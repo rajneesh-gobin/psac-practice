@@ -722,7 +722,7 @@ CHALLENGE_QS2.push(
 
   makeMCQ({ id:'CH_MON08', chapterId:'money', subsection:'profit_loss', difficulty:4,
     question:'A trader buys 200 apples for Rs 500 and sells 180 at Rs 4 each. The remaining 20 are thrown away. What is the profit or loss?',
-    options:['Rs 100 loss','Rs 120 profit','Rs 140 profit','Rs 200 profit'],
+    options:['Rs 100 loss','Rs 220 profit','Rs 140 profit','Rs 200 profit'],
     answer:'Rs 220 profit',
     hint:'Revenue = 180×4=720. Cost = 500. Profit = 720−500.',
     explanation:'Revenue=720. Profit=720−500=Rs 220.' }),

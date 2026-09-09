@@ -1,0 +1,392 @@
+[
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-nrb-104-aii",
+    "difficulty": 4,
+    "judgment": "inflated-level",
+    "note": "Fraction subtraction alone inherits L4 from a six-mark task. Reclassify the part independently; three routine calculations do not establish challenge-level reasoning.",
+    "source": "subjects/grade9-maths/questions/extended_bank_3.js",
+    "line": 116,
+    "taskId": "g9m-nrb-104",
+    "question": "Calculate <sup>2</sup>&frasl;<sub>3</sub> &minus; <sup>1</sup>&frasl;<sub>4</sub>.",
+    "answer": "5/12"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-vis-003-a",
+    "difficulty": 4,
+    "judgment": "inflated-level",
+    "note": "Reading the labelled 600 ml mark is a foundation skill, despite its L4 label. Keep as basic practice or as an introductory part of a larger task.",
+    "source": "subjects/grade9-maths/questions/visual_bank.js",
+    "line": 307,
+    "taskId": "g9m-vis-003",
+    "question": "<svg viewBox=\"0 0 176 180\" width=\"176\" height=\"180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><rect x=\"62\" y=\"72.8\" width=\"84\" height=\"79.2\" fill=\"#dcdcdc\"/><path d=\"M 62 20 L 62 152 L 146 152 L 146 20\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.8\"/><path d=\"M 146 28 L 160 22\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.6\"/><line x1=\"62\" y1=\"72.8\" x2=\"146\" y2=\"72.8\" stroke=\"#000\" stroke-width=\"1.4\"/><line x1=\"62\" y1=\"152.0\" x2=\"74\" y2=\"152.0\" stroke=\"#000\" stroke-width=\"1\"/><text x=\"56\" y=\"156.0\" font-size=\"11\" text-anchor=\"end\">0</text><line x1=\"62\" y1=\"125.6\" x2=\"74\" y2=\"125.6\" stroke=\"#000\" stroke-width=\"1\"/><text x=\"56\" y=\"129.6\" font-size=\"11\" text-anchor=\"end\">200</text><line x1=\"62\" y1=\"99.2\" x2=\"74\" y2=\"99.2\" stroke=\"#000\" stroke-width=\"1\"/><text x=\"56\" y=\"103.2\" font-size=\"11\" text-anchor=\"end\">400</text><line x1=\"62\" y1=\"72.8\" x2=\"74\" y2=\"72.8\" stroke=\"#000\" stroke-width=\"1\"/><text x=\"56\" y=\"76.8\" font-size=\"11\" text-anchor=\"end\">600</text><line x1=\"62\" y1=\"46.4\" x2=\"74\" y2=\"46.4\" stroke=\"#000\" stroke-width=\"1\"/><text x=\"56\" y=\"50.4\" font-size=\"11\" text-anchor=\"end\">800</text><line x1=\"62\" y1=\"20.0\" x2=\"74\" y2=\"20.0\" stroke=\"#000\" stroke-width=\"1\"/><text x=\"56\" y=\"24.0\" font-size=\"11\" text-anchor=\"end\">1000</text><text x=\"104\" y=\"170\" font-size=\"11\" text-anchor=\"middle\">millilitres</text></svg>\nThe jug shows how much juice is left. How many <b>millilitres</b> are in the jug? <span class=\"q-unit\">(answer in ml)</span>",
+    "answer": "600"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-int-202-a",
+    "difficulty": 4,
+    "judgment": "inflated-level",
+    "note": "Selecting an Internet connection over a printer/scanner/projector for Internet banking is basic recognition, labelled L4.",
+    "source": "subjects/grade9-ict/questions/nce_section_b.js",
+    "line": 589,
+    "taskId": "g9ict-int-202",
+    "question": "Mrs Appadu pays her electricity bill using Internet banking on her mobile phone.\n<div style=\"border:1px solid #000;max-width:340px;margin:6px auto;text-align:left;font-size:12px\"><div style=\"border-bottom:1px solid #000;padding:4px 8px;font-weight:bold\">Secure banking</div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Address</span><span style=\"flex:1 1 auto\">https://bank.mu/pay</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Signed in as</span><span style=\"flex:1 1 auto\">appadu.s</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 1</span><span style=\"flex:1 1 auto\">Choose the account</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 2</span><span style=\"flex:1 1 auto\">Enter the amount</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 3</span><span style=\"flex:1 1 auto\">Enter the code sent to your phone</span></div></div>\nWhich one of these does Mrs Appadu need in order to use Internet banking?",
+    "options": [
+      "A projector at her home",
+      "A scanner at her home",
+      "A printer at her home",
+      "An Internet connection"
+    ],
+    "answer": "An Internet connection"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-sys-204-c",
+    "difficulty": 3,
+    "judgment": "inflated-level",
+    "note": "The answer 64-bit is explicitly printed in the supplied system panel; this is retrieval, not Hard reasoning.",
+    "source": "subjects/grade9-ict/questions/nce_section_b.js",
+    "line": 216,
+    "taskId": "g9ict-sys-204",
+    "question": "The panel below was opened on a computer in the school laboratory.\n<div style=\"border:1px solid #000;max-width:340px;margin:6px auto;text-align:left;font-size:12px\"><div style=\"border-bottom:1px solid #000;padding:4px 8px;font-weight:bold\">System information</div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Device name</span><span style=\"flex:1 1 auto\">LAB-PC-07</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Processor</span><span style=\"flex:1 1 auto\">Intel Core i5 &nbsp; 2.40 GHz</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Installed memory</span><span style=\"flex:1 1 auto\">8.00 GB</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">System type</span><span style=\"flex:1 1 auto\">64-bit operating system</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Edition</span><span style=\"flex:1 1 auto\">Windows 11 Pro</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Storage</span><span style=\"flex:1 1 auto\">500 GB hard disk</span></div></div>\nThe system type of this computer is:",
+    "options": [
+      "32-bit",
+      "64-bit",
+      "8-bit",
+      "16-bit"
+    ],
+    "answer": "64-bit"
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-inq-350",
+    "difficulty": 4,
+    "judgment": "inflated-level",
+    "note": "Selecting Current / A is conventional notation recognition, not challenge-level investigation.",
+    "source": "subjects/grade9-physics/questions/inquiry_depth.js",
+    "line": 414,
+    "taskId": null,
+    "question": "A pupil records ammeter readings in amperes. Which column heading is correct?",
+    "options": [
+      "Current / A",
+      "The current measured",
+      "Current (amperes) / A",
+      "Current in amps A"
+    ],
+    "answer": "Current / A"
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-inq-c100",
+    "difficulty": 4,
+    "judgment": "inflated-level",
+    "note": "Selecting the largest of three temperature rises is a simple comparison, not L4. Heat inference also needs comparable mass and thermal conditions.",
+    "source": "subjects/grade9-chemistry/questions/inquiry_depth.js",
+    "line": 870,
+    "taskId": null,
+    "question": "Equal volumes of three acids are neutralised by the same alkali. The temperature rises by 5.2, 6.8 and 4.1 &deg;C. Which released the most heat?",
+    "options": [
+      "The one that rose by 5.2 &deg;C",
+      "They all released the same heat",
+      "The one that rose by 4.1 &deg;C",
+      "The one that rose by 6.8 &deg;C"
+    ],
+    "answer": "The one that rose by 6.8 &deg;C"
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-inq-c042",
+    "difficulty": 4,
+    "judgment": "weak-distractors",
+    "note": "The credible option is compared with choosing the fastest-loading or prettiest website. This allows common-sense elimination without chemistry reasoning.",
+    "source": "subjects/grade9-chemistry/questions/inquiry_depth.js",
+    "line": 433,
+    "taskId": null,
+    "question": "Two websites give different values for the pH of rainwater. What is the best next step?",
+    "options": [
+      "Use the value from the page that loaded fastest",
+      "Look for a third, independent source and compare",
+      "Write both down and let the reader pick one",
+      "Take the value that appears on the prettier page"
+    ],
+    "answer": "Look for a third, independent source and compare"
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-stsb-030",
+    "difficulty": 4,
+    "judgment": "weak-distractors",
+    "note": "Unsupported website claim: useful scientific literacy, but weak alternatives make L4 excessive. Ask pupils to evaluate competing evidence.",
+    "source": "subjects/grade9-biology/questions/sts_depth.js",
+    "line": 290,
+    "taskId": null,
+    "question": "A claim on a website has no author, no date and no references. How should it be treated?",
+    "options": [
+      "As true because it is written down",
+      "As unsupported until it is checked",
+      "As proved because a website printed it",
+      "As false because there is no author"
+    ],
+    "answer": "As unsupported until it is checked"
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-b2-015",
+    "difficulty": 3,
+    "judgment": "inflated-level",
+    "note": "Asks for the function of the oviduct: direct biological knowledge, labelled Hard. The topic is legitimate; its cognitive demand is mislabelled.",
+    "source": "subjects/grade9-biology/questions/b2_reproductive.js",
+    "line": 178,
+    "taskId": null,
+    "question": "What is the function of the oviduct?",
+    "options": [
+      "It filters waste products out of the blood",
+      "It carries the egg from the ovary towards the uterus",
+      "It produces the female sex cells each month",
+      "It is where the baby develops before birth"
+    ],
+    "answer": "It carries the egg from the ovary towards the uterus"
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-sb-037",
+    "difficulty": 4,
+    "judgment": "inflated-level",
+    "note": "Choosing fermer after Il a voulu is routine infinitive recognition, labelled L4.",
+    "source": "subjects/grade9-french/questions/starter_bank.js",
+    "line": 273,
+    "taskId": null,
+    "question": "Choisis la forme correcte : « Il a voulu .......... la porte. »",
+    "options": [
+      "fermait",
+      "fermé",
+      "fermant",
+      "fermer"
+    ],
+    "answer": "fermer"
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-sb-069",
+    "difficulty": 4,
+    "judgment": "format-gap",
+    "note": "Selecting a structure for a literary response does not assess constructing and supporting that response.",
+    "source": "subjects/grade9-french/questions/starter_bank.js",
+    "line": 495,
+    "taskId": null,
+    "question": "Une question longue sur une œuvre demande une réponse développée. Quelle structure convient ?",
+    "options": [
+      "Une opinion personnelle sans aucune référence au texte",
+      "La liste de tous les personnages de l’œuvre étudiée",
+      "Une idée, un exemple tiré de l’œuvre, une conclusion",
+      "Un résumé complet de l’intrigue de l’œuvre entière"
+    ],
+    "answer": "Une idée, un exemple tiré de l’œuvre, une conclusion"
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-egv-088",
+    "difficulty": 2,
+    "judgment": "format-gap",
+    "note": "Choosing advice about lengthening writing is not producing 50–75 words; distractors include copying and repetition.",
+    "source": "subjects/grade9-french/questions/ecrit_guide.js",
+    "line": 625,
+    "taskId": null,
+    "question": "Comment augmenter un texte de 40 mots à 50 mots sans hors-sujet ?",
+    "options": [
+      "Ajouter une introduction hors-sujet",
+      "Développer davantage les points imposés en ajoutant des détails, des exemples ou des précisions",
+      "Copier une partie du sujet",
+      "Répéter les mêmes phrases"
+    ],
+    "answer": "Développer davantage les points imposés en ajoutant des détails, des exemples ou des précisions"
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-litv-077",
+    "difficulty": 4,
+    "judgment": "weak-distractors",
+    "note": "Simple figurative meaning is contrasted with literal chairs making sounds. L4 overstates the reasoning elicited.",
+    "source": "subjects/grade9-english/questions/literature_volume.js",
+    "line": 472,
+    "taskId": null,
+    "question": "Explain the line: <i>\"The empty chair at the table spoke louder than any words.\"</i>",
+    "options": [
+      "Chairs can literally make sounds",
+      "The absence of someone was felt more powerfully than speech",
+      "No one sat down for the meal",
+      "The family argued very loudly at dinner"
+    ],
+    "answer": "The absence of someone was felt more powerfully than speech"
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-litv-097",
+    "difficulty": 4,
+    "judgment": "format-gap",
+    "note": "Recognising the only developed, evidence-bearing response does not demonstrate independent literary analysis.",
+    "source": "subjects/grade9-english/questions/literature_volume.js",
+    "line": 594,
+    "taskId": null,
+    "question": "Which response about an author's purpose is most convincing?",
+    "options": [
+      "\"The author wants to challenge complacency: the statistic 'one in four' appears three times, hammering the scale of the problem\"",
+      "\"The author is trying to persuade the reader\"",
+      "\"The author wants to make the reader think\"",
+      "\"The author has a clear purpose in this text\""
+    ],
+    "answer": "\"The author wants to challenge complacency: the statistic 'one in four' appears three times, hammering the scale of the problem\""
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-sb-007",
+    "difficulty": 3,
+    "judgment": "inflated-level",
+    "note": "Selecting ability to pay school fees is a short causal recognition item, not a developed explanation at Hard level.",
+    "source": "subjects/grade9-social-modern-studies/questions/starter_bank.js",
+    "line": 69,
+    "taskId": null,
+    "question": "Before free secondary education, what mainly decided whether a child continued to secondary school?",
+    "options": [
+      "Whether the family could pay the fees",
+      "The child's age in years",
+      "The child's district of birth",
+      "The size of the school building"
+    ],
+    "answer": "Whether the family could pay the fees"
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-v126",
+    "difficulty": 3,
+    "judgment": "weak-distractors",
+    "note": "Distractors claiming Mauritius has no meteorological service or cyclones only form above small islands make elimination too easy.",
+    "source": "subjects/grade9-social-modern-studies/questions/sms_volume_2.js",
+    "line": 189,
+    "taskId": null,
+    "question": "Why are cyclones particularly damaging to small island nations like Mauritius?",
+    "options": [
+      "A small island has no large land mass to weaken a cyclone before it reaches settled areas",
+      "Mauritius lacks a meteorological service capable of tracking cyclones",
+      "Cyclones only ever form directly above small islands in the Indian Ocean",
+      "Small islands always produce stronger cyclones than large countries"
+    ],
+    "answer": "A small island has no large land mass to weaken a cyclone before it reaches settled areas"
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c5-v010",
+    "difficulty": 3,
+    "judgment": "content-review",
+    "note": "The stem rules out copper hydroxide because it is insoluble, but insoluble bases can be used with acid to prepare salts. Correct this misleading premise before judging difficulty.",
+    "source": "subjects/grade9-chemistry/questions/c5_volume.js",
+    "line": 88,
+    "taskId": null,
+    "question": "A student wishes to prepare a pure dry sample of copper sulfate by neutralisation. She cannot use copper hydroxide because it is insoluble. What method should she use?",
+    "options": [
+      "Add excess copper metal to dilute sulfuric acid, filter, then crystallise",
+      "Electrolyse copper sulfate solution and collect the salt from the electrodes",
+      "Add sodium hydroxide to copper sulfate solution and filter the copper sulfate that precipitates",
+      "Add excess copper oxide (a base) to warm dilute sulfuric acid, filter off the excess solid, then crystallise the filtrate"
+    ],
+    "answer": "Add excess copper oxide (a base) to warm dilute sulfuric acid, filter off the excess solid, then crystallise the filtrate"
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c5-v011",
+    "difficulty": 2,
+    "judgment": "ambiguous-options",
+    "note": "Two options both say excess reactant contaminates the salt. A single-answer MCQ should not offer two equivalent correct statements.",
+    "source": "subjects/grade9-chemistry/questions/c5_volume.js",
+    "line": 98,
+    "taskId": null,
+    "question": "Why is excess acid (or excess base) a problem in the preparation of a pure salt by neutralisation?",
+    "options": [
+      "Excess acid (or excess base) will contaminate the final salt product and make it impure",
+      "Excess reactant reacts with the salt product and destroys it",
+      "Excess reactant will contaminate the final salt product and make it impure",
+      "Excess reactant makes the solution too concentrated to crystallise"
+    ],
+    "answer": "Excess acid (or excess base) will contaminate the final salt product and make it impure"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-esv-042",
+    "difficulty": 2,
+    "judgment": "content-review",
+    "note": "The question says changes since the last FULL backup but keys incremental; this wording describes differential backup. Review and correct the distinction.",
+    "source": "subjects/grade9-ict/questions/ethics_volume.js",
+    "line": 258,
+    "taskId": null,
+    "question": "Which backup method copies only the files that have changed since the last full backup?",
+    "options": [
+      "Mirror backup",
+      "Manual backup",
+      "Full backup",
+      "Incremental backup"
+    ],
+    "answer": "Incremental backup"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-exp-016-a",
+    "difficulty": 3,
+    "judgment": "useful-core",
+    "note": "Expanding two linear factors is legitimate algebra practice; retain an appropriate place in progression.",
+    "source": "subjects/grade9-maths/questions/ch09_expressions.js",
+    "line": 92,
+    "taskId": "g9m-exp-016",
+    "question": "Expand (<i>x</i> &minus; 1)(<i>x</i> &minus; 4).",
+    "answer": "x^2-5x+4"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-multi-003-b",
+    "difficulty": 3,
+    "judgment": "useful-application",
+    "note": "Combines trapezium area and reverse rectangle area. This is more substantial application than direct recall.",
+    "source": "subjects/grade9-maths/questions/extended_bank_2.js",
+    "line": 180,
+    "taskId": "g9m-multi-003",
+    "question": "<svg viewBox=\"0 0 248 138\" width=\"248\" height=\"138\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><polygon points=\"86,22 182,22 218,112 50,112\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.6\"/><line x1=\"86\" y1=\"22\" x2=\"86\" y2=\"112\" stroke=\"#000\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/><path d=\"M 86 99 L 99 99 L 99 112\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.1\"/><text x=\"134\" y=\"16\" font-size=\"12\" text-anchor=\"middle\">12 cm</text><text x=\"134\" y=\"129\" font-size=\"12\" text-anchor=\"middle\">21 cm</text><text x=\"78\" y=\"71\" font-size=\"12\" text-anchor=\"end\">24 cm</text></svg>\nA rectangle has the same area and a length of 33 cm. Find its <b>width</b>. <span class=\"q-unit\">(answer in cm)</span>",
+    "answer": "12"
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-trv-151",
+    "difficulty": 3,
+    "judgment": "useful-core",
+    "note": "Passive transformation in the pluperfect demands real grammatical discrimination, although producing it would test more than choosing it.",
+    "source": "subjects/grade9-french/questions/transformation_volume.js",
+    "line": 1074,
+    "taskId": null,
+    "question": "Mets à la voix passive (plus-que-parfait) : « Le médecin avait examiné la patiente. »",
+    "options": [
+      "La patiente était examinée par le médecin.",
+      "La patiente avait été examinée du médecin.",
+      "La patiente a été examinée par le médecin.",
+      "La patiente avait été examinée par le médecin."
+    ],
+    "answer": "La patiente avait été examinée par le médecin."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-b1-v083",
+    "difficulty": 2,
+    "judgment": "useful-application",
+    "note": "Distinguishing correlation from sole causation is relevant scientific reasoning. Improve distractor balance rather than remove the outcome.",
+    "source": "subjects/grade9-biology/questions/b1_volume.js",
+    "line": 665,
+    "taskId": null,
+    "question": "A graph shows cardiovascular death rates falling steadily over 20 years in a country that introduced a national anti-smoking campaign in the same period. What is the most reasonable interpretation?",
+    "options": [
+      "The decline in deaths has nothing to do with the campaign and is due entirely to genetics",
+      "The anti-smoking campaign is the sole proven cause of every reduction in deaths",
+      "Reduced smoking may have contributed to the fall, though other factors may also be involved",
+      "Cardiovascular death rates always decrease over time regardless of any interventions"
+    ],
+    "answer": "Reduced smoking may have contributed to the fall, though other factors may also be involved"
+  }
+]

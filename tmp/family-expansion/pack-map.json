@@ -1,0 +1,3603 @@
+{
+ "grade9-biology": {
+  "chapters": [
+   {
+    "id": "g9s-b1-circulatory",
+    "name": "B1 · Blood Circulatory System",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "blood_vessels",
+      39
+     ],
+     [
+      "components_of_blood",
+      36
+     ],
+     [
+      "cardiovascular_disease",
+      29
+     ],
+     [
+      "pulse",
+      27
+     ],
+     [
+      "magnification",
+      26
+     ],
+     [
+      "circulatory_overview",
+      20
+     ],
+     [
+      "interpreting_health_data",
+      17
+     ]
+    ],
+    "levels": {
+     "1": 44,
+     "2": 87,
+     "3": 63,
+     "4": 0
+    },
+    "types": {
+     "mcq": 162,
+     "numeric": 18,
+     "text": 9,
+     "task": 5
+    }
+   },
+   {
+    "id": "g9s-b2-reproductive",
+    "name": "B2 · Reproductive System",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "stds",
+      31
+     ],
+     [
+      "sexual_asexual",
+      30
+     ],
+     [
+      "female_reproductive_system",
+      29
+     ],
+     [
+      "male_reproductive_system",
+      24
+     ],
+     [
+      "reproduction_basics",
+      18
+     ],
+     [
+      "interpreting_health_data",
+      17
+     ],
+     [
+      "stis_and_contraception",
+      5
+     ],
+     [
+      "fertilisation",
+      1
+     ],
+     [
+      "reproduction",
+      1
+     ],
+     [
+      "reproductive_system",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 41,
+     "2": 69,
+     "3": 47,
+     "4": 0
+    },
+    "types": {
+     "mcq": 135,
+     "text": 14,
+     "numeric": 4,
+     "task": 4
+    }
+   },
+   {
+    "id": "g9s-b3-biodiversity",
+    "name": "B3 · Biodiversity",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "human_threats",
+      28
+     ],
+     [
+      "quadrat_sampling",
+      27
+     ],
+     [
+      "what_is_biodiversity",
+      25
+     ],
+     [
+      "natural_threats",
+      21
+     ],
+     [
+      "importance_of_biodiversity",
+      18
+     ],
+     [
+      "quadrat_method",
+      3
+     ],
+     [
+      "threats_to_biodiversity",
+      3
+     ],
+     [
+      "conservation",
+      2
+     ],
+     [
+      "human_impact",
+      1
+     ],
+     [
+      "food_webs",
+      1
+     ],
+     [
+      "biodiversity_overview",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 29,
+     "2": 65,
+     "3": 36,
+     "4": 0
+    },
+    "types": {
+     "mcq": 107,
+     "numeric": 8,
+     "text": 11,
+     "task": 4
+    }
+   },
+   {
+    "id": "g9s-b4-plant-nutrition",
+    "name": "B4 · Nutrition in Plants",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "photosynthesis_experiments",
+      31
+     ],
+     [
+      "photosynthesis",
+      30
+     ],
+     [
+      "leaf_adaptation",
+      30
+     ],
+     [
+      "factors_for_photosynthesis",
+      22
+     ],
+     [
+      "word_equation",
+      20
+     ],
+     [
+      "leaf_structure",
+      7
+     ],
+     [
+      "testing_for_starch",
+      5
+     ],
+     [
+      "mineral_nutrition",
+      5
+     ]
+    ],
+    "levels": {
+     "1": 40,
+     "2": 65,
+     "3": 44,
+     "4": 1
+    },
+    "types": {
+     "mcq": 132,
+     "text": 13,
+     "task": 5
+    }
+   },
+   {
+    "id": "g9s-inquiry",
+    "name": "Scientific Inquiry",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "recording_data",
+      21
+     ],
+     [
+      "hypothesis_testing",
+      21
+     ],
+     [
+      "interpreting_results",
+      21
+     ],
+     [
+      "lab_safety",
+      21
+     ],
+     [
+      "reporting_findings",
+      21
+     ]
+    ],
+    "levels": {
+     "1": 5,
+     "2": 42,
+     "3": 47,
+     "4": 11
+    },
+    "types": {
+     "mcq": 90,
+     "text": 15
+    }
+   },
+   {
+    "id": "g9s-sts",
+    "name": "Science, Technology & Society",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "ethics_of_science",
+      22
+     ],
+     [
+      "evaluating_information",
+      22
+     ],
+     [
+      "christiaan_barnard",
+      21
+     ]
+    ],
+    "levels": {
+     "1": 3,
+     "2": 21,
+     "3": 33,
+     "4": 8
+    },
+    "types": {
+     "mcq": 58,
+     "text": 7
+    }
+   }
+  ],
+  "files": [
+   "b1_circulatory.js",
+   "b1_volume.js",
+   "b2_reproductive.js",
+   "b2_volume.js",
+   "b3_biodiversity.js",
+   "b3_volume.js",
+   "b4_plant_nutrition.js",
+   "b4_volume.js",
+   "bio_diagram_multi.js",
+   "bio_diagram_patch.js",
+   "bio_multi_year.js",
+   "bio_paper_inspired.js",
+   "bio_tasks.js",
+   "inquiry.js",
+   "inquiry_depth.js",
+   "past_paper_2024.js",
+   "sts.js",
+   "sts_depth.js"
+  ],
+  "total": 801
+ },
+ "grade9-chemistry": {
+  "chapters": [
+   {
+    "id": "g9s-c1-atmosphere",
+    "name": "C1 · The Atmosphere & Environment Around Us",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "air_pollutants",
+      36
+     ],
+     [
+      "greenhouse_gases",
+      29
+     ],
+     [
+      "eutrophication",
+      26
+     ],
+     [
+      "acid_rain",
+      23
+     ],
+     [
+      "global_warming",
+      23
+     ],
+     [
+      "water_pollution",
+      21
+     ],
+     [
+      "air_pollution",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 34,
+     "2": 74,
+     "3": 51,
+     "4": 0
+    },
+    "types": {
+     "mcq": 141,
+     "text": 6,
+     "task": 6,
+     "numeric": 1,
+     "expr": 5
+    }
+   },
+   {
+    "id": "g9s-c2-mixtures",
+    "name": "C2 · Mixtures & Separation Techniques",
+    "examWeight": 6,
+    "enrichment": false,
+    "subsections": [
+     [
+      "choosing_a_technique",
+      27
+     ],
+     [
+      "apparatus_diagrams",
+      25
+     ],
+     [
+      "distillation",
+      24
+     ],
+     [
+      "sublimation",
+      21
+     ],
+     [
+      "crystallization",
+      18
+     ],
+     [
+      "separation_techniques",
+      4
+     ],
+     [
+      "crystallisation",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 24,
+     "2": 62,
+     "3": 34,
+     "4": 0
+    },
+    "types": {
+     "mcq": 106,
+     "text": 6,
+     "task": 3,
+     "expr": 5
+    }
+   },
+   {
+    "id": "g9s-c3-language",
+    "name": "C3 · Language of Chemistry",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "formulae_of_compounds",
+      52
+     ],
+     [
+      "balancing_equations",
+      22
+     ],
+     [
+      "word_equations",
+      18
+     ],
+     [
+      "rearrangement_of_atoms",
+      15
+     ],
+     [
+      "formulae",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 24,
+     "2": 50,
+     "3": 32,
+     "4": 2
+    },
+    "types": {
+     "mcq": 85,
+     "numeric": 13,
+     "text": 5,
+     "task": 2,
+     "expr": 3
+    }
+   },
+   {
+    "id": "g9s-c4-metals",
+    "name": "C4 · Metals & the Reactivity Series",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "reactivity_series",
+      29
+     ],
+     [
+      "metals_with_acids",
+      27
+     ],
+     [
+      "metals_with_water_steam",
+      27
+     ],
+     [
+      "predicting_reactions",
+      26
+     ],
+     [
+      "equations_for_metals",
+      26
+     ],
+     [
+      "metals_with_oxygen",
+      22
+     ],
+     [
+      "reactivity",
+      2
+     ]
+    ],
+    "levels": {
+     "1": 29,
+     "2": 70,
+     "3": 59,
+     "4": 1
+    },
+    "types": {
+     "mcq": 141,
+     "text": 6,
+     "task": 4,
+     "expr": 8
+    }
+   },
+   {
+    "id": "g9s-c5-salts",
+    "name": "C5 · Salts",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "neutralisation",
+      34
+     ],
+     [
+      "uses_of_salts",
+      24
+     ],
+     [
+      "soluble_insoluble",
+      23
+     ],
+     [
+      "neutralisation_in_daily_life",
+      23
+     ]
+    ],
+    "levels": {
+     "1": 19,
+     "2": 50,
+     "3": 35,
+     "4": 0
+    },
+    "types": {
+     "mcq": 90,
+     "text": 6,
+     "task": 3,
+     "expr": 3,
+     "numeric": 2
+    }
+   },
+   {
+    "id": "g9s-inquiry",
+    "name": "Scientific Inquiry",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "recording_data",
+      21
+     ],
+     [
+      "lab_safety",
+      21
+     ],
+     [
+      "reporting_findings",
+      20
+     ],
+     [
+      "research_and_ict",
+      20
+     ],
+     [
+      "hypothesis_testing",
+      20
+     ],
+     [
+      "interpreting_results",
+      20
+     ]
+    ],
+    "levels": {
+     "1": 9,
+     "2": 55,
+     "3": 44,
+     "4": 14
+    },
+    "types": {
+     "mcq": 97,
+     "text": 18,
+     "numeric": 7
+    }
+   },
+   {
+    "id": "g9s-sts",
+    "name": "Science, Technology & Society",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "applications_of_distillation",
+      20
+     ],
+     [
+      "applications_of_chromatography",
+      20
+     ],
+     [
+      "climate_change",
+      20
+     ],
+     [
+      "interpreting_climate_data",
+      20
+     ],
+     [
+      "evaluating_information",
+      1
+     ],
+     [
+      "ethics_of_science",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 37,
+     "3": 38,
+     "4": 7
+    },
+    "types": {
+     "mcq": 66,
+     "text": 14,
+     "numeric": 2
+    }
+   }
+  ],
+  "files": [
+   "c1_atmosphere.js",
+   "c1_volume.js",
+   "c2_mixtures.js",
+   "c2_volume.js",
+   "c3_language.js",
+   "c3_volume.js",
+   "c4_metals.js",
+   "c4_volume.js",
+   "c5_salts.js",
+   "c5_volume.js",
+   "chem_diagram_multi.js",
+   "chem_multi_year.js",
+   "chem_paper_inspired.js",
+   "chem_tasks.js",
+   "inquiry.js",
+   "inquiry_depth.js",
+   "past_paper_2024.js",
+   "sts.js",
+   "sts_depth.js"
+  ],
+  "total": 854
+ },
+ "grade9-english": {
+  "chapters": [
+   {
+    "id": "g9eng-listening",
+    "name": "Listening & Comprehension",
+    "examWeight": 0,
+    "enrichment": false,
+    "subsections": [],
+    "levels": {
+     "1": 0,
+     "2": 1,
+     "3": 1,
+     "4": 0
+    },
+    "types": {
+     "mcq": 2
+    }
+   },
+   {
+    "id": "g9eng-speaking",
+    "name": "Speaking & Oral Interaction",
+    "examWeight": 0,
+    "enrichment": false,
+    "subsections": [],
+    "levels": {
+     "1": 0,
+     "2": 2,
+     "3": 0,
+     "4": 0
+    },
+    "types": {
+     "mcq": 2
+    }
+   },
+   {
+    "id": "g9eng-reading",
+    "name": "Reading & Comprehension",
+    "examWeight": 10,
+    "enrichment": false,
+    "subsections": [
+     [
+      "retrieval",
+      4
+     ],
+     [
+      "inference",
+      4
+     ],
+     [
+      "vocabulary",
+      3
+     ],
+     [
+      "authors_view",
+      2
+     ],
+     [
+      "language",
+      2
+     ],
+     [
+      "evidence",
+      2
+     ],
+     [
+      "across_texts",
+      2
+     ],
+     [
+      "text_features",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 3,
+     "2": 8,
+     "3": 8,
+     "4": 1
+    },
+    "types": {
+     "mcq": 20
+    }
+   },
+   {
+    "id": "g9eng-writing",
+    "name": "Writing",
+    "examWeight": 8,
+    "enrichment": false,
+    "subsections": [
+     [
+      "planning",
+      1
+     ],
+     [
+      "essay",
+      1
+     ],
+     [
+      "descriptive",
+      1
+     ],
+     [
+      "formal_letter",
+      1
+     ],
+     [
+      "narrative",
+      1
+     ],
+     [
+      "cohesion",
+      1
+     ],
+     [
+      "register",
+      1
+     ],
+     [
+      "spelling",
+      1
+     ],
+     [
+      "punctuation",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 5,
+     "3": 4,
+     "4": 0
+    },
+    "types": {
+     "mcq": 9
+    }
+   },
+   {
+    "id": "g9eng-vocabulary",
+    "name": "Vocabulary & Word Choice",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "vocabulary_in_context",
+      32
+     ],
+     [
+      "word_choice",
+      26
+     ],
+     [
+      "collocation",
+      25
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 54,
+     "3": 28,
+     "4": 0
+    },
+    "types": {
+     "mcq": 83
+    }
+   },
+   {
+    "id": "g9eng-word-formation",
+    "name": "Word Formation",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "verb_formation",
+      23
+     ],
+     [
+      "adverb_formation",
+      22
+     ],
+     [
+      "adjective_formation",
+      22
+     ],
+     [
+      "noun_formation",
+      22
+     ],
+     [
+      "root_and_affix",
+      22
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 76,
+     "3": 33,
+     "4": 0
+    },
+    "types": {
+     "mcq": 111
+    }
+   },
+   {
+    "id": "g9eng-literature",
+    "name": "Literary Appreciation",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "figurative_devices",
+      21
+     ],
+     [
+      "effect_of_device",
+      20
+     ],
+     [
+      "narrative_voice",
+      20
+     ],
+     [
+      "rhyme",
+      19
+     ],
+     [
+      "line_explication",
+      18
+     ],
+     [
+      "supported_response",
+      18
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 34,
+     "3": 69,
+     "4": 12
+    },
+    "types": {
+     "mcq": 116
+    }
+   },
+   {
+    "id": "g9eng-gr-nouns",
+    "name": "Grammar · Nouns",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "apposition",
+      12
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 6,
+     "3": 4,
+     "4": 0
+    },
+    "types": {
+     "mcq": 12
+    }
+   },
+   {
+    "id": "g9eng-gr-pronouns",
+    "name": "Grammar · Pronouns",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "reflexive",
+      20
+     ],
+     [
+      "relative",
+      19
+     ],
+     [
+      "emphasising",
+      18
+     ]
+    ],
+    "levels": {
+     "1": 8,
+     "2": 34,
+     "3": 15,
+     "4": 0
+    },
+    "types": {
+     "mcq": 57
+    }
+   },
+   {
+    "id": "g9eng-gr-adjectives",
+    "name": "Grammar · Adjectives",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "adjectives_as_nouns",
+      7
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 4,
+     "3": 3,
+     "4": 0
+    },
+    "types": {
+     "mcq": 7
+    }
+   },
+   {
+    "id": "g9eng-gr-verbs",
+    "name": "Grammar · Verbs & Tenses",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "tense_consistency",
+      28
+     ],
+     [
+      "future_perfect",
+      24
+     ],
+     [
+      "future_perfect_continuous",
+      23
+     ]
+    ],
+    "levels": {
+     "1": 4,
+     "2": 43,
+     "3": 26,
+     "4": 2
+    },
+    "types": {
+     "mcq": 75
+    }
+   },
+   {
+    "id": "g9eng-gr-determiners",
+    "name": "Grammar · Determiners, Articles & Quantifiers",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [],
+    "levels": {
+     "1": 1,
+     "2": 10,
+     "3": 1,
+     "4": 0
+    },
+    "types": {
+     "mcq": 12
+    }
+   },
+   {
+    "id": "g9eng-gr-adverbs",
+    "name": "Grammar · Adverbs",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "attitude_adverbs",
+      21
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 9,
+     "3": 12,
+     "4": 0
+    },
+    "types": {
+     "mcq": 21
+    }
+   },
+   {
+    "id": "g9eng-gr-modals",
+    "name": "Grammar · Modals",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [],
+    "levels": {
+     "1": 0,
+     "2": 1,
+     "3": 1,
+     "4": 0
+    },
+    "types": {
+     "mcq": 2
+    }
+   },
+   {
+    "id": "g9eng-gr-prepositions",
+    "name": "Grammar · Prepositions",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "prepositions",
+      18
+     ],
+     [
+      "phrasal_verbs",
+      11
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 17,
+     "3": 10,
+     "4": 0
+    },
+    "types": {
+     "mcq": 29
+    }
+   },
+   {
+    "id": "g9eng-gr-sentence",
+    "name": "Grammar · Sentence Structure",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "voice",
+      11
+     ],
+     [
+      "direct_speech",
+      9
+     ],
+     [
+      "perfect_conditional",
+      8
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 8,
+     "3": 18,
+     "4": 2
+    },
+    "types": {
+     "mcq": 28
+    }
+   },
+   {
+    "id": "g9eng-gr-punctuation",
+    "name": "Grammar · Punctuation",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "quotation_marks",
+      8
+     ],
+     [
+      "non_defining_comma",
+      7
+     ],
+     [
+      "dash",
+      6
+     ],
+     [
+      "semicolon",
+      5
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 11,
+     "3": 14,
+     "4": 1
+    },
+    "types": {
+     "mcq": 26
+    }
+   }
+  ],
+  "files": [
+   "eng_multi_year.js",
+   "eng_paper_inspired.js",
+   "grammar_adverbs_sentence_prep_punct.js",
+   "grammar_pronouns_nouns_adj.js",
+   "grammar_verbs.js",
+   "literature_volume.js",
+   "starter_bank.js",
+   "vocab_volume.js"
+  ],
+  "total": 612
+ },
+ "grade9-french": {
+  "chapters": [
+   {
+    "id": "g9fr-grammaire",
+    "name": "Grammaire : le mot juste",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "temps_modes",
+      25
+     ],
+     [
+      "pronoms",
+      24
+     ],
+     [
+      "accords",
+      24
+     ],
+     [
+      "prepositions",
+      23
+     ],
+     [
+      "connecteurs",
+      23
+     ],
+     [
+      "determinants",
+      23
+     ],
+     [
+      "interrogatifs",
+      21
+     ]
+    ],
+    "levels": {
+     "1": 4,
+     "2": 95,
+     "3": 64,
+     "4": 0
+    },
+    "types": {
+     "mcq": 163
+    }
+   },
+   {
+    "id": "g9fr-transformation",
+    "name": "Transformation de phrases",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "negation",
+      24
+     ],
+     [
+      "temps_verbaux",
+      24
+     ],
+     [
+      "pronominalisation",
+      23
+     ],
+     [
+      "ponctuation",
+      22
+     ],
+     [
+      "changement_personne",
+      22
+     ],
+     [
+      "voix_passive",
+      22
+     ],
+     [
+      "jonction_phrases",
+      22
+     ],
+     [
+      "genre_nombre",
+      22
+     ],
+     [
+      "place_adjectif",
+      21
+     ],
+     [
+      "interrogation",
+      21
+     ]
+    ],
+    "levels": {
+     "1": 3,
+     "2": 110,
+     "3": 110,
+     "4": 0
+    },
+    "types": {
+     "mcq": 223
+    }
+   },
+   {
+    "id": "g9fr-vocabulaire",
+    "name": "Vocabulaire et sens des mots",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "traits_caractere",
+      25
+     ],
+     [
+      "notions_abstraites",
+      24
+     ],
+     [
+      "adjectifs_qualificatifs",
+      24
+     ],
+     [
+      "verbes_action",
+      23
+     ],
+     [
+      "noms_concrets",
+      22
+     ],
+     [
+      "adverbes",
+      19
+     ]
+    ],
+    "levels": {
+     "1": 5,
+     "2": 86,
+     "3": 46,
+     "4": 0
+    },
+    "types": {
+     "mcq": 137
+    }
+   },
+   {
+    "id": "g9fr-doc-authentique",
+    "name": "Courriel, fiche et documents",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "role_emetteur_destinataire",
+      35
+     ],
+     [
+      "courriel",
+      22
+     ],
+     [
+      "fiche_infographie",
+      21
+     ],
+     [
+      "reperage_explicite",
+      19
+     ],
+     [
+      "reponses_multiples",
+      13
+     ]
+    ],
+    "levels": {
+     "1": 9,
+     "2": 56,
+     "3": 45,
+     "4": 0
+    },
+    "types": {
+     "mcq": 110
+    }
+   },
+   {
+    "id": "g9fr-formation-mots",
+    "name": "Formation des mots",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "nominalisation",
+      23
+     ],
+     [
+      "formation_adjectif",
+      23
+     ],
+     [
+      "formation_adverbe",
+      23
+     ],
+     [
+      "noms_de_personne",
+      23
+     ],
+     [
+      "formation_verbe",
+      23
+     ],
+     [
+      "noms_de_quantite",
+      21
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 90,
+     "3": 44,
+     "4": 0
+    },
+    "types": {
+     "mcq": 136
+    }
+   },
+   {
+    "id": "g9fr-correction",
+    "name": "Correction d'erreurs",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "homophones",
+      5
+     ],
+     [
+      "accords",
+      5
+     ],
+     [
+      "participe_infinitif",
+      4
+     ],
+     [
+      "orthographe_accents",
+      4
+     ],
+     [
+      "determinants",
+      3
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 14,
+     "3": 6,
+     "4": 1
+    },
+    "types": {
+     "mcq": 21
+    }
+   },
+   {
+    "id": "g9fr-textes-trous",
+    "name": "Texte à trous",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "determinants",
+      4
+     ],
+     [
+      "conjonctions",
+      4
+     ],
+     [
+      "prepositions",
+      4
+     ],
+     [
+      "pronoms_relatifs",
+      4
+     ],
+     [
+      "verbes_contexte",
+      3
+     ],
+     [
+      "adverbes_negation",
+      2
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 15,
+     "3": 4,
+     "4": 0
+    },
+    "types": {
+     "mcq": 21
+    }
+   },
+   {
+    "id": "g9fr-ecrit-guide",
+    "name": "Écrit guidé : lettre et invitation",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "invitation",
+      20
+     ],
+     [
+      "lettre_amicale",
+      20
+     ],
+     [
+      "points_imposes",
+      20
+     ],
+     [
+      "formules_ouverture_cloture",
+      20
+     ],
+     [
+      "longueur_50_75",
+      20
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 52,
+     "3": 46,
+     "4": 0
+    },
+    "types": {
+     "mcq": 100
+    }
+   },
+   {
+    "id": "g9fr-comprehension",
+    "name": "Compréhension de texte",
+    "examWeight": 8,
+    "enrichment": false,
+    "subsections": [
+     [
+      "inference",
+      2
+     ],
+     [
+      "expression_imagee",
+      2
+     ],
+     [
+      "reperage_explicite",
+      1
+     ],
+     [
+      "synonymes_contexte",
+      1
+     ],
+     [
+      "avis_personnel",
+      1
+     ],
+     [
+      "reponses_multiples",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 0,
+     "3": 5,
+     "4": 2
+    },
+    "types": {
+     "mcq": 8
+    }
+   },
+   {
+    "id": "g9fr-redaction",
+    "name": "Rédaction",
+    "examWeight": 6,
+    "enrichment": false,
+    "subsections": [
+     [
+      "recit",
+      2
+     ],
+     [
+      "description",
+      2
+     ],
+     [
+      "texte_opinion",
+      2
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 2,
+     "3": 3,
+     "4": 1
+    },
+    "types": {
+     "mcq": 6
+    }
+   },
+   {
+    "id": "g9fr-oeuvres",
+    "name": "Œuvres au programme",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "question_longue",
+      47
+     ],
+     [
+      "papa_simon_personnages",
+      20
+     ],
+     [
+      "topaze_personnages",
+      14
+     ],
+     [
+      "papa_simon_themes",
+      12
+     ],
+     [
+      "topaze_themes",
+      7
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 52,
+     "3": 47,
+     "4": 1
+    },
+    "types": {
+     "mcq": 100
+    }
+   }
+  ],
+  "files": [
+   "doc_authentique.js",
+   "ecrit_guide.js",
+   "formation_mots.js",
+   "fr_multi_year.js",
+   "fr_paper_inspired.js",
+   "grammaire_volume.js",
+   "oeuvres.js",
+   "starter_bank.js",
+   "transformation_volume.js",
+   "vocabulaire_vocab.js"
+  ],
+  "total": 1025
+ },
+ "grade9-ict": {
+  "chapters": [
+   {
+    "id": "g9ict-computer-systems",
+    "name": "Computer Systems & Hardware",
+    "examWeight": 5,
+    "enrichment": false,
+    "subsections": [
+     [
+      "cpu_memory",
+      32
+     ],
+     [
+      "input_devices",
+      31
+     ],
+     [
+      "storage_devices",
+      25
+     ],
+     [
+      "data_units",
+      21
+     ],
+     [
+      "output_devices",
+      19
+     ],
+     [
+      "input_output_devices",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 27,
+     "2": 81,
+     "3": 21,
+     "4": 0
+    },
+    "types": {
+     "mcq": 110,
+     "text": 5,
+     "task": 6,
+     "slots": 4,
+     "numeric": 4
+    }
+   },
+   {
+    "id": "g9ict-software-os",
+    "name": "Software & Operating Systems",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "utility_programs",
+      31
+     ],
+     [
+      "os_functions",
+      29
+     ],
+     [
+      "os_types",
+      18
+     ]
+    ],
+    "levels": {
+     "1": 10,
+     "2": 59,
+     "3": 9,
+     "4": 0
+    },
+    "types": {
+     "mcq": 65,
+     "text": 5,
+     "task": 4,
+     "slots": 4
+    }
+   },
+   {
+    "id": "g9ict-word-processing",
+    "name": "Word Processing",
+    "examWeight": 5,
+    "enrichment": false,
+    "subsections": [
+     [
+      "text_formatting",
+      32
+     ],
+     [
+      "page_layout",
+      32
+     ],
+     [
+      "mail_merge",
+      29
+     ],
+     [
+      "word_icons",
+      24
+     ],
+     [
+      "styles",
+      20
+     ],
+     [
+      "toc_lists",
+      20
+     ],
+     [
+      "images_shapes",
+      17
+     ],
+     [
+      "tables_text",
+      17
+     ],
+     [
+      "multiple_documents",
+      14
+     ]
+    ],
+    "levels": {
+     "1": 17,
+     "2": 156,
+     "3": 32,
+     "4": 0
+    },
+    "types": {
+     "mcq": 184,
+     "text": 5,
+     "task": 6,
+     "slots": 6,
+     "numeric": 4
+    }
+   },
+   {
+    "id": "g9ict-spreadsheets",
+    "name": "Spreadsheets",
+    "examWeight": 5,
+    "enrichment": false,
+    "subsections": [
+     [
+      "functions",
+      38
+     ],
+     [
+      "formulas",
+      33
+     ],
+     [
+      "cells_ranges",
+      22
+     ],
+     [
+      "charts_from_data",
+      20
+     ],
+     [
+      "filter_sort",
+      17
+     ],
+     [
+      "advanced_formatting",
+      14
+     ],
+     [
+      "cell_references",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 12,
+     "2": 90,
+     "3": 41,
+     "4": 2
+    },
+    "types": {
+     "mcq": 119,
+     "text": 5,
+     "task": 6,
+     "slots": 5,
+     "expr": 5,
+     "numeric": 5
+    }
+   },
+   {
+    "id": "g9ict-databases",
+    "name": "Databases",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "db_structure",
+      33
+     ],
+     [
+      "queries",
+      31
+     ],
+     [
+      "forms_reports",
+      24
+     ],
+     [
+      "data_entry",
+      21
+     ],
+     [
+      "db_tables",
+      20
+     ]
+    ],
+    "levels": {
+     "1": 10,
+     "2": 100,
+     "3": 19,
+     "4": 0
+    },
+    "types": {
+     "mcq": 108,
+     "text": 5,
+     "task": 6,
+     "slots": 8,
+     "numeric": 2
+    }
+   },
+   {
+    "id": "g9ict-networks",
+    "name": "Networks",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "topologies",
+      37
+     ],
+     [
+      "network_components",
+      31
+     ],
+     [
+      "network_types",
+      29
+     ],
+     [
+      "wired_wireless",
+      20
+     ],
+     [
+      "network_basics",
+      17
+     ],
+     [
+      "intranet_extranet",
+      17
+     ]
+    ],
+    "levels": {
+     "1": 11,
+     "2": 114,
+     "3": 26,
+     "4": 0
+    },
+    "types": {
+     "mcq": 130,
+     "text": 5,
+     "task": 8,
+     "slots": 8
+    }
+   },
+   {
+    "id": "g9ict-internet",
+    "name": "Internet & Online Communication",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "email",
+      33
+     ],
+     [
+      "e_services",
+      31
+     ],
+     [
+      "browsers_search",
+      28
+     ],
+     [
+      "web_tools",
+      19
+     ],
+     [
+      "internet_www",
+      17
+     ],
+     [
+      "web_design_principles",
+      13
+     ]
+    ],
+    "levels": {
+     "1": 14,
+     "2": 100,
+     "3": 21,
+     "4": 6
+    },
+    "types": {
+     "mcq": 120,
+     "text": 5,
+     "task": 7,
+     "slots": 8,
+     "numeric": 1
+    }
+   },
+   {
+    "id": "g9ict-algorithms",
+    "name": "Algorithms, Flowcharts & Programming",
+    "examWeight": 5,
+    "enrichment": false,
+    "subsections": [
+     [
+      "flowchart_symbols",
+      30
+     ],
+     [
+      "python_basics",
+      26
+     ],
+     [
+      "control_structures",
+      25
+     ],
+     [
+      "flowchart_reading",
+      23
+     ],
+     [
+      "drawing_flowcharts",
+      12
+     ],
+     [
+      "maths_modelling",
+      11
+     ]
+    ],
+    "levels": {
+     "1": 12,
+     "2": 75,
+     "3": 39,
+     "4": 1
+    },
+    "types": {
+     "mcq": 105,
+     "text": 5,
+     "task": 5,
+     "slots": 10,
+     "numeric": 2
+    }
+   },
+   {
+    "id": "g9ict-presentation",
+    "name": "Presentation & Multimedia",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "slide_masters",
+      26
+     ],
+     [
+      "animations",
+      23
+     ],
+     [
+      "storyboarding",
+      23
+     ],
+     [
+      "notes_handouts",
+      22
+     ],
+     [
+      "charts_tables",
+      21
+     ],
+     [
+      "design_templates",
+      20
+     ],
+     [
+      "authoring_tools",
+      20
+     ],
+     [
+      "comic_strips",
+      20
+     ],
+     [
+      "animated_clips",
+      19
+     ],
+     [
+      "print_preview",
+      18
+     ],
+     [
+      "video_enhancement",
+      18
+     ],
+     [
+      "presentation_printing",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 12,
+     "2": 201,
+     "3": 18,
+     "4": 0
+    },
+    "types": {
+     "mcq": 223,
+     "text": 5,
+     "task": 2,
+     "slots": 1
+    }
+   },
+   {
+    "id": "g9ict-ethics-security",
+    "name": "Ethics, Data Protection & Security",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "data_security",
+      40
+     ],
+     [
+      "internet_dangers",
+      26
+     ],
+     [
+      "data_backups",
+      23
+     ],
+     [
+      "data_protection_act",
+      22
+     ],
+     [
+      "copyright_ownership",
+      22
+     ],
+     [
+      "information_privacy",
+      19
+     ],
+     [
+      "computer_ethics",
+      19
+     ],
+     [
+      "social_economic_effects",
+      17
+     ],
+     [
+      "plagiarism",
+      16
+     ]
+    ],
+    "levels": {
+     "1": 12,
+     "2": 170,
+     "3": 22,
+     "4": 0
+    },
+    "types": {
+     "mcq": 187,
+     "text": 9,
+     "task": 6,
+     "slots": 2
+    }
+   },
+   {
+    "id": "g9ict-health-safety",
+    "name": "Health & Safety",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "health_hazards",
+      33
+     ],
+     [
+      "lab_guidelines",
+      27
+     ],
+     [
+      "hazard_prevention",
+      25
+     ],
+     [
+      "safety_precautions",
+      17
+     ],
+     [
+      "equipment_care",
+      16
+     ]
+    ],
+    "levels": {
+     "1": 15,
+     "2": 98,
+     "3": 5,
+     "4": 0
+    },
+    "types": {
+     "mcq": 105,
+     "text": 5,
+     "task": 5,
+     "slots": 3
+    }
+   },
+   {
+    "id": "g9ict-troubleshooting",
+    "name": "Troubleshooting",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "troubleshooting_techniques",
+      26
+     ],
+     [
+      "troubleshooting_steps",
+      17
+     ]
+    ],
+    "levels": {
+     "1": 8,
+     "2": 25,
+     "3": 10,
+     "4": 0
+    },
+    "types": {
+     "mcq": 34,
+     "text": 5,
+     "task": 2,
+     "slots": 2
+    }
+   }
+  ],
+  "files": [
+   "ch01_computer_systems.js",
+   "ch02_word_processing.js",
+   "ch03_spreadsheets.js",
+   "ch04_algorithms.js",
+   "ch05_networks.js",
+   "ch06_internet.js",
+   "ch07_databases.js",
+   "ch08_software_os.js",
+   "ch09_ethics_security.js",
+   "ch10_presentation.js",
+   "ch11_health_safety.js",
+   "ch12_troubleshooting.js",
+   "db_health_volume.js",
+   "ethics_volume.js",
+   "exam_depth.js",
+   "ict_diagram_multi.js",
+   "ict_diagram_patch.js",
+   "ict_multi_year.js",
+   "ict_paper_inspired.js",
+   "ict_tasks.js",
+   "nce_section_a.js",
+   "nce_section_b.js",
+   "networks_internet_volume.js",
+   "past_paper_2024.js",
+   "presentation_volume.js",
+   "spread_alg_volume.js",
+   "wp_volume.js"
+  ],
+  "total": 1701
+ },
+ "grade9-maths": {
+  "chapters": [
+   {
+    "id": "g9m-number-revision",
+    "name": "Number Revision (Grades 7-8)",
+    "examWeight": 6,
+    "enrichment": false,
+    "subsections": [
+     [
+      "fractions_decimals_percentages",
+      111
+     ],
+     [
+      "ratio_and_measures",
+      110
+     ]
+    ],
+    "levels": {
+     "1": 46,
+     "2": 43,
+     "3": 66,
+     "4": 66
+    },
+    "types": {
+     "task": 88,
+     "numeric": 98,
+     "mcq": 28,
+     "expr": 6,
+     "slots": 1
+    }
+   },
+   {
+    "id": "g9m-indices",
+    "name": "Indices",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "laws",
+      98
+     ],
+     [
+      "negative_indices",
+      74
+     ]
+    ],
+    "levels": {
+     "1": 41,
+     "2": 61,
+     "3": 47,
+     "4": 23
+    },
+    "types": {
+     "task": 80,
+     "mcq": 15,
+     "expr": 38,
+     "numeric": 39
+    }
+   },
+   {
+    "id": "g9m-patterns",
+    "name": "Patterns & Sequences",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "sequences_and_figures",
+      59
+     ]
+    ],
+    "levels": {
+     "1": 3,
+     "2": 13,
+     "3": 26,
+     "4": 17
+    },
+    "types": {
+     "task": 26,
+     "numeric": 14,
+     "mcq": 7,
+     "expr": 9,
+     "slots": 3
+    }
+   },
+   {
+    "id": "g9m-finance",
+    "name": "Personal & Household Finance",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "salaries_and_bills",
+      64
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 12,
+     "3": 24,
+     "4": 26
+    },
+    "types": {
+     "task": 27,
+     "mcq": 7,
+     "numeric": 30
+    }
+   },
+   {
+    "id": "g9m-geometry-revision",
+    "name": "Geometry Revision (Grades 7-8)",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "grade7_8_geometry",
+      85
+     ]
+    ],
+    "levels": {
+     "1": 5,
+     "2": 20,
+     "3": 35,
+     "4": 25
+    },
+    "types": {
+     "task": 34,
+     "mcq": 10,
+     "numeric": 41
+    }
+   },
+   {
+    "id": "g9m-trigonometry",
+    "name": "Trigonometry",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "ratios_and_2d_problems",
+      67
+     ]
+    ],
+    "levels": {
+     "1": 6,
+     "2": 13,
+     "3": 24,
+     "4": 24
+    },
+    "types": {
+     "task": 29,
+     "numeric": 31,
+     "mcq": 4,
+     "expr": 3
+    }
+   },
+   {
+    "id": "g9m-coordinates",
+    "name": "Coordinates & Straight Lines",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "equation_of_line",
+      85
+     ],
+     [
+      "gradient",
+      78
+     ]
+    ],
+    "levels": {
+     "1": 20,
+     "2": 44,
+     "3": 54,
+     "4": 45
+    },
+    "types": {
+     "task": 75,
+     "mcq": 9,
+     "numeric": 55,
+     "expr": 24
+    }
+   },
+   {
+    "id": "g9m-vectors",
+    "name": "Vectors & Translation",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "column_vectors",
+      69
+     ],
+     [
+      "translation",
+      53
+     ]
+    ],
+    "levels": {
+     "1": 4,
+     "2": 44,
+     "3": 38,
+     "4": 36
+    },
+    "types": {
+     "task": 53,
+     "mcq": 7,
+     "numeric": 29,
+     "expr": 33
+    }
+   },
+   {
+    "id": "g9m-surface-area",
+    "name": "Surface Area",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "nets_and_surface_area",
+      76
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 20,
+     "3": 21,
+     "4": 33
+    },
+    "types": {
+     "task": 32,
+     "numeric": 38,
+     "mcq": 5,
+     "expr": 1
+    }
+   },
+   {
+    "id": "g9m-volume",
+    "name": "Volume",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "prisms_and_cylinders",
+      86
+     ]
+    ],
+    "levels": {
+     "1": 8,
+     "2": 13,
+     "3": 23,
+     "4": 42
+    },
+    "types": {
+     "task": 35,
+     "numeric": 47,
+     "expr": 1,
+     "mcq": 3
+    }
+   },
+   {
+    "id": "g9m-capacity",
+    "name": "Capacity",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "units_and_problems",
+      61
+     ]
+    ],
+    "levels": {
+     "1": 10,
+     "2": 17,
+     "3": 20,
+     "4": 14
+    },
+    "types": {
+     "task": 27,
+     "mcq": 7,
+     "numeric": 26,
+     "expr": 1
+    }
+   },
+   {
+    "id": "g9m-expressions",
+    "name": "Algebraic Expressions",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "binomials_and_factorising",
+      77
+     ]
+    ],
+    "levels": {
+     "1": 11,
+     "2": 20,
+     "3": 16,
+     "4": 30
+    },
+    "types": {
+     "task": 31,
+     "mcq": 10,
+     "expr": 27,
+     "numeric": 9
+    }
+   },
+   {
+    "id": "g9m-matrices",
+    "name": "Matrices",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "order_types_operations",
+      55
+     ]
+    ],
+    "levels": {
+     "1": 5,
+     "2": 26,
+     "3": 20,
+     "4": 4
+    },
+    "types": {
+     "task": 25,
+     "mcq": 11,
+     "expr": 13,
+     "numeric": 5,
+     "slots": 1
+    }
+   },
+   {
+    "id": "g9m-quadratics",
+    "name": "Quadratics",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "factorise_and_solve",
+      64
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 11,
+     "3": 26,
+     "4": 25
+    },
+    "types": {
+     "task": 27,
+     "mcq": 7,
+     "expr": 9,
+     "slots": 10,
+     "numeric": 11
+    }
+   },
+   {
+    "id": "g9m-manipulation",
+    "name": "Formulae & Changing the Subject",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "formulae_and_subject",
+      73
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 16,
+     "3": 27,
+     "4": 28
+    },
+    "types": {
+     "task": 31,
+     "mcq": 6,
+     "numeric": 21,
+     "expr": 15
+    }
+   },
+   {
+    "id": "g9m-inequalities",
+    "name": "Inequalities",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "solve_and_represent",
+      58
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 14,
+     "3": 25,
+     "4": 19
+    },
+    "types": {
+     "task": 26,
+     "mcq": 8,
+     "expr": 14,
+     "numeric": 10
+    }
+   },
+   {
+    "id": "g9m-simultaneous",
+    "name": "Simultaneous Equations",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "solve_simultaneous",
+      89
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 7,
+     "3": 28,
+     "4": 54
+    },
+    "types": {
+     "task": 42,
+     "mcq": 4,
+     "slots": 30,
+     "numeric": 13
+    }
+   },
+   {
+    "id": "g9m-statistics",
+    "name": "Statistics",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "frequency_and_averages",
+      91
+     ]
+    ],
+    "levels": {
+     "1": 12,
+     "2": 18,
+     "3": 17,
+     "4": 44
+    },
+    "types": {
+     "task": 34,
+     "mcq": 8,
+     "numeric": 48,
+     "slots": 1
+    }
+   },
+   {
+    "id": "g9m-probability",
+    "name": "Probability",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "simple_and_combined_events",
+      77
+     ]
+    ],
+    "levels": {
+     "1": 10,
+     "2": 25,
+     "3": 19,
+     "4": 23
+    },
+    "types": {
+     "task": 32,
+     "mcq": 6,
+     "numeric": 26,
+     "expr": 13
+    }
+   }
+  ],
+  "files": [
+   "balance_bank.js",
+   "ch01_indices.js",
+   "ch02_coordinates.js",
+   "ch03_number_revision.js",
+   "ch04_volume.js",
+   "ch05_vectors.js",
+   "ch06_statistics.js",
+   "ch07_trigonometry.js",
+   "ch08_probability.js",
+   "ch09_expressions.js",
+   "ch10_quadratics.js",
+   "ch11_simultaneous.js",
+   "ch12_surface_area.js",
+   "ch13_patterns.js",
+   "ch14_inequalities.js",
+   "ch15_finance.js",
+   "ch16_capacity.js",
+   "ch17_matrices.js",
+   "ch18_manipulation.js",
+   "ch19_geometry_revision.js",
+   "depth_bank.js",
+   "extended_bank.js",
+   "extended_bank_2.js",
+   "extended_bank_3.js",
+   "maths_multi_year.js",
+   "mcq_bank.js",
+   "past_paper_2024.js",
+   "visual_bank.js",
+   "visual_bank_2.js"
+  ],
+  "total": 1760
+ },
+ "grade9-physics": {
+  "chapters": [
+   {
+    "id": "g9s-p1-measurements",
+    "name": "P1 · Measurements",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "measuring_instruments",
+      30
+     ],
+     [
+      "si_units",
+      21
+     ],
+     [
+      "measurement_errors",
+      21
+     ],
+     [
+      "accuracy_of_instruments",
+      18
+     ]
+    ],
+    "levels": {
+     "1": 24,
+     "2": 40,
+     "3": 26,
+     "4": 0
+    },
+    "types": {
+     "mcq": 80,
+     "numeric": 5,
+     "text": 5
+    }
+   },
+   {
+    "id": "g9s-p2-light",
+    "name": "P2 · Light",
+    "examWeight": 6,
+    "enrichment": false,
+    "subsections": [
+     [
+      "laws_of_reflection",
+      25
+     ],
+     [
+      "ray_diagrams",
+      23
+     ],
+     [
+      "luminous_objects",
+      21
+     ],
+     [
+      "rectilinear_propagation",
+      21
+     ],
+     [
+      "reflection",
+      21
+     ],
+     [
+      "light_and_vision",
+      20
+     ],
+     [
+      "plane_mirrors",
+      4
+     ],
+     [
+      "refraction",
+      2
+     ]
+    ],
+    "levels": {
+     "1": 35,
+     "2": 66,
+     "3": 36,
+     "4": 0
+    },
+    "types": {
+     "mcq": 125,
+     "numeric": 7,
+     "text": 5
+    }
+   },
+   {
+    "id": "g9s-p3-energy",
+    "name": "P3 · Energy, Heat & Temperature",
+    "examWeight": 6,
+    "enrichment": false,
+    "subsections": [
+     [
+      "conservation_of_energy",
+      29
+     ],
+     [
+      "energy_problems",
+      29
+     ],
+     [
+      "electricity_production",
+      23
+     ],
+     [
+      "comparing_energy_sources",
+      23
+     ],
+     [
+      "renewable_sources",
+      22
+     ],
+     [
+      "non_renewable_sources",
+      20
+     ],
+     [
+      "thermal_expansion",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 28,
+     "2": 67,
+     "3": 52,
+     "4": 0
+    },
+    "types": {
+     "mcq": 123,
+     "text": 6,
+     "task": 4,
+     "numeric": 14
+    }
+   },
+   {
+    "id": "g9s-p4-motion",
+    "name": "P4 · Motion",
+    "examWeight": 9,
+    "enrichment": false,
+    "subsections": [
+     [
+      "speed_time_graphs",
+      42
+     ],
+     [
+      "motion_problems",
+      34
+     ],
+     [
+      "acceleration",
+      28
+     ],
+     [
+      "scalars_vectors",
+      21
+     ],
+     [
+      "distance_displacement",
+      19
+     ],
+     [
+      "speed_velocity",
+      19
+     ],
+     [
+      "oscillations",
+      1
+     ]
+    ],
+    "levels": {
+     "1": 21,
+     "2": 58,
+     "3": 85,
+     "4": 0
+    },
+    "types": {
+     "mcq": 115,
+     "numeric": 37,
+     "text": 5,
+     "task": 7
+    }
+   },
+   {
+    "id": "g9s-p5-electricity",
+    "name": "P5 · Electricity",
+    "examWeight": 6,
+    "enrichment": false,
+    "subsections": [
+     [
+      "dc_circuit_problems",
+      36
+     ],
+     [
+      "measuring_current_voltage",
+      28
+     ],
+     [
+      "charge_and_current",
+      27
+     ],
+     [
+      "circuit_symbols",
+      24
+     ],
+     [
+      "current_voltage_resistance",
+      24
+     ],
+     [
+      "potential_difference",
+      24
+     ],
+     [
+      "series_circuits",
+      20
+     ]
+    ],
+    "levels": {
+     "1": 32,
+     "2": 68,
+     "3": 83,
+     "4": 0
+    },
+    "types": {
+     "mcq": 132,
+     "numeric": 39,
+     "text": 5,
+     "task": 7
+    }
+   },
+   {
+    "id": "g9s-inquiry",
+    "name": "Scientific Inquiry",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "formula_rearrangement",
+      20
+     ],
+     [
+      "recording_data",
+      20
+     ],
+     [
+      "interpreting_results",
+      20
+     ],
+     [
+      "hypothesis_testing",
+      20
+     ],
+     [
+      "lab_safety",
+      20
+     ],
+     [
+      "reporting_findings",
+      20
+     ]
+    ],
+    "levels": {
+     "1": 13,
+     "2": 37,
+     "3": 52,
+     "4": 18
+    },
+    "types": {
+     "numeric": 24,
+     "mcq": 88,
+     "text": 8
+    }
+   },
+   {
+    "id": "g9s-sts",
+    "name": "Science, Technology & Society",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "optical_fibres",
+      20
+     ],
+     [
+      "energy_and_society",
+      20
+     ],
+     [
+      "justifying_views",
+      20
+     ]
+    ],
+    "levels": {
+     "1": 4,
+     "2": 17,
+     "3": 25,
+     "4": 14
+    },
+    "types": {
+     "mcq": 51,
+     "text": 8,
+     "numeric": 1
+    }
+   }
+  ],
+  "files": [
+   "inquiry.js",
+   "inquiry_depth.js",
+   "p1_measurements.js",
+   "p1_volume.js",
+   "p2_light.js",
+   "p2_volume.js",
+   "p3_energy.js",
+   "p3_volume.js",
+   "p4_motion.js",
+   "p4_volume.js",
+   "p5_electricity.js",
+   "p5_volume.js",
+   "past_paper_2024.js",
+   "phy_diagram_multi.js",
+   "phy_multi_year.js",
+   "phy_paper_inspired.js",
+   "phy_tasks.js",
+   "sts.js",
+   "sts_depth.js"
+  ],
+  "total": 901
+ },
+ "grade9-social-modern-studies": {
+  "chapters": [
+   {
+    "id": "g9sms-colonial-independence",
+    "name": "Colonial Past & the Road to Independence",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "colonial_period",
+      14
+     ],
+     [
+      "parties_1967",
+      6
+     ],
+     [
+      "republic_1992",
+      6
+     ],
+     [
+      "independence_1968",
+      4
+     ]
+    ],
+    "levels": {
+     "1": 7,
+     "2": 17,
+     "3": 6,
+     "4": 0
+    },
+    "types": {
+     "mcq": 30
+    }
+   },
+   {
+    "id": "g9sms-living-conditions",
+    "name": "Living Conditions, 1940s–1960s",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "health_and_disease",
+      6
+     ],
+     [
+      "strike_1975",
+      5
+     ],
+     [
+      "housing_transport",
+      5
+     ],
+     [
+      "education_before_reform",
+      4
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 13,
+     "3": 6,
+     "4": 0
+    },
+    "types": {
+     "mcq": 20
+    }
+   },
+   {
+    "id": "g9sms-economy-1960s",
+    "name": "The Economy at Independence & Its Obstacles",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "obstacles",
+      7
+     ],
+     [
+      "sugar_dependence",
+      6
+     ],
+     [
+      "early_measures",
+      5
+     ],
+     [
+      "predictions",
+      3
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 9,
+     "3": 10,
+     "4": 0
+    },
+    "types": {
+     "mcq": 21
+    }
+   },
+   {
+    "id": "g9sms-industrialisation",
+    "name": "Industrialisation: ISI, the EPZ & the Mauritian Miracle",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "epz_incentives",
+      9
+     ],
+     [
+      "sectors_over_time",
+      8
+     ],
+     [
+      "mauritian_miracle",
+      7
+     ],
+     [
+      "import_substitution",
+      4
+     ]
+    ],
+    "levels": {
+     "1": 2,
+     "2": 13,
+     "3": 13,
+     "4": 0
+    },
+    "types": {
+     "mcq": 28
+    }
+   },
+   {
+    "id": "g9sms-industrial-impact",
+    "name": "Impacts of Industrialisation on Society",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "work_and_jobs",
+      6
+     ],
+     [
+      "environment_impact",
+      5
+     ],
+     [
+      "life_expectancy",
+      4
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 9,
+     "3": 6,
+     "4": 0
+    },
+    "types": {
+     "mcq": 15
+    }
+   },
+   {
+    "id": "g9sms-chagos-tromelin",
+    "name": "Chagos, Tromelin & Our Territory",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "diego_garcia",
+      5
+     ],
+     [
+      "expulsion_and_icj",
+      5
+     ],
+     [
+      "chagos_history",
+      5
+     ],
+     [
+      "tromelin",
+      4
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 8,
+     "3": 10,
+     "4": 0
+    },
+    "types": {
+     "mcq": 19
+    }
+   },
+   {
+    "id": "g9sms-map-data-skills",
+    "name": "Map, Table & Graph Skills",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "graph_reading",
+      5
+     ],
+     [
+      "table_reading",
+      5
+     ],
+     [
+      "map_key_and_scale",
+      5
+     ],
+     [
+      "map_shading",
+      4
+     ],
+     [
+      "pyramid_construction",
+      3
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 13,
+     "3": 9,
+     "4": 0
+    },
+    "types": {
+     "mcq": 22
+    }
+   },
+   {
+    "id": "g9sms-population",
+    "name": "Population Studies",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "density_distribution",
+      10
+     ],
+     [
+      "birth_death_rates",
+      9
+     ],
+     [
+      "ageing",
+      8
+     ],
+     [
+      "structure_pyramids",
+      8
+     ],
+     [
+      "life_expectancy",
+      5
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 22,
+     "3": 18,
+     "4": 0
+    },
+    "types": {
+     "mcq": 40
+    }
+   },
+   {
+    "id": "g9sms-migration",
+    "name": "Migration & the Movement of People",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "push_pull",
+      4
+     ],
+     [
+      "internal_international",
+      4
+     ],
+     [
+      "refugees_displacement",
+      3
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 5,
+     "3": 5,
+     "4": 0
+    },
+    "types": {
+     "mcq": 11
+    }
+   },
+   {
+    "id": "g9sms-outer-islands",
+    "name": "Rodrigues, Agalega & the Outer Islands",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "agalega",
+      5
+     ],
+     [
+      "rodrigues",
+      5
+     ],
+     [
+      "services_and_access",
+      5
+     ]
+    ],
+    "levels": {
+     "1": 3,
+     "2": 8,
+     "3": 4,
+     "4": 0
+    },
+    "types": {
+     "mcq": 15
+    }
+   },
+   {
+    "id": "g9sms-hazards-environment",
+    "name": "Natural Hazards & the Environment",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "cyclones",
+      8
+     ],
+     [
+      "climate_change",
+      5
+     ],
+     [
+      "environmental_damage",
+      5
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 12,
+     "3": 5,
+     "4": 0
+    },
+    "types": {
+     "mcq": 18
+    }
+   },
+   {
+    "id": "g9sms-government-welfare",
+    "name": "Government, Citizenship & the Welfare State",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "taxes_and_mra",
+      10
+     ],
+     [
+      "constitution",
+      9
+     ],
+     [
+      "head_of_state_voting",
+      7
+     ],
+     [
+      "welfare_measures",
+      5
+     ],
+     [
+      "rights_and_law",
+      4
+     ]
+    ],
+    "levels": {
+     "1": 5,
+     "2": 19,
+     "3": 11,
+     "4": 0
+    },
+    "types": {
+     "mcq": 35
+    }
+   },
+   {
+    "id": "g9sms-media",
+    "name": "Media & Communication",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "types_of_media",
+      11
+     ],
+     [
+      "roles_of_media",
+      7
+     ],
+     [
+      "media_and_learning",
+      2
+     ],
+     [
+      "media_and_lifestyle",
+      2
+     ]
+    ],
+    "levels": {
+     "1": 6,
+     "2": 10,
+     "3": 6,
+     "4": 0
+    },
+    "types": {
+     "mcq": 22
+    }
+   },
+   {
+    "id": "g9sms-family",
+    "name": "Family & Social Roles",
+    "examWeight": 3,
+    "enrichment": false,
+    "subsections": [
+     [
+      "family_types",
+      8
+     ],
+     [
+      "women_at_work",
+      4
+     ],
+     [
+      "family_functions",
+      3
+     ],
+     [
+      "gender_roles",
+      2
+     ]
+    ],
+    "levels": {
+     "1": 3,
+     "2": 9,
+     "3": 5,
+     "4": 0
+    },
+    "types": {
+     "mcq": 17
+    }
+   },
+   {
+    "id": "g9sms-social-change",
+    "name": "Social Change & Collective Behaviour",
+    "examWeight": 2,
+    "enrichment": false,
+    "subsections": [
+     [
+      "deviance_and_norms",
+      7
+     ],
+     [
+      "social_mobility",
+      3
+     ],
+     [
+      "forces_of_change",
+      3
+     ],
+     [
+      "social_movements",
+      2
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 6,
+     "3": 8,
+     "4": 0
+    },
+    "types": {
+     "mcq": 15
+    }
+   },
+   {
+    "id": "g9sms-links",
+    "name": "Mauritius and the World",
+    "examWeight": 4,
+    "enrichment": false,
+    "subsections": [
+     [
+      "regional_organisations",
+      5
+     ],
+     [
+      "origins_of_our_people",
+      5
+     ],
+     [
+      "links_india_africa",
+      3
+     ],
+     [
+      "links_europe_france",
+      3
+     ],
+     [
+      "benefits_of_membership",
+      3
+     ]
+    ],
+    "levels": {
+     "1": 0,
+     "2": 10,
+     "3": 9,
+     "4": 0
+    },
+    "types": {
+     "mcq": 19
+    }
+   },
+   {
+    "id": "g9sms-economy-today",
+    "name": "Economy & Work Today",
+    "examWeight": 1,
+    "enrichment": false,
+    "subsections": [
+     [
+      "sectors",
+      10
+     ],
+     [
+      "siting_a_factory",
+      5
+     ],
+     [
+      "factors_of_production",
+      3
+     ]
+    ],
+    "levels": {
+     "1": 1,
+     "2": 9,
+     "3": 8,
+     "4": 0
+    },
+    "types": {
+     "mcq": 18
+    }
+   }
+  ],
+  "files": [
+   "sms_multi_year.js",
+   "sms_paper_inspired.js",
+   "sms_volume_1.js",
+   "sms_volume_2.js",
+   "starter_bank.js"
+  ],
+  "total": 365
+ }
+}

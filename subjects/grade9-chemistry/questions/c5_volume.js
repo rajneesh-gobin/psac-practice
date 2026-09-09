@@ -101,7 +101,7 @@ const MCQ = [
     'Excess reactant speeds up crystallisation and makes the crystals too small',
     'Excess reactant reacts with the salt product and destroys it',
     'Excess reactant makes the solution too concentrated to crystallise'],
-   'Excess acid (or excess base) will contaminate the final salt product and make it impure',
+   'Excess reactant will contaminate the final salt product and make it impure',
    'The product must be pure, so neither reactant should be left over.',
    'Any remaining acid or alkali will be present in the filtrate and will contaminate the crystals when the solution is evaporated; to get a pure salt, the reactants must be used in exactly the stoichiometric ratio, or excess solid base is added and filtered off.'],
 

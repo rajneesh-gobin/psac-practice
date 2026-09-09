@@ -1460,7 +1460,7 @@ const AdminPanel = (() => {
   async function loadSettings() {
     if (!_sb) return;
     const { data } = await _sb.from('mm_data').select('value').eq('key', 'global_settings').maybeSingle();
-    _settings = data?.value || { disabled_grades: [], disabled_subjects: [], disabled_chapters: [], registration_open: true };
+    _settings = data?.value || { disabled_grades: [], disabled_subjects: [], disabled_chapters: [], registration_open: true, leaderboard_enabled: false };
   }
 
   async function _saveSettings() {
@@ -1560,6 +1560,14 @@ const AdminPanel = (() => {
     const regToggle = document.getElementById('admin-reg-toggle');
     if (regToggle) regToggle.checked = !!_settings.registration_open;
     _styleToggle(regToggle);
+    // Global leaderboard toggle
+    // ⚠ !== true, not a truthy test: an older global_settings blob has no such
+    //   key at all, and that must read as OFF — the same coalesce(..., false)
+    //   the SQL does.
+    const lbToggle = document.getElementById('admin-leaderboard-toggle');
+    if (lbToggle) lbToggle.checked = _settings.leaderboard_enabled === true;
+    _styleToggle(lbToggle);
+
     // Plan enforcement toggle
     const enfToggle = document.getElementById('admin-enforcement-toggle');
     if (enfToggle) enfToggle.checked = !!_settings.plan_enforcement_enabled;
@@ -1611,6 +1619,26 @@ const AdminPanel = (() => {
       _styleToggle(toggle);
     });
   }
+
+  // ⚠ This makes every child's name and score visible to every other child in
+  //   the app. It is a safeguarding decision, not a feature flag, which is why
+  //   it ships OFF and why the confirmation names what actually becomes visible.
+  async function toggleLeaderboard(on) {
+    if (!_settings) return;
+    if (on && !confirm('Turn the global leaderboard ON?\n\nEvery child will be able to see the display name, avatar, grade, level and score of every other child in the app. No ids, friend codes or family details are shared.\n\nYou can switch this off again at any time.')) {
+      const t = document.getElementById('admin-leaderboard-toggle');
+      if (t) { t.checked = false; _styleToggle(t); }
+      return;
+    }
+    const prev = JSON.stringify(_settings);
+    _settings.leaderboard_enabled = on;
+    await _commitSettings(prev, `Global leaderboard ${on ? 'enabled 🌍' : 'disabled'}`, () => {
+      const toggle = document.getElementById('admin-leaderboard-toggle');
+      if (toggle) toggle.checked = _settings.leaderboard_enabled === true;
+      _styleToggle(toggle);
+    });
+  }
+
 
   // ── Stats ───────────────────────────────────
   async function loadStats() {
@@ -3829,7 +3857,7 @@ const AdminPanel = (() => {
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
-    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, filterRoles, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, toggleLeaderboard, loadStats, loadReports, loadMoreReports, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, filterRoles, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier, sortTeachers, refreshTeacherActivity,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
     qmSubjectFilter: QM.qmSubjectFilter, qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,

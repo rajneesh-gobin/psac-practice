@@ -237,9 +237,17 @@ disagree at birth.
 { id:'g5enr-personalities', name:'…', icon:'👤', enrichment:true,
   examWeight:2, enrichmentNote:'Derived from syllabus, NOT a direct MIE chapter.' }
 ```
-Gold "✨ BONUS" card. ⚠ **`examWeight: 0` does NOT keep a chapter out of an
-exam** — `assembleExamPaper()` clamps every weight with `Math.max(1, …)`, so a 0
-still buys a slot. The TYPE filter is the guard that actually holds.
+Gold "✨ BONUS" card. **An EXPLICIT `examWeight: 0` now keeps a chapter out of an
+exam**, as it always read as though it did; a MISSING weight still defaults to 1,
+because 7 packs never set one. ⚠ It used to clamp both with `Math.max(1, …)`, so
+a deliberate 0 still bought a slot — measured on grade9-english, where
+`g9eng-listening` and `g9eng-speaking` are weighted 0 and hold two poolable items
+each: the paper was built from 42 slots and reconciliation took both back off
+`g9eng-reading`, the pack's HIGHEST-weighted chapter, 10 → 8. No amount of new
+content could fix that. ⚠ Only 8 chapters carry an explicit 0 and 6 are the French
+cloze/errorhunt chapters `canFill()` already drops, so this changed one pack.
+⚠ The TYPE filter is still the guard that holds for a chapter that is weighted but
+unfillable.
 
 ### The rest of authoring → [`content-authoring.md`](docs/claude/content-authoring.md)
 Past papers (164 items, never gradable) · dynamic generators · the two French
@@ -405,11 +413,14 @@ Never move an entitlement decision into the browser.
 |---|---|---|
 | Which questions a child gets (plan, kill switch, entitlements, expiry, blocks) | `netlify/functions/questions.js` (service role) | `_planAllowsChapter()` — UI only |
 | Credits earned | `record_student_activity()` RPC (idempotent, reads `current_student_id()`) | anything client-side |
+| Points earned, and the level on the leaderboard | `_award_points()` in SQL, keyed `(student_id, kind, ref)` so a thing pays **once** — called by `record_question_progress()`, `award_activity_points()` and `add_friend()` | `DB.xp` / `gainPoints()` — an optimistic prediction, corrected on the next flush |
+| Whether the GLOBAL leaderboard exists at all | `leaderboard_enabled()` (from `global_settings`, **default false**) — `get_points_leaderboard()` returns no rows to anyone while off | `#dash-global-lb` being hidden — presentation only |
 | Credits spent | `purchase_chapter()` / `purchase_subject()` (price + balance read server-side, row-locked) | the Buy button |
 | Expired account | `questions.js` | `Auth.isAccessExpired()` — picks wording only |
 | Forum identity (`author_name`/`author_type`) | `forum_set_author` BEFORE INSERT trigger | the browser (it no longer sends them) |
 | Parent PIN, when it mints a session | `netlify/functions/parent-pin-signin.js` + `parent_pin_attempts` (service role) | `_pinMatches()` — a local convenience check |
 | Parent's own `lockedChapters` | client only — **deliberate**: the parent is not the adversary, and per-child server filtering would make the question cache per-child |
+| Which GRADES a child may use (`restrictions.allowedGrades`) | client only, same category as `lockedChapters` — `GradeAccess` in `engine/helpers.js` | `questions.js`, which still decides what the family's plan covers |
 
 Ordering that is the whole feature, in `questions.js`:
 - **expired** ⇒ the allowed list becomes *exactly* the live entitlements, even on
@@ -609,6 +620,10 @@ is child-facing versus parent-facing, deliberately. Headlines:
 - ⚠ **PRICING IS HIDDEN, NOT DELETED**, and the "free right now" promise carries no
   end date on any surface. Do not reintroduce a deadline in one place.
 - ⚠ **Every number on the landing page is measured and goes stale silently.**
+- ⚠ **The printable paper prints only ~5 questions with their A/B/C/D options**;
+  every other choice question is printed open, with a line to write on, and
+  Section B has no options at all. `_printNeedsOptions()` decides which stems
+  cannot survive that — measured, 20% of the corpus — and it fails SAFE.
 - ⚠ **Report copy says "they"**, a chapter with no attempts is "not started" (never
   0%), and there is no "missed sessions" list on a child's screen.
 

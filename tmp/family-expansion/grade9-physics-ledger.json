@@ -1,0 +1,565 @@
+{
+  "pack": "grade9-physics",
+  "file": "subjects/grade9-physics/questions/family_expansion.js",
+  "idNamespace": "g9s-pfam-NNN-<a..e>",
+  "totals": {
+    "families": 13,
+    "variants": 56,
+    "byDifficulty": {
+      "1": 0,
+      "2": 25,
+      "3": 16,
+      "4": 15
+    },
+    "byType": {
+      "mcq": 26,
+      "numeric": 24,
+      "text": 6
+    },
+    "byChapter": {
+      "g9s-p4-motion": 18,
+      "g9s-p5-electricity": 13,
+      "g9s-p1-measurements": 9,
+      "g9s-p3-energy": 8,
+      "g9s-p2-light": 4,
+      "g9s-inquiry": 4
+    }
+  },
+  "families": [
+    {
+      "familyId": "g9s-pfam-001",
+      "chapterId": "g9s-p4-motion",
+      "subsection": "speed_time_graphs",
+      "outcome": "Interpret a speed-time graph for motion in a straight line: read a value, find a gradient, recognise the nature of the motion, and find distance from the area",
+      "context": "One inline-SVG speed-time graph of a bus: 0 to 12 m/s over 4 s, steady for 4 s, back to rest over 4 s",
+      "variants": [
+        {
+          "id": "g9s-pfam-001-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "read a value off the sloping section, where the answer is not a plotted vertex",
+          "misconception": "reads the time axis instead of the speed axis, or gives the graph's peak value"
+        },
+        {
+          "id": "g9s-pfam-001-b",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "find the gradient of one named section rather than read a point",
+          "misconception": "divides the speed change by the total journey time instead of by the time it was changing"
+        },
+        {
+          "id": "g9s-pfam-001-c",
+          "difficulty": 3,
+          "type": "mcq",
+          "variation": "diagnose a stated pupil claim about the flat section rather than describe the graph",
+          "misconception": "carries the distance-time rule across: a flat line read as 'at rest' on a speed axis"
+        },
+        {
+          "id": "g9s-pfam-001-d",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "area under the graph, split into three shapes; nothing can be read directly",
+          "misconception": "multiplies the maximum speed by the total time, counting the sloping parts as full speed"
+        },
+        {
+          "id": "g9s-pfam-001-e",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "evaluate a driver's claim about average speed; requires computing the area first, then judging",
+          "misconception": "takes the speed held longest, or the midpoint of first and last speed, as the average"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-002",
+      "chapterId": "g9s-p4-motion",
+      "subsection": "speed_velocity / motion_problems",
+      "outcome": "Solve problems on the motion of objects, converting to SI units before calculating",
+      "context": "Journeys on Mauritian roads with the quantities deliberately supplied in km and minutes",
+      "variants": [
+        {
+          "id": "g9s-pfam-002-a",
+          "difficulty": 2,
+          "type": "mcq",
+          "variation": "two conversions needed before one division; the unconverted results are the distractors",
+          "misconception": "divides before converting (3.6/4 = 0.9), or converts the distance only (3600/4 = 900)"
+        },
+        {
+          "id": "g9s-pfam-002-b",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "reversed: speed and time given, distance wanted, and the ANSWER unit differs from the working unit",
+          "misconception": "multiplies m/s by minutes, then forgets to convert the answer from metres to km"
+        },
+        {
+          "id": "g9s-pfam-002-c",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "time is the unknown, and a conversion is needed at both ends of the calculation",
+          "misconception": "divides kilometres by metres per second and answers 1.2"
+        },
+        {
+          "id": "g9s-pfam-002-d",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "compare two routes under a constraint; the shorter route is the slower one",
+          "misconception": "assumes the shorter route must be quicker; or compares unconverted quotients, giving a 0.1 'saving'"
+        },
+        {
+          "id": "g9s-pfam-002-e",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "diagnose what is wrong with a correct calculation that is wrongly described",
+          "misconception": "treats an average speed as the speed at a particular instant"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-003",
+      "chapterId": "g9s-p1-measurements",
+      "subsection": "si_units / accuracy_of_instruments",
+      "outcome": "Use an appropriate instrument for a length, convert to SI units, and compare the accuracy of simple instruments",
+      "context": "Finding the thickness of one sheet of paper by measuring a stack of them",
+      "variants": [
+        {
+          "id": "g9s-pfam-003-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "divide a measured total to get the value for one item",
+          "misconception": "divides the wrong way round, making one sheet thicker than the whole stack"
+        },
+        {
+          "id": "g9s-pfam-003-b",
+          "difficulty": 2,
+          "type": "mcq",
+          "variation": "convert a sub-millimetre length to metres; every distractor is one wrong power of ten",
+          "misconception": "divides by 100 (the centimetre factor) or by 10, or relabels the number unchanged"
+        },
+        {
+          "id": "g9s-pfam-003-c",
+          "difficulty": 3,
+          "type": "mcq",
+          "variation": "justify the method rather than execute it; requires knowing what the instrument can resolve",
+          "misconception": "believes an instrument can measure anything if you look carefully enough"
+        },
+        {
+          "id": "g9s-pfam-003-d",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "compare two pupils' methods that give the same value, and decide which value is more reliable",
+          "misconception": "the same instrument must give the same reliability, whatever is measured with it"
+        },
+        {
+          "id": "g9s-pfam-003-e",
+          "difficulty": 2,
+          "type": "text",
+          "variation": "produce the resolution of an instrument instead of selecting it",
+          "misconception": "gives the ruler's greatest length (30 cm) when asked for the smallest it can measure"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-004",
+      "chapterId": "g9s-p1-measurements",
+      "subsection": "measurement_errors",
+      "outcome": "Recognise a zero (end) error and correct readings for it",
+      "context": "Top-pan balances carrying a known zero error, used forwards, backwards and in a difference",
+      "variants": [
+        {
+          "id": "g9s-pfam-004-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "correct a single reading for a NEGATIVE zero error, so the correction is an addition",
+          "misconception": "always subtracts the zero error, whatever its sign"
+        },
+        {
+          "id": "g9s-pfam-004-b",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "reversed: a known standard mass is used to find the instrument's fault",
+          "misconception": "adds the two masses, or reports the reading as though it were the error"
+        },
+        {
+          "id": "g9s-pfam-004-c",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "judge whether a correction is needed at all when the result is a DIFFERENCE of two readings",
+          "misconception": "a known error must always be applied; a fixed offset in fact cancels in a subtraction"
+        },
+        {
+          "id": "g9s-pfam-004-d",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "correct once, then share out; the order of the two operations is the whole question",
+          "misconception": "corrects after dividing, or applies the zero error once per marble"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-005",
+      "chapterId": "g9s-p5-electricity",
+      "subsection": "charge_and_current / potential_difference",
+      "outcome": "Recall and use Q = It and W = QV",
+      "context": "Lamps and torch bulbs run for a time given in minutes, so every part needs a conversion to seconds",
+      "variants": [
+        {
+          "id": "g9s-pfam-005-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "direct Q = It with the time supplied in minutes",
+          "misconception": "uses the time in minutes, giving an answer 60 times too small"
+        },
+        {
+          "id": "g9s-pfam-005-b",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "reversed: charge given, current wanted",
+          "misconception": "divides by 5 instead of 300, producing a current no household circuit could carry"
+        },
+        {
+          "id": "g9s-pfam-005-c",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "chains the two named formulae: Q = It feeds W = QV",
+          "misconception": "multiplies all three given numbers once, with the time still in minutes"
+        },
+        {
+          "id": "g9s-pfam-005-d",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "apparent contradiction: very different current and voltage, identical energy transferred",
+          "misconception": "judges energy by the current alone, or by the voltage alone, instead of the product"
+        },
+        {
+          "id": "g9s-pfam-005-e",
+          "difficulty": 2,
+          "type": "text",
+          "variation": "produce the unit of charge that defines the volt, rather than select it",
+          "misconception": "answers 'ampere', confusing the unit of current with the unit of charge"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-006",
+      "chapterId": "g9s-p5-electricity",
+      "subsection": "dc_circuit_problems",
+      "outcome": "Solve problems on simple DC series circuits",
+      "context": "One inline-SVG series circuit, 4 ohm and 8 ohm resistors on a 12 V supply, then one component swapped",
+      "variants": [
+        {
+          "id": "g9s-pfam-006-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "combine two series resistances",
+          "misconception": "averages the two resistances instead of adding them"
+        },
+        {
+          "id": "g9s-pfam-006-b",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "two steps: total resistance, then I = V/R",
+          "misconception": "uses one resistor's value as though it were the whole circuit's resistance"
+        },
+        {
+          "id": "g9s-pfam-006-c",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "three steps, ending with V = IR applied to ONE component",
+          "misconception": "shares the supply p.d. equally between the two components and answers 6 V"
+        },
+        {
+          "id": "g9s-pfam-006-d",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "change one condition and predict the effect on TWO coupled quantities; answers are relative, not numeric",
+          "misconception": "a component whose own resistance has not changed must keep the same p.d. across it"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-007",
+      "chapterId": "g9s-p2-light",
+      "subsection": "laws_of_reflection / reflection",
+      "outcome": "Apply the laws of reflection; measure angles from the normal; explain diffuse reflection",
+      "context": "One inline-SVG plane mirror with a single incident ray, labelled 30 degrees to the mirror SURFACE",
+      "variants": [
+        {
+          "id": "g9s-pfam-007-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "convert an angle given from the surface into the angle of incidence",
+          "misconception": "measures the angle from the mirror instead of from the normal and answers 30"
+        },
+        {
+          "id": "g9s-pfam-007-b",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "same figure, but the angle wanted spans both rays and the normal between them",
+          "misconception": "gives the angle of reflection (60) as though it were the angle between the two rays"
+        },
+        {
+          "id": "g9s-pfam-007-c",
+          "difficulty": 2,
+          "type": "text",
+          "variation": "produce the name of the reference line rather than pick it from a list",
+          "misconception": "answers 'perpendicular' or 'vertical', confusing the line's name with its direction"
+        },
+        {
+          "id": "g9s-pfam-007-e",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "resolve an apparent contradiction: the laws seem to fail on a rough wall",
+          "misconception": "a law that does not give the familiar result must have stopped applying"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-008",
+      "chapterId": "g9s-p3-energy",
+      "subsection": "comparing_energy_sources",
+      "outcome": "Compare the advantages and drawbacks of electricity sources and justify a choice from data",
+      "context": "One table of three supplies for a village (output, fuel cost, pollution) against a stated daily and night-time demand",
+      "variants": [
+        {
+          "id": "g9s-pfam-008-a",
+          "difficulty": 2,
+          "type": "mcq",
+          "variation": "read the table and apply a threshold before comparing on cost",
+          "misconception": "compares on cost alone and picks the cheapest row without checking it meets the demand"
+        },
+        {
+          "id": "g9s-pfam-008-b",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "a daily total that looks sufficient conceals WHEN the energy arrives",
+          "misconception": "compares daily totals (450 vs 400) and concludes there is no shortfall"
+        },
+        {
+          "id": "g9s-pfam-008-c",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "evaluate a councillor's claim whose premises are all true but whose conclusion fails",
+          "misconception": "treats a correct daily total as a guarantee of supply at every hour"
+        },
+        {
+          "id": "g9s-pfam-008-d",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "identify the MISSING information; two distractors are already in the table and one is irrelevant",
+          "misconception": "decides from whatever data is present without asking what the decision actually requires"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-009",
+      "chapterId": "g9s-p3-energy",
+      "subsection": "conservation_of_energy / energy_problems",
+      "outcome": "Solve problems on conservation of energy in simple systems (falling objects)",
+      "context": "Objects dropped from a height: a ball, a bouncing ball, then a marble against a sheet of paper",
+      "variants": [
+        {
+          "id": "g9s-pfam-009-a",
+          "difficulty": 2,
+          "type": "mcq",
+          "variation": "name the direction of the transfer during the fall",
+          "misconception": "reverses the two stores, which describes an object thrown upwards instead"
+        },
+        {
+          "id": "g9s-pfam-009-b",
+          "difficulty": 3,
+          "type": "mcq",
+          "variation": "explain why the outcome falls short of what conservation alone would predict",
+          "misconception": "energy is 'used up' or destroyed at the bounce, rather than transferred elsewhere"
+        },
+        {
+          "id": "g9s-pfam-009-c",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "apparent contradiction: the same paper, unchanged in mass, falls differently once crumpled",
+          "misconception": "heavier objects always fall faster; here only the area facing the air changed"
+        },
+        {
+          "id": "g9s-pfam-009-d",
+          "difficulty": 2,
+          "type": "text",
+          "variation": "produce the name of the store that is FILLING, not the one emptying",
+          "misconception": "names the gravitational store, which is the one being emptied"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-010",
+      "chapterId": "g9s-inquiry",
+      "subsection": "interpreting_results / recording_data",
+      "outcome": "Process, interpret and evaluate results, and record data in a properly headed table",
+      "context": "One table of spring lengths against load, whose last reading breaks the proportion and was repeated three times",
+      "variants": [
+        {
+          "id": "g9s-pfam-010-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "derive extension from lengths; the table does not contain the answer",
+          "misconception": "reads the length straight off the table and gives 26.0 cm as the extension"
+        },
+        {
+          "id": "g9s-pfam-010-b",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "predict a value between two rows using the pattern, not the printed numbers",
+          "misconception": "interpolates the LENGTH instead of the extension, or forgets to subtract the unloaded length"
+        },
+        {
+          "id": "g9s-pfam-010-c",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "judge whether a claimed proportionality actually holds across the whole data set",
+          "misconception": "any set of rising readings shows proportionality; or the odd point 'must be a mistake' (it was repeated three times)"
+        },
+        {
+          "id": "g9s-pfam-010-d",
+          "difficulty": 2,
+          "type": "text",
+          "variation": "redeems the audit's seed g9s-inq-350 by PRODUCING the missing element of a heading, not selecting it",
+          "misconception": "writes the unit beside every number in the column instead of once in the heading"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-011",
+      "chapterId": "g9s-p4-motion",
+      "subsection": "distance_displacement / speed_velocity",
+      "outcome": "Distinguish distance from displacement and speed from velocity for a real journey",
+      "context": "One inline-SVG plan of an 80 m by 60 m field, walked round from a marked corner",
+      "variants": [
+        {
+          "id": "g9s-pfam-011-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "total path length round a closed shape",
+          "misconception": "adds only the two labelled sides and answers 140 m"
+        },
+        {
+          "id": "g9s-pfam-011-b",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "same journey, the other quantity; the answer is zero",
+          "misconception": "assumes displacement must equal the distance walked"
+        },
+        {
+          "id": "g9s-pfam-011-c",
+          "difficulty": 3,
+          "type": "mcq",
+          "variation": "both quantities at once, as rates, for a journey that clearly happened yet has zero velocity",
+          "misconception": "treats speed and velocity as interchangeable words for the same thing"
+        },
+        {
+          "id": "g9s-pfam-011-d",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "compare two walkers where the faster one has the SMALLER average velocity",
+          "misconception": "whoever has the greater speed must also have the greater velocity"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-012",
+      "chapterId": "g9s-p5-electricity",
+      "subsection": "measuring_current_voltage / series_circuits",
+      "outcome": "Measure current with an ammeter and voltage with a voltmeter; understand p.d. in a series circuit",
+      "context": "Meters placed on series circuits, and a measured result that contradicts a pupil's prediction",
+      "variants": [
+        {
+          "id": "g9s-pfam-012-a",
+          "difficulty": 2,
+          "type": "mcq",
+          "variation": "choose how BOTH meters are connected in one decision",
+          "misconception": "swaps them, which short-circuits the lamp with the ammeter and nearly stops the current with the voltmeter"
+        },
+        {
+          "id": "g9s-pfam-012-b",
+          "difficulty": 3,
+          "type": "mcq",
+          "variation": "explain why a measured result differs from a stated prediction",
+          "misconception": "current is 'used up' by the lamps; it is energy that is used up, not charge"
+        },
+        {
+          "id": "g9s-pfam-012-c",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "calculate the remaining p.d., then infer a property of the component from it",
+          "misconception": "the supply is always shared equally, or the full supply p.d. appears across each lamp"
+        },
+        {
+          "id": "g9s-pfam-012-d",
+          "difficulty": 2,
+          "type": "text",
+          "variation": "produce the instrument's name from what it measures and how it is connected",
+          "misconception": "answers 'ammeter', which measures current and goes in series"
+        }
+      ]
+    },
+    {
+      "familyId": "g9s-pfam-013",
+      "chapterId": "g9s-p4-motion",
+      "subsection": "acceleration",
+      "outcome": "Define and calculate acceleration for motion in a straight line",
+      "context": "Vehicles speeding up and braking on a straight road",
+      "variants": [
+        {
+          "id": "g9s-pfam-013-a",
+          "difficulty": 2,
+          "type": "numeric",
+          "variation": "acceleration from a non-zero starting speed",
+          "misconception": "divides the FINAL speed by the time, ignoring that the lorry was already moving"
+        },
+        {
+          "id": "g9s-pfam-013-b",
+          "difficulty": 3,
+          "type": "numeric",
+          "variation": "reversed: acceleration given, time wanted",
+          "misconception": "multiplies instead of dividing, giving an implausible 50 s stopping time"
+        },
+        {
+          "id": "g9s-pfam-013-c",
+          "difficulty": 3,
+          "type": "mcq",
+          "variation": "interpret the SIGN of a recorded acceleration against a stated direction of travel",
+          "misconception": "reads a minus sign as 'moving backwards' rather than 'slowing down'"
+        },
+        {
+          "id": "g9s-pfam-013-d",
+          "difficulty": 4,
+          "type": "mcq",
+          "variation": "compare two accelerations engineered to have the SAME change in speed",
+          "misconception": "compares the change in speed alone, or the final speed, and ignores the time"
+        }
+      ]
+    }
+  ],
+  "needs": [],
+  "verification": {
+    "node --check": "pass",
+    "sandbox load": "56 loaded, 56 unique ids, 0 missing fields, 0 undeclared subsection tags",
+    "built bundle": "56 present in netlify/question-bundles/grade9-physics.json with subsection, hint and explanation intact",
+    "test-subsection-invariant.js": "grade9-physics still FAILS on 3 PRE-EXISTING chapters (refraction, plane_mirrors, thermal_expansion, oscillations). None of my items uses any of those ids.",
+    "test-option-parity.js": "grade9-physics FAILS on 68 PRE-EXISTING length leaks; none is a -pfam- item. My 26 four-option MCQs: 0 leaks, answer-longest rate 0%, average within-question spread 4.8 chars.",
+    "test-live-pack-content.js": "84 passed, 0 failed; grade9-physics ok",
+    "test-mcq-answer-in-options.js": "grade9-physics FAILS on 3 PRE-EXISTING items (g9s-p2-v046, g9s-p3-v090, g9s-p3-v092) whose keyed answer is a paraphrase of an option rather than one of them. None of my 26 MCQs is affected.",
+    "test-family-batch.js": "grade9-physics row: 13 families, 56 variants, 0/25/16/15, numeric:24 mcq:26 text:6 - passes. The one FAIL in that run is another pack (126 g9eng-fam-* items with no ledger yet).",
+    "test-question-families.js": "29/29 checks passed."
+  },
+  "notes": [
+    "SUBSECTION IDS: pack-map.json was derived from tags and listed four ids the manifest does not declare (refraction, plane_mirrors, thermal_expansion, oscillations). Caught before authoring; every id used here is in declared-subsections.json.",
+    "L4 GAP: before this batch all 32 of the pack's L4 items sat in Scientific Inquiry (18) and STS (14). The five weighted core chapters P1-P5 held ZERO. Fifteen of the sixteen new L4 items are in P1-P5 (the sixteenth is in Inquiry), which is where the pack's exam weight is: 15/15/9/9/6 out of 40.",
+    "AUDIT SEED: g9s-inq-350 (L4, 'which column heading is correct: Current / A') is left untouched, per the isolation rules. g9s-pfam-010-d covers the same recording_data outcome as a PRODUCED short answer, honestly labelled L2, since naming the missing element of a table heading is L2 work.",
+    "FOUND, NOT FIXED (1): test-subsection-invariant.js fails for grade9-physics on 4 tagged-but-undeclared subsection ids across 3 chapters. Those items are unreachable from the per-subsection Practise screen. Either declare the ids in _manifest.js or retag the items.",
+    "FOUND, NOT FIXED (2): test-option-parity.js fails grade9-physics with 68 items where the correct answer is materially the longest option (g9s-p1-v*, g9s-p2-v*, g9s-p4-v*, g9s-p5-v* and the depth files). The pack has no BASELINE entry in that script, so this is an outright FAIL rather than recorded debt - the coordinator needs to decide whether to work it off or record it.",
+    "FOUND, NOT FIXED (3): test-option-parity.js also fails on g9sms-pi054 (grade9-social-modern-studies) for referencing the textbook in the question text. Not my pack.",
+    "FIGURES: 12 items carry inline SVG (a speed-time graph, two series circuits, a mirror ray diagram, a field plan) and 7 carry an HTML table (class q-table, matching p3_volume.js). No image file is referenced, so nothing here can 404 or break offline. Every aria-label is deliberately uninformative ('a circuit diagram', 'a plan of a rectangular field').",
+    "NO NEW FIELDS: nothing outside the factories' fixed field lists is used, so nothing can be silently dropped at build time. The family id is the question id minus its -<variant> suffix, as the brief requires.",
+    "ARITHMETIC: every division comes out exact and every answer was re-derived twice from the stem including units. Values were chosen for that: 12/12 = 1 A, 15000/12.5 = 1200 s, 25.2/4 = 6.3 g, (29-5)/8 = 3 m/s2.",
+    "DISCLOSURE: checked variant by variant that no option or stem states another variant's answer. Two stems were rewritten for this - g9s-pfam-003-b now uses 0.4 mm card rather than restating 003-a's 0.1 mm, and g9s-pfam-005-d uses 3 minutes so its 1080 J does not repeat 005-c's 1440 J.",
+    "OUT OF SYLLABUS, DELIBERATELY AVOIDED: density and floating (no P-chapter covers it), calorimetry and specific heat capacity (syllabus-science.md records that P3's heading names heat but no outcome under it does), and Pythagoras for a diagonal displacement (Grade 9 maths, not Grade 9 physics). The 'apparent contradiction' families use air resistance and Q=It/W=QV instead.",
+    "FOUND, NOT FIXED (4): test-mcq-answer-in-options.js fails grade9-physics on g9s-p2-v046, g9s-p3-v090 and g9s-p3-v092 - the keyed answer string is a shortened paraphrase of an option, so makeMCQ keeps five options and none of them equals the answer. A child can never mark those three right. This is a real content defect, pre-existing, in p2_volume.js and p3_volume.js."
+  ]
+}

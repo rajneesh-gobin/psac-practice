@@ -784,7 +784,7 @@ const MCQ = [
 
   ['g9s-p3-v090', 'comparing_energy_sources', 2,
    'Oil is used to generate electricity in many small islands. Why might these islands switch to renewable energy?',
-   ['Oil must be imported, making it expensive and creating supply risk; renewables are locally available',
+   ['Oil is imported, expensive and a supply risk; renewables are locally available',
     'Oil-fired power stations cannot produce enough electricity for islands',
     'Oil is heavier than renewable energy sources',
     'Island governments are required by law to use renewables'],
@@ -804,7 +804,7 @@ const MCQ = [
 
   ['g9s-p3-v092', 'comparing_energy_sources', 2,
    'Which statement correctly describes a disadvantage of hydroelectric power compared to solar power?',
-   ['Hydroelectric requires a specific geography (large river, suitable valley); solar can be installed almost anywhere',
+   ['Hydroelectric requires a specific geography; solar can be installed almost anywhere',
     'Hydroelectric produces more CO&#8322; per kWh than solar',
     'Solar farms generate electricity at night; hydroelectric does not',
     'Hydroelectric power is more expensive per kWh than solar in every country'],

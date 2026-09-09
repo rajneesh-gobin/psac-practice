@@ -17,26 +17,67 @@
 // ⚠ Photos sous licence CC BY / CC BY-SA : le crédit sous chaque image est une
 //   obligation de la licence, pas une décoration. Ne pas le retirer.
 
-function _g5imgSvg(w, h, body) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img"
-    style="max-width:100%;max-height:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15);background:#fff;margin:6px 0">
-    <title>Image à décrire</title>${body}</svg>`;
-}
+// ⚠ La séquence de trois images est UNE GRILLE DE TROIS SVG SÉPARÉS, pas un
+//   seul dessin large. L'ancienne version était un unique svg de 660 unités de
+//   large : sur un téléphone les trois cases tombaient à ~110 px chacune, les
+//   personnages à ~19 px, et la troisième case sortait carrément de l'écran.
+//   Un enfant ne pouvait donc pas répondre aux questions sur l'image 3.
+//   La grille auto-fit empile les cases sur un téléphone (chacune prend toute
+//   la largeur) et les remet côte à côte dès qu'il y a la place.
+// ⚠ Les personnages sont un CORPS DESSINÉ surmonté d'un émoji de VISAGE.
+//   Les émojis de personne (👧 👩 🧒) sont des têtes seules dans Noto : posés
+//   sur le sol ils ressemblaient à des têtes coupées. Un visage sur un corps
+//   dessiné se lit comme un personnage debout, et l'émotion (😀 😲) reste
+//   lisible. La couleur du tee-shirt identifie le personnage d'une case à
+//   l'autre : c'est ce qui dit à l'enfant que c'est la même fille.
 function _g5imgEmoji(x, y, size, ch) {
   return `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle">${ch}</text>`;
 }
 function _g5imgLabel(x, y, txt, size, colour) {
   return `<text x="${x}" y="${y}" font-size="${size || 11}" font-family="sans-serif"
-    fill="${colour || '#1e293b'}" text-anchor="middle">${txt}</text>`;
+    font-weight="bold" fill="${colour || '#1e293b'}" text-anchor="middle">${txt}</text>`;
 }
-function _g5imgPanel(x, n, skyFill, groundFill, inner) {
-  return `<g transform="translate(${x},0)">
-    <rect x="0" y="0" width="210" height="190" fill="${skyFill}" stroke="#475569" stroke-width="2" rx="8"/>
-    <rect x="2" y="132" width="206" height="56" fill="${groundFill}"/>
+function _g5imgPerson(x, feetY, shirt, face, scale) {
+  const k = scale || 1;
+  const legH = 12 * k, torsoH = 21 * k, torsoW = 30 * k, head = 27 * k;
+  const torsoY = feetY - legH - torsoH;
+  return `<rect x="${x - 10 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#3730a3" rx="2"/>
+    <rect x="${x + 3 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#3730a3" rx="2"/>
+    <rect x="${x - torsoW / 2}" y="${torsoY}" width="${torsoW}" height="${torsoH}" rx="${8 * k}" fill="${shirt}"/>
+    <rect x="${x - torsoW / 2 - 5 * k}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>
+    <rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>
+    ${_g5imgEmoji(x, torsoY + 4 * k, head, face)}`;
+}
+// Le cartable : le rabat relevé et l'ouverture sombre sont ce qui rend le sac
+// « ouvert » - c'est le détail sur lequel porte g5fr-img-012.
+function _g5imgBagOpen(x, baseY) {
+  return `<polygon points="${x - 17},${baseY - 26} ${x - 21},${baseY - 44} ${x + 15},${baseY - 42} ${x + 17},${baseY - 26}"
+      fill="#ec4899" stroke="#9d174d" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="${x - 17}" y="${baseY - 28}" width="34" height="8" fill="#4c0519"/>
+    <rect x="${x - 17}" y="${baseY - 24}" width="34" height="24" rx="4" fill="#f472b6" stroke="#9d174d" stroke-width="2"/>
+    <rect x="${x - 7}" y="${baseY - 14}" width="14" height="9" rx="2" fill="#fbcfe8" stroke="#9d174d"/>`;
+}
+function _g5imgBagClosed(x, baseY, w, h) {
+  return `<rect x="${x - w / 2}" y="${baseY - h}" width="${w}" height="${h}" rx="4" fill="#f472b6" stroke="#9d174d" stroke-width="2"/>
+    <rect x="${x - w / 2}" y="${baseY - h + 4}" width="${w}" height="${h * 0.42}" fill="#ec4899" stroke="#9d174d" stroke-width="2"/>`;
+}
+// ⚠ Le sol est un path, pas un rect : un rect à angles droits dépasse des
+//   coins arrondis du cadre. Et pas de clipPath : il faudrait un id, or
+//   plusieurs figures peuvent coexister dans la même page.
+function _g5imgPanel(n, sky, ground, inner) {
+  return `<svg viewBox="0 0 200 170" role="img" preserveAspectRatio="xMidYMid meet"
+    style="width:100%;height:auto;display:block;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+    <title>Image ${n}</title>
+    <rect x="1" y="1" width="198" height="168" rx="10" fill="${sky}" stroke="#475569" stroke-width="2"/>
+    <path d="M3,120 H197 V159 A8,8 0 0 1 189,167 H11 A8,8 0 0 1 3,159 Z" fill="${ground}"/>
     ${inner}
-    <circle cx="20" cy="20" r="14" fill="#1e3a5f"/>
-    <text x="20" y="26" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle" font-family="sans-serif">${n}</text>
-  </g>`;
+    <circle cx="24" cy="24" r="16" fill="#1e3a5f"/>
+    <text x="24" y="31" font-size="19" font-weight="bold" fill="#fff" text-anchor="middle" font-family="sans-serif">${n}</text>
+  </svg>`;
+}
+function _g5imgStrip(panels) {
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:8px;margin:8px 0;max-width:680px">${panels.join('')}</div>`;
 }
 
 // ── SCÈNE 1 : une seule image - le marché ─────────────────────────────
@@ -56,38 +97,48 @@ const _G5IMG_MARCHE = _g5imgPhoto(
   'Photo : PattayaPatrol, Wikimedia Commons, CC BY-SA 4.0');
 
 // ── SCÈNE 2 : trois images - le chat dans le sac ──────────────────────
-const _G5IMG_CHAT = _g5imgSvg(660, 190, `
-  ${_g5imgPanel(0, 1, '#fef3c7', '#d6d3d1', `
-    <rect x="16" y="92" width="72" height="40" fill="#93c5fd" stroke="#1e40af"/>
-    <rect x="16" y="82" width="26" height="14" fill="#fff" stroke="#1e40af"/>
-    ${_g5imgEmoji(126, 124, 34, '👧')}
-    ${_g5imgEmoji(158, 154, 28, '🎒')}
-    ${_g5imgEmoji(182, 128, 20, '📚')}
-    ${_g5imgEmoji(58, 156, 26, '🐈')}
-  `)}
-  ${_g5imgPanel(225, 2, '#bfe4ff', '#9ca3af', `
-    <circle cx="34" cy="34" r="17" fill="#fcd34d"/>
-    <rect x="120" y="62" width="80" height="70" fill="#fed7aa" stroke="#9a3412"/>
-    <rect x="132" y="76" width="16" height="16" fill="#bfdbfe" stroke="#9a3412"/>
-    <rect x="158" y="76" width="16" height="16" fill="#bfdbfe" stroke="#9a3412"/>
-    <rect x="146" y="104" width="18" height="28" fill="#7c2d12"/>
-    ${_g5imgLabel(160, 58, 'ÉCOLE', 11, '#9a3412')}
-    <line x1="2" y1="160" x2="208" y2="160" stroke="#fff" stroke-width="3" stroke-dasharray="12 10"/>
-    ${_g5imgEmoji(62, 148, 36, '👧')}
-    ${_g5imgEmoji(42, 140, 22, '🎒')}
-  `)}
-  ${_g5imgPanel(450, 3, '#ecfdf5', '#d6d3d1', `
-    <rect x="14" y="36" width="86" height="46" fill="#14532d" stroke="#052e16" stroke-width="2" rx="3"/>
-    <rect x="26" y="112" width="70" height="10" fill="#a16207"/>
-    <rect x="118" y="112" width="70" height="10" fill="#a16207"/>
-    ${_g5imgEmoji(150, 108, 26, '🎒')}
-    ${_g5imgEmoji(150, 90, 24, '🐈')}
-    ${_g5imgEmoji(52, 152, 30, '🧒')}
-    ${_g5imgEmoji(92, 152, 30, '🧒')}
-    ${_g5imgEmoji(180, 152, 30, '😲')}
-    ${_g5imgEmoji(176, 76, 28, '👩')}
-  `)}
-`);
+// Image 1 = situation de départ, image 2 = le trajet, image 3 = la surprise.
+// Chaque case doit répondre seule aux questions g5fr-img-011 à 020 :
+//   1 la fille prépare son sac dans sa chambre, le chat observe le sac OUVERT
+//   2 la fille marche vers l'école, le sac sur le dos
+//   3 le chat sort du sac en classe, tout le monde est surpris
+const _G5IMG_GIRL = '#7c3aed';
+const _G5IMG_CHAT = _g5imgStrip([
+  _g5imgPanel(1, '#fef3c7', '#d6d3d1', `
+    <rect x="128" y="30" width="48" height="36" fill="#bfdbfe" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="152" y1="30" x2="152" y2="66" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="128" y1="48" x2="176" y2="48" stroke="#94a3b8" stroke-width="2"/>
+    <rect x="6" y="96" width="62" height="26" rx="3" fill="#93c5fd" stroke="#1e40af" stroke-width="2"/>
+    <rect x="9" y="86" width="24" height="12" rx="3" fill="#fff" stroke="#1e40af" stroke-width="2"/>
+    <rect x="10" y="122" width="6" height="12" fill="#1e40af"/>
+    <rect x="58" y="122" width="6" height="12" fill="#1e40af"/>
+    ${_g5imgPerson(88, 152, _G5IMG_GIRL, '😊')}
+    ${_g5imgBagOpen(128, 152)}
+    ${_g5imgEmoji(168, 154, 32, '🐈')}
+  `),
+  _g5imgPanel(2, '#bfe4ff', '#9ca3af', `
+    <circle cx="26" cy="28" r="14" fill="#fcd34d"/>
+    <rect x="112" y="50" width="82" height="70" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/>
+    <rect x="120" y="62" width="18" height="18" fill="#bfdbfe" stroke="#9a3412" stroke-width="2"/>
+    <rect x="168" y="62" width="18" height="18" fill="#bfdbfe" stroke="#9a3412" stroke-width="2"/>
+    <rect x="143" y="92" width="22" height="28" fill="#7c2d12"/>
+    ${_g5imgLabel(153, 44, 'ÉCOLE', 13, '#9a3412')}
+    <line x1="8" y1="158" x2="192" y2="158" stroke="#fff" stroke-width="4" stroke-dasharray="14 11"/>
+    ${_g5imgBagClosed(38, 140, 24, 26)}
+    ${_g5imgPerson(56, 146, _G5IMG_GIRL, '😊')}
+  `),
+  _g5imgPanel(3, '#ecfdf5', '#d6d3d1', `
+    <rect x="8" y="22" width="88" height="48" rx="3" fill="#14532d" stroke="#052e16" stroke-width="2"/>
+    <rect x="96" y="112" width="76" height="9" fill="#a16207"/>
+    <rect x="102" y="121" width="6" height="24" fill="#78350f"/>
+    <rect x="160" y="121" width="6" height="24" fill="#78350f"/>
+    ${_g5imgBagClosed(120, 112, 26, 22)}
+    ${_g5imgEmoji(146, 108, 30, '🐈')}
+    ${_g5imgPerson(178, 150, '#0f766e', '😮', 0.8)}
+    ${_g5imgPerson(34, 156, _G5IMG_GIRL, '😲', 0.85)}
+    ${_g5imgPerson(72, 156, '#ea580c', '😲', 0.85)}
+  `)
+]);
 
 const _G5IMG_C1 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;border-radius:6px;padding:8px 12px;margin:6px 0;font-size:0.93em"><b>Observe l\'image, puis réponds à la question.</b></div>`;
 const _G5IMG_C3 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;border-radius:6px;padding:8px 12px;margin:6px 0;font-size:0.93em"><b>Observe les trois images dans l\'ordre, puis réponds à la question.</b></div>`;

@@ -197,7 +197,16 @@ console.log('\nNo chapter loses more than one question to reconciliation');
 const MAX_LOSS = 1;
 for (const [pack, out] of Object.entries(results)) {
   const dead = new Set(out.dead);
-  const live = out.chapters.filter(c => !dead.has(c.id)).map(c => ({ ...c, want: c.n, got: c.n }));
+  // ⚠ Mirrors assembleExamPaper: an EXPLICIT examWeight of 0 buys NO slot, while
+  //   a MISSING one still defaults to 1. Before that changed, g9eng-listening and
+  //   g9eng-speaking (weight 0, two poolable items each) each bought a slot, the
+  //   paper was built from 42 slots, and reconciliation took both back off the
+  //   first chapter with n > 1 - g9eng-reading, the pack's highest-weighted
+  //   chapter - dropping it from 10 to 8. No amount of new content could fix it.
+  const live = out.chapters
+    .filter(c => !dead.has(c.id))
+    .filter(c => !(Number.isFinite(c.w) && c.w <= 0))
+    .map(c => ({ ...c, want: c.n, got: c.n }));
   if (!live.length) continue;
 
   // The engine's own reconciliation, mirrored.
@@ -252,6 +261,8 @@ let thin = 0;
 for (const [pack, out] of Object.entries(results)) {
   for (const c of out.chapters) {
     if (!c.pool) continue;
+    if (Number.isFinite(c.w) && c.w <= 0) continue;   // buys no slot, so it cannot repeat
+
     const exams = Math.floor(c.pool / c.n);
     if (exams < 10) { note(`${pack} ${c.id}: ${c.pool} items at ${c.n} a paper — repeats after ${exams} exams`); thin++; }
   }

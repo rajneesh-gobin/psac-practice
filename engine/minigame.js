@@ -275,6 +275,38 @@ const MiniGames = (() => {
   //   Bests: DB.games.story {plays, bestScore, bestAccuracy}.
 
   // ── Hub ────────────────────────────────────────
+  // ── Points for a FINISHED RUN ───────────────────────────────────────────
+  // ⚠ Game answers still never reach recordAnswer() / _recordDaily(): a replay
+  //   must not distort the mastery, mistake and daily reporting parents rely
+  //   on, and that rule is unchanged. This is the one thing a game writes
+  //   outside DB.games, and it is a LUMP AT THE END of a run - never per
+  //   question - so the questions inside a game cannot be farmed for points
+  //   the way practice questions are earned.
+  //
+  // ⚠ Nothing here sends an amount. award_activity_points() knows a run is
+  //   worth 5 and refuses more than 3 paid runs a day ACROSS ALL GAMES, so a
+  //   child cannot out-earn practice by playing. The local ptsRuns counter is
+  //   only there to keep the ref unique and to skip a call the server would
+  //   refuse anyway; it is not the cap.
+  function _awardRun(key) {
+    if (typeof DB === 'undefined' || !DB) return;
+    const day = (typeof _muDayKey === 'function')
+      ? _muDayKey()
+      : new Date().toISOString().slice(0, 10);
+    DB.games = DB.games || {};
+    const g = DB.games[key] = DB.games[key] || {};
+    if (g.ptsDay !== day) { g.ptsDay = day; g.ptsRuns = 0; }
+    g.ptsRuns = (g.ptsRuns || 0) + 1;
+    if (g.ptsRuns > 3) return;
+    if (typeof Store === 'undefined' || !Store.awardActivityPoints) return;
+    Store.awardActivityPoints('game', key + ':' + day + ':' + g.ptsRuns)
+      .then(r => {
+        if (r && typeof applyServerPoints === 'function') applyServerPoints(r.points, r.level);
+      })
+      .catch(() => {});
+  }
+
+
   function renderHub() {
     const el = $('mg-hub');
     if (!el) return;
@@ -296,6 +328,7 @@ const MiniGames = (() => {
     const tt = (typeof DB !== 'undefined' && DB.games?.timetravel) || {};
     el.innerHTML = `
       ${mixLine ? `<p class="mg-mix-line">🎯 ${esc(mixLine)}</p>` : ''}
+      ${(typeof GameSettings !== 'undefined' && GameSettings.childGradeBar) ? GameSettings.childGradeBar() : ''}
       <button class="mg-card mg-card-live mg-card-bq" onclick="MiniGames.startBillionaire()">
         <span class="mg-card-art">💰</span>
         <span class="mg-card-body">
@@ -473,9 +506,19 @@ const MiniGames = (() => {
   function _bankLoaded() {
     return (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : []).some(q => q.type === 'mcq');
   }
+  // EVERY grade this child's games may draw from, not just their own: a child
+  // who added Grade 6 gets nothing at all until that grade's questions have
+  // been fetched, and the failure reads as "not enough suitable questions".
   function _preloadGrade() {
     if (typeof QuestionLoader === 'undefined' || !QuestionLoader.loadAllForGrade) return;
-    try { const p = QuestionLoader.loadAllForGrade(_childGrade()); if (p && p.catch) p.catch(() => {}); } catch (_) {}
+    let grades = [_childGrade()];
+    try {
+      const g = GameSettings.context('quickfire').grades;
+      if (Array.isArray(g) && g.length) grades = g;
+    } catch (_) {}
+    for (const g of grades) {
+      try { const p = QuestionLoader.loadAllForGrade(g); if (p && p.catch) p.catch(() => {}); } catch (_) {}
+    }
   }
   // Two different failures, two different messages: "still loading" is a
   // wait; "not enough suitable questions" is the parent's settings.
@@ -723,6 +766,7 @@ const MiniGames = (() => {
     p.plays++;
     if (_g.rung > (p.bestLevel || 0)) p.bestLevel = _g.rung;
     if (_g.banked > (p.bestPrize || 0)) p.bestPrize = _g.banked;
+    _awardRun("billionaire");
     if (typeof save === 'function') save(DB);
   }
 
@@ -1066,6 +1110,7 @@ const MiniGames = (() => {
     g.plays++;
     if (_qf.score > g.bestScore) g.bestScore = _qf.score;
     if (_qf.bestCombo > g.bestCombo) g.bestCombo = _qf.bestCombo;
+    _awardRun("quickfire");
     if (typeof save === 'function') save(DB);
   }
 
@@ -1382,6 +1427,7 @@ const MiniGames = (() => {
     g.plays++;
     if (_wb.idx > (g.bestStones || 0)) { g.bestStones = _wb.idx; g.bestOf = _wb.stones; }
     if (_wb.score > (g.bestScore || 0)) g.bestScore = _wb.score;
+    _awardRun("wordbuilder");
     if (typeof save === 'function') save(DB);
   }
 
@@ -1540,6 +1586,7 @@ const MiniGames = (() => {
     g.plays++;
     if (golds > (g.bestGold || 0)) g.bestGold = golds;
     if (_ex.score > (g.bestScore || 0)) g.bestScore = _ex.score;
+    _awardRun("explorer");
     if (typeof save === 'function') save(DB);
   }
 
@@ -1803,6 +1850,7 @@ const MiniGames = (() => {
     g.plays++;
     if (_nj.beltsDone > (g.bestBelts || 0)) g.bestBelts = _nj.beltsDone;
     if (_nj.score > (g.bestScore || 0)) g.bestScore = _nj.score;
+    _awardRun("ninja");
     if (typeof save === 'function') save(DB);
   }
 
@@ -2022,6 +2070,7 @@ const MiniGames = (() => {
     if (winner === 0) g.p1Wins++;
     else if (winner === 1) g.p2Wins++;
     else g.draws++;
+    _awardRun("battle");
     if (typeof save === 'function') save(DB);
   }
 
@@ -2263,6 +2312,7 @@ const MiniGames = (() => {
     g.plays++;
     if (_tt.score > (g.bestScore || 0)) g.bestScore = _tt.score;
     if (_tt.perfect > (g.bestPerfect || 0)) g.bestPerfect = _tt.perfect;
+    _awardRun("timetravel");
     if (typeof save === 'function') save(DB);
   }
 

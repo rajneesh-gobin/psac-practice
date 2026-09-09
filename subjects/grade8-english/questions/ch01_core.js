@@ -26,7 +26,7 @@ STATIC_QUESTIONS.push(
     subsection:'summarising',
     question:'You listen to a three-minute talk. The speaker discusses the causes of deforestation, its effects on wildlife, and possible solutions. Which is the BEST one-sentence summary?',
     options:['Deforestation is very bad.','The talk described the causes, effects on wildlife and solutions for deforestation.','The speaker talked about forests for three minutes.','Animals are being harmed by humans.'],
-    answer:'The talk described the causes, effects and solutions for deforestation.',
+    answer:'The talk described the causes, effects on wildlife and solutions for deforestation.',
     hint:'A summary covers all the main points briefly — not just one detail or a vague comment.',
     explanation:'A good summary captures ALL the main points (causes, effects, solutions) in a concise, accurate way. "Deforestation is very bad" is too vague. Naming the three areas covered is the most complete and precise summary.' }),
 
@@ -292,7 +292,7 @@ STATIC_QUESTIONS.push(
     subsection:'reference_tracking',
     question:'Which sentence has a PRONOUN with NO clear antecedent?',
     options:['The dog barked and it woke the neighbours.','They say it will rain tomorrow.','The teacher returned the books and they were heavy.','The students submitted their work.'],
-    answer:'"They say it will rain tomorrow."',
+    answer:'They say it will rain tomorrow.',
     hint:'Who are "they"? Is there a noun in the sentence that "they" refers to?',
     explanation:'"<b>They</b> say it will rain" — "they" has no antecedent (no specific noun it refers to). This is common in everyday speech but technically imprecise in formal writing. "It is said…" or "Weather forecasters say…" would be clearer.' }),
 

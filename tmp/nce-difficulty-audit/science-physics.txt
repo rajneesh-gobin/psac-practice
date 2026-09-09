@@ -1,0 +1,592 @@
+                M
+                E
+                  S
+
+                 Gerat   Cor
+           ns               pus
+      Me
+
+
+
+Let the mind manage the body
+  Que l’esprit gère le corps
+
+
+
+                                  Index Number: ..............................................................................
+
+
+
+
+NATIONAL CERTIFICATE OF EDUCATION
+2025
+
+
+
+PHYSICS (N530)                                                                                                    TIME: 45 MINUTES
+
+Candidates answer on the Question Paper.
+Additional Materials:  Mathematical set, Calculator
+
+
+READ THESE INSTRUCTIONS FIRST
+
+1.              Write your index number in the space provided above.
+2.              Write in dark blue or black ink.
+3.              You may use a soft pencil for any diagram, graph or rough working.
+4.
+5.              Any rough working should be done in this booklet.
+6.              Answer ALL questions.
+7.              This document consists of 6 questions printed on 12 pages, numbered 2 to 13.
+8.              The total marks for each question is shown in brackets ( ) at the beginning of each question.
+9.              The number of marks for each part question is shown in brackets [ ].
+10.             The total number of marks for this paper is 50.
+
+
+
+                                                                 For Examiners’ use
+
+ Question No.                          1          2          3          4          5          6           Total                  Signature
+
+ Examiner
+
+ Team Leader
+
+ CE/ACE
+
+
+
+                                                          © Mauritius Examinations Syndicate
+                                                                                  Marks
+
+
+
+
+Question 1 (10 marks)
+
+(a)    Which physical quantity is measured using a balance?
+
+       A    Diameter
+
+       B    Length
+
+       C    Mass
+
+       D    Temperature
+
+
+(b)    Which of the following circuit diagrams shows a closed electric circuit?
+
+
+
+
+                       A                                           B
+
+
+
+
+                       C                                           D
+
+
+
+
+©MES                                          2
+                                                                                                     Marks
+(c)    Fig. 1.1 shows some liquid in a measuring cylinder.
+
+       Circle the letter which shows where the line of sight should be aligned for an accurate
+       measurement.
+
+                                                                   Measuring
+                                                                   cylinder
+
+
+                                                  B
+                                       A
+                                                           D
+                                                  C
+
+
+
+
+                                            Fig. 1.1
+
+
+(d)    Fig. 1.2 shows the reflection of a ray of light by a plane mirror.
+
+
+
+                  Incident ray                                        Reflected ray
+
+
+
+
+                                                 b c
+                                            a              d
+                                                                       Plane mirror
+
+                                                Fig. 1.2
+
+       Which pair of angles are equal?
+
+       A    b and c
+
+       B    b and d
+
+       C    a and b
+
+       D    a and c
+
+
+
+
+©MES                                             3                                Please turn over
+                                                                                           Marks
+(e)    Which of the following is the most reasonable estimate of the height of a pupil’s
+       school desk?
+
+       A    0.08 cm
+
+       B    0.8 cm
+
+       C    8 cm
+
+       D    80 cm
+
+
+(f)    Which of the following is luminous?
+
+       A    Gold
+
+       B    Moon
+
+       C    Rock
+
+       D    Sun
+
+
+(g)    Fig. 1.3 shows the motion of an object for a period of 10 s.
+
+
+
+
+                                             Fig. 1.3
+
+       What is the speed of the object at 5 s?
+
+       A    7.5 m/s
+
+       B    4.0 m/s
+
+       C    2.5 m/s
+
+       D    0.0 m/s
+
+
+©MES                                          4
+                                                                                                 Marks
+(h)    A car increases its speed from 20 m/s to 60 m/s in 5 s.
+
+       What is the acceleration of the car?
+
+       A    4 m/s2
+
+       B    8 m/s2
+
+       C    12 m/s2
+
+       D    16 m/s2
+
+
+(i)    What is the energy transformation that takes place in a thermal power station?
+
+
+             Chemical               Heat               Kinetic           Electrical
+       A
+              energy               energy              energy             energy
+
+
+               Heat               Chemical             Kinetic           Electrical
+       B
+              energy               energy              energy             energy
+
+
+             Electrical           Kinetic             Heat               Chemical
+       C      energy              energy                                  energy
+                                                     energy
+
+
+
+             Kinetic              Heat              Chemical            Electrical
+       D     energy              energy                                  energy
+                                                     energy
+
+
+
+(j)    What is the unit of resistance?
+
+       A    coulomb (C)
+
+       B    joule (J)
+
+       C    ohm (Ω)
+
+       D    volt (V)
+
+
+
+
+©MES                                          5                               Please turn over
+                                                                                             Marks
+Question 2 (7 marks)
+
+(a)    Define the time period of a simple pendulum.
+
+       …………………………………………………………………………………………….
+
+       ……………………………………………………………………………………………. [1]
+
+
+(b)    Fig. 2.1 shows a stopwatch.
+
+       (i)     What is the time shown on the stopwatch,
+               in seconds?
+
+
+
+
+                                                                       Fig. 2.1
+
+
+
+
+               Time ൌ ………………………….. s                                                   [3]
+
+       (ii)    The time shown in Fig. 2.1 is the time taken for a simple pendulum to make
+               30 complete swings.
+
+               Calculate the time period of the pendulum.
+
+
+
+
+                                                Time period ൌ ………………………….. s [2]
+
+       (iii)   Give one precaution that should be taken when using the stopwatch.
+
+               ……………………………………………………………………………………. [1]
+
+
+©MES                                        6
+                                                                                                 Marks
+Question 3 (5 marks)
+
+A girl stands in front of a plane mirror at a distance of 120 cm. A photo frame hangs on a
+wall 210 cm behind her, as shown in Fig. 3.1.
+
+        Mirror
+                                                               Photo frame
+
+                  120 cm                            210 cm
+
+
+
+
+                                                                                       Wall
+
+
+
+                                         Fig. 3.1
+
+
+(a)    The girl raises her right arm.
+       Explain why her left arm appears to be raised in the mirror.
+
+       ……………………………………………………………………………………………. [1]
+
+
+(b)    Give two other characteristics of an image formed in a plane mirror.
+
+       1. ………………………………………………………………………………………….
+
+       2. ………………………………………………………………………………………….
+                                                                                          [2]
+
+
+(c)    What is the distance between the girl and the image of the photo frame she sees
+       in the mirror?
+
+
+
+
+                                                Distance ൌ ………………………….. cm [2]
+
+
+©MES                                        7                                 Please turn over
+                                                                                               Marks
+Question 4 (13 marks)
+
+(a)    Table 4.1 lists some sources of energy.
+
+       (i)    Put a tick () beside all the non-renewable sources of energy in Table 4.1.
+
+                                           Table 4.1
+
+                           Energy sources               Non-renewable ()
+
+                                Diesel
+
+                                 Wind
+
+                                  Sun
+
+                                 Coal
+                                                                                         [2]
+
+       (ii)   Give one advantage of using renewable sources of energy to produce
+              electricity.
+
+              ………………………………………………………………………………….… [1]
+
+
+(b)    Match each statement in Column A to its corresponding form of energy in
+       Column B.
+
+
+                    Column A                                            Column B
+
+
+       Energy due to motion                                           Potential energy
+
+
+       Energy produced by a vibrating guitar string                   Light energy
+
+
+       Energy stored in a compressed spring                           Heat energy
+
+
+       Energy that enables us to see                                  Kinetic energy
+
+
+                                                                       Sound energy
+
+
+                                                                                         [4]
+
+
+
+
+©MES                                       8
+                                                                                                   Marks
+(c)    Which two physical quantities listed below are required to calculate gravitational
+       potential energy? Tick () the correct boxes.
+
+               Mass
+
+               Speed
+
+               Time
+
+               Height
+                                                                                             [2]
+
+
+(d)    (i)     Fig. 4.1 shows four identical empty bags
+               W, X, Y and Z placed on a rack in a classroom.
+                                                                                      W
+               Which of the bags W, X, Y or Z has maximum
+               gravitational potential energy?
+                                                                                      X
+               ………………… [1]
+
+
+                                                                                      Y
+
+
+
+                                                                                      Z
+
+
+
+                                                                           Fig. 4.1
+       (ii)    Tick () the correct boxes.
+
+               What happens to the gravitational potential energy (GPE) of bag Y when it
+               is moved and placed next to bag X?
+
+                                                   It remains
+                        It increases.              unchanged.                It decreases.
+                                                                                            [1]
+
+       (iii)   Give a reason for your answer in part (d)(ii).
+
+               ……………………………………………………………………………………. [1]
+
+       (iv)    Bag W falls on the ground.
+               What is the value of its gravitational potential energy (GPE) when it is on the
+
+               ground? ………………………………. J                                                      [1]
+
+
+
+©MES                                          9                                Please turn over
+                                                                                    Marks
+Question 5 (7 marks)
+
+Fig. 5.1 shows the motion of a car during a given period of time.
+
+
+  speed/ m/s
+
+
+
+
+                                                                          time/s
+       0
+
+                                            Fig. 5.1
+
+
+(a)    At what time does the car start to accelerate?
+
+
+                                                        Time ൌ ………………………….. s [1]
+
+
+(b)    For how long does the car accelerate?
+
+
+
+
+                                                        Time ൌ ………………………….. s [1]
+
+
+
+
+©MES                                       10
+                                                                                                   Marks
+(c)    After 30 s, the car decelerates uniformly to rest in the next 5 s. Show this motion on
+       the graph.                                                                           [2]
+
+
+(d)    For how long does the car move at constant speed during its journey?
+
+
+
+
+                                                       Time ൌ ………………………….. s [2]
+
+
+(e)    What is the maximum speed reached by the car during its journey?
+
+
+
+
+                                                   Speed ൌ ………………………….. m/s [1]
+
+
+
+
+©MES                                        11                                  Please turn over
+                                                                                                  Marks
+Question 6 (8 marks)
+
+(a)    Tick () the circuit diagram showing the correct direction of the conventional
+       current, I and the flow of electrons, e.
+
+
+
+
+       I                  e                                         I
+                                      I                  e                              e
+
+
+
+
+                                                                                            [1]
+
+
+(b)    A student sets up an electric circuit as shown in Fig. 6.1 to determine the resistance
+       of a lamp.
+                                            Battery
+
+
+
+
+                                                                        Instrument Q
+                                          Instrument P
+
+
+                                                                           Gap
+
+
+
+                                            Lamp X
+
+                                            Fig. 6.1
+
+
+       (i)    What is the function of the battery in the circuit?
+
+              ….………………………………………………………………………………. [1]
+
+       (ii)   P and Q are two measuring instruments.
+              Identify and name each instrument.
+
+              P: ……………………………………….                                                           [1]
+
+              Q: ……………………………………….                                                           [1]
+
+
+©MES                                          12
+                                                                                              Marks
+       (iii)   Which physical quantity does instrument Q measure?
+
+               ………………………………………………….                                                   [1]
+
+       (iv)    Will lamp X in Fig. 6.1 light up? Explain why.
+
+               …………………………………………………………………………………….
+
+               ……………………………………………………………………………………. [1]
+
+
+(c)    In a given circuit, a current of 3 A flows in a resistor.
+       Calculate the amount of charge that flows in the resistor in 2 s.
+       Show all your workings.
+
+
+
+
+                                         Amount of charge ൌ ………………………….. C [2]
+
+
+
+                                       END OF PAPER
+
+
+
+
+©MES                                        13                             Please turn over
+                    Marks
+       BLANK PAGE
+
+
+
+
+©MES       14
+                                       Marks
+       BLANK PAGE
+
+
+
+
+©MES       15       Please turn over
+                    Marks
+       BLANK PAGE
+
+
+
+
+©MES       16
+

@@ -1,0 +1,586 @@
+{
+ "grade9-biology": {
+  "g9s-b1-circulatory": [
+   "circulatory_overview",
+   "components_of_blood",
+   "blood_vessels",
+   "magnification",
+   "pulse",
+   "cardiovascular_disease",
+   "interpreting_health_data"
+  ],
+  "g9s-b2-reproductive": [
+   "reproduction_basics",
+   "sexual_asexual",
+   "male_reproductive_system",
+   "female_reproductive_system",
+   "stds",
+   "interpreting_health_data"
+  ],
+  "g9s-b3-biodiversity": [
+   "what_is_biodiversity",
+   "importance_of_biodiversity",
+   "quadrat_sampling",
+   "natural_threats",
+   "human_threats"
+  ],
+  "g9s-b4-plant-nutrition": [
+   "photosynthesis",
+   "word_equation",
+   "leaf_adaptation",
+   "factors_for_photosynthesis",
+   "photosynthesis_experiments"
+  ],
+  "g9s-inquiry": [
+   "hypothesis_testing",
+   "lab_safety",
+   "recording_data",
+   "interpreting_results",
+   "reporting_findings"
+  ],
+  "g9s-sts": [
+   "christiaan_barnard",
+   "evaluating_information",
+   "ethics_of_science"
+  ]
+ },
+ "grade9-chemistry": {
+  "g9s-c1-atmosphere": [
+   "water_pollution",
+   "eutrophication",
+   "air_pollutants",
+   "greenhouse_gases",
+   "acid_rain",
+   "global_warming"
+  ],
+  "g9s-c2-mixtures": [
+   "distillation",
+   "crystallization",
+   "sublimation",
+   "apparatus_diagrams",
+   "choosing_a_technique"
+  ],
+  "g9s-c3-language": [
+   "rearrangement_of_atoms",
+   "formulae_of_compounds",
+   "word_equations",
+   "balancing_equations"
+  ],
+  "g9s-c4-metals": [
+   "metals_with_oxygen",
+   "metals_with_acids",
+   "metals_with_water_steam",
+   "reactivity_series",
+   "predicting_reactions",
+   "equations_for_metals"
+  ],
+  "g9s-c5-salts": [
+   "neutralisation",
+   "soluble_insoluble",
+   "neutralisation_in_daily_life",
+   "uses_of_salts"
+  ],
+  "g9s-inquiry": [
+   "hypothesis_testing",
+   "lab_safety",
+   "recording_data",
+   "interpreting_results",
+   "reporting_findings",
+   "research_and_ict"
+  ],
+  "g9s-sts": [
+   "applications_of_distillation",
+   "applications_of_chromatography",
+   "climate_change",
+   "interpreting_climate_data"
+  ]
+ },
+ "grade9-english": {
+  "g9eng-listening": [],
+  "g9eng-speaking": [],
+  "g9eng-reading": [
+   "retrieval",
+   "inference",
+   "authors_view",
+   "vocabulary",
+   "language",
+   "evidence",
+   "across_texts",
+   "text_features"
+  ],
+  "g9eng-writing": [
+   "planning",
+   "essay",
+   "descriptive",
+   "formal_letter",
+   "narrative",
+   "cohesion",
+   "register",
+   "spelling",
+   "punctuation"
+  ],
+  "g9eng-vocabulary": [
+   "collocation",
+   "word_choice",
+   "vocabulary_in_context"
+  ],
+  "g9eng-word-formation": [
+   "noun_formation",
+   "adjective_formation",
+   "adverb_formation",
+   "verb_formation",
+   "root_and_affix"
+  ],
+  "g9eng-literature": [
+   "narrative_voice",
+   "rhyme",
+   "figurative_devices",
+   "effect_of_device",
+   "line_explication",
+   "supported_response"
+  ],
+  "g9eng-gr-nouns": [
+   "apposition"
+  ],
+  "g9eng-gr-pronouns": [
+   "reflexive",
+   "emphasising",
+   "relative"
+  ],
+  "g9eng-gr-adjectives": [
+   "adjectives_as_nouns"
+  ],
+  "g9eng-gr-verbs": [
+   "future_perfect",
+   "future_perfect_continuous",
+   "tense_consistency"
+  ],
+  "g9eng-gr-determiners": [],
+  "g9eng-gr-adverbs": [
+   "attitude_adverbs"
+  ],
+  "g9eng-gr-modals": [],
+  "g9eng-gr-prepositions": [
+   "prepositions",
+   "phrasal_verbs"
+  ],
+  "g9eng-gr-sentence": [
+   "voice",
+   "perfect_conditional",
+   "direct_speech"
+  ],
+  "g9eng-gr-punctuation": [
+   "non_defining_comma",
+   "quotation_marks",
+   "dash",
+   "semicolon"
+  ]
+ },
+ "grade9-french": {
+  "g9fr-grammaire": [
+   "temps_modes",
+   "connecteurs",
+   "accords",
+   "determinants",
+   "pronoms",
+   "prepositions",
+   "interrogatifs"
+  ],
+  "g9fr-transformation": [
+   "ponctuation",
+   "negation",
+   "place_adjectif",
+   "pronominalisation",
+   "jonction_phrases",
+   "temps_verbaux",
+   "genre_nombre",
+   "voix_passive",
+   "interrogation",
+   "changement_personne"
+  ],
+  "g9fr-vocabulaire": [
+   "traits_caractere",
+   "verbes_action",
+   "noms_concrets",
+   "adjectifs_qualificatifs",
+   "adverbes",
+   "notions_abstraites"
+  ],
+  "g9fr-doc-authentique": [
+   "courriel",
+   "fiche_infographie",
+   "reperage_explicite",
+   "reponses_multiples",
+   "role_emetteur_destinataire"
+  ],
+  "g9fr-formation-mots": [
+   "nominalisation",
+   "formation_adjectif",
+   "formation_adverbe",
+   "noms_de_personne",
+   "formation_verbe",
+   "noms_de_quantite"
+  ],
+  "g9fr-correction": [
+   "homophones",
+   "accords",
+   "participe_infinitif",
+   "orthographe_accents",
+   "determinants"
+  ],
+  "g9fr-textes-trous": [
+   "prepositions",
+   "pronoms_relatifs",
+   "determinants",
+   "conjonctions",
+   "adverbes_negation",
+   "verbes_contexte"
+  ],
+  "g9fr-ecrit-guide": [
+   "invitation",
+   "lettre_amicale",
+   "points_imposes",
+   "formules_ouverture_cloture",
+   "longueur_50_75"
+  ],
+  "g9fr-comprehension": [
+   "reperage_explicite",
+   "inference",
+   "expression_imagee",
+   "synonymes_contexte",
+   "avis_personnel",
+   "reponses_multiples"
+  ],
+  "g9fr-redaction": [
+   "recit",
+   "description",
+   "texte_opinion"
+  ],
+  "g9fr-oeuvres": [
+   "papa_simon_personnages",
+   "papa_simon_themes",
+   "topaze_personnages",
+   "topaze_themes",
+   "question_longue"
+  ]
+ },
+ "grade9-ict": {
+  "g9ict-computer-systems": [
+   "input_devices",
+   "output_devices",
+   "storage_devices",
+   "cpu_memory",
+   "data_units"
+  ],
+  "g9ict-software-os": [
+   "os_functions",
+   "os_types",
+   "utility_programs"
+  ],
+  "g9ict-word-processing": [
+   "text_formatting",
+   "page_layout",
+   "word_icons",
+   "images_shapes",
+   "tables_text",
+   "multiple_documents",
+   "styles",
+   "mail_merge",
+   "toc_lists"
+  ],
+  "g9ict-spreadsheets": [
+   "cells_ranges",
+   "formulas",
+   "functions",
+   "filter_sort",
+   "advanced_formatting",
+   "charts_from_data"
+  ],
+  "g9ict-databases": [
+   "db_structure",
+   "db_tables",
+   "data_entry",
+   "queries",
+   "forms_reports"
+  ],
+  "g9ict-networks": [
+   "network_basics",
+   "network_types",
+   "topologies",
+   "network_components",
+   "wired_wireless",
+   "intranet_extranet"
+  ],
+  "g9ict-internet": [
+   "internet_www",
+   "email",
+   "browsers_search",
+   "e_services",
+   "web_tools",
+   "web_design_principles"
+  ],
+  "g9ict-algorithms": [
+   "flowchart_symbols",
+   "flowchart_reading",
+   "drawing_flowcharts",
+   "control_structures",
+   "python_basics",
+   "maths_modelling"
+  ],
+  "g9ict-presentation": [
+   "charts_tables",
+   "animations",
+   "notes_handouts",
+   "print_preview",
+   "design_templates",
+   "slide_masters",
+   "animated_clips",
+   "video_enhancement",
+   "comic_strips",
+   "storyboarding",
+   "authoring_tools"
+  ],
+  "g9ict-ethics-security": [
+   "computer_ethics",
+   "information_privacy",
+   "data_security",
+   "data_backups",
+   "data_protection_act",
+   "copyright_ownership",
+   "plagiarism",
+   "internet_dangers",
+   "social_economic_effects"
+  ],
+  "g9ict-health-safety": [
+   "lab_guidelines",
+   "safety_precautions",
+   "equipment_care",
+   "health_hazards",
+   "hazard_prevention"
+  ],
+  "g9ict-troubleshooting": [
+   "troubleshooting_techniques",
+   "troubleshooting_steps"
+  ]
+ },
+ "grade9-maths": {
+  "g9m-number-revision": [
+   "fractions_decimals_percentages",
+   "ratio_and_measures"
+  ],
+  "g9m-indices": [
+   "laws",
+   "negative_indices"
+  ],
+  "g9m-patterns": [
+   "sequences_and_figures"
+  ],
+  "g9m-finance": [
+   "salaries_and_bills"
+  ],
+  "g9m-geometry-revision": [
+   "grade7_8_geometry"
+  ],
+  "g9m-trigonometry": [
+   "ratios_and_2d_problems"
+  ],
+  "g9m-coordinates": [
+   "gradient",
+   "equation_of_line"
+  ],
+  "g9m-vectors": [
+   "column_vectors",
+   "translation"
+  ],
+  "g9m-surface-area": [
+   "nets_and_surface_area"
+  ],
+  "g9m-volume": [
+   "prisms_and_cylinders"
+  ],
+  "g9m-capacity": [
+   "units_and_problems"
+  ],
+  "g9m-expressions": [
+   "binomials_and_factorising"
+  ],
+  "g9m-matrices": [
+   "order_types_operations"
+  ],
+  "g9m-quadratics": [
+   "factorise_and_solve"
+  ],
+  "g9m-manipulation": [
+   "formulae_and_subject"
+  ],
+  "g9m-inequalities": [
+   "solve_and_represent"
+  ],
+  "g9m-simultaneous": [
+   "solve_simultaneous"
+  ],
+  "g9m-statistics": [
+   "frequency_and_averages"
+  ],
+  "g9m-probability": [
+   "simple_and_combined_events"
+  ]
+ },
+ "grade9-physics": {
+  "g9s-p1-measurements": [
+   "si_units",
+   "measuring_instruments",
+   "accuracy_of_instruments",
+   "measurement_errors"
+  ],
+  "g9s-p2-light": [
+   "luminous_objects",
+   "light_and_vision",
+   "rectilinear_propagation",
+   "reflection",
+   "laws_of_reflection",
+   "ray_diagrams"
+  ],
+  "g9s-p3-energy": [
+   "conservation_of_energy",
+   "energy_problems",
+   "electricity_production",
+   "renewable_sources",
+   "non_renewable_sources",
+   "comparing_energy_sources"
+  ],
+  "g9s-p4-motion": [
+   "scalars_vectors",
+   "distance_displacement",
+   "speed_velocity",
+   "acceleration",
+   "speed_time_graphs",
+   "motion_problems"
+  ],
+  "g9s-p5-electricity": [
+   "circuit_symbols",
+   "series_circuits",
+   "measuring_current_voltage",
+   "current_voltage_resistance",
+   "charge_and_current",
+   "potential_difference",
+   "dc_circuit_problems"
+  ],
+  "g9s-inquiry": [
+   "formula_rearrangement",
+   "hypothesis_testing",
+   "recording_data",
+   "interpreting_results",
+   "lab_safety",
+   "reporting_findings"
+  ],
+  "g9s-sts": [
+   "optical_fibres",
+   "energy_and_society",
+   "justifying_views"
+  ]
+ },
+ "grade9-social-modern-studies": {
+  "g9sms-colonial-independence": [
+   "colonial_period",
+   "parties_1967",
+   "independence_1968",
+   "republic_1992"
+  ],
+  "g9sms-living-conditions": [
+   "health_and_disease",
+   "housing_transport",
+   "education_before_reform",
+   "strike_1975"
+  ],
+  "g9sms-economy-1960s": [
+   "sugar_dependence",
+   "obstacles",
+   "predictions",
+   "early_measures"
+  ],
+  "g9sms-industrialisation": [
+   "import_substitution",
+   "epz_incentives",
+   "sectors_over_time",
+   "mauritian_miracle"
+  ],
+  "g9sms-industrial-impact": [
+   "work_and_jobs",
+   "life_expectancy",
+   "environment_impact"
+  ],
+  "g9sms-chagos-tromelin": [
+   "chagos_history",
+   "expulsion_and_icj",
+   "diego_garcia",
+   "tromelin"
+  ],
+  "g9sms-map-data-skills": [
+   "map_key_and_scale",
+   "map_shading",
+   "table_reading",
+   "graph_reading",
+   "pyramid_construction"
+  ],
+  "g9sms-population": [
+   "density_distribution",
+   "structure_pyramids",
+   "birth_death_rates",
+   "life_expectancy",
+   "ageing"
+  ],
+  "g9sms-migration": [
+   "internal_international",
+   "push_pull",
+   "refugees_displacement"
+  ],
+  "g9sms-outer-islands": [
+   "agalega",
+   "rodrigues",
+   "services_and_access"
+  ],
+  "g9sms-hazards-environment": [
+   "cyclones",
+   "climate_change",
+   "environmental_damage"
+  ],
+  "g9sms-government-welfare": [
+   "head_of_state_voting",
+   "constitution",
+   "taxes_and_mra",
+   "welfare_measures",
+   "rights_and_law"
+  ],
+  "g9sms-media": [
+   "types_of_media",
+   "roles_of_media",
+   "media_and_learning",
+   "media_and_lifestyle"
+  ],
+  "g9sms-family": [
+   "family_types",
+   "family_functions",
+   "gender_roles",
+   "women_at_work"
+  ],
+  "g9sms-social-change": [
+   "forces_of_change",
+   "social_movements",
+   "deviance_and_norms",
+   "social_mobility"
+  ],
+  "g9sms-links": [
+   "origins_of_our_people",
+   "links_india_africa",
+   "links_europe_france",
+   "regional_organisations",
+   "benefits_of_membership"
+  ],
+  "g9sms-economy-today": [
+   "sectors",
+   "factors_of_production",
+   "siting_a_factory"
+  ]
+ }
+}

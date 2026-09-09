@@ -1,0 +1,319 @@
+{
+  "pack": "grade9-social-modern-studies",
+  "file": "subjects/grade9-social-modern-studies/questions/family_expansion.js",
+  "idPrefix": "g9sms-fam-",
+  "summary": {
+    "families": 13,
+    "variants": 55,
+    "byDifficulty": { "1": 0, "2": 18, "3": 21, "4": 16 },
+    "byType": { "mcq": 24, "numeric": 17, "text": 14 },
+    "nonMcqShare": "31 of 55 = 56%",
+    "chapters": 11,
+    "figures": "3 inline SVG (bar chart, population pyramid, cyclone track map) + 1 HTML data table"
+  },
+  "families": [
+    {
+      "familyId": "g9sms-fam-001",
+      "chapterId": "g9sms-population",
+      "subsection": "density_distribution",
+      "outcome": "Calculate and interpret population density, and judge claims about crowding against data",
+      "context": "A three-district table of population and area (Port Louis, Plaines Wilhems, Savanne) in which the largest population is NOT the densest district",
+      "variants": [
+        { "id": "g9sms-fam-001-a", "difficulty": 2, "type": "numeric", "subsection": "density_distribution",
+          "variation": "apply the definition once: divide one row's population by its area",
+          "misconception": "divides area by population and returns a meaningless decimal" },
+        { "id": "g9sms-fam-001-b", "difficulty": 3, "type": "text", "subsection": "density_distribution",
+          "variation": "compute three densities and rank them, then name the district",
+          "misconception": "names the district with the largest population, treating population as crowding" },
+        { "id": "g9sms-fam-001-c", "difficulty": 3, "type": "numeric", "subsection": "density_distribution",
+          "variation": "reverse it — density and area given, population withheld (real Moka figures, 360 x 230)",
+          "misconception": "divides because density questions usually involve division" },
+        { "id": "g9sms-fam-001-d", "difficulty": 4, "type": "mcq", "subsection": "density_distribution",
+          "variation": "judge a written pupil claim against the table and say why it fails",
+          "misconception": "confuses total population with density; a rival option offers largest area as crowding" },
+        { "id": "g9sms-fam-001-e", "difficulty": 4, "type": "mcq", "subsection": "density_distribution",
+          "variation": "decide what information is MISSING before a schools decision can be taken",
+          "misconception": "thinks a crowded district automatically needs schools; three options are already given or derivable" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-002",
+      "chapterId": "g9sms-map-data-skills",
+      "subsection": "graph_reading",
+      "outcome": "Read values and changes off a bar chart and test a prediction against them",
+      "context": "Inline-SVG bar chart of tourist arrivals 2019-2023 (1400, 300, 200, 1000, 1300 thousand) read against a labelled 200-unit scale",
+      "variants": [
+        { "id": "g9sms-fam-002-a", "difficulty": 2, "type": "numeric", "subsection": "graph_reading",
+          "variation": "read two bars and find the difference",
+          "misconception": "adds the two bars because both are used" },
+        { "id": "g9sms-fam-002-b", "difficulty": 3, "type": "numeric", "subsection": "graph_reading",
+          "variation": "compare every consecutive pair to find the largest FALL, not the lowest value",
+          "misconception": "answers 2021 because it is the shortest bar" },
+        { "id": "g9sms-fam-002-c", "difficulty": 4, "type": "mcq", "subsection": "graph_reading",
+          "variation": "evaluate a manager's 'risen every year' claim step by step, then his forecast",
+          "misconception": "reads an overall upward shape as an every-year rise; arrivals actually fell 2020 to 2021" },
+        { "id": "g9sms-fam-002-d", "difficulty": 3, "type": "numeric", "subsection": "graph_reading",
+          "variation": "convert a read change into a percentage increase (200 to 1000 = 400%)",
+          "misconception": "answers 500% — the new figure as a percentage of the old, not the increase" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-003",
+      "chapterId": "g9sms-industrialisation",
+      "subsection": "epz_incentives",
+      "outcome": "Distinguish import substitution from export-led industrialisation and explain why the second suited Mauritius",
+      "context": "The zone created by the Act of 1970 and the policy it replaced",
+      "variants": [
+        { "id": "g9sms-fam-003-a", "difficulty": 2, "type": "text", "subsection": "epz_incentives",
+          "variation": "produce the term from a description of the policy rather than pick it",
+          "misconception": "writes ISI, the earlier and opposite policy" },
+        { "id": "g9sms-fam-003-b", "difficulty": 2, "type": "text", "subsection": "epz_incentives",
+          "variation": "name the dominant industry of the zone in one word",
+          "misconception": "answers sugar, the sector the zone existed to reduce dependence on" },
+        { "id": "g9sms-fam-003-c", "difficulty": 3, "type": "mcq", "subsection": "import_substitution",
+          "variation": "diagnose the error in a pupil's written sentence",
+          "misconception": "merges the two policies because both aimed at industry; they face opposite markets" },
+        { "id": "g9sms-fam-003-d", "difficulty": 4, "type": "mcq", "subsection": "import_substitution",
+          "variation": "compare two policy options under the stated constraint of a tiny home market",
+          "misconception": "judges a policy by whether it sounds protective rather than by the constraint it must beat" },
+        { "id": "g9sms-fam-003-e", "difficulty": 3, "type": "numeric", "subsection": "epz_incentives",
+          "variation": "calculate value added, not turnover, on a duty-free import (150 - 60) x 4000",
+          "misconception": "multiplies the selling price by the quantity and calls that the gain to Mauritius" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-004",
+      "chapterId": "g9sms-links",
+      "subsection": "benefits_of_membership",
+      "outcome": "Explain why a small economy joins regional bodies, and test duty-free access against a better price",
+      "context": "A Mauritian garment firm choosing between a COMESA buyer and a buyer outside the agreement",
+      "variants": [
+        { "id": "g9sms-fam-004-a", "difficulty": 2, "type": "text", "subsection": "regional_organisations",
+          "variation": "complete the name of the organisation from its opening words",
+          "misconception": "answers Asia because Mauritius trades heavily with India" },
+        { "id": "g9sms-fam-004-b", "difficulty": 3, "type": "mcq", "subsection": "benefits_of_membership",
+          "variation": "resolve an apparent contradiction — no resources, yet many memberships",
+          "misconception": "treats membership as a reward for size or wealth rather than a strategy for smallness" },
+        { "id": "g9sms-fam-004-c", "difficulty": 4, "type": "numeric", "subsection": "benefits_of_membership",
+          "variation": "compute what the firm KEEPS under each offer and find the difference (Rs 12 500 the other way)",
+          "misconception": "assumes duty-free access always wins, so never computes the net price" },
+        { "id": "g9sms-fam-004-d", "difficulty": 4, "type": "mcq", "subsection": "benefits_of_membership",
+          "variation": "change one condition — which change would flip the decision (Rs 460 less 15% = Rs 391)",
+          "misconception": "treats any change as relevant; two options make the other offer better still, one affects both equally" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-005",
+      "chapterId": "g9sms-government-welfare",
+      "subsection": "taxes_and_mra",
+      "outcome": "Calculate VAT forwards and backwards and judge who a flat rate falls hardest on",
+      "context": "A shop receipt and the 15% VAT collected by the MRA",
+      "variants": [
+        { "id": "g9sms-fam-005-a", "difficulty": 2, "type": "text", "subsection": "taxes_and_mra",
+          "variation": "produce the collecting authority's abbreviation",
+          "misconception": "names the Ministry of Finance, which sets rates but does not collect" },
+        { "id": "g9sms-fam-005-b", "difficulty": 2, "type": "numeric", "subsection": "taxes_and_mra",
+          "variation": "add VAT to a price given before tax",
+          "misconception": "takes the percentage of the wrong one of the two prices" },
+        { "id": "g9sms-fam-005-c", "difficulty": 4, "type": "mcq", "subsection": "taxes_and_mra",
+          "variation": "argue against a fairness claim using what households earn, not what they pay",
+          "misconception": "judges fairness from the rate alone; the same rate is not the same burden" },
+        { "id": "g9sms-fam-005-d", "difficulty": 3, "type": "numeric", "subsection": "taxes_and_mra",
+          "variation": "reverse it — extract the VAT already inside a total (4600 / 1.15)",
+          "misconception": "takes 15% of the VAT-inclusive total and answers 690" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-006",
+      "chapterId": "g9sms-media",
+      "subsection": "roles_of_media",
+      "outcome": "Classify media and separate what a source shows from what it claims",
+      "context": "A false cyclone warning forwarded phone to phone, and two accounts of one road accident",
+      "variants": [
+        { "id": "g9sms-fam-006-a", "difficulty": 2, "type": "text", "subsection": "types_of_media",
+          "variation": "name the media type from two named platforms",
+          "misconception": "answers print media because a post contains writing" },
+        { "id": "g9sms-fam-006-b", "difficulty": 3, "type": "mcq", "subsection": "roles_of_media",
+          "variation": "identify which difference between a post and a newspaper actually matters",
+          "misconception": "believes reach or speed makes a message reliable, rather than editorial responsibility" },
+        { "id": "g9sms-fam-006-c", "difficulty": 4, "type": "mcq", "subsection": "roles_of_media",
+          "variation": "weigh two competing accounts and separate footage from the caption on it",
+          "misconception": "treats a caption as part of the evidence — a literal record versus an inference" },
+        { "id": "g9sms-fam-006-d", "difficulty": 3, "type": "text", "subsection": "roles_of_media",
+          "variation": "name the constitutional freedom behind the watchdog role",
+          "misconception": "answers with another protected right, such as freedom of movement" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-007",
+      "chapterId": "g9sms-family",
+      "subsection": "family_types",
+      "outcome": "Classify family types by household composition and reason about family change without assuming cause",
+      "context": "One three-generation household, and the national trends in women's work and household size",
+      "variants": [
+        { "id": "g9sms-fam-007-a", "difficulty": 2, "type": "text", "subsection": "family_types",
+          "variation": "name the type from a described household",
+          "misconception": "answers nuclear; the number of generations in the household is the test" },
+        { "id": "g9sms-fam-007-b", "difficulty": 3, "type": "mcq", "subsection": "family_types",
+          "variation": "change one condition — the grandparents move out — and say what follows",
+          "misconception": "keeps calling it extended because the relatives are still nearby" },
+        { "id": "g9sms-fam-007-c", "difficulty": 4, "type": "mcq", "subsection": "women_at_work",
+          "variation": "evaluate a causal conclusion drawn from two trends moving together",
+          "misconception": "correlation read as one-way causation; the arrow can point the other way" },
+        { "id": "g9sms-fam-007-d", "difficulty": 3, "type": "text", "subsection": "family_functions",
+          "variation": "name the function being performed in a described situation",
+          "misconception": "answers economic because the family is providing something" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-008",
+      "chapterId": "g9sms-chagos-tromelin",
+      "subsection": "chagos_history",
+      "outcome": "Explain the detachment of the Chagos Archipelago and what a court opinion can and cannot do",
+      "context": "The 1965 detachment, the base on Diego Garcia and the 2019 ICJ advisory opinion",
+      "variants": [
+        { "id": "g9sms-fam-008-a", "difficulty": 2, "type": "numeric", "subsection": "chagos_history",
+          "variation": "give the year, anchored three years before independence",
+          "misconception": "writes 1968 (independence) or 1992 (republic)" },
+        { "id": "g9sms-fam-008-b", "difficulty": 3, "type": "mcq", "subsection": "chagos_history",
+          "variation": "resolve an apparent contradiction between 1968 independence and the claim of no consent",
+          "misconception": "assumes an independent state must have agreed; the decision came before independence" },
+        { "id": "g9sms-fam-008-c", "difficulty": 4, "type": "mcq", "subsection": "expulsion_and_icj",
+          "variation": "judge what a 2019 advisory opinion actually changed on the ground",
+          "misconception": "treats a legal finding as its own enforcement; a rival option confuses Chagos with Tromelin" },
+        { "id": "g9sms-fam-008-d", "difficulty": 2, "type": "text", "subsection": "diego_garcia",
+          "variation": "name the island carrying the base",
+          "misconception": "answers Tromelin, the other disputed island, which has no such base" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-009",
+      "chapterId": "g9sms-map-data-skills",
+      "subsection": "map_key_and_scale",
+      "outcome": "Read positions and direction off a latitude-longitude grid and interpret a cyclone track",
+      "context": "Inline-SVG track map, 54-64 E by 14-24 S, four dated centre positions and Mauritius marked",
+      "variants": [
+        { "id": "g9sms-fam-009-a", "difficulty": 2, "type": "numeric", "subsection": "map_key_and_scale",
+          "variation": "read latitude for a stated longitude",
+          "misconception": "reads the bottom scale and gives the longitude instead" },
+        { "id": "g9sms-fam-009-b", "difficulty": 3, "type": "mcq", "subsection": "map_key_and_scale",
+          "variation": "combine two readings into a compass direction of travel",
+          "misconception": "answers due south after noticing only the latitude change" },
+        { "id": "g9sms-fam-009-c", "difficulty": 4, "type": "mcq", "subsection": "map_key_and_scale",
+          "variation": "judge a claim that a near miss means no effect",
+          "misconception": "reads a track line as the boundary of the storm; the dots mark only the centre" },
+        { "id": "g9sms-fam-009-d", "difficulty": 3, "type": "numeric", "subsection": "map_key_and_scale",
+          "variation": "convert degrees of latitude read off the grid into km (6 x 111)",
+          "misconception": "counts the dots instead of the degrees, or uses the longitude change" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-010",
+      "chapterId": "g9sms-population",
+      "subsection": "structure_pyramids",
+      "outcome": "Read a population pyramid, calculate a dependency ratio from it, and test claims about the future",
+      "context": "Inline-SVG age-sex pyramid, six bands, every bar landing on a 25-thousand tick (total 1.2 million)",
+      "variants": [
+        { "id": "g9sms-fam-010-a", "difficulty": 2, "type": "numeric", "subsection": "structure_pyramids",
+          "variation": "read one bar against the scale",
+          "misconception": "reads the male bar on the other side of the same row" },
+        { "id": "g9sms-fam-010-b", "difficulty": 3, "type": "numeric", "subsection": "structure_pyramids",
+          "variation": "group six bars into the working-age band and total them",
+          "misconception": "includes the 0-14 band because school pupils are not working" },
+        { "id": "g9sms-fam-010-c", "difficulty": 3, "type": "mcq", "subsection": "structure_pyramids",
+          "variation": "choose which of four TRUE readings of the chart is evidence of ageing",
+          "misconception": "accepts any true statement as evidence; three describe longevity or sex balance" },
+        { "id": "g9sms-fam-010-d", "difficulty": 4, "type": "numeric", "subsection": "structure_pyramids",
+          "variation": "apply a supplied definition across twelve bars: 450 dependants per 750 workers",
+          "misconception": "counts only children as dependants and forgets the two oldest bands" },
+        { "id": "g9sms-fam-010-e", "difficulty": 4, "type": "mcq", "subsection": "structure_pyramids",
+          "variation": "judge a minister's forecast of school demand from the shape of the base",
+          "misconception": "compares the young band with the old bands instead of with the bands just above it" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-011",
+      "chapterId": "g9sms-economy-1960s",
+      "subsection": "predictions",
+      "outcome": "State the obstacles of the 1960s and explain why the pessimistic forecast failed",
+      "context": "The 1961 Meade report and what changed after 1970",
+      "variants": [
+        { "id": "g9sms-fam-011-a", "difficulty": 2, "type": "text", "subsection": "sugar_dependence",
+          "variation": "name the single export crop the forecast rested on",
+          "misconception": "answers tea or tobacco, both grown but neither the dependence" },
+        { "id": "g9sms-fam-011-b", "difficulty": 3, "type": "mcq", "subsection": "obstacles",
+          "variation": "select the PAIR of conditions, not a single cause",
+          "misconception": "thinks smallness alone was the problem, rather than growth plus dependence" },
+        { "id": "g9sms-fam-011-c", "difficulty": 4, "type": "mcq", "subsection": "predictions",
+          "variation": "explain why a prediction failed by testing each of its assumptions",
+          "misconception": "looks for one lucky event (a sugar price, aid) instead of the assumptions changing" },
+        { "id": "g9sms-fam-011-d", "difficulty": 2, "type": "text", "subsection": "early_measures",
+          "variation": "produce the one-word name of the strategy",
+          "misconception": "answers industrialisation, which leaves out tourism and services" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-012",
+      "chapterId": "g9sms-outer-islands",
+      "subsection": "services_and_access",
+      "outcome": "Explain how distance shapes services in Rodrigues and Agalega and choose between two ways of providing them",
+      "context": "Health provision and transport links for the outer islands",
+      "variants": [
+        { "id": "g9sms-fam-012-a", "difficulty": 2, "type": "text", "subsection": "rodrigues",
+          "variation": "name the autonomous body created in 2002",
+          "misconception": "answers the National Assembly, the parliament of the whole Republic" },
+        { "id": "g9sms-fam-012-b", "difficulty": 2, "type": "numeric", "subsection": "rodrigues",
+          "variation": "apply density to a small island (44 000 over 110 km squared)",
+          "misconception": "assumes a small island must be crowded, without dividing" },
+        { "id": "g9sms-fam-012-c", "difficulty": 4, "type": "mcq", "subsection": "services_and_access",
+          "variation": "choose the criterion that should decide between a resident specialist and more flights",
+          "misconception": "picks the option that costs less in the first year instead of the one that meets the need" },
+        { "id": "g9sms-fam-012-d", "difficulty": 3, "type": "mcq", "subsection": "agalega",
+          "variation": "change one condition — a longer airstrip and deeper jetty — and predict what follows",
+          "misconception": "expects infrastructure to create institutions or industries by itself" }
+      ]
+    },
+    {
+      "familyId": "g9sms-fam-013",
+      "chapterId": "g9sms-migration",
+      "subsection": "internal_international",
+      "outcome": "Classify a move, separate push from pull, and judge an absolute claim about emigration",
+      "context": "A nurse's move from Souillac to Curepipe, set beside national migration flows",
+      "variants": [
+        { "id": "g9sms-fam-013-a", "difficulty": 2, "type": "text", "subsection": "internal_international",
+          "variation": "classify a move in one word",
+          "misconception": "answers emigration, though no border has been crossed" },
+        { "id": "g9sms-fam-013-b", "difficulty": 3, "type": "mcq", "subsection": "push_pull",
+          "variation": "sort relevant from irrelevant detail — one push, one pull, two neutral facts",
+          "misconception": "treats every fact in the stem as a factor, or calls the closed clinic a pull" },
+        { "id": "g9sms-fam-013-c", "difficulty": 4, "type": "mcq", "subsection": "internal_international",
+          "variation": "decide whether an absolute claim is always, sometimes or never true",
+          "misconception": "answers always because the claim sounds reasonable; remittances and returning skills are the exception" },
+        { "id": "g9sms-fam-013-d", "difficulty": 3, "type": "numeric", "subsection": "internal_international",
+          "variation": "compute net migration from two flows",
+          "misconception": "adds the flows and answers 9 900, the number who moved, not the net effect" }
+      ]
+    }
+  ],
+  "needs": [
+    "engine/question_loader.js: add 'subjects/grade9-social-modern-studies/questions/family_expansion.js' to LOCAL_FILES['grade9-social-modern-studies'] (file:// dev only; production auto-discovers the directory).",
+    "engine/question_loader.js: bump _CACHE_VERSION once, after all packs in this batch have landed.",
+    "No chapter, subsection or pack changed, so scripts/build-subject-index.js does NOT need re-running for this pack."
+  ],
+  "verification": {
+    "node --check": "pass",
+    "sandbox load": "55 loaded, 55 unique ids, 0 missing chapterId/subsection/question",
+    "test-subsection-invariant.js": "ok grade9-social-modern-studies: 17 chapters, every declared id has questions and every tag is declared (other packs fail, pre-existing: grade9-ict, grade9-physics and several grade1-8 packs)",
+    "test-live-pack-content.js": "84 passed, 0 failed",
+    "test-svg-figures.js": "my three figures pass viewBox, role=img, breakout and clipping; 14 failures elsewhere are pre-existing (g9s-bdiag-*, g9s-cdm-001, g9s-pdm-001, g9s-ctask-013, g9s-p5-v049/050)",
+    "test-option-parity.js": "the pack FAILED before this batch and still fails on pre-existing debt. 0 of the 98 length leaks and 0 of the 167 answer-longest items are new. My 24 MCQs: 0 leaks, 0 answer-longest, average spread 3.5 chars (papers 6.5-6.8). Pack-level: answer-longest 45.5% -> 42.7%, spread 17.7 -> 16.8 chars.",
+    "test-question-cache-budget.js": "all checks passed (Grade 9 at 1.07 MB of a 3.70 MB budget)"
+  },
+  "notes": [
+    "Every calculated answer was re-derived independently from the data as printed: 280, 82 800, 800, 400%, Rs 360 000, Rs 12 500, Rs 345, Rs 600, 1965, 18 degrees, 666 km, 100, 750, 60, 400, 1 500. Every division is exact.",
+    "No variant discloses another's answer. Three items were rewritten after a first pass did: fam-001-d named the densest district (fam-001-b's answer), fam-006-b printed 'social media' (fam-006-a's answer), and fam-008-b printed 1965 (fam-008-a's answer).",
+    "fam-010-c and fam-010-e originally rested on the same reading of the pyramid; -c now tests 60+ against under-15 (250 vs 200) and -e the narrowing base, so the two no longer answer each other.",
+    "Mauritius figures used: EPZ Act 1970 and textiles-dominated (consistent with g9sms-v034 and g9sms-pi043 already in the pack); VAT 15%; Chagos detached 1965, ICJ advisory opinion 2019, base on Diego Garcia; Rodrigues Regional Assembly 2002; Moka about 230 km squared and about 82 800 people. The district table is labelled 'figures rounded' and the arrivals chart uses figures rounded to 0.1 million, so no item depends on a figure to a precision this repo cannot support. Nothing in the batch depends on the status of the 2024-25 Chagos negotiations.",
+    "FOUND, NOT CHANGED (existing bank): g9sms-pi054 trips the 'refers to the textbook' check in test-option-parity.js. g9sms-v084 uses Port Louis 118 000 / 43 km squared while my table uses 129 000 / 43; both are labelled approximate but the pack would read better with one agreed set of district figures. And the pack carries 98 items whose correct option is materially the longest and an average option spread of 16.8 characters, which is the real reason test-option-parity.js fails for this pack - it is a backlog in the existing five files, not in this batch."
+  ]
+}

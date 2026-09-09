@@ -47,6 +47,9 @@ function makeCtx(opts) {
     console: { warn: (...a) => { ctx.warnings.push(a); }, log() {}, error() {} }, warnings: [],
   });
   ctx.els = els; ctx.storage = storage;
+  // helpers.js first: GradeAccess lives there, and game_settings.js degrades
+  // to own-grade-only without it - which would test the fallback, not the app.
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'engine/helpers.js'), 'utf8').replace(/^﻿/, ''), ctx, { filename: 'helpers.js' });
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'engine/game_settings.js'), 'utf8'), ctx, { filename: 'game_settings.js' });
   for (const f of ['minigame_gk', 'minigame_words', 'minigame_geo', 'minigame_time', 'minigame'])
     vm.runInContext(fs.readFileSync(path.join(ROOT, 'engine', f + '.js'), 'utf8'), ctx, { filename: f + '.js' });

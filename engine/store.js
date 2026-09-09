@@ -1374,6 +1374,68 @@ const Store = (() => {
     await _sb.rpc('remove_friend', { p_friend_id: friendId });
   }
 
+  // ── Points, levels, leaderboard ───────────────
+  // ⚠ Every one of these is a READ or a request to award; none of them carries
+  //   an amount. award_activity_points() takes a kind and a ref and looks the
+  //   value up in the database, so there is no number here for a tampered
+  //   client to inflate. See migrations/20260909_points_and_leaderboard.sql.
+
+  // The authoritative total. DB.xp is a cache of this.
+  async function getMyPoints() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('get_my_points');
+    if (error) { console.warn('[Store.getMyPoints]', error.message); return null; }
+    return (data && data.ok) ? data : null;
+  }
+
+  // Ask for an award. Returns { awarded, points, level } - awarded is 0 whenever
+  // this ref has already paid or the daily cap is reached, which is the ordinary
+  // case and never an error. Safe to call on every render for that reason.
+  async function awardActivityPoints(kind, ref) {
+    if (!_sb || !kind || !ref) return null;
+    const { data, error } = await _sb.rpc('award_activity_points', { p_kind: kind, p_ref: ref });
+    if (error) { console.warn('[Store.awardActivityPoints]', error.message); return null; }
+    return (data && data.ok) ? data : null;
+  }
+
+  // ⚠ Returns null on failure, never [] - [] is a real answer ("nobody has
+  //   scored yet") and conflating the two would draw an empty leaderboard over
+  //   a network blip. Same rule as getMyEntitlements().
+  async function getPointsLeaderboard(grade, limit) {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('get_points_leaderboard', {
+      p_grade: (grade === 0 || grade) ? Number(grade) : null,
+      p_limit: limit || 50,
+    });
+    if (error) { console.warn('[Store.getPointsLeaderboard]', error.message); return null; }
+    return data || [];
+  }
+
+  // Is the global board switched on? One admin switch in global_settings,
+  // enforced server-side by leaderboard_enabled() — this read only decides
+  // whether the child is shown a door.
+  // ⚠ Returns false on failure, never true. The switch is off by default and a
+  //   failed read must not be the thing that turns it on.
+  async function leaderboardEnabled() {
+    if (!_sb) return false;
+    const { data, error } = await _sb.rpc('leaderboard_enabled');
+    if (error) { console.warn('[Store.leaderboardEnabled]', error.message); return false; }
+    return data === true;
+  }
+
+
+  // Where this child sits when they are nowhere near the top - "#418 of 2,140"
+  // is the part of a global board that means anything to most children.
+  async function getMyPointsRank(grade) {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('get_my_points_rank', {
+      p_grade: (grade === 0 || grade) ? Number(grade) : null,
+    });
+    if (error) { console.warn('[Store.getMyPointsRank]', error.message); return null; }
+    return (data && data.ok) ? data : null;
+  }
+
+
   // ── Plans / subscriptions ─────────────────────
   async function getUserPlan(userId) {
     if (!_sb || !userId) return { plan_id: 'free', plan: null, subscription: null };
@@ -1484,6 +1546,8 @@ const Store = (() => {
     loadAssignments, createAssignment, deleteAssignment, completeAssignment,
     // Friends
     getFriends, getMyFriendCode, removeFriend,
+    // Points & leaderboard
+    getMyPoints, awardActivityPoints, getPointsLeaderboard, getMyPointsRank, leaderboardEnabled,
     // Login tracking
     logLoginEvent,
     // Plans & billing

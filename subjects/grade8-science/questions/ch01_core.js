@@ -112,8 +112,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g8s-mixtures-005', chapterId:'g8s-mixtures', difficulty:3, subsection:'principles_separation',
     question:'A student has muddy water (mud + water). Which sequence of techniques will give her pure water?',
-    options:['Filtration then evaporation is wrong — she should use filtration then distillation','Filtration only','Evaporation only','Decantation then evaporation'],
-    answer:'Decantation then evaporation is wrong — she should use filtration then distillation',
+    options:['Filtration then distillation','Filtration only','Evaporation only','Decantation then evaporation'],
+    answer:'Filtration then distillation',
     hint:'Filtration removes the mud; distillation separates water from dissolved salts.',
     explanation:'First, <b>filtration</b> removes the mud (insoluble solid). Then <b>distillation</b> is needed to separate pure water from any dissolved substances. Evaporation alone would give solid residue, not pure liquid water.' }),
 

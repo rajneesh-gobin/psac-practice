@@ -1,494 +1,88 @@
-improve this kind of questions this to actually use a frequency table nicely displayed
+FINAL PHASE — EXPAND THE IMPROVED QUESTIONS INTO VARIED QUESTION FAMILIES
 
-📈 Graphs & Data
-⭐⭐⭐ Hard
-Question 2 of 20
-📝 1
-✅ 0
-🎯 0%
-⭐⭐⭐ Level 3 - HardMulti-step reasoning. Challenges deeper understanding.
-A frequency table: 1–10: 5 students; 11–20: 8 students; 21–30: 12 students; 31–40: 7 students. What percentage of students scored 21–30?
+After correcting and improving the existing questions, create additional questions around the same learning outcomes and broad contexts.
 
-A
-40%
+Do not merely change numbers, names or option order. Each addition must introduce a meaningful difference in the situation, reasoning or skill being assessed.
 
-B
-37.5%
+For each suitable improved question, aim to create 3–5 related questions across appropriate difficulty levels. Treat this as a quality target, not a quota: do not add repetitive or artificial questions to reach it.
 
-C
-35%
+VARY THE THINKING REQUIRED
 
-D
-30%
+Possible variations include:
+- Change what is known and what must be found.
+- Reverse the problem.
+- Add a relevant constraint.
+- Ask pupils to compare two possible solutions.
+- Introduce a plausible mistake to diagnose and correct.
+- Ask whether a claim is always true, sometimes true or false.
+- Include relevant and irrelevant information that pupils must distinguish.
+- Change one condition and ask how the outcome changes.
+- Require interpretation of a diagram, table, passage or graph.
+- Present an apparent contradiction that can be resolved using syllabus knowledge.
+- Ask pupils to identify missing information before deciding.
+- Require a prediction followed by a justification.
 
-🛟
-Need help?
+Use these selectively. Do not stack several complications into every question.
 
-🔊
-Read it to me
+ADD FAIR TWISTS AND MISCONCEPTION CHECKS
 
-✏️
-My working
+Include carefully designed “catching points” that reveal understanding, such as:
+- Confusing percentage increase with percentage of the final amount.
+- Using the wrong units or overlooking a required conversion.
+- Confusing total quantity with the amount remaining.
+- Treating correlation as proof of causation.
+- Applying a rule where its conditions do not hold.
+- Confusing a literal statement with an inference.
+- Choosing a grammatically correct answer that changes the intended meaning.
+- Using the right spreadsheet function with the wrong cell range.
 
-🔢
-Numbers
+These must be fair checks of taught concepts—not tricks based on ambiguous wording, obscure exceptions, tiny diagram labels or hidden assumptions.
 
-and in questions like this use actually a table to display the data
+The explanation must identify the misconception and show how to avoid it.
 
-A table shows pupils choosing fruit: 18 pupils choose 1 fruit, 10 choose 2 fruits and 5 choose 3 fruits. How many fruits are chosen altogether?
-Type your answer here…
- 
-isnt these question too direct for a grade 5? 
+EXAMPLE OF A QUESTION FAMILY
 
-A table shows pupils choosing fruit: 13 pupils choose 1 fruit, 10 choose 2 fruits and 6 choose 3 fruits. How many fruits are chosen altogether?
-Type your answer here…
- 
- 
- can you increase the difficulty?
- 
- 
- and finally why some chapters has 0% affixed in the sylabus table 
- 🏠 Home
-›
-Start Practicing
-›
-Maths
-📖 Chapters
-📝 Exam
-🗒️ Syllabus
-🔢
-Numeration & Notation Part 1
-90 questions
-50%
-All levels →
-▾
-▸
-Place Value (up to 100,000)
-17 questions
-Practise →
-▸
-Numbers in Words & Figures
-5 questions
-Practise →
-▸
-Ordering & Comparing Numbers
-7 questions
-Practise →
-▸
-Expanded Notation
-4 questions
-Practise →
-▸
-Rounding
-14 questions
-Practise →
-▸
-Roman Numerals
-8 questions
-Practise →
-▸
-Number Sequences & Patterns
-10 questions
-Practise →
-▸
-Word Problems
-25 questions
-Practise →
-➕
-Four Operations Part 1
-91 questions
-0%
-All levels →
-▾
-▸
-Addition & Subtraction
-8 questions
-Practise →
-▸
-Multiplication
-9 questions
-Practise →
-▸
-Division with Remainders
-10 questions
-Practise →
-▸
-Mixed Operations / BODMAS
-12 questions
-Practise →
-▸
-Multi-step Word Problems
-52 questions
-Practise →
-⬜
-Square Numbers & Patterns Part 1
-76 questions
-50%
-All levels →
-▾
-▸
-Square Numbers (1² to 15²)
-32 questions
-Practise →
-▸
-Square Roots
-4 questions
-Practise →
-▸
-Number Patterns & Sequences
-14 questions
-Practise →
-▸
-Word Problems
-26 questions
-Practise →
-📐
-Geometry & Angles Part 1
-123 questions
-58%
-All levels →
-▾
-▸
-Types & Measurement of Angles
-56 questions
-Practise →
-▸
-Properties of 2D Shapes
-4 questions
-Practise →
-▸
-Properties of 3D Shapes
-13 questions
-Practise →
-▸
-Lines of Symmetry
-34 questions
-Practise →
-▸
-Compass Directions & Turns
-8 questions
-Practise →
-▸
-Perimeter & Compound Shapes
-8 questions
-Practise →
-½
-Fractions Part 1
-103 questions
-0%
-All levels →
-▾
-▸
-Proper, Improper & Mixed Numbers
-11 questions
-Practise →
-▸
-Equivalent Fractions
-12 questions
-Practise →
-▸
-Comparing & Ordering Fractions
-6 questions
-Practise →
-▸
-Adding & Subtracting Fractions
-16 questions
-Practise →
-▸
-Fraction of a Quantity
-9 questions
-Practise →
-▸
-Word Problems
-49 questions
-Practise →
-•
-Decimals Part 1
-83 questions
-0%
-All levels →
-▾
-▸
-Decimal Place Value
-5 questions
-Practise →
-▸
-Ordering Decimals
-3 questions
-Practise →
-▸
-Adding & Subtracting Decimals
-40 questions
-Practise →
-▸
-Fractions ↔ Decimals
-5 questions
-Practise →
-▸
-Word Problems
-30 questions
-Practise →
-²
-Powers & Exponents Part 1
-77 questions
-0%
-All levels →
-▾
-▸
-Power / Exponent Notation
-9 questions
-Practise →
-▸
-Calculating Powers
-40 questions
-Practise →
-▸
-Power Word Problems
-28 questions
-Practise →
-📊
-Average Part 2
-69 questions
-0%
-All levels →
-▾
-▸
-Finding the Mean (Average)
-27 questions
-Practise →
-▸
-Finding a Missing Value from Mean
-29 questions
-Practise →
-▸
-Average Word Problems
-13 questions
-Practise →
-⚖️
-Ratio & Proportion Part 2
-72 questions
-0%
-All levels →
-▾
-▸
-Writing & Simplifying Ratios
-17 questions
-Practise →
-▸
-Dividing a Quantity in a Ratio
-15 questions
-Practise →
-▸
-Equivalent Ratios
-7 questions
-Practise →
-▸
-Ratio Word Problems
-33 questions
-Practise →
-%
-Percentage Part 2
-58 questions
-0%
-All levels →
-▾
-▸
-What Percentage Means
-6 questions
-Practise →
-▸
-Converting Fractions/Decimals ↔ Percentages
-5 questions
-Practise →
-▸
-Finding a Percentage of a Quantity
-11 questions
-Practise →
-▸
-Percentage Increase & Decrease
-9 questions
-Practise →
-▸
-Word Problems
-27 questions
-Practise →
-📏
-Length & Perimeter Part 2
-69 questions
-0%
-All levels →
-▾
-▸
-Unit Conversions (km/m/cm/mm)
-18 questions
-Practise →
-▸
-Perimeter of Shapes
-28 questions
-Practise →
-▸
-Length Word Problems
-23 questions
-Practise →
-▭
-Area Part 2
-71 questions
-0%
-All levels →
-▾
-▸
-Area of Rectangles & Squares
-25 questions
-Practise →
-▸
-Area of Compound Shapes
-4 questions
-Practise →
-▸
-Area of Triangles
-12 questions
-Practise →
-▸
-Word Problems
-30 questions
-Practise →
-🧪
-Capacity Part 2
-62 questions
-0%
-All levels →
-▾
-▸
-Litres & Millilitres
-13 questions
-Practise →
-▸
-Adding & Subtracting Capacity
-18 questions
-Practise →
-▸
-Capacity Word Problems
-31 questions
-Practise →
-⚖️
-Mass Part 2
-61 questions
-0%
-All levels →
-▾
-▸
-Kilograms & Grams
-5 questions
-Practise →
-▸
-Adding & Subtracting Mass
-23 questions
-Practise →
-▸
-Mass Word Problems
-33 questions
-Practise →
-💰
-Money & Profit/Loss Part 2
-72 questions
-0%
-All levels →
-▾
-▸
-Adding & Subtracting Money
-10 questions
-Practise →
-▸
-Profit & Loss
-20 questions
-Practise →
-▸
-Discount & Best Buy
-9 questions
-Practise →
-▸
-Money Word Problems
-33 questions
-Practise →
-⏰
-Time Part 2
-81 questions
-0%
-All levels →
-▾
-▸
-Reading 12h & 24h Clocks
-17 questions
-Practise →
-▸
-Converting Units of Time
-12 questions
-Practise →
-▸
-Duration & Elapsed Time
-42 questions
-Practise →
-▸
-Calendar Problems
-4 questions
-Practise →
-▸
-Word Problems
-6 questions
-Practise →
-📈
-Graphs & Data Part 2
-75 questions
-10%
-All levels →
-▾
-▸
-Pictograms
-16 questions
-Practise →
-▸
-Bar Charts
-19 questions
-Practise →
-▸
-Frequency Tables
-27 questions
-Practise →
-▸
-Mean / Average from Data
-13 questions
-Practise →
-🔄
-Unit Conversions Part 2
-98 questions
-0%
-All levels →
-▾
-▸
-Mass (kg ↔ g, tonne ↔ kg)
-12 questions
-Practise →
-▸
-Length (km ↔ m ↔ cm ↔ mm)
-20 questions
-Practise →
-▸
-Capacity (L ↔ mL)
-12 questions
-Practise →
-▸
-Time (h ↔ min ↔ sec, days, weeks)
-11 questions
-Practise →
-▸
-Money (Rs ↔ cents)
-7 questions
-Practise →
-▸
-Area (m² ↔ cm²)
-6 questions
-Practise →
-▸
-Mixed & Multi-step Conversions
-30 questions
-Practise →
+Context: a water container.
+
+Basic:
+Read the amount shown on a scale.
+
+Standard:
+Determine the amount remaining after several containers are filled.
+
+Hard:
+Compare two filling plans with different container sizes and a wastage condition.
+
+Challenge:
+Evaluate a pupil’s claim that there is enough liquid for a planned mixture, identify the mistaken assumption, and determine a feasible alternative.
+
+These questions share a context but assess different reasoning. They should not all be the same subtraction problem with different values.
+
+Apply equivalent variation to languages, science, ICT and SMS—not only Maths.
+
+CONTROL REPETITION
+
+- Give every genuinely new question a unique ID.
+- Record a question-family ID in supported metadata or a sidecar ledger.
+- Record the learning outcome, difficulty, variation and targeted misconception.
+- Avoid showing several near-related questions consecutively in mixed practice.
+- Keep closely related variants from appearing together in a mock paper when they would reveal answers or feel repetitive.
+- Deliberate linked practice may show a progression, but label and structure it accordingly.
+- Ensure each standalone question includes all necessary information.
+- Check that one variant does not disclose the answer to another.
+
+QUALITY CHECK FOR EVERY ADDITION
+
+Before accepting a variant, answer:
+1. What new thinking does this require?
+2. How does it differ from the original beyond surface details?
+3. Is the difficulty justified by the actual reasoning?
+4. Is the twist fair and within the syllabus?
+5. Is the answer unambiguous and independently verified?
+6. Does the explanation teach the reasoning and address the likely mistake?
+
+Reject variants that fail these checks.
+
+Report the number of new question families and variants per subject and difficulty, with examples of the different situations and misconceptions covered.
+
+Complete this expansion after the quality fixes and before the final validation and report. Keep the existing restriction against committing, pushing, deploying or modifying the live database.

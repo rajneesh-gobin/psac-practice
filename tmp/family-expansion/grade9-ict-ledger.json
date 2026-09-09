@@ -1,0 +1,408 @@
+{
+  "pack": "grade9-ict",
+  "file": "subjects/grade9-ict/questions/family_expansion.js",
+  "totals": {
+    "families": 15,
+    "variants": 70,
+    "byDifficulty": { "1": 1, "2": 9, "3": 23, "4": 37 },
+    "byType": { "mcq": 30, "numeric": 28, "text": 12 },
+    "mcqShare": 0.429,
+    "byChapter": {
+      "g9ict-spreadsheets": 18,
+      "g9ict-algorithms": 14,
+      "g9ict-computer-systems": 10,
+      "g9ict-databases": 5,
+      "g9ict-ethics-security": 5,
+      "g9ict-networks": 5,
+      "g9ict-word-processing": 5,
+      "g9ict-internet": 4,
+      "g9ict-troubleshooting": 4
+    }
+  },
+  "families": [
+    {
+      "familyId": "g9ict-fam-001",
+      "chapterId": "g9ict-spreadsheets",
+      "subsection": "formulas, cells_ranges",
+      "outcome": "Choose the right function AND give it a range that covers the whole data set",
+      "context": "A canteen's week of sales in B2:B6, with a SUM in B7 whose range starts one row too low",
+      "variants": [
+        { "id": "g9ict-fam-001-a", "difficulty": 3, "type": "numeric",
+          "variation": "evaluate the formula exactly as written, not as intended",
+          "misconception": "believes SUM finds the whole column because the label says Total" },
+        { "id": "g9ict-fam-001-b", "difficulty": 3, "type": "text",
+          "variation": "produce the corrected formula rather than recognise it",
+          "misconception": "starts the range at the row below the heading without checking where the first value is" },
+        { "id": "g9ict-fam-001-c", "difficulty": 4, "type": "mcq",
+          "variation": "diagnose a stated discrepancy of Rs 450 between a displayed total and a hand total",
+          "misconception": "attributes a wrong total to the function rather than to the range it was given" },
+        { "id": "g9ict-fam-001-d", "difficulty": 4, "type": "numeric",
+          "variation": "change one cell OUTSIDE the range and predict the change (zero)",
+          "misconception": "thinks editing any cell in a column refreshes every total below it" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-002",
+      "chapterId": "g9ict-spreadsheets",
+      "subsection": "functions",
+      "outcome": "Know exactly what AVERAGE counts, and what an empty cell does to it",
+      "context": "Five pupils' marks with B4 empty because one pupil was absent",
+      "variants": [
+        { "id": "g9ict-fam-002-a", "difficulty": 3, "type": "numeric",
+          "variation": "evaluate AVERAGE over a range containing a blank",
+          "misconception": "divides by the number of cells in the range instead of the number of values found" },
+        { "id": "g9ict-fam-002-b", "difficulty": 4, "type": "mcq",
+          "variation": "reconcile two formulas that add the same numbers and disagree",
+          "misconception": "assumes a built-in function and the equivalent hand arithmetic must agree" },
+        { "id": "g9ict-fam-002-c", "difficulty": 3, "type": "numeric",
+          "variation": "fill the blank and recompute; the average FALLS although a mark was added",
+          "misconception": "believes adding a mark always raises an average" },
+        { "id": "g9ict-fam-002-d", "difficulty": 2, "type": "text",
+          "variation": "name a different function for a different summary of the same range",
+          "misconception": "confuses reading a value (MAX) with rearranging the data (sorting)" },
+        { "id": "g9ict-fam-002-e", "difficulty": 4, "type": "mcq",
+          "variation": "choose the change that makes the sheet follow a stated rule",
+          "misconception": "thinks a cell that looks filled (a typed space) is filled as far as AVERAGE is concerned" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-003",
+      "chapterId": "g9ict-spreadsheets",
+      "subsection": "functions, formulas",
+      "outcome": "Use COUNTIF and IF with the correct comparison operator and the correct reference type",
+      "context": "Six marks against a pass mark of 50, with one mark sitting exactly on the boundary",
+      "variants": [
+        { "id": "g9ict-fam-003-a", "difficulty": 3, "type": "numeric",
+          "variation": "count against a >= criterion where one value is exactly on the boundary",
+          "misconception": "reads >=50 as 'above 50' and drops the pupil who scored exactly 50" },
+        { "id": "g9ict-fam-003-b", "difficulty": 4, "type": "text",
+          "variation": "identify WHICH record two nearly identical criteria disagree about",
+          "misconception": "assumes > and >= give the same count" },
+        { "id": "g9ict-fam-003-c", "difficulty": 3, "type": "mcq",
+          "variation": "pick the IF whose argument order and comparison both match the rule",
+          "misconception": "swaps the true/false results, or reverses the comparison so low marks pass" },
+        { "id": "g9ict-fam-003-d", "difficulty": 4, "type": "mcq",
+          "variation": "diagnose why a copied IF returns the same word in every row",
+          "misconception": "believes $ signs make a formula 'safer' rather than fixing one address" },
+        { "id": "g9ict-fam-003-e", "difficulty": 2, "type": "text",
+          "variation": "name the function that applies a condition, as the family's entry point",
+          "misconception": "reaches for COUNT or COUNTA, which apply no test at all" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-004",
+      "chapterId": "g9ict-spreadsheets",
+      "subsection": "cells_ranges, formulas",
+      "outcome": "Decide which reference in a formula must be absolute before it is copied",
+      "context": "Three item prices and one VAT rate stored once, in B6, below the data",
+      "variants": [
+        { "id": "g9ict-fam-004-a", "difficulty": 3, "type": "numeric",
+          "variation": "work out which two cells a correctly written formula uses after being copied",
+          "misconception": "thinks copying a formula copies its result rather than its pattern" },
+        { "id": "g9ict-fam-004-b", "difficulty": 4, "type": "mcq",
+          "variation": "resolve two symptoms at once - the first row right, the rows below zero",
+          "misconception": "trusts a formula because the row it was typed in looks correct" },
+        { "id": "g9ict-fam-004-c", "difficulty": 3, "type": "text",
+          "variation": "produce the formula, deciding per reference which part must be locked",
+          "misconception": "locks both references, giving every item the first item's VAT" },
+        { "id": "g9ict-fam-004-d", "difficulty": 3, "type": "numeric",
+          "variation": "change the shared rate and predict a dependent cell without retyping anything",
+          "misconception": "believes a formula must be retyped after the value it refers to changes" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-005",
+      "chapterId": "g9ict-algorithms",
+      "subsection": "python_basics, control_structures",
+      "outcome": "Trace a Python loop with a condition, and say what one edit changes",
+      "context": "marks = [45, 62, 38, 71, 50] counted against a pass mark inside a for loop",
+      "variants": [
+        { "id": "g9ict-fam-005-a", "difficulty": 3, "type": "numeric",
+          "variation": "trace the loop and report the counter",
+          "misconception": "counts 50 as failing a >= test" },
+        { "id": "g9ict-fam-005-b", "difficulty": 4, "type": "numeric",
+          "variation": "change the comparison operator by one character and re-trace",
+          "misconception": "treats > and >= as interchangeable in code" },
+        { "id": "g9ict-fam-005-c", "difficulty": 4, "type": "numeric",
+          "variation": "change the accumulator from +1 to +m, so the variable stops being a count",
+          "misconception": "does not distinguish a counter from a running total" },
+        { "id": "g9ict-fam-005-d", "difficulty": 4, "type": "mcq",
+          "variation": "move print one indentation level and predict the change in behaviour",
+          "misconception": "treats indentation as layout rather than as the thing that defines a block" },
+        { "id": "g9ict-fam-005-e", "difficulty": 3, "type": "numeric",
+          "variation": "count how many times the TEST runs, not how many times it is true",
+          "misconception": "confuses the number of loop iterations with the number of matches" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-006",
+      "chapterId": "g9ict-algorithms",
+      "subsection": "control_structures",
+      "outcome": "Dry-run a while loop and reason about the value it stops on",
+      "context": "count = 10 stepping down by 3 while count > 0, with a step counter",
+      "variants": [
+        { "id": "g9ict-fam-006-a", "difficulty": 3, "type": "numeric",
+          "variation": "count the passes round the loop",
+          "misconception": "stops the trace at 1 and answers 3, forgetting the condition is tested before a pass" },
+        { "id": "g9ict-fam-006-b", "difficulty": 4, "type": "numeric",
+          "variation": "report the final value, which overshoots the limit",
+          "misconception": "believes a loop stops the instant its variable reaches the limit" },
+        { "id": "g9ict-fam-006-c", "difficulty": 4, "type": "mcq",
+          "variation": "judge a pupil's claim that the program is buggy",
+          "misconception": "assumes an unexpected result must be a coding error rather than the arithmetic of the step" },
+        { "id": "g9ict-fam-006-d", "difficulty": 4, "type": "numeric",
+          "variation": "reverse the problem - find the starting value that produces a required ending value",
+          "misconception": "treats the starting value as free when the step size constrains it" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-007",
+      "chapterId": "g9ict-algorithms",
+      "subsection": "flowchart_reading, flowchart_symbols",
+      "outcome": "Dry-run a flowchart with a loop, and say what each structural change does",
+      "context": "An inline-SVG flowchart: INPUT N, T = 0, C = 1, loop while C <= N adding C to T, OUTPUT T",
+      "variants": [
+        { "id": "g9ict-fam-007-a", "difficulty": 3, "type": "numeric",
+          "variation": "dry-run to the final output for N = 5",
+          "misconception": "stops the trace at C = 4 because the last pass is easy to miss" },
+        { "id": "g9ict-fam-007-b", "difficulty": 4, "type": "numeric",
+          "variation": "change the decision from <= to < and re-run",
+          "misconception": "the off-by-one - assumes the loop body count is unaffected by the operator" },
+        { "id": "g9ict-fam-007-c", "difficulty": 4, "type": "mcq",
+          "variation": "generalise from one trace to what the algorithm computes for any N",
+          "misconception": "reads a loop by its counter instead of by the box inside it" },
+        { "id": "g9ict-fam-007-d", "difficulty": 4, "type": "numeric",
+          "variation": "swap the two boxes inside the loop and re-run",
+          "misconception": "believes the order of statements inside a loop does not matter" },
+        { "id": "g9ict-fam-007-e", "difficulty": 2, "type": "text",
+          "variation": "name the symbol shape, as the family's accessible entry point",
+          "misconception": "confuses the decision diamond with the process rectangle or the I/O parallelogram" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-008",
+      "chapterId": "g9ict-databases",
+      "subsection": "queries",
+      "outcome": "Read a query-by-example grid against a table and predict exactly what it returns",
+      "context": "A six-record LIBRARY table and a QBE grid with Category and Year criteria",
+      "variants": [
+        { "id": "g9ict-fam-008-a", "difficulty": 3, "type": "numeric",
+          "variation": "apply two criteria on the SAME row (AND) and count the result",
+          "misconception": "reads >2019 as 'from 2019 onward' and includes the 2019 record" },
+        { "id": "g9ict-fam-008-b", "difficulty": 4, "type": "text",
+          "variation": "identify the record that satisfies one criterion but is excluded by the other",
+          "misconception": "filters on the field read first and accepts a record without testing the second" },
+        { "id": "g9ict-fam-008-c", "difficulty": 4, "type": "numeric",
+          "variation": "move one criterion to the Or row and count again - the result WIDENS",
+          "misconception": "believes the grid can only narrow a result set" },
+        { "id": "g9ict-fam-008-d", "difficulty": 3, "type": "mcq",
+          "variation": "separate what Show does from what Criteria does",
+          "misconception": "thinks a field must be displayed in order to be filtered on" },
+        { "id": "g9ict-fam-008-e", "difficulty": 2, "type": "text",
+          "variation": "name the row that carries the test, as the family's entry point",
+          "misconception": "confuses the Criteria row with the Field, Table, Show or Sort rows" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-009",
+      "chapterId": "g9ict-ethics-security",
+      "subsection": "data_backups",
+      "outcome": "Distinguish full, incremental and differential backups by what each copies AND by what a restore then costs",
+      "context": "A school office: a full backup every Sunday and one further backup each weeknight",
+      "variants": [
+        { "id": "g9ict-fam-009-a", "difficulty": 2, "type": "mcq",
+          "variation": "name the method whose starting point is always the last FULL backup",
+          "misconception": "the exact error in the existing g9ict-esv-042 - calling this incremental" },
+        { "id": "g9ict-fam-009-b", "difficulty": 2, "type": "mcq",
+          "variation": "name the method whose starting point moves forward each night",
+          "misconception": "believes the two methods differ on Monday, when in fact they are identical then" },
+        { "id": "g9ict-fam-009-c", "difficulty": 4, "type": "numeric",
+          "variation": "count the sets a differential restore actually needs",
+          "misconception": "assumes every backup taken during the week must be restored" },
+        { "id": "g9ict-fam-009-d", "difficulty": 4, "type": "numeric",
+          "variation": "change one condition (incremental instead of differential) and recount",
+          "misconception": "does not connect the smaller nightly copy to the longer restore chain" },
+        { "id": "g9ict-fam-009-e", "difficulty": 4, "type": "mcq",
+          "variation": "resolve a disagreement in which both sides state something true",
+          "misconception": "judges a backup plan by how long the backup takes rather than by how reliably it restores" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-010",
+      "chapterId": "g9ict-computer-systems",
+      "subsection": "data_units, storage_devices",
+      "outcome": "Work with storage capacity, converting units and separating what is used from what remains",
+      "context": "A 32 GB memory card, 8 MB photographs, and a 4 GB video already on it",
+      "variants": [
+        { "id": "g9ict-fam-010-a", "difficulty": 2, "type": "numeric",
+          "variation": "convert one capacity between units",
+          "misconception": "divides instead of multiplying when moving to the smaller unit" },
+        { "id": "g9ict-fam-010-b", "difficulty": 3, "type": "numeric",
+          "variation": "divide, but only after putting both quantities in the same unit",
+          "misconception": "divides 32 by 8 and answers 4 - a mixed-unit division" },
+        { "id": "g9ict-fam-010-c", "difficulty": 4, "type": "mcq",
+          "variation": "diagnose a stated (and arithmetically correct) claim that rests on a false premise",
+          "misconception": "total capacity versus space remaining" },
+        { "id": "g9ict-fam-010-d", "difficulty": 4, "type": "numeric",
+          "variation": "carry out the corrected calculation the previous variant only described",
+          "misconception": "converts first and then forgets to subtract the space already used" },
+        { "id": "g9ict-fam-010-e", "difficulty": 4, "type": "mcq",
+          "variation": "identify the missing information before any calculation is possible",
+          "misconception": "treats the facts a situation happens to supply as the facts a calculation needs" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-011",
+      "chapterId": "g9ict-networks",
+      "subsection": "topologies, network_components",
+      "outcome": "Use the pattern of who can and cannot connect to locate a fault in a star network",
+      "context": "An inline-SVG diagram of four lab PCs on a switch, a router and the Internet",
+      "variants": [
+        { "id": "g9ict-fam-011-a", "difficulty": 2, "type": "mcq",
+          "variation": "read the topology off the diagram",
+          "misconception": "confuses a star with a bus because both look like 'one line of computers'" },
+        { "id": "g9ict-fam-011-b", "difficulty": 3, "type": "mcq",
+          "variation": "one machine fails - eliminate every shared component",
+          "misconception": "blames a shared device that the three working machines are visibly using" },
+        { "id": "g9ict-fam-011-c", "difficulty": 4, "type": "mcq",
+          "variation": "two symptoms that look contradictory - local sharing works, the web does not",
+          "misconception": "treats 'the network is down' as one thing instead of two layers" },
+        { "id": "g9ict-fam-011-d", "difficulty": 4, "type": "numeric",
+          "variation": "remove the central device and count how many machines still reach the Internet",
+          "misconception": "believes a star is fault-tolerant, missing its single point of failure" },
+        { "id": "g9ict-fam-011-e", "difficulty": 3, "type": "mcq",
+          "variation": "compare star and bus on the property of being diagnosable",
+          "misconception": "judges a topology only by cost or speed, not by what a fault does to it" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-012",
+      "chapterId": "g9ict-internet",
+      "subsection": "e_services, browsers_search",
+      "outcome": "Decide what an online transaction actually requires, and what a security indicator does and does not promise",
+      "context": "Mrs Ramdin paying an electricity bill online from three different places",
+      "variants": [
+        { "id": "g9ict-fam-012-a", "difficulty": 4, "type": "mcq",
+          "variation": "given a full inventory of what she HAS, name what is missing",
+          "misconception": "assumes owning the hardware means holding the service (the corrected form of the audit's g9ict-int-202-a)" },
+        { "id": "g9ict-fam-012-b", "difficulty": 4, "type": "mcq",
+          "variation": "evaluate a claim that one safeguard removes all risk",
+          "misconception": "reads a padlock as sufficient rather than necessary security" },
+        { "id": "g9ict-fam-012-c", "difficulty": 3, "type": "text",
+          "variation": "produce the protocol name instead of recognising it",
+          "misconception": "does not distinguish HTTP from HTTPS when entering card details" },
+        { "id": "g9ict-fam-012-d", "difficulty": 4, "type": "mcq",
+          "variation": "compare two routes and pick the factor that actually separates them",
+          "misconception": "chooses a true statement about one option that is irrelevant to the decision" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-013",
+      "chapterId": "g9ict-word-processing",
+      "subsection": "mail_merge",
+      "outcome": "Predict the output of a mail merge from its data source, its main document and its filter",
+      "context": "Four fee-letter recipients and a main document with four merge fields",
+      "variants": [
+        { "id": "g9ict-fam-013-a", "difficulty": 2, "type": "numeric",
+          "variation": "count the letters a completed merge produces",
+          "misconception": "counts merge fields instead of records" },
+        { "id": "g9ict-fam-013-b", "difficulty": 3, "type": "text",
+          "variation": "produce the text one named field prints for one named record",
+          "misconception": "believes a field prints the same text wherever it appears" },
+        { "id": "g9ict-fam-013-c", "difficulty": 4, "type": "mcq",
+          "variation": "diagnose letters that still show the field names after printing",
+          "misconception": "judges a field by how it looks on screen rather than by whether the program recognises it" },
+        { "id": "g9ict-fam-013-d", "difficulty": 4, "type": "numeric",
+          "variation": "add a filter to the recipient list and recount",
+          "misconception": "thinks the data source must be edited to write to a subset of it" },
+        { "id": "g9ict-fam-013-e", "difficulty": 3, "type": "mcq",
+          "variation": "name the two inputs a merge requires",
+          "misconception": "confuses an output of the process (labels, envelopes) with an input to it" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-014",
+      "chapterId": "g9ict-troubleshooting",
+      "subsection": "troubleshooting_techniques, troubleshooting_steps",
+      "outcome": "Eliminate causes from evidence, test the cheapest hypothesis first, and change one thing at a time",
+      "context": "A desktop showing No signal while its fan runs and the monitor's own menu still opens",
+      "variants": [
+        { "id": "g9ict-fam-014-a", "difficulty": 3, "type": "mcq",
+          "variation": "use one observation to rule a cause OUT rather than to pick a cause",
+          "misconception": "jumps to the most familiar cause instead of narrowing the list" },
+        { "id": "g9ict-fam-014-b", "difficulty": 4, "type": "mcq",
+          "variation": "order candidate actions by cost and reversibility",
+          "misconception": "assumes a dramatic symptom implies a dramatic cause" },
+        { "id": "g9ict-fam-014-c", "difficulty": 4, "type": "text",
+          "variation": "name what is left after substitution has cleared two of three components",
+          "misconception": "keeps suspecting a part that has been proved good on another machine" },
+        { "id": "g9ict-fam-014-d", "difficulty": 4, "type": "mcq",
+          "variation": "criticise a method rather than solve the fault",
+          "misconception": "believes fixing the symptom and identifying the fault are the same outcome" }
+      ]
+    },
+    {
+      "familyId": "g9ict-fam-015",
+      "chapterId": "g9ict-computer-systems",
+      "subsection": "cpu_memory",
+      "outcome": "Compare a system panel against a stated set of minimum requirements",
+      "context": "An About this PC panel for LAB-PC-07 beside the minimum requirements for LabDraw 12",
+      "variants": [
+        { "id": "g9ict-fam-015-a", "difficulty": 1, "type": "text",
+          "variation": "read one value from the panel - the family's deliberate L1 anchor",
+          "misconception": "confuses installed RAM with disk space" },
+        { "id": "g9ict-fam-015-b", "difficulty": 4, "type": "mcq",
+          "variation": "find the requirement the document CANNOT answer",
+          "misconception": "assumes a panel titled About this PC describes everything about the machine (the corrected form of the audit's g9ict-sys-204-c, whose answer was printed in the panel)" },
+        { "id": "g9ict-fam-015-c", "difficulty": 4, "type": "mcq",
+          "variation": "adjudicate a pupil's claim that rests on a decimal comparison",
+          "misconception": "reads 1.60 as smaller than 1.5 because 60 is larger than 5" },
+        { "id": "g9ict-fam-015-d", "difficulty": 3, "type": "numeric",
+          "variation": "compute the shortfall rather than restate the requirement",
+          "misconception": "answers 8 - treats a minimum total as the amount to be added" },
+        { "id": "g9ict-fam-015-e", "difficulty": 4, "type": "mcq",
+          "variation": "compare two machines where each is better on one requirement",
+          "misconception": "treats minimum requirements as a score to be totalled, so a strong figure offsets a weak one" }
+      ]
+    }
+  ],
+  "needs": [
+    {
+      "type": "content-correction",
+      "file": "subjects/grade9-ict/questions/ethics_volume.js",
+      "id": "g9ict-esv-042",
+      "line": 258,
+      "problem": "The stem reads 'Which backup method copies only the files that have changed since the last full backup?' and keys 'Incremental backup'. That wording describes a DIFFERENTIAL backup. An incremental backup copies what has changed since the last backup of ANY type. The item's own explanation then contradicts its stem: it says 'since the previous backup (full or incremental)'.",
+      "fix": "Change the stem to 'Which backup method copies only the files that have changed since the previous backup, whether that was a full or an incremental one?' and leave the keyed answer and the explanation as they are. Do NOT change the answer to 'Differential backup': 'Differential backup' is not currently one of the four options, and the surrounding block (esv-041, esv-043) is built around full versus incremental. The differential/full/incremental distinction is now taught properly by g9ict-fam-009-a and g9ict-fam-009-b, which sit in the same chapter and subsection.",
+      "notChanged": "I did not edit that file, per the isolation rules."
+    },
+    {
+      "type": "dev-only registration",
+      "file": "engine/question_loader.js",
+      "problem": "LOCAL_FILES['grade9-ict'] does not list subjects/grade9-ict/questions/family_expansion.js. Production auto-discovers the directory (netlify/build-questions.js and netlify/lib/questions-sandbox.js both readdirSync it, verified), so this only affects file:// development.",
+      "fix": "Add 'subjects/grade9-ict/questions/family_expansion.js' to LOCAL_FILES['grade9-ict'] and bump _CACHE_VERSION in the same file when the whole batch lands."
+    },
+    {
+      "type": "build step",
+      "problem": "scripts/test-option-parity.js reads the BUILT bundles in netlify/question-bundles/, which are stale and do not contain this batch.",
+      "fix": "Run `node netlify/build-questions.js` before re-running test-option-parity.js and test-question-cache-budget.js. I did not run the build, to avoid writing outside my two files while other sessions are working in this tree."
+    }
+  ],
+  "preExistingFailuresNotCausedByThisBatch": [
+    "scripts/test-subsection-invariant.js: 37 passed / 14 failed BOTH before and after this batch. Three of the failures are in grade9-ict (input_output_devices on g9ict-computer-systems, cell_references on g9ict-spreadsheets, presentation_printing on g9ict-presentation). This batch uses only declared ids and adds nothing to that list.",
+    "scripts/test-option-parity.js: grade9-ict already fails three checks on the built bundles (answer visibly longest 54.4%, 545 flagged items, average spread 23.6 chars) and carries no BASELINE entry. Measured on this batch alone, in isolation: 30 four-option MCQs, answer uniquely longest 13.3% (chance is 25%), average within-question spread 4.8 chars (the real papers measure 6.5-6.8), 0 flagged items. This batch improves the pack's numbers."
+  ],
+  "otherObservationsNotChanged": [
+    "g9ict-int-202-a (nce_section_b.js) and g9ict-sys-204-c (nce_section_b.js) still carry their inflated L4 / L3 labels. Both are parts of parent tasks, so the label is inherited from the task; g9ict-fam-012-a and g9ict-fam-015-b are honest replacements for those two outcomes rather than edits to the originals.",
+    "The pack ships 63 `task` records whose projected parts inherit the parent task's difficulty (engine/assessment.js). Five of the pack's nine pre-existing L4 items are projections. Nothing in this batch uses tasks, so every difficulty label here was chosen for the item itself."
+  ],
+  "verification": {
+    "syntax": "node --check subjects/grade9-ict/questions/family_expansion.js — OK",
+    "sandboxLoad": "loaded 70, ids unique 70, missing fields 0, undeclared subsection tags 0, mcq answers all present in options",
+    "subsectionIds": "checked against tmp/family-expansion/declared-subsections.json, not against pack-map.json",
+    "numericAnswers": "all 30 keyed numeric/derived answers independently recomputed from the stems in a separate script; all matched. Every division is exact (32768/8, 28672/8, 260/4, 305/5, 400*0.15, 1200*0.2).",
+    "markup": "both inline SVGs parse with balanced tags; all 32 tables are balanced; no aria-label contains its item's answer",
+    "testLivePackContent": "84 passed, 0 failed; grade9-ict now reports 1771 items over 12 chapters"
+  },
+  "notes": "Two figures are inline SVG (a sum-to-N flowchart and a star-topology lab) and every data table uses the existing .q-table / .q-scroll classes from style.css rather than per-cell inline styles — .q-table is a fixed light plate with dark ink, which is what keeps a table legible on the practice chalkboard, and it costs far fewer bytes in the question cache than the per-cell style attributes the older ICT files use. No new question field was invented: the family id is the question id minus its -<variant> suffix."
+}

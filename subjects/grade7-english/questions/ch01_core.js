@@ -641,7 +641,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g7eng-gr-sentence-005', chapterId:'g7eng-gr-sentence', difficulty:3,
     subsection:'complex_sentences',
     question:'Which sentence correctly uses a RELATIVE CLAUSE with "who"?',
-    options:['The man, who is tall, lives next door.','The man who is tall lives next door, who.','Who lives next door the man is tall.','The man is tall who next door lives.'],
+    options:['The man who is tall lives next door.','The man who is tall lives next door, who.','Who lives next door the man is tall.','The man is tall who next door lives.'],
     answer:'The man who is tall lives next door.',
     hint:'The relative clause "who is tall" should come right after the noun it describes.',
     explanation:'"The man <b>who is tall</b> lives next door" — the relative clause "who is tall" directly follows "the man" (the noun it describes). Relative clauses must attach directly to their noun.' }),

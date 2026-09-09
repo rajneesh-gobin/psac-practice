@@ -21,6 +21,14 @@ New keys go in `Store._defaultStudent()` so the key-merge in
 |---|---|---|
 | `daily` | `{'YYYY-MM-DD': {a, c, e, s, g, ch:{id:[att,corr]}, asg:{…}}}` | `_DAILY_KEEP` 120 days, `_DAY_CH_KEEP` 12 chapters/day |
 | `mistakes` | newest-first | `_MISTAKE_KEEP` 60 |
+| `games.sourceGrades` | `[6]` — grades the CHILD added to their games | own grade is implicit and never stored |
+
+- ⚠ **`games.sourceGrades` is in the blob because the CHILD writes it.** A child
+  session has SELECT only on `students`, so anything a child chooses for
+  themselves cannot live in `restrictions`. It is validated on every read against
+  what the parent granted (`GradeAccess.gameGrades`), so a revoked grade stops
+  counting without anyone writing to the blob. See **Grade access** in
+  [features.md](features.md).
 
 - ⚠ **Day keys are Mauritius days (`_muDayKey`), never the device clock** — a child
   changing timezone would rewrite their own history. `YYYY-MM-DD` is chosen so a
@@ -42,6 +50,13 @@ New keys go in `Store._defaultStudent()` so the key-merge in
   are shown as-is, never round-tripped, and get no calendar square.
 
 ### Saving
+> ⚠ **`xp` and `level` in the blob are now a CACHE, not the score.** The total
+> lives in `student_points` and is minted by `_award_points()`; `gainPoints()`
+> predicts an award so the header moves at once, and `applyServerPoints()`
+> overwrites it from the RPC response on the next flush (~4s) and at login.
+> Writing to `DB.xp` expecting it to stick is therefore wrong — see
+> **Points, levels and the leaderboard** in [features.md](features.md).
+
 ⚠ `Store.saveStudentProgress()` is a **throttle, not a debounce**
 (`_pendingSince` + `_SAVE_MAX_WAIT_MS`). It used to reschedule on every answer, so
 steady practice produced **zero** server writes and only exam submit ever got through.

@@ -503,7 +503,7 @@ const MCQ = [
     'Light cannot travel through any tube',
     'Light only travels in a vacuum',
     'Light slows down when it passes through a bent tube'],
-   'Light cannot go around a bend',
+   'Light travels in straight lines and cannot go around a bend',
    'Straight-line travel means no path around a corner.',
    'When the tube is bent, there is no straight-line path from the source to the eye; since light cannot bend, nothing is seen.'],
 

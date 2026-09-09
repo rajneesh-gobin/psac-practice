@@ -1,0 +1,154 @@
+[
+  {
+    "pack": "grade9-biology",
+    "practiceItems": 783,
+    "strict": {
+      "groups": 2,
+      "items": 5,
+      "extraBeyondOne": 3
+    },
+    "visual": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "contextDependent": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    }
+  },
+  {
+    "pack": "grade9-chemistry",
+    "practiceItems": 836,
+    "strict": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "visual": {
+      "groups": 1,
+      "items": 2,
+      "extraBeyondOne": 1
+    },
+    "contextDependent": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    }
+  },
+  {
+    "pack": "grade9-english",
+    "practiceItems": 612,
+    "strict": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "visual": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "contextDependent": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    }
+  },
+  {
+    "pack": "grade9-french",
+    "practiceItems": 1025,
+    "strict": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "visual": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "contextDependent": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    }
+  },
+  {
+    "pack": "grade9-ict",
+    "practiceItems": 1638,
+    "strict": {
+      "groups": 1,
+      "items": 2,
+      "extraBeyondOne": 1
+    },
+    "visual": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "contextDependent": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    }
+  },
+  {
+    "pack": "grade9-maths",
+    "practiceItems": 1006,
+    "strict": {
+      "groups": 50,
+      "items": 122,
+      "extraBeyondOne": 72
+    },
+    "visual": {
+      "groups": 4,
+      "items": 9,
+      "extraBeyondOne": 5
+    },
+    "contextDependent": {
+      "groups": 1,
+      "items": 2,
+      "extraBeyondOne": 1
+    }
+  },
+  {
+    "pack": "grade9-physics",
+    "practiceItems": 883,
+    "strict": {
+      "groups": 1,
+      "items": 2,
+      "extraBeyondOne": 1
+    },
+    "visual": {
+      "groups": 3,
+      "items": 6,
+      "extraBeyondOne": 3
+    },
+    "contextDependent": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    }
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "practiceItems": 365,
+    "strict": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "visual": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    },
+    "contextDependent": {
+      "groups": 0,
+      "items": 0,
+      "extraBeyondOne": 0
+    }
+  }
+]

@@ -62,14 +62,17 @@ function makeSb(script) {
 
 function load(sb, storage, online, opts = {}) {
   const noop = () => {};
-  const log = { screens: [], roles: [], toasts: [], clearedStudent: 0, events: {}, fetches: [], shakes: 0 };
+  const log = { screens: [], roles: [], toasts: [], clearedStudent: 0, events: {}, fetches: [], shakes: 0, pinOpened: 0 };
   // The wrong-PIN shake IS 'pin-entry-error loses .hidden'. Without this the
   // element stub swallows it and every wrong-PIN assertion passes by
   // measuring nothing at all.
   const elStub = (id) => ({
     classList: {
       add: noop,
-      remove: (c) => { if (id === 'pin-entry-error' && c === 'hidden') log.shakes++; },
+      remove: (c) => {
+        if (id === 'pin-entry-error' && c === 'hidden') log.shakes++;
+        if (id === 'modal-parent-pin' && c === 'hidden') log.pinOpened++;
+      },
       toggle: noop, contains: () => false,
     },
     querySelectorAll: () => [],
@@ -146,6 +149,17 @@ function check(name, ok, detail) {
 }
 
 (async () => {
+  {
+    const store = makeStore();
+    store.setItem('psac_parent_uid_v1', 'u-42');
+    const sb = makeSb({ getSession: [] });
+    const { A, log } = load(sb, store, true);
+    A._test.setWho(null, null, { id: 'child-1' });
+    await A.enterParentMode();
+    check('saved child opens remembered parent PIN recovery', log.pinOpened === 1);
+    check('opening parent PIN does not navigate or clear the child', log.screens.length === 0 && log.clearedStudent === 0);
+    check('remembered parent identity does not restore access before PIN verification', sb.calls.length === 0 && log.fetches.length === 0);
+  }
   // 1. A live session is answered straight away - no needless network refresh,
   //    and the stash is refreshed on the way past.
   {

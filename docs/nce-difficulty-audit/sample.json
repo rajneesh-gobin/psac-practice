@@ -1,0 +1,1967 @@
+[
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-b1-v077",
+    "chapterId": "g9s-b1-circulatory",
+    "difficulty": 1,
+    "subsection": "cardiovascular_disease",
+    "type": "mcq",
+    "question": "Which of the following is a non-modifiable risk factor for cardiovascular disease?",
+    "options": [
+      "Eating a diet very high in saturated fat and salt",
+      "Family history of heart disease passed on through genetics",
+      "Smoking cigarettes on a daily basis",
+      "Doing no physical exercise throughout the week"
+    ],
+    "answer": "Family history of heart disease passed on through genetics",
+    "acceptableAnswers": [
+      "Family history of heart disease passed on through genetics"
+    ],
+    "hint": "A non-modifiable factor cannot be changed by the individual.",
+    "explanation": "Family history (genetic predisposition) and age are risk factors that cannot be changed; smoking, diet and exercise levels are modifiable factors that a person can control."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-b3-v066",
+    "chapterId": "g9s-b3-biodiversity",
+    "difficulty": 1,
+    "subsection": "human_threats",
+    "type": "text",
+    "question": "Give one example of an invasive alien species found in Mauritius.",
+    "answer": "Psidium cattleianum (strawberry guava)",
+    "acceptableAnswers": [
+      "Psidium cattleianum (strawberry guava)",
+      "strawberry guava",
+      "guava",
+      "mongoose",
+      "rat",
+      "black rat",
+      "Indian myna",
+      "myna bird",
+      "rose apple",
+      "Syzygium jambos",
+      "common myna",
+      "Achatina fulica",
+      "giant African land snail"
+    ],
+    "confusables": [],
+    "strictAccents": false,
+    "hint": "Think of a plant or animal brought to Mauritius that now threatens native species.",
+    "explanation": "Mauritius has many invasive alien species including strawberry guava (Psidium cattleianum), the common myna bird (Acridotheres tristis), the mongoose, and the giant African land snail."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-bpi-021",
+    "chapterId": "g9s-b2-reproductive",
+    "difficulty": 1,
+    "subsection": "male_reproductive_system",
+    "type": "mcq",
+    "question": "What is the function of the testes in the male reproductive system?",
+    "options": [
+      "To carry sperm from the epididymis directly to the uterus",
+      "To produce sperm cells and the hormone testosterone",
+      "To produce oestrogen to regulate the menstrual cycle",
+      "To store urine and release it through the urethra during urination"
+    ],
+    "answer": "To produce sperm cells and the hormone testosterone",
+    "acceptableAnswers": [
+      "To produce sperm cells and the hormone testosterone"
+    ],
+    "explanation": "The testes are the male gonads — think about what gonads produce."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-b1-v081",
+    "chapterId": "g9s-b1-circulatory",
+    "difficulty": 2,
+    "subsection": "interpreting_health_data",
+    "type": "mcq",
+    "question": "A bar chart shows that 42% of heart disease patients smoke, compared with 14% of the general population. What conclusion is best supported?",
+    "options": [
+      "All smokers will eventually develop serious cardiovascular disease",
+      "Smoking is the single proven direct cause of every case of heart disease",
+      "Non-smokers cannot develop heart disease under any circumstances",
+      "Smoking is associated with a higher likelihood of developing heart disease"
+    ],
+    "answer": "Smoking is associated with a higher likelihood of developing heart disease",
+    "acceptableAnswers": [
+      "Smoking is associated with a higher likelihood of developing heart disease"
+    ],
+    "hint": "The data shows an association, but be careful about the strength of the claim.",
+    "explanation": "The data shows that smokers are over-represented among heart disease patients, suggesting an association; it does not prove that smoking is the only or inevitable cause."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-b4-v006",
+    "chapterId": "g9s-b4-plant-nutrition",
+    "difficulty": 2,
+    "subsection": "photosynthesis",
+    "type": "mcq",
+    "question": "After photosynthesis, the glucose produced in a leaf can be used for which of the following?",
+    "options": [
+      "Aerobic respiration to release energy for the plant",
+      "Breaking down carbon dioxide into carbon and oxygen",
+      "Producing more chlorophyll without any additional energy",
+      "Absorbing mineral ions directly from the soil"
+    ],
+    "answer": "Aerobic respiration to release energy for the plant",
+    "acceptableAnswers": [
+      "Aerobic respiration to release energy for the plant"
+    ],
+    "hint": "Glucose is a fuel — what do living things do with fuel?",
+    "explanation": "Plants use glucose as a respiratory substrate to release energy for growth and other life processes; they can also convert it to starch for storage or cellulose for cell walls."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-inqb-011",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 2,
+    "subsection": "hypothesis_testing",
+    "type": "text",
+    "question": "Give the term for a variable that is deliberately kept the same throughout an investigation.",
+    "answer": "Controlled variable",
+    "acceptableAnswers": [
+      "Controlled variable",
+      "controlled",
+      "a controlled variable",
+      "control variable",
+      "constant variable"
+    ],
+    "confusables": [],
+    "strictAccents": false,
+    "hint": "It is neither changed nor measured.",
+    "explanation": "A controlled variable is held constant so that it cannot affect the result and the outcome can be attributed to the independent variable."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-b2-015",
+    "chapterId": "g9s-b2-reproductive",
+    "difficulty": 3,
+    "subsection": "female_reproductive_system",
+    "type": "mcq",
+    "question": "What is the function of the oviduct?",
+    "options": [
+      "It filters waste products out of the blood",
+      "It carries the egg from the ovary towards the uterus",
+      "It produces the female sex cells each month",
+      "It is where the baby develops before birth"
+    ],
+    "answer": "It carries the egg from the ovary towards the uterus",
+    "acceptableAnswers": [
+      "It carries the egg from the ovary towards the uterus"
+    ],
+    "hint": "It is the tube between two other structures.",
+    "explanation": "The oviduct carries the egg from the ovary to the uterus, and is usually where fertilisation happens."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-bmy-039",
+    "chapterId": "g9s-sts",
+    "difficulty": 3,
+    "subsection": "ethics_of_science",
+    "type": "mcq",
+    "question": "Which argument SUPPORTS the use of organ transplants from deceased donors?",
+    "options": [
+      "Not all organs survive outside the body",
+      "The donor's family may not agree",
+      "Saving the life of the recipient gives new meaning to the donor's death",
+      "Organs from deceased donors may carry disease"
+    ],
+    "answer": "Saving the life of the recipient gives new meaning to the donor's death",
+    "acceptableAnswers": [
+      "Saving the life of the recipient gives new meaning to the donor's death"
+    ],
+    "explanation": "A key ethical argument for organ donation is that one death can give life to several people, making it a humanitarian act with profound social value."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-inqb-068",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 3,
+    "subsection": "reporting_findings",
+    "type": "mcq",
+    "question": "What should the conclusion of an investigation do?",
+    "options": [
+      "Answer the aim using the results found",
+      "Give the opinion of the whole group",
+      "List the apparatus that was used again",
+      "Repeat the method in shorter sentences"
+    ],
+    "answer": "Answer the aim using the results found",
+    "acceptableAnswers": [
+      "Answer the aim using the results found"
+    ],
+    "hint": "Look back at what the investigation set out to do.",
+    "explanation": "The conclusion answers the aim in one or two sentences, using the measurements as its evidence and going no further than they allow."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-inqb-034",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 4,
+    "subsection": "interpreting_results",
+    "type": "mcq",
+    "question": "Using the same table, predict how many seeds would germinate at 12 &deg;C.<br><svg viewBox=\"0 0 250 148\" width=\"260\" role=\"img\" aria-label=\"a table of results\"><text x=\"125\" y=\"15\" font-size=\"10\" text-anchor=\"middle\" fill=\"#0f172a\">Bean seeds germinating, 20 seeds per dish</text><rect x=\"26\" y=\"24\" width=\"198\" height=\"114\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"126\" y1=\"24\" x2=\"126\" y2=\"138\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"26\" y1=\"43\" x2=\"224\" y2=\"43\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"31\" y=\"37\" font-size=\"9\" fill=\"#0f172a\">Temperature / &deg;C</text><text x=\"131\" y=\"37\" font-size=\"9\" fill=\"#0f172a\">Seeds germinated</text><text x=\"31\" y=\"56\" font-size=\"9\" fill=\"#334155\">5</text><text x=\"131\" y=\"56\" font-size=\"9\" fill=\"#334155\">2</text><line x1=\"26\" y1=\"62\" x2=\"224\" y2=\"62\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"31\" y=\"75\" font-size=\"9\" fill=\"#334155\">10</text><text x=\"131\" y=\"75\" font-size=\"9\" fill=\"#334155\">7</text><line x1=\"26\" y1=\"81\" x2=\"224\" y2=\"81\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"31\" y=\"94\" font-size=\"9\" fill=\"#334155\">15</text><text x=\"131\" y=\"94\" font-size=\"9\" fill=\"#334155\">13</text><line x1=\"26\" y1=\"100\" x2=\"224\" y2=\"100\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"31\" y=\"113\" font-size=\"9\" fill=\"#334155\">20</text><text x=\"131\" y=\"113\" font-size=\"9\" fill=\"#334155\">18</text><line x1=\"26\" y1=\"119\" x2=\"224\" y2=\"119\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"31\" y=\"132\" font-size=\"9\" fill=\"#334155\">25</text><text x=\"131\" y=\"132\" font-size=\"9\" fill=\"#334155\">19</text></svg>",
+    "options": [
+      "About 25",
+      "About 2",
+      "About 10",
+      "About 19"
+    ],
+    "answer": "About 10",
+    "acceptableAnswers": [
+      "About 10"
+    ],
+    "hint": "Look at the values in the rows either side of 12.",
+    "explanation": "Seven germinated at 10 &deg;C and thirteen at 15 &deg;C, so a value at 12 &deg;C lies between them, at about ten."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-inqb-078",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 4,
+    "subsection": "reporting_findings",
+    "type": "mcq",
+    "question": "A report ends: \"These results prove that all seeds need warmth to germinate.\" Why is that claim too strong?",
+    "options": [
+      "The investigation used ten seeds a dish",
+      "Only one kind of seed was tested here",
+      "The results were written in a table",
+      "The conclusion is placed at the end"
+    ],
+    "answer": "Only one kind of seed was tested here",
+    "acceptableAnswers": [
+      "Only one kind of seed was tested here"
+    ],
+    "hint": "What was actually investigated?",
+    "explanation": "One species was tested, so the conclusion may be stated for that seed only; a claim about all seeds would need far wider evidence."
+  },
+  {
+    "pack": "grade9-biology",
+    "id": "g9s-stsb-030",
+    "chapterId": "g9s-sts",
+    "difficulty": 4,
+    "subsection": "evaluating_information",
+    "type": "mcq",
+    "question": "A claim on a website has no author, no date and no references. How should it be treated?",
+    "options": [
+      "As true because it is written down",
+      "As unsupported until it is checked",
+      "As proved because a website printed it",
+      "As false because there is no author"
+    ],
+    "answer": "As unsupported until it is checked",
+    "acceptableAnswers": [
+      "As unsupported until it is checked"
+    ],
+    "hint": "An unchecked claim is not the same as a false one.",
+    "explanation": "With no author, date or references there is nothing to check, so the claim is set aside as unsupported rather than accepted or declared false."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c1-v068",
+    "chapterId": "g9s-c1-atmosphere",
+    "difficulty": 1,
+    "subsection": "global_warming",
+    "type": "mcq",
+    "question": "Which of these is a consequence of global warming?",
+    "options": [
+      "Thickening of the ozone layer above the poles",
+      "Rising sea levels due to melting ice caps and thermal expansion of water",
+      "Increase in the amount of ultraviolet radiation reaching the Earth's surface",
+      "Reduction of carbon dioxide in the atmosphere due to faster plant growth"
+    ],
+    "answer": "Rising sea levels due to melting ice caps and thermal expansion of water",
+    "acceptableAnswers": [
+      "Rising sea levels due to melting ice caps and thermal expansion of water"
+    ],
+    "hint": "Warming affects water in both solid and liquid form.",
+    "explanation": "Higher temperatures melt glaciers and polar ice, adding water to the oceans; warmer water also expands (thermal expansion), both effects raising sea level."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c4-v015",
+    "chapterId": "g9s-c4-metals",
+    "difficulty": 1,
+    "subsection": "metals_with_acids",
+    "type": "mcq",
+    "question": "What gas is produced when a metal reacts with a dilute acid?",
+    "options": [
+      "Chlorine",
+      "Hydrogen",
+      "Oxygen",
+      "Carbon dioxide"
+    ],
+    "answer": "Hydrogen",
+    "acceptableAnswers": [
+      "Hydrogen"
+    ],
+    "hint": "Test for it with a lighted splint.",
+    "explanation": "Metal + dilute acid → salt + hydrogen. The hydrogen test: hold a lighted splint to the mouth of the tube — a \"squeaky pop\" confirms H₂."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-cpi-019",
+    "chapterId": "g9s-c4-metals",
+    "difficulty": 1,
+    "subsection": "reactivity_series",
+    "type": "mcq",
+    "question": "The reactivity series of metals is shown below, from most to least reactive:<br>potassium → sodium → calcium → magnesium → zinc → iron → copper → gold<br><br>Which metal in this series is the LEAST reactive?",
+    "options": [
+      "Iron",
+      "Zinc",
+      "Gold",
+      "Copper"
+    ],
+    "answer": "Gold",
+    "acceptableAnswers": [
+      "Gold"
+    ],
+    "explanation": "Gold is at the bottom of the reactivity series, meaning it is the least reactive. It does not react with oxygen, water or dilute acids under normal conditions."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c2-026",
+    "chapterId": "g9s-c2-mixtures",
+    "difficulty": 2,
+    "subsection": "distillation",
+    "type": "text",
+    "question": "Give the name of the liquid collected at the end of a distillation.",
+    "answer": "Distillate",
+    "acceptableAnswers": [
+      "Distillate",
+      "the distillate"
+    ],
+    "confusables": [],
+    "strictAccents": false,
+    "hint": "It is named after the technique.",
+    "explanation": "The liquid that has evaporated and been condensed is the distillate."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c5-v007",
+    "chapterId": "g9s-c5-salts",
+    "difficulty": 2,
+    "subsection": "neutralisation",
+    "type": "mcq",
+    "question": "Which of the following is the ionic equation for any strong acid–strong alkali neutralisation?",
+    "options": [
+      "Na⁺ + Cl⁻ → NaCl",
+      "H⁺(aq) + OH⁻(aq) → H₂O(l)",
+      "H₂ + O → H₂O",
+      "HCl + NaOH → NaCl + H₂O"
+    ],
+    "answer": "H⁺(aq) + OH⁻(aq) → H₂O(l)",
+    "acceptableAnswers": [
+      "H⁺(aq) + OH⁻(aq) → H₂O(l)"
+    ],
+    "hint": "The spectator ions cancel out in the ionic equation.",
+    "explanation": "For any strong acid + strong alkali reaction, the ionic equation is always H⁺ + OH⁻ → H₂O; the cation of the alkali and anion of the acid are spectator ions."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-inq-c077",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 2,
+    "subsection": "recording_data",
+    "type": "mcq",
+    "question": "What must be written along each axis of a graph?",
+    "options": [
+      "The quantity and its unit",
+      "The date of the lesson",
+      "The name of the pupil",
+      "The number of readings taken"
+    ],
+    "answer": "The quantity and its unit",
+    "acceptableAnswers": [
+      "The quantity and its unit"
+    ],
+    "hint": "A number on an axis has to say what it is.",
+    "explanation": "Each axis is labelled with the quantity and its unit, such as &ldquo;Volume of gas / cm&sup3;&rdquo;, or the graph cannot be read."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c2-v006",
+    "chapterId": "g9s-c2-mixtures",
+    "difficulty": 3,
+    "subsection": "distillation",
+    "type": "mcq",
+    "question": "A mixture of ethanol (b.p. 78 °C) and water (b.p. 100 °C) is distilled. At what temperature should the thermometer read when the ethanol-rich fraction is being collected?",
+    "options": [
+      "About 60 °C — below either boiling point to avoid decomposition",
+      "About 89 °C — the average of the two boiling points",
+      "About 78 °C — the boiling point of ethanol",
+      "About 100 °C — the boiling point of water"
+    ],
+    "answer": "About 78 °C — the boiling point of ethanol",
+    "acceptableAnswers": [
+      "About 78 °C — the boiling point of ethanol"
+    ],
+    "hint": "The thermometer measures the temperature of the vapour at the still-head.",
+    "explanation": "When ethanol vapour reaches the thermometer bulb at the still-head, the reading corresponds to its boiling point (78 °C); when it rises to 100 °C, water is distilling over and collection of the ethanol fraction should stop."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-c5-016",
+    "chapterId": "g9s-c5-salts",
+    "difficulty": 3,
+    "subsection": "neutralisation_in_daily_life",
+    "type": "mcq",
+    "question": "A wasp sting is alkaline. Which treatment would relieve it by neutralisation?",
+    "options": [
+      "Vinegar, which is an acid",
+      "Pure water, which is neutral",
+      "Baking soda, which is a base",
+      "Soap solution, which is alkaline"
+    ],
+    "answer": "Vinegar, which is an acid",
+    "acceptableAnswers": [
+      "Vinegar, which is an acid"
+    ],
+    "hint": "This time the sting is alkaline, so the opposite is needed.",
+    "explanation": "An alkaline sting is neutralised by a weak acid such as vinegar."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-inq-c106",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 3,
+    "subsection": "interpreting_results",
+    "type": "numeric",
+    "question": "During a neutralisation the temperature rises from 21.0 &deg;C to 27.5 &deg;C. Calculate the temperature rise in &deg;C.",
+    "answer": "6.5",
+    "acceptableAnswers": [
+      "6.5"
+    ],
+    "hint": "Subtract the starting temperature from the final one.",
+    "explanation": "27.5 &minus; 21.0 = 6.5 &deg;C. Neutralisation is exothermic, so the temperature of the mixture rises."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-inq-c042",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 4,
+    "subsection": "research_and_ict",
+    "type": "mcq",
+    "question": "Two websites give different values for the pH of rainwater. What is the best next step?",
+    "options": [
+      "Use the value from the page that loaded fastest",
+      "Look for a third, independent source and compare",
+      "Write both down and let the reader pick one",
+      "Take the value that appears on the prettier page"
+    ],
+    "answer": "Look for a third, independent source and compare",
+    "acceptableAnswers": [
+      "Look for a third, independent source and compare"
+    ],
+    "hint": "Agreement between independent sources is the test.",
+    "explanation": "A third independent source shows which value is supported. Loading speed and appearance say nothing at all about accuracy."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-inq-c100",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 4,
+    "subsection": "interpreting_results",
+    "type": "mcq",
+    "question": "Equal volumes of three acids are neutralised by the same alkali. The temperature rises by 5.2, 6.8 and 4.1 &deg;C. Which released the most heat?",
+    "options": [
+      "The one that rose by 5.2 &deg;C",
+      "They all released the same heat",
+      "The one that rose by 4.1 &deg;C",
+      "The one that rose by 6.8 &deg;C"
+    ],
+    "answer": "The one that rose by 6.8 &deg;C",
+    "acceptableAnswers": [
+      "The one that rose by 6.8 &deg;C"
+    ],
+    "hint": "More heat gives a bigger temperature rise.",
+    "explanation": "The same mass of solution is warmed each time, so the largest temperature rise means the most heat was released."
+  },
+  {
+    "pack": "grade9-chemistry",
+    "id": "g9s-sts-c041",
+    "chapterId": "g9s-sts",
+    "difficulty": 4,
+    "subsection": "climate_change",
+    "type": "mcq",
+    "question": "A family wants to cut its carbon footprint. Which change does most?",
+    "options": [
+      "Fitting a solar water heater on the roof",
+      "Washing the car with a hose every weekend",
+      "Leaving the lights on only at night time",
+      "Buying bottled water instead of tap water"
+    ],
+    "answer": "Fitting a solar water heater on the roof",
+    "acceptableAnswers": [
+      "Fitting a solar water heater on the roof"
+    ],
+    "hint": "Which one replaces a fuel with sunlight?",
+    "explanation": "A solar heater replaces electricity or gas with sunlight for a large daily energy demand. The other three save nothing, or use more."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-grv-014",
+    "chapterId": "g9eng-gr-pronouns",
+    "difficulty": 1,
+    "subsection": "reflexive",
+    "type": "mcq",
+    "question": "Complete the sentence: <i>\"I blamed .......... for the mistake.\"</i>",
+    "options": [
+      "my",
+      "myself",
+      "mine",
+      "me"
+    ],
+    "answer": "myself",
+    "acceptableAnswers": [
+      "myself"
+    ],
+    "hint": "The speaker is directing the blame back at themselves.",
+    "explanation": "When the subject \"I\" acts on itself, the reflexive pronoun is <b>myself</b>. \"Me\" is an object pronoun used when referring to a different receiver."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-pi-001",
+    "chapterId": "g9eng-gr-prepositions",
+    "difficulty": 1,
+    "subsection": "prepositions",
+    "type": "mcq",
+    "question": "Choose the correct preposition to complete the sentence.<br><br>\"The ambassador arrived _____ Mauritius last Monday after a long flight from Geneva.\"",
+    "options": [
+      "to",
+      "on",
+      "at",
+      "in"
+    ],
+    "answer": "in",
+    "acceptableAnswers": [
+      "in"
+    ],
+    "hint": "We use this preposition with countries and large places.",
+    "explanation": "\"Arrive in\" is used with countries, cities, and large places. \"Arrive at\" is used with specific buildings or small locations (e.g., the airport). You arrive in Mauritius but at the hotel."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-pi-065",
+    "chapterId": "g9eng-reading",
+    "difficulty": 1,
+    "subsection": "retrieval",
+    "type": "mcq",
+    "question": "Read the passage below and answer the question.<br><br><em>\"The coral reefs surrounding Mauritius have provided coastal protection and sustained local fishing communities for centuries. Scientists now warn that rising sea temperatures have bleached over 30% of these reefs in the past decade. Once bleached, corals may recover if temperatures drop, but prolonged heat exposure kills them permanently. Without reefs, storm surges will strike the coast with far greater force. Local fishermen report declining catches, and the tourism industry — which contributes nearly 8% of GDP — faces an uncertain future.\"</em><br><br>According to the passage, what proportion of Mauritius's coral reefs have been bleached in the past decade?",
+    "options": [
+      "The entire reef system",
+      "More than half",
+      "Nearly 8%",
+      "Over 30%"
+    ],
+    "answer": "Over 30%",
+    "acceptableAnswers": [
+      "Over 30%"
+    ],
+    "hint": "Look for the specific statistic given in the passage about reef bleaching.",
+    "explanation": "The passage states directly: \"rising sea temperatures have bleached over 30% of these reefs in the past decade.\" The 8% figure refers to the tourism industry's contribution to GDP, not reef bleaching."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-grv-097",
+    "chapterId": "g9eng-gr-verbs",
+    "difficulty": 2,
+    "subsection": "future_perfect_continuous",
+    "type": "mcq",
+    "question": "\"They will have been rehearsing for three months by opening night.\" What does this tell us?",
+    "options": [
+      "They have never rehearsed before.",
+      "They rehearse continuously in the lead-up to opening night.",
+      "They will begin rehearsing on opening night.",
+      "They rehearsed once, three months ago."
+    ],
+    "answer": "They rehearse continuously in the lead-up to opening night.",
+    "acceptableAnswers": [
+      "They rehearse continuously in the lead-up to opening night."
+    ],
+    "hint": "The future perfect continuous stresses an ongoing process up to a future point.",
+    "explanation": "The sentence pictures <b>continuous rehearsal</b> across three months, arriving at opening night — that is what the future perfect continuous communicates."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-pi-021",
+    "chapterId": "g9eng-gr-adverbs",
+    "difficulty": 2,
+    "subsection": "attitude_adverbs",
+    "type": "mcq",
+    "question": "Choose the attitude adverb that best reflects the speaker's viewpoint in the sentence.<br><br>\"The surgery lasted over twelve hours; _____, the patient made a full recovery within a week.\"",
+    "options": [
+      "unfortunately",
+      "remarkably",
+      "fortunately",
+      "consequently"
+    ],
+    "answer": "fortunately",
+    "acceptableAnswers": [
+      "fortunately"
+    ],
+    "hint": "The outcome (full recovery) is positive. Which adverb expresses the speaker's relief about a positive outcome?",
+    "explanation": "\"Fortunately\" expresses the speaker's relief or pleasure that a good outcome occurred. \"Unfortunately\" would contradict the positive result. \"Consequently\" is a logical connector, not an attitude adverb. \"Remarkably\" could work but \"fortunately\" more directly signals the speaker's attitude."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-vocv-071",
+    "chapterId": "g9eng-word-formation",
+    "difficulty": 2,
+    "subsection": "noun_formation",
+    "type": "mcq",
+    "question": "Form a <b>noun</b> from the verb <i>manage</i>: \"Good .......... is essential in any business.\"",
+    "options": [
+      "manage",
+      "managerial",
+      "management",
+      "managing"
+    ],
+    "answer": "management",
+    "acceptableAnswers": [
+      "management"
+    ],
+    "hint": "Add -ment to the verb.",
+    "explanation": "<b>Management</b> is the noun, formed with -ment. The final -e of <i>manage</i> is dropped before adding -ment."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-grv-125",
+    "chapterId": "g9eng-gr-adverbs",
+    "difficulty": 3,
+    "subsection": "attitude_adverbs",
+    "type": "mcq",
+    "question": "Which sentence uses an attitude adverb to express <b>doubt</b>?",
+    "options": [
+      "She walked quickly, apparently to the station",
+      "She left quickly and without explanation",
+      "She left the country and apparently walked fast",
+      "Apparently, she left the country last week"
+    ],
+    "answer": "Apparently, she left the country last week",
+    "acceptableAnswers": [
+      "Apparently, she left the country last week"
+    ],
+    "hint": "In which sentence does the adverb cast doubt on the whole statement?",
+    "explanation": "When <b>Apparently</b> opens a sentence, it signals the speaker is not certain but is reporting what seems to be the case. In the other sentences it modifies only part of the clause."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-litv-075",
+    "chapterId": "g9eng-literature",
+    "difficulty": 3,
+    "subsection": "line_explication",
+    "type": "mcq",
+    "question": "Explain the line: <i>\"She built walls around herself so high that no one could reach her.\"</i>",
+    "options": [
+      "She isolated herself emotionally and refused connection",
+      "She became very tall",
+      "She moved to a gated community",
+      "She built a house with high walls for privacy"
+    ],
+    "answer": "She isolated herself emotionally and refused connection",
+    "acceptableAnswers": [
+      "She isolated herself emotionally and refused connection"
+    ],
+    "hint": "\"Walls\" here are emotional barriers, not physical ones.",
+    "explanation": "\"<b>Built walls</b>\" is a metaphor for emotional isolation. Very high walls keep others out — the line describes a person who has cut herself off from <b>emotional connection</b>."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-vocv-029",
+    "chapterId": "g9eng-vocabulary",
+    "difficulty": 3,
+    "subsection": "word_choice",
+    "type": "mcq",
+    "question": "Which word is the most precise? <i>\"The government .......... the use of single-use plastics.\"</i>",
+    "options": [
+      "banned",
+      "finished",
+      "ended",
+      "stopped"
+    ],
+    "answer": "banned",
+    "acceptableAnswers": [
+      "banned"
+    ],
+    "hint": "The word that means to officially prohibit by law or rule.",
+    "explanation": "\"<b>Banned</b>\" means prohibited by an official authority. \"Stopped\" and \"ended\" lack the sense of legal or official prohibition."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-litv-077",
+    "chapterId": "g9eng-literature",
+    "difficulty": 4,
+    "subsection": "line_explication",
+    "type": "mcq",
+    "question": "Explain the line: <i>\"The empty chair at the table spoke louder than any words.\"</i>",
+    "options": [
+      "Chairs can literally make sounds",
+      "The absence of someone was felt more powerfully than speech",
+      "No one sat down for the meal",
+      "The family argued very loudly at dinner"
+    ],
+    "answer": "The absence of someone was felt more powerfully than speech",
+    "acceptableAnswers": [
+      "The absence of someone was felt more powerfully than speech"
+    ],
+    "hint": "An empty chair means someone is missing — and it \"spoke\", which is personification.",
+    "explanation": "The personification gives the chair a voice, but what it \"says\" is an <b>absence</b> — someone who should be there is gone. The line conveys that <b>loss can be felt more keenly than it can be expressed in words</b>."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-litv-097",
+    "chapterId": "g9eng-literature",
+    "difficulty": 4,
+    "subsection": "supported_response",
+    "type": "mcq",
+    "question": "Which response about an author's purpose is most convincing?",
+    "options": [
+      "\"The author wants to challenge complacency: the statistic 'one in four' appears three times, hammering the scale of the problem\"",
+      "\"The author is trying to persuade the reader\"",
+      "\"The author wants to make the reader think\"",
+      "\"The author has a clear purpose in this text\""
+    ],
+    "answer": "\"The author wants to challenge complacency: the statistic 'one in four' appears three times, hammering the scale of the problem\"",
+    "acceptableAnswers": [
+      "\"The author wants to challenge complacency: the statistic 'one in four' appears three times, hammering the scale of the problem\""
+    ],
+    "hint": "A convincing response names the specific purpose AND shows how the technique achieves it.",
+    "explanation": "This response names a specific purpose (challenge complacency), identifies a technique (repetition of a statistic), and explains the effect (\"hammering the scale\"). The other responses are too vague to be convincing."
+  },
+  {
+    "pack": "grade9-english",
+    "id": "g9eng-sb-042",
+    "chapterId": "g9eng-gr-verbs",
+    "difficulty": 4,
+    "subsection": "future_perfect_continuous",
+    "type": "mcq",
+    "question": "Choose the <b>future perfect continuous</b>: <i>\"By December, he .......... here for ten years.\"</i>",
+    "options": [
+      "will be working",
+      "will have worked",
+      "will have been working",
+      "has been working"
+    ],
+    "answer": "will have been working",
+    "acceptableAnswers": [
+      "will have been working"
+    ],
+    "hint": "The sentence stresses how LONG the action will have been going on.",
+    "explanation": "The <b>future perfect continuous</b> (will have been + -ing) emphasises the duration of an action continuing up to a future point. \"Will have worked\" would state completion, not duration."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-fmv-039",
+    "chapterId": "g9fr-formation-mots",
+    "difficulty": 1,
+    "subsection": "formation_adverbe",
+    "type": "mcq",
+    "question": "Quel adverbe est formé à partir de l'adjectif « rapide » ?",
+    "options": [
+      "rapidement",
+      "rapidité",
+      "rapide"
+    ],
+    "answer": "rapidement",
+    "acceptableAnswers": [
+      "rapidement"
+    ],
+    "hint": "On ajoute -ment à la forme féminine de l'adjectif.",
+    "explanation": "<b>Rapidement</b> : rapide → rapide (féminine) + -ment. Règle générale : adjectif féminin + -ment = adverbe."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-pi-041",
+    "chapterId": "g9fr-doc-authentique",
+    "difficulty": 1,
+    "subsection": "courriel",
+    "type": "mcq",
+    "question": "Lis ce courriel, puis réponds à la question.<br><br>\n<blockquote style=\"border-left:3px solid #888;padding:0.5em 1em;font-style:italic\">\n<b>De :</b> priya.ramsamy@ecole-phoenix.mu<br>\n<b>À :</b> direction@ecole-phoenix.mu<br>\n<b>Objet :</b> Demande d'autorisation — sortie pédagogique<br><br>\nMadame, Monsieur,<br>\nJe me permets de vous contacter au sujet de la sortie pédagogique prévue le 15 octobre prochain au Jardin Botanique de Pamplemousses. Je souhaite obtenir votre autorisation officielle afin de confirmer la réservation du car scolaire. La participation de 28 élèves de 9<sup>e</sup> est attendue.<br>\nDans l'attente de votre réponse, veuillez agréer mes cordiales salutations.<br>\n<i>Priya Ramsamy, enseignante de Sciences</i>\n</blockquote><br>\nQui est l'expéditeur de ce courriel ?",
+    "options": [
+      "Un élève de 9e",
+      "Le directeur de l'école",
+      "Le chauffeur du car scolaire",
+      "Priya Ramsamy, enseignante de Sciences"
+    ],
+    "answer": "Priya Ramsamy, enseignante de Sciences",
+    "acceptableAnswers": [
+      "Priya Ramsamy, enseignante de Sciences"
+    ],
+    "hint": "L'expéditeur figure dans le champ « De ».",
+    "explanation": "Le champ <b>De</b> indique l'expéditeur : <i>priya.ramsamy@ecole-phoenix.mu</i>, identifiée en signature comme <b>Priya Ramsamy, enseignante de Sciences</b>."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-sb-026",
+    "chapterId": "g9fr-doc-authentique",
+    "difficulty": 1,
+    "subsection": "reperage_explicite",
+    "type": "mcq",
+    "question": "Une affiche indique : « Atelier de lecture — samedi 14 juin, 9 h, bibliothèque municipale. » Où se déroule l'atelier ?",
+    "options": [
+      "À la mairie du village",
+      "Au collège du quartier",
+      "Au centre sportif voisin",
+      "À la bibliothèque municipale"
+    ],
+    "answer": "À la bibliothèque municipale",
+    "acceptableAnswers": [
+      "À la bibliothèque municipale"
+    ],
+    "hint": "L'information est écrite telle quelle sur l'affiche.",
+    "explanation": "Le lieu est donné explicitement : « <b>bibliothèque municipale</b> ». Le repérage explicite consiste à retrouver une information écrite noir sur blanc."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-egv-088",
+    "chapterId": "g9fr-ecrit-guide",
+    "difficulty": 2,
+    "subsection": "longueur_50_75",
+    "type": "mcq",
+    "question": "Comment augmenter un texte de 40 mots à 50 mots sans hors-sujet ?",
+    "options": [
+      "Ajouter une introduction hors-sujet",
+      "Développer davantage les points imposés en ajoutant des détails, des exemples ou des précisions",
+      "Copier une partie du sujet",
+      "Répéter les mêmes phrases"
+    ],
+    "answer": "Développer davantage les points imposés en ajoutant des détails, des exemples ou des précisions",
+    "acceptableAnswers": [
+      "Développer davantage les points imposés en ajoutant des détails, des exemples ou des précisions"
+    ],
+    "hint": "On développe le fond, pas la forme.",
+    "explanation": "Pour augmenter la longueur de façon productive : <b>ajouter des détails, des exemples concrets ou des précisions</b> sur les points imposés. Cela enrichit le texte sans le rendre hors-sujet."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-oev-020",
+    "chapterId": "g9fr-oeuvres",
+    "difficulty": 2,
+    "subsection": "papa_simon_themes",
+    "type": "mcq",
+    "question": "Quel est le thème central de <i>Le Papa de Simon</i> de Maupassant ?",
+    "options": [
+      "La vie des forgerons au XIXe siècle",
+      "La jalousie entre frères",
+      "Les aventures d'un enfant à la campagne",
+      "La quête d'un père et la stigmatisation des enfants illégitimes"
+    ],
+    "answer": "La quête d'un père et la stigmatisation des enfants illégitimes",
+    "acceptableAnswers": [
+      "La quête d'un père et la stigmatisation des enfants illégitimes"
+    ],
+    "hint": "Le titre lui-même annonce le thème.",
+    "explanation": "Le thème central est la <b>quête d'un père</b> et la souffrance liée à la <b>stigmatisation de l'illégitimité</b> au XIXe siècle. Simon souffre d'une blessure sociale que seule la bonté de Philippe peut guérir."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-trv-121",
+    "chapterId": "g9fr-transformation",
+    "difficulty": 2,
+    "subsection": "genre_nombre",
+    "type": "mcq",
+    "question": "Mets au pluriel : « le bail commercial »",
+    "options": [
+      "les bails commerciaux",
+      "les bail commerciaux",
+      "les bails commercials",
+      "les baux commerciaux"
+    ],
+    "answer": "les baux commerciaux",
+    "acceptableAnswers": [
+      "les baux commerciaux"
+    ],
+    "hint": "Bail → baux (pluriel en -aux) ; commercial → commerciaux.",
+    "explanation": "<b>Bail</b> → <b>baux</b> (comme vitrail → vitraux) ; l'adjectif : -al → -aux : « les <b>baux commerciaux</b>. »"
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-egv-062",
+    "chapterId": "g9fr-ecrit-guide",
+    "difficulty": 3,
+    "subsection": "formules_ouverture_cloture",
+    "type": "mcq",
+    "question": "Laquelle de ces paires (ouverture / clôture) est cohérente pour une lettre à un ami ?",
+    "options": [
+      "Cher Ahmed, / Amicalement, Ahmed",
+      "Monsieur, / À bientôt !",
+      "Cher Ahmed, / Veuillez agréer…",
+      "Monsieur, / Bisous,"
+    ],
+    "answer": "Cher Ahmed, / Amicalement, Ahmed",
+    "acceptableAnswers": [
+      "Cher Ahmed, / Amicalement, Ahmed"
+    ],
+    "hint": "L'ouverture et la clôture doivent être du même registre.",
+    "explanation": "<b>Cher Ahmed, / Amicalement,</b> forment une paire cohérente car elles sont toutes deux du registre amical. Les autres paires mélangent les registres (formel + informel), ce qui est incohérent."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-oev-039",
+    "chapterId": "g9fr-oeuvres",
+    "difficulty": 3,
+    "subsection": "topaze_personnages",
+    "type": "mcq",
+    "question": "Dans <i>Topaze</i>, quel type de personnage Topaze représente-t-il au début de la pièce (type littéraire) ?",
+    "options": [
+      "Le méchant hypocrite",
+      "Le naïf ou l'idéaliste qui découvre la réalité du monde",
+      "Le jeune ambitieux sans scrupules",
+      "Le héros tragique classique"
+    ],
+    "answer": "Le naïf ou l'idéaliste qui découvre la réalité du monde",
+    "acceptableAnswers": [
+      "Le naïf ou l'idéaliste qui découvre la réalité du monde"
+    ],
+    "hint": "Topaze croit sincèrement aux valeurs qu'il enseigne.",
+    "explanation": "Au début, Topaze est le type du <b>naïf ou de l'idéaliste</b> : il croit sincèrement que la vertu est récompensée et que le monde fonctionne selon les principes moraux qu'il enseigne. Sa transformation constitue la désillusion centrale de la pièce."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-trv-151",
+    "chapterId": "g9fr-transformation",
+    "difficulty": 3,
+    "subsection": "voix_passive",
+    "type": "mcq",
+    "question": "Mets à la voix passive (plus-que-parfait) : « Le médecin avait examiné la patiente. »",
+    "options": [
+      "La patiente était examinée par le médecin.",
+      "La patiente avait été examinée du médecin.",
+      "La patiente a été examinée par le médecin.",
+      "La patiente avait été examinée par le médecin."
+    ],
+    "answer": "La patiente avait été examinée par le médecin.",
+    "acceptableAnswers": [
+      "La patiente avait été examinée par le médecin."
+    ],
+    "hint": "PQP actif → PQP passif : avait été + participe accordé.",
+    "explanation": "Plus-que-parfait passif : <b>avait été examinée</b> (féminin singulier) + <b>par le médecin</b> : « La patiente <b>avait été examinée par</b> le médecin. »"
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-sb-037",
+    "chapterId": "g9fr-correction",
+    "difficulty": 4,
+    "subsection": "participe_infinitif",
+    "type": "mcq",
+    "question": "Choisis la forme correcte : « Il a voulu .......... la porte. »",
+    "options": [
+      "fermait",
+      "fermé",
+      "fermant",
+      "fermer"
+    ],
+    "answer": "fermer",
+    "acceptableAnswers": [
+      "fermer"
+    ],
+    "hint": "Remplace par « vendre » : si cela sonne juste, c'est l'infinitif.",
+    "explanation": "Après un autre verbe conjugué on emploie l'<b>infinitif</b> : « il a voulu <b>fermer</b> ». Le test du remplacement par « vendre » distingue -er de -é."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-sb-058",
+    "chapterId": "g9fr-comprehension",
+    "difficulty": 4,
+    "subsection": "expression_imagee",
+    "type": "mcq",
+    "question": "Que signifie « poser un lapin à quelqu'un » ?",
+    "options": [
+      "Offrir un cadeau surprise",
+      "Ne pas venir au rendez-vous",
+      "Rendre visite à l'improviste",
+      "Raconter une histoire drôle"
+    ],
+    "answer": "Ne pas venir au rendez-vous",
+    "acceptableAnswers": [
+      "Ne pas venir au rendez-vous"
+    ],
+    "hint": "L'expression concerne un rendez-vous manqué.",
+    "explanation": "« Poser un lapin » signifie <b>ne pas se rendre</b> à un rendez-vous fixé, en laissant l'autre attendre."
+  },
+  {
+    "pack": "grade9-french",
+    "id": "g9fr-sb-069",
+    "chapterId": "g9fr-oeuvres",
+    "difficulty": 4,
+    "subsection": "question_longue",
+    "type": "mcq",
+    "question": "Une question longue sur une œuvre demande une réponse développée. Quelle structure convient ?",
+    "options": [
+      "Une opinion personnelle sans aucune référence au texte",
+      "La liste de tous les personnages de l’œuvre étudiée",
+      "Une idée, un exemple tiré de l’œuvre, une conclusion",
+      "Un résumé complet de l’intrigue de l’œuvre entière"
+    ],
+    "answer": "Une idée, un exemple tiré de l’œuvre, une conclusion",
+    "acceptableAnswers": [
+      "Une idée, un exemple tiré de l’œuvre, une conclusion"
+    ],
+    "hint": "La réponse doit s'appuyer sur l'œuvre elle-même.",
+    "explanation": "Une réponse longue annonce une <b>idée</b>, l'appuie sur un <b>exemple précis</b> de l'œuvre, puis conclut. Résumer l'intrigue ne répond pas à la question posée."
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-eth-016",
+    "chapterId": "g9ict-ethics-security",
+    "difficulty": 1,
+    "subsection": "copyright_ownership",
+    "type": "mcq",
+    "question": "Copying and selling software you did not pay for is called:",
+    "options": [
+      "Encryption",
+      "Compression",
+      "Software piracy",
+      "Software engineering"
+    ],
+    "answer": "Software piracy",
+    "acceptableAnswers": [
+      "Software piracy"
+    ],
+    "hint": "It is theft of someone&rsquo;s work.",
+    "explanation": "Software piracy is copying, using or selling software without the licence to do so."
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-piv-016",
+    "chapterId": "g9ict-software-os",
+    "difficulty": 1,
+    "subsection": "utility_programs",
+    "type": "mcq",
+    "question": "Which of the following is an example of system software?",
+    "options": [
+      "Word processor",
+      "Spreadsheet application",
+      "Operating system",
+      "Web browser"
+    ],
+    "answer": "Operating system",
+    "acceptableAnswers": [
+      "Operating system"
+    ],
+    "explanation": "An operating system is system software that manages the computer's hardware and provides services for application programs. Word processors, spreadsheets, and web browsers are application software."
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-sys-006",
+    "chapterId": "g9ict-computer-systems",
+    "difficulty": 1,
+    "subsection": "output_devices",
+    "type": "mcq",
+    "question": "Which output device produces a <b>hard copy</b>?",
+    "options": [
+      "Projector",
+      "Printer",
+      "Speaker",
+      "Monitor"
+    ],
+    "answer": "Printer",
+    "acceptableAnswers": [
+      "Printer"
+    ],
+    "hint": "A hard copy is one you can hold.",
+    "explanation": "A hard copy is output on paper, and only the printer produces that. A monitor, speaker and projector all give soft copy."
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-esv-037",
+    "chapterId": "g9ict-ethics-security",
+    "difficulty": 2,
+    "subsection": "data_security",
+    "type": "mcq",
+    "question": "Which of the following is the best practice for password management?",
+    "options": [
+      "Use a different password for each account and change passwords regularly",
+      "Use the same simple password on all accounts",
+      "Write all passwords on a sticky note attached to the monitor",
+      "Share passwords with colleagues so they can help in emergencies"
+    ],
+    "answer": "Use a different password for each account and change passwords regularly",
+    "acceptableAnswers": [
+      "Use a different password for each account and change passwords regularly"
+    ],
+    "hint": "Different passwords limit the damage if one is compromised.",
+    "explanation": "Using unique passwords for each account means that if one is stolen, attackers cannot use it to access other accounts."
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-prv-002",
+    "chapterId": "g9ict-presentation",
+    "difficulty": 2,
+    "subsection": "charts_tables",
+    "type": "mcq",
+    "question": "Which chart type is best for showing how one quantity changes over a period of time?",
+    "options": [
+      "Line graph",
+      "Pie chart",
+      "Pictogram",
+      "Bar chart"
+    ],
+    "answer": "Line graph",
+    "acceptableAnswers": [
+      "Line graph"
+    ],
+    "hint": "Think about which chart joins points with a continuous line.",
+    "explanation": "A line graph connects data points in order, making trends over time easy to see."
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-task-009-c",
+    "taskId": "g9ict-task-009",
+    "partLabel": "c",
+    "chapterId": "g9ict-networks",
+    "subsection": "intranet_extranet",
+    "difficulty": 2,
+    "marks": 2,
+    "question": "Give <b>two</b> features a school intranet might provide for its pupils.",
+    "hint": "Think about what a school website only for students would contain.",
+    "explanation": "A school intranet typically provides timetables, learning resources, homework assignments, notices and staff contact details to pupils and staff.",
+    "type": "slots",
+    "answer": "access to timetables, access to timetables",
+    "acceptableAnswers": [],
+    "slotResponse": {
+      "kind": "blanks",
+      "answer": [
+        [
+          "access to timetables",
+          "homework resources",
+          "learning materials",
+          "school notices",
+          "staff contact details",
+          "library catalogue"
+        ],
+        [
+          "access to timetables",
+          "homework resources",
+          "learning materials",
+          "school notices",
+          "staff contact details",
+          "library catalogue"
+        ]
+      ]
+    },
+    "responseKind": "blanks"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-db-201-a",
+    "taskId": "g9ict-db-201",
+    "partLabel": "a",
+    "chapterId": "g9ict-databases",
+    "subsection": "queries",
+    "difficulty": 3,
+    "marks": 1,
+    "question": "The table PUPILS below is stored in a database. The query grid under it has already been filled in.\n<table style=\"border-collapse:collapse;margin:6px auto;font-size:12px\"><tr><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;background:#e5e5e5;font-weight:bold\">PupilID</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;background:#e5e5e5;font-weight:bold\">Name</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;background:#e5e5e5;font-weight:bold\">Class</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;background:#e5e5e5;font-weight:bold\">Mark</td></tr><tr><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">101</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">Anil</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">9A</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">72</td></tr><tr><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">102</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">Bibi</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">9B</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">55</td></tr><tr><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">103</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">Chan</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">9A</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">88</td></tr><tr><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">104</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">Devi</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">9B</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">41</td></tr><tr><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">105</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">Emma</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">9A</td><td style=\"border:1px solid #000;padding:3px 11px;text-align:center;\">64</td></tr></table><table style=\"border-collapse:collapse;margin:6px auto;font-size:12px\"><tr><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;background:#e5e5e5;font-weight:bold;text-align:left\">Field:</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">Name</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">Class</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">Mark</td></tr><tr><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;background:#e5e5e5;font-weight:bold;text-align:left\">Table:</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">PUPILS</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">PUPILS</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">PUPILS</td></tr><tr><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;background:#e5e5e5;font-weight:bold;text-align:left\">Sort:</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\"></td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\"></td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\"></td></tr><tr><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;background:#e5e5e5;font-weight:bold;text-align:left\">Show:</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">&#10003;</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">&#10003;</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">&#10003;</td></tr><tr><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;background:#e5e5e5;font-weight:bold;text-align:left\">Criteria:</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\"></td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">\"9A\"</td><td style=\"border:1px solid #000;padding:3px 10px;text-align:center;min-width:70px;\">&gt; 70</td></tr></table>\nHow many <b>records</b> are there in the table PUPILS? <span class=\"q-unit\">(answer in records)</span>",
+    "hint": "A record is one row of data, not the heading row.",
+    "explanation": "There are five rows of data below the headings, so the table holds five records.",
+    "type": "numeric",
+    "answer": "5",
+    "acceptableAnswers": [
+      "5"
+    ],
+    "unit": "records",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-piv-052",
+    "chapterId": "g9ict-databases",
+    "difficulty": 3,
+    "subsection": "db_structure",
+    "type": "mcq",
+    "question": "A student chooses \"Book Title\" as the primary key for a library database. Why might this cause a problem?",
+    "options": [
+      "Two different books could share the same title, so records would not be unique",
+      "Titles cannot be searched using a query",
+      "Book titles are too long to store in a database field",
+      "Titles may change when a new edition is published, making queries fail"
+    ],
+    "answer": "Two different books could share the same title, so records would not be unique",
+    "acceptableAnswers": [
+      "Two different books could share the same title, so records would not be unique"
+    ],
+    "explanation": "A primary key must be unique for every record. If two books have the same title, the uniqueness rule is broken. A unique Book ID number would be a safer choice."
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-sys-204-a",
+    "taskId": "g9ict-sys-204",
+    "partLabel": "a",
+    "chapterId": "g9ict-computer-systems",
+    "subsection": "cpu_memory",
+    "difficulty": 3,
+    "marks": 1,
+    "question": "The panel below was opened on a computer in the school laboratory.\n<div style=\"border:1px solid #000;max-width:340px;margin:6px auto;text-align:left;font-size:12px\"><div style=\"border-bottom:1px solid #000;padding:4px 8px;font-weight:bold\">System information</div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Device name</span><span style=\"flex:1 1 auto\">LAB-PC-07</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Processor</span><span style=\"flex:1 1 auto\">Intel Core i5 &nbsp; 2.40 GHz</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Installed memory</span><span style=\"flex:1 1 auto\">8.00 GB</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">System type</span><span style=\"flex:1 1 auto\">64-bit operating system</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Edition</span><span style=\"flex:1 1 auto\">Windows 11 Pro</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Storage</span><span style=\"flex:1 1 auto\">500 GB hard disk</span></div></div>\nWrite down the amount of installed memory shown on the panel.",
+    "hint": "Read it straight off the row labelled Installed memory.",
+    "explanation": "The panel gives the installed memory as 8.00 GB.",
+    "type": "slots",
+    "answer": "8.00 GB",
+    "acceptableAnswers": [],
+    "slotResponse": {
+      "kind": "blanks",
+      "answer": [
+        [
+          "8.00 GB",
+          "8 GB",
+          "8GB",
+          "8.00GB",
+          "8"
+        ]
+      ]
+    },
+    "responseKind": "blanks"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-int-202-b",
+    "taskId": "g9ict-int-202",
+    "partLabel": "b",
+    "chapterId": "g9ict-internet",
+    "subsection": "e_services",
+    "difficulty": 4,
+    "marks": 2,
+    "question": "Mrs Appadu pays her electricity bill using Internet banking on her mobile phone.\n<div style=\"border:1px solid #000;max-width:340px;margin:6px auto;text-align:left;font-size:12px\"><div style=\"border-bottom:1px solid #000;padding:4px 8px;font-weight:bold\">Secure banking</div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Address</span><span style=\"flex:1 1 auto\">https://bank.mu/pay</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Signed in as</span><span style=\"flex:1 1 auto\">appadu.s</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 1</span><span style=\"flex:1 1 auto\">Choose the account</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 2</span><span style=\"flex:1 1 auto\">Enter the amount</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 3</span><span style=\"flex:1 1 auto\">Enter the code sent to your phone</span></div></div>\nBefore she can sign in, the bank asks for two things.<br>(i) Name the one she types to say who she is.<br>(ii) Name the secret one she types to prove that it really is her.",
+    "hint": "One identifies her and the other proves it.",
+    "explanation": "The username says who she claims to be and the password proves it. Only the password is secret.",
+    "type": "slots",
+    "answer": "username, password",
+    "acceptableAnswers": [],
+    "slotResponse": {
+      "kind": "blanks",
+      "answer": [
+        [
+          "username",
+          "user name",
+          "user id",
+          "login name"
+        ],
+        [
+          "password",
+          "pass word"
+        ]
+      ]
+    },
+    "responseKind": "blanks"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-int-202-e",
+    "taskId": "g9ict-int-202",
+    "partLabel": "e",
+    "chapterId": "g9ict-internet",
+    "subsection": "e_services",
+    "difficulty": 4,
+    "marks": 1,
+    "question": "Mrs Appadu pays her electricity bill using Internet banking on her mobile phone.\n<div style=\"border:1px solid #000;max-width:340px;margin:6px auto;text-align:left;font-size:12px\"><div style=\"border-bottom:1px solid #000;padding:4px 8px;font-weight:bold\">Secure banking</div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Address</span><span style=\"flex:1 1 auto\">https://bank.mu/pay</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Signed in as</span><span style=\"flex:1 1 auto\">appadu.s</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 1</span><span style=\"flex:1 1 auto\">Choose the account</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 2</span><span style=\"flex:1 1 auto\">Enter the amount</span></div><div style=\"display:flex;padding:3px 8px;border-bottom:1px solid #ccc\"><span style=\"flex:0 0 46%\">Step 3</span><span style=\"flex:1 1 auto\">Enter the code sent to your phone</span></div></div>\nShe pays three bills of Rs 450, Rs 620 and Rs 930. What total amount leaves her account?",
+    "hint": "Add the three amounts together.",
+    "explanation": "450 + 620 + 930 = Rs 2 000.",
+    "type": "numeric",
+    "answer": "2000",
+    "acceptableAnswers": [
+      "2000"
+    ],
+    "prefix": "Rs",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-ict",
+    "id": "g9ict-pp24-048",
+    "chapterId": "g9ict-spreadsheets",
+    "difficulty": 4,
+    "subsection": "functions",
+    "type": "mcq",
+    "question": "In the spreadsheet below, the formula <b>= COUNTIF(F3:F7, \"Above\")</b> is used in cell F8. What is the output?<img src=\"assets/past-papers/g9-ict-2024/d8-spreadsheet.png\" alt=\"A screenshot of a spreadsheet with lettered columns and numbered rows of brands and monthly sales\" style=\"display:block;margin:8px auto;max-width:min(100%,420px);height:auto;border-radius:6px;background:#fff\">",
+    "options": [
+      "5",
+      "2",
+      "2500",
+      "3"
+    ],
+    "answer": "2",
+    "acceptableAnswers": [
+      "2"
+    ],
+    "hint": "Count how many rows in the last column say Above - do not add anything up.",
+    "explanation": "COUNTIF counts the cells in F3:F7 whose contents are “Above”. Dior and Yves Saint Laurent are Above; Chanel, Gucci and Dolce are Below - so the answer is <b>2</b>."
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-fin-001-a",
+    "taskId": "g9m-fin-001",
+    "partLabel": "a",
+    "chapterId": "g9m-finance",
+    "subsection": "salaries_and_bills",
+    "difficulty": 1,
+    "marks": 1,
+    "question": "A worker is paid Rs 450 per day. Find his pay for <b>6 days</b>.",
+    "hint": "Multiply the daily rate by the number of days.",
+    "explanation": "450 &times; 6 = Rs 2 700.",
+    "type": "numeric",
+    "answer": "2700",
+    "acceptableAnswers": [
+      "2700"
+    ],
+    "prefix": "Rs",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-my-013",
+    "chapterId": "g9m-patterns",
+    "difficulty": 1,
+    "subsection": "sequences_and_figures",
+    "type": "numeric",
+    "question": "Complete the sequence: 3, 10, 17, 24, ___.",
+    "answer": "31",
+    "acceptableAnswers": [
+      "31"
+    ],
+    "hint": "Find the common difference between consecutive terms.",
+    "explanation": "Each term increases by 7. So the next term is 24 + 7 = <b>31</b>."
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-prb-002-a",
+    "taskId": "g9m-prb-002",
+    "partLabel": "a",
+    "chapterId": "g9m-probability",
+    "subsection": "simple_and_combined_events",
+    "difficulty": 1,
+    "marks": 1,
+    "question": "A fair six-sided die is thrown once. Find the probability of getting a <b>3</b>.",
+    "hint": "There is one face showing 3.",
+    "explanation": "One of the six equally likely faces is a 3, so the probability is 1/6.",
+    "type": "numeric",
+    "answer": "1/6",
+    "acceptableAnswers": [
+      "1/6"
+    ],
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-geo-002-a",
+    "taskId": "g9m-geo-002",
+    "partLabel": "a",
+    "chapterId": "g9m-geometry-revision",
+    "subsection": "grade7_8_geometry",
+    "difficulty": 2,
+    "marks": 2,
+    "question": "<svg viewBox=\"0 0 300 130\" width=\"300\" height=\"130\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><line x1=\"20\" y1=\"96\" x2=\"280\" y2=\"96\" stroke=\"#000\" stroke-width=\"1.6\"/><line x1=\"150\" y1=\"96\" x2=\"123.3\" y2=\"22.7\" stroke=\"#000\" stroke-width=\"1.5\"/><path d=\"M 126.0 96.0 A 24 24 0 0 1 141.8 73.4\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.1\"/><text x=\"112.3\" y=\"74.6\" font-size=\"13\" text-anchor=\"middle\">70&deg;</text><line x1=\"150\" y1=\"96\" x2=\"205.2\" y2=\"40.8\" stroke=\"#000\" stroke-width=\"1.5\"/><path d=\"M 141.8 73.4 A 24 24 0 0 1 167.0 79.0\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.1\"/><text x=\"160.0\" y=\"56.1\" font-size=\"13\" text-anchor=\"middle\"><tspan font-style=\"italic\">y</tspan></text><path d=\"M 167.0 79.0 A 24 24 0 0 1 174.0 96.0\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.1\"/><text x=\"192.5\" y=\"83.4\" font-size=\"13\" text-anchor=\"middle\">45&deg;</text><circle cx=\"150\" cy=\"96\" r=\"2.4\" fill=\"#000\"/></svg>\nFind the value of angle <i>y</i> in the diagram. <span class=\"q-unit\">(answer in °)</span>",
+    "hint": "The three angles sit on a straight line.",
+    "explanation": "Angles on a straight line add up to 180&deg;, so y = 180 &minus; 70 &minus; 45 = 65&deg;.",
+    "type": "numeric",
+    "answer": "65",
+    "acceptableAnswers": [
+      "65"
+    ],
+    "unit": "°",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-mcq-049-a",
+    "taskId": "g9m-mcq-049",
+    "partLabel": "a",
+    "chapterId": "g9m-statistics",
+    "subsection": "frequency_and_averages",
+    "difficulty": 2,
+    "marks": 1,
+    "question": "The <b>range</b> of 7, 2, 9, 4 is",
+    "hint": "Largest take away smallest.",
+    "explanation": "9 &minus; 2 = 7. Answering 5 subtracts the wrong pair; 11 adds them; 5.5 is the mean.",
+    "type": "mcq",
+    "options": [
+      "5",
+      "7",
+      "11",
+      "5.5"
+    ],
+    "answer": "7",
+    "acceptableAnswers": [
+      "7"
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-sfa-006-a",
+    "taskId": "g9m-sfa-006",
+    "partLabel": "a",
+    "chapterId": "g9m-surface-area",
+    "subsection": "nets_and_surface_area",
+    "difficulty": 2,
+    "marks": 2,
+    "question": "Find the <b>area</b> of a circle of radius 7 cm. <span style=\"white-space:nowrap\">(Use &pi; = <sup>22</sup>&frasl;<sub>7</sub>)</span> <span class=\"q-unit\">(answer in cm²)</span>",
+    "hint": "Area is &pi;r&sup2;.",
+    "explanation": "A = (22/7) &times; 7 &times; 7 = 22 &times; 7 = 154 cm&sup2;.",
+    "type": "numeric",
+    "answer": "154",
+    "acceptableAnswers": [
+      "154"
+    ],
+    "unit": "cm²",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-fin-004-a",
+    "taskId": "g9m-fin-004",
+    "partLabel": "a",
+    "chapterId": "g9m-finance",
+    "subsection": "salaries_and_bills",
+    "difficulty": 3,
+    "marks": 2,
+    "question": "A basic salary is Rs 18 000. A bonus of 10% is added. Find the <b>total</b> pay.",
+    "hint": "Find 10% first, then add it on.",
+    "explanation": "10% of 18 000 = 1 800, so the total is 18 000 + 1 800 = Rs 19 800.",
+    "type": "numeric",
+    "answer": "19800",
+    "acceptableAnswers": [
+      "19800"
+    ],
+    "prefix": "Rs",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-multi-007-a",
+    "taskId": "g9m-multi-007",
+    "partLabel": "a",
+    "chapterId": "g9m-number-revision",
+    "subsection": "ratio_and_measures",
+    "difficulty": 3,
+    "marks": 2,
+    "question": "Share Rs 4 200 between Aisha and Ben in the ratio <b>3 : 4</b>. How much does <b>Aisha</b> get? <span class=\"q-unit\">(answer in Rs)</span>",
+    "hint": "Find the value of one share first.",
+    "explanation": "3 + 4 = 7 shares, and 4200 &divide; 7 = Rs 600 per share. Aisha gets 3 &times; 600 = Rs 1 800.",
+    "type": "numeric",
+    "answer": "1800",
+    "acceptableAnswers": [
+      "1800"
+    ],
+    "unit": "Rs",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-trg-009-a",
+    "taskId": "g9m-trg-009",
+    "partLabel": "a",
+    "chapterId": "g9m-trigonometry",
+    "subsection": "ratios_and_2d_problems",
+    "difficulty": 3,
+    "marks": 2,
+    "question": "In a right-angled triangle, the side adjacent to a 45&deg; angle is 5 cm. Find the length of the <b>opposite</b> side. <span style=\"white-space:nowrap\">[Given tan 45&deg; = 1]</span> <span class=\"q-unit\">(answer in cm)</span>",
+    "hint": "Tangent relates the opposite side to the adjacent side.",
+    "explanation": "tan 45&deg; = opposite &divide; 5, so opposite = 5 &times; 1 = 5 cm.",
+    "type": "numeric",
+    "answer": "5",
+    "acceptableAnswers": [
+      "5"
+    ],
+    "unit": "cm",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-exb-101-b",
+    "taskId": "g9m-exb-101",
+    "partLabel": "b",
+    "chapterId": "g9m-expressions",
+    "subsection": "binomials_and_factorising",
+    "difficulty": 4,
+    "marks": 2,
+    "question": "Factorise <i>x</i><sup>2</sup> &minus; 36.",
+    "hint": "A difference of two squares.",
+    "explanation": "x&sup2; &minus; 6&sup2; = (x + 6)(x &minus; 6).",
+    "type": "expr",
+    "answer": "(x+6)(x-6)",
+    "acceptableAnswers": [
+      "(x+6)(x-6)",
+      "(x-6)(x+6)"
+    ],
+    "responseKind": "expression"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-nrb-103-b",
+    "taskId": "g9m-nrb-103",
+    "partLabel": "b",
+    "chapterId": "g9m-number-revision",
+    "subsection": "ratio_and_measures",
+    "difficulty": 4,
+    "marks": 2,
+    "question": "A third town is 11 km from the first. How far apart are they <b>on the map</b>? <span class=\"q-unit\">(answer in cm)</span>",
+    "hint": "Turn the kilometres into centimetres first, then divide by 50 000.",
+    "explanation": "11 km = 1 100 000 cm, and 1 100 000 &divide; 50 000 = 22 cm.",
+    "type": "numeric",
+    "answer": "22",
+    "acceptableAnswers": [
+      "22"
+    ],
+    "unit": "cm",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-maths",
+    "id": "g9m-vis-006-b",
+    "taskId": "g9m-vis-006",
+    "partLabel": "b",
+    "chapterId": "g9m-surface-area",
+    "subsection": "nets_and_surface_area",
+    "difficulty": 4,
+    "marks": 2,
+    "question": "<svg viewBox=\"0 0 310 136\" width=\"310\" height=\"136\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><polygon points=\"100,24 250,24 204,108 54,108\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.6\"/><line x1=\"100\" y1=\"24\" x2=\"100\" y2=\"108\" stroke=\"#000\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/><path d=\"M 100 95 L 113 95 L 113 108\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.1\"/><text x=\"129\" y=\"126\" font-size=\"12\" text-anchor=\"middle\">14 cm</text><text x=\"92\" y=\"70\" font-size=\"12\" text-anchor=\"end\">8 cm</text><text x=\"258\" y=\"66\" font-size=\"12\" text-anchor=\"start\">10 cm</text></svg>\nA second parallelogram has the same area but a base of 16 cm. Find its perpendicular height. <span class=\"q-unit\">(answer in cm)</span>",
+    "hint": "Area divided by base gives the height.",
+    "explanation": "112 &divide; 16 = 7 cm.",
+    "type": "numeric",
+    "answer": "7",
+    "acceptableAnswers": [
+      "7"
+    ],
+    "unit": "cm",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p1-v013",
+    "chapterId": "g9s-p1-measurements",
+    "difficulty": 1,
+    "subsection": "measuring_instruments",
+    "type": "mcq",
+    "question": "Which instrument measures the temperature of a liquid?",
+    "options": [
+      "A stopwatch",
+      "A thermometer",
+      "A balance",
+      "A ruler"
+    ],
+    "answer": "A thermometer",
+    "acceptableAnswers": [
+      "A thermometer"
+    ],
+    "hint": "Temperature is measured in degrees.",
+    "explanation": "A thermometer measures temperature in degrees Celsius."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p3-v047",
+    "chapterId": "g9s-p3-energy",
+    "difficulty": 1,
+    "subsection": "electricity_production",
+    "type": "mcq",
+    "question": "What energy conversion takes place in a photovoltaic (solar) cell?",
+    "options": [
+      "Light energy &rarr; thermal energy &rarr; electrical energy",
+      "Chemical energy &rarr; electrical energy",
+      "Electrical energy &rarr; light energy",
+      "Light energy &rarr; electrical energy"
+    ],
+    "answer": "Light energy &rarr; electrical energy",
+    "acceptableAnswers": [
+      "Light energy &rarr; electrical energy"
+    ],
+    "hint": "Solar cells convert light directly to electricity.",
+    "explanation": "A photovoltaic cell converts light energy directly into electrical energy without a turbine or generator."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p5-v029",
+    "chapterId": "g9s-p5-electricity",
+    "difficulty": 1,
+    "subsection": "measuring_current_voltage",
+    "type": "mcq",
+    "question": "Which instrument measures electric current?",
+    "options": [
+      "A voltmeter",
+      "An ohmmeter",
+      "A wattmeter",
+      "An ammeter"
+    ],
+    "answer": "An ammeter",
+    "acceptableAnswers": [
+      "An ammeter"
+    ],
+    "hint": "It measures amps.",
+    "explanation": "An ammeter measures electric current in amperes (A); it is connected in series with the component."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p1-v023",
+    "chapterId": "g9s-p1-measurements",
+    "difficulty": 2,
+    "subsection": "measuring_instruments",
+    "type": "mcq",
+    "question": "Why is a beaker not suitable for accurate volume measurements?",
+    "options": [
+      "Its scale markings are too far apart for precision",
+      "It has no scale at all",
+      "It must not be used with hot liquids",
+      "It can only hold water"
+    ],
+    "answer": "Its scale markings are too far apart for precision",
+    "acceptableAnswers": [
+      "Its scale markings are too far apart for precision"
+    ],
+    "hint": "Compare the divisions on a beaker with those on a measuring cylinder.",
+    "explanation": "A beaker is marked roughly; a measuring cylinder has a much finer scale."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p3-v072",
+    "chapterId": "g9s-p3-energy",
+    "difficulty": 2,
+    "subsection": "non_renewable_sources",
+    "type": "mcq",
+    "question": "Natural gas is mainly made of which chemical?",
+    "options": [
+      "Methane (CH&#8324;)",
+      "Carbon dioxide (CO&#8322;)",
+      "Nitrogen (N&#8322;)",
+      "Hydrogen (H&#8322;)"
+    ],
+    "answer": "Methane (CH&#8324;)",
+    "acceptableAnswers": [
+      "Methane (CH&#8324;)"
+    ],
+    "hint": "Methane is the simplest hydrocarbon.",
+    "explanation": "Natural gas is predominantly methane (CH&#8324;), a hydrocarbon that burns to produce CO&#8322; and H&#8322;O."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p5-v078",
+    "chapterId": "g9s-p5-electricity",
+    "difficulty": 2,
+    "subsection": "potential_difference",
+    "type": "mcq",
+    "question": "What is the meaning of a potential difference of 1 V?",
+    "options": [
+      "1 coulomb of charge is stored",
+      "1 watt of power is consumed",
+      "1 ampere of current flows for every ohm of resistance",
+      "1 joule of energy is transferred for every coulomb of charge that moves"
+    ],
+    "answer": "1 joule of energy is transferred for every coulomb of charge that moves",
+    "acceptableAnswers": [
+      "1 joule of energy is transferred for every coulomb of charge that moves"
+    ],
+    "hint": "1 V = 1 J/C.",
+    "explanation": "1 volt = 1 joule per coulomb; it means 1 J of energy is transferred when 1 C of charge moves through the potential difference."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p1-017",
+    "chapterId": "g9s-p1-measurements",
+    "difficulty": 3,
+    "subsection": "accuracy_of_instruments",
+    "type": "mcq",
+    "question": "A pupil measures the thickness of one page by measuring 100 pages and dividing by 100. Why?",
+    "options": [
+      "One page is too thin for the ruler to measure accurately",
+      "It makes the answer a whole number",
+      "A ruler cannot measure paper at all",
+      "The pages become thicker when they are stacked up"
+    ],
+    "answer": "One page is too thin for the ruler to measure accurately",
+    "acceptableAnswers": [
+      "One page is too thin for the ruler to measure accurately"
+    ],
+    "hint": "Think about the smallest division on the ruler.",
+    "explanation": "A single page is far thinner than the smallest division, so many are measured together and the total divided."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-p4-v037",
+    "chapterId": "g9s-p4-motion",
+    "difficulty": 3,
+    "subsection": "speed_velocity",
+    "type": "mcq",
+    "question": "A car's speedometer reads 100 km/h. The car is travelling in a straight line East. Express this as a velocity.",
+    "options": [
+      "27.8 km/h East",
+      "100 m/s East",
+      "100 km/h East (or 27.8 m/s East)",
+      "100 km/h (no direction needed for velocity)"
+    ],
+    "answer": "100 km/h East (or 27.8 m/s East)",
+    "acceptableAnswers": [
+      "100 km/h East (or 27.8 m/s East)"
+    ],
+    "hint": "Velocity requires magnitude and direction.",
+    "explanation": "The velocity is 100 km/h East; the direction is essential. (100 &divide; 3.6 &asymp; 27.8 m/s.)"
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-ptask-010-c",
+    "taskId": "g9s-ptask-010",
+    "partLabel": "c",
+    "chapterId": "g9s-p5-electricity",
+    "subsection": "dc_circuit_problems",
+    "difficulty": 3,
+    "marks": 2,
+    "question": "<svg viewBox=\"0 0 260 180\" width=\"280\" role=\"img\" aria-label=\"a series electrical circuit\"><rect x=\"20\" y=\"25\" width=\"220\" height=\"120\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"118\" y1=\"10\" x2=\"118\" y2=\"30\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"132\" y1=\"16\" x2=\"132\" y2=\"30\" stroke=\"#0f172a\" stroke-width=\"4\"/><line x1=\"108\" y1=\"25\" x2=\"118\" y2=\"25\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"132\" y1=\"25\" x2=\"142\" y2=\"25\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"125\" y=\"9\" font-size=\"10\" text-anchor=\"middle\" fill=\"#334155\">12 V</text><rect x=\"220\" y=\"60\" width=\"20\" height=\"38\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"242\" y=\"82\" font-size=\"10\" fill=\"#334155\">4 Ω</text><rect x=\"108\" y=\"130\" width=\"44\" height=\"16\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"130\" y=\"160\" font-size=\"10\" text-anchor=\"middle\" fill=\"#334155\">8 Ω</text><circle cx=\"20\" cy=\"85\" r=\"12\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"20\" y=\"90\" font-size=\"11\" text-anchor=\"middle\" fill=\"#0f172a\">A</text><text x=\"130\" y=\"20\" font-size=\"8\" text-anchor=\"middle\" fill=\"#64748b\">cell</text></svg>\nCalculate the voltage across R&#8321;. <span class=\"q-unit\">(answer in V)</span>",
+    "hint": "V = IR.",
+    "explanation": "V&#8321; = 1 &times; 4 = 4 V.",
+    "type": "numeric",
+    "answer": "4",
+    "acceptableAnswers": [
+      "4"
+    ],
+    "unit": "V",
+    "responseKind": "number"
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-inq-350",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 4,
+    "subsection": "recording_data",
+    "type": "mcq",
+    "question": "A pupil records ammeter readings in amperes. Which column heading is correct?",
+    "options": [
+      "Current / A",
+      "The current measured",
+      "Current (amperes) / A",
+      "Current in amps A"
+    ],
+    "answer": "Current / A",
+    "acceptableAnswers": [
+      "Current / A"
+    ],
+    "hint": "The papers print the quantity, a solidus, then the unit symbol.",
+    "explanation": "The standard form is <b>Current / A</b>: quantity, slash, unit symbol. Writing the unit twice, or leaving it out, both lose the mark."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-inq-410",
+    "chapterId": "g9s-inquiry",
+    "difficulty": 4,
+    "subsection": "reporting_findings",
+    "type": "mcq",
+    "question": "A pupil is asked to report results to the class in two minutes. What should be left out?",
+    "options": [
+      "The main conclusion that was drawn",
+      "The pattern that the results showed",
+      "The one anomaly that was found",
+      "Every individual reading from the table"
+    ],
+    "answer": "Every individual reading from the table",
+    "acceptableAnswers": [
+      "Every individual reading from the table"
+    ],
+    "hint": "Two minutes is enough for the finding, not for the raw data.",
+    "explanation": "A short talk gives the aim, the pattern, the conclusion and any anomaly. Reading out forty numbers uses the time and communicates nothing."
+  },
+  {
+    "pack": "grade9-physics",
+    "id": "g9s-sts-337",
+    "chapterId": "g9s-sts",
+    "difficulty": 4,
+    "subsection": "justifying_views",
+    "type": "mcq",
+    "question": "A device is advertised as cutting a car&rsquo;s fuel use by 30%. How should the claim be tested?",
+    "options": [
+      "Fit the device and drive a much shorter route",
+      "Read the advertisement through very carefully",
+      "Ask several drivers whether the device feels good",
+      "Measure fuel used on the same trip with and without"
+    ],
+    "answer": "Measure fuel used on the same trip with and without",
+    "acceptableAnswers": [
+      "Measure fuel used on the same trip with and without"
+    ],
+    "hint": "Only one thing should differ between the two runs.",
+    "explanation": "The same car, route, load and driving style, with the device the only difference, and repeated. Opinions and a shorter route settle nothing."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-my025",
+    "chapterId": "g9sms-migration",
+    "difficulty": 1,
+    "subsection": "internal_international",
+    "type": "mcq",
+    "question": "What is meant by <b>internal migration</b>?",
+    "options": [
+      "Moving from one country to another",
+      "Moving from one place to another within the same country",
+      "Moving from a rural area to a foreign city",
+      "Forced movement due to war"
+    ],
+    "answer": "Moving from one place to another within the same country",
+    "acceptableAnswers": [
+      "Moving from one place to another within the same country"
+    ],
+    "hint": "Internal means within the same borders.",
+    "explanation": "<b>Internal migration</b> is movement within the same country (e.g. rural-to-urban migration). <b>International migration</b> crosses national borders."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-pi023",
+    "chapterId": "g9sms-hazards-environment",
+    "difficulty": 1,
+    "subsection": "cyclones",
+    "type": "mcq",
+    "question": "Which devastating cyclone struck Mauritius in 1960, causing widespread destruction and loss of life?",
+    "options": [
+      "Cyclone Carol",
+      "Cyclone Hollanda",
+      "Cyclone Gervaise",
+      "Cyclone Claudette"
+    ],
+    "answer": "Cyclone Carol",
+    "acceptableAnswers": [
+      "Cyclone Carol"
+    ],
+    "hint": "This was the most destructive cyclone in living memory at the time.",
+    "explanation": "<b>Cyclone Carol</b> struck Mauritius in February 1960 and was one of the most destructive cyclones in the island's recorded history, causing many deaths and massive damage to homes and infrastructure."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-pi073",
+    "chapterId": "g9sms-media",
+    "difficulty": 1,
+    "subsection": "types_of_media",
+    "type": "mcq",
+    "question": "Which of the following is an example of PRINT media?",
+    "options": [
+      "A Facebook post",
+      "A television news programme",
+      "A radio broadcast",
+      "A daily newspaper"
+    ],
+    "answer": "A daily newspaper",
+    "acceptableAnswers": [
+      "A daily newspaper"
+    ],
+    "hint": "Print media is physically printed on paper.",
+    "explanation": "<b>Print media</b> refers to physically printed materials such as newspapers, magazines, books and journals. A daily newspaper is a classic example. Print media is the oldest category of mass media."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-pi008",
+    "chapterId": "g9sms-government-welfare",
+    "difficulty": 2,
+    "subsection": "constitution",
+    "type": "mcq",
+    "question": "Which branch of government implements and enforces laws in Mauritius?",
+    "options": [
+      "The Executive (Cabinet and Prime Minister)",
+      "The Legislature (National Assembly)",
+      "The Judiciary (Courts)",
+      "The Electoral Commission"
+    ],
+    "answer": "The Executive (Cabinet and Prime Minister)",
+    "acceptableAnswers": [
+      "The Executive (Cabinet and Prime Minister)"
+    ],
+    "hint": "This branch is led by the Prime Minister.",
+    "explanation": "The <b>Executive</b> branch, headed by the Prime Minister and the Cabinet of Ministers, is responsible for implementing and enforcing the laws passed by the Legislature."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-v003",
+    "chapterId": "g9sms-colonial-independence",
+    "difficulty": 2,
+    "subsection": "colonial_period",
+    "type": "mcq",
+    "question": "The dodo became extinct during the colonial period. Which colonial power's settlers and their animals MOST contributed to its extinction?",
+    "options": [
+      "The Portuguese — their explorers caught every dodo on first landing",
+      "The British — their navy ate it during the Napoleonic Wars",
+      "The French — their hunters killed it for sport after 1715",
+      "The Dutch — their pigs, rats and hunting wiped it out by around 1690"
+    ],
+    "answer": "The Dutch — their pigs, rats and hunting wiped it out by around 1690",
+    "acceptableAnswers": [
+      "The Dutch — their pigs, rats and hunting wiped it out by around 1690"
+    ],
+    "hint": "The dodo was gone before the French arrived.",
+    "explanation": "The dodo became extinct around <b>1690</b>, during the Dutch period. Hunting by settlers, and predation by introduced pigs, rats and monkeys, destroyed a bird that had no fear of humans."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-v120",
+    "chapterId": "g9sms-outer-islands",
+    "difficulty": 2,
+    "subsection": "rodrigues",
+    "type": "mcq",
+    "question": "Approximately how far is Rodrigues from the main island of Mauritius?",
+    "options": [
+      "About 2 000 km to the south",
+      "About 560 km to the east",
+      "About 100 km to the north",
+      "About 50 km to the west"
+    ],
+    "answer": "About 560 km to the east",
+    "acceptableAnswers": [
+      "About 560 km to the east"
+    ],
+    "hint": "It lies well to the east, not just offshore.",
+    "explanation": "Rodrigues is approximately <b>560 km east</b> of the main island — far enough that it needs its own local governance, given the distance and infrequent transport links."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-sb-007",
+    "chapterId": "g9sms-living-conditions",
+    "difficulty": 3,
+    "subsection": "education_before_reform",
+    "type": "mcq",
+    "question": "Before free secondary education, what mainly decided whether a child continued to secondary school?",
+    "options": [
+      "Whether the family could pay the fees",
+      "The child's age in years",
+      "The child's district of birth",
+      "The size of the school building"
+    ],
+    "answer": "Whether the family could pay the fees",
+    "acceptableAnswers": [
+      "Whether the family could pay the fees"
+    ],
+    "hint": "Secondary schooling was not free at the time.",
+    "explanation": "Secondary education was <b>fee-paying</b>, so ability to pay decided who continued. Free secondary education from 1977 opened it to all."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-v027",
+    "chapterId": "g9sms-economy-1960s",
+    "difficulty": 3,
+    "subsection": "predictions",
+    "type": "mcq",
+    "question": "Why did the predictions made by the Meade Report and other economists turn out to be WRONG?",
+    "options": [
+      "World sugar prices rose dramatically and eliminated all economic problems",
+      "The population actually fell, which solved the unemployment problem automatically",
+      "Britain gave Mauritius unlimited aid that funded development for 30 years",
+      "Mauritius diversified its economy, invested in education and controlled population growth through family planning"
+    ],
+    "answer": "Mauritius diversified its economy, invested in education and controlled population growth through family planning",
+    "acceptableAnswers": [
+      "Mauritius diversified its economy, invested in education and controlled population growth through family planning"
+    ],
+    "hint": "Three policy changes worked together to defy the forecast.",
+    "explanation": "The predictions failed because the government pursued <b>economic diversification</b> (the EPZ), <b>education reform</b>, and a <b>family planning programme</b> — all of which together altered the trajectory Meade had projected."
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "id": "g9sms-v126",
+    "chapterId": "g9sms-hazards-environment",
+    "difficulty": 3,
+    "subsection": "cyclones",
+    "type": "mcq",
+    "question": "Why are cyclones particularly damaging to small island nations like Mauritius?",
+    "options": [
+      "A small island has no large land mass to weaken a cyclone before it reaches settled areas",
+      "Mauritius lacks a meteorological service capable of tracking cyclones",
+      "Cyclones only ever form directly above small islands in the Indian Ocean",
+      "Small islands always produce stronger cyclones than large countries"
+    ],
+    "answer": "A small island has no large land mass to weaken a cyclone before it reaches settled areas",
+    "acceptableAnswers": [
+      "A small island has no large land mass to weaken a cyclone before it reaches settled areas"
+    ],
+    "hint": "Think about how cyclones weaken when they cross land.",
+    "explanation": "Cyclones weaken when they move over land. A <b>small island</b> offers no large land mass to dissipate a storm's energy, so it hits settled areas close to full strength. The whole island is within the damage radius."
+  }
+]

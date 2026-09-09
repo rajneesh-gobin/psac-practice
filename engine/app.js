@@ -6,7 +6,7 @@
 // ── STATE ─────────────────────────────────────
 const S = {
   exam: { qs: [], answers: {}, flagged: new Set(), idx: 0, timer: null, duration: 0, endTime: null },
-  practice: { chapterId: null, difficulty: 1, qs: [], idx: 0, answers: {}, hintShown: false, session: { attempted: 0, correct: 0 } },
+  practice: { chapterId: null, difficulty: 1, qs: [], idx: 0, answers: {}, hintShown: false, session: { attempted: 0, correct: 0, points: 0 } },
   currentScreen: 'dashboard',
 };
 
@@ -2193,6 +2193,7 @@ const _BOTTOM_NAV_SCREENS = new Set([
   'assignment-complete',
   // new chalkboard practice flow
   'practice-hub','subject-hub','cloze-list','cloze-play',
+  'leaderboard',
 ]);
 const _NAV_MAP = {
   'student-home':'home','dashboard':'home',
@@ -2201,7 +2202,7 @@ const _NAV_MAP = {
   'practice':'practice','cloze-list':'practice','cloze-play':'practice',
   'practice-hub':'practice','subject-hub':'practice',
   'exam-config':'exam','exam':'exam','results':'exam',
-  'analytics':'progress',
+  'analytics':'progress','leaderboard':'progress',
   'schedule':'home','inbox':'home','assignment-complete':'home',
 };
 
@@ -2510,6 +2511,7 @@ function showScreen(id) {
   if (id === 'dashboard')       renderDashboard();
   if (id === 'schedule')        renderSchedule();
   if (id === 'analytics')       renderAnalytics();
+  if (id === 'leaderboard')     renderGlobalLeaderboard();
   if (id === 'inbox')           renderStudentInbox();
   if (id === 'minigames' && typeof MiniGames !== 'undefined') MiniGames.renderHub();
   if (id === 'chapter-select')  renderChapterSelect();
@@ -2954,6 +2956,13 @@ function recordAnswer(chapterId, correct, source, questionId) {
   // recordAnswer that early, but the cost of being wrong is a child unable to
   // answer a question, against a cache flag that does not matter yet.
   try { if (typeof SubjectHub !== 'undefined' && SubjectHub.syllabusStale) SubjectHub.syllabusStale(); } catch (_) {}
+  // Read BEFORE QuestionProgress.record() (below) applies this answer to the
+  // local cache - afterwards every correct answer looks like a repeat.
+  let _wasEverCorrect = false;
+  try {
+    if (questionId && typeof QuestionProgress !== 'undefined') _wasEverCorrect = QuestionProgress.everCorrect(questionId);
+  } catch (_) {}
+
   if (questionId && STATIC_QUESTIONS.some(q => q.id === questionId && q.chapterId === chapterId)) {
     const chapter = DB.chapters[chapterId];
     chapter.answeredIds = [...new Set([...(Array.isArray(chapter.answeredIds) ? chapter.answeredIds : []), questionId])];
@@ -2981,7 +2990,18 @@ function recordAnswer(chapterId, correct, source, questionId) {
   if (correct) DB.stats.totalCorrect++;
   updateStreak();
   checkBadges();
-  if (correct) gainXP();
+  // ⚠ A question pays ONCE, EVER. The second time a child answers it correctly
+  //   they get the practice, not the points - otherwise the cheapest way to the
+  //   top of a leaderboard is one easy chapter on repeat, which is the opposite
+  //   of what the score is meant to reward. Enforced in the database on
+  //   (student, 'question', question_id); this is the local prediction so the
+  //   header moves at once instead of four seconds later.
+  //
+  //   Note what is NOT required: getting it right FIRST time. A child who gets
+  //   it wrong, learns it and comes back is paid the same. That is the app.
+  if (correct && _wasEverCorrect === false) {
+    gainPoints(_questionPoints(STATIC_QUESTIONS.find(x => x.id === questionId)));
+  }
   save(DB);
   Events.emit('answer', { chapterId, correct });
 }
@@ -3829,26 +3849,102 @@ function showBadgeAlert(b) {
   setTimeout(() => el.remove(), 4000);
 }
 
-// ── XP & LEVELS (Phase 4) ─────────────────────
-const XP_PER_ANSWER  = 10;
-const XP_THRESHOLDS  = [0, 100, 250, 500, 900, 1400, 2000, 2800, 3800, 5000];
-const LEVEL_NAMES    = ['Beginner','Explorer','Learner','Practiser','Achiever','Expert','Champion','Master','Genius','Legend'];
+// ── POINTS & LEVELS ────────────────────────────
+// ⚠ THE SERVER OWNS THE SCORE. Points are minted by _award_points() in the
+//   database, keyed so a thing can only ever pay once, and read back from
+//   student_points. Everything here is presentation: it predicts the award so
+//   the child sees a number the instant they answer, and is corrected by the
+//   server total on the next flush (~4s). DB.xp is now a CACHE of that total,
+//   not the score - see migrations/20260909_points_and_leaderboard.sql for why
+//   a browser-written number cannot back a global leaderboard.
+//
+// ⚠ POINTS_THRESHOLDS mirrors points_level() in SQL. Change both together;
+//   scripts/test-points-levels.js compares them and fails on drift.
+const POINTS_THRESHOLDS = [0, 301, 801, 1500, 2400, 3500, 4800, 6200, 7700, 9300, 11000, 13000];
+const LEVEL_NAMES    = ['Beginner','Explorer','Learner','Practiser','Achiever','Expert','Champion','Master','Genius','Legend','Grandmaster','Titan'];
 
-function getLevel(xp) {
-  for (let i = XP_THRESHOLDS.length - 1; i >= 0; i--) {
-    if (xp >= XP_THRESHOLDS[i]) return i + 1;
+// Kept as an alias so nothing that still spells it XP breaks; the two names
+// mean the same number and the bar reads from this one.
+const XP_THRESHOLDS  = POINTS_THRESHOLDS;
+
+// A question is worth its difficulty: L1 = 1 point … L4 = 4. This copy only
+// draws the float. The SERVER reads questions.difficulty, a column the browser
+// cannot write, so claiming an L1 was an L4 buys nothing.
+function _questionPoints(q) {
+  const d = q && Number(q.difficulty);
+  return Number.isFinite(d) ? Math.max(1, Math.min(4, Math.round(d))) : 1;
+}
+
+// What THIS answer is worth right now: the question's difficulty the first
+// time it is answered correctly, and nothing every time after. The database is
+// the authority (student_point_events is unique on (student, 'question', id));
+// this predicts it so a "+3" is never shown for points the server will refuse.
+//
+// ⚠ Must be read BEFORE QuestionProgress.record() updates the local cache, or
+//   it answers about the answer just given rather than the ones before it.
+function _awardablePoints(q) {
+  if (!q || !q.id) return 0;
+  try {
+    if (typeof QuestionProgress !== 'undefined' && QuestionProgress.everCorrect(q.id)) return 0;
+  } catch (_) {}
+  return _questionPoints(q);
+}
+
+
+function getLevel(points) {
+  for (let i = POINTS_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (points >= POINTS_THRESHOLDS[i]) return i + 1;
   }
   return 1;
 }
 
-function gainXP() {
-  DB.xp = (DB.xp || 0) + XP_PER_ANSWER;
+// Optimistic local add. ⚠ Call this ONLY where the server will also award, and
+// with the same amount - a float that says +4 followed by a total that moved by
+// 1 is worse than no float at all.
+function gainPoints(amount) {
+  const n = Math.max(0, Math.round(Number(amount) || 0));
+  if (!n) return 0;
+  DB.xp = (DB.xp || 0) + n;
   const newLevel = getLevel(DB.xp);
   const oldLevel = DB.level || 1;
   DB.level = newLevel;
   if (newLevel > oldLevel) { _playSound('levelup'); _haptic('levelup'); showLevelUp(newLevel); }
   updateXPBar();
+  return n;
 }
+
+// The server's total is the truth. Called from QuestionProgress.flush() and
+// after any award RPC. A level that went UP here still celebrates: the child
+// earned it, the client just had not counted it yet.
+function applyServerPoints(total, level) {
+  const t = Number(total);
+  if (!Number.isFinite(t) || t < 0) return;
+  const oldLevel = DB.level || 1;
+  DB.xp = t;
+  DB.level = Number(level) || getLevel(t);
+  if (DB.level > oldLevel) { _playSound('levelup'); _haptic('levelup'); showLevelUp(DB.level); }
+  updateXPBar();
+  if (typeof save === 'function') save(DB);
+}
+if (typeof window !== 'undefined') window.applyServerPoints = applyServerPoints;
+
+// Pull the authoritative total. Called when a child's progress is loaded, so
+// the header is right before they answer anything - otherwise a child who
+// practised on a phone sees yesterday's number on the tablet until the first
+// flush.
+//
+// ⚠ Points SURVIVE a progress reset, deliberately. The ledger is what makes a
+//   question pay once, so wiping the total while keeping the ledger would leave
+//   a child unable to re-earn what they lost. Reset clears mastery and history;
+//   it does not confiscate a score they did earn.
+async function _reconcilePoints() {
+  try {
+    if (typeof Store === 'undefined' || !Store.getMyPoints) return;
+    const p = await Store.getMyPoints();
+    if (p) applyServerPoints(p.points, p.level);
+  } catch (_) {}
+}
+if (typeof window !== 'undefined') window._reconcilePoints = _reconcilePoints;
 
 function updateXPBar() {
   const xp = DB.xp || 0;
@@ -3872,6 +3968,128 @@ function showLevelUp(level) {
   toast(`🎉 Level Up! You're now Level ${level} - ${LEVEL_NAMES[level - 1] || ''}!`, 4000);
   launchConfetti();
 }
+
+// ── GLOBAL LEADERBOARD ────────────────────────
+// ⚠ OFF BY DEFAULT, and the switch is in the DATABASE - leaderboard_enabled(),
+//   read from the global_settings blob, flipped in Admin › Content. Hiding the
+//   entry point is presentation; get_points_leaderboard() returning no rows to
+//   anyone is the enforcement. Both exist on purpose: a child must not be able
+//   to reach a screen that can only ever be empty, and an admin must not have to
+//   trust the browser to respect the switch.
+//
+// ⚠ This screen shows children from OTHER FAMILIES. Every name goes through
+//   _attr(). The RPC deliberately returns no id and no friend_code, so there is
+//   nothing here one child could use to reach another.
+let _lbGrade = 'mine';   // 'mine' | 'all' — reset on arrival, see below
+
+// ⚠ Reset in the RENDER, not in the toggle (the rule in ui-css.md): arriving
+//   from the dashboard must not inherit the filter left over from last time.
+function renderGlobalLeaderboard() {
+  _lbGrade = 'mine';
+  _lbFill();
+}
+
+function setLeaderboardGrade(which) {
+  _lbGrade = which === 'all' ? 'all' : 'mine';
+  _lbFill();
+}
+
+function _lbGradeLabel() {
+  return SELECTED_GRADE ? ('Grade ' + SELECTED_GRADE) : 'My grade';
+}
+
+async function _lbFill() {
+  const listEl = document.getElementById('lb-list');
+  const rankEl = document.getElementById('lb-rank');
+  const tabsEl = document.getElementById('lb-tabs');
+  if (!listEl) return;
+
+  if (tabsEl) {
+    const btn = (key, label) => `<button onclick="setLeaderboardGrade('${key}')"
+      class="px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${_lbGrade === key
+        ? 'bg-indigo-500 text-white shadow'
+        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}">${label}</button>`;
+    tabsEl.innerHTML = btn('mine', _attr(_lbGradeLabel())) + btn('all', 'All grades');
+  }
+
+  listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Loading the board…</p>';
+  if (rankEl) rankEl.innerHTML = '';
+
+  const grade = (_lbGrade === 'mine' && SELECTED_GRADE) ? SELECTED_GRADE : null;
+  const [rows, rank] = await Promise.all([
+    Store.getPointsLeaderboard(grade, 50),
+    Store.getMyPointsRank(grade),
+  ]);
+
+  // ⚠ null is a FAILED read; [] is a real answer ("nobody has scored yet").
+  //   Conflating them would draw "be the first!" over a network blip.
+  if (rows === null) {
+    listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Could not load the leaderboard. Check your connection and try again.</p>';
+    return;
+  }
+
+  if (!rows.length) {
+    listEl.innerHTML = `<div class="text-center py-8">
+      <div class="text-5xl mb-3">🌍</div>
+      <p class="text-sm font-bold text-gray-700 dark:text-white mb-1">No scores here yet</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400">Answer some questions and you could be the first on this board!</p>
+    </div>`;
+    return;
+  }
+
+  if (rankEl && rank && rank.ok) {
+    const inTop = rows.some(r => r.is_me);
+    rankEl.innerHTML = `<div class="rounded-xl px-4 py-3 text-center"
+      style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
+      <div class="text-xs text-indigo-600 dark:text-indigo-300">You are</div>
+      <div class="text-2xl font-extrabold text-indigo-700 dark:text-indigo-200">#${rank.rank}</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400">of ${rank.total} ${rank.total === 1 ? 'player' : 'players'} · ${rank.points} points${inTop ? '' : ' · keep going to reach the top 50!'}</div>
+    </div>`;
+  }
+
+  const medal = (r) => r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : '';
+  listEl.innerHTML = rows.map(r => {
+    const m = medal(r.rank);
+    const me = !!r.is_me;
+    const rowStyle = me
+      ? 'background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.28)'
+      : r.rank <= 3
+      ? 'background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25)'
+      : 'border:1px solid transparent';
+    return `<div class="flex items-center gap-3 rounded-xl px-3 py-2 mb-1" style="${rowStyle}">
+      <span class="w-8 shrink-0 text-center ${m ? 'text-xl' : 'text-xs font-bold text-gray-400'}">${m || r.rank}</span>
+      <span class="text-xl select-none">${_attr(r.avatar || '⭐')}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-bold text-gray-800 dark:text-white truncate">${_attr(r.display_name)}${me ? ' <span class="text-xs text-indigo-400 font-normal">(you)</span>' : ''}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Grade ${_attr(r.grade)} · Level ${_attr(r.level)}</div>
+      </div>
+      <div class="shrink-0 text-sm font-bold ${r.rank === 1 ? 'text-amber-500' : me ? 'text-indigo-500' : 'text-gray-500 dark:text-gray-300'}">${r.points}<span class="text-xs font-normal ml-0.5">pts</span></div>
+    </div>`;
+  }).join('');
+}
+
+// Whether the child may see the board at all. Cached per session: it is one
+// admin switch, and asking on every dashboard render would cost a round trip
+// per navigation to answer the same question.
+let _lbEnabledCache = null;
+async function _lbIsEnabled() {
+  if (_lbEnabledCache !== null) return _lbEnabledCache;
+  try {
+    const on = await Store.leaderboardEnabled();
+    // ⚠ A failed read is NOT "enabled". The safe answer for a switch that is
+    //   off by default is off.
+    _lbEnabledCache = on === true;
+  } catch (_) { _lbEnabledCache = false; }
+  return _lbEnabledCache;
+}
+
+async function _renderGlobalLbEntry() {
+  const btn = document.getElementById('dash-global-lb');
+  if (!btn) return;
+  const on = await _lbIsEnabled();
+  btn.classList.toggle('hidden', !on);
+}
+
 
 // ── FAMILY LEADERBOARD ────────────────────────
 function _renderLeaderboard() {
@@ -6317,21 +6535,48 @@ function _renderParentAssignDropdown(acct) {
   _pdFillAssignChapters(packs[0]);
 }
 
+// One row per live grade. The child's OWN grade is checked and disabled - it is
+// not a permission, it is who they are - and every other grade is the parent's
+// to grant one at a time. A grade BELOW their own is offered on purpose: that is
+// how a parent sets up catch-up revision. The child's own Game Zone control
+// cannot reach downwards (see GradeAccess.childChoices).
+function _renderGradeAccess(acct) {
+  const host = document.getElementById('pd-grade-access');
+  if (!host) return;
+  if (typeof GradeAccess === 'undefined') { host.innerHTML = ''; return; }
+  const own     = Number(acct?.grade) || 5;
+  const live    = GradeAccess.liveGrades();
+  const granted = new Set(GradeAccess.granted(DB.restrictions));
+  if (!live.length) {
+    host.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-3">No grades are available yet.</p>';
+    return;
+  }
+  const tag = g => g === own ? 'their grade' : g < own ? 'catch-up' : 'ahead';
+  host.innerHTML = live.map(g => {
+    const mine = g === own;
+    const on   = mine || granted.has(g);
+    return `<label class="flex items-center justify-between gap-3 py-2 border-b border-gray-100 dark:border-gray-700 last:border-0${mine ? '' : ' cursor-pointer'}">
+      <span class="text-sm text-gray-700 dark:text-gray-300">Grade ${g}
+        <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">${tag(g)}</span>
+      </span>
+      <input type="checkbox" class="accent-blue-500 w-5 h-5 shrink-0"${on ? ' checked' : ''}${mine ? ' disabled' : ''}
+        aria-label="Grade ${g}"${mine ? '' : ` onchange="Auth.toggleGradeAccess(${g}, this.checked)"`}>
+    </label>`;
+  }).join('') + (granted.size
+    ? '<p class="text-xs text-gray-500 dark:text-gray-400 mt-3">Search and cross-grade revision are open for the ticked grades. In games, your child chooses which of the grades at or above their own to include.</p>'
+    : `<p class="text-xs text-gray-500 dark:text-gray-400 mt-3">Only Grade ${own} is open. Tick another grade to let them search and revise it.</p>`);
+}
+
 function _renderParentControls(acct) {
   const _el     = id => document.getElementById(id);
   const maxDiff = DB.restrictions?.maxDifficulty  ?? 4;
   const examOff = DB.restrictions?.examDisabled   ?? false;
-  const crossSearch   = DB.restrictions?.crossGradeSearch   ?? false;
-  const crossPractice = DB.restrictions?.crossGradePractice ?? false;
   const lockedChs = DB.restrictions?.lockedChapters || [];
 
   [1,2,3,4].forEach(lv => { const r = _el(`pd-maxdiff-${lv}`); if (r) r.checked = maxDiff === lv; });
   const examToggle = _el('pd-exam-toggle');
   if (examToggle) examToggle.checked = !examOff;
-  const csToggle = _el('pd-crossgrade-search-toggle');
-  if (csToggle) csToggle.checked = crossSearch;
-  const cpToggle = _el('pd-crossgrade-practice-toggle');
-  if (cpToggle) cpToggle.checked = crossPractice;
+  _renderGradeAccess(acct);
   const hintsToggle = _el('pd-hints-toggle');
   if (hintsToggle) hintsToggle.checked = !(DB.restrictions?.hintsDisabled ?? false);
   const gamesToggle = _el('pd-games-toggle');
@@ -6463,6 +6708,7 @@ async function _renderFriendsLeaderboard(studentId) {
   if (!card || !listEl || !studentId) return;
   card.classList.remove('hidden');
 
+  _renderGlobalLbEntry();
   const [friends, myCode] = await Promise.all([
     Store.getFriends(),
     Store.getMyFriendCode(),
@@ -7733,7 +7979,7 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
     S.practice.idx = 0;
     S.practice.answers = {};
   }
-  S.practice.session = { attempted: 0, correct: 0 };
+  S.practice.session = { attempted: 0, correct: 0, points: 0 };
   S.practice.showAnswers = mode ? mode.showAnswers !== false : true;
   S.practice.showHints   = mode ? mode.showHints   !== false : true;
   // See _assignmentActive's own comment: true only when THIS launch came from
@@ -8487,6 +8733,107 @@ function _groupByPassage(questions) {
   return [...groups.values()].filter(g => g.items.length > 1);
 }
 
+// ── A CHOICE QUESTION PRINTED WITHOUT ITS OPTIONS ──────────────────────────
+// A printed paper that is one A/B/C/D block after another is not the paper a
+// PSAC pupil sits, and it is not the practice a written sheet is for: four
+// options hand the child the answer's wording, spelling and grammar, and paper
+// is the one place that scaffolding can be taken away. So the paper keeps a few
+// lettered questions at the top and prints every other choice question as an
+// open question - same stem, no options, a line to write on. The answer key is
+// unchanged, so the marker still has the model answer.
+//
+// ⚠ NOT EVERY MCQ SURVIVES THAT, and the ones that do not are the whole
+//   difficulty. A stem that points AT its options ("Which of the following…",
+//   "Choisis la phrase correcte") asks nothing once they are gone, and a bare
+//   statement stem ("British rule began in…") is a sentence, not a question.
+//   Those keep their options.
+// ⚠ THE RULES BELOW WERE MEASURED, NOT REASONED. Run over the built bundles
+//   2026-09-09: 19,579 choice questions across every live pack, of which 20.6%
+//   must keep their options - grade5-french 5%, grade4-history 32%, grade9-ict
+//   62% (that bank is largely "A computer virus is a program that:"). The
+//   spread is why this is a per-question reading and not a per-pack switch.
+//   scripts/test-printable-open-ended.js re-measures it and holds the
+//   hand-checked verdicts; run it after a content batch lands.
+// ⚠ It fails SAFE: anything it cannot read as a self-contained question keeps
+//   its options. A question printed with its options is merely less useful; a
+//   question printed without the options it needed is unanswerable, and the
+//   child finds that out with a pencil in their hand.
+const _PRINT_MCQ_KEEP = 5;
+// Longer than this and writing the answer out is a handwriting exercise.
+const _PRINT_LONG_ANSWER_CHARS = 90;
+
+const _printPlain = s => String(s == null ? '' : s)
+  .replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')
+  .replace(/\s+/g, ' ').trim();
+
+// A RUN of underscores or dots is a blank in the sentence itself, so the
+// sentence says what the answer must be however the stem is worded. ⚠ A single
+// "…" is prose trailing off ("British rule began in…"), which is the opposite
+// case - the same distinction _ttsBlanks() has to make.
+const _PRINT_GAP = /_{2,}|\.{3,}|…\s*…/;
+const _PRINT_QUOTED = /[«"“‘].{2,}[»"”’]/;
+const _PRINT_TF = /^(true|false|vrai|faux)$/i;
+const _PRINT_META_OPTION = /^(all of the above|none of (the above|these)|both a and b|a and b|toutes ces réponses|aucune( de ces réponses)?|les deux|a et b)\.?$/i;
+
+// The stem points at the options. Nothing rescues these.
+const _PRINT_PICKS_AN_OPTION = [
+  /\bof the following\b/i,
+  /\bfollowing (is|are|words|sentences|options|statements|numbers)\b/i,
+  /\bwhich (one|option|of)\b/i,
+  /\bodd one out\b/i,
+  /\b(choose|select|pick|tick|circle|underline) (the|which|one|a|an)\b/i,
+  /\b(is|are) (correct|incorrect|true|false|wrong|right)\b/i,
+  /\bbest (describes|explains|answer|completes|fits)\b/i,
+  /\ball of (the )?(above|these)\b/i,
+  /\bl[ae]quel|lesquel(le)?s/i,
+  /\bparmi\b/i,
+  /\b(choisis|choisir|choisiss|coche|entour|soulign)/i,
+  /\b(suivante?s?|ci-dessous)\b/i,
+  /\b(est|sont) (correcte?s?|juste|exacte?s?|vraie?s?|fausse?s?)\b/i,
+  // ⚠ "Identifiez la phrase CORRECTE avec les pronoms :" opens with an
+  //   instruction verb, so the question-word rule below reads it as open - and
+  //   without its four candidate sentences it asks nothing at all.
+  /\b(phrase|mot|groupe|réponse|forme|option|proposition)s? (correcte?s?|juste|exacte?s?)\b/i,
+];
+// Weaker: "Which word is a verb?" needs the options, but "Read: 'The bees
+// collect nectar.' Which word is a verb?" does not - the material to answer
+// from is quoted in the stem. So these only bite when nothing is quoted.
+const _PRINT_PICKS_MAYBE = [
+  /\bwhich (word|sentence|phrase|pair|group|set|list|line|version|form|answer|statement|number|verb|noun|adjective|shape|picture)\b/i,
+  /\bquell?es?\s+(mot|phrase|groupe|proposition|réponse|forme|verbe|expression|liste|série|image)/i,
+];
+// A question word or an instruction at the START of a sentence: the stem asks
+// for something even though it carries no question mark. ⚠ Anchored on purpose.
+// Unanchored, "A post office is a building where people can…" matches "where"
+// and a statement stem is printed with nothing to answer.
+const _PRINT_ASKS = /(^|[.:;!?»"”]\s+)(how|what|which|who|whom|whose|when|where|why|combien|comment|pourquoi|qui|quand|o[uù]|quel|relie|complèt|complet|écri|ecri|conjugu|remplac|trouv|calcul|corrig|identifi|simplif|arrondi|transform|traduis|observ|imagine|réécri|reecri|mets|range|classe|utilis|join|complete|writ|rewrit|rearrang|arrang|calculate|work out|find|solve|convert|simplify|round|evaluat|express|estimat|reduce|draw|shade|measure|name|give|explain|describe|read|look at|use)/i;
+
+function _printNeedsOptions(q) {
+  if (!q || !Array.isArray(q.options) || !q.options.length) return false;
+  if (q.type === 'multi') return true;              // "tick all that apply" has no open form
+  if (q.type !== 'mcq') return false;
+  const opts = q.options.map(_printPlain);
+  // Vrai/Faux is ALREADY an open question - two words, printed, cost one line.
+  if (opts.length === 2 && opts.every(o => _PRINT_TF.test(o))) return true;
+  if (opts.some(o => _PRINT_META_OPTION.test(o))) return true;
+  if (_printPlain(q.answer).length > _PRINT_LONG_ANSWER_CHARS) return true;
+  const stem = _printPlain(q.question);
+  if (_PRINT_GAP.test(stem)) return false;
+  if (_PRINT_PICKS_AN_OPTION.some(re => re.test(stem))) return true;
+  if (!_PRINT_QUOTED.test(stem) && _PRINT_PICKS_MAYBE.some(re => re.test(stem))) return true;
+  return !/\?/.test(stem) && !_PRINT_ASKS.test(stem);
+}
+
+// A short answer keeps the short blank the paper has always drawn. A written
+// sentence needs the width of the sheet, and two lines once it is long enough
+// that one would be cramped.
+function _printAnswerSpace(q, marks) {
+  const len = _printPlain(q && q.answer).length;
+  if (len <= 24 && marks < 4) return `<div class="ans-line"><span class="ans-label">Answer:</span><span class="ans-blank"></span></div>`;
+  return `<div class="ans-line ans-wide"><span class="ans-label">Answer:</span><span class="ans-blank"></span></div>`
+       + (len > 55 || marks >= 4 ? `<div class="ans-extra"></div>` : '');
+}
+
 // Printable papers are often generated several times in one revision week.
 // Remembering the last three papers, per child and subject, makes the second
 // and third download genuinely useful practice rather than a reshuffle which
@@ -8548,6 +8895,13 @@ function generatePrintablePaper() {
   // Pick ONE passage for this paper, and take up to 5 questions from it. The
   // rest of the passage questions are removed from the pools below, so no
   // passage prose can reach Section A or B.
+  // Which of this subject's questions cannot be printed without their options.
+  // ⚠ Computed ONCE over the pool. The rota below consults it inside a loop
+  //   bounded by secATarget * 40, and _printNeedsOptions() is ~20 regexes over
+  //   a stem - a French pack would have run several million of them per paper.
+  const _needsOpts = new Set(_allSubjectQs.filter(_printNeedsOptions).map(q => q.id));
+  const _keepsOptions = q => _needsOpts.has(q.id);
+
   const passageGroups = _groupByPassage(_allSubjectQs);
   // A shared comprehension passage is just as repetitive as a chart. Prefer a
   // passage whose questions were not on one of the recent printed papers.
@@ -8569,7 +8923,15 @@ function generatePrintablePaper() {
   };
   const secAPool = preferFresh(_subjectQs.filter(q => q.difficulty <= Math.min(3, maxDiff)));
   // Section B is L4 word problems - only offer it once the cap actually allows L4.
-  const secBPool = maxDiff >= 4 ? preferFresh(_subjectQs.filter(q => q.difficulty === 4)) : [];
+  // ⚠ Section B is WRITTEN OUT, so a stem that only works with four choices
+  //   under it does not belong there. Preference, not a filter: a small pack
+  //   that cannot fill the section any other way still gets a paper, and those
+  //   questions keep their options rather than being printed unanswerable.
+  const preferOpen = pool => {
+    const open = pool.filter(q => !_keepsOptions(q));
+    return open.length >= sectionBCount ? open : pool;
+  };
+  const secBPool = maxDiff >= 4 ? preferOpen(preferFresh(_subjectQs.filter(q => q.difficulty === 4))) : [];
 
   if (!secAPool.length && !comp.length) {
     toast('🔒 Not enough unlocked chapters/questions to build a printable paper. Ask your parent to review chapter locks.', 4000);
@@ -8608,7 +8970,17 @@ function generatePrintablePaper() {
     let tookOne = false;
     for (const ch of rota) {
       if (secA.length >= secATarget) break;
-      const pick = secAPool.find(q => q.chapterId === ch && !usedIds.has(q.id));
+      // ⚠ WITHIN the chapter, prefer a question that can be asked without its
+      //   options. The rota itself is untouched - which chapter takes this slot
+      //   is still examWeight's decision - so this changes WHICH question a
+      //   chapter offers, never how much of the paper it gets. Without it a
+      //   grade4-history paper printed 15 lettered blocks of 40: a third of that
+      //   bank points at its own options, and the rota met them by chance.
+      //   Measured after: 6 of 40.
+      // ⚠ It is a preference, never a filter. A chapter with nothing else to
+      //   give still gives what it has, options and all.
+      const free = q => q.chapterId === ch && !usedIds.has(q.id);
+      const pick = secAPool.find(q => free(q) && !_keepsOptions(q)) || secAPool.find(free);
       if (pick) { secA.push(pick); usedIds.add(pick.id); tookOne = true; }
     }
     if (!tookOne) break;   // every chapter is exhausted
@@ -8643,13 +9015,29 @@ function generatePrintablePaper() {
   }
   // Top up if needed from L3
   if (secB.length < sectionBCount) {
-    for (const q of preferFresh(_subjectQs.filter(q => q.difficulty === 3))) {
+    for (const q of preferOpen(preferFresh(_subjectQs.filter(q => q.difficulty === 3)))) {
       if (secB.length >= sectionBCount) break;
       if (!usedB.has(q.id) && !usedIds.has(q.id)) { secB.push(q); usedB.add(q.id); }
     }
   }
 
   _rememberPrintablePaper([...comp.map(c => c.q), ...secA, ...secB]);
+
+  // Which questions keep their lettered options. Counted in PAPER order, so
+  // "the first few" is the first few a child actually meets, and a question
+  // that must keep its options spends one of those slots rather than being
+  // added on top - otherwise a history paper, where a third of the bank points
+  // at its own options, prints fifteen A/B/C/D blocks and nothing has changed.
+  const _secAFinal = secA.slice(0, secATarget);
+  const _secBFinal = secB.slice(0, sectionBCount);
+  const withOptions = new Set();
+  let lettered = 0;
+  for (const q of [...comp.map(c => c.q), ..._secAFinal]) {
+    if (!Array.isArray(q.options) || !q.options.length) continue;
+    if (_keepsOptions(q)) { withOptions.add(q.id); lettered++; continue; }
+    if (lettered < _PRINT_MCQ_KEEP) { withOptions.add(q.id); lettered++; }
+  }
+  for (const q of _secBFinal) if (_keepsOptions(q)) withOptions.add(q.id);
 
   const diffLabel = d => ['','⭐ Basic','⭐⭐ Medium','⭐⭐⭐ Hard','🏆 Challenge'][d] || '';
   const chName = id => (CHAPTERS.find(c => c.id === id) || {}).name || id;
@@ -8658,19 +9046,21 @@ function generatePrintablePaper() {
   // where the passage is printed once above the questions instead of inside
   // each one.
   function renderQ(q, num, marks, overrideHtml) {
-    const stripHTML = s => s.replace(/<[^>]+>/g, '');
     let body = `<div class="q-text">${_prettyMath(overrideHtml != null ? overrideHtml : q.question)}`;
     if (q.type === 'symmetry-line') {
       body += _symLineStaticSvg(q, false, 'symline-print');
       body += `<div class="draw-note">Draw directly on the shape using a ruler.</div>`;
-    } else if ((q.type === 'mcq' || q.type === 'multi') && q.options) {
+    } else if (Array.isArray(q.options) && q.options.length && withOptions.has(q.id)) {
+      // ⚠ Lettered from the OPTIONS THAT EXIST, not a hard-coded A-D. A
+      //   Vrai/Faux question has two, and this printed two more empty bubbles
+      //   labelled C and D under every one of them.
       body += `<div class="mcq-opts">`;
-      ['A','B','C','D'].forEach((ltr, i) => {
-        body += `<span class="mcq-opt"><span class="bubble"></span> <b>${ltr}.</b> ${_prettyMath(q.options[i] || '')}</span>`;
+      q.options.forEach((opt, i) => {
+        body += `<span class="mcq-opt"><span class="bubble"></span> <b>${'ABCDEFGH'[i] || '?'}.</b> ${_prettyMath(opt)}</span>`;
       });
       body += `</div>`;
     } else {
-      body += `<div class="ans-line"><span class="ans-label">Answer:</span><span class="ans-blank"></span></div>`;
+      body += _printAnswerSpace(q, marks);
     }
     body += `</div>`;
     return `
@@ -8715,7 +9105,7 @@ function generatePrintablePaper() {
   const answerKeyHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
     <title>Answer Key - Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
     <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}.q-table,.picto-table{border-collapse:collapse;margin:6px 0;font-size:10pt}.q-table th,.picto-table th{background:#f1f5f9;font-weight:700;text-align:left;padding:4px 10px;border:1px solid #94a3b8}.q-table td,.picto-table td{padding:4px 10px;border:1px solid #cbd5e1}@media print{body{margin:10px}.no-print{display:none}}</style>
-    </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p></div>${answerRows}</body></html>`;
+    </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p><p>Most questions are printed on the paper <b>without</b> multiple-choice options, so the child writes their own answer. Accept any answer that means the same as the one shown here - the wording below is the model answer, not the only one.</p></div>${answerRows}</body></html>`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -8763,6 +9153,10 @@ function generatePrintablePaper() {
   .ans-line { display: flex; align-items: flex-end; gap: 6px; margin-top: 8px; }
   .ans-label { font-size: 9pt; color: #555; white-space: nowrap; }
   .ans-blank { flex: 1; max-width: 200px; border-bottom: 1px solid #444; height: 18px; }
+  /* A written sentence needs the width of the sheet, not the 200px stub a
+     numeric answer sits on. */
+  .ans-wide .ans-blank { max-width: none; }
+  .ans-extra { border-bottom: 1px solid #444; height: 18px; margin-top: 11px; }
   .symline-print { display:block; width:280px; max-width:100%; margin:8px auto; background:#fff; }
   .symline-paper { fill:#fff; stroke:#cbd5e1; }
   .symline-shape { fill:#fff; stroke:#111; stroke-width:3; }
@@ -8822,13 +9216,14 @@ function generatePrintablePaper() {
   <div class="instructions">
     <b>Instructions to candidates:</b>
     Write your name, class and index number in the spaces provided above.
-    Answer <b>all</b> questions. For Section A MCQ questions, circle or shade the correct letter.
-    For Section B, show all working clearly. Marks may be awarded for correct working.
+    Answer <b>all</b> questions. Where lettered choices are printed, circle or shade the correct letter.
+    Every other question is answered in <b>writing</b>, on the line provided - no choices are given.
+    In Section B, show all working clearly. Marks may be awarded for correct working.
   </div>
 
   <!-- SECTION A -->
   <div class="section-head">SECTION A &nbsp;-&nbsp; ${sectionAMarks} Marks &nbsp;(Questions 1–${sectionACount})</div>
-  <div class="section-sub">Answer all ${sectionACount} questions. Each question carries <b>2 marks</b>. Write your answer on the line provided. For MCQ, circle or fill in the correct letter.</div>
+  <div class="section-sub">Answer all ${sectionACount} questions. Each question carries <b>2 marks</b>. A few questions print lettered choices - circle the correct letter. For every other question, write your own answer on the line.</div>
   <table>
     <tr><td></td><td></td><td class="marks-header">Marks</td></tr>
     ${secARows}
@@ -8837,7 +9232,7 @@ function generatePrintablePaper() {
 
   <!-- SECTION B -->
   <div class="section-head">SECTION B &nbsp;-&nbsp; ${sectionBMarks} Marks &nbsp;(Questions ${sectionACount + 1}–${sectionACount + sectionBCount})</div>
-  <div class="section-sub">Answer all ${sectionBCount} questions. Each question carries <b>4 marks</b>. Show all working. Read each problem carefully.</div>
+  <div class="section-sub">Answer all ${sectionBCount} questions. Each question carries <b>4 marks</b>. No choices are given - write your own answer and show all working. Read each problem carefully.</div>
   <table>
     <tr><td></td><td></td><td class="marks-header">Marks</td></tr>
     ${secBRows}
@@ -9204,13 +9599,6 @@ const PracticeHub = (() => {
       || Number((typeof DB !== 'undefined' && DB?.grade) || 0)
       || 5;
   }
-  function _liveGrades() {
-    return [...new Set(
-      Object.values(SUBJECT_PACKS || {})
-        .filter(p => !p.comingSoon)
-        .map(p => Number(p.grade))
-    )].sort((a, b) => a - b);
-  }
   function _renderGradeBar() {
     const sel = document.getElementById('prac-grade-sel');
     const note = document.getElementById('prac-locked-note');
@@ -9224,18 +9612,21 @@ const PracticeHub = (() => {
     //   Grade 5 chapters (plants, discovery, eng-verbs, trade-agri). They did
     //   not wander into the wrong grade; the app opened it for them.
     const currentGrade = Number(_practiceHomeGrade());
-    // ⚠ The parent setting is `crossGradePractice`, and it is what the Parent
-    //   Controls toggle actually writes. This line used to test
-    //   `gradeRestricted || lockedGrade`, two names that appear NOWHERE else in
-    //   the codebase - nothing has ever written either - so the dropdown was
-    //   permanently unlocked and the toggle did nothing on the one screen that
-    //   matters. Locked unless the parent has opted in.
-    const locked = !(typeof DB !== 'undefined' && DB?.restrictions?.crossGradePractice);
-    const grades = _liveGrades();
+    // ⚠ The dropdown offers EXACTLY the grades the parent granted, own grade
+    //   included - not every live grade with a lock painted on top. It used to
+    //   test `gradeRestricted || lockedGrade`, two names that appear NOWHERE
+    //   else in the codebase - nothing has ever written either - so it was
+    //   permanently unlocked and the parent's setting did nothing on the one
+    //   screen that matters. Never fall back to _liveGrades() here: that hands
+    //   a child every grade the app ships.
+    const grades = (typeof GradeAccess !== 'undefined')
+      ? GradeAccess.allowed(currentGrade)
+      : [currentGrade];
+    const locked = grades.length < 2;
     sel.innerHTML = grades.map(g =>
       `<option value="${g}"${g === currentGrade ? ' selected' : ''}>Grade ${g}</option>`
     ).join('');
-    sel.disabled = locked || grades.length < 2;
+    sel.disabled = locked;
     if (note) note.style.display = locked ? '' : 'none';
   }
   function _renderBooks(grade) {
@@ -10049,7 +10440,10 @@ function practiceSubmit() {
   let reaction;
   if (ok) {
     _comboStreak++;
-    _floatXP(XP_PER_ANSWER);
+    // Nothing floats on a repeat: a "+0", or a "+3" the server then refuses,
+    // teaches the child the number is decorative.
+    const _pts = _awardablePoints(q);
+    if (_pts) { _floatXP(_pts); S.practice.session.points = (S.practice.session.points || 0) + _pts; }
     _playSound('correct'); _haptic('correct');
     _showCombo(_comboStreak);
     reaction = _practiceReaction(true, _comboStreak);
@@ -10252,7 +10646,10 @@ function _showRoundComplete() {
   const chName = S.practice.chapterId === _FIX_CHAPTER_ID
     ? 'Fix My Mistakes'
     : (CHAPTERS.find(c => c.id === S.practice.chapterId)?.name || 'Practice');
-  const xpEarned = correct * XP_PER_ANSWER;
+  // Accumulated per answer in practiceSubmit(), NOT correct x a flat rate:
+  // repeats earn nothing and an L4 is worth four times an L1, so a count of
+  // correct answers is no longer a points total.
+  const xpEarned = S.practice.session.points || 0;
   // A drill's real score is not the percentage - it is how many questions
   // left the list for good. Reported wherever the round happened, because a
   // mistake can be retired in ordinary practice too.
@@ -10390,7 +10787,7 @@ function _roundCompleteNext() {
   // The assignment, if this was one, is over - the next round is ordinary
   // practice and must count against the daily cap like any other.
   _setAssignmentContext(false);
-  S.practice.session = { attempted: 0, correct: 0 };
+  S.practice.session = { attempted: 0, correct: 0, points: 0 };
   // A drill is rebuilt from DB.mistakes, never re-dealt from a chapter:
   // getMixedQuestions('fix-mistakes') matches nothing, so "Practice Again"
   // would have handed the child an empty round. Rebuilding also drops
@@ -10997,7 +11394,7 @@ window.startSubsectionPractice = function(chapterId, subsectionId, subsectionNam
   S.practice.qs = getQuestionsForSubsection(chapterId, subsectionId, 20);
   S.practice.idx = 0;
   S.practice.answers = {};
-  S.practice.session = { attempted: 0, correct: 0 };
+  S.practice.session = { attempted: 0, correct: 0, points: 0 };
   loadPracticeQuestion();
   showScreen('practice');
   const ch = CHAPTERS.find(c => c.id === chapterId);
@@ -12208,11 +12605,6 @@ async function _renderStudentProfile(container) {
         <h2 class="text-xl font-bold text-gray-800 dark:text-white">⚙️ My Settings</h2>
       </div>
 
-      ${restricted ? `<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 rounded-2xl p-4 flex items-center gap-3">
-        <span class="text-2xl select-none shrink-0">🔒</span>
-        <p class="text-sm text-red-700 dark:text-red-400 font-medium">Your account has been restricted by an administrator.</p>
-      </div>` : ''}
-
       ${expiresAt ? `<div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-2xl p-4">
         <p class="text-sm text-amber-700 dark:text-amber-400">Access expires on <strong>${new Date(expiresAt).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })}</strong>.</p>
       </div>` : ''}
@@ -12543,7 +12935,7 @@ async function _renderParentProfile(container) {
   // so "apply to all" would be meaningless at best and would silently wipe a
   // parent's careful per-child locking at worst.
   const d = Object.assign(
-    { maxDifficulty: 4, examDisabled: false, crossGradeSearch: false, crossGradePractice: false, hintsDisabled: false },
+    { maxDifficulty: 4, examDisabled: false, hintsDisabled: false },
     (children[0] && children[0].settings) || {},
     _parentPrefs.child_defaults || {}
   );
@@ -12563,6 +12955,29 @@ async function _renderParentProfile(container) {
         <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-checked:bg-blue-500 rounded-full peer transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
       </label>
     </div>`;
+  // ⚠ Applied to every child at once, so these are ABSOLUTE grade numbers, not
+  //   "one above". Each child's own grade is always open and is never in the
+  //   list, so ticking Grade 6 grants it to the Grade 4 child and is a no-op for
+  //   the Grade 6 one.
+  const defGrades = d => {
+    const live = (typeof GradeAccess !== 'undefined') ? GradeAccess.liveGrades() : [];
+    if (!live.length) return '';
+    // ⚠ Through granted(), not d.allowedGrades: a family still carrying the old
+    //   crossGrade* booleans has no list yet, and reading the raw field would show
+    //   nothing ticked and then REVOKE every grade the moment Apply is pressed.
+    const on = new Set(GradeAccess.granted(d));
+    return `
+    <div>
+      <div class="font-semibold text-gray-800 dark:text-white text-sm mb-1">🎓 Grade access</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">Extra grades every child may search and revise. Their own grade is always open.</div>
+      <div class="flex gap-3 flex-wrap">${live.map(g => `
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" class="accent-blue-500" data-def-grade="${g}"${on.has(g) ? ' checked' : ''}>
+          <span class="text-sm text-gray-700 dark:text-gray-300">Grade ${g}</span>
+        </label>`).join('')}</div>
+    </div>`;
+  };
+
   const defaultsHtml = children.length ? `
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
       <div>
@@ -12578,8 +12993,7 @@ async function _renderParentProfile(container) {
       </div>
 
       ${defToggle('set-def-exam',  !d.examDisabled,        '📝 Exam mode',            'Allow timed exam papers')}
-      ${defToggle('set-def-cgs',   !!d.crossGradeSearch,   '🔍 Cross-grade search',   'Show results from other grades')}
-      ${defToggle('set-def-cgp',   !!d.crossGradePractice, '📚 Cross-grade revision', 'Practise questions from other grades')}
+      ${defGrades(d)}
       ${defToggle('set-def-hints', !d.hintsDisabled,       '💡 In-app hints',         'First-time tip callouts')}
 
       <button data-label="Apply to all children" onclick="_applyDefaultsToAll(this)"
@@ -13008,10 +13422,13 @@ async function _applyDefaultsToAll(btn) {
   const defaults = {
     maxDifficulty:      picked ? parseInt(picked.value) : 4,
     examDisabled:      !document.getElementById('set-def-exam')?.checked,
-    crossGradeSearch:  !!document.getElementById('set-def-cgs')?.checked,
-    crossGradePractice:!!document.getElementById('set-def-cgp')?.checked,
+    allowedGrades:     [...document.querySelectorAll('[data-def-grade]')]
+                         .filter(el => el.checked).map(el => Number(el.dataset.defGrade)).sort((a, b) => a - b),
     hintsDisabled:     !document.getElementById('set-def-hints')?.checked,
   };
+  // The two booleans this list replaced, kept in step so a device still running
+  // the old shell reads the same permission. Derived, never authored.
+  if (typeof GradeAccess !== 'undefined') Object.assign(defaults, GradeAccess.flagsFor(defaults.allowedGrades));
 
   if (statusEl) statusEl.textContent = 'Applying…';
   const failed = [];

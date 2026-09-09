@@ -1,0 +1,322 @@
+{
+  "pack": "grade9-biology",
+  "file": "subjects/grade9-biology/questions/family_expansion.js",
+  "idNamespace": "g9s-bfam-NNN-<variant>",
+  "counts": {
+    "families": 13,
+    "variants": 59,
+    "byDifficulty": { "1": 1, "2": 19, "3": 25, "4": 14 },
+    "byType": { "mcq": 36, "numeric": 13, "text": 10 },
+    "byChapter": {
+      "g9s-b1-circulatory": 18,
+      "g9s-b2-reproductive": 13,
+      "g9s-b3-biodiversity": 10,
+      "g9s-b4-plant-nutrition": 10,
+      "g9s-inquiry": 4,
+      "g9s-sts": 4
+    }
+  },
+  "families": [
+    {
+      "familyId": "g9s-bfam-001",
+      "chapterId": "g9s-b1-circulatory",
+      "subsection": "interpreting_health_data",
+      "outcome": "Interpret cardiovascular health data without reading a correlation as a cause",
+      "context": "An SVG table of four districts: weekly exercise rate against heart-attack admissions per 10 000 adults",
+      "seededFrom": "g9s-b1-v083 (audit: useful-application, improve distractor balance)",
+      "variants": [
+        { "id": "g9s-bfam-001-a", "difficulty": 2, "type": "numeric",
+          "variation": "read two values from the correct column and subtract",
+          "misconception": "subtracts the exercise percentages (50-20) instead of the admissions" },
+        { "id": "g9s-bfam-001-b", "difficulty": 2, "type": "mcq",
+          "variation": "describe the direction of the relationship across all four rows",
+          "misconception": "reads the two columns as rising together, or as unrelated" },
+        { "id": "g9s-bfam-001-c", "difficulty": 4, "type": "mcq",
+          "variation": "weigh two competing explanations - exercise vs an age difference - against the same table",
+          "misconception": "a pattern picks its own explanation; also that district size still matters after a per-10 000 rate" },
+        { "id": "g9s-bfam-001-d", "difficulty": 4, "type": "mcq",
+          "variation": "choose the further evidence that would actually separate the two explanations",
+          "misconception": "any extra data helps, so older figures or population sizes will settle it" },
+        { "id": "g9s-bfam-001-e", "difficulty": 3, "type": "mcq",
+          "variation": "judge a general claim as always / sometimes / never true",
+          "misconception": "four agreeing rows are treated as a rule with no exceptions" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-002",
+      "chapterId": "g9s-b1-circulatory",
+      "subsection": "magnification",
+      "outcome": "Use magnification = drawing size / real size in both directions and check the result is sensible",
+      "context": "Drawings of a white blood cell at stated widths",
+      "variants": [
+        { "id": "g9s-bfam-002-a", "difficulty": 2, "type": "numeric",
+          "variation": "find the magnification from both sizes", "misconception": "none targeted; establishes the relationship" },
+        { "id": "g9s-bfam-002-b", "difficulty": 3, "type": "numeric",
+          "variation": "reverse it: find the real size from the drawing and the magnification",
+          "misconception": "multiplies, making the real cell larger than its drawing" },
+        { "id": "g9s-bfam-002-c", "difficulty": 3, "type": "numeric",
+          "variation": "reverse the other way: find the drawing size that is required",
+          "misconception": "divides out of habit when the unknown has moved" },
+        { "id": "g9s-bfam-002-d", "difficulty": 3, "type": "mcq",
+          "variation": "diagnose a supplied wrong answer of x0.0002",
+          "misconception": "divides real by drawing because the smaller number looks like the numerator" },
+        { "id": "g9s-bfam-002-e", "difficulty": 3, "type": "mcq",
+          "variation": "two drawings of the SAME cell: decide what changed and what did not",
+          "misconception": "reads the size of the drawing as the size of the specimen" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-003",
+      "chapterId": "g9s-b1-circulatory",
+      "subsection": "pulse",
+      "outcome": "Interpret pulse-recovery data and judge what such data can and cannot support",
+      "context": "An SVG table of two pupils' pulse each minute for 4 minutes after the same exercise",
+      "variants": [
+        { "id": "g9s-bfam-003-a", "difficulty": 2, "type": "numeric",
+          "variation": "read two cells from one named column and find the fall",
+          "misconception": "reads down the other pupil's column" },
+        { "id": "g9s-bfam-003-b", "difficulty": 3, "type": "numeric",
+          "variation": "process the whole column into a mean",
+          "misconception": "divides by the 4 minutes instead of the 5 readings" },
+        { "id": "g9s-bfam-003-c", "difficulty": 3, "type": "mcq",
+          "variation": "compare the two columns and infer fitness from the rate of recovery",
+          "misconception": "judges fitness from the starting pulse, which is identical for both" },
+        { "id": "g9s-bfam-003-d", "difficulty": 4, "type": "mcq",
+          "variation": "decide why a conclusion about TRAINING cannot come from this investigation",
+          "misconception": "answers the expected question rather than the one the data supports; no training was done and both peaked at 150" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-004",
+      "chapterId": "g9s-b1-circulatory",
+      "subsection": "blood_vessels",
+      "outcome": "Apply the artery/vein naming rule, including to the pulmonary vessels",
+      "context": "How blood vessels are named and what the valves do",
+      "variants": [
+        { "id": "g9s-bfam-004-a", "difficulty": 2, "type": "text",
+          "variation": "produce the vessel name rather than select it",
+          "misconception": "calls it a vein because the blood in it is deoxygenated" },
+        { "id": "g9s-bfam-004-b", "difficulty": 2, "type": "mcq",
+          "variation": "state the rule itself",
+          "misconception": "believes the name records the kind of blood, or the wall thickness" },
+        { "id": "g9s-bfam-004-c", "difficulty": 4, "type": "mcq",
+          "variation": "resolve an apparent contradiction - the pulmonary vein carries oxygenated blood",
+          "misconception": "promotes the usual pattern (veins carry deoxygenated blood) into the definition" },
+        { "id": "g9s-bfam-004-d", "difficulty": 3, "type": "mcq",
+          "variation": "change one condition - failed valves - and predict the outcome",
+          "misconception": "expects a vein fault to show in the pulse, which is felt in an artery" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-005",
+      "chapterId": "g9s-b2-reproductive",
+      "subsection": "interpreting_health_data",
+      "outcome": "Distinguish a rise in detected cases from a rise in infections using screening data",
+      "context": "An SVG table of one STD screening programme: tests done and positive results, 2019-2021",
+      "variants": [
+        { "id": "g9s-bfam-005-a", "difficulty": 2, "type": "numeric",
+          "variation": "convert one year's raw counts into a rate",
+          "misconception": "none targeted; establishes why a rate is used" },
+        { "id": "g9s-bfam-005-b", "difficulty": 3, "type": "numeric",
+          "variation": "apply one year's rate to another year's test count and compare with what happened",
+          "misconception": "compares raw totals collected from different numbers of people" },
+        { "id": "g9s-bfam-005-c", "difficulty": 3, "type": "mcq",
+          "variation": "say what a tripled count of positives shows on its own",
+          "misconception": "reads a count of detected cases as a count of infections" },
+        { "id": "g9s-bfam-005-d", "difficulty": 4, "type": "mcq",
+          "variation": "pick the single figure that decides between more infection and more testing",
+          "misconception": "chooses a total (positives, or tests) when only the ratio can decide" },
+        { "id": "g9s-bfam-005-e", "difficulty": 3, "type": "text",
+          "variation": "state the missing information before a conclusion can be drawn",
+          "misconception": "believes a positive count is interpretable without the denominator" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-006",
+      "chapterId": "g9s-b2-reproductive",
+      "subsection": "female_reproductive_system",
+      "outcome": "Know the path of the egg and where fertilisation happens, and reason from it",
+      "context": "The journey from ovary to uterus",
+      "seededFrom": "g9s-b2-015 (audit: inflated-level - oviduct function labelled Hard). Rebuilt at HONEST levels: recall is L1/L2, the prediction is L3.",
+      "variants": [
+        { "id": "g9s-bfam-006-a", "difficulty": 1, "type": "text",
+          "variation": "produce the name instead of selecting it - the seed's own outcome, correctly levelled",
+          "misconception": "names the uterus, where the baby develops" },
+        { "id": "g9s-bfam-006-b", "difficulty": 2, "type": "mcq",
+          "variation": "locate the event rather than name the structure",
+          "misconception": "places fertilisation where the baby grows" },
+        { "id": "g9s-bfam-006-c", "difficulty": 3, "type": "mcq",
+          "variation": "change one condition - both oviducts blocked - and predict",
+          "misconception": "assumes a blockage shuts down the whole system, so eggs stop being released" },
+        { "id": "g9s-bfam-006-d", "difficulty": 3, "type": "mcq",
+          "variation": "diagnose and correct a pupil's stated reasoning, giving the right sequence",
+          "misconception": "assumes one organ must do both jobs" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-007",
+      "chapterId": "g9s-b2-reproductive",
+      "subsection": "sexual_asexual",
+      "outcome": "Relate sexual and asexual reproduction to variation, and use it to judge a real decision",
+      "context": "A nursery growing Bed 1 of bananas from suckers and Bed 2 from seed, with a new fungal disease in the region",
+      "variants": [
+        { "id": "g9s-bfam-007-a", "difficulty": 2, "type": "mcq",
+          "variation": "classify what suckers produce",
+          "misconception": "believes every new plant must have two parents" },
+        { "id": "g9s-bfam-007-b", "difficulty": 3, "type": "mcq",
+          "variation": "predict which bed is at risk and give the reason",
+          "misconception": "treats asexual offspring as weaker in general, rather than uniform" },
+        { "id": "g9s-bfam-007-c", "difficulty": 4, "type": "mcq",
+          "variation": "judge a commercial decision that has both a gain and a cost",
+          "misconception": "grades the decision simply right or wrong when the evidence supports a trade-off" },
+        { "id": "g9s-bfam-007-d", "difficulty": 3, "type": "text",
+          "variation": "produce the term for what lets some individuals survive",
+          "misconception": "confuses variation with the plants merely looking different" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-008",
+      "chapterId": "g9s-b3-biodiversity",
+      "subsection": "quadrat_sampling",
+      "outcome": "Estimate a population from quadrat data and judge whether the sample supports the estimate",
+      "context": "Five 1 m2 quadrats on a 200 m2 lawn; a second pupil places all five in one shaded patch",
+      "variants": [
+        { "id": "g9s-bfam-008-a", "difficulty": 2, "type": "numeric",
+          "variation": "process five counts into a mean", "misconception": "none targeted; establishes the step" },
+        { "id": "g9s-bfam-008-b", "difficulty": 2, "type": "numeric",
+          "variation": "scale the mean to the whole area",
+          "misconception": "multiplies the total counted (25) by the area instead of the mean" },
+        { "id": "g9s-bfam-008-c", "difficulty": 3, "type": "numeric",
+          "variation": "run the estimate backwards: from a total estimate to the number counted",
+          "misconception": "cannot reverse a two-step scaling" },
+        { "id": "g9s-bfam-008-d", "difficulty": 4, "type": "mcq",
+          "variation": "judge a second estimate whose arithmetic is right and whose sample is biased, and say WHICH WAY it is wrong",
+          "misconception": "accepts an answer because the calculation was done correctly; also loses the direction of the bias" },
+        { "id": "g9s-bfam-008-e", "difficulty": 3, "type": "text",
+          "variation": "state the condition on quadrat placement that makes an estimate trustworthy",
+          "misconception": "chooses spots that look interesting, biasing the sample before counting starts" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-009",
+      "chapterId": "g9s-b4-plant-nutrition",
+      "subsection": "photosynthesis_experiments",
+      "outcome": "Interpret the starch-test experiment and recognise when two variables have been changed at once",
+      "context": "A destarched leaf part-covered with black paper, then tested with iodine",
+      "variants": [
+        { "id": "g9s-bfam-009-a", "difficulty": 2, "type": "mcq",
+          "variation": "explain why the plant is destarched first",
+          "misconception": "confuses destarching with removing chlorophyll (which is done later, in alcohol)" },
+        { "id": "g9s-bfam-009-b", "difficulty": 2, "type": "text",
+          "variation": "produce the name of the test reagent",
+          "misconception": "names alcohol or limewater, the other liquids in the procedure" },
+        { "id": "g9s-bfam-009-c", "difficulty": 3, "type": "mcq",
+          "variation": "read the result and name what it shows",
+          "misconception": "names chlorophyll, a factor that did not differ between the two halves" },
+        { "id": "g9s-bfam-009-d", "difficulty": 4, "type": "mcq",
+          "variation": "spot the flaw when the same experiment is run on a VARIEGATED leaf",
+          "misconception": "believes any experiment with a clear-looking result has proved something; two variables changed at once" },
+        { "id": "g9s-bfam-009-e", "difficulty": 3, "type": "text",
+          "variation": "identify which part of the leaf is the control",
+          "misconception": "looks for a separate second plant rather than the untreated part of the same leaf" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-010",
+      "chapterId": "g9s-b4-plant-nutrition",
+      "subsection": "factors_for_photosynthesis",
+      "outcome": "Interpret a rate-against-light-intensity result and reason about limiting factors",
+      "context": "An SVG table of bubbles per minute from pondweed at five light intensities, temperature fixed",
+      "variants": [
+        { "id": "g9s-bfam-010-a", "difficulty": 2, "type": "numeric",
+          "variation": "read one value from the correct row",
+          "misconception": "reads the row above or below" },
+        { "id": "g9s-bfam-010-b", "difficulty": 3, "type": "mcq",
+          "variation": "describe the shape by working out the steps between readings",
+          "misconception": "describes a line from its two ends and misses the levelling off" },
+        { "id": "g9s-bfam-010-c", "difficulty": 4, "type": "mcq",
+          "variation": "explain why the rate stops responding at high intensity",
+          "misconception": "assumes the factor being changed is always the one in control; or that bright light damages the process" },
+        { "id": "g9s-bfam-010-d", "difficulty": 4, "type": "mcq",
+          "variation": "predict the effect of adding carbon dioxide AND say what that result would prove",
+          "misconception": "treats carbon dioxide as a waste gas rather than a raw material" },
+        { "id": "g9s-bfam-010-e", "difficulty": 2, "type": "text",
+          "variation": "name the gas being counted",
+          "misconception": "names carbon dioxide, confusing the input with the output" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-011",
+      "chapterId": "g9s-b3-biodiversity",
+      "subsection": "human_threats / natural_threats",
+      "outcome": "Separate natural calamity from human pressure as explanations of a decline",
+      "context": "An SVG table of fish landed from one lagoon over ten years, with a cyclone in Year 6",
+      "variants": [
+        { "id": "g9s-bfam-011-a", "difficulty": 2, "type": "numeric",
+          "variation": "calculate a percentage fall from the table",
+          "misconception": "divides by the final catch instead of the starting one" },
+        { "id": "g9s-bfam-011-b", "difficulty": 3, "type": "mcq",
+          "variation": "test one explanation against the rows that precede the event",
+          "misconception": "lets one dramatic event claim a trend that began before it" },
+        { "id": "g9s-bfam-011-c", "difficulty": 4, "type": "mcq",
+          "variation": "choose the evidence that would separate overfishing from cyclone damage",
+          "misconception": "collects whatever data is easy to get; prices, tourists and cyclone history are all about the lagoon and none is decisive" },
+        { "id": "g9s-bfam-011-d", "difficulty": 4, "type": "mcq",
+          "variation": "judge always / sometimes / never on 'a smaller catch proves fewer fish'",
+          "misconception": "reads a measure of what people took as a measure of what is there" },
+        { "id": "g9s-bfam-011-e", "difficulty": 2, "type": "mcq",
+          "variation": "classify one threat as natural rather than human",
+          "misconception": "calls any damage to nature a natural threat - the word describes the cause, not the victim" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-012",
+      "chapterId": "g9s-inquiry",
+      "subsection": "hypothesis_testing / interpreting_results / recording_data",
+      "outcome": "Evaluate a health claim: control group, comparison between groups, sample size",
+      "context": "Eight adults drink a herbal remedy for a month and their mean resting pulse falls by 4 bpm",
+      "variants": [
+        { "id": "g9s-bfam-012-a", "difficulty": 3, "type": "mcq",
+          "variation": "identify what is missing before the fall can be attributed to the drink",
+          "misconception": "believes measuring before and after is sufficient on its own" },
+        { "id": "g9s-bfam-012-b", "difficulty": 4, "type": "mcq",
+          "variation": "a control group is added and falls by the SAME amount - say what that shows",
+          "misconception": "looks only at the treated group; treats a control as something that merely has to exist" },
+        { "id": "g9s-bfam-012-c", "difficulty": 3, "type": "mcq",
+          "variation": "choose the change that most improves reliability",
+          "misconception": "believes more readings from the same few people is the same as testing more people" },
+        { "id": "g9s-bfam-012-d", "difficulty": 2, "type": "text",
+          "variation": "name the quantity that must be measured (the dependent variable)",
+          "misconception": "names what was changed rather than what was measured" }
+      ]
+    },
+    {
+      "familyId": "g9s-bfam-013",
+      "chapterId": "g9s-sts",
+      "subsection": "evaluating_information",
+      "outcome": "Weigh competing sources by method and independence rather than by count",
+      "context": "12 website testimonials, a 400-person controlled trial finding no effect, and a 30-person study funded by the maker",
+      "seededFrom": "g9s-stsb-030 (audit: weak-distractors on an L4 - 'ask pupils to evaluate competing evidence')",
+      "variants": [
+        { "id": "g9s-bfam-013-a", "difficulty": 2, "type": "mcq",
+          "variation": "compare two real sources and give the reason",
+          "misconception": "counts agreeing testimonials as evidence; people who felt no benefit had no reason to write in" },
+        { "id": "g9s-bfam-013-b", "difficulty": 3, "type": "mcq",
+          "variation": "find the fault in a stated argument from absence of evidence",
+          "misconception": "treats 'no evidence against' as evidence in favour; confuses safety with effectiveness" },
+        { "id": "g9s-bfam-013-c", "difficulty": 4, "type": "mcq",
+          "variation": "a third, funded, small study is added so 2 of 3 sources now agree - decide how to judge them",
+          "misconception": "votes: three sources are treated as three equal votes, and funding is ignored" },
+        { "id": "g9s-bfam-013-d", "difficulty": 3, "type": "text",
+          "variation": "state what a study must publish for others to check it",
+          "misconception": "believes the conclusion is the part that matters for checking" }
+      ]
+    }
+  ],
+  "needs": [
+    "LOCAL_FILES['grade9-biology'] in engine/question_loader.js must gain 'family_expansion.js' for file:// dev only (production auto-discovers the directory). Not edited: the brief forbids touching existing files.",
+    "_CACHE_VERSION in engine/question_loader.js must be bumped by the coordinator once, after all packs are merged.",
+    "netlify/question-bundles/ is stale for this pack (rebuilt 18:09 today, before this file existed). The coordinator should run `node netlify/build-questions.js` once at the end, then `node scripts/test-question-cache-budget.js` - CLAUDE.md warns the cache budget has only ~0.11 MB of headroom and several packs are growing today."
+  ],
+  "notes": "The BRIEF's verification snippet filters on /-fam-/, which does NOT match these ids: the infix is `bfam`, so the id reads `g9s-bfam-001-a` and the substring is `-bfam-`. Chemistry (`cfam`) and physics (`pfam`) will behave the same way. Use /fam-/ or /-[bcp]fam-/ when sweeping the three science packs. Nothing outside the two permitted files was created or modified; no build, no commit, no database write."
+}

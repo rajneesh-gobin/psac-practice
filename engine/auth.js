@@ -1258,6 +1258,7 @@ const Auth = (() => {
     renderDashboard();
     updateStreak();
     updateXPBar();
+    if (typeof _reconcilePoints === 'function') _reconcilePoints();
     _setWelcomeName(sess.displayName);
 
     // Pre-load questions for this student's grade
@@ -1530,6 +1531,7 @@ const Auth = (() => {
     renderDashboard();
     updateStreak();
     updateXPBar();
+    if (typeof _reconcilePoints === 'function') _reconcilePoints();
     _setWelcomeName(studentRow.display_name);
 
     // Fetch global settings (disabled grades/subjects set by admin) + plan enforcement flag
@@ -3899,7 +3901,11 @@ const Auth = (() => {
     // Check DB too so a PIN set from another device still shows the modal here.
     // Use the cached value if already fetched; only hit the network if needed.
     const hasDbPin = !hasLocalPin && !!await _fetchDbPinHash();
-    if (hasLocalPin || hasDbPin) {
+    // A saved child shortcut may restore only the student session. Without
+    // _parentUser neither PIN lookup can answer; the remembered uid is only
+    // a routing hint. _submitParentPin verifies the PIN through the server.
+    const canRecoverByPin = (!_parentUser || _dbPinFetchFailed) && !!_parentUidHint();
+    if (hasLocalPin || hasDbPin || canRecoverByPin) {
       _showParentPinModal();
       return;
     }
@@ -3960,6 +3966,7 @@ const Auth = (() => {
     } else {
       renderDashboard();
       updateXPBar();
+      if (typeof _reconcilePoints === 'function') _reconcilePoints();
       showScreen('dashboard');
     }
     toast('Progress reset. 🗑', 2000);
@@ -4125,20 +4132,31 @@ const Auth = (() => {
     await _saveRestrictions(prev, r.examDisabled ? '🔒 Exam mode locked.' : '🔓 Exam mode unlocked.');
   }
 
-  async function toggleCrossGradeSearch() {
+  // Grade access. Replaced toggleCrossGradeSearch / toggleCrossGradePractice:
+  // a parent now says WHICH grades rather than "all the others, or none".
+  //
+  // ⚠ The child's own grade is never in the list. It is not a permission, and a
+  //   child's grade changes at the start of a school year - storing it here
+  //   would freeze last year's answer into the settings blob.
+  // ⚠ The two booleans this replaced are written alongside, derived, so a device
+  //   still running the previous shell reads the same permission rather than
+  //   silently reverting to "no other grades".
+  async function toggleGradeAccess(grade, on) {
     const r    = _ensureRestrictions();
     const prev = JSON.stringify(r);
-    r.crossGradeSearch = !r.crossGradeSearch;
+    const g    = Number(grade);
+    if (!Number.isFinite(g) || typeof GradeAccess === 'undefined') return;
+    const live = GradeAccess.liveGrades();
+    if (!live.includes(g)) return;
+    const cur = new Set(GradeAccess.granted(r));
+    if (on) cur.add(g); else cur.delete(g);
+    r.allowedGrades = [...cur].filter(x => live.includes(x)).sort((a, b) => a - b);
+    Object.assign(r, GradeAccess.flagsFor(r.allowedGrades));
     // See toggleChapterLock for why this doesn't also call save(DB).
-    await _saveRestrictions(prev, r.crossGradeSearch ? '🔍 Cross-grade search enabled.' : '🔒 Cross-grade search off.');
-  }
-
-  async function toggleCrossGradePractice() {
-    const r    = _ensureRestrictions();
-    const prev = JSON.stringify(r);
-    r.crossGradePractice = !r.crossGradePractice;
-    // See toggleChapterLock for why this doesn't also call save(DB).
-    await _saveRestrictions(prev, r.crossGradePractice ? '📚 Cross-grade revision enabled.' : '🔒 Cross-grade revision off.');
+    const ok = await _saveRestrictions(prev, on ? `📚 Grade ${g} unlocked.` : `🔒 Grade ${g} locked.`);
+    // _saveRestrictions re-renders the whole controls tab only when it rolls
+    // back; on success the card still shows the old note, so refresh it here.
+    if (ok && typeof _renderGradeAccess === 'function') _renderGradeAccess(getActiveAccount() || {});
   }
 
   async function toggleMinigamesDisabled() {
@@ -4322,7 +4340,7 @@ const Auth = (() => {
     isSuperAdmin: () => _isSuperAdmin,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
-    toggleCrossGradeSearch, toggleCrossGradePractice, toggleHintsDisabled,
+    toggleGradeAccess, toggleHintsDisabled,
     toggleMinigamesDisabled, saveGameSettings,
     // Biometric lock
     attemptBiometricUnlock: _attemptBiometricUnlock, biometricUsePassword,

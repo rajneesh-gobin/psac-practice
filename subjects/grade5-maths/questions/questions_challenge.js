@@ -1079,7 +1079,7 @@ CHALLENGE_QS.push(
 
   makeMCQ({ id:'CH_AVG04', chapterId:'average', subsection:'mean', difficulty:3,
     question:'4 children have heights 128 cm, 134 cm, 119 cm, and 141 cm. What is their average height?',
-    options:['128 cm','130 cm','131 cm','133 cm'],
+    options:['130.5 cm','130 cm','131 cm','133 cm'],
     answer:'130.5 cm',
     hint:'Sum = 128+134+119+141. Divide by 4.',
     explanation:'Sum=522. Average=522÷4=130.5 cm.' }),

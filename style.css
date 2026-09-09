@@ -7851,6 +7851,31 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
   border-radius: 12px; padding: 8px 12px; margin: 0 0 12px; overflow-wrap: anywhere; }
 .dark .mg-mix-line { color: #c7d2fe; background: #312e81; }
 
+/* Which grades a child's games draw from. Injected by GameSettings.childGradeBar()
+   into the arcade hub, so the Tailwind CDN never sees these classes - every rule
+   the chips need lives here. Shown only when a parent has unlocked a higher
+   grade, so an empty row never appears.
+   ⚠ The row carries its OWN background, exactly like .mg-mix-line above: the hub
+   has no surface colour of its own, so text left transparent here was measured
+   at 2.35:1 against whatever the screen happened to be painting. */
+.mg-gradebar { display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 8px; margin: 0 0 12px; padding: 8px 10px; border-radius: 12px; background: #eef2ff; }
+.mg-gradebar-label { font-size: .72rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+  color: #4338ca; }
+.dark .mg-gradebar { background: #312e81; }
+.dark .mg-gradebar-label { color: #c7d2fe; }
+.mg-gradebar-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mg-gchip { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 8px 14px;
+  border: 1.5px solid #c7d2fe; border-radius: 999px; background: #fff; color: #4b5563;
+  font-size: .82rem; font-weight: 700; cursor: pointer;
+  transition: background-color .15s, border-color .15s, color .15s; }
+.mg-gchip small { font-size: .66rem; font-weight: 600; opacity: .8; }
+.mg-gchip:not(.mine):hover { border-color: #6366f1; }
+.mg-gchip.on { background: #4338ca; border-color: #4338ca; color: #fff; }
+.mg-gchip.mine { cursor: default; }
+.dark .mg-gchip { background: #1f2937; border-color: #4b5563; color: #e5e7eb; }
+.dark .mg-gchip.on { background: #4f46e5; border-color: #a5b4fc; color: #fff; }
+
 /* ══ TEACHER COMMAND CENTRE ═══════════════════════════════════════════════
    Home, four-item navigation with a More menu, the simplified Set Work form,
    the action-focused Results screen and the classroom Overview/Work/Pupils.

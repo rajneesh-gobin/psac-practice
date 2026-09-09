@@ -1,0 +1,244 @@
+[
+  {
+    "pack": "grade9-biology",
+    "total": 801,
+    "difficulty": {
+      "1": 162,
+      "2": 349,
+      "3": 270,
+      "4": 20
+    },
+    "types": {
+      "mcq": 684,
+      "numeric": 30,
+      "text": 69,
+      "task": 18
+    },
+    "chapters": {
+      "g9s-b1-circulatory": 194,
+      "g9s-b2-reproductive": 157,
+      "g9s-b3-biodiversity": 130,
+      "g9s-b4-plant-nutrition": 150,
+      "g9s-inquiry": 105,
+      "g9s-sts": 65
+    },
+    "withFigure": 0
+  },
+  {
+    "pack": "grade9-chemistry",
+    "total": 854,
+    "difficulty": {
+      "1": 139,
+      "2": 398,
+      "3": 293,
+      "4": 24
+    },
+    "types": {
+      "mcq": 726,
+      "text": 61,
+      "numeric": 25,
+      "task": 18,
+      "expr": 24
+    },
+    "chapters": {
+      "g9s-c1-atmosphere": 159,
+      "g9s-c2-mixtures": 120,
+      "g9s-c3-language": 108,
+      "g9s-c4-metals": 159,
+      "g9s-c5-salts": 104,
+      "g9s-inquiry": 122,
+      "g9s-sts": 82
+    },
+    "withFigure": 0
+  },
+  {
+    "pack": "grade9-english",
+    "total": 612,
+    "difficulty": {
+      "1": 24,
+      "2": 323,
+      "3": 247,
+      "4": 18
+    },
+    "types": {
+      "mcq": 612
+    },
+    "chapters": {
+      "g9eng-gr-determiners": 12,
+      "g9eng-gr-pronouns": 57,
+      "g9eng-gr-prepositions": 29,
+      "g9eng-gr-verbs": 75,
+      "g9eng-gr-sentence": 28,
+      "g9eng-gr-punctuation": 26,
+      "g9eng-vocabulary": 83,
+      "g9eng-word-formation": 111,
+      "g9eng-literature": 116,
+      "g9eng-gr-adverbs": 21,
+      "g9eng-reading": 20,
+      "g9eng-gr-nouns": 12,
+      "g9eng-gr-adjectives": 7,
+      "g9eng-writing": 9,
+      "g9eng-gr-modals": 2,
+      "g9eng-listening": 2,
+      "g9eng-speaking": 2
+    },
+    "withFigure": 0
+  },
+  {
+    "pack": "grade9-french",
+    "total": 1025,
+    "difficulty": {
+      "1": 28,
+      "2": 572,
+      "3": 420,
+      "4": 5
+    },
+    "types": {
+      "mcq": 1025
+    },
+    "chapters": {
+      "g9fr-doc-authentique": 110,
+      "g9fr-ecrit-guide": 100,
+      "g9fr-formation-mots": 136,
+      "g9fr-grammaire": 163,
+      "g9fr-transformation": 223,
+      "g9fr-vocabulaire": 137,
+      "g9fr-correction": 21,
+      "g9fr-textes-trous": 21,
+      "g9fr-oeuvres": 100,
+      "g9fr-comprehension": 8,
+      "g9fr-redaction": 6
+    },
+    "withFigure": 0
+  },
+  {
+    "pack": "grade9-ict",
+    "total": 1701,
+    "difficulty": {
+      "1": 160,
+      "2": 1269,
+      "3": 263,
+      "4": 9
+    },
+    "types": {
+      "mcq": 1490,
+      "text": 64,
+      "task": 63,
+      "slots": 61,
+      "numeric": 18,
+      "expr": 5
+    },
+    "chapters": {
+      "g9ict-computer-systems": 129,
+      "g9ict-word-processing": 205,
+      "g9ict-spreadsheets": 145,
+      "g9ict-algorithms": 127,
+      "g9ict-networks": 151,
+      "g9ict-internet": 141,
+      "g9ict-databases": 129,
+      "g9ict-software-os": 78,
+      "g9ict-ethics-security": 204,
+      "g9ict-presentation": 231,
+      "g9ict-health-safety": 118,
+      "g9ict-troubleshooting": 43
+    },
+    "withFigure": 0
+  },
+  {
+    "pack": "grade9-maths",
+    "total": 1760,
+    "difficulty": {
+      "1": 189,
+      "2": 437,
+      "3": 556,
+      "4": 578
+    },
+    "types": {
+      "task": 754,
+      "numeric": 591,
+      "mcq": 162,
+      "expr": 207,
+      "slots": 46
+    },
+    "chapters": {
+      "g9m-manipulation": 73,
+      "g9m-vectors": 122,
+      "g9m-trigonometry": 67,
+      "g9m-volume": 86,
+      "g9m-geometry-revision": 85,
+      "g9m-number-revision": 221,
+      "g9m-expressions": 77,
+      "g9m-indices": 172,
+      "g9m-coordinates": 163,
+      "g9m-statistics": 91,
+      "g9m-probability": 77,
+      "g9m-quadratics": 64,
+      "g9m-simultaneous": 89,
+      "g9m-surface-area": 76,
+      "g9m-patterns": 59,
+      "g9m-inequalities": 58,
+      "g9m-finance": 64,
+      "g9m-capacity": 61,
+      "g9m-matrices": 55
+    },
+    "withFigure": 0
+  },
+  {
+    "pack": "grade9-physics",
+    "total": 901,
+    "difficulty": {
+      "1": 157,
+      "2": 353,
+      "3": 359,
+      "4": 32
+    },
+    "types": {
+      "numeric": 127,
+      "mcq": 714,
+      "text": 42,
+      "task": 18
+    },
+    "chapters": {
+      "g9s-inquiry": 120,
+      "g9s-p1-measurements": 90,
+      "g9s-p2-light": 137,
+      "g9s-p3-energy": 147,
+      "g9s-p4-motion": 164,
+      "g9s-p5-electricity": 183,
+      "g9s-sts": 60
+    },
+    "withFigure": 0
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "total": 365,
+    "difficulty": {
+      "1": 34,
+      "2": 192,
+      "3": 139
+    },
+    "types": {
+      "mcq": 365
+    },
+    "chapters": {
+      "g9sms-colonial-independence": 30,
+      "g9sms-living-conditions": 20,
+      "g9sms-economy-1960s": 21,
+      "g9sms-industrialisation": 28,
+      "g9sms-industrial-impact": 15,
+      "g9sms-chagos-tromelin": 19,
+      "g9sms-map-data-skills": 22,
+      "g9sms-population": 40,
+      "g9sms-migration": 11,
+      "g9sms-outer-islands": 15,
+      "g9sms-hazards-environment": 18,
+      "g9sms-government-welfare": 35,
+      "g9sms-media": 22,
+      "g9sms-family": 17,
+      "g9sms-social-change": 15,
+      "g9sms-links": 19,
+      "g9sms-economy-today": 18
+    },
+    "withFigure": 0
+  }
+]

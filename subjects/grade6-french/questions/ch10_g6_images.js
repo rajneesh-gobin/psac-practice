@@ -19,22 +19,67 @@
 // ⚠ Photos sous licence CC BY / CC BY-SA : le crédit sous chaque image est une
 //   obligation de la licence, pas une décoration. Ne pas le retirer.
 
-function _g6imgSvg(w, h, body) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img"
-    style="max-width:100%;max-height:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15);background:#fff;margin:6px 0">
-    <title>Image à décrire</title>${body}</svg>`;
-}
+// ⚠ La séquence de trois images est UNE GRILLE DE TROIS SVG SÉPARÉS, pas un
+//   seul dessin large. L'ancienne version était un unique svg de 660 unités de
+//   large : sur un téléphone les trois cases tombaient à ~110 px chacune, les
+//   personnages à ~19 px, et la troisième case sortait carrément de l'écran.
+//   Un enfant ne pouvait donc pas répondre aux questions sur l'image 3.
+//   La grille auto-fit empile les cases sur un téléphone (chacune prend toute
+//   la largeur) et les remet côte à côte dès qu'il y a la place.
+// ⚠ Les personnages sont un CORPS DESSINÉ surmonté d'un émoji de VISAGE.
+//   Les émojis de personne (🧒 👩 👨) sont des têtes seules dans Noto : posés
+//   sur l'herbe ils ressemblaient à des têtes coupées. Un visage sur un corps
+//   dessiné se lit comme un personnage debout, et l'émotion reste lisible.
+//   La couleur du tee-shirt identifie le personnage d'une case à l'autre.
 function _g6imgEmoji(x, y, size, ch) {
   return `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle">${ch}</text>`;
 }
-function _g6imgPanel(x, n, skyFill, groundFill, inner) {
-  return `<g transform="translate(${x},0)">
-    <rect x="0" y="0" width="210" height="190" fill="${skyFill}" stroke="#475569" stroke-width="2" rx="8"/>
-    <rect x="2" y="130" width="206" height="58" fill="${groundFill}"/>
+// wave = bras droit levé. C'est ce qui montre l'au revoir de l'image 3 sans
+// poser une main émoji flottante à côté du personnage.
+function _g6imgPerson(x, feetY, shirt, face, scale, wave) {
+  const k = scale || 1;
+  const legH = 12 * k, torsoH = 21 * k, torsoW = 30 * k, head = 27 * k;
+  const torsoY = feetY - legH - torsoH;
+  const armR = wave
+    ? `<rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${15 * k}" rx="${2.5 * k}"
+        fill="${shirt}" transform="rotate(-150 ${x + torsoW / 2} ${torsoY + 3 * k})"/>`
+    : `<rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>`;
+  return `<rect x="${x - 10 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#374151" rx="2"/>
+    <rect x="${x + 3 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#374151" rx="2"/>
+    <rect x="${x - torsoW / 2}" y="${torsoY}" width="${torsoW}" height="${torsoH}" rx="${8 * k}" fill="${shirt}"/>
+    <rect x="${x - torsoW / 2 - 5 * k}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>
+    ${armR}
+    ${_g6imgEmoji(x, torsoY + 4 * k, head, face)}`;
+}
+function _g6imgTree(x) {
+  return `<rect x="${x - 7}" y="80" width="14" height="42" fill="#92400e" rx="2"/>
+    <circle cx="${x}" cy="64" r="28" fill="#16a34a"/>
+    <circle cx="${x - 20}" cy="76" r="19" fill="#22c55e"/>
+    <circle cx="${x + 20}" cy="76" r="19" fill="#15803d"/>`;
+}
+function _g6imgBench(x, seatY) {
+  return `<rect x="${x}" y="${seatY}" width="62" height="8" rx="2" fill="#a16207"/>
+    <rect x="${x}" y="${seatY - 14}" width="62" height="6" rx="2" fill="#a16207"/>
+    <rect x="${x + 4}" y="${seatY + 8}" width="6" height="18" fill="#78350f"/>
+    <rect x="${x + 52}" y="${seatY + 8}" width="6" height="18" fill="#78350f"/>`;
+}
+// ⚠ Le sol est un path, pas un rect : un rect à angles droits dépasse des
+//   coins arrondis du cadre. Et pas de clipPath : il faudrait un id, or
+//   plusieurs figures peuvent coexister dans la même page.
+function _g6imgPanel(n, sky, ground, inner) {
+  return `<svg viewBox="0 0 200 170" role="img" preserveAspectRatio="xMidYMid meet"
+    style="width:100%;height:auto;display:block;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+    <title>Image ${n}</title>
+    <rect x="1" y="1" width="198" height="168" rx="10" fill="${sky}" stroke="#475569" stroke-width="2"/>
+    <path d="M3,120 H197 V159 A8,8 0 0 1 189,167 H11 A8,8 0 0 1 3,159 Z" fill="${ground}"/>
     ${inner}
-    <circle cx="20" cy="20" r="14" fill="#1e3a5f"/>
-    <text x="20" y="26" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle" font-family="sans-serif">${n}</text>
-  </g>`;
+    <circle cx="24" cy="24" r="16" fill="#1e3a5f"/>
+    <text x="24" y="31" font-size="19" font-weight="bold" fill="#fff" text-anchor="middle" font-family="sans-serif">${n}</text>
+  </svg>`;
+}
+function _g6imgStrip(panels) {
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:8px;margin:8px 0;max-width:680px">${panels.join('')}</div>`;
 }
 
 // ── SCÈNE 1 : une seule image - la plantation d\'arbres ────────────────
@@ -53,38 +98,48 @@ const _G6IMG_PLANTATION = _g6imgPhoto(
   'scene-plantation.jpg',
   'Photo : Joena Bonnelame, Seychelles News Agency, Wikimedia Commons, CC BY 4.0');
 
-// ── SCÈNE 2 : trois images - l\'oiseau blessé ──────────────────────────
-const _G6IMG_OISEAU = _g6imgSvg(660, 190, `
-  ${_g6imgPanel(0, 1, '#bfe4ff', '#86efac', `
-    <circle cx="30" cy="30" r="16" fill="#fcd34d"/>
-    <rect x="160" y="96" width="10" height="36" fill="#92400e"/>
-    <circle cx="165" cy="82" r="24" fill="#16a34a"/>
-    <rect x="20" y="116" width="56" height="7" fill="#a16207"/>
-    <rect x="24" y="123" width="6" height="12" fill="#78350f"/>
-    <rect x="66" y="123" width="6" height="12" fill="#78350f"/>
-    ${_g6imgEmoji(112, 150, 32, '🧒')}
-    ${_g6imgEmoji(150, 148, 32, '👩')}
-    ${_g6imgEmoji(112, 176, 18, '🐦')}
-  `)}
-  ${_g6imgPanel(225, 2, '#fef3c7', '#d6d3d1', `
-    <rect x="60" y="108" width="96" height="24" fill="#a16207"/>
-    <rect x="78" y="86" width="46" height="24" rx="3" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
-    ${_g6imgEmoji(101, 104, 17, '🐦')}
-    ${_g6imgEmoji(140, 104, 15, '💧')}
-    ${_g6imgEmoji(60, 152, 32, '🧒')}
-    ${_g6imgEmoji(150, 152, 32, '👩')}
-  `)}
-  ${_g6imgPanel(450, 3, '#bfe4ff', '#86efac', `
-    <circle cx="30" cy="28" r="16" fill="#fcd34d"/>
-    <rect x="160" y="96" width="10" height="36" fill="#92400e"/>
-    <circle cx="165" cy="82" r="24" fill="#16a34a"/>
-    ${_g6imgEmoji(112, 52, 20, '🐦')}
-    <path d="M92 66 l8 -6 l8 6" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-    ${_g6imgEmoji(58, 152, 32, '🧒')}
-    ${_g6imgEmoji(96, 150, 32, '👩')}
-    ${_g6imgEmoji(132, 150, 24, '👋')}
-  `)}
-`);
+// ── SCÈNE 2 : trois images - l'oiseau blessé ──────────────────────────
+// Le récit change de LIEU à chaque case (parc, maison, extérieur) : c'est ce
+// que demande g6fr-img-014, donc le décor de chaque case doit être reconnu
+// sans légende. Les cases doivent répondre seules à g6fr-img-011 à 020 :
+//   1 au parc, l'enfant et sa mère découvrent un oiseau tombé par terre
+//   2 à la maison, ils le soignent dans une boîte et lui donnent de l'eau
+//   3 dehors, l'oiseau guéri s'envole et ils lui disent au revoir
+const _G6IMG_KID = '#f59e0b';
+const _G6IMG_MUM = '#be123c';
+const _G6IMG_OISEAU = _g6imgStrip([
+  _g6imgPanel(1, '#bfe4ff', '#86efac', `
+    <circle cx="30" cy="28" r="15" fill="#fcd34d"/>
+    ${_g6imgTree(166)}
+    ${_g6imgBench(8, 126)}
+    ${_g6imgPerson(94, 150, _G6IMG_KID, '😯', 0.85)}
+    ${_g6imgPerson(128, 152, _G6IMG_MUM, '🙁')}
+    ${_g6imgEmoji(163, 158, 26, '🐦')}
+  `),
+  _g6imgPanel(2, '#fef3c7', '#d6d3d1', `
+    <rect x="128" y="26" width="44" height="34" fill="#bfdbfe" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="150" y1="26" x2="150" y2="60" stroke="#94a3b8" stroke-width="2"/>
+    <rect x="40" y="98" width="120" height="10" rx="2" fill="#a16207"/>
+    <rect x="50" y="108" width="8" height="34" fill="#78350f"/>
+    <rect x="142" y="108" width="8" height="34" fill="#78350f"/>
+    <rect x="56" y="72" width="52" height="26" rx="3" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
+    <rect x="56" y="72" width="52" height="7" fill="#fbbf24" stroke="#92400e" stroke-width="2"/>
+    ${_g6imgEmoji(82, 96, 20, '🐦')}
+    <ellipse cx="132" cy="93" rx="13" ry="6" fill="#7dd3fc" stroke="#0369a1" stroke-width="2"/>
+    <path d="M119,93 a13,6 0 0 0 26,0 l-2,5 a11,5 0 0 1 -22,0 Z" fill="#0284c7"/>
+    ${_g6imgPerson(24, 152, _G6IMG_KID, '🙂', 0.8)}
+    ${_g6imgPerson(176, 152, _G6IMG_MUM, '🙂', 0.85)}
+  `),
+  _g6imgPanel(3, '#bfe4ff', '#86efac', `
+    <circle cx="30" cy="28" r="15" fill="#fcd34d"/>
+    ${_g6imgTree(166)}
+    ${_g6imgEmoji(112, 52, 28, '🐦')}
+    <path d="M84,46 q8,-7 16,0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+    <path d="M80,58 q8,-7 16,0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+    ${_g6imgPerson(56, 152, _G6IMG_KID, '😀', 0.85, true)}
+    ${_g6imgPerson(96, 152, _G6IMG_MUM, '😀', 1, true)}
+  `)
+]);
 
 const _G6IMG_C1 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;border-radius:6px;padding:8px 12px;margin:6px 0;font-size:0.93em"><b>Observe l\'image, puis réponds à la question.</b></div>`;
 const _G6IMG_C3 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;border-radius:6px;padding:8px 12px;margin:6px 0;font-size:0.93em"><b>Observe les trois images dans l\'ordre, puis réponds à la question.</b></div>`;

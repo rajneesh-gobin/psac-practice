@@ -525,7 +525,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g9fr-egv-074', chapterId:'g9fr-ecrit-guide', subsection:'formules_ouverture_cloture', difficulty:3,
     question:'Pourquoi une formule de clôture trop courte (juste « Merci ») est-elle insuffisante dans une lettre formelle ?',
     options:['Elle manque de politesse et ne respecte pas les conventions de la correspondance formelle','Elle est trop longue','Elle est incorrecte grammaticalement','Il n\'y a aucun problème'],
-    answer:'Elle manque de politesse et de respect des conventions de la correspondance formelle',
+    answer:'Elle manque de politesse et ne respecte pas les conventions de la correspondance formelle',
     hint:'La correspondance formelle a des codes précis à respecter.',
     explanation:'Dans une lettre formelle, <b>« Merci »</b> seul est insuffisant car il ne respecte pas les <b>conventions de politesse</b> de la correspondance officielle. Une formule complète (« Dans l\'attente de votre réponse… ») est attendue.' }),
 

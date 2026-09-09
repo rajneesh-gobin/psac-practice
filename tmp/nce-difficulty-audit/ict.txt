@@ -1,0 +1,988 @@
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+             M                 mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+             E                 mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+               S               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+        ns
+             Gerat   Cor       mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+      Me                pus    mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+Let the mind manage the body   mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+  Que l’esprit gère le corps   mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+                               mauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritiusexaminationssyndicatemauritius
+
+
+
+                               Index Number: ..............................................................................
+
+
+
+
+NATIONAL CERTIFICATE OF EDUCATION
+2025
+
+
+INFORMATION AND COMMUNICATIONS
+TECHNOLOGY (N540)
+Candidates answer on the Question Paper.                                                              TIME: 1 HOUR 45 MINUTES
+
+
+INSTRUCTIONS TO CANDIDATES
+
+1.           Write your index number in the space provided above.
+2.           Write in dark blue or black ink. Do not use correction
+3.           You may use a soft pencil for any diagram, graph or rough working.
+4.           Any rough working should be done in this booklet.
+5.           Do NOT use calculators.
+6.           Answer ALL questions.
+7.           This document consists of 11 questions printed on 24 pages, numbered 2 to 25.
+8.           The number of marks is given in brackets [ ] at the end of each question or part question.
+9.           The total marks for this paper is 100.
+
+
+
+                                                                  For Examiners’ use
+
+             Question No.            1       2      3       4       5      6      7       8       9      10       11       Total          Signature
+
+             Examiner
+
+             Team Leader
+
+             CE/ACE
+
+
+
+                                                         © Mauritius Examinations Syndicate
+                                                                    Marks
+
+
+
+
+                                     SECTION A
+
+Question 1 (15 marks)
+
+Circle the correct answer. Each item carries one mark.
+
+(a)    Which of the following is an input device?
+
+
+
+
+       A                                        B
+
+
+
+
+                  Projector                              Monitor
+
+
+
+
+       C                                        D
+
+
+
+
+                  Mouse                                   Speaker
+
+
+
+
+©MES                                        2
+                                                                                            Marks
+(b)    Which type of speech balloon is shown below?
+
+
+
+
+       A     Expression text balloon
+
+       B     Whisper balloon
+
+       C     Thought balloon
+
+       D     General speech balloon
+
+
+(c)    Which one of the following can be used to view web pages on the internet?
+
+
+
+
+       A                                       B
+
+
+            Microsoft Word                           Microsoft Paint
+
+
+
+
+       C                                       D
+
+
+
+
+             Google Chrome                                Linux
+
+
+
+
+©MES                                       3                             Please turn over
+                                                                                   Marks
+(d)    How many bits are there in one byte?
+
+       A      4
+
+       B      8
+
+       C      12
+
+       D      16
+
+
+
+
+(e)    Which key should be pressed to begin a new paragraph in a word processing
+       program?
+
+
+
+       A                                         B
+
+
+
+
+       C                                         D
+
+
+
+
+(f)    Which of the following illustrates a bus topology?
+
+
+       A                                         B
+
+
+
+
+       C                                         D
+
+
+
+
+©MES                                        4
+                                                                                              Marks
+(g)    Which function must be used to find the lowest value from a range of cells in
+       spreadsheet?
+
+       A      MAX
+
+       B      AVERAGE
+
+       C      MIN
+
+       D      SUM
+
+
+
+
+(h)    Which sign is used to start a formula in spreadsheet?
+
+
+       A      +
+
+       B      =
+
+       C      –
+
+       D      /
+
+
+
+(i)    Which spreadsheet feature is best used to duplicate information from a cell?
+
+       A      Fill handle
+
+       B      Autosum
+
+       C      Filter
+
+       D      Save as
+
+
+
+
+©MES                                        5                              Please turn over
+                                                                                           Marks
+(j)    In a word processor, what is the function of the following icons?
+
+
+
+
+       A      Set the line spacing
+
+       B      Add extra lines
+
+       C      Copy and paste the text
+
+       D      Change alignment
+
+
+
+
+(k)    Which term is used for the plan that contains images and instructions to create a
+       video?
+
+       A      Presentation
+
+       B      Letter
+
+       C      Storyboard
+
+       D      Recorded narration
+
+
+
+
+(l)    How is the set of principles that regulates the use of computers in everyday life
+       called?
+
+       A      Computer ethics
+
+       B      Computer crime
+
+       C      Computer piracy
+
+       D      Computer privacy
+
+
+
+
+©MES                                        6
+                                                                                             Marks
+(m)    In a database, which one of the following is a group of records?
+
+       A      File
+
+       B      Report
+
+       C      Field
+
+       D      Table
+
+
+
+
+(n)    Which of the following is a search engine?
+
+
+
+
+       A                                         B
+
+
+
+
+       C                                         D
+
+
+
+
+(o)    What is an email attachment?
+
+       A      A forwarded email
+
+       B      A deleted email
+
+       C      A reply to an email
+
+       D      A file sent with an email
+                                                                                   [15]
+
+
+
+
+©MES                                        7                             Please turn over
+                                                                                        Marks
+Question 2 (10 marks)
+
+(a)    Fill in the blanks with the correct term from the given list.
+
+
+
+                sound card                motherboard                  fan
+
+
+               graphics card                  CPU                      RAM
+
+
+
+
+       (i)     The …..………………............ is the brain of the computer and is
+               responsible for all data processing.
+
+
+
+
+       (ii)    The …..………………............ allows us to use microphones with a computer
+               system.
+
+
+
+       (iii)   The …..………………............ keeps the processor cool and stops it from
+               overheating.
+
+
+
+
+       (iv)    The …..………………............ enables the computer to display images.
+
+
+
+
+       (v)     The …..………………............ is where all the components of a computer
+               system are connected.
+                                                                                [5]
+
+
+
+
+©MES                                          8
+                                                                                                  Marks
+(b)      Give the output on screen when the following actions are taken.
+
+                               Actions                              Output on screen
+  (i)
+                                                  &
+                          Shift
+         Pressing                        +
+                                                  7
+
+
+  (ii)
+                                  (
+              Pressing
+                                  9
+
+
+
+                                                                                           [2]
+(c)      Match each button in Column A to its correct function in Column B.
+
+              Column A                                   Column B
+
+
+
+                                                            Close
+
+
+
+
+                                                        Move cursor to right
+
+
+
+
+                                                        Move cursor to left
+
+
+
+
+                                                             Save
+
+
+
+
+                                                                                           [3]
+
+
+
+
+©MES                                         9                                 Please turn over
+                                                                                          Marks
+Question 3 (10 marks)
+
+Tick () True or False next to each statement below. An example is given.
+
+
+                                                                       True   False
+
+
+  (a) ROM holds programs currently being used.                                 
+
+
+  (b) A text overlay places an audio file over a video.
+
+
+
+  (c) Hacking means gaining unauthorised access to a computer.
+
+
+
+  (d) A meta-search engine has its own database of websites.
+
+
+
+  (e) A joystick can be used to play games.
+
+
+
+  (f)   Megabyte is a smaller unit than Gigabyte.
+
+
+
+  (g) In a comic strip, caption provides information about a panel.
+
+
+        During a presentation, the speaker notes are visible to the
+  (h)
+        audience.
+
+
+  (i)   Spreadsheets can be used to produce pie charts.
+
+
+
+  (j)   Header refers to text appearing at the top of the document.
+
+
+
+  (k) Bullet points and numbering are used to create lists.
+
+
+
+                                                                                   [10]
+
+
+©MES                                         10
+                                                                                                         Marks
+Question 4 (10 marks)
+
+(a)          Match each term in Column A to the correct statement in Column B.
+              Write your answers in the answer grid provided below.
+              An example is given.
+
+
+                       Column A                                           Column B
+
+
+       (i)       Cache memory                           1   is non-volatile
+
+
+      (ii)       RAM                                    2   consists of 4 bits
+
+
+
+      (iii)      Nibble                                 3   can be 0 or 1
+
+
+
+      (iv)       Bit                                    4   primary storage
+
+
+      (v)        Sensor                                 5   is a printout
+
+
+
+      (vi)       Plotter                                6   is an input device
+
+
+
+      (vii)      Hard copy                              7   is volatile
+
+
+                                                        8   is an output device
+
+
+
+
+         (i)               (ii)      (iii)       (iv)         (v)             (vi)         (vii)
+
+             4
+
+                                                                                                   [6]
+
+
+
+
+©MES                                             11                                  Please turn over
+                                                                                           Marks
+(b)    Label the pictures using the appropriate words from the given list.
+
+
+
+
+          Input          Storage          Output                         Antivirus
+                                                          Sprite
+          device         device           device                         software
+
+
+
+
+                                                                                     [4]
+
+
+
+
+©MES                                        12
+                                                                                          Marks
+Question 5 (5 marks)
+
+Safety measures that must be adopted in the computer lab are shown below.
+Match each picture with the appropriate safety measure.
+
+
+
+
+                                                               Do not run in the
+                                                               computer lab
+
+
+
+
+                                                              Follow proper steps
+                                                              in switching on or
+                                                              off your computer
+
+
+
+
+                                                               Do not touch wires
+
+
+
+
+                                                                Adopt a proper
+                                                                sitting posture
+
+
+
+
+                                                               Avoid trailing wires
+                                                               in the computer lab
+
+
+
+
+                                                               No food or drinks
+                                                               in the computer lab
+
+
+
+                                                                                    [5]
+
+
+
+©MES                                      13                           Please turn over
+                                                           Marks
+                                    SECTION B
+
+Question 6 (5 marks)
+
+The specifications of a computer system are shown below.
+
+
+
+
+©MES                                     14
+                                                                                             Marks
+(a)    Give the name of the computer.
+
+       ……………………………………………………………………………………………                                            [1]
+
+
+(b)    Tick () the correct model of the processor used in the laptop.
+
+
+       Celeron                      AMD                          Intel
+                                                                                      [1]
+
+
+(c)    What is the speed of the processor used in the laptop?
+
+       …………………………………………………………………………………………..                                           [1]
+
+
+(d)    Give the name of the operating system installed on the computer.
+
+       …………………………………………………………………………………………..                                           [1]
+
+
+(e)    What is the memory size of the computer system?
+
+       …………………………………………………………………………………………..                                           [1]
+
+
+
+
+©MES                                         15                           Please turn over
+                                                                                            Marks
+Question 7 (7 marks)
+
+An extract of a document is given below. Answer the questions that follow.
+
+
+
+
+(a)    Which font type has been used for the title ‘2016 Summer Olympics’?
+
+       ……………………………………………………………………………………………                                            [1]
+
+
+(b)    What is the font size of the title ‘2016 Summer Olympics’?
+
+       ……………………………………………………………………………………………                                            [1]
+
+
+(c)    Which alignment has been used for the 2nd paragraph?
+
+       ……………………………………………………………………………………………                                            [1]
+
+
+(d)    Which type of formatting has been used for “Kosovo’’ in line 2 of the second
+       paragraph?
+
+       Underline                           Italic                            Bold
+
+                                                                                      [1]
+
+
+
+
+©MES                                         16
+                                                                                    Marks
+(e)    A hard copy of the document must be printed.
+       The diagram below shows the settings of the printer.
+
+
+
+
+       State
+
+       (i)     the number of copies that will be printed,
+
+               …………………………………………………………………………….…                               [1]
+
+       (ii)    the size of the paper selected,
+
+               ………………………………………………………………………….……                               [1]
+
+       (iii)   the pages of the document that will be printed.
+
+               …………………………..…………………………………………………..                             [1]
+
+
+
+
+©MES                                         17                  Please turn over
+                                                                                              Marks
+Question 8 (9 marks)
+
+Jane is comparing prices of PC hardware from three different shops and is using a
+spreadsheet to calculate the differences, as illustrated in the image below.
+
+
+
+
+(a)    Write the content of cell A7.
+
+       ………………….……………………...…………..……………………………………. [1]
+
+
+(b)    Give the cell address that contains the price of a mouse in Shop B.
+
+       ………………….……………………...…………..……………………………………. [1]
+
+
+(c)    Using an appropriate function, write a formula that should be entered in cell B9 to
+       find the total excluding VAT for the items purchased in Shop A.
+
+
+
+
+       ………………….……………………...…………..…………………………………….[2]
+
+(d)    Tick () the correct formula that has been used in cell B10 to calculate the VAT
+       at 18% on the items purchased from Shop A.
+
+
+       = B9 + 0.18                 = B9 x 0.18                  = B9 * 0.18
+                                                                                        [1]
+
+
+©MES                                        18
+                                                                                                Marks
+(e)    In cell H4, a formula was entered to find the average price of a pendrive.
+       Write down the formula.
+
+       ………………….……………………...…………..……………………………………. [2]
+
+
+(f)    Conditional formatting is applied to cell B4:D7 as follows:
+
+
+
+
+       Name the cells that will be formatted.
+
+
+       …………………………………………………………………………………………… [2]
+
+
+
+
+©MES                                         19                              Please turn over
+                                                                                   Marks
+Question 9 (9 marks)
+
+Video conferencing is becoming very popular nowadays.
+
+(a)    Explain what is meant by video conferencing.
+
+       ………………….……………………...…………..…………………………………….
+
+       ………………….……………………...…………..…………………………………….
+
+       ………………….……………………...…………..……………………………………. [2]
+
+
+(b)    Name two devices apart from keyboard, mouse and monitor that are required
+       during video conferencing.
+
+       1. …………………………………………………………………………………………
+
+       2. …………………………………………………………………………………………
+                                                                             [2]
+
+
+(c)    State two advantages of using video conferencing.
+
+       1. …………………………………………………………………………………………
+
+       2. …………………………………………………………………………………………
+                                                                             [2]
+
+
+(d)    State one disadvantage of using video conferencing.
+
+       ……………………………………………………………………………………………. [1]
+
+
+(e)    State two uses of video conferencing.
+
+       1. …………………………………………………………………………………………
+
+       2. …………………………………………………………………………………………
+                                                                             [2]
+
+
+
+
+©MES                                      20
+                                                                                              Marks
+Question 10 (10 marks)
+
+(a)    (i)    Give two advantages of using a computerised database program.
+
+              …………………………………………………………………………………….
+
+              ……………………………………………………………………………………. [2]
+
+
+       (ii)   A list of sports is given below:
+
+                    Badminton
+
+                    Football
+
+                    Tennis
+
+                    Cricket
+
+
+              If the data given above is sorted in descending order, which sport would be
+              first in the list?
+
+              ……………………………………………………………………………………. [1]
+
+
+
+
+©MES                                             21                        Please turn over
+                                                                                            Marks
+(b)    A hairdresser uses a database to store data on upcoming appointments of clients.
+       Part of the database is shown below.
+
+
+       The APPOINTMENT table is shown below.
+
+
+
+        APT_ID               DATE          TIME          NAME            STYLE
+
+             JP15           1/2/2026       09:45         Saleem    Cut
+
+             JP12           1/2/2026       14:00          Vicky    Cut and Dry
+
+             JP13           1/2/2026       14:30          Vidya    Colour
+
+             AD14           1/2/2026       16:00         Karen     Cut and Colour
+
+             JP16           2/2/2026       11:15         Steven    Cut and Dry
+
+             AD17           2/2/2026       12:30         Daniela   Colour
+
+
+
+       (i)      The following search condition was entered using a query by example grid.
+
+
+                    Field        APT_ID               STYLE
+
+                    Table     APPOINTMENT          APPOINTMENT
+
+                     Sort      ASCENDING
+
+                    Show               
+
+               Criteria                              = “Colour”
+
+                      Or
+
+
+
+                Show what the output would be.
+
+                …………………………………………………………………………………….
+
+                …………………………………………………………………………………….
+
+                ……………………………………………………………………………………. [3]
+
+
+
+
+©MES                                          22
+                                                                                          Marks
+       (ii)   Complete the query by example grid below to select and show the names
+              of clients who have appointments on 2/2/2026.
+
+
+                Field
+
+                Table    APPOINTMENT           APPOINTMENT
+
+                 Sort
+
+               Show
+
+              Criteria
+
+                   Or
+
+                                                                                   [4]
+
+
+
+
+©MES                                      23                           Please turn over
+                                                                                         Marks
+Question 11 (10 marks)
+
+(a)    Fill in the blanks using the terms given below.
+
+                            rectangle                diamond
+
+                              circle               parallelogram
+
+       In a flowchart,
+
+       (i)     a ……..…………........... is used to represent input and output.
+
+       (ii)    a ……..…………........... is used to represent a process.
+
+       (iii)   a ……..…………........... is used to represent a decision box.
+                                                                                   [3]
+
+(b)    The flowchart below allows the user to enter a mark for an ICT test.
+       If the mark is 35 or more, then output Pass, else output Fail.
+       Complete the flowchart.
+
+
+                                         Start
+
+
+
+
+                                       ………………..
+                                       ………………..
+
+
+
+
+                                       ………………               Yes         ………………..
+                                       ……………..                          ………………..
+
+
+                                         No
+
+                                       ………………..
+                                       ………………..
+
+
+
+
+                                          Stop
+                                                                                   [4]
+
+
+©MES                                          24
+                                                                                                  Marks
+(c)    Write statements in Python that will allow a user to enter a value in the variable
+       marks and then output its contents.
+
+
+       …………………………………………………………………………………………….
+
+       …………………………………………………………………………………………….
+
+       ……………………………………………………………………………………………. [3]
+
+
+
+
+                                    END OF PAPER
+
+
+
+
+©MES                                         25                                Please turn over
+                    Marks
+       BLANK PAGE
+
+
+
+
+©MES       26
+                                       Marks
+       BLANK PAGE
+
+
+
+
+©MES       27       Please turn over
+                    Marks
+       BLANK PAGE
+
+
+
+
+©MES       28
+

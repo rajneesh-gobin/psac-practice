@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>preview</title>
+<style>
+  body{font-family:system-ui,sans-serif;margin:0;padding:8px;background:#f8fafc}
+  .q{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:10px;margin:0 0 14px}
+  .qid{font-size:11px;color:#64748b;margin-bottom:4px}
+  img{max-width:100%}
+</style>
+</head><body>
+<script>
+  const STATIC_QUESTIONS = [];
+  function _mk(o){ return o; }
+  function makeMCQ(o){ return _mk(o); }
+  function makeTF(o){ return _mk(o); }
+  function makeNum(o){ return _mk(o); }
+</script>
+<script src="subjects/grade4-french/questions/ch10_g4_images.js"></script>
+<script src="subjects/grade5-french/questions/ch12_images.js"></script>
+<script src="subjects/grade6-french/questions/ch10_g6_images.js"></script>
+<div id="out"></div>
+<script>
+  const want = (location.search.match(/sub=([a-z_]+)/) || [])[1] || 'trois_images';
+  const seen = new Set();
+  const out = document.getElementById('out');
+  STATIC_QUESTIONS.forEach(q => {
+    if (q.subsection !== want) return;
+    const pk = (location.search.match(/pack=(g[0-9])/) || [])[1];
+    if (pk && q.id.indexOf(pk) !== 0) return;
+    const fig = String(q.question).replace(/[^]*?<\/div>/, '');
+    const key = fig.slice(0, 400);
+    if (seen.has(key)) return;
+    seen.add(key);
+    const d = document.createElement('div');
+    d.className = 'q';
+    d.innerHTML = '<div class="qid">' + q.id + '</div>' + q.question;
+    out.appendChild(d);
+  });
+  const g = document.querySelector('.q div[style*=grid]');
+  const dbg = document.createElement('pre');
+  dbg.style.fontSize='11px';
+  dbg.textContent = 'innerWidth=' + innerWidth + ' bodyW=' + document.body.offsetWidth + ' cardW=' + (out.firstChild?out.firstChild.offsetWidth:'-') + ' gridW=' + (g?g.offsetWidth:'-') + ' cols=' + (g?getComputedStyle(g).gridTemplateColumns:'-') + ' docW=' + document.documentElement.scrollWidth;
+  document.body.insertBefore(dbg, out);
+</script>
+</body></html>

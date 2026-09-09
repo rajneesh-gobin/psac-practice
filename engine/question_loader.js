@@ -153,7 +153,8 @@ const QuestionLoader = (() => {
                      'subjects/grade9-ict/questions/ict_paper_inspired.js',
                      'subjects/grade9-ict/questions/ict_multi_year.js',
                      'subjects/grade9-ict/questions/ict_diagram_patch.js',
-                     'subjects/grade9-ict/questions/ict_diagram_multi.js'],
+                     'subjects/grade9-ict/questions/ict_diagram_multi.js',
+                     'subjects/grade9-ict/questions/family_expansion.js'],
   'grade9-maths': ['subjects/grade9-maths/questions/ch01_indices.js',
                      'subjects/grade9-maths/questions/ch02_coordinates.js',
                      'subjects/grade9-maths/questions/ch03_number_revision.js',
@@ -190,7 +191,8 @@ const QuestionLoader = (() => {
                        'subjects/grade9-english/questions/vocab_volume.js',
                        'subjects/grade9-english/questions/literature_volume.js',
                        'subjects/grade9-english/questions/eng_paper_inspired.js',
-                       'subjects/grade9-english/questions/eng_multi_year.js'],
+                       'subjects/grade9-english/questions/eng_multi_year.js',
+                       'subjects/grade9-english/questions/family_expansion.js'],
     'grade9-french': ['subjects/grade9-french/questions/starter_bank.js',
                       'subjects/grade9-french/questions/transformation_volume.js',
                       'subjects/grade9-french/questions/grammaire_volume.js',
@@ -200,7 +202,8 @@ const QuestionLoader = (() => {
                       'subjects/grade9-french/questions/ecrit_guide.js',
                       'subjects/grade9-french/questions/oeuvres.js',
                       'subjects/grade9-french/questions/fr_paper_inspired.js',
-                      'subjects/grade9-french/questions/fr_multi_year.js'],
+                      'subjects/grade9-french/questions/fr_multi_year.js',
+                      'subjects/grade9-french/questions/family_expansion.js'],
     'grade9-biology': ['subjects/grade9-biology/questions/b1_circulatory.js',
                        'subjects/grade9-biology/questions/b2_reproductive.js',
                        'subjects/grade9-biology/questions/b3_biodiversity.js',
@@ -218,7 +221,8 @@ const QuestionLoader = (() => {
                        'subjects/grade9-biology/questions/bio_paper_inspired.js',
                        'subjects/grade9-biology/questions/bio_multi_year.js',
                        'subjects/grade9-biology/questions/bio_diagram_patch.js',
-                       'subjects/grade9-biology/questions/bio_diagram_multi.js'],
+                       'subjects/grade9-biology/questions/bio_diagram_multi.js',
+                       'subjects/grade9-biology/questions/family_expansion.js'],
     'grade9-chemistry': ['subjects/grade9-chemistry/questions/c1_atmosphere.js',
                          'subjects/grade9-chemistry/questions/c2_mixtures.js',
                          'subjects/grade9-chemistry/questions/c3_language.js',
@@ -237,7 +241,8 @@ const QuestionLoader = (() => {
                          'subjects/grade9-chemistry/questions/chem_tasks.js',
                          'subjects/grade9-chemistry/questions/chem_paper_inspired.js',
                          'subjects/grade9-chemistry/questions/chem_multi_year.js',
-                         'subjects/grade9-chemistry/questions/chem_diagram_multi.js'],
+                         'subjects/grade9-chemistry/questions/chem_diagram_multi.js',
+                         'subjects/grade9-chemistry/questions/family_expansion.js'],
     'grade9-physics': ['subjects/grade9-physics/questions/inquiry.js',
                        'subjects/grade9-physics/questions/p1_measurements.js',
                        'subjects/grade9-physics/questions/p2_light.js',
@@ -256,12 +261,14 @@ const QuestionLoader = (() => {
                        'subjects/grade9-physics/questions/phy_tasks.js',
                        'subjects/grade9-physics/questions/phy_paper_inspired.js',
                        'subjects/grade9-physics/questions/phy_multi_year.js',
-                       'subjects/grade9-physics/questions/phy_diagram_multi.js'],
+                       'subjects/grade9-physics/questions/phy_diagram_multi.js',
+                       'subjects/grade9-physics/questions/family_expansion.js'],
     'grade9-social-modern-studies': ['subjects/grade9-social-modern-studies/questions/starter_bank.js',
                                      'subjects/grade9-social-modern-studies/questions/sms_volume_1.js',
                                      'subjects/grade9-social-modern-studies/questions/sms_volume_2.js',
                                      'subjects/grade9-social-modern-studies/questions/sms_paper_inspired.js',
-                                     'subjects/grade9-social-modern-studies/questions/sms_multi_year.js'],
+                                     'subjects/grade9-social-modern-studies/questions/sms_multi_year.js',
+                                     'subjects/grade9-social-modern-studies/questions/family_expansion.js'],
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
       'subjects/grade5-maths/questions/questions_extra.js',
@@ -693,7 +700,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 116;
+  const _CACHE_VERSION = 118;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

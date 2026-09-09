@@ -1599,6 +1599,33 @@ const Calendar = (() => {
       doneToday = doneTodayChapterIds();
     } catch (_) { /* the plan must still render if history is unavailable */ }
 
+    // ── Points for a planned session actually done ────────────────────────
+    // Fired on RENDER rather than at a "mark complete" moment, because there is
+    // no such moment: a session reads as done when the child has practised its
+    // chapter today (doneTodayChapterIds above). That is derived state, not an
+    // event, so there is nothing else to hang an award on.
+    //
+    // ⚠ Safe to run on every render, and it will run on many. The award is
+    //   keyed on the schedule_entry id in student_point_events, so the second
+    //   call and the two-hundredth both mint nothing. applyServerPoints() is
+    //   called only when something WAS awarded, so an ordinary re-render costs
+    //   one cheap RPC and no save.
+    //
+    // ⚠ Today only. A plan row for next Tuesday cannot have been done, and
+    //   doneToday is today's practice by definition.
+    if (isToday && typeof Store !== 'undefined' && Store.awardActivityPoints) {
+      for (const e of entries) {
+        const cid = e.chapter_id || (_resolveChapter(e).chapter || {}).id || '';
+        if (!cid || !e.id || !doneToday.has(cid)) continue;
+        Store.awardActivityPoints('timetable', String(e.id))
+          .then(r => {
+            if (r && r.awarded && typeof applyServerPoints === 'function') applyServerPoints(r.points, r.level);
+          })
+          .catch(() => {});
+      }
+    }
+
+
     listEl.innerHTML = entries.map(e => {
       const meta  = TYPE_META[e.entry_type] || TYPE_META.other;
       const subj  = e.subject_id ? subjects.find(s => s.id === e.subject_id) : null;

@@ -186,6 +186,7 @@ const GameSettings = (() => {
 
   // ── Runtime context (reads the live globals) ──
   function childGrade() {
+    if (typeof GradeAccess !== 'undefined') return GradeAccess.ownGrade();
     return (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.grade)
       || (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
   }
@@ -195,7 +196,14 @@ const GameSettings = (() => {
     const available = availableSubjects(packs);
     const restrictions = (typeof DB !== 'undefined' && DB && DB.restrictions) || {};
     const settings = normalise(restrictions.games, available.map(a => a.key));
-    return { grade, packs, available, settings, restrictions, cap: capLevel(settings, restrictions), caps: GAMES[gameKey] || null };
+    // ⚠ `grade` is the child's OWN grade; `grades` is what this round may draw
+    //   from - own grade plus whatever the child chose from the grades their
+    //   parent unlocked. Default is [own] alone, so unlocking a grade never
+    //   changes a game by itself.
+    const grades = (typeof GradeAccess !== 'undefined')
+      ? GradeAccess.gameGrades(grade, restrictions, (typeof DB !== 'undefined' && DB && DB.games) || {})
+      : [grade];
+    return { grade, grades, packs, available, settings, restrictions, cap: capLevel(settings, restrictions), caps: GAMES[gameKey] || null };
   }
 
   // ── Question validity ────────────────────────
@@ -219,7 +227,11 @@ const GameSettings = (() => {
   // Every candidate for this child: subject-tagged, grade-scoped, valid.
   //   excludeChapter(id) → true for locked / admin-blocked chapters
   //   safe(q)            → the game's own suitability test (e.g. no passages)
-  //   crossGrade         → allow other grades' questions as a LAST resort
+  //   grades             → the exact grades this round may use (own grade
+  //                        included). Every one of them is first-class: a child
+  //                        who asked for Grade 6 wants Grade 6 questions, not
+  //                        Grade 6 once the Grade 5 stock at that level runs out.
+  //   crossGrade         → legacy: allow every other grade, as a LAST resort
   function buildPool(opts) {
     const questions = opts.questions || [];
     const packs = opts.packs || [];
@@ -228,6 +240,7 @@ const GameSettings = (() => {
     packs.forEach(p => (p._chapters || p.chapters || []).forEach(c => {
       chapterSubject[c.id] = subjectKeyOf(p); chapterGrade[c.id] = p.grade;
     }));
+    const only = Array.isArray(opts.grades) && opts.grades.length ? opts.grades.map(Number) : null;
     const excl = typeof opts.excludeChapter === 'function' ? opts.excludeChapter : () => false;
     const safe = typeof opts.safe === 'function' ? opts.safe : () => true;
     const out = [];
@@ -239,8 +252,14 @@ const GameSettings = (() => {
       // A chapter no manifest knows is not "this grade" - drop it, unless no
       // manifest is loaded at all (dev harnesses), where nothing is knowable.
       if (g === undefined && packs.length) continue;
-      const own = g === undefined ? null : g === grade;
-      if (own === false && !opts.crossGrade) continue;
+      let own;
+      if (only) {
+        if (g !== undefined && !only.includes(g)) continue;
+        own = true;
+      } else {
+        own = g === undefined ? null : g === grade;
+        if (own === false && !opts.crossGrade) continue;
+      }
       out.push({ q, id: q.id, chapterId: q.chapterId, subject: chapterSubject[q.chapterId] || null, level: levelOf(q), own });
     }
     // Manifests absent (dev harnesses, tests): nothing can be attributed, so
@@ -448,7 +467,7 @@ const GameSettings = (() => {
       questions, packs: allPacks, grade: c.grade,
       excludeChapter: id => locked.has(id) || adminBlocks(id),
       safe: extra && extra.safe, minOptions: c.caps ? c.caps.minOptions : 2,
-      crossGrade: !!c.restrictions.crossGradePractice,
+      grades: c.grades,
     });
     const games = (typeof DB !== 'undefined' && DB && DB.games) || {};
     const res = pick(Object.assign({
@@ -674,6 +693,54 @@ const GameSettings = (() => {
   }
 
   // ── Child-facing one-liner for the Game Zone hub ──
+  // ── The child's own control ───────────────────
+  // Rendered in the Game Zone hub, and ONLY when the parent has unlocked a
+  // grade above the child's own - a lone "Grade 5 (yours)" chip is clutter that
+  // teaches a child nothing. The own-grade chip is always on and cannot be
+  // switched off: a pool must never be empty.
+  function childGradeBar() {
+    const grade = childGrade();
+    const choices = (typeof GradeAccess !== 'undefined') ? GradeAccess.childChoices(grade) : [grade];
+    if (choices.length < 2) return '';
+    const on = new Set((typeof GradeAccess !== 'undefined') ? GradeAccess.gameGrades(grade) : [grade]);
+    const chips = choices.map(g => {
+      const mine = g === grade;
+      const sel = on.has(g);
+      return `<button type="button" class="mg-gchip${sel ? ' on' : ''}${mine ? ' mine' : ''}"
+        aria-pressed="${sel ? 'true' : 'false'}"
+        ${mine ? 'disabled aria-disabled="true" title="Your own grade is always included"'
+               : `onclick="GameSettings.toggleSourceGrade(${g})"`}>Grade ${g}${mine ? ' <small>yours</small>' : ''}</button>`;
+    }).join('');
+    return `<div class="mg-gradebar" role="group" aria-label="Which grades game questions come from">
+      <span class="mg-gradebar-label">🎓 Questions from</span>
+      <span class="mg-gradebar-chips">${chips}</span>
+    </div>`;
+  }
+
+  // The child writes this, so it lives in the progress blob - never in
+  // students.settings, which a child session may only read. A grade the parent
+  // has not unlocked, or one below the child's own, is refused here as well as
+  // hidden: a disabled button is one devtools edit away from gone.
+  function toggleSourceGrade(grade) {
+    if (typeof DB === 'undefined' || !DB) return;
+    const own = childGrade();
+    const g = Number(grade);
+    const choices = (typeof GradeAccess !== 'undefined') ? GradeAccess.childChoices(own) : [own];
+    if (g === own || !choices.includes(g)) return;
+    DB.games = DB.games || {};
+    const cur = new Set((Array.isArray(DB.games.sourceGrades) ? DB.games.sourceGrades : []).map(Number));
+    if (cur.has(g)) cur.delete(g); else cur.add(g);
+    DB.games.sourceGrades = [...cur].filter(x => x !== own && choices.includes(x)).sort((a, b) => a - b);
+    // ⚠ `save` inside this module is the parent card's own save(); the blob
+    //   writer is the app-level one, which is a top-level function declaration
+    //   and therefore genuinely on window.
+    if (typeof window !== 'undefined' && typeof window.save === 'function') window.save(DB);
+    if (typeof MiniGames !== 'undefined' && MiniGames.renderHub) MiniGames.renderHub();
+    if (typeof toast === 'function') {
+      toast(cur.has(g) ? `🎓 Grade ${g} questions added to games.` : `Grade ${g} questions removed from games.`, 1800);
+    }
+  }
+
   function childSummaryLine() {
     try { const c = context('quickfire'); return c.available.length ? childSummary(c.settings, c.available) : ''; }
     catch (_) { return ''; }
@@ -686,6 +753,7 @@ const GameSettings = (() => {
     pick, pickGeneralKnowledge, pickForGame, context, markUsed, adaptiveLevel, adaptiveAnswer,
     renderParentCard, openCard, cancel, setMode, toggleSubject, setPercent, balance,
     setDifficulty, setRound, toggleFlag, save, childSummaryLine,
+    childGradeBar, toggleSourceGrade,
     _debug: () => ({ open: _open, draft: _draft, forId: _forId, status: _status }),
   };
 })();

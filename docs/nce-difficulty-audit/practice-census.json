@@ -1,0 +1,151 @@
+[
+  {
+    "pack": "grade9-biology",
+    "loadedRecords": 801,
+    "tasks": 18,
+    "practiceItems": 783,
+    "difficulty": {
+      "1": 162,
+      "2": 344,
+      "3": 257,
+      "4": 20
+    },
+    "types": {
+      "mcq": 684,
+      "numeric": 30,
+      "text": 69
+    },
+    "l4Projected": 0,
+    "projected": 48
+  },
+  {
+    "pack": "grade9-chemistry",
+    "loadedRecords": 854,
+    "tasks": 18,
+    "practiceItems": 836,
+    "difficulty": {
+      "1": 139,
+      "2": 395,
+      "3": 278,
+      "4": 24
+    },
+    "types": {
+      "mcq": 726,
+      "text": 61,
+      "numeric": 25,
+      "expr": 24
+    },
+    "l4Projected": 0,
+    "projected": 28
+  },
+  {
+    "pack": "grade9-english",
+    "loadedRecords": 612,
+    "tasks": 0,
+    "practiceItems": 612,
+    "difficulty": {
+      "1": 24,
+      "2": 323,
+      "3": 247,
+      "4": 18
+    },
+    "types": {
+      "mcq": 612
+    },
+    "l4Projected": 0,
+    "projected": 0
+  },
+  {
+    "pack": "grade9-french",
+    "loadedRecords": 1025,
+    "tasks": 0,
+    "practiceItems": 1025,
+    "difficulty": {
+      "1": 28,
+      "2": 572,
+      "3": 420,
+      "4": 5
+    },
+    "types": {
+      "mcq": 1025
+    },
+    "l4Projected": 0,
+    "projected": 0
+  },
+  {
+    "pack": "grade9-ict",
+    "loadedRecords": 1701,
+    "tasks": 63,
+    "practiceItems": 1638,
+    "difficulty": {
+      "1": 159,
+      "2": 1224,
+      "3": 247,
+      "4": 8
+    },
+    "types": {
+      "mcq": 1490,
+      "text": 64,
+      "slots": 61,
+      "numeric": 18,
+      "expr": 5
+    },
+    "l4Projected": 5,
+    "projected": 220
+  },
+  {
+    "pack": "grade9-maths",
+    "loadedRecords": 1760,
+    "tasks": 754,
+    "practiceItems": 1006,
+    "difficulty": {
+      "1": 107,
+      "2": 239,
+      "3": 297,
+      "4": 363
+    },
+    "types": {
+      "numeric": 591,
+      "mcq": 162,
+      "expr": 207,
+      "slots": 46
+    },
+    "l4Projected": 356,
+    "projected": 921
+  },
+  {
+    "pack": "grade9-physics",
+    "loadedRecords": 901,
+    "tasks": 18,
+    "practiceItems": 883,
+    "difficulty": {
+      "1": 157,
+      "2": 353,
+      "3": 341,
+      "4": 32
+    },
+    "types": {
+      "numeric": 127,
+      "mcq": 714,
+      "text": 42
+    },
+    "l4Projected": 0,
+    "projected": 68
+  },
+  {
+    "pack": "grade9-social-modern-studies",
+    "loadedRecords": 365,
+    "tasks": 0,
+    "practiceItems": 365,
+    "difficulty": {
+      "1": 34,
+      "2": 192,
+      "3": 139
+    },
+    "types": {
+      "mcq": 365
+    },
+    "l4Projected": 0,
+    "projected": 0
+  }
+]

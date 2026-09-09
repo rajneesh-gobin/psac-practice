@@ -15,34 +15,66 @@
 // ⚠ Photos sous licence CC BY / CC BY-SA : le crédit affiché sous chaque image
 //   est une obligation de la licence, pas une décoration. Ne pas le retirer.
 
-function _g4imgSvg(w, h, body) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img"
-    style="max-width:100%;max-height:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15);background:#fff;margin:6px 0">
-    <title>Image à décrire</title>${body}</svg>`;
-}
+// ⚠ La séquence de trois images est UNE GRILLE DE TROIS SVG SÉPARÉS, pas un
+//   seul dessin large. L'ancienne version était un unique svg de 660 unités de
+//   large : sur un téléphone les trois cases tombaient à ~110 px chacune, les
+//   personnages à ~19 px, et la troisième case sortait carrément de l'écran.
+//   Un enfant ne pouvait donc pas répondre aux questions sur l'image 3.
+//   La grille auto-fit empile les cases sur un téléphone (chacune prend toute
+//   la largeur) et les remet côte à côte dès qu'il y a la place.
+// ⚠ Les personnages sont un CORPS DESSINÉ surmonté d'un émoji de VISAGE.
+//   Les émojis de personne (🧒 👨 👩) sont des têtes seules dans Noto : posés
+//   sur l'herbe ils ressemblaient à des têtes coupées. Un visage sur un corps
+//   dessiné se lit comme un personnage debout, et l'émotion (😀 😟) reste
+//   lisible, ce dont dépendent les questions « le garçon est triste ».
+//   La couleur du tee-shirt identifie le personnage d'une case à l'autre.
 function _g4imgEmoji(x, y, size, ch) {
   return `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle">${ch}</text>`;
 }
-function _g4imgTree(x, groundY) {
-  return `<rect x="${x - 6}" y="${groundY - 42}" width="12" height="42" fill="#92400e" rx="2"/>
-    <circle cx="${x}" cy="${groundY - 56}" r="26" fill="#16a34a"/>
-    <circle cx="${x - 18}" cy="${groundY - 46}" r="19" fill="#22c55e"/>
-    <circle cx="${x + 18}" cy="${groundY - 46}" r="19" fill="#15803d"/>`;
+function _g4imgMark(x, y, size, txt, colour) {
+  return `<text x="${x}" y="${y}" font-size="${size}" font-weight="bold" font-family="sans-serif"
+    fill="${colour}" text-anchor="middle">${txt}</text>`;
 }
-function _g4imgHouse(x, groundY) {
-  return `<rect x="${x}" y="${groundY - 44}" width="60" height="44" fill="#fca5a5" stroke="#7f1d1d"/>
-    <polygon points="${x - 8},${groundY - 44} ${x + 30},${groundY - 72} ${x + 68},${groundY - 44}" fill="#b91c1c"/>
-    <rect x="${x + 24}" y="${groundY - 26}" width="16" height="26" fill="#7c2d12"/>
-    <rect x="${x + 6}" y="${groundY - 36}" width="13" height="13" fill="#bfdbfe" stroke="#7f1d1d"/>`;
+function _g4imgPerson(x, feetY, shirt, face, scale) {
+  const k = scale || 1;
+  const legH = 12 * k, torsoH = 21 * k, torsoW = 27 * k, head = 30 * k;
+  const torsoY = feetY - legH - torsoH;
+  return `<rect x="${x - 10 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#1e3a8a" rx="2"/>
+    <rect x="${x + 3 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#1e3a8a" rx="2"/>
+    <rect x="${x - torsoW / 2}" y="${torsoY}" width="${torsoW}" height="${torsoH}" rx="${8 * k}" fill="${shirt}"/>
+    <rect x="${x - torsoW / 2 - 5 * k}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>
+    <rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>
+    ${_g4imgEmoji(x, torsoY + 3 * k, head, face)}`;
 }
-function _g4imgPanel(x, n, inner) {
-  return `<g transform="translate(${x},0)">
-    <rect x="0" y="0" width="210" height="190" fill="#e0f2fe" stroke="#475569" stroke-width="2" rx="8"/>
-    <rect x="0" y="130" width="210" height="60" fill="#86efac"/>
+function _g4imgTree(x) {
+  return `<rect x="${x - 7}" y="80" width="14" height="42" fill="#92400e" rx="2"/>
+    <circle cx="${x}" cy="66" r="29" fill="#16a34a"/>
+    <circle cx="${x - 21}" cy="78" r="20" fill="#22c55e"/>
+    <circle cx="${x + 21}" cy="78" r="20" fill="#15803d"/>`;
+}
+function _g4imgHouse(x) {
+  return `<rect x="${x}" y="74" width="60" height="48" fill="#fecaca" stroke="#7f1d1d" stroke-width="2"/>
+    <polygon points="${x - 9},74 ${x + 30},44 ${x + 69},74" fill="#b91c1c"/>
+    <rect x="${x + 22}" y="96" width="17" height="26" fill="#7c2d12"/>
+    <rect x="${x + 6}" y="84" width="14" height="14" fill="#bfdbfe" stroke="#7f1d1d" stroke-width="2"/>`;
+}
+// ⚠ Le sol est un path, pas un rect : un rect à angles droits dépasse des
+//   coins arrondis du cadre. Et pas de clipPath : il faudrait un id, or
+//   plusieurs figures peuvent coexister dans la même page.
+function _g4imgPanel(n, sky, ground, inner) {
+  return `<svg viewBox="0 0 200 170" role="img" preserveAspectRatio="xMidYMid meet"
+    style="width:100%;height:auto;display:block;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+    <title>Image ${n}</title>
+    <rect x="1" y="1" width="198" height="168" rx="10" fill="${sky}" stroke="#475569" stroke-width="2"/>
+    <path d="M3,120 H197 V159 A8,8 0 0 1 189,167 H11 A8,8 0 0 1 3,159 Z" fill="${ground}"/>
     ${inner}
-    <circle cx="20" cy="20" r="14" fill="#1e3a5f"/>
-    <text x="20" y="26" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle" font-family="sans-serif">${n}</text>
-  </g>`;
+    <circle cx="24" cy="24" r="16" fill="#1e3a5f"/>
+    <text x="24" y="31" font-size="19" font-weight="bold" fill="#fff" text-anchor="middle" font-family="sans-serif">${n}</text>
+  </svg>`;
+}
+function _g4imgStrip(panels) {
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:8px;margin:8px 0;max-width:680px">${panels.join('')}</div>`;
 }
 
 // ── SCÈNE 1 : une seule image - la plage ──────────────────────────────
@@ -63,22 +95,46 @@ const _G4IMG_PLAGE = _g4imgPhoto(
   'scene-plage.jpg',
   'Photo : Øyvind Holmstad, Wikimedia Commons, CC BY-SA 4.0');
 
-// ── SCÈNE 2 : trois images - le ballon perdu ──────────────────────────
-const _G4IMG_BALLON = _g4imgSvg(660, 190, `
-  ${_g4imgPanel(0, 1, `${_g4imgHouse(14, 130)}${_g4imgTree(168, 130)}
-    ${_g4imgEmoji(105, 160, 34, '👦')}${_g4imgEmoji(135, 168, 22, '⚽')}`)}
-  ${_g4imgPanel(225, 2, `${_g4imgHouse(14, 130)}${_g4imgTree(168, 130)}
-    ${_g4imgEmoji(168, 84, 20, '⚽')}
-    ${_g4imgEmoji(112, 160, 34, '🙍')}`)}
-  ${_g4imgPanel(450, 3, `${_g4imgHouse(14, 130)}${_g4imgTree(168, 130)}
-    <line x1="140" y1="130" x2="156" y2="66" stroke="#78350f" stroke-width="4"/>
-    <line x1="158" y1="130" x2="174" y2="66" stroke="#78350f" stroke-width="4"/>
-    <line x1="144" y1="115" x2="161" y2="115" stroke="#78350f" stroke-width="3"/>
-    <line x1="148" y1="100" x2="165" y2="100" stroke="#78350f" stroke-width="3"/>
-    <line x1="152" y1="85" x2="169" y2="85" stroke="#78350f" stroke-width="3"/>
-    ${_g4imgEmoji(126, 112, 26, '👨')}
-    ${_g4imgEmoji(72, 162, 32, '👦')}${_g4imgEmoji(96, 150, 20, '⚽')}`)}
-`);
+/// ── SCÈNE 2 : trois images - le ballon perdu ──────────────────────────
+// Image 1 = situation de départ, image 2 = problème, image 3 = solution.
+// Chaque case doit répondre seule aux questions g4fr-img-011 à 019 :
+//   1 le garçon joue au ballon dans le jardin
+//   2 le ballon est dans l'arbre, le garçon est triste
+//   3 le père monte à l'échelle, le garçon a récupéré son ballon
+// Le garçon porte le même tee-shirt bleu dans les trois cases : c'est ce qui
+// dit à l'enfant que c'est la même histoire et le même personnage.
+const _G4IMG_BOY = '#2563eb';
+const _G4IMG_DAD = '#0f766e';
+const _G4IMG_BALLON = _g4imgStrip([
+  _g4imgPanel(1, '#dbeafe', '#86efac', `
+    <circle cx="176" cy="26" r="14" fill="#fcd34d"/>
+    ${_g4imgHouse(10)}
+    ${_g4imgTree(158)}
+    ${_g4imgPerson(96, 152, _G4IMG_BOY, '😀')}
+    ${_g4imgEmoji(128, 156, 24, '⚽')}
+  `),
+  _g4imgPanel(2, '#dbeafe', '#86efac', `
+    <circle cx="176" cy="26" r="14" fill="#fcd34d"/>
+    ${_g4imgHouse(10)}
+    ${_g4imgTree(158)}
+    ${_g4imgEmoji(158, 74, 26, '⚽')}
+    ${_g4imgPerson(96, 152, _G4IMG_BOY, '😟')}
+    ${_g4imgMark(122, 96, 22, '?', '#b91c1c')}
+  `),
+  _g4imgPanel(3, '#dbeafe', '#86efac', `
+    <circle cx="176" cy="26" r="14" fill="#fcd34d"/>
+    ${_g4imgHouse(10)}
+    ${_g4imgTree(158)}
+    <line x1="130" y1="152" x2="148" y2="58" stroke="#a16207" stroke-width="5" stroke-linecap="round"/>
+    <line x1="152" y1="152" x2="170" y2="58" stroke="#a16207" stroke-width="5" stroke-linecap="round"/>
+    <line x1="134" y1="129" x2="156" y2="129" stroke="#a16207" stroke-width="4"/>
+    <line x1="139" y1="105" x2="161" y2="105" stroke="#a16207" stroke-width="4"/>
+    <line x1="144" y1="81" x2="166" y2="81" stroke="#a16207" stroke-width="4"/>
+    ${_g4imgPerson(152, 122, _G4IMG_DAD, '🧔', 0.85)}
+    ${_g4imgPerson(62, 152, _G4IMG_BOY, '😀')}
+    ${_g4imgEmoji(88, 140, 22, '⚽')}
+  `)
+]);
 
 const _G4IMG_CONS1 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;border-radius:6px;padding:8px 12px;margin:6px 0;font-size:0.93em"><b>Observe l\'image, puis réponds à la question.</b></div>`;
 const _G4IMG_CONS3 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;border-radius:6px;padding:8px 12px;margin:6px 0;font-size:0.93em"><b>Observe les trois images dans l\'ordre, puis réponds à la question.</b></div>`;

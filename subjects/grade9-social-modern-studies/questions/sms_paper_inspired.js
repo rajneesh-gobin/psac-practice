@@ -219,7 +219,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi030', chapterId:'g9sms-hazards-environment', subsection:'cyclones', difficulty:3,
     question:'Mauritius uses a four-class cyclone warning system. What does a Class IV warning indicate?',
-    options:['Extremely dangerous cyclonic winds are expected within 12 hours','A cyclone is at least 48 hours away','A cyclone has passed and conditions are improving','Gusts of 60–90 km/h are expected'],
+    options:['Extremely dangerous winds are expected within 12 hours','A cyclone is at least 48 hours away','A cyclone has passed and conditions are improving','Gusts of 60–90 km/h are expected'],
     answer:'Extremely dangerous winds are expected within 12 hours',
     hint:'Class IV is the highest and most urgent warning level.',
     explanation:'The Mauritian cyclone warning system runs from Class I (a potential threat within 48 hours) to <b>Class IV</b> (the highest level), signalling that extremely dangerous cyclonic winds are expected to strike within 12 hours. Class IV requires immediate shelter.' }),

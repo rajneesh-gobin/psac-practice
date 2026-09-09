@@ -67,14 +67,39 @@ check('the two dead grade-lock names are gone', () => {
   }
 });
 
-check('the practice-hub grade dropdown honours crossGradePractice', () => {
+check('the practice-hub grade dropdown offers exactly the granted grades', () => {
   const app = engine.find(e => e.file === 'engine/app.js').src;
   const start = app.indexOf('function _renderGradeBar(');
   assert.ok(start > 0, '_renderGradeBar moved');
   const body = app.slice(start, app.indexOf('\n  }', start));
-  assert.match(body, /crossGradePractice/,
-    'the dropdown must gate on the setting the Parent Controls toggle writes');
+  assert.match(body, /GradeAccess\.allowed\(/,
+    'the dropdown must list the grades the parent actually granted');
+  assert.ok(!/_liveGrades\(\s*\)/.test(body),
+    'listing every live grade and merely disabling the select hands a child the whole catalogue the moment the disabled attribute goes');
   assert.match(body, /sel\.disabled\s*=\s*locked/, 'the lock must actually disable the control');
+});
+
+// The same failure as the two dead names above, one layer up: a card that
+// writes a key nothing reads, or markup calling a handler that no longer
+// exists, both fail silently and permissively.
+check('grade access is written by the control that claims to write it', () => {
+  const auth = engine.find(e => e.file === 'engine/auth.js').src;
+  assert.match(auth, /r\.allowedGrades\s*=/, 'Auth.toggleGradeAccess must write restrictions.allowedGrades');
+  assert.match(auth, /toggleGradeAccess,/, 'it must be exported, or the markup calls nothing');
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.match(html, /Auth\.toggleGradeAccess\(/, 'the Parent Controls card must call it');
+  assert.ok(!/pd-crossgrade-(search|practice)-toggle/.test(html),
+    'the two replaced toggles are back in the markup, and nothing writes them now');
+  assert.ok(!/Auth\.toggleCrossGrade/.test(html), 'the markup calls a handler that no longer exists');
+});
+
+check('a child can never send their games below their own grade', () => {
+  const helpers = engine.find(e => e.file === 'engine/helpers.js').src;
+  const start = helpers.indexOf('function childChoices(');
+  assert.ok(start > 0, 'GradeAccess.childChoices moved');
+  const body = helpers.slice(start, helpers.indexOf('\n  }', start));
+  assert.match(body, /filter\(x => x >= g\)/,
+    'childChoices is the only thing standing between a child and easier questions');
 });
 
 check('a child\'s grade never comes from DB.grade alone', () => {

@@ -131,6 +131,14 @@ const QuestionProgress = (() => {
           return { ok: false, reason: (error && error.message) || (data && data.error) || 'refused', written };
         }
         written += (data.written || 0);
+        // ⚠ THE SERVER OWNS THE SCORE. app.js has been adding its own optimistic
+        //   prediction per answer; this is the number that actually got minted,
+        //   including every award it declined because the question had already
+        //   paid. Applied on every batch, so a device that was offline for an
+        //   hour reconciles on the first successful flush.
+        if (typeof applyServerPoints === 'function' && typeof data.points !== 'undefined') {
+          try { applyServerPoints(data.points, data.level); } catch (_) {}
+        }
         // Only now is it safe to drop them. Re-read, because an answer may have
         // been appended while the request was in flight.
         const fresh = readQueue();
@@ -214,6 +222,20 @@ const QuestionProgress = (() => {
     _owner = studentId || null;
   }
 
+  // Has this question EVER been answered correctly by this child? The points
+  // rule "a question pays once, ever" is enforced in the database; this is the
+  // local prediction of it, so app.js can decide whether to float a number
+  // before the queue has been anywhere near the server.
+  //
+  // ⚠ An id this cache has never seen answers FALSE - optimistic on purpose.
+  //   The cache is only ever loaded a chapter at a time, so "not here" usually
+  //   means "not loaded", not "never answered". Being optimistic shows a float
+  //   that a later flush may quietly not honour; being pessimistic would hide
+  //   points the child genuinely earned. The header total is corrected from the
+  //   server either way, within one flush.
+  const everCorrect = (questionId) => ((_cache[questionId] || {}).correctAttempts || 0) > 0;
+
+
   const all = () => _cache;
   const forChapter = (chapterId) => {
     const out = Object.create(null);
@@ -230,7 +252,7 @@ const QuestionProgress = (() => {
     window.addEventListener('pagehide', () => { flush(); });
   }
 
-  return { record, flush, loadChapter, backfill, reset, all, forChapter, pendingCount, syncState, eventKey, QUEUE_KEY };
+  return { record, flush, loadChapter, backfill, reset, all, forChapter, everCorrect, pendingCount, syncState, eventKey, QUEUE_KEY };
 })();
 
 if (typeof window !== 'undefined') window.QuestionProgress = QuestionProgress;

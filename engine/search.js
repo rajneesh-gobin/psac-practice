@@ -351,26 +351,40 @@ const Search = (() => {
     const qWords = normQ.split(' ').filter(w => w.length >= 2);
     if (!qWords.length) return;
 
-    const studentGrade       = (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
+    // ⚠ "Your grade" is the child's ACCOUNT grade. SELECTED_GRADE follows
+    //   whichever pack happens to be open, which is only right once a subject
+    //   has been chosen.
+    const studentGrade       = (typeof GradeAccess !== 'undefined' ? GradeAccess.ownGrade() : 0)
+      || (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
     const restr              = typeof DB !== 'undefined' ? (DB.restrictions || {}) : {};
-    const allowCrossSearch   = !!restr.crossGradeSearch;
-    const allowCrossPractice = !!restr.crossGradePractice;
+    // ⚠ WHICH grades, not whether. The parent grants grades one at a time
+    //   (restrictions.allowedGrades); a legacy blob carrying the old
+    //   crossGradeSearch / crossGradePractice booleans migrates to "every live
+    //   grade" inside GradeAccess, so no family loses access on the way over.
+    //   Anything in an allowed grade is both visible AND practisable - a result
+    //   a child can read but not attempt was two settings pretending to be one.
+    const allowedGrades      = new Set((typeof GradeAccess !== 'undefined')
+      ? GradeAccess.allowed(studentGrade, restr)
+      : [studentGrade]);
 
     // Question matches
     let qPool    = subjFilter ? buildQIndex().filter(e => e.meta.packId === subjFilter) : buildQIndex();
     const qAll   = qPool.filter(e => matchesQuery(e, normQ, qWords));
     const qOwn   = qAll.filter(e => e.meta.grade === studentGrade);
-    const qOther = qAll.filter(e => e.meta.grade !== studentGrade);
+    const qOtherAll = qAll.filter(e => e.meta.grade !== studentGrade);
+    const qOther    = qOtherAll.filter(e => allowedGrades.has(e.meta.grade));
 
     // Chapter/syllabus matches - exclude chapters already surfaced by question results
     let chPool    = subjFilter ? buildChIndex().filter(c => c.packId === subjFilter) : buildChIndex();
     const chAll   = chPool.filter(c => matchesQuery(c, normQ, qWords));
     const ownQChs = new Set(qOwn.map(e => e.q.chapterId));
     const syllOwn   = chAll.filter(c => c.grade === studentGrade && !ownQChs.has(c.chapterId));
-    const syllOther = chAll.filter(c => c.grade !== studentGrade);
+    const syllOtherAll = chAll.filter(c => c.grade !== studentGrade);
+    const syllOther    = syllOtherAll.filter(c => allowedGrades.has(c.grade));
 
-    const totalOwn   = qOwn.length + syllOwn.length;
-    const totalOther = qOther.length + syllOther.length;
+    const totalOwn    = qOwn.length + syllOwn.length;
+    const totalOther  = qOther.length + syllOther.length;
+    const totalLocked = (qOtherAll.length + syllOtherAll.length) - totalOther;
 
     if (statusEl) {
       statusEl.textContent = (totalOwn + totalOther)
@@ -407,7 +421,7 @@ const Search = (() => {
       }
       html += '</div>';
 
-    } else if (totalOther > 0) {
+    } else if (totalOther + totalLocked > 0) {
       html += `<div class="mb-4 text-center py-6 bg-gray-50 dark:bg-gray-800/40 rounded-2xl">
         <p class="text-sm text-gray-500 dark:text-gray-400">No matches in your grade (Grade ${studentGrade}).</p>
       </div>`;
@@ -424,40 +438,40 @@ const Search = (() => {
 
     // ── Other grades ───────────────────────────────────────────────────────
     if (totalOther > 0) {
-      if (!allowCrossSearch) {
-        html += `<div class="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-2xl text-center">
-          <p class="text-sm text-amber-700 dark:text-amber-400">🔒 ${totalOther} more result${totalOther !== 1 ? 's' : ''} found in other grades.</p>
-          <p class="text-xs text-amber-600 dark:text-amber-500 mt-1">Ask a parent to enable cross-grade search in Parent Controls.</p>
-        </div>`;
-      } else {
-        const otherGrades = [...new Set([
-          ...qOther.map(e => e.meta.grade),
-          ...syllOther.map(c => c.grade),
-        ])].sort();
+      const otherGrades = [...new Set([
+        ...qOther.map(e => e.meta.grade),
+        ...syllOther.map(c => c.grade),
+      ])].sort();
 
-        for (const g of otherGrades) {
-          const gQs  = qOther.filter(e => e.meta.grade === g);
-          const gChs = syllOther.filter(c => c.grade === g);
-          const ids  = gQs.map(e => e.q.id);
-          html += `<div class="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Grade ${g}</span>
-              <span class="chip gray text-xs">Preview</span>
-              <span class="chip amber text-xs">${gQs.length + gChs.length} match${(gQs.length + gChs.length) !== 1 ? 'es' : ''}</span>
-            </div>
-            ${gChs.length ? _renderChCards(gChs, true) : ''}
-            ${gQs.length  ? `<div class="mt-2">${_renderQCards(gQs, true)}</div>` : ''}
-            ${gQs.length && allowCrossPractice
-              ? `<button onclick="Search.practiceOther(${JSON.stringify(ids)},'Grade ${g}')"
-                  class="w-full mt-2 py-2 text-sm font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors">
-                  ▶ Revise Grade ${g} questions
-                </button>`
-              : gQs.length
-                ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">🔒 Cross-grade practice is off - ask a parent to enable it.</p>`
-                : ''}
-          </div>`;
-        }
+      for (const g of otherGrades) {
+        const gQs  = qOther.filter(e => e.meta.grade === g);
+        const gChs = syllOther.filter(c => c.grade === g);
+        const ids  = gQs.map(e => e.q.id);
+        html += `<div class="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Grade ${g}</span>
+            <span class="chip gray text-xs">${g > studentGrade ? 'Ahead' : 'Catch-up'}</span>
+            <span class="chip amber text-xs">${gQs.length + gChs.length} match${(gQs.length + gChs.length) !== 1 ? 'es' : ''}</span>
+          </div>
+          ${gChs.length ? _renderChCards(gChs, true) : ''}
+          ${gQs.length  ? `<div class="mt-2">${_renderQCards(gQs, true)}</div>` : ''}
+          ${gQs.length
+            ? `<button onclick="Search.practiceOther(${JSON.stringify(ids)},'Grade ${g}')"
+                class="w-full mt-2 py-2 text-sm font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors">
+                ▶ Revise Grade ${g} questions
+              </button>`
+            : ''}
+        </div>`;
       }
+    }
+
+    // Grades the parent has not unlocked. Counted, never listed: naming the
+    // topics would be the preview the lock is there to withhold.
+    if (totalLocked > 0) {
+      html += `<div class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-2xl text-center">
+        <p class="text-sm text-amber-700 dark:text-amber-400">🔒 ${totalLocked} more result${totalLocked !== 1 ? 's' : ''} found in grades you cannot open.</p>
+        <p class="text-xs text-amber-600 dark:text-amber-500 mt-1">Ask a parent to unlock those grades under Grade Access in Parent Controls.</p>
+      </div>`;
     }
 
     resultsEl.innerHTML = html;
@@ -468,8 +482,15 @@ const Search = (() => {
     startSearchPractice(STATIC_QUESTIONS.filter(q => ids.includes(q.id)), 'Search Results');
   }
 
+  // ⚠ The button is only drawn for a grade the parent unlocked, but a rendered
+  //   page outlives a setting change and markup is one devtools edit away from
+  //   anything. Re-check here rather than trust the DOM.
   function practiceOther(ids, label) {
-    startSearchPractice(STATIC_QUESTIONS.filter(q => ids.includes(q.id)), `Revision - ${label}`);
+    const allowed = new Set((typeof GradeAccess !== 'undefined') ? GradeAccess.allowed() : []);
+    const grade = new Map(buildQIndex().map(e => [e.q.id, e.meta.grade]));
+    const ok = ids.filter(id => { const g = grade.get(id); return g === undefined || allowed.has(g); });
+    if (!ok.length) { toast('🔒 That grade is locked by a parent.', 2500); return; }
+    startSearchPractice(STATIC_QUESTIONS.filter(q => ok.includes(q.id)), `Revision - ${label}`);
   }
 
   async function practiceChapter(packId, chapterId) {

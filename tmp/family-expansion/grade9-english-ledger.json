@@ -1,0 +1,236 @@
+{
+  "pack": "grade9-english",
+  "file": "subjects/grade9-english/questions/family_expansion.js",
+  "totals": {
+    "families": 15,
+    "variants": 71,
+    "byChapter": { "g9eng-reading": 34, "g9eng-writing": 28, "g9eng-literature": 5, "g9eng-gr-sentence": 4 },
+    "byDifficulty": { "1": 7, "2": 23, "3": 34, "4": 7 },
+    "byType": { "text": 33, "mcq": 38 }
+  },
+  "families": [
+    {
+      "familyId": "g9eng-fam-001",
+      "chapterId": "g9eng-reading",
+      "subsection": "retrieval, inference, vocabulary, authors_view, evidence",
+      "outcome": "Read a short descriptive/reportage passage and move from retrieval to inference to judging the writer's attitude",
+      "context": "Original 112-word passage: a night baker in Rose Hill, reprinted in full in every variant",
+      "variants": [
+        { "id": "g9eng-fam-001-a", "difficulty": 1, "type": "text", "variation": "retrieve a number stated in words and write it in figures", "misconception": "copies a nearby number (half past ten) without checking what it counts" },
+        { "id": "g9eng-fam-001-b", "difficulty": 2, "type": "mcq", "variation": "infer something the passage never states (his isolation) from combined details", "misconception": "picks the most vivid image (the smell of flour) as though vividness were evidence" },
+        { "id": "g9eng-fam-001-c", "difficulty": 2, "type": "text", "variation": "produce the word carrying a given meaning rather than choose it", "misconception": "answers 'complain', the neighbouring and more familiar verb" },
+        { "id": "g9eng-fam-001-d", "difficulty": 3, "type": "mcq", "variation": "weigh the strength of the writer's attitude, not just its direction", "misconception": "reads any criticism as contempt" },
+        { "id": "g9eng-fam-001-e", "difficulty": 3, "type": "mcq", "variation": "select the quotation that supports one exact claim among four accurate quotations", "misconception": "picks a quotation that mentions the topic instead of one that supports the claim" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-002",
+      "chapterId": "g9eng-reading",
+      "subsection": "retrieval, language, authors_view, evidence",
+      "outcome": "Follow an argument through a short opinion column and judge a claim about the writer's position",
+      "context": "Original 120-word school-magazine column on phones in lessons",
+      "variants": [
+        { "id": "g9eng-fam-002-a", "difficulty": 1, "type": "text", "variation": "retrieve a duration in the writer's own words", "misconception": "supplies a plausible length (a year) instead of the printed one" },
+        { "id": "g9eng-fam-002-b", "difficulty": 2, "type": "mcq", "variation": "explain the effect of a structural device (matched sentence shapes)", "misconception": "assumes the side named first is the side the writer supports" },
+        { "id": "g9eng-fam-002-c", "difficulty": 3, "type": "mcq", "variation": "identify the distinction the argument turns on (owning vs using)", "misconception": "takes a mid-argument detail (the toilets) as the writer's point" },
+        { "id": "g9eng-fam-002-d", "difficulty": 2, "type": "text", "variation": "quote evidence accurately, with the sequence of events checked", "misconception": "quotes 'the box', which is the later solution, not where phones went during the ban" },
+        { "id": "g9eng-fam-002-e", "difficulty": 4, "type": "mcq", "variation": "judge a pupil's claim against the whole column; all four options are developed", "misconception": "lifts a concession out of an argument and treats it as the conclusion" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-003",
+      "chapterId": "g9eng-reading",
+      "subsection": "across_texts, authors_view, text_features",
+      "outcome": "Compare two texts on one event: shared facts, added detail, apparent contradiction, difference of purpose",
+      "context": "TWO original texts on the same footpath repair — a council notice (65 words) and a resident's letter (90 words), both reprinted in every variant",
+      "variants": [
+        { "id": "g9eng-fam-003-a", "difficulty": 2, "type": "mcq", "variation": "find the one fact carried by both texts", "misconception": "a detail remembered clearly from one text is assumed to be in both" },
+        { "id": "g9eng-fam-003-b", "difficulty": 3, "type": "mcq", "variation": "add what the second text says about a fact the first reports flatly", "misconception": "assumes everything a complaining text mentions is unfinished" },
+        { "id": "g9eng-fam-003-c", "difficulty": 4, "type": "mcq", "variation": "resolve an apparent contradiction: disagreement about sufficiency is not a clash of facts", "misconception": "treats any difference of tone, or a comparison of two different jobs, as a contradiction" },
+        { "id": "g9eng-fam-003-d", "difficulty": 3, "type": "mcq", "variation": "contrast the purposes of the two texts", "misconception": "reads 'thanks residents for their patience' as an apology" },
+        { "id": "g9eng-fam-003-e", "difficulty": 2, "type": "text", "variation": "name the text type from its opening and its voice", "misconception": "answers 'notice' or 'report', which describe the other text" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-004",
+      "chapterId": "g9eng-reading",
+      "subsection": "retrieval, text_features, inference, authors_view",
+      "outcome": "Read a non-continuous text (headed leaflet with a list) for information and for how it is organised",
+      "context": "Original school-library Reading Week leaflet with three headings, four listed events and a capacity figure",
+      "variants": [
+        { "id": "g9eng-fam-004-a", "difficulty": 1, "type": "text", "variation": "retrieve from a list where two entries share a time", "misconception": "searches for the time and stops at the first match" },
+        { "id": "g9eng-fam-004-b", "difficulty": 2, "type": "mcq", "variation": "explain why a list is used rather than prose", "misconception": "assumes layout signals importance rather than how the text will be used" },
+        { "id": "g9eng-fam-004-c", "difficulty": 3, "type": "mcq", "variation": "place a NEW sentence under the right heading — organisation, not retrieval", "misconception": "matches a repeated word ('pupils') to a heading instead of matching purpose" },
+        { "id": "g9eng-fam-004-d", "difficulty": 3, "type": "mcq", "variation": "infer why a capacity figure was printed beside a sign-up instruction", "misconception": "brings in knowledge of other halls that the leaflet does not supply" },
+        { "id": "g9eng-fam-004-e", "difficulty": 4, "type": "mcq", "variation": "judge a claim about the leaflet's audience by auditing all four events", "misconception": "judges audience from the title ('Reading Week') rather than from what the text asks readers to do" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-005",
+      "chapterId": "g9eng-reading",
+      "subsection": "language, inference, vocabulary, evidence",
+      "outcome": "Read a narrative extract for its devices, its implications and the words that evidence them",
+      "context": "Original 75-word extract: a teacher, an emptied classroom and one bag left behind",
+      "variants": [
+        { "id": "g9eng-fam-005-a", "difficulty": 2, "type": "text", "variation": "name the device rather than select it from a list", "misconception": "answers 'metaphor' having seen a comparison but not the signal word 'like'" },
+        { "id": "g9eng-fam-005-b", "difficulty": 3, "type": "mcq", "variation": "read a figurative statement about size correctly; all distractors are literal readings", "misconception": "takes 'gone suddenly enormous' as a physical measurement" },
+        { "id": "g9eng-fam-005-c", "difficulty": 3, "type": "mcq", "variation": "infer a habit from a time reference, against a tempting causal detail", "misconception": "uses the opening detail (a nine-second exit) as the cause of the closing one" },
+        { "id": "g9eng-fam-005-d", "difficulty": 2, "type": "text", "variation": "supply a word used outside its usual field (a liquid verb used of noise)", "misconception": "answers 'finding' because it sits inside the same water image" },
+        { "id": "g9eng-fam-005-e", "difficulty": 3, "type": "text", "variation": "produce the exact two words that evidence 'for a long time'", "misconception": "quotes 'She knew', which evidences knowing but not duration" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-014",
+      "chapterId": "g9eng-reading",
+      "subsection": "retrieval, text_features, inference",
+      "outcome": "Read a table plus its footnote: retrieve, explain the layout, apply a constraint, and identify missing information",
+      "context": "Original Curepipe-to-Rose Hill bus table (4 services, 3 timing points) with a note on the days of operation. Journey times are internally consistent: route 198 = 40 min, route 22 = 46 min on both runs",
+      "variants": [
+        { "id": "g9eng-fam-014-a", "difficulty": 1, "type": "text", "variation": "read across a row to the correct column", "misconception": "reads the intermediate (Phoenix) column instead of the destination" },
+        { "id": "g9eng-fam-014-b", "difficulty": 2, "type": "mcq", "variation": "explain why a footnote sits outside the table", "misconception": "treats position on the page as a ranking of importance, and skips the note" },
+        { "id": "g9eng-fam-014-c", "difficulty": 3, "type": "mcq", "variation": "apply a deadline constraint: LATEST departure that still arrives in time", "misconception": "reads 'latest' from the departure column and ignores the arrival condition" },
+        { "id": "g9eng-fam-014-d", "difficulty": 3, "type": "mcq", "variation": "identify what the text does NOT tell you before answering a question with it", "misconception": "treats a stated exception ('not on public holidays') as a complete list of the days covered" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-015",
+      "chapterId": "g9eng-reading",
+      "subsection": "retrieval, vocabulary, inference, evidence, authors_view",
+      "outcome": "Follow where a passage of complaints actually arrives, and evidence it",
+      "context": "Original 100-word passage: an unplanned mango tree behind the science block",
+      "variants": [
+        { "id": "g9eng-fam-015-a", "difficulty": 1, "type": "text", "variation": "retrieve a number from among three competing numbers", "misconception": "takes '7' from 'the Grade 7s' or '2' from 'two slabs'" },
+        { "id": "g9eng-fam-015-b", "difficulty": 2, "type": "text", "variation": "supply the verb carrying a given meaning", "misconception": "answers 'drops', the neighbouring verb in the same list" },
+        { "id": "g9eng-fam-015-c", "difficulty": 3, "type": "mcq", "variation": "infer WHY an annual suggestion always dies, from the timing the passage gives", "misconception": "reverses the text — thinks the beans benefit from the shade" },
+        { "id": "g9eng-fam-015-d", "difficulty": 3, "type": "mcq", "variation": "match evidence to a claim about origin rather than about nuisance", "misconception": "offers evidence about the general subject instead of the exact claim" },
+        { "id": "g9eng-fam-015-e", "difficulty": 4, "type": "mcq", "variation": "judge a claim about the writer's position against the shape of the whole passage", "misconception": "counts negative details instead of following where the argument lands; reads a concession as the view" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-006",
+      "chapterId": "g9eng-writing",
+      "subsection": "formal_letter, register",
+      "outcome": "Produce the conventions of a formal letter and control its register",
+      "context": "A pupil's formal letter to the head teacher about a broken water fountain",
+      "variants": [
+        { "id": "g9eng-fam-006-a", "difficulty": 2, "type": "text", "variation": "produce the salutation for an unnamed reader", "misconception": "writes 'Dear Head Teacher' (a job title where English uses a name) or 'Hello Sir'" },
+        { "id": "g9eng-fam-006-b", "difficulty": 2, "type": "text", "variation": "produce the closing that the given salutation forces", "misconception": "reverses the faithfully/sincerely pair" },
+        { "id": "g9eng-fam-006-c", "difficulty": 3, "type": "text", "variation": "ONE condition changed — the reader is now named; the same question has a different answer", "misconception": "believes the closing depends on formality or on the subject, not on the salutation" },
+        { "id": "g9eng-fam-006-d", "difficulty": 3, "type": "text", "variation": "locate the single word that breaks the register in a sentence that is otherwise fine", "misconception": "rewrites the whole sentence, or blames a neutral noun" },
+        { "id": "g9eng-fam-006-e", "difficulty": 3, "type": "mcq", "variation": "choose among four requests that differ only in register", "misconception": "confuses formal with forceful ('It is about time'), or thinks 'please' alone makes a sentence formal" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-007",
+      "chapterId": "g9eng-writing",
+      "subsection": "cohesion",
+      "outcome": "Diagnose and repair cohesion faults in a pupil's own paragraph",
+      "context": "A five-sentence numbered paragraph about a bottle collection, with one gap and one ambiguous pronoun",
+      "variants": [
+        { "id": "g9eng-fam-007-a", "difficulty": 2, "type": "text", "variation": "supply a connective after naming the relationship", "misconception": "chooses 'However' because the paragraph contains a surprise — a surprise is not a contrast" },
+        { "id": "g9eng-fam-007-b", "difficulty": 3, "type": "mcq", "variation": "diagnose someone else's wrong answer and say why it is wrong", "misconception": "invents a placement rule ('however cannot begin a sentence') instead of naming the meaning fault" },
+        { "id": "g9eng-fam-007-c", "difficulty": 3, "type": "text", "variation": "locate an ambiguous pronoun rather than being told where it is", "misconception": "checks what the writer meant instead of what the nearest preceding noun is" },
+        { "id": "g9eng-fam-007-d", "difficulty": 3, "type": "text", "variation": "produce the repair, not the diagnosis (first two words only, so marking stays closed)", "misconception": "avoids repeating a noun because repetition was taught as a style fault" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-008",
+      "chapterId": "g9eng-writing",
+      "subsection": "planning, essay",
+      "outcome": "Plan and judge argumentative writing: relevance, reason vs example, topic sentences, evidence that fits its claim",
+      "context": "The essay title 'Should the school day start an hour later?' with a pupil's four-point plan, a drafted body paragraph, and a second pupil's rival plan",
+      "variants": [
+        { "id": "g9eng-fam-008-a", "difficulty": 2, "type": "mcq", "variation": "classify a point by which side it argues for", "misconception": "confuses point 4 with point 3's weakness (a single outside example)" },
+        { "id": "g9eng-fam-008-b", "difficulty": 3, "type": "text", "variation": "distinguish an example from a reason and name it by number", "misconception": "treats a concrete example as an argument because it feels solid" },
+        { "id": "g9eng-fam-008-c", "difficulty": 3, "type": "mcq", "variation": "choose the topic sentence that makes the paragraph's claim", "misconception": "announces the topic ('In this paragraph I am going to…') or opens with a general truth" },
+        { "id": "g9eng-fam-008-d", "difficulty": 4, "type": "mcq", "variation": "analyse a whole drafted paragraph and name its most serious weakness", "misconception": "over-generalisation — six pupils in one class used to prove a claim about the whole school" },
+        { "id": "g9eng-fam-008-e", "difficulty": 4, "type": "mcq", "variation": "compare two whole plans and justify which produces the stronger essay", "misconception": "believes a one-sided plan is more convincing, and that answering an objection is a distraction" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-009",
+      "chapterId": "g9eng-writing",
+      "subsection": "punctuation, spelling",
+      "outcome": "Proof-read a draft: apostrophes, capitals, direct speech, and the spellings pupils most often correct wrongly",
+      "context": "Sentences taken from a pupil's draft, each presented with its own context",
+      "variants": [
+        { "id": "g9eng-fam-009-e", "difficulty": 1, "type": "text", "variation": "restore a capital letter mid-sentence", "misconception": "capitalises only after a full stop, the first rule taught" },
+        { "id": "g9eng-fam-009-a", "difficulty": 2, "type": "text", "variation": "produce the word with the apostrophe in place, having decided how many owners there are", "misconception": "writes teacher's for a plural owner" },
+        { "id": "g9eng-fam-009-b", "difficulty": 3, "type": "mcq", "variation": "punctuate direct speech: where the question mark goes and what happens to the reporting verb", "misconception": "capitalises 'asked' because a question mark usually ends a sentence" },
+        { "id": "g9eng-fam-009-c", "difficulty": 2, "type": "text", "variation": "find and correct the misspelling in a sentence containing a decoy", "misconception": "'corrects' grateful to greatful on the assumption that it comes from great" },
+        { "id": "g9eng-fam-009-d", "difficulty": 3, "type": "text", "variation": "apply the consonant+y to -ily rule in production", "misconception": "spells what the word sounds like when said quickly (necessarly)" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-010",
+      "chapterId": "g9eng-writing",
+      "subsection": "descriptive, narrative",
+      "outcome": "Show rather than tell; keep a viewpoint; cut what does not move a story",
+      "context": "Sentences and openings from pupils' descriptive and narrative drafts",
+      "variants": [
+        { "id": "g9eng-fam-010-a", "difficulty": 2, "type": "mcq", "variation": "distinguish showing from telling among four sentences with the same content", "misconception": "believes an intensifier ('extremely nervous') counts as showing" },
+        { "id": "g9eng-fam-010-b", "difficulty": 3, "type": "text", "variation": "identify the one word that instructs the reader's feeling", "misconception": "deletes the precise verb ('struggled') instead of the feeling word — the opposite of the lesson" },
+        { "id": "g9eng-fam-010-c", "difficulty": 3, "type": "text", "variation": "locate the word that breaks first-person viewpoint", "misconception": "uses 'you' as a neutral 'one', which addresses the reader and drops the narrator" },
+        { "id": "g9eng-fam-010-d", "difficulty": 2, "type": "mcq", "variation": "cut the sentence that does not change the narrator's situation", "misconception": "keeps background facts because they look like research" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-013",
+      "chapterId": "g9eng-writing",
+      "subsection": "register",
+      "outcome": "Convert a group-chat message into a school notice: register, precision and accuracy",
+      "context": "One unpunctuated chat message that must be reissued as a notice on the school board",
+      "variants": [
+        { "id": "g9eng-fam-013-e", "difficulty": 1, "type": "text", "variation": "expand a contraction for formal writing", "misconception": "leaves contractions in place because they read naturally" },
+        { "id": "g9eng-fam-013-a", "difficulty": 2, "type": "text", "variation": "replace a spoken shortening with its full form", "misconception": "judges by whether the reader will understand rather than by where the text is printed" },
+        { "id": "g9eng-fam-013-c", "difficulty": 2, "type": "text", "variation": "expand an abbreviated day and capitalise it", "misconception": "corrects only the capital and keeps the abbreviation ('Fri')" },
+        { "id": "g9eng-fam-013-b", "difficulty": 3, "type": "mcq", "variation": "choose the opening line; one distractor has near-acceptable register but is factually wrong", "misconception": "writes 'cancelled' for an event that is being postponed" },
+        { "id": "g9eng-fam-013-d", "difficulty": 3, "type": "mcq", "variation": "decide which vagueness actually stops the notice working", "misconception": "thinks the missing cause matters more than the missing date" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-011",
+      "chapterId": "g9eng-literature",
+      "subsection": "figurative_devices, effect_of_device, line_explication, supported_response",
+      "outcome": "Name a device, explain its effect, read a literal line correctly, and support a reading with the right words",
+      "context": "Original six-line poem: the sea taking a sea wall stone by stone. Written to answer the audit's two seeds on this pack (g9eng-litv-077 weak-distractors, g9eng-litv-097 format-gap)",
+      "variants": [
+        { "id": "g9eng-fam-011-a", "difficulty": 2, "type": "text", "variation": "name the device in production", "misconception": "answers 'personification' — true of the poem, but not of the line asked about" },
+        { "id": "g9eng-fam-011-b", "difficulty": 3, "type": "mcq", "variation": "say which qualities a simile actually lends; no distractor is a silly literalism", "misconception": "imports the whole source situation (money, debt, repayment) instead of the borrowed quality" },
+        { "id": "g9eng-fam-011-c", "difficulty": 3, "type": "mcq", "variation": "recognise a LITERAL line inside a figurative poem — the reverse of the usual error", "misconception": "reads everything as figurative once a poem has used a simile" },
+        { "id": "g9eng-fam-011-d", "difficulty": 3, "type": "text", "variation": "PRODUCE the supporting quotation instead of recognising a developed answer", "misconception": "copies the whole line, showing where to look but not which words carry the point" },
+        { "id": "g9eng-fam-011-e", "difficulty": 4, "type": "mcq", "variation": "four responses, all developed and all quoting accurately; judge the fit between claim and evidence", "misconception": "picks the response that sounds most developed, or accepts a correct quotation as proof of the claim attached to it" }
+      ]
+    },
+    {
+      "familyId": "g9eng-fam-012",
+      "chapterId": "g9eng-gr-sentence",
+      "subsection": "voice",
+      "outcome": "Transform between voices in production, keep the tense, and explain why a writer chose the passive",
+      "context": "Short news-style sentences about a council, a head teacher and an inspection",
+      "variants": [
+        { "id": "g9eng-fam-012-a", "difficulty": 2, "type": "text", "variation": "produce the passive, agent kept, tense held", "misconception": "shifts to the present perfect while changing the voice" },
+        { "id": "g9eng-fam-012-b", "difficulty": 3, "type": "text", "variation": "reverse the transformation — passive back to active", "misconception": "keeps 'was' out of habit and produces a sentence in neither voice" },
+        { "id": "g9eng-fam-012-c", "difficulty": 3, "type": "mcq", "variation": "hold the present perfect through the transformation", "misconception": "defaults to the simple past because most passive practice sentences are past" },
+        { "id": "g9eng-fam-012-d", "difficulty": 3, "type": "mcq", "variation": "explain the writer's REASON for the passive, not the form of it", "misconception": "believes the passive is a rule of newspapers, or that the active would be ungrammatical" }
+      ]
+    }
+  ],
+  "needs": [
+    "LOCAL_FILES: add 'family_expansion.js' to LOCAL_FILES['grade9-english'] in engine/question_loader.js and bump _CACHE_VERSION. Production auto-discovers the directory, so the file ships without this, but file:// development will not see it.",
+    "test-exam-paper-shape.js STILL FAILS on this pack and my batch cannot fix it — the failure is weight arithmetic, not item supply. Measured: 17 fillable chapters; weights sum to 40; g9eng-listening and g9eng-speaking carry examWeight 0 but each hold 2 poolable questions, so Math.max(1, …) buys each a slot and the paper totals 42. The reconciliation loop decrements the FIRST chapter with n > 1, which is g9eng-reading, twice: 10 -> 8. The only fixes are outside my two files and are both coordinator decisions: (a) remove the 4 starter_bank questions in g9eng-listening / g9eng-speaking so those chapters become unfillable (the manifest comment at lines 80-93 records that this was costed and deliberately rejected, so it must not be done silently), or (b) rebalance examWeight in subjects/grade9-english/_manifest.js. What the batch DID fix is the pool depth behind those slots: g9eng-reading 20 -> 54 items (repeat-after-2-exams -> repeat-after-5) and g9eng-writing 9 -> 37 (repeat-after-1 -> repeat-after-4)."
+  ],
+  "found_but_not_changed": [
+    "eng_paper_inspired.js, the existing g9eng-reading block (g9eng-pi-065 onwards): five comprehension items say 'see question 065' instead of reprinting the passage. Questions are shuffled and dealt individually, so a pupil meeting any of them in mixed practice or an exam has no passage at all. Not fixed — it is another agent's file. Every variant in my batch reprints its own stimulus.",
+    "grade9-english carries 74 pre-existing option-length leaks in test-option-parity.js and is NOT in that harness's BASELINE, so the pack fails that check today. My 38 new MCQs add none: measured 0 leaks, answer visibly longest in 2 of 38 (5.3%), average within-question spread 4.8 chars. The pack's rate moved 30.3% -> 28.8% and its spread 10.3 -> 10.0 with the batch in.",
+    "test-subsection-invariant.js fails 14 times on grade9-biology / chemistry / ict / physics. Pre-existing, another session's; grade9-english passes."
+  ],
+  "notes": [
+    "71 variants across 15 families — slightly above the 50-65 guidance, on the coordinator's instruction to give g9eng-reading a real spread at every level. 62 of the 71 (87%) went to the two starved chapters.",
+    "33 of 71 items (46%) are makeText in a pack that was 100% MCQ. Every typed answer is a closed set: one word, a two-word fixed phrase, a sentence number, or a transformation whose opening is dictated by the stem. No item asks for free composition.",
+    "Passage stimuli are all original prose written for this bank: 7 passages, a two-text pair, a leaflet, a bus table and a six-line poem. Nothing is reproduced from any source.",
+    "DELIBERATE CONTRAST PAIR: g9eng-fam-006-b (Yours faithfully) and -006-c (Yours sincerely) teach the pair by changing one condition. Neither stem discloses the other's answer, but both explanations state the full rule, so they should not be scheduled consecutively. pickSpreadingFamilies() already takes at most one variant per family per exam paper, so this only matters in a deliberate linked-practice sequence.",
+    "The bus table was corrected during authoring so journey times are internally consistent (198 = 40 min on both runs, 22 = 46 min on both). Before that fix, g9eng-fam-014-d's distractor 'how long route 22 takes' had two different true answers and would have been unfair.",
+    "L4 = 7 items, all extended analysis: judging a claim against a whole argument (002-e, 015-e), resolving an apparent contradiction across two texts (003-c), auditing a whole leaflet against a claim about its audience (004-e), diagnosing a drafted paragraph's over-generalisation (008-d), comparing two whole essay plans (008-e), and choosing between four equally developed, accurately quoted literary responses (011-e). No vocabulary or single-word item is labelled L4."
+  ]
+}

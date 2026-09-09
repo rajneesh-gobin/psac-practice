@@ -1,7 +1,7 @@
 -- ══════════════════════════════════════════════════════════════════════════
 --  PSAC Exam Practice — CONSOLIDATED DATABASE SCHEMA
 --
---  GENERATED FROM THE LIVE DATABASE on 2026-09-08
+--  GENERATED FROM THE LIVE DATABASE on 2026-09-09
 --  (project xawvjwsiqhtxgpocdqgm, PostgreSQL 17.6).
 --
 --  This one file replaces 31 incremental migrations — every supabase-*.sql,
@@ -16,7 +16,7 @@
 --  • Answering "what is really deployed?": read this, not a migration file.
 --  • Re-running it against production: every statement is idempotent, so it is
 --    safe — but it is a SNAPSHOT, not a diff. It drops nothing, so an object
---    added to production since 2026-09-08 survives; and it overwrites function,
+--    added to production since 2026-09-09 survives; and it overwrites function,
 --    policy and trigger definitions with the ones recorded here, so regenerate
 --    before you re-run or you will roll a later fix backwards.
 --
@@ -1044,6 +1044,45 @@ ALTER TABLE public.student_invites ALTER COLUMN student_id SET NOT NULL;
 ALTER TABLE public.student_invites ALTER COLUMN created_at SET NOT NULL;
 ALTER TABLE public.student_invites ALTER COLUMN expires_at SET NOT NULL;
 
+CREATE TABLE IF NOT EXISTS public.student_point_events (
+  id bigint NOT NULL,
+  student_id uuid NOT NULL,
+  kind text NOT NULL,
+  ref text NOT NULL,
+  points integer NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.student_point_events ADD COLUMN IF NOT EXISTS id bigint;
+ALTER TABLE public.student_point_events ADD COLUMN IF NOT EXISTS student_id uuid;
+ALTER TABLE public.student_point_events ADD COLUMN IF NOT EXISTS kind text;
+ALTER TABLE public.student_point_events ADD COLUMN IF NOT EXISTS ref text;
+ALTER TABLE public.student_point_events ADD COLUMN IF NOT EXISTS points integer;
+ALTER TABLE public.student_point_events ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.student_point_events ALTER COLUMN id SET NOT NULL;
+ALTER TABLE public.student_point_events ALTER COLUMN student_id SET NOT NULL;
+ALTER TABLE public.student_point_events ALTER COLUMN kind SET NOT NULL;
+ALTER TABLE public.student_point_events ALTER COLUMN ref SET NOT NULL;
+ALTER TABLE public.student_point_events ALTER COLUMN points SET NOT NULL;
+ALTER TABLE public.student_point_events ALTER COLUMN created_at SET NOT NULL;
+
+CREATE TABLE IF NOT EXISTS public.student_points (
+  student_id uuid NOT NULL,
+  points bigint DEFAULT 0 NOT NULL,
+  legacy_bonus integer DEFAULT 0 NOT NULL,
+  level smallint DEFAULT 1 NOT NULL,
+  updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.student_points ADD COLUMN IF NOT EXISTS student_id uuid;
+ALTER TABLE public.student_points ADD COLUMN IF NOT EXISTS points bigint DEFAULT 0;
+ALTER TABLE public.student_points ADD COLUMN IF NOT EXISTS legacy_bonus integer DEFAULT 0;
+ALTER TABLE public.student_points ADD COLUMN IF NOT EXISTS level smallint DEFAULT 1;
+ALTER TABLE public.student_points ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.student_points ALTER COLUMN student_id SET NOT NULL;
+ALTER TABLE public.student_points ALTER COLUMN points SET NOT NULL;
+ALTER TABLE public.student_points ALTER COLUMN legacy_bonus SET NOT NULL;
+ALTER TABLE public.student_points ALTER COLUMN level SET NOT NULL;
+ALTER TABLE public.student_points ALTER COLUMN updated_at SET NOT NULL;
+
 CREATE TABLE IF NOT EXISTS public.student_progress (
   student_id text NOT NULL,
   data jsonb DEFAULT '{}'::jsonb NOT NULL,
@@ -1640,6 +1679,20 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'student_point_events_pkey'
+                    AND conrelid = 'student_point_events'::regclass) THEN
+    ALTER TABLE student_point_events ADD CONSTRAINT student_point_events_pkey PRIMARY KEY (id);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'student_points_pkey'
+                    AND conrelid = 'student_points'::regclass) THEN
+    ALTER TABLE student_points ADD CONSTRAINT student_points_pkey PRIMARY KEY (student_id);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'student_progress_pkey'
                     AND conrelid = 'student_progress'::regclass) THEN
     ALTER TABLE student_progress ADD CONSTRAINT student_progress_pkey PRIMARY KEY (student_id);
@@ -1806,6 +1859,13 @@ DO $$ BEGIN
                   WHERE conname = 'student_friends_unique'
                     AND conrelid = 'student_friends'::regclass) THEN
     ALTER TABLE student_friends ADD CONSTRAINT student_friends_unique UNIQUE (student_id_a, student_id_b);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'student_point_events_unique'
+                    AND conrelid = 'student_point_events'::regclass) THEN
+    ALTER TABLE student_point_events ADD CONSTRAINT student_point_events_unique UNIQUE (student_id, kind, ref);
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2507,6 +2567,20 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'student_point_events_student_id_fkey'
+                    AND conrelid = 'student_point_events'::regclass) THEN
+    ALTER TABLE student_point_events ADD CONSTRAINT student_point_events_student_id_fkey FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'student_points_student_id_fkey'
+                    AND conrelid = 'student_points'::regclass) THEN
+    ALTER TABLE student_points ADD CONSTRAINT student_points_student_id_fkey FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'student_question_progress_student_id_fkey'
                     AND conrelid = 'student_question_progress'::regclass) THEN
     ALTER TABLE student_question_progress ADD CONSTRAINT student_question_progress_student_id_fkey FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE;
@@ -2613,7 +2687,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 115 functions, verbatim from pg_get_functiondef().
+-- 124 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -2629,6 +2703,47 @@ END $$;
 --   plpgsql bodies were never checked; it is the 29 SQL ones that need this.
 --   It is turned back on straight after, so §6 onwards still validates.
 SET check_function_bodies = off;
+
+-- ── _award_points(p_student uuid, p_kind text, p_ref text, p_points integer)
+CREATE OR REPLACE FUNCTION public._award_points(p_student uuid, p_kind text, p_ref text, p_points integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_new   bigint;
+  v_got   integer;
+BEGIN
+  IF p_student IS NULL OR p_ref IS NULL OR p_points IS NULL OR p_points <= 0 THEN
+    RETURN 0;
+  END IF;
+  -- A ref is a key, not free text. Anything longer is a caller bug or an
+  -- attempt to make the unique index useless by minting unbounded distinct refs.
+  IF length(p_ref) > 160 THEN
+    RETURN 0;
+  END IF;
+
+  INSERT INTO public.student_point_events (student_id, kind, ref, points)
+  VALUES (p_student, p_kind, p_ref, p_points)
+  ON CONFLICT (student_id, kind, ref) DO NOTHING;
+
+  IF NOT FOUND THEN
+    RETURN 0;                      -- already paid for this exact thing
+  END IF;
+
+  INSERT INTO public.student_points AS sp (student_id, points, level, updated_at)
+  VALUES (p_student, p_points, public.points_level(p_points), now())
+  ON CONFLICT (student_id) DO UPDATE
+    SET points     = sp.points + excluded.points,
+        level      = public.points_level(sp.points + excluded.points),
+        updated_at = now()
+  RETURNING sp.points INTO v_new;
+
+  v_got := p_points;
+  RETURN v_got;
+END;
+$function$;
 
 -- ── _forum_dec_reply_count()
 CREATE OR REPLACE FUNCTION public._forum_dec_reply_count()
@@ -2652,6 +2767,21 @@ BEGIN
   UPDATE forum_posts SET reply_count = COALESCE(reply_count, 0) + 1 WHERE id = NEW.post_id;
   RETURN NEW;
 END;
+$function$;
+
+-- ── _points_today(p_student uuid, p_kind text)
+CREATE OR REPLACE FUNCTION public._points_today(p_student uuid, p_kind text)
+ RETURNS integer
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+  SELECT coalesce(count(*), 0)::integer
+  FROM public.student_point_events
+  WHERE student_id = p_student
+    AND kind = p_kind
+    AND (created_at AT TIME ZONE 'Indian/Mauritius')::date
+        = (now() AT TIME ZONE 'Indian/Mauritius')::date;
 $function$;
 
 -- ── _qr_on_message()
@@ -2749,17 +2879,21 @@ CREATE OR REPLACE FUNCTION public.add_friend(p_friend_code text)
  SET search_path TO 'public'
 AS $function$
 DECLARE
-  v_caller uuid := public.current_student_id();
-  v_target uuid;
-  v_a      uuid;
-  v_b      uuid;
-  v_count  int;
+  v_caller  uuid := public.current_student_id();
+  v_target  uuid;
+  v_a       uuid;
+  v_b       uuid;
+  v_count   int;
+  v_created timestamptz;
+  v_new     boolean := false;
+  v_pts     integer := 0;
+  v_paid    integer;
 BEGIN
   IF v_caller IS NULL THEN
     RETURN jsonb_build_object('error', 'not_authenticated');
   END IF;
 
-  SELECT id INTO v_target
+  SELECT id, created_at INTO v_target, v_created
   FROM   public.students
   WHERE  friend_code = upper(p_friend_code)
     AND  deleted_at IS NULL;
@@ -2772,7 +2906,6 @@ BEGIN
     RETURN jsonb_build_object('error', 'self');
   END IF;
 
-  -- Enforce max 20 friends per student.
   SELECT count(*) INTO v_count
   FROM   public.student_friends
   WHERE  student_id_a = v_caller OR student_id_b = v_caller;
@@ -2781,7 +2914,6 @@ BEGIN
     RETURN jsonb_build_object('error', 'max_friends');
   END IF;
 
-  -- Canonical ordering.
   IF v_caller < v_target THEN
     v_a := v_caller; v_b := v_target;
   ELSE
@@ -2790,9 +2922,32 @@ BEGIN
 
   INSERT INTO public.student_friends (student_id_a, student_id_b)
   VALUES (v_a, v_b)
-  ON CONFLICT DO NOTHING;   -- idempotent
+  ON CONFLICT DO NOTHING;
+  v_new := FOUND;
 
-  RETURN jsonb_build_object('ok', true);
+  -- ── POINTS ──────────────────────────────────────────────────────────────
+  -- Only on a genuinely new friendship, and only when the other account has
+  -- existed for a day. A pair that has ever paid cannot pay again, whatever
+  -- happened to the friendship in between.
+  IF v_new AND v_created IS NOT NULL AND v_created < now() - interval '24 hours' THEN
+    SELECT count(*)::integer INTO v_paid
+    FROM public.student_point_events
+    WHERE student_id = v_caller AND kind = 'friend';
+
+    IF v_paid < 10 THEN
+      v_pts := public._award_points(v_caller, 'friend', v_target::text, 25);
+      -- The other child is paid too: they did not ask for the friendship, but
+      -- a leaderboard where only the inviter gains rewards spamming codes.
+      -- Their own lifetime cap is checked against their own ledger.
+      IF (SELECT count(*) FROM public.student_point_events
+           WHERE student_id = v_target AND kind = 'friend') < 10 THEN
+        PERFORM public._award_points(v_target, 'friend', v_caller::text, 25);
+      END IF;
+    END IF;
+  END IF;
+  -- ────────────────────────────────────────────────────────────────────────
+
+  RETURN jsonb_build_object('ok', true, 'awarded', v_pts);
 END;
 $function$;
 
@@ -2992,6 +3147,54 @@ BEGIN
     FROM public.profiles p
    WHERE p.teacher_status <> 'none' OR p.role = 'teacher';
   RETURN jsonb_build_object('ok', true, 'requests', v_rows);
+END;
+$function$;
+
+-- ── award_activity_points(p_kind text, p_ref text)
+CREATE OR REPLACE FUNCTION public.award_activity_points(p_kind text, p_ref text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_student uuid := public.current_student_id();
+  v_amount  integer;
+  v_cap     integer;
+  v_awarded integer;
+  v_total   bigint;
+BEGIN
+  IF v_student IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_a_student_session');
+  END IF;
+
+  IF p_kind = 'game' THEN
+    v_amount := 5;  v_cap := 3;
+  ELSIF p_kind = 'timetable' THEN
+    v_amount := 10; v_cap := 3;
+  ELSE
+    -- 'question', 'friend' and 'legacy' are minted by their own code paths and
+    -- are deliberately unreachable from here.
+    RETURN jsonb_build_object('ok', false, 'error', 'unknown_kind');
+  END IF;
+
+  IF p_ref IS NULL OR p_ref !~ '^[A-Za-z0-9][A-Za-z0-9:._-]{0,127}$' THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'bad_ref');
+  END IF;
+
+  IF public._points_today(v_student, p_kind) >= v_cap THEN
+    RETURN jsonb_build_object('ok', true, 'awarded', 0, 'note', 'daily_cap');
+  END IF;
+
+  v_awarded := public._award_points(v_student, p_kind, p_ref, v_amount);
+
+  SELECT points INTO v_total FROM public.student_points WHERE student_id = v_student;
+
+  RETURN jsonb_build_object(
+    'ok', true,
+    'awarded', v_awarded,
+    'points', coalesce(v_total, 0),
+    'level', public.points_level(coalesce(v_total, 0)));
 END;
 $function$;
 
@@ -3863,11 +4066,11 @@ AS $function$
     s.avatar,
     s.grade::text,
     s.friend_code,
-    coalesce((sp.data->>'xp')::int,    0) AS xp,
-    coalesce((sp.data->>'level')::int, 1) AS level,
-    coalesce((sp.data->'stats'->>'streak')::int, 0) AS streak,
-    coalesce((sp.data->'stats'->>'totalAttempted')::int, 0) AS total_attempted,
-    coalesce((sp.data->'stats'->>'totalCorrect')::int,   0) AS total_correct
+    coalesce(pts.points, (sp.data->>'xp')::int, 0)::int         AS xp,
+    coalesce(pts.level, public.points_level(coalesce(pts.points, 0)))::int AS level,
+    coalesce((sp.data->'stats'->>'streak')::int, 0)             AS streak,
+    coalesce((sp.data->'stats'->>'totalAttempted')::int, 0)     AS total_attempted,
+    coalesce((sp.data->'stats'->>'totalCorrect')::int,   0)     AS total_correct
   FROM public.student_friends f
   JOIN public.students s
     ON s.id = CASE
@@ -3875,10 +4078,108 @@ AS $function$
                 ELSE f.student_id_a
               END
   LEFT JOIN public.student_progress sp ON sp.student_id = s.id::text
+  LEFT JOIN public.student_points   pts ON pts.student_id = s.id
   WHERE (f.student_id_a = public.current_student_id()
      OR  f.student_id_b = public.current_student_id())
     AND s.deleted_at IS NULL
   ORDER BY xp DESC;
+$function$;
+
+-- ── get_my_points()
+CREATE OR REPLACE FUNCTION public.get_my_points()
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_student uuid := public.current_student_id();
+  v_row     public.student_points%ROWTYPE;
+BEGIN
+  IF v_student IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_a_student_session');
+  END IF;
+
+  SELECT * INTO v_row FROM public.student_points WHERE student_id = v_student;
+
+  RETURN jsonb_build_object(
+    'ok', true,
+    'points', coalesce(v_row.points, 0),
+    'legacy_bonus', coalesce(v_row.legacy_bonus, 0),
+    'level', public.points_level(coalesce(v_row.points, 0)));
+END;
+$function$;
+
+-- ── get_my_points_rank(p_grade integer)
+CREATE OR REPLACE FUNCTION public.get_my_points_rank(p_grade integer DEFAULT NULL::integer)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_student uuid := public.current_student_id();
+  v_points  bigint;
+  v_rank    integer;
+  v_total   integer;
+BEGIN
+  IF v_student IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_a_student_session');
+  END IF;
+
+  -- ⚠ A distinct error, not a zero rank. The client needs to tell "the board is
+  --   off" from "you are last" — one hides the screen, the other is a score.
+  IF NOT public.leaderboard_enabled() THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'leaderboard_disabled');
+  END IF;
+
+  SELECT coalesce(points, 0) INTO v_points
+  FROM public.student_points WHERE student_id = v_student;
+  v_points := coalesce(v_points, 0);
+
+  SELECT count(*)::integer + 1 INTO v_rank
+  FROM public.student_points sp
+  JOIN public.students s ON s.id = sp.student_id
+  WHERE s.deleted_at IS NULL
+    AND sp.points > v_points
+    AND (p_grade IS NULL OR s.grade = p_grade);
+
+  SELECT count(*)::integer INTO v_total
+  FROM public.student_points sp
+  JOIN public.students s ON s.id = sp.student_id
+  WHERE s.deleted_at IS NULL
+    AND sp.points > 0
+    AND (p_grade IS NULL OR s.grade = p_grade);
+
+  RETURN jsonb_build_object('ok', true, 'points', v_points, 'rank', v_rank, 'total', v_total);
+END;
+$function$;
+
+-- ── get_points_leaderboard(p_grade integer, p_limit integer)
+CREATE OR REPLACE FUNCTION public.get_points_leaderboard(p_grade integer DEFAULT NULL::integer, p_limit integer DEFAULT 50)
+ RETURNS TABLE(rank integer, display_name text, avatar text, grade integer, points bigint, level smallint, is_me boolean)
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+  SELECT
+    row_number() OVER (ORDER BY sp.points DESC, s.created_at ASC)::integer AS rank,
+    s.display_name,
+    s.avatar,
+    s.grade::integer,
+    sp.points,
+    sp.level,
+    (s.id = public.current_student_id()) AS is_me
+  FROM public.student_points sp
+  JOIN public.students s ON s.id = sp.student_id
+  -- ⚠ The switch is the FIRST predicate: off means no rows, for everyone,
+  -- whatever the client asked for.
+  WHERE public.leaderboard_enabled()
+    AND s.deleted_at IS NULL
+    AND sp.points > 0
+    AND (p_grade IS NULL OR s.grade = p_grade)
+  ORDER BY sp.points DESC, s.created_at ASC
+  LIMIT greatest(1, least(200, coalesce(p_limit, 50)));
 $function$;
 
 -- ── get_student_reports(p_student_id uuid)
@@ -4750,6 +5051,19 @@ BEGIN
 END;
 $function$;
 
+-- ── leaderboard_enabled()
+CREATE OR REPLACE FUNCTION public.leaderboard_enabled()
+ RETURNS boolean
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+  SELECT coalesce(
+    (SELECT (value ->> 'leaderboard_enabled')::boolean
+       FROM public.mm_data WHERE key = 'global_settings'),
+    false);
+$function$;
+
 -- ── list_family_members()
 CREATE OR REPLACE FUNCTION public.list_family_members()
  RETURNS jsonb
@@ -5172,6 +5486,28 @@ BEGIN
 END;
 $function$;
 
+-- ── points_level(p_points bigint)
+CREATE OR REPLACE FUNCTION public.points_level(p_points bigint)
+ RETURNS smallint
+ LANGUAGE sql
+ IMMUTABLE PARALLEL SAFE
+AS $function$
+  SELECT CASE
+    WHEN p_points >= 13000 THEN 12
+    WHEN p_points >= 11000 THEN 11
+    WHEN p_points >=  9300 THEN 10
+    WHEN p_points >=  7700 THEN 9
+    WHEN p_points >=  6200 THEN 8
+    WHEN p_points >=  4800 THEN 7
+    WHEN p_points >=  3500 THEN 6
+    WHEN p_points >=  2400 THEN 5
+    WHEN p_points >=  1500 THEN 4
+    WHEN p_points >=   801 THEN 3
+    WHEN p_points >=   301 THEN 2
+    ELSE 1
+  END::smallint;
+$function$;
+
 -- ── priv_write_allowed()
 CREATE OR REPLACE FUNCTION public.priv_write_allowed()
  RETURNS boolean
@@ -5374,6 +5710,20 @@ BEGIN
 END;
 $function$;
 
+-- ── question_points(p_question_id text)
+CREATE OR REPLACE FUNCTION public.question_points(p_question_id text)
+ RETURNS integer
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+  SELECT coalesce(
+    (SELECT greatest(1, least(4, q.difficulty))::integer
+       FROM public.questions q
+      WHERE q.id = p_question_id),
+    1);
+$function$;
+
 -- ── record_question_progress(p_items jsonb, p_student uuid)
 CREATE OR REPLACE FUNCTION public.record_question_progress(p_items jsonb, p_student uuid DEFAULT NULL::uuid)
  RETURNS jsonb
@@ -5395,6 +5745,9 @@ DECLARE
   v_state   text;
   v_cc      integer;
   v_rec     timestamptz;
+  v_found   boolean;
+  v_pts     integer := 0;
+  v_total   bigint;
 BEGIN
   -- A child's own token wins. An adult may name a child they own.
   IF v_student IS NULL THEN
@@ -5406,7 +5759,6 @@ BEGIN
     END IF;
     v_student := p_student;
   ELSIF p_student IS NOT NULL AND p_student <> v_student THEN
-    -- A student token may only ever write its own row.
     RETURN jsonb_build_object('ok', false, 'error', 'not_authorized');
   END IF;
 
@@ -5431,9 +5783,10 @@ BEGIN
     SELECT * INTO v_row
     FROM public.student_question_progress
     WHERE student_id = v_student AND question_id = v_qid;
+    v_found := FOUND;
 
     -- Idempotency: the same answer event replayed by a retry changes nothing.
-    IF FOUND AND v_key IS NOT NULL AND v_row.last_event_key = v_key THEN
+    IF v_found AND v_key IS NOT NULL AND v_row.last_event_key = v_key THEN
       v_skipped := v_skipped + 1;
       CONTINUE;
     END IF;
@@ -5441,9 +5794,6 @@ BEGIN
     v_cc  := CASE WHEN v_correct THEN coalesce(v_row.consecutive_correct, 0) + 1 ELSE 0 END;
     v_rec := v_row.recovered_at;
 
-    -- State machine. A first correct answer on a question never answered
-    -- wrongly is secure; after a wrong answer it takes two consecutive correct
-    -- answers, so one lucky guess does not clear it.
     IF NOT v_correct THEN
       v_state := 'needs_practice';
     ELSIF NOT coalesce(v_row.ever_wrong, false) THEN
@@ -5455,6 +5805,21 @@ BEGIN
       v_state := 'improved';
       v_rec   := coalesce(v_rec, now());
     END IF;
+
+    -- ── POINTS ────────────────────────────────────────────────────────────
+    -- Paid on the FIRST correct answer to this question and never again. Note
+    -- what is deliberately NOT required: getting it right first time. A child
+    -- who gets a question wrong, learns it, and comes back is exactly who this
+    -- app is for, and they are paid the same as one who guessed it right.
+    --
+    -- _award_points() is idempotent on (student, 'question', question_id), so
+    -- this is belt AND braces: even if the counter above were wrong, the ledger
+    -- refuses the second payment.
+    IF v_correct AND coalesce(v_row.correct_attempts, 0) = 0 THEN
+      v_pts := v_pts + public._award_points(
+                 v_student, 'question', v_qid, public.question_points(v_qid));
+    END IF;
+    -- ──────────────────────────────────────────────────────────────────────
 
     INSERT INTO public.student_question_progress AS t (
       student_id, question_id, subject_pack_id, chapter_id,
@@ -5468,29 +5833,36 @@ BEGIN
       CASE WHEN v_correct THEN 0 ELSE 1 END,
       v_cc,
       CASE WHEN v_correct THEN 'correct' ELSE 'wrong' END,
-      NOT v_correct, v_rec, v_state, v_key, now()
+      NOT v_correct,
+      v_rec, v_state, v_key, now()
     )
     ON CONFLICT (student_id, question_id) DO UPDATE SET
-      subject_pack_id     = coalesce(EXCLUDED.subject_pack_id, t.subject_pack_id),
-      chapter_id          = EXCLUDED.chapter_id,
-      -- recency never goes backwards, so an older device arriving late cannot
-      -- rewind it
-      last_seen_at        = greatest(t.last_seen_at, EXCLUDED.last_seen_at),
+      subject_pack_id     = coalesce(excluded.subject_pack_id, t.subject_pack_id),
+      chapter_id          = excluded.chapter_id,
+      last_seen_at        = now(),
       attempts            = t.attempts + 1,
       correct_attempts    = t.correct_attempts + CASE WHEN v_correct THEN 1 ELSE 0 END,
       wrong_attempts      = t.wrong_attempts   + CASE WHEN v_correct THEN 0 ELSE 1 END,
       consecutive_correct = v_cc,
-      last_result         = EXCLUDED.last_result,
+      last_result         = CASE WHEN v_correct THEN 'correct' ELSE 'wrong' END,
       ever_wrong          = t.ever_wrong OR NOT v_correct,
-      recovered_at        = coalesce(t.recovered_at, EXCLUDED.recovered_at),
+      recovered_at        = v_rec,
       state               = v_state,
-      last_event_key      = coalesce(EXCLUDED.last_event_key, t.last_event_key),
+      last_event_key      = v_key,
       updated_at          = now();
 
     v_written := v_written + 1;
   END LOOP;
 
-  RETURN jsonb_build_object('ok', true, 'written', v_written, 'skipped', v_skipped);
+  SELECT points INTO v_total FROM public.student_points WHERE student_id = v_student;
+
+  RETURN jsonb_build_object(
+    'ok', true,
+    'written', v_written,
+    'skipped', v_skipped,
+    'awarded', v_pts,
+    'points', coalesce(v_total, 0),
+    'level', public.points_level(coalesce(v_total, 0)));
 END;
 $function$;
 
@@ -6942,7 +7314,7 @@ ALTER TABLE public.forum_replies ALTER COLUMN author_student_id SET DEFAULT curr
 
 -- ═══ 6 · INDEXES ══════════════════════════════════════════════════════════════
 -- Indexes that back a constraint are omitted — §3 creates those with the
--- constraint itself. 67 standalone indexes.
+-- constraint itself. 69 standalone indexes.
 CREATE INDEX IF NOT EXISTS submissions_assignment_idx ON public.assignment_submissions USING btree (assignment_id);
 CREATE INDEX IF NOT EXISTS submissions_classroom_idx ON public.assignment_submissions USING btree (classroom_id);
 CREATE INDEX IF NOT EXISTS submissions_student_idx ON public.assignment_submissions USING btree (student_id);
@@ -7000,6 +7372,8 @@ CREATE INDEX IF NOT EXISTS student_assignments_student_created_idx ON public.stu
 CREATE INDEX IF NOT EXISTS student_friends_b_idx ON public.student_friends USING btree (student_id_b);
 CREATE INDEX IF NOT EXISTS student_invites_creator_idx ON public.student_invites USING btree (created_by);
 CREATE INDEX IF NOT EXISTS student_invites_student_idx ON public.student_invites USING btree (student_id);
+CREATE INDEX IF NOT EXISTS student_point_events_student_day_idx ON public.student_point_events USING btree (student_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS student_points_points_idx ON public.student_points USING btree (points DESC);
 CREATE INDEX IF NOT EXISTS student_question_progress_student_chapter_idx ON public.student_question_progress USING btree (student_id, chapter_id);
 CREATE INDEX IF NOT EXISTS student_sessions_expiry_idx ON public.student_sessions USING btree (expires_at);
 CREATE INDEX IF NOT EXISTS student_sessions_student_idx ON public.student_sessions USING btree (student_id);
@@ -7077,7 +7451,7 @@ CREATE TRIGGER teacher_guest_pupils_name_log AFTER INSERT OR UPDATE OF name ON p
 -- ⚠ The forum is adults-only IN THE DATABASE (auth.uid() IS NOT NULL), not by
 --   hiding a button. A child session is anon and is excluded by construction.
 --
--- RLS is enabled on all 53 public tables.
+-- RLS is enabled on all 55 public tables.
 
 ALTER TABLE public.assignment_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chapter_entitlements ENABLE ROW LEVEL SECURITY;
@@ -7118,6 +7492,8 @@ ALTER TABLE public.security_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_friends ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_invites ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.student_point_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.student_points ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_question_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_sessions ENABLE ROW LEVEL SECURITY;
@@ -7723,6 +8099,8 @@ GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_friends TO authenticated;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_friends TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_invites TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_point_events TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_points TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_progress TO anon;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_progress TO authenticated;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.student_progress TO service_role;
@@ -7779,8 +8157,10 @@ GRANT SELECT (username) ON public.students TO anon;
 GRANT SELECT (username) ON public.students TO authenticated;
 
 -- ── function grants
+GRANT EXECUTE ON FUNCTION public._award_points(p_student uuid, p_kind text, p_ref text, p_points integer) TO service_role;
 GRANT EXECUTE ON FUNCTION public._forum_dec_reply_count() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public._forum_inc_reply_count() TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public._points_today(p_student uuid, p_kind text) TO service_role;
 GRANT EXECUTE ON FUNCTION public._qr_on_message() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.accept_coparent_invite(p_token text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.add_friend(p_friend_code text) TO anon, authenticated, service_role;
@@ -7791,6 +8171,7 @@ GRANT EXECUTE ON FUNCTION public.admin_pending_counts() TO anon, authenticated, 
 GRANT EXECUTE ON FUNCTION public.admin_security_events(p_limit integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.admin_set_teacher_status(p_user_id uuid, p_status text, p_tier text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.admin_teacher_requests() TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.award_activity_points(p_kind text, p_ref text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.backfill_question_progress(p_student uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.classroom_manage(p_action text, p_slug text, p_name text, p_description text, p_emoji text, p_color text, p_pin text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.classroom_post_manage(p_action text, p_classroom_id uuid, p_post_id uuid, p_type text, p_title text, p_body text, p_file_path text, p_file_name text, p_file_size integer, p_youtube_url text, p_pinned boolean, p_scheduled_at timestamp with time zone, p_share_to uuid[]) TO authenticated, service_role;
@@ -7814,6 +8195,9 @@ GRANT EXECUTE ON FUNCTION public.gen_invite_code() TO anon, authenticated, servi
 GRANT EXECUTE ON FUNCTION public.get_classroom_feed(p_slug text, p_token uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_friend_code() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_friends() TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_my_points() TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_my_points_rank(p_grade integer) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_points_leaderboard(p_grade integer, p_limit integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_student_reports(p_student_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_profiles_privileged() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_students_privileged() TO anon, authenticated, service_role;
@@ -7838,6 +8222,7 @@ GRANT EXECUTE ON FUNCTION public.is_family_owner(p_family uuid) TO anon, authent
 GRANT EXECUTE ON FUNCTION public.is_super_admin() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.is_teacher() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.join_classroom(p_invite_code text, p_student_id uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.leaderboard_enabled() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.list_family_members() TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.mark_report_seen(p_report_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_create(p_question text, p_options jsonb) TO anon, authenticated, service_role;
@@ -7858,9 +8243,11 @@ GRANT EXECUTE ON FUNCTION public.plan_enforcement_on() TO anon, authenticated, s
 GRANT EXECUTE ON FUNCTION public.plan_features_for_student(p_student uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.plan_features_for_user(p_uid uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.plan_for_user(p_uid uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.points_level(p_points bigint) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.priv_write_allowed() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.purchase_chapter(p_chapter_id text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.purchase_subject(p_subject_id text) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.question_points(p_question_id text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.record_question_progress(p_items jsonb, p_student uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.record_referral(p_code text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.record_student_activity() TO anon, authenticated, service_role;

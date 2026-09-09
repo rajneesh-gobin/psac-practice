@@ -1,0 +1,1793 @@
+[
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 7,
+    "extraBeyondOne": 6,
+    "template": "Find the gradient of the line joining (#, #) and (#, #).",
+    "items": [
+      {
+        "id": "g9m-crd-002-a",
+        "difficulty": 2,
+        "question": "Find the gradient of the line joining (1, 2) and (4, 11).",
+        "answer": "3",
+        "taskId": "g9m-crd-002"
+      },
+      {
+        "id": "g9m-crd-004-a",
+        "difficulty": 2,
+        "question": "Find the gradient of the line joining (2, 5) and (6, 13).",
+        "answer": "2",
+        "taskId": "g9m-crd-004"
+      },
+      {
+        "id": "g9m-crd-006-a",
+        "difficulty": 1,
+        "question": "Find the gradient of the line joining (0, 0) and (5, 10).",
+        "answer": "2",
+        "taskId": "g9m-crd-006"
+      },
+      {
+        "id": "g9m-crd-012-a",
+        "difficulty": 2,
+        "question": "Find the gradient of the line joining (3, 3) and (7, 3).",
+        "answer": "0",
+        "taskId": "g9m-crd-012"
+      },
+      {
+        "id": "g9m-crd-018-a",
+        "difficulty": 2,
+        "question": "Find the gradient of the line joining (0, 7) and (2, 1).",
+        "answer": "-3",
+        "taskId": "g9m-crd-018"
+      },
+      {
+        "id": "g9m-crd-020-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line joining (6, 4) and (2, 4).",
+        "answer": "0",
+        "taskId": "g9m-crd-020"
+      },
+      {
+        "id": "g9m-crd-047-a",
+        "difficulty": 2,
+        "question": "Find the gradient of the line joining (2, 1) and (6, 9).",
+        "answer": "2",
+        "taskId": "g9m-crd-047"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-vectors",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 5,
+    "extraBeyondOne": 4,
+    "template": "Find the <b>magnitude</b> of the vector <span style=\"display:inline-block;vertical-align:middle;font-size:#em;line-height:.#\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:#;margin:# #px\">#<br>#</span><span style=\"display:inline-block;vertical-align:middle;font-size:#em;line-height:.#\">)</span>.",
+    "items": [
+      {
+        "id": "g9m-vec-004-a",
+        "difficulty": 2,
+        "question": "Find the <b>magnitude</b> of the vector <span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 1px\">3<br>4</span><span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">)</span>.",
+        "answer": "5",
+        "taskId": "g9m-vec-004"
+      },
+      {
+        "id": "g9m-vec-005-a",
+        "difficulty": 2,
+        "question": "Find the <b>magnitude</b> of the vector <span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 1px\">6<br>8</span><span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">)</span>.",
+        "answer": "10",
+        "taskId": "g9m-vec-005"
+      },
+      {
+        "id": "g9m-vec-006-a",
+        "difficulty": 3,
+        "question": "Find the <b>magnitude</b> of the vector <span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 1px\">5<br>12</span><span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">)</span>.",
+        "answer": "13",
+        "taskId": "g9m-vec-006"
+      },
+      {
+        "id": "g9m-vec-010-a",
+        "difficulty": 3,
+        "question": "Find the <b>magnitude</b> of the vector <span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 1px\">8<br>15</span><span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">)</span>.",
+        "answer": "17",
+        "taskId": "g9m-vec-010"
+      },
+      {
+        "id": "g9m-vec-015-a",
+        "difficulty": 3,
+        "question": "Find the <b>magnitude</b> of the vector <span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 1px\">9<br>12</span><span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">)</span>.",
+        "answer": "15",
+        "taskId": "g9m-vec-015"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-expressions",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 4,
+    "extraBeyondOne": 3,
+    "template": "Factorise <i>x</i><sup>#</sup> &minus; #.",
+    "items": [
+      {
+        "id": "g9m-exp-007-a",
+        "difficulty": 2,
+        "question": "Factorise <i>x</i><sup>2</sup> &minus; 9.",
+        "answer": "(x+3)(x-3)",
+        "taskId": "g9m-exp-007"
+      },
+      {
+        "id": "g9m-exp-008-a",
+        "difficulty": 2,
+        "question": "Factorise <i>x</i><sup>2</sup> &minus; 25.",
+        "answer": "(x+5)(x-5)",
+        "taskId": "g9m-exp-008"
+      },
+      {
+        "id": "g9m-exp-019-a",
+        "difficulty": 2,
+        "question": "Factorise <i>x</i><sup>2</sup> &minus; 100.",
+        "answer": "(x+10)(x-10)",
+        "taskId": "g9m-exp-019"
+      },
+      {
+        "id": "g9m-exb-101-b",
+        "difficulty": 4,
+        "question": "Factorise <i>x</i><sup>2</sup> &minus; 36.",
+        "answer": "(x+6)(x-6)",
+        "taskId": "g9m-exb-101"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-biology",
+    "chapter": "g9s-b1-circulatory",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "A pupil counts <b>#</b> pulse beats in <b># seconds</b>. Calculate the pulse rate in beats per minute.",
+    "items": [
+      {
+        "id": "g9s-b1-v062",
+        "difficulty": 2,
+        "question": "A pupil counts <b>18</b> pulse beats in <b>15 seconds</b>. Calculate the pulse rate in beats per minute.",
+        "answer": "72",
+        "taskId": null
+      },
+      {
+        "id": "g9s-b1-v063",
+        "difficulty": 1,
+        "question": "A pupil counts <b>20</b> pulse beats in <b>15 seconds</b>. Calculate the pulse rate in beats per minute.",
+        "answer": "80",
+        "taskId": null
+      },
+      {
+        "id": "g9s-b1-v064",
+        "difficulty": 2,
+        "question": "A pupil counts <b>35</b> pulse beats in <b>30 seconds</b>. Calculate the pulse rate in beats per minute.",
+        "answer": "70",
+        "taskId": null
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Write #<sup>&minus;#</sup> as a fraction.",
+    "items": [
+      {
+        "id": "g9m-ind-021-a",
+        "difficulty": 1,
+        "question": "Write 3<sup>&minus;2</sup> as a fraction.",
+        "answer": "1/9",
+        "taskId": "g9m-ind-021"
+      },
+      {
+        "id": "g9m-ind-024-a",
+        "difficulty": 1,
+        "question": "Write 4<sup>&minus;1</sup> as a fraction.",
+        "answer": "1/4",
+        "taskId": "g9m-ind-024"
+      },
+      {
+        "id": "g9m-ind-056-a",
+        "difficulty": 1,
+        "question": "Write 6<sup>&minus;2</sup> as a fraction.",
+        "answer": "1/36",
+        "taskId": "g9m-ind-056"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Evaluate #<sup>&minus;#</sup>.",
+    "items": [
+      {
+        "id": "g9m-ind-023-a",
+        "difficulty": 1,
+        "question": "Evaluate 2<sup>&minus;4</sup>.",
+        "answer": "1/16",
+        "taskId": "g9m-ind-023"
+      },
+      {
+        "id": "g9m-ind-026-a",
+        "difficulty": 2,
+        "question": "Evaluate 10<sup>&minus;3</sup>.",
+        "answer": "1/1000",
+        "taskId": "g9m-ind-026"
+      },
+      {
+        "id": "g9m-ind-057-a",
+        "difficulty": 1,
+        "question": "Evaluate 3<sup>&minus;3</sup>.",
+        "answer": "1/27",
+        "taskId": "g9m-ind-057"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Find the value of <i>m</i>, if # = #<sup><i>m</i></sup>.",
+    "items": [
+      {
+        "id": "g9m-ind-050-a",
+        "difficulty": 2,
+        "question": "Find the value of <i>m</i>, if 27 = 3<sup><i>m</i></sup>.",
+        "answer": "3",
+        "taskId": "g9m-ind-050"
+      },
+      {
+        "id": "g9m-ind-045-a",
+        "difficulty": 4,
+        "question": "Find the value of <i>m</i>, if 81 = 3<sup><i>m</i></sup>.",
+        "answer": "4",
+        "taskId": "g9m-ind-045"
+      },
+      {
+        "id": "g9m-ind-063-a",
+        "difficulty": 4,
+        "question": "Find the value of <i>m</i>, if 27 = 3<sup><i>m</i></sup>.",
+        "answer": "3",
+        "taskId": "g9m-ind-063"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Find the equation of the line passing through (#, #) and (#, #).",
+    "items": [
+      {
+        "id": "g9m-crd-029-a",
+        "difficulty": 4,
+        "question": "Find the equation of the line passing through (2, 3) and (4, 7).",
+        "answer": "y=2x-1",
+        "taskId": "g9m-crd-029"
+      },
+      {
+        "id": "g9m-crd-030-a",
+        "difficulty": 4,
+        "question": "Find the equation of the line passing through (0, 6) and (3, 0).",
+        "answer": "y=-2x+6",
+        "taskId": "g9m-crd-030"
+      },
+      {
+        "id": "g9m-crd-039-a",
+        "difficulty": 4,
+        "question": "Find the equation of the line passing through (1, 1) and (3, 7).",
+        "answer": "y=3x-2",
+        "taskId": "g9m-crd-039"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-vectors",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "The point <b>A</b> (#, #) is mapped onto <b>B</b> (#, #). Find the <b>translation vector</b>.",
+    "items": [
+      {
+        "id": "g9m-vec-024-a",
+        "difficulty": 2,
+        "question": "The point <b>A</b> (1, 1) is mapped onto <b>B</b> (4, 5). Find the <b>translation vector</b>.",
+        "answer": "(3, 4)",
+        "taskId": "g9m-vec-024"
+      },
+      {
+        "id": "g9m-vec-038-a",
+        "difficulty": 3,
+        "question": "The point <b>A</b> (5, 5) is mapped onto <b>B</b> (1, 1). Find the <b>translation vector</b>.",
+        "answer": "(-4, -4)",
+        "taskId": "g9m-vec-038"
+      },
+      {
+        "id": "g9m-vec-043-a",
+        "difficulty": 2,
+        "question": "The point <b>A</b> (7, 1) is mapped onto <b>B</b> (7, 9). Find the <b>translation vector</b>.",
+        "answer": "(0, 8)",
+        "taskId": "g9m-vec-043"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-quadratics",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Factorise <i>x</i><sup>#</sup> + #<i>x</i> + #.",
+    "items": [
+      {
+        "id": "g9m-qdr-001-a",
+        "difficulty": 2,
+        "question": "Factorise <i>x</i><sup>2</sup> + 5<i>x</i> + 6.",
+        "answer": "(x+2)(x+3)",
+        "taskId": "g9m-qdr-001"
+      },
+      {
+        "id": "g9m-qdr-013-a",
+        "difficulty": 3,
+        "question": "Factorise <i>x</i><sup>2</sup> + 8<i>x</i> + 15.",
+        "answer": "(x+3)(x+5)",
+        "taskId": "g9m-qdr-013"
+      },
+      {
+        "id": "g9m-qdb-102-a",
+        "difficulty": 4,
+        "question": "Factorise <i>x</i><sup>2</sup> + 9<i>x</i> + 20.",
+        "answer": "(x+4)(x+5)",
+        "taskId": "g9m-qdb-102"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-quadratics",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Factorise <i>x</i><sup>#</sup> &minus; #<i>x</i> + #.",
+    "items": [
+      {
+        "id": "g9m-qdr-002-a",
+        "difficulty": 2,
+        "question": "Factorise <i>x</i><sup>2</sup> &minus; 5<i>x</i> + 6.",
+        "answer": "(x-2)(x-3)",
+        "taskId": "g9m-qdr-002"
+      },
+      {
+        "id": "g9m-qdr-018-a",
+        "difficulty": 3,
+        "question": "Factorise <i>x</i><sup>2</sup> &minus; 6<i>x</i> + 9.",
+        "answer": "(x-3)(x-3)",
+        "taskId": "g9m-qdr-018"
+      },
+      {
+        "id": "g9m-qdb-101-a",
+        "difficulty": 4,
+        "question": "Factorise <i>x</i><sup>2</sup> &minus; 7<i>x</i> + 12.",
+        "answer": "(x-3)(x-4)",
+        "taskId": "g9m-qdb-101"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-quadratics",
+    "type": "slots",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Solve <i>x</i><sup>#</sup> &minus; #<i>x</i> + # = #.",
+    "items": [
+      {
+        "id": "g9m-qdr-003-a",
+        "difficulty": 3,
+        "question": "Solve <i>x</i><sup>2</sup> &minus; 5<i>x</i> + 6 = 0.",
+        "answer": "2, 3",
+        "taskId": "g9m-qdr-003"
+      },
+      {
+        "id": "g9m-qdr-011-a",
+        "difficulty": 3,
+        "question": "Solve <i>x</i><sup>2</sup> &minus; 7<i>x</i> + 10 = 0.",
+        "answer": "2, 5",
+        "taskId": "g9m-qdr-011"
+      },
+      {
+        "id": "g9m-qdr-017-a",
+        "difficulty": 3,
+        "question": "Solve <i>x</i><sup>2</sup> &minus; 11<i>x</i> + 24 = 0.",
+        "answer": "3, 8",
+        "taskId": "g9m-qdr-017"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-simultaneous",
+    "type": "slots",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Solve the simultaneous equations:<div style=\"margin:#px # # #px;line-height:#\">#<i>x</i> + #<i>y</i> = #<br>#<i>x</i> &minus; #<i>y</i> = #</div>",
+    "items": [
+      {
+        "id": "g9m-sim-007-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">2<i>x</i> + 3<i>y</i> = 12<br>4<i>x</i> &minus; 3<i>y</i> = 6</div>",
+        "answer": "3, 2",
+        "taskId": "g9m-sim-007"
+      },
+      {
+        "id": "g9m-sim-014-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">4<i>x</i> + 3<i>y</i> = 18<br>2<i>x</i> &minus; 3<i>y</i> = 0</div>",
+        "answer": "3, 2",
+        "taskId": "g9m-sim-014"
+      },
+      {
+        "id": "g9m-sim-032-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">5<i>x</i> + 4<i>y</i> = 3<br>3<i>x</i> &minus; 2<i>y</i> = 15</div>",
+        "answer": "3, -3",
+        "taskId": "g9m-sim-032"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-simultaneous",
+    "type": "slots",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Solve the simultaneous equations:<div style=\"margin:#px # # #px;line-height:#\">#<i>x</i> + #<i>y</i> = #<br>#<i>x</i> + #<i>y</i> = #</div>",
+    "items": [
+      {
+        "id": "g9m-sim-023-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">3<i>x</i> + 2<i>y</i> = 13<br>2<i>x</i> + 3<i>y</i> = 12</div>",
+        "answer": "3, 2",
+        "taskId": "g9m-sim-023"
+      },
+      {
+        "id": "g9m-sim-025-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">3<i>x</i> + 4<i>y</i> = 18<br>4<i>x</i> + 3<i>y</i> = 17</div>",
+        "answer": "2, 3",
+        "taskId": "g9m-sim-025"
+      },
+      {
+        "id": "g9m-sim-028-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">2<i>x</i> + 3<i>y</i> = 16<br>3<i>x</i> + 4<i>y</i> = 22</div>",
+        "answer": "2, 4",
+        "taskId": "g9m-sim-028"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-surface-area",
+    "type": "numeric",
+    "classification": "visual-candidate",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "<svg viewBox=\"# # # #\" width=\"#\" height=\"#\" xmlns=\"http://www.w#.org/#/svg\" role=\"img\"><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\"># &times; #</text><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\"># &times; #</text><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\"># &times; #</text></svg> A cuboid measures # cm by # cm by # cm. Calculate its <b>total surface area</b>. <span class=\"q-unit\">(answer in cm²)</span>",
+    "items": [
+      {
+        "id": "g9m-sfa-001-a",
+        "difficulty": 2,
+        "question": "<svg viewBox=\"0 0 241.2 222.39999999999998\" width=\"241.2\" height=\"222.39999999999998\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><rect x=\"82\" y=\"14\" width=\"83.2\" height=\"44.199999999999996\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"30\" y=\"58.199999999999996\" width=\"52\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"58.199999999999996\" width=\"83.2\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"165.2\" y=\"58.199999999999996\" width=\"52\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"110.19999999999999\" width=\"83.2\" height=\"44.199999999999996\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"154.39999999999998\" width=\"83.2\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><text x=\"123.6\" y=\"88.19999999999999\" font-size=\"11\" text-anchor=\"middle\">5 &times; 4</text><text x=\"123.6\" y=\"40.099999999999994\" font-size=\"11\" text-anchor=\"middle\">5 &times; 3</text><text x=\"56\" y=\"88.19999999999999\" font-size=\"11\" text-anchor=\"middle\">3 &times; 4</text></svg>\nA cuboid measures 5 cm by 4 cm by 3 cm. Calculate its <b>total surface area</b>. <span class=\"q-unit\">(answer in cm²)</span>",
+        "answer": "94",
+        "taskId": "g9m-sfa-001"
+      },
+      {
+        "id": "g9m-sfa-014-a",
+        "difficulty": 3,
+        "question": "<svg viewBox=\"0 0 241.2 222.39999999999998\" width=\"241.2\" height=\"222.39999999999998\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><rect x=\"82\" y=\"14\" width=\"83.2\" height=\"44.199999999999996\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"30\" y=\"58.199999999999996\" width=\"52\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"58.199999999999996\" width=\"83.2\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"165.2\" y=\"58.199999999999996\" width=\"52\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"110.19999999999999\" width=\"83.2\" height=\"44.199999999999996\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"154.39999999999998\" width=\"83.2\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><text x=\"123.6\" y=\"88.19999999999999\" font-size=\"11\" text-anchor=\"middle\">10 &times; 6</text><text x=\"123.6\" y=\"40.099999999999994\" font-size=\"11\" text-anchor=\"middle\">10 &times; 5</text><text x=\"56\" y=\"88.19999999999999\" font-size=\"11\" text-anchor=\"middle\">5 &times; 6</text></svg>\nA cuboid measures 10 cm by 6 cm by 5 cm. Calculate its <b>total surface area</b>. <span class=\"q-unit\">(answer in cm²)</span>",
+        "answer": "280",
+        "taskId": "g9m-sfa-014"
+      },
+      {
+        "id": "g9m-sfa-019-a",
+        "difficulty": 3,
+        "question": "<svg viewBox=\"0 0 241.2 222.39999999999998\" width=\"241.2\" height=\"222.39999999999998\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><rect x=\"82\" y=\"14\" width=\"83.2\" height=\"44.199999999999996\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"30\" y=\"58.199999999999996\" width=\"52\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"58.199999999999996\" width=\"83.2\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"165.2\" y=\"58.199999999999996\" width=\"52\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"110.19999999999999\" width=\"83.2\" height=\"44.199999999999996\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><rect x=\"82\" y=\"154.39999999999998\" width=\"83.2\" height=\"52\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.4\"/><text x=\"123.6\" y=\"88.19999999999999\" font-size=\"11\" text-anchor=\"middle\">8 &times; 5</text><text x=\"123.6\" y=\"40.099999999999994\" font-size=\"11\" text-anchor=\"middle\">8 &times; 2</text><text x=\"56\" y=\"88.19999999999999\" font-size=\"11\" text-anchor=\"middle\">2 &times; 5</text></svg>\nA cuboid measures 8 cm by 5 cm by 2 cm. Calculate its <b>total surface area</b>. <span class=\"q-unit\">(answer in cm²)</span>",
+        "answer": "132",
+        "taskId": "g9m-sfa-019"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-patterns",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Write down the <b>next term</b> of the sequence #, #, #, #, &hellip;",
+    "items": [
+      {
+        "id": "g9m-pat-001-a",
+        "difficulty": 1,
+        "question": "Write down the <b>next term</b> of the sequence 3, 7, 11, 15, &hellip;",
+        "answer": "19",
+        "taskId": "g9m-pat-001"
+      },
+      {
+        "id": "g9m-pat-003-a",
+        "difficulty": 2,
+        "question": "Write down the <b>next term</b> of the sequence 2, 5, 8, 11, &hellip;",
+        "answer": "14",
+        "taskId": "g9m-pat-003"
+      },
+      {
+        "id": "g9m-pat-005-a",
+        "difficulty": 2,
+        "question": "Write down the <b>next term</b> of the sequence 20, 17, 14, 11, &hellip;",
+        "answer": "8",
+        "taskId": "g9m-pat-005"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-patterns",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 3,
+    "extraBeyondOne": 2,
+    "template": "Find the <b><i>n</i>th term</b> of the sequence #, #, #, #, &hellip;",
+    "items": [
+      {
+        "id": "g9m-pat-002-a",
+        "difficulty": 3,
+        "question": "Find the <b><i>n</i>th term</b> of the sequence 3, 7, 11, 15, &hellip;",
+        "answer": "4n-1",
+        "taskId": "g9m-pat-002"
+      },
+      {
+        "id": "g9m-pat-004-a",
+        "difficulty": 3,
+        "question": "Find the <b><i>n</i>th term</b> of the sequence 2, 5, 8, 11, &hellip;",
+        "answer": "3n-1",
+        "taskId": "g9m-pat-004"
+      },
+      {
+        "id": "g9m-pat-006-a",
+        "difficulty": 3,
+        "question": "Find the <b><i>n</i>th term</b> of the sequence 20, 17, 14, 11, &hellip;",
+        "answer": "23-3n",
+        "taskId": "g9m-pat-006"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-biology",
+    "chapter": "g9s-b1-circulatory",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "A drawing of a cell is # mm wide. The real cell is # mm wide. Calculate the magnification.",
+    "items": [
+      {
+        "id": "g9s-b1-030",
+        "difficulty": 2,
+        "question": "A drawing of a cell is 60 mm wide. The real cell is 0.006 mm wide. Calculate the magnification.",
+        "answer": "10000",
+        "taskId": null
+      },
+      {
+        "id": "g9s-b1-031",
+        "difficulty": 3,
+        "question": "A drawing of a cell is 40 mm wide. The real cell is 0.02 mm wide. Calculate the magnification.",
+        "answer": "2000",
+        "taskId": null
+      }
+    ]
+  },
+  {
+    "pack": "grade9-chemistry",
+    "chapter": "g9s-sts",
+    "type": "numeric",
+    "classification": "visual-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Use the table. Calculate the increase in carbon dioxide from # to #, in ppm.<br><svg viewBox=\"# # # #\" width=\"#\" role=\"img\" aria-label=\"a table of carbon dioxide readings by year\"><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##f#a\">Carbon dioxide in the air</text><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##f#a\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##f#a\">Year</text><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##f#a\">Carbon dioxide / ppm</text><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"#cbd#e#\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"#cbd#e#\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"#cbd#e#\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"#cbd#e#\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">#</text></svg>",
+    "items": [
+      {
+        "id": "g9s-sts-c059",
+        "difficulty": 3,
+        "question": "Use the table. Calculate the increase in carbon dioxide from 1960 to 2020, in ppm.<br><svg viewBox=\"0 0 250 148\" width=\"260\" role=\"img\" aria-label=\"a table of carbon dioxide readings by year\"><text x=\"125\" y=\"15\" font-size=\"10\" text-anchor=\"middle\" fill=\"#0f172a\">Carbon dioxide in the air</text><rect x=\"40\" y=\"24\" width=\"170\" height=\"114\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"110\" y1=\"24\" x2=\"110\" y2=\"138\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"40\" y1=\"43\" x2=\"210\" y2=\"43\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"45\" y=\"37\" font-size=\"9\" fill=\"#0f172a\">Year</text><text x=\"115\" y=\"37\" font-size=\"9\" fill=\"#0f172a\">Carbon dioxide / ppm</text><text x=\"45\" y=\"56\" font-size=\"9\" fill=\"#334155\">1960</text><text x=\"115\" y=\"56\" font-size=\"9\" fill=\"#334155\">317</text><line x1=\"40\" y1=\"62\" x2=\"210\" y2=\"62\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"75\" font-size=\"9\" fill=\"#334155\">1980</text><text x=\"115\" y=\"75\" font-size=\"9\" fill=\"#334155\">339</text><line x1=\"40\" y1=\"81\" x2=\"210\" y2=\"81\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"94\" font-size=\"9\" fill=\"#334155\">2000</text><text x=\"115\" y=\"94\" font-size=\"9\" fill=\"#334155\">369</text><line x1=\"40\" y1=\"100\" x2=\"210\" y2=\"100\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"113\" font-size=\"9\" fill=\"#334155\">2010</text><text x=\"115\" y=\"113\" font-size=\"9\" fill=\"#334155\">389</text><line x1=\"40\" y1=\"119\" x2=\"210\" y2=\"119\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"132\" font-size=\"9\" fill=\"#334155\">2020</text><text x=\"115\" y=\"132\" font-size=\"9\" fill=\"#334155\">414</text></svg>",
+        "answer": "97",
+        "taskId": null
+      },
+      {
+        "id": "g9s-sts-c060",
+        "difficulty": 2,
+        "question": "Use the table. Calculate the increase in carbon dioxide from 2000 to 2020, in ppm.<br><svg viewBox=\"0 0 250 148\" width=\"260\" role=\"img\" aria-label=\"a table of carbon dioxide readings by year\"><text x=\"125\" y=\"15\" font-size=\"10\" text-anchor=\"middle\" fill=\"#0f172a\">Carbon dioxide in the air</text><rect x=\"40\" y=\"24\" width=\"170\" height=\"114\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"110\" y1=\"24\" x2=\"110\" y2=\"138\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"40\" y1=\"43\" x2=\"210\" y2=\"43\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"45\" y=\"37\" font-size=\"9\" fill=\"#0f172a\">Year</text><text x=\"115\" y=\"37\" font-size=\"9\" fill=\"#0f172a\">Carbon dioxide / ppm</text><text x=\"45\" y=\"56\" font-size=\"9\" fill=\"#334155\">1960</text><text x=\"115\" y=\"56\" font-size=\"9\" fill=\"#334155\">317</text><line x1=\"40\" y1=\"62\" x2=\"210\" y2=\"62\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"75\" font-size=\"9\" fill=\"#334155\">1980</text><text x=\"115\" y=\"75\" font-size=\"9\" fill=\"#334155\">339</text><line x1=\"40\" y1=\"81\" x2=\"210\" y2=\"81\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"94\" font-size=\"9\" fill=\"#334155\">2000</text><text x=\"115\" y=\"94\" font-size=\"9\" fill=\"#334155\">369</text><line x1=\"40\" y1=\"100\" x2=\"210\" y2=\"100\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"113\" font-size=\"9\" fill=\"#334155\">2010</text><text x=\"115\" y=\"113\" font-size=\"9\" fill=\"#334155\">389</text><line x1=\"40\" y1=\"119\" x2=\"210\" y2=\"119\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><text x=\"45\" y=\"132\" font-size=\"9\" fill=\"#334155\">2020</text><text x=\"115\" y=\"132\" font-size=\"9\" fill=\"#334155\">414</text></svg>",
+        "answer": "45",
+        "taskId": null
+      }
+    ]
+  },
+  {
+    "pack": "grade9-ict",
+    "chapter": "g9ict-algorithms",
+    "type": "mcq",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "How many times does this loop print?<br><code>for i in range(#):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code>",
+    "items": [
+      {
+        "id": "g9ict-alg-019",
+        "difficulty": 3,
+        "question": "How many times does this loop print?<br><code>for i in range(3):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code>",
+        "options": [
+          "1",
+          "4",
+          "3",
+          "2"
+        ],
+        "answer": "3",
+        "taskId": null
+      },
+      {
+        "id": "g9ict-alg-115",
+        "difficulty": 3,
+        "question": "How many times does this loop print?<br><code>for i in range(5):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code>",
+        "options": [
+          "6",
+          "1",
+          "5",
+          "4"
+        ],
+        "answer": "5",
+        "taskId": null
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-expressions",
+    "type": "numeric",
+    "classification": "context-dependent-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Hence find the value of the expression when <i>x</i> = #.",
+    "items": [
+      {
+        "id": "g9m-bal-012-aii",
+        "difficulty": 4,
+        "question": "Hence find the value of the expression when <i>x</i> = 10.",
+        "answer": "238",
+        "taskId": "g9m-bal-012"
+      },
+      {
+        "id": "g9m-exb-101-aii",
+        "difficulty": 4,
+        "question": "Hence find the value of the expression when <i>x</i> = 3.",
+        "answer": "9",
+        "taskId": "g9m-exb-101"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Simplify (<i>a</i><sup>#</sup>)<sup>#</sup>.",
+    "items": [
+      {
+        "id": "g9m-ind-004-a",
+        "difficulty": 1,
+        "question": "Simplify (<i>a</i><sup>5</sup>)<sup>4</sup>.",
+        "answer": "a^20",
+        "taskId": "g9m-ind-004"
+      },
+      {
+        "id": "g9m-ind-049-a",
+        "difficulty": 1,
+        "question": "Simplify (<i>a</i><sup>4</sup>)<sup>5</sup>.",
+        "answer": "a^20",
+        "taskId": "g9m-ind-049"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Evaluate #<sup>#</sup>.",
+    "items": [
+      {
+        "id": "g9m-ind-007-a",
+        "difficulty": 1,
+        "question": "Evaluate 5<sup>0</sup>.",
+        "answer": "1",
+        "taskId": "g9m-ind-007"
+      },
+      {
+        "id": "g9m-inb-101-b",
+        "difficulty": 4,
+        "question": "Evaluate 2<sup>5</sup>.",
+        "answer": "32",
+        "taskId": "g9m-inb-101"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Evaluate (#<sup>#</sup> &times; #<sup>#</sup>) &divide; #<sup>#</sup>.",
+    "items": [
+      {
+        "id": "g9m-ind-011-a",
+        "difficulty": 3,
+        "question": "Evaluate (7<sup>3</sup> &times; 7<sup>2</sup>) &divide; 7<sup>4</sup>.",
+        "answer": "7",
+        "taskId": "g9m-ind-011"
+      },
+      {
+        "id": "g9m-ind-020-a",
+        "difficulty": 2,
+        "question": "Evaluate (2<sup>3</sup> &times; 2<sup>4</sup>) &divide; 2<sup>5</sup>.",
+        "answer": "4",
+        "taskId": "g9m-ind-020"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Evaluate <span style=\"white-space:nowrap\">(<sup>#</sup>&frasl;<sub>#</sub>)<sup>&minus;#</sup></span>.",
+    "items": [
+      {
+        "id": "g9m-ind-028-a",
+        "difficulty": 3,
+        "question": "Evaluate <span style=\"white-space:nowrap\">(<sup>1</sup>&frasl;<sub>3</sub>)<sup>&minus;2</sup></span>.",
+        "answer": "9",
+        "taskId": "g9m-ind-028"
+      },
+      {
+        "id": "g9m-ind-060-a",
+        "difficulty": 3,
+        "question": "Evaluate <span style=\"white-space:nowrap\">(<sup>1</sup>&frasl;<sub>4</sub>)<sup>&minus;2</sup></span>.",
+        "answer": "16",
+        "taskId": "g9m-ind-060"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Simplify <i>a</i><sup>#</sup> &times; <i>a</i><sup>&minus;#</sup>.",
+    "items": [
+      {
+        "id": "g9m-ind-029-a",
+        "difficulty": 2,
+        "question": "Simplify <i>a</i><sup>5</sup> &times; <i>a</i><sup>&minus;3</sup>.",
+        "answer": "a^2",
+        "taskId": "g9m-ind-029"
+      },
+      {
+        "id": "g9m-ind-059-a",
+        "difficulty": 2,
+        "question": "Simplify <i>a</i><sup>2</sup> &times; <i>a</i><sup>&minus;6</sup>.",
+        "answer": "a^-4",
+        "taskId": "g9m-ind-059"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Evaluate #<sup>&minus;#</sup> + #<sup>&minus;#</sup>.",
+    "items": [
+      {
+        "id": "g9m-ind-033-a",
+        "difficulty": 3,
+        "question": "Evaluate 2<sup>&minus;1</sup> + 2<sup>&minus;2</sup>.",
+        "answer": "3/4",
+        "taskId": "g9m-ind-033"
+      },
+      {
+        "id": "g9m-ind-070-a",
+        "difficulty": 3,
+        "question": "Evaluate 3<sup>&minus;1</sup> + 3<sup>&minus;2</sup>.",
+        "answer": "4/9",
+        "taskId": "g9m-ind-070"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-indices",
+    "type": "mcq",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Which of the following is equal to #<sup>&minus;#</sup>?",
+    "items": [
+      {
+        "id": "g9m-ind-043-a",
+        "difficulty": 2,
+        "question": "Which of the following is equal to 2<sup>&minus;3</sup>?",
+        "options": [
+          "<sup>1</sup>&frasl;<sub>6</sub>",
+          "<sup>1</sup>&frasl;<sub>8</sub>",
+          "&minus;6",
+          "&minus;8"
+        ],
+        "answer": "<sup>1</sup>&frasl;<sub>8</sub>",
+        "taskId": "g9m-ind-043"
+      },
+      {
+        "id": "g9m-ind-062-a",
+        "difficulty": 2,
+        "question": "Which of the following is equal to 5<sup>&minus;2</sup>?",
+        "options": [
+          "<sup>1</sup>&frasl;<sub>10</sub>",
+          "&minus;25",
+          "<sup>1</sup>&frasl;<sub>25</sub>",
+          "&minus;10"
+        ],
+        "answer": "<sup>1</sup>&frasl;<sub>25</sub>",
+        "taskId": "g9m-ind-062"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the gradient of the line joining (&minus;#, #) and (#, &minus;#).",
+    "items": [
+      {
+        "id": "g9m-crd-005-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line joining (&minus;1, 4) and (3, &minus;4).",
+        "answer": "-2",
+        "taskId": "g9m-crd-005"
+      },
+      {
+        "id": "g9m-crd-048-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line joining (&minus;1, 3) and (5, &minus;3).",
+        "answer": "-1",
+        "taskId": "g9m-crd-048"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the gradient of the line #<i>y</i> = #<i>x</i> &minus; #.",
+    "items": [
+      {
+        "id": "g9m-crd-010-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line 2<i>y</i> = 6<i>x</i> &minus; 4.",
+        "answer": "3",
+        "taskId": "g9m-crd-010"
+      },
+      {
+        "id": "g9m-crd-058-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line 3<i>y</i> = 6<i>x</i> &minus; 9.",
+        "answer": "2",
+        "taskId": "g9m-crd-058"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the gradient of the line joining (&minus;#, #) and (#, #).",
+    "items": [
+      {
+        "id": "g9m-crd-014-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line joining (&minus;4, 2) and (0, 0).",
+        "answer": "-1/2",
+        "taskId": "g9m-crd-014"
+      },
+      {
+        "id": "g9m-crd-019-a",
+        "difficulty": 2,
+        "question": "Find the gradient of the line joining (&minus;3, 1) and (1, 9).",
+        "answer": "2",
+        "taskId": "g9m-crd-019"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the gradient of the line #<i>y</i> = #<i>x</i> + #.",
+    "items": [
+      {
+        "id": "g9m-crd-015-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line 4<i>y</i> = 8<i>x</i> + 12.",
+        "answer": "2",
+        "taskId": "g9m-crd-015"
+      },
+      {
+        "id": "g9m-crd-060-a",
+        "difficulty": 4,
+        "question": "Find the gradient of the line 2<i>y</i> = 4<i>x</i> + 10.",
+        "answer": "2",
+        "taskId": "g9m-crd-060"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the gradient of the line joining (#, &minus;#) and (#, #).",
+    "items": [
+      {
+        "id": "g9m-crd-016-a",
+        "difficulty": 3,
+        "question": "Find the gradient of the line joining (5, &minus;2) and (1, 6).",
+        "answer": "-2",
+        "taskId": "g9m-crd-016"
+      },
+      {
+        "id": "g9m-crd-063-a",
+        "difficulty": 2,
+        "question": "Find the gradient of the line joining (0, &minus;3) and (5, 7).",
+        "answer": "2",
+        "taskId": "g9m-crd-063"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "A line has gradient # and passes through (#, #). Find its equation.",
+    "items": [
+      {
+        "id": "g9m-crd-026-a",
+        "difficulty": 3,
+        "question": "A line has gradient 2 and passes through (1, 5). Find its equation.",
+        "answer": "y=2x+3",
+        "taskId": "g9m-crd-026"
+      },
+      {
+        "id": "g9m-crd-027-a",
+        "difficulty": 3,
+        "question": "A line has gradient 3 and passes through (2, 7). Find its equation.",
+        "answer": "y=3x+1",
+        "taskId": "g9m-crd-027"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "A line has gradient &minus;# and passes through (&minus;#, #). Find its equation.",
+    "items": [
+      {
+        "id": "g9m-crd-028-a",
+        "difficulty": 3,
+        "question": "A line has gradient &minus;2 and passes through (&minus;1, 4). Find its equation.",
+        "answer": "y=-2x+2",
+        "taskId": "g9m-crd-028"
+      },
+      {
+        "id": "g9m-crd-064-a",
+        "difficulty": 3,
+        "question": "A line has gradient &minus;3 and passes through (&minus;1, 5). Find its equation.",
+        "answer": "y=-3x+2",
+        "taskId": "g9m-crd-064"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-coordinates",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "A line passes through <b>A</b> (#, #) and <b>B</b> (#, #). Find the <b>gradient</b> of <b>AB</b>.",
+    "items": [
+      {
+        "id": "g9m-crd-059-a",
+        "difficulty": 4,
+        "question": "A line passes through <b>A</b> (1, 2) and <b>B</b> (5, 10). Find the <b>gradient</b> of <b>AB</b>.",
+        "answer": "2",
+        "taskId": "g9m-crd-059"
+      },
+      {
+        "id": "g9m-crd-061-a",
+        "difficulty": 4,
+        "question": "A line passes through <b>A</b> (0, 2) and <b>B</b> (4, 6). Find the <b>gradient</b> of <b>AB</b>.",
+        "answer": "1",
+        "taskId": "g9m-crd-061"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-number-revision",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Work out # + #.",
+    "items": [
+      {
+        "id": "g9m-nrv-001-a",
+        "difficulty": 1,
+        "question": "Work out 632 + 157.",
+        "answer": "789",
+        "taskId": "g9m-nrv-001"
+      },
+      {
+        "id": "g9m-nrv-005-a",
+        "difficulty": 1,
+        "question": "Work out 2.1 + 0.5.",
+        "answer": "2.6",
+        "taskId": "g9m-nrv-005"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-number-revision",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Evaluate <sup>#</sup>&frasl;<sub>#</sub> + <sup>#</sup>&frasl;<sub>#</sub>.",
+    "items": [
+      {
+        "id": "g9m-nrv-003-a",
+        "difficulty": 1,
+        "question": "Evaluate <sup>5</sup>&frasl;<sub>13</sub> + <sup>3</sup>&frasl;<sub>13</sub>.",
+        "answer": "8/13",
+        "taskId": "g9m-nrv-003"
+      },
+      {
+        "id": "g9m-nrv-009-a",
+        "difficulty": 3,
+        "question": "Evaluate <sup>1</sup>&frasl;<sub>2</sub> + <sup>1</sup>&frasl;<sub>3</sub>.",
+        "answer": "5/6",
+        "taskId": "g9m-nrv-009"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-number-revision",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Convert # kg # g into grams. <span class=\"q-unit\">(answer in g)</span>",
+    "items": [
+      {
+        "id": "g9m-nrv-022-a",
+        "difficulty": 1,
+        "question": "Convert 2 kg 350 g into grams. <span class=\"q-unit\">(answer in g)</span>",
+        "answer": "2350",
+        "taskId": "g9m-nrv-022"
+      },
+      {
+        "id": "g9m-nrv-023-a",
+        "difficulty": 1,
+        "question": "Convert 5 kg 620 g into grams. <span class=\"q-unit\">(answer in g)</span>",
+        "answer": "5620",
+        "taskId": "g9m-nrv-023"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-number-revision",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find <sup>#</sup>&radic;<span style=\"text-decoration:overline\">#</span>.",
+    "items": [
+      {
+        "id": "g9m-nrv-025-a",
+        "difficulty": 1,
+        "question": "Find <sup>3</sup>&radic;<span style=\"text-decoration:overline\">8</span>.",
+        "answer": "2",
+        "taskId": "g9m-nrv-025"
+      },
+      {
+        "id": "g9m-nrv-026-a",
+        "difficulty": 1,
+        "question": "Find <sup>3</sup>&radic;<span style=\"text-decoration:overline\">64</span>.",
+        "answer": "4",
+        "taskId": "g9m-nrv-026"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-volume",
+    "type": "numeric",
+    "classification": "visual-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "<svg viewBox=\"# # # #\" width=\"#\" height=\"#\" xmlns=\"http://www.w#.org/#/svg\" role=\"img\"> <path d=\"M # # L # # A # # # # # # # L # #\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/> <ellipse cx=\"#\" cy=\"#\" rx=\"#\" ry=\"#\" fill=\"none\" stroke=\"##\" stroke-width=\"#\"/> <path d=\"M # # A # # # # # # #\" fill=\"none\" stroke=\"##\" stroke-width=\"#\" stroke-dasharray=\"# #\"/> <line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##\" stroke-width=\"#\"/> <circle cx=\"#\" cy=\"#\" r=\"#\" fill=\"##\"/> <!-- Printed: at y = top - # this label sat ON the top ellipse and the curve drew straight through it. Lifted clear of the rim. --> <text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\"># cm</text> <line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##\" stroke-width=\"#\"/> <line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##\" stroke-width=\"#\"/> <line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##\" stroke-width=\"#\"/> <line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##\" stroke-width=\"#\"/> <text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\"># cm</text> </svg> A cylinder has radius # cm and height # cm. Calculate its <b>volume</b>. <span style=\"white-space:nowrap\">(Use &pi; = <sup>#</sup>&frasl;<sub>#</sub>)</span> <span class=\"q-unit\">(answer in cm³)</span>",
+    "items": [
+      {
+        "id": "g9m-vol-005-a",
+        "difficulty": 3,
+        "question": "<svg viewBox=\"0 0 244 185\" width=\"244\" height=\"185\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n    <path d=\"M 66 34 L 66 140 A 58 17 0 0 0 182 140 L 182 34\"\n          fill=\"none\" stroke=\"#000\" stroke-width=\"1.5\"/>\n    <ellipse cx=\"124\" cy=\"34\" rx=\"58\" ry=\"17\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.5\"/>\n    <path d=\"M 66 140 A 58 17 0 0 1 182 140\"\n          fill=\"none\" stroke=\"#000\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/>\n    <line x1=\"124\" y1=\"34\" x2=\"182\" y2=\"34\" stroke=\"#000\" stroke-width=\"1\"/>\n    <circle cx=\"124\" cy=\"34\" r=\"2\" fill=\"#000\"/>\n    <!-- Printed: at y = top - 6 this label sat ON the top ellipse and the\n         curve drew straight through it. Lifted clear of the rim. -->\n    <text x=\"159\" y=\"12\" font-size=\"12\" text-anchor=\"middle\">3.5 cm</text>\n    <line x1=\"159\" y1=\"15\" x2=\"159\" y2=\"31\" stroke=\"#000\" stroke-width=\"0.7\"/>\n    <line x1=\"52\" y1=\"34\" x2=\"52\" y2=\"140\" stroke=\"#000\" stroke-width=\"1\"/>\n    <line x1=\"47\" y1=\"34\" x2=\"57\" y2=\"34\" stroke=\"#000\" stroke-width=\"1\"/>\n    <line x1=\"47\" y1=\"140\" x2=\"57\" y2=\"140\" stroke=\"#000\" stroke-width=\"1\"/>\n    <text x=\"42\" y=\"91\" font-size=\"12\" text-anchor=\"end\">8 cm</text>\n  </svg>\nA cylinder has radius 3.5 cm and height 8 cm. Calculate its <b>volume</b>. <span style=\"white-space:nowrap\">(Use &pi; = <sup>22</sup>&frasl;<sub>7</sub>)</span> <span class=\"q-unit\">(answer in cm³)</span>",
+        "answer": "308",
+        "taskId": "g9m-vol-005"
+      },
+      {
+        "id": "g9m-vol-017-a",
+        "difficulty": 4,
+        "question": "<svg viewBox=\"0 0 244 185\" width=\"244\" height=\"185\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n    <path d=\"M 66 34 L 66 140 A 58 17 0 0 0 182 140 L 182 34\"\n          fill=\"none\" stroke=\"#000\" stroke-width=\"1.5\"/>\n    <ellipse cx=\"124\" cy=\"34\" rx=\"58\" ry=\"17\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.5\"/>\n    <path d=\"M 66 140 A 58 17 0 0 1 182 140\"\n          fill=\"none\" stroke=\"#000\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/>\n    <line x1=\"124\" y1=\"34\" x2=\"182\" y2=\"34\" stroke=\"#000\" stroke-width=\"1\"/>\n    <circle cx=\"124\" cy=\"34\" r=\"2\" fill=\"#000\"/>\n    <!-- Printed: at y = top - 6 this label sat ON the top ellipse and the\n         curve drew straight through it. Lifted clear of the rim. -->\n    <text x=\"159\" y=\"12\" font-size=\"12\" text-anchor=\"middle\">14 cm</text>\n    <line x1=\"159\" y1=\"15\" x2=\"159\" y2=\"31\" stroke=\"#000\" stroke-width=\"0.7\"/>\n    <line x1=\"52\" y1=\"34\" x2=\"52\" y2=\"140\" stroke=\"#000\" stroke-width=\"1\"/>\n    <line x1=\"47\" y1=\"34\" x2=\"57\" y2=\"34\" stroke=\"#000\" stroke-width=\"1\"/>\n    <line x1=\"47\" y1=\"140\" x2=\"57\" y2=\"140\" stroke=\"#000\" stroke-width=\"1\"/>\n    <text x=\"42\" y=\"91\" font-size=\"12\" text-anchor=\"end\">5 cm</text>\n  </svg>\nA cylinder has radius 14 cm and height 5 cm. Calculate its <b>volume</b>. <span style=\"white-space:nowrap\">(Use &pi; = <sup>22</sup>&frasl;<sub>7</sub>)</span> <span class=\"q-unit\">(answer in cm³)</span>",
+        "answer": "3080",
+        "taskId": "g9m-vol-017"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-vectors",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "The point <b>P</b> (#, #) is mapped onto <b>Q</b> (#, #). Find the <b>translation vector</b>.",
+    "items": [
+      {
+        "id": "g9m-vec-026-a",
+        "difficulty": 3,
+        "question": "The point <b>P</b> (4, 3) is mapped onto <b>Q</b> (1, 8). Find the <b>translation vector</b>.",
+        "answer": "(-3, 5)",
+        "taskId": "g9m-vec-026"
+      },
+      {
+        "id": "g9m-vec-037-a",
+        "difficulty": 2,
+        "question": "The point <b>P</b> (2, 2) is mapped onto <b>Q</b> (6, 2). Find the <b>translation vector</b>.",
+        "answer": "(4, 0)",
+        "taskId": "g9m-vec-037"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-vectors",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "The point <b>A</b> (#, #) is translated by the vector <span style=\"display:inline-block;vertical-align:middle;font-size:#em;line-height:.#\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:#;margin:# #px\">#<br>&minus;#</span><span style=\"display:inline-block;vertical-align:middle;font-size:#em;line-height:.#\">)</span>. Find the coordinates of its <b>image</b>.",
+    "items": [
+      {
+        "id": "g9m-vec-035-a",
+        "difficulty": 2,
+        "question": "The point <b>A</b> (3, 1) is translated by the vector <span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 1px\">2<br>&minus;4</span><span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">)</span>. Find the coordinates of its <b>image</b>.",
+        "answer": "(5, -3)",
+        "taskId": "g9m-vec-035"
+      },
+      {
+        "id": "g9m-vec-041-a",
+        "difficulty": 2,
+        "question": "The point <b>A</b> (0, 4) is translated by the vector <span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">(</span><span style=\"display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 1px\">6<br>&minus;4</span><span style=\"display:inline-block;vertical-align:middle;font-size:1.5em;line-height:.8\">)</span>. Find the coordinates of its <b>image</b>.",
+        "answer": "(6, 0)",
+        "taskId": "g9m-vec-041"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-statistics",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the <b>mean</b> of #, #, # and #.",
+    "items": [
+      {
+        "id": "g9m-sta-001-a",
+        "difficulty": 1,
+        "question": "Find the <b>mean</b> of 4, 6, 8 and 10.",
+        "answer": "7",
+        "taskId": "g9m-sta-001"
+      },
+      {
+        "id": "g9m-sta-005-a",
+        "difficulty": 2,
+        "question": "Find the <b>mean</b> of 5, 5, 7 and 11.",
+        "answer": "7",
+        "taskId": "g9m-sta-005"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-statistics",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the <b>range</b> of #, #, # and #.",
+    "items": [
+      {
+        "id": "g9m-sta-004-a",
+        "difficulty": 1,
+        "question": "Find the <b>range</b> of 12, 5, 18 and 9.",
+        "answer": "13",
+        "taskId": "g9m-sta-004"
+      },
+      {
+        "id": "g9m-sta-015-a",
+        "difficulty": 2,
+        "question": "Find the <b>range</b> of 4.5, 2.1, 7.8 and 3.3.",
+        "answer": "5.7",
+        "taskId": "g9m-sta-015"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-statistics",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the <b>mode</b> of #, #, #, #, #, # and #.",
+    "items": [
+      {
+        "id": "g9m-sta-007-a",
+        "difficulty": 1,
+        "question": "Find the <b>mode</b> of 1, 4, 4, 6, 6, 6 and 9.",
+        "answer": "6",
+        "taskId": "g9m-sta-007"
+      },
+      {
+        "id": "g9m-sta-013-a",
+        "difficulty": 2,
+        "question": "Find the <b>mode</b> of 7, 7, 8, 9, 9, 9 and 10.",
+        "answer": "9",
+        "taskId": "g9m-sta-013"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-statistics",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the <b>mean</b> of #, # and #.",
+    "items": [
+      {
+        "id": "g9m-sta-008-a",
+        "difficulty": 1,
+        "question": "Find the <b>mean</b> of 12, 15 and 18.",
+        "answer": "15",
+        "taskId": "g9m-sta-008"
+      },
+      {
+        "id": "g9m-sta-014-a",
+        "difficulty": 3,
+        "question": "Find the <b>mean</b> of 2.5, 3.5 and 6.",
+        "answer": "4",
+        "taskId": "g9m-sta-014"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-expressions",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Factorise #<i>x</i> &minus; #.",
+    "items": [
+      {
+        "id": "g9m-exp-002-a",
+        "difficulty": 1,
+        "question": "Factorise 6<i>x</i> &minus; 15.",
+        "answer": "3(2x-5)",
+        "taskId": "g9m-exp-002"
+      },
+      {
+        "id": "g9m-exp-012-a",
+        "difficulty": 1,
+        "question": "Factorise 3<i>x</i> &minus; 6.",
+        "answer": "3(x-2)",
+        "taskId": "g9m-exp-012"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-expressions",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Expand (<i>x</i> + #)(<i>x</i> &minus; #).",
+    "items": [
+      {
+        "id": "g9m-exp-004-a",
+        "difficulty": 3,
+        "question": "Expand (<i>x</i> + 5)(<i>x</i> &minus; 2).",
+        "answer": "x^2+3x-10",
+        "taskId": "g9m-exp-004"
+      },
+      {
+        "id": "g9m-exb-101-ai",
+        "difficulty": 4,
+        "question": "Expand (<i>x</i> + 6)(<i>x</i> &minus; 2).",
+        "answer": "x^2+4x-12",
+        "taskId": "g9m-exb-101"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-quadratics",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Factorise <i>x</i><sup>#</sup> + #<i>x</i> &minus; #.",
+    "items": [
+      {
+        "id": "g9m-qdr-005-a",
+        "difficulty": 3,
+        "question": "Factorise <i>x</i><sup>2</sup> + 2<i>x</i> &minus; 8.",
+        "answer": "(x+4)(x-2)",
+        "taskId": "g9m-qdr-005"
+      },
+      {
+        "id": "g9m-multi-008-a",
+        "difficulty": 3,
+        "question": "Factorise <i>x</i><sup>2</sup> + 2<i>x</i> &minus; 15.",
+        "answer": "(x+5)(x-3)",
+        "taskId": "g9m-multi-008"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-quadratics",
+    "type": "slots",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Solve <i>x</i><sup>#</sup> &minus; # = #.",
+    "items": [
+      {
+        "id": "g9m-qdr-006-a",
+        "difficulty": 2,
+        "question": "Solve <i>x</i><sup>2</sup> &minus; 9 = 0.",
+        "answer": "3, -3",
+        "taskId": "g9m-qdr-006"
+      },
+      {
+        "id": "g9m-qdr-012-a",
+        "difficulty": 3,
+        "question": "Solve <i>x</i><sup>2</sup> &minus; 16 = 0.",
+        "answer": "4, -4",
+        "taskId": "g9m-qdr-012"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-simultaneous",
+    "type": "slots",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Solve the simultaneous equations:<div style=\"margin:#px # # #px;line-height:#\">#<i>x</i> + <i>y</i> = #<br>#<i>x</i> + #<i>y</i> = #</div>",
+    "items": [
+      {
+        "id": "g9m-sim-011-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">2<i>x</i> + <i>y</i> = 7<br>3<i>x</i> + 2<i>y</i> = 12</div>",
+        "answer": "2, 3",
+        "taskId": "g9m-sim-011"
+      },
+      {
+        "id": "g9m-sim-021-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">2<i>x</i> + <i>y</i> = 5<br>3<i>x</i> + 2<i>y</i> = 7</div>",
+        "answer": "3, -1",
+        "taskId": "g9m-sim-021"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-simultaneous",
+    "type": "slots",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Solve the simultaneous equations:<div style=\"margin:#px # # #px;line-height:#\">#<i>x</i> &minus; #<i>y</i> = #<br>#<i>x</i> + #<i>y</i> = #</div>",
+    "items": [
+      {
+        "id": "g9m-sim-012-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">5<i>x</i> &minus; 2<i>y</i> = 11<br>3<i>x</i> + 2<i>y</i> = 13</div>",
+        "answer": "3, 2",
+        "taskId": "g9m-sim-012"
+      },
+      {
+        "id": "g9m-sim-031-a",
+        "difficulty": 4,
+        "question": "Solve the simultaneous equations:<div style=\"margin:6px 0 0 14px;line-height:1.9\">3<i>x</i> &minus; 2<i>y</i> = 5<br>2<i>x</i> + 3<i>y</i> = 12</div>",
+        "answer": "3, 2",
+        "taskId": "g9m-sim-031"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-surface-area",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Find the <b>circumference</b> of a circle of radius # cm. <span style=\"white-space:nowrap\">(Use &pi; = <sup>#</sup>&frasl;<sub>#</sub>)</span> <span class=\"q-unit\">(answer in cm)</span>",
+    "items": [
+      {
+        "id": "g9m-sfa-005-a",
+        "difficulty": 2,
+        "question": "Find the <b>circumference</b> of a circle of radius 7 cm. <span style=\"white-space:nowrap\">(Use &pi; = <sup>22</sup>&frasl;<sub>7</sub>)</span> <span class=\"q-unit\">(answer in cm)</span>",
+        "answer": "44",
+        "taskId": "g9m-sfa-005"
+      },
+      {
+        "id": "g9m-sfa-007-a",
+        "difficulty": 3,
+        "question": "Find the <b>circumference</b> of a circle of radius 14 cm. <span style=\"white-space:nowrap\">(Use &pi; = <sup>22</sup>&frasl;<sub>7</sub>)</span> <span class=\"q-unit\">(answer in cm)</span>",
+        "answer": "88",
+        "taskId": "g9m-sfa-007"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-inequalities",
+    "type": "expr",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Solve the inequality #<i>x</i> + # &le; #.",
+    "items": [
+      {
+        "id": "g9m-ineq-003-a",
+        "difficulty": 3,
+        "question": "Solve the inequality 5<i>x</i> + 4 &le; 24.",
+        "answer": "{x:x<=4}",
+        "taskId": "g9m-ineq-003"
+      },
+      {
+        "id": "g9m-ineq-021-a",
+        "difficulty": 4,
+        "question": "Solve the inequality 2<i>x</i> + 3 &le; 11.",
+        "answer": "{x:x<=4}",
+        "taskId": "g9m-ineq-021"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-finance",
+    "type": "numeric",
+    "classification": "visual-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "<table style=\"border-collapse:collapse;margin:#px #;font-size:.#em\"><tr><td colspan=\"#\" style=\"border:#px solid ##;padding:#px #px;background:#eee;text-align:center\"><b>Electricity tariff</b></td></tr><tr><td style=\"border:#px solid ##;padding:#px #px;background:#f#f#f#\"><b>Units used</b></td><td style=\"border:#px solid ##;padding:#px #px;background:#f#f#f#\"><b>Rate per unit</b></td></tr><tr><td style=\"border:#px solid ##;padding:#px #px\">First # units</td><td style=\"border:#px solid ##;padding:#px #px;text-align:right\">Rs #</td></tr><tr><td style=\"border:#px solid ##;padding:#px #px\">Next # units</td><td style=\"border:#px solid ##;padding:#px #px;text-align:right\">Rs #</td></tr><tr><td style=\"border:#px solid ##;padding:#px #px\">Above # units</td><td style=\"border:#px solid ##;padding:#px #px;text-align:right\">Rs #</td></tr></table> A household uses <b># units</b> of electricity in a month. Using the tariff shown, calculate the <b>total cost</b>.",
+    "items": [
+      {
+        "id": "g9m-fin-014-a",
+        "difficulty": 3,
+        "question": "<table style=\"border-collapse:collapse;margin:6px 0;font-size:.95em\"><tr><td colspan=\"2\" style=\"border:1px solid #000;padding:4px 10px;background:#eee;text-align:center\"><b>Electricity tariff</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Units used</b></td><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Rate per unit</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">First 25 units</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 3.50</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Next 50 units</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 5.00</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Above 75 units</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 6.50</td></tr></table>\nA household uses <b>60 units</b> of electricity in a month. Using the tariff shown, calculate the <b>total cost</b>.",
+        "answer": "262.50",
+        "taskId": "g9m-fin-014"
+      },
+      {
+        "id": "g9m-fin-015-a",
+        "difficulty": 4,
+        "question": "<table style=\"border-collapse:collapse;margin:6px 0;font-size:.95em\"><tr><td colspan=\"2\" style=\"border:1px solid #000;padding:4px 10px;background:#eee;text-align:center\"><b>Electricity tariff</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Units used</b></td><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Rate per unit</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">First 25 units</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 3.50</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Next 50 units</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 5.00</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Above 75 units</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 6.50</td></tr></table>\nA household uses <b>90 units</b> of electricity in a month. Using the tariff shown, calculate the <b>total cost</b>.",
+        "answer": "435.00",
+        "taskId": "g9m-fin-015"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-finance",
+    "type": "numeric",
+    "classification": "visual-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "<table style=\"border-collapse:collapse;margin:#px #;font-size:.#em\"><tr><td colspan=\"#\" style=\"border:#px solid ##;padding:#px #px;background:#eee;text-align:center\"><b>Water tariff</b></td></tr><tr><td style=\"border:#px solid ##;padding:#px #px;background:#f#f#f#\"><b>Units used</b></td><td style=\"border:#px solid ##;padding:#px #px;background:#f#f#f#\"><b>Rate per unit</b></td></tr><tr><td style=\"border:#px solid ##;padding:#px #px\">First # m&sup#;</td><td style=\"border:#px solid ##;padding:#px #px;text-align:right\">Rs #</td></tr><tr><td style=\"border:#px solid ##;padding:#px #px\">Next # m&sup#;</td><td style=\"border:#px solid ##;padding:#px #px;text-align:right\">Rs #</td></tr><tr><td style=\"border:#px solid ##;padding:#px #px\">Above # m&sup#;</td><td style=\"border:#px solid ##;padding:#px #px;text-align:right\">Rs #</td></tr></table> A household uses <b># m&sup#;</b> of water in a month. Using the tariff shown, calculate the <b>total cost</b>.",
+    "items": [
+      {
+        "id": "g9m-fin-016-a",
+        "difficulty": 3,
+        "question": "<table style=\"border-collapse:collapse;margin:6px 0;font-size:.95em\"><tr><td colspan=\"2\" style=\"border:1px solid #000;padding:4px 10px;background:#eee;text-align:center\"><b>Water tariff</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Units used</b></td><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Rate per unit</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">First 10 m&sup3;</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 8.00</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Next 15 m&sup3;</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 12.00</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Above 25 m&sup3;</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 20.00</td></tr></table>\nA household uses <b>20 m&sup3;</b> of water in a month. Using the tariff shown, calculate the <b>total cost</b>.",
+        "answer": "200",
+        "taskId": "g9m-fin-016"
+      },
+      {
+        "id": "g9m-fin-017-a",
+        "difficulty": 4,
+        "question": "<table style=\"border-collapse:collapse;margin:6px 0;font-size:.95em\"><tr><td colspan=\"2\" style=\"border:1px solid #000;padding:4px 10px;background:#eee;text-align:center\"><b>Water tariff</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Units used</b></td><td style=\"border:1px solid #000;padding:4px 10px;background:#f6f6f6\"><b>Rate per unit</b></td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">First 10 m&sup3;</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 8.00</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Next 15 m&sup3;</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 12.00</td></tr><tr><td style=\"border:1px solid #000;padding:4px 10px\">Above 25 m&sup3;</td><td style=\"border:1px solid #000;padding:4px 10px;text-align:right\">Rs 20.00</td></tr></table>\nA household uses <b>30 m&sup3;</b> of water in a month. Using the tariff shown, calculate the <b>total cost</b>.",
+        "answer": "360",
+        "taskId": "g9m-fin-017"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-capacity",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Convert # L into <b>mL</b>. <span class=\"q-unit\">(answer in mL)</span>",
+    "items": [
+      {
+        "id": "g9m-cap-001-a",
+        "difficulty": 1,
+        "question": "Convert 3 L into <b>mL</b>. <span class=\"q-unit\">(answer in mL)</span>",
+        "answer": "3000",
+        "taskId": "g9m-cap-001"
+      },
+      {
+        "id": "g9m-cap-014-a",
+        "difficulty": 2,
+        "question": "Convert 0.25 L into <b>mL</b>. <span class=\"q-unit\">(answer in mL)</span>",
+        "answer": "250",
+        "taskId": "g9m-cap-014"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-maths",
+    "chapter": "g9m-capacity",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Convert # L into <b>cL</b>. <span class=\"q-unit\">(answer in cL)</span>",
+    "items": [
+      {
+        "id": "g9m-cap-002-a",
+        "difficulty": 1,
+        "question": "Convert 2 L into <b>cL</b>. <span class=\"q-unit\">(answer in cL)</span>",
+        "answer": "200",
+        "taskId": "g9m-cap-002"
+      },
+      {
+        "id": "g9m-cap-006-a",
+        "difficulty": 2,
+        "question": "Convert 4.5 L into <b>cL</b>. <span class=\"q-unit\">(answer in cL)</span>",
+        "answer": "450",
+        "taskId": "g9m-cap-006"
+      }
+    ]
+  },
+  {
+    "pack": "grade9-physics",
+    "chapter": "g9s-p1-measurements",
+    "type": "mcq",
+    "classification": "visual-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Read the measuring cylinder shown. What is the volume of the liquid?<br><svg viewBox=\"# # # #\" width=\"#\" role=\"img\" aria-label=\"a measuring cylinder holding a liquid\"><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##f#a\" stroke-width=\"#\"/><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"#bfdbfe\"/><path d=\"M # # Q # # # #\" fill=\"none\" stroke=\"##d#ed#\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\">cm&##;</text></svg>",
+    "items": [
+      {
+        "id": "g9s-p1-011",
+        "difficulty": 3,
+        "question": "Read the measuring cylinder shown. What is the volume of the liquid?<br><svg viewBox=\"0 0 150 152\" width=\"150\" role=\"img\" aria-label=\"a measuring cylinder holding a liquid\"><rect x=\"45\" y=\"18\" width=\"52\" height=\"112\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><rect x=\"46\" y=\"62.8\" width=\"50\" height=\"67.2\" fill=\"#bfdbfe\"/><path d=\"M 46 62.8 Q 71 66.8 96 62.8\" fill=\"none\" stroke=\"#1d4ed8\" stroke-width=\"1.5\"/><line x1=\"45\" y1=\"130.0\" x2=\"60\" y2=\"130.0\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"133.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">0</text><line x1=\"45\" y1=\"107.6\" x2=\"60\" y2=\"107.6\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"110.6\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">10</text><line x1=\"45\" y1=\"85.2\" x2=\"60\" y2=\"85.2\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"88.2\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">20</text><line x1=\"45\" y1=\"62.8\" x2=\"60\" y2=\"62.8\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"65.8\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">30</text><line x1=\"45\" y1=\"40.4\" x2=\"60\" y2=\"40.4\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"43.4\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">40</text><line x1=\"45\" y1=\"18.0\" x2=\"60\" y2=\"18.0\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"21.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">50</text><line x1=\"45\" y1=\"118.8\" x2=\"53\" y2=\"118.8\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"96.4\" x2=\"53\" y2=\"96.4\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"74.0\" x2=\"53\" y2=\"74.0\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"51.6\" x2=\"53\" y2=\"51.6\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"29.2\" x2=\"53\" y2=\"29.2\" stroke=\"#64748b\" stroke-width=\"1\"/><text x=\"112\" y=\"76\" font-size=\"9\" fill=\"#334155\">cm&#179;</text></svg>",
+        "options": [
+          "30 cm&#179;",
+          "20 cm&#179;",
+          "40 cm&#179;",
+          "35 cm&#179;"
+        ],
+        "answer": "30 cm&#179;",
+        "taskId": null
+      },
+      {
+        "id": "g9s-p1-012",
+        "difficulty": 3,
+        "question": "Read the measuring cylinder shown. What is the volume of the liquid?<br><svg viewBox=\"0 0 150 152\" width=\"150\" role=\"img\" aria-label=\"a measuring cylinder holding a liquid\"><rect x=\"45\" y=\"18\" width=\"52\" height=\"112\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><rect x=\"46\" y=\"74.0\" width=\"50\" height=\"56.0\" fill=\"#bfdbfe\"/><path d=\"M 46 74.0 Q 71 78.0 96 74.0\" fill=\"none\" stroke=\"#1d4ed8\" stroke-width=\"1.5\"/><line x1=\"45\" y1=\"130.0\" x2=\"60\" y2=\"130.0\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"133.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">0</text><line x1=\"45\" y1=\"107.6\" x2=\"60\" y2=\"107.6\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"110.6\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">10</text><line x1=\"45\" y1=\"85.2\" x2=\"60\" y2=\"85.2\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"88.2\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">20</text><line x1=\"45\" y1=\"62.8\" x2=\"60\" y2=\"62.8\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"65.8\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">30</text><line x1=\"45\" y1=\"40.4\" x2=\"60\" y2=\"40.4\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"43.4\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">40</text><line x1=\"45\" y1=\"18.0\" x2=\"60\" y2=\"18.0\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41\" y=\"21.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#334155\">50</text><line x1=\"45\" y1=\"118.8\" x2=\"53\" y2=\"118.8\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"96.4\" x2=\"53\" y2=\"96.4\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"74.0\" x2=\"53\" y2=\"74.0\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"51.6\" x2=\"53\" y2=\"51.6\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"45\" y1=\"29.2\" x2=\"53\" y2=\"29.2\" stroke=\"#64748b\" stroke-width=\"1\"/><text x=\"112\" y=\"76\" font-size=\"9\" fill=\"#334155\">cm&#179;</text></svg>",
+        "options": [
+          "25 cm&#179;",
+          "15 cm&#179;",
+          "20 cm&#179;",
+          "30 cm&#179;"
+        ],
+        "answer": "25 cm&#179;",
+        "taskId": null
+      }
+    ]
+  },
+  {
+    "pack": "grade9-physics",
+    "chapter": "g9s-p1-measurements",
+    "type": "mcq",
+    "classification": "visual-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "Read the ruler shown. How long is the grey object?<br><svg viewBox=\"# # # #\" width=\"#\" role=\"img\" aria-label=\"an object lying beside a ruler\"><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"#fef#c#\" stroke=\"##f#a\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\">#</text><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##b\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"end\" fill=\"##b\">cm</text><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"##a#b#\" stroke=\"##f#a\" stroke-width=\"#\"/></svg>",
+    "items": [
+      {
+        "id": "g9s-p1-013",
+        "difficulty": 3,
+        "question": "Read the ruler shown. How long is the grey object?<br><svg viewBox=\"0 0 250 100\" width=\"270\" role=\"img\" aria-label=\"an object lying beside a ruler\"><rect x=\"20\" y=\"40\" width=\"210\" height=\"34\" fill=\"#fef9c3\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"20.0\" y1=\"40\" x2=\"20.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"20.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">0</text><line x1=\"41.0\" y1=\"40\" x2=\"41.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">1</text><line x1=\"62.0\" y1=\"40\" x2=\"62.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"62.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">2</text><line x1=\"83.0\" y1=\"40\" x2=\"83.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"83.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">3</text><line x1=\"104.0\" y1=\"40\" x2=\"104.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"104.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">4</text><line x1=\"125.0\" y1=\"40\" x2=\"125.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"125.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">5</text><line x1=\"146.0\" y1=\"40\" x2=\"146.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"146.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">6</text><line x1=\"167.0\" y1=\"40\" x2=\"167.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"167.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">7</text><line x1=\"188.0\" y1=\"40\" x2=\"188.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"188.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">8</text><line x1=\"209.0\" y1=\"40\" x2=\"209.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"209.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">9</text><line x1=\"230.0\" y1=\"40\" x2=\"230.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"230.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">10</text><line x1=\"30.5\" y1=\"40\" x2=\"30.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"51.5\" y1=\"40\" x2=\"51.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"72.5\" y1=\"40\" x2=\"72.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"93.5\" y1=\"40\" x2=\"93.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"114.5\" y1=\"40\" x2=\"114.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"135.5\" y1=\"40\" x2=\"135.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"156.5\" y1=\"40\" x2=\"156.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"177.5\" y1=\"40\" x2=\"177.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"198.5\" y1=\"40\" x2=\"198.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"219.5\" y1=\"40\" x2=\"219.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><text x=\"230\" y=\"86\" font-size=\"8\" text-anchor=\"end\" fill=\"#64748b\">cm</text><rect x=\"62.0\" y=\"16\" width=\"105.0\" height=\"16\" fill=\"#94a3b8\" stroke=\"#0f172a\" stroke-width=\"1.5\"/></svg>",
+        "options": [
+          "9 cm",
+          "7 cm",
+          "5 cm",
+          "2 cm"
+        ],
+        "answer": "5 cm",
+        "taskId": null
+      },
+      {
+        "id": "g9s-p1-014",
+        "difficulty": 3,
+        "question": "Read the ruler shown. How long is the grey object?<br><svg viewBox=\"0 0 250 100\" width=\"270\" role=\"img\" aria-label=\"an object lying beside a ruler\"><rect x=\"20\" y=\"40\" width=\"210\" height=\"34\" fill=\"#fef9c3\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><line x1=\"20.0\" y1=\"40\" x2=\"20.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"20.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">0</text><line x1=\"41.0\" y1=\"40\" x2=\"41.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"41.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">1</text><line x1=\"62.0\" y1=\"40\" x2=\"62.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"62.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">2</text><line x1=\"83.0\" y1=\"40\" x2=\"83.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"83.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">3</text><line x1=\"104.0\" y1=\"40\" x2=\"104.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"104.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">4</text><line x1=\"125.0\" y1=\"40\" x2=\"125.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"125.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">5</text><line x1=\"146.0\" y1=\"40\" x2=\"146.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"146.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">6</text><line x1=\"167.0\" y1=\"40\" x2=\"167.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"167.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">7</text><line x1=\"188.0\" y1=\"40\" x2=\"188.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"188.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">8</text><line x1=\"209.0\" y1=\"40\" x2=\"209.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"209.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">9</text><line x1=\"230.0\" y1=\"40\" x2=\"230.0\" y2=\"52\" stroke=\"#0f172a\" stroke-width=\"1.5\"/><text x=\"230.0\" y=\"66\" font-size=\"9\" text-anchor=\"middle\" fill=\"#334155\">10</text><line x1=\"30.5\" y1=\"40\" x2=\"30.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"51.5\" y1=\"40\" x2=\"51.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"72.5\" y1=\"40\" x2=\"72.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"93.5\" y1=\"40\" x2=\"93.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"114.5\" y1=\"40\" x2=\"114.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"135.5\" y1=\"40\" x2=\"135.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"156.5\" y1=\"40\" x2=\"156.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"177.5\" y1=\"40\" x2=\"177.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"198.5\" y1=\"40\" x2=\"198.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><line x1=\"219.5\" y1=\"40\" x2=\"219.5\" y2=\"47\" stroke=\"#64748b\" stroke-width=\"1\"/><text x=\"230\" y=\"86\" font-size=\"8\" text-anchor=\"end\" fill=\"#64748b\">cm</text><rect x=\"41.0\" y=\"16\" width=\"73.5\" height=\"16\" fill=\"#94a3b8\" stroke=\"#0f172a\" stroke-width=\"1.5\"/></svg>",
+        "options": [
+          "3.5 cm",
+          "3 cm",
+          "4.5 cm",
+          "5.5 cm"
+        ],
+        "answer": "3.5 cm",
+        "taskId": null
+      }
+    ]
+  },
+  {
+    "pack": "grade9-physics",
+    "chapter": "g9s-p5-electricity",
+    "type": "numeric",
+    "classification": "strict-numeric-template",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "A current of # A flows for # s. Calculate the charge that passes, in coulombs.",
+    "items": [
+      {
+        "id": "g9s-p5-026",
+        "difficulty": 2,
+        "question": "A current of 3 A flows for 5 s. Calculate the charge that passes, in coulombs.",
+        "answer": "15",
+        "taskId": null
+      },
+      {
+        "id": "g9s-p5-027",
+        "difficulty": 2,
+        "question": "A current of 0.5 A flows for 60 s. Calculate the charge that passes, in coulombs.",
+        "answer": "30",
+        "taskId": null
+      }
+    ]
+  },
+  {
+    "pack": "grade9-physics",
+    "chapter": "g9s-p5-electricity",
+    "type": "numeric",
+    "classification": "visual-candidate",
+    "count": 2,
+    "extraBeyondOne": 1,
+    "template": "<svg viewBox=\"# # # #\" width=\"#\" role=\"img\" aria-label=\"a series electrical circuit\"><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##f#a\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><line x#=\"#\" y#=\"#\" x#=\"#\" y#=\"#\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\"># V</text><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" fill=\"##\"># Ω</text><rect x=\"#\" y=\"#\" width=\"#\" height=\"#\" fill=\"none\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##\"># Ω</text><circle cx=\"#\" cy=\"#\" r=\"#\" fill=\"none\" stroke=\"##f#a\" stroke-width=\"#\"/><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##f#a\">A</text><text x=\"#\" y=\"#\" font-size=\"#\" text-anchor=\"middle\" fill=\"##b\">cell</text></svg> Calculate the voltage across R&##;. <span class=\"q-unit\">(answer in V)</span>",
+    "items": [
+      {
+        "id": "g9s-ptask-010-c",
+        "difficulty": 3,
+        "question": "<svg viewBox=\"0 0 260 180\" width=\"280\" role=\"img\" aria-label=\"a series electrical circuit\"><rect x=\"20\" y=\"25\" width=\"220\" height=\"120\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"118\" y1=\"10\" x2=\"118\" y2=\"30\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"132\" y1=\"16\" x2=\"132\" y2=\"30\" stroke=\"#0f172a\" stroke-width=\"4\"/><line x1=\"108\" y1=\"25\" x2=\"118\" y2=\"25\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"132\" y1=\"25\" x2=\"142\" y2=\"25\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"125\" y=\"9\" font-size=\"10\" text-anchor=\"middle\" fill=\"#334155\">12 V</text><rect x=\"220\" y=\"60\" width=\"20\" height=\"38\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"242\" y=\"82\" font-size=\"10\" fill=\"#334155\">4 Ω</text><rect x=\"108\" y=\"130\" width=\"44\" height=\"16\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"130\" y=\"160\" font-size=\"10\" text-anchor=\"middle\" fill=\"#334155\">8 Ω</text><circle cx=\"20\" cy=\"85\" r=\"12\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"20\" y=\"90\" font-size=\"11\" text-anchor=\"middle\" fill=\"#0f172a\">A</text><text x=\"130\" y=\"20\" font-size=\"8\" text-anchor=\"middle\" fill=\"#64748b\">cell</text></svg>\nCalculate the voltage across R&#8321;. <span class=\"q-unit\">(answer in V)</span>",
+        "answer": "4",
+        "taskId": "g9s-ptask-010"
+      },
+      {
+        "id": "g9s-ptask-010-d",
+        "difficulty": 3,
+        "question": "<svg viewBox=\"0 0 260 180\" width=\"280\" role=\"img\" aria-label=\"a series electrical circuit\"><rect x=\"20\" y=\"25\" width=\"220\" height=\"120\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"118\" y1=\"10\" x2=\"118\" y2=\"30\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"132\" y1=\"16\" x2=\"132\" y2=\"30\" stroke=\"#0f172a\" stroke-width=\"4\"/><line x1=\"108\" y1=\"25\" x2=\"118\" y2=\"25\" stroke=\"#0f172a\" stroke-width=\"2\"/><line x1=\"132\" y1=\"25\" x2=\"142\" y2=\"25\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"125\" y=\"9\" font-size=\"10\" text-anchor=\"middle\" fill=\"#334155\">12 V</text><rect x=\"220\" y=\"60\" width=\"20\" height=\"38\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"242\" y=\"82\" font-size=\"10\" fill=\"#334155\">4 Ω</text><rect x=\"108\" y=\"130\" width=\"44\" height=\"16\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"130\" y=\"160\" font-size=\"10\" text-anchor=\"middle\" fill=\"#334155\">8 Ω</text><circle cx=\"20\" cy=\"85\" r=\"12\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"/><text x=\"20\" y=\"90\" font-size=\"11\" text-anchor=\"middle\" fill=\"#0f172a\">A</text><text x=\"130\" y=\"20\" font-size=\"8\" text-anchor=\"middle\" fill=\"#64748b\">cell</text></svg>\nCalculate the voltage across R&#8322;. <span class=\"q-unit\">(answer in V)</span>",
+        "answer": "8",
+        "taskId": "g9s-ptask-010"
+      }
+    ]
+  }
+]

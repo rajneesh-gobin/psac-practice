@@ -68,6 +68,93 @@ function isFreeChapter(chapterId) {
   return false;
 }
 
+// ── WHICH GRADES A CHILD MAY USE ─────────────────────────────────────
+// The parent grants grades one at a time (`restrictions.allowedGrades`); the
+// child's OWN grade is never in that list, because it is never optional and
+// because it can change - it is read from the ACCOUNT, never from the blob
+// (`DB.grade` is written nowhere; see scripts/test-parent-restrictions.js).
+//
+// ⚠ This is a PARENTAL control, not an entitlement. The server still decides
+//   which packs a family may fetch (netlify/functions/questions.js), exactly
+//   as it does for lockedChapters: unlocking Grade 6 here cannot hand a child
+//   questions their plan does not cover.
+//
+// ⚠ Legacy blobs carry the two booleans this list replaced. crossGradeSearch
+//   / crossGradePractice meant "EVERY other grade", so that is what they
+//   migrate to - on READ, so no child needs a write to keep working. New
+//   writes keep both booleans in step (`flagsFor`) so a device still running
+//   the old shell reads the same permission.
+const GradeAccess = (() => {
+  const _restr = r => r || ((typeof DB !== 'undefined' && DB && DB.restrictions) || {});
+
+  function ownGrade() {
+    const acct = (typeof Auth !== 'undefined' && Auth.getActiveAccount) ? Auth.getActiveAccount() : null;
+    return Number(acct && acct.grade)
+      || Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0)
+      || 5;
+  }
+
+  // Every grade a child could be shown at all: a live pack exists and the
+  // admin kill switch has not taken the grade down.
+  function liveGrades(packs) {
+    const list = packs || (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []) || [];
+    const off = ((typeof window !== 'undefined' && window.GLOBAL_SETTINGS) || {}).disabled_grades || [];
+    return [...new Set(Object.values(list)
+      .filter(p => p && !p.comingSoon && !off.includes(Number(p.grade)))
+      .map(p => Number(p.grade))
+      .filter(Number.isFinite))].sort((a, b) => a - b);
+  }
+
+  // The EXTRA grades the parent unlocked - never the child's own, never a
+  // grade that is no longer live.
+  function granted(restrictions, packs) {
+    const r = _restr(restrictions);
+    const live = liveGrades(packs);
+    if (Array.isArray(r.allowedGrades)) {
+      const want = r.allowedGrades.map(Number);
+      return live.filter(g => want.includes(g));
+    }
+    return (r.crossGradePractice || r.crossGradeSearch) ? live.slice() : [];
+  }
+
+  // Own grade + everything the parent unlocked. Search and the practice hub
+  // read THIS: a parent may unlock a lower grade deliberately, for catch-up.
+  function allowed(own, restrictions, packs) {
+    const g = Number(own) || ownGrade();
+    return [...new Set([g, ...granted(restrictions, packs)])].sort((a, b) => a - b);
+  }
+  function allows(grade, own, restrictions, packs) {
+    return allowed(own, restrictions, packs).includes(Number(grade));
+  }
+
+  // What the CHILD may choose for themselves. Own grade and above only: a
+  // child may stretch upwards, never quietly drop to easier work.
+  function childChoices(own, restrictions, packs) {
+    const g = Number(own) || ownGrade();
+    return allowed(g, restrictions, packs).filter(x => x >= g);
+  }
+
+  // What the Game Zone actually draws from. The child's own pick lives in the
+  // progress blob (DB.games.sourceGrades) because a child can write that and
+  // cannot write students.settings. Own grade is always in, so a pool can
+  // never be empty, and a pick the parent has since revoked simply drops out.
+  function gameGrades(own, restrictions, games, packs) {
+    const g = Number(own) || ownGrade();
+    const choices = childChoices(g, restrictions, packs);
+    const gs = games || ((typeof DB !== 'undefined' && DB && DB.games) || {});
+    const picked = Array.isArray(gs.sourceGrades) ? gs.sourceGrades.map(Number) : [];
+    return [...new Set([g, ...picked.filter(x => choices.includes(x))])].sort((a, b) => a - b);
+  }
+
+  // The two booleans this list replaced, derived - never authored by hand.
+  function flagsFor(list) {
+    const extra = (list || []).length > 0;
+    return { crossGradeSearch: extra, crossGradePractice: extra };
+  }
+
+  return { ownGrade, liveGrades, granted, allowed, allows, childChoices, gameGrades, flagsFor };
+})();
+
 function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
   const shuffled = shuffle([...new Set(options.filter(o => o !== answer))]);
   const finalOpts = shuffle([answer, ...shuffled.slice(0, 3)]);
