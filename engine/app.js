@@ -3523,17 +3523,17 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
     return;
   }
   // Single-word MCQ displayed as a typed input this session
-  if (q.type === ‘mcq’ && _shouldShowAsBlank(q)) {
+  if (q.type === 'mcq' && _shouldShowAsBlank(q)) {
     const m   = disabled ? matchTypedAnswer(q.acceptableAnswers || [q.answer], selectedAnswer, q) : null;
-    const cls = disabled ? (m && m.ok ? ‘num-input correct’ : ‘num-input wrong’) : ‘num-input’;
-    const enter = containerId === ‘exam-answer-area’ ? ‘saveCurrentExamAnswer()’ : ‘practiceSubmit()’;
-    const isFr = ACTIVE_PACK && ACTIVE_PACK.subject === ‘French’;
-    const placeholder = isFr ? ‘Écris ta réponse…’ : ‘Type your answer…’;
-    const langAttr = isFr ? ‘lang="fr"’ : ‘’;
-    cont.innerHTML = `<input type="text" class="${cls}" id="num-ans-${containerId}" value="${_attr(selectedAnswer || ‘’)}"
+    const cls = disabled ? (m && m.ok ? 'num-input correct' : 'num-input wrong') : 'num-input';
+    const enter = containerId === 'exam-answer-area' ? 'saveCurrentExamAnswer()' : 'practiceSubmit()';
+    const isFr = ACTIVE_PACK && ACTIVE_PACK.subject === 'French';
+    const placeholder = isFr ? 'Écris ta réponse…' : 'Type your answer…';
+    const langAttr = isFr ? 'lang="fr"' : '';
+    cont.innerHTML = `<input type="text" class="${cls}" id="num-ans-${containerId}" value="${_attr(selectedAnswer || '')}"
       placeholder="${placeholder}" ${langAttr} inputmode="text" spellcheck="false"
-      autocapitalize="off" autocorrect="off" autocomplete="off" ${disabled ? ‘disabled’ : ‘’}
-      onkeydown="if(event.key===’Enter’){${enter}}">`;
+      autocapitalize="off" autocorrect="off" autocomplete="off" ${disabled ? 'disabled' : ''}
+      onkeydown="if(event.key==='Enter'){${enter}}">`;
     if (m && m.ok && m.slip) {
       cont.innerHTML += isFr
         ? `<p class="txt-slip">Juste - attention à l’accent : <b>${_attr(q.answer)}</b></p>`

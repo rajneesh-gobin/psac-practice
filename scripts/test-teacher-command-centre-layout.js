@@ -197,7 +197,9 @@ let chrome, ws; const pageErrorsRef = [];
 
   await call('Page.navigate', { url: 'http://127.0.0.1:' + PORT + '/' });
   let ready = false;
-  for (let i = 0; i < 120 && !ready; i++) { await sleep(500); try { ready = await evaluate("typeof _sb !== 'undefined' && !!_sb && typeof TeacherMode !== 'undefined' && typeof TeacherHome !== 'undefined' && typeof Auth !== 'undefined' && document.readyState === 'complete'"); } catch (_) {} }
+  // ⚠ TeacherMode and TeacherHome are in the lazy teacher group, so ASK for
+  //   them. A plain boot never defines them any more (test-role-modules.js).
+  for (let i = 0; i < 120 && !ready; i++) { await sleep(500); try { ready = await evaluate("typeof _sb !== 'undefined' && !!_sb && typeof Auth !== 'undefined' && document.readyState === 'complete' ? RoleModules.ensure('teacher').then(() => typeof TeacherMode !== 'undefined' && typeof TeacherHome !== 'undefined') : false"); } catch (_) {} }
   assert(ready, 'app globals loaded');
   await sleep(1500);
   await evaluate(MOCK);
