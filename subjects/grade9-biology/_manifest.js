@@ -90,7 +90,7 @@ registerSubject({
   practiceble: true, notesBased: false, level4Label: 'Applied Scenarios',
   syllabus: G9BIO_SYLLABUS,
   chapters: [
-    { id: 'g9s-b1-circulatory', name: 'B1 · Blood Circulatory System', icon: '🫀', examWeight: 9,
+    { id: 'g9s-b1-circulatory', name: 'B1 · Blood Circulatory System', icon: '❤️', examWeight: 9,
       syllabus: 'State that the circulatory system consists of blood, the heart and the blood vessels. List the components of blood and outline their functions. Compare the structure of arteries, veins and capillaries. Relate the function of each blood vessel to its structure. Discuss cardiovascular disease and its prevention.' },
     { id: 'g9s-b2-reproductive', name: 'B2 · Reproductive System', icon: '👶', examWeight: 9,
       syllabus: 'Define reproduction and state its importance in living things. Distinguish between sexual and asexual reproduction. Identify and label the parts of the human reproductive systems. Understand sexually transmitted diseases and how they are prevented.' },
