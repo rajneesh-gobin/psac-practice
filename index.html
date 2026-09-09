@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Apply saved theme before first paint so the spinner matches the app theme -->
+  <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
+  <!-- Warm up CDN connections before the blocking script tags are reached -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <title>PSAC Exam Practice - PSAC Revision</title>
 
   <!-- PWA manifest -->
