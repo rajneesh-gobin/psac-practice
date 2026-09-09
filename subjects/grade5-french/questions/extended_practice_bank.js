@@ -92,8 +92,8 @@
   const aux = [['j’','ai'],['tu','as'],['il','a'],['nous','avons'],['vous','avez'],['ils','ont']];
   participles.forEach(([verb, part, completions], vi) => aux.forEach(([person, helper], pi) => completions.forEach((completion, ci) => {
     add('fr-passe-compose', vi < 7 ? 'formation' : 'participe',
-      _clamp(1 + (/é$/.test(part) ? 0 : 1) + _personCost(person), 1, 3), `Complète : « ${person} ___ ${part} ${completion}. » (${verb}, passé composé)`, opts(helper, aux.map(a => a[1])), helper,
-      'Au passé composé, commence par choisir la forme de « avoir » qui va avec le sujet.', `La bonne forme est <b>${person.endsWith('’') ? person + helper : person + ' ' + helper} ${part}</b>. Le passé composé = auxiliaire + participe passé.`);
+      _clamp(1 + (/é$/.test(part) ? 0 : 1) + _personCost(person), 1, 3), `Complète : « ${person} ___ ${completion}. » (${verb}, passé composé)`, opts(helper + ' ' + part, aux.map(a => a[1] + ' ' + part)), helper + ' ' + part,
+      'Choisis d’abord l’auxiliaire qui correspond au sujet, puis ajoute le participe passé du verbe.', `La bonne forme est <b>${person.endsWith('’') ? person + helper : person + ' ' + helper} ${part}</b>. Le passé composé = auxiliaire + participe passé.`);
   })));
 
   // Pronouns: 10 nouns × 5 actions × 5 contexts = 250 varied application questions.

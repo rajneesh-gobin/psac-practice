@@ -76,16 +76,23 @@
   ].forEach(([words, answer, wrong], i) => add(`g4fr-cov-order-${i}`, 'g4fr-phrase', 'ordre_mots', `Remets les mots dans l\'ordre : « ${words} »`,
     [answer, wrong], answer, 'Cherche d\'abord qui fait l\'action, puis le verbe.', `La phrase correcte est : <b>${answer}</b>`));
 
+  const _aux4 = (answer, part) => {
+    const pool = ['ai', 'as', 'a', 'avons', 'avez', 'ont'];
+    const u = [`${answer} ${part}`];
+    for (const a of pool) { const f = `${a} ${part}`; if (!u.includes(f)) u.push(f); }
+    return u.slice(0, 4);
+  };
   [
-    ['Hier, j\'___ mangé une banane.', 'ai'], ['Hier, nous ___ joué au ballon.', 'avons'], ['Hier, tu ___ fini ton travail.', 'as'],
-    ['Hier, elle ___ regardé un film.', 'a'], ['Hier, vous ___ choisi un livre.', 'avez'], ['Hier, ils ___ visité le musée.', 'ont'],
-    ['Hier, j\'___ dessiné un bateau.', 'ai'], ['Hier, nous ___ rangé la classe.', 'avons'], ['Hier, tu ___ entendu le bruit.', 'as'],
-    ['Hier, il ___ perdu sa casquette.', 'a'], ['Hier, vous ___ préparé le repas.', 'avez'], ['Hier, elles ___ trouvé un trésor.', 'ont'],
-    ['Hier, j\'___ écrit une carte.', 'ai'], ['Hier, nous ___ vendu des gâteaux.', 'avons'], ['Hier, tu ___ répondu à la question.', 'as'],
-    ['Hier, elle ___ ouvert la fenêtre.', 'a'], ['Hier, ils ___ pris le train.', 'ont']
-  ].forEach(([question, answer], i) => add(`g4fr-cov-aux-${i}`, 'g4fr-passe-comp', 'auxiliaire', question,
-    ['ai', 'as', 'a', 'avons', 'avez', 'ont'], answer, 'Au passé composé, choisis la forme du verbe « avoir » qui correspond au sujet.',
-    `Avec ce sujet, l\'auxiliaire « avoir » est <b>${answer}</b>.`));
+    ['Hier, j\'___ une banane.', 'ai', 'mangé'], ['Hier, nous ___ au ballon.', 'avons', 'joué'], ['Hier, tu ___ ton travail.', 'as', 'fini'],
+    ['Hier, elle ___ un film.', 'a', 'regardé'], ['Hier, vous ___ un livre.', 'avez', 'choisi'], ['Hier, ils ___ le musée.', 'ont', 'visité'],
+    ['Hier, j\'___ un bateau.', 'ai', 'dessiné'], ['Hier, nous ___ la classe.', 'avons', 'rangé'], ['Hier, tu ___ le bruit.', 'as', 'entendu'],
+    ['Hier, il ___ sa casquette.', 'a', 'perdu'], ['Hier, vous ___ le repas.', 'avez', 'préparé'], ['Hier, elles ___ un trésor.', 'ont', 'trouvé'],
+    ['Hier, j\'___ une carte.', 'ai', 'écrit'], ['Hier, nous ___ des gâteaux.', 'avons', 'vendu'], ['Hier, tu ___ à la question.', 'as', 'répondu'],
+    ['Hier, elle ___ la fenêtre.', 'a', 'ouvert'], ['Hier, ils ___ le train.', 'ont', 'pris'],
+  ].forEach(([question, answer, part], i) => add(`g4fr-cov-aux-${i}`, 'g4fr-passe-comp', 'auxiliaire', question,
+    _aux4(answer, part), `${answer} ${part}`,
+    'Choisis la forme complète du passé composé (auxiliaire + participe passé) qui correspond au sujet.',
+    `La bonne forme est <b>${answer} ${part}</b>. Le passé composé = auxiliaire + participe passé.`));
 
   [
     ['Quel est le participe passé de « manger » ?', 'mangé'], ['Quel est le participe passé de « finir » ?', 'fini'],

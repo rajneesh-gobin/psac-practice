@@ -285,6 +285,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/ch03_verbes_present.js',
       'subjects/grade5-french/questions/ch04_adjectifs.js',
       'subjects/grade5-french/questions/ch05_passe_compose.js',
+      'subjects/grade5-french/questions/ch05_passe_compose_saisie.js',
       'subjects/grade5-french/questions/ch06_pronoms.js',
       'subjects/grade5-french/questions/ch07_lecture.js',
       'subjects/grade5-french/questions/ch08_grammaire.js',
@@ -692,7 +693,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 115;
+  const _CACHE_VERSION = 116;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
