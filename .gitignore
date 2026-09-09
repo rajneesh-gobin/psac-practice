@@ -25,3 +25,9 @@ node_modules/
 
 # Staging dir built by scripts/prepare-deploy.js — never committed, never served
 .deploy/
+
+# MIE textbook PDFs/RARs — 1.2 GB of source material, 10 files over GitHub's
+# 50 MB warning. They were only ever input to the book-syllabus audit, whose
+# OUTPUT is kept in docs/book-syllabus-audit/. Keep local copies outside the
+# repo if you need to re-run it.
+books/
