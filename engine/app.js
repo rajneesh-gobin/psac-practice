@@ -10150,6 +10150,29 @@ function loadPracticeQuestion() {
     if (S.practice.difficulty !== null) {
       // Specific difficulty assigned (parent assignment)
       S.practice.qs = getQuestionsForChapter(S.practice.chapterId, S.practice.difficulty, 20);
+      // ⚠ A LEVEL WITH NO STOCK USED TO LAND ON A BLANK SCREEN. If the pool came
+      // back empty this function fell through to the `!q || !q.question` branch
+      // below, which clears the question text and RETURNS — no message, no way
+      // back except the back button. Measured 2026-09-10: six live packs
+      // (grade7/8 french, science and social-modern-studies) held ZERO L4 items
+      // while the timetable day popup offered a Challenge button for every one
+      // of them (app.js:8544 does not check stock, and cannot: the pack may not
+      // be loaded when that popup renders). A parent assigning a level the
+      // chapter cannot fill reached the same dead end.
+      // Falling back to mixed is the honest answer — the child asked for harder
+      // and this chapter has none, so give them the chapter rather than nothing.
+      // ⚠ S.practice.difficulty MUST be cleared too, or _updateDiffBadge() keeps
+      // announcing a level the questions are not actually drawn from.
+      if (!S.practice.qs.length) {
+        const _lvlName = (typeof _DIFF_NAMES !== 'undefined' && _DIFF_NAMES[S.practice.difficulty])
+          || ('level ' + S.practice.difficulty);
+        S.practice.difficulty = null;
+        const _maxD = DB.restrictions?.maxDifficulty ?? 4;
+        S.practice.qs = getMixedQuestions(S.practice.chapterId, _maxD, 20);
+        if (S.practice.qs.length) {
+          toast(`No ${_lvlName} questions in this chapter yet — showing all levels instead.`, 3500);
+        }
+      }
     } else if (S.practice.chapterId) {
       // Mixed mode - random across all levels up to parent cap
       const _maxD = DB.restrictions?.maxDifficulty ?? 4;
@@ -10163,7 +10186,12 @@ function loadPracticeQuestion() {
     if (S.practice.idx < S.practice.qs.length - 1) { S.practice.idx++; loadPracticeQuestion(); return; }
     // No questions available - clear stale DOM so previous subject's content isn't shown
     const _qt = document.getElementById('practice-q-text');
-    if (_qt) _qt.innerHTML = '';
+    // ⚠ SAY SO. This used to blank the text and return, leaving a child staring
+    // at an empty practice screen with no explanation and no instruction. An
+    // empty pool is a real answer — "there is nothing here yet" — and a child
+    // must be told it rather than left to decide the app is broken.
+    if (_qt) _qt.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-6 text-center">'
+      + 'There are no questions in this chapter yet. Try another chapter, or come back soon. 📚</p>';
     const _qc = document.getElementById('practice-q-counter');
     if (_qc) _qc.textContent = '';
     return;
