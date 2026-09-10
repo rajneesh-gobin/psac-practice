@@ -511,7 +511,30 @@ STATIC_QUESTIONS.push(
     options:['Use a long tape, since fewer joins means fewer small errors','Use a shorter ruler, since small rulers are marked out more finely','Count paces instead, since everybody\'s paces are the same size','Measure only half and double it, since that halves the mistakes'],
     answer:'Use a long tape, since fewer joins means fewer small errors',
     hint:'Each time the ruler is picked up and put down, a tiny error can creep in. How many times does that happen?',
-    explanation:'Every join is a chance to overlap or leave a gap, and over a playground there are hundreds of them adding up. A shorter ruler means even more joins, paces differ from person to person, and halving the distance does not remove the errors in the half you measure.' })
+    explanation:'Every join is a chance to overlap or leave a gap, and over a playground there are hundreds of them adding up. A shorter ruler means even more joins, paces differ from person to person, and halving the distance does not remove the errors in the half you measure.' }),
+  // ── L4 top-up: three chapters finished on 7 items at L4; a Challenge round
+  //    deals up to 8. Same rules as the rest of the file.
+  makeMCQ({ id:'g4sci-hd-074', chapterId:'g4sci-plants', subsection:'growth', difficulty:4,
+    question:'Two bean seeds are planted. One is put on a sunny windowsill and watered; the other is put in a dark cupboard and watered.<br>The cupboard seed sprouts and grows tall and pale, then dies. Why did it grow at all?',
+    options:['The seed had its own food store to start with','Cupboards hold a small amount of hidden light','Water alone can feed a plant for a few weeks','The seed took food out of the soil around it'],
+    answer:'The seed had its own food store to start with',
+    hint:'Something inside the seed keeps it going before the first leaves work.',
+    explanation:'A seed carries a <b>food store</b> that powers the first growth. Once that runs out the plant must make its own food, and without light it cannot, so it dies.' }),
+
+  makeMCQ({ id:'g4sci-hd-075', chapterId:'g4sci-animals', subsection:'habitats', difficulty:4,
+    question:'A fish from the lagoon is put into a bucket of fresh tap water and soon dies.<br>Why, when both are water?',
+    options:['Its body is suited only to salty water','Tap water is far too cold for any fish','A bucket is too small for a fish to live','Fish can only breathe in moving water'],
+    answer:'Its body is suited only to salty water',
+    hint:'Water is not just water. What is dissolved in it matters.',
+    explanation:'A lagoon fish is adapted to <b>salty surroundings</b> and cannot cope in fresh water. A habitat is defined by its conditions, not by the substance alone.' }),
+
+  makeMCQ({ id:'g4sci-hd-076', chapterId:'g4sci-protect', subsection:'why_protect', difficulty:4,
+    question:'A lagoon is closed to fishing for two years. Afterwards fishermen catch more fish just outside it than before.<br>Why?',
+    options:['Fish bred inside and spread beyond the closed area','The fish outside grew larger because of the rest','Fishermen simply became better at catching them','Closing the lagoon made the sea water cleaner'],
+    answer:'Fish bred inside and spread beyond the closed area',
+    hint:'A closed area is not sealed. What can cross the line?',
+    explanation:'Protected fish breed, and the extra fish and young <b>spill over</b> the boundary. Closing an area can raise catches nearby rather than only removing fishing ground.' })
+
 
 );
 })();

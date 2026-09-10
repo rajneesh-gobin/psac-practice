@@ -424,7 +424,32 @@ STATIC_QUESTIONS.push(
     options:['Un personnage qui parle de lui-même.','Le frère qui crie depuis le portail.','Un narrateur extérieur à l\'histoire.','Le maître qui raconte à la classe.'],
     answer:'Un personnage qui parle de lui-même.',
     hint:'Rep&eacute;rez les mots <i>je</i>, <i>mon</i>, <i>me</i> : ils disent qui tient la plume.',
-    explanation:'Le r&eacute;cit emploie <b>je</b> et <b>mon fr&egrave;re</b> : celui qui raconte est un personnage de l\'histoire et parle de lui-m&ecirc;me. Un narrateur ext&eacute;rieur dirait "il" et "son fr&egrave;re".' })
+    explanation:'Le r&eacute;cit emploie <b>je</b> et <b>mon fr&egrave;re</b> : celui qui raconte est un personnage de l\'histoire et parle de lui-m&ecirc;me. Un narrateur ext&eacute;rieur dirait "il" et "son fr&egrave;re".' }),
+
+  // ── Ajout L4 : trois chapitres s\'arr&ecirc;taient &agrave; 7 items en L4, or une
+  //    s&eacute;rie "Analyse de texte" en distribue 8. M&ecirc;mes r&egrave;gles que le reste.
+  // ⚠ g4fr-images reste &agrave; 2 : ce chapitre demande des IMAGES, que ce lot ne
+  //    peut pas produire. C\'est une lacune r&eacute;elle, pas un oubli.
+  makeMCQ({ id:'g4fr-hd-061', chapterId:'g4fr-vocabulaire', subsection:'politesse', difficulty:4,
+    question:'Un &eacute;l&egrave;ve &eacute;crit &agrave; sa directrice : <i>"Salut, je veux un rendez-vous."</i><br>Quelle formule convient mieux ?',
+    options:['Madame, je souhaiterais obtenir un rendez-vous.','Salut Madame, je veux vite un rendez-vous.','Bonjour, donnez-moi un rendez-vous demain.','Madame, il me faut un rendez-vous tout de suite.'],
+    answer:'Madame, je souhaiterais obtenir un rendez-vous.',
+    hint:'Plus la personne est &eacute;loign&eacute;e, moins la demande est directe.',
+    explanation:'&Agrave; une directrice on emploie <b>Madame</b> et un conditionnel de politesse : <i>je souhaiterais</i>. &laquo; Je veux &raquo; et &laquo; donnez-moi &raquo; sont des ordres, et &laquo; Salut &raquo; s\'adresse &agrave; un ami.' }),
+
+  makeMCQ({ id:'g4fr-hd-062', chapterId:'g4fr-formation', subsection:'tout_leur', difficulty:4,
+    question:'Compl&eacute;tez : <i>"___ les enfants ont rang&eacute; ___ cahiers avant de partir."</i>',
+    options:['Tous / leurs','Tout / leur','Tous / leur','Toutes / leurs'],
+    answer:'Tous / leurs',
+    hint:'Accordez le premier mot avec &laquo; enfants &raquo;, puis demandez-vous combien de cahiers.',
+    explanation:'&laquo; Enfants &raquo; est masculin pluriel, donc <b>tous</b>. Chaque enfant a plusieurs cahiers, donc <b>leurs</b> au pluriel. Les deux accords se font s&eacute;par&eacute;ment.' }),
+
+  makeMCQ({ id:'g4fr-hd-063', chapterId:'g4fr-enr-relier', subsection:'temps', difficulty:4,
+    question:'Reliez les deux phrases avec une expression de temps : <i>"Le cyclone est pass&eacute;."</i> <i>"Nous sommes sortis."</i>',
+    options:['Nous sommes sortis après que le cyclone est passé.','Nous sommes sortis, le cyclone est passé après.','Après le cyclone est passé, nous sommes sortis.','Nous sommes sortis pendant que le cyclone est passé.'],
+    answer:'Nous sommes sortis après que le cyclone est passé.',
+    hint:'Quel &eacute;v&eacute;nement se produit en premier ? Gardez cet ordre.',
+    explanation:'Le cyclone passe d\'abord, donc <b>apr&egrave;s que</b> introduit cet &eacute;v&eacute;nement. &laquo; Pendant que &raquo; dirait que l\'on sort au milieu du cyclone, ce qui change le sens et le danger.' })
 
 );
 })();

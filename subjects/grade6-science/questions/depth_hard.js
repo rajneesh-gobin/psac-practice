@@ -618,7 +618,134 @@ STATIC_QUESTIONS.push(
     options:['The planets orbit in the same direction, in one plane','The planets are all the same size','Every planet has exactly one moon','The planets are all evenly spaced apart from each other'],
     answer:'The planets orbit in the same direction, in one plane',
     hint:'What pattern would a spinning disc leave behind?',
-    explanation:'A spinning cloud flattens into a disc, and objects forming in it inherit <b>one direction and one plane</b>. That shared motion is strong evidence for a common origin.' })
+    explanation:'A spinning cloud flattens into a disc, and objects forming in it inherit <b>one direction and one plane</b>. That shared motion is strong evidence for a common origin.' }),
+
+  // ── L4 top-up added after the first pass ────────────────────────────────
+  // The first pass cleared the 15-item hard floor everywhere but left three
+  // chapters below 8 items at L4, which is what a Challenge round deals.
+  // g6-animals had NONE. Same rules as the rest of the file.
+
+  // ══ g6-air · 2 ══════════════════════════════════════════════════════════
+  makeMCQ({ id:'g6sc-hd-085', chapterId:'g6-air', subsection:'properties', difficulty:4,
+    question:'A glass is pushed straight down over a floating cork, mouth first, and the cork goes down with it without getting wet.<br>Why?',
+    options:['Trapped air fills the glass and keeps the water out','The cork is waterproof and repels the water','The glass is heavier than the water beneath it','Water cannot move upwards inside a container'],
+    answer:'Trapped air fills the glass and keeps the water out',
+    hint:'The glass is not empty — something is already inside it.',
+    explanation:'The glass is full of <b>air</b>, and air takes up space, so water cannot enter to replace it. Tilt the glass and you see the air escape as bubbles, and the water rushes in.' }),
+
+  makeMCQ({ id:'g6sc-hd-086', chapterId:'g6-air', subsection:'wind_pressure', difficulty:4,
+    question:'At night the land cools faster than the sea, and the breeze reverses to blow from land to sea.<br>What does that tell you about the daytime breeze?',
+    options:['It blew inland because the land was warmer then','It blows the same way both day and night','It is caused by the tide rather than by heat','It only happens when there are clouds about'],
+    answer:'It blew inland because the land was warmer then',
+    hint:'The breeze always blows toward the warmer side. Which side is warmer by day?',
+    explanation:'Air rises over the <b>warmer</b> surface and cooler air flows in beneath. By day the land is warmer, so the breeze comes off the sea; at night that reverses. The reversal proves heat drives it.' }),
+
+  // ══ g6-materials · 7 ════════════════════════════════════════════════════
+  makeMCQ({ id:'g6sc-hd-087', chapterId:'g6-materials', subsection:'rusting', difficulty:4,
+    question:'Three identical nails are left for two weeks: one in dry air, one in boiled water sealed under oil, one half in ordinary water. Only the third rusts.<br>What does the experiment show?',
+    options:['Rusting needs both air and water together','Rusting needs water but never needs air','Oil is what causes iron to rust quickly','Boiling water makes iron rust much faster'],
+    answer:'Rusting needs both air and water together',
+    hint:'Work out what each nail was missing, then find what only the third one had.',
+    explanation:'Dry air has no water; boiled water under oil has no dissolved air. Only the third nail met <b>both</b>, so both are needed. Removing one thing at a time is how a cause is pinned down.' }),
+
+  makeMCQ({ id:'g6sc-hd-088', chapterId:'g6-materials', subsection:'rusting', difficulty:4,
+    question:'A gate is painted, and where the paint chips off the metal begins to rust.<br>What does paint actually do?',
+    options:['It keeps air and water off the metal surface','It makes the metal too hard to rust','It reacts with the iron and changes it','It cools the metal so rusting slows down'],
+    answer:'It keeps air and water off the metal surface',
+    hint:'Rust needs contact. What does a coat of paint prevent?',
+    explanation:'Paint is a <b>barrier</b>. Break it and air and water reach the iron again, which is why rust starts exactly at a chip and spreads from there.' }),
+
+  makeMCQ({ id:'g6sc-hd-089', chapterId:'g6-materials', subsection:'properties', difficulty:4,
+    question:'A cooking pot is made of metal but its handle is plastic.<br>What does that tell you about the two materials?',
+    options:['One carries heat well and the other hardly does','Plastic is stronger than metal when heated','Metal is cheaper, so it is used for the body','Plastic conducts heat better than metal does'],
+    answer:'One carries heat well and the other hardly does',
+    hint:'The pot and the handle need opposite things.',
+    explanation:'The pot must <b>conduct</b> heat into the food; the handle must <b>not</b> conduct it into your hand. Two opposite requirements in one object, solved with two materials.' }),
+
+  makeMCQ({ id:'g6sc-hd-090', chapterId:'g6-materials', subsection:'natural_manmade', difficulty:4,
+    question:'Cotton, wool and silk come from living things, while nylon and polyester are made in factories.<br>Why might a factory-made cloth still be preferred for a raincoat?',
+    options:['It can be made waterproof and dries quickly','It always costs more than a natural cloth','It is made from plants grown near the factory','Natural cloth cannot be made into a coat'],
+    answer:'It can be made waterproof and dries quickly',
+    hint:'A material is chosen for what the job needs, not for where it came from.',
+    explanation:'Manufactured fibres can be given <b>properties to order</b> — waterproof, quick-drying, hard-wearing. Natural and man-made is a question of origin, not of quality.' }),
+
+  makeMCQ({ id:'g6sc-hd-091', chapterId:'g6-materials', subsection:'waste', difficulty:4,
+    question:'A banana skin buried in a garden disappears within weeks; a plastic bag buried beside it is still there years later.<br>What is the difference?',
+    options:['Living things can break down one but not the other','The plastic bag was buried much deeper down','Banana skins dissolve in the water in the soil','Plastic bags are far heavier than banana skins'],
+    answer:'Living things can break down one but not the other',
+    hint:'Something in the soil eats one of them.',
+    explanation:'Decomposers can digest the banana skin — it is <b>biodegradable</b>. Plastic is not, so it stays in the ground. That is why plastic waste is a problem of time, not of size.' }),
+
+  makeMCQ({ id:'g6sc-hd-092', chapterId:'g6-materials', subsection:'properties', difficulty:4,
+    question:'Glass is chosen for windows and steel for bridge beams.<br>Which pair of properties explains the two choices?',
+    options:['Glass is transparent; steel is strong','Glass is strong; steel is transparent','Both are chosen because they are cheap','Both are chosen because they resist heat'],
+    answer:'Glass is transparent; steel is strong',
+    hint:'Match each job to the one property it most needs.',
+    explanation:'A window must let light through, so <b>transparency</b> decides it; a beam must carry load, so <b>strength</b> decides it. Materials are chosen for the property the job depends on most.' }),
+
+  makeMCQ({ id:'g6sc-hd-093', chapterId:'g6-materials', subsection:'waste', difficulty:4,
+    question:'A town separates its rubbish into paper, glass, metal and food waste.<br>Why is sorting done before recycling rather than after?',
+    options:['Mixed waste is far harder to process cleanly','Sorting makes the rubbish weigh much less','Recycling machines cannot run on clean waste','Separated bins take up less room in a lorry'],
+    answer:'Mixed waste is far harder to process cleanly',
+    hint:'Think about glass fragments inside recycled paper.',
+    explanation:'Each material needs a <b>different process</b>, and contamination ruins a batch — a little glass in the paper stream spoils it. Sorting at the source is far cheaper than separating later.' }),
+
+  // ══ g6-animals · 8 ══════════════════════════════════════════════════════
+  makeMCQ({ id:'g6sc-hd-094', chapterId:'g6-animals', subsection:'teeth', difficulty:4,
+    question:'A skull is found with long sharp pointed teeth at the front and no flat grinding teeth at all.<br>What did the animal most likely eat?',
+    options:['Meat, because the teeth are for gripping and tearing','Grass, because pointed teeth cut stems easily','Fruit, because soft food needs no flat teeth','Leaves, because sharp teeth strip them from twigs'],
+    answer:'Meat, because the teeth are for gripping and tearing',
+    hint:'Match the tooth shape to the job it can do.',
+    explanation:'Pointed teeth grip and tear, which suits <b>meat</b>. Plant food must be ground down, and this skull has no grinding teeth — the absence is as informative as what is there.' }),
+
+  makeMCQ({ id:'g6sc-hd-095', chapterId:'g6-animals', subsection:'teeth', difficulty:4,
+    question:'A cow chews steadily for hours, while a dog swallows its food in large pieces.<br>Why the difference?',
+    options:['Plant food must be ground before it can be digested','A cow has a much larger mouth than a dog does','Dogs cannot move their jaws from side to side','Cows enjoy chewing more than dogs enjoy it'],
+    answer:'Plant food must be ground before it can be digested',
+    hint:'Grass is much tougher than meat.',
+    explanation:'Tough plant material needs <b>grinding</b> to break it up before digestion can work on it. Meat is softer and can be swallowed in chunks — diet shapes both teeth and behaviour.' }),
+
+  makeMCQ({ id:'g6sc-hd-096', chapterId:'g6-animals', subsection:'life_cycle', difficulty:4,
+    question:'A butterfly\'s caterpillar eats leaves while the adult drinks nectar from flowers.<br>What is the advantage of that difference?',
+    options:['Young and adult do not compete for the same food','The caterpillar cannot taste nectar at all','Leaves are only available at night','Adults need no food once they can fly'],
+    answer:'Young and adult do not compete for the same food',
+    hint:'What would happen if both stages ate the same thing?',
+    explanation:'Eating different foods means the young and the adults <b>do not compete</b> with each other, so more of both can survive in the same place. It is a real advantage of a life cycle with stages.' }),
+
+  makeMCQ({ id:'g6sc-hd-097', chapterId:'g6-animals', subsection:'habitats', difficulty:4,
+    question:'A fish taken from the lagoon and put into fresh water soon dies, although both are water.<br>Why?',
+    options:['Its body is suited to salty water only','Fresh water contains no oxygen for fish','The fish cannot swim in still fresh water','Fresh water is always far too cold'],
+    answer:'Its body is suited to salty water only',
+    hint:'Water is not just water — what is dissolved in it matters.',
+    explanation:'A sea fish\'s body is adapted to <b>salty surroundings</b> and cannot control its water balance in fresh water. A habitat is defined by conditions, not by the substance alone.' }),
+
+  makeMCQ({ id:'g6sc-hd-098', chapterId:'g6-animals', subsection:'endangered', difficulty:4,
+    question:'The Mauritius kestrel once fell to a handful of birds and has since recovered through captive breeding AND forest protection.<br>Why was the second part needed?',
+    options:['Released birds need somewhere they can survive','Captive breeding is not allowed without it','Forests are needed to keep the birds hidden','Breeding cannot work without wild birds present'],
+    answer:'Released birds need somewhere they can survive',
+    hint:'Where does a bird go after it leaves the cage?',
+    explanation:'Breeding produces birds; only habitat can <b>keep</b> them. Releasing them into the conditions that endangered them in the first place would simply repeat the decline.' }),
+
+  makeMCQ({ id:'g6sc-hd-099', chapterId:'g6-animals', subsection:'classification', difficulty:4,
+    question:'A whale lives in the sea, has no legs and swims like a fish, yet is grouped with mammals.<br>Why?',
+    options:['It breathes air and feeds its young on milk','It is much larger than any known fish','It lives near the surface rather than the deep','Its name was given before whales were studied'],
+    answer:'It breathes air and feeds its young on milk',
+    hint:'Grouping follows body features, not where an animal lives.',
+    explanation:'Classification follows <b>underlying features</b>, not lifestyle. Living the same way in the same place makes unrelated animals look alike, which is why appearance alone misleads.' }),
+
+  makeMCQ({ id:'g6sc-hd-100', chapterId:'g6-animals', subsection:'diet', difficulty:4,
+    question:'A gardener notices that when he kills all the insects in his garden, the birds leave too.<br>What does that show?',
+    options:['The birds fed on the insects he removed','Birds are harmed by the spray directly','Birds only visit gardens that have flowers','Insects and birds always arrive together'],
+    answer:'The birds fed on the insects he removed',
+    hint:'Follow the food chain one step up.',
+    explanation:'Removing the insects removed the <b>birds\' food</b>, so the birds went elsewhere. Acting on one level of a food chain changes the level above it, even without touching it.' }),
+
+  makeMCQ({ id:'g6sc-hd-101', chapterId:'g6-animals', subsection:'habitats', difficulty:4,
+    question:'Two birds live on the same tree: one eats insects from the bark, the other eats fruit from the top branches.<br>Why can both live there without one driving the other out?',
+    options:['They use the tree in different ways','They are too small to notice each other','One only feeds at night and one by day','Trees always hold exactly two species'],
+    answer:'They use the tree in different ways',
+    hint:'Competition happens when two species need the same thing.',
+    explanation:'Different food in different parts of the tree means they are <b>not competing</b>. Sharing a place is possible whenever species make their living in different ways.' })
 
 );
 })();

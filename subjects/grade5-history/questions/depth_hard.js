@@ -836,7 +836,51 @@ STATIC_QUESTIONS.push(
     options:['Its people and trade links come from both','It lies exactly halfway between them','A shipping route runs across it','It was governed by both continents'],
     answer:'Its people and trade links come from both',
     hint:'Think about where Mauritians and their trade partners come from.',
-    explanation:'The population descends from African, Indian, Chinese and European arrivals, and the country trades with both regions. The "bridge" is <b>human and economic</b>, not geographical.' })
+    explanation:'The population descends from African, Indian, Chinese and European arrivals, and the country trades with both regions. The "bridge" is <b>human and economic</b>, not geographical.' }),
+
+  // ── L4 top-up: three chapters finished below 8 items at L4, which is what a
+  //    Challenge round deals. Same rules as the rest of the file.
+  makeMCQ({ id:'g5hg-hd-116', chapterId:'discovery', subsection:'routes', difficulty:4,
+    question:'A ship leaving the Cape of Good Hope for India could sail past Madagascar or past the Mascarenes.<br>Why might a captain choose the longer route past the Mascarenes?',
+    options:['Uninhabited islands offered water without any conflict','The Mascarenes were closer to the Cape','Madagascar had no fresh water at all','The Mascarenes had a shorter route to India'],
+    answer:'Uninhabited islands offered water without any conflict',
+    hint:'What is the risk of stopping somewhere that already has people?',
+    explanation:'An empty island supplied <b>water and timber with nobody to negotiate or fight with</b>. Safety of resupply could outweigh a longer distance, which is much of why these islands mattered.' }),
+
+  makeMCQ({ id:'g5hg-hd-117', chapterId:'g5ge-weather', subsection:'impact', difficulty:4,
+    question:'A cyclone passes without much wind damage, but a village is cut off for three days.<br>What most likely happened?',
+    options:['Heavy rain flooded the roads and washed them out','The wind blew the village signs away','The cyclone changed the village\'s position','Cyclones always stop people from walking'],
+    answer:'Heavy rain flooded the roads and washed them out',
+    hint:'A cyclone brings two dangers, not one.',
+    explanation:'A cyclone carries <b>wind and rain</b>, and the rain can do the greater damage — flooding roads, cutting bridges and isolating villages long after the wind has gone.' }),
+
+  makeMCQ({ id:'g5hg-hd-118', chapterId:'g5ge-weather', subsection:'instruments', difficulty:4,
+    question:'A rain gauge records 40 mm on Monday and 15 mm on Tuesday. It is emptied each morning.<br>What was the total for the two days, and why does emptying matter?',
+    options:['55 mm; otherwise Tuesday would include Monday','25 mm; the difference between the two days','40 mm; only the larger reading counts','15 mm; the gauge resets itself each night'],
+    answer:'55 mm; otherwise Tuesday would include Monday',
+    hint:'Each reading must cover one day only.',
+    explanation:'40 + 15 = <b>55 mm</b>. Emptying the gauge is what makes each reading a <b>separate day</b>; without it Tuesday\'s figure would silently contain Monday\'s rain.' }),
+
+  makeMCQ({ id:'g5hg-hd-119', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:4,
+    question:'A governor is remembered for building a port and a hospital, and also for the harsh treatment of enslaved people under his rule.<br>How should both facts be handled?',
+    options:['Both are recorded, because both are true','Only the buildings should be remembered','Only the harsh treatment should be recorded','Neither can be known for certain now'],
+    answer:'Both are recorded, because both are true',
+    hint:'One fact does not cancel the other.',
+    explanation:'History records <b>what a person did, not a verdict on their character</b>. Keeping both facts is more honest than choosing the one that suits a simpler story.' }),
+
+  makeMCQ({ id:'g5hg-hd-120', chapterId:'g5enr-personalities', subsection:'independence', difficulty:4,
+    question:'Independence in 1968 came after years of debate, with some Mauritians in favour and others against.<br>What does that tell you?',
+    options:['A major change is rarely agreed by everyone','Everyone in Mauritius wanted independence','The debate meant independence was a mistake','Only one group was allowed to have a view'],
+    answer:'A major change is rarely agreed by everyone',
+    hint:'Big decisions usually have people on both sides.',
+    explanation:'Real historical change involves <b>disagreement</b>, and remembering only one side flattens it. Knowing there was a debate is part of understanding what independence meant.' }),
+
+  makeMCQ({ id:'g5hg-hd-121', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:4,
+    question:'A statue of a historical figure was put up fifty years after that person died.<br>What does the statue tell a historian most reliably about?',
+    options:['What people fifty years later wanted remembered','Exactly what the person looked like','What the person achieved in their lifetime','How popular the person was while alive'],
+    answer:'What people fifty years later wanted remembered',
+    hint:'Ask who made it, and when.',
+    explanation:'A statue is evidence about <b>the people who put it up</b> and what they chose to honour. It is much weaker evidence about the person, especially one nobody living had seen.' })
 
 );
 })();
