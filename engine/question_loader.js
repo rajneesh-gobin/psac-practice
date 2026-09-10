@@ -340,6 +340,7 @@ const QuestionLoader = (() => {
                        'subjects/grade9-english/questions/eng_paper_inspired.js',
                        'subjects/grade9-english/questions/eng_multi_year.js',
                        'subjects/grade9-english/questions/family_expansion.js',
+                       'subjects/grade9-english/questions/grammar_depth_modals_det_adj_nouns.js',
                        'subjects/grade9-english/questions/reclaimed_sample.js'],
     'grade9-french': ['subjects/grade9-french/questions/starter_bank.js',
                       'subjects/grade9-french/questions/transformation_volume.js',
@@ -861,7 +862,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 124;
+  const _CACHE_VERSION = 125;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
