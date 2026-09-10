@@ -90,7 +90,11 @@ const G8ENG_SYLLABUS = {
 registerSubject({
   id: 'grade8-english', name: 'English', grade: 8, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+    // ⚠ WAS 'Word Problems' — the MATHS label on an English pack. L4 is
+  // maths-shaped and does not travel; level4Label says what it means HERE:
+  // extended analysis — hold a passage or two competing readings in mind and
+  // justify a choice. Matches grade7-english so one wording carries up.
+  practiceble: true, notesBased: false, level4Label: 'Extended Analysis',
   syllabus: G8ENG_SYLLABUS,
   chapters: [
     { id: 'g8eng-listening',            name: 'Listening & Comprehension',                       icon: '👂', examWeight: 3,

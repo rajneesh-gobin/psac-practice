@@ -56,7 +56,12 @@ const G8FR_SYLLABUS = {
 registerSubject({
   id: 'grade8-french', name: 'Français', grade: 8, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  practiceble: true, notesBased: false,
+  // ⚠ level4Label set with the content, never before it — a relabelled empty
+  // level is still an empty level. L4 is maths-shaped and does not travel.
+  // ⚠ Deliberately IN FRENCH: every other label a child meets in this pack is
+    // French, and an English word in the level badge would be the only one.
+  level4Label: 'Analyse de texte',
   syllabus: G8FR_SYLLABUS,
   chapters: [
     { id: 'g8fr-co',                    name: 'Compréhension orale',    icon: '👂', examWeight: 3,

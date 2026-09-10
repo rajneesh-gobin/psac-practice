@@ -56,7 +56,12 @@ const G7SMS_SYLLABUS = {
 registerSubject({
   id: 'grade7-social-modern-studies', name: 'Social & Modern Studies', grade: 7, icon: '🌍', subject: 'Social & Modern Studies',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  // ⚠ WAS 'Word Problems' — the MATHS label on a social studies pack. CLAUDE.md
+  // records that L4 is maths-shaped and does not travel; level4Label exists to
+  // say what L4 means in THIS pack. Here it is an applied scenario: put two
+  // facts together, or evaluate a claim where both sides sound reasonable.
+  // 'Applied Reasoning' matches grade4-history and grade5-history.
+  practiceble: true, notesBased: false, level4Label: 'Applied Reasoning',
   syllabus: G7SMS_SYLLABUS,
   chapters: [
     { id: 'g7sms-islands',              name: 'Our Islands & their Landforms',      icon: '🏝️', examWeight: 3,

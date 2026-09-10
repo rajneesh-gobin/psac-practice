@@ -56,7 +56,12 @@ const G8SMS_SYLLABUS = {
 registerSubject({
   id: 'grade8-social-modern-studies', name: 'Social & Modern Studies', grade: 8, icon: '🌍', subject: 'Social & Modern Studies',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  practiceble: true, notesBased: false,
+  // ⚠ level4Label set with the content, never before it — a relabelled empty
+  // level is still an empty level. L4 is maths-shaped and does not travel.
+  // ⚠ L4 here is an applied scenario needing two facts, or judging a claim where
+    // both sides sound reasonable. Matches grade4/5/6-history and grade7-sms.
+  level4Label: 'Applied Reasoning',
   syllabus: G8SMS_SYLLABUS,
   chapters: [
     { id: 'g8sms-slavery',              name: 'Slavery & Indentured Labour',         icon: '⛓️', examWeight: 3,

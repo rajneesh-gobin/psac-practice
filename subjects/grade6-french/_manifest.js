@@ -106,7 +106,14 @@ const G6FR_SYLLABUS = {
 registerSubject({
   id: 'grade6-french', name: 'French', grade: 6, icon: '📕', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true, noDifficulty: true,
+  practiceble: true, notesBased: true,
+  // ⚠ level4Label set WITH the content, never before it — a relabelled empty
+  // level is still an empty level. Deliberately IN FRENCH: every other label a
+  // child meets in this pack is French, so an English badge would be the only one.
+  // ⚠ noDifficulty REMOVED only after depth_hard.js cleared the 15-item hard floor
+  // in every chapter. The flag hid the ladder while getMixedQuestions() drew
+  // across all levels at once, so the MIX was the experience.
+  level4Label: 'Analyse de texte',
   syllabus: G6FR_SYLLABUS,
   // examWeight is a chapter's share of a 40-question exam. These come from the
   // 2024 PSAC French paper's own mark allocation, not from how many questions

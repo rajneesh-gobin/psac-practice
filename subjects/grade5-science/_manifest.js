@@ -62,7 +62,15 @@ const G5SC_SYLLABUS = {
 registerSubject({
   id: 'grade5-science', name: 'Science', grade: 5, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false, noDifficulty: true,
+  practiceble: true, notesBased: false,
+  // ⚠ level4Label set with the content, never before it — a relabelled empty
+  // level is still an empty level. L4 is maths-shaped and does not travel.
+  // ⚠ L4 here is an applied scenario — predict and justify, or combine two
+    // facts. Matches grade4/6/7/8-science and the four Grade 9 science packs.
+  // ⚠ noDifficulty REMOVED only after depth_hard.js cleared the 15-item hard
+  // floor in every chapter. The flag hid the ladder while getMixedQuestions()
+  // drew across all levels at once, so the MIX was the experience.
+  level4Label: 'Applied Scenarios',
   syllabus: G5SC_SYLLABUS,
   // examWeight is a chapter's share of a 40-question exam. These are measured
   // from the real 2024 and 2025 papers, question by question: every

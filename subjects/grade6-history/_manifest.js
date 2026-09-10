@@ -75,7 +75,15 @@ const G6HG_SYLLABUS = {
 registerSubject({
   id: 'grade6-history', name: 'History & Geography', grade: 6, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false, noDifficulty: true,
+  // ⚠ noDifficulty REMOVED 2026-09-10, content first. The flag hid the ladder
+  // while getMixedQuestions() drew across every level at once, so with 78% of
+  // this pack at L1/L2 the mix WAS the experience and nothing a child or parent
+  // could touch asked for harder. depth_hard.js took every chapter to 15+ at
+  // L3/L4 before this line changed.
+  // ⚠ 'Applied Reasoning' matches grade4-history, grade5-history and
+  // grade7-social-modern-studies. The default "Challenge" and the maths
+  // "Word Problems" both describe something else.
+  practiceble: true, notesBased: false, level4Label: 'Applied Reasoning',
   syllabus: G6HG_SYLLABUS,
   // examWeight is a chapter's share of a 40-question exam. These are measured
   // from the real 2022, 2023 and 2024 papers, question by question: every

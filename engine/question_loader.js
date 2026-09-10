@@ -196,10 +196,13 @@ const QuestionLoader = (() => {
                        'subjects/grade7-english/questions/batch2_listening.js',
                        'subjects/grade7-english/questions/batch2_reading.js',
                        'subjects/grade7-english/questions/batch2_speaking.js',
-                       'subjects/grade7-english/questions/batch2_writing.js'],
-    'grade7-french': ['subjects/grade7-french/questions/ch01_core.js',
+                       'subjects/grade7-english/questions/batch2_writing.js',
+                       'subjects/grade7-english/questions/rcp_passages.js'],
+    'grade7-french': ['subjects/grade7-french/questions/depth_hard.js',
+                      'subjects/grade7-french/questions/ch01_core.js',
                       'subjects/grade7-french/questions/ch02_expanded.js',
-                      'subjects/grade7-french/questions/reclaimed_sample.js'],
+                      'subjects/grade7-french/questions/reclaimed_sample.js',
+                      'subjects/grade7-french/questions/rcp_textes.js'],
     'grade7-science': ['subjects/grade7-science/questions/depth_hard.js',
                        'subjects/grade7-science/questions/ch01_core.js',
                        'subjects/grade7-science/questions/ch02_expanded.js',
@@ -218,13 +221,15 @@ const QuestionLoader = (() => {
                        'subjects/grade7-science/questions/batch2_g7s-measurement.js',
                        'subjects/grade7-science/questions/batch2_g7s-solar-system.js',
                        'subjects/grade7-science/questions/batch2_g7s-sts.js'],
-    'grade7-social-modern-studies': ['subjects/grade7-social-modern-studies/questions/ch01_core.js',
+    'grade7-social-modern-studies': ['subjects/grade7-social-modern-studies/questions/depth_hard.js',
+                                    'subjects/grade7-social-modern-studies/questions/ch01_core.js',
                                      'subjects/grade7-social-modern-studies/questions/ch02_expanded.js',
                                      'subjects/grade7-social-modern-studies/questions/reclaimed_sample.js',
                                      'subjects/grade7-social-modern-studies/questions/batch2_g7sms-people.js',
                                      'subjects/grade7-social-modern-studies/questions/batch2_g7sms-resources.js',
                                      'subjects/grade7-social-modern-studies/questions/batch2_g7sms-settlement.js'],
-    'grade8-maths': ['subjects/grade8-maths/questions/ch01_core.js',
+    'grade8-maths': [
+      'subjects/grade8-maths/questions/depth_hard.js','subjects/grade8-maths/questions/ch01_core.js',
                      'subjects/grade8-maths/questions/ch02_expanded.js',
                      'subjects/grade8-maths/questions/ch03_real_numbers.js',
                      'subjects/grade8-maths/questions/ch04_pythagoras.js',
@@ -243,7 +248,8 @@ const QuestionLoader = (() => {
                      'subjects/grade8-maths/questions/batch2_statistics.js',
                      'subjects/grade8-maths/questions/batch2_surface_area.js',
                      'subjects/grade8-maths/questions/batch2_volume.js'],
-    'grade8-english': ['subjects/grade8-english/questions/ch01_core.js',
+    'grade8-english': ['subjects/grade8-english/questions/depth_hard.js',
+                       'subjects/grade8-english/questions/ch01_core.js',
                        'subjects/grade8-english/questions/ch02_expanded.js',
                        'subjects/grade8-english/questions/reclaimed_sample.js',
                        'subjects/grade8-english/questions/batch2_gr_adjectives.js',
@@ -259,10 +265,13 @@ const QuestionLoader = (() => {
                        'subjects/grade8-english/questions/batch2_listening.js',
                        'subjects/grade8-english/questions/batch2_reading.js',
                        'subjects/grade8-english/questions/batch2_speaking.js',
-                       'subjects/grade8-english/questions/batch2_writing.js'],
-    'grade8-french': ['subjects/grade8-french/questions/ch01_core.js',
+                       'subjects/grade8-english/questions/batch2_writing.js',
+                       'subjects/grade8-english/questions/rcp_passages.js'],
+    'grade8-french': ['subjects/grade8-french/questions/depth_hard.js',
+                      'subjects/grade8-french/questions/ch01_core.js',
                       'subjects/grade8-french/questions/ch02_expanded.js',
-                      'subjects/grade8-french/questions/reclaimed_sample.js'],
+                      'subjects/grade8-french/questions/reclaimed_sample.js',
+                      'subjects/grade8-french/questions/rcp_textes.js'],
     'grade8-science': ['subjects/grade8-science/questions/depth_hard.js',
                        'subjects/grade8-science/questions/ch01_core.js',
                        'subjects/grade8-science/questions/ch02_expanded.js',
@@ -280,7 +289,8 @@ const QuestionLoader = (() => {
                        'subjects/grade8-science/questions/batch2_respiratory.js',
                        'subjects/grade8-science/questions/batch2_sts.js',
                        'subjects/grade8-science/questions/batch2_work_energy.js'],
-    'grade8-social-modern-studies': ['subjects/grade8-social-modern-studies/questions/ch01_core.js',
+    'grade8-social-modern-studies': [
+      'subjects/grade8-social-modern-studies/questions/depth_hard.js','subjects/grade8-social-modern-studies/questions/ch01_core.js',
                                      'subjects/grade8-social-modern-studies/questions/ch02_expanded.js',
                                      'subjects/grade8-social-modern-studies/questions/reclaimed_sample.js',
                                      'subjects/grade8-social-modern-studies/questions/batch2_democracy.js',
@@ -353,7 +363,8 @@ const QuestionLoader = (() => {
                        'subjects/grade9-english/questions/eng_multi_year.js',
                        'subjects/grade9-english/questions/family_expansion.js',
                        'subjects/grade9-english/questions/grammar_depth_modals_det_adj_nouns.js',
-                       'subjects/grade9-english/questions/reclaimed_sample.js'],
+                       'subjects/grade9-english/questions/reclaimed_sample.js',
+                       'subjects/grade9-english/questions/rcp_passages.js'],
     'grade9-french': ['subjects/grade9-french/questions/starter_bank.js',
                       'subjects/grade9-french/questions/transformation_volume.js',
                       'subjects/grade9-french/questions/grammaire_volume.js',
@@ -365,7 +376,8 @@ const QuestionLoader = (() => {
                       'subjects/grade9-french/questions/fr_paper_inspired.js',
                       'subjects/grade9-french/questions/fr_multi_year.js',
                       'subjects/grade9-french/questions/family_expansion.js',
-                      'subjects/grade9-french/questions/reclaimed_sample.js'],
+                      'subjects/grade9-french/questions/reclaimed_sample.js',
+                      'subjects/grade9-french/questions/rcp_textes.js'],
     'grade9-biology': ['subjects/grade9-biology/questions/b1_circulatory.js',
                        'subjects/grade9-biology/questions/b2_reproductive.js',
                        'subjects/grade9-biology/questions/b3_biodiversity.js',
@@ -459,6 +471,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-maths/questions/symmetry_line_drawing.js',
     ],
     'grade5-french': [
+      'subjects/grade5-french/questions/depth_hard.js',
       'subjects/grade5-french/questions/ch01_vocabulaire.js',
       'subjects/grade5-french/questions/exam_depth.js',
       'subjects/grade5-french/questions/ch02_noms.js',
@@ -480,8 +493,10 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/extended_practice_bank.js',
       'subjects/grade5-french/questions/enrichment_relier_phrases.js',
       'subjects/grade5-french/questions/coverage_g5_balance.js',
-    ],
+    ,
+      'subjects/grade5-french/questions/rcp_textes.js'],
     'grade5-english': [
+      'subjects/grade5-english/questions/depth_hard.js',
       'subjects/grade5-english/questions/coverage_core_grammar.js',
       'subjects/grade5-english/questions/exam_depth.js',
       'subjects/grade5-english/questions/coverage_articles_determiners.js',
@@ -508,8 +523,10 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/coverage_comprehension_writing.js',
       'subjects/grade5-english/questions/coverage_vocabulary_spelling.js',
       'subjects/grade5-english/questions/enrichment_joining_sentences.js',
-    ],
+    ,
+      'subjects/grade5-english/questions/rcp_passages.js'],
     'grade5-science': [
+      'subjects/grade5-science/questions/depth_hard.js',
       'subjects/grade5-science/questions/diagrams_exam_style.js',
       'subjects/grade5-science/questions/ch02_plants.js',
       'subjects/grade5-science/questions/exam_depth.js',
@@ -590,6 +607,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-science/questions/topup_g6_science.js',
     ],
     'grade6-history': [
+      'subjects/grade6-history/questions/depth_hard.js',
       'subjects/grade6-history/questions/ch01_g6_slaves_immigrants.js',
       'subjects/grade6-history/questions/exam_depth.js',
       'subjects/grade6-history/questions/ch02_g6_independence.js',
@@ -640,6 +658,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/symmetry_line_drawing.js',
     ],
     'grade6-english': [
+      'subjects/grade6-english/questions/depth_hard.js',
       // comprehension on passages - the measured gap in this pack
       'subjects/grade6-english/questions/comprehension_passages.js',
       'subjects/grade6-english/questions/coverage_authors_view_inference.js',
@@ -674,8 +693,10 @@ const QuestionLoader = (() => {
       // top-up
       'subjects/grade6-english/questions/topup_g6_english.js',
       'subjects/grade6-english/questions/enrichment_joining_sentences.js',
-    ],
+    ,
+      'subjects/grade6-english/questions/rcp_passages.js'],
     'grade6-french': [
+      'subjects/grade6-french/questions/depth_hard.js',
       // compréhension sur textes - the measured gap in this pack
       'subjects/grade6-french/questions/comprehension_textes.js',
       'subjects/grade6-french/questions/exam_depth.js',
@@ -701,7 +722,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/past_paper_2021.js',
       'subjects/grade6-french/questions/past_paper_2019.js',
       'subjects/grade6-french/questions/enrichment_relier_phrases.js',
-    ],
+    ,
+      'subjects/grade6-french/questions/rcp_textes.js'],
     'grade4-maths': [
       'subjects/grade4-maths/questions/ch01_g4_numeration.js',
       'subjects/grade4-maths/questions/ch02_g4_four_ops.js',
@@ -880,7 +902,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 131;
+  const _CACHE_VERSION = 132;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

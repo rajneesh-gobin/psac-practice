@@ -88,7 +88,15 @@ const G6E_BADGES = [
 registerSubject({
   id: 'grade6-english', name: 'English', grade: 6, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true, noDifficulty: true,
+  practiceble: true, notesBased: true,
+  // ⚠ level4Label set with the content, never before it — a relabelled empty
+  // level is still an empty level. L4 is maths-shaped and does not travel.
+  // ⚠ L4 here is extended analysis — hold a passage or two competing readings
+    // in mind and justify a choice. Matches grade7-english and grade8-english.
+  // ⚠ noDifficulty REMOVED only after depth_hard.js cleared the 15-item hard
+  // floor in every chapter. The flag hid the ladder while getMixedQuestions()
+  // drew across all levels at once, so the MIX was the experience.
+  level4Label: 'Extended Analysis',
   badges: G6E_BADGES,
   syllabus: G6ENG_SYLLABUS,
   // examWeight is a chapter's share of a 40-question exam. These come from the

@@ -56,7 +56,11 @@ const G7FR_SYLLABUS = {
 registerSubject({
   id: 'grade7-french', name: 'Français', grade: 7, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  // ⚠ WAS 'Word Problems' — the MATHS label, in English, on a French pack. Both
+  // wrong at once. 'Analyse de texte' matches grade4-french and is deliberately
+  // IN FRENCH: every other label a child meets in this pack is French, and an
+  // English word in the level badge would be the only one.
+  practiceble: true, notesBased: false, level4Label: 'Analyse de texte',
   syllabus: G7FR_SYLLABUS,
   chapters: [
     { id: 'g7fr-co',                    name: 'Compréhension orale',    icon: '👂', examWeight: 3,

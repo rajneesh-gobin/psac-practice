@@ -143,7 +143,15 @@ const G5F_BADGES = [
 registerSubject({
   id: 'grade5-french', name: 'French', grade: 5, icon: '📕', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true, noDifficulty: true,
+  practiceble: true, notesBased: true,
+  // ⚠ level4Label set with the content, never before it — a relabelled empty
+  // level is still an empty level. L4 is maths-shaped and does not travel.
+  // ⚠ Deliberately IN FRENCH: every other label a child meets in this pack is
+    // French, and an English word in the level badge would be the only one.
+  // ⚠ noDifficulty REMOVED only after depth_hard.js cleared the 15-item hard
+  // floor in every chapter. The flag hid the ladder while getMixedQuestions()
+  // drew across all levels at once, so the MIX was the experience.
+  level4Label: 'Analyse de texte',
   badges: G5F_BADGES,
   syllabus: G5FR_SYLLABUS,
   // ── EXAM WEIGHT ───────────────────────────────────────────────────────────

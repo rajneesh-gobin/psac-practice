@@ -64,6 +64,13 @@ registerSubject({
   subject:    'Maths',
   curriculum: 'MIE Mauritius',
   comingSoon: false,
+  // ⚠ This pack showed the L1-L4 ladder with NO level4Label, so its top level
+  // fell back to the generic "Challenge" while grade5-, grade6-, grade7- and
+  // grade8-maths all said "Word Problems". Same subject, same ladder, two
+  // different words for the same level as a child moves up a grade.
+  // 'Word Problems' is the one label that is genuinely CORRECT here — maths is
+  // the family L4 was defined for; everywhere else it had to be renamed.
+  level4Label: 'Word Problems',
   syllabus: G4M_SYLLABUS,
   // Each chapter also carries a prose `syllabus`. It is the fallback the
   // Syllabus screen shows when a chapter has no subsections, and it is what the
