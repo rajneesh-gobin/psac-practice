@@ -266,7 +266,7 @@ const TeacherClassroomDetail = (() => {
     box.innerHTML = `
       <div class="tc-today-hero">
         <div>
-          <span class="tc-today-kicker">${esc(_className)}</span>
+          <span class="tc-today-kicker">${esc(new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>
           <h3>What needs you today</h3>
           <p>${_signals.loading ? 'Checking what has come back…'
             : jobs ? `${jobs} thing${jobs === 1 ? '' : 's'} to look at.`

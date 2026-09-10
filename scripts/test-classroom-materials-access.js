@@ -47,8 +47,8 @@ ok('More keeps only results and settings',
   [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map(m => m[1]).join() === 'results,settings');
 ok('the More button no longer lights up for materials',
   /MORE_SECTIONS = \['results', 'settings'\]/.test(detail));
-ok('the Overview stats offer a Materials tile',
-  /tc-today-stats[\s\S]{0,900}showSection\('materials'\)[\s\S]{0,120}_materials\.length/.test(detail));
+ok('the classroom header count for files is the route to them',
+  /class="tc-cd-stat" onclick="TeacherClassroomDetail\.showSection\('materials'\)"[\s\S]{0,120}id="tc-cd-stat-materials"/.test(overlay));
 ok('the Work tab routes to Materials even with no files yet',
   /_workFilter === 'active' \? `<h4 class="tc-work-subhead">📁 Files shared with this class/.test(detail)
   && /No files yet/.test(detail));

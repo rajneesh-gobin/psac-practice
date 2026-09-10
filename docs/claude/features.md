@@ -227,32 +227,103 @@ write them:
   `test-grade-access-ui.js` (both surfaces in real Chrome at 360px, both themes),
   and the grade checks in `test-parent-restrictions.js`.
 
-## Teacher Mode — Hybrid Classroom Command Centre
-Main navigation is **Home · Classrooms · Set Work · Results** plus a labelled
-`⋯ More` (Materials, Messages, Gradebook, Archived work, Teacher settings). The
-classroom screen is **Overview · Work · Pupils** plus `⋯ More` (Materials, Results,
-Settings). Set Work: classroom → sharing choice → grade/subject → chapter → number
-of questions → due date; everything else inside `<details id="ta-more-options">`.
-Full write-up in ENGINEERING-NOTES.
+## Teacher Mode — one destination, one to-do list, one question per screen
+Rebuilt 2026-09-10 on one rule: **a teacher must never be asked the same
+question in two places, and must never have to work out what to do next.**
+
+### Navigation — Set Work and Results are NOT top-level
+Main navigation is **🏫 My classes** and a labelled `⋯ More` (Marks book, All my
+files, Past work, Messages, Teacher settings). The classroom screen is
+**Today · Work · Pupils · Files** plus `⋯ More` (All marks, Settings).
+- ⚠ **`create` and `results` are still real tabs** and `switchTab()` still opens
+  them; they are simply not somewhere a teacher *picks*. They used to sit in the
+  main nav **beside a classroom screen carrying the same two names**, so
+  "Results" meant two different scopes on two screens with no way to tell.
+  Each now carries its own `← Back to my class` (`TeacherMode.leaveSetWork()`,
+  which reopens the classroom the teacher came from).
+- `switchTab('classes')` is an **alias for `'home'`** — Home and Classrooms were
+  two tabs with the same greeting, the same "recent activity" and the same
+  "needs help" panel. The classroom boards render into `#tc-list` directly under
+  `#ta-home` on that one screen.
+- `MAIN_TABS` / `DETAIL_TABS` / `MORE_TABS` / `ALL_TABS` in `engine/teacher.js`.
+
+### "What needs you today" — ONE builder
+`TeacherInsights.todo(groups, {showClass, limit})` is pure, and **both** Home
+(across every class) and a classroom's Today screen call it. A teacher asking
+the same question on two screens must not get two answers.
+- Pupils are **grouped per piece of work, never one row each** — four pupils who
+  have not opened the same homework is one job, not four.
+- ⚠ **Never "everyone finished" over a pupil who needs help.** `all-done` is
+  suppressed when the same work produced a low or rushed row; a green tick reads
+  as "handled", which would be the opposite of the truth.
+- Every row's button does exactly what its label says: *Send a reminder* opens
+  the share sheet with the message written, *Set easier practice* opens Set Work
+  already pointed at the same chapters and the same pupils.
+- Evidence thresholds are unchanged and still apply here: ≥ 5 answers before
+  "may need help" (< 50%), ≥ 3 answers in a chapter before naming it, "very
+  quickly" = < 8 s/question **and** < 60%. **Never label on one or two answers.**
+
+### One counter per classroom
+The header strip (`.tc-cd-stats`, four `button.tc-cd-stat`) is the **only** place
+a classroom is counted, and each number is the button that opens what it counts.
+- ⚠ There used to be **two stat rows on one screen that disagreed**: the strip
+  said *"5 submitted"* while a five-tile grid three centimetres below said
+  *"2 Submissions"*, because one counted every piece of work and the other only
+  the active ones. Do not reintroduce a second counter anywhere in the overlay.
+
+### Set Work — one question per screen
+Who → subject → which chapters → how many and how hard → when, five steps with
+`Back`/`Next`, a progress track, and a plain-English summary above the button
+that sends it (*"Grade 5 Blue will get 10 mixed questions on the whole of
+Mathematics, with no timer, due Thursday 17 September."*).
+- ⚠ **The wizard owns no state.** Every control is the same element
+  `_buildAssignment()` has always read; `gotoStep()` only decides which is on
+  screen. A hidden input still answers `.value`, so a step nobody visited still
+  publishes correctly — and the publish path, its PGRST202 fallback and the
+  success screen are untouched.
+- ⚠ **"The whole subject" is a spoken choice** (`input[name=ta-scope]`), not an
+  empty form. It used to be "leave every box blank", the least discoverable
+  default there is. Choosing it **clears** any tick left from an earlier visit;
+  arriving at the step **follows** the ticks instead (`_syncScope`), because
+  `prefillPractice()` and `_duplicateAssignment()` tick chapters directly.
+- ⚠ **Level 4 does not mean the same thing in every pack**, so the wording
+  follows the SUBJECT (`_levelWords`): word problems in maths, a multi-verb
+  cloze in French, an extended passage in English, an applied scenario
+  elsewhere. A French teacher is never promised word problems.
+- `_poolSize()` counts **exactly the pool `_buildAssignment()` will search**, the
+  same way. A friendlier number the publish step then contradicts is worse than
+  no number. It returns `null` while the subject is still loading, and nothing
+  blocks on `null`.
+- Each step refuses to be left for a reason in the teacher's own words
+  (`_stepProblem`) — every one of them a failure the publish step used to report
+  at the very end, moved to the screen that caused it.
+- Sharing choice stays on step 1 on purpose (online groups need "Anyone with the
+  link" without discovering a disclosure); PIN is the default whenever the
+  classroom has pupils, flipped only by the teacher's own tap. The two options
+  now say what each **costs**: the open link "cannot be sure who answered".
+- ⚠ Set Work opens on the **lowest live grade**, not the classroom's — a
+  classroom row carries no grade, so there is nothing honest to infer from.
+
+### Still true
 - **Location survives refresh**: `psac_teacher_loc_v1` (owner-scoped) holds tab,
   list filter, selected results and the open classroom + section.
-- **Evidence thresholds** live in `TeacherInsights`: ≥ 5 answers before "may need
-  help" (< 50%), ≥ 3 answers in a chapter before naming it, "very quickly" = < 8 s
-  /question **and** < 60%. **Never label on one or two answers.**
-- ⚠ **The board's `p:not(…):not(…)` rule scores (1,3,1)** and beats every single-id
-  override; the command-centre CSS uses `#screen-teacher#screen-teacher` on purpose.
-  Paper cards carry their own ink in both themes.
+- ⚠ **The board's `p:not(…):not(…)` rule scores (1,3,1)** and beats every
+  single-id override; the teacher CSS uses `#screen-teacher#screen-teacher` on
+  purpose. Paper cards carry their own ink in both themes.
+- ⚠ **`.tc-cd-nav-btn span` is set three times** (base, the new override, and a
+  `max-width:430px` block). Same specificity — the LAST one wins, which is why
+  the readable rail labels live at the end of `style.css` with their own copy of
+  the media query.
 - ⚠ **A refresh superseded by a newer one resolves `undefined`** —
   `TeacherWorkspace.ensureLoaded()` waits for the newest in-flight refresh and
   judges by `loaded`, or Home shows its error state on every load.
-- Sharing choice is on step 1 on purpose (online groups need "Anyone with the link"
-  without discovering a disclosure); PIN is the default whenever the classroom has
-  pupils, flipped only by the teacher's own tap.
-- Not shown, on purpose: a "Scheduled" filter (nothing schedules a start), hints /
-  attempt limits / answer visibility (no server support). The `?classroom=` share
-  link is **inert** (nothing parses it) and is not promoted.
-- Tests: `test-teacher-command-centre.js` (VM), `-layout.js` (360/1280 ×
-  light/dark, overflow + contrast + 44px targets; `--shots DIR`).
+- Not shown, on purpose: a "Scheduled" filter (nothing schedules a start), hints
+  / attempt limits / answer visibility (no server support). The `?classroom=`
+  share link is **inert** (nothing parses it) and is not promoted.
+- Tests: `test-teacher-command-centre.js` (VM, 169 checks), `-layout.js`
+  (60 screens at 360/1280 × light/dark, overflow + contrast + 44px targets;
+  `--shots DIR` walks all five wizard steps), `test-classroom-materials-access.js`,
+  `test-coach-teacher-layout.js`.
 
 ---
 
