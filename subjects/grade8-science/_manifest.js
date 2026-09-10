@@ -99,7 +99,12 @@ const G8SC_SYLLABUS = {
 registerSubject({
   id: 'grade8-science', name: 'Science', grade: 8, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+    // ⚠ WAS 'Word Problems', the MATHS label, on a science pack. CLAUDE.md
+  // records that L4 is maths-shaped and does not travel; level4Label exists to
+  // say what L4 means in THIS pack. 'Applied Scenarios' matches grade6-science,
+  // grade7-science and the four Grade 9 science packs, so one wording carries
+  // from Grade 6 to Grade 9.
+  practiceble: true, notesBased: false, level4Label: 'Applied Scenarios',
   syllabus: G8SC_SYLLABUS,
   chapters: [
     { id: 'g8s-inquiry',                name: 'Scientific Inquiry',                         icon: '🔍', examWeight: 2,
