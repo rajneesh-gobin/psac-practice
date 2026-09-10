@@ -301,8 +301,25 @@ Mathematics, with no timer, due Thursday 17 September."*).
   link" without discovering a disclosure); PIN is the default whenever the
   classroom has pupils, flipped only by the teacher's own tap. The two options
   now say what each **costs**: the open link "cannot be sure who answered".
-- ⚠ Set Work opens on the **lowest live grade**, not the classroom's — a
-  classroom row carries no grade, so there is nothing honest to infer from.
+- **Set Work opens on the classroom's own grade.**
+  `teacher_guest_classes.grade` (nullable `smallint`, CHECK 1–9) is asked for
+  when a classroom is created and can be changed in its Settings; the class chip
+  carries it in `data-grade` and `_applyClassGrade()` preselects `#ta-grade`.
+  Migration: `migrations/20260910_teacher_classroom_grade.sql`, applied
+  2026-09-10.
+  - ⚠ Before it, Set Work opened on the **lowest live grade for everybody** — a
+    Grade 5 teacher was shown Grade 1 subjects every time they set homework.
+  - ⚠ **NULL is a real answer.** "I have not said" stays expressible, and a
+    classroom with no grade changes nothing; `set_grade` with `p_grade: null`
+    clears it. A guess dressed as an answer is worse than no answer.
+  - ⚠ **Applied only when the chosen classroom CHANGES** (`_gradeAppliedFor`).
+    `_renderClassPicker()` re-runs on tab entry and after every list refresh and
+    auto-selects the first classroom; re-applying each time would drag the grade
+    back from under a teacher who had moved on and changed it.
+  - ⚠ The RPC gained `p_grade`, which **cannot** be a `CREATE OR REPLACE` — the
+    six-argument overload is dropped in the same transaction, or a six-name
+    PostgREST call is ambiguous. The deployed client's six-argument call still
+    works, because `p_grade` defaults to NULL.
 
 ### Still true
 - **Location survives refresh**: `psac_teacher_loc_v1` (owner-scoped) holds tab,

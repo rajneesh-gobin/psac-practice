@@ -105,6 +105,39 @@ ok(!swSrc.includes("'/engine/teacher_insights.js'") && !swSrc.includes("'/engine
   'new modules are kept OUT of the all-or-nothing pre-cache list');
 ok(/_ADULT_ONLY_SCREENS = new Set\(\[[^\]]*'teacher'/.test(fs.readFileSync('engine/app.js', 'utf8')), 'teacher screen is adult-only in showScreen');
 
+// ── 1b. A classroom knows which grade it is ─────────────────────────────────
+// ⚠ Set Work opened on the LOWEST live grade for every teacher, because nothing
+//   in the schema could say what a classroom is. This is that plumbing, from
+//   the migration through to the <select> it preselects.
+const mig = fs.readFileSync('migrations/20260910_teacher_classroom_grade.sql', 'utf8');
+ok(/ADD COLUMN IF NOT EXISTS grade smallint/.test(mig), 'the column is nullable smallint');
+ok(/grade IS NULL OR grade BETWEEN 1 AND 9/.test(mig), 'and constrained to the registered grades');
+ok(/p_grade integer DEFAULT NULL::integer\)/.test(mig), 'p_grade defaults to NULL, so a six-argument call still works');
+// ⚠ CREATE OR REPLACE cannot change a signature: without this DROP the old
+//   six-argument function survives and a six-name PostgREST call is ambiguous.
+ok(/DROP FUNCTION IF EXISTS public\.teacher_guest_manage\(text, uuid, uuid, text, text, integer\);/.test(mig),
+  'the six-argument overload is retired in the same transaction');
+ok(/GRANT EXECUTE ON FUNCTION public\.teacher_guest_manage\([\s\S]{0,220}TO anon, authenticated, service_role/.test(mig),
+  'and the new signature is granted to the roles the old one had');
+ok(/ELSIF p_action = 'set_grade' THEN/.test(mig), 'a dedicated action, so NULL can mean "clear it"');
+
+const gcSrc = fs.readFileSync('engine/teacher_guest_classes.js', 'utf8');
+const cdSrc = fs.readFileSync('engine/teacher_classroom_detail.js', 'utf8');
+const tmSrc = fs.readFileSync('engine/teacher.js', 'utf8');
+ok(/id="ncf-grade"[\s\S]{0,120}data-grade-select="live"/.test(gcSrc), 'the new-classroom form asks the grade');
+ok(/<option value="">I'll say later<\/option>/.test(gcSrc), 'and lets the teacher not answer');
+ok(/p_grade: grade,/.test(gcSrc) && /\/\^\[1-9\]\$\/\.test\(gradeRaw\) \? Number\(gradeRaw\) : null/.test(gcSrc),
+  'an unanswered grade is sent as null, never as a guess');
+ok(/id="tc-cd-set-grade"[\s\S]{0,120}data-grade-select="live"/.test(cdSrc), 'classroom Settings can change it later');
+ok(/p_action: 'set_grade'/.test(cdSrc), 'through the dedicated action');
+ok(/data-grade="\$\{Number\(c\.grade\) \|\| ''\}"/.test(tmSrc), 'the Set Work class chip carries the grade');
+// ⚠ Only on a CHANGE of classroom. _renderClassPicker() re-runs on every list
+//   refresh and auto-selects the first class; re-applying would drag the grade
+//   back from under a teacher who had already moved on and changed it.
+ok(/if \(!cid \|\| _gradeAppliedFor === cid\) return;/.test(tmSrc),
+  'and it is applied only when the chosen classroom changes');
+ok(/if \(!grade \|\| !gradeEl\) return;/.test(tmSrc), 'a classroom with no grade changes nothing');
+
 // ── 2. Insights ─────────────────────────────────────────────────────────────
 const ictx = vm.createContext({ window: {}, Date, Math, Map, Set, Number, String, Array, Object, JSON, console });
 vm.runInContext(fs.readFileSync('engine/teacher_insights.js', 'utf8') + '\nthis.I = TeacherInsights;', ictx);

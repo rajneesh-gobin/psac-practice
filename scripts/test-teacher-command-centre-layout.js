@@ -41,7 +41,7 @@ const MOCK = `
   const week = new Date(Date.now() + 6*86400000).toISOString();
   const past = new Date(Date.now() - 2*86400000).toISOString();
   const classes = [
-    { id: 'c1', name: 'Grade 5 Blue', active: true, access_type: 'per_student', pupils: 3 },
+    { id: 'c1', name: 'Grade 5 Blue', active: true, access_type: 'per_student', pupils: 3, grade: 5 },
     { id: 'c2', name: 'Online revision group', active: true, access_type: 'per_student', pupils: 2 },
   ];
   const assignments = [
@@ -76,7 +76,7 @@ const MOCK = `
     if (name === 'teacher_guest_results') return { data: { ok: true, assignment: { id: args.p_assignment_id }, submissions: results[args.p_assignment_id] || [] } };
     if (name === 'teacher_guest_manage') {
       if (args.p_action === 'list') return { data: { ok: true, classes } };
-      if (args.p_action === 'roster') return { data: { ok: true, pupils: args.p_classroom === 'c1' ? roster : newRoster, access_type: 'per_student', class_pin: null } };
+      if (args.p_action === 'roster') return { data: { ok: true, pupils: args.p_classroom === 'c1' ? roster : newRoster, access_type: 'per_student', class_pin: null, grade: args.p_classroom === 'c1' ? 5 : null } };
       if (args.p_action === 'create_class') return { data: { ok: true, id: 'c-new' } };
       if (args.p_action === 'reveal_pin') return { data: { ok: true, pin: '4821' } };
       if (args.p_action === 'reveal_all_pins') return { data: { ok: true, pupils: roster.map(p => ({ ...p, pin: '1234' })) } };
@@ -252,6 +252,11 @@ let chrome, ws; const pageErrorsRef = [];
 
     await evaluate("TeacherMode.wizardNext(); true"); await sleep(300);
     assert(await evaluate(seen('ta-subject')), 'step 2 asks the subject');
+    // ⚠ Grade 5 Blue is a Grade 5 class, and Set Work opens there. Before the
+    //   grade column existed this select opened on the LOWEST live grade for
+    //   everybody, so a Grade 5 teacher was shown Grade 1 subjects every time.
+    assert.equal(await evaluate("document.getElementById('ta-grade').value"), '5',
+      'Set Work opens on the classroom own grade');
     await evaluate("TeacherMode.wizardNext(); true"); await sleep(300);
     const step3 = await evaluate(`({ n: document.getElementById('ta-wiz-count').textContent, scope: document.querySelector('input[name=ta-scope]:checked').value, grid: ${seen('ta-chapter-opts-container')} })`);
     assert.equal(step3.n, 'Step 3 of 5');

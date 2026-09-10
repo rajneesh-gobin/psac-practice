@@ -344,9 +344,9 @@ const TeacherMode = (() => {
     picker.innerHTML = active.map(c => {
       const sel = current === c.id;
       return `<button type="button" class="ta-class-chip ${sel ? 'ta-class-chip-sel' : ''}"
-        data-cid="${_esc(c.id)}" data-pupils="${Number(c.pupils) || 0}" data-cname="${_esc(c.name)}" title="${_esc(c.name)}" aria-pressed="${sel}">
+        data-cid="${_esc(c.id)}" data-pupils="${Number(c.pupils) || 0}" data-grade="${Number(c.grade) || ''}" data-cname="${_esc(c.name)}" title="${_esc(c.name)}" aria-pressed="${sel}">
         <span class="ta-chip-name">&#x1F3EB; ${_esc(c.name)}</span>
-        <span class="ta-chip-pupils">${c.pupils} pupil${c.pupils===1?'':'s'}</span>
+        <span class="ta-chip-pupils">${c.pupils} pupil${c.pupils===1?'':'s'}${c.grade ? ' · Grade ' + Number(c.grade) : ''}</span>
       </button>`;
     }).join('') +
     `<button type="button" class="ta-class-chip ${!current ? 'ta-class-chip-sel' : ''}"
@@ -382,8 +382,33 @@ const TeacherMode = (() => {
       b.classList.toggle('ta-class-chip-sel', on);
       b.setAttribute('aria-pressed', String(on));
     });
+    _applyClassGrade(cid);
     _syncShareChoice(cid, pupils);
     _renderPupilPicker(cid);
+  }
+
+  // Set Work used to open on the LOWEST live grade for everybody, because
+  // nothing in the schema could say what a classroom is. teacher_guest_classes
+  // .grade answers that now (migrations/20260910_teacher_classroom_grade.sql).
+  //
+  // ⚠ Applied only when the CHOSEN CLASSROOM CHANGES, never on every render.
+  //   _renderClassPicker() re-runs on tab entry and after every list refresh
+  //   and auto-selects the first classroom; re-applying each time would drag
+  //   the grade back from under a teacher who had moved on and changed it.
+  // ⚠ A classroom with no grade changes nothing. The teacher has not said, and
+  //   a guess dressed as an answer is worse than no answer.
+  let _gradeAppliedFor = null;
+  function _applyClassGrade(cid) {
+    if (!cid || _gradeAppliedFor === cid) return;
+    _gradeAppliedFor = cid;
+    const chip = _el('ta-class-picker')?.querySelector(`[data-cid="${CSS.escape(cid)}"]`);
+    const grade = Number(chip?.dataset.grade || 0);
+    const gradeEl = _el('ta-grade');
+    if (!grade || !gradeEl) return;
+    if (!Array.from(gradeEl.options).some(o => o.value === String(grade))) return;
+    if (gradeEl.value === String(grade)) return;
+    gradeEl.value = String(grade);
+    gradeChange();
   }
 
   // The two plain-language sharing choices. PIN entry needs a classroom WITH

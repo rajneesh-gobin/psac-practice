@@ -87,7 +87,7 @@ const TeacherGuestClasses = (() => {
                 '<span class="tc-board-active"><i></i> Active</span>' +
                 '<span class="tc-board-emoji">' + icons[i % icons.length] + '</span>' +
                 '<strong class="tc-board-name">' + esc(c.name) + '</strong>' +
-                '<span class="tc-board-pupils">' + pupils + ' pupil' + (pupils === 1 ? '' : 's') + '</span>' +
+                '<span class="tc-board-pupils">' + pupils + ' pupil' + (pupils === 1 ? '' : 's') + (c.grade ? ' · Grade ' + Number(c.grade) : '') + '</span>' +
                 '<span class="tc-board-access">🔐 ' + access + '</span>' +
               '</div>' +
               '<div class="tc-board-tray">' +
@@ -163,6 +163,14 @@ const TeacherGuestClasses = (() => {
     }
   }
 
+  // Settings just changed the grade on the server. Patch the cached row rather
+  // than refetching the whole list, so the board card and the Set Work chip
+  // agree with what the teacher just saw saved.
+  function noteGrade(id, grade) {
+    const c = classes.find(x => x.id === id);
+    if (c) { c.grade = grade; _renderBoards(); }
+  }
+
   function accessChanged() {
     const modeEl = el('ta-access');
     if (!modeEl) return;
@@ -207,7 +215,7 @@ const TeacherGuestClasses = (() => {
     });
   }
 
-  return { refresh, ready, create, accessChanged, reset, createAssignment, getClasses, clearCurrent, openById };
+  return { refresh, ready, create, accessChanged, reset, createAssignment, getClasses, noteGrade, clearCurrent, openById };
 })();
 
 // ── New Classroom Form ─────────────────────────────────────────────────────
@@ -238,6 +246,13 @@ const NewClassroomForm = (() => {
         <div class="ncf-field">
           <label for="ncf-name">Classroom name</label>
           <input id="ncf-name" type="text" placeholder="e.g. Grade 5 Blue" maxlength="60" class="ncf-input" autocomplete="off" />
+        </div>
+        <div class="ncf-field">
+          <label for="ncf-grade">Which grade do you teach this class?</label>
+          <select id="ncf-grade" class="ncf-input ncf-input-sm" data-grade-select="live">
+            <option value="">I'll say later</option>
+          </select>
+          <span class="ncf-count-note">We use this to open Set Work on the right grade.</span>
         </div>
         <div class="ncf-field" id="ncf-count-wrap">
           <label for="ncf-count">Expected number of students</label>
@@ -274,6 +289,9 @@ const NewClassroomForm = (() => {
         <p class="ncf-err hidden" id="ncf-err"></p>
       </div>`;
     overlay.classList.remove('hidden');
+    // The panel is built here, long after app.js filled every [data-grade-select]
+    // on the page, so this select has to ask for itself.
+    if (typeof _populateGradeSelects === 'function') _populateGradeSelects();
     const nameInput = document.getElementById('ncf-name');
     if (nameInput && prefillName) {
       nameInput.value = prefillName;
@@ -327,6 +345,9 @@ const NewClassroomForm = (() => {
     const expectedStudents = accessType === 'per_student'
       ? Math.max(1, Math.min(200, parseInt(document.getElementById('ncf-count')?.value || '25', 10) || 25))
       : 0;
+    // '' means "not said", which the column stores as NULL. Never a guess.
+    const gradeRaw = document.getElementById('ncf-grade')?.value || '';
+    const grade = /^[1-9]$/.test(gradeRaw) ? Number(gradeRaw) : null;
     const btn = document.getElementById('ncf-submit');
     if (btn) { btn.disabled = true; btn.textContent = 'Creating…'; }
     _setErr('');
@@ -340,6 +361,7 @@ const NewClassroomForm = (() => {
         p_name: name,
         p_access_type: accessType,
         p_expected_students: expectedStudents,
+        p_grade: grade,
       }));
       if (error && (error.code === 'PGRST202' || error.message?.includes('Could not find the function'))) {
         // Fallback: old function signature (no access_type / expected_students params)

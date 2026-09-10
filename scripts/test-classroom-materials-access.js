@@ -114,7 +114,9 @@ const PROBE = `(() => {
     ok(width + 'px: every section is at least 44px tall', small.length === 0, small);
     ok(width + 'px: every section keeps a readable word, not a bare emoji', unlabelled.length === 0, unlabelled);
     const mat = m.btns.find(b => b.sec === 'materials');
-    ok(width + 'px: the Materials button says so', /Materials/.test(mat.label), mat.label);
+    // The nav says 'Files' now: 'Materials' is the database's word for it,
+    // not a teacher's. What matters is that it is a word, not a bare folder icon.
+    ok(width + 'px: the files button says so in plain words', /Files|Materials/.test(mat.label), mat.label);
   }
 
   console.log('\nClassroom materials access: ' + checks + ' checks passed.');

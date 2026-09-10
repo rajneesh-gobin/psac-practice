@@ -28,6 +28,7 @@ const TeacherClassroomDetail = (() => {
   let _resultsAssignId = null;
   let _accessType = 'per_student';
   let _classPin = null;
+  let _classGrade = null;
   let _pinsRevealed = false;
   let _signalEpoch = 0;
   let _signals = { loading: false, sampled: 0, failed: 0 };
@@ -70,6 +71,7 @@ const TeacherClassroomDetail = (() => {
     _pinsRevealed = false;
     _accessType = 'per_student';
     _classPin = null;
+    _classGrade = null;
     _physicalHomework = [];
     _materials = [];
     _matDone = { expected: 0, materials: {} };
@@ -129,7 +131,7 @@ const TeacherClassroomDetail = (() => {
     if (sec === 'overview') _renderOverview();
     if (sec === 'work')     _renderWork();
     if (sec === 'pupils')   _renderPupils();
-    if (sec === 'settings') _renderSettings();
+    if (sec === 'settings') { _renderSettings(); _paintGradeSelect(); }
     if (sec === 'results')  _renderResults(_resultsAssignId);
     if (_classId && typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(_classId, _className, sec);
   }
@@ -698,6 +700,7 @@ const TeacherClassroomDetail = (() => {
       if (_accessType === 'shared') await _loadDevices(_classId);
       _accessType = data.access_type || 'per_student';
       _classPin = data.class_pin || null;
+      _classGrade = Number(data.grade) || null;
       _pupilError = '';
       _pupilsLoaded = true;
       el('tc-cd-stat-pupils').textContent = _pupils.filter(p => p.active).length;
@@ -1477,6 +1480,17 @@ const TeacherClassroomDetail = (() => {
       </div>
 
       <div class="tc-cd-settings-card">
+        <label class="tc-cd-settings-label" for="tc-cd-set-grade">Grade</label>
+        <p class="tc-cd-tip-text">Set Work opens on this grade for this classroom. Leave it unset and it opens on the lowest grade the app covers.</p>
+        <div class="tc-cd-upload-row">
+          <select id="tc-cd-set-grade" class="tc-cd-input" data-grade-select="live" style="flex:1">
+            <option value="">Not set</option>
+          </select>
+          <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.saveGrade()">Save</button>
+        </div>
+      </div>
+
+      <div class="tc-cd-settings-card">
         <label class="tc-cd-settings-label">Classroom icon</label>
         <div class="tc-cd-emoji-picker">
           ${emojis.map(e => `<button class="tc-cd-emoji-opt" onclick="TeacherClassroomDetail.setEmoji(this,'${e}')">${e}</button>`).join('')}
@@ -1581,6 +1595,26 @@ const TeacherClassroomDetail = (() => {
     const notes = el('tc-cd-notes')?.value ?? '';
     _savePrefs({ notes });
     toast('Notes saved.', 1800);
+  }
+
+  function _paintGradeSelect() {
+    const sel = el('tc-cd-set-grade');
+    if (!sel) return;
+    if (typeof _populateGradeSelects === 'function') _populateGradeSelects();
+    sel.value = _classGrade ? String(_classGrade) : '';
+  }
+
+  async function saveGrade() {
+    const raw = el('tc-cd-set-grade')?.value || '';
+    // '' is a real answer here - "I have not said" - and clears the column.
+    const grade = /^[1-9]$/.test(raw) ? Number(raw) : null;
+    try {
+      const { error } = await _sb.rpc('teacher_guest_manage', { p_action: 'set_grade', p_classroom: _classId, p_grade: grade });
+      if (error) throw error;
+      _classGrade = grade;
+      if (typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.noteGrade(_classId, grade);
+      toast(grade ? `Set Work will open on Grade ${grade} for this class.` : 'Grade cleared.', 2200);
+    } catch (_e) { toast('Could not save the grade.', 2000); }
   }
 
   async function saveName() {
@@ -1694,7 +1728,7 @@ const TeacherClassroomDetail = (() => {
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,
     uploadMaterial, _onMatFileChosen, setMaterialSort, shareMaterial, copyFileLink, openFile, deleteFile,
-    saveName, setEmoji, archiveClass, deleteClassroom, shareLink,
+    saveName, saveGrade, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
     openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },
     refreshResults: () => { if (_resultsAssignId) _loadResultsFor(_resultsAssignId); }

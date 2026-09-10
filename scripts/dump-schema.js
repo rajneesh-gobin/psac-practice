@@ -73,6 +73,7 @@ const tables=(await q(`select c.relname from pg_class c join pg_namespace n on n
 
 const cols=await q(`select c.relname tbl, a.attnum, a.attname col,
     format_type(a.atttypid,a.atttypmod) typ, a.attnotnull AS nn,
+    a.attidentity AS ident,
     pg_get_expr(d.adbin,d.adrelid) def
   from pg_class c join pg_namespace n on n.oid=c.relnamespace
   join pg_attribute a on a.attrelid=c.oid
@@ -149,6 +150,26 @@ const deferred=await q(`select c.relname tbl, a.attname col, pg_get_expr(ad.adbi
   where n.nspname='public' and pn.nspname='public'
   order by 1,2`);
 
+// ⚠ A column default of nextval('x_seq'::regclass) depends on a pg_class, not
+//   a pg_proc, so the `deferred` query above does NOT catch it and the sequence
+//   was never emitted at all. Every other table here defaults its id to
+//   gen_random_uuid(), which is why one bigserial column (teacher_guest_pupil_names)
+//   was enough to make the whole file unbuildable from nothing while applying
+//   perfectly to production, where the sequence already existed.
+const seqs=await q(`select c.relname seq,
+    coalesce(dc.relname,'') owner_tbl, coalesce(a.attname,'') owner_col
+  from pg_class c
+  join pg_namespace n on n.oid=c.relnamespace
+  left join pg_depend d on d.objid=c.oid and d.classid='pg_class'::regclass
+                       and d.refclassid='pg_class'::regclass and d.deptype='a'
+  left join pg_class dc on dc.oid=d.refobjid
+  left join pg_attribute a on a.attrelid=d.refobjid and a.attnum=d.refobjsubid
+  where n.nspname='public' and c.relkind='S'
+    and not exists (select 1 from pg_depend idep
+                     where idep.objid=c.oid and idep.classid='pg_class'::regclass
+                       and idep.deptype='i')
+  order by 1`);
+
 const buckets=await q(`select id,name,public,file_size_limit from storage.buckets order by 1`);
 const plans=await q(`select id,name,price_mur,max_children,features,is_active from public.plans order by price_mur, id`);
 
@@ -220,6 +241,16 @@ CREATE SCHEMA IF NOT EXISTS extensions;
 CREATE EXTENSION IF NOT EXISTS pgcrypto    WITH SCHEMA extensions;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA extensions;`);
 
+if(seqs.length){
+  rule('2a','SEQUENCES');
+  w(`-- ⚠ BEFORE §2 on purpose. A table whose id defaults to nextval() cannot be
+--   created until its sequence exists, and CREATE TABLE does not create one
+--   unless the column is declared serial/identity - which it is not here,
+--   because these columns are dumped with their resolved default.
+--   OWNED BY is set after the tables exist, in §2b.`);
+  for(const s of seqs) w(`CREATE SEQUENCE IF NOT EXISTS public.${s.seq};`);
+}
+
 rule(2,'TABLES');
 w(`-- Columns only. Constraints are §3, so no table here depends on a table
 -- created after it. The one default that calls a public function is deferred
@@ -241,7 +272,8 @@ for(const t of tables){
   const cs=cols.filter(c=>c.tbl===t);
   const colSql=c=>{
     let s=`${c.col} ${c.typ}`;
-    if(c.def && !defer.has(t+'.'+c.col)) s+=` DEFAULT ${c.def}`;
+    if(c.ident==='a'||c.ident==='d') s+=` GENERATED ${c.ident==='a'?'ALWAYS':'BY DEFAULT'} AS IDENTITY`;
+    else if(c.def && !defer.has(t+'.'+c.col)) s+=` DEFAULT ${c.def}`;
     if(c.nn) s+=' NOT NULL';
     return s;
   };
@@ -250,6 +282,13 @@ for(const t of tables){
   w(`);`);
   for(const c of cs) w(`ALTER TABLE public.${t} ADD COLUMN IF NOT EXISTS ${colSql(c).replace(/ NOT NULL$/,'')};`);
   for(const c of cs) if(c.nn) w(`ALTER TABLE public.${t} ALTER COLUMN ${c.col} SET NOT NULL;`);
+}
+
+if(seqs.some(s=>s.owner_tbl)){
+  rule('2b','SEQUENCE OWNERSHIP');
+  w(`-- Re-attaches each sequence to the column it feeds, so dropping the table
+-- drops the sequence too. Cannot run in §2a: the table does not exist yet.`);
+  for(const s of seqs) if(s.owner_tbl) w(`ALTER SEQUENCE public.${s.seq} OWNED BY public.${s.owner_tbl}.${s.owner_col};`);
 }
 
 rule(3,'CONSTRAINTS');
