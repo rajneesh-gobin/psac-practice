@@ -12,9 +12,14 @@
 ⚠ Re-check anything here against `pg_policies` / `pg_proc` / production before
 trusting it. **There are no outstanding SQL migrations** — all were verified
 applied against the live database and consolidated into `supabase-schema.sql`.
-This list used to name migrations as outstanding that had been applied for weeks,
-and that staleness sent a whole debugging session down the wrong path. Everything
-below that touches the database is a **decision**, not a pending run.
+(The two written on 2026-09-10, `20260910_guest_device_cap.sql` and
+`20260910_classroom_materials_library.sql`, were applied to production the same
+day, re-applied to prove idempotency, verified by reading `pg_proc`/`proacl`
+rather than the migration text, smoke-tested end to end against a real
+classroom, and the schema regenerated.) This list used to name migrations as
+outstanding that had been applied for weeks, and that staleness sent a whole
+debugging session down the wrong path. Everything below that touches the
+database is a **decision**, not a pending run.
 
 0. ⚠⚠ **A CO-PARENT CAN TAKE OVER A FAMILY.** `families_own` is
    `USING (parent_id = auth.uid() OR is_family_member(id) OR is_admin())` with

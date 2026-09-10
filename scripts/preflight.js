@@ -15,8 +15,28 @@
 //  OWN node process — the builders and the tests each define STATIC_QUESTIONS
 //  and the question factories at global scope, so one process would collide.
 //
+//  And, only when asked for by name:
+//
+//    6 import-questions          upsert the verified corpus into Supabase
+//
+//  ⚠ STEPS 1-5 ARE LOCAL. They write files in this repo and read nothing over
+//  the network, which is what makes this command safe to run on a whim - and
+//  running it on a whim is the point. Step 6 writes to the PRODUCTION database.
+//  It therefore exists only when --import (or --import-dry-run) asks for it,
+//  never by default, and it never runs after a failed step - not even under
+//  --keep-going, whose whole job is to carry on past failures.
+//
+//  ⚠ The gates are worth having in front of a write. The importer runs its own
+//  fail-closed preflight, but that one checks a QUESTION (unique id, known
+//  type, required fields, difficulty 1-4, chapterId present). It does not check
+//  the subsection invariant, whether a live pack holds real content, or index
+//  drift. Steps 2, 4 and 5 do, and nothing used to stop you importing a corpus
+//  that failed all three.
+//
 //  Run:  node scripts/preflight.js [--keep-going] [--only=1,3] [--quiet]
-//  Exit: 0 all passed, 1 something failed.
+//        node scripts/preflight.js --import-dry-run   # reads the DB, writes nothing
+//        node scripts/preflight.js --import           # checks, then writes
+//  Exit: 0 all passed, 1 something failed, 2 the command line was wrong.
 // ══════════════════════════════════════════════════════════════════════════
 
 const { spawnSync } = require('child_process');
@@ -35,6 +55,18 @@ const grab = (out, re) => { const m = out.match(re); return m ? m[1].trim() : ''
 // are the counts CLAUDE.md says to re-measure from the built bundles rather
 // than quote from a .md; the preflight computes them, so it should report them.
 const SUMMARY = {
+  imported: out => {
+    const n = re => { const m = out.match(re); return m ? m[1].trim() : null; };
+    const added = n(/^New\s+([\d,]+)/m), updated = n(/^Updated\s+([\d,]+)/m);
+    const verified = n(/verified: ([\d,]+)/), failed = n(/failed\/unverified: ([\d,]+)/);
+    if (added === null && updated === null) return '';
+    // ⚠ A clean re-import is "0 new, ~560 updated", not zero writes - an
+    //   unchanged row is deliberately not rewritten, and that is not a failure.
+    return `${added} new · ${updated} updated`
+      + (verified ? ` · ${verified} verified` : '')
+      + (failed && failed !== '0' ? ` · ${failed} FAILED` : '');
+  },
+
   index: out => grab(out, /_index\.js\s+—\s+(.+)$/m),
 
   tests: out => {
@@ -89,18 +121,72 @@ const GREEN = color ? ESC + '[32m' : '';
 const AMBER = color ? ESC + '[33m' : '';
 const OFF   = color ? ESC + '[0m'  : '';
 
-const args      = process.argv.slice(2);
+const USAGE = [
+  'Usage: node scripts/preflight.js [--keep-going] [--only=1,3] [--quiet] [--list]',
+  '                                 [--import | --import-dry-run]',
+  '',
+  '  (no flag)          Steps 1-5. Local only: writes files in this repo,',
+  '                     touches no network and no database.',
+  '  --import           Also run step 6 — upsert the corpus into Supabase.',
+  '                     Skipped if any earlier step failed.',
+  '  --import-dry-run   Step 6 as a dry run: reads the database, reports what',
+  '                     would change, writes nothing.',
+  '  --keep-going       Carry on past a failed step (never into step 6).',
+  '  --only=1,3         Run just these steps.',
+  '  --quiet            Suppress the output of steps that pass (never step 6).',
+  '  --list             Print the steps and exit.',
+  '',
+  '  --import and --import-dry-run both need SUPABASE_SERVICE_ROLE_KEY.',
+].join('\n');
+
+const args = process.argv.slice(2);
+// ⚠ AN UNKNOWN OR MISSPELLED FLAG IS NEVER IGNORED - the same rule
+// netlify/import-questions.js keeps, for the same reason. Ignoring "--imports"
+// would run the local steps and let you walk away believing you had imported.
+const KNOWN = ['--keep-going', '--quiet', '--list', '-h', '--help', '--import', '--import-dry-run'];
+const badArg = args.find(a => !KNOWN.includes(a) && !a.startsWith('--only='));
+if (badArg) {
+  console.error('Unknown option ' + JSON.stringify(badArg) + '\n\n' + USAGE);
+  process.exit(2);
+}
+
 const keepGoing = args.includes('--keep-going');
 const quiet     = args.includes('--quiet');
+const importMode = args.includes('--import') ? 'live'
+  : args.includes('--import-dry-run') ? 'dry-run' : null;
 const onlyArg   = args.find(a => a.startsWith('--only='));
 const only      = onlyArg
   ? new Set(onlyArg.slice('--only='.length).split(',').map(s => Number(s.trim())).filter(Boolean))
   : null;
 
+// ⚠ Refuse BEFORE anything runs. Discovering the credential is missing at step
+// 6, after a minute of building, is how a run ends with five green steps and no
+// import - which reads as success.
+if (importMode && !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.error('SUPABASE_SERVICE_ROLE_KEY is not set, and ' + (importMode === 'live' ? '--import' : '--import-dry-run')
+    + ' needs it.\nNothing has run. Set it and try again, or drop the flag for the local steps only.');
+  process.exit(2);
+}
+
+if (importMode) {
+  STEPS.push({
+    script: 'netlify/import-questions.js',
+    args: importMode === 'dry-run' ? ['--dry-run'] : [],
+    label: importMode === 'dry-run'
+      ? 'read the database and report what WOULD change'
+      : 'upsert the verified corpus into Supabase',
+    summary: SUMMARY.imported,
+    // Both are gated behind the five checks; only one of them writes.
+    isImport: true,
+    writes: importMode === 'live',
+  });
+}
+
 if (args.includes('--list') || args.includes('-h') || args.includes('--help')) {
   console.log('Steps, in the order they must run:\n');
   STEPS.forEach((s, i) => console.log(`  ${i + 1}. node ${s.script}  — ${s.label}`));
-  console.log('\nnode scripts/preflight.js [--keep-going] [--only=1,3] [--quiet] [--list]');
+  if (!importMode) console.log('\n  6. node netlify/import-questions.js  — only with --import or --import-dry-run');
+  console.log('\n' + USAGE);
   process.exit(0);
 }
 
@@ -120,13 +206,24 @@ for (let i = 0; i < STEPS.length; i++) {
   const n = i + 1;
   if (only && !only.has(n)) { results.push({ n, step, status: 'skipped', ms: 0 }); continue; }
 
+  // ⚠ THE GATE. --keep-going exists to carry on past a failure, and carrying
+  //   on INTO a production write is the one thing it must never do.
+  if (step.isImport && failed) {
+    console.error(`\n${RED}── ${n}/${STEPS.length} · skipped: an earlier step failed.${OFF} `
+      + 'Nothing was sent to the database.');
+    results.push({ n, step, status: 'skipped', ms: 0 });
+    continue;
+  }
+  if (step.writes) {
+    console.log(`\n${AMBER}${BOLD}⚠ WRITING TO THE PRODUCTION DATABASE${OFF}`);
+  }
   console.log(`\n${BOLD}── ${n}/${STEPS.length} · node ${step.script}${OFF} — ${step.label}`);
   const before = step.watch ? fingerprint(step.watch) : null;
   const t0 = Date.now();
   // ⚠ Always piped, never 'inherit': the summary is derived from what the step
   // PRINTED, and there is no second copy of it. Each step is well under a
   // second, so its output lands as one block instead of streaming.
-  const r = spawnSync(process.execPath, [path.join(ROOT, step.script)], {
+  const r = spawnSync(process.execPath, [path.join(ROOT, step.script), ...(step.args || [])], {
     cwd: ROOT,
     stdio: ['ignore', 'pipe', 'pipe'],
     env: process.env,
@@ -139,7 +236,8 @@ for (let i = 0; i < STEPS.length; i++) {
   const stderr = r.stderr ? r.stderr.toString() : '';
   const out = stdout + stderr;
 
-  if (!quiet || !ok) {
+  // ⚠ A write to production is never silenced by --quiet.
+  if (!quiet || !ok || step.isImport) {
     if (stdout) process.stdout.write(stdout);
     if (stderr) process.stderr.write(stderr);
   }

@@ -621,3 +621,65 @@ function materialShareMessage(f, url) {
     isLinkMaterial(f) ? '' : 'This link works for ' + fmtMaterialExpiry(f?.link_expiry_seconds) + '.',
   ].filter(Boolean).join('\n');
 }
+
+// ⚠ HERE, NOT IN app.js. index.html loads helpers.js third and nce_paper.js
+//   sixth - both long before app.js. This builder is used by FOUR printed
+//   documents across two files (the PSAC practice paper and its answer key in
+//   app.js, the NCE paper and its mark scheme in nce_paper.js), and a shared
+//   builder that only exists after app.js has run is one the earlier file can
+//   reach only by luck of call timing.
+// ── Printed-paper watermark ────────────────────────────────────────────────
+// ⚠ ONE BUILDER FOR BOTH PRINTED DOCUMENTS. The pupil paper and the answer
+//   key are separate <html> strings with their own <style> blocks - style.css
+//   is not loaded in a print window - and a second hand-written copy of these
+//   rules is exactly the shape this codebase keeps growing drift in.
+//
+// ⚠ A TILED BACKGROUND ON body::before, NOT a position:fixed overlay. A fixed
+//   element is painted on the FIRST SHEET ONLY by several print engines; a
+//   repeating background on a box that spans the whole document tiles down
+//   every page by construction, however many pages the paper runs to.
+//
+// ⚠ z-index:-1 is what puts it BEHIND the text. A negative-z-index descendant
+//   paints above its parent's background and below the parent's in-flow
+//   content, so no rule is needed on every child - and adding one to every
+//   child is how a watermark ends up on top of the questions.
+//
+// ⚠ print-color-adjust:exact, or Chrome drops it entirely: "Background
+//   graphics" is OFF by default in the print dialog, and a watermark nobody
+//   prints is not a watermark. Scoped to this one element on purpose - put it
+//   on .paper and it inherits, and the navy section headers start printing
+//   solid too, which is a different decision about the pupil's ink.
+//
+// ⚠ The opacity is the whole design. Measured against the paper's own body
+//   text (#111 on white, 18.9:1): at 0.05 the tint costs about 0.2 of a
+//   contrast point and the sheet still clears 4.5:1 everywhere by a mile.
+//   Raise it and the watermark starts competing with the questions - which on
+//   an exam paper a child is reading under time is not a cosmetic problem.
+function _paperWatermarkCSS(text, opts) {
+  const o = Object.assign({ w: 380, h: 250, size: 27, opacity: 0.05, color: '#1e3a5f', angle: -30 }, opts || {});
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + o.w + '" height="' + o.h + '" '
+    + 'viewBox="0 0 ' + o.w + ' ' + o.h + '">'
+    + '<text x="' + (o.w / 2) + '" y="' + (o.h / 2) + '" '
+    + 'transform="rotate(' + o.angle + ' ' + (o.w / 2) + ' ' + (o.h / 2) + ')" '
+    + 'text-anchor="middle" dominant-baseline="middle" '
+    + 'font-family="Arial, Helvetica, sans-serif" font-size="' + o.size + '" '
+    + 'font-weight="bold" letter-spacing="2" '
+    + 'fill="' + o.color + '" fill-opacity="' + o.opacity + '">' + esc(text) + '</text>'
+    + '</svg>';
+  // encodeURIComponent, not a raw data URI: the markup carries #, < and " and
+  // any one of them ends the url() early and silently leaves no background.
+  return 'body { position: relative; }\n'
+    + 'body::before {\n'
+    + '  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;\n'
+    + '  background-image: url("data:image/svg+xml,' + encodeURIComponent(svg) + '");\n'
+    + '  background-repeat: repeat;\n'
+    + '  -webkit-print-color-adjust: exact; print-color-adjust: exact;\n'
+    + '}';
+}
+
+// ⚠ Node requires this file too: scripts/nce-generate-paper.js pulls the
+//   paper builders in from the command line, and a paper generated there has
+//   to be the SAME document the app prints. The browser ignores this line -
+//   `module` is undefined there and every function above is already a global.
+if (typeof module !== 'undefined' && module.exports) module.exports = { _paperWatermarkCSS };

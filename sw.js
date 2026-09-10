@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v304';
+const SHELL_VERSION = 'shell-v306';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -161,9 +161,17 @@ self.addEventListener('fetch', event => {
   // /a/<CODE> and guest.html are time-sensitive (deadlines, expiry, one-shot
   // submissions). A cache-first hit here would show a child a stale page for an
   // assignment that has already closed. Let these go straight to the network.
+  // ⚠ /m/<CODE> joins them for a different reason: the library page's whole
+  //   promise is that the link always shows the LATEST shelf. A cache-first hit
+  //   would show a child the materials their teacher shared last week and hide
+  //   the ones added this morning - the exact failure this feature exists to
+  //   fix. (Its API answers no-store as well; the CDN keys on URL alone.)
   if (url.pathname.startsWith('/a/') ||
+      url.pathname.startsWith('/m/') ||
       url.pathname === '/guest.html' ||
-      url.pathname === '/guest.js') {
+      url.pathname === '/guest.js' ||
+      url.pathname === '/materials.html' ||
+      url.pathname === '/materials.js') {
     return;
   }
 

@@ -511,6 +511,17 @@
   to     = "/guest.html"
   status = 200
 
+# /m/<CODE> serves the classroom material library. Same rewrite trick as /a/:
+# the shared URL stays in the address bar and materials.js reads the code from
+# location.pathname.
+#
+# ⚠ This link is PERMANENT and that is the feature. Sharing one material used
+# to hand out a signed storage URL that expired in an hour; the code here never
+# changes and the signed URLs are minted per visit by the function.
+[[redirects]]
+  from   = "/m/*"
+  to     = "/materials.html"
+  status = 200
 # /v/<CODE> serves the standalone Ask-the-Crowd voting page (minigame
 # lifeline). Same rewrite trick as /a/: the shared URL stays in the address
 # bar and vote.html reads the code from location.pathname.
@@ -549,6 +560,13 @@
 [[redirects]]
   from   = "/api/pupil-name"
   to     = "/.netlify/functions/pupil-name"
+  status = 200
+
+# The classroom material library behind /m/<CODE>. Mints fresh signed URLs on
+# every request, so it must never be cached - the function sends no-store.
+[[redirects]]
+  from   = "/api/materials-library"
+  to     = "/.netlify/functions/materials-library"
   status = 200
 
 # A shared-PIN device registering the name it is being used under.

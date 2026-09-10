@@ -798,13 +798,15 @@ async function _doResume(kind, chapterId) {
   // Loading the questions is not enough: CHAPTERS/ACTIVE_PACK must point at the
   // saved subject too, or resuming a session started in another subject renders
   // the chapter name, badges and help from whichever subject is open now.
-  if (saved.subjectId && typeof activateSubjectPack === 'function') {
-    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(saved.subjectId).catch(() => {});
-    activateSubjectPack(saved.subjectId);
-  }
-  if (saved.subjectId && typeof QuestionLoader !== 'undefined') {
-    await QuestionLoader.loadSubject(saved.subjectId);
-  }
+  await _withRouteBusy('Picking up where you left off…', 'Finding your questions', async () => {
+    if (saved.subjectId && typeof activateSubjectPack === 'function') {
+      if (typeof PackLoader !== 'undefined') await PackLoader.ensure(saved.subjectId).catch(() => {});
+      activateSubjectPack(saved.subjectId);
+    }
+    if (saved.subjectId && typeof QuestionLoader !== 'undefined') {
+      await QuestionLoader.loadSubject(saved.subjectId);
+    }
+  });
   const qMap = {};
   STATIC_QUESTIONS.forEach(q => { if (q) qMap[q.id] = q; });
   const qs = (saved.qIds || []).map(id => qMap[id]).filter(Boolean);
@@ -2545,6 +2547,61 @@ function showScreen(id) {
   _armIdleNudge(id);
 }
 
+// ── ROUTE BUSY ──────────────────────────────────────────────
+// Some taps cannot draw the next screen until something has been FETCHED: the
+// subject's manifest (PackLoader.ensure) or its whole question bank
+// (QuestionLoader.loadSubject). Those awaits sit BEFORE the showScreen() in
+// their caller and have to - the screen is rendered from what they load - so
+// between the tap and the arrival the app showed the child nothing at all, on
+// the screen they were trying to leave. Long enough that they tap again.
+// ⚠ THE DELAY IS THE FEATURE. PackLoader keeps a pack for the session and
+//   QuestionLoader caches a subject for 7 days, so most of these taps resolve
+//   in single-digit milliseconds. Drawing an overlay for those would put a
+//   flash into navigations that are already instant, which reads as slower,
+//   not faster. Nothing is drawn unless the work is STILL running after
+//   _ROUTE_BUSY_DELAY.
+// ⚠ The node is body-level, OUTSIDE every .screen - see the comment on it in
+//   index.html. It is therefore not hidden by showScreen(), which is why every
+//   path clears it in a finally rather than relying on the navigation.
+const _ROUTE_BUSY_DELAY = 220;
+let _routeBusyTimer = null;
+let _routeBusyDepth = 0;
+
+// Nests on purpose. SubjectHub.open() awaits the manifest and then the bank,
+// and a calendar tap can start a session from inside another awaited path. A
+// depth count means an inner finally cannot pull the overlay out from under
+// an outer call that is still fetching.
+async function _withRouteBusy(title, step, fn) {
+  _routeBusyDepth++;
+  if (_routeBusyDepth === 1) {
+    clearTimeout(_routeBusyTimer);
+    _routeBusyTimer = setTimeout(() => _routeBusyShow(title, step), _ROUTE_BUSY_DELAY);
+  }
+  try {
+    return await fn();
+  } finally {
+    _routeBusyDepth = Math.max(0, _routeBusyDepth - 1);
+    if (!_routeBusyDepth) _routeBusyHide();
+  }
+}
+
+function _routeBusyShow(title, step) {
+  const box = document.getElementById('route-busy');
+  if (!box) return;
+  const t = document.getElementById('route-busy-title');
+  if (t) t.textContent = title || 'Loading…';
+  const s = document.getElementById('route-busy-step');
+  if (s) s.textContent = step || '';
+  box.classList.remove('hidden');
+}
+
+function _routeBusyHide() {
+  clearTimeout(_routeBusyTimer);
+  _routeBusyTimer = null;
+  const box = document.getElementById('route-busy');
+  if (box) box.classList.add('hidden');
+}
+
 // A screen change used to leave BOTH the scroll position and keyboard focus
 // wherever the previous screen had them: a child arriving from a long chapter
 // grid landed mid-page, and a screen-reader user was still "on" a button that
@@ -2602,7 +2659,12 @@ function _updateBreadcrumb(screenId) {
   const pack     = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) || null;
   const packIcon = pack ? (pack.icon || '') : '';
   const packName = pack ? (pack.subject || pack.name || '') : '';
-  const packLabel = (packIcon + ' ' + packName).trim() || 'Subject';
+  // ⚠ THE GRADE IS PART OF THE NAME. "📖 English" is the same crumb in every
+  //   grade, so a screenshot of a chapter list - the thing people actually send
+  //   when something looks wrong - identified the subject and nothing else.
+  //   Taken from the PACK, never from SELECTED_GRADE: the pack is what is open.
+  const packGrade = pack && pack.grade ? ` · Grade ${pack.grade}` : '';
+  const packLabel = ((packIcon + ' ' + packName).trim() || 'Subject') + packGrade;
 
   const chId  = S.practice?.chapterId;
   const ch    = chId && pack ? ((pack._chapters || pack.chapters || []).find(c => c.id === chId)) : null;
@@ -2631,7 +2693,7 @@ function _updateBreadcrumb(screenId) {
     return;
   }
   if (screenId === 'subject-hub') {
-    const subjName = (packIcon + ' ' + packName).trim() || 'Subject';
+    const subjName = ((packIcon + ' ' + packName).trim() || 'Subject') + packGrade;
     inner.innerHTML = gradeCrumb + link('Start Practicing', `PracticeHub.open()`) + curr(subjName);
     bar.classList.remove('hidden');
     return;
@@ -8141,8 +8203,11 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
       toast('These questions could not be loaded. Check your connection, or ask your parent whether this chapter is unlocked.', 4000);
       return;
     }
-    toast('⏳ Loading questions…', 2000);
-    QuestionLoader.loadSubject(ACTIVE_PACK.id)
+    // ⚠ This path is slow BY DEFINITION - it only runs when the bank is not
+    //   loaded - so the overlay will always draw here. The toast it replaces
+    //   lasted 2s and the fetch routinely outlived it, leaving the child on a
+    //   silent screen again with no way to tell it was still working.
+    _withRouteBusy('Loading questions…', 'Fetching this subject', () => QuestionLoader.loadSubject(ACTIVE_PACK.id))
       .then(() => { _practiceMode = mode; _practiceResume = resume; startChapterDirect(chapterId, forceDiff, 1); })
       .catch(() => toast('Could not load questions. Please try again.', 3000));
     return;
@@ -8247,10 +8312,16 @@ function startSearchPractice(questions, label, coachMission = null) {
 // started; the calendar day popup passes a level when the child picks one.
 async function startScheduledSession(subjectId, chapterId, forceDiff) {
   if (!subjectId || !chapterId) { toast('This session has no topic set. 📚', 2500); return; }
-  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(subjectId).catch(() => {});
-  const pack = activateSubjectPack(subjectId);
+  // startChapterDirect stays OUTSIDE the wrapper: by then everything is in
+  // memory and it paints synchronously, so the overlay must already be down.
+  const pack = await _withRouteBusy('Opening your session…', 'Getting your questions ready', async () => {
+    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(subjectId).catch(() => {});
+    const p = activateSubjectPack(subjectId);
+    if (!p) return null;
+    if (typeof QuestionLoader !== 'undefined') await QuestionLoader.loadSubject(p.id);
+    return p;
+  });
   if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
-  if (typeof QuestionLoader !== 'undefined') await QuestionLoader.loadSubject(pack.id);
   startChapterDirect(chapterId, forceDiff || null);
 }
 
@@ -8769,14 +8840,17 @@ async function renderMyActivity(studentId) {
 }
 
 async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers, showHints, assignmentId) {
-  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(subjectId).catch(() => {});
-  const pack = activateSubjectPack(subjectId);
+  // Manifest and bank together, under one overlay: homework is the path a
+  // child is most often sent to from a link, on a subject nothing has loaded
+  // yet, which is the slowest case there is.
+  const pack = await _withRouteBusy('Opening your homework…', 'Getting your questions ready', async () => {
+    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(subjectId).catch(() => {});
+    const p = activateSubjectPack(subjectId);
+    if (!p) return null;
+    if (typeof QuestionLoader !== 'undefined') await QuestionLoader.loadSubject(p.id);
+    return p;
+  });
   if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
-
-  // Load questions for this subject, then jump straight to practice
-  if (typeof QuestionLoader !== 'undefined') {
-    await QuestionLoader.loadSubject(pack.id);
-  }
 
   // Which assignment this round IS. Without it, finishing the questions could
   // never mark the assignment done - completed_at was only ever written by the
@@ -9289,7 +9363,7 @@ function generatePrintablePaper() {
     </article>`).join('');
   const answerKeyHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
     <title>Answer Key - Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
-    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}.q-table,.picto-table{border-collapse:collapse;margin:6px 0;font-size:10pt}.q-table th,.picto-table th{background:#f1f5f9;font-weight:700;text-align:left;padding:4px 10px;border:1px solid #94a3b8}.q-table td,.picto-table td{padding:4px 10px;border:1px solid #cbd5e1}@media print{body{margin:10px}.no-print{display:none}}</style>
+    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}.q-table,.picto-table{border-collapse:collapse;margin:6px 0;font-size:10pt}.q-table th,.picto-table th{background:#f1f5f9;font-weight:700;text-align:left;padding:4px 10px;border:1px solid #94a3b8}.q-table td,.picto-table td{padding:4px 10px;border:1px solid #cbd5e1}@media print{body{margin:10px}.no-print{display:none}}${_paperWatermarkCSS('ANSWER KEY', { color: '#7f1d1d', opacity: 0.055 })}</style>
     </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p><p>Most questions are printed on the paper <b>without</b> multiple-choice options, so the child writes their own answer. Accept any answer that means the same as the one shown here - the wording below is the model answer, not the only one.</p></div>${answerRows}</body></html>`;
 
   const html = `<!DOCTYPE html>
@@ -9368,6 +9442,12 @@ function generatePrintablePaper() {
 
   .total-row td { border-top: 2px solid #333; padding: 6px 4px; font-weight:bold; font-size:10.5pt; }
   .footer { margin-top: 20px; border-top: 1px solid #bbb; padding-top: 8px; font-size: 8.5pt; color: #777; text-align:center; }
+
+  /* ⚠ The footer disclaimer above STAYS. The watermark repeats the same fact
+     on every sheet, where it cannot be cut off or read past - it does not
+     replace a line that exists so a printed sheet cannot pass for an official
+     document. */
+  ${_paperWatermarkCSS('PSAC EXAM PRACTICE')}
 </style>
 </head>
 <body>
@@ -9774,29 +9854,51 @@ const PracticeHub = (() => {
     const k = (subject || '').toLowerCase();
     return BOOK_TAGLINES[k] || '';
   }
-  // The child's grade lives on the signed-in account (Auth._activeAccount),
-  // never in the progress blob. SELECTED_GRADE is the second-best answer: it
-  // follows whatever pack is open, so it is right once a subject is chosen.
-  function _practiceHomeGrade() {
+  // ⚠ TWO DIFFERENT GRADES, and conflating them is the defect this block
+  //   exists to prevent:
+  //     _ownGrade()      the grade the child is REGISTERED in. The base every
+  //                      entitlement is computed from. Never derived from
+  //                      wherever they happen to be browsing.
+  //     _browsingGrade() the grade whose books are on screen. Follows the
+  //                      picker and whatever pack was last opened.
+  //   They were one function that answered with the account grade FIRST, so
+  //   the hub threw the browsing grade away every time it reopened. Reported
+  //   from the app: pick Grade 8, open Science, then press "Start Practicing"
+  //   in the breadcrumb - the only way back - and Grade 5's books are on
+  //   screen. Tapping one starts Grade 5 work under a Grade 8 intention.
+  function _ownGrade() {
+    // ⚠ The child's grade lives on the signed-in account, never in the
+    //   progress blob. `DB.grade` was read here and is written NOWHERE - not
+    //   by the app, not by Store._defaultStudent() - so it was always
+    //   undefined and every child in every grade opened this screen on GRADE
+    //   5. Measured on live data: three Grade 6 children carrying Grade 5
+    //   chapters. They did not wander into the wrong grade; the app opened it.
     const acct = (typeof Auth !== 'undefined' && Auth.getActiveAccount) ? Auth.getActiveAccount() : null;
-    return Number(acct?.grade)
-      || Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0)
-      || Number((typeof DB !== 'undefined' && DB?.grade) || 0)
-      || 5;
+    return Number(acct && acct.grade) || 5;
   }
+
+  // ⚠ ALWAYS FROM THE OWN GRADE. GradeAccess.allowed(g) puts g in the list it
+  //   returns, so computing this from the browsing grade would make any grade
+  //   self-granting the moment it was opened once.
+  function _allowedGrades() {
+    const own = _ownGrade();
+    return (typeof GradeAccess !== 'undefined') ? GradeAccess.allowed(own) : [own];
+  }
+
+  // SELECTED_GRADE is a UI memory - it follows selectGrade() and every
+  // activateSubjectPack() - and is NEVER an entitlement, so it is clamped.
+  // It starts null, so a fresh session still opens on the child's own grade.
+  function _browsingGrade() {
+    const own = _ownGrade();
+    const at  = Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0) || 0;
+    if (!at || at === own) return own;
+    return _allowedGrades().includes(at) ? at : own;
+  }
+
   function _renderGradeBar() {
     const sel = document.getElementById('prac-grade-sel');
     const note = document.getElementById('prac-locked-note');
     if (!sel) return;
-    // ⚠ THE CHILD'S OWN GRADE, from the account. `DB.grade` was read here and
-    //   in _renderBooks below, and it is written NOWHERE - not by the app, not
-    //   in Store._defaultStudent(), not in a single stored blob. So it was
-    //   always undefined and this always fell through to 5: every child, in
-    //   every grade, opened Start Practicing on GRADE 5 and got Grade 5
-    //   subjects. Measured on live data - three Grade 6 children carrying
-    //   Grade 5 chapters (plants, discovery, eng-verbs, trade-agri). They did
-    //   not wander into the wrong grade; the app opened it for them.
-    const currentGrade = Number(_practiceHomeGrade());
     // ⚠ The dropdown offers EXACTLY the grades the parent granted, own grade
     //   included - not every live grade with a lock painted on top. It used to
     //   test `gradeRestricted || lockedGrade`, two names that appear NOWHERE
@@ -9804,21 +9906,30 @@ const PracticeHub = (() => {
     //   permanently unlocked and the parent's setting did nothing on the one
     //   screen that matters. Never fall back to _liveGrades() here: that hands
     //   a child every grade the app ships.
-    const grades = (typeof GradeAccess !== 'undefined')
-      ? GradeAccess.allowed(currentGrade)
-      : [currentGrade];
+    const grades  = _allowedGrades();
+    const showing = _browsingGrade();
     sel.innerHTML = grades.map(g =>
-      `<option value="${g}"${g === currentGrade ? ' selected' : ''}>Grade ${g}</option>`
+      `<option value="${g}"${g === showing ? ' selected' : ''}>Grade ${g}</option>`
     ).join('');
     // Only one grade to choose from means there is nothing to choose.
     sel.disabled = grades.length < 2;
-    // ⚠ The message keys on "fewer grades than EXIST", not on the dropdown
-    //   being disabled. Those are different sets: a child allowed 2 of 6 live
-    //   grades has a perfectly usable dropdown and was told nothing at all
-    //   about the other four. It also stays silent when everything live is
-    //   already reachable - a child with nothing locked must not be sent to
-    //   ask their parent for something they already have.
     if (note) {
+      // ⚠ A GRADE DROPPED BY THE CLAMP MUST SAY SO. Silently painting another
+      //   grade's books under an unchanged heading is exactly how a child taps
+      //   Grade 5 Science believing it is Grade 8.
+      const wanted = Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0) || 0;
+      if (wanted && wanted !== showing) {
+        note.textContent = `🔒 Grade ${wanted} is not unlocked on this account - showing Grade ${showing}.`;
+        note.style.display = '';
+        return;
+      }
+      note.textContent = '🔒 Check with your parent to unlock other grades.';
+      // ⚠ The message keys on "fewer grades than EXIST", not on the dropdown
+      //   being disabled. Those are different sets: a child allowed 2 of 6 live
+      //   grades has a perfectly usable dropdown and was told nothing at all
+      //   about the other four. It also stays silent when everything live is
+      //   already reachable - a child with nothing locked must not be sent to
+      //   ask their parent for something they already have.
       const live = (typeof GradeAccess !== 'undefined') ? GradeAccess.liveGrades() : grades;
       note.style.display = grades.length < live.length ? '' : 'none';
     }
@@ -9827,12 +9938,16 @@ const PracticeHub = (() => {
     const grid = document.getElementById('prac-books-grid');
     if (!grid) return;
     const sel = document.getElementById('prac-grade-sel');
-    const g = grade !== undefined ? Number(grade) : Number(sel?.value || _practiceHomeGrade());
+    const g = grade !== undefined ? Number(grade) : Number(sel?.value || _browsingGrade());
+    // ⚠ The heading is the only thing on this screen a child reads before
+    //   tapping. Naming the grade here is what makes a wrong one visible.
+    const sub = document.getElementById('prac-hub-sub');
+    if (sub) sub.textContent = `Grade ${g} - pick a subject to begin.`;
     const packs = Object.values(SUBJECT_PACKS || {})
       .filter(p => Number(p.grade) === g && !p.comingSoon)
       .sort((a, b) => (a.subject || a.name || '').localeCompare(b.subject || b.name || ''));
     if (!packs.length) {
-      grid.innerHTML = '<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">No subjects available for this grade yet.</p>';
+      grid.innerHTML = `<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">No subjects available for Grade ${g} yet.</p>`;
       return;
     }
     grid.innerHTML = packs.map(pack => {
@@ -9856,11 +9971,17 @@ const PracticeHub = (() => {
   }
   function open() {
     _renderGradeBar();
-    _renderBooks();
+    _renderBooks(_browsingGrade());
     showScreen('practice-hub');
   }
   function onGradeChange(grade) {
-    _renderBooks(Number(grade));
+    const g = Number(grade);
+    // ⚠ REMEMBER IT. The picker used to move the books and nothing else, so
+    //   the next time the hub opened - which is the only way back out of a
+    //   subject - it reset to the child's own grade and the choice was gone.
+    if (g && _allowedGrades().includes(g)) SELECTED_GRADE = g;
+    _renderBooks(g);
+    _renderGradeBar();
   }
   return { open, onGradeChange };
 })();
@@ -9875,13 +9996,39 @@ const SubjectHub = (() => {
     if (packId) { _packId = packId; _shFilter = 'all'; }
     const pack = (typeof SUBJECT_PACKS !== 'undefined') && SUBJECT_PACKS?.find(p => p.id === _packId);
     if (!pack) { PracticeHub.open(); return; }
-    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(_packId).catch(() => {});
+    if (typeof PackLoader !== 'undefined') {
+      await _withRouteBusy('Opening ' + (pack.subject || pack.name || 'subject') + '…',
+        'Loading the chapter list', () => PackLoader.ensure(_packId).catch(() => {}));
+    }
     activateSubjectPack(_packId);
     const hubTitle = document.getElementById('subj-hub-title');
     if (hubTitle) hubTitle.textContent = pack.subject || pack.name || 'Subject';
+    const hubSub = document.getElementById('subj-hub-sub');
+    if (hubSub) hubSub.textContent = (pack.grade ? `Grade ${pack.grade} · ` : '')
+      + 'Chapters, exam paper and syllabus.';
     tab('chapters');
     showScreen('subject-hub');
     _renderChapters();
+
+    // ⚠ PackLoader.ensure() loads the MANIFEST - chapters, syllabus,
+    //   generators. It does NOT load the questions; QuestionLoader does, and
+    //   nothing here awaited it. So every chapter card was drawn against an
+    //   empty bank and read "Question bank not loaded yet", with the summary
+    //   saying "0 different bank questions recorded" - on a pack holding 499
+    //   questions. Reported from a screenshot of Grade 3 English.
+    // ⚠ It is loaded for the CHILD'S OWN grade at sign-in (loadForStudent),
+    //   which is why this only ever showed up on a subject in another grade -
+    //   and why it looked like a file:// problem. It is not: nothing fetched
+    //   those questions at all until startChapterDirect() did, at which point
+    //   Start worked and the card had been lying the whole time.
+    // ⚠ RENDER FIRST, then again when they land. Awaiting before the first
+    //   render would hold an empty screen on a slow connection.
+    const opened = _packId;
+    if (typeof QuestionLoader !== 'undefined' && QuestionLoader.loadSubject) {
+      try { await QuestionLoader.loadSubject(opened); } catch (e) {}
+      // Only if the child is still on the subject they opened.
+      if (_packId === opened) _renderChapters();
+    }
   }
 
   function back() { open(_packId); }
@@ -10975,7 +11122,7 @@ function _renderRoundReview() {
         ${r.skipped
           ? '<div class="text-gray-500 dark:text-gray-400">Skipped</div>'
           : `<div class="text-red-700 dark:text-red-400">You said: <b>${_prettyMath(_profEsc(r.userAnswer)) || '-'}</b></div>`}
-        <div class="text-green-700 dark:text-green-400">Correct answer: <b>${_prettyMath(_profEsc(r.correctAnswer))}</b></div>`;
+        <div class="text-green-700 dark:text-green-400">Correct answer: <b>${_prettyMath(String(r.correctAnswer ?? ''))}</b></div>`;
     }
 
     return `<div class="rounded-xl border ${tone} px-3 py-2">
@@ -11174,7 +11321,7 @@ function _submitTestAssignment() {
         <div class="flex-1 min-w-0">
           <div class="text-gray-800 dark:text-white font-medium mb-1">Q${i + 1}: ${a.question}</div>
           ${!a.correct
-            ? `<div class="text-xs text-red-600 dark:text-red-400 mb-0.5">Your answer: <b>${a.userAnswer}</b> &nbsp;·&nbsp; Correct: <b>${a.correctAnswer}</b></div>`
+            ? `<div class="text-xs text-red-600 dark:text-red-400 mb-0.5">Your answer: <b>${_profEsc(a.userAnswer)}</b> &nbsp;·&nbsp; Correct: <b>${a.correctAnswer}</b></div>`
             : ''}
           <div class="text-xs text-gray-500 dark:text-gray-400">${a.explanation}</div>
         </div>
@@ -12100,7 +12247,10 @@ async function surpriseMe() {
 window.selectSubject = async function(id) {
   const known = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === id);
   if (known && known.comingSoon) { toast(`${known.subject || known.name} is coming soon! 🚀`, 2500); return; }
-  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(id).catch(() => {});
+  if (typeof PackLoader !== 'undefined') {
+    await _withRouteBusy('Opening ' + (known?.subject || known?.name || 'subject') + '…',
+      'Loading the chapters', () => PackLoader.ensure(id).catch(() => {}));
+  }
   const pack = activateSubjectPack(id);
   if (pack && typeof QuestionLoader !== 'undefined') {
     // Load questions for this subject if not already loaded

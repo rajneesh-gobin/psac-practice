@@ -110,7 +110,7 @@ section('guest.html');
 {
   ck('the claim happens only for shared-PIN classes', /if \(S\.access === 'shared_pin'\) \{/.test(guest));
   ck('…and before the assignment is opened',
-    guest.indexOf("api('/api/guest-device'") < guest.indexOf("api('/api/assignment-open', { code: S.code, name, pin })"));
+    guest.indexOf("api('/api/guest-device'") < guest.indexOf("api('/api/assignment-open', { code: S.code, name, pin"));
   // ⚠ Best effort. A failed claim must never block a child from their homework.
   ck('a failed claim does not block sign-in',
     /catch \(_\) \{ \/\* carry on: the claim is an improvement, not a gate \*\//.test(guest));

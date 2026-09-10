@@ -281,3 +281,21 @@ Full write-up in `DB_IMPORT_GUIDE.md`. What matters here:
   change shape on every load. Churn, not drift.
 - ⚠ **The importer never deletes.** Removing a question from `subjects/` does not
   remove it from the database.
+- ⚠ **`scripts/preflight.js` is NOT the importer**, and the word is overloaded:
+  the importer's own fail-closed validation phase is also called a preflight, and
+  its usage line reads *"(no flag) Preflight, then upsert"*. The script runs five
+  **local** steps and holds no Supabase client, no key and no network call — so
+  "I ran preflight and nothing was imported" is it working.
+- **One command does the whole thing**: `node scripts/preflight.js --import`
+  (or `--import-dry-run`). ⚠ **The write step is opt-in and always last, and it
+  never runs after a failed step — not even under `--keep-going`, whose entire
+  job is to carry on past failures.** ⚠ It refuses **before anything runs** when
+  `SUPABASE_SERVICE_ROLE_KEY` is missing: discovering that at step 6 ends a run
+  with five green steps and no import, which reads as success. ⚠ `--quiet` never
+  silences it. ⚠ An unknown flag exits 2 rather than falling through to a
+  local-only run and letting you believe you imported.
+  ⚠ **The gates are worth having in front of a write.** The importer's own
+  preflight validates a QUESTION — unique id, known type, required fields,
+  difficulty 1-4, chapterId present. It does not check the subsection invariant,
+  whether a live pack holds real content, or index drift. Steps 2, 4 and 5 do,
+  and nothing used to stop an import of a corpus that failed all three.

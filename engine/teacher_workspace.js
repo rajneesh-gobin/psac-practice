@@ -620,6 +620,9 @@ const TeacherWorkspace = (() => {
     const rush = ins ? ins.rushed(r) : false;
     const score = state === 'completed' ? `${esc(r.score)}/${esc(r.total)} <b>(${esc(r.pct)}%)</b>` : state === 'working' ? 'Working on it' : 'Not started';
     const when = r.submitted_at ? `${esc(_shortDate(r.submitted_at))}${r.elapsed_secs != null ? ` · ${esc(ins ? ins.fmtDuration(r.elapsed_secs) : r.elapsed_secs + 's')}` : ''}${r.over_time ? ' · over time' : ''}${Number(r.attempt) > 1 ? ` · attempt ${esc(r.attempt)}` : ''}` : '';
+    // ⚠ In the row below the PUPIL's answer is escaped and the correct answer is
+    //   NOT: the correct answer is authored content (H<sub>2</sub>O, 3<sup>6</sup>)
+    //   and escaping it printed the tags at the teacher.
     const answers = (r.answers || []);
     // ⚠ NEVER colour alone. A green row is the fast signal a teacher scans for,
     // but it is paired with a glyph and a word, because ~8% of men have a colour
@@ -640,7 +643,7 @@ const TeacherWorkspace = (() => {
       ${state === 'completed' ? `<div class="tr-row-actions">
         <button type="button" class="tr-mini" data-retry="${i}" ${r.retry_allowed ? 'disabled' : ''}>${r.retry_allowed ? 'Retry allowed' : 'Allow another attempt'}</button>
       </div>` : ''}
-      ${state === 'completed' && answers.length ? `<details class="tr-answers"><summary>View answers</summary>${answers.map((ans, n) => `<p class="${ans.correct ? 'ok' : 'wrong'}"><b>Q${n + 1}</b> ${ans.correct ? '✓ Correct' : '✗ Wrong'}${ans.correct ? '' : `<br><span>Pupil: ${esc(ans.userAnswer)}</span><br><span>Correct: ${esc(ans.correctAnswer)}</span>`}</p>`).join('')}</details>` : ''}
+      ${state === 'completed' && answers.length ? `<details class="tr-answers"><summary>View answers</summary>${answers.map((ans, n) => `<p class="${ans.correct ? 'ok' : 'wrong'}"><b>Q${n + 1}</b> ${ans.correct ? '✓ Correct' : '✗ Wrong'}${ans.correct ? '' : `<br><span>Pupil: ${esc(ans.userAnswer)}</span><br><span>Correct: ${ans.correctAnswer}</span>`}</p>`).join('')}</details>` : ''}
     </div>`;
   }
 

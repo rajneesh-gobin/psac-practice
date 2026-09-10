@@ -250,6 +250,55 @@ surfaces disagreeing.
   `cloze`/`errorhunt` are named and refused rather than falling through to the
   "can't be answered on screen" card. `scripts/test-admin-question-preview.js`
   (25 checks, real browser).
+- **"Question bank not loaded yet" means nobody asked for it.** `SubjectHub.open()`
+  awaits `PackLoader.ensure()`, which loads the **manifest** — chapters, syllabus,
+  generators — and for a long time nothing awaited `QuestionLoader.loadSubject()`.
+  ⚠ **The two loads are separate and both are needed before a chapter card can
+  tell the truth.** Every card read "Question bank not loaded yet" and the
+  summary "0 different bank questions recorded" on a pack holding 499 questions;
+  `PracticeJourney.coverageLine()` says that whenever `eligible()` is empty, which
+  is indistinguishable from "this pack has no content".
+  ⚠ **It only ever showed on a subject in ANOTHER grade** — the bank is fetched
+  for the child’s own grade at sign-in (`loadForStudent`) — which is why it read
+  as a `file://` problem. Measured over `file://` on the reporter’s exact path:
+  0 questions before the fix, **499 after**, so the LOCAL_FILES script-injection
+  path was working the whole time. `startChapterDirect()` awaits the loader, so
+  **Start worked while the card said the content was missing.**
+  ⚠ **Render, then re-render.** Awaiting the bank before the first paint holds an
+  empty screen; the second render is guarded on `_packId` still being the pack
+  that was opened.
+- **A screenshot has to say which grade it is.** The breadcrumb read
+  `🏠 Home › Start Practicing › 📖 English` — identical in nine grades — and the
+  header said only "English", so a support question about a screenshot could not
+  be answered from it. `packLabel` / `subjName` now append ` · Grade N` **from the
+  pack**, never from `SELECTED_GRADE`: the pack is what is actually open. Carried
+  by every deeper screen too (chapters, syllabus, practice, exam).
+  `scripts/test-subject-hub-bank.js` (9 checks, real browser over `file://`).
+- **Start Practicing — own grade vs browsing grade.** `PracticeHub` keeps the
+  two apart and must go on doing so: `_ownGrade()` is the grade on the signed-in
+  account (the base every entitlement is computed from), `_browsingGrade()` is
+  whose books are on screen — it follows the picker and every
+  `activateSubjectPack()` via `SELECTED_GRADE`.
+  ⚠ **They were ONE function that answered with the account grade first.**
+  Reported from the app: pick Grade 8, open Science, then press "Start
+  Practicing" in the breadcrumb — the only way back out of a subject — and
+  Grade 5’s books are on screen. Measured on the old code, the picker was
+  already lying one step earlier: choosing Grade 8 swapped the books and left
+  the dropdown reading **Grade 5**, because `onGradeChange()` re-rendered the
+  grid and nothing else. Tapping a book then starts the wrong grade’s work.
+  ⚠ **Never pass the browsing grade to `GradeAccess.allowed()`** — it returns a
+  list CONTAINING its argument, so deriving the allowed set from where the child
+  is browsing makes any grade self-granting the moment it is opened once.
+  ⚠ **A grade dropped by the clamp says so** (`prac-locked-note`). Silently
+  painting another grade’s books under an unchanged heading is the half of the
+  report that starts the wrong work; `#prac-hub-sub` now names the grade too.
+  ⚠ `SELECTED_GRADE` is a **UI memory, never an entitlement** — it is clamped on
+  read and only written from a grade the picker was allowed to offer.
+  ⚠ `#screen-grade-select` / `renderGradeSelect()` is **dead** — nothing calls
+  `showScreen('grade-select')`, and it filters by nothing, so it would let a
+  child into any live grade. The "← Back to Grades" button its breadcrumb
+  comment names does not exist either. Delete or gate it before reviving it.
+  `scripts/test-practice-hub-grade.js` (14 checks).
 - **My Timetable** — `#screen-schedule` has a list ⇄ calendar toggle
   (`setTimetableView`, `psac_timetable_view_v1`); both views paint from one load
   (`_ttData`) and both start work through
@@ -292,6 +341,26 @@ surfaces disagreeing.
   selection Set outlives a filter change) and reports the count the DELETE
   returned. ⚠ `.contact-field` backgrounds are **opaque**; fields are 16px.
   `scripts/test-contact-form.js`.
+- **Question reports — one action, not two.** ✅ Resolved / ⚪ Won't fix / 🔁 Reopen
+  all go through `_replyThenStatus()`: whatever is in the message box is sent to
+  the pupil's inbox FIRST, and only then does the status move.
+  ⚠ **A failed message never moves the status**, and a moved status is never
+  reported as a send — *"Message sent, but the status did not change"* is a real
+  outcome and must not read like success.
+  ⚠ **The reply box used to be gated on `isOpen`**, so pressing Resolved removed
+  the only way to say why. It now renders whatever the status, which is also how
+  a follow-up on a closed report gets answered.
+  ⚠ **The Questions-tab panel had no way to reject spam** — only Edit question and
+  Mark as resolved, with Delete and Won't fix on the other screen behind a
+  "Review all reports →" link. It now carries Resolve · Not a problem · Delete.
+  ⚠ **Its message box is `qm-report-reply-<id>`, NOT `report-reply-<id>`** — both
+  panels can be in the DOM at once, and one id on two elements means
+  `getElementById` returns the wrong box.
+  ⚠ Spam is `wont_fix`, not `resolved`: resolved asserts the question was looked
+  at and something was done, and the reports screen filters on that distinction.
+  The pupil sees the message in `renderStudentInbox()` under "Admin replied:".
+  `scripts/test-admin-report-actions.js` (17 checks) and
+  `scripts/test-admin-pending-reports.js`.
 - **Sharing to WhatsApp** — `TeacherWorkspace.shareText(title, text, url)` is
   **the** share path (assignment links, reminders, materials).
   ⚠ **The panel is never replaced by `navigator.share`** — the OS sheet lists

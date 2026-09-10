@@ -2570,15 +2570,49 @@ const AdminPanel = (() => {
     return ['', '⭐ Basic', '⭐⭐ Medium', '⭐⭐⭐ Hard', '⭐⭐⭐⭐ Challenge'][diff] || '';
   }
 
-  async function resolveReport(id) {
-    const ok = await Store.resolveReport(id);
-    if (ok) { toast('Report marked resolved.', 1800); loadReports(); }
-    else toast('Could not update - try again.', 2500);
+  // ⚠ THE REPLY AND THE STATUS USED TO BE TWO SEPARATE ACTIONS, and the reply
+  //   box was rendered only while the report was still open - so an admin who
+  //   pressed Resolved first lost the only way to tell the child why. Worse,
+  //   nothing said so. One action now: whatever is typed goes to the child's
+  //   inbox, and only then does the status move.
+  // ⚠ THE TWO WRITES CAN FAIL INDEPENDENTLY and the toast must never claim
+  //   more than happened - 'message sent, status unchanged' is a real outcome
+  //   and reads nothing like a success.
+  async function _replyThenStatus(id, status, boxId) {
+    const box = document.getElementById(boxId);
+    const msg = (box && box.value || '').trim();
+    if (msg) {
+      const res = await Store.replyToReport(id, msg);
+      if (!res.ok) { toast('Could not send the message — the status was NOT changed.', 3500); return false; }
+      if (box) box.value = '';
+    }
+    const ok = status === 'resolved'
+      ? await Store.resolveReport(id)
+      : await Store.setReportStatus(id, status);
+    if (!ok) {
+      toast(msg ? 'Message sent, but the status did not change — try again.' : 'Could not update — try again.', 3500);
+      return false;
+    }
+    toast(msg ? 'Message sent to the pupil ✅ · ' + _REPORT_STATUS_WORD[status] : _REPORT_STATUS_WORD[status], 2200);
+    return true;
   }
 
-  function deleteReport(id) {
+  const _REPORT_STATUS_WORD = { resolved: 'Marked resolved.', wont_fix: 'Closed as not a problem.', open: 'Reopened.', in_review: 'Marked in review.' };
+
+  async function _afterReportAction() {
+    await Promise.all([loadReports(true), _loadReportBadge(), _loadPendingReports()]);
+  }
+
+  async function resolveReport(id) {
+    if (await _replyThenStatus(id, 'resolved', 'report-reply-' + id)) await _afterReportAction();
+  }
+
+  // ⚠ `label` exists because this is now called from the Questions tab too,
+  //   where _reportsAll is empty - the confirm text would have read
+  //   "delete the report for this report".
+  function deleteReport(id, label) {
     const report = _reportsAll.find(r => r.id === id);
-    const question = report?.question_id || 'this report';
+    const question = report?.question_id || label || 'this report';
     _confirmModal(
       `Permanently delete the report for “${question}”?\n\nIts conversation and replies will also be deleted. This cannot be undone. Deleting the report does not delete the question itself.`,
       async () => {
@@ -2602,9 +2636,7 @@ const AdminPanel = (() => {
   }
 
   async function setReportStatus(id, status) {
-    const ok = await Store.setReportStatus(id, status);
-    if (ok) { toast(`Status set to "${status}".`, 1800); loadReports(); }
-    else toast('Could not update - try again.', 2500);
+    if (await _replyThenStatus(id, status, 'report-reply-' + id)) await _afterReportAction();
   }
 
   async function sendAdminReply(id) {
@@ -2971,10 +3003,14 @@ const AdminPanel = (() => {
               </div>` : ''}
 
               <!-- Admin reply form -->
-              ${isOpen && !isContact ? `<div class="mb-3">
-                <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Reply to student</p>
+              <!-- ⚠ Shown whatever the status. It used to be gated on the open
+                   status, so the moment a report was resolved the admin could no
+                   longer answer a follow-up on it - and could not explain the
+                   resolution either, because resolving removed the box. -->
+              ${!isContact ? `<div class="mb-3">
+                <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Message to the pupil</p>
                 <div class="flex gap-2">
-                  <textarea id="report-reply-${safeId}" rows="2" maxlength="1000" placeholder="Type a reply - the student will see this in their inbox…"
+                  <textarea id="report-reply-${safeId}" rows="2" maxlength="1000" placeholder="They see this in their inbox. Resolved and Won't fix send it too…"
                     class="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"></textarea>
                   <button id="report-reply-btn-${safeId}" onclick="AdminPanel.sendAdminReply('${safeId}')"
                     class="shrink-0 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-colors self-end">Send</button>
@@ -3273,9 +3309,19 @@ const AdminPanel = (() => {
               : `No question text was stored with this report, and <span class="font-mono">${_escRpt(r.question_id || 'no id')}</span> is not in the question bank loaded here. Open the full Reports screen to investigate.`}</p>
             <p class="font-semibold text-xs text-gray-500 dark:text-gray-400 mb-1">Reported issue</p>
             <p class="mb-3 whitespace-pre-wrap">${_escRpt(issue) || 'No comment provided.'}</p>
+            <!-- ⚠ A DISTINCT ID. The Reports tab renders report-reply-<id> for
+                 the same report, both panels can be in the DOM at once, and two
+                 elements with one id means getElementById returns the wrong box. -->
+            <p class="font-semibold text-xs text-gray-500 dark:text-gray-400 mb-1">Message to the pupil <span class="font-normal">(optional — sent with whichever button you press)</span></p>
+            <textarea id="qm-report-reply-${safeId}" rows="2" maxlength="1000"
+              placeholder="They see this in their inbox…"
+              class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-2 dark:bg-gray-700 dark:text-white resize-none"></textarea>
             <div class="flex flex-wrap gap-2">
               <button data-report-edit="${i}" class="text-xs bg-blue-600 text-white px-3 py-2 rounded-lg">Edit question</button>
-              <button data-report-resolve="${i}" class="text-xs bg-green-600 text-white px-3 py-2 rounded-lg disabled:opacity-50">Mark as resolved</button>
+              <button data-report-resolve="${i}" class="text-xs bg-green-600 text-white px-3 py-2 rounded-lg disabled:opacity-50">✅ Mark as resolved</button>
+              <button data-report-reject="${i}" class="text-xs bg-gray-500 text-white px-3 py-2 rounded-lg disabled:opacity-50">⚪ Not a problem</button>
+              <button data-report-delete="${i}" class="text-xs border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 px-3 py-2 rounded-lg disabled:opacity-50">🗑 Delete</button>
+            </div>
             </div>
           </div>
         </details>`;
@@ -3285,20 +3331,29 @@ const AdminPanel = (() => {
     el.querySelectorAll('[data-report-edit]').forEach(button => {
       button.onclick = () => QM.qmOpenForm(data[Number(button.dataset.reportEdit)].question_id);
     });
-    el.querySelectorAll('[data-report-resolve]').forEach(button => {
+    // One handler shape for all three, because all three can fail and none of
+    // them may be pressed twice while the first is still in flight.
+    const wire = (attr, run) => el.querySelectorAll('[' + attr + ']').forEach(button => {
       button.onclick = async () => {
         button.disabled = true;
-        try { await qmResolveReport(data[Number(button.dataset.reportResolve)].id); }
+        try { await run(data[Number(button.getAttribute(attr))]); }
         finally { button.disabled = false; }
       };
     });
+    wire('data-report-resolve', r => qmResolveReport(r.id));
+    wire('data-report-reject',  r => qmRejectReport(r.id));
+    wire('data-report-delete',  r => deleteReport(r.id, r.question_id));
   }
 
   async function qmResolveReport(id) {
-    const ok = await Store.resolveReport(id);
-    if (!ok) { toast('Could not resolve this report. Please try again.', 3000); return; }
-    await Promise.all([_loadPendingReports(), _loadReportBadge()]);
-    if (typeof toast === 'function') toast('Report resolved ✅', 1500);
+    if (await _replyThenStatus(id, 'resolved', 'qm-report-reply-' + id)) await _afterReportAction();
+  }
+
+  // Spam is 'not a problem', not 'resolved' - resolved says the question was
+  // looked at and something was done about it, and the reports screen filters
+  // on that distinction.
+  async function qmRejectReport(id) {
+    if (await _replyThenStatus(id, 'wont_fix', 'qm-report-reply-' + id)) await _afterReportAction();
   }
 
   // ── Question Manager ─────────────────────────────────────────────────────

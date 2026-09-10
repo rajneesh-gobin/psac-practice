@@ -540,7 +540,8 @@ CREATE TABLE IF NOT EXISTS public.guest_submissions (
   elapsed_secs integer,
   over_time boolean DEFAULT false NOT NULL,
   open_token_hash text,
-  session_token_hash text
+  session_token_hash text,
+  device_code text
 );
 ALTER TABLE public.guest_submissions ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
 ALTER TABLE public.guest_submissions ADD COLUMN IF NOT EXISTS assignment_id uuid;
@@ -560,6 +561,7 @@ ALTER TABLE public.guest_submissions ADD COLUMN IF NOT EXISTS elapsed_secs integ
 ALTER TABLE public.guest_submissions ADD COLUMN IF NOT EXISTS over_time boolean DEFAULT false;
 ALTER TABLE public.guest_submissions ADD COLUMN IF NOT EXISTS open_token_hash text;
 ALTER TABLE public.guest_submissions ADD COLUMN IF NOT EXISTS session_token_hash text;
+ALTER TABLE public.guest_submissions ADD COLUMN IF NOT EXISTS device_code text;
 ALTER TABLE public.guest_submissions ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.guest_submissions ALTER COLUMN assignment_id SET NOT NULL;
 ALTER TABLE public.guest_submissions ALTER COLUMN name_display SET NOT NULL;
@@ -1264,13 +1266,16 @@ ALTER TABLE public.subscriptions ALTER COLUMN created_at SET NOT NULL;
 CREATE TABLE IF NOT EXISTS public.teacher_guest_access (
   assignment_id uuid NOT NULL,
   mode text NOT NULL,
-  classroom_id uuid
+  classroom_id uuid,
+  one_per_device boolean DEFAULT false NOT NULL
 );
 ALTER TABLE public.teacher_guest_access ADD COLUMN IF NOT EXISTS assignment_id uuid;
 ALTER TABLE public.teacher_guest_access ADD COLUMN IF NOT EXISTS mode text;
 ALTER TABLE public.teacher_guest_access ADD COLUMN IF NOT EXISTS classroom_id uuid;
+ALTER TABLE public.teacher_guest_access ADD COLUMN IF NOT EXISTS one_per_device boolean DEFAULT false;
 ALTER TABLE public.teacher_guest_access ALTER COLUMN assignment_id SET NOT NULL;
 ALTER TABLE public.teacher_guest_access ALTER COLUMN mode SET NOT NULL;
+ALTER TABLE public.teacher_guest_access ALTER COLUMN one_per_device SET NOT NULL;
 
 CREATE TABLE IF NOT EXISTS public.teacher_guest_archives (
   assignment_id uuid NOT NULL,
@@ -1284,6 +1289,21 @@ ALTER TABLE public.teacher_guest_archives ALTER COLUMN assignment_id SET NOT NUL
 ALTER TABLE public.teacher_guest_archives ALTER COLUMN previous_status SET NOT NULL;
 ALTER TABLE public.teacher_guest_archives ALTER COLUMN archived_at SET NOT NULL;
 
+CREATE TABLE IF NOT EXISTS public.teacher_guest_class_throttle (
+  classroom_id uuid NOT NULL,
+  source text NOT NULL,
+  attempts integer DEFAULT 0 NOT NULL,
+  since timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.teacher_guest_class_throttle ADD COLUMN IF NOT EXISTS classroom_id uuid;
+ALTER TABLE public.teacher_guest_class_throttle ADD COLUMN IF NOT EXISTS source text;
+ALTER TABLE public.teacher_guest_class_throttle ADD COLUMN IF NOT EXISTS attempts integer DEFAULT 0;
+ALTER TABLE public.teacher_guest_class_throttle ADD COLUMN IF NOT EXISTS since timestamp with time zone DEFAULT now();
+ALTER TABLE public.teacher_guest_class_throttle ALTER COLUMN classroom_id SET NOT NULL;
+ALTER TABLE public.teacher_guest_class_throttle ALTER COLUMN source SET NOT NULL;
+ALTER TABLE public.teacher_guest_class_throttle ALTER COLUMN attempts SET NOT NULL;
+ALTER TABLE public.teacher_guest_class_throttle ALTER COLUMN since SET NOT NULL;
+
 CREATE TABLE IF NOT EXISTS public.teacher_guest_classes (
   id uuid DEFAULT gen_random_uuid() NOT NULL,
   teacher_id uuid NOT NULL,
@@ -1296,7 +1316,8 @@ CREATE TABLE IF NOT EXISTS public.teacher_guest_classes (
   expected_students integer DEFAULT 25 NOT NULL,
   class_pin_cipher bytea,
   class_pin_lookup text,
-  grade smallint
+  grade smallint,
+  materials_code text
 );
 ALTER TABLE public.teacher_guest_classes ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
 ALTER TABLE public.teacher_guest_classes ADD COLUMN IF NOT EXISTS teacher_id uuid;
@@ -1310,6 +1331,7 @@ ALTER TABLE public.teacher_guest_classes ADD COLUMN IF NOT EXISTS expected_stude
 ALTER TABLE public.teacher_guest_classes ADD COLUMN IF NOT EXISTS class_pin_cipher bytea;
 ALTER TABLE public.teacher_guest_classes ADD COLUMN IF NOT EXISTS class_pin_lookup text;
 ALTER TABLE public.teacher_guest_classes ADD COLUMN IF NOT EXISTS grade smallint;
+ALTER TABLE public.teacher_guest_classes ADD COLUMN IF NOT EXISTS materials_code text;
 ALTER TABLE public.teacher_guest_classes ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.teacher_guest_classes ALTER COLUMN teacher_id SET NOT NULL;
 ALTER TABLE public.teacher_guest_classes ALTER COLUMN name SET NOT NULL;
@@ -1775,6 +1797,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_guest_class_throttle_pkey'
+                    AND conrelid = 'teacher_guest_class_throttle'::regclass) THEN
+    ALTER TABLE teacher_guest_class_throttle ADD CONSTRAINT teacher_guest_class_throttle_pkey PRIMARY KEY (classroom_id, source);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'teacher_guest_classes_pkey'
                     AND conrelid = 'teacher_guest_classes'::regclass) THEN
     ALTER TABLE teacher_guest_classes ADD CONSTRAINT teacher_guest_classes_pkey PRIMARY KEY (id);
@@ -2010,6 +2039,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'guest_submissions_device_code_ck'
+                    AND conrelid = 'guest_submissions'::regclass) THEN
+    ALTER TABLE guest_submissions ADD CONSTRAINT guest_submissions_device_code_ck CHECK (((device_code IS NULL) OR (device_code ~ '^[0-9a-f]{32}$'::text)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'learning_materials_description_len_ck'
                     AND conrelid = 'learning_materials'::regclass) THEN
     ALTER TABLE learning_materials ADD CONSTRAINT learning_materials_description_len_ck CHECK (((description IS NULL) OR (length(description) <= 500)));
@@ -2202,6 +2238,13 @@ DO $$ BEGIN
                   WHERE conname = 'teacher_guest_classes_grade_range'
                     AND conrelid = 'teacher_guest_classes'::regclass) THEN
     ALTER TABLE teacher_guest_classes ADD CONSTRAINT teacher_guest_classes_grade_range CHECK (((grade IS NULL) OR ((grade >= 1) AND (grade <= 9))));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_guest_classes_materials_code_ck'
+                    AND conrelid = 'teacher_guest_classes'::regclass) THEN
+    ALTER TABLE teacher_guest_classes ADD CONSTRAINT teacher_guest_classes_materials_code_ck CHECK (((materials_code IS NULL) OR (materials_code ~ '^[A-Z0-9]{10}$'::text)));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2727,7 +2770,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 129 functions, verbatim from pg_get_functiondef().
+-- 131 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -5184,6 +5227,170 @@ BEGIN
 END;
 $function$;
 
+-- ── materials_library_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean)
+CREATE OR REPLACE FUNCTION public.materials_library_open(p_code text, p_name text DEFAULT ''::text, p_pin text DEFAULT ''::text, p_ip text DEFAULT ''::text, p_info boolean DEFAULT false)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE
+  c        public.teacher_guest_classes%ROWTYPE;
+  pupil    public.teacher_guest_pupils%ROWTYPE;
+  t        public.teacher_guest_class_throttle%ROWTYPE;
+  v_src    text;
+  v_who    text;
+  v_key    text;
+  v_mats   jsonb;
+  v_work   jsonb;
+BEGIN
+  IF p_code IS NULL OR upper(btrim(p_code)) !~ '^[A-Z0-9]{10}$' THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_found');
+  END IF;
+
+  SELECT * INTO c FROM public.teacher_guest_classes
+    WHERE materials_code = upper(btrim(p_code)) AND deleted_at IS NULL;
+  -- ⚠ ONE answer for "no such code", "switched off", "class archived" and
+  --   "class deleted". Telling them apart would let anyone with a code
+  --   discover that a classroom exists and when it was retired.
+  IF NOT FOUND OR NOT c.active THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_found');
+  END IF;
+
+  -- The same teacher test teacher_guest_open() applies before letting a child
+  -- into an assignment. A disabled, expired or unapproved teacher's shelf goes
+  -- away with the rest of their work, rather than outliving it.
+  IF NOT EXISTS (SELECT 1 FROM public.profiles
+                  WHERE id = c.teacher_id AND NOT coalesce(disabled, false)
+                    AND (expires_at IS NULL OR expires_at > now())
+                    AND (role = 'admin' OR (role = 'teacher' AND teacher_status = 'approved'))) THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_found');
+  END IF;
+
+  -- ── The gate description. No PIN needed to learn WHICH form to draw, and
+  --    nothing behind the gate is returned here.
+  IF p_info THEN
+    RETURN jsonb_build_object('ok', true, 'access_mode',
+      CASE WHEN c.access_type = 'shared' THEN 'shared_pin' ELSE 'pupil_pin' END,
+      'classroom', jsonb_build_object('name', c.name, 'grade', c.grade));
+  END IF;
+
+  -- ── Throttle. ⚠ Only FAILURES are counted, below: a child reopening this
+  --    page all afternoon must never lock themselves out of their own hub.
+  DELETE FROM public.teacher_guest_class_throttle
+    WHERE classroom_id = c.id AND since < now() - interval '1 day';
+  v_src := encode(digest(coalesce(p_ip, ''), 'sha256'), 'hex');
+  INSERT INTO public.teacher_guest_class_throttle(classroom_id, source)
+    VALUES (c.id, v_src) ON CONFLICT DO NOTHING;
+  SELECT * INTO t FROM public.teacher_guest_class_throttle
+    WHERE classroom_id = c.id AND source = v_src FOR UPDATE;
+  IF t.since < now() - interval '15 minutes' THEN
+    UPDATE public.teacher_guest_class_throttle SET attempts = 0, since = now()
+      WHERE classroom_id = c.id AND source = v_src;
+    t.attempts := 0;
+  END IF;
+  -- ⚠ A whole class shares one school NAT, so this ceiling counts WRONG PINs
+  --   from an entire classroom. 30 is high enough not to punish a class and
+  --   low enough that 10,000 combinations are out of reach.
+  IF t.attempts >= 30 THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'locked');
+  END IF;
+
+  IF c.access_type = 'shared' THEN
+    IF c.class_pin_lookup IS NULL OR p_pin !~ '^\d{4}$'
+       OR encode(hmac(p_pin, c.secret, 'sha256'), 'hex') <> c.class_pin_lookup THEN
+      UPDATE public.teacher_guest_class_throttle SET attempts = t.attempts + 1
+        WHERE classroom_id = c.id AND source = v_src;
+      RETURN jsonb_build_object('ok', false, 'error', 'bad_pin',
+        'attemptsLeft', greatest(0, 30 - t.attempts - 1));
+    END IF;
+    v_who := btrim(p_name);
+    IF v_who IS NULL OR length(v_who) NOT BETWEEN 1 AND 40 THEN
+      RETURN jsonb_build_object('ok', false, 'error', 'name_required');
+    END IF;
+    -- ⚠ Matches teacher_guest_open()'s shared_pin key exactly, or "done" would
+    --   never line up with the submission the child actually made.
+    v_key := 'shared:' || lower(v_who);
+  ELSE
+    SELECT s.* INTO pupil FROM public.teacher_guest_pupils s
+      WHERE s.classroom_id = c.id AND s.active
+        AND p_pin ~ '^\d{4}$'
+        AND s.pin_lookup = encode(hmac(p_pin, c.secret, 'sha256'), 'hex');
+    IF NOT FOUND THEN
+      UPDATE public.teacher_guest_class_throttle SET attempts = t.attempts + 1
+        WHERE classroom_id = c.id AND source = v_src;
+      RETURN jsonb_build_object('ok', false, 'error', 'bad_pin',
+        'attemptsLeft', greatest(0, 30 - t.attempts - 1));
+    END IF;
+    v_who := pupil.name;
+    v_key := pupil.id::text;
+  END IF;
+
+  -- ⚠ A correct PIN CLEARS the counter. Otherwise a class of thirty signing in
+  --   normally, with the ordinary handful of typos between them, walks the
+  --   count up all day and locks the room out by the afternoon.
+  UPDATE public.teacher_guest_class_throttle SET attempts = 0, since = now()
+    WHERE classroom_id = c.id AND source = v_src;
+
+  SELECT coalesce(jsonb_agg(jsonb_build_object(
+           'id',                  m.id,
+           'title',               m.title,
+           'description',         m.description,
+           'subject',             m.subject,
+           'grade',               m.grade,
+           'file_path',           m.file_path,
+           'file_name',           m.file_name,
+           'file_size',           m.file_size,
+           'link_expiry_seconds', m.link_expiry_seconds,
+           'source_type',         m.source_type,
+           'external_url',        m.external_url,
+           'created_at',          m.created_at,
+           'shared_at',           coalesce(cm.assigned_at, m.created_at)
+         ) ORDER BY coalesce(cm.assigned_at, m.created_at) DESC), '[]'::jsonb)
+    INTO v_mats
+    FROM public.classroom_materials cm
+    JOIN public.learning_materials m ON m.id = cm.material_id
+   WHERE cm.classroom_id = c.id;
+
+  -- ── The homework set for this class ─────────────────────────────────────
+  -- ⚠ NO question_ids, NO answers, and NO other pupil. `done` is THIS child's
+  --   own row, and the SCORE is deliberately absent: a mark belongs on the
+  --   teacher's screen until they have looked at it, and children comparing
+  --   marks on a shared tablet is exactly what this must not enable.
+  -- ⚠ A per-pupil classroom also honours the ROSTER: work set for six named
+  --   pupils must not appear on the other twenty-four's hub.
+  SELECT coalesce(jsonb_agg(jsonb_build_object(
+           'code',           a.code,
+           'title',          a.title,
+           'subject',        a.subject_pack_id,
+           'question_count', a.question_count,
+           'duration_mins',  a.duration_mins,
+           'due_at',         a.due_at,
+           'expires_at',     a.expires_at,
+           'done',           EXISTS (SELECT 1 FROM public.guest_submissions g
+                                      WHERE g.assignment_id = a.id AND g.name_key = v_key
+                                        AND g.submitted_at IS NOT NULL)
+         ) ORDER BY coalesce(a.due_at, a.expires_at)), '[]'::jsonb)
+    INTO v_work
+    FROM public.guest_assignments a
+    JOIN public.teacher_guest_access ac ON ac.assignment_id = a.id
+   WHERE ac.classroom_id = c.id
+     AND a.deleted_at IS NULL
+     AND a.status = 'active'
+     AND a.expires_at > now()
+     AND (c.access_type = 'shared'
+          OR NOT EXISTS (SELECT 1 FROM public.teacher_guest_roster r WHERE r.assignment_id = a.id)
+          OR EXISTS (SELECT 1 FROM public.teacher_guest_roster r
+                      WHERE r.assignment_id = a.id AND r.pupil_id::text = v_key));
+
+  RETURN jsonb_build_object('ok', true,
+    'name', v_who,
+    'classroom', jsonb_build_object('name', c.name, 'grade', c.grade),
+    'materials', v_mats,
+    'assignments', v_work);
+END;
+$function$;
+
 -- ── minigame_poll_create(p_question text, p_options jsonb)
 CREATE OR REPLACE FUNCTION public.minigame_poll_create(p_question text, p_options jsonb)
  RETURNS jsonb
@@ -6688,6 +6895,68 @@ BEGIN
     'features', coalesce(v_features, '{}'::jsonb));
 END $function$;
 
+-- ── teacher_classroom_materials_link(p_classroom uuid, p_action text)
+CREATE OR REPLACE FUNCTION public.teacher_classroom_materials_link(p_classroom uuid, p_action text DEFAULT 'get'::text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE
+  c     public.teacher_guest_classes%ROWTYPE;
+  v_new text;
+  tries integer;
+  ch    integer;
+  -- ⚠ No 0/O/1/I/L/5/S/2/Z/8/B. This gets read off a whiteboard and typed by a
+  --   nine-year-old; the same reason the Juice payment reference drops them.
+  alpha text := 'ACDEFGHJKMNPQRTUVWXY34679';
+BEGIN
+  IF NOT public.teacher_guest_authorized() THEN RAISE EXCEPTION 'Teacher access required'; END IF;
+
+  SELECT * INTO c FROM public.teacher_guest_classes
+    WHERE id = p_classroom AND teacher_id = auth.uid() AND deleted_at IS NULL FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Classroom unavailable'; END IF;
+
+  IF p_action = 'off' THEN
+    UPDATE public.teacher_guest_classes SET materials_code = NULL WHERE id = c.id;
+    RETURN jsonb_build_object('ok', true, 'code', NULL, 'access_type', c.access_type);
+  END IF;
+
+  -- ⚠ 'get' NEVER MINTS. Opening the Materials tab reads this, and a read that
+  --   creates a public address as a side effect would put every classroom a
+  --   teacher merely LOOKED at on the open internet. Minting is 'create', and
+  --   a teacher only reaches it by tapping the button that says so.
+  IF p_action = 'get' THEN
+    RETURN jsonb_build_object('ok', true, 'code', c.materials_code,
+                              'access_type', c.access_type);
+  END IF;
+
+  IF p_action NOT IN ('create', 'rotate') THEN RAISE EXCEPTION 'Unknown action'; END IF;
+
+  -- 'create' is idempotent on purpose: a teacher tapping Share twice must be
+  -- sent to the SAME address, or the second tap silently orphans the first
+  -- message. Only 'rotate' deliberately breaks the links already shared.
+  IF p_action = 'create' AND c.materials_code IS NOT NULL THEN
+    RETURN jsonb_build_object('ok', true, 'code', c.materials_code, 'created', false,
+                              'access_type', c.access_type);
+  END IF;
+
+  FOR tries IN 1..40 LOOP
+    v_new := '';
+    FOR ch IN 1..10 LOOP
+      v_new := v_new || substr(alpha, (get_byte(gen_random_bytes(1), 0) % length(alpha)) + 1, 1);
+    END LOOP;
+    EXIT WHEN NOT EXISTS (SELECT 1 FROM public.teacher_guest_classes WHERE materials_code = v_new);
+    v_new := NULL;
+  END LOOP;
+  IF v_new IS NULL THEN RAISE EXCEPTION 'Could not create a hub code, please try again'; END IF;
+
+  UPDATE public.teacher_guest_classes SET materials_code = v_new WHERE id = c.id;
+  RETURN jsonb_build_object('ok', true, 'code', v_new, 'created', true,
+    'access_type', c.access_type, 'replaced', c.materials_code IS NOT NULL);
+END;
+$function$;
+
 -- ── teacher_guest_admin_recover(p_action text, p_classroom uuid)
 CREATE OR REPLACE FUNCTION public.teacher_guest_admin_recover(p_action text, p_classroom uuid DEFAULT NULL::uuid)
  RETURNS jsonb
@@ -6787,8 +7056,8 @@ BEGIN
   RETURN NEW;
 END $function$;
 
--- ── teacher_guest_create_assignment(p_title text, p_subject_pack_id text, p_chapter_ids jsonb, p_question_ids jsonb, p_access text, p_classroom uuid, p_duration_mins integer, p_due_at timestamp with time zone, p_pupil_ids jsonb)
-CREATE OR REPLACE FUNCTION public.teacher_guest_create_assignment(p_title text, p_subject_pack_id text, p_chapter_ids jsonb, p_question_ids jsonb, p_access text, p_classroom uuid DEFAULT NULL::uuid, p_duration_mins integer DEFAULT NULL::integer, p_due_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_pupil_ids jsonb DEFAULT NULL::jsonb)
+-- ── teacher_guest_create_assignment(p_title text, p_subject_pack_id text, p_chapter_ids jsonb, p_question_ids jsonb, p_access text, p_classroom uuid, p_duration_mins integer, p_due_at timestamp with time zone, p_pupil_ids jsonb, p_one_per_device boolean)
+CREATE OR REPLACE FUNCTION public.teacher_guest_create_assignment(p_title text, p_subject_pack_id text, p_chapter_ids jsonb, p_question_ids jsonb, p_access text, p_classroom uuid DEFAULT NULL::uuid, p_duration_mins integer DEFAULT NULL::integer, p_due_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_pupil_ids jsonb DEFAULT NULL::jsonb, p_one_per_device boolean DEFAULT false)
  RETURNS jsonb
  LANGUAGE plpgsql
  SECURITY DEFINER
@@ -6842,7 +7111,8 @@ BEGIN
 
   UPDATE public.guest_assignments SET pin_hash=crypt(encode(gen_random_bytes(32),'hex'),gen_salt('bf')),
     max_students=CASE WHEN p_access='classroom_pin' THEN greatest(max_students,n) ELSE max_students END WHERE id=(r->>'id')::uuid;
-  INSERT INTO public.teacher_guest_access(assignment_id,mode,classroom_id) VALUES((r->>'id')::uuid,p_access,c.id);
+  INSERT INTO public.teacher_guest_access(assignment_id,mode,classroom_id,one_per_device)
+    VALUES((r->>'id')::uuid,p_access,c.id,coalesce(p_one_per_device,false));
 
   IF p_access='classroom_pin' THEN
     IF v_chosen IS NOT NULL THEN
@@ -6855,6 +7125,7 @@ BEGIN
 
   RETURN r || jsonb_build_object('access_mode',p_access,'classroom_id',c.id,
     'due_at',p_due_at,'selected_pupils',CASE WHEN v_chosen IS NULL THEN NULL ELSE cardinality(v_chosen) END,
+    'one_per_device',coalesce(p_one_per_device,false),
     'max_students',CASE WHEN p_access='classroom_pin' THEN greatest((r->>'max_students')::integer,n) ELSE (r->>'max_students')::integer END);
 END $function$;
 
@@ -6885,8 +7156,8 @@ BEGIN
 END;
 $function$;
 
--- ── teacher_guest_entry(p_code text, p_name text, p_pin text, p_ip text, p_info boolean)
-CREATE OR REPLACE FUNCTION public.teacher_guest_entry(p_code text, p_name text DEFAULT ''::text, p_pin text DEFAULT ''::text, p_ip text DEFAULT ''::text, p_info boolean DEFAULT false)
+-- ── teacher_guest_entry(p_code text, p_name text, p_pin text, p_ip text, p_info boolean, p_device text)
+CREATE OR REPLACE FUNCTION public.teacher_guest_entry(p_code text, p_name text DEFAULT ''::text, p_pin text DEFAULT ''::text, p_ip text DEFAULT ''::text, p_info boolean DEFAULT false, p_device text DEFAULT ''::text)
  RETURNS jsonb
  LANGUAGE plpgsql
  SECURITY DEFINER
@@ -6897,7 +7168,7 @@ BEGIN
     JOIN public.teacher_guest_classes c ON c.id=a.classroom_id WHERE g.code=upper(btrim(p_code)) AND NOT c.active) THEN
     RETURN jsonb_build_object('ok',false,'error','expired');
   END IF;
-  RETURN public.teacher_guest_open(p_code,p_name,p_pin,p_ip,p_info);
+  RETURN public.teacher_guest_open(p_code,p_name,p_pin,p_ip,p_info,p_device);
 END $function$;
 
 -- ── teacher_guest_log_pupil_name()
@@ -7116,8 +7387,8 @@ BEGIN
   RETURN jsonb_build_object('ok', true);
 END $function$;
 
--- ── teacher_guest_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean)
-CREATE OR REPLACE FUNCTION public.teacher_guest_open(p_code text, p_name text DEFAULT ''::text, p_pin text DEFAULT ''::text, p_ip text DEFAULT ''::text, p_info boolean DEFAULT false)
+-- ── teacher_guest_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean, p_device text)
+CREATE OR REPLACE FUNCTION public.teacher_guest_open(p_code text, p_name text DEFAULT ''::text, p_pin text DEFAULT ''::text, p_ip text DEFAULT ''::text, p_info boolean DEFAULT false, p_device text DEFAULT ''::text)
  RETURNS jsonb
  LANGUAGE plpgsql
  SECURITY DEFINER
@@ -7132,7 +7403,15 @@ DECLARE
   key    text; display text; token text;
   t      public.teacher_guest_throttle%ROWTYPE;
   effective_mode text;
+  v_device text;
+  v_other  text;
 BEGIN
+  -- ⚠ Only a well-formed code counts. '' (private browsing, storage refused)
+  --   becomes NULL and is never compared against anything, so a child whose
+  --   browser cannot store a code is never locked out by this feature.
+  v_device := lower(btrim(coalesce(p_device, '')));
+  IF v_device !~ '^[0-9a-f]{32}$' THEN v_device := NULL; END IF;
+
   SELECT * INTO a FROM public.guest_assignments WHERE code=upper(btrim(p_code)) FOR UPDATE;
   IF NOT FOUND THEN RETURN jsonb_build_object('ok',false,'error','not_found'); END IF;
   SELECT * INTO access FROM public.teacher_guest_access WHERE assignment_id=a.id;
@@ -7197,6 +7476,25 @@ BEGIN
     UPDATE public.teacher_guest_throttle SET attempts=t.attempts+1,since=t.since WHERE assignment_id=a.id AND source=t.source;
   END IF;
 
+  -- ⚠ THE CAP. Only ever about a DIFFERENT name: the same name is already
+  --   answered by name_taken / already_submitted below, and a teacher who has
+  --   granted a retry (retry_allowed) must not be overruled by this.
+  --   Checked AFTER the PIN, so it can never be used to probe an assignment
+  --   without the PIN, and only when the teacher asked for it.
+  IF access.one_per_device AND v_device IS NOT NULL THEN
+    SELECT g.name_display INTO v_other
+      FROM public.guest_submissions g
+     WHERE g.assignment_id = a.id
+       AND g.device_code   = v_device
+       AND g.name_key     <> key
+       AND g.submitted_at IS NOT NULL
+       AND NOT g.retry_allowed
+     LIMIT 1;
+    IF v_other IS NOT NULL THEN
+      RETURN jsonb_build_object('ok',false,'error','device_used','other_name',v_other);
+    END IF;
+  END IF;
+
   SELECT * INTO sub FROM public.guest_submissions WHERE assignment_id=a.id AND name_key=key FOR UPDATE;
   IF FOUND AND sub.submitted_at IS NOT NULL AND NOT sub.retry_allowed THEN
     RETURN jsonb_build_object('ok',false,'error','name_taken');
@@ -7206,11 +7504,14 @@ BEGIN
   END IF;
   token := encode(gen_random_bytes(32),'hex');
   IF NOT FOUND THEN
-    INSERT INTO public.guest_submissions(assignment_id,name_key,name_display,open_token_hash)
-      VALUES(a.id,key,display,encode(digest(token,'sha256'),'hex'));
+    INSERT INTO public.guest_submissions(assignment_id,name_key,name_display,open_token_hash,device_code)
+      VALUES(a.id,key,display,encode(digest(token,'sha256'),'hex'),v_device);
   ELSE
+    -- ⚠ coalesce, not overwrite: a reopen from a browser that has since lost
+    --   its code must not erase the device that is on record for this attempt.
     UPDATE public.guest_submissions SET name_display=display,
-      open_token_hash=encode(digest(token,'sha256'),'hex'),submitted_at=NULL,answers='[]'
+      open_token_hash=encode(digest(token,'sha256'),'hex'),submitted_at=NULL,answers='[]',
+      device_code=coalesce(v_device, device_code)
       WHERE assignment_id=a.id AND name_key=key;
   END IF;
   RETURN jsonb_build_object('ok',true,'name',display,'submit_name',key,'token',token,
@@ -7609,7 +7910,7 @@ ALTER TABLE public.forum_replies ALTER COLUMN author_student_id SET DEFAULT curr
 
 -- ═══ 6 · INDEXES ══════════════════════════════════════════════════════════════
 -- Indexes that back a constraint are omitted — §3 creates those with the
--- constraint itself. 72 standalone indexes.
+-- constraint itself. 74 standalone indexes.
 CREATE INDEX IF NOT EXISTS submissions_assignment_idx ON public.assignment_submissions USING btree (assignment_id);
 CREATE INDEX IF NOT EXISTS submissions_classroom_idx ON public.assignment_submissions USING btree (classroom_id);
 CREATE INDEX IF NOT EXISTS submissions_student_idx ON public.assignment_submissions USING btree (student_id);
@@ -7635,6 +7936,7 @@ CREATE INDEX IF NOT EXISTS guest_assignments_teacher_idx ON public.guest_assignm
 CREATE INDEX IF NOT EXISTS idx_ga_deleted_at ON public.guest_assignments USING btree (deleted_at) WHERE (deleted_at IS NOT NULL);
 CREATE INDEX IF NOT EXISTS guest_material_completions_class_idx ON public.guest_material_completions USING btree (classroom_id, done_at DESC);
 CREATE INDEX IF NOT EXISTS guest_submissions_assignment_idx ON public.guest_submissions USING btree (assignment_id);
+CREATE INDEX IF NOT EXISTS guest_submissions_device_idx ON public.guest_submissions USING btree (assignment_id, device_code) WHERE (device_code IS NOT NULL);
 CREATE INDEX IF NOT EXISTS learning_materials_teacher_created_idx ON public.learning_materials USING btree (teacher_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS login_events_user_idx ON public.login_events USING btree (user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS payments_plan_idx ON public.payments USING btree (plan_id);
@@ -7679,6 +7981,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS students_live_username_key ON public.students 
 CREATE INDEX IF NOT EXISTS subscriptions_plan_idx ON public.subscriptions USING btree (plan_id);
 CREATE INDEX IF NOT EXISTS subscriptions_user_status_idx ON public.subscriptions USING btree (user_id, status, started_at DESC);
 CREATE INDEX IF NOT EXISTS idx_tgc_deleted_at ON public.teacher_guest_classes USING btree (deleted_at) WHERE (deleted_at IS NOT NULL);
+CREATE UNIQUE INDEX IF NOT EXISTS teacher_guest_classes_materials_code_uq ON public.teacher_guest_classes USING btree (materials_code) WHERE (materials_code IS NOT NULL);
 CREATE UNIQUE INDEX IF NOT EXISTS tgc_teacher_name_unique ON public.teacher_guest_classes USING btree (teacher_id, name) WHERE (deleted_at IS NULL);
 CREATE UNIQUE INDEX IF NOT EXISTS teacher_guest_devices_name_uq ON public.teacher_guest_devices USING btree (classroom_id, name_key);
 CREATE INDEX IF NOT EXISTS teacher_guest_pupil_names_pupil_idx ON public.teacher_guest_pupil_names USING btree (pupil_id, changed_at DESC);
@@ -7749,7 +8052,7 @@ CREATE TRIGGER teacher_guest_pupils_name_log AFTER INSERT OR UPDATE OF name ON p
 -- ⚠ The forum is adults-only IN THE DATABASE (auth.uid() IS NOT NULL), not by
 --   hiding a button. A child session is anon and is excluded by construction.
 --
--- RLS is enabled on all 55 public tables.
+-- RLS is enabled on all 56 public tables.
 
 ALTER TABLE public.assignment_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chapter_entitlements ENABLE ROW LEVEL SECURITY;
@@ -7800,6 +8103,7 @@ ALTER TABLE public.study_schedules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_access ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_archives ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.teacher_guest_class_throttle ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_classes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_devices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_pupil_names ENABLE ROW LEVEL SECURITY;
@@ -8419,6 +8723,7 @@ GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.subscriptions TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_access TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_archives TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_class_throttle TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_classes TO service_role;
 GRANT SELECT ON public.teacher_guest_devices TO authenticated;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_devices TO service_role;
@@ -8523,6 +8828,7 @@ GRANT EXECUTE ON FUNCTION public.join_classroom(p_invite_code text, p_student_id
 GRANT EXECUTE ON FUNCTION public.leaderboard_enabled() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.list_family_members() TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.mark_report_seen(p_report_id uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.materials_library_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean) TO service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_create(p_question text, p_options jsonb) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_results(p_code text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_vote(p_code text, p_option integer) TO anon, authenticated, service_role;
@@ -8566,17 +8872,18 @@ GRANT EXECUTE ON FUNCTION public.shop_settings() TO anon, authenticated, service
 GRANT EXECUTE ON FUNCTION public.shop_subject_price(p_subject_id text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.soft_delete_student(p_student uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.student_plan_features(p_student uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.teacher_classroom_materials_link(p_classroom uuid, p_action text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_admin_recover(p_action text, p_classroom uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_archive_assignment(p_id uuid, p_archive boolean) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_assignment_modes() TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_authorized() TO service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_class_state_guard() TO service_role;
-GRANT EXECUTE ON FUNCTION public.teacher_guest_create_assignment(p_title text, p_subject_pack_id text, p_chapter_ids jsonb, p_question_ids jsonb, p_access text, p_classroom uuid, p_duration_mins integer, p_due_at timestamp with time zone, p_pupil_ids jsonb) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.teacher_guest_create_assignment(p_title text, p_subject_pack_id text, p_chapter_ids jsonb, p_question_ids jsonb, p_access text, p_classroom uuid, p_duration_mins integer, p_due_at timestamp with time zone, p_pupil_ids jsonb, p_one_per_device boolean) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_device_list(p_classroom_id uuid) TO authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.teacher_guest_entry(p_code text, p_name text, p_pin text, p_ip text, p_info boolean) TO service_role;
+GRANT EXECUTE ON FUNCTION public.teacher_guest_entry(p_code text, p_name text, p_pin text, p_ip text, p_info boolean, p_device text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_log_pupil_name() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_manage(p_action text, p_id uuid, p_classroom uuid, p_name text, p_access_type text, p_expected_students integer, p_grade integer) TO anon, authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.teacher_guest_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean) TO service_role;
+GRANT EXECUTE ON FUNCTION public.teacher_guest_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean, p_device text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_results(p_assignment_id uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_submission_guard() TO service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_material_completions(p_classroom_id uuid) TO authenticated, service_role;

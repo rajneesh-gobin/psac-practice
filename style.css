@@ -6946,6 +6946,60 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
   border: 1px solid rgba(240,236,220,.12);
 }
 .tc-cd-status-msg { font-size: .9rem; color: #fbbf24; min-height: 1.2em; margin: .3rem 0 0; }
+
+/* ── The class library link (/m/<CODE>) ───────────────────────────── */
+/* Above the upload form on purpose: "where do pupils get all this" is the
+   question a teacher asks BEFORE adding the next file, not after. */
+.tc-cd-lib {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(240,236,220,.16);
+  border-radius: 10px;
+  padding: .9rem 1rem;
+  margin-bottom: 1rem;
+}
+.tc-cd-lib-off { border-style: dashed; }
+.tc-cd-lib-head { display: flex; gap: .6rem; align-items: flex-start; margin-bottom: .7rem; }
+.tc-cd-lib-head > span { font-size: 1.15rem; line-height: 1.3; }
+.tc-cd-lib-head strong { display: block; font-size: .95rem; color: #f0ece0; }
+.tc-cd-lib-head small { display: block; margin-top: 2px; font-size: .8rem; line-height: 1.4; color: rgba(240,236,220,.68); }
+.tc-cd-lib-row { display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; }
+.tc-cd-lib-url {
+  flex: 1 1 200px; min-width: 0; min-height: 40px;
+  background: rgba(0,0,0,.22); border: 1px solid rgba(240,236,220,.22); border-radius: 8px;
+  padding: .4rem .6rem; color: #f0ece0; font-size: .84rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.tc-cd-lib-acts { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+.tc-cd-lib-warn { margin: .6rem 0 0; font-size: .78rem; line-height: 1.4; color: #fbbf24; }
+
+/* ── Files not shared with this class ─────────────────────────────── */
+/* ⚠ A <details>, closed by default. For a teacher with several classes this
+   is a normal large list — everything that lives elsewhere — and only
+   becomes urgent when a file they have just uploaded is in it. */
+.tc-cd-unshared {
+  margin-top: 1.2rem;
+  border: 1px dashed rgba(240,236,220,.28);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+}
+.tc-cd-unshared > summary {
+  display: flex; align-items: center; gap: .5rem;
+  min-height: 48px; padding: .5rem .9rem;
+  cursor: pointer; list-style: none;
+  font-size: .92rem; font-weight: 700; color: rgba(240,236,220,.9);
+}
+.tc-cd-unshared > summary::-webkit-details-marker { display: none; }
+.tc-cd-unshared-n {
+  margin-left: auto; min-width: 24px; padding: .1rem .45rem;
+  border-radius: 999px; background: rgba(244,206,82,.22); color: #f4ce52;
+  font-size: .8rem; font-weight: 800; text-align: center;
+}
+.tc-cd-unshared-note {
+  margin: 0 .9rem .6rem; font-size: .8rem; line-height: 1.45;
+  color: rgba(240,236,220,.66);
+}
+.tc-cd-unshared .tc-cd-file-row { margin: 0 .5rem .5rem; }
+
+
 .tc-cd-add-pupil-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
 
 /* ── Pills - chalk-outline style ─────────────────────────────────── */
@@ -8140,6 +8194,18 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
 .ta-share-opt-text small { margin-top: 2px; color: var(--tp-muted) !important; font-size: .78rem; line-height: 1.35; }
 #screen-teacher .ta-tab-content .ta-share-opt.ta-share-opt-sel { border-color: #e5bd3a; box-shadow: 0 0 0 3px rgba(229,189,58,.35); }
 #screen-teacher .ta-tab-content .ta-share-opt.ta-share-opt-disabled { opacity: .55; cursor: not-allowed; }
+
+/* One go per device. A checkbox, not a third sharing card: it MODIFIES the open
+   link rather than replacing it, and a card would read as a choice between three. */
+#screen-teacher .ta-tab-content .ta-one-device {
+  display: grid; grid-template-columns: 22px 1fr; column-gap: .7rem; align-items: start;
+  margin-top: .6rem; padding: .7rem .8rem; min-height: 56px;
+  border: 1px solid var(--tp-line); border-radius: 14px; background: var(--tp-bg); color: var(--tp-ink) !important; cursor: pointer;
+}
+#screen-teacher .ta-tab-content .ta-one-device input { width: 22px; height: 22px; margin-top: 2px; accent-color: #e5bd3a; cursor: pointer; }
+.ta-one-device-text strong, .ta-one-device-text small { display: block; }
+.ta-one-device-text strong { font-size: .92rem; }
+.ta-one-device-text small { margin-top: 2px; color: var(--tp-muted) !important; font-size: .78rem; line-height: 1.35; }
 .ta-due-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .6rem 1rem; }
 .ta-due-chips { display: flex; flex-wrap: wrap; gap: .4rem; padding-bottom: .6rem; }
 .ta-due-chips button { min-height: 44px; padding: 0 .9rem; border: 1.5px solid rgba(240,236,220,.45); border-radius: 999px; background: rgba(255,255,255,.07); color: #f0ece0; font-size: .88rem; font-weight: 700; cursor: pointer; }
@@ -9433,9 +9499,37 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
   animation: authProgressSpin 0.7s linear infinite;
 }
 
+/* ── ROUTE BUSY ─────────────────────────────────────────
+   Shown while a tap waits on a subject manifest or a question bank. It reuses
+   the sign-in card's classes so the app has ONE loading look, but NOT its
+   backdrop, deliberately: sign-in covers an app that is not on screen yet and
+   may be opaque, while this covers a screen the child is already looking at,
+   where an opaque wall reads as having been signed out of it. A scrim keeps
+   what they tapped visible behind the card.
+   ⚠ The card's transform is safe for the same reason it is on #auth-progress
+   and no other: this is a body-level sibling of every .screen, and nothing
+   inside it is position:fixed or a text input. */
+#route-busy {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  background: rgba(30, 27, 75, 0.55);
+  animation: authProgressIn 0.16s ease both;
+}
+#route-busy.hidden { display: none !important; }
+#route-busy .auth-progress-card {
+  background: rgba(23, 20, 60, 0.94);
+  padding: 1.5rem 1.75rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.38);
+}
+/* The sign-in step line reserves two lines because its text changes as the
+   sign-in advances. This one is set once per tap, so it reserves nothing. */
+#route-busy .auth-progress-step { min-height: 0; }
+
 @media (prefers-reduced-motion: reduce) {
   #auth-progress, #auth-progress.auth-progress-leaving, .auth-progress-card,
-  .auth-progress-step { animation: none; }
+  #route-busy, .auth-progress-step { animation: none; }
   .auth-progress-mark { animation: none; }
   .auth-progress-ring, .auth-btn-busy::after { animation-duration: 1.6s; }
 }

@@ -57,6 +57,29 @@ const LIVE = (function () {
   return out.sort();
 })();
 
+// Which chapters opened a full paper with a complete comprehension block?
+// ⚠ DERIVED FROM WHAT WAS DEALT, never a hard-coded list of packs. A list would
+//   have to be edited every time a pack gains or loses passages, and the day it
+//   was not, this file would go back to reporting drift that is not there - or,
+//   worse, stop noticing drift that is.
+// ⚠ It requires the real shape (ten questions, one passage, five -m then five
+//   -o, at the head of the paper), so a chapter that merely holds -rcp- ids does
+//   not qualify and is still held to its mark map.
+const RCP = /^(.+-rcp-\d{3})-([mo])([1-5])$/;
+function blockChapters(out) {
+  const found = new Set();
+  for (const paper of out.papers.full) {
+    const head = paper.slice(0, 10);
+    if (head.length < 10) continue;
+    const parts = head.map(q => RCP.exec(q.id));
+    if (!parts.every(Boolean)) continue;
+    if (new Set(parts.map(p => p[1])).size !== 1) continue;
+    if (parts.map(p => p[2] + p[3]).join(',') !== 'm1,m2,m3,m4,m5,o1,o2,o3,o4,o5') continue;
+    found.add(head[0].ch);
+  }
+  return found;
+}
+
 function runPack(pack) {
   const bundleFile = path.join(BUNDLES, pack + '.json');
   if (!fs.existsSync(bundleFile)) return null;
@@ -137,6 +160,16 @@ for (const pack of LIVE) {
 // whole question is 2.5 points. 4 points is the tightest band that does not
 // fail on rounding alone once a pack carries more than a dozen chapters.
 const BAND = 4;
+// ⚠ THE BAND SCALES WITH THE PAPER. When a comprehension block takes ten of the
+//   forty slots, the other chapters share 30, one question becomes 3.33 points
+//   instead of 2.5, and every rounding difference is amplified by 40/30. Holding
+//   the same 4 points would fail on arithmetic rather than on content: measured,
+//   grade5-english eng-adjectives carries weight 2 against 2.0% of the real
+//   paper's marks — a pre-existing mismatch worth 3.0 points in a 40-question
+//   paper, which becomes 4.9 in a 30-question one without anything changing
+//   about the pack. The band is widened in exactly that ratio and no further,
+//   so a real distribution error is still caught.
+const bandFor = target => BAND * (SIZES.full / target);
 
 console.log('\nEach weighted pack follows its own paper\'s mark allocation');
 for (const [pack, spec] of Object.entries(MARK_MAPS)) {
@@ -151,13 +184,50 @@ for (const [pack, spec] of Object.entries(MARK_MAPS)) {
     .filter(id => !(id in spec.marks) && !(id in spec.floor));
   if (unmapped.length) { bad(`${pack}: chapter in no mark map: ${unmapped.join(', ')}`); continue; }
 
-  const worst = Object.keys(spec.marks)
-    .map(id => ({ id, want: 100 * spec.marks[id] / tot, got: 100 * (tally[id] || 0) / n }))
+  // ⚠ THE BLOCK CHAPTER IS OUT OF THIS COMPARISON, AND THAT IS A DELIBERATE
+  //   PRODUCT CHOICE, NOT A ROUNDING ALLOWANCE. A full paper spends ten of its
+  //   forty questions on one reading passage, which is 25% - measured against
+  //   the real papers, comprehension earns 13.7% of the marks in Grade 5
+  //   English, 15.6% in Grade 5 French, 18.0% in Grade 6 English and 20.0% in
+  //   Grade 6 French. So the block over-weights comprehension by 5 to 11 points
+  //   against the exam it is modelled on. That is the cost of a whole passage
+  //   being worth reading at all: five scattered questions on a 420-word text
+  //   is the shape this replaced, and it made a child read the text five times.
+  //   ⚠ The exemption is scoped to the block chapter in FULL papers only. Short
+  //   and drill papers carry no block, every other chapter is still held to the
+  //   mark map, and the block's own size is pinned to exactly 10 by the
+  //   anti-drift cap below - so nothing here is merely unchecked.
+  // ⚠ RENORMALISED WHEN A BLOCK IS PRESENT. Ten of forty questions are spent on
+  //   one passage, so the other chapters share 30 slots, not 40, and NO
+  //   distribution of those 30 can match a share measured against a whole paper
+  //   - a chapter the real paper gives 23.5% can reach 17.6% at best. Comparing
+  //   against the un-shrunk share would report a failure that no content or
+  //   weighting could ever fix. So both sides are taken as a share of the
+  //   NON-BLOCK part: the question this asks is "are the remaining 30 dealt in
+  //   the paper's proportions", which is the honest one, and it is still a real
+  //   check - it would catch exactly the gutting measured a moment ago.
+  const blocks = blockChapters(out);
+  const mapped = Object.keys(spec.marks).filter(id => !blocks.has(id));
+  const totNB = mapped.reduce((s, id) => s + spec.marks[id], 0);
+  const nNB = mapped.reduce((s, id) => s + (tally[id] || 0), 0);
+  const worst = mapped
+    .map(id => ({
+      id,
+      want: 100 * spec.marks[id] / (blocks.size ? totNB : tot),
+      got: 100 * (tally[id] || 0) / (blocks.size ? (nNB || 1) : n),
+    }))
     .map(r => ({ ...r, drift: Math.abs(r.got - r.want) }))
     .sort((a, b) => b.drift - a.drift)[0];
+  for (const id of blocks) {
+    const got = 100 * (tally[id] || 0) / n;
+    note(`${pack}: ${id} carries the comprehension block — ${got.toFixed(1)}% of the paper `
+       + `against ${spec.marks[id] !== undefined ? (100 * spec.marks[id] / tot).toFixed(1) + '%' : 'no mark map'} in the real paper`);
+  }
+  if (!worst) { ok(`${pack}: every mapped chapter is the block chapter`); continue; }
 
   const line = `${pack}: worst chapter ${worst.id} dealt ${worst.got.toFixed(1)}%, paper gives ${worst.want.toFixed(1)}%`;
-  if (worst.drift <= BAND) ok(line); else bad(line + ` — ${worst.drift.toFixed(1)} points off`);
+  const band = bandFor(SIZES.full - (blocks.size ? 10 : 0));
+  if (worst.drift <= band) ok(line); else bad(line + ` — ${worst.drift.toFixed(1)} points off (band ${band.toFixed(1)})`);
 }
 
 // ── No chapter is gutted by the reconciliation loop ─────────────────────────
@@ -203,18 +273,43 @@ for (const [pack, out] of Object.entries(results)) {
   //   paper was built from 42 slots, and reconciliation took both back off the
   //   first chapter with n > 1 - g9eng-reading, the pack's highest-weighted
   //   chapter - dropping it from 10 to 8. No amount of new content could fix it.
-  const live = out.chapters
+  let live = out.chapters
     .filter(c => !dead.has(c.id))
     .filter(c => !(Number.isFinite(c.w) && c.w <= 0))
     .map(c => ({ ...c, want: c.n, got: c.n }));
   if (!live.length) continue;
 
   // The engine's own reconciliation, mirrored.
+  // ⚠ A comprehension block reserves ten slots and its chapter drops out of the
+  //   weighting entirely, so the rest of the paper is built to 30, not 40. The
+  //   model has to do the same or it measures a paper the engine never builds.
+  const blocked = blockChapters(out);
+  live = live.filter(c => !blocked.has(c.id));
+  const fullTarget = SIZES.full - (blocked.size ? 10 : 0);
+  // ⚠ The engine scales each weight to `target / 40`, not to cfg.count / 40, so
+  //   the model must too. Re-derive `got` and `want` at that scale.
+  for (const c of live) {
+    c.want = Math.max(1, Math.round((Number.isFinite(c.w) ? c.w : 1) * fullTarget / 40));
+    c.got = c.want;
+  }
+  // ⚠ LARGEST REMAINDER, mirroring the engine exactly. Round-robin top-up and
+  //   first-above-1 reduction were both here and both are wrong; see the comment
+  //   on the same loop in engine/questions_engine.js.
+  const idealOf = c => (Number.isFinite(c.w) ? c.w : 1) * fullTarget / 40;
   let total = live.reduce((s, c) => s + c.got, 0);
-  let i = 0;
-  while (total < SIZES.full) { live[i % live.length].got++; total++; i++; }
-  while (total > SIZES.full) {
-    const k = live.findIndex(c => c.got > 1);
+  while (total < fullTarget) {
+    let k = 0;
+    for (let j = 1; j < live.length; j++) {
+      if (idealOf(live[j]) - live[j].got > idealOf(live[k]) - live[k].got) k = j;
+    }
+    live[k].got++; total++;
+  }
+  while (total > fullTarget) {
+    let k = -1;
+    for (let j = 0; j < live.length; j++) {
+      if (live[j].got <= 1) continue;
+      if (k === -1 || (live[j].got - idealOf(live[j])) > (live[k].got - idealOf(live[k]))) k = j;
+    }
     if (k === -1) break;
     live[k].got--; total--;
   }
@@ -238,8 +333,19 @@ for (const [pack, out] of Object.entries(results)) {
   //   a chapter may deal FEWER than its slots (a thin pool cannot fill them),
   //   but it must never deal MORE. If it does, this model no longer matches
   //   assembleExamPaper() and every result in this section is worthless.
+  // ⚠ A COMPREHENSION BLOCK IS AN EXCEPTION THE MODEL HAS TO KNOW ABOUT.
+  //   A full paper opens with one passage and its ten questions (five MCQ, five
+  //   short answers), and that block REPLACES its chapter's weighted slots
+  //   instead of adding to them - so the chapter deals exactly BLOCK_SIZE, which
+  //   is almost always more than its weight allows. Left unmodelled this fired
+  //   as "the model has DRIFTED" on eight packs at once, which is the anti-drift
+  //   check doing its job: the model really had stopped matching the engine.
+  //   The cap is raised only for a chapter that HAS a complete block, and only
+  //   to exactly 10 - never to "whatever it dealt", which would silence it.
+  const BLOCK_SIZE = 10;
   const cap = {};
   for (const c of live) cap[c.id] = c.got;
+  for (const ch of blockChapters(out)) cap[ch] = Math.max(cap[ch] || 0, BLOCK_SIZE);
   let overflow = null;
   for (const paper of out.papers.full) {
     const tally = {};

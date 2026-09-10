@@ -62,6 +62,11 @@ const ctx = vm.createContext({
   _prettyMath: s => String(s == null ? '' : s),
   _symLineStaticSvg: () => '<svg></svg>',
   _activeSubjectLabel: () => ({ grade: 5, name: 'French' }),
+  // ⚠ The REAL builder, not a stub. _paperWatermarkCSS moved to helpers.js so
+  //   nce_paper.js could share it (it loads before app.js), which made it an
+  //   external dependency of this slice - and a stub here would hide a broken
+  //   url() behind a string that looks perfectly fine.
+  _paperWatermarkCSS: require(path.join(ROOT, 'engine', 'helpers.js'))._paperWatermarkCSS,
   toast: m => { throw new Error('unexpected toast: ' + m); },
   localStorage: (() => {
     const store = new Map();

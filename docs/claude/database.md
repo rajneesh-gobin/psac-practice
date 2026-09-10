@@ -18,7 +18,7 @@ same drift, and regenerate rather than adding a file.**
 
 | Thing | Where |
 |---|---|
-| The schema | `supabase-schema.sql` — 55 tables · 183 constraints · 69 indexes · 124 functions · 12 triggers · 81 policies (re-measured 2026-09-10; the generator prints the counts) |
+| The schema | `supabase-schema.sql` — 56 tables · 187 constraints · 74 indexes · 131 functions · 12 triggers · 81 policies (re-measured 2026-09-10 AFTER the device-cap and class-hub migrations; the generator prints the counts) |
 | Regenerate | `SUPABASE_ACCESS_TOKEN=sbp_… node scripts/dump-schema.js` |
 | Test | `scripts/sql-tests/run-schema-tests.sh` |
 
@@ -89,6 +89,45 @@ defaults found via `pg_depend`, `check_function_bodies`, the pinned
    drops the `=X` PUBLIC entry. Check `proacl`, not the migration text, after any
    `CREATE FUNCTION`.
 
+### Guest device cap and the class hub (2026-09-10, APPLIED)
+`migrations/20260910_guest_device_cap.sql` and
+`migrations/20260910_classroom_materials_library.sql` — applied to production
+2026-09-10, re-applied to prove idempotency, verified by reading `pg_proc` and
+`proacl` rather than the migration text, and smoke-tested end to end against a
+real classroom before the schema was regenerated.
+- ⚠ **Both ship OFF.** `one_per_device` defaults to false and every existing
+  classroom's `materials_code` is NULL, so applying them changed nothing any
+  user could see. Verified after the fact: 0 hubs on, 0 caps on.
+- ⚠⚠ **Three functions were DROPPED and recreated with wider signatures** —
+  `teacher_guest_open`, `teacher_guest_entry` (both gained `p_device`) and
+  `teacher_guest_create_assignment` (gained `p_one_per_device`). `CREATE OR
+  REPLACE` cannot change an arity, and two overloads a named PostgREST call can
+  both satisfy is an **ambiguity error, not a fallback**. Confirmed after
+  applying: exactly one overload of each survives. The deployed clients call
+  with the old arities and keep working, because every new parameter defaults.
+- ⚠ `proacl` was read on production, not inferred: `teacher_guest_open` and
+  `teacher_guest_entry` carry **postgres + service_role only, with no `=X`
+  PUBLIC entry and no anon** — the explicit `REVOKE … FROM PUBLIC, anon,
+  authenticated` did its job. Same for `materials_library_open`.
+  `teacher_classroom_materials_link` is authenticated + service_role.
+  ⚠ `teacher_guest_create_assignment` still carries `=X` PUBLIC and anon, as it
+  did before — deliberately unchanged, since the function raises unless
+  `teacher_guest_authorized()`, and tightening it silently was not this
+  migration's job.
+- ⚠ **The throttle is a SEPARATE table.** `teacher_guest_throttle` keys on
+  `assignment_id NOT NULL` and is cleaned per assignment, so it cannot carry a
+  classroom-scoped PIN gate; `teacher_guest_class_throttle` is RLS-on with
+  grants for service_role only. Only FAILED PINs count and a correct one clears
+  the counter — a class of thirty with the ordinary handful of typos between
+  them would otherwise lock the room out by the afternoon, all sharing one
+  school NAT.
+- ⚠ **`guest_submissions.device_code` needed no column GRANT**, and that was
+  measured: the table carries grants for service_role only, so nothing reads it
+  directly. (Contrast `public.students`, where a missing per-column GRANT SELECT
+  silently empties a screen.)
+- Tested by `scripts/sql-tests/run-device-cap-tests.sh` (51 assertions on a real
+  postgres: fresh build from nothing, idempotency, then behaviour) plus
+  `scripts/test-guest-device-cap.js` and `scripts/test-materials-library.js`.
 ### Manual MCB Juice payments (2026-09-10, APPLIED)
 `migrations/20260910_manual_juice_payments.sql` — applied to production
 2026-09-10, verified by read-after-write and re-applied to prove idempotency.

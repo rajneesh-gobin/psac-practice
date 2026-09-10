@@ -197,6 +197,101 @@ ck('the search box is 16px, so iOS does not zoom', /\.tm-search-input \{[^}]*fon
 ck('the chalkboard override uses the doubled id to beat the board rule',
   /#screen-teacher#screen-teacher \.tm-cal-cell/.test(cssSrc));
 
+// ── 3 · the classroom Files section ───────────────────────────────────────
+// ⚠ THIS SECTION EXISTS BECAUSE THE FEATURE WAS ONLY HALF-WIRED. Links worked
+//   end to end - helpers, the standalone Materials tab, the Lambda, the pupil
+//   page, the migration, all covered above - and the CLASSROOM screen's own
+//   Files section was still file-only. It had no link input at all, and its
+//   list rendered every row as a file: the icon came from file_name (so a
+//   YouTube video showed 🖼️), the meta line printed "Link valid 1 hour" about a
+//   link that never expires, and Open / Link / Delete were handed
+//   `esc(f.file_path)` - which is NULL on a link row and arrived as the string
+//   "null". Nothing here looked at that file, which is how it survived.
+section('classroom Files section');
+const cdSrc = fs.readFileSync(path.join(ROOT, 'engine/teacher_classroom_detail.js'), 'utf8');
+
+// ⚠ Scope every "does X happen inside Y" assertion to Y's ACTUAL body. Four of
+//   the checks below were first written as `Y[\s\S]*?X` over the whole file and
+//   a mutation run proved all four toothless: `classroom_materials`,
+//   `draft.title` and `_matSource = 'file'` each appear again further down, so
+//   the lazy span simply walked into the next function and matched there.
+function fnBody(src, name) {
+  const head = new RegExp('\\n  (?:async )?function ' + name + '\\b[^\\n]*\\n').exec(src);
+  if (!head) return '';
+  const start = head.index + head[0].length;
+  const end = src.indexOf('\n  }\n', start);
+  return end === -1 ? src.slice(start) : src.slice(start, end);
+}
+const saveLinkBody = fnBody(cdSrc, '_saveMaterialLink');
+const setSrcBody   = fnBody(cdSrc, 'setMatSource');
+const openBody     = fnBody(cdSrc, 'open');
+ck('the test can find the three bodies it scopes to',
+  !!saveLinkBody && !!setSrcBody && !!openBody,
+  `saveLink=${saveLinkBody.length} setSrc=${setSrcBody.length} open=${openBody.length}`);
+
+ck('the classroom form has a file/link toggle',
+  /TeacherClassroomDetail\.setMatSource\('link'\)/.test(cdSrc));
+ck('…exposed on the module', /setMatSource,/.test(cdSrc));
+ck('…and a url input to paste into', /id="tc-cd-mat-url"/.test(cdSrc));
+ck('…that is type=url', /id="tc-cd-mat-url"[^>]*type="url"/.test(cdSrc));
+ck('a link saved here carries source_type', /source_type: 'link'/.test(cdSrc));
+ck('…normalised first', /normaliseMaterialUrl\(el\('tc-cd-mat-url'\)/.test(cdSrc));
+// ⚠ A material row that is never joined to classroom_materials is invisible to
+//   every pupil in the class - the teacher sees it saved and nobody receives it.
+ck('…and is still attached to the classroom, or no pupil sees it',
+  /_shareWithClass/.test(saveLinkBody) && /_loadMaterials/.test(cdSrc));
+// ⚠⚠ THE BUG THIS REPLACED. The junction insert used to be inline with its
+//    result thrown away, then "Link added!" unconditionally — a success
+//    message over a material no pupil could ever see, because _loadMaterials()
+//    reads THROUGH classroom_materials.
+ck('…and the attach is CHECKED, not fired and forgotten',
+  /const shared(Link)? = await _shareWithClass/.test(saveLinkBody));
+ck('…with the failure told plainly instead of reported as success',
+  /NOT shared with this class yet/.test(saveLinkBody));
+// ⚠ Zero rows is a refusal: an INSERT whose RLS policy matches nothing returns
+//   no error and no rows, and reading that as success is how this stayed silent.
+ck('…and zero rows counts as a failure, not a success',
+  /\.select\('material_id'\)/.test(cdSrc) && /not_permitted/.test(cdSrc));
+// The recovery path: nothing a teacher uploaded may be invisible.
+ck('files not shared with this class are surfaced, not lost',
+  /_unsharedHTML/.test(cdSrc) && /Your files not shared with this class/.test(cdSrc));
+ck('…each with one tap to attach it', /shareToClass/.test(cdSrc));
+ck('…with the missing-migration case explained rather than raw',
+  /material-links migration/.test(cdSrc));
+
+// The three that were passing a null file path.
+for (const fn of ['openFile', 'copyFileLink', 'deleteFile']) {
+  ck(fn + '() is called with a material id, never a file path',
+    new RegExp('TeacherClassroomDetail\\.' + fn + "\\('\\$\\{esc\\(f\\.id\\)\\}'").test(cdSrc)
+    && !new RegExp('TeacherClassroomDetail\\.' + fn + "\\('\\$\\{esc\\(f\\.file_path\\)").test(cdSrc));
+}
+// ⚠ ANYWHERE in the argument list, not just first. The first version of this
+//   check anchored on the opening quote and a mutation that moved file_path to
+//   the second argument sailed straight through it.
+ck('no caller in the file still passes f.file_path into an onclick',
+  !/onclick="TeacherClassroomDetail\.[a-zA-Z]+\([^"]*f\.file_path/.test(cdSrc));
+ck('deleting a link does not ask Storage to remove a null path',
+  /if \(!link && f\?\.file_path\) await _sb\.storage/.test(cdSrc));
+ck('a link is opened directly, never signed',
+  /isLinkMaterial\(f\)\) return normaliseMaterialUrl\(f\.external_url\)/.test(cdSrc));
+
+ck('the row icon comes from the shared helper, not from file_name',
+  /materialIcon\(f\)/.test(cdSrc) && !/\(f\.file_name\|\|''\)\.endsWith\('\.pdf'\)/.test(cdSrc));
+ck('a link row does not claim an expiry',
+  /link \? '' : 'Link valid '/.test(cdSrc));
+ck('a link row shows where it points', /materialHost\(f\)/.test(cdSrc));
+ck('…and what kind of thing it is', /materialTypeLabel\(f\)/.test(cdSrc));
+ck('the file-size column is only read for a file',
+  /link \? materialTypeLabel\(f\) : _fmtSize\(f\.file_size\)/.test(cdSrc));
+// ⚠ Module-level UI state must be reset in the render or the reset, never left
+//   to the toggle - the rule that _examReviewWrongOnly and friends exist for.
+//   Here it cannot go in the render, because setMatSource repaints through it.
+ck('the form mode is cleared when another classroom opens',
+  /_matSource = 'file';/.test(openBody));
+ck('switching mode keeps what the teacher already typed',
+  /draft/.test(setSrcBody) && /tc-cd-mat-title'\)\.value = draft\.title/.test(setSrcBody)
+  && /tc-cd-mat-url'\)\.value = draft\.url/.test(setSrcBody));
+
 section('migration');
 ck('adds source_type with a file default', /source_type\s+text NOT NULL DEFAULT 'file'/.test(migSrc));
 ck('adds external_url', /ADD COLUMN IF NOT EXISTS external_url/.test(migSrc));

@@ -60,7 +60,8 @@ const DIRS = ['engine', 'subjects', 'assets', 'fonts', 'icons'];
 // up dev-server.js and four dbg*.js scratch files.
 const FILES = [
   'index.html', 'guest.html', 'vote.html', 'score.html', 'image-credits.html',
-  'style.css', 'sw.js', 'manifest.json', 'guest.js',
+  'materials.html',
+  'style.css', 'sw.js', 'manifest.json', 'guest.js', 'materials.js',
 ];
 
 // Anything matching these must never appear in the output, whatever the lists

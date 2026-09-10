@@ -494,7 +494,10 @@ const Search = (() => {
   }
 
   async function practiceChapter(packId, chapterId) {
-    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(packId).catch(() => {});
+    if (typeof PackLoader !== 'undefined') {
+      await _withRouteBusy('Opening that chapter…', 'Getting your questions ready',
+        () => PackLoader.ensure(packId).catch(() => {}));
+    }
     const pack = activateSubjectPack(packId);
     if (!pack) { toast('Chapter not available.', 2000); return; }
     const go = () => startChapterDirect(chapterId, null);

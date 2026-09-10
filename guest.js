@@ -178,6 +178,11 @@ async function openAssignment() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spin"></span> Opening…';
 
+  // ⚠ Read ONCE, for every mode. It used to be minted only inside the
+  //   shared-PIN branch below; the one-attempt-per-device cap needs it on the
+  //   open-link path too, which is the path that had no identity at all.
+  const device = _deviceCode();
+
   // ⚠ Claim the name for THIS device before opening. Two things depend on it:
   // the teacher gets a list of who is actually in a shared-PIN class, and this
   // child's own abandoned attempt is cleared so a reload does not answer
@@ -187,7 +192,6 @@ async function openAssignment() {
   // than blocking a child out of their homework over a nicety. The one refusal
   // that IS surfaced is a name genuinely held by another device.
   if (S.access === 'shared_pin') {
-    const device = _deviceCode();
     if (device) {
       try {
         const claim = await api('/api/guest-device', { code: S.code, device, name });
@@ -203,7 +207,7 @@ async function openAssignment() {
 
   let r;
   try {
-    r = await api('/api/assignment-open', { code: S.code, name, pin });
+    r = await api('/api/assignment-open', { code: S.code, name, pin, device });
   } catch (e) {
     btn.disabled = false; btn.textContent = 'Start homework →';
     err('No connection. Check your internet and try again.');
@@ -221,6 +225,15 @@ async function openAssignment() {
       err('Someone called "' + name + '" already did this. If that is not you, '
         + 'add your surname initial - e.g. "' + name + ' B".');
       $('g-name').focus();
+      return;
+    }
+    // ⚠ The teacher switched on one attempt per device. Name the name that
+    //   already finished here: on a shared family laptop the honest answer is
+    //   usually 'your brother did it', and a bare refusal reads as a bug.
+    if (r.error === 'device_used') {
+      err(r.other_name
+        ? '"' + r.other_name + '" has already finished this homework on this device. Your teacher allowed one go per device - ask them if you need another.'
+        : 'This device has already finished this homework. Ask your teacher if you need another go.');
       return;
     }
     if (r.error === 'locked') {
@@ -512,9 +525,15 @@ function renderQuestion() {
 
   const box = $('q-answers');
   if (q.type === 'mcq' && q.options) {
+    // ⚠ The option INDEX is the attribute, never the option text. esc() escapes
+    //   & < > only, and 944 authored options contain a double quote ('No - it
+    //   should be "four"'), which closed data-v early: dataset.v held a
+    //   truncated answer and the server graded a correct pick as wrong.
+    // ⚠ The label is authored HTML, like q.question above - 55 questions carry
+    //   <sup>/<sub> in their options and 3<sup>6</sup> is not 36.
     box.innerHTML = q.options.map((o, i) =>
-      '<button class="opt" data-v="' + esc(o) + '">'
-      + '<span class="ltr">' + String.fromCharCode(65 + i) + '</span><span>' + esc(o) + '</span></button>'
+      '<button class="opt" data-i="' + i + '">'
+      + '<span class="ltr">' + String.fromCharCode(65 + i) + '</span><span>' + o + '</span></button>'
     ).join('');
     box.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
       if (S.answered) return;
@@ -530,11 +549,18 @@ function renderQuestion() {
   }
 }
 
+// The option a button stands for, read back from the question - see the
+// data-i note in renderQuestion().
+function optText(q, btn) {
+  const o = (q.options || [])[Number(btn.dataset.i)];
+  return o == null ? '' : String(o);
+}
+
 function currentAnswer() {
   const q = S.questions[S.idx];
   if (q.type === 'mcq') {
     const sel = $('q-answers').querySelector('.opt.sel');
-    return sel ? sel.dataset.v : '';
+    return sel ? optText(q, sel) : '';
   }
   const inp = $('q-num');
   return inp ? inp.value.trim() : '';
@@ -556,7 +582,7 @@ $('q-btn') && $('q-btn').addEventListener('click', () => {
     if (q.type === 'mcq') {
       $('q-answers').querySelectorAll('.opt').forEach(b => {
         b.disabled = true;
-        const v = b.dataset.v;
+        const v = optText(q, b);
         if (normalise(v) === normalise(q.answer)) b.classList.add('ok');
         else if (v === ua) b.classList.add('no');
         b.classList.remove('sel');
@@ -566,9 +592,13 @@ $('q-btn') && $('q-btn').addEventListener('click', () => {
     }
 
     $('q-fb').className = 'fb on ' + (ok ? 'ok' : 'no');
+    // ⚠ The answer and the working are authored content from our own repo, the
+    //   same provenance as q.question - escaping them printed the markup at the
+    //   child ("= <b>256 books</b>"). 25,780 of 35,460 questions carry markup in
+    //   their explanation and 51 carry it in the answer (H<sub>2</sub>O).
     $('q-fb').innerHTML = ok
-      ? '<b>Correct! 🎉</b>' + esc(q.explanation || '')
-      : '<b>Answer: ' + esc(q.answer) + '</b>' + esc(q.explanation || '');
+      ? '<b>Correct! 🎉</b>' + (q.explanation || '')
+      : '<b>Answer: ' + q.answer + '</b>' + (q.explanation || '');
 
     $('q-btn').textContent = (S.idx === S.questions.length - 1) ? 'Finish →' : 'Next question →';
     return;
@@ -636,8 +666,9 @@ function buildReview(detail) {
     const q = byId[d.id] || {};
     return '<div class="rv"><span class="ic">' + (d.correct ? '✅' : '❌') + '</span>'
       + '<span><b>Q' + (i + 1) + '.</b> ' + esc(String(q.question || '').replace(/<[^>]*>/g, ' ')).slice(0, 120)
+      // The pupil's own text stays escaped; the correct answer is authored.
       + (d.correct ? '' : '<br><span class="muted">You: ' + esc(d.userAnswer || '-')
-          + ' · Correct: ' + esc(d.correctAnswer) + '</span>')
+          + ' · Correct: ' + d.correctAnswer + '</span>')
       + '</span></div>';
   }).join('');
   $('d-review').onclick = () => {

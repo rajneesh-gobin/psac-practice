@@ -1,6 +1,6 @@
 'use strict';
 // ══════════════════════════════════════════════════════════════════════════
-//  POST /api/assignment-open   { code, name, pin }
+//  POST /api/assignment-open   { code, name, pin, device }
 //
 //  Guest entry point. No account, no Supabase session - the child has only a
 //  share code from WhatsApp, their first name, and a 4-digit PIN.
@@ -31,6 +31,7 @@ const MESSAGES = {
   full:         'This assignment is full. Please tell your teacher.',
   name_taken:   'Someone with that name has already done this assignment.',
   name_required:'Please enter your first name.',
+  device_used:  'This device has already finished this homework. Ask your teacher if you need another go.',
 };
 
 async function rpc(fn, body) {
@@ -41,6 +42,12 @@ async function rpc(fn, body) {
   });
   if (!res.ok) throw new Error(`${fn} ${res.status}: ${await res.text()}`);
   return res.json();
+}
+
+// The RPC helper throws with the PostgREST body in the message, so the same
+// shapes engine/teacher.js matches on are all readable here.
+function _signatureMissing(err) {
+  return /PGRST202|42883|Could not find the function|schema cache/i.test(String((err && err.message) || ''));
 }
 
 exports.handler = async (event) => {
@@ -58,6 +65,13 @@ exports.handler = async (event) => {
   const code = String(body.code || '').trim().toUpperCase().slice(0, 12);
   const name = String(body.name || '').trim().slice(0, 40);
   const pin  = String(body.pin  || '').trim();
+  // ⚠ The DEVICE code guest.js minted and kept in its own localStorage. Shape-
+  //   checked here, in guest.js and by a CHECK constraint; anything else is
+  //   sent as '' rather than rejected, because a browser that cannot store one
+  //   (private mode, storage refused) must still be able to do its homework.
+  //   The cap fails OPEN by design - it is an integrity nicety, not a paywall.
+  const devRaw = String(body.device || '').trim().toLowerCase();
+  const device = /^[0-9a-f]{32}$/.test(devRaw) ? devRaw : '';
 
   if (!code) {
     return { statusCode: 400, headers: HEADERS,
@@ -70,7 +84,21 @@ exports.handler = async (event) => {
 
   let result;
   try {
-    result = await rpc('teacher_guest_entry', { p_code: code, p_name: name, p_pin: pin, p_ip: ip, p_info: body.info === true });
+    const args = { p_code: code, p_name: name, p_pin: pin, p_ip: ip, p_info: body.info === true };
+    // ⚠ A database that has not had migrations/20260910_guest_device_cap.sql
+    //   applied answers PGRST202/42883 to the six-argument call. Retry WITHOUT
+    //   the device rather than letting a config lag stop a child opening their
+    //   homework: the cap is simply not enforced until the migration lands,
+    //   which is the same outcome as a teacher leaving it switched off.
+    //   ⚠ Only a genuine signature error may widen this — falling back on ANY
+    //   error is how a filter gets silently dropped and stays dropped.
+    try {
+      result = await rpc('teacher_guest_entry', { ...args, p_device: device });
+    } catch (e) {
+      if (!_signatureMissing(e)) throw e;
+      console.warn('[assignment-open] device-cap migration not applied; opening without it');
+      result = await rpc('teacher_guest_entry', args);
+    }
     if (body.info === true) {
       return { statusCode: 200, headers: HEADERS, body: JSON.stringify(result) };
     }

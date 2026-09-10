@@ -831,6 +831,22 @@ function taskHtml(task, number) {
   return `<div class="task${task.lead ? ' splittable' : ''}"><div class="tnum">${number}.</div><div class="tbody">${lead}${intro}${stim}${parts}</div></div>`;
 }
 
+// ⚠ RESOLVED AT RENDER TIME, NOT LOAD TIME. PAPER_CSS below is a module-level
+//   const, and interpolating the watermark into it threw
+//   "ReferenceError: _paperWatermarkCSS is not defined" the moment this file
+//   was require()d from Node - taking scripts/nce-generate-paper.js and every
+//   NCE test out with it. In the browser helpers.js is loaded third and this
+//   file sixth, so the global is there; from the command line there is no
+//   helpers.js at all until it is asked for.
+// ⚠ IT THROWS RATHER THAN SKIPPING. A command-line paper missing the
+//   watermark the app prints is a DIFFERENT document, and this file's own
+//   generator exists precisely to check that those two are the same.
+function paperWatermark(text, opts) {
+  if (typeof _paperWatermarkCSS === 'function') return _paperWatermarkCSS(text, opts);
+  if (typeof require === 'function') return require('./helpers.js')._paperWatermarkCSS(text, opts);
+  throw new Error('nce_paper: _paperWatermarkCSS is unavailable - engine/helpers.js must load before this file');
+}
+
 const PAPER_CSS = `
 .short-note{font-size:9pt;font-style:italic}
 
@@ -954,7 +970,7 @@ function paperHtml(paper, opts) {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NCE-style Practice Paper - Grade ${bp.grade} ${esc(bp.subjectName)} ${year}</title>
-<style>${PAPER_CSS}</style></head><body><div class="sheet">
+<style>${PAPER_CSS}${paperWatermark('PRACTICE PAPER')}</style></head><body><div class="sheet">
 <button class="no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
 
 <div class="cover">
@@ -1078,6 +1094,7 @@ function markSchemeHtml(paper, opts) {
   .warn { background:#fef2f2; border-left:3px solid #dc2626; padding:6px 8px; margin-top:6px; color:#7f1d1d; }
   .stimulus svg, .stimulus img { max-width:60%; height:auto; }
   @media print { .no-print { display:none; } }
+  ${paperWatermark('MARK SCHEME', { color: '#7f1d1d', opacity: 0.055 })}
 </style></head><body><div class="sheet">
 <button class="no-print" onclick="window.print()">🖨️ Print / Save mark scheme as PDF</button>
 <div class="head">

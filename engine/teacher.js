@@ -457,6 +457,12 @@ const TeacherMode = (() => {
     }
     const pupilsWrap = _el('ta-pupils-wrap');
     if (pupilsWrap) pupilsWrap.hidden = mode !== 'classroom_pin' || !cid;
+    // ⚠ Only the open link can be re-entered under a made-up name, so that is
+    //   the only place the cap is offered. Hiding it is not enough — a hidden
+    //   checkbox still answers .checked — so _buildAssignment() gates on the
+    //   mode as well.
+    const oneDev = _el('ta-one-device-wrap');
+    if (oneDev) oneDev.hidden = mode !== 'nickname';
     _updateBuildButton();
   }
 
@@ -1016,6 +1022,11 @@ const TeacherMode = (() => {
         const extra = {};
         if (dueAt) extra.p_due_at = dueAt.toISOString();
         if (pupilIds) extra.p_pupil_ids = pupilIds;
+        // ⚠ Read ONLY for the open link. The wizard owns no state, so a tick
+        //   left behind from an earlier visit would otherwise publish a cap on
+        //   a pupil-PIN assignment where the control was never on screen — and
+        //   a shared classroom tablet would lock after the first pupil.
+        if (access === 'nickname' && _el('ta-one-device')?.checked) extra.p_one_per_device = true;
         r = await _sb.rpc('teacher_guest_create_assignment', Object.assign({}, args, extra));
         // ⚠ A database that has not had migrations/20260906_teacher_assignment_
         // due_date_and_pupils.sql applied answers PGRST202 to the nine-argument

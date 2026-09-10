@@ -1681,7 +1681,10 @@ const Calendar = (() => {
     }
 
     // Activate the pack globally so the chapter-select and quiz screens use it
-    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(pack.id).catch(() => {});
+    if (typeof PackLoader !== 'undefined') {
+      await _withRouteBusy('Opening ' + (pack.subject || pack.name || 'subject') + '…',
+        'Getting your questions ready', () => PackLoader.ensure(pack.id).catch(() => {}));
+    }
     activateSubjectPack(pack.id);
     const chs = pack._chapters || pack.chapters || [];
     if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadSubject(pack.id).catch(() => {});

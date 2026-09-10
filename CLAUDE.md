@@ -457,6 +457,17 @@ owner-scoped 7-day question cache. Headlines:
   next large content addition pushes a grade out of its own offline cache.
 - ⚠ **`_done` is rolled back when a load failed** — only "you get nothing" sticks.
 
+## Guest homework — who a child IS → [`features.md`](docs/claude/features.md)
+⚠ **Identity in a guest assignment is the NAME** (`guest_submissions.name_key`).
+The same name is refused; a **made-up one was not**, so one laptop could sit the
+same paper repeatedly. `one_per_device` (default off, teacher-set, open-link
+only) is a **speed bump, not a wall** — the real cap is a per-pupil-PIN
+classroom, where `name_key` is a pupil row id nobody can invent. ⚠ **Never cap
+by IP**: a school behind one NAT is one address.
+⚠ **`/m/<CODE>` is the class page** — homework and materials behind the pupil's
+ordinary PIN. **The PIN is the gate, not the code**, and the code is permanent
+while the signed URLs behind it are minted per visit.
+
 ## Auth & sessions → [`auth-sessions.md`](docs/claude/auth-sessions.md)
 Two credentials, two worlds. **Adults** carry a Supabase JWT (`auth.uid()`);
 **children** have no JWT — a PIN buys an opaque token, stored SHA-256-hashed in
@@ -636,9 +647,11 @@ is child-facing versus parent-facing, deliberately. Headlines:
 ---
 
 ## Pending / not yet done → [`pending.md`](docs/claude/pending.md)
-16 numbered items. **There are no outstanding SQL migrations** — everything there
-that touches the database is a *decision*, not a pending run, and each should be
-re-checked against `pg_policies` / `pg_proc` / production before it is trusted.
+16 numbered items. **There are no outstanding SQL migrations** — the two written
+on 2026-09-10 were applied to production the same day and the schema
+regenerated. Everything there that touches the database is a *decision*, not a
+pending run, and each should be re-checked against `pg_policies` / `pg_proc` /
+production before it is trusted.
 The two that are not housekeeping:
 - **0. ⚠⚠ A co-parent can take over a family.** `families_own`'s WITH CHECK lets a
   member write themselves in as `parent_id`. The one-line fix is written out,

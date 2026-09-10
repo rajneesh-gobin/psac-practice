@@ -321,6 +321,154 @@ Mathematics, with no timer, due Thursday 17 September."*).
     PostgREST call is ambiguous. The deployed client's six-argument call still
     works, because `p_grade` defaults to NULL.
 
+### The guest homework runner (`guest.html` + `guest.js`)
+The page a child opens from a WhatsApp link. It loads **no engine file** by
+design, so it carries its own `esc()`, its own answer matching and its own
+material sort — and its own copy of the one rule that matters here:
+> **Authored content is HTML; only what the PUPIL typed is escaped.**
+The question, the options, the answer and the worked explanation all come from
+our own repo and are written with `innerHTML`. `d.userAnswer` is the one value
+a person supplied, and it stays in `esc()`.
+- ⚠ It was the other way round for the answer and the explanation, and that
+  printed the tags at the child: *"4⁴ = 4×4×4×4 = 16×16 = `<b>`256 books`</b>`"*.
+  Measured in the built bundles: **25,780 of 35,460** questions carry markup in
+  their explanation, 55 in their options and 51 in their answer
+  (`H<sub>2</sub>O`, `3<sup>6</sup>`) — so this was most of the corpus, and
+  stripping tags instead would have turned `3<sup>6</sup>` into **36**.
+- ⚠⚠ **Never put authored text in an ATTRIBUTE on this page.** `esc()` escapes
+  `& < >` and **not the double quote**, and **944 authored options contain one**
+  (`No — it should be "four"`). The option used to be carried in
+  `data-v="…"`, which therefore closed early: `dataset.v` held a truncated
+  string, that string was POSTed, and `grade()` in
+  `netlify/lib/questions-sandbox.js` marked a child who picked the right answer
+  **wrong** — stored, and shown to the teacher. The button now carries the
+  option **index** (`data-i`) and the text is read back from the question.
+- The same asymmetry holds in the app: the assignment review in `app.js` and
+  the teacher's *View answers* row in `teacher_workspace.js` escape the pupil's
+  answer and render the authored one.
+- `scripts/test-guest-answer-rendering.js` — 20 checks in **real headless
+  Chrome**, driving the real page with three real authored questions (one with
+  a quoted option, one with `<sup>` options, one with a bold explanation) and a
+  stubbed `/api/`. ⚠ Needs Chrome for Testing via `CHROME_PATH`; `GUEST_JS`
+  points it at a COPY of `guest.js` — never swap the repo's own file to test an
+  old version, a second session may be writing it.
+  ⚠ Harness trap: **`#g-go` ships enabled**, so "the button is enabled" is not
+  "the gate is ready" — `initGate()` attaches its click listener only after the
+  metadata arrives, and which side of that race a run landed on flipped with
+  the size of `guest.js`.
+
+### One go per device (2026-09-10, APPLIED)
+Identity in a guest assignment is the **NAME** — `teacher_guest_open()` keys
+`guest_submissions` on `name_key` — so the same name was always refused and a
+**made-up one never was**. Measured on a real laptop: finish, reload, type
+"Sam2", sit the paper again.
+`teacher_guest_access.one_per_device` (**default false**) stops a device that
+has already SUBMITTED reopening under a different name.
+- ⚠ **A speed bump, not a wall.** The device code is 32 hex characters in
+  `localStorage`, not a fingerprint: incognito, a cleared browser and a second
+  phone all defeat it. The control that genuinely caps attempts is a
+  **per-pupil-PIN classroom**, where `name_key` is a pupil row id nobody can
+  invent. Say that to a teacher who asks; do not sell this as more than it is.
+- ⚠ **NOT IP, deliberately.** A Mauritian school behind one NAT and mobile CGNAT
+  put a whole class on one address — an IP cap locks out twenty-nine innocent
+  children to stop one. It is the same reason `teacher_guest_throttle` already
+  raises its ceiling to 100 for `nickname`/`shared_pin`. IP stays a wrong-PIN
+  throttle key and nothing else.
+- ⚠ **It FAILS OPEN.** No device code (private browsing, storage refused) is
+  never capped, and an un-migrated database falls back to opening without it.
+  This is an integrity nicety, not an entitlement check — the opposite call from
+  `questions.js`.
+- ⚠ It never fires on the **same** name (`name_taken` already answers that), on
+  an **unsubmitted** attempt, or over a teacher-granted `retry_allowed`. It is
+  checked **after** the PIN, so it cannot be used to probe an assignment.
+- ⚠⚠ The checkbox is shown **only for the open link**, and hiding it is not
+  enough — the wizard owns no state and a hidden checkbox still answers
+  `.checked`, so `_buildAssignment()` gates on `access === 'nickname'` as well.
+  A tick left from an earlier visit would otherwise lock a shared classroom
+  tablet after its first pupil.
+- The refusal **names who already finished on this device**: on a family laptop
+  the honest answer is usually "your brother did it", and a bare refusal reads
+  as a bug.
+- `scripts/test-guest-device-cap.js` (47 checks) ·
+  `scripts/sql-tests/run-device-cap-tests.sh` (the rule on a real postgres:
+  fresh build, idempotency, then twelve behavioural assertions).
+
+### The class page — one permanent link (2026-09-10, APPLIED)
+`/m/<CODE>` → `materials.html` + `materials.js`, backed by
+`netlify/functions/materials-library.js`. Standalone exactly like `guest.html`:
+no Tailwind, no supabase-js, no engine file. Four views — **Homework**
+(default), **Files**, **Subject**, **Calendar** — plus a search box.
+- ⚠ **WHAT IT FIXES.** `shareMaterial()` hands out a signed storage URL for
+  **one** file, and `learning_materials.link_expiry_seconds` **defaults to 3600**
+  — so the message a teacher sent was one file that was dead by the evening, and
+  a second file meant a second message.
+- ⚠ **THE SPLIT IS THE FEATURE: the CODE is permanent, the signed URLs are
+  minted per visit.** Anything that caches either half breaks it, so `/m/`,
+  `materials.html` and `materials.js` are in the service worker's never-cache
+  list beside `/a/`, and the function answers `no-store`.
+- ⚠⚠ **THE PIN IS THE GATE, NOT THE CODE.** The first draft made the link open
+  to anyone holding it, reasoning that the existing single-file share already
+  did that. Wrong twice over: a classroom's whole shelf is not one file, and
+  this link also lists the class's homework codes. A pupil now signs in the
+  same way they already do for homework — **their own PIN** in a per-pupil
+  classroom, **the class PIN plus a name** in a shared one. `info: true`
+  returns only which form to draw and the class name; nothing behind the gate
+  is fetched until it passes.
+- ⚠ **Throttled per classroom**, in its own `teacher_guest_class_throttle`
+  (`teacher_guest_throttle` keys on `assignment_id` and cannot carry it). Only
+  **failures** count and a correct PIN **clears** the counter — a class of
+  thirty with the ordinary handful of typos between them would otherwise walk
+  the count up and lock the room out by the afternoon. Ceiling 30, because that
+  number is shared by everyone behind one school NAT.
+- ⚠ **Homework carries codes, never content.** No `question_ids`, no answers,
+  no other pupil — and **no score**: a mark belongs on the teacher's screen
+  until they have looked at it, and children comparing marks on a shared tablet
+  is what this must not enable. Each card links to `/a/<CODE>`, the same guest
+  runner; this page starts nothing and grades nothing.
+- ⚠ **The per-pupil ROSTER is honoured**: work set for six named pupils must not
+  appear on the other twenty-four's page. Expired and deleted work is excluded.
+- ⚠ **`get` NEVER MINTS.** Opening the Materials tab reads the code; a read that
+  created a public address as a side effect would expose every classroom a
+  teacher merely *looked at*. Minting is `create`, reached only by the button
+  that says so, and it is idempotent — a second Share tap must reach the SAME
+  address or it orphans the first message.
+- ⚠ **One `not_found` for every kind of nothing** (no such code, switched off,
+  archived, deleted, malformed), or the code becomes an oracle for "does this
+  classroom exist".
+- ⚠ **The name is remembered per class code; the PIN never is.** One is a label,
+  the other is the credential, and this runs on tablets children share.
+- ⚠ **NO "Mark as done" on this page**, deliberately: that needs the PIN token a
+  child only gets by opening an assignment.
+- ⚠ Two defects found by **measuring the rendered page at 360px**, not by
+  reading the CSS: `aspect-ratio:1` gave 41px calendar cells (31 sub-44px
+  targets), and dark mode's lightened `--brand` left white button text at about
+  **2.6:1**. Hence `--on-brand`, which flips with `--brand`.
+- `scripts/test-materials-library.js` (116 checks) ·
+  `scripts/test-materials-library-render.js` (walks the gate with a wrong PIN
+  then a right one, against six awkward materials including a `<script>` title
+  and a `javascript:` URL) · `scripts/sql-tests/run-device-cap-tests.sh`.
+
+### ⚠⚠ Uploaded materials that nobody could see (fixed 2026-09-10)
+Reported from the field as *"I'm sure I uploaded some materials but I no longer
+see them"*. **Nothing was deleted and nothing lives in localStorage** — every
+material is a `learning_materials` row plus a Supabase Storage object. Two
+separate causes, both of which left the file intact and unreachable:
+1. **The junction insert was fired and forgotten.** Both upload paths in
+   `teacher_classroom_detail.js` did
+   `await _sb.from('classroom_materials').insert({…});` with the result
+   discarded, then set the status to *"Uploaded!"* unconditionally. Every list
+   — the teacher's and the pupil's — reads **through** that junction, so any
+   failure produced a success message over a material no one could ever see.
+   ⚠ Zero rows is a refusal too: an INSERT whose RLS policy matches nothing
+   returns no error and no rows.
+2. **The standalone Materials screen (`engine/teacher.js`) creates no junction
+   at all**, by design — you upload there, then tick classrooms. A teacher who
+   never ticked had files that existed and belonged to no class.
+`_shareWithClass()` now checks the result and says plainly when it failed, and
+the classroom's Materials tab carries a collapsed **"Your files not shared with
+this class"** list with one-tap Share. ⚠ **A failed share does NOT roll back the
+upload** — the file is safely stored and one tap from being fixed; deleting a
+teacher's upload because a second write failed would be worse.
 ### Still true
 - **Location survives refresh**: `psac_teacher_loc_v1` (owner-scoped) holds tab,
   list filter, selected results and the open classroom + section.
@@ -381,6 +529,53 @@ maths) and Section B (10 × 4, 15 for maths) — plus a second window with the
 answer key, opened only by the adult-facing button. Gated on the
 `printable_papers` plan feature, and it honours `lockedChapters` and
 `maxDifficulty` exactly as `assembleExamPaper()` does.
+
+### The watermark (`_paperWatermarkCSS()`, engine/helpers.js)
+A pale diagonal tile behind everything on **all four printed documents**:
+the PSAC practice paper (PSAC EXAM PRACTICE) and its answer key (ANSWER KEY, in
+red, so a key left on a desk announces itself), and the NCE paper
+(PRACTICE PAPER) and its mark scheme (MARK SCHEME).
+- ⚠ **It lives in `helpers.js`, not `app.js`.** index.html loads helpers.js
+  **third** and `nce_paper.js` **sixth** — both long before app.js at 33. A
+  shared builder that only exists once app.js has run is one `nce_paper.js` can
+  reach by luck of call timing and nothing more.
+- ⚠⚠ **`nce_paper.js` is `require()`d from Node** (`scripts/nce-generate-paper.js`,
+  `test-nce-paper*.js`), where there is no helpers.js and no globals at all. Its
+  `PAPER_CSS` is a **module-level `const`**, so interpolating the watermark there
+  threw *ReferenceError: _paperWatermarkCSS is not defined* on `require()` and
+  took the generator and every NCE test down with it — at LOAD time, not render
+  time. It now goes through `paperWatermark()`, which resolves the global in the
+  browser and `require("./helpers.js")` under Node, and **throws rather than
+  skipping**: a command-line paper without the watermark the app prints is a
+  different document, and that generator exists to check the two are the same.
+  `helpers.js` carries a `typeof module` export guard for it.
+- ⚠ **NEVER the app name on the NCE paper.** NCE is Grades 7–9 and PSAC is 1–6,
+  so "PSAC" across it names the wrong exam — and the cover promises the sheet
+  "carries no examination-board branding".
+- ⚠ **A tiled background on `body::before`, never a `position: fixed` overlay.**
+  A fixed element is painted on the FIRST SHEET ONLY by several print engines, so
+  the sheets the child actually writes on would carry nothing. A repeating
+  background on a box spanning the whole document tiles down every page by
+  construction. Measured on 6- and 9-page papers.
+- ⚠ **`z-index: -1` is what puts it behind the text.** A negative-z-index
+  descendant paints above its parent’s background and below its in-flow content,
+  so no rule is needed on every child — and adding one is how a watermark ends
+  up on top of the questions.
+- ⚠ **`print-color-adjust: exact`, or Chrome prints nothing.** "Background
+  graphics" is OFF by default in the print dialog. Scoped to that one element
+  on purpose: on `.paper` it inherits, and the navy section headers start
+  printing solid too, which is a different decision about the pupil’s ink.
+- ⚠ **`encodeURIComponent` the SVG.** It carries `#`, `<` and `"`, and any one
+  of them ends the `url()` early and leaves no background and no error.
+- ⚠ **The footer disclaimers STAY.** They exist so a printed sheet cannot pass
+  for an MIE / Ministry document; the watermark repeats that on every sheet where
+  it cannot be cut off, and does not replace them.
+- ⚠ **Paleness is the design.** Measured in printed pixels at print media across
+  all four documents: the tint sits at ~91% luminance and the body ink still
+  clears **17.2–17.3:1** over it. One constant (`opacity`, default 0.05) moves it.
+  `scripts/test-print-watermark.js` samples REAL pixels across the sheet width at
+  three depths, and classifies them as *pale but tinted* — ink and rules are not
+  white either, so a naive "not white" check passes on a sheet with no watermark.
 
 ### Most choice questions are printed WITHOUT their options
 - ⚠ **A printed A/B/C/D block is a worse exercise than the exam it imitates.**

@@ -24,6 +24,26 @@ const TeacherClassroomDetail = (() => {
   // A preference, not per-classroom state, so it is read from storage rather
   // than cleared by _reset() when another classroom opens.
   let _matSort = readMaterialSort();
+  // File or link, for the add-material form on this screen. ⚠ Transient FORM
+  // state, not a preference like _matSort - so it is cleared in _reset(), where
+  // every other per-classroom field is cleared, and not left to the toggle
+  // alone. Otherwise opening a second classroom inherits the first one's mode.
+  // (It cannot be reset inside _renderMaterials: setMatSource repaints through
+  // it, and a reset there would undo the tap that caused it.)
+  let _matSource = 'file';
+  // The classroom's permanent /m/<CODE> library link. null = not loaded yet,
+  // '' = the teacher has not switched one on. Per-classroom, so _reset() clears
+  // it, or a second classroom shows the first one's address.
+  let _libCode = null;
+  // ⚠ THE RECOVERY LIST. Files this teacher owns that are NOT shared with the
+  //   open classroom. Until this existed they were invisible: the Materials
+  //   list reads THROUGH classroom_materials, so an upload whose junction row
+  //   never landed — and every file uploaded from the standalone Materials
+  //   screen, which creates no junction at all — simply was not there, with
+  //   nothing on screen to say so.
+  let _unshared = [];
+  // 'shared' | 'per_student', as the hub RPC reports it.
+  let _libAccess = null;
   let _activeSection = 'overview';
   let _resultsAssignId = null;
   let _accessType = 'per_student';
@@ -74,6 +94,10 @@ const TeacherClassroomDetail = (() => {
     _classGrade = null;
     _physicalHomework = [];
     _materials = [];
+    _matSource = 'file';
+    _libCode = null;
+    _unshared = [];
+    _libAccess = null;
     _matDone = { expected: 0, materials: {} };
     _pupils = [];
     _nameChanges = [];
@@ -372,7 +396,7 @@ const TeacherClassroomDetail = (() => {
       ${!hasAnything && !_workError ? '<div class="tc-work-empty"><span>📚</span><strong>No classwork yet</strong><p>Set your first homework and pupil progress will appear here automatically.</p><button type="button" onclick="TeacherClassroomDetail.showHomeworkChoice()">Set the first piece of work →</button></div>' : ''}
       <div id="tc-cd-work-cards"></div>
       ${sheets.length ? '<h4 class="tc-work-subhead">📄 Worksheets</h4><div id="tc-cd-phw-list"></div>' : ''}
-      ${_workFilter === 'active' ? `<h4 class="tc-work-subhead">📁 Files shared with this class <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">${_materials.length ? 'Manage' : 'Upload one'}</button></h4>${_materials.length ? `<div class="tc-work-files">${sortMaterials(_materials, 'recent').slice(0, 6).map(f => `<button type="button" class="tc-work-file" onclick="TeacherClassroomDetail.openFile('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})"><span>${(f.file_name||'').endsWith('.pdf') ? '📄' : '🖼️'}</span><strong>${esc(f.title)}</strong><small>${f.subject ? esc(f.subject) + ' · ' : ''}${_fmtDate(f.shared_at || f.created_at)}</small></button>`).join('')}</div>` : `<p class="tc-cd-empty">No files yet - share a worksheet, a past paper or a photo of the board and every pupil in ${esc(_className)} can open it from their own device.</p>`}` : ''}
+      ${_workFilter === 'active' ? `<h4 class="tc-work-subhead">📁 Files shared with this class <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">${_materials.length ? 'Manage' : 'Upload one'}</button></h4>${_materials.length ? `<div class="tc-work-files">${sortMaterials(_materials, 'recent').slice(0, 6).map(f => `<button type="button" class="tc-work-file" onclick="TeacherClassroomDetail.openFile('${esc(f.id)}')"><span>${materialIcon(f)}</span><strong>${esc(f.title)}</strong><small>${f.subject ? esc(f.subject) + ' · ' : ''}${_fmtDate(f.shared_at || f.created_at)}</small></button>`).join('')}</div>` : `<p class="tc-cd-empty">No files yet - share a worksheet, a past paper, a YouTube lesson or a photo of the board, and every pupil in ${esc(_className)} can open it from their own device.</p>`}` : ''}
     `;
     const cards = el('tc-cd-work-cards');
     if (hasAnything && cards) {
@@ -1154,7 +1178,8 @@ const TeacherClassroomDetail = (() => {
       }
       files = sortMaterials(files, _matSort);
       _materials = files;
-      await _loadMaterialDone(_classId);
+      await Promise.all([_loadMaterialDone(_classId), _loadLibraryCode(_classId),
+                          _loadUnshared(files)]);
       el('tc-cd-stat-materials').textContent = files.length;
       _renderMaterials(files);
       if (_activeSection === 'work') _renderWork();
@@ -1188,6 +1213,204 @@ const TeacherClassroomDetail = (() => {
     } catch (_) { /* chips stay absent */ }
   }
 
+  // ── The class library link ────────────────────────────────────────
+  // ⚠ WHY THIS EXISTS. shareMaterial() hands out a SIGNED STORAGE URL for one
+  //   file, and learning_materials.link_expiry_seconds defaults to an hour — so
+  //   a teacher sent one file that was dead by the evening, and a second file
+  //   meant a second message. /m/<CODE> is one address that never changes and
+  //   always shows the whole shelf; the signed URLs behind it are minted per
+  //   visit by netlify/functions/materials-library.js.
+  //
+  // ⚠ THE LINK IS THE CREDENTIAL. It shows materials and the class NAME, never
+  //   pupils, results, PINs or assignment codes. Do not put anything behind it
+  //   that the PIN gate is protecting.
+  async function _loadLibraryCode(classroomId) {
+    _libCode = null;
+    if (!classroomId || typeof _sb === 'undefined' || !_sb) return;
+    try {
+      // ⚠ 'get' never mints. Opening this tab must not create a public address.
+      const { data, error } = await _sb.rpc('teacher_classroom_materials_link',
+        { p_classroom: classroomId, p_action: 'get' });
+      // A database without the migration answers PGRST202. That is "not
+      // available here yet", not an error worth a red box on a working screen:
+      // _libCode stays null and the panel offers nothing.
+      if (!error && data && data.ok) {
+        _libCode = data.code || '';
+        // ⚠ Read from the RPC, not from _accessType: the panel must say which
+        //   PIN a pupil brings, and getting that wrong sends thirty children to
+        //   a form they cannot fill in.
+        if (data.access_type) _libAccess = data.access_type;
+      }
+    } catch (_) { /* the materials list still renders */ }
+  }
+
+  // ⚠ The link is NOT the credential — the PIN is. A pupil who has the link
+  //   still has to sign in exactly as they do for homework, so this line has to
+  //   name the RIGHT PIN or a class arrives unable to get in.
+  function _libPinLine() {
+    const shared = (_libAccess || _accessType) === 'shared';
+    return shared
+      ? 'Pupils open it, type the class PIN and their name, then see their homework and every file below. Nobody sees anyone else\'s marks.'
+      : 'Pupils open it and type their own four-digit PIN, then see the homework set for them and every file below. Nobody sees anyone else\'s marks.';
+  }
+
+  function _libUrl(code) { return location.origin + '/m/' + code; }
+
+  function _libraryPanelHTML() {
+    if (_libCode === null) return '';
+    if (!_libCode) {
+      return `
+      <div class="tc-cd-lib tc-cd-lib-off">
+        <div class="tc-cd-lib-head"><span aria-hidden="true">🔖</span>
+          <div><strong>One permanent link for this class</strong>
+          <small>Share it once. Your pupils sign in with the PIN they already use, and see their homework and every file you have shared — including anything you add later, at the same address.</small></div>
+        </div>
+        <button type="button" class="tc-cd-action-btn" onclick="TeacherClassroomDetail.createLibraryLink()">🔖 Create the link</button>
+      </div>`;
+    }
+    const url = _libUrl(_libCode);
+    return `
+      <div class="tc-cd-lib">
+        <div class="tc-cd-lib-head"><span aria-hidden="true">🔖</span>
+          <div><strong>Class page link</strong>
+          <small>${_libPinLine()}</small></div>
+        </div>
+        <div class="tc-cd-lib-row">
+          <input class="tc-cd-lib-url" readonly value="${esc(url)}" onclick="this.select()" aria-label="Class library link">
+          <button type="button" class="tc-cd-pill tc-cd-pill-share" onclick="TeacherClassroomDetail.shareLibraryLink()">💬 Share</button>
+        </div>
+        <div class="tc-cd-lib-acts">
+          <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.copyLibraryLink()">🔗 Copy</button>
+          <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.rotateLibraryLink()">♻️ New link</button>
+          <button type="button" class="tc-cd-pill tc-cd-pill-red" onclick="TeacherClassroomDetail.disableLibraryLink()">Turn off</button>
+        </div>
+        <p class="tc-cd-lib-warn">⚠ “New link” and “Turn off” stop every copy you have already sent from working.</p>
+      </div>`;
+  }
+
+  async function _libAction(action) {
+    if (!_classId || typeof _sb === 'undefined' || !_sb) return null;
+    try {
+      const { data, error } = await _sb.rpc('teacher_classroom_materials_link',
+        { p_classroom: _classId, p_action: action });
+      if (error) throw error;
+      if (!data || !data.ok) throw new Error('failed');
+      _libCode = data.code || '';
+      _renderMaterials(_materials);
+      return data;
+    } catch (e) {
+      const missing = /PGRST202|42883|Could not find the function|schema cache/i
+        .test([e && e.code, e && e.message].filter(Boolean).join(' '));
+      if (typeof toast === 'function') {
+        toast(missing
+          ? 'Class library links are not available on this database yet. Ask an administrator to apply the latest migration.'
+          : 'Could not change the library link. Please try again.', 4500);
+      }
+      return null;
+    }
+  }
+
+  async function createLibraryLink() {
+    const r = await _libAction('create');
+    if (r) shareLibraryLink();
+  }
+
+  // ⚠ Confirmed, both of them. A teacher tapping these has already sent the old
+  //   address to thirty parents on WhatsApp, and a WhatsApp message cannot be
+  //   corrected once forwarded.
+  async function rotateLibraryLink() {
+    if (!confirm('Create a new link for this class?\n\nThe link you have already shared will stop working, and you will need to send the new one.')) return;
+    const r = await _libAction('rotate');
+    if (r && typeof toast === 'function') toast('New link created. Send it to your class.', 3500);
+  }
+
+  async function disableLibraryLink() {
+    if (!confirm('Turn off the class library link?\n\nAnyone who already has it will see "Library not found". You can create a new one at any time.')) return;
+    const r = await _libAction('off');
+    if (r && typeof toast === 'function') toast('Library link turned off.', 3000);
+  }
+
+  function copyLibraryLink() {
+    if (!_libCode) return;
+    const url = _libUrl(_libCode);
+    navigator.clipboard?.writeText(url)
+      .then(() => { if (typeof toast === 'function') toast('Link copied ✓', 2000); })
+      .catch(() => { if (typeof toast === 'function') toast(url, 6000); });
+  }
+
+  function shareLibraryLink() {
+    if (!_libCode) return;
+    const url = _libUrl(_libCode);
+    const shared = (_libAccess || _accessType) === 'shared';
+    const text = `📚 ${_className} — homework and class files\n\nEverything is here, and it stays at this same link:\n${url}\n\n${
+      shared ? 'Sign in with the class PIN and your name.' : 'Sign in with your own four-digit PIN.'}`;
+    if (typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.shareText) {
+      TeacherWorkspace.shareText(_className + ' — class page', text, url);
+      return;
+    }
+    _showSharePanel(_className + ' — class page', url, `https://wa.me/?text=${encodeURIComponent(text)}`);
+  }
+
+  // ⚠ RLS scopes learning_materials to this teacher's own rows, so this asks
+  //   for everything it is allowed to see and subtracts what is already shared
+  //   here. Never blocks the list: if it fails the classroom's own materials
+  //   still render, exactly as before.
+  async function _loadUnshared(shared) {
+    _unshared = [];
+    if (!_classId || typeof _sb === 'undefined' || !_sb) return;
+    try {
+      const here = new Set((shared || []).map(f => f.id));
+      const { data, error } = await _sb.from('learning_materials')
+        .select('*').order('created_at', { ascending: false });
+      if (error) return;
+      _unshared = (data || []).filter(m => m && m.id && !here.has(m.id));
+    } catch (_) { /* the classroom's own materials still render */ }
+  }
+
+  function _unsharedHTML() {
+    if (!_unshared.length) return '';
+    // ⚠ Collapsed by default. For a teacher with many classes this is a normal,
+    //   large list — "files that live elsewhere" — and only becomes urgent when
+    //   something they just uploaded is in it. Open it and the answer is there.
+    return `
+      <details class="tc-cd-unshared">
+        <summary>📂 Your files not shared with this class
+          <span class="tc-cd-unshared-n">${_unshared.length}</span></summary>
+        <p class="tc-cd-unshared-note">These are in your account but not given to
+          <b>${esc(_className)}</b>, so nobody in this class can open them. A file uploaded
+          from the Materials screen, or one whose sharing did not save, lands here.</p>
+        ${_unshared.map(f => `
+          <div class="tc-cd-file-row">
+            <div class="tc-cd-file-icon">${materialIcon(f)}</div>
+            <div class="tc-cd-file-info">
+              <p class="tc-cd-file-name">${esc(f.title)}</p>
+              <p class="tc-cd-file-meta">${[f.subject ? esc(f.subject) : '',
+                 isLinkMaterial(f) ? materialTypeLabel(f) : _fmtSize(f.file_size),
+                 'Added ' + _fmtDate(f.created_at)].filter(Boolean).join(' · ')}</p>
+            </div>
+            <div class="tc-cd-file-btns">
+              <button onclick="TeacherClassroomDetail.shareToClass('${esc(f.id)}')"
+                class="tc-cd-pill tc-cd-pill-share">＋ Share with this class</button>
+            </div>
+          </div>`).join('')}
+      </details>`;
+  }
+
+  // One tap to put a file back where the teacher thought it already was.
+  async function shareToClass(id) {
+    const r = await _shareWithClass(id);
+    if (!r.ok) {
+      if (typeof toast === 'function') {
+        toast(r.reason === 'not_permitted'
+          ? 'That file could not be shared with this class. It may belong to another teacher.'
+          : 'Could not share that file: ' + r.reason, 4000);
+      }
+      return;
+    }
+    if (typeof toast === 'function') toast('Shared with ' + _className + ' ✓', 2000);
+    await _loadMaterials();
+  }
+
   function _renderMaterials(files) {
     const box = el('tc-cd-materials');
     if (!box) return;
@@ -1195,9 +1418,16 @@ const TeacherClassroomDetail = (() => {
       <div class="tc-cd-section-header">
         <h3 class="tc-cd-section-title">📁 Learning Materials</h3>
       </div>
+      ${_libraryPanelHTML()}
       ${files.length > 1 ? materialSortBar(_matSort, 'TeacherClassroomDetail.setMaterialSort',
         ['recent', 'oldest', 'subject', 'grade', 'title']) : ''}
       <div class="tc-cd-upload-panel">
+        <div class="tm-source-row" role="group" aria-label="What are you adding?">
+          <button type="button" id="tc-cd-src-file" class="tm-source-btn${_matSource === 'file' ? ' is-on' : ''}"
+            aria-pressed="${_matSource === 'file'}" onclick="TeacherClassroomDetail.setMatSource('file')">📎 Upload a file</button>
+          <button type="button" id="tc-cd-src-link" class="tm-source-btn${_matSource === 'link' ? ' is-on' : ''}"
+            aria-pressed="${_matSource === 'link'}" onclick="TeacherClassroomDetail.setMatSource('link')">🔗 Paste a link</button>
+        </div>
         <div class="tc-cd-upload-row">
           <input id="tc-cd-mat-title" type="text" maxlength="80"  placeholder="Title…"                   class="tc-cd-input" style="flex:2">
           <input id="tc-cd-mat-desc"  type="text" maxlength="160" placeholder="Description (optional)…" class="tc-cd-input" style="flex:3">
@@ -1211,14 +1441,14 @@ const TeacherClassroomDetail = (() => {
             <option value="science">Science</option>
             <option value="history">History &amp; Geography</option>
           </select>
-          <select id="tc-cd-mat-expiry" class="tc-cd-input" title="How long the share link stays valid">
+          <select id="tc-cd-mat-expiry" class="tc-cd-input${_matSource === 'link' ? ' hidden' : ''}" title="How long the share link stays valid">
             <option value="3600">Link valid 1 hour</option>
             <option value="604800" selected>Link valid 1 week</option>
             <option value="2592000">Link valid 1 month</option>
             <option value="31536000">Link valid 1 year</option>
           </select>
         </div>
-        <div class="tc-cd-upload-row" style="flex-wrap:wrap;gap:.5rem">
+        <div id="tc-cd-mat-file-row" class="tc-cd-upload-row${_matSource === 'link' ? ' hidden' : ''}" style="flex-wrap:wrap;gap:.5rem">
           <input id="tc-cd-mat-file"   type="file" accept="application/pdf,image/*" class="hidden"
             onchange="TeacherClassroomDetail._onMatFileChosen('file')">
           <input id="tc-cd-mat-camera" type="file" accept="image/*" capture="environment" class="hidden"
@@ -1227,28 +1457,54 @@ const TeacherClassroomDetail = (() => {
           <button type="button" class="tc-cd-pick-btn tc-cd-pick-camera"
             onclick="document.getElementById('tc-cd-mat-camera').click()">📷 Camera</button>
           <span id="tc-cd-mat-filename" class="tc-cd-filename-hint">No file chosen</span>
-          <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.uploadMaterial()">⬆️ Upload</button>
+        </div>
+        <div id="tc-cd-mat-link-row" class="tc-cd-upload-row${_matSource === 'link' ? '' : ' hidden'}" style="flex-wrap:wrap;gap:.35rem">
+          <input id="tc-cd-mat-url" type="url" inputmode="url" maxlength="600" class="tc-cd-input" style="flex:1 1 100%"
+            placeholder="https://www.youtube.com/watch?v=…" aria-label="Link to a YouTube video or a PDF on another site">
+          <span class="tc-cd-filename-hint">A YouTube video, or a PDF that already lives on another site. It never expires, so pupils can open it any time.</span>
+        </div>
+        <div class="tc-cd-upload-row" style="flex-wrap:wrap;gap:.5rem">
+          <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.uploadMaterial()">${_matSource === 'link' ? '🔗 Add link' : '⬆️ Upload'}</button>
         </div>
         <p id="tc-cd-mat-status" class="tc-cd-status-msg"></p>
       </div>
       <div id="tc-cd-mat-list" class="tc-cd-file-list">
-        ${!files.length ? '<p class="tc-cd-empty">No materials uploaded yet.</p>' : files.map(f => `
+        ${!files.length ? '<p class="tc-cd-empty">No materials yet.</p>' : files.map(f => {
+          // ⚠ A LINK ROW HAS NO FILE. file_path, file_name and file_size are all
+          //   null on one, so the old row rendered a 🖼️ icon for a YouTube video,
+          //   printed "Link valid 1 hour" about a link that never expires, and
+          //   wired Open/Link/Delete to esc(null). Everything below branches on
+          //   the one helper, isLinkMaterial().
+          const link = isLinkMaterial(f);
+          const when = f.shared_at ? 'Shared with this class ' + _fmtDate(f.shared_at)
+                                   : (link ? 'Added ' : 'Uploaded ') + _fmtDate(f.created_at);
+          const meta = [
+            f.subject ? esc(f.subject) : '',
+            f.grade ? 'Grade ' + f.grade : '',
+            link ? materialTypeLabel(f) : _fmtSize(f.file_size),
+            link ? esc(materialHost(f)) : '',
+            when,
+            link ? '' : 'Link valid ' + _fmtExpiry(f.link_expiry_seconds),
+          ].filter(Boolean).join(' · ');
+          return `
           <div class="tc-cd-file-row">
-            <div class="tc-cd-file-icon">${(f.file_name||'').endsWith('.pdf') ? '📄' : '🖼️'}</div>
+            <div class="tc-cd-file-icon">${materialIcon(f)}</div>
             <div class="tc-cd-file-info">
               <p class="tc-cd-file-name">${esc(f.title)}</p>
-              <p class="tc-cd-file-meta">${f.subject ? esc(f.subject) + ' · ' : ''}${f.grade ? 'Grade ' + f.grade + ' · ' : ''}${_fmtSize(f.file_size)} · ${f.shared_at ? 'Shared with this class ' + _fmtDate(f.shared_at) : 'Uploaded ' + _fmtDate(f.created_at)} · Link valid ${_fmtExpiry(f.link_expiry_seconds)}</p>
+              <p class="tc-cd-file-meta">${meta}</p>
               ${_doneChip(f.id)}
               ${f.description ? `<p class="tc-cd-file-desc">${esc(f.description)}</p>` : ''}
             </div>
             <div class="tc-cd-file-btns">
               <button onclick="TeacherClassroomDetail.shareMaterial('${esc(f.id)}')" class="tc-cd-pill tc-cd-pill-share">💬 Share</button>
-              <button onclick="TeacherClassroomDetail.openFile('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})" class="tc-cd-pill">📂 Open</button>
-              <button onclick="TeacherClassroomDetail.copyFileLink('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})" class="tc-cd-pill">🔗 Link</button>
-              <button onclick="TeacherClassroomDetail.deleteFile('${esc(f.id)}','${esc(f.file_path)}')" class="tc-cd-pill tc-cd-pill-red">Delete</button>
+              <button onclick="TeacherClassroomDetail.openFile('${esc(f.id)}')" class="tc-cd-pill">${link ? '↗️ Open' : '📂 Open'}</button>
+              <button onclick="TeacherClassroomDetail.copyFileLink('${esc(f.id)}')" class="tc-cd-pill">🔗 Link</button>
+              <button onclick="TeacherClassroomDetail.deleteFile('${esc(f.id)}')" class="tc-cd-pill tc-cd-pill-red">Delete</button>
             </div>
-          </div>`).join('')}
+          </div>`;
+        }).join('')}
       </div>
+      ${_unsharedHTML()}
     `;
   }
 
@@ -1280,7 +1536,94 @@ const TeacherClassroomDetail = (() => {
     if (hint) hint.textContent = file ? file.name : 'No file chosen';
   }
 
+  // Switching between "upload a file" and "paste a link". Nothing typed is
+  // thrown away - title, description and subject are shared by both - so the
+  // fields are read back after the repaint the same way setMaterialSort does.
+  function setMatSource(kind) {
+    _matSource = kind === 'link' ? 'link' : 'file';
+    const draft = {
+      title:   el('tc-cd-mat-title')?.value || '',
+      desc:    el('tc-cd-mat-desc')?.value || '',
+      subject: el('tc-cd-mat-subject')?.value || '',
+      url:     el('tc-cd-mat-url')?.value || '',
+    };
+    _renderMaterials(_materials);
+    if (el('tc-cd-mat-title'))   el('tc-cd-mat-title').value = draft.title;
+    if (el('tc-cd-mat-desc'))    el('tc-cd-mat-desc').value = draft.desc;
+    if (el('tc-cd-mat-subject')) el('tc-cd-mat-subject').value = draft.subject;
+    if (el('tc-cd-mat-url'))     el('tc-cd-mat-url').value = draft.url;
+    if (_matSource === 'link') el('tc-cd-mat-url')?.focus();
+  }
+
+  // A link is the row - no Storage, no upload, no expiry. The URL is refused
+  // here unless it is http(s), and the database CHECK refuses it again, because
+  // this validation runs on the teacher's machine.
+  async function _saveMaterialLink() {
+    const title  = el('tc-cd-mat-title')?.value.trim();
+    const status = el('tc-cd-mat-status');
+    if (!title) { if (status) status.textContent = 'Enter a title.'; return; }
+    const url = normaliseMaterialUrl(el('tc-cd-mat-url')?.value);
+    if (!url) {
+      if (status) status.textContent = 'That link does not look right. It should start with https:// and point at a website.';
+      return;
+    }
+    if (status) status.textContent = 'Saving…';
+    const user = (await _sb.auth.getUser()).data?.user;
+    if (!user) { if (status) status.textContent = 'Not signed in.'; return; }
+    const {data: matRow, error: dbErr} = await _sb.from('learning_materials').insert({
+      teacher_id: user.id, title,
+      description: el('tc-cd-mat-desc')?.value.trim() || null,
+      subject: el('tc-cd-mat-subject')?.value || null,
+      source_type: 'link', external_url: url,
+    }).select('id').single();
+    if (dbErr) {
+      // ⚠ Name the likely cause. Without migrations/20260908_material_links.sql
+      //   there is no source_type column and PostgREST answers PGRST204, which
+      //   as a bare message reads like a mistake in the form just filled in.
+      const missing = /source_type|external_url|PGRST204|42703/i.test(dbErr.message || '');
+      if (status) status.textContent = missing
+        ? 'Links are not enabled on this site yet - the database still needs the material-links migration.'
+        : 'Could not save the link: ' + dbErr.message;
+      return;
+    }
+    const sharedLink = await _shareWithClass(matRow?.id);
+    if (status) status.textContent = sharedLink.ok
+      ? 'Link added and shared with this class!'
+      : 'Link saved, but NOT shared with this class yet - open "Not shared with this class" below and tap Share.';
+    const u = el('tc-cd-mat-url'); if (u) u.value = '';
+    await _loadMaterials();
+  }
+
+  // ⚠ THE JUNCTION IS WHAT MAKES A FILE VISIBLE. _loadMaterials() reads
+  //   classroom_materials → learning_materials, and so does the pupil hub, so a
+  //   material with no junction row is invisible everywhere while still
+  //   existing and still costing storage.
+  //
+  //   Both callers used to do this and throw the result away:
+  //       await _sb.from('classroom_materials').insert({...});
+  //   then say "Uploaded!" regardless. A failure here produced a success
+  //   message and a file nobody could ever see — reported from the field as
+  //   "I'm sure I uploaded some materials but I no longer see them".
+  //
+  //   ⚠ The file is NOT rolled back. It is safely stored and appears under
+  //   "Not shared with this class" below, one tap from being fixed. Deleting a
+  //   teacher's upload because a second write failed would be worse than
+  //   leaving it somewhere they can see it.
+  async function _shareWithClass(materialId) {
+    if (!_classId || !materialId) return { ok: false, reason: 'no_classroom' };
+    const { data, error } = await _sb.from('classroom_materials')
+      .insert({ material_id: materialId, classroom_id: _classId })
+      .select('material_id');
+    if (error) return { ok: false, reason: error.message };
+    // ⚠ Zero rows is a refusal: an INSERT whose RLS policy matches nothing
+    //   returns no error and no rows, and reading that as success is exactly
+    //   how this failure stayed silent.
+    if (!data || !data.length) return { ok: false, reason: 'not_permitted' };
+    return { ok: true };
+  }
+
   async function uploadMaterial() {
+    if (_matSource === 'link') return _saveMaterialLink();
     const title  = el('tc-cd-mat-title')?.value.trim();
     const file   = el('tc-cd-mat-camera')?.files[0] || el('tc-cd-mat-file')?.files[0];
     const status = el('tc-cd-mat-status');
@@ -1308,10 +1651,10 @@ const TeacherClassroomDetail = (() => {
       return;
     }
     // Link this material to the current classroom so only its students can access it.
-    if (_classId && matRow?.id) {
-      await _sb.from('classroom_materials').insert({ material_id: matRow.id, classroom_id: _classId });
-    }
-    if (status) status.textContent = 'Uploaded!';
+    const shared = await _shareWithClass(matRow?.id);
+    if (status) status.textContent = shared.ok
+      ? 'Uploaded and shared with this class!'
+      : 'Uploaded, but NOT shared with this class yet - open "Not shared with this class" below and tap Share.';
     await _loadMaterials();
   }
 
@@ -1321,22 +1664,38 @@ const TeacherClassroomDetail = (() => {
     return data.signedUrl;
   }
 
-  async function copyFileLink(filePath, expirySeconds) {
-    const secs = expirySeconds || 3600;
-    const url = await _getSignedUrl(filePath, secs);
+  // ⚠ THESE THREE TAKE A MATERIAL ID, NOT A FILE PATH. They used to be handed
+  //   `f.file_path` straight from the markup, which is null on a link row and
+  //   arrived as the string "null". Looking the row up here means a link and a
+  //   file cannot be told apart by the caller, only by the row itself - and
+  //   shareMaterial() already worked this way.
+  function _material(id) { return _materials.find(m => String(m.id) === String(id)) || null; }
+
+  // The URL to hand a teacher for one material: a link is already a URL, a file
+  // needs a fresh signed one. Null means "could not".
+  async function _materialUrl(f) {
+    if (!f) return null;
+    if (isLinkMaterial(f)) return normaliseMaterialUrl(f.external_url);
+    return _getSignedUrl(f.file_path, Number(f.link_expiry_seconds) || 3600);
+  }
+
+  async function copyFileLink(id) {
+    const f = _material(id);
+    const url = await _materialUrl(f);
     if (!url) { toast('Could not generate link.', 2000); return; }
-    const label = _fmtExpiry(secs);
-    try { await navigator.clipboard.writeText(url); toast(`Link copied! Valid for ${label}.`, 2500); }
-    catch { prompt(`Copy this link (valid ${label}):`, url); }
+    const label = _fmtExpiry(Number(f.link_expiry_seconds) || 3600);
+    const note = isLinkMaterial(f) ? 'Link copied!' : `Link copied! Valid for ${label}.`;
+    try { await navigator.clipboard.writeText(url); toast(note, 2500); }
+    catch { prompt(isLinkMaterial(f) ? 'Copy this link:' : `Copy this link (valid ${label}):`, url); }
   }
 
   // The same share panel the assignment link uses, so a file and a piece of
   // work leave this screen the same way: WhatsApp, always on it.
   async function shareMaterial(id) {
-    const f = _materials.find(m => String(m.id) === String(id));
+    const f = _material(id);
     if (!f) return;
     const slow = setTimeout(() => toast('Preparing the link…', 1500), 400);
-    const url = await _getSignedUrl(f.file_path, Number(f.link_expiry_seconds) || 3600);
+    const url = await _materialUrl(f);
     clearTimeout(slow);
     if (!url) { toast('Could not create a share link. Please try again.', 3500); return; }
     const text = materialShareMessage(f, url);
@@ -1347,24 +1706,30 @@ const TeacherClassroomDetail = (() => {
     _showSharePanel(f.title, url, `https://wa.me/?text=${encodeURIComponent(text)}`);
   }
 
-  async function openFile(filePath, expirySeconds) {
-    const url = await _getSignedUrl(filePath, expirySeconds || 3600);
-    if (!url) { toast('Could not open file.', 2000); return; }
+  async function openFile(id) {
+    const f = _material(id);
+    const url = await _materialUrl(f);
+    if (!url) { toast(f && isLinkMaterial(f) ? 'That link is not valid.' : 'Could not open file.', 2000); return; }
     window.open(url, '_blank', 'noopener');
   }
 
-  async function deleteFile(id, filePath) {
-    if (!confirm('Delete this file? This cannot be undone.')) return;
+  async function deleteFile(id) {
+    const f = _material(id);
+    const link = isLinkMaterial(f);
+    if (!confirm(link ? 'Remove this link? This cannot be undone.'
+                      : 'Delete this file? This cannot be undone.')) return;
     // ⚠ Zero rows is a refusal — no error, no rows. Removing the object after
     //   an unverified row delete loses the file and keeps the record.
     const {data, error: dbErr} = await _sb.from('learning_materials')
       .delete().eq('id', id).select('id');
     if (dbErr || !data?.length) {
       if (dbErr) console.error('[deleteFile]', dbErr.message);
-      toast(dbErr ? 'Could not delete: ' + dbErr.message : 'Could not delete that file.', 3000);
+      toast(dbErr ? 'Could not delete: ' + dbErr.message : 'Could not delete that material.', 3000);
       return;
     }
-    await _sb.storage.from('learning-materials').remove([filePath]);
+    // ⚠ Only a file has a Storage object. Calling remove([null]) on a link row
+    //   asks Storage to delete a path that is not there.
+    if (!link && f?.file_path) await _sb.storage.from('learning-materials').remove([f.file_path]);
     await _loadMaterials();
   }
 
@@ -1727,7 +2092,9 @@ const TeacherClassroomDetail = (() => {
     showHomeworkChoice, _chooseDigital, _chooseWorksheet,
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,
-    uploadMaterial, _onMatFileChosen, setMaterialSort, shareMaterial, copyFileLink, openFile, deleteFile,
+    uploadMaterial, _onMatFileChosen, setMaterialSort, setMatSource, shareMaterial, copyFileLink, openFile, deleteFile,
+    createLibraryLink, shareLibraryLink, copyLibraryLink, rotateLibraryLink, disableLibraryLink,
+    shareToClass,
     saveName, saveGrade, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
     openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },
