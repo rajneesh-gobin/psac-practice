@@ -90,7 +90,15 @@ const G7ENG_SYLLABUS = {
 registerSubject({
   id: 'grade7-english', name: 'English', grade: 7, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  // ⚠ WAS 'Word Problems' — the MATHS label on an English pack. CLAUDE.md
+  // records that L4 is maths-shaped and does not travel, and level4Label exists
+  // to say what L4 means in THIS pack. In English it is extended analysis: hold
+  // a passage or two competing readings in mind and justify a choice.
+  // ⚠ Seven packs still carry the wrong default — grade7/8 french and
+  // social-modern-studies, grade8-english, and grade9 english, french and
+  // social-modern-studies. Fix each in the commit that gives its L4 real
+  // content, never before: a relabelled empty level is still an empty level.
+  practiceble: true, notesBased: false, level4Label: 'Extended Analysis',
   syllabus: G7ENG_SYLLABUS,
   chapters: [
     { id: 'g7eng-listening',            name: 'Listening & Comprehension',                       icon: '👂', examWeight: 3,
