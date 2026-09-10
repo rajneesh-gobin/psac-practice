@@ -5582,10 +5582,26 @@ async function openPlansModal() {
   list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-3">Loading…</p>';
 
   const profile = (typeof Auth !== 'undefined' && Auth.getParentProfile) ? Auth.getParentProfile() : null;
-  const [plans, current] = await Promise.all([
+  const [plans, current, juice, openPay] = await Promise.all([
     Store.listPlans(),
     profile?.id ? Store.getUserPlan(profile.id) : Promise.resolve({ plan_id: 'free' }),
+    _juiceSettings(),
+    _juiceOpenPayment(),
   ]);
+  const canPay = _juiceOn(juice);
+
+  // ⚠ "Everything is free right now" and a Buy button cannot both be true.
+  //   The banner comes down the moment paying becomes possible, and goes back
+  //   up if an admin switches Juice off again.
+  document.getElementById('modal-plans')?.querySelectorAll('[data-free-banner]')
+    .forEach(el => el.classList.toggle('hidden', canPay));
+
+  const payBox = document.getElementById('juice-pay');
+  if (payBox) {
+    payBox.classList.toggle('hidden', !canPay || !openPay);
+    if (canPay && openPay) _renderJuiceInstructions(Object.assign({}, juice, openPay, { payment_id: openPay.id }));
+    else payBox.innerHTML = '';
+  }
 
   if (!plans.length) {
     list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-3">Plan details are not available right now.</p>';
@@ -5613,10 +5629,136 @@ async function openPlansModal() {
       </div>
       <div class="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-1">${price}</div>
       <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Up to ${kids}</div>
-      ${isCurrent ? '' : '<button disabled class="mt-2 w-full py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed">Available later</button>'}
+      ${isCurrent ? ''
+        : (canPay && p.price_mur > 0)
+          ? `<button onclick="startJuicePayment('${_profEsc(p.id)}', 1)" class="mt-2 w-full py-2 rounded-xl text-xs font-bold bg-amber-500 text-white">📱 Pay with MCB Juice</button>`
+          : '<button disabled class="mt-2 w-full py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed">Available later</button>'}
     </div>`;
   }).join('');
 }
+
+
+// ══════════════════════════════════════════════════════════════
+//  Paying by MCB Juice
+//
+//  ⚠ NOTHING HERE GRANTS ANYTHING. It shows a reference and takes the parent's
+//  word that they sent the money; an admin confirming the transfer in
+//  payment_admin_confirm() is the only thing that opens a single question.
+//  Every price shown is the one the server put on the row - this file never
+//  computes an amount.
+//
+//  ⚠ The whole flow stays invisible until an admin sets a Juice number and
+//  switches it on. While it is off the plans modal reads exactly as it did
+//  before: "Everything is free right now", and no Buy button anywhere.
+// ══════════════════════════════════════════════════════════════
+let _juiceCfg = null;
+
+async function _juiceSettings() {
+  if (_juiceCfg) return _juiceCfg;
+  try {
+    const { data, error } = await _sb.rpc('payment_settings');
+    if (error) throw error;
+    _juiceCfg = data || {};
+  } catch (_e) {
+    // A settings lookup that fails must not offer a payment method that may
+    // not exist. Treat it as off.
+    _juiceCfg = { juice_enabled: false };
+  }
+  return _juiceCfg;
+}
+function _juiceOn(cfg) { return !!(cfg && cfg.juice_enabled && cfg.juice_number); }
+
+// The parent's own open payment, if they already started one. Read straight
+// through RLS - pay_select already limits this to their own rows.
+async function _juiceOpenPayment() {
+  try {
+    const { data } = await _sb.from('payments')
+      .select('id, plan_id, amount_mur, months, reference, status, created_at')
+      .in('status', ['pending', 'sent'])
+      .order('created_at', { ascending: false })
+      .limit(1);
+    return (data && data[0]) || null;
+  } catch (_e) { return null; }
+}
+
+async function startJuicePayment(planId, months) {
+  const box = document.getElementById('juice-pay');
+  if (box) box.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-3 text-center animate-pulse">Getting your reference…</p>';
+  let res = null;
+  try {
+    const { data, error } = await _sb.rpc('payment_start_juice', { p_plan_id: planId, p_months: Number(months) || 1 });
+    if (error) throw error;
+    res = data;
+  } catch (e) {
+    if (box) box.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400 py-3">We could not start that just now. Nothing has been charged - please try again.</p>';
+    return;
+  }
+  if (!res || res.ok !== true) {
+    const why = {
+      juice_disabled:       'Paying by Juice is switched off at the moment.',
+      unknown_plan:         'That plan is not available.',
+      plan_not_purchasable: 'That plan is already free - there is nothing to pay.',
+      too_many_open:        'You already have payments waiting to be checked. We will confirm those first.',
+      not_authenticated:    'Please sign in again.',
+    }[res && res.error] || 'We could not start that just now.';
+    if (box) box.innerHTML = `<p class="text-sm text-red-600 dark:text-red-400 py-3">${_profEsc(why)}</p>`;
+    return;
+  }
+  _renderJuiceInstructions(res);
+}
+
+// ⚠ Every number in here comes from the RPC result, never from the button that
+//   was tapped. If the server priced it differently, the parent sees the
+//   server's number and pays that.
+function _renderJuiceInstructions(p) {
+  const box = document.getElementById('juice-pay');
+  if (!box) return;
+  box.classList.remove('hidden');
+  const sent = p.status === 'sent';
+  box.innerHTML = `
+    <div class="rounded-xl border-2 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4">
+      <p class="text-sm font-bold text-amber-800 dark:text-amber-300">📱 Pay with MCB Juice</p>
+      <ol class="text-xs text-amber-800 dark:text-amber-200 mt-2 space-y-1 list-decimal list-inside">
+        <li>Open MCB Juice and send <b>${_formatMur(p.amount_mur)}</b> to <b>${_profEsc(p.juice_number)}</b>${p.juice_name ? ' (' + _profEsc(p.juice_name) + ')' : ''}.</li>
+        <li>Put this reference in the message:</li>
+      </ol>
+      <div class="flex items-center gap-2 mt-2">
+        <code class="flex-1 text-center text-xl font-black tracking-[0.3em] bg-white dark:bg-gray-800 border border-amber-300 dark:border-amber-700 rounded-lg py-2 select-all">${_profEsc(p.reference)}</code>
+        <button onclick="copyJuiceReference('${_profEsc(p.reference)}', this)" class="shrink-0 px-3 py-2 rounded-lg text-xs font-bold bg-amber-500 text-white">Copy</button>
+      </div>
+      <p class="text-[11px] text-amber-700 dark:text-amber-300 mt-2">${_profEsc(p.juice_note || '')}</p>
+      ${sent
+        ? '<p class="mt-3 text-xs font-bold text-green-700 dark:text-green-400">✅ Thank you - we are checking your transfer. Access opens as soon as we have.</p>'
+        : `<button onclick="markJuiceSent('${_profEsc(p.payment_id)}')" class="mt-3 w-full py-2.5 rounded-xl text-sm font-bold bg-green-600 text-white">I have sent the money</button>`}
+      <p class="text-[11px] text-gray-600 dark:text-gray-400 mt-2">Nothing opens until we have checked the transfer. We usually do this the same day.</p>
+    </div>`;
+}
+
+function copyJuiceReference(ref, btn) {
+  try {
+    navigator.clipboard.writeText(ref);
+    if (btn) { const t = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = t; }, 1500); }
+  } catch (_e) { if (typeof toast === 'function') toast('Write it down: ' + ref, 4000); }
+}
+
+async function markJuiceSent(paymentId) {
+  const note = prompt('If your Juice app gave you a reference number, type it here (optional):', '') || '';
+  try {
+    const { data, error } = await _sb.rpc('payment_mark_sent', { p_payment_id: paymentId, p_payer_note: note.slice(0, 120) });
+    if (error) throw error;
+    if (data && data.ok !== true) throw new Error(data.error || 'failed');
+  } catch (_e) {
+    if (typeof toast === 'function') toast('We could not record that. Your transfer is safe - please tell us in Messages.', 4000);
+    return;
+  }
+  const open = await _juiceOpenPayment();
+  const cfg = await _juiceSettings();
+  if (open) _renderJuiceInstructions(Object.assign({}, cfg, open, { payment_id: open.id }));
+  if (typeof toast === 'function') toast('Thank you - we will check it and open your access.', 3000);
+}
+window.startJuicePayment  = startJuicePayment;
+window.markJuiceSent      = markJuiceSent;
+window.copyJuiceReference = copyJuiceReference;
 
 function closePlansModal() {
   document.getElementById('modal-plans')?.classList.add('hidden');

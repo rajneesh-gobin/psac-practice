@@ -343,7 +343,9 @@
         <button onclick="closePlansModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
 
-      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-xl p-3 mb-4">
+      <!-- ⚠ data-free-banner: comes down the moment paying becomes possible.
+           "Everything is free right now" and a Buy button cannot both be true. -->
+      <div data-free-banner class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-xl p-3 mb-4">
         <p class="text-sm font-bold text-green-700 dark:text-green-300">🎉 Everything is free right now</p>
         <p class="text-xs text-green-600 dark:text-green-400 mt-0.5">Every chapter, every subject, every child. No card needed. Paid plans will arrive later - you will be told well before anything changes.</p>
       </div>
@@ -356,6 +358,10 @@
       </div>
 
       <div id="plans-list" class="space-y-2 mb-5"></div>
+
+      <!-- ⚠ Stays hidden until an admin switches Juice on. While it is off,
+           this modal says exactly what it said before: everything is free. -->
+      <div id="juice-pay" class="hidden mt-4"></div>
 
       <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Payment methods</h4>
       <div class="space-y-2 mb-3">
@@ -3744,6 +3750,11 @@
           <p class="text-sm font-semibold text-blue-700 dark:text-blue-400">💳 Plan Management - configure which chapters each plan unlocks.</p>
           <p class="text-xs text-blue-600 dark:text-blue-500 mt-1">Enforcement is off by default (free period). Flip the ⚡ toggle in the Content tab when ready to activate.</p>
         </div>
+        <!-- ⚠ Confirming a row here is the ONLY thing in the app that grants
+             paid access. Check the transfer in your Juice app against the
+             reference BEFORE tapping it - nothing else verifies the money. -->
+        <div id="admin-juice-settings" class="mb-4"></div>
+        <div id="admin-juice-queue" class="mb-5"></div>
         <div id="admin-plans-list" class="space-y-3"></div>
       </div>
 

@@ -344,6 +344,37 @@ Mathematics, with no timer, due Thursday 17 September."*).
 
 ---
 
+## Paying — manual MCB Juice
+Stripe does not accept Mauritius-registered merchants, and the gateways that do
+(Peach, MIPS) cost Rs 550–2,200 a month before any revenue. So the first
+payment path is the one most small Mauritian sites actually use: the parent
+sends a Juice transfer quoting a reference, and an admin confirms it.
+- **Parent**: plans modal → *Pay with MCB Juice* → amount, number and a
+  6-character reference (no 0/O/1/I/L — it gets typed into a Juice message) →
+  *I have sent the money*.
+- **Admin**: Plans tab → the queue → *Money received – open access*. The
+  confirm dialog names the amount and the reference, because that tap is the
+  only thing standing between a stranger and a paid plan.
+- ⚠ **"Everything is free right now" and a Buy button cannot both be true.**
+  The banner carries `data-free-banner` and comes down exactly when
+  `juice_enabled` goes on. ⚠ The *"Grades 1 & 2 are always free"* banner stays
+  — that one is permanent and still true.
+- ⚠ **The browser never computes an amount.** `payment_start_juice()` takes a
+  plan and a month count; the price comes from `plans.price_mur`.
+- ⚠ **A failed settings lookup reads as OFF.** Offering a payment method that
+  may not be configured is worse than offering none.
+- ⚠ **Tapping Buy repeatedly reuses one reference.** Four rows for one transfer
+  means an admin guessing which to confirm.
+- ⚠ **The parent is never told access is open** until an admin has confirmed.
+- ⚠ `netlify/functions/payment-webhook.js` stays a **fail-closed skeleton**.
+  Its three verifiers each returned `true` directly above a commented-out block
+  that activated subscriptions from the request body; `test-juice-payments.js`
+  now fails if any of them returns true again.
+- The next step, when volume justifies the monthly fee, is Peach Payments —
+  one integration covers cards, MCB Juice, MauCAS QR, blink and Apple Pay, all
+  in MUR. ⚠ Juice, MauCAS and blink **cannot be refunded** through it; only
+  cards can.
+
 ## The printable practice paper (`generatePrintablePaper()`, app.js)
 A pop-up window holding a 100-mark paper — Section A (30 × 2, or 20 × 2 for
 maths) and Section B (10 × 4, 15 for maths) — plus a second window with the

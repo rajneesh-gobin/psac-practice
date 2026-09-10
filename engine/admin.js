@@ -2062,6 +2062,7 @@ const AdminPanel = (() => {
   // ── Plans tab (super admin only) ───────────────
   async function loadPlans() {
     if (!_sb) return;
+    loadJuice();
     const listEl = document.getElementById('admin-plans-list');
     if (!listEl) return;
     listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
@@ -2349,6 +2350,164 @@ const AdminPanel = (() => {
     loadPlans();   // repaint from the DB so the card header shows the saved cap
   }
 
+
+  // ── Manual MCB Juice payments ──────────────────
+  //  ⚠ CONFIRMING A ROW HERE IS THE ONLY THING IN THE APP THAT GRANTS PAID
+  //  ACCESS. Nothing verifies the money for you: open Juice, find the transfer
+  //  whose message carries the reference, check the amount, THEN confirm.
+  //
+  //  ⚠ The queue reads payments directly. pay_select already lets an admin see
+  //  every row, and the two buttons go through SECURITY DEFINER functions that
+  //  re-check is_admin() server-side - the RLS read is not the authorisation.
+  async function loadJuice() {
+    if (!_sb) return;
+    await Promise.all([_loadJuiceSettings(), _loadJuiceQueue()]);
+  }
+
+  async function _loadJuiceSettings() {
+    const box = document.getElementById('admin-juice-settings');
+    if (!box) return;
+    let cfg = {};
+    try {
+      const { data } = await _sb.from('mm_data').select('value').eq('key', 'payment_settings').maybeSingle();
+      cfg = (data && data.value) || {};
+    } catch (_e) { cfg = {}; }
+    const on = !!cfg.juice_enabled;
+    box.innerHTML = `
+      <div class="rounded-xl border ${on ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20' : 'border-gray-200 dark:border-gray-700'} p-4">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-sm font-bold text-gray-800 dark:text-white">📱 Pay with MCB Juice</p>
+          <span class="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${on ? 'bg-amber-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}">${on ? 'Live' : 'Off'}</span>
+        </div>
+        <!-- ⚠ Switching this ON puts a Buy button in front of every parent AND
+             takes down the "Everything is free right now" banner. Those two
+             cannot both be true, so they move together. -->
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Turning this on shows parents a Buy button and removes the “everything is free right now” banner.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-300">Juice number
+            <input id="juice-number" value="${_esc(cfg.juice_number || '')}" placeholder="5xxx xxxx"
+              class="mt-1 w-full border dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm dark:bg-gray-700 dark:text-white">
+          </label>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-300">Account name
+            <input id="juice-name" value="${_esc(cfg.juice_name || '')}" placeholder="Shown to parents"
+              class="mt-1 w-full border dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm dark:bg-gray-700 dark:text-white">
+          </label>
+        </div>
+        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mt-2">Note shown with the instructions
+          <input id="juice-note" value="${_esc(cfg.juice_note || '')}"
+            class="mt-1 w-full border dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm dark:bg-gray-700 dark:text-white">
+        </label>
+        <div class="flex items-center gap-2 mt-3">
+          <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
+            <input type="checkbox" id="juice-enabled" ${on ? 'checked' : ''} class="w-4 h-4 accent-amber-500">
+            Accept Juice payments
+          </label>
+          <button onclick="AdminPanel.saveJuiceSettings()" class="ml-auto px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white">Save</button>
+        </div>
+      </div>`;
+  }
+
+  async function saveJuiceSettings() {
+    const num = (document.getElementById('juice-number')?.value || '').trim();
+    const on  = !!document.getElementById('juice-enabled')?.checked;
+    // ⚠ Instructions with no number to send to are worse than no button at all.
+    //   The RPC refuses this too; refusing here as well means the admin is told
+    //   why instead of watching a switch that silently does nothing.
+    if (on && !num) { toast('Add the Juice number before switching it on.', 3500); return; }
+    const value = {
+      juice_enabled: on,
+      juice_number:  num,
+      juice_name:    (document.getElementById('juice-name')?.value || '').trim(),
+      juice_note:    (document.getElementById('juice-note')?.value || '').trim(),
+    };
+    const { error } = await _sb.from('mm_data').upsert({ key: 'payment_settings', value }, { onConflict: 'key' });
+    if (error) { toast('Could not save: ' + error.message, 4000); return; }
+    toast(on ? 'Juice payments are live.' : 'Juice payments are off.', 2500);
+    loadJuice();
+  }
+
+  async function _loadJuiceQueue() {
+    const box = document.getElementById('admin-juice-queue');
+    if (!box) return;
+    box.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-3 animate-pulse">Loading payments…</p>';
+    let rows = [];
+    try {
+      const { data, error } = await _sb.from('payments')
+        .select('id, user_id, plan_id, amount_mur, months, reference, status, payer_note, claimed_at, created_at')
+        .in('status', ['pending', 'sent'])
+        .order('claimed_at', { ascending: true, nullsFirst: false })
+        .limit(50);
+      if (error) throw error;
+      rows = data || [];
+    } catch (e) {
+      box.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400 py-3">Could not load the payment queue. Nothing has been changed.</p>';
+      return;
+    }
+    if (!rows.length) {
+      box.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-3">No payments waiting.</p>';
+      return;
+    }
+    // Names come from profiles; a payment row carries only the id.
+    let names = {};
+    try {
+      const { data } = await _sb.from('profiles').select('id, full_name')
+        .in('id', [...new Set(rows.map(r => r.user_id))]);
+      (data || []).forEach(p => { names[p.id] = p.full_name; });
+    } catch (_e) { names = {}; }
+
+    box.innerHTML = `
+      <p class="text-sm font-bold text-gray-800 dark:text-white mb-2">💳 Payments waiting (${rows.length})</p>
+      <div class="space-y-2">${rows.map(r => {
+        const said = r.status === 'sent';
+        return `<div class="rounded-xl border ${said ? 'border-amber-300 dark:border-amber-700' : 'border-gray-200 dark:border-gray-700'} p-3">
+          <div class="flex items-center gap-2 flex-wrap">
+            <code class="text-base font-black tracking-widest text-gray-800 dark:text-white">${_esc(r.reference || '-')}</code>
+            <span class="text-sm font-bold text-gray-700 dark:text-gray-200">Rs ${Number(r.amount_mur) || 0}</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400">${_esc(r.plan_id)} · ${Number(r.months) || 1} month${(Number(r.months) || 1) === 1 ? '' : 's'}</span>
+            <span class="ml-auto text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${said ? 'bg-amber-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}">${said ? 'Says paid' : 'Not sent yet'}</span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${_esc(names[r.user_id] || r.user_id)}${r.payer_note ? ' · “' + _esc(r.payer_note) + '”' : ''}</p>
+          <div class="flex gap-2 mt-2">
+            <button onclick="AdminPanel.confirmJuice('${_esc(r.id)}','${_esc(r.reference || '')}',${Number(r.amount_mur) || 0})"
+              class="flex-1 py-2 rounded-lg text-xs font-bold bg-green-600 text-white">✅ Money received - open access</button>
+            <button onclick="AdminPanel.rejectJuice('${_esc(r.id)}','${_esc(r.reference || '')}')"
+              class="px-3 py-2 rounded-lg text-xs font-bold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">Reject</button>
+          </div>
+        </div>`;
+      }).join('')}</div>`;
+  }
+
+  // ⚠ The confirm dialog names the reference and the amount ON PURPOSE. This is
+  //   the last point at which a wrong row can be caught, and it is granting
+  //   real money's worth of access on nothing but the admin's own eyes.
+  async function confirmJuice(id, reference, amount) {
+    if (!confirm(`Confirm you have received Rs ${amount} with reference ${reference}?\n\nThis opens paid access straight away.`)) return;
+    const ref = prompt('Juice transaction reference (optional, for your records):', '') || '';
+    try {
+      const { data, error } = await _sb.rpc('payment_admin_confirm', { p_payment_id: id, p_provider_ref: ref.slice(0, 80) });
+      if (error) throw error;
+      if (!data || data.ok !== true) throw new Error(data && data.error ? data.error : 'failed');
+      toast(data.already ? 'Already confirmed - nothing changed.' : 'Access opened.', 2500);
+    } catch (e) {
+      toast('Could not confirm: ' + (e.message || e), 4000);
+    }
+    loadJuice();
+  }
+
+  async function rejectJuice(id, reference) {
+    const why = prompt(`Reject ${reference}? Say why (the parent does not see this):`, 'No transfer received');
+    if (why === null) return;
+    try {
+      const { data, error } = await _sb.rpc('payment_admin_reject', { p_payment_id: id, p_reason: why.slice(0, 200) });
+      if (error) throw error;
+      if (!data || data.ok !== true) throw new Error(data && data.error ? data.error : 'failed');
+      toast('Rejected. Nothing was granted.', 2500);
+    } catch (e) {
+      toast('Could not reject: ' + (e.message || e), 4000);
+    }
+    loadJuice();
+  }
+
   async function showPlanHistory(userId) {
     const panel = document.getElementById(`plan-history-${userId}`);
     if (!panel) return;
@@ -2390,6 +2549,13 @@ const AdminPanel = (() => {
   }
 
   // ── Question Reports tab ───────────────────────
+  // ⚠ ONE map, read by the Reports tab AND by the pending-report panel in the
+  //   Questions tab. It was inline in loadReports() while the second panel
+  //   showed no type at all, which is how the two screens came to describe the
+  //   same row differently.
+  const _REPORT_TYPE_LABELS = { wrong_answer:'❌ Wrong answer', unclear:'❓ Unclear', typo:'✏️ Typo',
+    wrong_options:'🔄 Options', other:'💬 Other', contact:'🌐 Guest contact', ticket:'🎫 Ticket' };
+
   function _parseReportMeta(raw) {
     const sep = (raw || '').indexOf('\n__meta__');
     if (sep === -1) return { text: raw || '', meta: {} };
@@ -2682,8 +2848,7 @@ const AdminPanel = (() => {
         : status === 'in_review' ? 'border-blue-400'
         : status === 'wont_fix'  ? 'border-gray-300'
         : 'border-amber-400';
-      const reportTypeLabel = { wrong_answer:'❌ Wrong answer', unclear:'❓ Unclear', typo:'✏️ Typo', wrong_options:'🔄 Options', other:'💬 Other',
-        contact:'🌐 Guest contact', ticket:'🎫 Ticket' }[r.report_type || ''] || '';
+      const reportTypeLabel = _REPORT_TYPE_LABELS[r.report_type || ''] || '';
       // A contact-form message comes from somebody with NO account: no student
       // row to join, no inbox to reply into. The card says so and gives the one
       // route back to them there is - their email address.
@@ -2947,45 +3112,174 @@ const AdminPanel = (() => {
   }
 
   // ── Pending-report badge + mini panel shown in the Questions tab ─────────
+  // ⚠ 'open' IS NOT THE WHOLE QUEUE. A report an admin starts working on moves
+  //   to 'in_review', and both the badge and the Questions-tab panel used to
+  //   filter status = 'open' alone - so the moment you touched a report it
+  //   vanished from the badge and from that panel, and only the full Reports
+  //   screen still knew about it. Measured: one real bug report ("The scratch
+  //   pad doesnt work", from a Grade 5 pupil) sat at in_review for five days,
+  //   counted nowhere. Unfinished means open OR in_review; 'resolved' and
+  //   'wont_fix' are the only two that leave the queue.
+  // ⚠ ONE definition, used by the badge AND the panel. They are two queries
+  //   against the same idea, and a badge that disagrees with the list under it
+  //   is worse than either being wrong on its own.
+  const _REPORT_UNFINISHED = ['open', 'in_review'];
+
   async function _loadReportBadge() {
     const { count, error } = await _sb.from('question_reports')
-      .select('*', { count: 'exact', head: true }).eq('status', 'open');
+      .select('*', { count: 'exact', head: true }).in('status', _REPORT_UNFINISHED);
     const n = error ? 0 : (count || 0);
     const badge = document.getElementById('admin-reports-badge');
-    if (badge) { badge.textContent = `${n} open`; badge.classList.toggle('hidden', n === 0); }
+    if (badge) { badge.textContent = `${n} to review`; badge.classList.toggle('hidden', n === 0); }
   }
 
   function _escRpt(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // ⚠ COLLAPSED BY DEFAULT, and it carries WHO reported and WHICH question.
+  //   This panel used to select five columns - id, question_id, question_text,
+  //   message, created_at - and render every report fully expanded. Two things
+  //   followed. There was no reporter anywhere on the card, because the row it
+  //   fetched had no student join and it never read reporter_id; and a report
+  //   whose question_text was never stored printed "Question preview
+  //   unavailable. Open Reports to investigate this ID." - which is the admin
+  //   being sent to another screen to find out what they are looking at.
+  //   The full Reports tab had already solved both (see loadReports): it joins
+  //   students!student_id, resolves the question out of STATIC_QUESTIONS, and
+  //   uses <details>. This is the same treatment, kept lighter - the summary is
+  //   what triage needs and "Review all reports →" is where the thread lives.
+  const _qmReportsOpen = new Set();
+  function toggleQmReportOpen(id, open) {
+    if (open) _qmReportsOpen.add(id); else _qmReportsOpen.delete(id);
+  }
+
+  // A question stem is innerHTML - it can carry <b>, and since the Grade 1-2
+  // visual banks it can carry a whole inline <svg>. Escaping it without
+  // stripping first prints the markup at the admin; stripping without escaping
+  // after would run it. Both, in that order.
+  function _rptPlain(html) {
+    return String(html == null ? '' : html)
+      .replace(/<svg[\s\S]*?<\/svg>/gi, ' [figure] ')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // Who to put on the card. A student report joins a name; a contact-form
+  // message has no account at all; a row written by an admin tool or a policy
+  // test has neither, and there the account id is the only thing that can be
+  // chased, so it is shown rather than swallowed into "Anonymous".
+  function _rptWho(r, meta) {
+    const name = r.students?.display_name || meta.studentName || null;
+    if (name) return name + (r.students?.grade ? ` (Grade ${r.students.grade})` : '');
+    if (r.report_type === 'contact' || r.question_id === '__contact__') {
+      return meta.guestEmail ? `Guest · ${meta.guestEmail}` : 'Guest (contact form)';
+    }
+    if (r.student_id) return `Pupil ${String(r.student_id).slice(0, 8)}…`;
+    if (r.reporter_id) return `Account ${String(r.reporter_id).slice(0, 8)}…`;
+    return 'Not recorded';
+  }
+
+  function _rptWhen(iso) {
+    if (!iso) return 'date unknown';
+    const d = new Date(iso);
+    return isNaN(d) ? 'date unknown'
+      : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  // Subject and chapter for a question id, read from the packs already loaded.
+  // ⚠ Packs are lazy (PackLoader), so a miss here means "not loaded", never
+  //   "does not exist" - the card says which rather than asserting either.
+  function _rptWhere(r, fullQ) {
+    const chapterId = r.chapter_id || fullQ?.chapterId || null;
+    let chapter = null, pack = null;
+    if (chapterId && typeof SUBJECT_PACKS !== 'undefined') {
+      for (const p of SUBJECT_PACKS) {
+        const found = (p._chapters || p.chapters || []).find(c => c.id === chapterId);
+        if (found) { chapter = found; pack = p; break; }
+      }
+    }
+    const subject = pack ? `${pack.name} · Grade ${pack.grade}` : '';
+    const name = chapter?.name || chapterId || '';
+    return [subject, name].filter(Boolean).join(' · ');
+  }
 
   async function _loadPendingReports() {
     const el = document.getElementById('qm-reports-section');
     if (!el) return;
     const { data, error, count } = await _sb.from('question_reports')
-      .select('id,question_id,question_text,message,created_at', { count: 'exact' })
-      .eq('status', 'open')
+      .select('id,question_id,question_text,message,created_at,status,report_type,chapter_id,student_id,reporter_id,students!student_id(display_name,grade)',
+              { count: 'exact' })
+      .in('status', _REPORT_UNFINISHED)
       .order('created_at', { ascending: false })
       .limit(10);
     if (error) { el.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400 mb-3">Could not load question reports. Please refresh to try again.</p>'; return; }
     if (!data || !data.length) { el.innerHTML = ''; return; }
     el.innerHTML = `<div class="mb-4 border border-red-200 dark:border-red-800 rounded-xl p-3 bg-red-50 dark:bg-red-900/20">
       <div class="flex flex-wrap gap-2 items-center justify-between mb-2">
-        <h3 class="font-semibold text-sm text-red-600 dark:text-red-400">🚩 ${count ?? data.length} question reports awaiting review</h3>
+        <h3 class="font-semibold text-sm text-red-600 dark:text-red-400">🚩 ${count ?? data.length} question report${(count ?? data.length) === 1 ? '' : 's'} to review</h3>
         <button onclick="AdminPanel.showTab('reports')" class="text-xs text-red-600 dark:text-red-400 underline">Review all reports →</button>
       </div>
-      <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">Users flagged these questions for an administrator to check. A report does not necessarily mean the question is wrong. Mark it resolved after reviewing the issue; this does not edit the question.</p>
-      ${(count || 0) > data.length ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Showing the latest ${data.length} of ${count} open reports.</p>` : ''}
-      <div class="space-y-3">${data.map((r, i) => `
-        <div class="rounded-lg border border-red-100 dark:border-gray-600 bg-white dark:bg-gray-800 p-3 text-sm text-gray-800 dark:text-gray-100 break-words">
-          <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Question ID: <span class="font-mono">${_escRpt(r.question_id || 'Not recorded')}</span></p>
-          <p class="font-semibold">Question</p>
-          <p class="mb-3 whitespace-pre-wrap">${_escRpt(_parseReportMeta(r.question_text).text || 'Question preview unavailable. Open Reports to investigate this ID.')}</p>
-          <p class="font-semibold">Reported issue</p>
-          <p class="mb-3 whitespace-pre-wrap">${_escRpt(_parseReportMeta(r.message).text || 'No comment provided.')}</p>
-          <div class="flex flex-wrap gap-2">
-            <button data-report-edit="${i}" class="text-xs bg-blue-600 text-white px-3 py-2 rounded-lg">Edit question</button>
-            <button data-report-resolve="${i}" class="text-xs bg-green-600 text-white px-3 py-2 rounded-lg disabled:opacity-50">Mark as resolved</button>
+      <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">Users flagged these questions for an administrator to check. A report does not necessarily mean the question is wrong. Tap a report to open it. Marking it resolved does not edit the question.</p>
+      ${(count || 0) > data.length ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Showing the latest ${data.length} of ${count} unresolved reports.</p>` : ''}
+      <div class="space-y-2">${data.map((r, i) => {
+        // ⚠ _parseReportMeta returns a WRAPPER, { text, meta } - the stored blob
+        //   is one level down. Reading .studentName / .mode straight off the
+        //   wrapper silently yields undefined, which reads on screen as
+        //   "Not recorded" for a pupil the row actually names.
+        const parsed  = _parseReportMeta(r.question_text);
+        const meta    = parsed.meta || {};
+        const fullQ   = (typeof STATIC_QUESTIONS !== 'undefined')
+          ? STATIC_QUESTIONS.find(q => q.id === r.question_id) : null;
+        const stored  = _rptPlain(parsed.text);
+        const live    = _rptPlain(fullQ?.question);
+        const qText   = stored || live;
+        const issue   = _parseReportMeta(r.message).text.trim();
+        const where   = _rptWhere(r, fullQ);
+        const typeLbl = _REPORT_TYPE_LABELS[r.report_type || ''] || '';
+        const who     = _rptWho(r, meta);
+        const mode    = meta.mode || null;
+        const snippet = issue.replace(/\s+/g, ' ').slice(0, 120);
+        const safeId  = String(r.id).replace(/[^a-zA-Z0-9-]/g, '');
+        const openAtt = _qmReportsOpen.has(r.id) ? ' open' : '';
+        // Now that the list holds two statuses, a card with no status chip is
+        // ambiguous - the admin cannot tell what they have already picked up.
+        const inRev   = (r.status || 'open') === 'in_review';
+        return `
+        <details class="rep-det rounded-lg border border-red-100 dark:border-gray-600 bg-white dark:bg-gray-800 p-3 text-sm text-gray-800 dark:text-gray-100"${openAtt}
+          ontoggle="AdminPanel.toggleQmReportOpen('${safeId}', this.open)">
+          <summary class="rep-sum">
+            <span class="rep-sum-inner">
+            <span class="rep-caret" aria-hidden="true">▸</span>
+            <span class="rep-sum-main">
+              <span class="rep-sum-top">
+                <span class="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">${_escRpt(r.question_id || 'no id')}</span>
+                ${typeLbl ? `<span class="text-xs text-gray-600 dark:text-gray-300">${_escRpt(typeLbl)}</span>` : ''}
+                ${mode ? `<span class="text-xs text-gray-500 dark:text-gray-400">(${_escRpt(mode)})</span>` : ''}
+                <span class="text-xs px-2 py-0.5 rounded-full font-medium ${inRev
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                  : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'}">${inRev ? 'in review' : 'open'}</span>
+              </span>
+              ${where ? `<span class="rep-sum-sub text-blue-600 dark:text-blue-400">${_escRpt(where)}</span>` : ''}
+              ${snippet ? `<span class="rep-sum-snip text-gray-600 dark:text-gray-300">${_escRpt(snippet)}</span>` : ''}
+              <span class="rep-sum-meta text-gray-400 dark:text-gray-500">Reported by ${_escRpt(who)} · ${_escRpt(_rptWhen(r.created_at))}</span>
+            </span>
+            </span>
+          </summary>
+          <div class="rep-body pt-3">
+            <p class="font-semibold text-xs text-gray-500 dark:text-gray-400 mb-1">Question${stored ? '' : live ? ' (from the question bank)' : ''}</p>
+            <p class="mb-3 whitespace-pre-wrap">${qText
+              ? _escRpt(qText.slice(0, 400)) + (qText.length > 400 ? '…' : '')
+              : `No question text was stored with this report, and <span class="font-mono">${_escRpt(r.question_id || 'no id')}</span> is not in the question bank loaded here. Open the full Reports screen to investigate.`}</p>
+            <p class="font-semibold text-xs text-gray-500 dark:text-gray-400 mb-1">Reported issue</p>
+            <p class="mb-3 whitespace-pre-wrap">${_escRpt(issue) || 'No comment provided.'}</p>
+            <div class="flex flex-wrap gap-2">
+              <button data-report-edit="${i}" class="text-xs bg-blue-600 text-white px-3 py-2 rounded-lg">Edit question</button>
+              <button data-report-resolve="${i}" class="text-xs bg-green-600 text-white px-3 py-2 rounded-lg disabled:opacity-50">Mark as resolved</button>
+            </div>
           </div>
-        </div>`).join('')}
+        </details>`;
+      }).join('')}
       </div>
     </div>`;
     el.querySelectorAll('[data-report-edit]').forEach(button => {
@@ -4174,7 +4468,7 @@ const AdminPanel = (() => {
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
-    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, toggleLeaderboard, loadStats, loadReports, loadMoreReports, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, filterRoles, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, toggleLeaderboard, loadStats, loadReports, loadMoreReports, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleQmReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, filterRoles, loadPlans, togglePlan, loadJuice, saveJuiceSettings, confirmJuice, rejectJuice, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier, sortTeachers, refreshTeacherActivity,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
     qmSubjectFilter: QM.qmSubjectFilter, qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,

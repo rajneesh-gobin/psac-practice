@@ -89,6 +89,39 @@ defaults found via `pg_depend`, `check_function_bodies`, the pinned
    drops the `=X` PUBLIC entry. Check `proacl`, not the migration text, after any
    `CREATE FUNCTION`.
 
+### Manual MCB Juice payments (2026-09-10)
+`migrations/20260910_manual_juice_payments.sql`. Five functions, and only one
+of them grants anything.
+| Function | Who | Grants |
+|---|---|---|
+| `payment_settings()` | anon + | nothing — the public Juice number, built field by field |
+| `payment_start_juice(plan, months)` | authenticated | nothing — a `payments` row and a 6-character reference |
+| `payment_mark_sent(id, note)` | authenticated | nothing — moves the row up the queue |
+| **`payment_admin_confirm(id, ref)`** | admin | **everything** |
+| `payment_admin_reject(id, reason)` | admin | nothing |
+- ⚠ **`profiles.expires_at` is the gate, not `subscriptions.expires_at`.**
+  `questions.js` reads `profiles.expires_at` for the expired test (line ~587)
+  and `subscriptions.status='active'` only to pick the plan's `features`
+  (line ~674) — the subscription's own `expires_at` is written and **never
+  read**. A grant must move both or a paying parent still reads as expired.
+- ⚠ **One active subscription per user.** Confirming supersedes the previous
+  active row, or an old tier's `allowed_chapters` outlives the payment for it.
+- ⚠ **Renewing early ADDS.** The window starts at
+  `greatest(now(), profiles.expires_at)`, so paying three days early does not
+  throw away the days already bought.
+- ⚠ **Confirming twice returns `already: true` and grants nothing more.** Two
+  admins on one queue, or one double-tap, must not buy two months for one
+  transfer. `payments.reference` and `(provider, provider_ref)` are unique.
+- ⚠ **`REVOKE … FROM anon` was not enough** — a new function carries EXECUTE
+  for PUBLIC and anon is a member of PUBLIC, so `has_function_privilege`
+  stayed true. The harness caught it; the revoke names `PUBLIC, anon`.
+- ⚠ **Nothing is switched on by the migration.** `juice_enabled` defaults to
+  false, so applying it to production changes nothing a user can see until an
+  admin sets a number and flips the switch.
+- Tested by `scripts/sql-tests/run-juice-tests.sh` (26 assertions on a real
+  postgres, as `authenticated`), `scripts/test-juice-payments.js` (the client
+  half) and `scripts/test-juice-ui.js` (both screens at 360px).
+
 ### Other database facts worth keeping
 - ⚠ **`public.profiles` has NO email column** — the address is in `auth.users`,
   which the browser cannot read and should not, so the admin members list could

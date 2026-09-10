@@ -276,8 +276,13 @@ papers · the importer's flags and fail-closed preflight. Headlines:
 6. ⚠ If you added/removed/renamed/reordered a **chapter** — or added a pack —
    re-run `node scripts/build-subject-index.js`. `scripts/check.js` fails on
    drift, so this cannot ship stale, but it will stop the build until you do.
-7. After any large content addition:
-   `node netlify/build-questions.js && node scripts/test-question-cache-budget.js`.
+7. **`node scripts/preflight.js`** runs the five local steps that must pass after
+   any content or chapter change — rebuild the index, subsection invariant,
+   rebuild the bundles, live-pack content, `check.js` — in the one order that
+   works. ⚠ It writes NOTHING to the database. Add `--import-dry-run` to see
+   what would change, `--import` to actually upsert; step 6 is opt-in and is
+   skipped if any earlier step failed, `--keep-going` included.
+   After a large content addition also run `node scripts/test-question-cache-budget.js`.
 
 ## ⚠ Code that is duplicated on purpose — change every copy together
 There is no shared module between the browser and the Lambdas. Each of these has
@@ -416,6 +421,7 @@ Never move an entitlement decision into the browser.
 | Points earned, and the level on the leaderboard | `_award_points()` in SQL, keyed `(student_id, kind, ref)` so a thing pays **once** — called by `record_question_progress()`, `award_activity_points()` and `add_friend()` | `DB.xp` / `gainPoints()` — an optimistic prediction, corrected on the next flush |
 | Whether the GLOBAL leaderboard exists at all | `leaderboard_enabled()` (from `global_settings`, **default false**) — `get_points_leaderboard()` returns no rows to anyone while off | `#dash-global-lb` being hidden — presentation only |
 | Credits spent | `purchase_chapter()` / `purchase_subject()` (price + balance read server-side, row-locked) | the Buy button |
+| **Money → access** (manual MCB Juice) | `payment_admin_confirm()` — an admin verifying a real transfer. It moves `profiles.expires_at` **and** the `subscriptions` row together | `payment_start_juice()` / `payment_mark_sent()`, which grant **nothing**; and the browser, which never sees a price it did not receive |
 | Expired account | `questions.js` | `Auth.isAccessExpired()` — picks wording only |
 | Forum identity (`author_name`/`author_type`) | `forum_set_author` BEFORE INSERT trigger | the browser (it no longer sends them) |
 | Parent PIN, when it mints a session | `netlify/functions/parent-pin-signin.js` + `parent_pin_attempts` (service role) | `_pinMatches()` — a local convenience check |
