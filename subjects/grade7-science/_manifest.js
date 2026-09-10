@@ -104,7 +104,16 @@ const G7SC_SYLLABUS = {
 registerSubject({
   id: 'grade7-science', name: 'Science', grade: 7, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  // ⚠ WAS 'Word Problems', which is the MATHS label and meaningless in science.
+  // CLAUDE.md records that L4 is maths-shaped and does not travel; the whole
+  // point of level4Label is to say what L4 means in THIS pack. 'Applied
+  // Scenarios' matches grade6-science and the four Grade 9 science packs, so a
+  // child meets one wording for the same idea from Grade 6 to Grade 9.
+  // ⚠ Nine other packs still carry the 'Word Problems' default wrongly —
+  // grade7/8 english, french and social-modern-studies, grade9 english, french
+  // and social-modern-studies. Fix each as its batch comes up, not before: the
+  // label should change in the commit that gives the level real content.
+  practiceble: true, notesBased: false, level4Label: 'Applied Scenarios',
   syllabus: G7SC_SYLLABUS,
   chapters: [
     { id: 'g7s-inquiry',                name: 'Scientific Inquiry',               icon: '🔍', examWeight: 2,
