@@ -3885,6 +3885,10 @@
           <p id="qm-filter-hint" class="qm-filter-hint hidden" aria-live="polite"></p>
           <div class="qm-extra-filters">
           <label class="flex items-center gap-1.5 text-sm cursor-pointer select-none border dark:border-gray-600 rounded px-2 py-1 dark:text-gray-300">
+            <input id="qm-preview-mode" type="checkbox" class="rounded" checked onchange="AdminPanel.qmTogglePreviewMode()">
+            👁 Show as the pupil sees it
+          </label>
+          <label class="flex items-center gap-1.5 text-sm cursor-pointer select-none border dark:border-gray-600 rounded px-2 py-1 dark:text-gray-300">
             <input id="qm-has-image" type="checkbox" class="rounded" onchange="AdminPanel.qmSearch()">
             🖼 Has image
           </label>
@@ -3919,46 +3923,31 @@
         </div>
       </div>
 
-      <!-- Main navigation: four items. Everything else lives behind More. -->
+      <!-- ⚠ ONE main destination. Set Work and Results used to sit here too,
+           beside the same two jobs inside a classroom, so a teacher could not
+           tell which "Results" they were looking at. Both are now reached only
+           from inside the class they belong to; the tabs still exist in the DOM
+           and switchTab() still opens them, they are just not a place you pick. -->
       <div class="teacher-navigation" role="tablist" aria-label="Teaching workspace">
-        <button role="tab" aria-selected="true" class="ta-tab" data-tab="home" onclick="TeacherMode.switchTab('home')"><strong>🏠 Home</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="classes" onclick="TeacherMode.switchTab('classes')"><strong>🏫 Classrooms</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="create" onclick="TeacherMode.switchTab('create')"><strong>✏️ Set Work</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="results" onclick="TeacherMode.switchTab('results')"><strong>📊 Results</strong></button>
+        <button role="tab" aria-selected="true" class="ta-tab" data-tab="home" onclick="TeacherMode.switchTab('home')"><strong>🏫 My classes</strong></button>
         <div class="ta-more-wrap">
           <button type="button" id="ta-more-btn" class="ta-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="ta-more-menu" onclick="TeacherMode.toggleMore()"><strong>⋯ More</strong><span id="tc-msg-badge" class="hidden ta-more-badge">new</span></button>
           <div id="ta-more-menu" class="ta-more-menu hidden" role="menu" aria-label="More teacher tools">
-            <button type="button" role="menuitem" data-more="materials" onclick="TeacherMode.switchTab('materials')"><span class="ta-more-ico">📂</span><span><strong>Materials</strong><small>Files and notes for your classes</small></span></button>
+            <button type="button" role="menuitem" data-more="gradebook" onclick="TeacherMode.switchTab('gradebook')"><span class="ta-more-ico">📋</span><span><strong>Marks book</strong><small>Every score in one table, class by class</small></span></button>
+            <button type="button" role="menuitem" data-more="materials" onclick="TeacherMode.switchTab('materials')"><span class="ta-more-ico">📂</span><span><strong>All my files</strong><small>Every worksheet and note you have uploaded</small></span></button>
+            <button type="button" role="menuitem" data-more="assignments" onclick="TeacherMode.switchTab('assignments')"><span class="ta-more-ico">📦</span><span><strong>Past work</strong><small>Work that has closed or been put away</small></span></button>
             <button type="button" role="menuitem" data-more="messages" onclick="TeacherMode.switchTab('messages')"><span class="ta-more-ico">💬</span><span><strong>Messages</strong><small>Ask a question or report a problem</small></span></button>
-            <button type="button" role="menuitem" data-more="gradebook" onclick="TeacherMode.switchTab('gradebook')"><span class="ta-more-ico">📋</span><span><strong>Gradebook</strong><small>Every score for a classroom in one table</small></span></button>
-            <button type="button" role="menuitem" data-more="assignments" onclick="TeacherMode.switchTab('assignments')"><span class="ta-more-ico">📦</span><span><strong>Archived work</strong><small>Closed and archived assignments</small></span></button>
             <button type="button" role="menuitem" data-more="settings" onclick="TeacherMode.switchTab('settings')"><span class="ta-more-ico">⚙️</span><span><strong>Teacher settings</strong><small>Install, invite, account</small></span></button>
           </div>
         </div>
       </div>
 
-      <!-- ── TAB: HOME ── -->
+      <!-- ── TAB: MY CLASSES ──
+           Home and Classrooms were two tabs answering the same question, each
+           with its own greeting and its own "who needs help" panel. They are
+           one screen: what needs me today, then the classes themselves. -->
       <div class="ta-tab-content" data-tab="home">
-        <div id="ta-home" class="th-root" aria-live="polite"><p class="ta-loading">Loading your overview…</p></div>
-      </div>
-
-      <!-- ── TAB: CLASSROOMS ── -->
-      <div class="ta-tab-content hidden" data-tab="classes">
-        <div class="tc-classroom-heading">
-          <div>
-            <span class="tc-classroom-kicker">YOUR TEACHING SPACE</span>
-            <h3 class="font-bold text-lg">Your classrooms</h3>
-            <p class="teacher-intro">Each classroom keeps its pupils, work and results together. Pupils do not need an account.</p>
-          </div>
-          <button onclick="TeacherGuestClasses.refresh()" class="tc-refresh-btn" title="Refresh classrooms">↻ <span>Refresh</span></button>
-        </div>
-        <div class="teacher-class-create">
-          <div class="tc-quick-create-copy"><span>＋</span><div><strong>Set up a new classroom</strong><small>Start with a memorable name such as “Grade 5 Blue”.</small></div></div>
-          <label for="tc-name" class="sr-only">Classroom name</label>
-          <input id="tc-name" maxlength="80" placeholder="Classroom name, e.g. Grade 5 Blue"
-            class="border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-          <button onclick="TeacherGuestClasses.create(this)" class="ta-btn-pencil">Continue →</button>
-        </div>
+        <div id="ta-home" class="th-root" aria-live="polite"><p class="ta-loading">Loading your classes…</p></div>
         <p id="tc-status" role="status" class="text-sm my-3"></p>
         <div id="tc-list"></div><div id="tc-workspace"></div><div id="tc-roster"></div>
       </div>
@@ -3974,134 +3963,185 @@
           <button onclick="TeacherMode.switchTab('classes')" class="ta-notice-btn">🏫 Create a classroom →</button>
         </div>
 
-        <div id="ta-create-form" class="hidden ta-form">
-          <!-- Step 1: who -->
-          <h4 class="teacher-step" data-step="1"><span>Who is this for?</span></h4>
-          <div id="ta-class-picker" class="ta-class-picker-wrap"></div>
-          <div id="ta-share-choice" class="ta-share-choice" role="radiogroup" aria-label="How pupils open this work">
-            <label class="ta-share-opt" id="ta-share-opt-pin">
-              <input type="radio" name="ta-share" value="classroom_pin" onchange="TeacherMode.shareChoiceChanged(true)">
-              <span class="ta-share-opt-ico" aria-hidden="true">🔑</span>
-              <span class="ta-share-opt-text"><strong>My classroom pupils</strong><small>Each pupil uses their personal four-digit PIN.</small></span>
-            </label>
-            <label class="ta-share-opt" id="ta-share-opt-link">
-              <input type="radio" name="ta-share" value="nickname" onchange="TeacherMode.shareChoiceChanged(true)">
-              <span class="ta-share-opt-ico" aria-hidden="true">🔗</span>
-              <span class="ta-share-opt-text"><strong>Anyone with the link</strong><small>Pupils enter their name and begin.</small></span>
-            </label>
+        <div id="ta-create-form" class="hidden ta-form ta-wizard">
+          <!-- ⚠ One question per screen. Every id below is read by
+               _buildAssignment(); the wizard shows and hides, it never replaces.
+               Hidden-but-present inputs still answer .value, which is why the
+               steps a teacher has not reached yet still publish correctly. -->
+          <div class="ta-wiz-top">
+            <button type="button" class="ta-wiz-quit" onclick="TeacherMode.leaveSetWork()">← Back to my class</button>
+            <div class="ta-wiz-track" aria-hidden="true"><i data-dot="1"></i><i data-dot="2"></i><i data-dot="3"></i><i data-dot="4"></i><i data-dot="5"></i></div>
+            <span class="ta-wiz-count" id="ta-wiz-count" aria-live="polite">Step 1 of 5</span>
           </div>
-          <p id="ta-share-note" class="ta-form-note" aria-live="polite"></p>
 
-          <!-- Hidden selects kept for backwards-compat with buildAssignment() and older tests -->
-          <select id="ta-access" aria-label="Access type" onchange="TeacherGuestClasses.accessChanged()" style="display:none">
-            <option value="nickname">Open link - nickname, no PIN</option>
-            <option value="classroom_pin">My classroom - each pupil’s private PIN</option>
-            <option value="legacy">Shared assignment PIN + name (legacy)</option>
-          </select>
-          <div id="ta-classroom-wrap" style="display:none">
-            <select id="ta-classroom" aria-label="Classroom" class="w-full border rounded p-2 dark:bg-gray-700 dark:text-white">
-              <option value="">Standalone - not tied to a classroom</option>
+          <section class="ta-wiz-step" data-step="1">
+            <h4 class="ta-wiz-q">Who is this work for?</h4>
+            <p class="ta-wiz-help">Pick the class. Your pupils never need an account, an email address or a password.</p>
+            <div id="ta-class-picker" class="ta-class-picker-wrap"></div>
+
+            <h5 class="ta-wiz-sub">How will they open it?</h5>
+            <div id="ta-share-choice" class="ta-share-choice" role="radiogroup" aria-label="How pupils open this work">
+              <label class="ta-share-opt" id="ta-share-opt-pin">
+                <input type="radio" name="ta-share" value="classroom_pin" onchange="TeacherMode.shareChoiceChanged(true)">
+                <span class="ta-share-opt-ico" aria-hidden="true">🔑</span>
+                <span class="ta-share-opt-text"><strong>Only my pupils</strong><small>You send one link. Each pupil types the four-digit PIN you gave them, so every mark is saved under their real name.</small></span>
+              </label>
+              <label class="ta-share-opt" id="ta-share-opt-link">
+                <input type="radio" name="ta-share" value="nickname" onchange="TeacherMode.shareChoiceChanged(true)">
+                <span class="ta-share-opt-ico" aria-hidden="true">🔗</span>
+                <span class="ta-share-opt-text"><strong>Anyone with the link</strong><small>No PIN. Whoever opens the link types a name and starts, so you cannot be sure who answered.</small></span>
+              </label>
+            </div>
+            <p id="ta-share-note" class="ta-form-note" aria-live="polite"></p>
+
+            <!-- Hidden selects kept for backwards-compat with buildAssignment() and older tests -->
+            <select id="ta-access" aria-label="Access type" onchange="TeacherGuestClasses.accessChanged()" style="display:none">
+              <option value="nickname">Open link - nickname, no PIN</option>
+              <option value="classroom_pin">My classroom - each pupil's private PIN</option>
+              <option value="legacy">Shared assignment PIN + name (legacy)</option>
             </select>
-          </div>
-          <p id="ta-access-help" class="hidden"></p>
-          <div id="ta-legacy-pin-wrap" hidden>
-            <input id="ta-pin" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 4821"
-              class="w-32 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
-          </div>
+            <div id="ta-classroom-wrap" style="display:none">
+              <select id="ta-classroom" aria-label="Classroom" class="w-full border rounded p-2 dark:bg-gray-700 dark:text-white">
+                <option value="">Standalone - not tied to a classroom</option>
+              </select>
+            </div>
+            <p id="ta-access-help" class="hidden"></p>
+            <div id="ta-legacy-pin-wrap" hidden>
+              <input id="ta-pin" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 4821"
+                class="w-32 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
+            </div>
+          </section>
 
-          <!-- Step 2: what -->
-          <h4 class="teacher-step" data-step="2"><span>What is the work?</span></h4>
-          <div class="ta-form-grid">
-            <div class="ta-field">
-              <label for="ta-grade">Grade</label>
-              <select id="ta-grade" onchange="TeacherMode.gradeChange()"></select>
-            </div>
-            <div class="ta-field">
-              <label for="ta-subject">Subject</label>
-              <select id="ta-subject" onchange="TeacherMode.subjectChange()"></select>
-            </div>
-          </div>
-          <div class="ta-field">
-            <label for="ta-chapter-opts-container">Chapter <span>tick one or more, or leave all blank for the whole subject</span></label>
-            <div id="ta-chapter-opts-container" class="ta-chapter-grid"></div>
-          </div>
-          <div class="ta-field ta-field-narrow">
-            <label for="ta-count">Number of questions</label>
-            <select id="ta-count">
-              <option value="5">5 questions</option>
-              <option value="10" selected>10 questions</option>
-              <option value="15">15 questions</option>
-              <option value="20">20 questions</option>
-            </select>
-          </div>
-
-          <!-- Step 3: when -->
-          <h4 class="teacher-step" data-step="3"><span>When is it due?</span></h4>
-          <div class="ta-due-row">
-            <div class="ta-field ta-field-narrow">
-              <label for="ta-due">Due date</label>
-              <input id="ta-due" type="date" onchange="TeacherMode.dueChanged()">
-            </div>
-            <div class="ta-due-chips" aria-label="Quick due dates">
-              <button type="button" data-due-days="1" onclick="TeacherMode.setDueInDays(1)">Tomorrow</button>
-              <button type="button" data-due-days="3" onclick="TeacherMode.setDueInDays(3)">In 3 days</button>
-              <button type="button" data-due-days="7" onclick="TeacherMode.setDueInDays(7)">Next week</button>
-            </div>
-          </div>
-          <p id="ta-due-note" class="ta-form-note">Pupils can open the work until the end of that day.</p>
-
-          <details id="ta-more-options" class="ta-more-options">
-            <summary><span>⚙️ More options</span><small>difficulty, timer, chosen pupils, name</small></summary>
+          <section class="ta-wiz-step hidden" data-step="2">
+            <h4 class="ta-wiz-q">Which subject?</h4>
+            <p class="ta-wiz-help">The questions come from the Mauritian syllabus for the grade you pick.</p>
             <div class="ta-form-grid">
               <div class="ta-field">
-                <label for="ta-difficulty">Difficulty</label>
-                <select id="ta-difficulty">
-                  <option value="0">🔀 Mixed</option>
-                  <option value="1">⭐ Level 1 · basic</option>
-                  <option value="2">⭐⭐ Level 2 · medium</option>
-                  <option value="3">⭐⭐⭐ Level 3 · hard</option>
-                  <option value="4">🏆 Level 4 · word problems</option>
-                </select>
+                <label for="ta-grade">Grade</label>
+                <select id="ta-grade" onchange="TeacherMode.gradeChange()"></select>
               </div>
               <div class="ta-field">
-                <label for="ta-mode">Timer</label>
-                <select id="ta-mode" onchange="TeacherMode.modeChanged()">
-                  <option value="practice">No timer</option>
-                  <option value="test">Timed</option>
-                </select>
-              </div>
-              <div class="ta-field" id="ta-duration-wrap" hidden>
-                <label for="ta-duration">Time allowed</label>
-                <select id="ta-duration">
-                  <option value="">Automatic · 2 minutes per question</option>
-                  <option value="10">10 minutes</option>
-                  <option value="15">15 minutes</option>
-                  <option value="20">20 minutes</option>
-                  <option value="30">30 minutes</option>
-                  <option value="45">45 minutes</option>
-                  <option value="60">60 minutes</option>
-                </select>
-              </div>
-              <div class="ta-field">
-                <label for="ta-label">Assignment name <span>optional</span></label>
-                <input id="ta-label" type="text" maxlength="60" placeholder="e.g. Fractions homework" class="selectable">
+                <label for="ta-subject">Subject</label>
+                <select id="ta-subject" onchange="TeacherMode.subjectChange()"></select>
               </div>
             </div>
-            <label class="ta-check"><input type="checkbox" id="ta-random" checked> 🎲 Shuffle the questions</label>
-            <div class="ta-field" id="ta-pupils-wrap" hidden>
-              <label for="ta-pupils-list">Which pupils? <span>leave everyone ticked to assign to the whole class</span></label>
-              <div id="ta-pupils-list" class="ta-pupils-list"></div>
-            </div>
-            <p class="ta-form-note">Pupils see feedback after each question. Every result is saved online for you.</p>
-          </details>
+          </section>
 
-          <p id="ta-quota" class="ta-quota hidden"></p>
-          <button id="ta-build-btn" onclick="TeacherMode.buildAssignment()">✏️ Assign to the whole class</button>
+          <section class="ta-wiz-step hidden" data-step="3">
+            <h4 class="ta-wiz-q">Which part of the subject?</h4>
+            <!-- ⚠ "Leave every box blank for the whole subject" was the old
+                 instruction. An empty form meaning "everything" is the least
+                 discoverable default there is, so the choice is now spoken. -->
+            <div class="ta-scope" role="radiogroup" aria-label="How much of the subject to use">
+              <label class="ta-scope-opt">
+                <input type="radio" name="ta-scope" value="all" checked onchange="TeacherMode.scopeChanged()">
+                <span class="ta-scope-ico" aria-hidden="true">📚</span>
+                <span class="ta-scope-text"><strong>The whole subject</strong><small>Questions may come from any chapter. Best for revision before a test.</small></span>
+              </label>
+              <label class="ta-scope-opt">
+                <input type="radio" name="ta-scope" value="pick" onchange="TeacherMode.scopeChanged()">
+                <span class="ta-scope-ico" aria-hidden="true">✅</span>
+                <span class="ta-scope-text"><strong>Only the chapters I choose</strong><small>Best for homework on exactly what you taught this week.</small></span>
+              </label>
+            </div>
+            <div class="ta-field" id="ta-chapter-wrap" hidden>
+              <label for="ta-chapter-opts-container">Tick every chapter this work may use</label>
+              <div id="ta-chapter-opts-container" class="ta-chapter-grid"></div>
+            </div>
+            <p id="ta-pool-note" class="ta-form-note" aria-live="polite"></p>
+          </section>
+
+          <section class="ta-wiz-step hidden" data-step="4">
+            <h4 class="ta-wiz-q">How many questions, and how hard?</h4>
+            <div class="ta-field ta-field-narrow">
+              <label for="ta-count">How many questions</label>
+              <select id="ta-count" onchange="TeacherMode.countChanged()">
+                <option value="5">5 questions</option>
+                <option value="10" selected>10 questions</option>
+                <option value="15">15 questions</option>
+                <option value="20">20 questions</option>
+              </select>
+            </div>
+            <p id="ta-count-note" class="ta-form-note" aria-live="polite"></p>
+
+            <div class="ta-field">
+              <label for="ta-difficulty">How hard should it be</label>
+              <select id="ta-difficulty" onchange="TeacherMode.difficultyChanged()">
+                <option value="0">🔀 A mix of every level</option>
+                <option value="1">⭐ Easy</option>
+                <option value="2">⭐⭐ Medium</option>
+                <option value="3">⭐⭐⭐ Hard</option>
+                <option value="4">🏆 The hardest kind</option>
+              </select>
+            </div>
+            <p id="ta-difficulty-note" class="ta-form-note" aria-live="polite"></p>
+
+            <div class="ta-field">
+              <label for="ta-mode">Should the clock run?</label>
+              <select id="ta-mode" onchange="TeacherMode.modeChanged()">
+                <option value="practice">No timer - they can take their time</option>
+                <option value="test">Timed test - like a real exam</option>
+              </select>
+            </div>
+            <div class="ta-field" id="ta-duration-wrap" hidden>
+              <label for="ta-duration">Time allowed</label>
+              <select id="ta-duration">
+                <option value="">Work it out for me - 2 minutes a question</option>
+                <option value="10">10 minutes</option>
+                <option value="15">15 minutes</option>
+                <option value="20">20 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="45">45 minutes</option>
+                <option value="60">60 minutes</option>
+              </select>
+            </div>
+          </section>
+
+          <section class="ta-wiz-step hidden" data-step="5">
+            <h4 class="ta-wiz-q">When is it due?</h4>
+            <div class="ta-due-row">
+              <div class="ta-field ta-field-narrow">
+                <label for="ta-due">Due date</label>
+                <input id="ta-due" type="date" onchange="TeacherMode.dueChanged()">
+              </div>
+              <div class="ta-due-chips" aria-label="Quick due dates">
+                <button type="button" data-due-days="1" onclick="TeacherMode.setDueInDays(1)">Tomorrow</button>
+                <button type="button" data-due-days="3" onclick="TeacherMode.setDueInDays(3)">In 3 days</button>
+                <button type="button" data-due-days="7" onclick="TeacherMode.setDueInDays(7)">Next week</button>
+              </div>
+            </div>
+            <p id="ta-due-note" class="ta-form-note">Pupils can open the work until the end of that day.</p>
+
+            <details id="ta-more-options" class="ta-more-options">
+              <summary><span>⚙️ A few extra choices</span><small>give it a name, shuffle, pick certain pupils</small></summary>
+              <div class="ta-field">
+                <label for="ta-label">Give this work a name <span>optional - we write one for you</span></label>
+                <input id="ta-label" type="text" maxlength="60" placeholder="e.g. Fractions homework" class="selectable" oninput="TeacherMode.refreshSummary()">
+              </div>
+              <label class="ta-check"><input type="checkbox" id="ta-random" checked> 🎲 Give each pupil the questions in a different order</label>
+              <div class="ta-field" id="ta-pupils-wrap" hidden>
+                <label for="ta-pupils-list">Only certain pupils? <span>leave everyone ticked to send it to the whole class</span></label>
+                <div id="ta-pupils-list" class="ta-pupils-list"></div>
+              </div>
+            </details>
+
+            <div id="ta-wiz-summary" class="ta-wiz-summary" aria-live="polite"></div>
+            <p id="ta-quota" class="ta-quota hidden"></p>
+            <button id="ta-build-btn" onclick="TeacherMode.buildAssignment()">✏️ Assign to the whole class</button>
+          </section>
+
+          <div class="ta-wiz-nav">
+            <button type="button" id="ta-wiz-back" class="ta-wiz-back" onclick="TeacherMode.wizardBack()">← Back</button>
+            <button type="button" id="ta-wiz-next" class="ta-wiz-next" onclick="TeacherMode.wizardNext()">Next →</button>
+          </div>
         </div>
       </div>
 
       <!-- ── TAB: RESULTS ── -->
       <div class="ta-tab-content hidden" data-tab="results">
+        <!-- ⚠ Results is reached from a class, never from the main nav, so it
+             has to say how to get back where you came from. -->
+        <button type="button" class="ta-wiz-quit" onclick="TeacherMode.leaveSetWork()">← Back to my class</button>
         <div class="ta-results-head">
           <div><h3 class="font-bold">📊 Results</h3><p class="ta-form-help">Choose a piece of work to see who has finished and who needs help.</p></div>
           <button onclick="TeacherWorkspace.refresh()" class="ta-btn-eraser">↻ Refresh</button>
@@ -4274,22 +4314,26 @@
         </div>
         <button class="tc-cd-share-btn" onclick="TeacherClassroomDetail.createWork()" title="Set work for this classroom">✏️ Set work</button>
       </div>
+      <!-- ⚠ The ONE place this classroom's numbers are counted. There used to
+           be a second grid on the Today screen counting three of the same
+           things in different words, and disagreeing about one of them. Each
+           number is now the button that takes you to what it counts. -->
       <div class="tc-cd-stats" aria-label="Classroom at a glance">
-        <div class="tc-cd-stat"><strong id="tc-cd-stat-pupils">-</strong><span>pupils</span></div>
-        <div class="tc-cd-stat"><strong id="tc-cd-stat-assignments">-</strong><span>active work</span></div>
-        <div class="tc-cd-stat"><strong id="tc-cd-stat-materials">-</strong><span>materials</span></div>
-        <div class="tc-cd-stat"><strong id="tc-cd-stat-results">-</strong><span>submitted</span></div>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('pupils')"><strong id="tc-cd-stat-pupils">-</strong><span>pupils</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('work')"><strong id="tc-cd-stat-assignments">-</strong><span>work running</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('materials')"><strong id="tc-cd-stat-materials">-</strong><span>files</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('work')"><strong id="tc-cd-stat-results">-</strong><span>handed in</span></button>
       </div>
       <div class="tc-cd-body">
         <nav class="tc-cd-nav" role="tablist" aria-label="Classroom sections">
-          <button class="tc-cd-nav-btn" role="tab" data-sec="overview" onclick="TeacherClassroomDetail.showSection('overview')">🏠<span>Overview</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="overview" onclick="TeacherClassroomDetail.showSection('overview')">🔔<span>Today</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="work"     onclick="TeacherClassroomDetail.showSection('work')">📋<span>Work</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="pupils"   onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Materials</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Files</span></button>
           <div class="tc-cd-nav-more">
             <button class="tc-cd-nav-btn" id="tc-cd-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="tc-cd-more-menu" onclick="TeacherClassroomDetail.toggleMore()">⋯<span>More</span></button>
             <div id="tc-cd-more-menu" class="tc-cd-more-menu hidden" role="menu" aria-label="More classroom tools">
-              <button type="button" role="menuitem" data-sec="results"   onclick="TeacherClassroomDetail.showSection('results')">📊 Results</button>
+              <button type="button" role="menuitem" data-sec="results"   onclick="TeacherClassroomDetail.showSection('results')">📊 All marks</button>
               <button type="button" role="menuitem" data-sec="settings"  onclick="TeacherClassroomDetail.showSection('settings')">⚙️ Settings</button>
             </div>
           </div>
@@ -6121,14 +6165,17 @@
           <select id="qmf-type" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1" onchange="AdminPanel.qmFormTypeChange()">
             <option value="mcq">MCQ (4 options)</option>
             <option value="numeric">Numeric (typed answer)</option>
-            <option value="tf">True / False</option>
+            <option value="text">Text (typed word or phrase)</option>
+            <option value="tf">True / False (saved as an MCQ)</option>
           </select>
         </div>
       </div>
 
+      <p id="qmf-type-note" class="hidden text-xs rounded px-2 py-1.5 bg-amber-50 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700"></p>
       <div>
         <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Question ID <span class="text-gray-400 font-normal">(leave blank to auto-generate)</span></label>
         <input id="qmf-id" type="text" placeholder="e.g. g5fr-lec-071" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1 font-mono">
+        <p id="qmf-id-note" class="hidden text-xs text-gray-500 dark:text-gray-400 mt-1">The id is fixed once a question exists — progress, mistakes and the importer all key on it. Delete and re-add to change it.</p>
       </div>
 
       <div>
@@ -6150,25 +6197,30 @@
       <div id="qmf-options-block" class="grid grid-cols-2 gap-2">
         <div>
           <label class="text-xs text-gray-500">Option A</label>
-          <input id="qmf-opt-a" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+          <input id="qmf-opt-a" oninput="AdminPanel.qmUpdatePreview()" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
         </div>
         <div>
           <label class="text-xs text-gray-500">Option B</label>
-          <input id="qmf-opt-b" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+          <input id="qmf-opt-b" oninput="AdminPanel.qmUpdatePreview()" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
         </div>
         <div>
           <label class="text-xs text-gray-500">Option C</label>
-          <input id="qmf-opt-c" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+          <input id="qmf-opt-c" oninput="AdminPanel.qmUpdatePreview()" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
         </div>
         <div>
           <label class="text-xs text-gray-500">Option D</label>
-          <input id="qmf-opt-d" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+          <input id="qmf-opt-d" oninput="AdminPanel.qmUpdatePreview()" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
         </div>
       </div>
 
       <div>
         <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Correct answer</label>
-        <input id="qmf-answer" type="text" placeholder="Must match one of the options exactly" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+        <input id="qmf-answer" oninput="AdminPanel.qmUpdatePreview()" type="text" placeholder="Must match one of the options exactly" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Also accept <span class="text-gray-400 font-normal">(one per line — other spellings or wordings marked right)</span></label>
+        <textarea id="qmf-accept" rows="2" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1 font-mono"></textarea>
       </div>
 
       <div>
@@ -6183,10 +6235,46 @@
 
       <div class="flex gap-2 pt-2">
         <button onclick="AdminPanel.qmCloseForm()" class="flex-1 border dark:border-gray-600 dark:text-gray-300 rounded py-2 text-sm">Cancel</button>
+        <button onclick="AdminPanel.qmPreviewForm()" class="qm-preview-button" title="See this question drawn exactly as a pupil gets it">👁 Preview</button>
         <button onclick="AdminPanel.qmSave()" class="flex-1 bg-blue-600 text-white rounded py-2 text-sm font-semibold">Save Question</button>
       </div>
     </div>
   </div>
+
+  <!-- ── ADMIN: "HOW THE PUPIL SEES IT" PREVIEW ──────────────────────
+       ⚠ The board inside is the PRACTICE SCREEN's own chalkboard: style.css
+       names #qm-preview-board in the same selector list as #screen-practice, and
+       the answer area is drawn by renderAnswerArea() itself. A preview with its
+       own renderer or its own copy of the rules is a preview of the copy. -->
+  <div id="modal-qm-preview" class="fixed inset-0 bg-black/60 flex items-start justify-center p-4 hidden" style="overflow-y:auto;z-index:60">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-xl p-5 space-y-3 my-8">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold text-gray-800 dark:text-white">👁 How the pupil sees it</h2>
+        <button onclick="AdminPanel.qmClosePreview()" aria-label="Close preview" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+      <p id="qmp-meta" class="text-xs text-gray-500 dark:text-gray-400"></p>
+      <div class="qm-preview-frame">
+        <div id="qm-preview-board">
+          <div class="pr-card">
+            <div id="qmp-hints" class="pr-hint hidden"></div>
+            <div id="qmp-q" class="pr-q"></div>
+            <div id="qmp-answers" class="pr-answers"></div>
+            <div id="qmp-feedback" class="pr-feedback hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="qm-preview-opts">
+        <label><input id="qmp-answered" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> After they answer — shows the correct answer and the explanation</label>
+        <label><input id="qmp-show-hints" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> Show the three hints the pupil can ask for</label>
+        <label id="qmp-blank-row" class="hidden"><input id="qmp-blank" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> Typed-blank face — half of pupils get this question as a typed box instead of four options</label>
+      </div>
+      <p class="qm-preview-note">Shown at a phone's width, on the practice screen. An exam draws the same question on the exam layout, and read-aloud there speaks the question only.</p>
+      <div class="flex gap-2 pt-1">
+        <button onclick="AdminPanel.qmClosePreview()" class="flex-1 border dark:border-gray-600 dark:text-gray-300 rounded py-2 text-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ── QR SCANNER OVERLAY ──────────────────────────────────── -->
   <div id="modal-qr-scanner" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center p-4"

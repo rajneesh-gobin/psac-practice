@@ -138,8 +138,8 @@ const TeacherWorkspace = (() => {
     if (token !== generation) return;
     if (!q || typeof q.per_day !== 'number') { box.classList.add('hidden'); return; }
     box.textContent = q.left_today === 0
-      ? 'You have used all ' + q.per_day + ' of today' + String.fromCharCode(8217) + 's assignments. The limit resets tomorrow.'
-      : q.left_today + ' of ' + q.per_day + ' assignments left today · up to ' + q.max_students + ' pupils each.';
+      ? 'You have set all ' + q.per_day + ' pieces of work allowed today. You can set more tomorrow.'
+      : 'You can set ' + q.left_today + ' more piece' + (q.left_today === 1 ? '' : 's') + ' of work today, for up to ' + q.max_students + ' pupils each.';
     box.classList.remove('hidden');
   }
 

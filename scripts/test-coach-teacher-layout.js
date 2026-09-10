@@ -81,11 +81,13 @@ let chrome,ws;
       const teacher=document.getElementById('screen-teacher'); teacher.classList.remove('hidden');
       teacher.querySelectorAll('.ta-tab-content').forEach(c=>c.classList.toggle('hidden',c.dataset.tab!=='create'));
       document.getElementById('ta-create-form').classList.remove('hidden');
-      const measured=[...teacher.querySelectorAll('.ta-tab,.teacher-step,#ta-share-choice,#ta-grade,#ta-subject,#ta-count,#ta-due,#ta-build-btn')].map(e=>({text:e.textContent.trim().slice(0,50),x:e.getBoundingClientRect().x,right:e.getBoundingClientRect().right,width:e.getBoundingClientRect().width}));
-      return {measured,buttons:teacher.querySelectorAll('.teacher-navigation .ta-tab').length,steps:teacher.querySelectorAll('.teacher-step').length,coach:typeof LearningCoach};
+      teacher.querySelectorAll('.ta-wiz-step').forEach(s=>s.classList.remove('hidden'));
+      teacher.querySelectorAll('#ta-chapter-wrap').forEach(s=>{s.hidden=false;});
+      const measured=[...teacher.querySelectorAll('.ta-tab,.ta-wiz-q,#ta-share-choice,#ta-grade,#ta-subject,#ta-count,#ta-difficulty,#ta-due,#ta-wiz-summary,#ta-build-btn,#ta-wiz-next')].map(e=>({text:e.textContent.trim().slice(0,50),x:e.getBoundingClientRect().x,right:e.getBoundingClientRect().right,width:e.getBoundingClientRect().width}));
+      return {measured,buttons:teacher.querySelectorAll('.teacher-navigation .ta-tab').length,steps:teacher.querySelectorAll('.ta-wiz-step').length,coach:typeof LearningCoach};
     })()`});
     assert(!result.exceptionDetails,JSON.stringify(result.exceptionDetails));
-    const value=result.result.value;assert.equal(value.buttons,4);assert.equal(value.steps,3);assert.equal(value.coach,'object');
+    const value=result.result.value;assert.equal(value.buttons,1);assert.equal(value.steps,5);assert.equal(value.coach,'object');
     for(const e of value.measured){assert(e.width>0,e.text+' visible');assert(e.x>=-1&&e.right<=width+1,e.text+' fits '+width);}
     console.log(`Teacher layout fits ${width}px, ${dark?'dark':'light'} theme; coach module loaded.`);
     const coachResult=await call('Runtime.evaluate',{returnByValue:true,expression:`(()=>{

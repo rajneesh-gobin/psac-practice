@@ -147,7 +147,7 @@ const PROBE = `
     const large = size >= 24 || (size >= 18.66 && bold);
     if (rt < (large ? 3 : 4.5)) contrast.push({ text: (el.textContent || '').trim().slice(0, 40), cls: String(el.className).slice(0, 60), ratio: +rt.toFixed(2), fg: s.color, bg: 'rgb(' + [bg.r, bg.g, bg.b].map(Math.round).join(',') + ')', size });
   }
-  const targets = [...scope.querySelectorAll('.ta-tab,.ta-more-btn,.th-action,.tw-btn,#ta-build-btn,.tr-insight-btn,.tr-bulk button,.ta-more-menu button,.tc-cd-nav-btn,.tc-work-filter,.ta-due-chips button,.ta-share-opt,.th-empty button,.tp-open,.ta-settings-card,.tc-cd-action-btn,.ta-state-retry,.tc-setup-step>button,.tc-setup-skip,.tc-setup-help')];
+  const targets = [...scope.querySelectorAll('.ta-tab,.ta-more-btn,.th-action,.tw-btn,#ta-build-btn,.tr-insight-btn,.tr-bulk button,.ta-more-menu button,.tc-cd-nav-btn,.tc-work-filter,.ta-due-chips button,.ta-share-opt,.th-empty button,.tp-open,.ta-settings-card,.tc-cd-action-btn,.ta-state-retry,.tc-setup-step>button,.tc-setup-skip,.tc-setup-help,.th-todo-btn,.tc-todo-btn,.ta-wiz-next,.ta-wiz-back,.ta-wiz-quit,.ta-scope-opt,.tc-today-footnote button')];
   for (const el of targets) { if (!visible(el)) continue; const r = el.getBoundingClientRect(); if (r.height < 43.5) small.push({ cls: String(el.className).slice(0, 50), text: (el.textContent || '').trim().slice(0, 30), h: Math.round(r.height) }); }
   const scroll = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth);
   return { overflow, contrast, small, scroll, W, checked: measured };
@@ -212,33 +212,86 @@ let chrome, ws; const pageErrorsRef = [];
     await sleep(1200);
     // Navigation shape
     const nav = await evaluate(`({ tabs: [...document.querySelectorAll('#screen-teacher .teacher-navigation .ta-tab')].map(b => b.textContent.trim()), more: [...document.querySelectorAll('#ta-more-menu [data-more]')].map(b => b.dataset.more), home: document.querySelector('.ta-tab-content[data-tab="home"]').classList.contains('hidden') === false })`);
-    assert.deepEqual(nav.tabs, ['🏠 Home', '🏫 Classrooms', '✏️ Set Work', '📊 Results'], 'four main tabs');
-    assert.deepEqual(nav.more, ['materials', 'messages', 'gradebook', 'assignments', 'settings'], 'five tools behind More');
+    // ⚠ ONE destination. Set Work and Results are reached from inside a class.
+    assert.deepEqual(nav.tabs, ['🏫 My classes'], 'one main destination');
+    assert.deepEqual(nav.more, ['gradebook', 'materials', 'assignments', 'messages', 'settings'], 'five tools behind More');
     assert(nav.home, 'Home is the landing tab');
-    const home = await evaluate(`({ greeting: document.querySelector('.th-hero h3')?.textContent, actions: document.querySelectorAll('.th-action').length, cards: document.querySelectorAll('.th-card').length, help: document.querySelector('.th-card:nth-child(2)')?.textContent })`);
+    const home = await evaluate(`({ greeting: document.querySelector('.th-hero h3')?.textContent, todos: [...document.querySelectorAll('.th-todo')].map(r => r.textContent.replace(/\\s+/g, ' ').trim()), oldCards: document.querySelectorAll('.th-card, .th-action').length, boards: document.querySelectorAll('#tc-list .tc-board-hanger').length, classesHead: !!document.querySelector('.th-classes-head') })`);
     if (!home.greeting) console.log('ta-home:', await evaluate("document.getElementById('ta-home').innerHTML.slice(0, 400)"));
     assert.match(home.greeting || '', /Good (morning|afternoon|evening), Mrs Devi/);
-    assert.equal(home.actions, 3); assert.equal(home.cards, 3);
-    assert.match(home.help, /Ben/, 'Ben (20% over 10 questions) is flagged on Home');
-    assert.doesNotMatch(home.help, /Aisha/, 'Aisha (80%) is not flagged');
+    assert.equal(home.oldCards, 0, 'the three duplicate dashboard cards are gone');
+    assert.equal(await evaluate("document.querySelectorAll('.tc-class-overview').length"), 0,
+      'and so is the counter row that sat between the greeting and the classes');
+    // Two classes + the "create" card, on the SAME screen as the to-do list:
+    // Home and Classrooms used to be separate tabs saying the same things.
+    assert.equal(home.boards, 3, 'the classroom boards are on Home: ' + home.boards);
+    assert(home.classesHead, 'and they are introduced');
+    const todoText = home.todos.join(' | ');
+    assert.match(todoText, /Ben/, 'Ben (20% over 10 questions, in 50 s) is named');
+    assert.doesNotMatch(todoText, /Aisha/, 'Aisha (80%) is not');
+    assert.match(todoText, /have not finished|has not finished/, 'and the unfinished pupils are one job');
+    assert(home.todos.every(t => /Send a reminder|Set easier practice|Look at their answers|See the results/.test(t)),
+      'every job carries an action: ' + todoText);
     report('Home ' + tag, await evaluate(PROBE)); await shot('home-' + tag);
 
     await evaluate("TeacherMode.toggleMore(true); true"); await sleep(150);
     report('More menu ' + tag, await evaluate(PROBE)); await shot('more-' + tag);
-    await evaluate("TeacherMode.closeMore(); TeacherMode.switchTab('classes'); true"); await sleep(600);
+    await evaluate("TeacherMode.closeMore(); true"); await sleep(300);
     report('Classrooms ' + tag, await evaluate(PROBE)); await shot('classes-' + tag);
 
-    await evaluate("TeacherMode.switchTab('create'); document.getElementById('ta-more-options').open = true; true"); await sleep(700);
-    const form = await evaluate(`(() => { const vis = id => { const e = document.getElementById(id); return !!e && e.offsetParent !== null; }; return { classroom: vis('ta-class-picker'), share: vis('ta-share-choice'), subject: vis('ta-subject'), chapter: vis('ta-chapter-opts-container'), count: vis('ta-count'), due: vis('ta-due'), pupils: vis('ta-pupils-list'), difficulty: vis('ta-difficulty'), btn: document.getElementById('ta-build-btn').textContent.trim(), pin: document.querySelector('input[name=ta-share][value=classroom_pin]').checked }; })()`);
-    assert(form.classroom && form.share && form.subject && form.chapter && form.count && form.due, 'initial fields visible ' + JSON.stringify(form));
-    assert(form.pin, 'a classroom with pupils defaults to PIN entry');
-    assert.match(form.btn, /Assign to the whole class/);
-    assert(form.pupils && form.difficulty, 'More options reveals pupils and difficulty');
+    await evaluate("TeacherMode.switchTab('create'); true"); await sleep(700);
+    // ⚠ One question per screen. Anything the teacher has not been asked yet
+    // must be OFF the screen, and the step they are on must be entirely on it.
+    const seen = id => `(() => { const e = document.getElementById('${id}'); return !!e && e.offsetParent !== null; })()`;
+    const step1 = await evaluate(`({ n: document.getElementById('ta-wiz-count').textContent, who: ${seen('ta-class-picker')}, share: ${seen('ta-share-choice')}, subject: ${seen('ta-subject')}, count: ${seen('ta-count')}, due: ${seen('ta-due')}, pin: document.querySelector('input[name=ta-share][value=classroom_pin]').checked })`);
+    assert.equal(step1.n, 'Step 1 of 5');
+    assert(step1.who && step1.share, 'step 1 asks who it is for');
+    assert(!step1.subject && !step1.count && !step1.due, 'and asks nothing else yet: ' + JSON.stringify(step1));
+    assert(step1.pin, 'a classroom with pupils defaults to PIN entry');
     report('Set Work ' + tag, await evaluate(PROBE)); await shot('create-' + tag);
-    // Chrome hides closed <details> content with content-visibility, so the
-    // honest check is checkVisibility() plus the details box shrinking to its summary.
-    const collapsed = await evaluate(`(() => { const d = document.getElementById('ta-more-options'); d.open = false; const e = document.getElementById('ta-difficulty'); const db = d.getBoundingClientRect(), eb = e.getBoundingClientRect(), sb = d.querySelector('summary').getBoundingClientRect(); return db.height <= sb.height + 6 && (eb.height === 0 || eb.top >= db.bottom - 1); })()`);
-    assert(collapsed, 'difficulty hidden until More options is opened');
+
+    await evaluate("TeacherMode.wizardNext(); true"); await sleep(300);
+    assert(await evaluate(seen('ta-subject')), 'step 2 asks the subject');
+    await evaluate("TeacherMode.wizardNext(); true"); await sleep(300);
+    const step3 = await evaluate(`({ n: document.getElementById('ta-wiz-count').textContent, scope: document.querySelector('input[name=ta-scope]:checked').value, grid: ${seen('ta-chapter-opts-container')} })`);
+    assert.equal(step3.n, 'Step 3 of 5');
+    assert.equal(step3.scope, 'all', 'the whole subject is the spoken default');
+    assert(!step3.grid, 'and the chapter grid stays out of the way until it is asked for');
+    await evaluate("document.querySelector('input[name=ta-scope][value=pick]').checked = true; TeacherMode.scopeChanged(); true"); await sleep(250);
+    assert(await evaluate(seen('ta-chapter-opts-container')), 'choosing "only some chapters" reveals them');
+    await evaluate("document.querySelector('input[name=ta-scope][value=all]').checked = true; TeacherMode.scopeChanged(); true"); await sleep(250);
+    report('Set Work chapters ' + tag, await evaluate(PROBE)); await shot('create-chapters-' + tag);
+
+    await evaluate("TeacherMode.wizardNext(); true"); await sleep(300);
+    // ⚠ Level 4 is NOT the same thing in every pack, so the wording follows
+    //   the subject. Both readings are checked, from the same screen.
+    const levelWordsFor = async packId => evaluate(`(async () => { const g = document.getElementById('ta-grade'); g.value = '${packId.match(/\d+/)[0]}'; await TeacherMode.gradeChange(); const s = document.getElementById('ta-subject'); s.value = '${packId}'; await TeacherMode.subjectChange(); return document.getElementById('ta-difficulty').options[4].textContent.trim(); })()`, true);
+    assert.match(await levelWordsFor('grade5-english'), /Longer passages/, 'English L4 is an extended passage, not a word problem');
+    assert.match(await levelWordsFor('grade5-french'), /Longer exercises/, 'French L4 is a multi-verb cloze');
+    assert.match(await levelWordsFor('grade5-maths'), /Word problems/, 'and only maths is promised word problems');
+    const step4 = await evaluate(`({ n: document.getElementById('ta-wiz-count').textContent, levels: [...document.getElementById('ta-difficulty').options].map(o => o.textContent.trim()), note: document.getElementById('ta-difficulty-note').textContent, count: document.getElementById('ta-count-note').textContent, timer: [...document.getElementById('ta-mode').options].map(o => o.textContent.trim()) })`);
+    assert.equal(step4.n, 'Step 4 of 5');
+    // ⚠ Level 4 is word problems in MATHS. The wording follows the subject.
+    assert.match(step4.note, /easy, medium and hard together/, 'every level explains itself');
+    assert.match(step4.count, /minutes/, 'and the count says how long it takes');
+    assert(step4.timer.every(t => /take their time|like a real exam/.test(t)), 'the timer choice is in plain words: ' + step4.timer.join(' / '));
+    report('Set Work level ' + tag, await evaluate(PROBE)); await shot('create-level-' + tag);
+
+    await evaluate("TeacherMode.wizardNext(); document.getElementById('ta-more-options').open = true; true"); await sleep(400);
+    const step5 = await evaluate(`({ n: document.getElementById('ta-wiz-count').textContent, due: ${seen('ta-due')}, pupils: ${seen('ta-pupils-list')}, summary: document.getElementById('ta-wiz-summary').textContent.replace(/\\s+/g,' ').trim(), btn: document.getElementById('ta-build-btn').textContent.trim(), next: document.getElementById('ta-wiz-next').hidden })`);
+    assert.equal(step5.n, 'Step 5 of 5');
+    assert(step5.due && step5.pupils, 'step 5 asks when, and hides the rest behind More');
+    assert(step5.next, 'there is no Next past the last question');
+    assert.match(step5.btn, /Assign to the whole class/);
+    // The whole assignment in one sentence, because nobody can check six
+    // controls they answered several screens ago.
+    assert.match(step5.summary, /Grade 5 Blue/, 'the summary names the class: ' + step5.summary);
+    assert.match(step5.summary, /10 mixed questions/, 'and how many, and how hard');
+    assert.match(step5.summary, /whole of Mathematics/, 'and what it covers');
+    assert.match(step5.summary, /own four-digit PIN/, 'and how pupils get in');
+    report('Set Work summary ' + tag, await evaluate(PROBE)); await shot('create-summary-' + tag);
+    const collapsed = await evaluate(`(() => { const d = document.getElementById('ta-more-options'); d.open = false; const e = document.getElementById('ta-label'); const db = d.getBoundingClientRect(), eb = e.getBoundingClientRect(), sb = d.querySelector('summary').getBoundingClientRect(); return db.height <= sb.height + 6 && (eb.height === 0 || eb.top >= db.bottom - 1); })()`);
+    assert(collapsed, 'the extra choices stay collapsed until asked for');
 
     await evaluate("TeacherWorkspace.openResults('a1'); true"); await sleep(900);
     const res = await evaluate(`(() => { const w = document.querySelector('.tr-wrap'); const t = w ? w.textContent : ''; return { has: !!w, stats: [...document.querySelectorAll('.tr-stats strong')].map(e => e.textContent), help: document.querySelector('.tr-help')?.textContent || '', groups: [...document.querySelectorAll('.tr-group h4')].map(h => h.textContent.replace(/\\s+/g, ' ').trim()), escaped: w ? w.innerHTML.includes('<b>x</b>') : true, bulk: [...document.querySelectorAll('.tr-bulk button')].map(b => b.disabled) }; })()`);
@@ -253,12 +306,19 @@ let chrome, ws; const pageErrorsRef = [];
     report('Results ' + tag, await evaluate(PROBE)); await shot('results-' + tag);
 
     await evaluate("TeacherGuestClasses.openById('c1'); true"); await sleep(1200);
-    const ov = await evaluate(`({ open: !document.getElementById('tc-classroom-detail').classList.contains('hidden'), nav: [...document.querySelectorAll('.tc-cd-nav > .tc-cd-nav-btn')].map(b => b.dataset.sec), more: [...document.querySelectorAll('#tc-cd-more-menu [data-sec]')].map(b => b.dataset.sec), stats: [...document.querySelectorAll('.tc-today-stats strong')].map(e => e.textContent), attention: document.querySelector('.tc-today-columns')?.textContent || '' })`);
+    const ov = await evaluate(`({ open: !document.getElementById('tc-classroom-detail').classList.contains('hidden'), nav: [...document.querySelectorAll('.tc-cd-nav > .tc-cd-nav-btn')].map(b => b.dataset.sec), more: [...document.querySelectorAll('#tc-cd-more-menu [data-sec]')].map(b => b.dataset.sec), stats: [...document.querySelectorAll('.tc-today-stats')].length, headStrip: [...document.querySelectorAll('.tc-cd-stat strong')].map(e => e.textContent), todos: [...document.querySelectorAll('.tc-todo')].map(r => r.textContent.replace(/\\s+/g, ' ').trim()), foot: document.querySelectorAll('.tc-today-footnote').length, strip: document.querySelectorAll('button.tc-cd-stat').length })`);
     assert(ov.open, 'classroom overlay opens from Home data');
     assert.deepEqual(ov.nav, ['overview', 'work', 'pupils', 'materials'], 'four primary classroom sections');
     assert.deepEqual(ov.more, ['results', 'settings']);
-    assert.equal(ov.stats[0], '3', 'pupil count');
-    assert.match(ov.attention, /Ben|Chloé/, 'needs attention lists a pupil');
+    // ⚠ There used to be TWO stat rows on this one screen, disagreeing:
+    // "5 submitted" in the header strip beside "2 Submissions" below it,
+    // because one counted every piece of work and the other only the active.
+    assert.equal(ov.stats, 0, 'the second, contradicting stat grid is gone');
+    assert.equal(ov.headStrip[0], '3', 'the header strip is the only counter left');
+    assert.match(ov.todos.join(' | '), /Ben|Chloé/, 'the class to-do list names a pupil');
+    assert(ov.todos.length, 'and there is at least one job');
+    assert.equal(ov.foot, 0, 'and Today does not repeat the header strip either');
+    assert.equal(ov.strip, 4, 'the four header numbers are the way to what they count');
     report('Classroom overview ' + tag, await evaluate(PROBE)); await shot('class-overview-' + tag);
     await evaluate("TeacherClassroomDetail.showSection('work'); true"); await sleep(400);
     const work = await evaluate(`({ cards: document.querySelectorAll('#tc-cd-work .tw-card').length, completion: document.querySelector('#tc-cd-work .tw-completion')?.textContent, filters: [...document.querySelectorAll('.tc-work-filter')].map(b => b.textContent.trim()) })`);
@@ -291,24 +351,25 @@ let chrome, ws; const pageErrorsRef = [];
     await evaluate("TeacherClassroomDetail.close(); true");
     assert.equal(await evaluate("JSON.parse(localStorage.getItem('psac_teacher_loc_v1')).classId"), null, 'closing forgets the classroom');
     await evaluate("localStorage.setItem('psac_teacher_loc_v1', JSON.stringify({ owner: 'teacher-1', tab: 'results', classId: 'c1', className: 'Grade 5 Blue', section: 'work', resultsId: 'a1' })); TeacherMode.render(); true"); await sleep(1500);
-    const restored = await evaluate("({ open: !document.getElementById('tc-classroom-detail').classList.contains('hidden'), sec: document.querySelector('.tc-cd-nav-btn.tc-cd-nav-active')?.dataset.sec, tab: document.querySelector('#screen-teacher .ta-tab[aria-selected=true]')?.dataset.tab, results: !!document.querySelector('.tr-wrap') })");
+    const restored = await evaluate("({ open: !document.getElementById('tc-classroom-detail').classList.contains('hidden'), sec: document.querySelector('.tc-cd-nav-btn.tc-cd-nav-active')?.dataset.sec, tab: [...document.querySelectorAll('#screen-teacher .ta-tab-content')].find(c => !c.classList.contains('hidden'))?.dataset.tab, results: !!document.querySelector('.tr-wrap') })");
     assert(restored.open && restored.sec === 'work' && restored.tab === 'results' && restored.results, 'refresh restores tab, results and classroom: ' + JSON.stringify(restored));
+    assert(await evaluate("!!document.querySelector('.ta-tab-content[data-tab=results] .ta-wiz-quit')"), 'Results carries its own way back');
     await evaluate("TeacherClassroomDetail.close(); true");
 
     // A new per-pupil classroom opens as a short, data-driven setup path,
     // rather than a dashboard full of zeroes and unexplained controls.
     await evaluate("localStorage.removeItem('psac_tc_pref_c2'); TeacherGuestClasses.openById('c2'); true"); await sleep(900);
-    const guide = await evaluate(`(() => { const g = document.querySelector('.tc-setup-guide'); return { shown: !!g, steps: document.querySelectorAll('.tc-setup-step').length, current: document.querySelector('.tc-setup-current h4')?.textContent || '', text: g?.textContent || '', stats: document.querySelectorAll('.tc-today-stats').length }; })()`);
+    const guide = await evaluate(`(() => { const g = document.querySelector('.tc-setup-guide'); return { shown: !!g, steps: document.querySelectorAll('.tc-setup-step').length, current: document.querySelector('.tc-setup-current h4')?.textContent || '', text: g?.textContent || '', dash: document.querySelectorAll('.tc-todo-list').length }; })()`);
     assert(guide.shown, 'new classroom setup guide is shown');
     assert.equal(guide.steps, 3, 'setup guide has three steps');
     assert.match(guide.current, /Replace the 2 numbered pupil names/);
     assert.match(guide.text, /Nothing here creates a pupil account/);
     assert.match(guide.text, /link.*PIN/i);
-    assert.equal(guide.stats, 0, 'zero-value command dashboard is hidden during first setup');
+    assert.equal(guide.dash, 0, 'the day-to-day list is hidden during first setup');
     report('New classroom guide ' + tag, await evaluate(PROBE)); await shot('class-guide-' + tag);
     await evaluate("TeacherClassroomDetail.dismissSetupGuide(); true"); await sleep(150);
     assert.equal(await evaluate("document.querySelectorAll('.tc-setup-guide').length"), 0, 'teacher can dismiss the guide');
-    assert.equal(await evaluate("document.querySelectorAll('.tc-today-stats').length"), 1, 'full dashboard remains available');
+    assert.equal(await evaluate("document.querySelectorAll('.tc-todo-list').length"), 1, 'the day-to-day list remains available');
     await evaluate("TeacherClassroomDetail.showSetupGuide(); true"); await sleep(150);
     assert.equal(await evaluate("document.querySelectorAll('.tc-setup-guide').length"), 1, 'teacher can reopen classroom help');
     await evaluate("TeacherClassroomDetail.close(); true");

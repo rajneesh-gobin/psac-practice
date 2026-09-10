@@ -11,8 +11,15 @@ const TeacherMode = (() => {
   // on render() so a refresh lands where they left off. Owner-scoped so two
   // teachers sharing a device never inherit each other's place.
   const LOC_KEY = 'psac_teacher_loc_v1';
-  const MAIN_TABS = ['home', 'classes', 'create', 'results'];
+  // ⚠ ONE main destination. 'create' and 'results' are still real tabs and
+  // switchTab() still opens them - they are simply not somewhere a teacher
+  // PICKS, because the same two jobs also live inside every classroom and a
+  // teacher could not tell the two "Results" apart. You reach them from the
+  // class they belong to, and leave by the Back button they now carry.
+  const MAIN_TABS = ['home'];
+  const DETAIL_TABS = ['create', 'results'];
   const MORE_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'settings'];
+  const ALL_TABS = MAIN_TABS.concat(DETAIL_TABS, MORE_TABS);
 
   function _getData() {
     try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { pin: null, assignments: [] }; }
@@ -149,7 +156,7 @@ const TeacherMode = (() => {
     _initDueDate();
     _renderClassPicker();            // show form immediately with whatever is cached
     const loc = _readLoc();
-    const tab = MAIN_TABS.concat(MORE_TABS).includes(loc.tab) ? loc.tab : 'home';
+    const tab = ALL_TABS.includes(loc.tab) ? loc.tab : 'home';
     if (typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.refresh();
     switchTab(tab, { restoring: true });
     if (typeof TeacherGuestClasses !== 'undefined') {
@@ -227,7 +234,7 @@ const TeacherMode = (() => {
     }
     container.innerHTML = chs.map(c =>
       `<label class="ta-chapter-opt">
-        <input type="checkbox" value="${_esc(c.id)}">
+        <input type="checkbox" value="${_esc(c.id)}" onchange="TeacherMode.chaptersChanged()">
         <span>${c.icon || ''} ${_esc(c.name)}</span>
       </label>`
     ).join('');
@@ -235,7 +242,10 @@ const TeacherMode = (() => {
 
   async function subjectChange() {
     _buildChapterCheckboxes();
+    _applyLevelWords();
+    _refreshPool();
     await _ensureSubjectLoaded();
+    _refreshPool();
   }
 
   // STATIC_QUESTIONS only ever holds the subjects the app has actually fetched,
@@ -470,6 +480,7 @@ const TeacherMode = (() => {
     btn.textContent = mode === 'classroom_pin'
       ? (chosen ? `✏️ Assign to ${chosen.length} pupil${chosen.length === 1 ? '' : 's'}` : '✏️ Assign to the whole class')
       : '🔗 Create the link';
+    refreshSummary();
   }
 
   // ── Set Work: when is it due ───────────────────
@@ -503,6 +514,7 @@ const TeacherMode = (() => {
     note.textContent = when
       ? `Pupils can open the work until the end of ${when.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}.`
       : 'Pick a due date. Without one the work closes 48 hours after you create it.';
+    refreshSummary();
   }
   // End of the chosen day on the teacher's device - the assignment closes then.
   function _dueDateValue() {
@@ -515,16 +527,217 @@ const TeacherMode = (() => {
   function modeChanged() {
     const wrap = _el('ta-duration-wrap');
     if (wrap) wrap.hidden = (_el('ta-mode')?.value || 'practice') !== 'test';
+    refreshSummary();
+  }
+
+
+  // ── Set Work: one question per screen ──────────
+  //  ⚠ The wizard OWNS NO STATE. Every control is the same element
+  //  _buildAssignment() has always read; this decides which one a teacher is
+  //  looking at and refuses to move on until it is answered. A hidden input
+  //  still answers .value, so a step nobody visited still publishes correctly.
+  const WIZ_STEPS = 5;
+  let _wizStep = 1;
+
+  function _scope() { return document.querySelector('input[name="ta-scope"]:checked')?.value || 'all'; }
+  function _tickedChapters() {
+    return Array.from(document.querySelectorAll('#ta-chapter-opts-container input[type=checkbox]:checked')).map(cb => cb.value);
+  }
+  function _paintScope() {
+    const pick = _scope() === 'pick';
+    const wrap = _el('ta-chapter-wrap');
+    if (wrap) wrap.hidden = !pick;
+    document.querySelectorAll('.ta-scope-opt').forEach(l => l.classList.toggle('ta-scope-opt-sel', !!l.querySelector('input')?.checked));
+  }
+  // Called by the teacher's own tap. "The whole subject" has to MEAN the whole
+  // subject: a tick left behind from an earlier visit would silently narrow the
+  // work without appearing anywhere on screen.
+  function scopeChanged() {
+    if (_scope() === 'all') document.querySelectorAll('#ta-chapter-opts-container input[type=checkbox]').forEach(cb => { cb.checked = false; });
+    _paintScope();
+    _refreshPool();
+  }
+  // Called when we ARRIVE at the step. prefillPractice() and _duplicateAssignment()
+  // tick chapters directly, so the radio has to follow the ticks - never the
+  // other way round, which would wipe the prefill.
+  function _syncScope() {
+    const has = _tickedChapters().length > 0;
+    const pick = document.querySelector('input[name="ta-scope"][value="pick"]');
+    const all  = document.querySelector('input[name="ta-scope"][value="all"]');
+    if (has && pick) pick.checked = true;
+    else if (!has && all && !pick?.checked) all.checked = true;
+    _paintScope();
+  }
+  function chaptersChanged() { _refreshPool(); }
+
+  // Exactly the pool _buildAssignment() will search, counted the same way -
+  // a friendlier number that the publish step then contradicts is worse than
+  // no number at all.
+  function _poolSize() {
+    const pack = _selectedPack();
+    if (!pack || typeof STATIC_QUESTIONS === 'undefined') return null;
+    const ids = new Set((pack._chapters || pack.chapters || []).map(c => c.id));
+    let pool = STATIC_QUESTIONS.filter(q => ids.has(q.chapterId));
+    if (!pool.length) return null;                       // subject still loading
+    const chapters = _tickedChapters();
+    if (chapters.length) pool = pool.filter(q => chapters.includes(q.chapterId));
+    const diff = parseInt(_el('ta-difficulty')?.value || '0');
+    if (diff) pool = pool.filter(q => q.difficulty === diff);
+    return new Set(pool.filter(q => q.id).map(q => q.id)).size;
+  }
+
+  function _refreshPool() {
+    const note = _el('ta-pool-note');
+    const pack = _selectedPack();
+    const n = _poolSize();
+    if (note) {
+      note.textContent = n === null
+        ? (pack ? `Loading the ${pack.name} questions…` : '')
+        : (_scope() === 'pick' && !_tickedChapters().length)
+          ? 'Tick the chapters you want to use.'
+          : `${n} question${n === 1 ? '' : 's'} to choose from.`;
+    }
+    refreshSummary();
+  }
+
+  // ⚠ Level 4 does not mean the same thing in every pack: word problems in
+  // maths, a multi-verb cloze in French, an extended passage in English, an
+  // applied scenario elsewhere. So the words follow the SUBJECT - a French
+  // teacher is never promised "word problems" a French pack cannot deal.
+  function _levelWords(pack) {
+    const subject = String(pack?.id || '').replace(/^grade\d+-/, '');
+    const hardest =
+      subject === 'maths' ? ['🏆 Word problems', 'A story they have to work out for themselves.']
+      : subject === 'french' ? ['🏆 Longer exercises', 'A whole passage with several verbs to get right.']
+      : subject === 'english' ? ['🏆 Longer passages', 'Reading a longer text and writing a full answer.']
+      : ['🏆 Applied questions', 'Using what they know in a real situation, not just remembering it.'];
+    return [
+      ['🔀 A mix of every level', 'The safest choice: easy, medium and hard together, like a real paper.'],
+      ['⭐ Easy', 'Reminds them of the basics. Good after a hard week.'],
+      ['⭐⭐ Medium', 'About what the class is working on now.'],
+      ['⭐⭐⭐ Hard', 'Stretches the pupils who always finish early.'],
+      hardest,
+    ];
+  }
+  function _applyLevelWords() {
+    const sel = _el('ta-difficulty');
+    if (!sel) return;
+    const words = _levelWords(_selectedPack());
+    Array.from(sel.options || []).forEach((o, i) => { if (words[i]) o.textContent = words[i][0]; });
+    const note = _el('ta-difficulty-note');
+    const chosen = words[parseInt(sel.value || '0')];
+    if (note) note.textContent = chosen ? chosen[1] : '';
+  }
+  function difficultyChanged() { _applyLevelWords(); _refreshPool(); }
+
+  function countChanged() {
+    const n = Number(_el('ta-count')?.value || 10);
+    const note = _el('ta-count-note');
+    if (note) note.textContent = `Most pupils will need about ${Math.max(3, Math.round(n * 1.5))} minutes.`;
+    refreshSummary();
+  }
+
+  const LEVEL_ADJECTIVE = ['mixed', 'easy', 'medium', 'hard', 'challenge'];
+
+  // The whole assignment in one sentence a teacher can check at a glance,
+  // because nobody can check six separate controls they answered minutes ago.
+  function refreshSummary() {
+    const box = _el('ta-wiz-summary');
+    if (!box) return;
+    const pack = _selectedPack();
+    const cid = _el('ta-classroom')?.value || '';
+    const cls = (typeof TeacherGuestClasses !== 'undefined' ? TeacherGuestClasses.getClasses() : []).find(c => c.id === cid);
+    const mode = _el('ta-access')?.value || 'nickname';
+    const chapters = _tickedChapters().map(chapterName).filter(Boolean);
+    const what = chapters.length === 1 ? chapters[0]
+      : chapters.length ? `${chapters.length} chapters of ${pack ? pack.name : 'the subject'}`
+      : `the whole of ${pack ? pack.name : 'the subject'}`;
+    const count = Number(_el('ta-count')?.value || 10);
+    const level = LEVEL_ADJECTIVE[parseInt(_el('ta-difficulty')?.value || '0')] || 'mixed';
+    const when = _dueDateValue();
+    const timed = (_el('ta-mode')?.value || 'practice') === 'test';
+    const chosen = mode === 'classroom_pin' ? _chosenPupils() : null;
+    const target = chosen && cls ? `${chosen.length} pupil${chosen.length === 1 ? '' : 's'} in ${cls.name}`
+      : cls ? cls.name : 'anyone you send the link to';
+    box.innerHTML =
+      '<span class="ta-wiz-summary-kicker">Check this before you send it</span>' +
+      `<p><b>${_esc(target)}</b> will get <b>${count} ${level} question${count === 1 ? '' : 's'}</b> on <b>${_esc(what)}</b>${timed ? ', with the clock running' : ', with no timer'}, due <b>${when ? _esc(when.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })) : '48 hours from now'}</b>.</p>` +
+      `<p class="ta-wiz-summary-how">${mode === 'classroom_pin'
+        ? 'Each pupil types their own four-digit PIN, so every mark is saved under their real name.'
+        : 'Anyone who opens the link types a name and starts. There is no PIN, so you cannot be certain who answered.'}</p>`;
+  }
+
+  function _wizSteps() { return Array.from(document.querySelectorAll('#ta-create-form .ta-wiz-step')); }
+
+  function gotoStep(n, opts = {}) {
+    const step = Math.min(WIZ_STEPS, Math.max(1, Number(n) || 1));
+    _wizStep = step;
+    _wizSteps().forEach(sec => sec.classList.toggle('hidden', Number(sec.dataset.step) !== step));
+    document.querySelectorAll('#ta-create-form .ta-wiz-track [data-dot]').forEach(d => {
+      const i = Number(d.dataset.dot);
+      d.classList.toggle('on', i === step);
+      d.classList.toggle('done', i < step);
+    });
+    const count = _el('ta-wiz-count');
+    if (count) count.textContent = `Step ${step} of ${WIZ_STEPS}`;
+    const back = _el('ta-wiz-back'), next = _el('ta-wiz-next');
+    if (back) back.hidden = step === 1;
+    if (next) next.hidden = step === WIZ_STEPS;
+    if (step === 3) { _syncScope(); _refreshPool(); }
+    if (step === 4) { _applyLevelWords(); countChanged(); }
+    if (step === 5) { _updateBuildButton(); refreshSummary(); }
+    if (!opts.silent) _el('ta-create-form')?.scrollIntoView?.({ block: 'start' });
+  }
+  function currentStep() { return _wizStep; }
+
+  // Every reason a step cannot be left, in the teacher's own words. Nothing
+  // here is a new rule: each one is a failure _buildAssignment() would have
+  // reported at the very end, moved to the screen that caused it.
+  function _stepProblem(step) {
+    if (step === 1) {
+      const mode = _el('ta-access')?.value || 'nickname';
+      if (mode === 'classroom_pin' && !(_el('ta-classroom')?.value || '')) return 'Choose a class, or share an open link instead.';
+    }
+    if (step === 2 && !_selectedPack()) return 'Choose a subject first.';
+    if (step === 3) {
+      if (_scope() === 'pick' && !_tickedChapters().length) return 'Tick at least one chapter, or choose “The whole subject”.';
+      if (_poolSize() === 0) return 'There are no questions for that choice. Try another chapter or another level.';
+    }
+    if (step === 4) {
+      const have = _poolSize(), want = Number(_el('ta-count')?.value || 10);
+      if (have !== null && have < want) return `Only ${have} question${have === 1 ? '' : 's'} match. Ask for fewer, or add a chapter.`;
+    }
+    return '';
+  }
+
+  function wizardNext() {
+    const problem = _stepProblem(_wizStep);
+    if (problem) { if (typeof toast === 'function') toast(problem, 3500); return; }
+    gotoStep(_wizStep + 1);
+  }
+  function wizardBack() { if (_wizStep === 1) leaveSetWork(); else gotoStep(_wizStep - 1); }
+
+  // Setting work is something you do TO a class, so finishing or abandoning it
+  // puts the teacher back inside that class rather than at the top of the app.
+  function leaveSetWork() {
+    const loc = _readLoc();
+    switchTab('home');
+    if (loc.classId) { _restoredClass = ''; _restoreClassroom(loc); }
   }
 
   // ── Tab switching ──────────────────────────────
   function switchTab(tab, opts = {}) {
-    if (!MAIN_TABS.includes(tab) && !MORE_TABS.includes(tab)) tab = 'home';
+    // 'classes' was its own tab until the classroom list moved onto Home.
+    // Older callers, and a location saved before the change, still name it.
+    if (tab === 'classes') tab = 'home';
+    if (!ALL_TABS.includes(tab)) tab = 'home';
     closeMore();
-    if (tab === 'home' && typeof TeacherHome !== 'undefined') TeacherHome.render({ silent: true });
-    if (tab === 'classes' && typeof TeacherGuestClasses !== 'undefined' && !opts.restoring) TeacherGuestClasses.refresh();
+    if (tab === 'home') {
+      if (typeof TeacherHome !== 'undefined') TeacherHome.render({ silent: true });
+      if (typeof TeacherGuestClasses !== 'undefined' && !opts.restoring) TeacherGuestClasses.refresh();
+    }
     if (tab === 'materials') TeacherMaterials.load();
-    if (tab === 'create')    { _renderClassPicker(); modeChanged(); }
+    if (tab === 'create')    { _renderClassPicker(); modeChanged(); _applyLevelWords(); if (!opts.keepStep) gotoStep(1, { silent: true }); }
     if (tab === 'results' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showResults(_readLoc().resultsId || '');
     if (tab === 'assignments' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showList(opts.filter || _readLoc().listFilter || 'archived');
     if (tab === 'gradebook') _renderGradebook();
@@ -1295,7 +1508,9 @@ const TeacherMode = (() => {
     isTeacher, render, switchTab, subjectChange, gradeChange,
     buildAssignment, copyLink, deleteAssignment,
     shareAssignment, closeShare, shareCopy, shareWhatsApp, shareNative, shareCopyLink, shareView,
-    toggleMore, closeMore, getLocation, saveLocation: _saveLoc, rememberClassroom, chooseClassroom, setShareMode,
+    toggleMore, closeMore, getLocation, gotoStep, currentStep, wizardNext, wizardBack, leaveSetWork,
+    scopeChanged, chaptersChanged, countChanged, difficultyChanged, refreshSummary,
+    saveLocation: _saveLoc, rememberClassroom, chooseClassroom, setShareMode,
     shareChoiceChanged, setDueInDays, dueChanged, modeChanged, reloadPupils, tickPupils, pupilsChanged,
     prefillPractice, chapterName, packLabel,
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,

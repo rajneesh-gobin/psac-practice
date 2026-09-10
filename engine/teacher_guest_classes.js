@@ -71,15 +71,8 @@ const TeacherGuestClasses = (() => {
     // Only show active classrooms in the main view; archived ones are hidden.
     // The teacher can archive/restore from inside the classroom's Settings tab.
     const visible = classes.filter(c => c.active);
-    const totalPupils = visible.reduce((sum, c) => sum + Number(c.pupils || 0), 0);
-    const pinClasses = visible.filter(c => c.access_type !== 'shared').length;
     const icons = ['📘','✏️','🔬','🌍','🎨','📐'];
     list.innerHTML =
-      '<div class="tc-class-overview" aria-label="Classroom overview">' +
-        '<div><span class="tc-overview-icon">🏫</span><strong>' + visible.length + '</strong><small>active classroom' + (visible.length === 1 ? '' : 's') + '</small></div>' +
-        '<div><span class="tc-overview-icon">👥</span><strong>' + totalPupils + '</strong><small>pupil' + (totalPupils === 1 ? '' : 's') + ' managed</small></div>' +
-        '<div><span class="tc-overview-icon">🔑</span><strong>' + pinClasses + '</strong><small>with individual PINs</small></div>' +
-      '</div>' +
       (!visible.length ? '<div class="tc-class-empty"><span>✨</span><div><strong>Your first classroom starts here</strong><p>Create a class, add your pupils and keep their homework and results together.</p></div></div>' : '') +
       '<div class="tc-boards-wrap">' +
       visible.map((c) => {

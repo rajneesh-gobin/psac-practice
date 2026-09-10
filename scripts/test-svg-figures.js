@@ -70,6 +70,18 @@ const PACKS = [
   'subjects/grade4-french/questions',
   'subjects/grade5-french/questions',
   'subjects/grade6-french/questions',
+  // ⚠ THE GRADE 1-2 VISUAL BANKS, added 2026-09-10 with 727 new inline figures.
+  //   Before this batch these six packs held ZERO svg between them, so listing
+  //   the whole directory brings in the new figures and nothing else - there is
+  //   no legacy width debt to work off first. That is NOT true of
+  //   grade{1,2}-maths, whose ch0{4,8}_shapes_visual.js predate the batch; they
+  //   are the separate chantier this file already describes above.
+  'subjects/grade1-english/questions',
+  'subjects/grade1-french/questions',
+  'subjects/grade1-health/questions',
+  'subjects/grade2-english/questions',
+  'subjects/grade2-french/questions',
+  'subjects/grade2-health/questions',
 ];
 
 const ctx = { STATIC_QUESTIONS: [], console, Math, JSON, window: {} };

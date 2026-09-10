@@ -36,25 +36,51 @@ for (const f of ['engine/teacher.js', 'engine/teacher_workspace.js', 'engine/tea
 // ── 1. Markup ───────────────────────────────────────────────────────────────
 const html = fs.readFileSync('index.html', 'utf8');
 const teacher = html.slice(html.indexOf('<div id="screen-teacher"'), html.indexOf('<!-- ══════════ ASSIGNMENT ENTRANCE'));
-const nav = teacher.slice(teacher.indexOf('class="teacher-navigation"'), teacher.indexOf('<!-- ── TAB: HOME'));
+const nav = teacher.slice(teacher.indexOf('class="teacher-navigation"'), teacher.indexOf('<!-- ── TAB: MY CLASSES'));
 const tabs = [...nav.matchAll(/class="ta-tab" data-tab="([a-z]+)"/g)].map(m => m[1]);
-assert.deepEqual(tabs, ['home', 'classes', 'create', 'results'], 'main navigation has exactly four tabs'); checks++;
+// ⚠ ONE main destination. Set Work and Results are reached only from inside
+// the class they belong to - they used to sit here as well, beside a classroom
+// screen carrying the same two names, and a teacher could not tell the two
+// "Results" apart. Their PANELS must still exist: switchTab() still opens them.
+assert.deepEqual(tabs, ['home'], 'main navigation offers exactly one destination'); checks++;
+ok(!nav.includes('data-tab="create"') && !nav.includes('data-tab="results"') && !nav.includes('data-tab="classes"'),
+  'Set Work, Results and Classrooms are not top-level tabs any more');
 const more = [...nav.matchAll(/data-more="([a-z]+)"/g)].map(m => m[1]);
-assert.deepEqual(more, ['materials', 'messages', 'gradebook', 'assignments', 'settings'], 'More holds the five secondary tools'); checks++;
-for (const t of ['home', 'classes', 'create', 'results', 'assignments', 'gradebook', 'materials', 'messages', 'settings']) ok(teacher.includes(`data-tab="${t}"`) && teacher.includes(`class="ta-tab-content${t === 'home' ? '' : ' hidden'}" data-tab="${t}"`), `panel for ${t} exists`);
-for (const id of ['tm-title', 'tm-file', 'tm-list', 'tc-msg-list', 'ta-gradebook-root', 'ta-asgn-list', 'ta-results-list', 'ta-results-assign-sel', 'tc-list', 'tc-name', 'ta-classroom', 'ta-access', 'ta-pin', 'ta-chapter-opts-container']) ok(teacher.includes(`id="${id}"`), `existing element #${id} preserved`);
+assert.deepEqual(more, ['gradebook', 'materials', 'assignments', 'messages', 'settings'], 'More holds the five secondary tools'); checks++;
+for (const t of ['home', 'create', 'results', 'assignments', 'gradebook', 'materials', 'messages', 'settings']) ok(teacher.includes(`data-tab="${t}"`) && teacher.includes(`class="ta-tab-content${t === 'home' ? '' : ' hidden'}" data-tab="${t}"`), `panel for ${t} exists`);
+ok(!/class="ta-tab-content[^"]*" data-tab="classes"/.test(teacher), 'the classrooms panel is gone - its list lives on Home');
+const homePanel = teacher.slice(teacher.indexOf('class="ta-tab-content" data-tab="home"'), teacher.indexOf('<!-- ── TAB: SET WORK'));
+for (const id of ['ta-home', 'tc-list', 'tc-status']) ok(homePanel.includes(`id="${id}"`), `Home carries #${id}`);
+for (const id of ['tm-title', 'tm-file', 'tm-list', 'tc-msg-list', 'ta-gradebook-root', 'ta-asgn-list', 'ta-results-list', 'ta-results-assign-sel', 'tc-list', 'ta-classroom', 'ta-access', 'ta-pin', 'ta-chapter-opts-container']) ok(teacher.includes(`id="${id}"`), `existing element #${id} preserved`);
 ok(/onclick="Auth\.switchToStudentSelect\(\)"/.test(teacher), 'teacher → student mode switch kept');
 ok(teacher.includes('ProfileInstall.installTeacher()') && teacher.includes('Auth.openInviteModal()'), 'install + invite moved into Teacher settings');
 
+// ── Set Work is one question per screen ─────────────────────────────────────
 const form = teacher.slice(teacher.indexOf('id="ta-create-form"'), teacher.indexOf('<!-- ── TAB: RESULTS'));
-const before = form.slice(0, form.indexOf('<details id="ta-more-options"'));
-const inside = form.slice(form.indexOf('<details id="ta-more-options"'), form.indexOf('</details>'));
-for (const id of ['ta-class-picker', 'ta-share-choice', 'ta-grade', 'ta-subject', 'ta-chapter-opts-container', 'ta-count', 'ta-due']) ok(before.includes(`id="${id}"`), `${id} is on the initial form`);
-for (const id of ['ta-difficulty', 'ta-mode', 'ta-duration', 'ta-label', 'ta-random', 'ta-pupils-list']) ok(inside.includes(`id="${id}"`), `${id} is behind More options`);
-ok(!before.includes('id="ta-difficulty"') && !before.includes('id="ta-pupils-list"'), 'advanced fields are not on the initial form');
-eq((form.match(/class="teacher-step"/g) || []).length, 3, 'three step headings');
-ok(/My classroom pupils/.test(form) && /Each pupil uses their personal four-digit PIN/.test(form), 'PIN sharing choice in plain words');
-ok(/Anyone with the link/.test(form) && /Pupils enter their name and begin/.test(form), 'open-link sharing choice in plain words');
+const steps = [...form.matchAll(/class="ta-wiz-step(?: hidden)?" data-step="(\d)"/g)].map(m => m[1]);
+assert.deepEqual(steps, ['1', '2', '3', '4', '5'], 'five steps, in order'); checks++;
+eq((form.match(/<i data-dot="\d"><\/i>/g) || []).length, 5, 'five progress dots, one per step'); checks++;
+const stepBody = n => {
+  const start = form.indexOf(`data-step="${n}"`);
+  const next = form.indexOf(`data-step="${n + 1}"`);
+  return form.slice(start, next === -1 ? form.indexOf('class="ta-wiz-nav"') : next);
+};
+// ⚠ Every one of these ids is read by _buildAssignment(). The wizard only
+// decides which is on screen; if one drifts off the form entirely the publish
+// path reads an empty value and says nothing about it.
+const onStep = { 1: ['ta-class-picker', 'ta-share-choice', 'ta-access', 'ta-classroom', 'ta-pin'],
+                 2: ['ta-grade', 'ta-subject'],
+                 3: ['ta-chapter-opts-container', 'ta-pool-note'],
+                 4: ['ta-count', 'ta-difficulty', 'ta-mode', 'ta-duration'],
+                 5: ['ta-due', 'ta-label', 'ta-random', 'ta-pupils-list', 'ta-wiz-summary', 'ta-build-btn'] };
+for (const [n, ids] of Object.entries(onStep)) for (const id of ids) ok(stepBody(Number(n)).includes(`id="${id}"`), `#${id} is on step ${n}`);
+ok(/name="ta-scope" value="all"/.test(form) && /name="ta-scope" value="pick"/.test(form), 'the whole subject is a spoken choice, not an empty form');
+ok(!/leave all blank/i.test(form), 'the old "leave every box blank" instruction is gone');
+ok(/Only my pupils/.test(form) && /four-digit PIN/.test(form), 'PIN sharing choice in plain words');
+ok(/Anyone with the link/.test(form) && /cannot be sure who answered/.test(form), 'the open link says what it costs you');
+// ⚠ The PIN help sentence used to be printed twice, verbatim, in two styles.
+const shareHelp = form.slice(form.indexOf('id="ta-share-choice"'), form.indexOf('id="ta-access"'));
+eq((shareHelp.match(/One link for the class/g) || []).length, 0, 'no duplicated sharing help'); checks++;
 const visibleCopy = teacher.replace(/<select id="ta-access"[\s\S]*?<\/select>/, '').replace(/<!--[\s\S]*?-->/g, '').replace(/aria-label="[^"]*"/g, '');
 for (const word of ['guest account', 'token', 'anonymous', 'access type', 'database record']) ok(!new RegExp(word, 'i').test(visibleCopy), `no "${word}" in teacher-facing copy`);
 
@@ -114,6 +140,30 @@ const roll = I.pupilRollup([{ assignment: active, rows }, { assignment: active, 
 ok(roll.get('p2').needsHelp && /correct over 20 questions/.test(roll.get('p2').reason), 'Ben is flagged across two pieces of work');
 ok(!roll.get('p1').needsHelp, 'Aisha is not flagged');
 eq(roll.get('p4').completed, 0); eq(roll.get('p4').notStarted, 1);
+// ⚠ ONE builder for "what needs you today". Home asks it across every class
+// and a classroom asks it for its own work; a teacher must never be told two
+// different things by the two screens.
+const soon = { id: 'a1', title: 'Fractions homework', status: 'active', classroom_name: 'Grade 5 Blue', expires_at: new Date(Date.now() + 86400000).toISOString() };
+const t1 = I.todo([{ assignment: soon, rows }], { showClass: true });
+eq(t1.filter(x => x.kind === 'not-opened').length, 1, 'the two unfinished pupils are ONE job, not two');
+ok(/2 pupils have not finished/.test(t1.find(x => x.kind === 'not-opened').title), 'and it says so');
+ok(/Grade 5 Blue/.test(t1.find(x => x.kind === 'not-opened').detail), 'Home names the class; a classroom does not');
+ok(!/Grade 5 Blue/.test(I.todo([{ assignment: soon, rows }])[0].detail), 'inside a class the name is redundant');
+// Ben answered 10 questions in 50 s at 20% - that is 'rushed', not merely low,
+// and a teacher is told the more specific thing.
+eq(t1.find(x => x.kind === 'rushed').title, 'Ben rushed Fractions homework');
+const slow = I.todo([{ assignment: soon, rows: [done('Ben', 'p2', 2, 10, 600)] }]);
+eq(slow.find(x => x.kind === 'low-score').title, 'Ben scored 2/10 on Fractions homework');
+ok(!slow.some(x => x.kind === 'all-done'), 'never "everyone finished" over a pupil who needs help');
+ok(t1.every((x, i, a) => i === 0 || a[i - 1].priority >= x.priority), 'most urgent first');
+ok(!I.todo([{ assignment: soon, rows: null }]).length, 'an assignment that failed to load produces no job at all');
+const allDone = I.todo([{ assignment: soon, rows: [done('Aisha', 'p1', 8, 10, 600), done('Ben', 'p2', 9, 10, 600)] }]);
+eq(allDone.length, 1); eq(allDone[0].kind, 'all-done');
+ok(/class average 85%/.test(allDone[0].detail), 'a finished piece of work reports its average');
+ok(!I.todo([{ assignment: soon, rows: [done('Solo', 'k9', 0, 2, 30)] }]).some(x => x.kind === 'low-score'),
+  'zero out of two never labels a pupil - the evidence threshold holds here too');
+eq(I.todo([{ assignment: soon, rows }], { limit: 1 }).length, 1, 'limit is honoured');
+
 eq(I.fmtDuration(45), '45s'); eq(I.fmtDuration(600), '10 min'); eq(I.fmtDuration(0), '-');
 ok(/^Due /.test(I.dueLabel(new Date(Date.now() + 5 * 86400000).toISOString())), 'due label for next week');
 eq(I.dueLabel(new Date(Date.now() + 3600000).toISOString()), 'Due today');

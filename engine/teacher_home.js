@@ -1,11 +1,16 @@
 'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice - Teacher Home
-//  The first thing a teacher sees. It answers three questions - what needs
-//  my attention, what work is active, what should I do next - and offers
-//  three big actions. It draws from data TeacherWorkspace and
-//  TeacherGuestClasses already load; the only extra network work is the
-//  per-assignment results it needs for "due soon" counts and "may need help".
+//  PSAC Exam Practice - Teacher Home ("My classes")
+//  The one place a teacher lands. It answers a single question - what needs me
+//  today - and then shows the classes themselves, which TeacherGuestClasses
+//  draws into #tc-list directly below this block.
+//
+//  ⚠ Home and the classroom screen used to be two dashboards with the same
+//  greeting, the same "recent activity" and the same "needs help" panel, one
+//  scoped to everything and one to a class. A teacher could not tell which
+//  they were on. Home is now the only cross-class surface, and it asks
+//  TeacherInsights.todo() the same question a classroom asks, so the two can
+//  never answer it differently.
 //
 //  ⚠ A failed refresh never blanks a Home that already has data: the last
 //  good picture stays on screen with a "could not refresh" line and a Retry.
@@ -19,6 +24,7 @@ const TeacherHome = (() => {
   let _epoch = 0;
   let _last = null;          // last successfully built picture
   let _loading = false;
+  let _groups = [];          // assignment + rows, kept so a to-do button can act
 
   function _dayPart() {
     const h = new Date().getHours();
@@ -31,16 +37,9 @@ const TeacherHome = (() => {
     return String(name).trim().split(/\s+/).slice(0, 2).join(' ');
   }
 
-  function _packName(id) {
-    const packs = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
-    const p = packs.find(x => x.id === id);
-    return p ? `${p.icon || ''} ${p.name}`.trim() : String(id || '').replace(/^grade(\d+)-/, 'G$1 ').replace(/-/g, ' ');
-  }
-
   function _skeleton() {
     return `<div class="th-skeleton" aria-hidden="true">
       <div class="th-sk-line th-sk-wide"></div><div class="th-sk-line"></div>
-      <div class="th-sk-actions"><div></div><div></div><div></div></div>
       <div class="th-sk-cards"><div></div><div></div><div></div></div>
     </div>`;
   }
@@ -68,116 +67,106 @@ const TeacherHome = (() => {
         catch (_) { return { assignment: a, rows: null }; }
       }));
       if (token !== _epoch) return;
+      _groups = groups.filter(g => Array.isArray(g.rows));
       _last = _build({ classes, assignments, active, groups });
       _paint(_last, {});
     } catch (e) {
       if (token !== _epoch) return;
       if (_last) _paint(_last, { error: true });
-      else root.innerHTML = `<div class="th-error"><p>We could not load your overview. Your classrooms and work have not been changed.</p><button type="button" class="th-retry" onclick="TeacherHome.render()">Try again</button></div>`;
+      else root.innerHTML = `<div class="th-error"><p>We could not load your classes. Nothing has been changed or lost.</p><button type="button" class="th-retry" onclick="TeacherHome.render()">Try again</button></div>`;
     } finally { if (token === _epoch) _loading = false; }
   }
 
   function _build({ classes, assignments, active, groups }) {
     const ins = I();
-    const classById = new Map((classes || []).map(c => [c.id, c]));
     const known = groups.filter(g => Array.isArray(g.rows));
-    const rollup = ins ? ins.pupilRollup(known) : new Map();
-    const help = [...rollup.values()].filter(p => p.needsHelp).sort((a, b) => (b.low + b.overdueMissing) - (a.low + a.overdueMissing));
-    const recent = known.flatMap(g => g.rows.filter(r => r.submitted_at).map(r => ({ ...r, title: g.assignment.title, assignmentId: g.assignment.id })))
-      .sort((a, b) => Date.parse(b.submitted_at) - Date.parse(a.submitted_at)).slice(0, 5);
-    const dueSoon = active.filter(a => ins ? ins.dueSoon(a) : false)
-      .sort((a, b) => Date.parse(a.expires_at) - Date.parse(b.expires_at));
-    const upcoming = (dueSoon.length ? dueSoon : active.slice().sort((a, b) => Date.parse(a.expires_at || 0) - Date.parse(b.expires_at || 0))).slice(0, 4)
-      .map(a => {
-        const g = groups.find(x => x.assignment.id === a.id);
-        const rows = g && Array.isArray(g.rows) ? g.rows : null;
-        const cls = classById.get(a.classroom_id);
-        const total = rows ? rows.length : (a.access_mode === 'classroom_pin' && cls ? Number(cls.pupils || 0) : null);
-        const done = rows ? rows.filter(r => r.submitted_at).length : Number(a.submissions || 0);
-        return { a, total, done, className: a.classroom_name || (cls && cls.name) || '' };
-      });
-    return { classes: (classes || []).filter(c => c.active), assignments, active, help, recent, upcoming, dueSoonCount: dueSoon.length,
-      sampled: known.length, unknown: groups.length - known.length };
+    // The classroom's own Today list calls this with its own groups. Same
+    // function, same thresholds, so the two surfaces cannot disagree.
+    const todos = ins && ins.todo ? ins.todo(known, { showClass: true }) : [];
+    return {
+      classes: (classes || []).filter(c => c.active),
+      assignments, active, todos,
+      sampled: known.length, unknown: groups.length - known.length,
+    };
+  }
+
+  function _summaryLine(d) {
+    const bits = [];
+    if (d.active.length) bits.push(`${d.active.length} piece${d.active.length === 1 ? '' : 's'} of work running`);
+    const jobs = d.todos.filter(t => t.priority > 1).length;
+    if (jobs) bits.push(`${jobs} thing${jobs === 1 ? '' : 's'} need${jobs === 1 ? 's' : ''} you`);
+    else if (d.sampled) bits.push('nothing needs you right now');
+    if (!bits.length) bits.push(d.classes.length ? 'no work set yet' : 'no classes yet');
+    return bits.join(' · ');
+  }
+
+  function _todoRow(t, i) {
+    return `<div class="th-todo th-todo-${esc(t.kind)}">
+      <span class="th-todo-ico" aria-hidden="true">${t.icon}</span>
+      <div class="th-todo-main"><strong>${esc(t.title)}</strong><small>${esc(t.detail)}</small></div>
+      <button type="button" class="th-todo-btn" onclick="TeacherHome.doTodo(${i})">${esc(t.actionLabel)}</button>
+    </div>`;
+  }
+
+  function _todoEmpty(d) {
+    if (!d.classes.length) return `<div class="th-empty"><p>Create your first class. Your pupils will not need an account, an email address or a password - only the four-digit PIN you give them.</p><button type="button" onclick="NewClassroomForm.open()">🏫 Create a class →</button></div>`;
+    if (!d.active.length) return `<div class="th-empty"><p>No work is running yet. Open a class below and set the first piece - it takes about a minute.</p></div>`;
+    if (!d.sampled) return `<div class="th-empty"><p>Nothing has come back yet. As soon as a pupil answers, what needs you will appear here.</p></div>`;
+    return `<div class="th-empty th-empty-good"><p>✓ Nothing needs you right now.</p><small>Everyone is on track in the ${d.sampled} piece${d.sampled === 1 ? '' : 's'} of work checked. Pupils appear here only after enough answers to be sure.</small></div>`;
   }
 
   function _paint(d, state) {
     const root = el('ta-home');
     if (!root) return;
-    const ins = I();
     const name = _teacherName();
-    const parts = [];
-    parts.push(`${d.active.length} assignment${d.active.length === 1 ? '' : 's'} active`);
-    if (d.help.length) parts.push(`${d.help.length} pupil${d.help.length === 1 ? '' : 's'} may need help`);
-    else if (d.sampled) parts.push('nobody needs help right now');
-    if (d.dueSoonCount) parts.push(`${d.dueSoonCount} due within 2 days`);
-    const oneClass = d.classes.length === 1 ? d.classes[0] : null;
-
-    const actions = `
-      <div class="th-actions" aria-label="Main actions">
-        <button type="button" class="th-action th-action-primary" onclick="TeacherMode.switchTab('create')"><span aria-hidden="true">✏️</span><strong>Set new work</strong><small>Homework or a quick test in under a minute</small></button>
-        <button type="button" class="th-action" onclick="TeacherMode.switchTab('results')"><span aria-hidden="true">📊</span><strong>Check submissions</strong><small>See who has finished and who needs help</small></button>
-        <button type="button" class="th-action" onclick="${oneClass ? `TeacherGuestClasses.openById('${esc(oneClass.id)}')` : "TeacherMode.switchTab('classes')"}"><span aria-hidden="true">🏫</span><strong>Open a classroom</strong><small>${oneClass ? esc(oneClass.name) : d.classes.length ? `${d.classes.length} classrooms` : 'Create your first classroom'}</small></button>
-      </div>`;
-
-    const dueCard = `
-      <section class="th-card">
-        <div class="th-card-head"><h4>⏰ Work due soon</h4>${d.active.length ? `<button type="button" onclick="TeacherMode.switchTab('results')">All results</button>` : ''}</div>
-        ${!d.upcoming.length ? `<div class="th-empty"><p>${d.classes.length ? 'No work is active right now.' : 'Create a classroom, then set your first piece of work.'}</p><button type="button" onclick="${d.classes.length ? "TeacherMode.switchTab('create')" : "TeacherMode.switchTab('classes')"}">${d.classes.length ? 'Set work →' : 'Create a classroom →'}</button></div>`
-        : d.upcoming.map(u => `
-          <div class="th-row">
-            <div class="th-row-main"><strong>${esc(u.a.title)}</strong><small>${esc(u.className || 'Open link')} · ${esc(_packName(u.a.subject_pack_id))} · ${esc(ins ? ins.dueLabel(u.a.expires_at) : '')}</small></div>
-            <span class="th-chip ${u.total && u.done >= u.total ? 'th-chip-good' : ''}">${u.total ? `${u.done} of ${u.total} completed` : `${u.done} completed`}</span>
-            <button type="button" class="th-row-btn" onclick="TeacherWorkspace.openResults('${esc(u.a.id)}')">View results</button>
-          </div>`).join('')}
-      </section>`;
-
-    const helpCard = `
-      <section class="th-card">
-        <div class="th-card-head"><h4>🙋 Pupils who may need help</h4></div>
-        ${!d.sampled ? `<div class="th-empty"><p>${d.active.length ? 'Results will appear here once pupils start submitting.' : 'Set some work and this card will tell you who needs a hand.'}</p></div>`
-        : !d.help.length ? `<div class="th-empty th-empty-good"><p>✓ Nothing to worry about in the ${d.sampled} assignment${d.sampled === 1 ? '' : 's'} checked.</p><small>Pupils appear here only after enough answers to be sure.</small></div>`
-        : d.help.slice(0, 5).map(p => `
-          <div class="th-row">
-            <span class="th-avatar" aria-hidden="true">${esc(String(p.name).trim().charAt(0).toUpperCase() || '?')}</span>
-            <div class="th-row-main"><strong>${esc(p.name)}</strong><small>${esc(p.reason || 'Needs a closer look')}</small></div>
-            <button type="button" class="th-row-btn" onclick="TeacherMode.switchTab('results')">See work</button>
-          </div>`).join('')}
-        ${d.help.length > 5 ? `<p class="th-more">and ${d.help.length - 5} more - open Results for the full list.</p>` : ''}
-      </section>`;
-
-    const recentCard = `
-      <section class="th-card">
-        <div class="th-card-head"><h4>⚡ Recent submissions</h4></div>
-        ${!d.recent.length ? `<div class="th-empty"><p>No submissions yet. New ones appear here as pupils finish.</p></div>`
-        : d.recent.map(r => `
-          <div class="th-row">
-            <span class="th-avatar" aria-hidden="true">${esc(String(r.name || '?').trim().charAt(0).toUpperCase() || '?')}</span>
-            <div class="th-row-main"><strong>${esc(r.name || 'Pupil')}</strong><small>${esc(r.title)} · ${esc(r.score)}/${esc(r.total)} (${esc(r.pct)}%)</small></div>
-            <time>${esc(ins ? ins.relativeTime(r.submitted_at) : '')}</time>
-          </div>`).join('')}
-      </section>`;
+    const shown = d.todos.slice(0, 6);
 
     root.innerHTML = `
       <div class="th-hero">
         <div>
-          <span class="th-kicker">${state.refreshing ? 'Refreshing…' : state.error ? 'Showing the last good overview' : 'Your day at a glance'}</span>
+          <span class="th-kicker">${state.refreshing ? 'Refreshing…' : state.error ? 'Showing what loaded last time' : 'Your day at a glance'}</span>
           <h3>Good ${_dayPart()}${name ? ', ' + esc(name) : ''} 👋</h3>
-          <p>${esc(parts.join(' · '))}${d.unknown ? ` · ${d.unknown} assignment${d.unknown === 1 ? '' : 's'} could not be checked` : ''}</p>
+          <p>${esc(_summaryLine(d))}${d.unknown ? ` · ${d.unknown} piece${d.unknown === 1 ? '' : 's'} could not be checked` : ''}</p>
         </div>
-        <button type="button" class="th-refresh" onclick="TeacherHome.render()" ${state.refreshing ? 'disabled' : ''} aria-label="Refresh overview">↻ Refresh</button>
+        <button type="button" class="th-refresh" onclick="TeacherHome.render()" ${state.refreshing ? 'disabled' : ''} aria-label="Refresh">↻ Refresh</button>
       </div>
       ${state.error ? `<div class="th-error th-error-inline"><p>Could not refresh just now. Nothing has been lost.</p><button type="button" class="th-retry" onclick="TeacherHome.render()">Try again</button></div>` : ''}
-      ${actions}
-      <div class="th-cards">${dueCard}${helpCard}${recentCard}</div>`;
+      <section class="th-today" aria-label="What needs you today">
+        <div class="th-today-head"><h4>🔔 What needs you today</h4>${d.todos.length > shown.length ? `<small>showing ${shown.length} of ${d.todos.length}</small>` : ''}</div>
+        ${shown.length ? shown.map(_todoRow).join('') : _todoEmpty(d)}
+      </section>
+      <div class="th-classes-head">
+        <h4>🏫 Your classes</h4>
+        <p>Open a class to set work, see who has finished and manage pupils and PINs.</p>
+      </div>`;
   }
 
-  function reset() { _epoch++; _last = null; _loading = false; const root = el('ta-home'); if (root) root.innerHTML = ''; }
+  // ⚠ The button does exactly what its label says. "Send a reminder" opens the
+  // share sheet with the message already written; "Set easier practice" opens
+  // Set Work already pointed at the same chapters and the same pupils.
+  function doTodo(i) {
+    const t = _last && _last.todos ? _last.todos[i] : null;
+    if (!t) return;
+    const g = _groups.find(x => x.assignment && x.assignment.id === t.assignmentId);
+    const a = g && g.assignment;
+    if (!a) return;
+    const ws = typeof TeacherWorkspace !== 'undefined' ? TeacherWorkspace : null;
+    if (t.action === 'remind' && ws && ws.remind) { ws.remind(a, g.rows || []); return; }
+    if (t.action === 'practice' && typeof TeacherMode !== 'undefined' && TeacherMode.prefillPractice) {
+      TeacherMode.prefillPractice({ classroomId: a.classroom_id, packId: a.subject_pack_id,
+        chapterIds: a.chapter_ids || [], pupilKeys: t.pupilKeys, label: `Easier practice: ${a.title}`.slice(0, 60) });
+      return;
+    }
+    if (ws && ws.openResults) ws.openResults(t.assignmentId);
+  }
+
+  function reset() { _epoch++; _last = null; _groups = []; _loading = false; const root = el('ta-home'); if (root) root.innerHTML = ''; }
   function invalidate() { _last = null; }
 
   if (typeof _sb !== 'undefined' && _sb && _sb.auth && _sb.auth.onAuthStateChange) {
     _sb.auth.onAuthStateChange(event => { if (event === 'SIGNED_OUT') reset(); });
   }
 
-  return { render, reset, invalidate, _build, _paint };
+  return { render, reset, invalidate, doTodo, _build, _paint };
 })();
 if (typeof window !== 'undefined') window.TeacherHome = TeacherHome;

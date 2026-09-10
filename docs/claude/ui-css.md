@@ -217,6 +217,39 @@ surfaces disagreeing.
   `map-world-fit.html` (re-derives the world projection).
 
 ### Feature-specific UI notes
+- **Admin › Question bank, the pupil preview** — the list card renders the real
+  question HTML (`_kidPreviewHTML`, class `.qm-kid`) instead of a stripped line,
+  and **👁 Preview as pupil** opens `#modal-qm-preview`, which draws the question
+  through **`renderAnswerArea()` itself** inside `#qm-preview-board`.
+  ⚠ **`#qm-preview-board` shares the practice screen's chalkboard rules** — one
+  selector list in `style.css` names both `#screen-practice .pr-card` … through
+  `.pr-feedback` **and** `#qm-preview-board …`. Extend that list; never fork the
+  block. A preview drawn from a copy is a preview of the copy, which is worse than
+  no preview: it says a question is fine when the screen the child holds says
+  otherwise. Both selectors are id-based on purpose — the day-theme overrides at
+  the bottom of the file (`html:not(.dark) :is(.pr-card, …)`) outrank a class.
+  ⚠ **The board renders under a THROWAWAY id** (`__qm_preview__`).
+  `_shouldShowAsBlank()` memoises a per-id coin flip in `_blankQuestions`, so
+  previewing under the real id would settle how that question is drawn in a real
+  session on the device. The typed-blank checkbox writes the scratch id only.
+  ⚠ **`ACTIVE_PACK` is swapped for the duration of one synchronous
+  `renderAnswerArea()` call and restored in a `finally`** — it is what decides the
+  French placeholder and `lang`.
+  ⚠ **Enter is stopped in the CAPTURE phase** on the modal: the real answer inputs
+  carry `onkeydown="…practiceSubmit()"` inline, and there is no session behind a
+  preview. An inline handler on the wrapper runs too late.
+  ⚠ **`.pr-answers-pair` is a VIEWPORT media query**, and the frame is a phone's
+  width inside a desktop page — the preview overrides it back to one column,
+  because that is what the child in the frame gets.
+  ⚠ The toggle's state lives in the **checkbox**, read in `_renderList()`; the
+  three modal checkboxes are reset in `_openPreview()`, not in their handlers.
+  ⚠ **The preview and the save share `_qmComposeData()`** — see
+  [content-authoring.md](content-authoring.md). A preview built from the form
+  alone showed a `slots` question with no `slotResponse`, i.e. a preview of a
+  different object than the one that gets written.
+  `cloze`/`errorhunt` are named and refused rather than falling through to the
+  "can't be answered on screen" card. `scripts/test-admin-question-preview.js`
+  (25 checks, real browser).
 - **My Timetable** — `#screen-schedule` has a list ⇄ calendar toggle
   (`setTimetableView`, `psac_timetable_view_v1`); both views paint from one load
   (`_ttData`) and both start work through

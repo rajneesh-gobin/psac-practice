@@ -202,7 +202,75 @@ const TeacherInsights = (() => {
     return `Due ${day}`;
   }
 
+
+  // ── "What needs me today" ─────────────────────────────────────────
+  //  ONE builder, used by the teacher Home (across every classroom) and by a
+  //  classroom's own Today list. A teacher opening either surface is asking
+  //  the same question, so they must never answer it differently.
+  //
+  //  ⚠ Pupils are GROUPED per assignment, never listed one row each. Four
+  //  pupils who have not opened the same homework is one job for the teacher,
+  //  not four; four rows read as four separate problems.
+  //  ⚠ Every judgement still goes through the evidence thresholds above -
+  //  nothing here labels a pupil on one or two answers.
+  function todo(groups, opts = {}) {
+    const now = Number.isFinite(opts.now) ? opts.now : Date.now();
+    const showClass = !!opts.showClass;
+    const out = [];
+    for (const g of (groups || [])) {
+      const a = g.assignment || {};
+      const rows = Array.isArray(g.rows) ? g.rows : null;
+      if (!rows) continue;
+      const where = showClass && a.classroom_name ? ` · ${a.classroom_name}` : '';
+      const title = a.title || 'work';
+      const soon = dueSoon(a, now);
+
+      const missing = rows.filter(r => state(r) !== 'completed');
+      if (missing.length && isActive(a) && soon) {
+        out.push({ kind: 'not-opened', priority: 5, icon: '⏳',
+          title: missing.length === 1 ? `${missing[0].name || 'A pupil'} has not finished ${title}`
+                                      : `${missing.length} pupils have not finished ${title}`,
+          detail: `${dueLabel(a.expires_at, now)}${where}`,
+          actionLabel: 'Send a reminder', action: 'remind',
+          assignmentId: a.id, pupilKeys: missing.map(r => r.name_key).filter(Boolean) });
+      }
+
+      const rushers = rows.filter(rushed);
+      const low = rows.filter(r => needsHelp(r) && !rushers.includes(r));
+      if (low.length) {
+        const one = low.length === 1 ? low[0] : null;
+        out.push({ kind: 'low-score', priority: 4, icon: '💡',
+          title: one ? `${one.name || 'A pupil'} scored ${one.score}/${one.total} on ${title}`
+                     : `${low.length} pupils scored below ${LOW_PCT}% on ${title}`,
+          detail: `They may need an easier set on the same topic${where}`,
+          actionLabel: 'Set easier practice', action: 'practice',
+          assignmentId: a.id, pupilKeys: low.map(r => r.name_key).filter(Boolean) });
+      }
+      if (rushers.length) {
+        out.push({ kind: 'rushed', priority: 3, icon: '⚡',
+          title: rushers.length === 1 ? `${rushers[0].name || 'A pupil'} rushed ${title}`
+                                      : `${rushers.length} pupils rushed ${title}`,
+          detail: `Finished very quickly and got a lot wrong${where}`,
+          actionLabel: 'Look at their answers', action: 'answers',
+          assignmentId: a.id, pupilKeys: rushers.map(r => r.name_key).filter(Boolean) });
+      }
+
+      // ⚠ Never crow "everyone finished" over a piece of work that also
+      // produced a pupil who needs help - the tick would read as "handled".
+      const done = rows.filter(r => state(r) === 'completed');
+      if (rows.length && done.length === rows.length && !low.length && !rushers.length) {
+        const s = summarize(rows);
+        out.push({ kind: 'all-done', priority: 1, icon: '✅',
+          title: `Everyone finished ${title}`,
+          detail: `${done.length} of ${done.length} handed in${s.average != null ? ` · class average ${s.average}%` : ''}${where}`,
+          actionLabel: 'See the results', action: 'results', assignmentId: a.id, pupilKeys: [] });
+      }
+    }
+    out.sort((x, y) => y.priority - x.priority);
+    return typeof opts.limit === 'number' ? out.slice(0, opts.limit) : out;
+  }
+
   return { MIN_EVIDENCE, MIN_CHAPTER_EVIDENCE, LOW_PCT, state, hasEvidence, needsHelp, rushed, isActive, dueSoon,
-    chapterOf, summarize, insights, pupilRollup, fmtDuration, relativeTime, dueLabel };
+    chapterOf, summarize, insights, pupilRollup, todo, fmtDuration, relativeTime, dueLabel };
 })();
 if (typeof window !== 'undefined') window.TeacherInsights = TeacherInsights;

@@ -152,6 +152,51 @@ authored distractor is **silently discarded**, and the answer is appended.
   their distractors are far shorter than any correct answer, which the duplicate
   had been masking. **Check option parity after fixing an answer/option mismatch.**
 
+## ⚠ The admin editor MERGES onto the row — it must never rebuild it
+The second way a question gets written is Admin → Question bank, and `qmSave()`
+used to compose `data` from the form's own fields alone:
+`{ id, chapterId, difficulty, type, question, options, answer,
+acceptableAnswers:[answer], subsection?, hint?, explanation? }`.
+**Every other field in the row was destroyed on save.** Measured across the built
+bundles: **33,171 questions, 34 distinct `type` values, 66 distinct fields**,
+against a form that offered three types and wrote eleven fields. So opening a
+`slots` item to fix a typo dropped its `marks` and `slotResponse`; a French
+`text` item lost `confusables` and `strictAccents`; every multi-value
+`acceptableAnswers` collapsed to one; `learnMore`, `imageAlt`, `unit`,
+`parts`/`stimulus` went the same way. Nothing reported it — the row still
+validated, still rendered, and only the child met the difference.
+- ⚠ **`_qmComposeData()` is the single composer**, used by the save, the modal
+  preview and the inline one. They were separate builders and diverged exactly as
+  you would expect: the preview drew a `slots` question with no `slotResponse`
+  and showed an empty answer area, telling the author the question was broken
+  while the save was keeping it intact. **A preview of a different object than
+  the one that gets written is not a preview.**
+- ⚠ **The form owns four types** (`mcq`, `numeric`, `text`, and `tf` as a
+  shortcut). Anything else round-trips untouched: the select carries the real
+  value as a **disabled** option, the options block hides, the answer and accept
+  fields go read-only, and a banner says so. Without the carried option the
+  select lands on `''` and the save writes that emptiness back as the type.
+- ⚠ **`tf` is not a stored type.** `makeTF()` has always produced an `mcq` with
+  True/False options — Vrai/Faux on a French id, the same prefix rule — and
+  `renderAnswerArea()` has **no `tf` branch**, so a row saved as `type:'tf'`
+  showed the pupil *"this question can't be answered on screen"*. The editor now
+  translates it. ⚠ Any `tf` rows already in the live `questions` table predate
+  this and need re-saving; they will not appear in a bundle, because bundles are
+  built from `subjects/**` and admin-authored rows live only in the table.
+- ⚠ **A subsection the chapter no longer declares is carried too.** Dropping it
+  is the subsection invariant from the other side: the question keeps its tag,
+  the chapter stops declaring it, and the item vanishes from the syllabus screen.
+- ⚠ **The id is read-only on an existing question.** It was editable, and
+  `upsert()` on a changed id writes a **second** row and leaves the original —
+  progress, mistakes and the importer all key on that id.
+- ⚠ **"Must match one of the options exactly" is now enforced**, not just printed
+  in a placeholder. Same defect as the `makeMCQ` one above, on the other path.
+- Clearing hint / explanation / subsection now **deletes** the key. The old save
+  only ever wrote a value it found, so a field could be added and never removed.
+- `scripts/test-admin-question-save.js` (19 checks, real browser) stubs the
+  client's own fetch and asserts on the **upsert payload**, not on the form.
+
+
 ⚠ An **explicit `examWeight: 0` means no slots at all** (changed 2026-09-09); a
 **missing** weight still defaults to 1. Before that, both were clamped to at least
 one slot, and a chapter deliberately weighted 0 stole a question from the

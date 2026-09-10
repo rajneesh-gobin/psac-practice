@@ -30,8 +30,9 @@ const TeacherClassroomDetail = (() => {
   let _classPin = null;
   let _pinsRevealed = false;
   let _signalEpoch = 0;
-  let _signals = { loading: false, activity: [], attention: [], sampled: 0, failed: 0 };
+  let _signals = { loading: false, sampled: 0, failed: 0 };
   let _signalGroups = [];
+  let _todos = [];
   let _rollup = new Map();
   let _workFilter = 'active';
   let _pupilQuery = '';
@@ -76,8 +77,8 @@ const TeacherClassroomDetail = (() => {
     _nameChanges = [];
     _devices = [];
     _assignments = [];
-    _signals = { loading: true, activity: [], attention: [], sampled: 0, failed: 0 };
-    _signalGroups = []; _rollup = new Map();
+    _signals = { loading: true, sampled: 0, failed: 0 };
+    _signalGroups = []; _rollup = new Map(); _todos = [];
     _workFilter = 'active'; _pupilQuery = ''; _workError = ''; _pupilError = ''; _openPupilId = null;
     _workLoaded = false; _pupilsLoaded = false; _setupGuideForced = false;
     _signalEpoch++;
@@ -246,53 +247,82 @@ const TeacherClassroomDetail = (() => {
     if (!box) return;
     const active = _assignments.filter(_isActive);
     const activePupils = _pupils.filter(p => p.active);
-    const pupils = activePupils.length;
-    const submitted = active.reduce((sum, a) => sum + Number(a.submissions || 0), 0);
-    const allSubmitted = _assignments.reduce((sum, a) => sum + Number(a.submissions || 0), 0);
     const hasWork = _assignments.length > 0 || _physicalHomework.length > 0;
-    const attention = _signals.attention;
-    const activity = _signals.activity.slice(0, 5);
-    const needHelp = [..._rollup.values()].filter(p => p.needsHelp);
+    const allSubmitted = _assignments.reduce((sum, a) => sum + Number(a.submissions || 0), 0);
     if (!_workLoaded || !_pupilsLoaded) { box.innerHTML = _skeleton(); return; }
     if (!_workError && (_setupGuideForced || (!hasWork && !_loadPrefs().setupDismissed))) {
       box.innerHTML = _renderSetupGuide(activePupils, hasWork, allSubmitted);
       return;
     }
+    // ⚠ This used to be five counters and two panels, above a header strip
+    // that counted three of the same things again with different words - and
+    // "5 submitted" beside "2 Submissions" on one screen, because one counted
+    // every piece of work and the other only the active ones. A teacher with
+    // no prior IT knowledge was asked to read all that and work out what to do
+    // next. The screen now answers that question directly; the numbers are one
+    // quiet line at the bottom, and the header strip is their only other home.
+    const shown = _todos.slice(0, 8);
+    const jobs = _todos.filter(t => t.priority > 1).length;
     box.innerHTML = `
       <div class="tc-today-hero">
-        <div><span class="tc-today-kicker">CLASSROOM OVERVIEW</span><h3>Good ${_dayPart()} 👋</h3><p>Here is what is happening in ${esc(_className)}.</p></div>
-        <div class="tc-today-actions"><button type="button" class="tc-setup-help" onclick="TeacherClassroomDetail.showSetupGuide()">❓ How classrooms work</button><button class="tc-cd-action-btn tc-cd-action-big" onclick="TeacherClassroomDetail.createWork()">✏️ Set work</button></div>
+        <div>
+          <span class="tc-today-kicker">${esc(_className)}</span>
+          <h3>What needs you today</h3>
+          <p>${_signals.loading ? 'Checking what has come back…'
+            : jobs ? `${jobs} thing${jobs === 1 ? '' : 's'} to look at.`
+            : 'Nothing urgent. Here is where this class stands.'}</p>
+        </div>
+        <div class="tc-today-actions">
+          <button type="button" class="tc-setup-help" onclick="TeacherClassroomDetail.showSetupGuide()">❓ How classrooms work</button>
+          <button class="tc-cd-action-btn tc-cd-action-big" onclick="TeacherClassroomDetail.showHomeworkChoice()">✏️ Set work</button>
+        </div>
       </div>
       ${_workError ? `<div class="tc-cd-inline-error"><p>${esc(_workError)}</p><button type="button" onclick="TeacherClassroomDetail.retryWork()">Try again</button></div>` : ''}
-      <div class="tc-today-stats">
-        <button type="button" onclick="TeacherClassroomDetail.showSection('pupils')"><span class="purple">👥</span><strong>${_pupilError ? '-' : pupils}</strong><small>Pupils</small></button>
-        <button type="button" onclick="TeacherClassroomDetail.showSection('work')"><span class="blue">📋</span><strong>${active.length}</strong><small>Active assignments</small></button>
-        <button type="button" onclick="TeacherClassroomDetail.showSection('pupils')"><span class="amber">🙋</span><strong>${_signals.loading ? '…' : needHelp.length}</strong><small>May need attention</small></button>
-        <button type="button" onclick="TeacherClassroomDetail.showSection('work')"><span class="green">✓</span><strong>${submitted}</strong><small>Submissions</small></button>
-        <button type="button" onclick="TeacherClassroomDetail.showSection('materials')"><span class="blue">📁</span><strong>${_materials.length}</strong><small>Materials</small></button>
-      </div>
-      <div class="tc-today-columns">
-        <section class="tc-today-panel">
-          <div class="tc-today-panel-head"><div><span>⚡</span><h4>Recent activity</h4></div>${_signals.sampled ? `<small>Latest ${_signals.sampled} assignment${_signals.sampled === 1 ? '' : 's'}</small>` : ''}</div>
-          ${_signals.loading ? '<p class="tc-today-loading">Checking recent submissions…</p>' : activity.length ? activity.map(r => `
-            <div class="tc-activity-row"><span class="tc-activity-avatar">${esc((r.name || '?').trim().charAt(0).toUpperCase() || '?')}</span><div><strong>${esc(r.name || 'Pupil')} submitted</strong><small>${esc(r.title)} · ${esc(r.pct)}%</small></div><time>${esc(_relativeTime(r.submitted_at))}</time></div>`).join('') : '<p class="tc-today-empty">No recent submissions yet. New activity will appear here.</p>'}
-        </section>
-        <section class="tc-today-panel">
-          <div class="tc-today-panel-head"><div><span>🎯</span><h4>Needs attention</h4></div><button type="button" onclick="TeacherClassroomDetail.showSection('pupils')">All pupils</button></div>
-          ${_signals.loading ? '<p class="tc-today-loading">Looking for pupils who may need help…</p>' : attention.length ? attention.slice(0, 5).map(r => `
-            <div class="tc-attention-row"><span>${r.kind === 'not-started' ? '⏳' : r.kind === 'in-progress' ? '✏️' : '💡'}</span><div><strong>${esc(r.name || 'Pupil')}</strong><small>${esc(r.message)} · ${esc(r.title)}</small></div></div>`).join('') : `<p class="tc-today-empty tc-today-good">${_signals.sampled ? '✓ Nothing urgent in the assignments checked.' : 'Set some work and this panel will show who needs a hand.'}</p>`}
-          ${_signals.failed ? `<p class="tc-today-empty">${_signals.failed} assignment${_signals.failed === 1 ? '' : 's'} could not be checked. <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.retrySignals()">Try again</button></p>` : ''}
-        </section>
-      </div>`;
+      <section class="tc-todo-list" aria-label="What needs you today">
+        ${_signals.loading ? '<p class="tc-today-loading">Looking at what your pupils have done…</p>'
+          : shown.length ? shown.map(_todoRow).join('')
+          : `<div class="tc-today-empty tc-today-good"><p>${_signals.sampled ? '✓ Everyone is on track in the work you have set.' : 'Nothing has come back yet. As soon as a pupil answers, it appears here.'}</p></div>`}
+        ${_signals.failed ? `<p class="tc-today-empty">${_signals.failed} piece${_signals.failed === 1 ? '' : 's'} of work could not be checked. <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.retrySignals()">Try again</button></p>` : ''}
+      </section>
+      `;
+  }
+
+  function _todoRow(t, i) {
+    return `<div class="tc-todo tc-todo-${esc(t.kind)}">
+      <span class="tc-todo-ico" aria-hidden="true">${t.icon}</span>
+      <div class="tc-todo-main"><strong>${esc(t.title)}</strong><small>${esc(t.detail)}</small></div>
+      <button type="button" class="tc-todo-btn" onclick="TeacherClassroomDetail.doTodo(${i})">${esc(t.actionLabel)}</button>
+    </div>`;
+  }
+
+  // ⚠ Each button does exactly what its label promises. "Send a reminder"
+  // opens the share sheet with the message written; "Set easier practice"
+  // opens Set Work already pointed at the same chapters and the same pupils.
+  function doTodo(i) {
+    const t = _todos[i];
+    if (!t) return;
+    const g = _signalGroups.find(x => x.assignment && x.assignment.id === t.assignmentId);
+    const a = g && g.assignment;
+    if (!a) return;
+    const ws = typeof TeacherWorkspace !== 'undefined' ? TeacherWorkspace : null;
+    if (t.action === 'remind' && ws && ws.remind) { ws.remind(a, g.rows || []); return; }
+    if (t.action === 'practice' && typeof TeacherMode !== 'undefined' && TeacherMode.prefillPractice) {
+      close();
+      TeacherMode.prefillPractice({ classroomId: a.classroom_id, packId: a.subject_pack_id,
+        chapterIds: a.chapter_ids || [], pupilKeys: t.pupilKeys, label: `Easier practice: ${a.title}`.slice(0, 60) });
+      return;
+    }
+    _loadResultsFor(a.id);
+    showSection('results');
   }
 
   async function _loadDashboardSignals() {
     const token = ++_signalEpoch;
     const classroomId = _classId;
     const relevant = _assignments.filter(_isActive).slice(0, 8);
-    _signals = { loading: relevant.length > 0, activity: [], attention: [], sampled: relevant.length, failed: 0 };
+    _signals = { loading: relevant.length > 0, sampled: relevant.length, failed: 0 };
     if (_activeSection === 'overview') _renderOverview();
-    if (!relevant.length) { _signalGroups = []; _rollup = new Map(); if (_activeSection === 'pupils') _renderPupils(); return; }
+    if (!relevant.length) { _signalGroups = []; _rollup = new Map(); _todos = []; if (_activeSection === 'pupils') _renderPupils(); return; }
     const ws = typeof TeacherWorkspace !== 'undefined' ? TeacherWorkspace : null;
     const results = await Promise.all(relevant.map(async a => {
       try {
@@ -302,25 +332,11 @@ const TeacherClassroomDetail = (() => {
     }));
     if (token !== _signalEpoch || classroomId !== _classId) return;
     const valid = results.filter(Boolean);
-    const activity = valid.flatMap(group => group.rows.filter(r => r.submitted_at).map(r => ({...r, title: group.assignment.title})))
-      .sort((a, b) => Date.parse(b.submitted_at) - Date.parse(a.submitted_at));
     const ins = I();
-    const latestByPupil = new Map();
-    valid.forEach(group => group.rows.forEach(r => {
-      const key = r.name_key || String(r.name || '').toLowerCase();
-      const current = latestByPupil.get(key);
-      const urgent = group.assignment.expires_at && Date.parse(group.assignment.expires_at) - Date.now() <= 2 * 86400000;
-      const low = ins ? ins.needsHelp(r) : (r.submitted_at && Number(r.pct) < 60);
-      const priority = r.not_started && urgent ? 3 : !r.submitted_at && !r.not_started && urgent ? 2 : low ? 1 : 0;
-      if (priority && (!current || priority > current.priority)) latestByPupil.set(key, {
-        ...r, title: group.assignment.title, priority,
-        kind: r.not_started ? 'not-started' : !r.submitted_at ? 'in-progress' : 'low-score',
-        message: r.not_started ? 'Has not started' : !r.submitted_at ? 'Started but not submitted' : `Scored ${Number(r.pct)}%`
-      });
-    }));
     _signalGroups = valid;
     _rollup = ins ? ins.pupilRollup(valid) : new Map();
-    _signals = { loading: false, activity, attention: [...latestByPupil.values()].sort((a,b) => b.priority-a.priority), sampled: valid.length, failed: relevant.length - valid.length };
+    _todos = ins && ins.todo ? ins.todo(valid) : [];
+    _signals = { loading: false, sampled: valid.length, failed: relevant.length - valid.length };
     if (_activeSection === 'overview') _renderOverview();
     if (_activeSection === 'pupils') _renderPupils();
     if (_activeSection === 'work') _renderWork();
@@ -1673,7 +1689,7 @@ const TeacherClassroomDetail = (() => {
   }
 
   return {
-    open, close, showSection, isOpen, toggleMore, setWorkFilter, retryWork, retryPupils, retrySignals, showSetupGuide, dismissSetupGuide, openPupil, closePupil,
+    open, close, showSection, isOpen, toggleMore, setWorkFilter, retryWork, retryPupils, retrySignals, doTodo, showSetupGuide, dismissSetupGuide, openPupil, closePupil,
     showHomeworkChoice, _chooseDigital, _chooseWorksheet,
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,

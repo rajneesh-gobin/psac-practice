@@ -3013,6 +3013,41 @@ const AdminPanel = (() => {
     const PAGE     = 50;
     let _qmTotal   = null;
     let _editingId = null;
+    // ⚠ THE WHOLE ROW, not just its id. qmSave() used to rebuild `data` from
+    //   the form's ten fields, so every field the form has no control for was
+    //   destroyed on save: marks, slotResponse, confusables/strictAccents,
+    //   unit, parts/stimulus/intro, learnMore, imageAlt and the rest of
+    //   acceptableAnswers. Measured across the built bundles: 34 distinct
+    //   `type` values and 66 distinct fields, against a form that knows 4 types
+    //   and 11 fields. The save now MERGES onto this.
+    let _editingRow = null;
+
+    // The types this form can actually author. Everything else round-trips
+    // untouched: the select carries the real value as a disabled option, the
+    // options block is hidden, and qmSave() writes back what it read.
+    // ⚠ 'tf' is a SHORTCUT, not a stored type - makeTF() has always produced an
+    //   MCQ with True/False options, and renderAnswerArea() has no 'tf' branch,
+    //   so a row saved as type:'tf' shows the pupil "can't be answered on
+    //   screen". qmSave() translates it.
+    const _QM_FORM_TYPES = ['mcq', 'numeric', 'text', 'tf'];
+    const _qmTypeEditable = t => _QM_FORM_TYPES.includes(t || 'mcq');
+
+    // French packs answer Vrai/Faux. Same rule as makeTF() in engine/helpers.js
+    // - the id prefix is the only language marker a factory can see.
+    const _qmTfLabels = (id, chapterId) =>
+      (/^(g\d)?fr[-_]/i.test(id || '') || /^(g\d)?fr[-_]/i.test(chapterId || ''))
+        ? ['Vrai', 'Faux'] : ['True', 'False'];
+
+    // A stored value the rebuilt dropdown does not offer - a type this form
+    // cannot author, or a subsection the chapter no longer declares. Without
+    // this the select lands on '' and the save writes that emptiness back.
+    function _qmCarryOption(selId, value, label) {
+      const sel = _el(selId);
+      if (!value || !sel || [...sel.options].some(o => o.value === value)) return;
+      const o = document.createElement('option');
+      o.value = value; o.textContent = label; o.disabled = true;
+      sel.appendChild(o);
+    }
     let _idCounter = 0;
     let _listRequest = 0;
 
@@ -3025,6 +3060,59 @@ const AdminPanel = (() => {
     function _getPack(subjectId) {
       return SUBJECT_PACKS.find(p => p.id === subjectId);
     }
+
+    // ── Pupil preview ─────────────────────────────────────────────────────
+    // ⚠ The list is the surface a question is JUDGED from, and it used to show
+    //   a stripped-HTML line. For a large part of the bank the markup IS the
+    //   question - an <img>, an inline <svg>, a run of ___ blanks - so what an
+    //   admin read was "A noun is a -" with the picture and the four options
+    //   thrown away before it was drawn.
+    // ⚠ Two surfaces, and they are not the same promise. _kidPreviewHTML() is
+    //   the inline one: fast, light, fifty to a page, and NOT the chalkboard.
+    //   The modal is the faithful one - it draws through renderAnswerArea()
+    //   itself on the practice screen's own rules, because a preview drawn by
+    //   a second renderer is a preview of the second renderer.
+    let _rows = [];                 // every row currently listed, across Load more
+    const _rowById = new Map();
+    let _previewQ = null;
+    let _previewPack = null;
+    let _previewWired = false;
+
+    const _pm = html => (typeof _prettyMath === 'function' ? _prettyMath(html || '') : (html || ''));
+
+    // The row as the ENGINE sees it. data.* is authoritative - the columns are
+    // a copy the importer writes for filtering - but an old row can be missing
+    // one, so the column is the fallback and never the other way round.
+    function _qData(row) {
+      const d = Object.assign({}, row.data || {});
+      if (!d.id) d.id = row.id;
+      if (!d.chapterId) d.chapterId = row.chapter_id;
+      if (d.difficulty == null) d.difficulty = row.difficulty;
+      if (!d.type) d.type = 'mcq';
+      return d;
+    }
+
+    function _kidPreviewHTML(q) {
+      const body = _pm(q.question || '');
+      const opts = Array.isArray(q.options) ? q.options : [];
+      const correct = Array.isArray(q.answer) ? q.answer : [q.answer];
+      let tail = '';
+      if (opts.length) {
+        tail = '<div class="qm-kid-opts">' + opts.map((o, i) =>
+          '<span class="qm-kid-opt' + (correct.includes(o) ? ' is-answer' : '') + '">'
+          + '<span class="opt-letter">' + String.fromCharCode(65 + i) + '</span>'
+          + '<span>' + _pm(String(o)) + '</span></span>').join('') + '</div>';
+      } else if (q.answer != null && String(q.answer) !== '') {
+        tail = '<div class="qm-kid-typed">Typed answer: <b>' + _esc(String(q.answer)) + '</b></div>';
+      }
+      // ⚠ makeMCQ() shuffles its own options, so the order here is the order in
+      //   the row, not the order the child meets. Which one is RIGHT is what
+      //   this view is for, and that is marked.
+      return '<div class="qm-kid"><div class="pr-q">' + (body
+        || '<span class="qm-kid-empty">No question text - open the preview.</span>')
+        + '</div>' + tail + '</div>';
+    }
+
 
     // ── Filter bar: grade → subject → chapter ────────────────────────────
     // One builder for the subject list, used on tab open and on every grade
@@ -3184,36 +3272,181 @@ const AdminPanel = (() => {
       _qmTotal = (typeof count === 'number') ? count : _qmTotal;
       _setCount('qm-count', _offset + rows.length, _qmTotal, 'questions');
 
-      const html = rows.map(r => {
-        const preview = _stripHtml(r.data?.question || '').slice(0, 360) || 'Visual or interactive question - open to review.';
-        const safeId = _esc(JSON.stringify(r.id));
-        const pack = _getPack(r.subject_id);
-        const ch = (pack?._chapters || pack?.chapters || []).find(c => c.id === r.chapter_id);
-        const difficulty = {1:'Basic',2:'Medium',3:'Hard',4:'Word problems / applied'}[r.difficulty] || 'Not specified';
-        return `<article class="qm-question-card">
-          <div class="qm-question-meta"><span>${_esc(pack ? `Grade ${pack.grade} · ${pack.name}` : r.subject_id)}</span><span>${_esc(difficulty)}</span>${pack?.comingSoon ? '<span>Unpublished pack</span>' : ''}${r.protected ? '<span>🔒 Protected from imports</span>' : ''}</div>
-          <h3>${_esc(ch?.name || r.chapter_id)}${ch?.enrichment ? ' · Bonus' : ''}</h3>
-          <p class="qm-question-preview">${_esc(preview)}</p>
-          <div class="qm-question-footer"><span class="qm-question-id">ID: ${_esc(r.id)}</span>
-            <div class="qm-question-actions">
-              <button onclick="AdminPanel.qmOpenForm(${safeId})" class="qm-edit-button">Review / edit question</button>
-              <details><summary>More actions</summary><div class="qm-secondary-actions">
-                <p>Protection keeps imports from overwriting your edits.</p>
-                <button onclick="AdminPanel.qmToggleProtection(${safeId},${!r.protected})">${r.protected ? 'Remove import protection' : 'Protect from imports'}</button>
-                <button onclick="AdminPanel.qmDelete(${safeId})" class="qm-delete-button">Delete question…</button>
-              </div></details>
-            </div>
-          </div>
-        </article>`;
-      }).join('');
-
-      const list = _el('qm-list');
-      if (replace) list.innerHTML = html || '<p class="text-sm text-gray-400 p-4">No questions found.</p>';
-      else list.insertAdjacentHTML('beforeend', html);
+      if (replace) { _rows = rows; _rowById.clear(); }
+      else _rows = _rows.concat(rows);
+      rows.forEach(r => _rowById.set(r.id, r));
+      _renderList();
 
       const loadMore = _el('qm-load-more');
       if (rows.length === PAGE) loadMore.classList.remove('hidden');
       else loadMore.classList.add('hidden');
+    }
+
+    function _cardHTML(r, previewOn) {
+      const q = _qData(r);
+      const safeId = _esc(JSON.stringify(r.id));
+      const pack = _getPack(r.subject_id);
+      const ch = (pack?._chapters || pack?.chapters || []).find(c => c.id === r.chapter_id);
+      const difficulty = {1:'Basic',2:'Medium',3:'Hard',4:'Word problems / applied'}[r.difficulty] || 'Not specified';
+      const body = previewOn
+        ? _kidPreviewHTML(q)
+        : '<p class="qm-question-preview">' + _esc(_stripHtml(q.question || '').slice(0, 360)
+            || 'Visual or interactive question - open to review.') + '</p>';
+      return `<article class="qm-question-card">
+        <div class="qm-question-meta"><span>${_esc(pack ? `Grade ${pack.grade} · ${pack.name}` : r.subject_id)}</span><span>${_esc(difficulty)}</span>${pack?.comingSoon ? '<span>Unpublished pack</span>' : ''}${r.protected ? '<span>🔒 Protected from imports</span>' : ''}</div>
+        <h3>${_esc(ch?.name || r.chapter_id)}${ch?.enrichment ? ' · Bonus' : ''}</h3>
+        ${body}
+        <div class="qm-question-footer"><span class="qm-question-id">ID: ${_esc(r.id)}</span>
+          <div class="qm-question-actions">
+            <button onclick="AdminPanel.qmPreview(${safeId})" class="qm-preview-button" title="See it drawn exactly as a pupil gets it">👁 Preview as pupil</button>
+            <button onclick="AdminPanel.qmOpenForm(${safeId})" class="qm-edit-button">Review / edit question</button>
+            <details><summary>More actions</summary><div class="qm-secondary-actions">
+              <p>Protection keeps imports from overwriting your edits.</p>
+              <button onclick="AdminPanel.qmToggleProtection(${safeId},${!r.protected})">${r.protected ? 'Remove import protection' : 'Protect from imports'}</button>
+              <button onclick="AdminPanel.qmDelete(${safeId})" class="qm-delete-button">Delete question…</button>
+            </div></details>
+          </div>
+        </div>
+      </article>`;
+    }
+
+    // Rebuilds from _rows, so the preview toggle costs nothing on the wire.
+    // ⚠ The toggle's state lives in the CHECKBOX, read here in the render -
+    //   a module-level copy of it is the bug the CSS/UI notes warn about.
+    function _renderList() {
+      const previewOn = _el('qm-preview-mode') ? _el('qm-preview-mode').checked : true;
+      const list = _el('qm-list');
+      list.innerHTML = _rows.length
+        ? _rows.map(r => _cardHTML(r, previewOn)).join('')
+        : '<p class="text-sm text-gray-400 p-4">No questions found.</p>';
+      if (previewOn && typeof _makeImgsZoomable === 'function') _makeImgsZoomable(list);
+    }
+
+    function qmTogglePreviewMode() { _renderList(); }
+
+    // ── Preview: the practice screen, with this question in it ────────────
+    function qmPreview(id) {
+      const r = _rowById.get(id);
+      if (!r) { toast('Reload the list and try again.', 2000); return; }
+      _openPreview(_qData(r), _getPack(r.subject_id));
+    }
+
+    // The unsaved form, drawn the same way. An author checks the picture, the
+    // option lengths and the explanation BEFORE the row exists.
+    // The unsaved form, drawn the same way. An author checks the picture, the
+    // option lengths and the explanation BEFORE the row exists - and sees the
+    // object the save would write, fields this form cannot edit included.
+    function qmPreviewForm() {
+      const { data } = _qmComposeData(_el('qmf-id').value.trim() || '__qm_preview__', false);
+      _openPreview(data || {}, _getPack(_el('qmf-subject').value));
+    }
+
+    function _openPreview(q, pack) {
+      _previewQ = q;
+      _previewPack = pack || null;
+      // ⚠ Reset in the OPEN, not in the toggle handlers: otherwise the next
+      //   question opens already answered because the last one was left that way.
+      ['qmp-answered', 'qmp-show-hints', 'qmp-blank'].forEach(id => {
+        const c = _el(id); if (c) c.checked = false;
+      });
+      if (!_previewWired) {
+        _previewWired = true;
+        // ⚠ The real answer inputs carry onkeydown="…practiceSubmit()". There is
+        //   no practice session behind a preview, so Enter is stopped in the
+        //   CAPTURE phase - an inline handler on the wrapper would run too late.
+        _el('modal-qm-preview').addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); }
+        }, true);
+      }
+      _el('modal-qm-preview').classList.remove('hidden');
+      _renderPreview();
+    }
+
+    function qmClosePreview() {
+      _el('modal-qm-preview').classList.add('hidden');
+      _previewQ = null;
+      _previewPack = null;
+    }
+
+    function qmPreviewToggle() { _renderPreview(); }
+
+    function _renderPreview() {
+      const q = _previewQ;
+      if (!q) return;
+      const answered = !!_el('qmp-answered')?.checked;
+      // ⚠ A THROWAWAY ID. _shouldShowAsBlank() memoises its coin-flip per
+      //   question id in _blankQuestions, so previewing under the real id would
+      //   decide how that question is drawn in a real session on this device.
+      const shown = Object.assign({}, q, { id: '__qm_preview__' });
+      const pack = _previewPack;
+
+      _el('qmp-meta').textContent = [
+        pack ? `Grade ${pack.grade} · ${pack.name}` : (q.chapterId || ''),
+        {1:'Basic',2:'Medium',3:'Hard',4:'Word problems / applied'}[q.difficulty] || '',
+        String(q.type || 'mcq').toUpperCase(),
+        q.id === '__qm_preview__' ? 'not saved yet' : q.id,
+      ].filter(Boolean).join('  ·  ');
+
+      // Half of the pupils meeting a one-word MCQ get a typed box instead of
+      // the options. Both faces are real, so both are offered - but only where
+      // the question actually has them.
+      const blankable = typeof _isSingleWordAnswer === 'function' && _isSingleWordAnswer(shown);
+      _el('qmp-blank-row')?.classList.toggle('hidden', !blankable);
+      if (typeof _blankQuestions !== 'undefined') {
+        _blankQuestions.set(shown.id, blankable && !!_el('qmp-blank')?.checked);
+      }
+
+      const qBox = _el('qmp-q');
+      qBox.innerHTML = _pm(shown.question || '') || '<i>This question has no text.</i>';
+      if (typeof _makeImgsZoomable === 'function') _makeImgsZoomable(qBox);
+
+      // The three hints, as the child gets them. Hint 2 is DERIVED from the
+      // explanation rather than authored, so this is where a leak shows up.
+      const hintBox = _el('qmp-hints');
+      let hints = [];
+      try { if (typeof _buildHints === 'function') hints = _buildHints(shown) || []; } catch (e) { hints = []; }
+      hintBox.innerHTML = hints.map((h, i) =>
+        '<div class="qmp-hint-line"><b>Hint ' + (i + 1) + ':</b> ' + _pm(String(h)) + '</div>').join('');
+      hintBox.classList.toggle('hidden', !hints.length || !_el('qmp-show-hints')?.checked);
+
+      const fb = _el('qmp-feedback');
+      // ⚠ cloze and errorhunt never reach renderAnswerArea() - they have their
+      //   own French screens and isPoolQuestion() keeps them out of every pool.
+      //   Saying so beats drawing the "can't be answered on screen" card, which
+      //   would read as a defect in a question that has none.
+      if (shown.type === 'cloze' || shown.type === 'errorhunt') {
+        _el('qmp-answers').innerHTML = '<div class="answer-unsupported" role="status">'
+          + '<p><b>A French exercise, not a pool question.</b></p>'
+          + '<p>Textes à Trous and Chasse aux Erreurs have their own screen and are never dealt into practice or an exam, so there is no answer area here.</p></div>';
+      } else {
+        const sel = !answered ? null
+          : (Array.isArray(shown.answer) ? JSON.stringify(shown.answer)
+             : String(shown.answer == null ? '' : shown.answer));
+        // ⚠ renderAnswerArea() reads ACTIVE_PACK for the French placeholder and
+        //   lang. Swapped for the duration of ONE synchronous call and put back
+        //   in a finally, so the preview speaks the pack's language without
+        //   leaving the admin standing in that pack.
+        const prev = typeof ACTIVE_PACK !== 'undefined' ? ACTIVE_PACK : undefined;
+        try {
+          if (prev !== undefined && pack) ACTIVE_PACK = pack;
+          renderAnswerArea(shown, 'qmp-answers', sel, answered);
+        } finally {
+          if (prev !== undefined) ACTIVE_PACK = prev;
+        }
+      }
+
+      if (answered && shown.type !== 'cloze' && shown.type !== 'errorhunt') {
+        fb.className = 'pr-feedback feedback-correct';
+        fb.innerHTML = '<div class="qmp-fb"><span class="qmp-fb-ico">🎉</span><div>'
+          + '<div class="qmp-fb-head">Correct! Well done!</div>'
+          + '<div class="qmp-fb-body">' + (shown.explanation
+              ? _pm(shown.explanation)
+              : '<i>No explanation - the pupil is told nothing after answering.</i>')
+          + '</div></div></div>';
+      } else {
+        fb.className = 'pr-feedback hidden';
+        fb.innerHTML = '';
+      }
     }
 
     // ── Form: open ───────────────────────────────────────────────────────
@@ -3222,32 +3455,50 @@ const AdminPanel = (() => {
       _el('qm-form-title').textContent = id ? 'Edit Question' : 'Add Question';
 
       // Reset fields
-      ['qmf-id','qmf-question','qmf-opt-a','qmf-opt-b','qmf-opt-c','qmf-opt-d','qmf-answer','qmf-hint','qmf-explanation'].forEach(fid => { _el(fid).value = ''; });
-      _el('qmf-preview').innerHTML = '';
+      ['qmf-id','qmf-question','qmf-opt-a','qmf-opt-b','qmf-opt-c','qmf-opt-d','qmf-answer','qmf-accept','qmf-hint','qmf-explanation'].forEach(fid => { _el(fid).value = ''; });
+      _editingRow = null;
+      _el('qmf-id').readOnly = false;
+      _el('qmf-id-note').classList.add('hidden');
+      [...(_el('qmf-type').options)].filter(o => o.disabled).forEach(o => o.remove());
       _el('qmf-grade').value = '4';
       _el('qmf-difficulty').value = '2';
       _el('qmf-type').value = 'mcq';
       _el('qmf-options-block').classList.remove('hidden');
       qmFormGradeChange();
+      qmUpdatePreview();
 
       if (id) {
         const { data, error } = await _sb.from('questions').select('*').eq('id', id).maybeSingle();
         if (error || !data) { toast('Could not load question.', 2000); return; }
+        _editingRow = data;
         const q = data.data || {};
+        // ⚠ The id is the primary key AND what progress, mistakes and the
+        //   importer key on. Editing it made upsert() write a SECOND row and
+        //   leave the original behind.
+        _el('qmf-id').readOnly = true;
+        _el('qmf-id-note').classList.remove('hidden');
         _el('qmf-id').value          = data.id;
         _el('qmf-grade').value       = String(data.grade);
         _el('qmf-difficulty').value  = String(data.difficulty);
+        _qmCarryOption('qmf-type', q.type, (q.type || '') + ' \u2014 not editable here');
         _el('qmf-type').value        = q.type || 'mcq';
         _el('qmf-question').value    = q.question || '';
-        _el('qmf-answer').value      = q.answer || '';
+        _el('qmf-answer').value      = Array.isArray(q.answer) ? q.answer.join(', ') : (q.answer || '');
+        // The primary answer is the first entry; the rest is what this field
+        // used to throw away on every save.
+        _el('qmf-accept').value      = (q.acceptableAnswers || [])
+          .filter(a => String(a) !== String(q.answer)).join('\n');
         _el('qmf-hint').value        = q.hint || '';
         _el('qmf-explanation').value = q.explanation || '';
-        _el('qmf-preview').innerHTML = q.question || '';
         qmFormGradeChange();
         _el('qmf-subject').value = data.subject_id;
         qmFormSubjectChange();
         _el('qmf-chapter').value = data.chapter_id;
         qmFormChapterChange();
+        // ⚠ A subsection the chapter no longer declares still belongs to the
+        //   question. Dropping it here is how a tagged item goes missing from
+        //   the syllabus screen - the invariant in CLAUDE.md, from the other side.
+        _qmCarryOption('qmf-subsection', q.subsection, q.subsection + ' \u2014 not declared in this chapter');
         if (q.subsection) _el('qmf-subsection').value = q.subsection;
         const opts = q.options || [];
         ['qmf-opt-a','qmf-opt-b','qmf-opt-c','qmf-opt-d'].forEach((fid, i) => {
@@ -3262,6 +3513,7 @@ const AdminPanel = (() => {
     function qmCloseForm() {
       _el('modal-qm-form').classList.add('hidden');
       _editingId = null;
+      _editingRow = null;
     }
 
     // ── Form: cascading dropdowns ─────────────────────────────────────────
@@ -3309,10 +3561,27 @@ const AdminPanel = (() => {
     function qmFormTypeChange() {
       const type = _el('qmf-type').value;
       _el('qmf-options-block').classList.toggle('hidden', type !== 'mcq');
+      // Fields this form cannot write for the type must not invite typing.
+      ['qmf-answer', 'qmf-accept'].forEach(fid => { _el(fid).readOnly = !_qmTypeEditable(type); });
+      const note = _el('qmf-type-note');
+      if (_qmTypeEditable(type)) {
+        note.classList.add('hidden');
+      } else {
+        note.textContent = 'This is a "' + type + '" question. The text, hint and explanation below are '
+          + 'safe to change; everything else this type needs is kept exactly as it is and cannot be '
+          + 'edited here. Use \u{1F441} Preview to see what the pupil gets.';
+        note.classList.remove('hidden');
+      }
+      qmUpdatePreview();
     }
 
     function qmUpdatePreview() {
-      _el('qmf-preview').innerHTML = _el('qmf-question').value;
+      // The stem alone answered "is my HTML valid". It never answered the
+      // question an author is actually asking - what does the CHILD get - so
+      // the options and which of them is right are drawn with it.
+      const { data } = _qmComposeData(_el('qmf-id').value.trim() || '__qm_preview__', false);
+      _el('qmf-preview').innerHTML = _kidPreviewHTML(data || {});
+      if (typeof _makeImgsZoomable === 'function') _makeImgsZoomable(_el('qmf-preview'));
     }
 
     function qmInsertImage() {
@@ -3351,45 +3620,92 @@ const AdminPanel = (() => {
     }
 
     // ── Save ─────────────────────────────────────────────────────────────
-    async function qmSave() {
+    // ⚠ ONE composer, used by the save AND by both previews. They were two, and
+    //   they diverged in the obvious way: the preview built its question from
+    //   the form's fields alone, so a `slots` item previewed with no
+    //   slotResponse and drew an empty row - telling the author the question was
+    //   broken while the save was keeping it intact. A preview of a different
+    //   object than the one that gets written is not a preview.
+    //
+    // ⚠ MERGE, never rebuild. Everything this form has no control for - marks,
+    //   slotResponse, confusables/strictAccents, unit, parts/stimulus, learnMore,
+    //   imageAlt and the rest of acceptableAnswers - belongs to the question and
+    //   survives an edit untouched. Measured when this was written: 34 distinct
+    //   `type` values and 66 distinct fields across the built bundles, against a
+    //   form that offers 4 types and writes 11 fields.
+    function _qmComposeData(qId, validate) {
       const question = _el('qmf-question').value.trim();
       const answer   = _el('qmf-answer').value.trim();
-      if (!question) { toast('Question text is required.', 2000); return; }
-      if (!answer)   { toast('Correct answer is required.', 2000); return; }
-
-      const grade    = _el('qmf-grade').value;
-      const subject  = _el('qmf-subject').value;
       const chapter  = _el('qmf-chapter').value;
       const subsect  = _el('qmf-subsection').value;
       const diff     = _el('qmf-difficulty').value;
-      const type     = _el('qmf-type').value;
+      const formType = _el('qmf-type').value;
       const hint     = _el('qmf-hint').value.trim();
       const expl     = _el('qmf-explanation').value.trim();
+      const extra    = _el('qmf-accept').value.split('\n').map(s => s.trim()).filter(Boolean);
+      const editable = _qmTypeEditable(formType);
+      const fail = msg => { if (validate) toast(msg, 3500); return { error: msg }; };
 
+      if (editable && validate && !question) return fail('Question text is required.');
+      if (editable && validate && !answer)   return fail('Correct answer is required.');
+
+      // ⚠ 'tf' is a form SHORTCUT, not a stored type. makeTF() has always
+      //   produced an mcq with True/False options (Vrai/Faux in a French pack),
+      //   and renderAnswerArea() has no 'tf' branch - a row saved as type:'tf'
+      //   showed the pupil "this question can't be answered on screen".
+      const type   = formType === 'tf' ? 'mcq' : formType;
+      const tfOpts = _qmTfLabels(qId, chapter);
+
+      let options = null;                       // null = leave whatever is stored
+      if (formType === 'mcq') {
+        options = [_el('qmf-opt-a').value.trim(), _el('qmf-opt-b').value.trim(),
+                   _el('qmf-opt-c').value.trim(), _el('qmf-opt-d').value.trim()].filter(Boolean);
+        if (validate && options.length < 2) return fail('An MCQ needs at least two options.');
+        // ⚠ The placeholder has always said "must match one of the options
+        //   exactly" and nothing enforced it. An answer matching no option is a
+        //   question no child can ever get right.
+        if (validate && !options.includes(answer)) return fail('The correct answer must match one of the options exactly.');
+      } else if (formType === 'tf') {
+        options = tfOpts;
+        if (validate && !tfOpts.includes(answer)) return fail('A True / False answer must be "' + tfOpts[0] + '" or "' + tfOpts[1] + '".');
+      }
+
+      const prev = (_editingRow && _editingRow.data) || {};
+      const data = Object.assign({}, prev, { id: qId, chapterId: chapter, difficulty: +diff, type });
+      if (question || editable) data.question = question;
+      if (editable) {
+        // ⚠ Only here. A 'multi' answer is an ARRAY and a 'task' has none - the
+        //   form shows them read-only, and read-only is what it means.
+        data.answer = answer;
+        data.acceptableAnswers = [answer, ...extra.filter(a => a !== answer)];
+        if (options) data.options = options;
+      }
+
+      // Set-or-DELETE: an author clearing a field could not remove it before,
+      // because the save only ever wrote a value it found.
+      for (const [key, value] of [['subsection', subsect], ['hint', hint], ['explanation', expl]]) {
+        if (value) data[key] = value; else delete data[key];
+      }
+      return { data };
+    }
+
+    async function qmSave() {
+      const subject = _el('qmf-subject').value;
       let qId = _el('qmf-id').value.trim();
       if (!qId) {
         const prefix = subject.replace('grade', 'g').replace('-', '').replace(/[^a-z0-9]/gi, '');
         qId = `${prefix}-db-${Date.now().toString(36)}${(++_idCounter).toString(36)}`;
       }
 
-      const options = type === 'mcq'
-        ? [_el('qmf-opt-a').value.trim(), _el('qmf-opt-b').value.trim(),
-           _el('qmf-opt-c').value.trim(), _el('qmf-opt-d').value.trim()].filter(Boolean)
-        : type === 'tf' ? ['True', 'False'] : [];
-
-      const data = {
-        id: qId, chapterId: chapter, difficulty: +diff,
-        type, question, options, answer, acceptableAnswers: [answer],
-      };
-      if (subsect)  data.subsection   = subsect;
-      if (hint)     data.hint         = hint;
-      if (expl)     data.explanation  = expl;
+      const composed = _qmComposeData(qId, true);
+      if (composed.error) return;
 
       const row = {
-        id: qId, subject_id: subject, chapter_id: chapter,
-        grade: +grade, difficulty: +diff, is_past_paper: false,
+        id: qId, subject_id: subject, chapter_id: _el('qmf-chapter').value,
+        grade: +_el('qmf-grade').value, difficulty: +_el('qmf-difficulty').value,
+        is_past_paper: _editingRow ? !!_editingRow.is_past_paper : false,
         protected: true,
-        data, imported_at: new Date().toISOString(),
+        data: composed.data, imported_at: new Date().toISOString(),
       };
 
       const { error } = await _sb.from('questions').upsert(row, { onConflict: 'id' });
@@ -3430,7 +3746,8 @@ const AdminPanel = (() => {
 
     return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmSubjectFilter, qmOpenForm, qmCloseForm,
              qmFormGradeChange, qmFormSubjectChange, qmFormChapterChange,
-             qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmUploadImage, qmSave, qmDelete,
+             qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmUploadImage, qmSave, qmDelete, qmTogglePreviewMode,
+             qmPreview, qmPreviewForm, qmPreviewToggle, qmClosePreview,
              qmToggleProtection };
   })();
 
@@ -3865,6 +4182,9 @@ const AdminPanel = (() => {
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
     qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,
     qmUploadImage: QM.qmUploadImage, qmSave: QM.qmSave, qmDelete: QM.qmDelete,
+    qmTogglePreviewMode: QM.qmTogglePreviewMode, qmPreview: QM.qmPreview,
+    qmPreviewForm: QM.qmPreviewForm, qmPreviewToggle: QM.qmPreviewToggle,
+    qmClosePreview: QM.qmClosePreview,
     qmToggleProtection: QM.qmToggleProtection, qmResolveReport, applyFirstNChapters,
     syllabusGradeChange: Syllabus.gradeChange, syllabusShow: Syllabus.show };
 })();

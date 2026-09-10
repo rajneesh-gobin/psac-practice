@@ -1751,37 +1751,41 @@ body.has-bottom-nav .pr-actions { bottom: calc(4rem + env(safe-area-inset-bottom
 #screen-practice .practice-progress-inner { background: rgba(240,236,220,.65); }
 #screen-practice .pr-level { background: rgba(240,236,220,.07); border-color: rgba(240,236,220,.14); color: rgba(240,236,220,.8); }
 /* Question card - the writing area of the blackboard */
-#screen-practice .pr-card {
+/* ⚠ The rules from here to .pr-feedback below are SHARED with the admin
+   question manager's pupil preview (#qm-preview-board). A preview drawn by
+   a second copy of these rules is a preview of the copy, not of the screen
+   the child sees - so extend the selector list, never duplicate the block. */
+#screen-practice .pr-card, #qm-preview-board .pr-card {
   background: rgba(0,0,0,.25);
   border: 1.5px solid rgba(240,236,220,.18);
   box-shadow: inset 0 2px 10px rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.2);
 }
-#screen-practice .pr-q { color: #f0ece8; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
-#screen-practice .pr-hint { background: rgba(251,191,36,.1); border-color: rgba(251,191,36,.3); color: rgba(251,191,36,.9); }
+#screen-practice .pr-q, #qm-preview-board .pr-q { color: #f0ece8; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+#screen-practice .pr-hint, #qm-preview-board .pr-hint { background: rgba(251,191,36,.1); border-color: rgba(251,191,36,.3); color: rgba(251,191,36,.9); }
 /* MCQ answer options */
-#screen-practice .mcq-opt { background: rgba(240,236,220,.07); border-color: rgba(240,236,220,.25); color: #f0ece8; }
-#screen-practice .mcq-opt:hover:not(.disabled) { background: rgba(240,236,220,.14); border-color: rgba(240,236,220,.5); }
-#screen-practice .mcq-opt.selected { background: rgba(240,236,220,.17); border-color: rgba(240,236,220,.65); }
-#screen-practice .mcq-opt.correct { background: rgba(34,197,94,.2) !important; border-color: #4ade80 !important; }
-#screen-practice .mcq-opt.wrong   { background: rgba(239,68,68,.2)  !important; border-color: #f87171 !important; }
-#screen-practice .mcq-opt.correct::after { color: #4ade80; }
-#screen-practice .mcq-opt.wrong::after   { color: #f87171; }
-#screen-practice .opt-letter { background: rgba(240,236,220,.14); color: #f0ece8; border-color: rgba(240,236,220,.28); }
-#screen-practice .mcq-opt.selected .opt-letter { background: rgba(240,236,220,.28); }
+#screen-practice .mcq-opt, #qm-preview-board .mcq-opt { background: rgba(240,236,220,.07); border-color: rgba(240,236,220,.25); color: #f0ece8; }
+#screen-practice .mcq-opt:hover:not(.disabled), #qm-preview-board .mcq-opt:hover:not(.disabled) { background: rgba(240,236,220,.14); border-color: rgba(240,236,220,.5); }
+#screen-practice .mcq-opt.selected, #qm-preview-board .mcq-opt.selected { background: rgba(240,236,220,.17); border-color: rgba(240,236,220,.65); }
+#screen-practice .mcq-opt.correct, #qm-preview-board .mcq-opt.correct { background: rgba(34,197,94,.2) !important; border-color: #4ade80 !important; }
+#screen-practice .mcq-opt.wrong, #qm-preview-board .mcq-opt.wrong { background: rgba(239,68,68,.2)  !important; border-color: #f87171 !important; }
+#screen-practice .mcq-opt.correct::after, #qm-preview-board .mcq-opt.correct::after { color: #4ade80; }
+#screen-practice .mcq-opt.wrong::after, #qm-preview-board .mcq-opt.wrong::after { color: #f87171; }
+#screen-practice .opt-letter, #qm-preview-board .opt-letter { background: rgba(240,236,220,.14); color: #f0ece8; border-color: rgba(240,236,220,.28); }
+#screen-practice .mcq-opt.selected .opt-letter, #qm-preview-board .mcq-opt.selected .opt-letter { background: rgba(240,236,220,.28); }
 /* Numeric input */
-#screen-practice .num-input { background: rgba(240,236,220,.08); border-color: rgba(240,236,220,.3); color: #f0ece8; }
-#screen-practice .num-input::placeholder { color: rgba(240,236,220,.35); }
-#screen-practice .num-input:focus { border-color: rgba(240,236,220,.65); }
-#screen-practice .num-input.correct { border-color: #4ade80; background: rgba(34,197,94,.15); }
-#screen-practice .num-input.wrong   { border-color: #f87171; background: rgba(239,68,68,.15); }
+#screen-practice .num-input, #qm-preview-board .num-input { background: rgba(240,236,220,.08); border-color: rgba(240,236,220,.3); color: #f0ece8; }
+#screen-practice .num-input::placeholder, #qm-preview-board .num-input::placeholder { color: rgba(240,236,220,.35); }
+#screen-practice .num-input:focus, #qm-preview-board .num-input:focus { border-color: rgba(240,236,220,.65); }
+#screen-practice .num-input.correct, #qm-preview-board .num-input.correct { border-color: #4ade80; background: rgba(34,197,94,.15); }
+#screen-practice .num-input.wrong, #qm-preview-board .num-input.wrong { border-color: #f87171; background: rgba(239,68,68,.15); }
 /* Typed-answer helpers. The board is dark in BOTH themes, so anything in the
    answer area that inherits the sheet colour is black on a blackboard. */
-#screen-practice .expr-hint { color: rgba(240,236,220,.82); }
-#screen-practice .slot-label { color: rgba(240,236,220,.85); }
-#screen-practice .slot-score { color: #f0ece8; }
-#screen-practice .answer-unsupported { color: #f0ece8; background: rgba(240,236,220,.08); border-color: rgba(240,236,220,.4); }
+#screen-practice .expr-hint, #qm-preview-board .expr-hint { color: rgba(240,236,220,.82); }
+#screen-practice .slot-label, #qm-preview-board .slot-label { color: rgba(240,236,220,.85); }
+#screen-practice .slot-score, #qm-preview-board .slot-score { color: #f0ece8; }
+#screen-practice .answer-unsupported, #qm-preview-board .answer-unsupported { color: #f0ece8; background: rgba(240,236,220,.08); border-color: rgba(240,236,220,.4); }
 /* Feedback block */
-#screen-practice .pr-feedback { border: 1px solid rgba(240,236,220,.12); background: rgba(0,0,0,.18); color: #f0ece8; }
+#screen-practice .pr-feedback, #qm-preview-board .pr-feedback { border: 1px solid rgba(240,236,220,.12); background: rgba(0,0,0,.18); color: #f0ece8; }
 /* Tools row */
 #screen-practice .pr-tool { background: rgba(240,236,220,.08); border-color: rgba(240,236,220,.2); color: rgba(240,236,220,.82); }
 #screen-practice .pr-tool:hover { background: rgba(240,236,220,.16); color: #f0ece8; }
@@ -9500,3 +9504,206 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
    rather than widening the question card. */
 .q-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.6rem 0; }
 .q-scroll .q-table { margin: 0; }
+
+/* ===== ADMIN QUESTION MANAGER: PUPIL PREVIEW =====================================
+   The list used to show a stripped-HTML line, which is the one thing a question
+   cannot be judged from: the markup IS the question - an <img>, an inline <svg>,
+   a run of ___ blanks - and "A noun is a -" reads as a broken sentence when it is
+   a perfectly good stem with four options under it.
+   Two surfaces:
+   - #qm-preview-board is the faithful one. It borrows the practice screen's own
+     chalkboard rules (the shared selector list up by .pr-card) and only defines
+     the board itself here.
+   - .qm-kid is the inline one in the list, deliberately NOT the chalkboard: fifty
+     dark cards make the list unscannable, and the modal is one tap away. */
+#qm-preview-board {
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 34px,
+      rgba(180,180,180,.08) 34px, rgba(180,180,180,.08) 35px),
+    #1e1e1e;
+  border-radius: 1rem; padding: 0.9rem;
+}
+/* A phone's width, because that is what a child holds. */
+.qm-preview-frame { max-width: 24rem; margin: 0 auto; }
+/* .pr-answers-pair is a VIEWPORT media query - two columns for short options
+   on a wide screen. This frame is a PHONE width sitting inside a desktop
+   page, so the query fires and pairs options that no phone ever pairs, in
+   cells narrower than the tap-target guidance. Put them back in one column,
+   which is what the child in the frame actually gets. */
+@media (min-width: 700px) {
+  #qm-preview-board .pr-answers-pair { display: block; }
+  #qm-preview-board .pr-answers-pair .mcq-opt { margin-bottom: 0.5rem; height: auto; }
+}
+#qm-preview-board .pr-q img, #qm-preview-board .pr-q svg { max-width: 100%; height: auto; }
+.qm-preview-opts { display: grid; gap: .4rem; font-size: .8rem; color: #334155; }
+.dark .qm-preview-opts { color: #cbd5e1; }
+.qm-preview-opts label { display: flex; align-items: flex-start; gap: .45rem; cursor: pointer; }
+.qm-preview-note { font-size: .75rem; color: #64748b; }
+.dark .qm-preview-note { color: #94a3b8; }
+.qmp-hint-line + .qmp-hint-line { margin-top: .35rem; }
+.qmp-fb { display: flex; align-items: flex-start; gap: .6rem; }
+.qmp-fb-ico { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
+.qmp-fb-head { font-weight: 700; margin-bottom: .2rem; }
+.qmp-fb-body { font-size: .85rem; }
+
+.qm-kid { margin: .5rem 0 1rem; }
+.qm-kid .pr-q { font-size: 1rem; }
+/* Capped, not hidden: a diagram is why the preview exists, but a 900px SVG
+   would push every other card off the first screenful. */
+.qm-kid .pr-q img, .qm-kid .pr-q svg { max-width: 100%; max-height: 170px; height: auto; }
+.qm-kid-opts { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .7rem; }
+.qm-kid-opt {
+  display: inline-flex; align-items: center; gap: .4rem; max-width: 100%;
+  border: 2px solid #cbd5e1; background: #fff; color: #1e293b;
+  border-radius: .6rem; padding: .3rem .6rem; font-size: .85rem;
+}
+/* Which option is right is signalled by the tick as well as the green, so it
+   still reads for someone who cannot separate the hues. */
+.qm-kid-opt.is-answer { border-color: #22c55e; background: #f0fdf4; }
+.qm-kid-opt.is-answer::after { content: '\2713'; color: #16a34a; font-weight: 800; }
+.dark .qm-kid-opt { background: #1e293b; border-color: #374151; color: #e5e7eb; }
+.dark .qm-kid-opt.is-answer { background: #052e16; border-color: #22c55e; }
+.qm-kid-typed { margin-top: .7rem; font-size: .85rem; }
+.qm-kid-empty { font-style: italic; opacity: .7; }
+.qm-preview-button {
+  background: #0f766e; color: #fff; padding: .65rem .9rem; border-radius: .6rem;
+  font-size: .8rem; font-weight: 700; flex-shrink: 0;
+}
+.qm-preview-button:hover { background: #115e59; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   Teacher restructure - "what needs you today" lists and the Set Work
+   wizard.
+   ⚠ Anything that sets a COLOUR on a p / small / label inside
+   .ta-tab-content needs the doubled #screen-teacher#screen-teacher prefix:
+   the chalkboard's own p:not(.teacher-intro):not(.ta-chip-hint) rule scores
+   (1,3,1) and beats every single-id override.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Home: what needs you today ─────────────────────────────────────── */
+.th-today { border: 1px solid var(--tp-line); border-radius: 16px; background: var(--tp-bg); overflow: hidden; margin-bottom: 1.15rem; }
+.th-today-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .8rem .95rem; border-bottom: 1px solid var(--tp-line); }
+#screen-teacher#screen-teacher .ta-tab-content .th-today-head h4 { margin: 0; color: var(--tp-ink) !important; font-family: inherit; font-size: .98rem; font-weight: 800; }
+#screen-teacher#screen-teacher .ta-tab-content .th-today-head small { color: var(--tp-muted) !important; font-size: .74rem; }
+.th-todo { display: flex; align-items: center; gap: .7rem; padding: .8rem .95rem; border-bottom: 1px solid var(--tp-line); }
+.th-todo:last-child { border-bottom: 0; }
+.th-todo-ico { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border-radius: 11px; background: var(--tp-soft); font-size: 1.15rem; }
+.th-todo-not-opened .th-todo-ico { background: var(--tp-warn-bg); }
+.th-todo-all-done .th-todo-ico { background: var(--tp-good-bg); }
+.th-todo-main { flex: 1; min-width: 0; }
+#screen-teacher#screen-teacher .ta-tab-content .th-todo-main strong { display: block; color: var(--tp-ink) !important; font-size: .92rem; line-height: 1.35; }
+#screen-teacher#screen-teacher .ta-tab-content .th-todo-main small { display: block; margin-top: 2px; color: var(--tp-muted) !important; font-size: .78rem; line-height: 1.35; }
+.th-todo-btn { flex: none; min-height: 44px; padding: 0 .85rem; border: 1px solid #d1aa2c; border-radius: 10px; background: var(--tp-gold); color: var(--tp-gold-ink); font-size: .8rem; font-weight: 800; cursor: pointer; }
+.th-todo-btn:hover { filter: brightness(1.06); }
+.th-todo-all-done .th-todo-btn { border-color: var(--tp-line); background: var(--tp-soft); color: var(--tp-ink); }
+.th-classes-head { margin: 0 0 .55rem; }
+#screen-teacher#screen-teacher .ta-tab-content .th-classes-head h4 { margin: 0; color: #fff !important; font-family: 'Caveat', cursive; font-size: 1.5rem; }
+#screen-teacher#screen-teacher .ta-tab-content .th-classes-head p { margin: .1rem 0 0; color: rgba(240,236,220,.8) !important; font-size: .85rem; }
+
+/* ── Classroom: what needs you today (chalkboard, not paper) ────────── */
+.tc-todo-list { display: grid; gap: .55rem; margin-bottom: .9rem; }
+.tc-todo {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .8rem .9rem;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 14px;
+  background: rgba(9,28,14,.28);
+}
+.tc-todo-not-opened { border-color: rgba(245,158,11,.5); }
+.tc-todo-all-done { border-color: rgba(34,197,94,.38); }
+.tc-todo-ico { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border-radius: 11px; background: rgba(255,255,255,.09); font-size: 1.15rem; }
+.tc-todo-main { flex: 1; min-width: 0; }
+.tc-todo-main strong { display: block; color: #fff; font-size: .92rem; line-height: 1.35; }
+.tc-todo-main small { display: block; margin-top: 2px; color: rgba(240,236,220,.8); font-size: .76rem; line-height: 1.35; }
+.tc-todo-btn {
+  flex: none; min-height: 44px; padding: 0 .8rem;
+  border: 0; border-radius: 10px;
+  color: #302408; background: #fcd34d;
+  font: inherit; font-size: .76rem; font-weight: 900; cursor: pointer;
+}
+.tc-todo-btn:hover { filter: brightness(1.07); }
+.tc-todo-all-done .tc-todo-btn { color: #f0ece0; background: rgba(255,255,255,.12); }
+.tc-today-footnote { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; margin: .2rem 0 0; color: rgba(240,236,220,.78); font-size: .78rem; }
+.tc-today-footnote button {
+  min-height: 44px; padding: 0 .5rem;
+  border: 0; border-radius: 8px;
+  color: rgba(240,236,220,.9); background: transparent;
+  font: inherit; font-size: .78rem; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.tc-today-footnote button:hover { color: #fff; background: rgba(255,255,255,.08); }
+
+/* ── Set Work: one question per screen ──────────────────────────────── */
+.ta-wiz-top { display: flex; align-items: center; gap: .7rem; margin-bottom: 1rem; }
+.ta-wiz-quit {
+  min-height: 44px; padding: 0 .8rem;
+  border: 1px solid rgba(240,236,220,.35); border-radius: 10px;
+  background: rgba(255,255,255,.08); color: #f0ece0;
+  font-size: .82rem; font-weight: 700; cursor: pointer;
+}
+.ta-wiz-quit:hover { background: rgba(255,255,255,.16); }
+.ta-wiz-track { display: flex; flex: 1; gap: .3rem; }
+.ta-wiz-track i { flex: 1; height: 6px; border-radius: 999px; background: rgba(255,255,255,.16); }
+.ta-wiz-track i.done { background: rgba(252,211,77,.55); }
+.ta-wiz-track i.on { background: #fcd34d; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-count { flex: none; color: rgba(240,236,220,.8) !important; font-size: .78rem; font-weight: 700; white-space: nowrap; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-q {
+  margin: 0 0 .3rem; color: #fff !important;
+  font-family: 'Caveat', cursive; font-size: 2rem; line-height: 1.15;
+}
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-help { margin: 0 0 1rem; color: rgba(240,236,220,.82) !important; font-size: .92rem; line-height: 1.45; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-sub { margin: 1.3rem 0 .55rem; color: #fff !important; font-family: inherit; font-size: 1rem; font-weight: 800; }
+.ta-wiz-nav { display: flex; gap: .6rem; margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.14); }
+.ta-wiz-back, .ta-wiz-next { min-height: 48px; padding: 0 1.1rem; border-radius: 12px; font-size: .95rem; font-weight: 800; cursor: pointer; }
+.ta-wiz-back { border: 1px solid rgba(240,236,220,.35); background: rgba(255,255,255,.08); color: #f0ece0; }
+.ta-wiz-back:hover { background: rgba(255,255,255,.16); }
+.ta-wiz-next { flex: 1; border: 1px solid #d1aa2c; background: var(--tp-gold); color: var(--tp-gold-ink); }
+.ta-wiz-next:hover { filter: brightness(1.06); }
+
+/* Which part of the subject - the choice that used to be "leave it blank". */
+.ta-scope { display: grid; gap: .55rem; margin-bottom: 1rem; }
+.ta-scope-opt {
+  display: flex; align-items: flex-start; gap: .75rem;
+  min-height: 44px; padding: .85rem .9rem;
+  border: 2px solid var(--tp-line); border-radius: 14px;
+  background: var(--tp-bg); color: var(--tp-ink);
+  cursor: pointer;
+}
+.ta-scope-opt input { margin-top: .25rem; flex: none; width: 20px; height: 20px; accent-color: #2a4d28; }
+.ta-scope-opt-sel { border-color: #d1aa2c; box-shadow: 0 0 0 3px rgba(244,206,82,.28); }
+.ta-scope-ico { flex: none; font-size: 1.3rem; line-height: 1.2; }
+.ta-scope-text { min-width: 0; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-scope-text strong { display: block; color: var(--tp-ink) !important; font-size: .96rem; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-scope-text small { display: block; margin-top: 2px; color: var(--tp-muted) !important; font-size: .8rem; line-height: 1.4; }
+
+/* The whole assignment in one sentence, right above the button that sends it. */
+.ta-wiz-summary {
+  margin: 1.2rem 0 .8rem; padding: .95rem 1rem;
+  border: 1px solid var(--tp-line); border-left: 5px solid var(--tp-gold); border-radius: 14px;
+  background: var(--tp-bg); color: var(--tp-ink);
+}
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-summary-kicker { display: block; margin-bottom: .3rem; color: var(--tp-muted) !important; font-size: .68rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-summary p { margin: 0; color: var(--tp-ink) !important; font-size: 1rem; line-height: 1.55; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-summary p b { color: var(--tp-ink) !important; font-weight: 800; }
+#screen-teacher#screen-teacher .ta-tab-content .ta-wiz-summary-how { margin-top: .45rem !important; color: var(--tp-muted) !important; font-size: .84rem !important; }
+
+@media (max-width: 640px) {
+  .th-todo, .tc-todo { flex-wrap: wrap; }
+  .th-todo-main, .tc-todo-main { flex: 1 1 60%; }
+  .th-todo-btn, .tc-todo-btn { flex: 1 1 100%; margin-left: 48px; }
+  .ta-wiz-top { flex-wrap: wrap; }
+  .ta-wiz-track { order: 3; flex: 1 1 100%; }
+  #screen-teacher#screen-teacher .ta-tab-content .ta-wiz-q { font-size: 1.7rem; }
+  .ta-wiz-nav { position: sticky; bottom: 0; z-index: 2; margin-left: -.5rem; margin-right: -.5rem; padding: .7rem .5rem calc(.7rem + env(safe-area-inset-bottom)); background: rgba(18,42,22,.96); backdrop-filter: blur(4px); }
+}
+
+/* The classroom header numbers navigate now - they are the only place this
+   class is counted, so each one is the way to what it counts. */
+button.tc-cd-stat { min-height: 44px; font: inherit; text-align: center; cursor: pointer; transition: background .14s, border-color .14s; }
+button.tc-cd-stat:hover { background: rgba(255,255,255,.12); border-color: rgba(240,236,220,.28); }
+button.tc-cd-stat:focus-visible { outline: 3px solid #f4ce52; outline-offset: 2px; }
+/* The rail labels are the whole navigation for a teacher who is not sure
+   what the icons mean, so they are readable rather than decorative. */
+.tc-cd-nav-btn span { font-size: .82rem; }
+@media (max-width: 430px) {
+  .tc-cd-nav .tc-cd-nav-btn span { font-size: .72rem; }
+}
