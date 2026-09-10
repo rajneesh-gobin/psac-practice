@@ -16,8 +16,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-047', chapterId:'g1he-hygiene', difficulty:1, subsection:'personal_hygiene',
     question:'Why do we take a shower or bath?',
-    options:['To wash away dirt and germs from our body','To cool down only','Because our parents make us','To get wet for fun'],
-    answer:'To wash away dirt and germs from our body',
+    options:['To wash off the germs','To cool ourselves down','Because our parents say','To get wet for fun'],
+    answer:'To wash off the germs',
     explanation:'We bathe to <b>wash away dirt and germs</b> and keep our skin clean and healthy.' }),
 
   makeTF({ id:'g1he-hyg-048', chapterId:'g1he-hygiene', difficulty:1, subsection:'personal_hygiene',
@@ -62,8 +62,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-055', chapterId:'g1he-hygiene', difficulty:2, subsection:'hand_washing',
     question:'Why is it important NOT to share towels for drying hands?',
-    options:['Germs from one person\'s hands can spread to the next person via the towel','Towels wear out faster when shared','Sharing towels makes them wet','There is no reason — sharing is fine'],
-    answer:'Germs from one person\'s hands can spread to the next person via the towel',
+    options:['Germs pass on the towel','Towels wear out faster','Shared towels get wet','There is no reason'],
+    answer:'Germs pass on the towel',
     explanation:'A shared towel can transfer <b>germs from one person to the next</b>. Use your own towel or paper towels.' }),
 
   // ── dental_care topup (056–065) ───────────────────────────────────────────
@@ -75,8 +75,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-057', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'Which food is BEST for our teeth?',
-    options:['An apple (crunchy fruits and vegetables)','A sticky toffee','Sugary biscuits','A fizzy drink'],
-    answer:'An apple (crunchy fruits and vegetables)',
+    options:['An apple','A sticky toffee','Sugary biscuits','A fizzy drink'],
+    answer:'An apple',
     explanation:'Crunchy fruits and vegetables like apples <b>help clean teeth naturally</b> and contain no added sugar.' }),
 
   makeMCQ({ id:'g1he-hyg-058', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
@@ -92,16 +92,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-060', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'Our teeth help us to:',
-    options:['Chew food, speak clearly and smile','Only look nice','Only eat sweets','Sleep better'],
-    answer:'Chew food, speak clearly and smile',
+    options:['Chew our food','Only look nice','Only eat sweets','Sleep much better'],
+    answer:'Chew our food',
     explanation:'Teeth have important jobs: <b>chewing food, helping us speak clearly and giving us a healthy smile</b>. Taking care of them matters.' }),
 
   // ── food_groups topup ─────────────────────────────────────────────────────
 
   makeMCQ({ id:'g1he-nut-046', chapterId:'g1he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Which food helps us see well and have healthy skin?',
-    options:['Carrot (rich in Vitamin A)','Sweets','Chips','White bread only'],
-    answer:'Carrot (rich in Vitamin A)',
+    options:['Carrots','Sweets','Chips','White bread'],
+    answer:'Carrots',
     explanation:'Carrots are rich in <b>Vitamin A</b>, which helps us see well, especially in dim light, and keeps skin healthy.' }),
 
   makeTF({ id:'g1he-nut-047', chapterId:'g1he-nutrition', difficulty:1, subsection:'food_groups',
@@ -130,7 +130,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-051', chapterId:'g1he-nutrition', difficulty:1, subsection:'healthy_meals',
     question:'What is a good food to eat for breakfast?',
-    options:['Bread with egg','Sweets','Crisps','Fizzy drink'],
+    options:['Bread with egg','Sweets and cake','Crisps and cola','A fizzy drink'],
     answer:'Bread with egg',
     explanation:'<b>Bread with egg</b> gives energy (bread) and protein (egg) to start the school day well.' }),
 
@@ -190,8 +190,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-037', chapterId:'g1he-safety', difficulty:1, subsection:'school_safety',
     question:'Should you push people on the stairs?',
-    options:['No — they could fall and get badly hurt','Yes — it is funny','Yes — if they are in the way','Yes — to make them go faster'],
-    answer:'No — they could fall and get badly hurt',
+    options:['No, they could fall','Yes, it is funny','Yes, if in the way','Yes, to hurry them'],
+    answer:'No, they could fall',
     explanation:'<b>No</b> — pushing on stairs is very dangerous. Someone could fall and suffer serious injury.' }),
 
   makeTF({ id:'g1he-saf-038', chapterId:'g1he-safety', difficulty:1, subsection:'school_safety',
@@ -212,8 +212,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-041', chapterId:'g1he-safety', difficulty:1, subsection:'school_safety',
     question:'Is it safe to climb on classroom furniture?',
-    options:['No — furniture can fall over and hurt you','Yes — chairs are for climbing','Yes — if the teacher is not watching','Yes — if you hold on tight'],
-    answer:'No — furniture can fall over and hurt you',
+    options:['No, it can fall over','Yes, chairs are strong','Yes, if no one looks','Yes, if you hold on'],
+    answer:'No, it can fall over',
     explanation:'<b>No</b> — furniture is not built for climbing. It can topple over and cause serious injury.' }),
 
   // ── home_safety topup ─────────────────────────────────────────────────────
@@ -225,17 +225,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-043', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'What should you do if you smell gas (like a strong rotten egg smell) at home?',
-    options:['Go outside immediately and tell an adult — do not switch anything on or off',
-             'Open the oven to check',
-             'Light a match to find the source',
-             'Stay inside and close all windows'],
-    answer:'Go outside immediately and tell an adult — do not switch anything on or off',
+    options:['Go outside at once','Open the oven to check','Light a match to look','Close all the windows'],
+    answer:'Go outside at once',
     explanation:'A gas smell means there is a dangerous gas leak. <b>Get out immediately</b> without using any switches, and call for adult help.' }),
 
   makeMCQ({ id:'g1he-saf-044', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'Where should medicine be stored in a home with young children?',
-    options:['In a locked cupboard out of reach of children','On the kitchen table','In a child\'s bedroom','On the floor where it is easy to find'],
-    answer:'In a locked cupboard out of reach of children',
+    options:['In a locked cupboard','On the kitchen table','In a child’s bedroom','On the floor by the door'],
+    answer:'In a locked cupboard',
     explanation:'Medicine should be stored in a <b>locked cupboard, out of reach</b>. Children might accidentally take too much, which can be very dangerous.' }),
 
   makeTF({ id:'g1he-saf-045', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
@@ -245,16 +242,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-046', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'Should you play with or touch electrical wires at home?',
-    options:['No — they carry electricity that can shock and kill you','Yes — if the wire is colourful','Yes — if it is on the floor','Only if the power is low'],
-    answer:'No — they carry electricity that can shock and kill you',
+    options:['No, they are dangerous','Yes, if it is colourful','Yes, if it is on the floor','Yes, if the power is low'],
+    answer:'No, they are dangerous',
     explanation:'<b>Never</b> touch electrical wires. They carry dangerous electricity that can cause severe injury or death.' }),
 
   // ── environment topup ─────────────────────────────────────────────────────
 
   makeMCQ({ id:'g1he-saf-047', chapterId:'g1he-safety', difficulty:1, subsection:'environment',
     question:'You see broken glass on the playground floor. What should you do?',
-    options:['Tell a teacher straight away — do not touch it','Pick it up with your hands','Step on it to break it into smaller pieces','Ignore it'],
-    answer:'Tell a teacher straight away — do not touch it',
+    options:['Tell a teacher','Pick it up quickly','Step on it hard','Kick it away'],
+    answer:'Tell a teacher',
     explanation:'Broken glass is very sharp. <b>Tell a teacher</b> so it can be removed safely. Never touch it with bare hands.' }),
 
   makeTF({ id:'g1he-saf-048', chapterId:'g1he-safety', difficulty:1, subsection:'environment',
@@ -264,8 +261,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-049', chapterId:'g1he-safety', difficulty:1, subsection:'environment',
     question:'If a stranger offers you sweets and asks you to go with them, what should you do?',
-    options:['Say no, move away and tell a trusted adult immediately','Take the sweets and then run','Go with them if the sweets look nice','Take the sweets and tell no one'],
-    answer:'Say no, move away and tell a trusted adult immediately',
+    options:['Say no and tell an adult','Take the sweets and run','Go if the sweets look nice','Take them and say nothing'],
+    answer:'Say no and tell an adult',
     explanation:'<b>Never go with or accept gifts from strangers.</b> Say no firmly, move away and tell a trusted adult (parent, teacher) immediately.' }),
 
   makeTF({ id:'g1he-saf-050', chapterId:'g1he-safety', difficulty:1, subsection:'environment',

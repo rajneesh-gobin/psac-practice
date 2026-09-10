@@ -25,7 +25,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-003', chapterId:'g1he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Which food gives us energy to run and play?',
-    options:['Rice and bread','Sweets only','Water only','Oil only'],
+    options:['Rice and bread','Sweets only','Water only','A little oil'],
     answer:'Rice and bread',
     hint:'Starchy foods give us energy.',
     explanation:'<b>Rice and bread</b> are starchy foods that give us energy to play, run and learn.' }),
@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-009', chapterId:'g1he-nutrition', difficulty:2, subsection:'food_groups',
     question:'We should eat food from _____ groups every day.',
-    options:['many different','only one','only two','none of the'],
+    options:['many different','only one of the','only two of the','none of the'],
     answer:'many different',
     hint:'A balanced diet includes many types of food.',
     explanation:'We should eat food from <b>many different groups</b> every day to get all the nutrients our body needs.' }),
@@ -75,15 +75,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-011', chapterId:'g1he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Which food group does bread belong to?',
-    options:['Starchy foods (energy foods)','Dairy foods','Fruits and vegetables','Protein foods'],
-    answer:'Starchy foods (energy foods)',
+    options:['Starchy foods','Dairy foods','Fruit and veg','Protein foods'],
+    answer:'Starchy foods',
     hint:'Bread is made from wheat — a grain.',
     explanation:'Bread belongs to the <b>starchy foods (energy foods)</b> group. It gives us energy to move and think.' }),
 
   makeMCQ({ id:'g1he-nut-012', chapterId:'g1he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Which food group does chicken belong to?',
-    options:['Protein foods (for growth)','Dairy foods','Starchy foods','Fruits'],
-    answer:'Protein foods (for growth)',
+    options:['Protein foods','Dairy foods','Starchy foods','Fruit foods'],
+    answer:'Protein foods',
     hint:'Chicken is a type of meat.',
     explanation:'Chicken belongs to the <b>protein foods</b> group. Proteins help our body grow and stay strong.' }),
 
@@ -101,8 +101,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-015', chapterId:'g1he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Water is important for our body because it:',
-    options:['Keeps us hydrated and helps all our organs work','Makes food taste sweet','Gives us lots of energy like rice','Makes us taller'],
-    answer:'Keeps us hydrated and helps all our organs work',
+    options:['Keeps our body working','Makes food taste sweet','Gives us lots of energy','Makes us grow taller'],
+    answer:'Keeps our body working',
     hint:'Our body is mostly made of water.',
     explanation:'<b>Water</b> keeps us hydrated and helps our heart, brain and all body parts work properly.' }),
 
@@ -117,7 +117,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-017', chapterId:'g1he-nutrition', difficulty:1, subsection:'healthy_meals',
     question:'Which meal do we eat in the morning?',
-    options:['Breakfast','Lunch','Dinner','Supper'],
+    options:['Breakfast','Lunchtime','Dinner','Supper'],
     answer:'Breakfast',
     hint:'Breakfast "breaks" the fast of sleeping.',
     explanation:'We eat <b>breakfast</b> in the morning. It gives us energy to start the school day.' }),
@@ -143,15 +143,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-021', chapterId:'g1he-nutrition', difficulty:2, subsection:'healthy_meals',
     question:'Ravi skips breakfast and goes to school. What might happen?',
-    options:['He may feel tired and find it hard to concentrate','He will run faster','He will eat more at lunch — which is fine','He will feel great all day'],
-    answer:'He may feel tired and find it hard to concentrate',
+    options:['He may feel tired','He will run faster','He will feel great','He will grow taller'],
+    answer:'He may feel tired',
     hint:'Think about what breakfast gives us.',
     explanation:'Without breakfast, Ravi may feel <b>tired and hungry</b>, making it hard to concentrate and learn.' }),
 
   makeMCQ({ id:'g1he-nut-022', chapterId:'g1he-nutrition', difficulty:1, subsection:'healthy_meals',
     question:'What is a good breakfast to have before school?',
-    options:['Bread with egg and a glass of milk','Chips and sweets','Fizzy drink only','Biscuits with lots of sugar'],
-    answer:'Bread with egg and a glass of milk',
+    options:['Bread and an egg','Chips and sweets','A fizzy drink','Sugary biscuits'],
+    answer:'Bread and an egg',
     hint:'Think about which foods give energy and nutrients.',
     explanation:'<b>Bread with egg and milk</b> is a healthy breakfast — it gives energy (bread), protein (egg) and calcium (milk).' }),
 
@@ -169,11 +169,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-025', chapterId:'g1he-nutrition', difficulty:2, subsection:'healthy_meals',
     question:'What should a good lunch include?',
-    options:['Rice or bread, vegetables, and a protein food like fish or beans',
-             'Only sweets and chips',
-             'Only a fizzy drink',
-             'Only bread with nothing else'],
-    answer:'Rice or bread, vegetables, and a protein food like fish or beans',
+    options:['Rice, fish and veg','Sweets and chips','A fizzy drink only','Bread on its own'],
+    answer:'Rice, fish and veg',
     hint:'A good lunch needs energy foods, vegetables and protein.',
     explanation:'A balanced lunch includes <b>starchy food</b> (rice/bread), <b>vegetables</b> and a <b>protein</b> (fish/chicken/beans).' }),
 
@@ -184,8 +181,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-027', chapterId:'g1he-nutrition', difficulty:1, subsection:'healthy_meals',
     question:'Why do we eat three meals a day?',
-    options:['To give our body energy and nutrients throughout the day','To make us sleep better only','Because we feel bored','Because our teacher says so'],
-    answer:'To give our body energy and nutrients throughout the day',
+    options:['To give our body energy','To help us sleep well','Because we feel bored','Because the teacher says'],
+    answer:'To give our body energy',
     hint:'Think about what food does for our body.',
     explanation:'We eat three meals a day to give our body a steady supply of <b>energy and nutrients</b> throughout the day.' }),
 
@@ -203,8 +200,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-030', chapterId:'g1he-nutrition', difficulty:1, subsection:'healthy_meals',
     question:'Food should be cooked or kept clean so that it is:',
-    options:['Safe to eat and free from germs','Only tasty','Very cold only','Very hot only'],
-    answer:'Safe to eat and free from germs',
+    options:['Safe to eat','Only very tasty','Very cold only','Very hot only'],
+    answer:'Safe to eat',
     hint:'Think about why we cook food.',
     explanation:'Food should be <b>safe to eat and free from germs</b>. Cooking and proper storage kill harmful bacteria.' }),
 
@@ -250,8 +247,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-037', chapterId:'g1he-nutrition', difficulty:1, subsection:'healthy_snacks',
     question:'Why are fruits and vegetables good snacks?',
-    options:['They have vitamins and are natural','They are always sweet','They are the tastiest foods','They are the biggest foods'],
-    answer:'They have vitamins and are natural',
+    options:['They have vitamins','They are always sweet','They are the tastiest','They are the biggest'],
+    answer:'They have vitamins',
     hint:'Think about what nutrients they contain.',
     explanation:'Fruits and vegetables are great snacks because they are <b>natural</b> and full of <b>vitamins</b> that keep us healthy.' }),
 
@@ -269,15 +266,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-040', chapterId:'g1he-nutrition', difficulty:2, subsection:'healthy_snacks',
     question:'Tom eats sweets every day as his snack. What might happen to his teeth?',
-    options:['He might get cavities (holes in his teeth)','His teeth will get bigger','His teeth will get whiter','Nothing will happen'],
-    answer:'He might get cavities (holes in his teeth)',
+    options:['He might get holes','They will get bigger','They will get whiter','They will get longer'],
+    answer:'He might get holes',
     hint:'Think about what sugar does to teeth.',
     explanation:'Eating sweets every day can cause <b>cavities</b> (holes in teeth). The sugar feeds bacteria that damage tooth enamel.' }),
 
   makeMCQ({ id:'g1he-nut-041', chapterId:'g1he-nutrition', difficulty:1, subsection:'healthy_snacks',
     question:'Food that has been left out in the heat for a long time is:',
-    options:['Unsafe to eat — it may have germs','Perfectly fine to eat','Better than fresh food','Tastier than fresh food'],
-    answer:'Unsafe to eat — it may have germs',
+    options:['Unsafe to eat','Perfectly fine','Better than fresh','Tastier than fresh'],
+    answer:'Unsafe to eat',
     hint:'Heat and time allow bacteria to grow in food.',
     explanation:'Food left out for a long time in the heat can grow <b>harmful bacteria</b> (germs) and become unsafe to eat.' }),
 
@@ -295,8 +292,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-nut-044', chapterId:'g1he-nutrition', difficulty:2, subsection:'healthy_snacks',
     question:'Mary says she likes to eat only chips and sweets. What advice would you give her?',
-    options:['Eat more fruits and vegetables too','Eat even more chips','Eat nothing else','Drink more fizzy drinks'],
-    answer:'Eat more fruits and vegetables too',
+    options:['Eat fruit and vegetables','Eat even more chips','Eat nothing else at all','Drink more fizzy drinks'],
+    answer:'Eat fruit and vegetables',
     hint:'A healthy diet needs many types of food.',
     explanation:'Mary should <b>eat more fruits and vegetables</b>. A balanced diet keeps her healthy and gives her all the vitamins and minerals she needs.' }),
 

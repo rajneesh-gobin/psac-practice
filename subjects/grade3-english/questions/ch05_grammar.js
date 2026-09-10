@@ -30,11 +30,11 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Tiny</b> is an adjective describing the kitten. "Drank" is a verb, "some" is a determiner, and "milk" is a noun.' }),
 
   makeMCQ({ id:'g3eng-grm-004', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
-    question:'Which word is an ADVERB in: "She sang beautifully on stage."?',
-    options:['beautifully','sang','stage','she'],
-    answer:'beautifully',
+    question:'Which word is an ADVERB in: "She quickly painted a picture."?',
+    options:['quickly','painted','picture','she'],
+    answer:'quickly',
     hint:'An adverb tells you HOW something is done — it describes a verb.',
-    explanation:'<b>Beautifully</b> is an adverb that describes HOW she sang. Most adverbs end in -ly.' }),
+    explanation:'<b>Quickly</b> is an adverb: it tells us HOW she painted. "Painted" is the verb, "picture" is a noun and "she" is a pronoun. Most adverbs end in -ly.'}),
 
   makeMCQ({ id:'g3eng-grm-005', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which is a PROPER NOUN?',
@@ -66,10 +66,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-009', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which sentence contains an ADJECTIVE?',
-    options:['The fluffy white rabbit sat in the garden.','The rabbit sat in the garden.','She ran to the garden.','I love the garden.'],
-    answer:'The fluffy white rabbit sat in the garden.',
+    options:['The fluffy rabbit sat in the garden.','The rabbit sat in the garden and ate.','The girl ran to the garden and back.','I love the garden near the school.'],
+    answer:'The fluffy rabbit sat in the garden.',
     hint:'An adjective is a word that describes a noun.',
-    explanation:'<b>The fluffy white rabbit</b> — "fluffy" and "white" are both adjectives describing the rabbit.' }),
+    explanation:'In <b>"The fluffy rabbit sat in the garden."</b> the word <i>fluffy</i> describes the rabbit, so it is an adjective. The other three sentences have nouns and verbs but no describing word.'}),
 
   makeMCQ({ id:'g3eng-grm-010', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which word is an ABSTRACT NOUN (a feeling or idea, not a thing you can see)?',
@@ -129,10 +129,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-018', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which sentence has a NOUN, a VERB and an ADJECTIVE?',
-    options:['The clever monkey climbed the tree.','The monkey climbed.','Clever monkeys.','Climbed quickly and high.'],
+    options:['The clever monkey climbed the tree.','The monkey climbed up and then down.','Climbed quickly and very high indeed.','Clever monkeys in the tall green tree.'],
     answer:'The clever monkey climbed the tree.',
     hint:'Noun = naming word; verb = action word; adjective = describing word.',
-    explanation:'<b>The clever monkey climbed the tree</b> — noun: monkey/tree; verb: climbed; adjective: clever.' }),
+    explanation:'In <b>"The clever monkey climbed the tree."</b> <i>monkey</i> and <i>tree</i> are nouns, <i>climbed</i> is the verb and <i>clever</i> is the adjective. Each of the other three is missing at least one of the three.'}),
 
   makeMCQ({ id:'g3eng-grm-019', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which word is a PREPOSITION in: "The cat sat under the table."?',
@@ -163,11 +163,11 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Butterflies</b> — this is the plural of "butterfly" (the -y changes to -ies). It refers to more than one butterfly.' }),
 
   makeMCQ({ id:'g3eng-grm-023', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
-    question:'Which word is an ADJECTIVE in: "Riya wore a beautiful red dress."?',
-    options:['beautiful','wore','dress','Riya'],
-    answer:'beautiful',
+    question:'Which word is an ADJECTIVE in: "The hungry kitten drank the milk."?',
+    options:['hungry','kitten','drank','milk'],
+    answer:'hungry',
     hint:'The adjective describes the noun "dress".',
-    explanation:'<b>Beautiful</b> is an adjective — it describes the dress. "Red" is also an adjective. "Wore" is a verb; "dress" and "Riya" are nouns.' }),
+    explanation:'<b>Hungry</b> is an adjective — it describes the kitten. "Kitten" and "milk" are nouns, and "drank" is a verb.'}),
 
   makeMCQ({ id:'g3eng-grm-024', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'What is the correct PLURAL of "tooth"?',
@@ -178,10 +178,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-025', chapterId:'g3eng-grammar', difficulty:2, subsection:'parts_of_speech',
     question:'Which sentence uses a CONJUNCTION to show CONTRAST?',
-    options:['I love mangoes, but I do not like guavas.','I love mangoes and guavas.','I love mangoes because they are sweet.','I love mangoes although.'],
+    options:['I love mangoes, but I do not like guavas.','I love mangoes and I also like guavas.','I love mangoes because they are so sweet.','I love mangoes when they are ripe and soft.'],
     answer:'I love mangoes, but I do not like guavas.',
     hint:'Contrast means showing a difference or opposite.',
-    explanation:'<b>But</b> is a conjunction that shows contrast — one idea goes against the other. "And" adds; "because" gives a reason.' }),
+    explanation:'<b>But</b> is the conjunction that shows contrast — the second idea goes against the first. "And" adds, "because" gives a reason and "when" tells us the time.'}),
 
   // ── VERB TENSES (25 questions) ─────────────────────────────────────────────
 
@@ -201,10 +201,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-028', chapterId:'g3eng-grammar', difficulty:1, subsection:'verb_tenses',
     question:'Which sentence is in the FUTURE TENSE?',
-    options:['We will visit the museum on Friday.','We visited the museum last week.','We visit the museum every month.','We are visiting the museum.'],
+    options:['We will visit the museum on Friday.','We visit the museum every month.','We are visiting the museum today.','We visited the museum last week.'],
     answer:'We will visit the museum on Friday.',
     hint:'Future tense uses "will" + verb to describe something that has not happened yet.',
-    explanation:'<b>We will visit the museum on Friday</b> — "will visit" is future tense. "On Friday" also signals a future event.' }),
+    explanation:'<b>"We will visit the museum on Friday."</b> — "will visit" is the future tense, and "on Friday" points to a time still to come.'}),
 
   makeMCQ({ id:'g3eng-grm-029', chapterId:'g3eng-grammar', difficulty:1, subsection:'verb_tenses',
     question:'What is the PAST TENSE of "go"?',
@@ -299,10 +299,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-042', chapterId:'g3eng-grammar', difficulty:1, subsection:'verb_tenses',
     question:'Which sentence is INCORRECT?',
-    options:['He goed to the market.','He went to the market.','He goes to the market every week.','He will go to the market tomorrow.'],
+    options:['He goed to the market.','He went to the market.','He will go to the market.','He goes to the market.'],
     answer:'He goed to the market.',
     hint:'"Go" is irregular — you cannot add -ed to form its past tense.',
-    explanation:'<b>He goed to the market</b> is incorrect. The past tense of "go" is "went" — it is an irregular verb.' }),
+    explanation:'<b>"He goed to the market."</b> is wrong. "Go" is an irregular verb: its past tense is <i>went</i>, never "goed".'}),
 
   makeMCQ({ id:'g3eng-grm-043', chapterId:'g3eng-grammar', difficulty:1, subsection:'verb_tenses',
     question:'Which time word tells you the sentence should be in the PAST TENSE?',
@@ -341,10 +341,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-048', chapterId:'g3eng-grammar', difficulty:2, subsection:'verb_tenses',
     question:'What is WRONG with: "Yesterday, I see a rainbow over the mountains."?',
-    options:['The verb "see" should be "saw" (past tense)','The sentence needs an exclamation mark','"Yesterday" should be at the end','The sentence needs "a" before "rainbow"'],
-    answer:'The verb "see" should be "saw" (past tense)',
+    options:['The verb "see" should be "saw"','The sentence needs an exclamation mark','"Yesterday" should be at the end','The sentence needs "a" before "rainbow"'],
+    answer:'The verb "see" should be "saw"',
     hint:'"Yesterday" tells you to use the past tense.',
-    explanation:'<b>The verb should be "saw"</b> — "yesterday" signals the past, so the verb must change from "see" to "saw" (irregular past tense).' }),
+    explanation:'"Yesterday" tells us this happened in the past, so the verb must change from <i>see</i> to <b>saw</b> — the irregular past tense.'}),
 
   makeMCQ({ id:'g3eng-grm-049', chapterId:'g3eng-grammar', difficulty:1, subsection:'verb_tenses',
     question:'Which form of "be" is correct: "The children ___ playing football now."?',
@@ -355,19 +355,19 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-050', chapterId:'g3eng-grammar', difficulty:2, subsection:'verb_tenses',
     question:'Which THREE verbs are in the past tense?',
-    options:['walked, sang, ate','walk, sing, eat','will walk, will sing, will eat','walking, singing, eating'],
+    options:['walked, sang, ate','walks, sings, eats','walking, singing, eating','will walk, sing and eat'],
     answer:'walked, sang, ate',
     hint:'Past tense verbs show completed actions — look for -ed endings or irregular forms.',
-    explanation:'<b>Walked, sang, ate</b> — "walked" = past of walk (-ed added); "sang" = irregular past of sing; "ate" = irregular past of eat.' }),
+    explanation:'<b>walked, sang, ate</b> are all past tense: <i>walked</i> adds -ed, while <i>sang</i> and <i>ate</i> are the irregular past forms of sing and eat.'}),
 
   // ── PUNCTUATION IN GRAMMAR (25 questions) ─────────────────────────────────
 
   makeMCQ({ id:'g3eng-grm-051', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which punctuation mark ends a STATEMENT?',
-    options:['Full stop (.)','Question mark (?)','Exclamation mark (!)','Comma (,)'],
-    answer:'Full stop (.)',
+    options:['A full stop','A question mark','A comma mark','A bracket pair'],
+    answer:'A full stop',
     hint:'Statements give information and have one specific end punctuation.',
-    explanation:'<b>Full stop (.)</b> — statements (sentences that give information) end with a full stop.' }),
+    explanation:'A <b>full stop</b> ends a statement — a sentence that gives information. A question mark ends a question, and commas and brackets appear inside a sentence, never at its end.'}),
 
   makeMCQ({ id:'g3eng-grm-052', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which punctuation mark ends a QUESTION?',
@@ -385,24 +385,24 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-054', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which is the CORRECT way to use an apostrophe for contraction?',
-    options:["can't (cannot)","can't (can not)","ca'nt","cant'"],
-    answer:"can't (cannot)",
+    options:['can\'t','ca\'nt','cant\'','cann\'t'],
+    answer:'can\'t',
     hint:"The apostrophe replaces the 'no' in 'cannot'.",
-    explanation:"<b>can't</b> = cannot. The apostrophe shows where letters have been removed: cann + ot → can't." }),
+    explanation:'<b>can\'t</b> is correct. The apostrophe stands in place of the letters that were removed from <i>cannot</i> (can + not becomes can\'t). "ca\'nt", "cant\'" and "cann\'t" all put the apostrophe in the wrong place.'}),
 
   makeMCQ({ id:'g3eng-grm-055', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which word in this sentence needs a CAPITAL LETTER? "last saturday, ali went to port louis."',
-    options:['Last, Saturday, Ali, Port, Louis','last only','saturday and ali only','all of them except "went"'],
+    options:['Last, Saturday, Ali, Port, Louis','Saturday, Ali, Port, Louis only','Only the first word, last','All of the words except went'],
     answer:'Last, Saturday, Ali, Port, Louis',
     hint:'Capital letters: start of sentence, proper nouns (days, names, places).',
-    explanation:'<b>Last, Saturday, Ali, Port, Louis</b> — "Last" starts the sentence; "Saturday" is a day (proper noun); "Ali" is a name; "Port Louis" is a place. All need capitals.' }),
+    explanation:'<b>Last, Saturday, Ali, Port, Louis</b> — "Last" begins the sentence, "Saturday" is a day, "Ali" is a person\'s name and "Port Louis" is a place. All five need a capital letter.'}),
 
   makeMCQ({ id:'g3eng-grm-056', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Where does a COMMA go in this sentence: "Although it was raining ___ the children played outside."?',
-    options:['After "raining" (after the introductory clause)','After "children"','After "played"','No comma needed'],
-    answer:'After "raining" (after the introductory clause)',
+    options:['After the word "raining"','After the word "children"','After the word "played"','No comma is needed here'],
+    answer:'After the word "raining"',
     hint:'When a sentence starts with "Although...", a comma follows the introductory clause.',
-    explanation:'<b>After "raining"</b> — the comma separates the introductory clause ("Although it was raining") from the main clause ("the children played outside").' }),
+    explanation:'The comma goes after <b>"raining"</b>, separating the introductory clause ("Although it was raining") from the main clause ("the children played outside").'}),
 
   makeMCQ({ id:'g3eng-grm-057', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which sentence is punctuated CORRECTLY?',
@@ -420,10 +420,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-059', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which word ALWAYS begins with a CAPITAL LETTER?',
-    options:['The name of a specific person (e.g. Priya)','A long word','A describing word (adjective)','A word at the end of a sentence'],
-    answer:'The name of a specific person (e.g. Priya)',
+    options:['The name of a person, like Priya','A word at the end of a sentence','A describing word (an adjective)','A word that is unusually long'],
+    answer:'The name of a person, like Priya',
     hint:'Proper nouns — names of specific people, places and things — always start with a capital.',
-    explanation:'<b>Proper nouns</b> (specific names like Priya, Mauritius, Monday) always start with a capital letter, wherever they appear in a sentence.' }),
+    explanation:'Proper nouns — the names of people, places, days and months, such as <b>Priya</b>, Mauritius or Monday — always take a capital letter, wherever they stand in the sentence.'}),
 
   makeMCQ({ id:'g3eng-grm-060', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which sentence is MISSING a comma?',
@@ -434,10 +434,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-061', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which of these is NOT a correct use of a full stop?',
-    options:['Putting a full stop in the middle of a sentence.To break it up.','Ending a statement: "The dog barked."','After an abbreviation: "Mr. Smith"','Ending a command: "Sit down."'],
-    answer:'Putting a full stop in the middle of a sentence.To break it up.',
+    options:['A full stop in the middle of a sentence','A full stop after "Mr" in "Mr. Smith"','A full stop ending a command: "Sit down."','A full stop ending: "The dog barked."'],
+    answer:'A full stop in the middle of a sentence',
     hint:'A full stop ends a complete sentence — not a part of one.',
-    explanation:'<b>Putting a full stop in the middle</b> is incorrect — a full stop marks the END of a complete sentence. You cannot break a single sentence into two with a full stop mid-way.' }),
+    explanation:'A full stop marks the <b>end</b> of a complete sentence, so one placed in the middle is wrong. Ending a statement or a command with a full stop is correct, and so is the full stop in an abbreviation such as "Mr."'}),
 
   makeMCQ({ id:'g3eng-grm-062', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which sentence uses inverted commas (speech marks) CORRECTLY?',
@@ -448,10 +448,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-063', chapterId:'g3eng-grammar', difficulty:2, subsection:'punctuation_grammar',
     question:'Which sentence uses punctuation for BOTH a list AND an exclamation?',
-    options:['What a fantastic day of swimming, surfing and sunshine!','What a fantastic day.','Swimming, surfing and sunshine is good.','Fantastic day of swimming and surfing.'],
-    answer:'What a fantastic day of swimming, surfing and sunshine!',
+    options:['What a day of swimming, surfing and sun!','Swimming, surfing and sunshine are good.','What a fantastic day out at the seaside!','A fantastic day of swimming and surfing.'],
+    answer:'What a day of swimming, surfing and sun!',
     hint:'Look for both commas (list) and an exclamation mark.',
-    explanation:'<b>What a fantastic day of swimming, surfing and sunshine!</b> — the commas separate the list items; the exclamation mark ends the exclamatory sentence.' }),
+    explanation:'<b>"What a day of swimming, surfing and sun!"</b> uses commas to separate the items of a list AND an exclamation mark to end an exclamatory sentence. Each of the others has only one of the two, or neither.'}),
 
   makeMCQ({ id:'g3eng-grm-064', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which sentence correctly uses "they\'re", "there" and "their"?',
@@ -469,10 +469,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-066', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'A student writes: "its a sunny day." What are the TWO mistakes?',
-    options:["Missing capital 'I' at the start and 'its' should be 'it's'",'Missing a full stop only','Missing capital and a comma','No mistakes'],
-    answer:"Missing capital 'I' at the start and 'its' should be 'it's'",
+    options:['No capital letter, and "its" should be "it\'s"','A missing full stop at the very end only','A missing capital letter and a missing comma','There are no mistakes at all in the sentence'],
+    answer:'No capital letter, and "its" should be "it\'s"',
     hint:"Every sentence starts with a capital; 'it is' = 'it's' (with apostrophe).",
-    explanation:"<b>Two mistakes</b>: (1) 'its' should be 'it's' (it is); (2) the sentence must start with a capital 'I'." }),
+    explanation:'Two mistakes: the sentence must begin with a capital <b>I</b>, and <b>"its"</b> should be <b>"it\'s"</b> (short for "it is"). The full stop at the end is already correct.'}),
 
   makeMCQ({ id:'g3eng-grm-067', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which sentence correctly punctuates a COMMAND?',
@@ -497,10 +497,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-grm-070', chapterId:'g3eng-grammar', difficulty:2, subsection:'punctuation_grammar',
     question:'How many PUNCTUATION MARKS are in this sentence: "Wait!" shouted Ravi. "Don\'t go yet!"',
-    options:['Six (!, ", ", ., ", !)','Four','Three','Five'],
-    answer:'Six (!, ", ", ., ", !)',
+    options:['Six','Four','Five','Three'],
+    answer:'Six',
     hint:'Count every punctuation mark including inverted commas, exclamation marks and the full stop.',
-    explanation:'<b>Six marks</b>: ! (end of "Wait!"), opening ", closing " after "Wait!", . (after "Ravi"), opening " before "Don\'t", ! (after "yet!"). Counting all marks = 6.' }),
+    explanation:'<b>Six</b> marks: the ! inside "Wait!", the opening and closing quotation marks around it, the full stop after "Ravi", the opening quotation mark before "Don\'t", and the ! after "yet".'}),
 
   makeMCQ({ id:'g3eng-grm-071', chapterId:'g3eng-grammar', difficulty:1, subsection:'punctuation_grammar',
     question:'Which sentence is INCORRECTLY punctuated?',

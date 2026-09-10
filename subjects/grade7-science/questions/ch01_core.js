@@ -17,17 +17,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-inquiry-002', chapterId:'g7s-inquiry', difficulty:1, subsection:'lab_safety',
     question:'What should you do immediately if you spill acid on your skin in the laboratory?',
-    options:['Wash the area with plenty of cold water','Rub it with a dry cloth','Ignore it if it does not sting','Cover it with paper'],
-    answer:'Wash the area with plenty of cold water',
+    options:['Rinse it with cold water','Rub it with a dry cloth','Cover it with dry paper','Wipe it with a tissue'],
+    answer:'Rinse it with cold water',
     hint:'Diluting the acid quickly is the priority.',
-    explanation:'You should immediately <b>wash the area with plenty of cold water</b> to dilute and remove the acid, then inform your teacher.' }),
+    explanation:'<b>Rinse it with cold water</b> straight away, using plenty of water, to dilute and wash the acid off the skin, then tell your teacher. Rubbing, covering or wiping leaves the acid on the skin and can push it deeper into the burn.' }),
 
   makeMCQ({ id:'g7s-inquiry-003', chapterId:'g7s-inquiry', difficulty:2, subsection:'investigations',
     question:'In a fair test, a student changes only one variable. What is this variable called?',
-    options:['The independent variable','The dependent variable','The controlled variable','The result'],
-    answer:'The independent variable',
+    options:['Independent variable','Dependent variable','Controlled variable','Constant variable'],
+    answer:'Independent variable',
     hint:'This is the variable deliberately changed by the experimenter.',
-    explanation:'The <b>independent variable</b> is the one the scientist deliberately changes. All other variables are kept the same (controlled) so the test is fair.' }),
+    explanation:'The <b>independent variable</b> is the one the scientist deliberately changes. The dependent variable is the one measured; controlled (constant) variables are kept the same so the test is fair.' }),
 
   makeMCQ({ id:'g7s-inquiry-004', chapterId:'g7s-inquiry', difficulty:2, subsection:'investigations',
     question:'A student measures how the height of a plant changes over two weeks. What is the dependent variable?',
@@ -45,19 +45,19 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-inquiry-006', chapterId:'g7s-inquiry', difficulty:2, subsection:'data_recording',
     question:'A student plots her results on a line graph. What does a straight line through the origin suggest?',
-    options:['The two variables are directly proportional','There is no relationship between the variables','The experiment went wrong','The results should be ignored'],
-    answer:'The two variables are directly proportional',
+    options:['Directly proportional','Inversely proportional','No relationship at all','A random relationship'],
+    answer:'Directly proportional',
     hint:'As one doubles, the other doubles too.',
-    explanation:'A <b>straight line through the origin</b> on a graph shows that the two variables are directly proportional — when one doubles, the other doubles as well.' }),
+    explanation:'A straight line through the origin shows the two variables are <b>directly proportional</b> — when one doubles, the other doubles as well. An inverse relationship would curve downwards, and no relationship would give a scatter of points with no trend.' }),
 
   // ── g7s-measurement ─────────────────────────────────────────────────────────
 
   makeMCQ({ id:'g7s-measurement-001', chapterId:'g7s-measurement', difficulty:1, subsection:'si_units',
     question:'What is the SI unit for measuring mass?',
-    options:['Kilogram (kg)','Newton (N)','Metre (m)','Litre (L)'],
-    answer:'Kilogram (kg)',
+    options:['Kilogram','Newton','Metre','Litre'],
+    answer:'Kilogram',
     hint:'This unit is used on kitchen weighing scales.',
-    explanation:'The SI unit for mass is the <b>kilogram (kg)</b>. Mass measures the amount of matter in an object.' }),
+    explanation:'The SI unit for mass is the <b>kilogram (kg)</b>. Mass measures the amount of matter in an object. The newton (N) measures force, the metre (m) length and the litre (L) volume.' }),
 
   makeMCQ({ id:'g7s-measurement-002', chapterId:'g7s-measurement', difficulty:1, subsection:'si_units',
     question:'What is the SI unit for measuring length?',
@@ -68,17 +68,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-measurement-003', chapterId:'g7s-measurement', difficulty:1, subsection:'measuring_instruments',
     question:'Which instrument is used to measure the volume of a liquid accurately in the laboratory?',
-    options:['Measuring cylinder','Ruler','Thermometer','Spring balance'],
+    options:['Measuring cylinder','Electronic balance','Spring balance','Thermometer'],
     answer:'Measuring cylinder',
     hint:'This is a tall, graduated glass container.',
-    explanation:'A <b>measuring cylinder</b> is used to measure liquid volumes accurately. You read the level at the bottom of the meniscus (the curved surface of the liquid).' }),
+    explanation:'A <b>measuring cylinder</b> is used to measure liquid volumes accurately. You read the level at the bottom of the meniscus (the curved surface of the liquid). A balance measures mass and a thermometer measures temperature.' }),
 
   makeMCQ({ id:'g7s-measurement-004', chapterId:'g7s-measurement', difficulty:1, subsection:'measuring_instruments',
     question:'Which instrument measures temperature?',
-    options:['Thermometer','Ruler','Measuring cylinder','Balance'],
+    options:['Thermometer','Metre rule','Stopwatch','Ammeter'],
     answer:'Thermometer',
     hint:'This instrument uses mercury or a digital sensor.',
-    explanation:'A <b>thermometer</b> measures temperature. The SI unit for temperature is the kelvin (K), but degrees Celsius (°C) is used in everyday science.' }),
+    explanation:'A <b>thermometer</b> measures temperature. The SI unit for temperature is the kelvin (K), but degrees Celsius (&deg;C) is used in everyday science. A metre rule measures length, a stopwatch time and an ammeter current.' }),
 
   makeMCQ({ id:'g7s-measurement-005', chapterId:'g7s-measurement', difficulty:2, subsection:'calculating_measurements',
     question:'A rectangle is 8 cm long and 5 cm wide. What is its area?',
@@ -119,10 +119,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-cells-004', chapterId:'g7s-cells', difficulty:1, subsection:'cell_parts',
     question:'What is the function of the cell membrane?',
-    options:['Controls what enters and leaves the cell','Produces energy for the cell','Contains the genetic material','Makes food by photosynthesis'],
-    answer:'Controls what enters and leaves the cell',
+    options:['Controls what enters the cell','Makes food from sunlight','Stores the genetic material','Releases energy from food'],
+    answer:'Controls what enters the cell',
     hint:'Think of it as the gatekeeper of the cell.',
-    explanation:'The <b>cell membrane</b> controls what enters and leaves the cell. It is a selectively permeable barrier found in all cells.' }),
+    explanation:'The cell membrane <b>controls what enters and leaves the cell</b>. It is a selectively permeable barrier found in all cells. Making food is the job of the chloroplast, storing genetic material the nucleus, and releasing energy the mitochondria.' }),
 
   makeMCQ({ id:'g7s-cells-005', chapterId:'g7s-cells', difficulty:2, subsection:'animal_plant_cells',
     question:'Which structure is found in plant cells but NOT in animal cells?',
@@ -133,10 +133,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-cells-006', chapterId:'g7s-cells', difficulty:2, subsection:'animal_plant_cells',
     question:'Chloroplasts are found in plant cells. What is their function?',
-    options:['To carry out photosynthesis','To control the cell','To provide support','To absorb water'],
-    answer:'To carry out photosynthesis',
+    options:['Carry out photosynthesis','Control cell division','Store water and sap','Release energy from food'],
+    answer:'Carry out photosynthesis',
     hint:'They contain the green pigment chlorophyll.',
-    explanation:'<b>Chloroplasts</b> are the site of photosynthesis in plant cells. They contain chlorophyll, the green pigment that absorbs light energy to make food from carbon dioxide and water.' }),
+    explanation:'Chloroplasts are the site of <b>photosynthesis</b> in plant cells. They contain chlorophyll, the green pigment that absorbs light energy to make food from carbon dioxide and water. Storing water and sap is the vacuole\'s job, and releasing energy is the mitochondria\'s.' }),
 
   // ── g7s-matter ──────────────────────────────────────────────────────────────
 
@@ -156,17 +156,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-matter-003', chapterId:'g7s-matter', difficulty:1, subsection:'properties_states',
     question:'Which state of matter can be compressed (squashed into a smaller space)?',
-    options:['Gas','Liquid','Solid','All states equally'],
+    options:['Gas','Liquid','Solid','All three'],
     answer:'Gas',
     hint:'In this state, particles are far apart with lots of empty space between them.',
-    explanation:'<b>Gas</b> can be compressed because its particles are spread far apart with large gaps between them. Solids and liquids cannot easily be compressed.' }),
+    explanation:'A <b>gas</b> can be compressed because its particles are spread far apart with large gaps between them. Solids and liquids have their particles already close together, so they cannot easily be compressed.' }),
 
   makeMCQ({ id:'g7s-matter-004', chapterId:'g7s-matter', difficulty:2, subsection:'properties_states',
     question:'A liquid takes the shape of its container but has a fixed volume. What does this tell us about its particles?',
-    options:['Particles can move past each other but are close together','Particles are fixed in place','Particles are very far apart','Particles have no movement at all'],
-    answer:'Particles can move past each other but are close together',
+    options:['Close together but able to move','Fixed in place and vibrating','Very far apart and fast','Packed with no movement'],
+    answer:'Close together but able to move',
     hint:'Liquid particles flow freely but are still close.',
-    explanation:'In a liquid, particles <b>can move past each other but remain close together</b>. This allows liquids to flow and take the shape of their container while keeping a fixed volume.' }),
+    explanation:'In a liquid, particles are <b>close together but able to move</b> past each other. This allows liquids to flow and take the shape of their container while keeping a fixed volume. Particles fixed in place describe a solid; particles very far apart describe a gas.' }),
 
   makeMCQ({ id:'g7s-matter-005', chapterId:'g7s-matter', difficulty:1, subsection:'changes_of_state',
     question:'What is it called when a liquid changes into a gas by heating?',
@@ -177,10 +177,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-matter-006', chapterId:'g7s-matter', difficulty:2, subsection:'changes_of_state',
     question:'Ice melts to form water. What type of change is this?',
-    options:['Physical change — the substance stays the same','Chemical change — a new substance forms','Biological change','Permanent change'],
-    answer:'Physical change — the substance stays the same',
+    options:['Physical change','Chemical change','Nuclear change','Biological change'],
+    answer:'Physical change',
     hint:'The water can be frozen again to get ice back.',
-    explanation:'Melting ice is a <b>physical change</b>. The water molecules remain H₂O throughout — only the arrangement of particles changes, not the chemical identity of the substance.' }),
+    explanation:'Melting ice is a <b>physical change</b> — the substance stays the same. The water molecules remain H&#8322;O throughout; only the arrangement of the particles changes, not the chemical identity, and the change can be reversed by freezing.' }),
 
   // ── g7s-solar-system ────────────────────────────────────────────────────────
 
@@ -230,45 +230,45 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-electricity-001', chapterId:'g7s-electricity', difficulty:1, subsection:'circuit_parts',
     question:'Which component in a circuit provides the electrical energy?',
-    options:['Battery (cell)','Bulb','Switch','Wire'],
-    answer:'Battery (cell)',
+    options:['Battery','Switch','Ammeter','Bulb'],
+    answer:'Battery',
     hint:'This stores chemical energy and converts it to electrical energy.',
-    explanation:'A <b>battery (or cell)</b> provides electrical energy in a circuit. It converts stored chemical energy into electrical energy that drives current around the circuit.' }),
+    explanation:'A <b>battery</b> (or cell) provides electrical energy in a circuit. It converts stored chemical energy into electrical energy that drives current around the circuit. A switch only breaks the path, an ammeter measures current and a bulb uses the energy.' }),
 
   makeMCQ({ id:'g7s-electricity-002', chapterId:'g7s-electricity', difficulty:1, subsection:'circuit_parts',
     question:'What does a switch do in an electric circuit?',
-    options:['Opens or closes the circuit to stop or start the current','Provides the electrical energy','Converts electrical energy to light','Measures the current'],
-    answer:'Opens or closes the circuit to stop or start the current',
+    options:['Opens and closes the circuit','Measures the current flowing','Supplies the electrical energy','Changes electricity to light'],
+    answer:'Opens and closes the circuit',
     hint:'When it is open, current cannot flow.',
-    explanation:'A <b>switch</b> opens or closes a circuit. When the switch is open (off), the circuit is broken and current cannot flow. When closed (on), current flows.' }),
+    explanation:'A switch <b>opens and closes the circuit</b> to stop or start the current. When the switch is open (off), the circuit is broken and current cannot flow. When closed (on), current flows.' }),
 
   makeMCQ({ id:'g7s-electricity-003', chapterId:'g7s-electricity', difficulty:1, subsection:'circuit_symbols',
     question:'In a circuit diagram, a long line and a short line together represent which component?',
-    options:['A cell (battery)','A bulb','A resistor','A switch'],
-    answer:'A cell (battery)',
+    options:['A cell','A switch','A bulb','A resistor'],
+    answer:'A cell',
     hint:'The long line is the positive terminal, the short line is the negative terminal.',
-    explanation:'In circuit diagrams, a <b>cell (battery)</b> is represented by one long line (positive) and one short line (negative). Several cells together make a battery.' }),
+    explanation:'In circuit diagrams, a <b>cell</b> (battery) is drawn as one long line (positive) and one short line (negative). Several cells together make a battery.' }),
 
   makeMCQ({ id:'g7s-electricity-004', chapterId:'g7s-electricity', difficulty:2, subsection:'circuit_symbols',
     question:'Which symbol in a circuit diagram represents a resistor?',
-    options:['A rectangle','A circle with a cross','Two parallel lines of different lengths','A zigzag line'],
+    options:['A rectangle','A crossed circle','A triangle shape','A curved arrow'],
     answer:'A rectangle',
     hint:'In the international standard, it is a plain box shape.',
-    explanation:'A <b>rectangle</b> is used to represent a resistor in a circuit diagram (international symbol). A resistor limits the flow of current in a circuit.' }),
+    explanation:'A <b>rectangle</b> is the international symbol for a resistor in a circuit diagram. A resistor limits the flow of current. A circle with a cross in it is a bulb.' }),
 
   makeMCQ({ id:'g7s-electricity-005', chapterId:'g7s-electricity', difficulty:2, subsection:'simple_circuits',
     question:'For current to flow, an electric circuit must be ___.',
-    options:['Complete (closed)','Open (broken)','Disconnected from the battery','Made of plastic wire'],
+    options:['Complete (closed)','Open (broken)','Made of plastic','Coiled up tightly'],
     answer:'Complete (closed)',
     hint:'Current needs a continuous path to travel along.',
     explanation:'For current to flow, a circuit must be <b>complete (closed)</b>. There must be an unbroken conducting path from one terminal of the battery, through the components, and back to the other terminal.' }),
 
   makeMCQ({ id:'g7s-electricity-006', chapterId:'g7s-electricity', difficulty:3, subsection:'simple_circuits',
     question:'Two bulbs are connected in series with a battery. If one bulb breaks, what happens to the other?',
-    options:['It also goes off because the circuit is broken','It glows brighter','Nothing changes','It gets dimmer but stays on'],
-    answer:'It also goes off because the circuit is broken',
+    options:['It goes off as well','It glows brighter','It stays the same','It dims but stays on'],
+    answer:'It goes off as well',
     hint:'In series, components share the same current path.',
-    explanation:'In a <b>series circuit</b>, all components share one path. If one bulb breaks, the circuit is broken and no current can flow, so the other bulb also goes off.' }),
+    explanation:'In a series circuit, all components share one path. If one bulb breaks, the circuit is broken and no current can flow, so the other bulb <b>goes off as well</b>.' }),
 
   // ── g7s-ecosystem ───────────────────────────────────────────────────────────
 
@@ -281,10 +281,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-ecosystem-002', chapterId:'g7s-ecosystem', difficulty:1, subsection:'ecosystem_types',
     question:'What is an ecosystem?',
-    options:['A community of living things interacting with each other and their non-living environment','A group of plants only','A type of rock formation','A collection of animals without plants'],
-    answer:'A community of living things interacting with each other and their non-living environment',
+    options:['Living things and their non-living surroundings','Living things separated from their surroundings','Non-living surroundings with no living things','Living things that never interact with each other'],
+    answer:'Living things and their non-living surroundings',
     hint:'It includes both living (biotic) and non-living (abiotic) parts.',
-    explanation:'An <b>ecosystem</b> is a community of living organisms (plants, animals, microorganisms) interacting with each other and their non-living environment (water, air, soil, sunlight).' }),
+    explanation:'An ecosystem is a community of living organisms (plants, animals, microorganisms) interacting with each other <b>and with their non-living environment</b> — water, air, soil and sunlight. Take away either the living or the non-living part, or the interaction between them, and it is not an ecosystem.' }),
 
   makeMCQ({ id:'g7s-ecosystem-003', chapterId:'g7s-ecosystem', difficulty:2, subsection:'ecosystem_balance',
     question:'In an ecosystem, what are plants called because they make their own food?',
@@ -295,24 +295,24 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-ecosystem-004', chapterId:'g7s-ecosystem', difficulty:2, subsection:'ecosystem_balance',
     question:'What role do decomposers play in an ecosystem?',
-    options:['They break down dead organisms and return nutrients to the soil','They eat plants','They produce oxygen','They feed on large animals'],
-    answer:'They break down dead organisms and return nutrients to the soil',
+    options:['Break down dead matter','Make food from sunlight','Hunt and eat large prey','Give out oxygen for us'],
+    answer:'Break down dead matter',
     hint:'Bacteria and fungi are the main decomposers.',
-    explanation:'<b>Decomposers</b> (mainly bacteria and fungi) break down dead plants and animals, returning essential nutrients to the soil. This nutrient recycling keeps ecosystems healthy.' }),
+    explanation:'Decomposers (mainly bacteria and fungi) <b>break down dead plants and animals</b>, returning essential nutrients to the soil. This nutrient recycling keeps ecosystems healthy. Making food from sunlight is what producers do, hunting is what predators do.' }),
 
   makeMCQ({ id:'g7s-ecosystem-005', chapterId:'g7s-ecosystem', difficulty:2, subsection:'human_impact',
     question:'Which human activity causes the most damage to coral reef ecosystems in Mauritius?',
-    options:['Pollution and coastal development','Reading books about the sea','Sailing away from the reef','Watching fish from a boat'],
-    answer:'Pollution and coastal development',
+    options:['Pollution and coastal building','Photographing fish from a boat','Reading books about the sea','Sailing far away from the reef'],
+    answer:'Pollution and coastal building',
     hint:'Chemicals and construction near the coast affect the reef.',
-    explanation:'<b>Pollution and coastal development</b> are major threats to coral reefs. Chemical runoff, sewage and physical damage from construction kill coral and reduce biodiversity.' }),
+    explanation:'<b>Pollution and coastal development</b> are the major threats to coral reefs. Chemical runoff, sewage and physical damage from construction kill coral and reduce biodiversity. Watching, photographing or sailing past the reef does it no harm.' }),
 
   makeMCQ({ id:'g7s-ecosystem-006', chapterId:'g7s-ecosystem', difficulty:3, subsection:'human_impact',
     question:'Deforestation in a terrestrial ecosystem leads to ___.',
-    options:['Loss of habitat for animals and soil erosion','More food for animals','Cleaner rivers','More rainfall'],
-    answer:'Loss of habitat for animals and soil erosion',
+    options:['Habitat loss and soil erosion','More food for wild animals','Cleaner rivers and streams','Heavier rainfall each year'],
+    answer:'Habitat loss and soil erosion',
     hint:'Removing trees affects both the animals that lived in them and the soil beneath.',
-    explanation:'<b>Deforestation</b> destroys habitats, causing animals to lose their homes and leading to extinction. Tree roots also hold soil in place, so their removal causes soil erosion and can pollute rivers.' }),
+    explanation:'Deforestation destroys habitats, so animals lose their homes and some die out. Tree roots also hold soil in place, so removing the trees causes <b>soil erosion</b>, which washes soil into rivers and makes them dirtier, not cleaner.' }),
 
   // ── g7s-elements ────────────────────────────────────────────────────────────
 
@@ -332,10 +332,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-elements-003', chapterId:'g7s-elements', difficulty:1, subsection:'periodic_table',
     question:'How are elements arranged in the Periodic Table?',
-    options:['In order of increasing atomic number','Alphabetically by name','By colour','By how common they are on Earth'],
-    answer:'In order of increasing atomic number',
+    options:['By increasing atomic number','By decreasing atomic mass','By alphabetical order of name','By how common they are'],
+    answer:'By increasing atomic number',
     hint:'Hydrogen (atomic number 1) comes first.',
-    explanation:'Elements in the Periodic Table are arranged in order of <b>increasing atomic number</b>. Elements in the same column (group) have similar chemical properties.' }),
+    explanation:'Elements in the Periodic Table are arranged in order of <b>increasing atomic number</b> (the number of protons). Elements in the same column (group) have similar chemical properties.' }),
 
   makeMCQ({ id:'g7s-elements-004', chapterId:'g7s-elements', difficulty:2, subsection:'periodic_table',
     question:'What do we call a substance made of two or more elements chemically joined together?',
@@ -346,10 +346,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-elements-005', chapterId:'g7s-elements', difficulty:1, subsection:'metals_nonmetals',
     question:'Which of these is a property of metals?',
-    options:['Good conductors of electricity and heat','Poor conductors','Dull and non-shiny','Brittle and easily broken'],
-    answer:'Good conductors of electricity and heat',
+    options:['Good conductors of heat','Poor conductors of heat','Dull and never shiny','Brittle and easily broken'],
+    answer:'Good conductors of heat',
     hint:'Copper wires are used in electrical cables because of this property.',
-    explanation:'Metals are <b>good conductors of electricity and heat</b>. They are also shiny, malleable (can be shaped) and ductile (can be drawn into wires).' }),
+    explanation:'Metals are <b>good conductors of heat and electricity</b>. They are also shiny, malleable (can be hammered into shape) and ductile (can be drawn into wires). Being dull and brittle is typical of non-metals.' }),
 
   makeMCQ({ id:'g7s-elements-006', chapterId:'g7s-elements', difficulty:2, subsection:'metals_nonmetals',
     question:'Which of these is a non-metal?',
@@ -376,10 +376,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-air-003', chapterId:'g7s-air', difficulty:2, subsection:'oxygen_co2_tests',
     question:'Which test confirms that a gas is oxygen?',
-    options:['A glowing splint relights in the presence of oxygen','Lime water turns milky','A burning splint goes out','The gas turns damp litmus red'],
-    answer:'A glowing splint relights in the presence of oxygen',
+    options:['A glowing splint relights','A burning splint goes out','Lime water turns milky','Damp litmus turns red'],
+    answer:'A glowing splint relights',
     hint:'Oxygen supports combustion, so it can relight a glowing (but not burning) splint.',
-    explanation:'The test for oxygen is: a <b>glowing splint relights</b> when placed in the gas. Oxygen supports combustion, giving the splint enough energy to catch fire again.' }),
+    explanation:'The test for oxygen is that <b>a glowing splint relights</b> when placed in the gas. Oxygen supports combustion, giving the splint enough energy to catch fire again. Lime water turning milky is the test for carbon dioxide.' }),
 
   makeMCQ({ id:'g7s-air-004', chapterId:'g7s-air', difficulty:2, subsection:'oxygen_co2_tests',
     question:'Which test confirms that a gas is carbon dioxide?',
@@ -397,10 +397,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-air-006', chapterId:'g7s-air', difficulty:3, subsection:'air_properties',
     question:'Why does a burning candle go out when covered with a glass jar?',
-    options:['It uses up the oxygen inside the jar and cannot continue burning','The glass blocks light from reaching the flame','The jar cools the candle too quickly','Carbon dioxide in the jar puts it out immediately'],
-    answer:'It uses up the oxygen inside the jar and cannot continue burning',
+    options:['The oxygen inside is used up','The glass blocks all the light','The jar cools the wax quickly','Carbon dioxide enters the jar'],
+    answer:'The oxygen inside is used up',
     hint:'Burning requires a continuous supply of oxygen.',
-    explanation:'The candle goes out because it <b>uses up the oxygen</b> inside the jar. Combustion requires oxygen; once it is used up, burning stops.' }),
+    explanation:'The candle goes out because <b>the oxygen inside the jar is used up</b>. Combustion requires oxygen; once it is used up, burning stops. The carbon dioxide in the jar is made by the flame itself, it does not come in from outside.' }),
 
   // ── g7s-biodiversity ────────────────────────────────────────────────────────
 
@@ -434,26 +434,26 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-biodiversity-005', chapterId:'g7s-biodiversity', difficulty:2, subsection:'plant_types',
     question:'What is the difference between flowering and non-flowering plants?',
-    options:['Flowering plants reproduce using seeds from flowers; non-flowering plants use spores or cones','Flowering plants are always bigger','Non-flowering plants cannot photosynthesise','All plants are flowering plants'],
-    answer:'Flowering plants reproduce using seeds from flowers; non-flowering plants use spores or cones',
+    options:['Flowering plants make seeds in flowers','Flowering plants cannot make their food','Flowering plants have no true roots','Flowering plants grow only in water'],
+    answer:'Flowering plants make seeds in flowers',
     hint:'Ferns and mosses are non-flowering plants.',
-    explanation:'<b>Flowering plants</b> (angiosperms) reproduce using seeds that develop inside flowers. <b>Non-flowering plants</b> like ferns and mosses reproduce using spores, while conifers use cones.' }),
+    explanation:'Flowering plants (angiosperms) reproduce using <b>seeds that develop inside flowers</b>. Non-flowering plants like ferns and mosses reproduce using spores, while conifers use cones. Both kinds photosynthesise, have roots and grow on land.' }),
 
   makeMCQ({ id:'g7s-biodiversity-006', chapterId:'g7s-biodiversity', difficulty:1, subsection:'plant_types',
     question:'The pink pigeon is endemic to Mauritius. What does "endemic" mean?',
-    options:['Found only in that particular place and nowhere else in the world','Common everywhere','Extinct','Very large in number'],
-    answer:'Found only in that particular place and nowhere else in the world',
+    options:['Found only in one place','Found all over the world','Found only in captivity','No longer found alive'],
+    answer:'Found only in one place',
     hint:'Many Mauritian species are endemic due to the island\'s isolation.',
-    explanation:'<b>Endemic</b> means found only in one specific location and nowhere else. The pink pigeon is endemic to Mauritius — it exists naturally only on this island.' }),
+    explanation:'Endemic means <b>found only in one specific place</b> and nowhere else in the world. The pink pigeon is endemic to Mauritius — it exists naturally only on this island. An animal found nowhere alive is extinct, which is a different word.' }),
 
   // ── g7s-food-chains ─────────────────────────────────────────────────────────
 
   makeMCQ({ id:'g7s-food-chains-001', chapterId:'g7s-food-chains', difficulty:1, subsection:'feeding_relationships',
     question:'In a food chain, what do the arrows represent?',
-    options:['The direction of energy flow (from food to feeder)','The direction animals move','Which animal is bigger','Which organism is rarer'],
-    answer:'The direction of energy flow (from food to feeder)',
+    options:['The direction energy flows','The direction animals move','Which animal is the biggest','Which organism is rarest'],
+    answer:'The direction energy flows',
     hint:'The arrow points from what is eaten to what eats it.',
-    explanation:'In a food chain, <b>arrows show the direction of energy flow</b> — from the food (what is eaten) to the feeder (what eats it). e.g. grass → grasshopper → frog → hawk.' }),
+    explanation:'In a food chain, arrows show the <b>direction of energy flow</b> — from the food (what is eaten) to the feeder (what eats it). For example grass → grasshopper → frog → hawk. The arrows say nothing about size, rarity or movement.' }),
 
   makeMCQ({ id:'g7s-food-chains-002', chapterId:'g7s-food-chains', difficulty:1, subsection:'feeding_relationships',
     question:'What do we call an animal that eats only plants?',
@@ -471,68 +471,68 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-food-chains-004', chapterId:'g7s-food-chains', difficulty:2, subsection:'food_chains',
     question:'In the food chain: seaweed → fish → shark, what is the shark called?',
-    options:['A tertiary consumer (top predator)','A producer','A primary consumer','A decomposer'],
-    answer:'A tertiary consumer (top predator)',
+    options:['The top predator','A primary consumer','A green producer','A soil decomposer'],
+    answer:'The top predator',
     hint:'The shark is the third consumer in the chain.',
-    explanation:'The shark is a <b>tertiary consumer (top predator)</b>. Seaweed is the producer, fish is the primary consumer (eats seaweed), and the shark is the secondary/top consumer (eats the fish).' }),
+    explanation:'In seaweed → fish → shark the seaweed is the producer, the fish is the primary consumer (it eats the seaweed) and the shark is the secondary consumer — <b>the top predator</b> of this chain, because nothing else eats it.' }),
 
   makeMCQ({ id:'g7s-food-chains-005', chapterId:'g7s-food-chains', difficulty:2, subsection:'energy_flow',
     question:'What happens to most of the energy as it passes through a food chain?',
-    options:['Most energy is lost as heat at each level','All energy is passed on perfectly','Energy increases at each level','Energy stays the same throughout'],
-    answer:'Most energy is lost as heat at each level',
+    options:['Most is lost as heat','Most is passed on fully','It increases each level','It stays exactly the same'],
+    answer:'Most is lost as heat',
     hint:'Only about 10% of energy passes from one level to the next.',
-    explanation:'<b>Most energy (about 90%) is lost as heat</b> at each level of a food chain through movement, keeping warm and other life processes. Only about 10% passes to the next level.' }),
+    explanation:'About 90% of the energy is <b>lost as heat</b> at each level of a food chain through movement, keeping warm and other life processes. Only about 10% passes on to the next level.' }),
 
   makeMCQ({ id:'g7s-food-chains-006', chapterId:'g7s-food-chains', difficulty:3, subsection:'energy_flow',
     question:'If all the hawks disappeared from a food chain: grass → grasshopper → lizard → hawk, what would most likely happen?',
-    options:['The lizard population would increase, leading to fewer grasshoppers','The grass would disappear','The grasshopper population would decrease','Nothing would change'],
-    answer:'The lizard population would increase, leading to fewer grasshoppers',
+    options:['More lizards, fewer grasshoppers','Fewer lizards, more grasshoppers','Fewer lizards, fewer grasshoppers','More lizards, more grasshoppers'],
+    answer:'More lizards, fewer grasshoppers',
     hint:'Think about what controls the lizard population.',
-    explanation:'Without hawks, <b>the lizard population would increase</b> (no predator to eat them). More lizards means they eat more grasshoppers, so grasshopper numbers would fall. This shows how removing one species disrupts ecosystem balance.' }),
+    explanation:'Without hawks the lizard population would increase, because nothing is left to eat them. <b>More lizards means more grasshoppers eaten</b>, so grasshopper numbers would fall. This shows how removing one species disrupts the balance of the whole ecosystem.' }),
 
   // ── g7s-changes ─────────────────────────────────────────────────────────────
 
   makeMCQ({ id:'g7s-changes-001', chapterId:'g7s-changes', difficulty:1, subsection:'physical_changes',
     question:'Which of these is an example of a physical change?',
-    options:['Cutting paper into small pieces','Burning wood','Rusting iron','Baking bread'],
-    answer:'Cutting paper into small pieces',
+    options:['Cutting paper','Rusting iron','Baking bread','Burning wood'],
+    answer:'Cutting paper',
     hint:'No new substance is formed — it is still paper.',
-    explanation:'<b>Cutting paper</b> is a physical change. The paper is still paper — only its size has changed. No new substance is formed and the change can theoretically be reversed.' }),
+    explanation:'<b>Cutting paper</b> is a physical change. The paper is still paper — only its size has changed, no new substance is formed. Rusting, baking and burning all make new substances, so they are chemical changes.' }),
 
   makeMCQ({ id:'g7s-changes-002', chapterId:'g7s-changes', difficulty:1, subsection:'physical_changes',
     question:'What makes a change PHYSICAL rather than chemical?',
-    options:['No new substance is formed; the change can be reversed','A new substance is always formed','Heat is always produced','The colour always changes'],
-    answer:'No new substance is formed; the change can be reversed',
+    options:['No new substance is formed','A new substance is formed','The colour always changes','Heat is always given out'],
+    answer:'No new substance is formed',
     hint:'The original substance can be recovered.',
-    explanation:'In a <b>physical change</b>, no new substance is formed. The material may change shape, size or state, but its chemical identity stays the same and the change is usually reversible.' }),
+    explanation:'In a physical change <b>no new substance is formed</b>, and the change can usually be reversed. The material may change shape, size or state, but its chemical identity stays the same.' }),
 
   makeMCQ({ id:'g7s-changes-003', chapterId:'g7s-changes', difficulty:1, subsection:'chemical_changes',
     question:'Which of these is a sign that a chemical change has occurred?',
-    options:['Production of a new gas (bubbles)','The substance getting smaller','The colour staying the same','The substance getting colder without any reaction'],
-    answer:'Production of a new gas (bubbles)',
+    options:['A new gas bubbles off','The substance gets smaller','The colour stays the same','The substance only melts'],
+    answer:'A new gas bubbles off',
     hint:'Gas bubbles, light, heat and colour change are all signs of a chemical change.',
-    explanation:'<b>Production of a new gas</b> (seen as bubbles) is a sign of a chemical change. Other signs include colour change, production of light or heat, and formation of a precipitate.' }),
+    explanation:'<b>A new gas bubbling off</b> is a sign of a chemical change. Other signs include a permanent colour change, light or heat being given out, and a precipitate forming. Getting smaller or melting are physical changes.' }),
 
   makeMCQ({ id:'g7s-changes-004', chapterId:'g7s-changes', difficulty:2, subsection:'chemical_changes',
     question:'Why is burning classified as a chemical change?',
-    options:['New substances (ash, carbon dioxide, water vapour) are formed and the change cannot be reversed','The wood changes size','The wood changes colour','Burning is fast'],
-    answer:'New substances (ash, carbon dioxide, water vapour) are formed and the change cannot be reversed',
+    options:['New substances are formed','The wood changes colour','The wood changes its size','Burning happens quickly'],
+    answer:'New substances are formed',
     hint:'You cannot turn ash and CO₂ back into wood.',
-    explanation:'Burning is a <b>chemical change</b> because new substances are formed — ash, carbon dioxide and water vapour. The original material (wood) cannot be recovered. This is irreversible.' }),
+    explanation:'Burning is a chemical change because <b>new substances are formed</b> — ash, carbon dioxide and water vapour. The original material (wood) cannot be recovered, so the change is irreversible. Speed, colour and size do not decide whether a change is chemical.' }),
 
   makeMCQ({ id:'g7s-changes-005', chapterId:'g7s-changes', difficulty:2, subsection:'examples_changes',
     question:'Is photosynthesis a physical or chemical change?',
-    options:['Chemical — new substances (glucose and oxygen) are formed from carbon dioxide and water','Physical — nothing new is made','Physical — light is absorbed','Neither — it is a biological process only'],
-    answer:'Chemical — new substances (glucose and oxygen) are formed from carbon dioxide and water',
+    options:['Chemical — new substances form','Physical — nothing new forms','Physical — only light moves','Neither — it is only growth'],
+    answer:'Chemical — new substances form',
     hint:'New molecules are made that were not there before.',
-    explanation:'<b>Photosynthesis is a chemical change</b>. Plants use carbon dioxide and water to make glucose (a new substance) and release oxygen. The original CO₂ and water are transformed into new substances.' }),
+    explanation:'Photosynthesis is a <b>chemical</b> change. Plants use carbon dioxide and water to make glucose (a new substance) and release oxygen. The original CO&#8322; and water are transformed into new substances that cannot easily be changed back.' }),
 
   makeMCQ({ id:'g7s-changes-006', chapterId:'g7s-changes', difficulty:3, subsection:'examples_changes',
     question:'Rusting is a chemical change. Which two substances must be present for iron to rust?',
-    options:['Oxygen and water','Carbon dioxide and heat','Only water','Only oxygen'],
+    options:['Oxygen and water','Oxygen and nitrogen','Nitrogen and water','Hydrogen and heat'],
     answer:'Oxygen and water',
     hint:'Iron kept in dry air or completely submerged in boiled (oxygen-free) water does not rust.',
-    explanation:'Iron rusts only when both <b>oxygen and water</b> are present. The iron reacts with oxygen (from air) dissolved in water to form iron oxide (rust). Remove either one and rusting stops.' }),
+    explanation:'Iron rusts only when both <b>oxygen and water</b> are present. The iron reacts with oxygen from the air dissolved in water to form iron oxide (rust). Remove either one and rusting stops.' }),
 
   // ── g7s-energy ──────────────────────────────────────────────────────────────
 
@@ -552,40 +552,40 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-energy-003', chapterId:'g7s-energy', difficulty:2, subsection:'energy_transformation',
     question:'When a torch is switched on, which energy transformation occurs?',
-    options:['Chemical energy → electrical energy → light energy','Light energy → chemical energy','Electrical energy → chemical energy','Kinetic energy → light energy'],
-    answer:'Chemical energy → electrical energy → light energy',
+    options:['Chemical → electrical → light','Electrical → chemical → light','Light → electrical → chemical','Kinetic → electrical → light'],
+    answer:'Chemical → electrical → light',
     hint:'The battery contains stored chemical energy.',
-    explanation:'In a torch: <b>chemical energy</b> (stored in the battery) is converted to <b>electrical energy</b> (current), which is then converted to <b>light energy</b> (and some heat) by the bulb.' }),
+    explanation:'In a torch, <b>chemical</b> energy stored in the battery is converted to <b>electrical</b> energy (the current), which the bulb then converts to <b>light</b> energy and some heat.' }),
 
   makeMCQ({ id:'g7s-energy-004', chapterId:'g7s-energy', difficulty:1, subsection:'energy_transformation',
     question:'What does the law of conservation of energy state?',
-    options:['Energy cannot be created or destroyed — only transformed','Energy is always destroyed when used','Energy increases each time it is transformed','Energy can be created from nothing'],
-    answer:'Energy cannot be created or destroyed — only transformed',
+    options:['Energy is only transformed','Energy is always destroyed','Energy can be made anew','Energy grows each time'],
+    answer:'Energy is only transformed',
     hint:'The total amount of energy in a closed system stays the same.',
-    explanation:'The <b>law of conservation of energy</b> states that energy cannot be created or destroyed — it can only be changed from one form to another. The total energy always remains constant.' }),
+    explanation:'The law of conservation of energy states that energy cannot be created or destroyed — it can <b>only be transformed</b> from one form to another. The total energy always stays the same.' }),
 
   makeMCQ({ id:'g7s-energy-005', chapterId:'g7s-energy', difficulty:1, subsection:'renewable_nonrenewable',
     question:'Which of these is a renewable energy source?',
-    options:['Solar energy (sunlight)','Coal','Natural gas','Petroleum (oil)'],
-    answer:'Solar energy (sunlight)',
+    options:['Sunlight','Coal','Natural gas','Petroleum'],
+    answer:'Sunlight',
     hint:'This energy source is replenished naturally and will not run out.',
-    explanation:'<b>Solar energy</b> is renewable — sunlight will not run out on any human timescale. Coal, natural gas and petroleum are non-renewable fossil fuels that will eventually be exhausted.' }),
+    explanation:'<b>Sunlight</b> is renewable — it will not run out on any human timescale. Coal, natural gas and petroleum are non-renewable fossil fuels that will eventually be exhausted.' }),
 
   makeMCQ({ id:'g7s-energy-006', chapterId:'g7s-energy', difficulty:2, subsection:'renewable_nonrenewable',
     question:'Why are fossil fuels (coal, oil and gas) classified as non-renewable energy sources?',
-    options:['They took millions of years to form and are being used much faster than they can be replaced','They cannot produce energy','They are found only underground','They produce no pollution'],
-    answer:'They took millions of years to form and are being used much faster than they can be replaced',
+    options:['They form far slower than we use them','They are found only deep underground','They give out no pollution at all','They cannot be burned for energy'],
+    answer:'They form far slower than we use them',
     hint:'Once used up, they cannot be replaced on a human timescale.',
-    explanation:'Fossil fuels are <b>non-renewable</b> because they took hundreds of millions of years to form from ancient organisms. We are using them far faster than new ones can form, so they will eventually run out.' }),
+    explanation:'Fossil fuels took hundreds of millions of years to form from the remains of ancient organisms, and we are burning them <b>far faster than new ones can form</b>, so they will eventually run out. Being underground is not what makes a fuel non-renewable.' }),
 
   // ── g7s-sts ─────────────────────────────────────────────────────────────────
 
   makeMCQ({ id:'g7s-sts-001', chapterId:'g7s-sts', difficulty:1, subsection:'science_technology',
     question:'Who is credited with inventing the first practical microscope, allowing cells to be discovered?',
-    options:['Antonie van Leeuwenhoek','Isaac Newton','Charles Darwin','Albert Einstein'],
-    answer:'Antonie van Leeuwenhoek',
+    options:['Van Leeuwenhoek','Charles Darwin','Isaac Newton','Albert Einstein'],
+    answer:'Van Leeuwenhoek',
     hint:'He was a Dutch scientist in the 17th century who made his own powerful lenses.',
-    explanation:'<b>Antonie van Leeuwenhoek</b> (1632–1723) is considered the father of microscopy. He developed powerful lenses and was the first to observe bacteria and other microorganisms.' }),
+    explanation:'Antonie <b>van Leeuwenhoek</b> (1632&ndash;1723) is considered the father of microscopy. He ground powerful lenses and was the first to observe bacteria and other microorganisms.' }),
 
   makeMCQ({ id:'g7s-sts-002', chapterId:'g7s-sts', difficulty:1, subsection:'discoveries',
     question:'Which scientist first described cells after looking at cork under a microscope?',
@@ -596,31 +596,31 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7s-sts-003', chapterId:'g7s-sts', difficulty:2, subsection:'discoveries',
     question:'How do weather satellites in space help people on Earth?',
-    options:['They provide images and data that allow meteorologists to forecast weather accurately','They stop hurricanes from forming','They water crops from space','They clean pollution from the atmosphere'],
-    answer:'They provide images and data that allow meteorologists to forecast weather accurately',
+    options:['They send data for weather forecasts','They stop hurricanes from forming','They clean the air of all pollution','They water the crops from space'],
+    answer:'They send data for weather forecasts',
     hint:'Modern weather forecasting would be impossible without satellites.',
-    explanation:'Weather <b>satellites</b> orbit Earth and take images and measurements of the atmosphere. This data allows meteorologists to track storms, monitor cloud cover and produce accurate weather forecasts that save lives.' }),
+    explanation:'Weather satellites orbit Earth and take images and measurements of the atmosphere. This <b>data lets meteorologists forecast the weather</b> — tracking storms and cloud cover accurately enough to save lives. Satellites cannot change the weather itself.' }),
 
   makeMCQ({ id:'g7s-sts-004', chapterId:'g7s-sts', difficulty:2, subsection:'sustainability',
     question:'Which of the following is an example of sustainable use of metals?',
-    options:['Recycling aluminium cans','Throwing used tin cans into the sea','Mining more iron every year without limit','Burning copper wire to get rid of it'],
+    options:['Recycling aluminium cans','Dumping tin cans in the sea','Burning copper wire away','Mining iron without limit'],
     answer:'Recycling aluminium cans',
     hint:'Recycling uses much less energy than producing new metal from ore.',
-    explanation:'<b>Recycling aluminium</b> is sustainable because it uses only about 5% of the energy needed to produce new aluminium from ore. It conserves natural resources and reduces waste.' }),
+    explanation:'<b>Recycling aluminium</b> is sustainable because it uses only about 5% of the energy needed to make new aluminium from ore. It conserves natural resources and reduces waste.' }),
 
   makeMCQ({ id:'g7s-sts-005', chapterId:'g7s-sts', difficulty:2, subsection:'sustainability',
     question:'What does sustainability mean in science and technology?',
-    options:['Using resources in a way that meets today\'s needs without harming the ability of future generations to meet their needs','Using as many resources as possible now','Stopping all use of technology','Only using old technology'],
-    answer:'Using resources in a way that meets today\'s needs without harming the ability of future generations to meet their needs',
+    options:['Meeting needs without harming the future','Using up resources as fast as possible','Stopping all use of new technology today','Keeping only the oldest technology in use'],
+    answer:'Meeting needs without harming the future',
     hint:'It is about balance between the present and the future.',
-    explanation:'<b>Sustainability</b> means managing resources so that we can meet our present needs without depleting them for future generations. It involves recycling, reducing waste and using renewable energy.' }),
+    explanation:'Sustainability means using resources in a way that <b>meets today\'s needs without harming the ability of future generations to meet theirs</b>. It involves recycling, reducing waste and using renewable energy — not giving up technology.' }),
 
   makeMCQ({ id:'g7s-sts-006', chapterId:'g7s-sts', difficulty:3, subsection:'science_technology',
     question:'GPS satellites orbit Earth and help us navigate. Which branch of science made this technology possible?',
-    options:['Astronomy and physics (understanding orbits and radio signals)','Only biology','Only chemistry','Only geology'],
-    answer:'Astronomy and physics (understanding orbits and radio signals)',
+    options:['Astronomy and physics','Biology and chemistry','Geology and botany','Zoology and ecology'],
+    answer:'Astronomy and physics',
     hint:'Calculating satellite positions requires knowledge of gravity and electromagnetic waves.',
-    explanation:'GPS relies on <b>astronomy and physics</b>. Understanding orbital mechanics (astronomy) and electromagnetic wave behaviour (physics) made it possible to design satellites that transmit precise timing signals for navigation.' })
+    explanation:'GPS relies on <b>astronomy and physics</b>: understanding orbits (astronomy) and radio waves and precise timing (physics) is what makes satellite navigation possible.' })
 
 );
 

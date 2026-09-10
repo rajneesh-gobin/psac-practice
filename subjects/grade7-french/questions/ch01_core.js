@@ -59,22 +59,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-co-008', chapterId:'g7fr-co', difficulty:2, subsection:'locuteur_message',
     question:'Dans un message oral, l\'intention du locuteur peut être de :',
-    options:['Informer, convaincre ou divertir','Écrire une lettre','Corriger une dictée','Lire un roman'],
-    answer:'Informer, convaincre ou divertir',
+    options:['Informer ou convaincre','Lire un roman policier','Écrire une longue lettre','Corriger une dictée'],
+    answer:'Informer ou convaincre',
     hint:'Pourquoi le locuteur prend-il la parole ?',
     explanation:'Le locuteur peut avoir différentes intentions : <b>informer</b> (donner des informations), <b>convaincre</b> (changer une opinion) ou <b>divertir</b> (amuser).' }),
 
   makeMCQ({ id:'g7fr-co-009', chapterId:'g7fr-co', difficulty:2, subsection:'locuteur_message',
     question:'Pour identifier le message principal d\'un texte oral, on doit :',
-    options:['Écouter attentivement et retenir l\'idée centrale','Répéter chaque mot entendu','Écrire toutes les phrases','Regarder les images'],
-    answer:'Écouter attentivement et retenir l\'idée centrale',
+    options:['Retenir l\'idée centrale','Écrire toutes les phrases','Répéter chaque mot entendu','Regarder les images du livre'],
+    answer:'Retenir l\'idée centrale',
     hint:'Il faut distinguer les informations importantes des détails secondaires.',
     explanation:'L\'idée centrale est le message principal que le locuteur veut transmettre. Une <b>écoute active</b> permet de la repérer.' }),
 
   makeMCQ({ id:'g7fr-co-010', chapterId:'g7fr-co', difficulty:3, subsection:'locuteur_message',
     question:'Dans un dialogue, comment sait-on que le locuteur change ?',
-    options:['Une nouvelle voix prend la parole ou une réplique commence','Le texte s\'arrête','Les mots deviennent plus longs','Le sujet change complètement'],
-    answer:'Une nouvelle voix prend la parole ou une réplique commence',
+    options:['Une autre voix prend la parole','Les mots deviennent plus longs','Le sujet change complètement','Le texte s\'arrête un instant'],
+    answer:'Une autre voix prend la parole',
     hint:'Dans un dialogue écrit, chaque nouvelle réplique correspond à un locuteur différent.',
     explanation:'Dans un <b>dialogue</b>, on repère le changement de locuteur au changement de voix (à l\'oral) ou au tiret et à la nouvelle réplique (à l\'écrit).' }),
 
@@ -82,15 +82,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-co-011', chapterId:'g7fr-co', difficulty:1, subsection:'vocabulaire_oral',
     question:'Que signifie "écouter attentivement" ?',
-    options:['Prêter une grande attention à ce qu\'on entend','Parler fort','Écrire rapidement','Regarder la télévision'],
-    answer:'Prêter une grande attention à ce qu\'on entend',
+    options:['Prêter attention aux paroles','Écrire tout ce qu\'on entend','Regarder la télévision','Parler plus fort que les autres'],
+    answer:'Prêter attention aux paroles',
     hint:'"Attentivement" veut dire avec beaucoup d\'attention.',
     explanation:'<b>Écouter attentivement</b> signifie se concentrer pleinement sur ce que dit le locuteur, sans se laisser distraire.' }),
 
   makeMCQ({ id:'g7fr-co-012', chapterId:'g7fr-co', difficulty:2, subsection:'vocabulaire_oral',
     question:'L\'intonation sert à :',
-    options:['Exprimer des émotions et donner du sens à la phrase','Écrire sans fautes','Trouver les synonymes','Conjuguer les verbes'],
-    answer:'Exprimer des émotions et donner du sens à la phrase',
+    options:['Exprimer des émotions','Écrire sans fautes','Conjuguer les verbes','Trouver les synonymes'],
+    answer:'Exprimer des émotions',
     hint:'L\'intonation, c\'est la façon dont la voix monte ou descend.',
     explanation:'L\'<b>intonation</b> est la variation de la hauteur de la voix. Elle permet d\'exprimer la joie, la surprise, la colère ou de distinguer une question d\'une affirmation.' }),
 
@@ -98,22 +98,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-eo-001', chapterId:'g7fr-eo', difficulty:1, subsection:'lecture_voix_haute',
     question:'Lire à voix haute avec expression signifie :',
-    options:['Varier le ton, le rythme et l\'intensité de sa voix','Lire le plus vite possible','Chuchoter pour ne pas déranger','Sauter les mots difficiles'],
-    answer:'Varier le ton, le rythme et l\'intensité de sa voix',
+    options:['Varier le ton et le rythme','Sauter les mots difficiles','Chuchoter pour ne pas déranger','Lire le plus vite possible'],
+    answer:'Varier le ton et le rythme',
     hint:'Une lecture expressive rend le texte vivant et intéressant.',
     explanation:'Une bonne lecture à voix haute implique de <b>varier le ton</b> (grave/aigu), le <b>rythme</b> (lent/rapide) et l\'<b>intensité</b> (fort/doux) pour donner vie au texte.' }),
 
   makeMCQ({ id:'g7fr-eo-002', chapterId:'g7fr-eo', difficulty:1, subsection:'lecture_voix_haute',
     question:'Que signifie "respecter la ponctuation" lors d\'une lecture à voix haute ?',
-    options:['Faire une pause à la virgule et un arrêt au point','Ignorer les signes de ponctuation','Lire toutes les phrases à la même vitesse','Sauter les paragraphes'],
-    answer:'Faire une pause à la virgule et un arrêt au point',
+    options:['Marquer une pause à la virgule','Lire tout à la même vitesse','Ignorer les signes de ponctuation','Sauter les fins de paragraphes'],
+    answer:'Marquer une pause à la virgule',
     hint:'La ponctuation guide le lecteur sur où s\'arrêter.',
     explanation:'La <b>ponctuation</b> indique au lecteur les pauses. La virgule (,) marque une courte pause ; le point (.) marque un arrêt ; le point d\'exclamation exprime une émotion forte.' }),
 
   makeMCQ({ id:'g7fr-eo-003', chapterId:'g7fr-eo', difficulty:2, subsection:'lecture_voix_haute',
     question:'Pourquoi est-il important de bien articuler lors d\'une lecture à voix haute ?',
-    options:['Pour que l\'auditeur comprenne clairement chaque mot','Pour lire plus vite','Pour impressionner le professeur','Pour éviter d\'apprendre le texte'],
-    answer:'Pour que l\'auditeur comprenne clairement chaque mot',
+    options:['Pour que l\'auditeur comprenne','Pour éviter d\'apprendre le texte','Pour lire beaucoup plus vite','Pour impressionner le professeur'],
+    answer:'Pour que l\'auditeur comprenne',
     hint:'Une bonne articulation rend la parole compréhensible.',
     explanation:'<b>Articuler</b> signifie prononcer clairement chaque son et chaque syllabe. Cela permet à l\'auditeur de comprendre sans effort.' }),
 
@@ -128,8 +128,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-eo-005', chapterId:'g7fr-eo', difficulty:1, subsection:'expression_confiance',
     question:'Pour s\'exprimer avec confiance à l\'oral, il faut :',
-    options:['Regarder son auditoire et parler clairement','Chuchoter et regarder par terre','Lire ses notes sans lever les yeux','Parler très vite pour finir rapidement'],
-    answer:'Regarder son auditoire et parler clairement',
+    options:['Regarder son auditoire et parler','Chuchoter et regarder par terre','Lire ses notes sans lever la tête','Parler très vite pour finir vite'],
+    answer:'Regarder son auditoire et parler',
     hint:'Le contact visuel montre qu\'on est sûr de ce qu\'on dit.',
     explanation:'S\'exprimer avec <b>confiance</b> implique de regarder son auditoire (contact visuel), de parler clairement et à un rythme approprié.' }),
 
@@ -149,8 +149,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-eo-008', chapterId:'g7fr-eo', difficulty:3, subsection:'expression_confiance',
     question:'Lorsqu\'on hésite en parlant, quelle expression peut-on utiliser pour gagner du temps ?',
-    options:['"C\'est-à-dire..." ou "En d\'autres termes..."','Arrêter de parler','Parler plus vite','Répéter le même mot plusieurs fois'],
-    answer:'"C\'est-à-dire..." ou "En d\'autres termes..."',
+    options:['"C\'est-à-dire..."','"Euh... euh... euh..."','"Tant pis, j\'abandonne."','"Vite, il faut finir !"'],
+    answer:'"C\'est-à-dire..."',
     hint:'Ces expressions permettent de reformuler et de mieux expliquer.',
     explanation:'Des expressions comme <b>"c\'est-à-dire"</b> ou <b>"en d\'autres termes"</b> permettent de reformuler une idée, de gagner du temps et de clarifier sa pensée.' }),
 
@@ -158,8 +158,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-eo-009', chapterId:'g7fr-eo', difficulty:1, subsection:'lexique_approprie',
     question:'Utiliser un lexique approprié signifie :',
-    options:['Choisir les mots qui conviennent à la situation','Utiliser toujours les mêmes mots','Parler uniquement en créole','Inventer de nouveaux mots'],
-    answer:'Choisir les mots qui conviennent à la situation',
+    options:['Choisir les mots qui conviennent','Parler uniquement en créole','Inventer de nouveaux mots','Utiliser toujours les mêmes mots'],
+    answer:'Choisir les mots qui conviennent',
     hint:'On ne parle pas de la même façon à son meilleur ami et à son directeur d\'école.',
     explanation:'Un <b>lexique approprié</b> signifie choisir les bons mots selon le contexte : un langage soutenu avec les adultes, un langage familier avec les amis.' }),
 
@@ -172,7 +172,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-eo-011', chapterId:'g7fr-eo', difficulty:2, subsection:'lexique_approprie',
     question:'Pour exprimer son accord à l\'oral, on peut dire :',
-    options:['Je suis d\'accord avec toi.','Je n\'aime pas ça.','Tais-toi !','C\'est faux.'],
+    options:['Je suis d\'accord avec toi.','Je ne suis pas d\'accord.','Tu as complètement tort.','Je n\'aime pas du tout ça.'],
     answer:'Je suis d\'accord avec toi.',
     hint:'Cette expression montre qu\'on partage le même avis.',
     explanation:'<b>"Je suis d\'accord avec toi"</b> est une expression courante pour montrer son accord. D\'autres expressions : "En effet", "C\'est juste", "Tout à fait".' }),
@@ -188,22 +188,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ce-001', chapterId:'g7fr-ce', difficulty:1, subsection:'idee_principale',
     question:'L\'idée principale d\'un texte est :',
-    options:['L\'idée la plus importante, celle dont parle tout le texte','Le titre du texte','La dernière phrase du texte','Les mots difficiles'],
-    answer:'L\'idée la plus importante, celle dont parle tout le texte',
+    options:['L\'idée la plus importante','La dernière phrase du texte','Les mots difficiles du texte','Le titre écrit en haut'],
+    answer:'L\'idée la plus importante',
     hint:'L\'idée principale résume ce dont parle l\'ensemble du texte.',
     explanation:'L\'<b>idée principale</b> est le message central du texte. Toutes les autres informations la développent ou l\'illustrent.' }),
 
   makeMCQ({ id:'g7fr-ce-002', chapterId:'g7fr-ce', difficulty:2, subsection:'idee_principale',
     question:'Comment trouve-t-on l\'idée principale d\'un texte ?',
-    options:['En lisant le texte en entier et en demandant : "De quoi parle ce texte ?"','En lisant seulement la première phrase','En comptant les mots','En regardant les images'],
-    answer:'En lisant le texte en entier et en demandant : "De quoi parle ce texte ?"',
+    options:['En lisant le texte en entier','En lisant la première phrase','En comptant les mots du texte','En regardant les images'],
+    answer:'En lisant le texte en entier',
     hint:'La question "De quoi parle ce texte ?" guide vers l\'idée principale.',
     explanation:'Pour dégager l\'<b>idée principale</b>, on lit le texte en entier, puis on se demande : "Quel est le sujet central ?" ou "Qu\'est-ce que l\'auteur veut dire essentiellement ?"' }),
 
   makeMCQ({ id:'g7fr-ce-003', chapterId:'g7fr-ce', difficulty:2, subsection:'idee_principale',
     question:'Les idées secondaires dans un texte servent à :',
-    options:['Illustrer, expliquer ou compléter l\'idée principale','Remplacer l\'idée principale','Contredire l\'auteur','Former le titre du texte'],
-    answer:'Illustrer, expliquer ou compléter l\'idée principale',
+    options:['Compléter l\'idée principale','Remplacer l\'idée principale','Contredire l\'auteur du texte','Former le titre du texte'],
+    answer:'Compléter l\'idée principale',
     hint:'Les idées secondaires apportent des détails supplémentaires.',
     explanation:'Les <b>idées secondaires</b> développent l\'idée principale en ajoutant des exemples, des précisions ou des explications.' }),
 
@@ -218,7 +218,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ce-005', chapterId:'g7fr-ce', difficulty:1, subsection:'information_explicite',
     question:'Une information explicite dans un texte est une information qui est :',
-    options:['Directement écrite dans le texte','Cachée entre les lignes','À deviner','Inventée par le lecteur'],
+    options:['Directement écrite dans le texte','Cachée entre les lignes du texte','Inventée par le lecteur lui-même','À deviner grâce aux indices'],
     answer:'Directement écrite dans le texte',
     hint:'"Explicite" vient du latin "explicitus" qui signifie "développé, clair".',
     explanation:'Une information <b>explicite</b> est clairement écrite dans le texte. On n\'a pas besoin de la déduire — elle est dite directement.' }),
@@ -232,24 +232,24 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ce-007', chapterId:'g7fr-ce', difficulty:2, subsection:'information_explicite',
     question:'Pour repérer des informations explicites, on doit :',
-    options:['Lire attentivement et souligner les informations importantes','Imaginer l\'histoire','Ne lire que le titre','Compter les paragraphes'],
-    answer:'Lire attentivement et souligner les informations importantes',
+    options:['Lire et souligner le texte','Compter les paragraphes','Ne lire que le titre','Imaginer la fin du texte'],
+    answer:'Lire et souligner le texte',
     hint:'La lecture active consiste à marquer les informations clés.',
     explanation:'La <b>lecture active</b> — souligner, encadrer, annoter — aide à repérer les informations explicites directement présentes dans le texte.' }),
 
   makeMCQ({ id:'g7fr-ce-008', chapterId:'g7fr-ce', difficulty:3, subsection:'information_explicite',
     question:'Lisez : "Le colibri, le plus petit oiseau du monde, bat ses ailes jusqu\'à 80 fois par seconde." Quelle information est explicite ?',
-    options:['Le colibri bat ses ailes 80 fois par seconde','Le colibri vit à Maurice','Le colibri mange des fleurs','Le colibri est en danger'],
-    answer:'Le colibri bat ses ailes 80 fois par seconde',
+    options:['Le colibri est le plus petit oiseau','Le colibri vit à l\'île Maurice','Le colibri mange surtout des fleurs','Le colibri est un oiseau en danger'],
+    answer:'Le colibri est le plus petit oiseau',
     hint:'Lisez la phrase attentivement — quelle donnée chiffrée est mentionnée ?',
-    explanation:'La phrase mentionne explicitement <b>80 fois par seconde</b>. Les autres options ne sont pas mentionnées dans la phrase.' }),
+    explanation:'La phrase énonce explicitement deux choses : que le colibri est <b>le plus petit oiseau du monde</b>, et qu\'il bat des ailes jusqu\'à 80 fois par seconde. Les autres options ne sont mentionnées nulle part dans la phrase.' }),
 
   // ── Compréhension écrite — vocabulaire ───────────────────────────────────
 
   makeMCQ({ id:'g7fr-ce-009', chapterId:'g7fr-ce', difficulty:1, subsection:'vocabulaire',
     question:'Un synonyme est un mot qui a :',
-    options:['Un sens proche ou identique à un autre mot','Un sens opposé à un autre mot','La même longueur qu\'un autre mot','La même lettre initiale'],
-    answer:'Un sens proche ou identique à un autre mot',
+    options:['Un sens proche d\'un autre mot','Un sens opposé à un autre mot','La même longueur qu\'un autre mot','La même lettre initiale qu\'un mot'],
+    answer:'Un sens proche d\'un autre mot',
     hint:'Syn- vient du grec et signifie "avec, ensemble".',
     explanation:'Un <b>synonyme</b> est un mot qui a le même sens ou un sens très proche. Exemple : "rapide" et "vite" sont des synonymes.' }),
 
@@ -269,8 +269,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ce-012', chapterId:'g7fr-ce', difficulty:2, subsection:'vocabulaire',
     question:'Pour comprendre un mot inconnu dans un texte, on peut :',
-    options:['Utiliser le contexte de la phrase pour deviner son sens','L\'ignorer complètement','Recommencer la lecture depuis le début','Fermer le livre'],
-    answer:'Utiliser le contexte de la phrase pour deviner son sens',
+    options:['Utiliser le contexte de la phrase','Recommencer la lecture au début','L\'ignorer complètement toujours','Fermer le livre et abandonner'],
+    answer:'Utiliser le contexte de la phrase',
     hint:'Les mots autour d\'un mot inconnu aident souvent à comprendre son sens.',
     explanation:'Le <b>contexte</b> — les mots, les phrases autour — aide souvent à comprendre un mot inconnu. C\'est la stratégie la plus efficace avant de chercher dans un dictionnaire.' }),
 
@@ -278,14 +278,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ee-001', chapterId:'g7fr-ee', difficulty:1, subsection:'textes_fonctionnels',
     question:'Un texte fonctionnel est un texte qui :',
-    options:['Sert à accomplir une action précise dans la vie quotidienne','Raconte une histoire imaginaire','Décrit un paysage','Exprime des émotions'],
-    answer:'Sert à accomplir une action précise dans la vie quotidienne',
+    options:['Sert à agir dans la vie réelle','Raconte une histoire inventée','Décrit un paysage de campagne','Exprime les émotions du poète'],
+    answer:'Sert à agir dans la vie réelle',
     hint:'Ces textes ont une utilité pratique.',
     explanation:'Un <b>texte fonctionnel</b> a un but pratique précis : inviter (lettre d\'invitation), informer (affiche), donner des instructions (mode d\'emploi).' }),
 
   makeMCQ({ id:'g7fr-ee-002', chapterId:'g7fr-ee', difficulty:1, subsection:'textes_fonctionnels',
     question:'Laquelle de ces productions est un texte fonctionnel ?',
-    options:['Une lettre d\'invitation','Un conte de fées','Un poème','Une chanson'],
+    options:['Une lettre d\'invitation','Une chanson populaire','Un conte de fées','Un poème en vers'],
     answer:'Une lettre d\'invitation',
     hint:'Ce texte sert à inviter quelqu\'un — il a une fonction précise.',
     explanation:'Une <b>lettre d\'invitation</b> est un texte fonctionnel car elle sert à informer quelqu\'un d\'un événement et à l\'inviter à y participer.' }),
@@ -299,8 +299,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ee-004', chapterId:'g7fr-ee', difficulty:2, subsection:'textes_fonctionnels',
     question:'Une affiche publicitaire doit contenir :',
-    options:['Un titre accrocheur, une illustration et un message clair','Plusieurs longs paragraphes','Des notes de bas de page','Une introduction et une conclusion'],
-    answer:'Un titre accrocheur, une illustration et un message clair',
+    options:['Un titre, une image, un message','Plusieurs longs paragraphes','Un sommaire et une bibliographie','Une introduction et une conclusion'],
+    answer:'Un titre, une image, un message',
     hint:'Une affiche doit attirer l\'attention rapidement.',
     explanation:'Une affiche efficace contient un <b>titre accrocheur</b> pour attirer l\'attention, une <b>illustration</b> et un <b>message court et clair</b>. Les longues phrases ne conviennent pas à ce format.' }),
 
@@ -308,8 +308,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ee-005', chapterId:'g7fr-ee', difficulty:1, subsection:'organisation_paragraphes',
     question:'Un paragraphe est composé de :',
-    options:['Plusieurs phrases qui développent une seule idée','Un seul mot','Une seule lettre','Des images uniquement'],
-    answer:'Plusieurs phrases qui développent une seule idée',
+    options:['Plusieurs phrases sur une idée','Une seule lettre de l\'alphabet','Des images sans aucune phrase','Un seul mot toujours répété'],
+    answer:'Plusieurs phrases sur une idée',
     hint:'Un paragraphe = une idée développée.',
     explanation:'Un <b>paragraphe</b> regroupe plusieurs phrases qui développent une même idée. On va à la ligne et on laisse un alinéa pour commencer un nouveau paragraphe.' }),
 
@@ -329,8 +329,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ee-008', chapterId:'g7fr-ee', difficulty:3, subsection:'organisation_paragraphes',
     question:'Pourquoi doit-on utiliser des connecteurs logiques dans un texte ?',
-    options:['Pour assurer la cohérence et la progression des idées','Pour allonger le texte inutilement','Pour impressionner le correcteur','Pour éviter les fautes d\'orthographe'],
-    answer:'Pour assurer la cohérence et la progression des idées',
+    options:['Pour lier et enchaîner les idées','Pour allonger le texte inutilement','Pour impressionner le correcteur','Pour éviter les fautes d\'accord'],
+    answer:'Pour lier et enchaîner les idées',
     hint:'Les connecteurs créent des liens entre les idées.',
     explanation:'Les <b>connecteurs logiques</b> (d\'abord, ensuite, enfin, cependant, donc…) créent des liens entre les idées et assurent la cohérence du texte.' }),
 
@@ -338,8 +338,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ee-009', chapterId:'g7fr-ee', difficulty:1, subsection:'correction_syntaxe',
     question:'La syntaxe, c\'est :',
-    options:['L\'organisation des mots dans une phrase pour qu\'elle ait un sens','La façon d\'écrire les lettres','Le nombre de syllabes d\'un mot','La définition d\'un mot'],
-    answer:'L\'organisation des mots dans une phrase pour qu\'elle ait un sens',
+    options:['L\'ordre des mots dans la phrase','La façon d\'écrire les lettres','Le nombre de syllabes d\'un mot','La définition exacte d\'un mot'],
+    answer:'L\'ordre des mots dans la phrase',
     hint:'Syntaxe = façon d\'agencer les mots correctement.',
     explanation:'La <b>syntaxe</b> désigne les règles qui organisent les mots dans une phrase. En français, l\'ordre habituel est : Sujet + Verbe + Complément.' }),
 
@@ -375,15 +375,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-litterature-002', chapterId:'g7fr-litterature', difficulty:1, subsection:'genres_litteraires',
     question:'Un poème se reconnaît surtout à :',
-    options:['Ses vers organisés en strophes et ses effets musicaux','Ses longs paragraphes narratifs','Ses personnages qui se disputent sur scène','Ses instructions étape par étape'],
-    answer:'Ses vers organisés en strophes et ses effets musicaux',
+    options:['Ses vers groupés en strophes','Ses personnages sur une scène','Ses instructions étape par étape','Ses longs paragraphes narratifs'],
+    answer:'Ses vers groupés en strophes',
     hint:'Un poème joue avec les sons, le rythme et les images.',
     explanation:'Un <b>poème</b> est composé de <b>vers</b> (lignes) groupés en <b>strophes</b>. Il crée des effets musicaux grâce à la rime, le rythme et les images (métaphores, comparaisons).' }),
 
   makeMCQ({ id:'g7fr-litterature-003', chapterId:'g7fr-litterature', difficulty:2, subsection:'genres_litteraires',
     question:'Le théâtre se distingue des autres genres par :',
-    options:['La présence de répliques, de didascalies et d\'actes','L\'absence totale de personnages','L\'utilisation exclusive de la rime','La narration à la première personne'],
-    answer:'La présence de répliques, de didascalies et d\'actes',
+    options:['Ses répliques et ses didascalies','Son emploi exclusif de la rime','Sa narration à la première personne','Son absence totale de personnages'],
+    answer:'Ses répliques et ses didascalies',
     hint:'Une pièce de théâtre est écrite pour être jouée sur scène.',
     explanation:'Le <b>théâtre</b> est caractérisé par les <b>répliques</b> (ce que disent les personnages), les <b>didascalies</b> (indications de mise en scène) et la division en <b>actes</b> et en <b>scènes</b>.' }),
 
@@ -398,15 +398,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-litterature-005', chapterId:'g7fr-litterature', difficulty:1, subsection:'types_textes',
     question:'Un texte narratif raconte :',
-    options:['Une histoire avec des personnages et des événements','Les caractéristiques d\'un lieu','Comment faire quelque chose','Une opinion sur un sujet'],
-    answer:'Une histoire avec des personnages et des événements',
+    options:['Une histoire avec des personnages','Les caractéristiques d\'un paysage','Comment faire quelque chose','Une opinion sur un sujet'],
+    answer:'Une histoire avec des personnages',
     hint:'"Narrer" signifie raconter.',
     explanation:'Un texte <b>narratif</b> raconte une histoire avec des personnages, un lieu, des événements et souvent un début, un milieu et une fin (schéma narratif).' }),
 
   makeMCQ({ id:'g7fr-litterature-006', chapterId:'g7fr-litterature', difficulty:1, subsection:'types_textes',
     question:'Un texte descriptif sert à :',
-    options:['Donner une image précise d\'un lieu, d\'une personne ou d\'un objet','Raconter une histoire','Donner des instructions','Convaincre le lecteur'],
-    answer:'Donner une image précise d\'un lieu, d\'une personne ou d\'un objet',
+    options:['Décrire un lieu ou un objet','Raconter une histoire vécue','Convaincre le lecteur','Donner des instructions'],
+    answer:'Décrire un lieu ou un objet',
     hint:'"Décrire" c\'est peindre avec des mots.',
     explanation:'Un texte <b>descriptif</b> donne une représentation détaillée d\'un lieu, d\'une personne ou d\'un objet, en faisant appel aux cinq sens.' }),
 
@@ -419,7 +419,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-litterature-008', chapterId:'g7fr-litterature', difficulty:2, subsection:'types_textes',
     question:'Le schéma narratif d\'un récit comprend dans l\'ordre :',
-    options:['Situation initiale — Élément perturbateur — Péripéties — Résolution — Situation finale','Introduction — Développement — Conclusion','Titre — Corps — Moral','Exposition — Crise — Dénouement'],
+    options:['Situation initiale — Élément perturbateur — Péripéties — Résolution — Situation finale','Situation initiale — Péripéties — Élément perturbateur — Résolution — Situation finale','Élément perturbateur — Situation initiale — Péripéties — Situation finale — Résolution','Situation initiale — Résolution — Élément perturbateur — Péripéties — Situation finale'],
     answer:'Situation initiale — Élément perturbateur — Péripéties — Résolution — Situation finale',
     hint:'Le schéma narratif est la structure d\'un récit en 5 étapes.',
     explanation:'Le <b>schéma narratif</b> décrit la structure d\'un récit : 1. Situation initiale (le calme au début), 2. Élément perturbateur (un problème survient), 3. Péripéties (actions des personnages), 4. Résolution (le problème est résolu), 5. Situation finale.' }),
@@ -428,29 +428,29 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-litterature-009', chapterId:'g7fr-litterature', difficulty:1, subsection:'conte_bd',
     question:'Un conte commence souvent par :',
-    options:['"Il était une fois..."','"En conclusion..."','"Premièrement..."','"Cher lecteur..."'],
+    options:['"Il était une fois..."','"Cher lecteur, bonjour..."','"En conclusion, donc..."','"Premièrement, notons..."'],
     answer:'"Il était une fois..."',
     hint:'Cette formule magique annonce le début d\'un conte.',
     explanation:'La formule <b>"Il était une fois..."</b> est la formule traditionnelle d\'ouverture des contes. Elle situe l\'histoire dans un temps indéterminé, magique.' }),
 
   makeMCQ({ id:'g7fr-litterature-010', chapterId:'g7fr-litterature', difficulty:1, subsection:'conte_bd',
     question:'La morale d\'un conte est :',
-    options:['La leçon de vie que le conte veut transmettre','Le nom de l\'auteur','Le titre du conte','Le nombre de personnages'],
-    answer:'La leçon de vie que le conte veut transmettre',
+    options:['La leçon de vie du conte','Le nombre de personnages','Le nom de l\'auteur du conte','Le titre écrit sur la page'],
+    answer:'La leçon de vie du conte',
     hint:'Après le "ils vécurent heureux", quelle leçon retient-on ?',
     explanation:'La <b>morale</b> est le message ou la leçon de vie que l\'auteur veut transmettre à travers le conte. Ex. : "La Cigale et la Fourmi" → Il faut travailler en été pour avoir des réserves en hiver.' }),
 
   makeMCQ({ id:'g7fr-litterature-011', chapterId:'g7fr-litterature', difficulty:2, subsection:'conte_bd',
     question:'Dans une bande dessinée (BD), les paroles des personnages apparaissent dans :',
-    options:['Des bulles (ou phylactères)','Des parenthèses','Des notes de bas de page','Des paragraphes'],
-    answer:'Des bulles (ou phylactères)',
+    options:['Des bulles ou phylactères','Des notes de bas de page','Des paragraphes serrés','Des parenthèses simples'],
+    answer:'Des bulles ou phylactères',
     hint:'Ces formes arrondies contiennent les paroles des personnages.',
     explanation:'Dans une <b>bande dessinée</b>, les paroles sont dans des <b>bulles</b> (phylactères) — formes rondes ou ovales qui sortent de la bouche du personnage. Les pensées sont dans des bulles nuageuses.' }),
 
   makeMCQ({ id:'g7fr-litterature-012', chapterId:'g7fr-litterature', difficulty:3, subsection:'conte_bd',
     question:'Quelle est la différence principale entre un conte traditionnel et un conte moderne ?',
-    options:['Le conte traditionnel vient de la tradition orale ; le conte moderne est souvent écrit par un auteur connu','Le conte traditionnel est plus long','Le conte moderne n\'a pas de morale','Le conte traditionnel utilise toujours des animaux'],
-    answer:'Le conte traditionnel vient de la tradition orale ; le conte moderne est souvent écrit par un auteur connu',
+    options:['Le traditionnel vient de la tradition orale','Le moderne ne comporte jamais de morale','Le traditionnel est toujours plus long','Le traditionnel met toujours en scène des animaux'],
+    answer:'Le traditionnel vient de la tradition orale',
     hint:'Les contes traditionnels sont transmis de génération en génération oralement.',
     explanation:'Un <b>conte traditionnel</b> est d\'origine orale, souvent anonyme, transmis de génération en génération (ex. contes africains). Un <b>conte moderne</b> est écrit par un auteur identifié (ex. Perrault, Andersen).' })
 

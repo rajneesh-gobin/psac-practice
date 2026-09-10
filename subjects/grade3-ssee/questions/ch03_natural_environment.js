@@ -25,10 +25,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-003', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
     question:'What is the main function of the STEM of a plant?',
-    options:['To support the plant and carry water from roots to leaves','To absorb water from the soil','To make seeds','To attract insects for pollination'],
-    answer:'To support the plant and carry water from roots to leaves',
+    options:['To hold the plant up and carry water','To take water in from the soil surface','To attract insects to the plant flowers','To store the seeds until they drop'],
+    answer:'To hold the plant up and carry water',
     hint:'The stem is like a highway for water transport.',
-    explanation:'The <b>stem</b> supports the plant and acts as a transport highway, carrying water and minerals from the roots up to the leaves.' }),
+    explanation:'The <b>stem</b> holds the plant upright and works as a transport highway, carrying water and minerals from the roots up to the leaves. Roots take in water, flowers attract insects and fruits hold the seeds.'}),
 
   makeTF({ id:'g3ssee-nat-004', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
     question:'Flowers help plants to reproduce by producing seeds.',
@@ -44,16 +44,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-006', chapterId:'g3ssee-natural', difficulty:2, subsection:'plants',
     question:'What do plants need to make their own food through photosynthesis?',
-    options:['Sunlight, water and carbon dioxide','Only water','Only sunlight','Sunlight and soil only'],
+    options:['Sunlight, water and carbon dioxide','Sunlight, water and salty seawater','Moonlight, water and oxygen gas','Darkness, sand and carbon dioxide'],
     answer:'Sunlight, water and carbon dioxide',
     hint:'Plants are like factories that need three raw materials.',
-    explanation:'Plants use <b>sunlight, water</b> (from the soil) and <b>carbon dioxide</b> (from the air) to make their own food through photosynthesis.' }),
+    explanation:'Plants make their own food using <b>sunlight</b>, <b>water</b> from the soil and <b>carbon dioxide</b> from the air. Moonlight, darkness and seawater cannot drive photosynthesis.'}),
 
   makeMCQ({ id:'g3ssee-nat-007', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
     question:'Which gas do plants release during photosynthesis that humans breathe?',
-    options:['Oxygen','Carbon dioxide','Nitrogen','Hydrogen'],
+    options:['Oxygen','Hydrogen','Nitrogen','Helium'],
     answer:'Oxygen',
-    explanation:'During photosynthesis, plants release <b>oxygen</b> into the air. Humans and animals breathe oxygen to survive.' }),
+    explanation:'During photosynthesis plants release <b>oxygen</b> into the air, and humans and animals breathe it to stay alive. Hydrogen, nitrogen and helium are not released by leaves.'}),
 
   makeMCQ({ id:'g3ssee-nat-008', chapterId:'g3ssee-natural', difficulty:2, subsection:'plants',
     question:'A mango tree is an example of a ___ plant.',
@@ -83,16 +83,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-012', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
     question:'Which of the following is a plant that is native to Mauritius?',
-    options:['Trochetia boutoniana (bouton d\'or)','Rose bush','Cactus','Sunflower'],
-    answer:'Trochetia boutoniana (bouton d\'or)',
+    options:['Trochetia boutoniana','Yellow garden sunflower','Red climbing rose bush','Spiky desert cactus'],
+    answer:'Trochetia boutoniana',
     hint:'The national flower of Mauritius.',
-    explanation:'The <b>Trochetia boutoniana</b>, also called "bouton d\'or" or "boucle d\'oreille", is the national flower of Mauritius and is native to the island.' }),
+    explanation:'The <b>Trochetia boutoniana</b>, also called "bouton d\'or", is the national flower of Mauritius and grows naturally nowhere else. Sunflowers, roses and cacti were all brought here from other countries.'}),
 
   makeMCQ({ id:'g3ssee-nat-013', chapterId:'g3ssee-natural', difficulty:2, subsection:'plants',
     question:'Why is it important to protect the forests of Mauritius such as the Black River Gorges?',
-    options:['They are home to rare and native species of plants and animals','They produce sugar for export','They are where buses park at night','They are sources of electricity'],
-    answer:'They are home to rare and native species of plants and animals',
-    explanation:'Forests like the <b>Black River Gorges</b> protect rare and endemic Mauritian species of plants and animals that are found nowhere else on Earth.' }),
+    options:['They are home to rare native species','They produce sugar for export','They are a source of electricity','They are where buses park at night'],
+    answer:'They are home to rare native species',
+    explanation:'Forests like the Black River Gorges shelter rare <b>endemic</b> plants and animals found nowhere else on Earth. They do not grow sugar, make electricity or park buses.'}),
 
   makeTF({ id:'g3ssee-nat-014', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
     question:'Cutting down all trees in a forest has no effect on the environment.',
@@ -101,10 +101,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-015', chapterId:'g3ssee-natural', difficulty:3, subsection:'plants',
     question:'A plant is placed in a dark cupboard for several days. What will most likely happen?',
-    options:['The plant will turn yellow and die without sunlight','The plant will grow very fast','The plant will produce more flowers','The plant will stay exactly the same'],
-    answer:'The plant will turn yellow and die without sunlight',
+    options:['It will turn yellow and slowly die','It will grow much faster than usual','It will produce many more flowers','It will stay exactly as it is now'],
+    answer:'It will turn yellow and slowly die',
     hint:'Think about what plants need to make food.',
-    explanation:'Without sunlight, plants cannot carry out photosynthesis to make food. The leaves will <b>turn yellow</b> (as chlorophyll breaks down) and the plant will eventually die.' }),
+    explanation:'Without sunlight a plant cannot photosynthesise to make food. Its chlorophyll breaks down, the leaves turn <b>yellow</b> and in the end the plant dies. Darkness never speeds up growth or flowering.'}),
 
 // ── animals (016-045) ──────────────────────────────────────────────────────
 
@@ -117,10 +117,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-017', chapterId:'g3ssee-natural', difficulty:1, subsection:'animals',
     question:'Which of the following is a native bird of Mauritius that is now endangered?',
-    options:['Pink pigeon','Dodo','Ostrich','Parrot'],
+    options:['Pink pigeon','Grey parrot','Common crow','Grey ostrich'],
     answer:'Pink pigeon',
     hint:'This beautiful bird is still alive but at risk.',
-    explanation:'The <b>pink pigeon</b> (pigeon rose) is a native Mauritian bird that is endangered — its numbers are very small and conservation efforts are needed to save it.' }),
+    explanation:'The <b>pink pigeon</b> (pigeon rose) is a native Mauritian bird that came close to extinction and is still endangered. Parrots, crows and ostriches are not native Mauritian birds.'}),
 
   makeTF({ id:'g3ssee-nat-018', chapterId:'g3ssee-natural', difficulty:1, subsection:'animals',
     question:'Animals with a backbone are called vertebrates.',
@@ -129,10 +129,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-019', chapterId:'g3ssee-natural', difficulty:2, subsection:'animals',
     question:'Which of the following is an INVERTEBRATE (no backbone)?',
-    options:['Butterfly','Dog','Fish','Pigeon'],
+    options:['Butterfly','Sparrow','Mongoose','Goldfish'],
     answer:'Butterfly',
     hint:'Invertebrates do NOT have a backbone.',
-    explanation:'A <b>butterfly</b> is an invertebrate — it has no backbone. Dogs, fish and pigeons all have a backbone, making them vertebrates.' }),
+    explanation:'A <b>butterfly</b> is an invertebrate — it has no backbone. Sparrows, mongooses and goldfish all have a backbone, so they are vertebrates.'}),
 
   makeMCQ({ id:'g3ssee-nat-020', chapterId:'g3ssee-natural', difficulty:1, subsection:'animals',
     question:'Which group of vertebrates breathes through gills?',
@@ -143,10 +143,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-021', chapterId:'g3ssee-natural', difficulty:2, subsection:'animals',
     question:'The Mauritius kestrel is a bird of prey found only in Mauritius. It eats ___.',
-    options:['Lizards and insects','Only grass and leaves','Only fish','Only other birds'],
+    options:['Lizards and insects','Grass and dry leaves','Only fish from rivers','Fruit and tree bark'],
     answer:'Lizards and insects',
     hint:'This bird is a predator — it hunts for food.',
-    explanation:'The <b>Mauritius kestrel</b> is a small falcon that hunts and eats lizards, insects and small birds.' }),
+    explanation:'The Mauritius kestrel is a small falcon that hunts <b>lizards, insects</b> and small birds. It does not eat plants and it does not fish.'}),
 
   makeMCQ({ id:'g3ssee-nat-022', chapterId:'g3ssee-natural', difficulty:1, subsection:'animals',
     question:'Which of the following is a MAMMAL?',
@@ -176,15 +176,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-026', chapterId:'g3ssee-natural', difficulty:2, subsection:'animals',
     question:'The green turtle is sometimes seen around Mauritius. Why is it important to protect it?',
-    options:['It is an endangered species that helps keep the ocean ecosystem healthy','It produces sugarcane','It builds houses for other animals','It makes the sea salty'],
-    answer:'It is an endangered species that helps keep the ocean ecosystem healthy',
-    explanation:'The <b>green turtle</b> is endangered and plays an important role in marine ecosystems by grazing on sea grass, which keeps it healthy.' }),
+    options:['It is endangered and keeps the sea healthy','It makes the seawater around the island salty','It builds underwater homes for other animals','It grows the sugar cane found on the beach'],
+    answer:'It is endangered and keeps the sea healthy',
+    explanation:'The green turtle is an <b>endangered species</b>, and by grazing on sea grass it keeps the ocean ecosystem healthy. It does not make the sea salty, build homes or grow crops.'}),
 
   makeMCQ({ id:'g3ssee-nat-027', chapterId:'g3ssee-natural', difficulty:1, subsection:'animals',
     question:'What is a habitat?',
-    options:['The natural place where an animal or plant lives','A type of food','A school subject','A weather measurement'],
-    answer:'The natural place where an animal or plant lives',
-    explanation:'A <b>habitat</b> is the natural environment where a plant or animal lives — for example, a forest, a coral reef or a freshwater stream.' }),
+    options:['The place where an animal lives','A measurement of the weather','A subject studied at school','A type of food that animals eat'],
+    answer:'The place where an animal lives',
+    explanation:'A <b>habitat</b> is the natural place where a plant or animal lives — a forest, a coral reef or a freshwater stream, for example.'}),
 
   makeTF({ id:'g3ssee-nat-028', chapterId:'g3ssee-natural', difficulty:1, subsection:'animals',
     question:'Cutting down forests destroys animal habitats.',
@@ -192,18 +192,18 @@ STATIC_QUESTIONS.push(
     explanation:'Yes! Deforestation (cutting down forests) <b>destroys habitats</b> for many animals, leading to a loss of biodiversity.' }),
 
   makeMCQ({ id:'g3ssee-nat-029', chapterId:'g3ssee-natural', difficulty:3, subsection:'animals',
-    question:'The dodo became extinct partly because sailors hunted it. Why were dodos easy to catch?',
-    options:['They could not fly and had no fear of humans','They were very fast runners','They were very small','They could swim away quickly'],
-    answer:'They could not fly and had no fear of humans',
+    question:'The dodo became extinct partly because sailors hunted it. Why was the dodo easy to catch?',
+    options:['It could not fly and had no fear','It was smaller than a chicken','It could run faster than a horse','It could swim away very quickly'],
+    answer:'It could not fly and had no fear',
     hint:'The dodo had lived on an island without predators before humans arrived.',
-    explanation:'Because dodos had <b>never encountered humans or predators</b> before, they had no fear. They also could not fly, making them very easy to catch.' }),
+    explanation:'Dodos had never met humans or predators, so they had <b>no fear</b> of them, and they <b>could not fly</b> away. They were not small, not fast and not swimmers.'}),
 
   makeMCQ({ id:'g3ssee-nat-030', chapterId:'g3ssee-natural', difficulty:2, subsection:'animals',
     question:'Which of the following animals is NOT native to Mauritius?',
-    options:['Lion','Mauritius kestrel','Pink pigeon','Green gecko'],
-    answer:'Lion',
+    options:['African lion','Mauritius kestrel','Pink pigeon','Green gecko'],
+    answer:'African lion',
     hint:'This animal is native to Africa, not islands in the Indian Ocean.',
-    explanation:'<b>Lions</b> are native to Africa and are not found naturally in Mauritius. The Mauritius kestrel, pink pigeon and green gecko are all native to Mauritius.' }),
+    explanation:'Lions live naturally in Africa and have never lived wild in Mauritius. The <b>Mauritius kestrel</b>, the <b>pink pigeon</b> and the <b>green gecko</b> are all native Mauritian animals.'}),
 
 // ── soil_rocks (031-075) ──────────────────────────────────────────────────
 
@@ -235,29 +235,29 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-035', chapterId:'g3ssee-natural', difficulty:1, subsection:'soil_rocks',
     question:'What is HUMUS in soil?',
-    options:['Decayed plant and animal material that makes soil fertile','A type of rock','A form of water','A layer of sand'],
-    answer:'Decayed plant and animal material that makes soil fertile',
-    explanation:'<b>Humus</b> is the dark, rich material in soil made from decayed plants and animals. It provides nutrients for plant growth and makes soil fertile.' }),
+    options:['Decayed plant and animal material','A hard layer of solid volcanic rock','A form of water found underground','A layer of very fine white sand'],
+    answer:'Decayed plant and animal material',
+    explanation:'<b>Humus</b> is the dark, rich material in soil formed from decayed plants and animals. It feeds plants and makes soil fertile. It is not rock, water or sand.'}),
 
   makeMCQ({ id:'g3ssee-nat-036', chapterId:'g3ssee-natural', difficulty:2, subsection:'soil_rocks',
     question:'Mauritius has reddish-brown soil called "latosol" in many areas. What gives it this colour?',
-    options:['Iron compounds','Blue clay','White sand','Green algae'],
+    options:['Iron compounds','Green algae','White chalk','Blue crystals'],
     answer:'Iron compounds',
     hint:'Rust is also reddish-brown and contains iron.',
-    explanation:'The reddish-brown colour of Mauritian <b>latosol</b> comes from iron compounds (iron oxide) in the soil, similar to how rust forms on metal.' }),
+    explanation:'The reddish-brown colour of Mauritian latosol comes from <b>iron compounds</b> (iron oxide) in the soil — the same chemistry that makes rust on metal.'}),
 
   makeMCQ({ id:'g3ssee-nat-037', chapterId:'g3ssee-natural', difficulty:1, subsection:'soil_rocks',
     question:'What is the main difference between a ROCK and SOIL?',
-    options:['Rock is hard and solid; soil is a mixture of small particles and organic matter','Rock is wet; soil is dry','Rock is black; soil is white','Rock is light; soil is very heavy'],
-    answer:'Rock is hard and solid; soil is a mixture of small particles and organic matter',
-    explanation:'<b>Rocks</b> are hard, solid pieces of mineral matter. <b>Soil</b> is a mixture of tiny rock particles, organic matter (humus), water, air and living organisms.' }),
+    options:['Rock is solid; soil is a loose mixture','Rock is light; soil is very heavy','Rock is always wet; soil is always dry','Rock is always black; soil is always white'],
+    answer:'Rock is solid; soil is a loose mixture',
+    explanation:'A <b>rock</b> is hard, solid mineral matter. <b>Soil</b> is a loose mixture of tiny rock particles, humus, water, air and living things. Colour and weight are not what tells them apart.'}),
 
   makeMCQ({ id:'g3ssee-nat-038', chapterId:'g3ssee-natural', difficulty:2, subsection:'soil_rocks',
     question:'What happens to soil when there are no plants to hold it in place?',
-    options:['It is washed away by rain — this is called soil erosion','It becomes harder and richer','It turns into rock','It stays exactly the same'],
-    answer:'It is washed away by rain — this is called soil erosion',
+    options:['It is washed away by the rain','It becomes harder and richer','It turns slowly into solid rock','It stays exactly as it was'],
+    answer:'It is washed away by the rain',
     hint:'Without roots, the soil has nothing to hold it.',
-    explanation:'Without plant roots to hold soil in place, <b>soil erosion</b> occurs — rainwater washes the soil away, making land less fertile.' }),
+    explanation:'Without plant roots to hold it, rain washes the soil away — this is <b>soil erosion</b>, and it leaves the land less fertile. Bare soil does not get richer, turn to rock or stay the same.'}),
 
   makeTF({ id:'g3ssee-nat-039', chapterId:'g3ssee-natural', difficulty:1, subsection:'soil_rocks',
     question:'Earthworms are helpful to plants because they loosen and improve the soil.',
@@ -266,10 +266,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-040', chapterId:'g3ssee-natural', difficulty:3, subsection:'soil_rocks',
     question:'A farmer notices that plants grow well in one part of the field but poorly in another. What might explain this difference?',
-    options:['The soil types are different — one area may have more nutrients','The plants choose where to grow','The weather is different on each side of the field','The rocks are a different colour'],
-    answer:'The soil types are different — one area may have more nutrients',
+    options:['The two soils hold different nutrients','The plants choose where they grow','The rocks there are a different colour','The weather differs across the field'],
+    answer:'The two soils hold different nutrients',
     hint:'Soil quality affects plant growth.',
-    explanation:'Plants grow better in <b>fertile soil</b> rich in nutrients. If one area has better soil (more humus, good drainage), plants will thrive there.' }),
+    explanation:'Plants grow better in fertile soil rich in <b>nutrients</b> and with good drainage. One part of a field can have quite different soil from another, which is why the growth differs.'}),
 
   makeMCQ({ id:'g3ssee-nat-041', chapterId:'g3ssee-natural', difficulty:2, subsection:'soil_rocks',
     question:'Which layer of soil contains most of the nutrients and living organisms?',
@@ -280,9 +280,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-042', chapterId:'g3ssee-natural', difficulty:1, subsection:'soil_rocks',
     question:'How are rocks broken down into smaller particles over time?',
-    options:['By weathering — the action of wind, water and temperature changes','By animals eating them','By plants watering them','By the moon\'s gravity'],
-    answer:'By weathering — the action of wind, water and temperature changes',
-    explanation:'<b>Weathering</b> is the process by which rocks are broken into smaller particles over time by the action of wind, rain and temperature changes.' }),
+    options:['By weathering from wind, water and heat','By animals chewing them into small pieces','By plants pouring rainwater over them','By the pull of the moon during the night'],
+    answer:'By weathering from wind, water and heat',
+    explanation:'<b>Weathering</b> is the slow breaking down of rock into smaller particles by wind, rain and changes in temperature. Animals, plants and the moon do not grind rock down.'}),
 
   makeTF({ id:'g3ssee-nat-043', chapterId:'g3ssee-natural', difficulty:1, subsection:'soil_rocks',
     question:'Planting trees on a hill can prevent soil erosion.',
@@ -298,10 +298,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-045', chapterId:'g3ssee-natural', difficulty:3, subsection:'soil_rocks',
     question:'A pupil squeezes a handful of wet clay soil tightly. What will she observe?',
-    options:['The clay holds its shape in a solid lump','The clay crumbles immediately','The clay turns into sand','The clay dissolves in the water'],
-    answer:'The clay holds its shape in a solid lump',
+    options:['It holds its shape in a solid lump','It dissolves away into the water','It changes into dry sandy grains','It crumbles apart almost at once'],
+    answer:'It holds its shape in a solid lump',
     hint:'Clay particles are very fine and stick together when wet.',
-    explanation:'<b>Clay soil</b> is very sticky when wet. When squeezed, it holds its shape because the fine clay particles bind tightly together.' })
+    explanation:'Wet <b>clay</b> soil is very sticky: its fine particles bind tightly, so a squeezed handful keeps its shape. Clay does not dissolve, turn into sand or crumble.'})
 
 );
 

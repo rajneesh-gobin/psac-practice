@@ -56,13 +56,8 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9ict-my-006', chapterId: 'g9ict-software-os', subsection: 'os_functions',
   difficulty: 2,
   question: 'Which of the following is a function of an <b>operating system</b>?',
-  options: [
-    'Manage the computer\'s hardware and software resources',
-    'Produce printed documents',
-    'Design web pages',
-    'Create spreadsheet formulas'
-  ],
-  answer: 'Manage the computer\'s hardware and software resources',
+  options:['Manage hardware and software','Design web pages with HTML','Create spreadsheet formulas','Produce printed documents'],
+  answer:'Manage hardware and software',
   explanation: 'The OS acts as an interface between hardware and software. Its key functions include memory management, processor scheduling, file management and device control.'
 }));
 
@@ -109,13 +104,8 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9ict-my-010', chapterId: 'g9ict-troubleshooting', subsection: 'troubleshooting_techniques',
   difficulty: 1,
   question: 'A <b>paper jam</b> inside a printer will:',
-  options: [
-    'Prevent the printer from working properly',
-    'Speed up printing',
-    'Cause the monitor to go blank',
-    'Delete files from the computer'
-  ],
-  answer: 'Prevent the printer from working properly',
+  options:['Stop the printer working','Blank the monitor screen','Delete files from the PC','Speed up the printing'],
+  answer:'Stop the printer working',
   explanation: 'A paper jam blocks the paper path inside the printer and stops it from printing. The jam must be carefully removed before printing can resume.'
 }));
 
@@ -272,13 +262,8 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9ict-my-025', chapterId: 'g9ict-networks', subsection: 'network_basics',
   difficulty: 2,
   question: 'Which of the following best describes the <b>Internet</b>?',
-  options: [
-    'A global network that connects millions of computers worldwide',
-    'Software used to browse web pages',
-    'A private company network accessible only to staff',
-    'A single computer that stores all web pages'
-  ],
-  answer: 'A global network that connects millions of computers worldwide',
+  options:['A global network of computers','Software for browsing web pages','A single computer storing pages','A private network for staff only'],
+  answer:'A global network of computers',
   explanation: 'The Internet is a worldwide system of interconnected networks. Web browsers are software used to access its resources; websites live on servers connected to this network.'
 }));
 
@@ -286,13 +271,8 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9ict-my-026', chapterId: 'g9ict-networks', subsection: 'network_components',
   difficulty: 2,
   question: 'A <b>computer virus</b> is best described as:',
-  options: [
-    'A software program that can damage or disrupt a computer',
-    'A hardware fault that slows down the processor',
-    'A type of network cable',
-    'An antivirus scanning tool'
-  ],
-  answer: 'A software program that can damage or disrupt a computer',
+  options:['A program that damages a computer','A hardware fault in the processor','A tool that scans for malware','A type of network cable'],
+  answer:'A program that damages a computer',
   explanation: 'A virus is malicious software (malware) that can copy itself, corrupt files, slow the system, or give unauthorised access. It is combated with antivirus software.'
 }));
 
@@ -320,13 +300,8 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9ict-my-029', chapterId: 'g9ict-internet', subsection: 'email',
   difficulty: 2,
   question: 'A <b>mailing list</b> is a collection of:',
-  options: [
-    'Names, email addresses and contact details used to send group messages',
-    'Deleted emails stored in the trash folder',
-    'Spam messages blocked by the mail filter',
-    'Folders used to organise received emails'
-  ],
-  answer: 'Names, email addresses and contact details used to send group messages',
+  options:['contact details for group email','spam blocked by the mail filter','folders for organising received mail','deleted emails in the trash folder'],
+  answer:'contact details for group email',
   explanation: 'A mailing list stores contact information so that one message can be sent to many recipients at once — used for newsletters, announcements and group communications.'
 }));
 
@@ -398,13 +373,8 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9ict-my-035', chapterId: 'g9ict-presentation', subsection: 'design_templates',
   difficulty: 2,
   question: 'Applying a <b>design template</b> to a presentation will:',
-  options: [
-    'Change the colours, fonts and background design of all slides at once',
-    'Delete all text from the slides',
-    'Add new slides to the presentation automatically',
-    'Convert the presentation to a video file'
-  ],
-  answer: 'Change the colours, fonts and background design of all slides at once',
+  options:['Change the colours and fonts used','Add new slides to the presentation','Delete all the text from the slides','Convert the presentation to a video'],
+  answer:'Change the colours and fonts used',
   explanation: 'A design template (theme) applies a consistent colour scheme, font set and background to every slide, giving the presentation a professional and uniform appearance.'
 }));
 
@@ -428,13 +398,8 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9ict-my-037', chapterId: 'g9ict-ethics-security', subsection: 'data_backups',
   difficulty: 1,
   question: '<b>Backup</b> means to:',
-  options: [
-    'Keep a copy of an original document in case the original is lost or damaged',
-    'Delete an original document after sending it',
-    'Print a document for safekeeping',
-    'Modify a document and save it under a new name'
-  ],
-  answer: 'Keep a copy of an original document in case the original is lost or damaged',
+  options:['Keep a spare copy of a document','Save a modified document under a new name','Delete the original after sending it','Print a document for safekeeping'],
+  answer:'Keep a spare copy of a document',
   explanation: 'A backup is a duplicate of data stored separately. If the original is lost, corrupted or accidentally deleted, the backup can be used to restore it.'
 }));
 

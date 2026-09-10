@@ -1,0 +1,75 @@
+'use strict';
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g8eng-writing-012', chapterId:'g8eng-writing', difficulty:2,
+    subsection:'extended_writing',
+    question:'An essay argues for a longer lunch break.<br>Which sentence begins the <b>counter-argument</b> paragraph?',
+    options:['Some teachers would object that…','My first reason is simply that…','In conclusion, the break should…','For example, on Monday we had…'],
+    answer:'Some teachers would object that…',
+    hint:'A counter-argument gives the other side its say before you answer it.',
+    explanation:'Naming an objection introduces the opposing view, which is what a counter-argument paragraph does. The others open a reason of your own, close the essay, or add an example to a point already made.' }),
+
+  makeMCQ({ id:'g8eng-writing-013', chapterId:'g8eng-writing', difficulty:2,
+    subsection:'editing_accuracy',
+    question:'Which sentence contains a <b>dangling modifier</b>?',
+    options:['Walking home, the rain started.','Walking home, I met my cousin.','Walking home, we saw a rainbow.','After we walked home, it rained.'],
+    answer:'Walking home, the rain started.',
+    hint:'Ask who or what is doing the walking in each sentence.',
+    explanation:'The opening phrase must describe the subject that follows it, and rain cannot walk. In the second and third the walkers are named at once, and the fourth turns the phrase into a full clause with its own subject.' }),
+
+  makeMCQ({ id:'g8eng-writing-014', chapterId:'g8eng-writing', difficulty:3,
+    subsection:'extended_writing',
+    question:'A body paragraph argues that homework builds independence, then adds two sentences about the school canteen.<br>What should the writer do?',
+    options:['Delete the canteen sentences','Move the topic sentence to end','Add a third canteen sentence','Change the paragraph to past tense'],
+    answer:'Delete the canteen sentences',
+    hint:'A paragraph should carry one idea and everything in it should serve that idea.',
+    explanation:'The canteen has nothing to do with independence, so it breaks the unity of the paragraph and has to go. Moving the topic sentence, adding more canteen material or changing tense would all leave the drift in place.' }),
+
+  makeMCQ({ id:'g8eng-writing-015', chapterId:'g8eng-writing', difficulty:3,
+    subsection:'editing_accuracy',
+    question:'Edit this sentence:<br><i>"Neither the pupils nor the teacher were ready for the test."</i><br>Which correction is right?',
+    options:['were → was','pupils → pupil','nor → or','teacher → teachers'],
+    answer:'were → was',
+    hint:'With "neither … nor", which noun does the verb agree with?',
+    explanation:'The verb agrees with the nearer subject, and "teacher" is singular, so "were" becomes "was". Changing the nouns or the conjunction would alter the meaning of the sentence rather than fix its grammar.' }),
+
+  makeMCQ({ id:'g8eng-writing-016', chapterId:'g8eng-writing', difficulty:3,
+    subsection:'extended_writing',
+    question:'Which sentence is the <b>strongest</b> supporting evidence in an essay on road safety?',
+    options:['Speed cameras cut deaths by 18%','Everyone knows speeding is bad','Speeding is a very serious thing','Many people think speed is bad'],
+    answer:'Speed cameras cut deaths by 18%',
+    hint:'Evidence is something a reader could go away and check.',
+    explanation:'A measured figure can be verified and links a cause to an effect. "Everyone knows" and "many people think" appeal to opinion, and calling something serious repeats the claim instead of supporting it.' }),
+
+  makeMCQ({ id:'g8eng-writing-017', chapterId:'g8eng-writing', difficulty:3,
+    subsection:'editing_accuracy',
+    question:'Edit this sentence:<br><i>"The list of names were pinned to the door."</i><br>Why is it wrong?',
+    options:['The subject is list, not names','The verb should be in the past','The noun door needs an article','The sentence needs a semicolon'],
+    answer:'The subject is list, not names',
+    hint:'Cross out the phrase beginning with "of" and read what is left.',
+    explanation:'"Of names" is a prepositional phrase and never controls the verb, so the singular "list" needs "was". The verb is already past, "the door" already has its article, and no second clause calls for a semicolon.' }),
+
+  makeMCQ({ id:'g8eng-writing-018', chapterId:'g8eng-writing', difficulty:4,
+    subsection:'extended_writing',
+    question:'An essay on tourism gives three paragraphs of benefits, none of drawbacks, and concludes <i>"so tourism is entirely good"</i>.<br>What is the main weakness?',
+    options:['No opposing view is considered','The conclusion is far too short','The paragraphs are not numbered','The essay uses too many facts'],
+    answer:'No opposing view is considered',
+    hint:'What would a reader who disagrees say after reading it?',
+    explanation:'A word as absolute as "entirely" can only be earned by answering the objections, and none is raised. Length, numbering and the number of facts are matters of presentation, not of whether the argument holds.' }),
+
+  makeText({ id:'g8eng-writing-019', chapterId:'g8eng-writing', difficulty:3,
+    subsection:'editing_accuracy',
+    question:'Write the correct form of the verb in brackets:<br><i>"Each of the pupils ______ (have) a locker in the corridor."</i>',
+    answer:'has',
+    hint:'"Each" is singular, whatever noun comes after it.',
+    explanation:'"Each" is the subject and is always singular, so the verb is "has". The plural "pupils" sits inside the phrase "of the pupils", which can never control the verb.' }),
+
+  makeMCQ({ id:'g8eng-writing-020', chapterId:'g8eng-writing', difficulty:2,
+    subsection:'editing_accuracy',
+    question:'Which of these is a <b>sentence fragment</b>?',
+    options:['Because the bus was late.','The bus was late this morning.','The late bus reached the gate.','We waited because it was late.'],
+    answer:'Because the bus was late.',
+    hint:'Read each one aloud on its own. Which leaves you waiting for the rest?',
+    explanation:'"Because" opens a subordinate clause, which cannot stand alone as a sentence. The other three each contain a subject and a main verb in a main clause, so each one is complete.' })
+
+);

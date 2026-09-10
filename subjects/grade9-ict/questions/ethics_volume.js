@@ -5,8 +5,8 @@
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-001', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:2,
   question:'Computer ethics refers to:',
-  options:['the moral principles that guide the use of computers and technology','the technical rules for writing computer programs','the laws about how computers are manufactured','the standards for computer hardware design'],
-  answer:'the moral principles that guide the use of computers and technology', hint:'Ethics is about right and wrong behaviour.',
+  options:['moral principles for using technology','technical rules for writing programs','legal rules for making hardware','design standards for screen sizes'],
+  answer:'moral principles for using technology', hint:'Ethics is about right and wrong behaviour.',
   explanation:'Computer ethics is the study of moral principles that guide responsible use of computers and information technology.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-002', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:2,
@@ -53,40 +53,40 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-008', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-009', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:2,
   question:'The digital divide refers to:',
-  options:['the gap between people who have access to technology and those who do not','the difference between hardware and software','the speed difference between two computers','the gap between old and new software versions'],
-  answer:'the gap between people who have access to technology and those who do not', hint:'Not everyone has equal access to ICT.',
+  options:['the gap in access to technology','the gap between hardware and software','the gap between two processor speeds','the gap between software versions'],
+  answer:'the gap in access to technology', hint:'Not everyone has equal access to ICT.',
   explanation:'The digital divide is the inequality between those with ready access to computers and the internet and those without.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-010', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:2,
   question:'Installing unauthorised software on a school computer is wrong because:',
-  options:['it could introduce viruses and violates the school\'s acceptable use policy','it makes the computer run faster','it helps other students learn new programs','it is required for some subjects'],
-  answer:'it could introduce viruses and violates the school\'s acceptable use policy', hint:'Schools have policies about software installation.',
+  options:['it risks viruses and breaks the AUP','it is required for some subjects','it helps students learn new programs','it makes the computer run faster'],
+  answer:'it risks viruses and breaks the AUP', hint:'Schools have policies about software installation.',
   explanation:'Unauthorised software may contain malware, slows the system and breaks the terms of the school\'s acceptable use policy.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-011', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:2,
   question:'An acceptable use policy (AUP) is a document that:',
-  options:['sets out the rules for using an organisation\'s computer systems','installs antivirus software automatically','controls the speed of an internet connection','backs up data every night'],
-  answer:'sets out the rules for using an organisation\'s computer systems', hint:'It is a set of guidelines users must agree to follow.',
+  options:['sets the rules for using ICT systems','installs antivirus software each night','controls the speed of the connection','backs up all data every night'],
+  answer:'sets the rules for using ICT systems', hint:'It is a set of guidelines users must agree to follow.',
   explanation:'An AUP defines what users may and may not do on an organisation\'s computers and network, to promote ethical use.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-012', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:2,
   question:'Why is it unethical to use someone else\'s creative work without giving credit?',
-  options:['It denies the creator recognition and may violate copyright law','It makes the document too long','It slows down the computer','It uses more storage space'],
-  answer:'It denies the creator recognition and may violate copyright law', hint:'Creators deserve acknowledgement for their work.',
+  options:['It denies the creator recognition','It makes the finished document longer','It slows the computer down','It uses more storage space'],
+  answer:'It denies the creator recognition', hint:'Creators deserve acknowledgement for their work.',
   explanation:'Using another\'s work without credit steals the recognition they deserve and may break copyright law.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-013', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:2,
   question:'Which statement about computer ethics is true?',
-  options:['Ethical rules for computers are based on the same values as ethical rules for everyday life','Computer ethics only applies to professional programmers','Anything done online has no ethical implications','Ethics do not apply if you are using a personal computer'],
-  answer:'Ethical rules for computers are based on the same values as ethical rules for everyday life', hint:'Honesty and respect apply online as well as offline.',
+  options:['It applies the same values as everyday ethics','It applies only to professional programmers','It does not apply on a personal computer','It has no bearing on anything done online'],
+  answer:'It applies the same values as everyday ethics', hint:'Honesty and respect apply online as well as offline.',
   explanation:'Computer ethics extends general ethical values — honesty, respect, fairness — to the specific context of computing.' }));
 
 // ── information_privacy: g9ict-esv-014 to g9ict-esv-026 ─────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-014', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
   question:'Personal data is information that:',
-  options:['can be used to identify a specific individual','is stored only in databases','is always available to the public','is used only by the police'],
-  answer:'can be used to identify a specific individual', hint:'A name or an ID number links to one person.',
+  options:['can identify a specific individual','is always available to the public','is stored only in databases','is used only by the police'],
+  answer:'can identify a specific individual', hint:'A name or an ID number links to one person.',
   explanation:'Personal data is any information that, alone or combined, can identify a specific person, such as a name, address or ID number.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-015', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
@@ -97,8 +97,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-015', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-016', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
   question:'Information privacy means that individuals have the right to:',
-  options:['control how their personal information is collected and used','access anyone else\'s personal data freely','delete all data held anywhere on the internet','make all personal data publicly available'],
-  answer:'control how their personal information is collected and used', hint:'Privacy is about control over your own data.',
+  options:['control how their own data is used','read anyone else\'s personal data','publish all personal data they hold','erase all data held on the internet'],
+  answer:'control how their own data is used', hint:'Privacy is about control over your own data.',
   explanation:'Information privacy is the right of individuals to decide who can collect their personal data and how it can be used.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-017', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
@@ -109,14 +109,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-017', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-018', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
   question:'Cookies stored by a website on your browser are used mainly to:',
-  options:['remember your preferences and track your browsing activity','speed up your computer\'s processor','protect you from viruses','print web pages automatically'],
-  answer:'remember your preferences and track your browsing activity', hint:'They are small files that remember information.',
+  options:['remember preferences and visits','protect the computer from viruses','speed up the computer\'s processor','print open web pages automatically'],
+  answer:'remember preferences and visits', hint:'They are small files that remember information.',
   explanation:'Cookies store data about your preferences and activity so websites can personalise your experience and track visits.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-019', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
   question:'To protect your privacy when using social media, you should:',
-  options:['review your privacy settings and limit who can see your posts','share your home address and phone number publicly','accept every friend or follow request you receive','use the same simple password on all platforms'],
-  answer:'review your privacy settings and limit who can see your posts', hint:'Control who can see your information.',
+  options:['review your privacy settings often','accept every friend request you get','use one simple password everywhere','post your home address and phone number'],
+  answer:'review your privacy settings often', hint:'Control who can see your information.',
   explanation:'Adjusting privacy settings so only trusted people see your posts reduces the risk of strangers accessing your personal information.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-020', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
@@ -133,8 +133,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-021', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-022', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
   question:'Which action best protects your privacy when using a public computer?',
-  options:['Logging out of all accounts before leaving the computer','Saving your passwords in the browser','Leaving your browsing history intact','Storing files on the desktop'],
-  answer:'Logging out of all accounts before leaving the computer', hint:'The next user could access your accounts if you stay logged in.',
+  options:['Logging out of every account','Saving your passwords in the browser','Leaving your browsing history intact','Storing your files on the desktop'],
+  answer:'Logging out of every account', hint:'The next user could access your accounts if you stay logged in.',
   explanation:'Logging out before leaving a shared computer prevents the next user from accessing your accounts and personal data.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-023', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
@@ -145,14 +145,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-023', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-024', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
   question:'Two-factor authentication protects your privacy by:',
-  options:['requiring a second form of verification in addition to the password','doubling the length of your password automatically','making your password visible only to yourself','storing your password in two separate databases'],
-  answer:'requiring a second form of verification in addition to the password', hint:'A second step means a stolen password alone is not enough.',
+  options:['asking for a second proof of identity','making the password twice as long','showing the password only to you','saving the password in two databases'],
+  answer:'asking for a second proof of identity', hint:'A second step means a stolen password alone is not enough.',
   explanation:'Two-factor authentication adds a second check (such as a code sent to your phone) so a stolen password alone cannot unlock your account.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-025', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
   question:'A privacy policy on a website explains:',
-  options:['how the site collects, uses and protects visitors\' personal data','the price of the products sold on the site','the technical specifications of the web server','how to change the website\'s background colour'],
-  answer:'how the site collects, uses and protects visitors\' personal data', hint:'It tells you what the website does with your information.',
+  options:['how the site uses visitors\' data','the price of the goods on sale','how to change the background colour','the specification of the web server'],
+  answer:'how the site uses visitors\' data', hint:'It tells you what the website does with your information.',
   explanation:'A privacy policy is a legal statement that discloses how a website collects, uses, stores and protects personal data.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-026', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:2,
@@ -171,20 +171,20 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-027', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-028', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'Which of the following makes a password strong?',
-  options:['A mix of uppercase letters, lowercase letters, numbers and symbols','Using your own name','Using only your date of birth','Using the word "password"'],
-  answer:'A mix of uppercase letters, lowercase letters, numbers and symbols', hint:'Complexity makes a password hard to guess.',
+  options:['A mix of letters, numbers, symbols','Your date of birth written in full','Your own first name and surname','The single word "password"'],
+  answer:'A mix of letters, numbers, symbols', hint:'Complexity makes a password hard to guess.',
   explanation:'A strong password uses a variety of character types to increase the number of possible combinations, making it much harder to guess.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-029', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'A firewall helps protect a network by:',
-  options:['monitoring and filtering traffic entering and leaving the network','speeding up all internet connections','storing backup copies of all data','encrypting email messages'],
-  answer:'monitoring and filtering traffic entering and leaving the network', hint:'It checks what is allowed to pass.',
+  options:['filtering traffic entering and leaving','storing backup copies of all data','encrypting every email message sent','speeding up all internet connections'],
+  answer:'filtering traffic entering and leaving', hint:'It checks what is allowed to pass.',
   explanation:'A firewall inspects data packets and blocks any traffic that does not meet the security rules defined by the network administrator.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-030', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'Encryption protects data by:',
-  options:['converting it into an unreadable code that requires a key to decode','deleting it from the server after it is sent','making it available to all users on the network','compressing it to save storage space'],
-  answer:'converting it into an unreadable code that requires a key to decode', hint:'Without the key, the data looks like nonsense.',
+  options:['turning it into code that needs a key','deleting it from the server once sent','compressing it to save storage space','sharing it with all network users'],
+  answer:'turning it into code that needs a key', hint:'Without the key, the data looks like nonsense.',
   explanation:'Encryption scrambles data into ciphertext; only someone with the correct decryption key can read the original data.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-031', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
@@ -207,8 +207,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-033', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-034', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'Two-factor authentication is more secure than a password alone because:',
-  options:['even if the password is stolen, the attacker still needs the second factor','it stores two copies of the password','it makes the password twice as long','it removes the need for any password'],
-  answer:'even if the password is stolen, the attacker still needs the second factor', hint:'Two steps are better than one.',
+  options:['a stolen password alone is not enough','it stores two copies of the password','it makes the password twice as long','it removes the need for a password'],
+  answer:'a stolen password alone is not enough', hint:'Two steps are better than one.',
   explanation:'With 2FA, a stolen password is not enough; the attacker also needs the second verification (such as a phone code).' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-035', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
@@ -219,8 +219,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-035', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-036', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'Ransomware is a type of malicious software that:',
-  options:['encrypts the victim\'s files and demands payment for the decryption key','speeds up the computer','improves the quality of internet connections','blocks advertisements on websites'],
-  answer:'encrypts the victim\'s files and demands payment for the decryption key', hint:'It holds your files hostage.',
+  options:['encrypts files and demands payment','blocks advertisements on all websites','speeds up a slow home computer','improves the internet connection'],
+  answer:'encrypts files and demands payment', hint:'It holds your files hostage.',
   explanation:'Ransomware encrypts a victim\'s files, making them inaccessible, and demands a ransom payment in exchange for the decryption key.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-037', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
@@ -231,28 +231,28 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-037', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-038', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'A biometric security measure uses:',
-  options:['a physical characteristic such as a fingerprint or retina scan to verify identity','a long random string of characters as a password','a hardware key plugged into a USB port','a code sent by text message'],
-  answer:'a physical characteristic such as a fingerprint or retina scan to verify identity', hint:'It uses part of your body.',
+  options:['a fingerprint or retina scan','a long random string of characters','a code sent by text message','a hardware key in a USB port'],
+  answer:'a fingerprint or retina scan', hint:'It uses part of your body.',
   explanation:'Biometric authentication verifies identity using unique physical characteristics such as fingerprints, retina patterns or facial recognition.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-039', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'SSL/TLS in a web address shows that:',
-  options:['the connection between the browser and the server is encrypted','the page has been approved by a government authority','the website does not use any cookies','the website is free to use'],
-  answer:'the connection between the browser and the server is encrypted', hint:'The padlock symbol indicates encrypted communication.',
+  options:['the connection is encrypted','the website is free to use','the website uses no cookies','the page was approved by government'],
+  answer:'the connection is encrypted', hint:'The padlock symbol indicates encrypted communication.',
   explanation:'SSL/TLS encrypts the data sent between a browser and a web server, indicated by "https" and a padlock icon.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-040', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
   question:'Why should antivirus software be updated regularly?',
-  options:['New threats appear constantly, and updates add definitions to detect them','Older antivirus programs delete all your files','Regular updates make the computer run faster','Updates remove the need for a firewall'],
-  answer:'New threats appear constantly, and updates add definitions to detect them', hint:'Malware evolves quickly.',
+  options:['New threats appear all the time','Updates make the computer run faster','Updates remove the need for a firewall','Old versions delete your own files'],
+  answer:'New threats appear all the time', hint:'Malware evolves quickly.',
   explanation:'New viruses and malware appear every day; antivirus updates add the signatures needed to detect and remove the latest threats.' }));
 
 // ── data_backups: g9ict-esv-041 to g9ict-esv-053 ────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-041', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'A data backup is:',
-  options:['a copy of data kept separately so it can be restored if the original is lost','a program that speeds up the hard disk','a type of antivirus scan','a method of encrypting files'],
-  answer:'a copy of data kept separately so it can be restored if the original is lost', hint:'A backup is a spare copy.',
+  options:['a spare copy kept for restoring data','a method of encrypting stored files','a program that speeds up a hard disk','a scan that removes viruses'],
+  answer:'a spare copy kept for restoring data', hint:'A backup is a spare copy.',
   explanation:'A backup is a copy of data stored separately from the original so it can be used to restore data if the original is lost, damaged or corrupted.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-042', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
@@ -263,14 +263,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-042', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-043', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'A full backup:',
-  options:['copies all selected data, regardless of whether it has changed','copies only files changed since the last backup','makes a copy only when the disk is nearly full','runs only when the computer is idle'],
-  answer:'copies all selected data, regardless of whether it has changed', hint:'It does a complete copy every time.',
+  options:['copies all the selected data each time','copies only files changed since the last','copies data only when the disk is full','copies data only when the PC is idle'],
+  answer:'copies all the selected data each time', hint:'It does a complete copy every time.',
   explanation:'A full backup copies every selected file each time it runs, creating a complete independent copy of all the data.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-044', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'Why should a backup be stored in a different location from the original data?',
-  options:['So that a disaster such as a fire or flood that destroys the original cannot also destroy the backup','So that the backup takes up less disk space','So that the backup runs faster on a second computer','So that no password is needed to access the backup'],
-  answer:'So that a disaster such as a fire or flood that destroys the original cannot also destroy the backup', hint:'Two copies in the same room can both be lost at once.',
+  options:['A fire or flood cannot destroy both','A second copy uses less disk space','A remote backup needs no password','A second computer runs backups faster'],
+  answer:'A fire or flood cannot destroy both', hint:'Two copies in the same room can both be lost at once.',
   explanation:'Storing backups off-site or in the cloud means a local disaster cannot destroy both the original and the backup at the same time.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-045', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
@@ -281,8 +281,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-045', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-046', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'How often should critical business data be backed up?',
-  options:['As frequently as possible — daily or more often','Once a year is usually enough','Only when a virus is detected','Only when the computer breaks down'],
-  answer:'As frequently as possible — daily or more often', hint:'The more often you back up, the less data you can lose.',
+  options:['Daily, or more often if possible','Once a year is usually enough','Only when the computer breaks down','Only when a virus has been detected'],
+  answer:'Daily, or more often if possible', hint:'The more often you back up, the less data you can lose.',
   explanation:'Critical data should be backed up as frequently as possible; the longer the gap between backups, the more data can be lost if something goes wrong.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-047', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
@@ -293,8 +293,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-047', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-048', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'What is a backup rotation scheme?',
-  options:['A plan for cycling through multiple sets of backup media so older backups are retained','A method for changing passwords automatically','A schedule for rotating staff who do the backups','A way of spinning hard disk platters faster'],
-  answer:'A plan for cycling through multiple sets of backup media so older backups are retained', hint:'It keeps several generations of backups.',
+  options:['A cycle of media that keeps older copies','A method of changing passwords weekly','A way of spinning disk platters faster','A rota of the staff who run the backups'],
+  answer:'A cycle of media that keeps older copies', hint:'It keeps several generations of backups.',
   explanation:'A rotation scheme uses multiple sets of backup media in sequence so you can restore data from several different points in the past.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-049', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
@@ -305,8 +305,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-049', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-050', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'Ransomware attacks highlight the importance of backups because:',
-  options:['a recent backup allows the victim to restore files without paying the ransom','backups contain the decryption key for ransomware','backups prevent ransomware from being installed','backups alert you when ransomware arrives'],
-  answer:'a recent backup allows the victim to restore files without paying the ransom', hint:'A backup gives you a clean copy to return to.',
+  options:['files can be restored without paying','backups hold the decryption key','backups stop ransomware installing','backups warn you when malware arrives'],
+  answer:'files can be restored without paying', hint:'A backup gives you a clean copy to return to.',
   explanation:'If files are encrypted by ransomware, a recent backup means the victim can restore their data without paying the criminals.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-051', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
@@ -317,22 +317,22 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-051', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-052', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'Which device provides automatic real-time backup of files as they change?',
-  options:['A NAS (Network Attached Storage) with continuous backup software','A CD-ROM drive','A standard keyboard','The screen monitor'],
-  answer:'A NAS (Network Attached Storage) with continuous backup software', hint:'Some backup systems work continuously, not just at scheduled times.',
+  options:['A NAS with continuous backup software','A CD-ROM drive with a write-once disc','A standard USB keyboard and mouse','A monitor with a built-in card reader'],
+  answer:'A NAS with continuous backup software', hint:'Some backup systems work continuously, not just at scheduled times.',
   explanation:'A NAS device with continuous backup software can copy changes to files in real time, minimising the amount of data that could be lost.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-053', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
   question:'One advantage of cloud backup over a local external hard disk is that cloud backup:',
-  options:['can be accessed from any location with an internet connection','requires no internet connection','is always faster than a local disk','uses no storage space'],
-  answer:'can be accessed from any location with an internet connection', hint:'Cloud storage is remote.',
+  options:['can be reached from any location','needs no internet connection at all','is always faster than a local disk','uses no storage space whatsoever'],
+  answer:'can be reached from any location', hint:'Cloud storage is remote.',
   explanation:'Cloud backup is stored on remote servers, so it can be accessed and restored from any device with an internet connection.' }));
 
 // ── data_protection_act: g9ict-esv-054 to g9ict-esv-067 ─────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-054', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'The main purpose of a Data Protection Act is to:',
-  options:['protect individuals by regulating how organisations collect and use personal data','prevent computers from being connected to the internet','make all personal data freely available to the public','ban the use of computers in government offices'],
-  answer:'protect individuals by regulating how organisations collect and use personal data', hint:'It gives people rights over their own data.',
+  options:['control how organisations use personal data','ban computers from all government offices','keep computers off the internet entirely','make all personal data freely public'],
+  answer:'control how organisations use personal data', hint:'It gives people rights over their own data.',
   explanation:'A Data Protection Act sets rules for how organisations collect, store, use and share personal data, protecting individuals\' privacy.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-055', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
@@ -343,8 +343,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-055', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-056', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'An individual\'s right of access under data protection law allows them to:',
-  options:['request a copy of the personal data an organisation holds about them','delete any data they do not like from any website','access data held about other people','change other people\'s records'],
-  answer:'request a copy of the personal data an organisation holds about them', hint:'You can ask to see what is held about you.',
+  options:['ask for a copy of their own data','see the data held about other people','change other people\'s records','delete any data on any website'],
+  answer:'ask for a copy of their own data', hint:'You can ask to see what is held about you.',
   explanation:'The right of access (subject access request) allows a person to ask an organisation for a copy of the personal data it holds about them.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-057', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
@@ -355,8 +355,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-057', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-058', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'Who is responsible for ensuring that an organisation complies with data protection laws?',
-  options:['The organisation that collects and processes the data','The individual whose data is held','The internet service provider','The manufacturer of the computer'],
-  answer:'The organisation that collects and processes the data', hint:'Responsibility sits with whoever holds the data.',
+  options:['The organisation holding the data','The manufacturer of the computer used','The person whose data is held','The internet service provider'],
+  answer:'The organisation holding the data', hint:'Responsibility sits with whoever holds the data.',
   explanation:'The data controller — the organisation that collects and processes personal data — is legally responsible for complying with data protection legislation.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-059', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
@@ -367,38 +367,38 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-059', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-060', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'Under data protection law, "consent" means:',
-  options:['the individual has freely and clearly agreed to the collection and use of their data','the company has agreed to pay the individual for their data','the government has authorised the collection','the data has been automatically gathered from the internet'],
-  answer:'the individual has freely and clearly agreed to the collection and use of their data', hint:'Consent must be given by the data subject.',
+  options:['the person has freely agreed to the use','the data was gathered from the internet','the government authorised the collection','the company has paid for the data'],
+  answer:'the person has freely agreed to the use', hint:'Consent must be given by the data subject.',
   explanation:'Consent is a legal basis for processing data; it requires a clear, freely given, and informed agreement from the individual.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-061', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'Which of the following is a breach of data protection law?',
-  options:['Selling customers\' email addresses to a marketing company without their consent','Storing customer data in an encrypted database','Deleting personal data when it is no longer needed','Allowing customers to view their own records'],
-  answer:'Selling customers\' email addresses to a marketing company without their consent', hint:'Using data without consent for a different purpose is a breach.',
+  options:['Selling email addresses without consent','Letting customers view their own records','Storing customer data in encrypted form','Deleting data that is no longer needed'],
+  answer:'Selling email addresses without consent', hint:'Using data without consent for a different purpose is a breach.',
   explanation:'Selling personal data without consent violates the principle of purpose limitation and other data protection requirements.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-062', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'What is a data breach?',
-  options:['An incident in which personal data is accessed, disclosed or lost without authorisation','A routine backup of the database','A scheduled update of the data protection policy','A request by an individual to see their own data'],
-  answer:'An incident in which personal data is accessed, disclosed or lost without authorisation', hint:'Something went wrong with the security of the data.',
+  options:['Unauthorised access to personal data','A routine overnight backup of the database','A request to see one\'s own data','A scheduled update of the policy'],
+  answer:'Unauthorised access to personal data', hint:'Something went wrong with the security of the data.',
   explanation:'A data breach occurs when personal data is accessed, altered, disclosed or lost in an unauthorised or unlawful way.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-063', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'Under GDPR and similar data protection laws, organisations must report certain data breaches to:',
-  options:['the relevant data protection authority within a specified time limit','the individuals affected before doing anything else','the press and media immediately','every other company in the country'],
-  answer:'the relevant data protection authority within a specified time limit', hint:'There is a regulatory body that oversees compliance.',
+  options:['the data protection authority','the press and media immediately','every other company in the country','the individuals affected first'],
+  answer:'the data protection authority', hint:'There is a regulatory body that oversees compliance.',
   explanation:'Organisations must notify the data protection authority of serious breaches, usually within 72 hours under GDPR.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-064', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'The principle of data minimisation in data protection law means:',
-  options:['only the minimum amount of personal data necessary for the purpose should be collected','all data must be stored in the smallest file format possible','data should be deleted every month','the organisation should have as few computers as possible'],
-  answer:'only the minimum amount of personal data necessary for the purpose should be collected', hint:'Collect only what you need.',
+  options:['collecting only the data that is needed','storing data in the smallest file format','deleting all data every single month','using as few computers as possible'],
+  answer:'collecting only the data that is needed', hint:'Collect only what you need.',
   explanation:'Data minimisation means collecting only the personal data that is strictly necessary for the stated purpose, not more.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-065', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
   question:'Children\'s personal data is given extra protection under data protection laws because:',
-  options:['children may not understand the implications of sharing their data','children use the internet more than adults','children\'s data is always more accurate','children give stronger consent than adults'],
-  answer:'children may not understand the implications of sharing their data', hint:'Young people need more protection.',
+  options:['children may not understand the risks','children\'s data is always more accurate','children give stronger consent than adults','children use the internet more than adults'],
+  answer:'children may not understand the risks', hint:'Young people need more protection.',
   explanation:'Children may not fully understand how their data will be used, so laws give their data additional protection and often require parental consent.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-066', chapterId:'g9ict-ethics-security', subsection:'data_protection_act', difficulty:2,
@@ -417,8 +417,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-067', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-068', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
   question:'Copyright law protects:',
-  options:['original creative works such as music, text, images and software','physical objects like computers and monitors','mathematical formulas and scientific facts','publicly available government documents'],
-  answer:'original creative works such as music, text, images and software', hint:'It covers intellectual creations.',
+  options:['original music, text, images and software','mathematical formulas and scientific facts','government documents already published','physical objects such as monitors'],
+  answer:'original music, text, images and software', hint:'It covers intellectual creations.',
   explanation:'Copyright automatically protects original creative works — including writing, music, images and software — from being copied without permission.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-069', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
@@ -441,8 +441,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-071', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-072', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
   question:'Open source software means:',
-  options:['the source code is made available so anyone can view, modify and distribute it','the software is only available on open networks','the software costs more than commercial software','the software can only be used by government organisations'],
-  answer:'the source code is made available so anyone can view, modify and distribute it', hint:'The source code is open — you can see exactly how it works.',
+  options:['the source code is available to everyone','the software is for government use only','the software costs more than commercial','the software runs only on open networks'],
+  answer:'the source code is available to everyone', hint:'The source code is open — you can see exactly how it works.',
   explanation:'Open source software provides public access to its source code, allowing anyone to inspect, change and redistribute it under the terms of its licence.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-073', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
@@ -465,14 +465,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-075', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-076', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
   question:'Shareware differs from freeware because shareware:',
-  options:['is distributed free to try, but payment is required for continued or full use','is completely free with no conditions','can only be used by businesses','requires a monthly subscription from the first day'],
-  answer:'is distributed free to try, but payment is required for continued or full use', hint:'Try before you buy.',
+  options:['is free to try but must be paid for','needs a subscription from the first day','is completely free with no conditions','can only be used by large businesses'],
+  answer:'is free to try but must be paid for', hint:'Try before you buy.',
   explanation:'Shareware is a try-before-you-buy model; the software is free to evaluate but must be purchased for ongoing or unrestricted use.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-077', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
   question:'A patent protects:',
-  options:['an invention or process that is new and non-obvious','the name or logo of a brand','an original piece of creative writing','the colour scheme used by a company'],
-  answer:'an invention or process that is new and non-obvious', hint:'Patents cover technical inventions.',
+  options:['a new and non-obvious invention','the colour scheme of a company','the name or logo of a brand','an original piece of writing'],
+  answer:'a new and non-obvious invention', hint:'Patents cover technical inventions.',
   explanation:'A patent grants exclusive rights to an inventor for a new and non-obvious invention or process, preventing others from making or selling it without permission.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-078', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
@@ -483,14 +483,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-078', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-079', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
   question:'Using an image found on a Google Images search in a school project is only legal if:',
-  options:['the image is licensed for reuse, or you obtain the owner\'s permission','the image is larger than 500 × 500 pixels','the image was uploaded before the current year','the search result shows the image on the first page'],
-  answer:'the image is licensed for reuse, or you obtain the owner\'s permission', hint:'Appearing in a search result does not mean the image is free to use.',
+  options:['it is licensed to allow reuse','it is larger than 500 by 500 pixels','it appears on the first results page','it was uploaded before this year'],
+  answer:'it is licensed to allow reuse', hint:'Appearing in a search result does not mean the image is free to use.',
   explanation:'Most images online are copyright-protected; you must have a licence that allows reuse or obtain explicit permission from the copyright holder.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-080', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
   question:'A trademark protects:',
-  options:['a brand name, logo or symbol used to identify goods or services','a new invention or technical process','an original piece of music or writing','personal data held in a database'],
-  answer:'a brand name, logo or symbol used to identify goods or services', hint:'It distinguishes one company\'s products from another\'s.',
+  options:['a brand name, logo or symbol','personal data held in a database','a new invention or technical process','an original piece of music or writing'],
+  answer:'a brand name, logo or symbol', hint:'It distinguishes one company\'s products from another\'s.',
   explanation:'A trademark is a registered symbol, name or slogan that identifies and distinguishes a company\'s products or services.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-081', chapterId:'g9ict-ethics-security', subsection:'copyright_ownership', difficulty:2,
@@ -503,14 +503,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-081', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-082', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Plagiarism in ICT means:',
-  options:['using someone else\'s work and presenting it as your own without giving credit','citing every source you used in a bibliography','downloading licensed software for personal use','sharing files legally with Creative Commons permission'],
-  answer:'using someone else\'s work and presenting it as your own without giving credit', hint:'It is about claiming ownership of work you did not create.',
+  options:['presenting another\'s work as your own','downloading licensed software you own','citing every source in a bibliography','sharing files under a Creative Commons licence'],
+  answer:'presenting another\'s work as your own', hint:'It is about claiming ownership of work you did not create.',
   explanation:'Plagiarism is the act of taking another person\'s work — text, code, images, ideas — and presenting it as your own without acknowledgement.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-083', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Which of the following is an example of plagiarism?',
-  options:['Copying a paragraph from a website and pasting it into a report without quoting it','Paraphrasing an idea and naming the original source','Quoting a short passage and citing the author','Summarising an article in your own words and referencing it'],
-  answer:'Copying a paragraph from a website and pasting it into a report without quoting it', hint:'No credit is given for the copied words.',
+  options:['Copying a paragraph with no citation','Paraphrasing an idea and naming the source','Quoting a short passage and citing it','Summarising an article and referencing it'],
+  answer:'Copying a paragraph with no citation', hint:'No credit is given for the copied words.',
   explanation:'Copying text verbatim without quotation marks or a citation is plagiarism because it presents the original author\'s words as your own.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-084', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
@@ -521,32 +521,32 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-084', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-085', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'To avoid plagiarism when using information from a website, you should:',
-  options:['paraphrase the information in your own words and cite the source','copy the text but change the font colour','print the page without reading it','use only the images, not the text'],
-  answer:'paraphrase the information in your own words and cite the source', hint:'Rewrite it and give credit.',
+  options:['paraphrase it and cite the source','use only the images, not the text','copy the text and change the colour','print the page without reading it'],
+  answer:'paraphrase it and cite the source', hint:'Rewrite it and give credit.',
   explanation:'Paraphrasing puts the ideas in your own words, and a citation gives credit to the original source — together they avoid plagiarism.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-086', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Self-plagiarism means:',
-  options:['submitting your own previous work as if it is new original work for a different assignment','copying text from a famous author','using the same font as another student','printing more than one copy of your work'],
-  answer:'submitting your own previous work as if it is new original work for a different assignment', hint:'Even your own old work must be acknowledged.',
+  options:['resubmitting your own earlier work','printing several copies of your work','using the same font as another student','copying text from a famous author'],
+  answer:'resubmitting your own earlier work', hint:'Even your own old work must be acknowledged.',
   explanation:'Self-plagiarism occurs when a student resubmits work they have already submitted elsewhere without disclosing that they have done so.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-087', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Turnitin and similar tools are used in schools to:',
-  options:['detect plagiarism in submitted assignments','organise the school timetable','block inappropriate websites','back up student files'],
-  answer:'detect plagiarism in submitted assignments', hint:'They are plagiarism-checking services.',
+  options:['detect plagiarism in assignments','back up student files each night','organise the school timetable','block inappropriate websites'],
+  answer:'detect plagiarism in assignments', hint:'They are plagiarism-checking services.',
   explanation:'Turnitin and similar plagiarism detection services compare submitted text against databases of published work and student papers to find copied content.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-088', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Plagiarism is harmful in schools because it:',
-  options:['prevents students from developing their own skills and is unfair to other students','makes documents look more professional','helps teachers mark work more quickly','reduces the time needed to complete assignments'],
-  answer:'prevents students from developing their own skills and is unfair to other students', hint:'It harms both the plagiarist and honest students.',
+  options:['prevents students developing their skills','reduces the time needed for assignments','helps teachers mark work more quickly','makes documents look more professional'],
+  answer:'prevents students developing their skills', hint:'It harms both the plagiarist and honest students.',
   explanation:'Plagiarism prevents learning and is unfair because it gives plagiarists an advantage over students who did their own work.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-089', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'A bibliography at the end of a report is used to:',
-  options:['list all the sources that were consulted in preparing the report','describe the contents of each chapter','show the word count of the report','store backup copies of all images used'],
-  answer:'list all the sources that were consulted in preparing the report', hint:'It credits the sources used.',
+  options:['list every source that was consulted','store backup copies of the images used','describe the contents of each chapter','show the word count of the report'],
+  answer:'list every source that was consulted', hint:'It credits the sources used.',
   explanation:'A bibliography or reference list gives full details of every source consulted, allowing readers to find and verify them.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-090', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
@@ -557,94 +557,94 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-090', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-091', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Which of the following best describes academic integrity?',
-  options:['Completing your own work honestly and taking responsibility for it','Getting the highest mark in the class','Submitting work on time no matter what','Using as many sources as possible'],
-  answer:'Completing your own work honestly and taking responsibility for it', hint:'Integrity means honesty and responsibility.',
+  options:['Doing your own work honestly','Submitting work on time every time','Getting the highest mark in the class','Using as many sources as you can find'],
+  answer:'Doing your own work honestly', hint:'Integrity means honesty and responsibility.',
   explanation:'Academic integrity means doing your own work honestly, citing sources correctly, and taking responsibility for what you submit.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-092', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Paraphrasing means:',
-  options:['rewriting someone else\'s idea in your own words while retaining the meaning','copying text word for word from a source','translating a document into another language','summarising a source in a single sentence'],
-  answer:'rewriting someone else\'s idea in your own words while retaining the meaning', hint:'Same idea, different words.',
+  options:['rewriting an idea in your own words','summarising a source in one sentence','translating a text into another language','copying text word for word'],
+  answer:'rewriting an idea in your own words', hint:'Same idea, different words.',
   explanation:'Paraphrasing rewrites an idea using your own vocabulary and sentence structure while keeping the original meaning, and still requires a citation.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-093', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'Using an AI tool to write your whole assignment and submitting it as your own work is:',
-  options:['a form of academic dishonesty equivalent to plagiarism','always acceptable in all schools','required by some examination boards','impossible to detect'],
-  answer:'a form of academic dishonesty equivalent to plagiarism', hint:'You are passing off work produced by another (the AI) as your own.',
+  options:['a form of academic dishonesty','required by some examination boards','always acceptable in every school','impossible for a teacher to detect'],
+  answer:'a form of academic dishonesty', hint:'You are passing off work produced by another (the AI) as your own.',
   explanation:'Submitting AI-generated work as your own is academic dishonesty because you are presenting work you did not produce as your own effort.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-094', chapterId:'g9ict-ethics-security', subsection:'plagiarism', difficulty:2,
   question:'When must you provide a citation for information used in a report?',
-  options:['Every time you use a fact, idea or quotation taken from another source','Only when the source is a printed book','Only for direct word-for-word quotations','Only when the teacher specifically asks for it'],
-  answer:'Every time you use a fact, idea or quotation taken from another source', hint:'All borrowed ideas need a credit.',
+  options:['Whenever you use another source','Only for word-for-word quotations','Only when the teacher asks for it','Only when the source is a book'],
+  answer:'Whenever you use another source', hint:'All borrowed ideas need a credit.',
   explanation:'Any time you use someone else\'s information — whether quoted or paraphrased — a citation must be provided to acknowledge the source.' }));
 
 // ── internet_dangers: g9ict-esv-095 to g9ict-esv-108 ────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-095', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Phishing is an online attack in which criminals:',
-  options:['pretend to be a trustworthy organisation to trick people into revealing personal information','speed up the internet connection for their own use','create new websites to sell goods cheaply','install useful software on your computer without asking'],
-  answer:'pretend to be a trustworthy organisation to trick people into revealing personal information', hint:'They pretend to be your bank or a trusted service.',
+  options:['pose as a trusted organisation','speed up their own internet connection','install useful software without asking','set up websites selling cheap goods'],
+  answer:'pose as a trusted organisation', hint:'They pretend to be your bank or a trusted service.',
   explanation:'Phishing uses fake emails or websites that appear to come from a trusted source to trick people into handing over passwords or financial details.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-096', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Cyber-bullying is defined as:',
-  options:['the use of digital technology to repeatedly harass, threaten or humiliate another person','playing violent video games online','sharing your own embarrassing photos online','downloading files without paying for them'],
-  answer:'the use of digital technology to repeatedly harass, threaten or humiliate another person', hint:'Bullying done through technology.',
+  options:['using technology to harass someone','playing violent video games online','downloading files without paying','sharing your own photos online'],
+  answer:'using technology to harass someone', hint:'Bullying done through technology.',
   explanation:'Cyber-bullying uses digital channels — social media, messaging, gaming — to repeatedly intimidate, embarrass or harm another person.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-097', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'A computer virus is a program that:',
-  options:['copies itself and spreads to other files or computers, often causing damage','cleans up unwanted files from the disk','speeds up the computer by removing old software','connects a computer to the internet automatically'],
-  answer:'copies itself and spreads to other files or computers, often causing damage', hint:'Like a biological virus, it spreads and harms.',
+  options:['copies itself and spreads to files','connects the computer to the internet','cleans unwanted files from the disk','speeds up an old and slow computer'],
+  answer:'copies itself and spreads to files', hint:'Like a biological virus, it spreads and harms.',
   explanation:'A computer virus is malicious software that replicates itself by attaching to other files and can corrupt data, slow the system or enable further attacks.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-098', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Spam email is best described as:',
-  options:['unsolicited bulk messages, often advertising goods or carrying malware','a secure encrypted email service','a program for organising your inbox','an official communication from your internet provider'],
-  answer:'unsolicited bulk messages, often advertising goods or carrying malware', hint:'Unwanted bulk email you did not ask for.',
+  options:['unsolicited bulk email messages','a secure encrypted email service','a program that organises the inbox','an official notice from your provider'],
+  answer:'unsolicited bulk email messages', hint:'Unwanted bulk email you did not ask for.',
   explanation:'Spam is mass unsolicited email, typically used for advertising, phishing or distributing malware.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-099', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'A Trojan horse in computing is:',
-  options:['malicious software disguised as a legitimate program','a type of network topology','a tool for recovering deleted files','a method for speeding up downloads'],
-  answer:'malicious software disguised as a legitimate program', hint:'It looks helpful but is actually harmful.',
+  options:['malware disguised as a useful program','a tool for recovering deleted files','a method of speeding up downloads','a type of network topology'],
+  answer:'malware disguised as a useful program', hint:'It looks helpful but is actually harmful.',
   explanation:'A Trojan horse appears to be useful software but secretly carries malicious code that runs when the program is installed.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-100', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Spyware is malicious software designed to:',
-  options:['secretly collect information about a user and send it to a third party','improve the speed of the internet connection','block pop-up advertisements','organise files on the hard disk'],
-  answer:'secretly collect information about a user and send it to a third party', hint:'It spies on you without your knowledge.',
+  options:['secretly collect a user\'s information','block pop-up advertisements on websites','improve the speed of the connection','organise files on the hard disk'],
+  answer:'secretly collect a user\'s information', hint:'It spies on you without your knowledge.',
   explanation:'Spyware silently monitors a user\'s activities — browsing, keystrokes, passwords — and transmits the data to criminals without the user\'s knowledge.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-101', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Online grooming refers to:',
-  options:['an adult building a relationship with a child online in order to exploit them','tidying up your social media profile','removing unwanted software from your computer','updating your privacy settings on a social network'],
-  answer:'an adult building a relationship with a child online in order to exploit them', hint:'This is a serious safeguarding issue.',
+  options:['befriending a child online to exploit them','updating the privacy settings on a network','removing unwanted software from a PC','tidying up your social media profile'],
+  answer:'befriending a child online to exploit them', hint:'This is a serious safeguarding issue.',
   explanation:'Online grooming is when an adult builds a relationship of trust with a child online with the intention of exploiting or abusing them.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-102', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'If you receive a message online from a stranger that makes you feel uncomfortable, you should:',
-  options:['tell a trusted adult and report or block the sender','ignore it and carry on','reply to find out what they want','forward it to all your friends'],
-  answer:'tell a trusted adult and report or block the sender', hint:'Always report uncomfortable online contact to an adult.',
+  options:['tell a trusted adult about it','forward it to all your friends','reply to find out what they want','ignore it and carry on as normal'],
+  answer:'tell a trusted adult about it', hint:'Always report uncomfortable online contact to an adult.',
   explanation:'Telling a trusted adult ensures the right people are informed; reporting and blocking the sender stops further contact.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-103', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Identity theft online involves:',
-  options:['someone using another person\'s personal information without their knowledge to commit fraud','changing the username on a social network','deleting a social media account','creating a new email address'],
-  answer:'someone using another person\'s personal information without their knowledge to commit fraud', hint:'Someone steals who you are to commit crimes in your name.',
+  options:['using someone\'s details to commit fraud','deleting your own social media account','creating a new email address for work','changing your username on a network'],
+  answer:'using someone\'s details to commit fraud', hint:'Someone steals who you are to commit crimes in your name.',
   explanation:'Identity theft occurs when criminals obtain personal details and use them fraudulently — to open bank accounts, apply for loans or make purchases.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-104', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'A keylogger records:',
-  options:['every key pressed on the keyboard, capturing passwords and messages','the number of files on the hard disk','the brightness of the screen','the speed of the internet connection'],
-  answer:'every key pressed on the keyboard, capturing passwords and messages', hint:'It watches every keystroke.',
+  options:['every key pressed on the keyboard','the speed of the internet connection','the brightness setting of the screen','the number of files on the hard disk'],
+  answer:'every key pressed on the keyboard', hint:'It watches every keystroke.',
   explanation:'A keylogger is malware that silently records all keystrokes, allowing criminals to capture passwords, bank details and private messages.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-105', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Social engineering attacks exploit:',
-  options:['human psychology and trust rather than technical vulnerabilities','weaknesses in firewall software','broken encryption algorithms','outdated operating systems'],
-  answer:'human psychology and trust rather than technical vulnerabilities', hint:'They trick people, not machines.',
+  options:['human trust rather than technology','weaknesses in the firewall software','broken encryption algorithms','outdated operating systems'],
+  answer:'human trust rather than technology', hint:'They trick people, not machines.',
   explanation:'Social engineering manipulates people into revealing information or taking actions, exploiting trust, fear or urgency rather than hacking technology.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-106', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
@@ -655,46 +655,46 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-106', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-107', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'A DDoS (Distributed Denial of Service) attack works by:',
-  options:['flooding a server with so many requests that it becomes unable to respond to legitimate users','inserting a virus into every file on the server','encrypting all the server\'s data','deleting the server\'s operating system'],
-  answer:'flooding a server with so many requests that it becomes unable to respond to legitimate users', hint:'It overwhelms the server with traffic.',
+  options:['flooding a server with requests','inserting a virus into every file','encrypting all the server\'s data','deleting the operating system'],
+  answer:'flooding a server with requests', hint:'It overwhelms the server with traffic.',
   explanation:'A DDoS attack uses many compromised computers to send huge volumes of requests to a server, overloading it so legitimate users cannot access the service.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-108', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
   question:'Fake news online is dangerous because it:',
-  options:['spreads quickly and can mislead many people before it is corrected','always originates from foreign governments','is only shared by young people','cannot spread beyond one country'],
-  answer:'spreads quickly and can mislead many people before it is corrected', hint:'It travels far before the truth catches up.',
+  options:['spreads faster than corrections','is only ever shared by young people','always comes from foreign governments','cannot spread beyond one country'],
+  answer:'spreads faster than corrections', hint:'It travels far before the truth catches up.',
   explanation:'Fake news spreads rapidly on social media, influencing opinions and behaviour before fact-checkers or media organisations can correct it.' }));
 
 // ── social_economic_effects: g9ict-esv-109 to g9ict-esv-121 ─────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-109', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'One positive social effect of the internet is that:',
-  options:['people can communicate and share information across the world instantly','it eliminates the need for face-to-face interaction entirely','it always improves mental health','it removes all forms of inequality'],
-  answer:'people can communicate and share information across the world instantly', hint:'Global communication is a major benefit.',
+  options:['people can share information instantly','it ends the need for meeting face to face','it removes every form of inequality','it always improves mental health'],
+  answer:'people can share information instantly', hint:'Global communication is a major benefit.',
   explanation:'The internet enables instant global communication and information sharing, connecting people and organisations regardless of distance.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-110', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'Automation in industry can lead to:',
-  options:['some jobs being replaced by machines, reducing employment in those roles','every worker becoming wealthier immediately','computer viruses spreading to all machines','slower production of goods'],
-  answer:'some jobs being replaced by machines, reducing employment in those roles', hint:'Machines can do some jobs that people used to do.',
+  options:['some jobs being replaced by machines','every worker becoming wealthy at once','slower production of finished goods','viruses spreading to every machine'],
+  answer:'some jobs being replaced by machines', hint:'Machines can do some jobs that people used to do.',
   explanation:'Automation replaces repetitive manual tasks with machines or software, which can reduce the number of workers needed in those roles.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-111', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'E-commerce has changed shopping by allowing:',
-  options:['goods to be bought and sold over the internet without visiting a physical store','goods to be sent for free to any address','prices to be set by the customer','shops to stop employing any staff at all'],
-  answer:'goods to be bought and sold over the internet without visiting a physical store', hint:'You can buy things online.',
+  options:['goods to be bought and sold online','goods to be delivered free anywhere','prices to be set by each customer','shops to employ no staff at all'],
+  answer:'goods to be bought and sold online', hint:'You can buy things online.',
   explanation:'E-commerce enables consumers and businesses to buy and sell goods and services online, transforming retail and business models.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-112', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'One negative social effect of spending too much time on social media is:',
-  options:['reduced face-to-face social skills and increased feelings of isolation','improved concentration in lessons','better physical fitness','faster reading skills'],
-  answer:'reduced face-to-face social skills and increased feelings of isolation', hint:'Online time can replace real-world interaction.',
+  options:['weaker face-to-face social skills','better physical fitness and health','improved concentration in lessons','faster reading and writing skills'],
+  answer:'weaker face-to-face social skills', hint:'Online time can replace real-world interaction.',
   explanation:'Excessive social media use is linked to reduced face-to-face social interaction, loneliness, and mental health issues in young people.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-113', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'Teleworking (working from home using ICT) benefits employees by:',
-  options:['reducing commuting time and offering greater flexibility','eliminating the need for a computer','guaranteeing a higher salary','removing the need for any meetings'],
-  answer:'reducing commuting time and offering greater flexibility', hint:'No travel to the office is needed.',
+  options:['cutting commuting time and cost','removing the need for any meetings','guaranteeing a much higher salary','removing the need for a computer'],
+  answer:'cutting commuting time and cost', hint:'No travel to the office is needed.',
   explanation:'Teleworking saves the time and cost of commuting and allows employees to arrange their working day more flexibly.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-114', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
@@ -705,8 +705,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-114', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-115', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'The use of ICT in health care has led to:',
-  options:['faster diagnosis, better patient record management and remote consultations','the disappearance of all hospital staff','patients diagnosing themselves without any medical guidance','the elimination of all medical errors'],
-  answer:'faster diagnosis, better patient record management and remote consultations', hint:'ICT helps doctors and patients.',
+  options:['faster diagnosis and remote consultations','the disappearance of all hospital staff','the elimination of every medical error','patients diagnosing themselves alone'],
+  answer:'faster diagnosis and remote consultations', hint:'ICT helps doctors and patients.',
   explanation:'ICT in health care enables electronic patient records, computer-aided diagnosis, telemedicine and improved information sharing among medical staff.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-116', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
@@ -717,20 +717,20 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-116', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-117', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'Online banking has created an economic benefit by:',
-  options:['reducing the cost of financial transactions and making banking available 24 hours a day','eliminating all bank fraud','making cash obsolete worldwide','requiring every customer to own a smartphone'],
-  answer:'reducing the cost of financial transactions and making banking available 24 hours a day', hint:'Banking is cheaper and always available.',
+  options:['lowering the cost of transactions','requiring every customer to own a phone','making cash obsolete worldwide','eliminating all bank fraud'],
+  answer:'lowering the cost of transactions', hint:'Banking is cheaper and always available.',
   explanation:'Online banking reduces processing costs for banks and offers customers round-the-clock access to their accounts without visiting a branch.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-118', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'Digital entertainment (streaming music and video) has economically impacted:',
-  options:['the traditional music and DVD retail industry, causing many physical stores to close','the construction industry','agricultural production','public transport systems'],
-  answer:'the traditional music and DVD retail industry, causing many physical stores to close', hint:'Streaming replaced buying physical media.',
+  options:['music and DVD retail shops','the construction industry','public transport systems','agricultural production'],
+  answer:'music and DVD retail shops', hint:'Streaming replaced buying physical media.',
   explanation:'Streaming services reduced demand for CDs and DVDs, causing many music and video rental shops to close and transforming how entertainment is sold.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-119', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'ICT in education provides the benefit of:',
-  options:['access to a vast range of learning resources from anywhere with internet access','eliminating the role of teachers entirely','preventing students from doing their own research','making all examinations unnecessary'],
-  answer:'access to a vast range of learning resources from anywhere with internet access', hint:'The internet is a huge library.',
+  options:['access to resources from anywhere','making all examinations unnecessary','stopping students doing research','removing the need for teachers'],
+  answer:'access to resources from anywhere', hint:'The internet is a huge library.',
   explanation:'ICT gives students access to online courses, research papers, videos and interactive tools that would be impossible to provide in a physical classroom alone.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-120', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
@@ -741,8 +741,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-120', chapterId:'g9ict-ethics-secu
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-esv-121', chapterId:'g9ict-ethics-security', subsection:'social_economic_effects', difficulty:2,
   question:'The use of computers has created jobs in areas such as:',
-  options:['software development, network administration, cybersecurity and data analysis','sheep farming and fishing','bricklaying and carpentry','vehicle manufacture using only hand tools'],
-  answer:'software development, network administration, cybersecurity and data analysis', hint:'New technology creates new types of jobs.',
+  options:['cybersecurity and data analysis','sheep farming and sea fishing','hand-tool vehicle assembly','bricklaying and carpentry'],
+  answer:'cybersecurity and data analysis', hint:'New technology creates new types of jobs.',
   explanation:'The computing industry has created millions of new jobs in programming, IT support, data science, cybersecurity and digital marketing.' }));
 
 })();

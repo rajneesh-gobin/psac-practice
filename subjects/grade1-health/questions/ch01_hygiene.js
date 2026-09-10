@@ -11,7 +11,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-001', chapterId:'g1he-hygiene', difficulty:1, subsection:'personal_hygiene',
     question:'What should you do when you wake up in the morning?',
-    options:['Wash my hands and face','Watch television','Go back to sleep','Play outside'],
+    options:['Wash my hands and face','Watch the television','Go back to sleep','Play outside first'],
     answer:'Wash my hands and face',
     hint:'Think about keeping our body clean.',
     explanation:'When we wake up, we should <b>wash our hands and face</b> to start the day clean and fresh.' }),
@@ -25,8 +25,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-003', chapterId:'g1he-hygiene', difficulty:1, subsection:'personal_hygiene',
     question:'Why should we wear clean clothes every day?',
-    options:['To look nice and stay healthy','To run faster','To eat better food','To sleep well'],
-    answer:'To look nice and stay healthy',
+    options:['To stay healthy','To run much faster','To eat better food','To sleep for longer'],
+    answer:'To stay healthy',
     hint:'Think about dirt and germs on clothes.',
     explanation:'Wearing <b>clean clothes</b> keeps us looking nice and prevents germs from staying on our skin.' }),
 
@@ -49,18 +49,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-007', chapterId:'g1he-hygiene', difficulty:1, subsection:'personal_hygiene',
     question:'What should you do before going to school each morning?',
-    options:['Wash hands, brush teeth, take a shower and wear clean clothes',
-             'Only eat breakfast',
-             'Only put on shoes',
-             'Only comb hair'],
-    answer:'Wash hands, brush teeth, take a shower and wear clean clothes',
+    options:['Wash and brush my teeth','Only eat my breakfast','Only put on my shoes','Only comb my hair'],
+    answer:'Wash and brush my teeth',
     hint:'Good hygiene involves many steps.',
     explanation:'To be clean and ready for school, we should <b>wash hands, brush teeth, take a shower and wear clean clothes</b>.' }),
 
   makeMCQ({ id:'g1he-hyg-008', chapterId:'g1he-hygiene', difficulty:1, subsection:'personal_hygiene',
     question:'Why is it important to dry yourself properly after a shower?',
-    options:['To stay warm and avoid getting sick','To make noise','To be faster','To eat more food'],
-    answer:'To stay warm and avoid getting sick',
+    options:['To stay warm','To make noise','To be faster','To eat more'],
+    answer:'To stay warm',
     hint:'Think about what happens when you stay wet.',
     explanation:'Drying ourselves properly after a shower keeps us <b>warm and healthy</b>. Staying wet can make us feel cold.' }),
 
@@ -71,8 +68,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-010', chapterId:'g1he-hygiene', difficulty:2, subsection:'personal_hygiene',
     question:'What is personal hygiene?',
-    options:['Keeping our body clean and healthy','Eating lots of food','Playing sports every day','Sleeping for 12 hours'],
-    answer:'Keeping our body clean and healthy',
+    options:['Keeping our body clean','Eating lots of food','Playing sport each day','Sleeping for 12 hours'],
+    answer:'Keeping our body clean',
     hint:'Think about all the things we do to keep our body clean.',
     explanation:'<b>Personal hygiene</b> means keeping our body clean and healthy by washing, brushing, and wearing clean clothes.' }),
 
@@ -90,15 +87,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-013', chapterId:'g1he-hygiene', difficulty:1, subsection:'personal_hygiene',
     question:'What do we use to comb our hair?',
-    options:['A comb or brush','A spoon','A pencil','A ruler'],
-    answer:'A comb or brush',
+    options:['A comb','A spoon','A pencil','A ruler'],
+    answer:'A comb',
     hint:'Think about what you use in the morning.',
     explanation:'We use a <b>comb or brush</b> to tidy our hair every day.' }),
 
   makeMCQ({ id:'g1he-hyg-014', chapterId:'g1he-hygiene', difficulty:2, subsection:'personal_hygiene',
     question:'Which step comes LAST in getting ready for school?',
-    options:['Putting on your school bag','Waking up','Taking a shower','Combing your hair'],
-    answer:'Putting on your school bag',
+    options:['Taking my school bag','Waking up in the morning','Taking a shower','Combing my hair'],
+    answer:'Taking my school bag',
     hint:'Think about what you do just before you leave the house.',
     explanation:'The last step is <b>putting on your school bag</b> to leave for school.' }),
 
@@ -125,15 +122,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-018', chapterId:'g1he-hygiene', difficulty:1, subsection:'hand_washing',
     question:'After applying soap, what do we do next?',
-    options:['Rub our hands together','Dry our hands','Eat food','Rinse straight away'],
-    answer:'Rub our hands together',
+    options:['Rub our hands','Dry our hands','Eat our food','Rinse them at once'],
+    answer:'Rub our hands',
     hint:'Soap needs to cover all parts of our hands.',
     explanation:'After applying soap, we <b>rub our hands together</b> to spread the soap and clean between our fingers.' }),
 
   makeMCQ({ id:'g1he-hyg-019', chapterId:'g1he-hygiene', difficulty:1, subsection:'hand_washing',
     question:'After rubbing, what do we do?',
-    options:['Rinse our hands with water','Apply more soap','Eat straight away','Wipe on our clothes'],
-    answer:'Rinse our hands with water',
+    options:['Rinse our hands','Add more soap','Eat straight away','Wipe on our clothes'],
+    answer:'Rinse our hands',
     hint:'We need to wash the soap away.',
     explanation:'After rubbing, we <b>rinse our hands</b> with clean water to wash all the soap and germs away.' }),
 
@@ -158,8 +155,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-023', chapterId:'g1he-hygiene', difficulty:1, subsection:'hand_washing',
     question:'When ELSE should we wash our hands?',
-    options:['After using the toilet','Before sleeping','While watching TV','Before combing hair'],
-    answer:'After using the toilet',
+    options:['After the toilet','Before sleeping','While watching TV','Before combing hair'],
+    answer:'After the toilet',
     hint:'Think about when germs get on our hands.',
     explanation:'We should wash our hands <b>after using the toilet</b> to remove germs and stop them spreading.' }),
 
@@ -170,8 +167,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-025', chapterId:'g1he-hygiene', difficulty:2, subsection:'hand_washing',
     question:'Why is it important to wash our hands?',
-    options:['To remove germs and stop us getting sick','To make them softer','To make them smell nice','To make them look bigger'],
-    answer:'To remove germs and stop us getting sick',
+    options:['To remove germs','To make them soft','To make them smell','To make them bigger'],
+    answer:'To remove germs',
     hint:'Think about what germs do.',
     explanation:'Washing our hands removes <b>germs</b> that can make us sick. Clean hands keep us healthy.' }),
 
@@ -217,15 +214,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-032', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'When should you brush your teeth?',
-    options:['In the morning and before bed','Only in the evening','Only in the morning','Whenever you feel like it'],
-    answer:'In the morning and before bed',
+    options:['Morning and bedtime','Only in the evening','Only in the morning','Whenever we like'],
+    answer:'Morning and bedtime',
     hint:'Think about the best times to brush.',
     explanation:'Brush your teeth <b>in the morning</b> (to start the day clean) <b>and before bed</b> (to remove food before sleep).' }),
 
   makeMCQ({ id:'g1he-hyg-033', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'What do we use to brush our teeth?',
-    options:['A toothbrush and toothpaste','A cloth and water','A comb and soap','Our fingers only'],
-    answer:'A toothbrush and toothpaste',
+    options:['A toothbrush','A cloth','A comb','Our fingers'],
+    answer:'A toothbrush',
     hint:'Think about what is in the bathroom.',
     explanation:'We use a <b>toothbrush and toothpaste</b> to brush our teeth properly.' }),
 
@@ -236,15 +233,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-035', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'How much toothpaste should you put on your toothbrush?',
-    options:['A small amount (pea-sized)','A very large squeeze','No toothpaste at all','A full tube'],
-    answer:'A small amount (pea-sized)',
+    options:['A pea-sized amount','A very big squeeze','No toothpaste at all','A whole full tube'],
+    answer:'A pea-sized amount',
     hint:'More toothpaste is not better.',
     explanation:'We only need <b>a small (pea-sized) amount</b> of toothpaste. Using too much is wasteful and not better.' }),
 
   makeMCQ({ id:'g1he-hyg-036', chapterId:'g1he-hygiene', difficulty:2, subsection:'dental_care',
     question:'Why do we brush our teeth?',
-    options:['To keep them clean and prevent cavities','To make them fall out sooner','To eat faster','To grow new teeth immediately'],
-    answer:'To keep them clean and prevent cavities',
+    options:['To keep them clean','To make them fall out','To eat much faster','To grow new teeth'],
+    answer:'To keep them clean',
     hint:'Think about what happens if we do not brush.',
     explanation:'We brush our teeth <b>to keep them clean</b> and prevent cavities (holes). Sugar and food left on teeth cause damage.' }),
 
@@ -255,8 +252,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-038', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'What should you do after brushing your teeth?',
-    options:['Rinse your mouth with water','Eat sweets','Brush your hair','Go back to bed'],
-    answer:'Rinse your mouth with water',
+    options:['Rinse your mouth','Eat some sweets','Brush your hair','Go back to bed'],
+    answer:'Rinse your mouth',
     hint:'We need to remove the toothpaste from our mouth.',
     explanation:'After brushing, <b>rinse your mouth with water</b> to remove the toothpaste and any loosened food particles.' }),
 
@@ -274,8 +271,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-041', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'When you cough, what should you do?',
-    options:['Cover your mouth with a tissue or your elbow','Cough on your friend','Cough with your mouth wide open','Hide under the desk'],
-    answer:'Cover your mouth with a tissue or your elbow',
+    options:['Cover your mouth','Cough on a friend','Open your mouth wide','Hide under the desk'],
+    answer:'Cover your mouth',
     hint:'Think about stopping germs from spreading.',
     explanation:'When coughing, cover your mouth with <b>a tissue or your elbow</b> to stop germs from spreading to others.' }),
 
@@ -286,8 +283,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-hyg-043', chapterId:'g1he-hygiene', difficulty:1, subsection:'dental_care',
     question:'After blowing your nose into a tissue, what should you do?',
-    options:['Throw the tissue away and wash your hands','Keep the tissue in your pocket','Give the tissue to a friend','Use the tissue again and again'],
-    answer:'Throw the tissue away and wash your hands',
+    options:['Throw the tissue away','Keep it in your pocket','Give it to a friend','Use it again later'],
+    answer:'Throw the tissue away',
     hint:'Used tissues carry germs.',
     explanation:'Throw the used tissue <b>in the bin</b> and then <b>wash your hands</b> to remove the germs.' }),
 

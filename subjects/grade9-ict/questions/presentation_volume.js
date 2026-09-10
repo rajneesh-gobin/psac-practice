@@ -109,8 +109,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-017', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-018', chapterId:'g9ict-presentation', subsection:'animations', difficulty:2,
   question:'A slide transition is different from an animation because a transition:',
-  options:['is the effect used when moving from one slide to the next','is applied to a single object on one slide','makes text appear one letter at a time','plays a sound when a picture is clicked'],
-  answer:'is the effect used when moving from one slide to the next', hint:'A transition affects the change between two slides, not the objects on a single slide.',
+  options:['plays when moving to the next slide','is applied to one object on a slide','makes text appear one letter at a time','plays a sound when a picture is clicked'],
+  answer:'plays when moving to the next slide', hint:'A transition affects the change between two slides, not the objects on a single slide.',
   explanation:'A transition is the visual effect that plays as one slide replaces another; animations affect objects within a slide.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-019', chapterId:'g9ict-presentation', subsection:'animations', difficulty:2,
@@ -181,8 +181,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-029', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-030', chapterId:'g9ict-presentation', subsection:'animations', difficulty:3,
   question:'A teacher wants to reveal bullet points one at a time as she speaks. Which setting should she apply to the text box?',
-  options:['Entrance animation with "On Click" trigger for each paragraph','Transition effect set to automatic','Slide Master with a timer','Exit animation applied to the whole slide'],
-  answer:'Entrance animation with "On Click" trigger for each paragraph', hint:'Each paragraph needs to appear separately when she clicks.',
+  options:['Entrance animation on each paragraph','Transition effect set to automatic','Slide Master with a built-in timer','Exit animation on the whole slide'],
+  answer:'Entrance animation on each paragraph', hint:'Each paragraph needs to appear separately when she clicks.',
   explanation:'Applying an entrance animation to the text box and setting it to appear by first-level paragraph reveals one bullet at a time on each click.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-031', chapterId:'g9ict-presentation', subsection:'animations', difficulty:2,
@@ -213,8 +213,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-034', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-035', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
   question:'A handout printed with three slides per page includes:',
-  options:['lines for the audience to write their own notes','only the title of each slide','the speaker notes for each slide','a copy of the full script'],
-  answer:'lines for the audience to write their own notes', hint:'The three-slides layout leaves ruled lines beside each thumbnail.',
+  options:['lines for the audience to write on','the speaker notes for each slide','a copy of the full spoken script','only the title of each slide'],
+  answer:'lines for the audience to write on', hint:'The three-slides layout leaves ruled lines beside each thumbnail.',
   explanation:'The three-slides-per-page handout layout places lines next to each slide thumbnail so the audience can write notes.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-036', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
@@ -231,8 +231,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-037', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-038', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
   question:'The Handout Master allows you to:',
-  options:['set a consistent layout for all printed handout pages','change the animation on every slide','add new slides to the presentation','delete the speaker notes'],
-  answer:'set a consistent layout for all printed handout pages', hint:'It is the equivalent of the Slide Master but for printouts.',
+  options:['set the layout of printed handouts','delete the speaker notes for a slide','change the animation on every slide','add new slides to the presentation'],
+  answer:'set the layout of printed handouts', hint:'It is the equivalent of the Slide Master but for printouts.',
   explanation:'The Handout Master controls the header, footer, page number and layout that appear on every printed handout page.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-039', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
@@ -249,8 +249,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-040', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-041', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
   question:'A handout is given to the audience so they can:',
-  options:['follow the presentation and have a record to keep','see the animations that were used','choose the order of the slides','control the slide show themselves'],
-  answer:'follow the presentation and have a record to keep', hint:'It is a printout for the audience.',
+  options:['follow along and keep a record','see the animations that were used','control the slide show themselves','choose the order of the slides'],
+  answer:'follow along and keep a record', hint:'It is a printout for the audience.',
   explanation:'Handouts give the audience a printed copy of the slides to follow during the presentation and refer to afterwards.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-042', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
@@ -279,8 +279,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-045', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-046', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
   question:'To print six slide thumbnails on one sheet without note lines, you choose:',
-  options:['6 slides per page from the Handouts section','Notes Pages from the print settings','Full Page Slides','Outline'],
-  answer:'6 slides per page from the Handouts section', hint:'The Handouts section has options for different numbers of slides per page.',
+  options:['6 Slides per Page (Handouts)','3 Slides per Page (Handouts)','Full Page Slides (one each)','Notes Pages (one per sheet)'],
+  answer:'6 Slides per Page (Handouts)', hint:'The Handouts section has options for different numbers of slides per page.',
   explanation:'Choosing 6 slides per page under Handouts prints six small slide images with no note lines beside them.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-047', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:2,
@@ -293,8 +293,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-047', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-048', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
   question:'Print Preview is used to:',
-  options:['check how a document will look before printing','print the document immediately','change the font size on all slides','delete empty slides'],
-  answer:'check how a document will look before printing', hint:'It lets you see the output before using any paper.',
+  options:['check the look before printing','print the document immediately','change the font size on slides','delete any empty slides'],
+  answer:'check the look before printing', hint:'It lets you see the output before using any paper.',
   explanation:'Print Preview shows an on-screen image of the printed output so you can spot problems before wasting paper.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-049', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
@@ -329,8 +329,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-053', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-054', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
   question:'"Print Current Slide" prints:',
-  options:['only the slide that is currently selected','all the slides in the presentation','only the first slide','only the last slide'],
-  answer:'only the slide that is currently selected', hint:'It is a quick way to print just one slide.',
+  options:['only the slide now selected','only the first slide of the show','only the last slide of the show','all the slides in the file'],
+  answer:'only the slide now selected', hint:'It is a quick way to print just one slide.',
   explanation:'"Print Current Slide" prints whichever slide is highlighted or open at the time the print command is given.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-055', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
@@ -341,8 +341,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-055', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-056', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
   question:'Which print setting places four slide thumbnails on a single sheet?',
-  options:['4 slides per page (Handouts)','Outline','Notes Pages','Full Page Slides'],
-  answer:'4 slides per page (Handouts)', hint:'The Handouts section offers 1, 2, 3, 4, 6, or 9 per page.',
+  options:['4 Slides per Page (Handouts)','9 Slides per Page (Handouts)','Full Page Slides (one each)','Notes Pages (one per sheet)'],
+  answer:'4 Slides per Page (Handouts)', hint:'The Handouts section offers 1, 2, 3, 4, 6, or 9 per page.',
   explanation:'Choosing 4 slides per page under Handouts prints four small thumbnail images on one sheet.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-057', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
@@ -353,19 +353,19 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-057', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-058', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
   question:'Pure Black and White print mode differs from Greyscale because it:',
-  options:['removes shading and prints all non-white areas as solid black','uses colour for text but grey for images','prints text only and omits all images','adds a black border around every slide'],
-  answer:'removes shading and prints all non-white areas as solid black', hint:'There are no grey shades — only black and white.',
+  options:['prints every shade as solid black','uses colour for text, grey for images','adds a black border to every slide','prints text only and omits images'],
+  answer:'prints every shade as solid black', hint:'There are no grey shades — only black and white.',
   explanation:'Pure Black and White converts all content to solid black or white with no intermediate grey shades.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-059', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
   question:'Before clicking Print, a presenter should use Print Preview to check:',
-  options:['that the correct slides are selected and the layout looks right','that all animations will still play','that the Internet connection is working','that the font is installed on the printer'],
-  answer:'that the correct slides are selected and the layout looks right', hint:'Preview catches layout problems before wasting paper.',
+  options:['the slides and layout are correct','that all animations will still play','that the printer has the right font','that the internet connection works'],
+  answer:'the slides and layout are correct', hint:'Preview catches layout problems before wasting paper.',
   explanation:'Print Preview lets you confirm the correct slides, the correct layout and that nothing is cut off at the edges.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-060', chapterId:'g9ict-presentation', subsection:'print_preview', difficulty:2,
   question:'The number of copies to be printed is set in the:',
-  options:['Copies box in the Print dialog','Animations pane','Slide Master view','Transitions tab'],
+  options:['Copies box in the Print dialog','Timing group on the Animations tab','Duration box on the Transitions tab','Placeholder pane in Slide Master'],
   answer:'Copies box in the Print dialog', hint:'It is a numbered box in the print settings.',
   explanation:'The Copies box in the Print dialog lets you type how many complete sets of the slides you want to print.' }));
 
@@ -385,14 +385,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-062', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-063', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'A design template in a presentation application sets:',
-  options:['the colours, fonts and background for all slides','the order in which slides are shown','the speed at which transitions play','the number of slides allowed'],
-  answer:'the colours, fonts and background for all slides', hint:'It controls the visual look of the whole presentation.',
+  options:['the colours, fonts and background','the speed at which transitions play','the order in which slides show','the number of slides allowed'],
+  answer:'the colours, fonts and background', hint:'It controls the visual look of the whole presentation.',
   explanation:'A design template applies a consistent set of colours, fonts and backgrounds to every slide in the presentation.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-064', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'Applying a theme to a presentation changes:',
-  options:['the colours, fonts and visual effects','the order of the slides','the speaker notes','the number of animations'],
-  answer:'the colours, fonts and visual effects', hint:'A theme is a coordinated set of visual settings.',
+  options:['the colours, fonts and effects','the text of the speaker notes','the number of animations used','the order of the slides shown'],
+  answer:'the colours, fonts and effects', hint:'A theme is a coordinated set of visual settings.',
   explanation:'A theme is a preset collection of colours, fonts and graphic effects that is applied to all slides at once.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-065', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
@@ -409,20 +409,20 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-066', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-067', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'The main reason to use a design template rather than formatting each slide separately is:',
-  options:['to make all slides look consistent with less effort','to add more slides to the presentation','to record narration for the slide show','to convert the file into a PDF'],
-  answer:'to make all slides look consistent with less effort', hint:'One setting change updates every slide.',
+  options:['to keep every slide consistent','to record narration for the show','to convert the file into a PDF','to add more slides to the show'],
+  answer:'to keep every slide consistent', hint:'One setting change updates every slide.',
   explanation:'A template applies the same look to every slide instantly, keeping the presentation consistent without formatting each slide individually.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-068', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'A blank presentation has:',
-  options:['a plain white background and no preset colours or fonts','a pre-selected theme applied already','animated transitions on every slide','a background image on each slide'],
-  answer:'a plain white background and no preset colours or fonts', hint:'Nothing is applied — you start from scratch.',
+  options:['a plain white background','animated transitions on every slide','a background image on each slide','a preset theme already applied'],
+  answer:'a plain white background', hint:'Nothing is applied — you start from scratch.',
   explanation:'A blank presentation opens with a plain white background and default fonts so you can design it from scratch.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-069', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'Theme colours can be customised by:',
-  options:['editing the colour palette in the Theme Colors dialog','deleting and retyping all the text','changing the slide transitions','adding a new slide layout'],
-  answer:'editing the colour palette in the Theme Colors dialog', hint:'You can replace the preset colours with your own.',
+  options:['editing the Theme Colors palette','changing the slide transitions','deleting and retyping the text','adding a new slide layout'],
+  answer:'editing the Theme Colors palette', hint:'You can replace the preset colours with your own.',
   explanation:'The Theme Colors dialog lets you swap each colour in the palette for a custom choice, updating all slides that use those colours.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-070', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
@@ -439,14 +439,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-071', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-072', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'The background of a slide can be set to:',
-  options:['a solid colour, a gradient, a texture or an image','animations only','a video that plays on every slide','a spreadsheet of data'],
-  answer:'a solid colour, a gradient, a texture or an image', hint:'There are several background fill types.',
+  options:['a colour, gradient or picture','a video playing on every slide','a spreadsheet of raw data','an animation effect only'],
+  answer:'a colour, gradient or picture', hint:'There are several background fill types.',
   explanation:'Slide backgrounds can use a solid fill, a gradient, a pattern, a texture or a picture.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-073', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'Applying a theme variant changes:',
-  options:['the colour scheme while keeping the same font and layout','the order of the slides','the speed of all animations','the number of slides in the presentation'],
-  answer:'the colour scheme while keeping the same font and layout', hint:'A variant is a colour alternative within the same theme.',
+  options:['the colour scheme only','the number of slides in the file','the speed of all animations','the order of the slides'],
+  answer:'the colour scheme only', hint:'A variant is a colour alternative within the same theme.',
   explanation:'Theme variants offer alternative colour palettes within the same theme, so the layout and fonts stay the same.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-074', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
@@ -463,8 +463,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-075', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-076', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'Which element is NOT typically set by a design template?',
-  options:['The content of the speaker notes','The colour of headings','The background graphic','The body font'],
-  answer:'The content of the speaker notes', hint:'Templates control appearance, not the words you type.',
+  options:['The speaker notes text','The colour of headings','The background graphic','The body text font'],
+  answer:'The speaker notes text', hint:'Templates control appearance, not the words you type.',
   explanation:'A design template sets visual properties such as colours, fonts and backgrounds, but not the text typed into notes or slides.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-077', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
@@ -475,22 +475,22 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-077', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-078', chapterId:'g9ict-presentation', subsection:'design_templates', difficulty:2,
   question:'Theme fonts control:',
-  options:['the font used for headings and body text throughout the presentation','the speed at which text animates onto the slide','the number of words allowed on each slide','the size of the slide thumbnails in the panel'],
-  answer:'the font used for headings and body text throughout the presentation', hint:'Changing the theme font updates all text at once.',
+  options:['the heading and body text fonts','the number of words per slide','the size of slide thumbnails','the speed of text animation'],
+  answer:'the heading and body text fonts', hint:'Changing the theme font updates all text at once.',
   explanation:'Theme fonts define one font for headings and one for body text, applied consistently across all slides.' }));
 
 // ── slide_masters: g9ict-prv-079 to g9ict-prv-094 ────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-079', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'The slide master controls:',
-  options:['the layout and appearance shared by all slides that use it','the speed of the slide show','the number of slides in the presentation','how the file is saved'],
-  answer:'the layout and appearance shared by all slides that use it', hint:'It is the template for all slides.',
+  options:['the shared layout of its slides','the number of slides in the file','the speed of the slide show','the way the file is saved'],
+  answer:'the shared layout of its slides', hint:'It is the template for all slides.',
   explanation:'The slide master holds the background, fonts, colours and placeholders that every slide based on it inherits.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-080', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'Editing the slide master affects:',
-  options:['all slides that are based on that master','only the first slide','only the last slide','only slides that have no animations'],
-  answer:'all slides that are based on that master', hint:'That is the whole purpose of a master.',
+  options:['all slides based on that master','only slides that have no animations','only the first slide of the show','only the last slide of the show'],
+  answer:'all slides based on that master', hint:'That is the whole purpose of a master.',
   explanation:'Any change made on the slide master is immediately applied to every slide that inherits from it.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-081', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
@@ -501,8 +501,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-081', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-082', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'A logo placed on the slide master will appear:',
-  options:['on every slide that uses that master','only on slide 1','only on the last slide','only when the show is printed'],
-  answer:'on every slide that uses that master', hint:'Everything on the master is inherited by all its slides.',
+  options:['on every slide using that master','only on the first slide of all','only on the last slide of all','only when the show is printed'],
+  answer:'on every slide using that master', hint:'Everything on the master is inherited by all its slides.',
   explanation:'Objects placed on the slide master appear on every slide based on it, which is useful for logos and watermarks.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-083', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
@@ -513,8 +513,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-083', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-084', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'Layout slides in the Slide Master view control:',
-  options:['the arrangement of placeholders for a specific type of slide','the colour of the presentation background','the sound played at the start of the show','the number of words allowed per slide'],
-  answer:'the arrangement of placeholders for a specific type of slide', hint:'A title-only layout is different from a two-content layout.',
+  options:['where the placeholders are placed','the colour of the slide background','the number of words per slide','the sound played at the start'],
+  answer:'where the placeholders are placed', hint:'A title-only layout is different from a two-content layout.',
   explanation:'Layout slides define where title, content, picture and other placeholders sit for a particular slide type.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-085', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
@@ -537,8 +537,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-087', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-088', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'A date placeholder on the slide master inserts:',
-  options:['the current or a fixed date on every slide','a clock that counts down','the name of the presenter','a link to an online calendar'],
-  answer:'the current or a fixed date on every slide', hint:'It can update automatically or be set to a fixed value.',
+  options:['the current or a fixed date','a link to an online calendar','the name of the presenter','a clock that counts down'],
+  answer:'the current or a fixed date', hint:'It can update automatically or be set to a fixed value.',
   explanation:'The date placeholder can show either today\'s date (updating automatically) or a fixed date, on every slide.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-089', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
@@ -555,8 +555,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-090', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-091', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'If you change the background colour on the slide master, you should:',
-  options:['also check that text colours still give enough contrast','delete all slides and start again','remove all animations from the show','change the file format to PDF'],
-  answer:'also check that text colours still give enough contrast', hint:'Dark text on a dark background cannot be read.',
+  options:['check the text still has contrast','delete all slides and start again','change the file format to PDF','remove all animations from it'],
+  answer:'check the text still has contrast', hint:'Dark text on a dark background cannot be read.',
   explanation:'A new background colour may make existing text hard to read, so the text colour may also need adjusting.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-092', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
@@ -567,22 +567,22 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-092', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-093', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'To prevent the audience from seeing the slide master during the show, you:',
-  options:['close Slide Master view and return to Normal view','delete the master','hide the master with an animation','print the master before presenting'],
-  answer:'close Slide Master view and return to Normal view', hint:'The master is only visible in its own editing view.',
+  options:['close Slide Master view','print the master beforehand','delete the master entirely','hide it with an animation'],
+  answer:'close Slide Master view', hint:'The master is only visible in its own editing view.',
   explanation:'The slide master is an editing tool; once you close that view the audience sees only the normal slides.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-094', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'The slide master preserves:',
-  options:['a consistent design so individual slides share the same look','the animation speed of every object','the number of characters per slide','the name of each image file used'],
-  answer:'a consistent design so individual slides share the same look', hint:'Consistency is the key benefit of a master.',
+  options:['a consistent design across slides','the name of each image file used','the number of characters allowed','the animation speed of objects'],
+  answer:'a consistent design across slides', hint:'Consistency is the key benefit of a master.',
   explanation:'The master enforces a shared look across all slides, ensuring consistency without manual formatting.' }));
 
 // ── animated_clips: g9ict-prv-095 to g9ict-prv-110 ───────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-095', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
   question:'An animated GIF file differs from a still image because it:',
-  options:['displays a series of frames in sequence to create the impression of movement','stores a much higher resolution','can only be viewed in a video player','always fills the entire slide'],
-  answer:'displays a series of frames in sequence to create the impression of movement', hint:'GIF supports multiple frames.',
+  options:['shows several frames in sequence','stores a much higher resolution','always fills the entire slide','opens only in a video player'],
+  answer:'shows several frames in sequence', hint:'GIF supports multiple frames.',
   explanation:'An animated GIF contains multiple image frames played one after another, creating the impression of animation.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-096', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
@@ -611,14 +611,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-099', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-100', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
   question:'In Normal view, an animated clip appears as:',
-  options:['a still image — it only animates during the slide show','a video player with play controls','a blank white box','a text placeholder'],
-  answer:'a still image — it only animates during the slide show', hint:'The animation only plays in presentation mode.',
+  options:['a still image, not moving','a video player with controls','an empty text placeholder','a plain blank white box'],
+  answer:'a still image, not moving', hint:'The animation only plays in presentation mode.',
   explanation:'In editing (Normal) view, an animated GIF shows only its first frame; it animates automatically when the slide show runs.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-101', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
   question:'Animated clips are most effective in a presentation when they:',
-  options:['illustrate a concept or add relevant visual interest','are placed on every slide to fill space','replace all the text on the slide','cover the company logo'],
-  answer:'illustrate a concept or add relevant visual interest', hint:'They should support the content, not distract from it.',
+  options:['illustrate a concept clearly','appear on every slide to fill space','replace all text on the slide','cover the company logo up'],
+  answer:'illustrate a concept clearly', hint:'They should support the content, not distract from it.',
   explanation:'Animated clips work best when they reinforce a concept or provide relevant visual interest rather than decoration.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-102', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
@@ -629,14 +629,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-102', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-103', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
   question:'Animated clips are embedded in a presentation file, which means:',
-  options:['the clip is stored inside the file and will play on any computer','the clip requires a live internet connection to play','the clip must be saved separately as a video file','the presentation file size is reduced'],
-  answer:'the clip is stored inside the file and will play on any computer', hint:'Embedding copies the file into the presentation.',
+  options:['the clip is stored inside the file','the clip is saved as a separate video','the clip needs an internet connection','the presentation file becomes smaller'],
+  answer:'the clip is stored inside the file', hint:'Embedding copies the file into the presentation.',
   explanation:'An embedded animated clip is stored inside the presentation file so it plays correctly when the file is opened on another computer.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-104', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
   question:'An animated clip that "loops" will:',
-  options:['play again from the start as soon as it finishes','play once and then stop','play once for each slide','play backwards after finishing'],
-  answer:'play again from the start as soon as it finishes', hint:'Looping means continuous repetition.',
+  options:['restart as soon as it ends','play backwards after finishing','play once for every slide','play once and then stop'],
+  answer:'restart as soon as it ends', hint:'Looping means continuous repetition.',
   explanation:'A looping animated GIF restarts automatically when it reaches its last frame, creating a continuous animation.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-105', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
@@ -647,8 +647,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-105', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-106', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
   question:'To stop an animated clip playing continuously on a slide, you would:',
-  options:['edit the GIF to remove looping before inserting it','press Escape during the presentation','click the slide transition button','change the clip to a JPEG'],
-  answer:'edit the GIF to remove looping before inserting it', hint:'Looping is set inside the GIF file itself.',
+  options:['edit the GIF to remove looping','press Escape during the show','click the transition button','change the clip to a JPEG'],
+  answer:'edit the GIF to remove looping', hint:'Looping is set inside the GIF file itself.',
   explanation:'The loop setting is part of the GIF file, so looping must be turned off using an image editor before the file is inserted.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-107', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
@@ -665,8 +665,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-108', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-109', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
   question:'One disadvantage of adding many large animated GIFs to a presentation is that:',
-  options:['the file size of the presentation increases significantly','the slide show cannot be started','the slides lose all their text','no transitions can be applied'],
-  answer:'the file size of the presentation increases significantly', hint:'Each GIF adds its full size to the file.',
+  options:['the file size grows a lot','the slides lose all their text','no transitions can be applied','the slide show cannot start'],
+  answer:'the file size grows a lot', hint:'Each GIF adds its full size to the file.',
   explanation:'Each embedded animated clip increases the total file size, making the presentation slower to open, send and save.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-110', chapterId:'g9ict-presentation', subsection:'animated_clips', difficulty:2,
@@ -691,8 +691,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-112', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-113', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:2,
   question:'The Fade In effect on a video makes the video:',
-  options:['start from black and gradually become fully visible','play in reverse order','loop back to the beginning when it finishes','display only its audio'],
-  answer:'start from black and gradually become fully visible', hint:'It is the same kind of effect as a fade entrance animation.',
+  options:['appear gradually from black','display only its audio track','play in reverse frame order','loop back to the beginning'],
+  answer:'appear gradually from black', hint:'It is the same kind of effect as a fade entrance animation.',
   explanation:'A Fade In video effect makes the clip increase from black to fully visible at the start of playback.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-114', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:2,
@@ -721,20 +721,20 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-117', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-118', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:2,
   question:'Playing a video full screen in a presentation:',
-  options:['fills the whole display with the video during playback','makes the video play backwards','removes audio from the clip','converts the video to a GIF'],
-  answer:'fills the whole display with the video during playback', hint:'The slide disappears and the video takes over the screen.',
+  options:['fills the whole display','removes the audio from the clip','makes the video play backwards','converts the video to a GIF'],
+  answer:'fills the whole display', hint:'The slide disappears and the video takes over the screen.',
   explanation:'Full screen playback expands the video to fill the whole display, hiding the slide behind it.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-119', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:2,
   question:'Adding a video to a presentation makes it:',
-  options:['more engaging by including moving images and sound','smaller in file size','faster to open on any device','easier to print as a handout'],
-  answer:'more engaging by including moving images and sound', hint:'Video combines sight and sound for impact.',
+  options:['more engaging for the audience','faster to open on any device','easier to print as a handout','smaller in total file size'],
+  answer:'more engaging for the audience', hint:'Video combines sight and sound for impact.',
   explanation:'Video engages the audience with moving images and sound, which can explain concepts more clearly than still images.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-120', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:2,
   question:'Linking a video instead of embedding it means:',
-  options:['the video file must be kept in the same folder as the presentation','the video is stored inside the .pptx file','the video plays without needing any file on disk','the presentation file size doubles'],
-  answer:'the video file must be kept in the same folder as the presentation', hint:'A link points to the file rather than copying it.',
+  options:['the video file must stay in place','the video plays with no file needed','the presentation file size doubles','the video is stored in the .pptx'],
+  answer:'the video file must stay in place', hint:'A link points to the file rather than copying it.',
   explanation:'A linked video is not stored inside the presentation; it must be available at the same path when the file is opened.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-121', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:2,
@@ -763,28 +763,28 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-124', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-125', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:2,
   question:'The Video Format tab that appears when a video is selected allows you to:',
-  options:['apply a visual frame style and adjust brightness','add new slides to the presentation','change the font of the slide title','record a new narration for the slide'],
-  answer:'apply a visual frame style and adjust brightness', hint:'It is used to change the appearance of the video frame.',
+  options:['apply a frame style and brightness','change the font of the slide title','add new slides to the presentation','record a narration for the slide'],
+  answer:'apply a frame style and brightness', hint:'It is used to change the appearance of the video frame.',
   explanation:'The Video Format tab includes options to apply borders and frames, adjust colour, brightness and contrast of the video on the slide.' }));
 
 // ── comic_strips: g9ict-prv-126 to g9ict-prv-141 ─────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-126', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'In ICT, a comic strip is used to:',
-  options:['tell a story or explain a process using images and speech bubbles','store a database of student marks','create a spreadsheet formula','format a document with styles'],
-  answer:'tell a story or explain a process using images and speech bubbles', hint:'It is a visual storytelling tool.',
+  options:['tell a story with images','format a document with styles','create a spreadsheet formula','store a database of marks'],
+  answer:'tell a story with images', hint:'It is a visual storytelling tool.',
   explanation:'A digital comic strip uses sequences of illustrated panels with dialogue and captions to tell a story or explain steps.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-127', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'The speech bubble in a comic strip is used to show:',
-  options:['what a character is saying or thinking','the title of the comic','the page number','the background of the scene'],
-  answer:'what a character is saying or thinking', hint:'Speech bubbles contain dialogue or thoughts.',
+  options:['what a character says','the background of the scene','the title of the comic','the number of the page'],
+  answer:'what a character says', hint:'Speech bubbles contain dialogue or thoughts.',
   explanation:'Speech bubbles contain the spoken words or thoughts of a character in the comic panel.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-128', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'A comic strip is similar to a storyboard because both:',
-  options:['present a sequence of scenes or events in order using images','are used to write the text of a report','convert video files to a smaller format','organise data in a table'],
-  answer:'present a sequence of scenes or events in order using images', hint:'Both use sequential visual panels.',
+  options:['show scenes in order with images','convert video to a smaller format','organise data in a table of rows','are used to write a report text'],
+  answer:'show scenes in order with images', hint:'Both use sequential visual panels.',
   explanation:'Both comic strips and storyboards use a sequence of visual panels to show events or ideas in order.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-129', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
@@ -807,32 +807,32 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-131', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-132', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'A caption in a comic strip provides:',
-  options:['a description or narration outside of the speech bubbles','a list of the characters in the story','the colour code of the background','the file size of the image'],
-  answer:'a description or narration outside of the speech bubbles', hint:'It is usually in a box at the top or bottom of the panel.',
+  options:['narration outside the bubbles','the colour code of the background','a list of characters in the story','the file size of the image used'],
+  answer:'narration outside the bubbles', hint:'It is usually in a box at the top or bottom of the panel.',
   explanation:'A caption is a block of narrative text in a panel, describing actions or settings outside of character dialogue.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-133', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'When creating a digital comic strip, the first step is to:',
-  options:['plan the story and decide what happens in each panel','choose the background colour','export the file as a PDF','add sound to each panel'],
-  answer:'plan the story and decide what happens in each panel', hint:'Planning comes before creating.',
+  options:['plan the story and the panels','export the finished file as PDF','add a sound clip to each panel','choose the background colour'],
+  answer:'plan the story and the panels', hint:'Planning comes before creating.',
   explanation:'The story must be planned and each panel\'s content decided before any character or background is placed in the tool.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-134', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'Comic strips can be exported from creation software and inserted into a presentation as:',
-  options:['image files such as JPEG or PNG','executable programs','database tables','audio files'],
-  answer:'image files such as JPEG or PNG', hint:'The finished strip is saved as an image.',
+  options:['image files (JPEG or PNG)','executable programs (.exe)','database tables (.accdb)','audio files (MP3 or WAV)'],
+  answer:'image files (JPEG or PNG)', hint:'The finished strip is saved as an image.',
   explanation:'Comic strips are exported as image files (JPEG, PNG, GIF) and can then be inserted into a presentation like any picture.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-135', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'Comics strips are effective for explaining concepts because they:',
-  options:['combine text and visuals in an engaging, easy-to-follow format','are always shorter than a written paragraph','can replace a database query','use only numbers, not words'],
-  answer:'combine text and visuals in an engaging, easy-to-follow format', hint:'The combination of image and text aids understanding.',
+  options:['combine text and visuals well','can replace a database query','are shorter than a paragraph','use only numbers, not words'],
+  answer:'combine text and visuals well', hint:'The combination of image and text aids understanding.',
   explanation:'Comics use pictures and text together, making concepts easier to understand and more memorable than text alone.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-136', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'The order of panels in a comic strip is read:',
-  options:['from left to right and then top to bottom','from bottom to top','randomly in any order','only from top to bottom'],
-  answer:'from left to right and then top to bottom', hint:'The same direction as reading English text.',
+  options:['left to right, top to bottom','randomly, in any order at all','from the bottom upwards only','only from the top downwards'],
+  answer:'left to right, top to bottom', hint:'The same direction as reading English text.',
   explanation:'Comic strips follow the same left-to-right and top-to-bottom reading order as written English text.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-137', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
@@ -843,8 +843,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-137', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-138', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'In a school ICT project, comic strips are useful for:',
-  options:['presenting information about internet safety in an engaging way','calculating the average of a set of marks','formatting a word-processed essay','designing a database table structure'],
-  answer:'presenting information about internet safety in an engaging way', hint:'Stories are an engaging way to teach.',
+  options:['presenting internet safety tips','formatting a word-processed essay','calculating the average of marks','designing a database table'],
+  answer:'presenting internet safety tips', hint:'Stories are an engaging way to teach.',
   explanation:'Comic strips can tell cautionary tales about internet safety in an engaging visual format, making the message memorable.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-139', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
@@ -861,46 +861,46 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-140', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-141', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
   question:'A comic strip used in a school presentation should be:',
-  options:['relevant to the topic and appropriate for the audience','as long as possible to fill the slide','randomly ordered for variety','printed only in black and white'],
-  answer:'relevant to the topic and appropriate for the audience', hint:'Content must always match the purpose and audience.',
+  options:['relevant and age appropriate','printed in black and white only','randomly ordered for variety','as long as the slide allows'],
+  answer:'relevant and age appropriate', hint:'Content must always match the purpose and audience.',
   explanation:'Any comic strip in a presentation should directly support the topic being presented and be suitable for the age group.' }));
 
 // ── storyboarding: g9ict-prv-142 to g9ict-prv-157 ────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-142', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'A storyboard is used to:',
-  options:['plan a multimedia project scene by scene before production begins','store the final video file','calculate the budget for a presentation','sort the slides alphabetically'],
-  answer:'plan a multimedia project scene by scene before production begins', hint:'It is a planning tool, not a finished product.',
+  options:['plan a project scene by scene','sort the slides alphabetically','calculate the project budget','store the final video file'],
+  answer:'plan a project scene by scene', hint:'It is a planning tool, not a finished product.',
   explanation:'A storyboard maps out each scene of a multimedia project in order before any recording or design work begins.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-143', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'Each frame (box) of a storyboard typically contains:',
-  options:['a sketch of the scene and notes about the content, timing and audio','the finished photograph for that scene','the completed animation for that scene','a chart of the data to be presented'],
-  answer:'a sketch of the scene and notes about the content, timing and audio', hint:'Storyboards use rough sketches, not finished art.',
+  options:['a sketch and notes on the scene','the finished photograph taken','a chart of the data collected','the completed animation clip'],
+  answer:'a sketch and notes on the scene', hint:'Storyboards use rough sketches, not finished art.',
   explanation:'Each storyboard frame has a simple sketch and written notes about what will be seen, heard and how long it lasts.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-144', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'A storyboard reduces production costs because:',
-  options:['problems are identified and fixed on paper before expensive recording begins','it automatically generates the finished video','it is cheaper than buying presentation software','it prevents the need for any animations'],
-  answer:'problems are identified and fixed on paper before expensive recording begins', hint:'A drawing is much cheaper to change than a recorded scene.',
+  options:['problems are fixed on paper first','it removes the need for animation','it generates the finished video','it is cheaper than the software'],
+  answer:'problems are fixed on paper first', hint:'A drawing is much cheaper to change than a recorded scene.',
   explanation:'Spotting errors in a pencil sketch costs nothing to fix; discovering the same error after filming wastes time and money.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-145', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'Storyboards were originally developed for use in:',
-  options:['film and animation production','database design','spreadsheet creation','network planning'],
-  answer:'film and animation production', hint:'Walt Disney\'s studio is credited with popularising them.',
+  options:['film and animation','network planning','spreadsheet work','database design'],
+  answer:'film and animation', hint:'Walt Disney\'s studio is credited with popularising them.',
   explanation:'Storyboards originated in film and animation studios to plan shots and sequences before the expensive filming stage.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-146', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'After a storyboard is approved, the next step in multimedia production is:',
-  options:['recording the actual content (filming, photography, audio)','deleting the storyboard','printing the storyboard as a handout','publishing the finished project online'],
-  answer:'recording the actual content (filming, photography, audio)', hint:'The storyboard is the plan; next comes execution.',
+  options:['recording the actual content','publishing the project online','printing it as a handout','deleting the storyboard'],
+  answer:'recording the actual content', hint:'The storyboard is the plan; next comes execution.',
   explanation:'Once the plan (storyboard) is approved, production begins — capturing the video, photographs and audio planned in each frame.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-147', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'Revising a storyboard is easier than revising the finished multimedia product because:',
-  options:['sketches can be changed quickly with no re-recording needed','a storyboard is stored in a database','the software automatically updates the video','a storyboard never needs to be revised'],
-  answer:'sketches can be changed quickly with no re-recording needed', hint:'Paper changes cost nothing.',
+  options:['sketches change with no re-filming','a storyboard sits in a database','the software updates the video','a storyboard is never revised'],
+  answer:'sketches change with no re-filming', hint:'Paper changes cost nothing.',
   explanation:'Altering a pencil sketch or typed note is quick and free; re-filming a scene takes equipment, actors and time.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-148', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
@@ -911,8 +911,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-148', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-149', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'A storyboard helps a production team because:',
-  options:['everyone can see the plan and work from the same document','it plays the finished animation automatically','it sends the video to the client','it converts audio to text'],
-  answer:'everyone can see the plan and work from the same document', hint:'It is a shared reference for the whole team.',
+  options:['everyone works from one plan','it plays the finished animation','it sends the video to a client','it converts audio into text'],
+  answer:'everyone works from one plan', hint:'It is a shared reference for the whole team.',
   explanation:'A storyboard gives every team member — director, camera operator, editor — a shared visual plan to work from.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-150', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
@@ -923,8 +923,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-150', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-151', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'The sketches in a storyboard are usually:',
-  options:['rough and simple — they only need to convey the idea','highly detailed, finished illustrations','photographs taken on location','generated automatically by software'],
-  answer:'rough and simple — they only need to convey the idea', hint:'Speed and clarity matter more than artistic quality.',
+  options:['rough and simple drawings','detailed finished illustrations','photographs taken on location','generated by the software'],
+  answer:'rough and simple drawings', hint:'Speed and clarity matter more than artistic quality.',
   explanation:'Storyboard sketches are intentionally rough; they just need to show the composition and action of each scene quickly.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-152', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
@@ -935,8 +935,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-152', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-153', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'A storyboard is drawn before any recording is done because:',
-  options:['it ensures the whole story is planned and logical before production','it is required by law for all multimedia','it generates the audio track automatically','it must be submitted to the teacher first'],
-  answer:'it ensures the whole story is planned and logical before production', hint:'Planning first avoids costly mistakes later.',
+  options:['the whole story is planned first','it generates the audio track itself','the teacher must see it first','the law requires it for video'],
+  answer:'the whole story is planned first', hint:'Planning first avoids costly mistakes later.',
   explanation:'Planning the entire sequence on paper first reveals any gaps or inconsistencies before expensive recording begins.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-154', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
@@ -953,22 +953,22 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-155', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-156', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'In what way is a storyboard similar to a flowchart?',
-  options:['Both show a sequence of steps or events in a visual, ordered format','Both are used to write computer programs','Both store data in rows and columns','Both are types of database query'],
-  answer:'Both show a sequence of steps or events in a visual, ordered format', hint:'Both use visual symbols or panels to show order.',
+  options:['Both show steps in visual order','Both store data in rows and columns','Both are types of database query','Both are used to write programs'],
+  answer:'Both show steps in visual order', hint:'Both use visual symbols or panels to show order.',
   explanation:'Like a flowchart, a storyboard presents a sequence visually in order, making the structure of the work easy to follow.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-157', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:2,
   question:'The main purpose of a storyboard is to:',
-  options:['communicate the plan clearly to everyone involved before production','store the finished multimedia file','replace the need for filming','generate captions automatically'],
-  answer:'communicate the plan clearly to everyone involved before production', hint:'It is a communication tool for the team.',
+  options:['communicate the plan to the team','generate the captions automatically','store the finished multimedia file','replace the need for any filming'],
+  answer:'communicate the plan to the team', hint:'It is a communication tool for the team.',
   explanation:'A storyboard\'s primary role is to communicate the creative and technical plan to every member of the production team.' }));
 
 // ── authoring_tools: g9ict-prv-158 to g9ict-prv-173 ─────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-158', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'An authoring tool is software used to:',
-  options:['combine different types of media into an interactive multimedia product','write only plain text documents','design network diagrams','create database queries'],
-  answer:'combine different types of media into an interactive multimedia product', hint:'It brings text, images, sound and video together.',
+  options:['combine media interactively','write plain text documents','create database queries','design network diagrams'],
+  answer:'combine media interactively', hint:'It brings text, images, sound and video together.',
   explanation:'Authoring tools allow developers to combine text, graphics, audio, video and interactive elements into a single multimedia product.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-159', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
@@ -979,8 +979,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-159', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-160', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'Authoring tools are used in education primarily to create:',
-  options:['interactive learning materials and e-learning courses','network cables and connectors','database backup schedules','antivirus software'],
-  answer:'interactive learning materials and e-learning courses', hint:'They combine media to teach.',
+  options:['interactive learning materials','network cables and connectors','antivirus scanning software','database backup schedules'],
+  answer:'interactive learning materials', hint:'They combine media to teach.',
   explanation:'Authoring tools are widely used to develop e-learning courses and interactive learning materials that combine text, quizzes, video and animation.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-161', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
@@ -991,44 +991,44 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-161', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-162', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'A hyperlink in an authoring tool allows:',
-  options:['the user to jump to a different page or section when clicked','the tool to generate a chart automatically','the tool to sort data in a table','the tool to print all slides at once'],
-  answer:'the user to jump to a different page or section when clicked', hint:'Hyperlinks create interactivity.',
+  options:['the user to jump to a section','the tool to sort a data table','the tool to generate a chart','the tool to print all slides'],
+  answer:'the user to jump to a section', hint:'Hyperlinks create interactivity.',
   explanation:'Hyperlinks in multimedia authoring tools let users navigate non-linearly by clicking to jump to any part of the product.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-163', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'The main advantage of authoring tools over simple word processors is that authoring tools:',
-  options:['support interactivity, animation and multiple media types in one product','produce documents with fewer spelling mistakes','are cheaper to buy','print faster on any printer'],
-  answer:'support interactivity, animation and multiple media types in one product', hint:'A word processor is limited to text and images.',
+  options:['support interactivity and media','produce fewer spelling mistakes','print faster on any printer','are much cheaper to buy'],
+  answer:'support interactivity and media', hint:'A word processor is limited to text and images.',
   explanation:'Authoring tools support rich media, interactivity, branching and animation — capabilities far beyond a word processor.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-164', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'Multimedia presentations created with authoring tools can include:',
-  options:['text, images, video, audio and interactive buttons all in one product','only text and still images','only video and audio without any text','only one type of media at a time'],
-  answer:'text, images, video, audio and interactive buttons all in one product', hint:'Authoring tools combine all media types.',
+  options:['text, video, audio and buttons','only one type of media at once','only video and audio, no text','only text and still pictures'],
+  answer:'text, video, audio and buttons', hint:'Authoring tools combine all media types.',
   explanation:'The key feature of an authoring tool is the ability to combine all media types — text, image, audio, video — with interactive controls.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-165', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'Content produced with an authoring tool can be delivered via:',
-  options:['the web, a CD-ROM, or as a standalone application','printed on paper only','spoken aloud by the computer only','sent as a text message only'],
-  answer:'the web, a CD-ROM, or as a standalone application', hint:'The output can be packaged in several ways.',
+  options:['the web, a CD-ROM or an app','a text message and nothing else','the computer speaking it aloud','printed paper and nothing else'],
+  answer:'the web, a CD-ROM or an app', hint:'The output can be packaged in several ways.',
   explanation:'Authoring tools can export content as a web page, a standalone executable, a packaged CD-ROM, or an app for different delivery methods.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-166', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'An authoring tool differs from a presentation package because authoring tools:',
-  options:['allow the user to interact and choose their own path through the content','only display slides in a fixed order','cannot include images or video','must always be connected to the internet'],
-  answer:'allow the user to interact and choose their own path through the content', hint:'Interactivity is the key distinction.',
+  options:['let the user choose their path','cannot include images or video','must always be online to work','show slides in a fixed order'],
+  answer:'let the user choose their path', hint:'Interactivity is the key distinction.',
   explanation:'Presentation packages play slides in sequence; authoring tools allow branching navigation where the user controls which content they see.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-167', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'An e-learning module created with an authoring tool might include:',
-  options:['an explanatory video followed by an interactive quiz','a single printed page','a database of customer records','a network topology diagram only'],
-  answer:'an explanatory video followed by an interactive quiz', hint:'E-learning uses multiple media and tests understanding.',
+  options:['a video and an interactive quiz','a network topology diagram only','a database of customer records','a single printed page of text'],
+  answer:'a video and an interactive quiz', hint:'E-learning uses multiple media and tests understanding.',
   explanation:'E-learning modules typically combine instructional content (video, text, images) with assessment (quiz, drag-and-drop) in one interactive package.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-168', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'Adobe Flash (now Animate) was widely used as an authoring tool to create:',
-  options:['interactive animations and web-based multimedia content','spreadsheet formulae','network cabling plans','printed certificates'],
-  answer:'interactive animations and web-based multimedia content', hint:'Flash was the standard for web animation for many years.',
+  options:['interactive web animations','printed award certificates','network cabling diagrams','spreadsheet formula sets'],
+  answer:'interactive web animations', hint:'Flash was the standard for web animation for many years.',
   explanation:'Adobe Flash was the dominant authoring tool for interactive web animations, games and multimedia presentations throughout the 2000s.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-169', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
@@ -1045,20 +1045,20 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-170', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-171', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'A card-based authoring tool organises content as:',
-  options:['a collection of cards or pages, like a stack of index cards','a spreadsheet of rows and columns','a flowchart of network nodes','a timeline of keyframes'],
-  answer:'a collection of cards or pages, like a stack of index cards', hint:'Each screen is one card.',
+  options:['a stack of linked cards','a flowchart of network nodes','a sheet of rows and columns','a timeline of keyframes'],
+  answer:'a stack of linked cards', hint:'Each screen is one card.',
   explanation:'Card-based authoring tools (such as the original HyperCard) store each screen as a "card" in a "stack", linked by buttons.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-172', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'For a student project, the most appropriate use of an authoring tool would be to:',
-  options:['create an interactive guide to school safety rules','calculate marks in a gradebook','design a database of library books','send emails to parents'],
-  answer:'create an interactive guide to school safety rules', hint:'Authoring tools produce interactive multimedia.',
+  options:['build an interactive safety guide','design a database of library books','calculate marks in a gradebook','send emails to all the parents'],
+  answer:'build an interactive safety guide', hint:'Authoring tools produce interactive multimedia.',
   explanation:'An authoring tool is ideal for creating an interactive guide that combines text, images and clickable sections about safety rules.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-prv-173', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:2,
   question:'SCORM is a standard used in e-learning authoring tools to:',
-  options:['package courses so they can be tracked by a Learning Management System','compress video files for playback','design database schemas','format text in a word processor'],
-  answer:'package courses so they can be tracked by a Learning Management System', hint:'It allows courses to report completion and scores.',
+  options:['package courses for an LMS','compress video for playback','format text in a document','design a database schema'],
+  answer:'package courses for an LMS', hint:'It allows courses to report completion and scores.',
   explanation:'SCORM (Sharable Content Object Reference Model) packages e-learning content so it can be launched and tracked by any compatible Learning Management System.' }));
 
 })();

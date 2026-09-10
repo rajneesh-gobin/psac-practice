@@ -31,8 +31,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-034', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
     question:'Why should we wash our feet every day?',
-    options:['Feet sweat inside shoes and bacteria build up, causing odour and infection','Feet are always clean inside shoes','Only our hands get dirty','Feet don\'t need washing unless they look dirty'],
-    answer:'Feet sweat inside shoes and bacteria build up, causing odour and infection',
+    options:['Feet sweat inside shoes','Feet stay clean in shoes','Only hands get dirty','Feet never need washing'],
+    answer:'Feet sweat inside shoes',
     explanation:'Feet sweat inside shoes all day. Washing them daily prevents <b>bacteria build-up, foot odour and fungal infections</b>.' }),
 
   makeTF({ id:'g2he-hyg-035', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
@@ -42,8 +42,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-036', chapterId:'g2he-hygiene', difficulty:2, subsection:'grooming',
     question:'Sam notices he has bad breath after eating garlic bread. What should he do?',
-    options:['Brush teeth and tongue gently and rinse mouth with water','Nothing — bad breath is natural','Eat more garlic','Avoid talking to anyone'],
-    answer:'Brush teeth and tongue gently and rinse mouth with water',
+    options:['Brush and rinse his mouth','Nothing, it is natural','Eat some more garlic','Avoid talking to people'],
+    answer:'Brush and rinse his mouth',
     explanation:'Brushing teeth and tongue and <b>rinsing the mouth</b> removes food particles and bacteria that cause bad breath (halitosis).' }),
 
   makeTF({ id:'g2he-hyg-037', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
@@ -53,8 +53,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-038', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
     question:'Why should we cover cuts or sores before going to school?',
-    options:['To prevent germs getting in and to stop spreading infection to others','Cuts don\'t need covering','Only to look tidy','Only if a teacher asks'],
-    answer:'To prevent germs getting in and to stop spreading infection to others',
+    options:['To keep germs out','To look tidy only','Only if a teacher asks','Cuts never need covers'],
+    answer:'To keep germs out',
     explanation:'Covering wounds with a clean plaster or bandage <b>protects the wound from germs</b> and prevents blood or fluid from spreading to others.' }),
 
   makeTF({ id:'g2he-hyg-039', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
@@ -64,16 +64,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-040', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
     question:'Which grooming habit helps protect us from the hot Mauritian sun?',
-    options:['Wearing a hat and applying sun protection outdoors','Never going outside','Wearing a coat in the heat','Rubbing sand on the skin'],
-    answer:'Wearing a hat and applying sun protection outdoors',
+    options:['Wearing a hat outdoors','Never going outside','Wearing a thick coat','Rubbing sand on skin'],
+    answer:'Wearing a hat outdoors',
     explanation:'The Mauritian sun is very strong. <b>Wearing a hat and using sunscreen</b> protects the skin from sunburn and long-term sun damage.' }),
 
   // ── hand_dental topup (041-050) ───────────────────────────────────────────
 
   makeMCQ({ id:'g2he-hyg-041', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'How long should you wash your hands to kill most germs?',
-    options:['At least 20 seconds — long enough to sing "Happy Birthday" twice','5 seconds is enough','Just a quick rinse with water','Only until hands look clean'],
-    answer:'At least 20 seconds — long enough to sing "Happy Birthday" twice',
+    options:['At least 20 seconds','About 5 seconds','A quick rinse only','Until they look clean'],
+    answer:'At least 20 seconds',
     explanation:'Washing for <b>at least 20 seconds</b> with soap creates enough friction to remove most germs. A quick rinse does not.' }),
 
   makeTF({ id:'g2he-hyg-042', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
@@ -83,8 +83,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-043', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'When we wash hands, which part should we scrub carefully?',
-    options:['The palms, back of hands, between fingers and under nails','Only the palms','Only the fingertips','Only the back of the hand'],
-    answer:'The palms, back of hands, between fingers and under nails',
+    options:['Every part of the hand','Only the palms','Only the fingertips','Only the back of them'],
+    answer:'Every part of the hand',
     explanation:'Germs hide on <b>all surfaces and under nails</b>. Thorough hand washing covers palms, backs, between fingers and beneath nails.' }),
 
   makeTF({ id:'g2he-hyg-044', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
@@ -94,14 +94,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-045', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'What does brushing the tongue help to prevent?',
-    options:['Bad breath — bacteria on the tongue produce smelly gases','Nothing — the tongue cleans itself','Tooth pain only','Stomach upset'],
-    answer:'Bad breath — bacteria on the tongue produce smelly gases',
+    options:['Bad breath','Tooth pain','Stomach upset','Sore eyes'],
+    answer:'Bad breath',
     explanation:'Bacteria live on the tongue and produce bad-smelling gases. <b>Gently brushing the tongue</b> removes these bacteria and freshens breath.' }),
 
   makeMCQ({ id:'g2he-hyg-046', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'Is it safe to share a toothbrush with a sibling?',
-    options:['No — sharing toothbrushes spreads bacteria and viruses between people','Yes — toothpaste kills all germs','Yes — if you rinse it first','Yes — family members always share one'],
-    answer:'No — sharing toothbrushes spreads bacteria and viruses between people',
+    options:['No, it spreads germs','Yes, toothpaste kills germs','Yes, if you rinse it','Yes, families always share'],
+    answer:'No, it spreads germs',
     explanation:'<b>Never share a toothbrush.</b> It transfers bacteria and viruses — including those that cause gum disease and infections.' }),
 
   makeTF({ id:'g2he-hyg-047', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
@@ -111,8 +111,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-048', chapterId:'g2he-hygiene', difficulty:2, subsection:'hand_dental',
     question:'Amina ate a banana at break time and does not have a toothbrush. What is the best thing she can do?',
-    options:['Rinse her mouth well with water to remove sugar','Eat more food to push the banana away','Do nothing — it\'s only one snack','Chew on a pen cap'],
-    answer:'Rinse her mouth well with water to remove sugar',
+    options:['Rinse her mouth with water','Eat more food afterwards','Do nothing at all today','Chew on a pen cap'],
+    answer:'Rinse her mouth with water',
     explanation:'When brushing is not possible, <b>rinsing the mouth with water</b> washes away sugar and food particles, reducing the risk of tooth decay.' }),
 
   makeTF({ id:'g2he-hyg-049', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
@@ -122,19 +122,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-050', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'What helps to keep teeth strong?',
-    options:['Eating calcium-rich foods (milk, cheese, yoghurt) and brushing twice daily',
-             'Eating lots of sweets',
-             'Never brushing',
-             'Drinking only fizzy drinks'],
-    answer:'Eating calcium-rich foods (milk, cheese, yoghurt) and brushing twice daily',
+    options:['Milk, cheese and yoghurt','Sweets and cakes every day','Fizzy drinks only','Never brushing them'],
+    answer:'Milk, cheese and yoghurt',
     explanation:'<b>Calcium-rich foods</b> build strong tooth enamel, and regular brushing removes plaque — together they protect teeth from decay.' }),
 
   // ── illness_hygiene topup (051-060) ───────────────────────────────────────
 
   makeMCQ({ id:'g2he-hyg-051', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'If you have a cold at school, what is the most important thing to do?',
-    options:['Cover mouth and nose when coughing or sneezing, and wash hands often','Cough freely on everyone','Stay home forever','Sneeze on food to kill germs'],
-    answer:'Cover mouth and nose when coughing or sneezing, and wash hands often',
+    options:['Cover your mouth and nose','Cough freely over everyone','Stay at home forever','Sneeze onto the food'],
+    answer:'Cover your mouth and nose',
     explanation:'Covering coughs and washing hands <b>stops cold viruses from spreading</b> to classmates and family.' }),
 
   makeTF({ id:'g2he-hyg-052', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
@@ -144,8 +141,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-053', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'What should you do with a used tissue?',
-    options:['Put it in the bin immediately after use','Leave it on the desk','Stuff it back in your pocket','Give it to a friend'],
-    answer:'Put it in the bin immediately after use',
+    options:['Put it in the bin','Leave it on the desk','Put it in your pocket','Give it to a friend'],
+    answer:'Put it in the bin',
     explanation:'Used tissues are full of germs. <b>Throwing them away immediately</b> stops those germs from spreading through the classroom.' }),
 
   makeTF({ id:'g2he-hyg-054', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
@@ -155,17 +152,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-055', chapterId:'g2he-hygiene', difficulty:2, subsection:'illness_hygiene',
     question:'Why should a child with chicken pox stay home from school?',
-    options:['Chicken pox spreads easily to others who have not had it, and the child needs rest','Chicken pox is not contagious','Only to stop the child from working','Teachers don\'t like children who are ill'],
-    answer:'Chicken pox spreads easily to others who have not had it, and the child needs rest',
+    options:['It spreads to others easily','It is not catching at all','To stop them doing work','Teachers dislike ill children'],
+    answer:'It spreads to others easily',
     explanation:'Chicken pox is <b>highly contagious</b>. Staying home protects classmates who have not had it and allows the child to rest and recover.' }),
 
   makeMCQ({ id:'g2he-hyg-056', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'Which action helps PREVENT the spread of germs at school?',
-    options:['Regular hand washing, not sharing food or drinks, covering coughs',
-             'Playing in mud all day',
-             'Sharing pencils with everyone',
-             'Never washing hands'],
-    answer:'Regular hand washing, not sharing food or drinks, covering coughs',
+    options:['Washing hands regularly','Playing in mud all day','Sharing pencils with all','Never washing our hands'],
+    answer:'Washing hands regularly',
     explanation:'The key actions to prevent germs spreading in school are <b>hand washing, not sharing food/drinks and covering coughs</b>.' }),
 
   makeTF({ id:'g2he-hyg-057', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
@@ -175,8 +169,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-058', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'If you feel sick and have a high fever at school, what should you tell a teacher?',
-    options:['Tell them immediately so they can contact a parent or get medical help','Keep it secret','Eat extra lunch','Ignore it and keep working'],
-    answer:'Tell them immediately so they can contact a parent or get medical help',
+    options:['Tell them straight away','Keep it a secret','Ask for extra lunch','Ignore it and work on'],
+    answer:'Tell them straight away',
     explanation:'A high fever needs medical attention. <b>Telling a teacher immediately</b> ensures a parent is called and proper care is given.' }),
 
   makeTF({ id:'g2he-hyg-059', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
@@ -186,25 +180,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-060', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'What is the role of vaccinations in preventing illness?',
-    options:['They prepare our immune system to fight specific diseases without making us very sick',
-             'They cure all illnesses',
-             'They replace healthy eating',
-             'They are only for adults'],
-    answer:'They prepare our immune system to fight specific diseases without making us very sick',
+    options:['They train our body to fight','They cure every illness','They replace healthy eating','They are only for adults'],
+    answer:'They train our body to fight',
     explanation:'Vaccinations contain weakened or dead viruses/bacteria that <b>train our immune system</b> to recognise and fight the real disease later.' }),
 
   // ── food_groups topup (031-040) ───────────────────────────────────────────
 
   makeMCQ({ id:'g2he-nut-031', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Which group gives us energy to run and play?',
-    options:['Carbohydrate foods (rice, bread, roti, pasta)','Meat only','Fizzy drinks','Sweets and chocolate'],
-    answer:'Carbohydrate foods (rice, bread, roti, pasta)',
+    options:['Carbohydrate foods','Meat and fish only','Fizzy drinks only','Sweets and chocolate'],
+    answer:'Carbohydrate foods',
     explanation:'<b>Carbohydrate (starchy) foods</b> are our main energy source. Rice, bread, roti and pasta fuel our muscles for activity.' }),
 
   makeMCQ({ id:'g2he-nut-032', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Milk, cheese and yoghurt belong to which food group?',
-    options:['Dairy foods (calcium-rich)','Energy foods','Vitamins group','Sugary foods'],
-    answer:'Dairy foods (calcium-rich)',
+    options:['Dairy foods','Energy foods','Vitamin foods','Sugary foods'],
+    answer:'Dairy foods',
     explanation:'Milk, cheese and yoghurt are <b>dairy foods</b>, rich in calcium for strong bones and teeth.' }),
 
   makeTF({ id:'g2he-nut-033', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_groups',
@@ -214,8 +205,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-034', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_groups',
     question:'Which food is a natural source of vitamins and minerals?',
-    options:['Broccoli (a green vegetable)','White sugar','Potato chips','Cola drink'],
-    answer:'Broccoli (a green vegetable)',
+    options:['Broccoli','White sugar','Potato chips','Cola drink'],
+    answer:'Broccoli',
     explanation:'<b>Broccoli</b> is packed with vitamins (C, K, A) and minerals (iron, calcium). Eating green vegetables provides essential protective nutrients.' }),
 
   makeTF({ id:'g2he-nut-035', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_groups',
@@ -236,8 +227,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-038', chapterId:'g2he-nutrition', difficulty:2, subsection:'food_groups',
     question:'Sophie wants to build strong muscles. Which food should she eat more of?',
-    options:['Chicken, eggs and beans (protein foods)','Sugar and sweets','Butter and oil only','Fizzy drinks'],
-    answer:'Chicken, eggs and beans (protein foods)',
+    options:['Chicken, eggs and beans','Sugar and sweets only','Butter and cooking oil','Fizzy drinks and cake'],
+    answer:'Chicken, eggs and beans',
     explanation:'<b>Protein foods</b> (chicken, eggs, beans) are the building blocks of muscles. Sophie needs more protein to help her muscles grow and repair.' }),
 
   makeTF({ id:'g2he-nut-039', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_groups',
@@ -255,8 +246,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-041', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
     question:'A balanced meal should include:',
-    options:['A starchy food, a protein food, vegetables and water','Only meat and chips','Only vegetables','Only sweets and juice'],
-    answer:'A starchy food, a protein food, vegetables and water',
+    options:['Foods from every group','Meat and chips only','Vegetables on their own','Sweets and juice only'],
+    answer:'Foods from every group',
     explanation:'A <b>balanced meal</b> includes starchy food (energy), protein (growth), vegetables (vitamins) and water (hydration) — covering all the body\'s needs.' }),
 
   makeTF({ id:'g2he-nut-042', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
@@ -266,8 +257,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-043', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
     question:'Which of these is a balanced school lunch?',
-    options:['Rice, fish curry, vegetable soup and water','Sweets and cola','Plain chips only','A chocolate bar and energy drink'],
-    answer:'Rice, fish curry, vegetable soup and water',
+    options:['Rice, fish and soup','Sweets and a cola','Plain chips only','Chocolate and an energy drink'],
+    answer:'Rice, fish and soup',
     explanation:'<b>Rice (energy), fish (protein), soup vegetables (vitamins) and water</b> give all the nutrients needed for an active afternoon of learning.' }),
 
   makeTF({ id:'g2he-nut-044', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
@@ -277,11 +268,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-045', chapterId:'g2he-nutrition', difficulty:2, subsection:'balanced_meals',
     question:'Priya skips breakfast because she is not hungry. What problem might this cause at school?',
-    options:['She may feel tired, have difficulty concentrating and have a headache by mid-morning',
-             'She will have more energy',
-             'She will learn better',
-             'Nothing will change'],
-    answer:'She may feel tired, have difficulty concentrating and have a headache by mid-morning',
+    options:['She may feel tired','She will have more energy','She will learn better','Nothing will change'],
+    answer:'She may feel tired',
     explanation:'Without breakfast, the brain runs low on glucose. This causes <b>tiredness, poor concentration and headaches</b>. Breakfast is important for learning.' }),
 
   makeMCQ({ id:'g2he-nut-046', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
@@ -297,8 +285,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-048', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
     question:'Which approach to mealtimes is healthiest?',
-    options:['Eating regular meals at set times (breakfast, lunch and dinner) without skipping','Eating only when very hungry','Having one large meal per day','Snacking on sweets all day instead of meals'],
-    answer:'Eating regular meals at set times (breakfast, lunch and dinner) without skipping',
+    options:['Regular meals every day','Eating only when hungry','One large meal a day','Sweets instead of meals'],
+    answer:'Regular meals every day',
     explanation:'<b>Regular meals at consistent times</b> keep blood sugar stable, support growth and provide steady energy for learning and play.' }),
 
   makeTF({ id:'g2he-nut-049', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
@@ -308,19 +296,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-050', chapterId:'g2he-nutrition', difficulty:1, subsection:'balanced_meals',
     question:'What makes a plate of food "colourful"?',
-    options:['Having many different fruits and vegetables of different colours on the plate',
-             'Using food dyes and colouring',
-             'Adding lots of ketchup',
-             'Only using sweets'],
-    answer:'Having many different fruits and vegetables of different colours on the plate',
+    options:['Many different vegetables','Adding lots of red ketchup','Using food colouring','Using only sweets'],
+    answer:'Many different vegetables',
     explanation:'A <b>colourful plate</b> means many different fruits and vegetables — each colour provides different vitamins and antioxidants for health.' }),
 
   // ── food_safety topup (051-060) ───────────────────────────────────────────
 
   makeMCQ({ id:'g2he-nut-051', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
     question:'Why do we keep cooked food covered?',
-    options:['To keep flies off it and stop germs from getting in','Only to keep it warm','Only because it looks better','There is no reason'],
-    answer:'To keep flies off it and stop germs from getting in',
+    options:['To keep flies off it','Only to keep it warm','Only to look nicer','There is no reason'],
+    answer:'To keep flies off it',
     explanation:'Flies carry germs and contaminate food. <b>Keeping food covered</b> protects it from flies and other sources of contamination.' }),
 
   makeTF({ id:'g2he-nut-052', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
@@ -330,8 +315,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-053', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
     question:'How can we tell if food might be unsafe to eat?',
-    options:['It smells bad, looks strange or is past its use-by date','Only if it is hot','Only if it is green','If it tastes sweet'],
-    answer:'It smells bad, looks strange or is past its use-by date',
+    options:['It smells bad','It is still hot','It is cold and firm','It tastes sweet'],
+    answer:'It smells bad',
     explanation:'Signs of unsafe food: <b>bad smell, unusual colour/texture or past use-by date</b>. When in doubt, throw it out.' }),
 
   makeTF({ id:'g2he-nut-054', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
@@ -341,11 +326,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-055', chapterId:'g2he-nutrition', difficulty:2, subsection:'food_safety',
     question:'Ravi ate some rice that was left uncovered overnight at room temperature. He now has a stomach ache. What most likely happened?',
-    options:['Bacteria grew in the rice overnight and he ate contaminated food',
-             'The rice was too hot',
-             'He ate too fast',
-             'Rice never causes stomach problems'],
-    answer:'Bacteria grew in the rice overnight and he ate contaminated food',
+    options:['Bacteria grew in the rice','The rice was far too hot','He ate it much too fast','Rice never causes illness'],
+    answer:'Bacteria grew in the rice',
     explanation:'Cooked rice left at room temperature is a <b>breeding ground for bacteria</b> like Bacillus cereus. Leftover rice should be refrigerated and reheated thoroughly.' }),
 
   makeMCQ({ id:'g2he-nut-056', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
@@ -361,8 +343,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-058', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
     question:'Why do fridges keep food safe longer than leaving it out?',
-    options:['The cold temperature slows down the growth of bacteria','Fridges have magic inside','Cold food has no germs at all','Fridges add preservatives to food'],
-    answer:'The cold temperature slows down the growth of bacteria',
+    options:['Cold slows down bacteria','Fridges have magic inside','Cold food has no germs','Fridges add chemicals'],
+    answer:'Cold slows down bacteria',
     explanation:'<b>Cold temperatures slow bacterial growth</b>, so food stays safe to eat for longer in the fridge than at room temperature.' }),
 
   makeTF({ id:'g2he-nut-059', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
@@ -372,16 +354,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-nut-060', chapterId:'g2he-nutrition', difficulty:1, subsection:'food_safety',
     question:'What should you do if you find mould growing on bread?',
-    options:['Throw the whole loaf away — mould spreads through bread you cannot see','Cut off the mouldy part and eat the rest','Toast it — heat kills all the mould','Give it to a pet'],
-    answer:'Throw the whole loaf away — mould spreads through bread you cannot see',
+    options:['Throw the whole loaf away','Cut off the mouldy part','Toast it and eat it','Give it to a pet'],
+    answer:'Throw the whole loaf away',
     explanation:'Mould penetrates bread throughout even if you can only see it in one spot. <b>Throw the whole loaf away</b> to avoid eating invisible mould toxins.' }),
 
   // ── home_safety topup (031-040) ───────────────────────────────────────────
 
   makeMCQ({ id:'g2he-saf-031', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
     question:'What should you do if you smell gas (like rotten eggs) at home?',
-    options:['Leave immediately and tell an adult — do not switch any lights on or off','Open all windows and light a candle','Switch on the kitchen lights to look for the leak','Stay inside and close all doors'],
-    answer:'Leave immediately and tell an adult — do not switch any lights on or off',
+    options:['Leave and tell an adult','Light a candle to see','Switch the lights on','Close all the doors'],
+    answer:'Leave and tell an adult',
     explanation:'A gas smell means a dangerous leak. <b>Get out immediately</b>, don\'t touch any switches (a spark could cause an explosion) and call for adult help from outside.' }),
 
   makeTF({ id:'g2he-saf-032', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
@@ -391,14 +373,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-033', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
     question:'If a fire starts in the kitchen, what should a child do?',
-    options:['Get out of the house, close doors behind them, and call for adult help','Try to put it out with a towel','Stay in the kitchen','Pour water on electrical fires'],
-    answer:'Get out of the house, close doors behind them, and call for adult help',
+    options:['Get out and call an adult','Put it out with a towel','Stay in the kitchen','Pour water on the wires'],
+    answer:'Get out and call an adult',
     explanation:'Children should <b>get out immediately, closing doors</b> (which slows fire) and calling for adult help. Never fight a fire alone, and never pour water on electrical fires.' }),
 
   makeMCQ({ id:'g2he-saf-034', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
     question:'Why should medicines be kept locked away from young children?',
-    options:['Children may think they are sweets and take too much, which can be fatal','Medicines are only for adults to look at','Children break bottles easily','Medicines attract insects'],
-    answer:'Children may think they are sweets and take too much, which can be fatal',
+    options:['They may look like sweets','They are only for adults','Children break bottles','They attract insects'],
+    answer:'They may look like sweets',
     explanation:'Children might mistake medicine for sweets. <b>An overdose can be fatal</b>. All medicines must be stored in locked cupboards out of reach.' }),
 
   makeTF({ id:'g2he-saf-035', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
@@ -408,11 +390,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-036', chapterId:'g2he-safety', difficulty:2, subsection:'home_safety',
     question:'You are home alone and hear a loud crash upstairs. What should you do?',
-    options:['Stay calm, do not go upstairs alone — call a parent or trusted adult immediately',
-             'Run upstairs to investigate',
-             'Open the front door and wait outside alone',
-             'Ignore it'],
-    answer:'Stay calm, do not go upstairs alone — call a parent or trusted adult immediately',
+    options:['Call a trusted adult','Run upstairs to look','Wait outside on your own','Ignore it completely'],
+    answer:'Call a trusted adult',
     explanation:'<b>Call a parent or trusted adult</b> immediately. Do not investigate alone — there may be an intruder or danger. Your safety is the priority.' }),
 
   makeTF({ id:'g2he-saf-037', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
@@ -422,8 +401,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-038', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
     question:'What should you do if a stranger knocks at the door when you are home alone?',
-    options:['Do not open the door — call your parent or a trusted adult immediately','Let them in because they knocked politely','Open the door to see who it is','Shout for them to come back tomorrow'],
-    answer:'Do not open the door — call your parent or a trusted adult immediately',
+    options:['Do not open the door','Open it to see who it is','Let them in politely','Tell them to come back'],
+    answer:'Do not open the door',
     explanation:'<b>Never open the door to a stranger when home alone.</b> Call your parent or trusted adult at once to let them know someone is at the door.' }),
 
   makeTF({ id:'g2he-saf-039', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
@@ -433,19 +412,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-040', chapterId:'g2he-safety', difficulty:1, subsection:'home_safety',
     question:'Which home hazard is most dangerous for a baby who is learning to crawl?',
-    options:['Uncovered electrical sockets and small objects on the floor that can be swallowed',
-             'A large sofa',
-             'Books on a shelf',
-             'A window that is open a little'],
-    answer:'Uncovered electrical sockets and small objects on the floor that can be swallowed',
+    options:['An uncovered socket','A large soft sofa','Books on a shelf','A closed cupboard'],
+    answer:'An uncovered socket',
     explanation:'Babies explore with their mouths. <b>Uncovered sockets and small objects</b> cause electric shocks and choking — two of the top causes of infant injury.' }),
 
   // ── road_safety topup (041-050) ───────────────────────────────────────────
 
   makeMCQ({ id:'g2he-saf-041', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
     question:'At a pedestrian crossing (zebra crossing), what should you do?',
-    options:['Wait for all vehicles to stop, then walk straight across without running','Run across as fast as possible','Cross only if you feel like it','Step out and wait for cars to stop around you'],
-    answer:'Wait for all vehicles to stop, then walk straight across without running',
+    options:['Wait for cars to stop','Run across as fast as you can','Cross when you feel like it','Step out and make cars stop'],
+    answer:'Wait for cars to stop',
     explanation:'At a zebra crossing, <b>wait for vehicles to stop completely</b> before crossing. Walk, don\'t run, and cross straight — don\'t angle across.' }),
 
   makeTF({ id:'g2he-saf-042', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
@@ -455,8 +431,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-043', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
     question:'You are walking home from school and need to cross a wide road. What is the safest place to cross?',
-    options:['At a pedestrian crossing, or where you can see clearly in both directions','Anywhere that looks quiet','Between two parked cars','From behind a bus'],
-    answer:'At a pedestrian crossing, or where you can see clearly in both directions',
+    options:['At a pedestrian crossing','Anywhere that looks quiet','Between two parked cars','From behind a bus'],
+    answer:'At a pedestrian crossing',
     explanation:'Cross at a <b>pedestrian crossing</b> or a place where you have a clear view of all traffic in both directions. Never cross behind a bus or between parked cars.' }),
 
   makeTF({ id:'g2he-saf-044', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
@@ -466,14 +442,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-045', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
     question:'Why is it dangerous to play ball games near a busy road?',
-    options:['A ball can roll onto the road and a child may run after it without looking','Balls are not allowed near roads','Roads are too hard to play on','There is no danger in playing near roads'],
-    answer:'A ball can roll onto the road and a child may run after it without looking',
+    options:['The ball can roll onto it','Balls are not allowed there','Roads are too hard to play on','There is no danger at all'],
+    answer:'The ball can roll onto it',
     explanation:'When a ball rolls onto a road, a child may chase it without checking for traffic — running into the path of a vehicle. <b>Always play away from roads.</b>' }),
 
   makeMCQ({ id:'g2he-saf-046', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
     question:'Which item makes a cyclist most visible to other road users at night?',
-    options:['Lights on the bicycle and reflective clothing','A dark helmet','A loud bell','A colourful water bottle'],
-    answer:'Lights on the bicycle and reflective clothing',
+    options:['Bicycle lights','A dark helmet','A loud bell','A water bottle'],
+    answer:'Bicycle lights',
     explanation:'<b>Bicycle lights and reflective clothing</b> make cyclists visible in the dark. Without them, drivers may not see a cyclist in time to avoid them.' }),
 
   makeTF({ id:'g2he-saf-047', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
@@ -483,8 +459,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-048', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
     question:'If a car stops and a stranger asks you to get in, what should you do?',
-    options:['Refuse firmly, step away from the car and run to a trusted adult or public place','Get in if they seem friendly','Get in if they offer sweets','Accept if they say they know your parent'],
-    answer:'Refuse firmly, step away from the car and run to a trusted adult or public place',
+    options:['Refuse and run away','Get in if they are kind','Get in for some sweets','Get in if they know Mum'],
+    answer:'Refuse and run away',
     explanation:'<b>Never get into a stranger\'s car.</b> Refuse firmly, move away and run to a trusted adult, school or public place immediately.' }),
 
   makeTF({ id:'g2he-saf-049', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
@@ -494,19 +470,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-050', chapterId:'g2he-safety', difficulty:1, subsection:'road_safety',
     question:'Which road sign means "Stop"?',
-    options:['A red octagon (8-sided) sign with the word STOP','A green circle','A yellow triangle','A blue rectangle'],
-    answer:'A red octagon (8-sided) sign with the word STOP',
+    options:['A red eight-sided sign','A green round sign','A yellow triangle sign','A blue oblong sign'],
+    answer:'A red eight-sided sign',
     explanation:'The <b>red octagonal STOP sign</b> means all vehicles must come to a complete stop before proceeding. It is one of the most important road signs.' }),
 
   // ── first_aid_basics topup (051-060) ──────────────────────────────────────
 
   makeMCQ({ id:'g2he-saf-051', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
     question:'What should you do first if someone has a nosebleed?',
-    options:['Lean forward and pinch the soft part of the nose for 10 minutes',
-             'Lean back and tilt the head backwards',
-             'Pack the nose tightly with paper',
-             'Blow the nose hard to clear it'],
-    answer:'Lean forward and pinch the soft part of the nose for 10 minutes',
+    options:['Lean forward and pinch it','Lean back and tilt up','Pack it tightly with paper','Blow the nose very hard'],
+    answer:'Lean forward and pinch it',
     explanation:'For a nosebleed: <b>lean forward</b> (not back — blood can go to the throat), <b>pinch the soft part</b> firmly for 10 minutes. Tilting back causes blood to be swallowed.' }),
 
   makeTF({ id:'g2he-saf-052', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
@@ -516,8 +489,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-053', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
     question:'If a classmate bumps their head and becomes confused or loses consciousness, what should you do?',
-    options:['Get an adult immediately — do not move them','Give them water and tell them to rest','Make them walk around','Put them to sleep'],
-    answer:'Get an adult immediately — do not move them',
+    options:['Get an adult at once','Give them a drink','Make them walk around','Put them to sleep'],
+    answer:'Get an adult at once',
     explanation:'A head injury with confusion or unconsciousness is a medical emergency. <b>Get an adult immediately</b> and do not move the person — they may have a neck injury.' }),
 
   makeTF({ id:'g2he-saf-054', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
@@ -527,14 +500,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-055', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
     question:'If someone is choking on food, the most important first step is to:',
-    options:['Shout for adult help immediately','Give them water to drink','Hit them hard on the chest','Tell them to jump up and down'],
-    answer:'Shout for adult help immediately',
+    options:['Shout for adult help','Give them a drink','Hit them on the chest','Tell them to jump'],
+    answer:'Shout for adult help',
     explanation:'If someone is choking, <b>get adult help immediately</b>. Trained adults can perform the Heimlich manoeuvre. Do not delay. Water will not help a choking person.' }),
 
   makeMCQ({ id:'g2he-saf-056', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
     question:'What should you do if someone gets something in their eye?',
-    options:['Rinse the eye gently with clean water and tell an adult','Rub the eye hard to remove it','Blow air directly into the eye','Ignore it if it\'s a small piece'],
-    answer:'Rinse the eye gently with clean water and tell an adult',
+    options:['Rinse it with clean water','Rub the eye very hard','Blow air into the eye','Ignore it if it is small'],
+    answer:'Rinse it with clean water',
     explanation:'Rinse the eye with <b>clean water gently</b> to flush out the object. Tell an adult — rubbing the eye can scratch the surface and worsen injury.' }),
 
   makeTF({ id:'g2he-saf-057', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
@@ -544,11 +517,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-058', chapterId:'g2he-safety', difficulty:2, subsection:'first_aid_basics',
     question:'A friend falls off their bicycle and their arm looks bent at a strange angle. What do you think has happened?',
-    options:['They may have broken (fractured) a bone — call an adult immediately and do not move the arm',
-             'They just need to exercise it',
-             'It is a bruise — it will heal on its own',
-             'They need water'],
-    answer:'They may have broken (fractured) a bone — call an adult immediately and do not move the arm',
+    options:['The arm may be broken','The arm needs exercise','It is only a bruise','They just need a drink'],
+    answer:'The arm may be broken',
     explanation:'A bent arm at an unusual angle suggests a <b>fracture</b>. Call for adult help immediately. <b>Do not move the arm</b> — this could cause more damage.' }),
 
   makeTF({ id:'g2he-saf-059', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
@@ -558,11 +528,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-saf-060', chapterId:'g2he-safety', difficulty:1, subsection:'first_aid_basics',
     question:'Learning first aid is useful because:',
-    options:['It helps us know what to do and what NOT to do in an emergency, so we can help without making things worse',
-             'It is only for doctors',
-             'It only helps in very rare situations',
-             'Children never need to know first aid'],
-    answer:'It helps us know what to do and what NOT to do in an emergency, so we can help without making things worse',
+    options:['It helps us in emergencies','It is only for doctors','It is rarely ever useful','Children never need it'],
+    answer:'It helps us in emergencies',
     explanation:'First aid knowledge helps us <b>act correctly in emergencies</b>. Knowing what NOT to do (e.g., move someone with a spinal injury) is just as important as knowing what to do.' })
 
 );

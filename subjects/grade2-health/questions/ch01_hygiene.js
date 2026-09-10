@@ -11,8 +11,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-001', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
     question:'Which of these is part of good daily grooming?',
-    options:['Combing hair, wearing clean clothes and trimming nails','Only eating well','Only drinking water','Only exercising'],
-    answer:'Combing hair, wearing clean clothes and trimming nails',
+    options:['Combing our hair','Eating a big meal','Drinking cold water','Running very fast'],
+    answer:'Combing our hair',
     hint:'Grooming involves caring for the whole body.',
     explanation:'Good daily grooming includes <b>combing hair, wearing clean clothes and trimming nails</b> to look and feel our best.' }),
 
@@ -30,15 +30,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-004', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
     question:'Why should we keep our nails short and clean?',
-    options:['To prevent germs hiding under them','To run faster','To write better','To look older'],
-    answer:'To prevent germs hiding under them',
+    options:['Germs hide under them','They help us run','They help us write','They make us look older'],
+    answer:'Germs hide under them',
     hint:'Think about what can hide under long nails.',
     explanation:'Germs and dirt can <b>hide under long nails</b>. Keeping nails short and clean prevents these germs from getting into our food or body.' }),
 
   makeMCQ({ id:'g2he-hyg-005', chapterId:'g2he-hygiene', difficulty:2, subsection:'grooming',
     question:'Raj has not bathed in three days. What is MOST LIKELY to happen?',
-    options:['His body will smell and bacteria will build up on his skin','He will become stronger','Nothing will happen','He will get taller'],
-    answer:'His body will smell and bacteria will build up on his skin',
+    options:['His body will smell','He will become stronger','He will grow taller','Nothing will happen'],
+    answer:'His body will smell',
     hint:'Think about what dirt and sweat do over time.',
     explanation:'Without bathing, <b>bacteria build up on the skin</b> and the body develops an unpleasant smell. Daily bathing is important.' }),
 
@@ -49,15 +49,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-007', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
     question:'What should you use to wash your hair?',
-    options:['Shampoo and water','Only water','Soap only','Toothpaste'],
+    options:['Shampoo and water','Toothpaste and water','Sand and water','Cooking oil'],
     answer:'Shampoo and water',
     hint:'There is a special product made for hair.',
     explanation:'We use <b>shampoo and water</b> to wash our hair, removing dirt, oil and any germs.' }),
 
   makeMCQ({ id:'g2he-hyg-008', chapterId:'g2he-hygiene', difficulty:2, subsection:'grooming',
     question:'Which of these is NOT part of good personal grooming?',
-    options:['Wearing the same unwashed clothes for a week','Brushing teeth twice a day','Combing hair daily','Bathing every day'],
-    answer:'Wearing the same unwashed clothes for a week',
+    options:['Wearing dirty clothes','Brushing teeth daily','Combing hair daily','Bathing every day'],
+    answer:'Wearing dirty clothes',
     hint:'Think about which option is unhygienic.',
     explanation:'Wearing <b>the same unwashed clothes for a week</b> is not hygienic. Clothes should be washed regularly.' }),
 
@@ -68,8 +68,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-010', chapterId:'g2he-hygiene', difficulty:1, subsection:'grooming',
     question:'What does good grooming help us with?',
-    options:['Staying clean, feeling confident and staying healthy','Only looking nice for photographs','Eating faster','Running faster'],
-    answer:'Staying clean, feeling confident and staying healthy',
+    options:['Staying clean and healthy','Looking nice in photographs','Eating much faster','Running much faster'],
+    answer:'Staying clean and healthy',
     hint:'Grooming has more than one benefit.',
     explanation:'Good grooming helps us <b>stay clean, feel confident about ourselves and stay healthy</b> by preventing germs.' }),
 
@@ -91,11 +91,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-013', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'Name THREE times when you should wash your hands.',
-    options:['Before eating, after using the toilet, and after playing outside',
-             'Only after eating',
-             'Only when a teacher tells you to',
-             'Only in the morning'],
-    answer:'Before eating, after using the toilet, and after playing outside',
+    options:['Before meals, after toilet, after play','After meals, before toilet, before play','Only at noon, at 3pm and at bedtime','Before bed, after bed and at breakfast'],
+    answer:'Before meals, after toilet, after play',
     hint:'Think about when our hands pick up most germs.',
     explanation:'We should wash hands <b>before eating, after using the toilet, and after playing outside</b> — these are the times germs spread most.' }),
 
@@ -113,8 +110,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-016', chapterId:'g2he-hygiene', difficulty:2, subsection:'hand_dental',
     question:'Why is it especially important to brush your teeth BEFORE BED?',
-    options:['Food left on teeth overnight feeds bacteria that cause cavities','The toothpaste smells nice','The toothbrush is new','It makes you dream nicely'],
-    answer:'Food left on teeth overnight feeds bacteria that cause cavities',
+    options:['Germs feed on food all night','The toothpaste smells nice','The toothbrush is new','It helps us dream nicely'],
+    answer:'Germs feed on food all night',
     hint:'Think about what happens to food left on teeth for many hours.',
     explanation:'<b>Food left on teeth overnight</b> feeds bacteria that produce acid, which causes <b>cavities</b> (holes in teeth).' }),
 
@@ -125,15 +122,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-018', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'What causes tooth decay (holes in teeth)?',
-    options:['Bacteria that feed on sugar and produce acid','Eating too many vegetables','Drinking too much water','Brushing too often'],
-    answer:'Bacteria that feed on sugar and produce acid',
+    options:['Germs feeding on sugar','Eating many vegetables','Drinking too much water','Brushing teeth too often'],
+    answer:'Germs feeding on sugar',
     hint:'Think about what happens when sugar sits on teeth.',
     explanation:'<b>Bacteria feed on sugar</b> left on teeth and produce acid. This acid breaks down tooth enamel causing decay (cavities).' }),
 
   makeMCQ({ id:'g2he-hyg-019', chapterId:'g2he-hygiene', difficulty:1, subsection:'hand_dental',
     question:'When should you change your toothbrush?',
-    options:['Every 3 months or when the bristles are worn','Never — use it your whole life','Every 10 years','Only when it breaks'],
-    answer:'Every 3 months or when the bristles are worn',
+    options:['Every three months','Every ten years','Only when it breaks','Never in your life'],
+    answer:'Every three months',
     hint:'Worn bristles do not clean teeth as well.',
     explanation:'Replace your toothbrush <b>every 3 months</b> or sooner if the bristles are splayed — worn bristles cannot clean teeth effectively.' }),
 
@@ -146,18 +143,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-021', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'How do germs spread from a sick person to a healthy person?',
-    options:['Through sneezing, coughing, touching and not washing hands',
-             'Only through drinking the same cup',
-             'Only by sitting next to each other',
-             'Only by looking at each other'],
-    answer:'Through sneezing, coughing, touching and not washing hands',
+    options:['By coughing and sneezing','By sitting side by side','By looking at each other','By talking on the phone'],
+    answer:'By coughing and sneezing',
     hint:'Think about how germs travel.',
     explanation:'Germs spread through <b>sneezing, coughing, direct touching and not washing hands</b>. Good hygiene breaks this chain.' }),
 
   makeMCQ({ id:'g2he-hyg-022', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'What should you do when you sneeze or cough?',
-    options:['Cover your mouth and nose with a tissue or your elbow','Sneeze directly onto your classmates','Sneeze into your hands then shake hands with others','Do nothing'],
-    answer:'Cover your mouth and nose with a tissue or your elbow',
+    options:['Cover your mouth and nose','Sneeze onto your classmates','Sneeze into your hands','Sneeze onto the food'],
+    answer:'Cover your mouth and nose',
     hint:'We need to stop the germ droplets from reaching others.',
     explanation:'Always <b>cover your mouth and nose with a tissue or your elbow</b> to stop germ-containing droplets spreading.' }),
 
@@ -168,8 +162,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-024', chapterId:'g2he-hygiene', difficulty:2, subsection:'illness_hygiene',
     question:'Lena sneezes into her hands, then shakes hands with her friend. What is the problem?',
-    options:['The germs on her hands are now passed to her friend','Nothing — this is fine','Her friend will become taller','Her friend will feel colder'],
-    answer:'The germs on her hands are now passed to her friend',
+    options:['Germs pass to her friend','Her friend will grow taller','Her friend will feel cold','There is no problem here'],
+    answer:'Germs pass to her friend',
     hint:'Think about where the germs went.',
     explanation:'Germs from Lena\'s sneeze are now on her hands. When she shakes hands, those <b>germs transfer to her friend</b>. She should have washed her hands first.' }),
 
@@ -180,18 +174,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-026', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'Which of these habits helps PREVENT illness from spreading?',
-    options:['Washing hands regularly, covering coughs and not sharing utensils',
-             'Sharing drinks with sick friends',
-             'Coughing openly without covering your mouth',
-             'Going to school even when very ill'],
-    answer:'Washing hands regularly, covering coughs and not sharing utensils',
+    options:['Covering our coughs','Sharing drinks when ill','Coughing over others','Going to school very ill'],
+    answer:'Covering our coughs',
     hint:'Think about what stops germs moving from person to person.',
     explanation:'<b>Washing hands, covering coughs and not sharing utensils</b> all prevent germs from spreading from person to person.' }),
 
   makeMCQ({ id:'g2he-hyg-027', chapterId:'g2he-hygiene', difficulty:1, subsection:'illness_hygiene',
     question:'Why should you NOT share your water bottle with others?',
-    options:['Germs from the mouth can spread through shared bottles','Water bottles are very heavy','Your drink might taste different','There is not enough water'],
-    answer:'Germs from the mouth can spread through shared bottles',
+    options:['Germs spread from mouths','Bottles are very heavy','The drink tastes odd','There is not enough water'],
+    answer:'Germs spread from mouths',
     hint:'Think about saliva and germs.',
     explanation:'<b>Germs from one person\'s mouth</b> can transfer to the bottle and then to the next person who drinks. Always use your own bottle.' }),
 
@@ -202,8 +193,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2he-hyg-029', chapterId:'g2he-hygiene', difficulty:2, subsection:'illness_hygiene',
     question:'What is the MAIN purpose of washing hands after using the toilet?',
-    options:['To remove germs that can cause stomach illness','To make hands look clean','To cool hands down','To remove colour from hands'],
-    answer:'To remove germs that can cause stomach illness',
+    options:['To remove germs','To make hands look nice','To cool our hands down','To take colour off hands'],
+    answer:'To remove germs',
     hint:'Think about what kinds of germs are found in the toilet area.',
     explanation:'<b>Germs from faeces</b> (waste) can remain on hands after using the toilet. These cause serious stomach illnesses if not washed off.' }),
 

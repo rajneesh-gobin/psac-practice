@@ -1,0 +1,83 @@
+'use strict';
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g8eng-speaking-011', chapterId:'g8eng-speaking', difficulty:2,
+    subsection:'structured_discussion',
+    question:'In a class debate two speakers begin talking at the same moment.<br>What should the chairperson do?',
+    options:['Let one finish, then call the other','Ask both of them to sit down','Repeat the motion from the start','Give the floor to a third speaker'],
+    answer:'Let one finish, then call the other',
+    hint:'A chairperson manages turns; nobody loses their turn for speaking too eagerly.',
+    explanation:'The chair\'s job is to order the turns so both contributions are heard. Silencing both punishes eagerness, restarting the motion wastes the floor, and skipping to a third speaker loses two arguments.' }),
+
+  makeMCQ({ id:'g8eng-speaking-012', chapterId:'g8eng-speaking', difficulty:2,
+    subsection:'register_adaptation',
+    question:'You leave a voicemail for a school inspector you have never met.<br>Which opening fits that <b>register</b>?',
+    options:['Good morning, this is Anaya Bhola','Hey, it is me, call me back soon','Hi there, guess who is calling you','Morning! Me again, same as always'],
+    answer:'Good morning, this is Anaya Bhola',
+    hint:'A stranger cannot recognise your voice, and an official call is not a chat.',
+    explanation:'A formal message greets the listener and names the caller. The other three assume the inspector already knows who is calling, and their playful tone belongs to a message left for a friend.' }),
+
+  makeMCQ({ id:'g8eng-speaking-013', chapterId:'g8eng-speaking', difficulty:3,
+    subsection:'structured_discussion',
+    question:'In a debate a speaker says: <i>"I accept that uniforms cost money, but they end the pressure to keep up with fashion."</i><br>What is the speaker doing in the first half?',
+    options:['Conceding a point before answering','Repeating the motion being debated','Asking the chair for extra time','Summing up the whole discussion'],
+    answer:'Conceding a point before answering',
+    hint:'What effect does admitting a weakness have on the argument that follows?',
+    explanation:'Granting the other side a fair point first — a concession — makes the answer that follows sound reasonable rather than stubborn. The motion is not restated, no request is made of the chair, and nothing is being summed up.' }),
+
+  makeMCQ({ id:'g8eng-speaking-014', chapterId:'g8eng-speaking', difficulty:3,
+    subsection:'register_adaptation',
+    question:'A Grade 8 class must warn Grade 1 pupils about a wet corridor.<br>Which spoken warning suits that audience <b>best</b>?',
+    options:['The floor is wet — walk slowly','Kindly exercise caution when moving','Wet surface: proceed with due care','Be advised the corridor is slippery'],
+    answer:'The floor is wet — walk slowly',
+    hint:'Which one could a six-year-old act on immediately?',
+    explanation:'Short everyday words and a clear instruction reach a Grade 1 listener. "Exercise caution", "proceed with due care" and "be advised" are official phrasings a young child would have to decode before acting on them.' }),
+
+  makeMCQ({ id:'g8eng-speaking-015', chapterId:'g8eng-speaking', difficulty:3,
+    subsection:'structured_discussion',
+    question:'You need to interrupt a long speech during a class discussion.<br>Which opening is <b>most</b> appropriate?',
+    options:['May I come in on that point?','Stop — you have said enough.','You are wrong about all of this.','I have been waiting for ages.'],
+    answer:'May I come in on that point?',
+    hint:'A polite interruption asks permission and points to what it is answering.',
+    explanation:'Asking to come in requests the floor and signals what you will address. The others shut the speaker down, attack the person rather than the argument, or complain about the chair instead of contributing.' }),
+
+  makeMCQ({ id:'g8eng-speaking-016', chapterId:'g8eng-speaking', difficulty:2,
+    subsection:'register_adaptation',
+    question:'Which sentence belongs in a <b>formal</b> speech rather than a chat with friends?',
+    options:['We should consider the evidence','Let us just see what happens, eh','That idea is rubbish, honestly','So basically nobody really cares'],
+    answer:'We should consider the evidence',
+    hint:'Listen for fillers, slang and dismissive words.',
+    explanation:'The first is neutral and impersonal, which is what formal speech needs. "Eh", "rubbish" and "so basically" are conversational fillers and put-downs that would sound careless in front of an audience.' }),
+
+  makeMCQ({ id:'g8eng-speaking-017', chapterId:'g8eng-speaking', difficulty:4,
+    subsection:'structured_discussion',
+    question:'A speaker claims: <i>"Every pupil in my class walks to school, so walking must be easy for everyone in Mauritius."</i><br>What is the weakness of this argument?',
+    options:['One class cannot stand for all','The speaker does not name a source','Walking is not defined in the talk','The sentence is far too long here'],
+    answer:'One class cannot stand for all',
+    hint:'How big is the group the speaker has actually observed?',
+    explanation:'The speaker generalises from a single class to a whole country, which the sample is far too small to support. The class is a source, the meaning of walking is plain, and length is not what makes the reasoning fail.' }),
+
+  makeMCQ({ id:'g8eng-speaking-018', chapterId:'g8eng-speaking', difficulty:3,
+    subsection:'register_adaptation',
+    question:'A pupil says to the head teacher: <i>"Yeah, so we kinda need the hall on Friday."</i><br>Which change fixes the <b>register</b>?',
+    options:['May we please use the hall on Friday?','Yeah, we need the hall on Friday.','So, the hall on Friday, all right?','We kinda want the hall this Friday.'],
+    answer:'May we please use the hall on Friday?',
+    hint:'A request to someone in authority is made as a question, not an announcement.',
+    explanation:'"May we please" turns the demand into a polite request and drops the slang. The other three keep "yeah", "so" or "kinda", so the register stays that of a conversation between classmates.' }),
+
+  makeMCQ({ id:'g8eng-speaking-019', chapterId:'g8eng-speaking', difficulty:3,
+    subsection:'structured_discussion',
+    question:'Two pupils have spent three minutes repeating the same argument in different words.<br>What should the chairperson do?',
+    options:['Move the debate to a new point','Ask them to repeat it once more','Award the debate to one speaker','End the discussion straight away'],
+    answer:'Move the debate to a new point',
+    hint:'A discussion has to make progress, not circle.',
+    explanation:'The chair keeps the discussion moving, so the right step is to open a new point. Another repetition wastes time, a chair does not judge the winner, and closing the debate punishes everyone for one stalled exchange.' }),
+
+  makeText({ id:'g8eng-speaking-020', chapterId:'g8eng-speaking', difficulty:4,
+    subsection:'register_adaptation',
+    question:'A pupil writes in a formal school report: <i>"The kids got loads of stuff for the fair."</i><br>Write the <b>one word</b> that should replace "kids" in a report.',
+    answer:'pupils', alsoAccept:['children','students','learners'],
+    hint:'What does a school report call the young people in a class?',
+    explanation:'"Kids" is informal speech; a report uses "pupils", "children" or "students". The register of a report is neutral and impersonal, which is why "loads" and "stuff" are out of place there too.' })
+
+);

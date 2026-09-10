@@ -41,26 +41,26 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-006', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-007', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:2,
   question:'Superscript text appears:',
-  options:['slightly above the normal text line and in a smaller size','below the normal text line','in bold on its own line','in a coloured box'],
-  answer:'slightly above the normal text line and in a smaller size', hint:'Think of the "2" in cm².',
+  options:['above the line, in a smaller size','below the line, in a smaller size','inside a coloured highlight box','in bold on a line of its own'],
+  answer:'above the line, in a smaller size', hint:'Think of the "2" in cm².',
   explanation:'Superscript raises the text above the normal baseline and reduces its size, used for powers and footnote numbers.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-008', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:2,
   question:'Strikethrough formatting is used to:',
-  options:['draw a line through text to show it has been deleted or is no longer valid','underline text in red','make text appear raised','turn text into a hyperlink'],
-  answer:'draw a line through text to show it has been deleted or is no longer valid', hint:'A line goes through the middle of the text.',
+  options:['draw a line through the text','raise the text above the line','underline the text in red','turn the text into a link'],
+  answer:'draw a line through the text', hint:'A line goes through the middle of the text.',
   explanation:'Strikethrough draws a horizontal line through text, commonly used when revising documents to mark removed content.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-009', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:2,
   question:'Line spacing in a word processor controls:',
-  options:['the vertical space between lines of text','the number of characters per line','the font colour','the page border width'],
-  answer:'the vertical space between lines of text', hint:'Double spacing leaves a gap between each line.',
+  options:['the space between lines','the characters allowed per line','the width of the page border','the colour of the font used'],
+  answer:'the space between lines', hint:'Double spacing leaves a gap between each line.',
   explanation:'Line spacing sets how much vertical space appears between successive lines in a paragraph.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-010', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:2,
   question:'The Format Painter tool is used to:',
-  options:['copy formatting from one piece of text and apply it to another','change the background colour of the page','insert a picture into the document','draw a border around a paragraph'],
-  answer:'copy formatting from one piece of text and apply it to another', hint:'It copies the look, not the content.',
+  options:['copy formatting to other text','change the page background colour','draw a border round a paragraph','insert a picture in the document'],
+  answer:'copy formatting to other text', hint:'It copies the look, not the content.',
   explanation:'The Format Painter copies all formatting settings (font, size, colour, bold, etc.) from selected text and applies them elsewhere.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-011', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:2,
@@ -71,16 +71,16 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-011', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-012', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:2,
   question:'Changing text to ALL CAPS using the Change Case option is different from holding Caps Lock because:',
-  options:['Change Case can be removed without retyping the text, while Caps Lock requires retyping','Caps Lock makes text bigger','Change Case always underlines the text','Caps Lock only works on the first letter'],
-  answer:'Change Case can be removed without retyping the text, while Caps Lock requires retyping', hint:'Change Case is a formatting toggle.',
+  options:['Change Case can be undone easily','Caps Lock affects the first letter','Caps Lock makes the text bigger','Change Case underlines the text'],
+  answer:'Change Case can be undone easily', hint:'Change Case is a formatting toggle.',
   explanation:'Change Case applies an appearance change that can be reversed; Caps Lock physically changes the characters, requiring retyping to undo.' }));
 
 // ── page_layout: g9ict-wpv-013 to g9ict-wpv-024 ─────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-013', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
   question:'The margin of a document is:',
-  options:['the blank space between the text and the edge of the page','the coloured band at the top of the screen','the gap between two columns of text','the space between two paragraphs'],
-  answer:'the blank space between the text and the edge of the page', hint:'It frames the text on the page.',
+  options:['the space around the text','the gap between two columns','the space between paragraphs','the coloured band at the top'],
+  answer:'the space around the text', hint:'It frames the text on the page.',
   explanation:'Margins are the areas of white space that surround the text area on all four sides of a page.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-014', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
@@ -109,8 +109,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-017', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-018', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
   question:'Gutter margin in a document is:',
-  options:['extra space added on the binding edge so text is not hidden when the document is bound','the space at the bottom of the page','the gap between columns','the top margin on odd pages'],
-  answer:'extra space added on the binding edge so text is not hidden when the document is bound', hint:'It is the inner edge margin for a booklet.',
+  options:['extra space on the binding edge','the space at the foot of a page','the gap between two columns','the top margin on odd pages'],
+  answer:'extra space on the binding edge', hint:'It is the inner edge margin for a booklet.',
   explanation:'A gutter margin adds extra blank space along the edge where pages will be bound, preventing text from disappearing into the spine.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-019', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
@@ -127,20 +127,20 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-020', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-021', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
   question:'Indentation in a word processor moves:',
-  options:['the left or right edge of a paragraph inward from the margin','the paragraph to the next page','the text to the centre of the page','the line spacing of the paragraph'],
-  answer:'the left or right edge of a paragraph inward from the margin', hint:'It pulls the paragraph in from the margin.',
+  options:['a paragraph edge in from the margin','the text to the centre of the page','the line spacing of the paragraph','the paragraph onto the next page'],
+  answer:'a paragraph edge in from the margin', hint:'It pulls the paragraph in from the margin.',
   explanation:'An indent sets how far the paragraph\'s left or right edge sits from the page margin.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-022', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
   question:'A page border is applied using:',
-  options:['the Borders and Shading dialog under the Design or Page Layout tab','the Font dialog box','the Insert Chart wizard','the Table of Contents tool'],
-  answer:'the Borders and Shading dialog under the Design or Page Layout tab', hint:'It is a page-level setting, not a text setting.',
+  options:['the Borders and Shading dialog','the Font dialog box settings','the Table of Contents tool','the Insert Chart wizard'],
+  answer:'the Borders and Shading dialog', hint:'It is a page-level setting, not a text setting.',
   explanation:'Page borders are applied through the Borders and Shading dialog, which lets you choose a style, colour and width for the border on each edge of the page.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-023', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
   question:'Section breaks in a document allow:',
-  options:['different parts of the document to have different formatting, such as different page orientations','the document to be split into separate files','paragraphs to be numbered automatically','columns to be formatted as a table'],
-  answer:'different parts of the document to have different formatting, such as different page orientations', hint:'Each section can have its own layout.',
+  options:['different formatting in each part','columns to be formatted as a table','paragraphs to be numbered for you','the document to split into files'],
+  answer:'different formatting in each part', hint:'Each section can have its own layout.',
   explanation:'Section breaks divide a document into sections that can each have their own margins, orientation, headers and columns.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-024', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
@@ -159,8 +159,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-025', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-026', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:2,
   question:'The icon showing a magnifying glass in a word processor represents:',
-  options:['Find and Replace or Search','Print Preview','Zoom','Spell Check'],
-  answer:'Find and Replace or Search', hint:'A magnifying glass means search.',
+  options:['Find and Replace','Spelling and Grammar','Print Preview','Zoom to Page'],
+  answer:'Find and Replace', hint:'A magnifying glass means search.',
   explanation:'A magnifying glass icon typically opens the Find (and Replace) function, used to search for words or phrases in the document.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-027', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:2,
@@ -171,8 +171,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-027', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-028', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:2,
   question:'The Redo icon (usually a curved arrow pointing right) is used to:',
-  options:['reapply an action that was previously undone','reverse the last action','cut the selected text','insert a table'],
-  answer:'reapply an action that was previously undone', hint:'It is the opposite of Undo.',
+  options:['reapply an undone action','reverse the last action','cut the selected text','insert a new table'],
+  answer:'reapply an undone action', hint:'It is the opposite of Undo.',
   explanation:'Redo reapplies an action that was just reversed with Undo.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-029', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:2,
@@ -201,8 +201,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-032', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-033', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:2,
   question:'The paragraph symbol (¶) icon in a word processor is used to:',
-  options:['show or hide non-printing formatting marks such as spaces, tabs and paragraph returns','insert a new paragraph','change the paragraph indentation','apply a paragraph style'],
-  answer:'show or hide non-printing formatting marks such as spaces, tabs and paragraph returns', hint:'Toggle the display of invisible formatting marks.',
+  options:['show or hide formatting marks','change the paragraph indentation','apply a paragraph style','insert a new paragraph'],
+  answer:'show or hide formatting marks', hint:'Toggle the display of invisible formatting marks.',
   explanation:'Clicking the ¶ icon toggles the display of non-printing characters, making spaces, tabs and paragraph marks visible for editing.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-034', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:2,
@@ -213,8 +213,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-034', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-035', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:2,
   question:'The zoom slider at the bottom-right of the screen is used to:',
-  options:['increase or decrease the magnification of the document on screen','change the font size of the selected text','scroll through the document quickly','change the paper size'],
-  answer:'increase or decrease the magnification of the document on screen', hint:'Drag it left to shrink, right to enlarge the view.',
+  options:['change the on-screen magnification','change the font size of the text','scroll through the document fast','change the size of the paper'],
+  answer:'change the on-screen magnification', hint:'Drag it left to shrink, right to enlarge the view.',
   explanation:'The zoom slider adjusts how large the document appears on screen; it does not change the actual font size or page size.' }));
 
 // ── images_shapes: g9ict-wpv-036 to g9ict-wpv-047 ────────────────────────
@@ -227,14 +227,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-036', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-037', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'Text wrapping around an image is controlled by:',
-  options:['the Wrap Text option in the image tools','the Page Layout margin setting','the Font dialog','the Table of Contents tool'],
-  answer:'the Wrap Text option in the image tools', hint:'You choose how text flows around the picture.',
+  options:['the Wrap Text option','the Table of Contents tool','the Page Layout margins','the Font dialog box'],
+  answer:'the Wrap Text option', hint:'You choose how text flows around the picture.',
   explanation:'Wrap Text settings determine how the document\'s text flows in relation to an inserted image — for example, square, tight or through.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-038', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'Setting the image wrap to "In Line with Text" means:',
-  options:['the image is treated as a character and moves with the surrounding text','the text flows over the image','the image is fixed to the page regardless of text changes','the image appears behind the text'],
-  answer:'the image is treated as a character and moves with the surrounding text', hint:'It behaves like a large letter in the text flow.',
+  options:['the image moves with the text','the image is fixed to the page','the image sits behind the text','the text flows over the image'],
+  answer:'the image moves with the text', hint:'It behaves like a large letter in the text flow.',
   explanation:'"In Line with Text" inserts the image as if it were a text character, so it moves when text above it is added or deleted.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-039', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
@@ -257,38 +257,38 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-041', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-042', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'A text box in a word-processed document allows you to:',
-  options:['position text independently of the main text flow, anywhere on the page','add a border around the entire document','create a spreadsheet inside the document','automatically number the headings'],
-  answer:'position text independently of the main text flow, anywhere on the page', hint:'Text inside a box can be placed anywhere.',
+  options:['place text anywhere on the page','number the headings automatically','create a spreadsheet in the file','add a border round the document'],
+  answer:'place text anywhere on the page', hint:'Text inside a box can be placed anywhere.',
   explanation:'A text box is a container that can be dragged to any position on the page, allowing text placement independent of the main document flow.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-043', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'Alt text (alternative text) added to an image in a document is used to:',
-  options:['describe the image for screen readers used by visually impaired users','change the image caption','resize the image automatically','convert the image to a drawing'],
-  answer:'describe the image for screen readers used by visually impaired users', hint:'It makes images accessible.',
+  options:['describe it for screen readers','convert the image into a drawing','change the caption of the image','resize the image automatically'],
+  answer:'describe it for screen readers', hint:'It makes images accessible.',
   explanation:'Alt text provides a text description of an image so screen readers can convey its content to users who cannot see the image.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-044', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'SmartArt graphics in a word processor are used to create:',
-  options:['visually formatted diagrams such as process flows, hierarchies and lists','spreadsheet charts from data tables','animated GIF files','video clips embedded in the document'],
-  answer:'visually formatted diagrams such as process flows, hierarchies and lists', hint:'They turn text into professional-looking diagrams.',
+  options:['diagrams such as process flows','video clips inside the document','animated GIF files for the web','charts from a table of data'],
+  answer:'diagrams such as process flows', hint:'They turn text into professional-looking diagrams.',
   explanation:'SmartArt provides templates for creating diagrams — cycle, hierarchy, relationship, process — with formatted shapes and text.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-045', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'To group several shapes together so they move as one object, you:',
-  options:['select all shapes and use Group from the Format or right-click menu','save each shape as a separate file','copy the shapes into a table cell','convert them to a single text box'],
-  answer:'select all shapes and use Group from the Format or right-click menu', hint:'Grouping locks them together.',
+  options:['select them and choose Group','copy them into a table cell','convert them to a text box','save each shape as a file'],
+  answer:'select them and choose Group', hint:'Grouping locks them together.',
   explanation:'Selecting all the shapes and choosing Group combines them into one object that can be moved and resized together.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-046', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'A watermark in a word-processed document is:',
-  options:['faded text or an image placed behind the main content on every page','a border around the edge of each page','a header applied to odd-numbered pages only','a hyperlink inserted in the body text'],
-  answer:'faded text or an image placed behind the main content on every page', hint:'DRAFT and CONFIDENTIAL stamps are common examples.',
+  options:['faded text behind the content','a hyperlink in the body text','a header on odd pages only','a border round every page'],
+  answer:'faded text behind the content', hint:'DRAFT and CONFIDENTIAL stamps are common examples.',
   explanation:'A watermark is a semi-transparent image or text placed behind the document content, often used to mark documents as DRAFT or CONFIDENTIAL.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-047', chapterId:'g9ict-word-processing', subsection:'images_shapes', difficulty:2,
   question:'The Picture Format tab (or Format Picture pane) allows you to:',
-  options:['adjust brightness, contrast, colour and apply artistic effects to an image','change the page margins','insert a chart','add a footnote to the document'],
-  answer:'adjust brightness, contrast, colour and apply artistic effects to an image', hint:'It is the formatting tool specifically for pictures.',
+  options:['adjust brightness and contrast','change the page margin sizes','insert a chart from a table','add a footnote to the page'],
+  answer:'adjust brightness and contrast', hint:'It is the formatting tool specifically for pictures.',
   explanation:'The Picture Format tab provides controls for adjusting image brightness, contrast, sharpness, colour mode and applying visual effects.' }));
 
 // ── tables_text: g9ict-wpv-048 to g9ict-wpv-059 ─────────────────────────
@@ -307,38 +307,38 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-049', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-050', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'Merging cells in a table means:',
-  options:['combining two or more adjacent cells into one larger cell','splitting one cell into two smaller cells','adding a border to selected cells','changing the background colour of the cell'],
-  answer:'combining two or more adjacent cells into one larger cell', hint:'Many cells become one.',
+  options:['joining cells into one cell','adding a border to the cells','changing the cell background','splitting a cell into two'],
+  answer:'joining cells into one cell', hint:'Many cells become one.',
   explanation:'Merge Cells joins adjacent selected cells into a single cell, useful for table headings that span multiple columns.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-051', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'Splitting a cell in a table means:',
-  options:['dividing one cell into two or more smaller cells','combining several cells into one','removing a row from the table','adding a new column at the edge'],
-  answer:'dividing one cell into two or more smaller cells', hint:'One cell becomes several.',
+  options:['dividing it into smaller cells','combining several cells into one','adding a new column at the edge','removing a row from the table'],
+  answer:'dividing it into smaller cells', hint:'One cell becomes several.',
   explanation:'Split Cells divides a cell into a specified number of rows or columns.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-052', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'To add a new row at the bottom of a table, the simplest method is:',
-  options:['press Tab when the cursor is in the last cell','press Ctrl + Enter','click Insert Table again','drag the bottom border of the table'],
-  answer:'press Tab when the cursor is in the last cell', hint:'Tab at the end creates a new row.',
+  options:['press Tab in the last cell','drag the bottom table border','press Ctrl + Enter together','click Insert Table again'],
+  answer:'press Tab in the last cell', hint:'Tab at the end creates a new row.',
   explanation:'Pressing Tab when you are in the last cell of a table automatically adds a new row below it.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-053', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'Text alignment inside a table cell can be set to:',
-  options:['top-left, top-centre, top-right, middle-left, middle-centre, middle-right, and so on','left or right only','top or bottom only','none — tables always use the default'],
-  answer:'top-left, top-centre, top-right, middle-left, middle-centre, middle-right, and so on', hint:'There are nine alignment positions for cells.',
+  options:['horizontally and vertically','the top or the bottom only','the left or the right only','the default setting only'],
+  answer:'horizontally and vertically', hint:'There are nine alignment positions for cells.',
   explanation:'Cell content can be aligned both horizontally (left, centre, right) and vertically (top, middle, bottom) within the cell.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-054', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'The header row of a table should be formatted to:',
-  options:['stand out from the data rows, for example in bold or with shading','be invisible to the reader','have no borders','contain only numbers'],
-  answer:'stand out from the data rows, for example in bold or with shading', hint:'It identifies the column contents.',
+  options:['stand out from the data rows','be invisible to the reader','contain only numeric data','have no borders at all'],
+  answer:'stand out from the data rows', hint:'It identifies the column contents.',
   explanation:'Formatting the header row differently — bold, coloured background — makes it visually distinct so readers can immediately identify each column.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-055', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'To delete an entire row from a table, you:',
-  options:['select the row and choose Delete Rows from the Table menu or right-click menu','press the Delete key on the keyboard','drag the row off the page','change the row colour to white'],
-  answer:'select the row and choose Delete Rows from the Table menu or right-click menu', hint:'Select it first, then delete.',
+  options:['select it and choose Delete Rows','change the row colour to white','press the Delete key on it','drag the row off the page'],
+  answer:'select it and choose Delete Rows', hint:'Select it first, then delete.',
   explanation:'Selecting the row and using Delete Rows removes the entire row and its content from the table.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-056', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
@@ -349,28 +349,28 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-056', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-057', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'Sorting data in a table by a column means:',
-  options:['rearranging the rows into alphabetical or numerical order based on that column\'s values','removing rows that do not match the column','highlighting the highest value','changing the column width'],
-  answer:'rearranging the rows into alphabetical or numerical order based on that column\'s values', hint:'Sort puts the rows in order.',
+  options:['reordering rows by that column','changing the width of the column','removing rows that do not match','highlighting the highest value'],
+  answer:'reordering rows by that column', hint:'Sort puts the rows in order.',
   explanation:'Sorting a table rearranges all rows based on the chosen column, either A to Z, Z to A, or smallest to largest.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-058', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'A table style in a word processor applies:',
-  options:['a set of colours, borders and shading to the whole table at once','a new font to all text in the document','a border only around the first row','a new page layout to the document'],
-  answer:'a set of colours, borders and shading to the whole table at once', hint:'Like a theme for the table.',
+  options:['colours, borders and shading','a new font to the whole document','a border on the first row only','a new page layout to the file'],
+  answer:'colours, borders and shading', hint:'Like a theme for the table.',
   explanation:'Table styles apply a coordinated combination of colours, fonts and borders to the entire table in one click.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-059', chapterId:'g9ict-word-processing', subsection:'tables_text', difficulty:2,
   question:'Which feature converts existing tabbed text into a formatted table?',
-  options:['Insert > Table > Convert Text to Table','Format > Paragraph > Columns','Insert > Shapes','Page Layout > Margins'],
-  answer:'Insert > Table > Convert Text to Table', hint:'Text separated by tabs or commas can be converted automatically.',
+  options:['Insert > Table > Convert Text','Page Layout > Margins > Custom','Format > Paragraph > Columns','Insert > Shapes > Rectangle'],
+  answer:'Insert > Table > Convert Text', hint:'Text separated by tabs or commas can be converted automatically.',
   explanation:'The Convert Text to Table option reads separator characters (tabs, commas, etc.) in selected text and creates a table from them.' }));
 
 // ── multiple_documents: g9ict-wpv-060 to g9ict-wpv-070 ───────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-060', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'To open more than one document at the same time in a word processor, you:',
-  options:['open each file separately — they appear in different windows or tabs','close the first file before opening the next','save the first file as a template first','merge both files into one before opening'],
-  answer:'open each file separately — they appear in different windows or tabs', hint:'Word processors support multiple open files.',
+  options:['open each file in its own window','merge both files before opening','close the first file each time','save the first as a template'],
+  answer:'open each file in its own window', hint:'Word processors support multiple open files.',
   explanation:'Most word processors allow several documents to be open simultaneously, each in its own window or tab.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-061', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
@@ -381,32 +381,32 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-061', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-062', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'To copy text from one document and paste it into another, you would use:',
-  options:['Ctrl + C to copy, switch to the other document, and then Ctrl + V to paste','Save both documents and then merge them','Use Print to print and retype the text','Use Insert > File to transfer the text'],
-  answer:'Ctrl + C to copy, switch to the other document, and then Ctrl + V to paste', hint:'The clipboard holds copied content across windows.',
+  options:['Ctrl + C and then Ctrl + V','Save both and then merge them','Insert > File to transfer it','Print the text and retype it'],
+  answer:'Ctrl + C and then Ctrl + V', hint:'The clipboard holds copied content across windows.',
   explanation:'The clipboard retains copied content even when you switch between document windows, allowing a quick copy and paste.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-063', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'Track Changes in a word processor is used to:',
-  options:['record all edits made to a document so they can be accepted or rejected later','automatically back up the document every minute','track how many words are typed each session','record the document\'s edit history in a separate file'],
-  answer:'record all edits made to a document so they can be accepted or rejected later', hint:'Editors use it to suggest changes.',
+  options:['record every edit for review','back up the document each minute','store the history in a new file','count the words typed per hour'],
+  answer:'record every edit for review', hint:'Editors use it to suggest changes.',
   explanation:'Track Changes marks every insertion, deletion and formatting change so the document\'s author can review and accept or reject each one.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-064', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'The Compare Documents feature is used to:',
-  options:['show the differences between two versions of the same document highlighted as tracked changes','print two documents at the same time','merge two documents into one combined file','check the spelling of two documents simultaneously'],
-  answer:'show the differences between two versions of the same document highlighted as tracked changes', hint:'It finds what has changed between two versions.',
+  options:['show differences between two versions','print two documents at the same time','check the spelling of two documents','merge two documents into one file'],
+  answer:'show differences between two versions', hint:'It finds what has changed between two versions.',
   explanation:'Compare Documents generates a new document showing all differences between two versions as tracked changes.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-065', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'A master document in a word processor is used to:',
-  options:['organise and link a long document that is split into several sub-documents','apply the same style to all open documents','make a copy of the document in a new folder','convert the document to PDF automatically'],
-  answer:'organise and link a long document that is split into several sub-documents', hint:'Long reports or books are often split into chapters.',
+  options:['link several sub-documents together','convert the document to PDF for you','apply one style to all open files','copy the document to a new folder'],
+  answer:'link several sub-documents together', hint:'Long reports or books are often split into chapters.',
   explanation:'A master document contains links to several sub-documents, allowing a long work to be edited in sections while maintaining a single table of contents.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-066', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'Inserting a file into an open document using Insert > Object (or Text from File) places:',
-  options:['the complete content of another file into the current document at the cursor position','a thumbnail image of the other document','a link that opens the file in a separate window','a footnote referencing the other document'],
-  answer:'the complete content of another file into the current document at the cursor position', hint:'It imports the entire file content.',
+  options:['the whole file at the cursor','a footnote naming the other file','a link that opens a new window','a thumbnail of the other file'],
+  answer:'the whole file at the cursor', hint:'It imports the entire file content.',
   explanation:'Insert Text from File inserts all the content of a chosen file into the current document at the cursor position.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-067', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
@@ -417,40 +417,40 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-067', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-068', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'Saving a document as a PDF means:',
-  options:['the document can be viewed on any device without the need for word processor software','the file can only be opened in one specific application','the file size always triples','all images are automatically removed'],
-  answer:'the document can be viewed on any device without the need for word processor software', hint:'PDF is a universal format.',
+  options:['it opens on any device','it opens in only one program','the file size always triples','all images are removed'],
+  answer:'it opens on any device', hint:'PDF is a universal format.',
   explanation:'PDF (Portable Document Format) can be opened on any device with a PDF reader, preserving the layout exactly without needing the original software.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-069', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'The Spelling and Grammar checker in a word processor:',
-  options:['identifies possible spelling mistakes and grammatical errors but may miss context-based errors','guarantees that the document is completely error-free','translates the document into another language','deletes all grammatical errors automatically without prompting'],
-  answer:'identifies possible spelling mistakes and grammatical errors but may miss context-based errors', hint:'It is helpful but not infallible.',
+  options:['may still miss context errors','guarantees an error-free file','translates the whole document','deletes every error for you'],
+  answer:'may still miss context errors', hint:'It is helpful but not infallible.',
   explanation:'Spell checkers catch many errors but can miss correctly-spelt words used in the wrong context, so human proofreading is still necessary.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-070', chapterId:'g9ict-word-processing', subsection:'multiple_documents', difficulty:2,
   question:'The word count feature in a word processor shows:',
-  options:['the total number of words, characters, paragraphs and pages in the document','the maximum number of words allowed','the number of formatting errors found','the font size of the longest word'],
-  answer:'the total number of words, characters, paragraphs and pages in the document', hint:'It provides statistics about the document.',
+  options:['words, characters and pages','the size of the longest word','the formatting errors found','the maximum words allowed'],
+  answer:'words, characters and pages', hint:'It provides statistics about the document.',
   explanation:'Word Count (found under the Review tab or on the status bar) displays statistics including word count, character count, paragraph count and page count.' }));
 
 // ── styles: g9ict-wpv-071 to g9ict-wpv-082 ───────────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-071', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'A style in a word processor is:',
-  options:['a named set of formatting settings that can be applied with a single click','a type of border applied to paragraphs','a method for inserting images','a shortcut for printing the document'],
-  answer:'a named set of formatting settings that can be applied with a single click', hint:'One click applies many formats at once.',
+  options:['a named set of formatting','a type of paragraph border','a way of inserting images','a shortcut for printing'],
+  answer:'a named set of formatting', hint:'One click applies many formats at once.',
   explanation:'A style saves multiple formatting settings (font, size, spacing, colour) under one name, allowing consistent formatting in a single click.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-072', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'Applying the Heading 1 style to text in a long document allows the word processor to:',
-  options:['include that text in an automatic Table of Contents','print that text in a larger font only','save the text in a separate file','send the text to a different document'],
-  answer:'include that text in an automatic Table of Contents', hint:'Heading styles are recognised by the TOC generator.',
+  options:['build a Table of Contents','print that text in a larger font','send the text to another file','save the text in a new file'],
+  answer:'build a Table of Contents', hint:'Heading styles are recognised by the TOC generator.',
   explanation:'The Table of Contents tool collects all text marked with Heading styles and builds a contents page automatically.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-073', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'Modifying a style in a document changes:',
-  options:['all text in the document that uses that style at once','only the text currently selected','only the next paragraph','only text added after the modification'],
-  answer:'all text in the document that uses that style at once', hint:'One change updates every instance.',
+  options:['all text that uses that style','only the next paragraph typed','only the text now selected','only text typed afterwards'],
+  answer:'all text that uses that style', hint:'One change updates every instance.',
   explanation:'If you modify a style, every paragraph formatted with that style updates immediately throughout the entire document.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-074', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
@@ -461,38 +461,38 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-074', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-075', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'A character style differs from a paragraph style because a character style:',
-  options:['applies formatting only to selected characters within a paragraph, not to the whole paragraph','applies to the whole document at once','can only be used on the first character of each word','removes all previous formatting from the paragraph'],
-  answer:'applies formatting only to selected characters within a paragraph, not to the whole paragraph', hint:'It works at the character level, not the paragraph level.',
+  options:['formats selected characters only','removes all previous formatting','works on the first letter only','applies to the whole document'],
+  answer:'formats selected characters only', hint:'It works at the character level, not the paragraph level.',
   explanation:'Character styles apply formatting (bold, colour, font size) to selected characters only, while paragraph styles apply to the entire paragraph.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-076', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'The Styles gallery or Styles pane in a word processor shows:',
-  options:['all the named styles available in the current document or template','all open documents','all spelling errors found','all recent changes made by Track Changes'],
-  answer:'all the named styles available in the current document or template', hint:'It lists your formatting options.',
+  options:['the named styles available','the changes tracked so far','the spelling errors found','the documents now open'],
+  answer:'the named styles available', hint:'It lists your formatting options.',
   explanation:'The Styles pane lists every style defined in the document or its template, allowing you to apply, modify or create styles.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-077', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'Using consistent heading styles throughout a long document helps because:',
-  options:['it creates a uniform structure, allows automatic TOC generation and aids navigation','it increases the file size','it removes the need for spell checking','it automatically translates the document'],
-  answer:'it creates a uniform structure, allows automatic TOC generation and aids navigation', hint:'Structure and navigation are the key benefits.',
+  options:['it gives structure and navigation','it translates the document for you','it removes the need to spell check','it makes the file size smaller'],
+  answer:'it gives structure and navigation', hint:'Structure and navigation are the key benefits.',
   explanation:'Consistent heading styles give the document clear visual structure, enable automatic table-of-contents generation, and allow quick navigation using the Document Map.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-078', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'A Quick Style set is a collection of:',
-  options:['coordinated styles for headings, body text and other elements that work well together visually','keyboard shortcuts for common commands','images grouped under one name','recent documents opened in the word processor'],
-  answer:'coordinated styles for headings, body text and other elements that work well together visually', hint:'All the styles match each other.',
+  options:['coordinated styles for a document','keyboard shortcuts for commands','images grouped under one name','recently opened documents'],
+  answer:'coordinated styles for a document', hint:'All the styles match each other.',
   explanation:'A Quick Style set provides a complete, visually coordinated set of styles for an entire document, making it easy to change the overall look.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-079', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'To create a new style based on existing text formatting, you:',
-  options:['select the formatted text and click New Style in the Styles pane','type the style name into the font size box','print the document and write the style name on it','save the document under a new file name'],
-  answer:'select the formatted text and click New Style in the Styles pane', hint:'Use the formatted text as the template for the new style.',
+  options:['select it and click New Style','print it and write the name on','save the file under a new name','type the name in the size box'],
+  answer:'select it and click New Style', hint:'Use the formatted text as the template for the new style.',
   explanation:'Selecting formatted text and choosing New Style creates a named style with all the formatting of the selected text.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-080', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'The difference between Heading 1 and Heading 2 styles is that:',
-  options:['Heading 1 is used for main headings and Heading 2 for subheadings, creating a hierarchy','Heading 1 is always blue and Heading 2 is always red','Heading 2 can only be used once per document','Heading 1 cannot include any bold text'],
-  answer:'Heading 1 is used for main headings and Heading 2 for subheadings, creating a hierarchy', hint:'They form a hierarchy of heading levels.',
+  options:['Heading 1 outranks Heading 2','Heading 1 is blue, Heading 2 red','Heading 2 is allowed only once','Heading 1 cannot be made bold'],
+  answer:'Heading 1 outranks Heading 2', hint:'They form a hierarchy of heading levels.',
   explanation:'Heading styles are numbered to show hierarchy: Heading 1 for chapter titles, Heading 2 for sections within a chapter, and so on.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-081', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
@@ -503,34 +503,34 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-081', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-082', chapterId:'g9ict-word-processing', subsection:'styles', difficulty:2,
   question:'Styles improve consistency in a document by ensuring:',
-  options:['the same type of text always looks the same throughout the document','every page has a different colour scheme','each paragraph uses a different font','spelling is checked automatically'],
-  answer:'the same type of text always looks the same throughout the document', hint:'One style definition means uniform appearance.',
+  options:['the same text type always matches','each paragraph uses its own font','the spelling is checked for you','every page has its own colours'],
+  answer:'the same text type always matches', hint:'One style definition means uniform appearance.',
   explanation:'Styles guarantee consistency because all text using a given style is formatted identically, removing the risk of accidental formatting variation.' }));
 
 // ── mail_merge: g9ict-wpv-083 to g9ict-wpv-094 ───────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-083', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'Mail merge is used to:',
-  options:['produce multiple personalised copies of a letter or document from one template and a list of data','send email automatically','merge two documents into one','check the spelling of a mailing list'],
-  answer:'produce multiple personalised copies of a letter or document from one template and a list of data', hint:'One template, many personalised letters.',
+  options:['personalise many copies of a letter','send email messages automatically','merge two documents into one file','spell check a list of addresses'],
+  answer:'personalise many copies of a letter', hint:'One template, many personalised letters.',
   explanation:'Mail merge creates a personalised copy of the main document for every record in the data source, inserting individual details automatically.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-084', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'In mail merge, the main document contains:',
-  options:['the fixed text and merge field placeholders used in every copy','the list of names and addresses','the finished merged letters','a copy of the data source'],
-  answer:'the fixed text and merge field placeholders used in every copy', hint:'It is the letter template.',
+  options:['the fixed text and merge fields','the list of names and addresses','a duplicate of the data source','the finished merged letters'],
+  answer:'the fixed text and merge fields', hint:'It is the letter template.',
   explanation:'The main document has the wording common to all copies and contains merge field markers that will be replaced by individual data.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-085', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'In mail merge, the data source is:',
-  options:['the file containing the records of names, addresses and other personal information','the main document with the letter text','the finished merged output','the printer used to print the letters'],
-  answer:'the file containing the records of names, addresses and other personal information', hint:'It holds the variable information.',
+  options:['the file holding the records','the finished merged output','the letter text document','the printer used for it'],
+  answer:'the file holding the records', hint:'It holds the variable information.',
   explanation:'The data source (often a spreadsheet or database table) contains the individual records whose fields are inserted into each merged copy.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-086', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'A merge field in a main document appears as:',
-  options:['a field name inside chevrons, such as «FirstName»','a red wavy underline','a small image of the field','a footnote at the bottom of the page'],
-  answer:'a field name inside chevrons, such as «FirstName»', hint:'Look at how they appear in the letter template.',
+  options:['a name inside chevrons','a small image of the field','a footnote on the page','a red wavy underline'],
+  answer:'a name inside chevrons', hint:'Look at how they appear in the letter template.',
   explanation:'Merge fields are displayed between chevron marks (« ») in the main document and are replaced by the corresponding data values during the merge.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-087', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
@@ -541,14 +541,14 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-087', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-088', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'One advantage of using mail merge rather than typing each letter individually is:',
-  options:['the same wording is guaranteed in every letter and the process is much faster for large numbers','each letter is saved as a separate file automatically','it checks the spelling for every letter individually','it selects a different font for each recipient'],
-  answer:'the same wording is guaranteed in every letter and the process is much faster for large numbers', hint:'One template, consistent wording, automated.',
+  options:['identical wording, produced faster','it spell checks each letter alone','it picks a font for each person','it saves each letter as a file'],
+  answer:'identical wording, produced faster', hint:'One template, consistent wording, automated.',
   explanation:'Mail merge produces consistent wording in every copy and is extremely fast for large mailings compared to typing each letter separately.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-089', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'The mail merge wizard in a word processor guides you through:',
-  options:['selecting the document type, data source, and fields, then completing the merge step by step','drawing a chart of the data','formatting each recipient\'s name individually','converting the data source into a PDF'],
-  answer:'selecting the document type, data source, and fields, then completing the merge step by step', hint:'A wizard walks you through the process.',
+  options:['the merge steps in order','formatting each name by hand','drawing a chart of the data','converting the data to PDF'],
+  answer:'the merge steps in order', hint:'A wizard walks you through the process.',
   explanation:'The mail merge wizard takes you through each stage: choose the document type, identify the data source, insert fields, preview and complete the merge.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-090', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
@@ -559,40 +559,40 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-090', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-091', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'Before starting a mail merge, the data source should be checked to ensure:',
-  options:['all records are complete and correctly formatted with consistent field names','all records use the same font','every record has a photograph','the file is saved as a .pdf'],
-  answer:'all records are complete and correctly formatted with consistent field names', hint:'Garbage in, garbage out.',
+  options:['the records are complete','the file is saved as .pdf','all records use one font','each record has a photo'],
+  answer:'the records are complete', hint:'Garbage in, garbage out.',
   explanation:'The data source must have consistent, complete records and correct field names; errors in the data source will produce errors in the merged letters.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-092', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'The "Preview Results" option in a mail merge allows you to:',
-  options:['see how the finished letter will look for a specific record before completing the merge','print all copies immediately','delete records from the data source','change the font used in the main document'],
-  answer:'see how the finished letter will look for a specific record before completing the merge', hint:'Check one letter before printing all of them.',
+  options:['check one letter before merging','delete records from the source','change the font of the letter','print every copy immediately'],
+  answer:'check one letter before merging', hint:'Check one letter before printing all of them.',
   explanation:'Preview Results replaces the merge field placeholders with actual data from one record so you can check the layout before running the full merge.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-093', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'Mail merge can be used to produce addressed envelopes by:',
-  options:['selecting Envelopes as the document type and using the delivery address fields from the data source','printing the main letter and folding it into an envelope shape','typing each address on a separate page','scanning a handwritten address list'],
-  answer:'selecting Envelopes as the document type and using the delivery address fields from the data source', hint:'The envelope size and address position are set in the wizard.',
+  options:['choosing Envelopes as the type','folding the printed letter over','scanning a handwritten address','typing each address on a page'],
+  answer:'choosing Envelopes as the type', hint:'The envelope size and address position are set in the wizard.',
   explanation:'Choosing Envelopes as the merge document type formats the page to envelope size and places address fields in the correct position.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-094', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'After a mail merge is completed, the merged documents can be:',
-  options:['printed immediately, saved as a single new document, or emailed','only deleted','converted into a database automatically','used to create a spreadsheet chart'],
-  answer:'printed immediately, saved as a single new document, or emailed', hint:'You can output the merged letters in several ways.',
+  options:['printed, saved or emailed','turned into a database file','used to build a data chart','deleted and nothing else'],
+  answer:'printed, saved or emailed', hint:'You can output the merged letters in several ways.',
   explanation:'The completed merge can be output directly to the printer, saved as a new document with all personalised copies, or used to generate personalised emails.' }));
 
 // ── toc_lists: g9ict-wpv-095 to g9ict-wpv-106 ────────────────────────────
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-095', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'An automatic Table of Contents is generated by the word processor using:',
-  options:['the heading styles applied to text in the document','the order in which text was typed','the font size of each paragraph','the number of words in each section'],
-  answer:'the heading styles applied to text in the document', hint:'The TOC collects heading-styled text.',
+  options:['the heading styles applied','the order the text was typed','the number of words per part','the font size of each line'],
+  answer:'the heading styles applied', hint:'The TOC collects heading-styled text.',
   explanation:'The word processor scans the document for text formatted with Heading 1, Heading 2 etc. and assembles them into the TOC.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-096', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'To update a Table of Contents after changes have been made to the document, you:',
-  options:['right-click the TOC and choose Update Field, or use the Update Table button','delete the TOC and retype it manually','save the document as a PDF','change the heading style font'],
-  answer:'right-click the TOC and choose Update Field, or use the Update Table button', hint:'The TOC can refresh itself.',
+  options:['right-click and Update Field','delete it and retype it by hand','change the heading style font','save the document as a PDF'],
+  answer:'right-click and Update Field', hint:'The TOC can refresh itself.',
   explanation:'Updating the TOC field tells the word processor to re-scan the document for headings and refresh the page numbers and entries.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-097', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
@@ -609,50 +609,50 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-098', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-099', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'A numbered list is used to present:',
-  options:['a sequence of steps that must be followed in a specific order','a collection of unrelated items','the chapters of a book in any order','a set of images'],
-  answer:'a sequence of steps that must be followed in a specific order', hint:'Numbers show the order matters.',
+  options:['steps in a fixed order','book chapters in any order','a set of unrelated images','items with no connection'],
+  answer:'steps in a fixed order', hint:'Numbers show the order matters.',
   explanation:'Numbered lists are used when items must be followed or considered in a specific sequence, such as instructions or procedural steps.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-100', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'A multi-level list in a word processor allows you to:',
-  options:['create sub-items indented beneath each main item, forming a hierarchy','number every character in the document','create columns of equal width','insert a border around every paragraph'],
-  answer:'create sub-items indented beneath each main item, forming a hierarchy', hint:'It is a list with indented sub-points.',
+  options:['indent sub-items under items','add a border to each paragraph','create columns of equal width','number every character typed'],
+  answer:'indent sub-items under items', hint:'It is a list with indented sub-points.',
   explanation:'A multi-level list uses indentation and different numbering or bullet styles to show hierarchy — for example, 1, 1.1, 1.1.1.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-101', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'To change the bullet symbol used in a bulleted list, you:',
-  options:['open the Bullets dialog and select a different symbol or character','change the font of the first character','press Tab before the bullet','delete the bullet and retype it'],
-  answer:'open the Bullets dialog and select a different symbol or character', hint:'The dialog lets you choose any character as a bullet.',
+  options:['pick one in the Bullets dialog','change the font of the first letter','delete it and retype the symbol','press Tab before each bullet'],
+  answer:'pick one in the Bullets dialog', hint:'The dialog lets you choose any character as a bullet.',
   explanation:'Right-clicking the list and choosing the Bullets menu opens a gallery and a dialog where you can select any symbol, image or character as the bullet.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-102', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'Footnotes in a word-processed document are used to:',
-  options:['add references or comments at the bottom of the page without interrupting the main text','number the pages of the document','insert a footer on every page','create a table of contents automatically'],
-  answer:'add references or comments at the bottom of the page without interrupting the main text', hint:'They appear at the foot of the page.',
+  options:['add notes at the foot of a page','insert a footer on every page','number the pages of the file','build a table of contents'],
+  answer:'add notes at the foot of a page', hint:'They appear at the foot of the page.',
   explanation:'Footnotes allow the author to add references, explanations or citations at the bottom of the page without cluttering the main text.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-103', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'An index at the end of a document helps the reader to:',
-  options:['find specific terms or topics and the pages on which they appear','count the number of words in the document','navigate to any page by clicking','check the headings used in the document'],
-  answer:'find specific terms or topics and the pages on which they appear', hint:'It is an alphabetical guide to the document\'s content.',
+  options:['find terms and their pages','check the headings that were used','count the words in the document','click through to any page'],
+  answer:'find terms and their pages', hint:'It is an alphabetical guide to the document\'s content.',
   explanation:'An index is an alphabetical list of key terms and their page numbers, helping readers quickly locate specific information.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-104', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'An endnote is similar to a footnote except that an endnote:',
-  options:['appears at the end of the document rather than at the bottom of each page','appears at the top of each page','is numbered in Roman numerals','can only be used in tables'],
-  answer:'appears at the end of the document rather than at the bottom of each page', hint:'It is placed at the very end.',
+  options:['appears at the end of the document','appears at the top of every single page','can only be used inside tables','is numbered in Roman numerals'],
+  answer:'appears at the end of the document', hint:'It is placed at the very end.',
   explanation:'Endnotes serve the same purpose as footnotes but are gathered together at the end of the document rather than scattered across page bottoms.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-105', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'Captions in a word-processed document are:',
-  options:['descriptive labels added below figures, tables or images','footnotes converted into headings','titles for each paragraph','bullet points converted to numbers'],
-  answer:'descriptive labels added below figures, tables or images', hint:'They label the object they describe.',
+  options:['labels placed beside a figure','bullet points turned to numbers','footnotes turned into headings','titles given to each paragraph'],
+  answer:'labels placed beside a figure', hint:'They label the object they describe.',
   explanation:'Captions are text labels placed near an image or table to describe it; word processors can number captions automatically.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-wpv-106', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:2,
   question:'The Table of Figures feature in a word processor creates:',
-  options:['a list of all captioned figures, tables or equations in the document with their page numbers','a gallery of all images that can be inserted','a chart from data in a table','a list of all hyperlinks in the document'],
-  answer:'a list of all captioned figures, tables or equations in the document with their page numbers', hint:'Like a TOC but for figures and tables.',
+  options:['a list of captioned figures','a gallery of insertable images','a chart from data in a table','a list of all the hyperlinks'],
+  answer:'a list of captioned figures', hint:'Like a TOC but for figures and tables.',
   explanation:'The Table of Figures uses captions to build an automatically numbered list of all figures or tables in the document, with page numbers.' }));
 
 })();

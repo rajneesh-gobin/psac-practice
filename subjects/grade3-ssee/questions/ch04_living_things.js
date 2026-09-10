@@ -11,10 +11,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-001', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'Which of the following is a LIVING thing?',
-    options:['A cat','A stone','A plastic cup','A metal spoon'],
+    options:['A cat','A stone','A cup','A spoon'],
     answer:'A cat',
     hint:'Living things breathe, grow and reproduce.',
-    explanation:'A <b>cat</b> is living — it breathes, eats, grows, moves and reproduces. A stone, plastic cup and metal spoon are non-living.' }),
+    explanation:'A <b>cat</b> is living — it breathes, eats, grows, moves and reproduces. A stone, a cup and a spoon are non-living.'}),
 
   makeMCQ({ id:'g3ssee-liv-002', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'How many main characteristics do living things share?',
@@ -44,17 +44,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-006', chapterId:'g3ssee-living', difficulty:2, subsection:'living_things',
     question:'A plant grows towards a light source. Which characteristic of living things does this show?',
-    options:['Sensitivity (responding to stimuli)','Excretion','Nutrition','Reproduction'],
-    answer:'Sensitivity (responding to stimuli)',
+    options:['Sensitivity','Reproduction','Respiration','Excretion'],
+    answer:'Sensitivity',
     hint:'The plant is detecting and responding to a change in its environment.',
-    explanation:'Growing towards light shows <b>sensitivity</b> — the ability to detect and respond to changes (stimuli) in the environment. Plants respond to light; animals respond to sound, pain, heat, etc.' }),
+    explanation:'Growing towards light shows <b>sensitivity</b> — detecting and responding to a change (a stimulus) in the surroundings. Reproduction makes offspring, respiration releases energy and excretion removes waste.'}),
 
   makeMCQ({ id:'g3ssee-liv-007', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'Which characteristic of living things refers to producing offspring?',
-    options:['Reproduction','Nutrition','Growth','Excretion'],
+    options:['Reproduction','Respiration','Excretion','Nutrition'],
     answer:'Reproduction',
     hint:'This is how living things make more of themselves.',
-    explanation:'<b>Reproduction</b> is the production of offspring (young). Animals mate and produce young; plants produce seeds.' }),
+    explanation:'<b>Reproduction</b> is the making of offspring: animals produce young and plants produce seeds. Respiration releases energy, excretion removes waste and nutrition is feeding.'}),
 
   makeTF({ id:'g3ssee-liv-008', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'All living things need food (nutrition).',
@@ -63,24 +63,24 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-009', chapterId:'g3ssee-living', difficulty:2, subsection:'living_things',
     question:'Which of the following shows that a baby kitten is ALIVE?',
-    options:['It breathes, drinks milk and grows bigger every week','It is soft and fluffy','It is found in a pet shop','It has four legs'],
-    answer:'It breathes, drinks milk and grows bigger every week',
+    options:['It breathes, feeds and grows bigger','It has four legs and a long tail','It is soft, fluffy and warm to hold','It was bought from a pet shop'],
+    answer:'It breathes, feeds and grows bigger',
     hint:'Living things show life processes such as breathing, eating and growing.',
-    explanation:'A kitten showing <b>breathing, nutrition and growth</b> demonstrates life processes that prove it is a living thing.' }),
+    explanation:'Breathing, feeding and growing are <b>life processes</b>, and together they show the kitten is alive. Legs, fur and where it came from tell us nothing about whether a thing is living.'}),
 
   makeMCQ({ id:'g3ssee-liv-010', chapterId:'g3ssee-living', difficulty:2, subsection:'living_things',
     question:'Are mushrooms living things?',
-    options:['Yes, they grow, respire and reproduce','No, they cannot move','No, they cannot make food','No, they do not have leaves'],
-    answer:'Yes, they grow, respire and reproduce',
+    options:['Yes, they grow and reproduce','No, they have no green leaves','No, they cannot make their food','No, they cannot move about'],
+    answer:'Yes, they grow and reproduce',
     hint:'Mushrooms are a type of fungi — they show life processes.',
-    explanation:'Yes! <b>Mushrooms</b> are living things (fungi). They grow, respire and reproduce by releasing spores, even though they cannot make their own food or move around like animals.' }),
+    explanation:'Yes — mushrooms are living things (fungi). They grow, respire and reproduce by releasing spores, even though they cannot make their own food or move around as animals do.'}),
 
   makeMCQ({ id:'g3ssee-liv-011', chapterId:'g3ssee-living', difficulty:3, subsection:'living_things',
     question:'A fire grows in size, moves (spreads) and produces waste gases. Is it ALIVE?',
-    options:['No, because it cannot reproduce or respond to stimuli like living things','Yes, because it grows and moves','Yes, because it needs oxygen','No, because it has no colour'],
-    answer:'No, because it cannot reproduce or respond to stimuli like living things',
+    options:['No, it cannot reproduce or respond','Yes, it grows and it moves about','Yes, it needs oxygen to keep going','No, it has no colour of its own'],
+    answer:'No, it cannot reproduce or respond',
     hint:'Consider ALL the characteristics of living things.',
-    explanation:'Fire <b>is not alive</b> because it cannot reproduce, it has no cells, and it does not respond to stimuli in the way living things do. It only mimics a few life processes.' }),
+    explanation:'Fire is <b>not alive</b>: it has no cells, it cannot reproduce, and it does not respond to stimuli the way living things do. It only copies a few life processes.'}),
 
   makeMCQ({ id:'g3ssee-liv-012', chapterId:'g3ssee-living', difficulty:2, subsection:'living_things',
     question:'What do ALL living things — from bacteria to elephants — have in common?',
@@ -103,10 +103,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-015', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'Bacteria are very tiny living things that cannot be seen without a microscope. What are they?',
-    options:['Microorganisms','Rocks','Minerals','Machines'],
+    options:['Microorganisms','Small machines','Tiny minerals','Ground rocks'],
     answer:'Microorganisms',
     hint:'Micro means very small.',
-    explanation:'Bacteria are <b>microorganisms</b> — living things that are too small to see with the naked eye. A microscope is needed to see them.' }),
+    explanation:'Bacteria are <b>microorganisms</b> — living things far too small to see with the naked eye, so a microscope is needed. They are not machines, minerals or rocks.'}),
 
 // ── non_living (016-045) ──────────────────────────────────────────────────
 
@@ -119,10 +119,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-017', chapterId:'g3ssee-living', difficulty:1, subsection:'non_living',
     question:'Which of the following is a NON-LIVING thing?',
-    options:['Water','Seagull','Ant','Cactus plant'],
+    options:['Water','Cactus','Seagull','Ant'],
     answer:'Water',
     hint:'This substance does not breathe, grow, eat or reproduce.',
-    explanation:'<b>Water</b> is non-living. Although it is essential for life, water itself does not show the characteristics of living things.' }),
+    explanation:'<b>Water</b> is non-living. It is essential for life, but it does not grow, breathe or reproduce. A cactus, a seagull and an ant all do.'}),
 
   makeTF({ id:'g3ssee-liv-018', chapterId:'g3ssee-living', difficulty:1, subsection:'non_living',
     question:'A car can move, so it is a living thing.',
@@ -138,17 +138,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-020', chapterId:'g3ssee-living', difficulty:2, subsection:'non_living',
     question:'What is the correct term for things that have never been alive and show no life processes?',
-    options:['Non-living','Dead','Extinct','Dormant'],
+    options:['Non-living','Long dead','Dormant','Extinct'],
     answer:'Non-living',
     hint:'These things have never shown life processes.',
-    explanation:'<b>Non-living things</b> (like rocks, water and air) have never been alive and do not show any life processes.' }),
+    explanation:'<b>Non-living</b> things — rocks, water, air — have never been alive and show no life processes. Dead, dormant and extinct all describe things that were once alive.'}),
 
   makeMCQ({ id:'g3ssee-liv-021', chapterId:'g3ssee-living', difficulty:2, subsection:'non_living',
     question:'What is the difference between a DEAD thing and a NON-LIVING thing?',
-    options:['A dead thing was once alive; a non-living thing was never alive','There is no difference','A dead thing never had life; a non-living thing is alive','A non-living thing can grow; a dead thing cannot'],
-    answer:'A dead thing was once alive; a non-living thing was never alive',
+    options:['Dead was once alive; non-living never was','Dead was never alive; non-living is alive','Non-living can grow; dead cannot grow','There is no difference between them'],
+    answer:'Dead was once alive; non-living never was',
     hint:'Think about a fallen leaf vs. a rock.',
-    explanation:'A <b>dead</b> thing (like a fallen leaf or a skeleton) was once alive. A <b>non-living</b> thing (like a rock or plastic) was never alive at all.' }),
+    explanation:'A <b>dead</b> thing — a fallen leaf, a skeleton — was once alive. A <b>non-living</b> thing — a rock, a piece of plastic — was never alive at all.'}),
 
   makeTF({ id:'g3ssee-liv-022', chapterId:'g3ssee-living', difficulty:1, subsection:'non_living',
     question:'Air is a non-living thing.',
@@ -157,10 +157,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-023', chapterId:'g3ssee-living', difficulty:3, subsection:'non_living',
     question:'A crystal grows in size over time. Does this make it a living thing?',
-    options:['No, because growth in crystals is a chemical process, not a life process','Yes, because it grows','Yes, because it changes shape','No, because it is too small'],
-    answer:'No, because growth in crystals is a chemical process, not a life process',
+    options:['No, crystal growth is a chemical change','No, because a crystal is far too small','Yes, because it grows bigger in size','Yes, because it changes its own shape'],
+    answer:'No, crystal growth is a chemical change',
     hint:'Living things grow because of biological processes involving cells.',
-    explanation:'Crystal growth is a <b>chemical/physical process</b>, not a biological one. Crystals do not have cells, cannot reproduce, breathe or eat — they are non-living.' }),
+    explanation:'A crystal grows by a <b>chemical</b> process, not a life process. Crystals have no cells and cannot reproduce, breathe or feed, so they are non-living.'}),
 
   makeMCQ({ id:'g3ssee-liv-024', chapterId:'g3ssee-living', difficulty:1, subsection:'non_living',
     question:'Which of the following is a non-living thing that living things depend on?',
@@ -171,9 +171,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-025', chapterId:'g3ssee-living', difficulty:2, subsection:'non_living',
     question:'Carbon dioxide is a gas in the air. Is it living or non-living?',
-    options:['Non-living','Living','Dead','Dormant'],
+    options:['Non-living','Once living','Dormant','Extinct'],
     answer:'Non-living',
-    explanation:'<b>Carbon dioxide</b> (CO₂) is a non-living gas — a chemical compound. It is not alive, even though plants absorb it during photosynthesis.' }),
+    explanation:'Carbon dioxide is a <b>non-living</b> gas — a chemical compound. It was never alive, even though plants take it in during photosynthesis.'}),
 
   makeMCQ({ id:'g3ssee-liv-026', chapterId:'g3ssee-living', difficulty:1, subsection:'non_living',
     question:'Which list contains ONLY non-living things?',
@@ -202,10 +202,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-030', chapterId:'g3ssee-living', difficulty:3, subsection:'non_living',
     question:'A pupil says "fire is alive because it moves and needs oxygen." Is the pupil correct?',
-    options:['No, because fire cannot reproduce or carry out all life processes','Yes, because it moves and needs oxygen','Yes, because it grows and produces waste','No, because fire is cold'],
-    answer:'No, because fire cannot reproduce or carry out all life processes',
+    options:['No, fire cannot carry out all life processes','No, because fire is always cold to the touch','Yes, because it moves about and needs oxygen','Yes, because it grows and makes waste gases'],
+    answer:'No, fire cannot carry out all life processes',
     hint:'One or two characteristics of life are not enough to be alive.',
-    explanation:'Fire is <b>not alive</b>. While it consumes oxygen and produces CO₂ (like respiration), it cannot reproduce, has no cells, and does not carry out all 7 life processes.' }),
+    explanation:'The pupil is wrong. Fire uses oxygen and gives off carbon dioxide, which looks like respiration, but it has no cells and cannot reproduce, so it does not carry out all the life processes.'}),
 
 // ── classifying (031-075) ──────────────────────────────────────────────────
 
@@ -223,10 +223,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-033', chapterId:'g3ssee-living', difficulty:1, subsection:'classifying',
     question:'A pupil collects the following: a shell, a leaf with no stem, a pebble, a feather. Which are once-living (dead)?',
-    options:['The shell, leaf and feather','Only the pebble','Only the leaf','All four objects'],
+    options:['The shell, leaf and feather','All four of the objects here','Only the small grey pebble','Only the leaf with no stem'],
     answer:'The shell, leaf and feather',
     hint:'Which of these were produced by living organisms?',
-    explanation:'The <b>shell</b> (made by a snail/mollusc), <b>leaf</b> (from a plant) and <b>feather</b> (from a bird) were all once produced by living things. The pebble is non-living.' }),
+    explanation:'The shell (made by a mollusc), the leaf (from a plant) and the feather (from a bird) were all once part of living things. The <b>pebble</b> is non-living and never was alive.'}),
 
   makeTF({ id:'g3ssee-liv-034', chapterId:'g3ssee-living', difficulty:1, subsection:'classifying',
     question:'Classifying objects helps scientists to study and understand them better.',
@@ -235,35 +235,35 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-035', chapterId:'g3ssee-living', difficulty:2, subsection:'classifying',
     question:'Which criterion is used to separate living from non-living things?',
-    options:['Whether the object shows life processes','Whether it is green or brown','Whether it is big or small','Whether it is wet or dry'],
-    answer:'Whether the object shows life processes',
-    explanation:'We classify objects as living or non-living based on whether they show <b>life processes</b> such as growth, respiration and reproduction.' }),
+    options:['Whether it shows life processes','Whether it is green or dark brown','Whether it is big or small','Whether it is wet or dry'],
+    answer:'Whether it shows life processes',
+    explanation:'We sort things as living or non-living by whether they show <b>life processes</b> — growth, respiration, reproduction and the rest. Colour, size and wetness tell us nothing.'}),
 
   makeMCQ({ id:'g3ssee-liv-036', chapterId:'g3ssee-living', difficulty:2, subsection:'classifying',
     question:'Which of the following is an example of CLASSIFYING animals?',
-    options:['Sorting them into groups: those with a backbone and those without','Counting how many are on an island','Giving all animals the same name','Feeding all animals the same food'],
-    answer:'Sorting them into groups: those with a backbone and those without',
-    explanation:'Sorting animals into <b>vertebrates</b> (with backbone) and <b>invertebrates</b> (without backbone) is an example of classification.' }),
+    options:['Sorting them by whether they have a backbone','Counting how many of them live on an island','Giving every animal in the zoo the same name','Feeding every animal in the zoo the same food'],
+    answer:'Sorting them by whether they have a backbone',
+    explanation:'Sorting animals into <b>vertebrates</b> (with a backbone) and <b>invertebrates</b> (without one) is classification — putting them into groups by a shared feature. Counting, naming and feeding are not.'}),
 
   makeMCQ({ id:'g3ssee-liv-037', chapterId:'g3ssee-living', difficulty:1, subsection:'classifying',
     question:'Ali is sorting objects on a table into two groups. He puts seeds and beans in Group A, and coins and buttons in Group B. What is the basis of his classification?',
-    options:['Living vs. non-living','Big vs. small','Round vs. square','Heavy vs. light'],
+    options:['Living vs. non-living','Bright vs. dull colour','Heavy vs. very light','Round vs. square shape'],
     answer:'Living vs. non-living',
     hint:'Seeds and beans come from plants. Coins and buttons do not.',
-    explanation:'Seeds and beans are (or were) <b>living</b>; coins and buttons are <b>non-living</b>. Ali is classifying by living vs. non-living.' }),
+    explanation:'Seeds and beans are (or once were) living; coins and buttons are non-living. Ali is sorting by <b>living vs. non-living</b>, not by colour, weight or shape.'}),
 
   makeMCQ({ id:'g3ssee-liv-038', chapterId:'g3ssee-living', difficulty:3, subsection:'classifying',
     question:'A scientist finds an unknown object. It does not move, but it grows slowly and releases spores. Is it living?',
-    options:['Yes — it shows growth and reproduction (spore release)','No — it cannot move','No — it is not green','Yes — it lives in water'],
-    answer:'Yes — it shows growth and reproduction (spore release)',
+    options:['Yes — it grows and reproduces by spores','No — it cannot move from place to place','No — it is not green in colour like a plant','Yes — it must be living in the water'],
+    answer:'Yes — it grows and reproduces by spores',
     hint:'Movement is not required for all living things — plants do not move from place to place.',
-    explanation:'The object is most likely a <b>fungus</b> or <b>plant</b>. Not all living things move; growth and reproduction by spores are life processes, confirming it is living.' }),
+    explanation:'Growth and reproduction by <b>spores</b> are life processes, so the object is living — most likely a fungus. Not every living thing moves, and not every living thing is green.'}),
 
   makeMCQ({ id:'g3ssee-liv-039', chapterId:'g3ssee-living', difficulty:2, subsection:'classifying',
     question:'Which of these correctly sorts plants into two groups?',
-    options:['Flowering plants (mango, rose) and non-flowering plants (fern, pine)','Big plants and small plants','Green plants and red plants','Wet plants and dry plants'],
-    answer:'Flowering plants (mango, rose) and non-flowering plants (fern, pine)',
-    explanation:'Plants are classified as <b>flowering</b> (produce flowers, fruit and seeds — like mango and rose) and <b>non-flowering</b> (reproduce by spores — like ferns and mosses).' }),
+    options:['Flowering plants and non-flowering plants','Green plants and reddish-brown plants','Wet-season plants and dry-season plants','Big garden plants and small garden plants'],
+    answer:'Flowering plants and non-flowering plants',
+    explanation:'Plants are classified as <b>flowering</b> (mango, rose — they produce flowers, fruit and seeds) and <b>non-flowering</b> (fern, pine, moss — they reproduce by spores or cones). Size, colour and season are not classification groups.'}),
 
   makeTF({ id:'g3ssee-liv-040', chapterId:'g3ssee-living', difficulty:1, subsection:'classifying',
     question:'We can classify animals by what they eat: herbivores, carnivores and omnivores.',
@@ -279,9 +279,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-042', chapterId:'g3ssee-living', difficulty:2, subsection:'classifying',
     question:'Why is it important to classify plants and animals into groups?',
-    options:['It helps scientists study, compare and understand different organisms','It makes all organisms look the same','It prevents animals from moving','It stops plants from growing'],
-    answer:'It helps scientists study, compare and understand different organisms',
-    explanation:'Classification helps scientists <b>organise living things</b> into groups based on shared features, making it easier to study, compare and understand them.' }),
+    options:['It helps scientists study and compare them','It makes all of the organisms look the same','It stops the plants from growing any taller','It prevents wild animals from moving around'],
+    answer:'It helps scientists study and compare them',
+    explanation:'Classification sorts living things into groups by shared features, so scientists can <b>study, compare and understand</b> them more easily.'}),
 
   makeMCQ({ id:'g3ssee-liv-043', chapterId:'g3ssee-living', difficulty:1, subsection:'classifying',
     question:'Sort: dog, cloud, chair, tree, river. How many are LIVING?',
@@ -292,17 +292,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-liv-044', chapterId:'g3ssee-living', difficulty:3, subsection:'classifying',
     question:'A wood carving in the shape of a fish is made from a log. Which statement is TRUE?',
-    options:['The carving is non-living, but the wood it came from was once living','The carving is living because wood comes from a tree','The carving is living because it has a fish shape','The carving is non-living because it is brown'],
-    answer:'The carving is non-living, but the wood it came from was once living',
+    options:['Non-living, but the wood was once alive','Living, because it has a fish shape','Living, because wood comes from a tree','Non-living, because it is brown wood'],
+    answer:'Non-living, but the wood was once alive',
     hint:'Consider the original source of the wood.',
-    explanation:'The <b>carving is non-living</b> — it shows no life processes. However, the <b>wood came from a tree</b>, which was once a living organism.' }),
+    explanation:'The carving shows no life processes, so it is <b>non-living</b>. The wood it was cut from, however, came from a tree that was once alive.'}),
 
   makeMCQ({ id:'g3ssee-liv-045', chapterId:'g3ssee-living', difficulty:2, subsection:'classifying',
     question:'Which set of characteristics would a scientist use to classify an organism as an ANIMAL?',
-    options:['It can move, breathes, eats other organisms and cannot make its own food','It makes its own food using sunlight','It has no cells and does not breathe','It only lives in water'],
-    answer:'It can move, breathes, eats other organisms and cannot make its own food',
+    options:['It moves, breathes and eats other living things','It makes its own food using the light of the sun','It has no cells at all and never breathes at all','It can only ever live inside the salty sea water'],
+    answer:'It moves, breathes and eats other living things',
     hint:'Animals are consumers — they cannot produce their own food.',
-    explanation:'Animals are classified as organisms that <b>move, breathe, eat other organisms</b> (they cannot make their own food like plants do), and reproduce.' })
+    explanation:'Animals <b>move</b>, <b>breathe</b> and <b>eat other organisms</b>, because they cannot make their own food the way plants do. Having no cells means not being alive at all, and plenty of animals live on land.'})
 
 );
 

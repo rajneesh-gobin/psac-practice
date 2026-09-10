@@ -1,0 +1,75 @@
+'use strict';
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g8eng-reading-012', chapterId:'g8eng-reading', difficulty:2,
+    subsection:'purpose_audience',
+    question:'A text ends: <i>"Terms apply. Offer valid while stocks last at all our Port Louis branches."</i><br>What is the <b>purpose</b> of this text?',
+    options:['To persuade a reader to buy','To explain how a shop is run','To describe a street in town','To instruct staff on the till'],
+    answer:'To persuade a reader to buy',
+    hint:'Who is being spoken to, and what are they meant to do next?',
+    explanation:'An offer with a deadline exists to move a shopper to act, so the purpose is persuasive. Nothing here explains the business, describes a place or gives staff a procedure to follow.' }),
+
+  makeMCQ({ id:'g8eng-reading-013', chapterId:'g8eng-reading', difficulty:2,
+    subsection:'explicit_implicit',
+    question:'Read: <i>"Sanjay checked the fridge, then the cupboard, then the fridge again."</i><br>What does this <b>imply</b>?',
+    options:['There is nothing to eat','He is tidying the kitchen','He has lost something small','He is cooking a large meal'],
+    answer:'There is nothing to eat',
+    hint:'Why would anyone look in the same place twice?',
+    explanation:'Returning to a place already searched shows the search has failed, and a fridge is searched for food. Tidying, hunting for an object and cooking would all involve doing something, not just looking again.' }),
+
+  makeMCQ({ id:'g8eng-reading-014', chapterId:'g8eng-reading', difficulty:3,
+    subsection:'purpose_audience',
+    question:'Two leaflets describe the same beach clean-up. One lists the meeting time and what to bring; the other repeats <i>"our island, our duty"</i>.<br>How do their <b>purposes</b> differ?',
+    options:['One informs, the other persuades','One is older than the other one','One is longer than the other one','One is printed, the other spoken'],
+    answer:'One informs, the other persuades',
+    hint:'Which leaflet helps you attend, and which one makes you want to?',
+    explanation:'Times and equipment are information a volunteer needs; a repeated slogan works on feeling, which is persuasion. Age, length and medium are not stated and would not change either purpose.' }),
+
+  makeMCQ({ id:'g8eng-reading-015', chapterId:'g8eng-reading', difficulty:3,
+    subsection:'explicit_implicit',
+    question:'Read: <i>"Mum read the electricity bill twice, folded it, and said nothing about the new fan."</i><br>What can you infer?',
+    options:['The bill worries her','She cannot read the bill','She has bought the fan','The fan is already broken'],
+    answer:'The bill worries her',
+    hint:'What is the link between reading a bill twice and staying silent about a purchase?',
+    explanation:'Rereading and then avoiding the subject of the fan suggests the amount troubles her. She clearly can read it, the fan is described as new rather than bought by her, and nothing hints that it has failed.' }),
+
+  makeMCQ({ id:'g8eng-reading-016', chapterId:'g8eng-reading', difficulty:3,
+    subsection:'purpose_audience',
+    question:'A school notice reads: <i>"Pupils are reminded that the gates close at 07:45. No exceptions will be made."</i><br>What is the <b>tone</b>?',
+    options:['Firm and official','Warm and personal','Playful and teasing','Anxious and unsure'],
+    answer:'Firm and official',
+    hint:'Read the last four words again and ask how much room they leave.',
+    explanation:'The passive "are reminded" and the flat refusal of exceptions leave no room to negotiate, which is a firm official tone. Nothing here is affectionate, joking or hesitant.' }),
+
+  makeMCQ({ id:'g8eng-reading-017', chapterId:'g8eng-reading', difficulty:3,
+    subsection:'explicit_implicit',
+    question:'Read: <i>"The coach named the team. Rohit read the list twice, then went to fetch the water bottles."</i><br>What is <b>implied</b> about Rohit?',
+    options:['He is not in the team','He is the team captain','He forgot the team list','He cannot read the list'],
+    answer:'He is not in the team',
+    hint:'What job is left for someone whose name is not on the list?',
+    explanation:'Checking twice and then taking on the water duty implies he looked for a name that was not there. A captain would be told directly, he clearly has the list in front of him, and he reads it perfectly well.' }),
+
+  makeMCQ({ id:'g8eng-reading-018', chapterId:'g8eng-reading', difficulty:4,
+    subsection:'purpose_audience',
+    question:'A newspaper report on a cyclone quotes wind speeds and a Meteo warning. A blog on the same cyclone calls it <i>"the longest night of my life"</i>.<br>A pupil needs <b>evidence</b> of how strong the cyclone was. Which text serves that purpose?',
+    options:['The report, as it gives figures','The blog, as it is more moving','The report, as it is in a paper','The blog, as it was written later'],
+    answer:'The report, as it gives figures',
+    hint:'Two options name the right text. Only one gives the right reason.',
+    explanation:'Evidence of strength must be measurable, and only the report carries wind speeds and an official warning. Being "in a paper" is not itself evidence, and the blog offers feeling rather than measurement whenever it was written.' }),
+
+  makeMCQ({ id:'g8eng-reading-019', chapterId:'g8eng-reading', difficulty:4,
+    subsection:'explicit_implicit',
+    question:'Read: <i>"Every year the shop repainted its sign. This year the paint tins stayed in the yard, unopened."</i><br>What does the second sentence <b>imply</b>?',
+    options:['Something has changed at the shop','The shop has changed its colours','The owner has bought new tins','The sign was painted much earlier'],
+    answer:'Something has changed at the shop',
+    hint:'The writer sets up a habit, then breaks it. Why?',
+    explanation:'A yearly routine that stops for the first time signals a change the writer has not yet named. No new colour is described, the tins are the usual ones, and the point is that this year they were never used.' }),
+
+  makeText({ id:'g8eng-reading-020', chapterId:'g8eng-reading', difficulty:3,
+    subsection:'explicit_implicit',
+    question:'Read: <i>"Nisha pulled her collar up, tucked her hands under her arms and walked faster."</i><br>What is Nisha most likely feeling? Answer with <b>one word</b>.',
+    answer:'cold', alsoAccept:['chilly','freezing','she is cold'],
+    hint:'What makes a person do all three of those things at once?',
+    explanation:'Each action is a way of keeping warm, so the writer shows the cold without ever naming it. Walking faster alone might mean she is late, but not with a raised collar and hidden hands.' })
+
+);

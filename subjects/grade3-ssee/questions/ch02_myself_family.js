@@ -11,10 +11,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-001', chapterId:'g3ssee-family', difficulty:1, subsection:'myself',
     question:'Which of the following is a PERSONAL DETAIL that helps identify who you are?',
-    options:['Your name','The colour of the sky','The size of a bus','The price of bread'],
+    options:['Your name','The weather','The bus fare','The shop name'],
     answer:'Your name',
     hint:'Personal details are things that describe YOU.',
-    explanation:'Your <b>name</b> is a personal detail — it identifies you specifically. Other personal details include your age, address and school name.' }),
+    explanation:'Your <b>name</b> is a personal detail — it identifies you. Your age, address and school name are personal details too. The weather, a bus fare and a shop name describe the world, not you.'}),
 
   makeMCQ({ id:'g3ssee-fam-002', chapterId:'g3ssee-family', difficulty:1, subsection:'myself',
     question:'What do we call the place where a person lives?',
@@ -36,28 +36,28 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-005', chapterId:'g3ssee-family', difficulty:1, subsection:'myself',
     question:'A person\'s date of birth tells us their ___.',
-    options:['age','address','school','family name'],
+    options:['age','name','town','class'],
     answer:'age',
     hint:'You can calculate how old someone is from their date of birth.',
-    explanation:'A person\'s <b>date of birth</b> tells us their age and when they were born — for example, 15 June 2017.' }),
+    explanation:'A person\'s date of birth tells us their <b>age</b> and when they were born — for example, 15 June 2017. It says nothing about their name, their town or their class.'}),
 
   makeMCQ({ id:'g3ssee-fam-006', chapterId:'g3ssee-family', difficulty:2, subsection:'myself',
     question:'Why is it important to know your home address?',
-    options:['So that people can find where you live if needed','So that you can buy things at the market','So that you can tell the weather','So that teachers give you more homework'],
-    answer:'So that people can find where you live if needed',
-    explanation:'Knowing your <b>home address</b> is important for safety — for example, so emergency services or your parents can find you.' }),
+    options:['So that people can find your house','So that you get more homework','So that you can tell the weather','So that you can buy food cheaply'],
+    answer:'So that people can find your house',
+    explanation:'Knowing your home address matters for <b>safety</b> — your parents, a neighbour or the emergency services need it to find where you live. It has nothing to do with homework, the weather or the price of food.'}),
 
   makeMCQ({ id:'g3ssee-fam-007', chapterId:'g3ssee-family', difficulty:1, subsection:'myself',
     question:'Alisha is 8 years old and lives in Quatre Bornes. What is Quatre Bornes in relation to her?',
-    options:['Her town/locality','Her name','Her school subject','Her age'],
-    answer:'Her town/locality',
-    explanation:'<b>Quatre Bornes</b> is the town (locality) where Alisha lives — part of her home address.' }),
+    options:['Her locality','Her age group','Her first name','Her school'],
+    answer:'Her locality',
+    explanation:'Quatre Bornes is the town (<b>locality</b>) where Alisha lives — part of her home address. It is not her age, her name or her school.'}),
 
   makeMCQ({ id:'g3ssee-fam-008', chapterId:'g3ssee-family', difficulty:2, subsection:'myself',
     question:'Which TWO of these are personal details?',
-    options:['Name and age','Colour of the ocean and size of trees','The weather today and the day of the week','The price of rice and the length of a road'],
+    options:['Name and age','Rice and roads','Rain and wind','Trees and sand'],
     answer:'Name and age',
-    explanation:'A person\'s <b>name</b> and <b>age</b> are personal details that identify them. The others are general facts.' }),
+    explanation:'A person\'s <b>name</b> and <b>age</b> are personal details that identify them. Rice, roads, rain, wind, trees and sand are general things in the world, not details about a person.'}),
 
   makeTF({ id:'g3ssee-fam-009', chapterId:'g3ssee-family', difficulty:1, subsection:'myself',
     question:'It is safe to share your home address with any stranger.',
@@ -73,10 +73,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-011', chapterId:'g3ssee-family', difficulty:2, subsection:'myself',
     question:'Sam is kind, honest and hardworking. These are examples of his ___.',
-    options:['personal qualities','physical features','addresses','ages'],
+    options:['personal qualities','physical features','favourite subjects','home addresses'],
     answer:'personal qualities',
     hint:'These describe Sam\'s character, not his body.',
-    explanation:'Kindness, honesty and hardworking are <b>personal qualities</b> (character traits) — they describe who Sam is on the inside.' }),
+    explanation:'Kindness, honesty and hard work are <b>personal qualities</b> (character traits) — they describe who Sam is inside, not how he looks, what he studies or where he lives.'}),
 
   makeMCQ({ id:'g3ssee-fam-012', chapterId:'g3ssee-family', difficulty:1, subsection:'myself',
     question:'Which of the following best describes a PHYSICAL feature of a person?',
@@ -86,9 +86,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-013', chapterId:'g3ssee-family', difficulty:2, subsection:'myself',
     question:'Priya is good at drawing and loves to help others. These describe her ___.',
-    options:['talents and personal qualities','physical features','address','school name'],
-    answer:'talents and personal qualities',
-    explanation:'Being good at drawing is a <b>talent</b>; loving to help others is a <b>personal quality</b>. Together, these describe who Priya is.' }),
+    options:['talents and qualities','looks and body features','school subjects and marks','home address and phone'],
+    answer:'talents and qualities',
+    explanation:'Being good at drawing is a <b>talent</b>; loving to help others is a <b>personal quality</b>. Together they describe who Priya is — not how she looks, what she studies or where she lives.'}),
 
   makeTF({ id:'g3ssee-fam-014', chapterId:'g3ssee-family', difficulty:1, subsection:'myself',
     question:'Every person is unique and has their own set of qualities.',
@@ -97,19 +97,19 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-015', chapterId:'g3ssee-family', difficulty:2, subsection:'myself',
     question:'Which of the following is a TALENT?',
-    options:['Playing the piano','Having brown hair','Being tall','Living in Curepipe'],
+    options:['Playing the piano','Living in Curepipe','Having brown hair','Being very tall'],
     answer:'Playing the piano',
     hint:'A talent is a skill someone is good at.',
-    explanation:'Playing the piano is a <b>talent</b> — a special ability or skill that a person has developed.' }),
+    explanation:'Playing the piano is a <b>talent</b> — a special ability a person has learned and developed. Where you live, your hair colour and your height are not talents.'}),
 
 // ── my_family (016-045) ───────────────────────────────────────────────────
 
   makeMCQ({ id:'g3ssee-fam-016', chapterId:'g3ssee-family', difficulty:1, subsection:'my_family',
     question:'Who are the members of a NUCLEAR family?',
-    options:['Parents and their children','Grandparents, uncles and aunts','Only the father','Only the mother and children'],
+    options:['Parents and their children','Only a mother and children','Grandparents and cousins','Only a father on his own'],
     answer:'Parents and their children',
     hint:'A nuclear family is the smallest family unit.',
-    explanation:'A <b>nuclear family</b> consists of parents (mother and father) and their children living together.' }),
+    explanation:'A <b>nuclear</b> family is parents (mother and father) and their children living together. One parent alone with children is a single-parent family, and adding grandparents, uncles, aunts or cousins makes an extended family.'}),
 
   makeMCQ({ id:'g3ssee-fam-017', chapterId:'g3ssee-family', difficulty:1, subsection:'my_family',
     question:'A family that includes grandparents, uncles, aunts and cousins is called an _____ family.',
@@ -131,9 +131,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-020', chapterId:'g3ssee-family', difficulty:1, subsection:'my_family',
     question:'What do we call your father\'s mother?',
-    options:['Grandmother','Aunt','Cousin','Sister'],
+    options:['Grandmother','Stepmother','Godmother','Grandfather'],
     answer:'Grandmother',
-    explanation:'Your father\'s mother is your <b>grandmother</b> (grand-mère in French).' }),
+    explanation:'Your father\'s mother is your <b>grandmother</b> (grand-mère in French). His father would be your grandfather.'}),
 
   makeMCQ({ id:'g3ssee-fam-021', chapterId:'g3ssee-family', difficulty:2, subsection:'my_family',
     question:'Ravi has a mother, father, sister and grandmother living with him. What type of family does Ravi have?',
@@ -155,30 +155,30 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-024', chapterId:'g3ssee-family', difficulty:2, subsection:'my_family',
     question:'Fatima lives only with her mother. What type of family does she have?',
-    options:['Single-parent family','Extended family','Nuclear family','Blended family'],
+    options:['Single-parent family','Extended family group','Nuclear family unit','Blended family home'],
     answer:'Single-parent family',
     hint:'Only one parent is present in this household.',
-    explanation:'Fatima lives with only one parent, so she has a <b>single-parent family</b>.' }),
+    explanation:'Fatima lives with only one parent, so hers is a <b>single-parent</b> family. A nuclear family has both parents, an extended family adds grandparents, uncles and aunts, and a blended family joins two families together.'}),
 
   makeMCQ({ id:'g3ssee-fam-025', chapterId:'g3ssee-family', difficulty:1, subsection:'my_family',
     question:'Which celebration brings many families together in Mauritius?',
-    options:['Diwali','A school examination','A traffic jam','A thunderstorm'],
+    options:['Diwali','A bus queue','A school test','A traffic jam'],
     answer:'Diwali',
     hint:'This is a Hindu festival of lights.',
-    explanation:'<b>Diwali</b> (and other celebrations like Eid, Christmas and Chinese New Year) bring Mauritian families together to celebrate their cultural traditions.' }),
+    explanation:'Diwali — like Eid, Christmas and Chinese New Year — brings Mauritian families together to celebrate their traditions. A bus queue, a school test and a traffic jam are not celebrations.'}),
 
   makeMCQ({ id:'g3ssee-fam-026', chapterId:'g3ssee-family', difficulty:1, subsection:'my_family',
     question:'What do we call the parents of your parents?',
-    options:['Grandparents','Cousins','Siblings','Uncles and aunts'],
+    options:['Grandparents','Uncles and aunts','Older cousins','Little siblings'],
     answer:'Grandparents',
-    explanation:'Your parents\' parents are your <b>grandparents</b> — grandmother and grandfather.' }),
+    explanation:'Your parents\' parents are your <b>grandparents</b> — grandmother and grandfather. Uncles, aunts, cousins and siblings are other relatives.'}),
 
   makeMCQ({ id:'g3ssee-fam-027', chapterId:'g3ssee-family', difficulty:2, subsection:'my_family',
     question:'A family tree shows ___.',
-    options:['The members of a family and how they are related','The types of trees in the garden','The school subjects a child studies','The price of food in the market'],
-    answer:'The members of a family and how they are related',
+    options:['How family members are related','Which subjects a child studies','Which trees grow in a garden','What food costs in the market'],
+    answer:'How family members are related',
     hint:'A family tree is a diagram that maps family relationships.',
-    explanation:'A <b>family tree</b> is a diagram that shows family members across different generations and how they are related to each other.' }),
+    explanation:'A <b>family tree</b> is a diagram showing family members across the generations and how each one is related to the others.'}),
 
   makeMCQ({ id:'g3ssee-fam-028', chapterId:'g3ssee-family', difficulty:1, subsection:'my_family',
     question:'What do we call the brother or sister of your parent?',
@@ -193,25 +193,25 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-030', chapterId:'g3ssee-family', difficulty:2, subsection:'my_family',
     question:'In Mauritius, families often celebrate Eid, Diwali, Christmas and Chinese New Year. What does this tell us?',
-    options:['Mauritius is a multicultural society','All Mauritians follow the same religion','There are no different cultures in Mauritius','Celebrations are only for children'],
-    answer:'Mauritius is a multicultural society',
-    explanation:'The fact that Mauritius celebrates festivals from different religions shows that it is a <b>multicultural society</b> — people from many different backgrounds live together.' }),
+    options:['Mauritius is a multicultural country','Every Mauritian follows one religion','Celebrations are only for children','Mauritius has just one culture'],
+    answer:'Mauritius is a multicultural country',
+    explanation:'Celebrating festivals from several religions shows that Mauritius is a <b>multicultural</b> country — people of many different backgrounds live side by side.'}),
 
 // ── family_roles (031-075) ────────────────────────────────────────────────
 
   makeMCQ({ id:'g3ssee-fam-031', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'Which of the following is a typical role of a MOTHER in the family?',
-    options:['Caring for the children','Driving buses in the town','Teaching in a university','Working as a doctor in a hospital'],
+    options:['Caring for the children','Driving buses in town','Flying planes to India','Building the town roads'],
     answer:'Caring for the children',
     hint:'Think about what a mother does at home.',
-    explanation:'A mother often <b>cares for children</b>, preparing meals, supporting their education and ensuring their well-being. (Mothers can also have professional jobs.)' }),
+    explanation:'A mother often <b>cares for the children</b> — meals, school and well-being. Driving buses, flying planes and building roads are jobs outside the home, not family roles. (Mothers can of course hold any of those jobs as well.)'}),
 
   makeMCQ({ id:'g3ssee-fam-032', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'What is a common role of CHILDREN in the family?',
-    options:['To study and help with household tasks','To pay the bills','To drive the car','To go to work every day'],
-    answer:'To study and help with household tasks',
+    options:['To study and help at home','To pay the family bills','To work in a factory','To drive the family car'],
+    answer:'To study and help at home',
     hint:'Children\'s main job at home is school and helping out.',
-    explanation:'Children\'s roles in the family include <b>studying hard at school</b> and helping with age-appropriate household tasks like tidying their room.' }),
+    explanation:'A child\'s roles are to <b>study hard</b> and to help with tasks they are old enough to do, such as tidying their room. Paying bills, working and driving are adult responsibilities.'}),
 
   makeTF({ id:'g3ssee-fam-033', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'In a family, every member has a role to play.',
@@ -234,16 +234,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-036', chapterId:'g3ssee-family', difficulty:2, subsection:'family_roles',
     question:'When siblings share their toys without arguing, they are showing the value of ___.',
-    options:['sharing and cooperation','selfishness','disrespect','dishonesty'],
+    options:['sharing and cooperation','greed and selfishness','lying and dishonesty','rudeness and disrespect'],
     answer:'sharing and cooperation',
     hint:'They are doing something positive together.',
-    explanation:'Sharing toys and cooperating shows the values of <b>sharing</b> and <b>cooperation</b> — important for family happiness.' }),
+    explanation:'Sharing toys and playing together shows the values of <b>sharing and cooperation</b>, which keep a family happy. Selfishness, dishonesty and disrespect are the opposite.'}),
 
   makeMCQ({ id:'g3ssee-fam-037', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'What is the role of a GRANDPARENT in many Mauritian families?',
-    options:['Sharing wisdom and cultural traditions with grandchildren','Driving the school bus','Managing the school timetable','Building houses'],
-    answer:'Sharing wisdom and cultural traditions with grandchildren',
-    explanation:'Grandparents often play the important role of <b>sharing wisdom, stories and cultural traditions</b> with younger generations.' }),
+    options:['Sharing stories and traditions','Building the family houses','Setting the school timetable','Driving the school bus daily'],
+    answer:'Sharing stories and traditions',
+    explanation:'Grandparents often share <b>wisdom, stories and cultural traditions</b> with their grandchildren. Building houses, setting timetables and driving buses are jobs, not the family role of a grandparent.'}),
 
   makeTF({ id:'g3ssee-fam-038', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'Only mothers can cook and clean in a family.',
@@ -258,22 +258,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-040', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'Which of the following is an example of COOPERATION in a family?',
-    options:['Everyone helping to clean the house together','One person doing all the work while others watch TV','Arguing about who should wash the dishes','Refusing to help when asked'],
-    answer:'Everyone helping to clean the house together',
+    options:['Everyone helping to clean the house','Arguing about who washes the dishes','One person doing all of the work','Refusing to help when you are asked'],
+    answer:'Everyone helping to clean the house',
     hint:'Cooperation means working together.',
-    explanation:'<b>Cooperation</b> means working together. When everyone helps clean the house, the task is done faster and everyone benefits.' }),
+    explanation:'<b>Cooperation</b> means working together. When everyone helps to clean, the job is done faster and the whole family benefits. Arguing, refusing, or leaving one person to do everything is the opposite.'}),
 
   makeMCQ({ id:'g3ssee-fam-041', chapterId:'g3ssee-family', difficulty:2, subsection:'family_roles',
     question:'Why is it important for families to eat meals together?',
-    options:['It strengthens family bonds and allows sharing of experiences','It saves money at the supermarket','It makes food cook faster','It reduces the amount of food needed'],
-    answer:'It strengthens family bonds and allows sharing of experiences',
-    explanation:'Eating meals together helps to <b>strengthen family relationships</b> — members can talk, share their day and support each other.' }),
+    options:['It strengthens family bonds','It makes the food cook faster','It saves money at the shop','It reduces the food needed'],
+    answer:'It strengthens family bonds',
+    explanation:'Eating together <b>strengthens family bonds</b> — members talk, share their day and support each other. It does not change how fast food cooks, how much it costs or how much is needed.'}),
 
   makeMCQ({ id:'g3ssee-fam-042', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'How can a child help at home?',
-    options:['By tidying their room','By going to sleep all day','By making a mess everywhere','By refusing to do their homework'],
+    options:['By tidying their room','By making a big mess','By skipping their homework','By sleeping all day long'],
     answer:'By tidying their room',
-    explanation:'Children can help at home by <b>tidying their room</b> and doing other age-appropriate tasks, showing responsibility.' }),
+    explanation:'A child can help at home by <b>tidying their room</b> and doing other jobs they are old enough for. Making a mess, skipping homework and sleeping all day help nobody.'}),
 
   makeTF({ id:'g3ssee-fam-043', chapterId:'g3ssee-family', difficulty:1, subsection:'family_roles',
     question:'Families should help and support each other in difficult times.',
@@ -282,16 +282,16 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-fam-044', chapterId:'g3ssee-family', difficulty:2, subsection:'family_roles',
     question:'Sam refuses to share his snacks with his sister at home. Which value is Sam LACKING?',
-    options:['Generosity and sharing','Honesty','Hard work','Patience'],
+    options:['Generosity and sharing','Patience and calmness','Honesty and truthfulness','Courage and bravery'],
     answer:'Generosity and sharing',
-    explanation:'By refusing to share, Sam is lacking the values of <b>generosity and sharing</b> — important for happy family relationships.' }),
+    explanation:'By refusing to share his snacks, Sam is short of <b>generosity and sharing</b>. He is not being impatient, dishonest or cowardly — those are different values.'}),
 
   makeMCQ({ id:'g3ssee-fam-045', chapterId:'g3ssee-family', difficulty:3, subsection:'family_roles',
     question:'Which statement BEST explains why family values are important?',
-    options:['They guide family members to treat each other well and live in harmony','They make families richer','They mean children never have to go to school','They ensure everyone in the family has the same job'],
-    answer:'They guide family members to treat each other well and live in harmony',
+    options:['They help the family live in harmony','They give everyone the same job','They let children stay away from school','They make the family much richer'],
+    answer:'They help the family live in harmony',
     hint:'Values shape how people behave towards each other.',
-    explanation:'Family values such as respect, love, honesty and cooperation <b>guide behaviour</b> and help family members live together in peace and happiness.' })
+    explanation:'Family values such as respect, love, honesty and cooperation guide how members treat each other, so the family lives together in <b>peace and harmony</b>. They do not decide jobs, wealth or schooling.'})
 
 );
 

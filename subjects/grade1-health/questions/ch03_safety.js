@@ -11,8 +11,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-001', chapterId:'g1he-safety', difficulty:1, subsection:'school_safety',
     question:'Why should we NOT run in the school corridors?',
-    options:['We might fall and hurt ourselves or others','Running makes us faster','The teacher likes it','It saves time'],
-    answer:'We might fall and hurt ourselves or others',
+    options:['We might fall over','Running makes us faster','The teacher likes it','It saves us some time'],
+    answer:'We might fall over',
     hint:'Think about what can happen when people run in a narrow space.',
     explanation:'Running in corridors is dangerous — we might <b>fall and hurt ourselves or others</b>. We should always walk.' }),
 
@@ -23,8 +23,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-003', chapterId:'g1he-safety', difficulty:1, subsection:'school_safety',
     question:'What should you do if you see a wet floor at school?',
-    options:['Walk around it carefully and tell a teacher','Run across it quickly','Jump over it','Ignore it and walk through'],
-    answer:'Walk around it carefully and tell a teacher',
+    options:['Tell a teacher','Run across it fast','Jump over it','Walk through it'],
+    answer:'Tell a teacher',
     hint:'Wet floors are slippery.',
     explanation:'Wet floors are slippery and dangerous. You should <b>walk around carefully</b> and <b>tell a teacher</b> so it can be cleaned.' }),
 
@@ -49,8 +49,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-007', chapterId:'g1he-safety', difficulty:2, subsection:'school_safety',
     question:'Sam wants to climb on the school fence. Should he?',
-    options:['No — fences are not for climbing and he could fall','Yes — it is good exercise','Yes — if his friend holds him','Yes — if the gate is open'],
-    answer:'No — fences are not for climbing and he could fall',
+    options:['No, he could fall','Yes, it is exercise','Yes, with a friend','Yes, if the gate is open'],
+    answer:'No, he could fall',
     hint:'Think about whether the fence is a safe structure to climb.',
     explanation:'<b>No</b> — school fences are not safe to climb. Sam could fall and seriously injure himself.' }),
 
@@ -75,8 +75,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-011', chapterId:'g1he-safety', difficulty:1, subsection:'school_safety',
     question:'During break time, where should you play?',
-    options:['In the designated playground area','On the road outside school','On the roof','In the kitchen'],
-    answer:'In the designated playground area',
+    options:['In the playground','On the road outside','On the school roof','In the kitchen'],
+    answer:'In the playground',
     hint:'The school playground is designed to be safe.',
     explanation:'Children should play in the <b>designated playground area</b> during break time. This is the safe space provided.' }),
 
@@ -87,8 +87,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-013', chapterId:'g1he-safety', difficulty:2, subsection:'school_safety',
     question:'You see a sharp object on the classroom floor. What should you do?',
-    options:['Tell the teacher so it can be removed safely','Pick it up with your bare hands','Leave it where it is','Step on it'],
-    answer:'Tell the teacher so it can be removed safely',
+    options:['Tell the teacher','Pick it up quickly','Leave it where it is','Step on it hard'],
+    answer:'Tell the teacher',
     hint:'Sharp objects need to be handled carefully by an adult.',
     explanation:'<b>Tell the teacher</b> about the sharp object. Never pick it up with bare hands — a teacher can remove it safely.' }),
 
@@ -99,8 +99,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-015', chapterId:'g1he-safety', difficulty:1, subsection:'school_safety',
     question:'What should you do if a stranger tries to talk to you at school?',
-    options:['Stay away and tell a teacher immediately','Go with them if they seem kind','Give them your name and address','Give them your school bag'],
-    answer:'Stay away and tell a teacher immediately',
+    options:['Tell a teacher at once','Go with them quietly','Give them your name','Give them your bag'],
+    answer:'Tell a teacher at once',
     hint:'Never go with or talk to strangers.',
     explanation:'<b>Stay away</b> from strangers and <b>tell a teacher immediately</b>. Never go with someone you do not know, even if they seem friendly.' }),
 
@@ -127,8 +127,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-019', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'Is it safe to play with electrical wires at home?',
-    options:['No — they can give you an electric shock','Yes — if they are colourful','Yes — if they are on the floor','No — only if they are plugged in'],
-    answer:'No — they can give you an electric shock',
+    options:['No, they can shock you','Yes, if they are red','Yes, if on the floor','Yes, if they look old'],
+    answer:'No, they can shock you',
     hint:'Electricity in wires is very dangerous.',
     explanation:'<b>No</b> — electrical wires carry electricity that can cause a dangerous shock. Never play with them.' }),
 
@@ -146,8 +146,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-022', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'What should you do if there is a fire at home?',
-    options:['Get out of the house and call for an adult','Try to put the fire out yourself','Hide under the bed','Stay and watch the fire'],
-    answer:'Get out of the house and call for an adult',
+    options:['Get out and call an adult','Put the fire out yourself','Hide under the bed','Stay and watch the fire'],
+    answer:'Get out and call an adult',
     hint:'Safety first — get away from fire.',
     explanation:'If there is a fire, <b>get out of the house immediately</b> and call for an adult or emergency services. Never hide inside.' }),
 
@@ -158,8 +158,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-024', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'Should you go near the cooking pot on the stove?',
-    options:['No — it is hot and dangerous for children','Yes — to stir the food','Yes — to check if it is ready','Yes — if mum says it is fine to look'],
-    answer:'No — it is hot and dangerous for children',
+    options:['No, it is very hot','Yes, to stir the food','Yes, to check the food','Yes, to have a look'],
+    answer:'No, it is very hot',
     hint:'Hot pots can cause serious burns.',
     explanation:'Children should <b>not go near</b> cooking pots. They are very hot and can cause bad burns.' }),
 
@@ -184,15 +184,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-028', chapterId:'g1he-safety', difficulty:1, subsection:'environment',
     question:'What should you do if you see a stray dog near your school?',
-    options:['Stay calm, do not approach it, and tell a teacher','Run towards it to pet it','Try to feed it your lunch','Throw things at it'],
-    answer:'Stay calm, do not approach it, and tell a teacher',
+    options:['Tell a teacher','Run over to pet it','Feed it your lunch','Throw things at it'],
+    answer:'Tell a teacher',
     hint:'Stray animals can be unpredictable.',
     explanation:'Stay calm, <b>do not approach</b> the dog, and <b>tell a teacher</b>. Stray animals can bite if startled.' }),
 
   makeMCQ({ id:'g1he-saf-029', chapterId:'g1he-safety', difficulty:2, subsection:'environment',
     question:'You see a bottle of liquid with a skull and crossbones symbol. What does this mean?',
-    options:['It is poisonous — do not touch it','It is a fun drink','It is water','It is for children only'],
-    answer:'It is poisonous — do not touch it',
+    options:['It is poisonous','It is a fun drink','It is clean water','It is for children'],
+    answer:'It is poisonous',
     hint:'The skull and crossbones is a universal warning symbol.',
     explanation:'A <b>skull and crossbones</b> means the substance is <b>poisonous</b>. Never touch or open it — tell an adult immediately.' }),
 
@@ -203,15 +203,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-031', chapterId:'g1he-safety', difficulty:1, subsection:'environment',
     question:'Why should we not pick up unknown objects from the ground?',
-    options:['They could be sharp, dirty or dangerous','They might belong to a teacher','They are always broken','They might be very heavy'],
-    answer:'They could be sharp, dirty or dangerous',
+    options:['They could be dangerous','They belong to a teacher','They are always broken','They are always heavy'],
+    answer:'They could be dangerous',
     hint:'We cannot always see if something is safe.',
     explanation:'Unknown objects could be <b>sharp, dirty or dangerous</b>. Always show them to an adult instead of picking them up.' }),
 
   makeMCQ({ id:'g1he-saf-032', chapterId:'g1he-safety', difficulty:1, subsection:'environment',
     question:'Where is the safest place to cross the road?',
-    options:['At a pedestrian crossing (zebra crossing)','Anywhere that looks quiet','Between parked cars','While running quickly'],
-    answer:'At a pedestrian crossing (zebra crossing)',
+    options:['At a zebra crossing','Anywhere that is quiet','Between parked cars','While running fast'],
+    answer:'At a zebra crossing',
     hint:'Pedestrian crossings are designed for people to cross safely.',
     explanation:'Always cross at a <b>pedestrian crossing (zebra crossing)</b> where drivers expect people to cross.' }),
 
@@ -222,8 +222,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-034', chapterId:'g1he-safety', difficulty:2, subsection:'environment',
     question:'Ravi sees a puddle near an electrical pole after heavy rain. He wants to play in it. Should he?',
-    options:['No — the water near electrical equipment can be dangerous','Yes — puddles are always safe','Yes — if the water is clean','No — only if it is very deep'],
-    answer:'No — the water near electrical equipment can be dangerous',
+    options:['No, it is dangerous','Yes, puddles are safe','Yes, if it looks clean','Yes, if it is shallow'],
+    answer:'No, it is dangerous',
     hint:'Water and electricity are a dangerous combination.',
     explanation:'<b>No</b> — water near electrical poles or cables can carry electricity. This is extremely dangerous. Stay away and tell an adult.' }),
 
@@ -234,8 +234,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1he-saf-036', chapterId:'g1he-safety', difficulty:1, subsection:'environment',
     question:'What should you do in an emergency at school?',
-    options:['Stay calm and tell a teacher immediately','Run out of the school alone','Hide in the bathroom','Shout and make everyone panic'],
-    answer:'Stay calm and tell a teacher immediately',
+    options:['Tell a teacher at once','Run out of school alone','Hide in the bathroom','Shout and make a panic'],
+    answer:'Tell a teacher at once',
     hint:'Teachers are trained to help in emergencies.',
     explanation:'In an emergency, <b>stay calm</b> and <b>tell a teacher immediately</b>. They know what to do to keep everyone safe.' })
 

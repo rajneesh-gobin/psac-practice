@@ -164,8 +164,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-025', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-026', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
   question:'What is the purpose of mail merge?',
-  options:['To combine a template document with a data source to produce personalised copies','To combine two open documents into a single file','To send emails directly from the word processor','To apply a master style to all paragraphs at once'],
-  answer:'To combine a template document with a data source to produce personalised copies',
+  options:['To merge a template with a data source','To apply a master style to all paragraphs','To combine two open documents into one','To send email from the word processor'],
+  answer:'To merge a template with a data source',
   explanation:'Mail merge joins a main document (such as a letter template containing merge fields) with a data source (such as a list of names and addresses) to automatically produce personalised copies.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-027', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:1,
@@ -188,8 +188,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-029', chapterId:'g9ict-word-proces
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-030', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:3,
   question:'During a mail merge a student notices that the same name appears on every letter. What is the most likely cause?',
-  options:['The merge fields are not correctly linked to the data source columns','The document has been saved in the wrong file format','The spell checker has overwritten the field names','The page margins prevent the field from updating'],
-  answer:'The merge fields are not correctly linked to the data source columns',
+  options:['The merge fields are not linked correctly','The document was saved in the wrong format','The page margins stop the field updating','The spell checker overwrote the names'],
+  answer:'The merge fields are not linked correctly',
   explanation:'In a mail merge, each merge field in the main document must be linked to the correct column in the data source. An incorrect link causes the same value to repeat instead of changing for each record.' }));
 
 // ── SPREADSHEETS ──────────────────────────────────────────────────────────────
@@ -220,8 +220,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-034', chapterId:'g9ict-spreadsheet
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-035', chapterId:'g9ict-spreadsheets', subsection:'formulas', difficulty:2,
   question:'What is the fill handle in a spreadsheet used for?',
-  options:['Copying a cell\'s content or formula to adjacent cells by dragging','Inserting a new row or column into the sheet','Applying a colour fill to a range of cells','Merging selected cells into one'],
-  answer:'Copying a cell\'s content or formula to adjacent cells by dragging',
+  options:['Copying content to nearby cells','Merging selected cells into one','Inserting a new row or column','Applying a colour to a range'],
+  answer:'Copying content to nearby cells',
   explanation:'The fill handle is the small square at the bottom-right corner of a selected cell. Dragging it copies the cell\'s content or formula into the cells in the direction you drag.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-036', chapterId:'g9ict-spreadsheets', subsection:'formulas', difficulty:3,
@@ -264,8 +264,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-041', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-042', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:2,
   question:'What is a slide master in a presentation application?',
-  options:['A template that controls the default formatting of all slides','The title slide at the start of a presentation','A slide that contains the presenter\'s notes','The slide with the most animations applied to it'],
-  answer:'A template that controls the default formatting of all slides',
+  options:['A template for all slide formatting','A slide containing the speaker notes','The title slide of the presentation','The slide with the most animations'],
+  answer:'A template for all slide formatting',
   explanation:'The slide master controls the default fonts, colours, backgrounds, and layouts for every slide. Changes made to the slide master are applied to all slides automatically.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-043', chapterId:'g9ict-presentation', subsection:'animations', difficulty:2,
@@ -300,8 +300,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-047', chapterId:'g9ict-presentatio
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-048', chapterId:'g9ict-presentation', subsection:'authoring_tools', difficulty:3,
   question:'A student embeds a video in her presentation and saves the file. On another computer the video does not play. What is the most likely reason?',
-  options:['The video was linked rather than embedded, so the file is missing on the new computer','The presentation software version is different','The video file format is not supported anywhere','The slide transition setting has disabled the video'],
-  answer:'The video was linked rather than embedded, so the file is missing on the new computer',
+  options:['The video was linked, not embedded','The transition setting disabled it','The video format is not supported','The software version is different'],
+  answer:'The video was linked, not embedded',
   explanation:'A linked video is stored separately; the presentation holds only a path to it. When the file is moved to another computer without the video, the link breaks. Embedding stores the video inside the presentation file.' }));
 
 // ── DATABASES ─────────────────────────────────────────────────────────────────
@@ -338,8 +338,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-053', chapterId:'g9ict-databases',
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-054', chapterId:'g9ict-databases', subsection:'forms_reports', difficulty:1,
   question:'What is the purpose of a form in a database?',
-  options:['To provide a user-friendly screen for entering and viewing records','To print a formatted summary of the database','To search for records that match a condition','To create a link between two database tables'],
-  answer:'To provide a user-friendly screen for entering and viewing records',
+  options:['To enter and view records','To search using a condition','To link two tables together','To print a summary report'],
+  answer:'To enter and view records',
   explanation:'A form provides a structured, easy-to-use interface for entering, viewing, and editing records, making the process more straightforward than typing directly into the table.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-055', chapterId:'g9ict-databases', subsection:'forms_reports', difficulty:2,
@@ -482,8 +482,8 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-076', chapterId:'g9ict-health-safe
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-077', chapterId:'g9ict-health-safety', subsection:'health_hazards', difficulty:2,
   question:'A student types for several hours without a break and develops pain in her wrists and hands. Which health problem is most likely?',
-  options:['Repetitive strain injury (RSI)','Colour blindness','Hearing loss','Asthma'],
-  answer:'Repetitive strain injury (RSI)',
+  options:['Repetitive strain injury','Noise-induced hearing loss','Photosensitive epilepsy','Colour blindness'],
+  answer:'Repetitive strain injury',
   explanation:'Repetitive strain injury (RSI) is caused by repeating the same movements — such as typing or using a mouse — for long periods. It causes pain and stiffness in the wrists, hands, and arms.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-piv-078', chapterId:'g9ict-health-safety', subsection:'lab_guidelines', difficulty:2,
