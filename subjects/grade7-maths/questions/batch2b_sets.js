@@ -79,7 +79,7 @@ STATIC_QUESTIONS.push(
     options:['{1, 3, 5, 7, 9}','{2, 4, 6, 8, 10}','{1, 2, 3, 4, 5}','{6, 7, 8, 9, 10}'],
     answer:'{1, 3, 5, 7, 9}',
     hint:'The complement holds everything in U that is NOT in A.',
-    explanation:'Removing the even numbers from U leaves the odd ones: <b>{1, 3, 5, 7, 9}</b>. The second option repeats A itself, and the last two are simply halves of U.' }),
+    explanation:'Removing the even numbers from U leaves the odd ones: <b>{1, 3, 5, 7, 9}</b>. {2, 4, 6, 8, 10} simply repeats A itself, and {1, 2, 3, 4, 5} and {6, 7, 8, 9, 10} are just halves of U.' }),
 
   makeMCQ({ id:'g7m-sets-017', chapterId:'g7m-sets', difficulty:3,
     subsection:'venn_diagrams',

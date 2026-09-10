@@ -223,6 +223,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Imagine a Mauritius without its coral reef - no turquoise lagoons, no colourful fish, no tourists, no future. Every year, 30% of our reef is damaged by pollution and climate change. Are we really willing to let this natural treasure disappear forever? We must act now."',
     hint:'AFOREST = Alliteration, Facts, Opinions, Rhetorical questions, Emotive language, Statistics, Triples.',
-    explanation:'The second option uses multiple AFOREST techniques: <b>Emotive language</b> ("let this natural treasure disappear"); <b>Statistics</b> ("30% of our reef"); <b>Rhetorical question</b> ("Are we really willing...?"); <b>Triple</b> ("no turquoise lagoons, no colourful fish, no tourists"). These techniques together make the argument persuasive and powerful.' })
+    explanation:'The "Imagine a Mauritius without its coral reef" version uses multiple AFOREST techniques: <b>Emotive language</b> ("let this natural treasure disappear"); <b>Statistics</b> ("30% of our reef"); <b>Rhetorical question</b> ("Are we really willing...?"); <b>Triple</b> ("no turquoise lagoons, no colourful fish, no tourists"). These techniques together make the argument persuasive and powerful.' })
 
 );

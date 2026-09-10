@@ -17,7 +17,7 @@ STATIC_QUESTIONS.push(
     options:['3² × 5³','3³ × 5²','3² + 5³','(3 × 5)⁵'],
     answer:'3² × 5³',
     hint:'Count how many times each different number appears, and keep the multiplication sign between them.',
-    explanation:'Three appears twice and five appears three times, giving 3² × 5³. The second option swaps the two counts, the third replaces × with +, and (3 × 5)⁵ means 15 multiplied by itself five times.' }),
+    explanation:'Three appears twice and five appears three times, giving 3² × 5³. Writing 3<sup>3</sup> &times; 5<sup>2</sup> swaps the two counts, 3<sup>2</sup> + 5<sup>3</sup> replaces × with +, and (3 × 5)⁵ means 15 multiplied by itself five times.' }),
 
   makeNum({ id:'g7m-indices-014', chapterId:'g7m-indices', difficulty:2,
     subsection:'index_notation',

@@ -139,7 +139,7 @@
     ],
     answer: 'The president himself signed the peace declaration, lending it historic weight.',
     hint: 'An emphasising pronoun can be removed without changing the core meaning. Which option uses "himself" purely for emphasis, placed immediately after the noun it emphasises?',
-    explanation: 'In the correct sentence, "himself" is an emphasising pronoun placed directly after "president" for emphasis — it can be removed without altering the meaning. Option B repeats the pronoun awkwardly. Option C places the pronoun at the front, which is non-standard. Option D uses "by himself" which means "alone", not emphasis.'
+    explanation: 'In the correct sentence, "himself" is an emphasising pronoun placed directly after "president" for emphasis — it can be removed without altering the meaning. The version ending "it was himself who drafted it" repeats the pronoun awkwardly; "Himself, the president signed..." puts it at the front, which is non-standard; and "by himself" means "alone" rather than emphasis.'
   }));
 
   STATIC_QUESTIONS.push(makeMCQ({
@@ -541,7 +541,7 @@
     ],
     answer: '"I have never seen such dedication in a student," said the professor.',
     hint: 'The comma separating speech from the reporting clause should be inside the closing quotation mark.',
-    explanation: 'When a reporting clause follows a quotation, the comma goes inside the closing quotation mark, not after it. A full stop inside the quotation mark followed by "said" (option D) is incorrect because the sentence continues.'
+    explanation: 'When a reporting clause follows a quotation, the comma goes inside the closing quotation mark, not after it. A full stop inside the quotation mark followed by "said" is incorrect because the sentence continues.'
   }));
 
   STATIC_QUESTIONS.push(makeMCQ({
@@ -558,7 +558,7 @@
     ],
     answer: 'She was about to reveal the name of the informant — then the lights went out.',
     hint: 'A dash creates a dramatic pause or signals an abrupt change. Which punctuation mark here best captures the sudden interruption?',
-    explanation: 'The em dash is used to create a dramatic pause or signal an abrupt break in thought. The comma (option B) is too weak for the dramatic effect. The colon (option C) introduces an explanation or list. The semicolon (option D) links independent clauses without the abruptness a dash conveys.'
+    explanation: 'The em dash is used to create a dramatic pause or signal an abrupt break in thought. A comma is too weak for the dramatic effect, a colon introduces an explanation or a list, and a semicolon links two independent clauses without the abruptness a dash conveys.'
   }));
 
   STATIC_QUESTIONS.push(makeMCQ({
@@ -575,7 +575,7 @@
     ],
     answer: 'The coastal villages were evacuated promptly; nevertheless, several homes were still damaged by the storm surge.',
     hint: 'A semicolon can link two independent clauses, especially when followed by a transitional adverb like "nevertheless".',
-    explanation: 'A semicolon before "nevertheless" correctly links two independent clauses with a contrasting relationship. Option B misuses the semicolon mid-phrase. Option C places the comma after "nevertheless" in the wrong position. Option D uses a colon, which introduces a list or explanation rather than a contrast.'
+    explanation: 'A semicolon before "nevertheless" correctly links two independent clauses with a contrasting relationship. The version reading "damaged; by the storm surge" misuses the semicolon mid-phrase, the one reading "promptly, nevertheless;" puts both marks in the wrong places, and a colon introduces a list or explanation rather than a contrast.'
   }));
 
   // ── VOCABULARY ────────────────────────────────────────────────────────────

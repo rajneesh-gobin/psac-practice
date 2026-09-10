@@ -911,7 +911,7 @@ STATIC_QUESTIONS.push(
     question:'Which sentence uses a word with the prefix <b>pre-</b> correctly?',
     options:['She predicted the result before it was announced','She predicted the result after everyone knew','She predicted the result and was wrong','She predicted nothing at all'], answer:'She predicted the result before it was announced',
     hint:'The prefix pre- means before — confirm the timing.',
-    explanation:'"<b>Pre-</b>dicted" means judged before the fact. Only the first option is consistent with the prefix meaning "before".' }),
+    explanation:'"<b>Pre-</b>dicted" means judged before the fact. Only "before it was announced" is consistent with the prefix meaning "before".' }),
 
   makeMCQ({ id:'g9eng-vocv-150', chapterId:'g9eng-word-formation', subsection:'root_and_affix', difficulty:3,
     question:'In the word <b>mistreatment</b>, what is the root?',

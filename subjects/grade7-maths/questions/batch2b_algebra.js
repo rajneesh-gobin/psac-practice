@@ -12,7 +12,7 @@ STATIC_QUESTIONS.push(
     options:['(n ÷ 4) + 3','(n + 3) ÷ 4','4 ÷ (n + 3)','(n ÷ 3) + 4'],
     answer:'(n ÷ 4) + 3',
     hint:'Do the operations in the order the sentence gives them.',
-    explanation:'The dividing happens first, so the answer is <b>(n ÷ 4) + 3</b>. (n + 3) ÷ 4 adds first and divides afterwards, and the last option swaps the 3 and the 4 around.' }),
+    explanation:'The dividing happens first, so the answer is <b>(n ÷ 4) + 3</b>. (n + 3) ÷ 4 adds first and divides afterwards, and (n &divide; 3) + 4 swaps the 3 and the 4 around.' }),
 
   makeMCQ({ id:'g7m-algebra-010', chapterId:'g7m-algebra', difficulty:3,
     subsection:'writing_expressions',

@@ -45,7 +45,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Have you finished your homework?',
     hint:'A question asks for information and ends with a question mark.',
-    explanation:'"<b>Have you finished your homework?</b>" is a question - it asks for information and ends with a question mark (?). "Close the window" is a command. "What a beautiful sunset!" is exclamatory. The last option is a statement.' }),
+    explanation:'"<b>Have you finished your homework?</b>" is a question - it asks for information and ends with a question mark (?). "Close the window" is a command. "What a beautiful sunset!" is exclamatory. "The sun sets in the west" is a statement.' }),
 
   makeTF({ id:'g5eng-sent-005', chapterId:'eng-sentences', subsection:'punctuation', difficulty:1,
     question:'A comma should be used to separate items in a list.',
@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'She said, "I am very tired."',
     hint:'Inverted commas go around the EXACT words spoken, not reported speech.',
-    explanation:'"<b>She said, "I am very tired."</b>" is correct. Inverted commas (" ") enclose the exact words spoken (direct speech). The comma comes before the opening speech mark. The first option incorrectly uses speech marks around reported speech.' }),
+    explanation:'"<b>She said, "I am very tired."</b>" is correct. Inverted commas (" ") enclose the exact words spoken (direct speech). The comma comes before the opening speech mark. "She said that she was tired" wrongly puts speech marks around reported speech.' }),
 
   makeMCQ({ id:'g5eng-sent-007', chapterId:'eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Which word correctly joins these two sentences? "It was raining. We stayed indoors."',

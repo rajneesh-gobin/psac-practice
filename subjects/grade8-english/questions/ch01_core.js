@@ -286,7 +286,7 @@ STATIC_QUESTIONS.push(
     options:['"Ali told Ben that the homework was wrong."','"Ali told Ben that Ali\'s own homework was wrong."','"He told him that his homework was wrong."','"Ali and Ben discussed homework which was wrong."'],
     answer:'"Ali told Ben that Ali\'s own homework was wrong."',
     hint:'Replace the ambiguous pronoun with the specific noun it refers to.',
-    explanation:'Using "<b>Ali\'s own</b>" makes it clear that the homework belongs to Ali, not Ben. Using "the homework" (option A) removes the possessive but is also clearer. Option C replaces both nouns with pronouns — making it MORE ambiguous. Clear pronoun reference avoids confusion.' }),
+    explanation:'Using "<b>Ali\'s own</b>" makes it clear that the homework belongs to Ali, not Ben. Using "the homework" removes the possessive but is also clearer. Replacing both nouns with pronouns ("He told him that his homework...") — making it MORE ambiguous. Clear pronoun reference avoids confusion.' }),
 
   makeMCQ({ id:'g8eng-gr-pronouns-005', chapterId:'g8eng-gr-pronouns', difficulty:3,
     subsection:'reference_tracking',

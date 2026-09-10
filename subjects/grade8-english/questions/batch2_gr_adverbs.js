@@ -38,7 +38,7 @@ STATIC_QUESTIONS.push(
     options:['She sang beautifully last night','She sang beautiful last night','She sings beautiful every day','Her singing beautifully last night'],
     answer:'She sang beautifully last night',
     hint:'The word describes how she sang, not what she is.',
-    explanation:'An adverb modifies the verb, so "sang" needs "beautifully". "Beautiful" is an adjective and can only describe a noun, and the last option is a phrase with no main verb.' }),
+    explanation:'An adverb modifies the verb, so "sang" needs "beautifully". "Beautiful" is an adjective and can only describe a noun, and "Her singing beautifully last night" is a phrase with no main verb.' }),
 
   makeMCQ({ id:'g8eng-gr-adverbs-015', chapterId:'g8eng-gr-adverbs', difficulty:3,
     subsection:'reason_purpose',

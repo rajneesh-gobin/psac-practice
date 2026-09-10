@@ -7,7 +7,7 @@ STATIC_QUESTIONS.push(
     options:['Manufacturing, up 21 points','Agriculture, down 13 points','Services, down 8 points','Manufacturing, up 15 points'],
     answer:'Manufacturing, up 21 points',
     hint:'Subtract each pair of figures and compare the sizes, ignoring whether they rose or fell.',
-    explanation:'Manufacturing rose 36 − 15 = <b>21 points</b>, the largest change. Agriculture fell 13 and services fell 8, both smaller. The fourth option quotes 15, which is the 1972 figure itself and not a change at all — a common slip when reading a two-column table.' }),
+    explanation:'Manufacturing rose 36 − 15 = <b>21 points</b>, the largest change. Agriculture fell 13 and services fell 8, both smaller. The "up 15 points" version quotes 15, which is the 1972 figure itself and not a change at all — a common slip when reading a two-column table.' }),
 
   makeText({ id:'g9sms-industrial-impact-017', chapterId:'g9sms-industrial-impact', difficulty:2,
     subsection:'life_expectancy',

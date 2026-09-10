@@ -111,7 +111,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"I am writing to apply for the position of library volunteer, as I have a keen interest in reading and community service."',
     hint:'Check for: contractions, slang, vague language and a clearly stated purpose.',
-    explanation:'The original has three problems: (1) <b>contractions</b> ("I\'d", "cos"), (2) <b>informal greeting and slang</b> ("Hi", "cos"), (3) <b>vague reason</b> ("really like books"). The correct rewrite uses full forms ("I am writing"), names the position precisely, avoids contractions and slang, and gives a purposeful reason. Option A removes contractions but keeps "Hello" (still informal); C names no specific role; D still uses "I\'d".' }),
+    explanation:'The original has three problems: (1) <b>contractions</b> ("I\'d", "cos"), (2) <b>informal greeting and slang</b> ("Hi", "cos"), (3) <b>vague reason</b> ("really like books"). The correct rewrite uses full forms ("I am writing"), names the position precisely, avoids contractions and slang, and gives a purposeful reason. The "Dear Library" version gives only a vague reason and names no precise role; the "Hello" version is still informal; and the "I\'d like to apply" version keeps a contraction.' }),
 
 );
 

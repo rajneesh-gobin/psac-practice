@@ -567,7 +567,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Dear Madam Headmistress, I am writing to respectfully request permission to represent our school at the inter-school science competition.',
     hint:'A formal letter uses a proper salutation, polite language, and states the purpose clearly in the first sentence.',
-    explanation:'Option A uses the correct formal salutation ("Dear Madam Headmistress"), polite language ("respectfully request"), and states the purpose clearly - all essential features of a formal letter opening. The other options are too informal or vague.' }),
+    explanation:'The "Dear Madam Headmistress" version uses the correct formal salutation ("Dear Madam Headmistress"), polite language ("respectfully request"), and states the purpose clearly - all essential features of a formal letter opening. The other options are too informal or vague.' }),
 
   // ── eng-spelling ─────────────────────────────────────────────────────────
 

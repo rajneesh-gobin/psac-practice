@@ -100,7 +100,7 @@ STATIC_QUESTIONS.push(
     options:['Could you kindly confirm the date?','Can you quickly confirm the date?','Will you confirm that date for me?','Confirm the date for me this week.'],
     answer:'Could you kindly confirm the date?',
     hint:'The further you are from the reader, the less direct the request.',
-    explanation:'<b>Could you</b> is the least direct and the most formal. "Can you" suits a friend, "Will you" sounds impatient, and the last is an order.' }),
+    explanation:'<b>Could you</b> is the least direct and the most formal. "Can you" suits a friend, "Will you" sounds impatient, and "Confirm the date" is a bare order.' }),
 
   makeMCQ({ id:'g9eng-gx-008', chapterId:'g9eng-gr-modals', difficulty:3,
     question:'Complete: <i>"Would you mind ___ the window? The wind is fierce."</i>',
@@ -261,7 +261,7 @@ STATIC_QUESTIONS.push(
     options:['The ferry may have been cancelled.','The ferry must have been cancelled.','The ferry can\'t have been cancelled.','The ferry should have been cancelled.'],
     answer:'The ferry may have been cancelled.',
     hint:'Keep the uncertainty, keep the past, and keep the ferry as the thing acted upon.',
-    explanation:'Three things must survive the rewrite: possibility (<b>may</b>), past time (<b>have been</b>) and the passive. Only the first option keeps all three.' }),
+    explanation:'Three things must survive the rewrite: possibility (<b>may</b>), past time (<b>have been</b>) and the passive. Only "may have been cancelled" keeps all three — "must have" and "can\'t have" change how certain the speaker is, and "should have" turns it into a complaint.' }),
 
   // ══════════════════════════════════════════════════════════════════════════
   //  ADJECTIVES USED AS NOUNS · g9eng-gr-adjectives · 25 items
@@ -343,7 +343,7 @@ STATIC_QUESTIONS.push(
     options:['The French eat late in the evening.','The French bread went stale quickly.','The French lesson was cancelled today.','The French coast is very rocky here.'],
     answer:'The French eat late in the evening.',
     hint:'In three of these the word is describing the thing that follows it.',
-    explanation:'Only in the first does <b>the French</b> stand alone as the subject and mean the people, taking the plural <i>eat</i>. Elsewhere it describes bread, a lesson or a coast.' }),
+    explanation:'Only in "The French <b>eat</b> late in the evening" does <i>the French</i> stand alone as the subject and mean the people, which is why the verb is plural. In the other three it is simply describing the bread, the lesson or the coast that follows it.' }),
 
   makeMCQ({ id:'g9eng-gx-042', chapterId:'g9eng-gr-adjectives', subsection:'adjectives_as_nouns', difficulty:3,
     question:'Complete: <i>"The deceased ___ survived by his wife and two daughters."</i>',
@@ -474,7 +474,7 @@ STATIC_QUESTIONS.push(
     options:['Rodrigues, part of Mauritius, lies 560 km east.','Rodrigues is part of Mauritius, lies 560 km east.','Rodrigues part of Mauritius lies 560 km east.','Rodrigues, part of Mauritius lies 560 km east.'],
     answer:'Rodrigues, part of Mauritius, lies 560 km east.',
     hint:'One fact becomes the main clause; the other slots in between commas.',
-    explanation:'The first fact folds into a phrase between paired commas, leaving one main verb. The second option leaves two verbs with no conjunction, which is a run-on.' }),
+    explanation:'One fact folds into a phrase between paired commas, leaving a single main verb — <i>lies</i>. The version beginning "Rodrigues is part of Mauritius, lies…" keeps two verbs with no conjunction between them, which is a run-on, and the two versions missing a comma leave the phrase unfenced.' }),
 
   makeMCQ({ id:'g9eng-gx-060', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:4,
     question:'Complete: <i>"___, the pupils of Form III, wish to thank you."</i>',
@@ -509,7 +509,7 @@ STATIC_QUESTIONS.push(
     options:['One thing mattered — his honour.','One thing mattered, his honour.','One thing mattered; his honour.','One thing mattered his honour.'],
     answer:'One thing mattered — his honour.',
     hint:'Which mark makes a reader pause longest before the phrase?',
-    explanation:'A <b>dash</b> creates the sharpest pause and throws weight onto what follows. A comma is neutral, a semicolon wrongly implies a full clause follows, and the last has no punctuation at all.' }),
+    explanation:'A <b>dash</b> creates the sharpest pause and throws weight onto what follows. A comma is neutral, a semicolon wrongly implies a full clause is coming, and "One thing mattered his honour" has no punctuation at all.' }),
 
   makeMCQ({ id:'g9eng-gx-065', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:4,
     question:'Complete: <i>"Two subjects, mathematics and physics, ___ compulsory this year."</i>',

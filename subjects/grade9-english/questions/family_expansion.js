@@ -710,7 +710,7 @@
     ],
     answer: 'A later start would give pupils the sleep that morning lessons need',
     hint: 'A topic sentence should answer the essay title, not announce what is coming.',
-    explanation: 'The first option makes a claim that answers the title and that the rest of the paragraph can support. Announcing the topic (&ldquo;In this paragraph I am going to&hellip;&rdquo;) wastes the sentence that carries the argument; a general truth about sleep says nothing about school start times; and a survey detail is evidence, which belongs after the claim rather than in place of it.'
+    explanation: 'Stating that a later start would give pupils the sleep morning lessons need makes a claim that answers the title and that the rest of the paragraph can support. Announcing the topic (&ldquo;In this paragraph I am going to&hellip;&rdquo;) wastes the sentence that carries the argument; a general truth about sleep says nothing about school start times; and a survey detail is evidence, which belongs after the claim rather than in place of it.'
   }));
 
   STATIC_QUESTIONS.push(makeMCQ({
@@ -894,7 +894,7 @@
     ],
     answer: 'Notice: Friday&rsquo;s trip has been postponed.',
     hint: 'A notice addresses everybody who passes it, and it must be accurate about what has happened.',
-    explanation: 'A notice names itself, addresses nobody in particular and states the fact. &ldquo;Hey everyone&rdquo; and &ldquo;Guys&rdquo; keep the register of the chat. The fourth option is the interesting trap: its register is nearly acceptable, but &ldquo;cancelled&rdquo; is untrue &mdash; the trip is being moved, and postponed is the word for that.'
+    explanation: 'A notice names itself, addresses nobody in particular and states the fact. &ldquo;Hey everyone&rdquo; and &ldquo;Guys&rdquo; keep the register of the chat. The &ldquo;Sorry, but&hellip;&rdquo; version is the interesting trap: its register is nearly acceptable, but &ldquo;cancelled&rdquo; is untrue &mdash; the trip is being moved, and postponed is the word for that.'
   }));
 
   STATIC_QUESTIONS.push(makeText({

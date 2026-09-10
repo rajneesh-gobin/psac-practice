@@ -419,7 +419,7 @@ STATIC_QUESTIONS.push(
     options:['He reached the summit. Suddenly, everything changes — the cloud lifts and the valley appears below.','He reached the summit. Suddenly, everything had changed.','He reached the summit. Suddenly, everything will change.','He reached the summit. Suddenly, everything changed.'],
     answer:'He reached the summit. Suddenly, everything changes — the cloud lifts and the valley appears below.',
     hint:'The historical present uses the present tense for vividness at a key moment — it is deliberate, not an error.',
-    explanation:'Writers sometimes shift to the present at a dramatic moment — this is the <b>historical present</b>. The pattern "Suddenly…" signals intent. The plain past in the last option is consistent but less vivid; the others are ungrammatical.' }),
+    explanation:'Writers sometimes shift to the present at a dramatic moment — this is the <b>historical present</b>. The pattern "Suddenly…" signals intent. The plain past ("everything changed") is consistent but less vivid; the future and past-perfect versions are ungrammatical here.' }),
 
   makeMCQ({ id:'g9eng-grv-120', chapterId:'g9eng-gr-verbs', subsection:'tense_consistency', difficulty:3,
     question:'Which best describes "maintaining tense consistency across a whole text"?',
