@@ -78,7 +78,18 @@ const G5HG_SYLLABUS = {
 registerSubject({
   id: 'grade5-history', name: 'History & Geography', grade: 5, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false, noDifficulty: true,
+  // ⚠ noDifficulty REMOVED 2026-09-10, and only after the content existed.
+  // The flag hid the L1-L4 ladder, and getMixedQuestions() draws across every
+  // level at once — so with 88% of this pack sitting at L1/L2 the mix WAS the
+  // experience and no control existed, for child or parent, to ask for harder.
+  // Turning the ladder on before the stock is there deals a Hard round of three
+  // questions and looks broken, so the order is always content first:
+  // depth_hard.js took every chapter to at least 15 items at L3/L4.
+  // ⚠ level4Label MUST be set whenever this flag is dropped. It defaults to
+  // "Challenge", but L4 is maths-shaped and "Word Problems" is meaningless in
+  // History — the label is the whole reason the flag was set on this pack and
+  // the 11 others like it (PROJECT_OVERVIEW.md §7.1).
+  practiceble: true, notesBased: false, level4Label: 'Applied Reasoning',
   syllabus: G5HG_SYLLABUS,
   // examWeight is a chapter's share of a 40-question exam. These are measured
   // from the real 2024 and 2025 papers, question by question: every

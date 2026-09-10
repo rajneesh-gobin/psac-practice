@@ -78,7 +78,18 @@ const G6SC_SYLLABUS = {
 registerSubject({
   id: 'grade6-science', name: 'Science', grade: 6, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false, noDifficulty: true,
+  // ⚠ noDifficulty REMOVED 2026-09-10, content first. See the same note on
+  // grade5-history/_manifest.js for why the order matters: the ladder was
+  // hidden, getMixedQuestions() draws across all levels, and 84% of this pack
+  // sat at L1/L2 — so nothing a child or parent could touch asked for harder.
+  // depth_hard.js took every chapter to at least 15 items at L3/L4 first.
+  // ⚠ level4Label MUST accompany this. The default is "Challenge" and the
+  // maths default is "Word Problems"; neither describes what L4 means here,
+  // which is an applied scenario — predict an outcome and justify it.
+  // ⚠ 'Applied Scenarios' MATCHES the four Grade 9 science packs (biology,
+  // chemistry, physics, ict) rather than inventing a sixth wording. A label a
+  // child meets in Grade 6 and again in Grade 9 should read the same.
+  practiceble: true, notesBased: false, level4Label: 'Applied Scenarios',
   syllabus: G6SC_SYLLABUS,
   // examWeight is a chapter's share of a 40-question exam. These are measured
   // from the real 2022, 2023 and 2024 papers, question by question: every
