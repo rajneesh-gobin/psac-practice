@@ -64,8 +64,18 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conrelid = 'public.payments'::regclass
                     AND conname  = 'payments_status_check') THEN
+    -- ⚠ 'completed' is a LEGACY value, not a sixth state. Store.activatePlan()
+    --   (engine/store.js) writes it from the browser for an admin's manual
+    --   plan activation, and production holds one such row already. The
+    --   deployed client is the thing writing it, so the constraint has to
+    --   accept it or the Assign Plan button starts failing the moment this
+    --   migration lands - before any new client can ship.
+    --   ⚠ Drop it from this list only AFTER a client writing 'confirmed' is
+    --   live and the historical rows have been normalised. Two words for one
+    --   state is a bug waiting to happen; this is the safe order to fix it in,
+    --   not permission to keep both.
     ALTER TABLE public.payments ADD CONSTRAINT payments_status_check
-      CHECK (status IN ('pending','sent','confirmed','rejected','failed'));
+      CHECK (status IN ('pending','sent','confirmed','rejected','failed','completed'));
   END IF;
 END
 $do$;

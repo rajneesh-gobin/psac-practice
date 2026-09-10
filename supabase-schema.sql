@@ -691,7 +691,11 @@ CREATE TABLE IF NOT EXISTS public.payments (
   status text DEFAULT 'pending'::text NOT NULL,
   notes text,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
-  processed_at timestamp with time zone
+  processed_at timestamp with time zone,
+  reference text,
+  months integer DEFAULT 1 NOT NULL,
+  payer_note text,
+  claimed_at timestamp with time zone
 );
 ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
 ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS user_id uuid;
@@ -703,6 +707,10 @@ ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS status text DEFAULT 'pendin
 ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS notes text;
 ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
 ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS processed_at timestamp with time zone;
+ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS reference text;
+ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS months integer DEFAULT 1;
+ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS payer_note text;
+ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS claimed_at timestamp with time zone;
 ALTER TABLE public.payments ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.payments ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE public.payments ALTER COLUMN plan_id SET NOT NULL;
@@ -710,6 +718,7 @@ ALTER TABLE public.payments ALTER COLUMN amount_mur SET NOT NULL;
 ALTER TABLE public.payments ALTER COLUMN provider SET NOT NULL;
 ALTER TABLE public.payments ALTER COLUMN status SET NOT NULL;
 ALTER TABLE public.payments ALTER COLUMN created_at SET NOT NULL;
+ALTER TABLE public.payments ALTER COLUMN months SET NOT NULL;
 
 CREATE TABLE IF NOT EXISTS public.physical_homework (
   id uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -2043,6 +2052,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'payments_status_check'
+                    AND conrelid = 'payments'::regclass) THEN
+    ALTER TABLE payments ADD CONSTRAINT payments_status_check CHECK ((status = ANY (ARRAY['pending'::text, 'sent'::text, 'confirmed'::text, 'rejected'::text, 'failed'::text, 'completed'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'profiles_credits_nonneg'
                     AND conrelid = 'profiles'::regclass) THEN
     ALTER TABLE profiles ADD CONSTRAINT profiles_credits_nonneg CHECK ((credits >= 0));
@@ -2711,7 +2727,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 124 functions, verbatim from pg_get_functiondef().
+-- 129 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -5423,6 +5439,247 @@ AS $function$
   );
 $function$;
 
+-- ── payment_admin_confirm(p_payment_id uuid, p_provider_ref text)
+CREATE OR REPLACE FUNCTION public.payment_admin_confirm(p_payment_id uuid, p_provider_ref text DEFAULT NULL::text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_row     public.payments%ROWTYPE;
+  v_from    timestamptz;
+  v_new_exp timestamptz;
+BEGIN
+  IF NOT public.is_admin() THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_admin');
+  END IF;
+
+  SELECT * INTO v_row FROM public.payments WHERE id = p_payment_id FOR UPDATE;
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'unknown_payment');
+  END IF;
+
+  -- ⚠ Idempotent, and deliberately NOT an error. Two admins on the same queue,
+  --   or one double-tap, must not grant two months for one transfer.
+  IF v_row.status = 'confirmed' THEN
+    RETURN jsonb_build_object('ok', true, 'already', true,
+      'expires_at', (SELECT expires_at FROM public.profiles WHERE id = v_row.user_id));
+  END IF;
+  IF v_row.status = 'rejected' THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'already_rejected');
+  END IF;
+
+  -- ⚠ Extend from whichever is later. Confirming a renewal three days early
+  --   must not throw away the days already paid for.
+  SELECT greatest(now(), coalesce(expires_at, now())) INTO v_from
+    FROM public.profiles WHERE id = v_row.user_id FOR UPDATE;
+  IF v_from IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'unknown_account');
+  END IF;
+  v_new_exp := v_from + (v_row.months || ' months')::interval;
+
+  -- One active subscription per user. A superseded row keeps its history but
+  -- stops selecting a plan, so an old tier cannot outlive the payment for it.
+  UPDATE public.subscriptions
+     SET status = 'superseded'
+   WHERE user_id = v_row.user_id AND status = 'active';
+
+  INSERT INTO public.subscriptions (user_id, plan_id, status, started_at, expires_at)
+  VALUES (v_row.user_id, v_row.plan_id, 'active', now(), v_new_exp);
+
+  -- THE gate questions.js reads.
+  UPDATE public.profiles SET expires_at = v_new_exp WHERE id = v_row.user_id;
+
+  UPDATE public.payments
+     SET status       = 'confirmed',
+         processed_at = now(),
+         provider_ref = coalesce(nullif(btrim(coalesce(p_provider_ref, '')), ''), provider_ref)
+   WHERE id = v_row.id;
+
+  RETURN jsonb_build_object('ok', true, 'already', false,
+    'user_id', v_row.user_id, 'plan_id', v_row.plan_id,
+    'months', v_row.months, 'expires_at', v_new_exp);
+END
+$function$;
+
+-- ── payment_admin_reject(p_payment_id uuid, p_reason text)
+CREATE OR REPLACE FUNCTION public.payment_admin_reject(p_payment_id uuid, p_reason text DEFAULT NULL::text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_row public.payments%ROWTYPE;
+BEGIN
+  IF NOT public.is_admin() THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_admin');
+  END IF;
+
+  SELECT * INTO v_row FROM public.payments WHERE id = p_payment_id FOR UPDATE;
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'unknown_payment');
+  END IF;
+  -- ⚠ A confirmed payment is never rejected here. Access has already been
+  --   granted; taking it back is a separate, deliberate act with its own
+  --   audit trail, not a one-tap undo on a queue screen.
+  IF v_row.status = 'confirmed' THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'already_confirmed');
+  END IF;
+
+  UPDATE public.payments
+     SET status       = 'rejected',
+         processed_at = now(),
+         notes        = nullif(btrim(coalesce(p_reason, '')), '')
+   WHERE id = v_row.id;
+
+  RETURN jsonb_build_object('ok', true, 'status', 'rejected');
+END
+$function$;
+
+-- ── payment_mark_sent(p_payment_id uuid, p_payer_note text)
+CREATE OR REPLACE FUNCTION public.payment_mark_sent(p_payment_id uuid, p_payer_note text DEFAULT NULL::text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_uid uuid := auth.uid();
+  v_row public.payments%ROWTYPE;
+BEGIN
+  IF v_uid IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_authenticated');
+  END IF;
+
+  SELECT * INTO v_row FROM public.payments
+   WHERE id = p_payment_id AND user_id = v_uid FOR UPDATE;
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'unknown_payment');
+  END IF;
+  IF v_row.status = 'confirmed' THEN
+    RETURN jsonb_build_object('ok', true, 'status', 'confirmed', 'already', true);
+  END IF;
+  IF v_row.status NOT IN ('pending','sent') THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_open');
+  END IF;
+
+  UPDATE public.payments
+     SET status     = 'sent',
+         claimed_at = coalesce(claimed_at, now()),
+         payer_note = nullif(btrim(coalesce(p_payer_note, '')), '')
+   WHERE id = v_row.id;
+
+  RETURN jsonb_build_object('ok', true, 'status', 'sent');
+END
+$function$;
+
+-- ── payment_settings()
+CREATE OR REPLACE FUNCTION public.payment_settings()
+ RETURNS jsonb
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+  SELECT jsonb_build_object(
+    'juice_enabled', coalesce((v ->> 'juice_enabled')::boolean, false),
+    'juice_number',  coalesce(v ->> 'juice_number', ''),
+    'juice_name',    coalesce(v ->> 'juice_name', ''),
+    'juice_note',    coalesce(v ->> 'juice_note', '')
+  )
+  FROM (SELECT coalesce((SELECT value FROM public.mm_data WHERE key = 'payment_settings'), '{}'::jsonb) AS v) s;
+$function$;
+
+-- ── payment_start_juice(p_plan_id text, p_months integer)
+CREATE OR REPLACE FUNCTION public.payment_start_juice(p_plan_id text, p_months integer DEFAULT 1)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions', 'pg_temp'
+AS $function$
+DECLARE
+  -- No 0/O/1/I/L: this gets read off a screen and typed into a Juice message.
+  ALPHABET constant text := '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+  v_uid    uuid := auth.uid();
+  v_cfg    jsonb := public.payment_settings();
+  v_plan   public.plans%ROWTYPE;
+  v_months integer := greatest(1, least(12, coalesce(p_months, 1)));
+  v_open   integer;
+  v_row    public.payments%ROWTYPE;
+  v_ref    text;
+  i        integer;
+  t        integer;
+BEGIN
+  IF v_uid IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_authenticated');
+  END IF;
+
+  IF coalesce((v_cfg ->> 'juice_enabled')::boolean, false) IS NOT TRUE
+     OR coalesce(v_cfg ->> 'juice_number', '') = '' THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'juice_disabled');
+  END IF;
+
+  SELECT * INTO v_plan FROM public.plans WHERE id = p_plan_id;
+  IF NOT FOUND OR v_plan.is_active IS NOT TRUE THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'unknown_plan');
+  END IF;
+  -- A free plan has nothing to pay for, and charging Rs 0 would produce a
+  -- reference an admin can never match to a transfer.
+  IF coalesce(v_plan.price_mur, 0) <= 0 THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'plan_not_purchasable');
+  END IF;
+
+  -- ⚠ Reuse rather than pile up. A parent who taps Buy four times must end up
+  --   with ONE reference, or the admin sees four rows for one transfer and has
+  --   to guess which to confirm.
+  SELECT * INTO v_row FROM public.payments
+   WHERE user_id = v_uid AND plan_id = p_plan_id AND months = v_months
+     AND status IN ('pending','sent') AND reference IS NOT NULL
+   ORDER BY created_at DESC LIMIT 1;
+  IF FOUND THEN
+    RETURN jsonb_build_object('ok', true, 'reused', true,
+      'payment_id', v_row.id, 'reference', v_row.reference,
+      'amount_mur', v_row.amount_mur, 'months', v_row.months,
+      'status', v_row.status, 'plan_name', v_plan.name,
+      'juice_number', v_cfg ->> 'juice_number', 'juice_name', v_cfg ->> 'juice_name',
+      'juice_note', v_cfg ->> 'juice_note');
+  END IF;
+
+  SELECT count(*) INTO v_open FROM public.payments
+   WHERE user_id = v_uid AND status IN ('pending','sent');
+  IF v_open >= 5 THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'too_many_open');
+  END IF;
+
+  FOR t IN 1..20 LOOP
+    v_ref := '';
+    FOR i IN 1..6 LOOP
+      v_ref := v_ref || substr(ALPHABET, 1 + (get_byte(gen_random_bytes(1), 0) % length(ALPHABET)), 1);
+    END LOOP;
+    BEGIN
+      INSERT INTO public.payments (user_id, plan_id, amount_mur, provider, status, reference, months)
+      VALUES (v_uid, v_plan.id, v_plan.price_mur * v_months, 'juice', 'pending', v_ref, v_months)
+      RETURNING * INTO v_row;
+      EXIT;
+    EXCEPTION WHEN unique_violation THEN
+      v_row.id := NULL;   -- collided; go round again
+    END;
+  END LOOP;
+
+  IF v_row.id IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'reference_unavailable');
+  END IF;
+
+  RETURN jsonb_build_object('ok', true, 'reused', false,
+    'payment_id', v_row.id, 'reference', v_row.reference,
+    'amount_mur', v_row.amount_mur, 'months', v_row.months,
+    'status', v_row.status, 'plan_name', v_plan.name,
+    'juice_number', v_cfg ->> 'juice_number', 'juice_name', v_cfg ->> 'juice_name',
+    'juice_note', v_cfg ->> 'juice_note');
+END
+$function$;
+
 -- ── plan_enforcement_on()
 CREATE OR REPLACE FUNCTION public.plan_enforcement_on()
  RETURNS boolean
@@ -7352,7 +7609,7 @@ ALTER TABLE public.forum_replies ALTER COLUMN author_student_id SET DEFAULT curr
 
 -- ═══ 6 · INDEXES ══════════════════════════════════════════════════════════════
 -- Indexes that back a constraint are omitted — §3 creates those with the
--- constraint itself. 69 standalone indexes.
+-- constraint itself. 72 standalone indexes.
 CREATE INDEX IF NOT EXISTS submissions_assignment_idx ON public.assignment_submissions USING btree (assignment_id);
 CREATE INDEX IF NOT EXISTS submissions_classroom_idx ON public.assignment_submissions USING btree (classroom_id);
 CREATE INDEX IF NOT EXISTS submissions_student_idx ON public.assignment_submissions USING btree (student_id);
@@ -7381,6 +7638,9 @@ CREATE INDEX IF NOT EXISTS guest_submissions_assignment_idx ON public.guest_subm
 CREATE INDEX IF NOT EXISTS learning_materials_teacher_created_idx ON public.learning_materials USING btree (teacher_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS login_events_user_idx ON public.login_events USING btree (user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS payments_plan_idx ON public.payments USING btree (plan_id);
+CREATE UNIQUE INDEX IF NOT EXISTS payments_provider_ref_uq ON public.payments USING btree (provider, provider_ref) WHERE (provider_ref IS NOT NULL);
+CREATE UNIQUE INDEX IF NOT EXISTS payments_reference_uq ON public.payments USING btree (reference) WHERE (reference IS NOT NULL);
+CREATE INDEX IF NOT EXISTS payments_status_idx ON public.payments USING btree (status, created_at DESC);
 CREATE INDEX IF NOT EXISTS payments_user_idx ON public.payments USING btree (user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS ph_classroom_idx ON public.physical_homework USING btree (classroom_id);
 CREATE INDEX IF NOT EXISTS ph_expires_idx ON public.physical_homework USING btree (expires_at);
@@ -8277,6 +8537,11 @@ GRANT EXECUTE ON FUNCTION public.owns_classroom(p_classroom uuid) TO anon, authe
 GRANT EXECUTE ON FUNCTION public.owns_student(p_student uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.owns_student_txt(p_student text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.parent_of_classroom_member(p_classroom uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.payment_admin_confirm(p_payment_id uuid, p_provider_ref text) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.payment_admin_reject(p_payment_id uuid, p_reason text) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.payment_mark_sent(p_payment_id uuid, p_payer_note text) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.payment_settings() TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.payment_start_juice(p_plan_id text, p_months integer) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.plan_enforcement_on() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.plan_features_for_student(p_student uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.plan_features_for_user(p_uid uuid) TO anon, authenticated, service_role;

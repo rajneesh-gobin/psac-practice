@@ -179,9 +179,38 @@ below that touches the database is a **decision**, not a pending run.
     blob (~2.4 MB uploaded per 30-minute session at current caps). A migration plus
     a rewrite of every reader — not a quick change.
 
-14. Payments are not wired: `openPlansModal()` is the single place to add them, and
-    `payment-webhook.js` verifiers **fail closed** on purpose — enabling payments
-    must break loudly until real signature checks are written.
+14. **Manual MCB Juice payments are wired and APPLIED to production (2026-09-10),
+    but switched OFF.** `payment_settings.juice_enabled` is `false`, so no parent
+    sees a Buy button and the "everything is free right now" banner still stands.
+    Turning it on is a **product decision**: Admin → Plans → set the Juice number
+    → tick *Accept Juice payments*. That one tick takes the free-forever banner
+    down. ⚠ `payment-webhook.js` verifiers still **fail closed** on purpose —
+    a real gateway must break loudly until real signature checks are written.
+
+14a. ⚠⚠ **`Store.activatePlan()` GRANTS A PLAN THAT NEVER EXPIRES, and writes it
+    from the BROWSER.** Found 2026-09-10 while applying the Juice migration.
+    The admin's *Assign plan* button (`AdminPanel.assignPlan` → `activatePlan`,
+    engine/store.js ~1465) inserts a `subscriptions` row with an `expires_at`
+    and a `payments` row — and never touches `profiles.expires_at`.
+    - ⚠ **`profiles.expires_at` is the gate `questions.js` reads** (line ~587);
+      `subscriptions.expires_at` is written and **never read**. So an
+      admin-assigned plan **fails OPEN**: the tier applies and the end date does
+      not, i.e. it never lapses. Measured on production — the one live
+      subscription has `sub_expires` set and `profile_expires` NULL.
+      (Harmless today: it is the `free` plan on the admin's own account.)
+    - ⚠ It also writes `subscriptions` and `payments` **directly from the
+      browser**, which is the one thing the enforcement table forbids, and uses
+      two vocabularies the rest of the code does not: `payments.status =
+      'completed'` (vs `confirmed`) and `subscriptions.status = 'cancelled'`
+      (vs `superseded`).
+    - ⚠ **The `payments_status_check` constraint accepts `'completed'` ONLY
+      because of this.** The deployed client is what writes the word, so
+      tightening the list first would have broken the Assign Plan button the
+      moment the migration landed. Drop `'completed'` from that CHECK only
+      after this is fixed, a client writing `'confirmed'` has shipped, and the
+      historical rows have been normalised.
+    - The fix is to route it through `payment_admin_confirm()`, or a sibling
+      that grants without a payment row — one grant path, server-side.
 
 15. ⚠ **Bundle sizes drift and nothing re-measures them.** The question cache went
     over the localStorage quota because the French packs quintupled with no one

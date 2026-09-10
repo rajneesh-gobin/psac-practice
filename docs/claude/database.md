@@ -89,9 +89,11 @@ defaults found via `pg_depend`, `check_function_bodies`, the pinned
    drops the `=X` PUBLIC entry. Check `proacl`, not the migration text, after any
    `CREATE FUNCTION`.
 
-### Manual MCB Juice payments (2026-09-10)
-`migrations/20260910_manual_juice_payments.sql`. Five functions, and only one
-of them grants anything.
+### Manual MCB Juice payments (2026-09-10, APPLIED)
+`migrations/20260910_manual_juice_payments.sql` — applied to production
+2026-09-10, verified by read-after-write and re-applied to prove idempotency.
+`juice_enabled` is **false**, so nothing is visible to any user yet.
+Five functions, and only one of them grants anything.
 | Function | Who | Grants |
 |---|---|---|
 | `payment_settings()` | anon + | nothing — the public Juice number, built field by field |
@@ -118,6 +120,15 @@ of them grants anything.
 - ⚠ **Nothing is switched on by the migration.** `juice_enabled` defaults to
   false, so applying it to production changes nothing a user can see until an
   admin sets a number and flips the switch.
+- ⚠ **`payments_status_check` accepts `'completed'`, and that is not cosmetic.**
+  `Store.activatePlan()` writes it from the browser for an admin's manual plan
+  activation, and production already held one such row. The DEPLOYED client is
+  what writes the word, so a tighter list would have broken the Assign Plan
+  button the moment this landed. See [pending.md](pending.md) item 14a — that
+  function also grants a plan that never expires.
+- ⚠ **`proacl` was checked on production, not inferred from the file**: the four
+  action functions carry `authenticated` and `service_role` only, with **no
+  `=X` PUBLIC entry**; `payment_settings()` keeps PUBLIC and anon.
 - Tested by `scripts/sql-tests/run-juice-tests.sh` (26 assertions on a real
   postgres, as `authenticated`), `scripts/test-juice-payments.js` (the client
   half) and `scripts/test-juice-ui.js` (both screens at 360px).
