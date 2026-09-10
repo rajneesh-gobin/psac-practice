@@ -73,7 +73,14 @@ const G4SC_SYLLABUS = {
 registerSubject({
   id: 'grade4-science', name: 'Science', grade: 4, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false, noDifficulty: true,
+  // ⚠ noDifficulty REMOVED 2026-09-10, content first. depth_hard.js took every
+  // chapter to 15+ at L3/L4 before this line changed. Turning the ladder on
+  // ahead of the stock deals a Hard round of three questions and looks broken.
+  // ⚠ 'Applied Scenarios' matches grade6-science, grade7-science, grade8-science
+  // and the four Grade 9 science packs, so a child meets ONE wording for the
+  // same idea from Grade 4 to Grade 9. The default "Challenge" and the maths
+  // "Word Problems" both describe something else.
+  practiceble: true, notesBased: false, level4Label: 'Applied Scenarios',
   syllabus: G4SC_SYLLABUS,
   chapters: [
     { id: 'g4sci-living',    name: 'Living & Non-Living Things',  icon: '🌿', examWeight: 3,

@@ -112,7 +112,18 @@ const G4FR_SYLLABUS = {
 registerSubject({
   id: 'grade4-french', name: 'French', grade: 4, icon: '📕', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true, noDifficulty: true,
+  // ⚠ noDifficulty REMOVED 2026-09-10, content first, same as the other three
+  // Grade 4 packs. See grade4-history/_manifest.js for the full reasoning.
+  // ⚠ 'Analyse de texte' is deliberately IN FRENCH: every other label a child
+  // meets in this pack is French, and an English word in the level badge would
+  // be the only one. It names what L4 means here — apply two rules at once, or
+  // infer from a short text before choosing.
+  // ⚠ 30 of this pack's hard-item gap sat in g4fr-textes-trous and
+  // g4fr-chasse-erreurs, which hold `cloze` and `errorhunt` items that
+  // isPoolQuestion() excludes from every pool BY DESIGN. They are reached from
+  // their own chapter screens and must never be filled with MCQs — dealt into
+  // practice they would draw a number pad under a French passage.
+  practiceble: true, notesBased: true, level4Label: 'Analyse de texte',
   syllabus: G4FR_SYLLABUS,
   chapters: [
     {

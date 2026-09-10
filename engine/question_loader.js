@@ -719,6 +719,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-maths/questions/extended_reasoning_bank.js',
     ],
     'grade4-english': [
+      'subjects/grade4-english/questions/depth_hard.js',
       'subjects/grade4-english/questions/ch01_g4_nouns.js',
       'subjects/grade4-english/questions/ch02_g4_verbs.js',
       'subjects/grade4-english/questions/ch03_g4_adjectives.js',
@@ -738,6 +739,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/enrichment_joining_sentences.js',
     ],
     'grade4-science': [
+      'subjects/grade4-science/questions/depth_hard.js',
       'subjects/grade4-science/questions/ch01_g4_living_things.js',
       'subjects/grade4-science/questions/exam_depth.js',
       'subjects/grade4-science/questions/ch02_g4_plants.js',
@@ -754,6 +756,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-science/questions/topup_g4_science.js',
     ],
     'grade4-french': [
+      'subjects/grade4-french/questions/depth_hard.js',
       'subjects/grade4-french/questions/ch01_g4_vocabulaire.js',
       'subjects/grade4-french/questions/ch02_g4_noms.js',
       'subjects/grade4-french/questions/ch03_g4_verbes.js',
@@ -782,6 +785,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/enrichment_relier_phrases.js',
     ],
     'grade4-history': [
+      'subjects/grade4-history/questions/depth_hard.js',
       'subjects/grade4-history/questions/ch01_g4_locality.js',
       'subjects/grade4-history/questions/ch02_g4_community.js',
       'subjects/grade4-history/questions/ch03_g4_voyages.js',
@@ -876,7 +880,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 130;
+  const _CACHE_VERSION = 131;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

@@ -62,7 +62,17 @@ const G4HG_SYLLABUS = {
 registerSubject({
   id: 'grade4-history', name: 'History & Geography', grade: 4, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false, noDifficulty: true,
+  // ⚠ noDifficulty REMOVED 2026-09-10, and only after depth_hard.js existed.
+  // The flag hid the L1-L4 ladder while getMixedQuestions() drew across every
+  // level at once, so with 92% of this pack at L1/L2 the mix WAS the experience
+  // and nothing a child or parent could touch asked for harder. Content first,
+  // always: turning the ladder on before the stock is there deals a Hard round
+  // of three questions and looks broken.
+  // ⚠ level4Label MUST accompany this. It defaults to "Challenge", and the maths
+  // default is "Word Problems" — neither describes what L4 means in History &
+  // Geography, which is an applied scenario needing two facts put together.
+  // 'Applied Reasoning' matches grade5-history so one wording carries across.
+  practiceble: true, notesBased: false, level4Label: 'Applied Reasoning',
   syllabus: G4HG_SYLLABUS,
   chapters: [
     { id: 'g4hist-locality',  name: 'Locality: Past & Present',  icon: '🏙️', examWeight: 4,

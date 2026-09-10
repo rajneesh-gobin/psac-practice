@@ -72,7 +72,18 @@ const G4ENG_SYLLABUS = {
 registerSubject({
   id: 'grade4-english', name: 'English', grade: 4, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true, noDifficulty: true,
+  // ⚠ noDifficulty REMOVED 2026-09-10, content first. This was the EASIEST pack
+  // in the project at 94% L1/L2 — and the flag hid the ladder while
+  // getMixedQuestions() drew across all levels at once, so a child met a hard
+  // question about one time in sixteen and had no control to ask for more.
+  // depth_hard.js took every chapter to 15+ at L3/L4 before this line changed.
+  // ⚠ level4Label MUST accompany it. The default is "Challenge" and the maths
+  // default is "Word Problems"; in English L4 means extended analysis — hold a
+  // short passage or two competing readings in mind and justify a choice.
+  // Matches grade7-english so one wording carries up the grades.
+  // ⚠ notesBased stays TRUE: that flag is about the Calendar showing "View
+  // Notes" instead of "Practice Now" and has nothing to do with difficulty.
+  practiceble: true, notesBased: true, level4Label: 'Extended Analysis',
   syllabus: G4ENG_SYLLABUS,
   chapters: [
     {
