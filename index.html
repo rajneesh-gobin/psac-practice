@@ -2470,33 +2470,34 @@
     <!-- ══════════ PRACTICE HUB ══════════ -->
     <div id="screen-practice-hub" class="screen hidden">
       <div class="prac-hub-outer">
-        <div class="prac-hub-crumb">
-          <button onclick="StudentHome.open()">🏠 Home</button>
-          <span class="crumb-sep">›</span>
-          <span>Start Practicing</span>
-        </div>
-        <h2 class="prac-hub-title">📚 Start Practicing</h2>
-        <div class="prac-hub-search-row">
+        <div class="sh-header">
+          <div>
+            <h2 class="sh-title">📚 Start Practicing</h2>
+            <p class="sh-subtitle">Pick a subject to begin.</p>
+          </div>
           <button class="prac-hub-search-btn" onclick="Search.open()">🔍 Search questions</button>
         </div>
-        <div class="prac-grade-bar">
-          <label class="prac-grade-label" for="prac-grade-sel">Grade</label>
-          <select id="prac-grade-sel" class="prac-grade-dropdown" onchange="PracticeHub.onGradeChange(this.value)"></select>
-          <span class="prac-locked-note" id="prac-locked-note" style="display:none">🔒 Set by parent</span>
+        <div class="prac-board-mat">
+          <div class="sh-board-frame">
+            <div class="prac-grade-bar">
+              <label class="prac-grade-label" for="prac-grade-sel">Grade</label>
+              <select id="prac-grade-sel" class="prac-grade-dropdown" onchange="PracticeHub.onGradeChange(this.value)"></select>
+            </div>
+            <p class="prac-grade-note" id="prac-locked-note" style="display:none">🔒 Check with your parent to unlock other grades.</p>
+            <div class="prac-books-grid" id="prac-books-grid"></div>
+          </div>
         </div>
-        <div class="prac-books-grid" id="prac-books-grid"></div>
       </div>
     </div>
 
     <!-- ══════════ SUBJECT HUB ══════════ -->
     <div id="screen-subject-hub" class="screen hidden">
       <div class="subj-hub-outer">
-        <div class="subj-hub-crumb">
-          <button onclick="StudentHome.open()">🏠 Home</button>
-          <span class="crumb-sep">›</span>
-          <button onclick="PracticeHub.open()">Start Practicing</button>
-          <span class="crumb-sep">›</span>
-          <span id="subj-hub-crumb-subject"></span>
+        <div class="sh-header">
+          <div>
+            <h2 class="sh-title" id="subj-hub-title">Subject</h2>
+            <p class="sh-subtitle">Chapters, exam paper and syllabus.</p>
+          </div>
         </div>
         <div class="teacher-navigation">
           <button class="ta-tab" data-sh-tab="chapters" aria-selected="true">📖 Chapters</button>

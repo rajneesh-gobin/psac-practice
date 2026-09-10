@@ -582,6 +582,13 @@ const Auth = (() => {
           _parentProfile = null;
           _family        = null;
           _familyStudents = [];
+          // ⚠ Both PIN copies are scoped by this uid. Leaving a signed-out
+          // account behind in it would let the NEXT account on this browser
+          // read - and _storePin() write - the previous account PIN, which is
+          // the cross-account leak the scoped key exists to close.
+          _pinSessionUid    = null;
+          _dbPinHash        = null;
+          _dbPinFetchFailed = false;
           if (!keepStudentSession) {
             Store.clearStudentSession();
             _activeAccount = null;
@@ -3319,13 +3326,46 @@ const Auth = (() => {
   const _PARENT_PIN_PREFIX = 'psac_parent_pin_v1:';  // per-account: prefix + _parentUser.id
   let _parentPinBusy = false;
   let _dbPinHash = null; // cached parent_pin_hash from profiles; '' = confirmed absent
-  let _dbPinFetchFailed = false; // true when the last fetch threw (network unavailable)
+  let _dbPinFetchFailed = false; // true when the last fetch could not answer
+  let _pinSessionUid = null; // uid of a restored parent session the listener never routed
 
-  // ⚠ Null when no parent is known yet: there is no account to scope to, so
-  // there is deliberately no local PIN to read. Routing then falls to
-  // _ensureParentSession(), which is the correct path when _parentUser is unset.
+  // ⚠ _parentUser is NOT the only way to know which account this browser is
+  // holding, and treating it as such is what broke the PIN. The auth listener
+  // only populates _parentUser when it ROUTES a parent session, and
+  // _studentOwnsDevice() deliberately makes it return early whenever a child
+  // owns the device - so on every reload with a child signed in, the parent's
+  // Supabase session is sitting right there in localStorage while _parentUser
+  // is null. Scoping the key to _parentUser alone therefore made the local PIN
+  // copy unreadable in exactly the state the pad is opened in.
+  // _pinAccountUid() asks the session too. Still null when nothing is known,
+  // which is the one case with genuinely no account to scope to.
+  function _pinAccountUid() {
+    if (_parentUser?.id) return _parentUser.id;
+    if (_pinSessionUid)  return _pinSessionUid;
+    return null;
+  }
+
   function _scopedPinKey() {
-    return _parentUser ? _PARENT_PIN_PREFIX + _parentUser.id : null;
+    const uid = _pinAccountUid();
+    return uid ? _PARENT_PIN_PREFIX + uid : null;
+  }
+
+  // Cached uid of the restored-but-unrouted parent session, filled by
+  // _refreshPinSessionUid() before anything reads the two PIN copies.
+  async function _refreshPinSessionUid() {
+    if (_parentUser?.id) { _pinSessionUid = _parentUser.id; return _pinSessionUid; }
+    if (!_sb) return _pinSessionUid;
+    try {
+      const { data } = await _sb.auth.getSession();
+      const uid = data?.session?.user?.id || null;
+      // A uid that CHANGED invalidates the cached hash with it. _pinMatches()
+      // always force-fetches, but _enterParentMode() reads the cache, and one
+      // account deciding whether ANOTHER account has a PIN is the same
+      // cross-account leak the scoped key was introduced to close.
+      if (uid && uid !== _pinSessionUid) { _dbPinHash = null; _dbPinFetchFailed = false; }
+      if (uid) _pinSessionUid = uid;
+    } catch (_) {}
+    return _pinSessionUid;
   }
 
   function _getStoredPinHash() {
@@ -3343,7 +3383,14 @@ const Auth = (() => {
 
   async function _fetchDbPinHash(force) {
     if (!force && _dbPinHash !== null) return _dbPinHash || null;
-    if (!_parentUser) return null;
+    const uid = _pinAccountUid();
+    // ⚠ SAME RULE AS EVERY OTHER MISS HERE: not knowing is not a verdict. With
+    // no account resolved this returned null while LEAVING _dbPinFetchFailed
+    // false - and false is the signal _pinMatches() reads as "the database
+    // answered, and this account has no PIN". So a parent with a perfectly good
+    // server-side hash was routed down the no-hash branch, found no local copy
+    // either, and had a correct PIN called wrong. Measured 2026-09-10.
+    if (!uid) { _dbPinFetchFailed = true; return null; }
     try {
       // ⚠ `error` is READ, not discarded. supabase-js does not throw on an RLS
       // denial, a dead session or a 5xx - it returns { data: null, error }. This
@@ -3351,7 +3398,7 @@ const Auth = (() => {
       // "confirmed absent": _dbPinHash = '', which is the same value as a
       // genuine no-PIN account. A parent on a train was told they had no PIN.
       // Same rule as the local copy: a MISS IS NOT A VERDICT.
-      const { data, error } = await _sb.from('profiles').select('parent_pin_hash').eq('id', _parentUser.id).single();
+      const { data, error } = await _sb.from('profiles').select('parent_pin_hash').eq('id', uid).single();
       if (error) { _dbPinFetchFailed = true; return null; }
       _dbPinHash = data?.parent_pin_hash || '';
       _dbPinFetchFailed = false;
@@ -3364,8 +3411,9 @@ const Auth = (() => {
     if (key) { try { localStorage.setItem(key, btoa(pin + ':psac_v1')); } catch(_) {} }
     // Also save SHA-256 hash to DB so the PIN survives localStorage clears
     _hashPinForDb(pin).then(hash => {
-      if (!hash || !_parentUser) return;
-      _sb.from('profiles').update({ parent_pin_hash: hash }).eq('id', _parentUser.id)
+      const uid = _pinAccountUid();
+      if (!hash || !uid) return;
+      _sb.from('profiles').update({ parent_pin_hash: hash }).eq('id', uid)
         .then(() => { _dbPinHash = hash; }).catch(() => {});
     });
   }
@@ -3572,7 +3620,8 @@ const Auth = (() => {
 
   async function _submitParentPin() {
     const pin = _parentPinEntry;
-    const localOk = await _pinMatches(pin);
+    await _refreshPinSessionUid();
+    let localOk = await _pinMatches(pin);
     // ⚠ A local "no" is NOT a verdict any more. _pinMatches() can only compare
     // against localStorage once the session is gone - _fetchDbPinHash() reads
     // profiles through the browser client and profiles_select is
@@ -3621,6 +3670,23 @@ const Auth = (() => {
       // locally: a live or renewable session costs one call and no round trip
       // to our own function.
       if (localOk) session = await _ensureParentSession();
+
+      // ⚠ "Could not check" is not "no". _pinMatches() compares against
+      // profiles.parent_pin_hash, and reading that row needs a LIVE access
+      // token - which is the very thing that has lapsed on the path that opens
+      // this pad. So re-mint FIRST (the refresh token is already ours; no PIN is
+      // spent doing it) and then ask the database again. The PIN is still
+      // verified before anything opens - a session that cannot answer for these
+      // four digits is thrown away right here - and this is the whole route back
+      // for an account the server-side PIN sign-in refuses by design.
+      if (!localOk && _dbPinFetchFailed && navigator.onLine) {
+        const revived = await _ensureParentSession();
+        if (revived) {
+          await _refreshPinSessionUid();
+          localOk = await _pinMatches(pin);
+          if (localOk) session = revived;
+        }
+      }
 
       // Everything the browser can do by itself has now failed. The PIN is the
       // credential from here: the server verifies it against
@@ -3892,6 +3958,10 @@ const Auth = (() => {
       _openParentDashboard();
       return;
     }
+    // Before either PIN copy can be read, work out WHICH account this browser
+    // is holding - _parentUser is null on every reload where a child owns the
+    // device, and both copies are scoped by uid.
+    await _refreshPinSessionUid();
     const hasLocalPin = !!_getStoredPinHash();
     // Check DB too so a PIN set from another device still shows the modal here.
     // Use the cached value if already fetched; only hit the network if needed.

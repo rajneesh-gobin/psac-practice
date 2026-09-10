@@ -128,7 +128,12 @@ function checkLocalFiles() {
     const entry = src.match(new RegExp("'" + pack + "':\\s*\\[([\\s\\S]*?)\\]"));
     if (!entry) { fail(`question_loader.js LOCAL_FILES has no entry for "${pack}" (${onDisk.length} files on disk)`); continue; }
 
-    const listed = [...entry[1].matchAll(/questions\/([A-Za-z0-9_]+\.js)/g)].map(x => x[1]).sort();
+    // ⚠ The class must allow `-`. It was [A-Za-z0-9_]+, which silently skipped
+    //   every hyphenated filename: onDisk listed them, this regex could not, so
+    //   24 real files reported as missing from LOCAL_FILES while sitting
+    //   correctly in the array. A name this check cannot parse is worse than one
+    //   it rejects — it makes real drift unreportable.
+    const listed = [...entry[1].matchAll(/questions\/([A-Za-z0-9_-]+\.js)/g)].map(x => x[1]).sort();
     for (const f of onDisk) if (!listed.includes(f)) fail(`LOCAL_FILES["${pack}"] is missing ${f} (invisible under file://)`);
     for (const f of listed) if (!onDisk.includes(f)) fail(`LOCAL_FILES["${pack}"] lists ${f} which is not on disk`);
   }

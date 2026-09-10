@@ -9665,12 +9665,21 @@ const PracticeHub = (() => {
     const grades = (typeof GradeAccess !== 'undefined')
       ? GradeAccess.allowed(currentGrade)
       : [currentGrade];
-    const locked = grades.length < 2;
     sel.innerHTML = grades.map(g =>
       `<option value="${g}"${g === currentGrade ? ' selected' : ''}>Grade ${g}</option>`
     ).join('');
-    sel.disabled = locked;
-    if (note) note.style.display = locked ? '' : 'none';
+    // Only one grade to choose from means there is nothing to choose.
+    sel.disabled = grades.length < 2;
+    // ⚠ The message keys on "fewer grades than EXIST", not on the dropdown
+    //   being disabled. Those are different sets: a child allowed 2 of 6 live
+    //   grades has a perfectly usable dropdown and was told nothing at all
+    //   about the other four. It also stays silent when everything live is
+    //   already reachable - a child with nothing locked must not be sent to
+    //   ask their parent for something they already have.
+    if (note) {
+      const live = (typeof GradeAccess !== 'undefined') ? GradeAccess.liveGrades() : grades;
+      note.style.display = grades.length < live.length ? '' : 'none';
+    }
   }
   function _renderBooks(grade) {
     const grid = document.getElementById('prac-books-grid');
@@ -9726,8 +9735,8 @@ const SubjectHub = (() => {
     if (!pack) { PracticeHub.open(); return; }
     if (typeof PackLoader !== 'undefined') await PackLoader.ensure(_packId).catch(() => {});
     activateSubjectPack(_packId);
-    const crumbSubj = document.getElementById('subj-hub-crumb-subject');
-    if (crumbSubj) crumbSubj.textContent = pack.subject || pack.name || '';
+    const hubTitle = document.getElementById('subj-hub-title');
+    if (hubTitle) hubTitle.textContent = pack.subject || pack.name || 'Subject';
     tab('chapters');
     showScreen('subject-hub');
     _renderChapters();

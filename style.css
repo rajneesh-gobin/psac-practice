@@ -3029,31 +3029,69 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
   .stat-tile { background: rgba(240,236,220,.08) !important; }
 
 /* ── Practice Hub ──────────────────────────────────────────────── */
+/* ⚠ PAPER, not a board. The blackboard is .sh-board-frame INSIDE the page -
+   the same shape as #screen-student-home, which is what makes the wooden
+   frame read as a frame at all. When this screen was itself a green board,
+   the framed panel sat board-on-board and the frame was invisible. */
 #screen-practice-hub {
-  background:
-    repeating-linear-gradient(0deg, transparent, transparent 34px, rgba(240,236,220,.06) 34px, rgba(240,236,220,.06) 35px),
-    linear-gradient(145deg, #2e5230 0%, #1d3a1f 60%, #2a4a28 100%);
-  border-radius: 1.5rem;
-  min-height: 100%;
+  background: #f2ebe0;
+  min-height: 100vh;
   padding: 1.25rem 1.25rem 5rem;
-  color: #f0ece8;
 }
-.dark #screen-practice-hub { background: linear-gradient(145deg,#111 0%,#0a0f0a 60%,#0d1410 100%); }
+.dark #screen-practice-hub { background: #1a1208; }
 .prac-hub-outer { max-width: 700px; margin: 0 auto; }
+/* ⚠ Used ONLY by #screen-exam-config now - the two hub screens dropped their
+   in-screen crumbs (the app's own breadcrumb bar already draws the same trail).
+   Exam config is still a green chalkboard, so this stays chalk. */
 .prac-hub-crumb { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: rgba(240,236,220,.7); margin-bottom: 1rem; flex-wrap: wrap; }
 .prac-hub-crumb button { background: none; border: none; color: rgba(240,236,220,.85); cursor: pointer; padding: 0; font-size: .78rem; text-decoration: underline; text-underline-offset: 2px; }
 .prac-hub-crumb button:hover { color: #f0ece8; }
 .prac-hub-crumb .crumb-sep { opacity: .5; }
 .prac-hub-title { font-family: 'Caveat', cursive; font-size: 1.9rem; color: #f0ece8; margin-bottom: 1rem; text-shadow: 1px 1px 3px rgba(0,0,0,.4); }
-.prac-hub-search-row { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
-.prac-hub-search-btn { background: rgba(240,236,220,.12); border: 1px solid rgba(240,236,220,.28); border-radius: 2rem; color: rgba(240,236,220,.9); font-size: .85rem; font-weight: 600; padding: .38rem 1rem; cursor: pointer; transition: background .18s, color .18s; }
-.prac-hub-search-btn:hover { background: rgba(240,236,220,.22); color: #f0ece8; }
-.prac-grade-bar { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem; background: rgba(0,0,0,.22); border-radius: .75rem; padding: .6rem 1rem; border: 1px solid rgba(240,236,220,.18); }
+.prac-hub-search-btn { background: rgba(42,77,40,.08); border: 1px solid rgba(42,77,40,.28); border-radius: 2rem; color: #2a4d28; font-size: .85rem; font-weight: 600; padding: .38rem 1rem; cursor: pointer; transition: background .18s, color .18s; align-self: flex-start; }
+.prac-hub-search-btn:hover { background: rgba(42,77,40,.16); }
+.dark .prac-hub-search-btn { background: rgba(240,236,220,.1); border-color: rgba(240,236,220,.26); color: rgba(240,236,220,.9); }
+.dark .prac-hub-search-btn:hover { background: rgba(240,236,220,.2); color: #f0ece8; }
+.prac-grade-bar { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; background: rgba(0,0,0,.22); border-radius: .75rem; padding: .6rem 1rem; border: 1px solid rgba(240,236,220,.18); }
 .prac-grade-label { font-size: .85rem; color: rgba(240,236,220,.8); font-weight: 700; white-space: nowrap; font-family: 'Caveat', cursive; font-size: 1.05rem; }
 .prac-grade-dropdown { background: rgba(240,236,220,.12); border: 1px solid rgba(240,236,220,.3); border-radius: .5rem; color: #f0ece8; font-size: .95rem; padding: .35rem .65rem; cursor: pointer; flex: 1; max-width: 180px; }
 .prac-grade-dropdown:disabled { opacity: .65; cursor: default; }
 .prac-grade-dropdown option, .prac-grade-dropdown optgroup { background: #2e5230; color: #f0ece8; }
-.prac-locked-note { font-size: .75rem; color: rgba(240,236,220,.55); font-style: italic; }
+/* ⚠ Shown whenever the child can reach FEWER grades than exist, not merely
+   when the dropdown is disabled - a child allowed 2 of 6 grades has a working
+   dropdown and no way to learn why the other four are missing. See
+   PracticeHub._renderGradeBar(). */
+.prac-grade-note { font-size: .78rem; color: rgba(240,236,220,.62); font-style: italic; margin: 0 0 1rem; padding: 0 .25rem; }
+/* The green mat the blackboard hangs on. Same surface #screen-student-home
+   gets from .ta-tab-content - repeated here rather than reused because that
+   rule is shaped for folder tabs (square top-left corner, no top border) and
+   this screen has none. ⚠ Never add transform/filter here: a .screen
+   descendant with one becomes the containing block for every fixed child. */
+.prac-board-mat {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 31px,
+      rgba(255,255,255,.035) 31px, rgba(255,255,255,.035) 32px
+    ),
+    linear-gradient(158deg, #2e5230 0%, #1e3a22 25%, #264028 50%, #1c3420 75%, #203824 100%);
+  border: 8px solid #5c3810;
+  border-radius: 8px;
+  padding: .9rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.dark .prac-board-mat {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 31px,
+      rgba(255,255,255,.025) 31px, rgba(255,255,255,.025) 32px
+    ),
+    linear-gradient(158deg, #111 0%, #0a0a0a 40%, #131313 70%, #0d0d0d 100%);
+  border-color: #3a2008;
+}
+@media (max-width: 420px) { .prac-board-mat { padding: .5rem; border-width: 6px; } }
+
 .prac-books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.1rem; }
 @media (max-width: 480px) { .prac-books-grid { grid-template-columns: repeat(2, 1fr); gap: .75rem; } }
 .ph-book {
@@ -3101,21 +3139,17 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
 }
 
 /* ── Subject Hub ──────────────────────────────────────────────── */
+/* ⚠ Paper, for the same reason as #screen-practice-hub above: the chapter
+   list already sits on a framed blackboard (.ta-tab-content, 8px #5c3810),
+   and its folder tabs already paint #f2ebe0 when selected - this screen was
+   the only part of that composition still painted green. */
 #screen-subject-hub {
-  background:
-    repeating-linear-gradient(0deg, transparent, transparent 34px, rgba(240,236,220,.06) 34px, rgba(240,236,220,.06) 35px),
-    linear-gradient(145deg, #2e5230 0%, #1d3a1f 60%, #2a4a28 100%);
-  border-radius: 1.5rem;
-  min-height: 100%;
+  background: #f2ebe0;
+  min-height: 100vh;
   padding: 1.25rem 1.25rem 5rem;
-  color: #f0ece8;
 }
-.dark #screen-subject-hub { background: linear-gradient(145deg,#111 0%,#0a0f0a 60%,#0d1410 100%); }
+.dark #screen-subject-hub { background: #1a1208; }
 .subj-hub-outer { max-width: 860px; margin: 0 auto; }
-.subj-hub-crumb { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: rgba(240,236,220,.7); margin-bottom: .75rem; flex-wrap: wrap; }
-.subj-hub-crumb button { background: none; border: none; color: rgba(240,236,220,.85); cursor: pointer; padding: 0; font-size: .78rem; text-decoration: underline; text-underline-offset: 2px; }
-.subj-hub-crumb button:hover { color: #f0ece8; }
-.subj-hub-crumb .crumb-sep { opacity: .5; }
 /* Chapter cards inside Subject Hub */
 .sh-chapter-list { display: flex; flex-direction: column; gap: .5rem; }
 .sh-chapter-card { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; background: rgba(255,255,255,.08); border: 1px solid rgba(240,236,220,.18); border-radius: .75rem; cursor: pointer; color: #f0ece8; text-align: left; transition: background .15s; width: 100%; }
