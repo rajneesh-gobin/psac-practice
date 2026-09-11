@@ -647,3 +647,32 @@ red, so a key left on a desk announces itself), and the NCE paper
   record that a mock exam happened.
 - A parent's own settings apply to children by **merge, never replace** —
   `lockedChapters` is per-child and must survive the write.
+
+---
+
+## Admin › Members — a family's settings, fixed without signing in as them
+Built 2026-09-11 for support calls ("my child cannot see Science"). In a
+member's **👶 Children** list, each child has **⚙️ Settings**:
+- **What is not at its default**, in plain words (`SupportSettings.describe`).
+- **Why can or can't they see it?** — every live subject of the child's grade
+  (plus granted grades), each chapter open or closed with **every** layer that
+  closes it: account disabled/blocked, site-wide kill switches, grade not
+  granted, parent lock, expiry vs bought chapters, plan list (only while plan
+  limits are on). `SupportSettings.explainChapter`, pure, in helpers.js.
+  ⚠ It mirrors `_planAllowsChapter` / `_adminBlocksChapter`; `questions.js` is
+  what actually decides. Change one, check the other.
+- **Controls** (super admin only): exam mode, hints, Game Zone, hardest level,
+  extra grades, chapter locks, a new child PIN, and a "why" field saved with each
+  change. Recent admin changes are listed from `admin_actions`.
+- ⚠ **Writes go through `admin_patch_student_settings()` only** — never a
+  whole-object `students.update({settings})` from admin.js (a test asserts it).
+- ⚠ **The child's device used to read settings ONLY at PIN login**, so a lock
+  set later — by a parent too, not just an admin — stayed invisible until the
+  next PIN. `Auth._refreshChildSettings()` now re-reads `students.settings` on
+  resume and on the session guard's focus/online/30-minute check (throttled to
+  once a minute), merges with `SupportSettings.mergeServer` (server wins on the
+  nine parent keys, device-only keys survive), and **never applies mid-exam or
+  mid-round** (deferred 60 s and retried). A failed or malformed read changes
+  nothing. A parent previewing a child is excluded. *Apply now* = Force Logout.
+- Tests: `scripts/test-support-settings.js` (49), `run-admin-support-tests.sh`
+  (37, real postgres), `scripts/test-admin-child-settings.js` (real Chrome, 360px).

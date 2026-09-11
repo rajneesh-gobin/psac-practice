@@ -219,11 +219,18 @@ const RoleModules = (() => {
       'engine/teacher.js',
       'engine/teacher_classroom_detail.js',
     ],
+    // Science Labs (NCE only): just the shared shell. It fetches each lab's own
+    // files (data, bench, stylesheet) when that lab is opened - see
+    // Labs.LABS / _ensure() in lab_core.js - so the hub costs one file.
+    labs: [
+      'engine/labs/lab_core.js',
+    ],
   };
   const READY = {
     admin:   () => typeof AdminPanel !== 'undefined',
     forum:   () => typeof Forum !== 'undefined',
     teacher: () => typeof TeacherMode !== 'undefined' && typeof TeacherClassroomDetail !== 'undefined',
+    labs:    () => typeof Labs !== 'undefined',
   };
   const _inflight = new Map();
 

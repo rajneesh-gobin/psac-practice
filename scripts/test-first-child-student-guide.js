@@ -20,7 +20,11 @@ assert(app.includes('setTimeout(dismissStudentViewGuide, 12000)'),
   'guide must quietly dismiss itself');
 assert(html.includes('onclick="dismissStudentViewGuide(); Auth.switchToStudentSelect()"'),
   'using the highlighted action must close the guide immediately');
-assert(/\.student-view-nudge\s*\{[^}]*0\.55s ease-in-out 2;/.test(css),
+assert(/function showStudentViewGuide\(\)[\s\S]*?classList\.add\('attn-nudge'\)/.test(app),
+  'the guide must use the same .attn-nudge shake as every other nudge');
+assert(/\.attn-nudge\s*\{[^}]*animation:\s*attnNudge [^;]* 1;/.test(css),
   'attention animation must be finite and subtle');
+assert(/async function switchToStudentSelect\(\)\s*\{[\s\S]{0,300}_markStudentModeUsed\(\)/.test(auth),
+  'using student mode must stop the dashboard nudging towards it');
 
 console.log('First-child student-mode guide is one-time, per-parent, subtle and auto-dismissing.');

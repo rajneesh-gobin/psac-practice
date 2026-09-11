@@ -110,6 +110,12 @@
   not on screen. Keep those two numbers in step with `.pd-switch`.
   ⚠ The ids stay `pd-student-view-*` and the flag stays
   `psac_student_view_guide_seen` — renaming it re-shows the nudge to every parent.
+  ⚠ **The parent dashboard's idle nudge points at the parent's NEXT step**
+  (`_parentIdleNudge()`): add-child while there are no children, then this
+  switch — the same `.attn-nudge` shake plus callout, after 15s idle, up to 3
+  times per page load — until the parent first uses student mode
+  (`psac_student_mode_used:<parentId>`, set in `Auth.switchToStudentSelect()`).
+  `scripts/test-parent-switch-nudge.js` (real browser).
 - Header: below 1100px everything collapses into one labelled **`☰ Menu`**. ⚠ The
   sheet rows are **built from the live header buttons** (`_buildHeaderMenu()`),
   never hard-coded — which controls exist is decided in half a dozen places.

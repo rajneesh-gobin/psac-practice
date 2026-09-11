@@ -2010,7 +2010,7 @@
              teacher powers, so say so before they wonder why nothing appeared. -->
         <div id="verify-teacher-note" class="hidden bg-amber-500/15 border border-amber-400/30 rounded-xl p-3 mb-5 text-left">
           <p class="text-amber-200 text-xs font-bold mb-1">👩‍🏫 Teacher account</p>
-          <p class="text-amber-100/80 text-xs">After you verify your email, an administrator reviews your teacher
+          <p id="verify-teacher-note-body" class="text-amber-100/80 text-xs">After you verify your email, an administrator reviews your teacher
             application. You can sign in straight away - teacher tools appear once you're approved.</p>
         </div>
         <button onclick="Auth.resendVerification()"
@@ -2622,6 +2622,15 @@
               <div class="sh-note-title">Game Zone</div>
               <div class="sh-note-desc">Rs 1 Billion quiz, Quick Fire, Island Explorer &amp; more!</div>
             </button>
+            <!-- Science Labs: NCE only, and only a grade that has a lab. Shown by
+                 _syncLabsNote() in app.js; starts hidden so a primary child never
+                 sees it flash. -->
+            <button id="sh-note-labs" class="sh-note sh-note-blue" onclick="openLabs()" style="display:none">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">🔬</div>
+              <div class="sh-note-title">Science Labs</div>
+              <div class="sh-note-desc">Mix chemicals, make things fizz &amp; pop - real experiments</div>
+            </button>
             <button class="sh-note sh-note-pink" onclick="showScreen('interactive-map')">
               <div class="sh-note-tape"></div>
               <div class="sh-note-icon">🗺️</div>
@@ -3194,6 +3203,12 @@
       <button class="back-btn mb-4" onclick="ErrorHunt.backToList()">← Tous les textes</button>
       <div id="hunt-play-body" class="eh-play"></div>
     </div>
+    <!-- ── Science Labs (NCE) ──
+         Filled by Labs.render() from engine/labs/, fetched on demand. Overlays
+         are appended inside #labs-root so they hide with the screen. -->
+    <div id="screen-labs" class="screen hidden">
+      <div id="labs-root" class="lab-root"></div>
+    </div>
     <div id="screen-minigames" class="screen hidden">
       <button class="back-btn mb-4" data-target="student-home">← Home</button>
       <div class="mg-hero">
@@ -3405,9 +3420,22 @@
         </div>
         <p id="admin-members-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-members-list" class="space-y-2"></div>
-        <div class="text-center mt-4">
-          <button id="admin-members-more" onclick="AdminPanel.loadMoreMembers()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
-        </div>
+        <!-- Numbered pages. The buttons live here rather than in admin.js so the
+             Tailwind CDN sees their classes at its first scan. -->
+        <nav id="admin-members-pager" class="hidden mt-4" aria-label="Member list pages">
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <button id="admin-members-first" type="button" onclick="AdminPanel.membersPage('first')" aria-label="First page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">« First</button>
+            <button id="admin-members-prev" type="button" onclick="AdminPanel.membersPage('prev')" aria-label="Previous page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">‹ Prev</button>
+            <select id="admin-members-page" onchange="AdminPanel.membersPage(this.value)" aria-label="Go to page"
+              class="text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></select>
+            <button id="admin-members-next" type="button" onclick="AdminPanel.membersPage('next')" aria-label="Next page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Next ›</button>
+            <button id="admin-members-last" type="button" onclick="AdminPanel.membersPage('last')" aria-label="Last page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Last »</button>
+          </div>
+        </nav>
       </div>
 
       <!-- Teachers tab -->
@@ -3431,9 +3459,20 @@
              never signed in. The per-teacher detail sits on each card. -->
         <p id="admin-teachers-activity" class="text-xs text-gray-600 dark:text-gray-300 mb-2 hidden" role="status"></p>
         <div id="admin-teachers-list" class="space-y-2"></div>
-        <div class="text-center mt-4">
-          <button id="admin-teachers-more" onclick="AdminPanel.loadMoreTeachers()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
-        </div>
+        <nav id="admin-teachers-pager" class="hidden mt-4" aria-label="Teacher list pages">
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <button id="admin-teachers-first" type="button" onclick="AdminPanel.teachersPage('first')" aria-label="First page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">« First</button>
+            <button id="admin-teachers-prev" type="button" onclick="AdminPanel.teachersPage('prev')" aria-label="Previous page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">‹ Prev</button>
+            <select id="admin-teachers-page" onchange="AdminPanel.teachersPage(this.value)" aria-label="Go to page"
+              class="text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></select>
+            <button id="admin-teachers-next" type="button" onclick="AdminPanel.teachersPage('next')" aria-label="Next page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Next ›</button>
+            <button id="admin-teachers-last" type="button" onclick="AdminPanel.teachersPage('last')" aria-label="Last page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Last »</button>
+          </div>
+        </nav>
       </div>
 
       <!-- Content tab -->
@@ -3456,6 +3495,23 @@
                 <div class="toggle-dot absolute w-4 h-4 bg-white rounded-full shadow top-1 left-1 transition"></div>
               </div>
             </label>
+            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+              <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">👩‍🏫 Teacher Approval</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                <b>Off by default</b> - every teacher application waits for you to approve it, and the
+                teacher is emailed when you do. When on, a teacher is approved as soon as they click the
+                link in their verification email (unverified tier). Anyone you rejected or suspended
+                still needs you. Enforced in the database.
+              </p>
+              <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-sm text-gray-700 dark:text-gray-300">Approve teachers automatically</span>
+                <div class="relative">
+                  <input id="admin-teacher-auto-toggle" type="checkbox" class="sr-only" onchange="AdminPanel.toggleTeacherAutoApprove(this.checked)">
+                  <div class="w-11 h-6 bg-gray-300 dark:bg-gray-600 rounded-full shadow-inner toggle-bg"></div>
+                  <div class="toggle-dot absolute w-4 h-4 bg-white rounded-full shadow top-1 left-1 transition"></div>
+                </div>
+              </label>
+            </div>
             <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
               <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">⚡ Plan Enforcement</h3>
               <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">When on, chapter access is restricted by each family's plan. Leave off during the free period.</p>
@@ -3716,9 +3772,20 @@
         <div id="admin-reports-list">
           <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Click Refresh to load reports.</p>
         </div>
-        <div class="text-center mt-4">
-          <button id="admin-reports-more" onclick="AdminPanel.loadMoreReports()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
-        </div>
+        <nav id="admin-reports-pager" class="hidden mt-4" aria-label="Report list pages">
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <button id="admin-reports-first" type="button" onclick="AdminPanel.reportsPage('first')" aria-label="First page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">« First</button>
+            <button id="admin-reports-prev" type="button" onclick="AdminPanel.reportsPage('prev')" aria-label="Previous page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">‹ Prev</button>
+            <select id="admin-reports-page" onchange="AdminPanel.reportsPage(this.value)" aria-label="Go to page"
+              class="text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></select>
+            <button id="admin-reports-next" type="button" onclick="AdminPanel.reportsPage('next')" aria-label="Next page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Next ›</button>
+            <button id="admin-reports-last" type="button" onclick="AdminPanel.reportsPage('last')" aria-label="Last page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Last »</button>
+          </div>
+        </nav>
       </div>
 
       <!-- Roles tab (super admin only) -->
@@ -3779,9 +3846,20 @@
         </details>
         <p id="admin-roles-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-roles-list" class="space-y-2"></div>
-        <div class="text-center mt-4">
-          <button id="admin-roles-more" onclick="AdminPanel.loadMoreRoles()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
-        </div>
+        <nav id="admin-roles-pager" class="hidden mt-4" aria-label="Role list pages">
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <button id="admin-roles-first" type="button" onclick="AdminPanel.rolesPage('first')" aria-label="First page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">« First</button>
+            <button id="admin-roles-prev" type="button" onclick="AdminPanel.rolesPage('prev')" aria-label="Previous page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">‹ Prev</button>
+            <select id="admin-roles-page" onchange="AdminPanel.rolesPage(this.value)" aria-label="Go to page"
+              class="text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></select>
+            <button id="admin-roles-next" type="button" onclick="AdminPanel.rolesPage('next')" aria-label="Next page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Next ›</button>
+            <button id="admin-roles-last" type="button" onclick="AdminPanel.rolesPage('last')" aria-label="Last page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Last »</button>
+          </div>
+        </nav>
       </div>
 
       <!-- Plans tab (super admin only) -->
@@ -3958,9 +4036,20 @@
         </div>
         <p id="qm-count" class="text-sm text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="qm-list" class="space-y-3" aria-live="polite"></div>
-        <div class="text-center mt-4">
-          <button id="qm-load-more" onclick="AdminPanel.qmLoadMore()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
-        </div>
+        <nav id="qm-pager" class="hidden mt-4" aria-label="Question list pages">
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <button id="qm-first" type="button" onclick="AdminPanel.qmPage('first')" aria-label="First page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">« First</button>
+            <button id="qm-prev" type="button" onclick="AdminPanel.qmPage('prev')" aria-label="Previous page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">‹ Prev</button>
+            <select id="qm-page" onchange="AdminPanel.qmPage(this.value)" aria-label="Go to page"
+              class="text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></select>
+            <button id="qm-next" type="button" onclick="AdminPanel.qmPage('next')" aria-label="Next page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Next ›</button>
+            <button id="qm-last" type="button" onclick="AdminPanel.qmPage('last')" aria-label="Last page"
+              class="border dark:border-gray-600 rounded px-3 py-2 text-sm text-gray-600 dark:text-gray-300 disabled:opacity-50">Last »</button>
+          </div>
+        </nav>
       </div>
     </div>
 

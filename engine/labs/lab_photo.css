@@ -1,0 +1,50 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Photosynthesis Lab - only what labs.css does not already give.
+   Loaded by lab_core.js when the lab opens. Every class is .lab-photo-*.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN: no utility classes.
+   ══════════════════════════════════════════════ */
+
+/* Pondweed / starch-test switch above the picture */
+.lab-photo-rigs { display: flex; width: 100%; }
+.lab-photo-rigs button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 8px; font-size: 0.85rem; }
+
+/* Readout chips over the canvas, top-left, wrapping on a phone */
+.lab-photo-chips {
+  position: absolute; top: 8px; left: 8px; right: 8px; display: flex; flex-wrap: wrap; gap: 5px;
+  pointer-events: none;
+}
+.lab-photo-count b { font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+/* The status strip lies over the bottom of the picture: one line, never three. */
+.lab-photo .lab-contents { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Tools under the picture: four on the pondweed rig, six (3 × 2) on the starch bench */
+.lab-photo-tools.is-six { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lab-photo-tools .lab-tool { position: relative; }
+.lab-photo-toolsign { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; font-style: normal; }
+.lab-photo-toolsign .lab-sign-mini { width: 18px; height: 18px; }
+.lab-photo-danger { border-color: var(--lab-danger); background: var(--lab-danger-soft); color: var(--lab-danger); }
+
+/* Set-up panel: labelled rows of option buttons */
+.lab-photo-set h2 { margin-bottom: 8px; }
+.lab-photo-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.lab-photo-label { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); }
+.lab-photo-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-photo-opts.is-wide { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.lab-photo-opt {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  min-width: 44px; min-height: 44px; padding: 4px 10px; border-radius: 10px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface-2); color: var(--lab-ink); font: inherit; font-size: 0.8rem; font-weight: 700;
+  line-height: 1.2; text-align: center; cursor: pointer; touch-action: manipulation;
+}
+.lab-photo-opts:not(.is-wide) .lab-photo-opt { flex: 1 1 44px; }
+.lab-photo-opt small { font-size: 0.66rem; font-weight: 500; color: var(--lab-muted); }
+.lab-photo-opt:hover { border-color: var(--lab-accent); }
+.lab-photo-opt[aria-pressed="true"] { background: var(--lab-accent); border-color: var(--lab-accent); color: var(--lab-accent-ink); }
+.lab-photo-opt[aria-pressed="true"] small { color: var(--lab-accent-ink); opacity: 0.85; }
+.lab-photo-opt:active { transform: scale(0.97); }
+
+/* Under an equation in a discovery card */
+.lab-photo-over { margin: 2px 0 6px !important; font-size: 0.78rem !important; color: var(--lab-muted); }
+
+@media (prefers-reduced-motion: reduce) { .lab-photo-opt:active { transform: none; } }
+.kid-calm .lab-photo-opt:active { transform: none; }

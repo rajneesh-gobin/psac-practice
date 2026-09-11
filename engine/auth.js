@@ -1260,6 +1260,9 @@ const Auth = (() => {
     _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
     ACTIVE_STUDENT_ID = sess.id;
     Object.assign(DB, progress);
+    // Settings a parent or an admin changed since this device last signed
+    // in. Not awaited: the dashboard must not wait on it.
+    _refreshChildSettings(sess.id, true);
 
     applyTheme(_preferredTheme(DB.theme));
     renderDashboard();
@@ -1402,6 +1405,54 @@ const Auth = (() => {
     });
   }
 
+  // ── Settings changed elsewhere (the parent's Controls tab, Admin › Members) ─
+  // students.settings is the master copy, and DB.restrictions used to be copied
+  // from it ONLY at PIN login - so a lock set afterwards stayed invisible until
+  // the child next typed their PIN. Read again on resume and on the session
+  // guard's focus / online / 30-minute check.
+  // ⚠ Never mid-exam or mid-round: a timed paper that loses a tool halfway is
+  //   worse than a lock that lands one screen later. Deferred, then retried.
+  // ⚠ A failed, empty or malformed read changes NOTHING. Falling back to blank
+  //   settings would unlock everything the parent locked.
+  // ⚠ A parent previewing a child is not this path (_parentProfile is set, and
+  //   their own Controls tab is the writer).
+  let _settingsRetry = null;
+  let _settingsLastRead = 0;
+  function _onTimedScreen() {
+    return ['screen-exam', 'screen-practice'].some(id => {
+      const el = document.getElementById(id);
+      return !!el && !el.classList.contains('hidden');
+    });
+  }
+
+  async function _refreshChildSettings(studentId, force) {
+    if (!_sb || _parentProfile || typeof SupportSettings === 'undefined') return;
+    if (!force && Date.now() - _settingsLastRead < 60000) return;
+    _settingsLastRead = Date.now();
+    let server = null;
+    try {
+      const r = await _sb.from('students').select('settings').eq('id', studentId).maybeSingle();
+      if (r.error || !r.data) return;
+      server = r.data.settings;
+    } catch (_) { return; }
+    if (!server || typeof server !== 'object' || Array.isArray(server)) return;
+    _applyChildSettings(studentId, server);
+  }
+
+  function _applyChildSettings(studentId, server) {
+    clearTimeout(_settingsRetry);
+    if (ACTIVE_STUDENT_ID !== studentId || _parentProfile) return;
+    const merged = SupportSettings.mergeServer(DB.restrictions, server);
+    if (!SupportSettings.differs(DB.restrictions, merged)) return;
+    if (_onTimedScreen()) {
+      _settingsRetry = setTimeout(() => _applyChildSettings(studentId, server), 60000);
+      return;
+    }
+    DB.restrictions = merged;
+    if (typeof save === 'function') save(DB);
+    if (typeof MiniGames !== 'undefined' && MiniGames.syncTile) MiniGames.syncTile();
+  }
+
   function _startSessionGuard(studentId, version) {
     _stopSessionGuard(); // clear any previous guard first
     _sessionEndedHandled = false;
@@ -1422,6 +1473,7 @@ const Auth = (() => {
           }
           if (typeof toast === 'function') toast('⚠️ Your account was logged in on another device. You have been signed out.', 6000);
         }
+        if (data && data.session_version === version) _refreshChildSettings(studentId);
       } catch(_) { /* offline - allow to continue */ }
     };
 
@@ -1908,12 +1960,17 @@ const Auth = (() => {
   // so that heading sent people to wait on an inbox that would stay empty.
   // Measured 2026-09-09 on a real parent's account: it was already CONFIRMED,
   // and every route this screen offered first was one that could not help.
-  function _showVerifyScreen(email, mode, isTeacher) {
+  function _showVerifyScreen(email, mode, isTeacher, autoApprove) {
     _pendingVerifyEmail = email;
     const set = (id, txt) => { const el = _el(id); if (el) el.textContent = txt; };
     set('verify-email-addr', email);
     const note = _el('verify-teacher-note');
     if (note) note.classList.toggle('hidden', mode !== 'sent' || !isTeacher);
+    // Wording only - request_teacher_access() makes the actual decision, when
+    // they first sign in after clicking the link.
+    set('verify-teacher-note-body', autoApprove
+      ? 'Click the link in the email, then sign in - your teacher tools will be ready straight away.'
+      : "After you verify your email, an administrator reviews your teacher application. You can sign in straight away - teacher tools appear once you're approved, and we'll email you when that happens.");
 
     if (mode === 'exists') {
       set('verify-email-title', 'This email is already registered');
@@ -2037,7 +2094,7 @@ const Auth = (() => {
       return;
     }
 
-    _showVerifyScreen(email, 'sent', role === 'teacher');
+    _showVerifyScreen(email, 'sent', role === 'teacher', gs?.teacher_auto_approve === true);
   }
 
   function backToSignUp() {
@@ -2243,6 +2300,19 @@ const Auth = (() => {
       toast(data?.error === 'suspended'
         ? 'Your teacher access is suspended. Contact the administrator.'
         : 'Could not send your application.', 3500);
+      return data;
+    }
+    if (data.note === 'auto_approved') {
+      // Approved by request_teacher_access() itself (the admin's auto-approve
+      // switch). Mirror what the next sign-in would work out, so the tools
+      // appear now instead of after a reload.
+      _teacherStatus = 'approved';
+      _isTeacherUser = true;
+      if (_parentProfile) { _parentProfile.role = 'teacher'; _parentProfile.teacher_status = 'approved'; }
+      const tBtn = document.getElementById('btn-open-teacher');
+      if (tBtn) { tBtn.classList.remove('hidden'); tBtn.classList.add('flex'); }
+      toast('You are approved - your teacher tools are ready. 👩‍🏫', 4000);
+      renderParentDashboard();
       return data;
     }
     _teacherStatus = data.status;
@@ -3071,6 +3141,9 @@ const Auth = (() => {
   // signing in on a device with no parent session (nothing to list).
   let _testOnSwitch = null;
   async function switchToStudentSelect() {
+    // Once this parent has handed the device over, the dashboard stops nudging
+    // them towards the switch (app.js _parentIdleNudge).
+    if (typeof _markStudentModeUsed === 'function') _markStudentModeUsed();
     await _offerPinBeforeSwitch(() => (_testOnSwitch || _doSwitchToStudentSelect)());
   }
 

@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v306';
+const SHELL_VERSION = 'shell-v307';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -82,6 +82,7 @@ const SHELL_FILES = [
   //   on demand, and the default fetch branch (cache-first into SHELL_CACHE)
   //   caches each one the first time it is actually used, so a teacher still
   //   works offline after opening the screen once.
+  //   engine/labs/ (Science Labs, NCE only) is absent for the same reason.
   '/engine/calendar.js',
   '/engine/search.js',
   '/engine/classroom.js',

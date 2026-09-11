@@ -1,0 +1,100 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Materials Tester - only what engine/labs/labs.css does not
+   already give every lab. Every class here starts .lab-materials.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN.
+   ⚠ Nothing here animates or transforms .screen or its ancestors.
+   ⚠ Grade 4: tap targets are at least 44px, pictures are big, words are few.
+   ══════════════════════════════════════════════ */
+
+/* Over the picture: the station and its status stacked top-left, the result
+   top-right - clear of the object under test, which the drawing keeps low. */
+.lab-materials-tl { position: absolute; top: 10px; left: 10px; max-width: 54%; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.lab-materials-chip { flex-wrap: wrap; }
+.lab-materials-status { display: flex; flex-wrap: wrap; gap: 4px; }
+.lab-materials-verdict {
+  position: absolute; top: 10px; right: 10px; max-width: 42%;
+  padding: 5px 12px; border-radius: 14px; background: var(--lab-ok-soft); color: var(--lab-ok);
+  border: 2px solid var(--lab-ok); font-size: 0.95rem; font-weight: 800; line-height: 1.2; text-align: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.lab-materials-verdict.is-bad { background: var(--lab-warn-soft); color: var(--lab-warn); border-color: var(--lab-warn); }
+
+/* Read-aloud and fact buttons: 44px for small fingers. */
+.lab-materials .lab-coach-tip { width: 44px; height: 44px; }
+.lab-materials .lab-btn-sm { min-height: 44px; }
+.lab-materials-sayrow { display: flex; align-items: flex-start; gap: 8px; }
+.lab-materials-sayrow .lab-guide-say { flex: 1; }
+
+.lab-materials-controls { display: flex; flex-direction: column; gap: 8px; }
+
+/* Seven stations: four to a row on a phone. */
+.lab-materials-stations { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; }
+.lab-materials-st {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px; min-width: 0;
+  padding: 4px 3px; border-radius: 12px; border: 1px solid var(--lab-rule); background: var(--lab-surface); color: var(--lab-ink);
+  font-size: 0.7rem; font-weight: 700; line-height: 1.1; text-align: center; cursor: pointer;
+}
+.lab-materials-st span { font-size: 1.35rem; line-height: 1; }
+.lab-materials-st[aria-pressed="true"] { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); }
+.lab-materials-ask { margin: 0; font-size: 0.9rem; line-height: 1.4; }
+
+.lab-materials-opts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.lab-materials-opt.is-dark { background: #1F2937; border-color: #1F2937; color: #F9FAFB; }
+.lab-materials-power button { min-height: 44px; }
+.lab-materials-power button[data-power="socket"][aria-pressed="false"] { color: var(--lab-danger); }
+
+/* The tray: big pictures, short names. */
+.lab-materials-tray { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.lab-materials-obj {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  min-height: 72px; min-width: 0; padding: 6px 4px; border-radius: 12px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface-2); color: var(--lab-ink); cursor: pointer; touch-action: manipulation; user-select: none;
+}
+.lab-materials-obj b { font-size: 0.72rem; line-height: 1.15; text-align: center; }
+.lab-materials-obj i { position: absolute; top: 3px; right: 6px; font-style: normal; font-size: 0.72rem; font-weight: 800; color: var(--lab-ok); }
+.lab-materials-obj.is-on { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); }
+.lab-materials-obj:hover { border-color: var(--lab-accent); }
+.lab-materials-ico { width: 36px; height: 36px; display: block; flex: 0 0 auto; }
+.lab-materials-drag { font-size: 0.72rem; }
+@media (pointer: coarse) { .lab-materials-drag { display: none; } }
+
+/* Sort it */
+.lab-materials-sortpick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.lab-materials-sortpick .lab-btn[aria-pressed="true"] { background: var(--lab-accent); border-color: var(--lab-accent); color: var(--lab-accent-ink); }
+.lab-materials-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.lab-materials-col { padding: 8px; border-radius: 12px; background: var(--lab-surface-2); border: 1px solid var(--lab-rule); min-width: 0; }
+.lab-materials-col h3 { font-size: 0.9rem; font-weight: 800; }
+.lab-materials-col .lab-hint { margin: 2px 0 6px; }
+.lab-materials-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-materials-chipobj {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 2px 2px; border-radius: 999px; min-width: 0;
+  background: var(--lab-surface); border: 1px solid var(--lab-rule); font-size: 0.74rem; font-weight: 700; color: var(--lab-ink);
+}
+.lab-materials-chipobj .lab-materials-ico { width: 26px; height: 26px; }
+button.lab-materials-chipobj { min-height: 44px; cursor: pointer; border-style: dashed; }
+.lab-materials-untested-h { margin: 12px 0 6px; font-size: 0.85rem; font-weight: 800; }
+.lab-materials-untested-h small { font-weight: 600; color: var(--lab-muted); }
+
+/* Right material for the job */
+.lab-materials-joblist { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.lab-materials-jobico { font-size: 1.5rem; flex: 0 0 auto; }
+.lab-item.lab-materials-done { border-color: var(--lab-ok); background: var(--lab-ok-soft); }
+.lab-materials-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; text-align: left; }
+.lab-materials-choice {
+  display: flex; align-items: center; gap: 8px; min-height: 60px; padding: 6px 8px; border-radius: 12px;
+  border: 2px solid var(--lab-rule); background: var(--lab-surface-2); color: var(--lab-ink); cursor: pointer; min-width: 0;
+}
+.lab-materials-choice span { display: flex; flex-direction: column; min-width: 0; }
+.lab-materials-choice b { font-size: 0.9rem; }
+.lab-materials-choice small { font-size: 0.7rem; color: var(--lab-muted); line-height: 1.2; }
+.lab-materials-choice.is-right { border-color: var(--lab-ok); background: var(--lab-ok-soft); }
+.lab-materials-choice.is-wrong { border-color: var(--lab-danger); background: var(--lab-danger-soft); }
+.lab-materials-jobcard .lab-quiz-fb { text-align: left; }
+.lab-materials-bigico .lab-materials-ico { width: 64px; height: 64px; margin: 0 auto; }
+.lab-materials-guess .lab-btn { flex: 1 1 130px; }
+
+/* Notebook */
+.lab-materials-table th[scope="row"] { font-weight: 700; white-space: nowrap; }
+.lab-materials-table td { white-space: nowrap; font-size: 0.74rem; }
+.lab-materials-table thead th { font-size: 1rem; text-transform: none; letter-spacing: 0; }
+.lab-materials-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.lab-log li.lab-materials-log-bad { border-left-color: var(--lab-danger); }

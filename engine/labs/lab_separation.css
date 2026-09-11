@@ -1,0 +1,67 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Separation Station - only what labs.css does not already give.
+   Loaded by lab_core.js when the lab opens. Every class is .lab-separation-*.
+   ⚠ Injected markup is never scanned by the Tailwind CDN: define it all here.
+   ══════════════════════════════════════════════ */
+
+/* Five tools on the crystallisation bench: let them wrap instead of squeezing. */
+.lab-separation-tools { grid-template-columns: repeat(auto-fit, minmax(62px, 1fr)); }
+
+/* The technique picker: two by two on a phone, one row when there is room. */
+.lab-separation-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+@media (min-width: 560px) { .lab-separation-modes { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lab-separation-modes button {
+  min-height: 44px; min-width: 0; padding: 4px 8px; border-radius: 12px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface); color: var(--lab-ink); font-weight: 700; font-size: 0.82rem; line-height: 1.15; cursor: pointer;
+}
+.lab-separation-modes button[aria-pressed="true"] { background: var(--lab-accent); border-color: var(--lab-accent); color: var(--lab-accent-ink); }
+
+/* One row per piece of apparatus, with its choices as buttons. */
+.lab-separation-part { padding: 9px 0; border-top: 1px solid var(--lab-rule); }
+.lab-shelf-head + .lab-separation-part { border-top: 0; padding-top: 0; }
+.lab-separation-part-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.lab-separation-part-head > span[aria-hidden] { font-size: 1.2rem; flex: 0 0 auto; }
+.lab-separation-part-name { display: flex; flex-direction: column; min-width: 0; }
+.lab-separation-part-name b { font-size: 0.85rem; line-height: 1.2; }
+.lab-separation-part-name small { font-size: 0.72rem; color: var(--lab-muted); line-height: 1.3; }
+.lab-separation-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-separation-opt {
+  flex: 1 1 128px; min-width: 0; min-height: 44px; padding: 6px 10px; border-radius: 10px;
+  border: 1px solid var(--lab-rule); background: var(--lab-surface-2); color: var(--lab-ink);
+  font-weight: 700; font-size: 0.8rem; line-height: 1.2; text-align: center; cursor: pointer; touch-action: manipulation;
+}
+.lab-separation-opt:hover { border-color: var(--lab-accent); }
+.lab-separation-opt[aria-pressed="true"] { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); color: var(--lab-accent); }
+.lab-separation-opt[aria-pressed="true"]::before { content: "✓ "; }
+.lab-separation-rigstate { margin: 8px 0 0; font-size: 0.8rem; font-weight: 700; color: var(--lab-muted); }
+.lab-separation-rigstate.is-ok { color: var(--lab-ok); }
+
+.lab-separation-sol th, .lab-separation-sol td { text-align: center; padding: 5px 3px; font-variant-numeric: tabular-nums; }
+
+/* Which technique? */
+.lab-separation-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.lab-separation-chip {
+  min-height: 44px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface-2); color: var(--lab-ink); font-weight: 700; font-size: 0.75rem; cursor: pointer;
+}
+.lab-separation-chip[aria-pressed="true"] { border: 2px solid var(--lab-accent); }
+.lab-separation-chip.is-done { color: var(--lab-ok); border-color: var(--lab-ok); }
+.lab-separation-mix { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 12px; background: var(--lab-accent-soft); margin-bottom: 10px; }
+.lab-separation-mix b { font-size: 0.95rem; }
+.lab-separation-mix small { font-size: 0.8rem; color: var(--lab-muted); }
+.lab-separation-q { margin: 0 0 8px; font-size: 0.85rem; font-weight: 800; }
+.lab-separation-q.is-ok { color: var(--lab-ok); }
+.lab-separation-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.lab-separation-why { display: flex; flex-direction: column; gap: 6px; }
+.lab-separation-choice {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 48px; min-width: 0; padding: 8px 10px;
+  border-radius: 12px; border: 1px solid var(--lab-rule); background: var(--lab-surface-2); color: var(--lab-ink);
+  font-size: 0.8rem; line-height: 1.35; text-align: left; cursor: pointer;
+}
+.lab-separation-choice b { font-size: 0.85rem; }
+.lab-separation-choice small { font-size: 0.7rem; color: var(--lab-muted); }
+.lab-separation-choice:hover { border-color: var(--lab-accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-separation-opt:active, .lab-separation-choice:active { transform: none; }
+}

@@ -45,6 +45,8 @@ const GROUPS = {
   forum: ['Forum'],
   teacher: ['TeacherInsights', 'TeacherHome', 'TeacherWorkspace', 'TeacherGuestClasses',
     'TeacherMode', 'TeacherClassroomDetail'],
+  // Science Labs (NCE only) - engine/labs/, docs/labs/PLAN.md.
+  labs: ['Labs'],
 };
 
 let pass = 0;
@@ -83,7 +85,9 @@ const server = http.createServer((req, res) => {
   const files = Object.values((reg.match(/const GROUPS = \{([\s\S]*?)\n  \};/) || [, ''])[1].match(/'([^']+\.js)'/g) || [])
     .map(s => s.replace(/'/g, ''));
 
-  ok(files.length === 8, 'RoleModules lists all eight files', files.length + ' found');
+  // 8 role files (admin, forum, six teacher) + the Science Labs shell (each lab
+  // then loads its own files through Labs, not through RoleModules).
+  ok(files.length === 9, 'RoleModules lists all nine files', files.length + ' found');
 
   const stillTagged = files.filter(f => html.includes('<script src="' + f + '"'));
   ok(stillTagged.length === 0, 'none of them is a blocking <script> in index.html', stillTagged.join(', '));

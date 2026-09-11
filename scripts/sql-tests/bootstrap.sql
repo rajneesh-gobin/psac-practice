@@ -23,7 +23,8 @@ GRANT USAGE ON SCHEMA public, extensions, auth, storage TO anon, authenticated, 
 
 CREATE TABLE IF NOT EXISTS auth.users (
   id    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  email text
+  email text,
+  email_confirmed_at timestamptz
 );
 
 CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid

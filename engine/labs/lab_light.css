@@ -1,0 +1,37 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Light Bench - only what engine/labs/labs.css does not
+   already give every lab. Every class here starts .lab-light-.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN.
+   ⚠ Nothing here animates or transforms .screen or its ancestors.
+   ══════════════════════════════════════════════ */
+
+/* Source chip, top-left over the canvas (the Mixing Bench's pH chip spot). */
+.lab-light-chip { position: absolute; top: 10px; left: 10px; max-width: calc(100% - 20px); flex-wrap: wrap; }
+/* The canvas is a dim room, so the strip along its foot is dark too. */
+.lab-light-contents { background: linear-gradient(to top, rgba(12, 18, 22, 0.85), transparent); color: #D6E2E8; }
+
+.lab-light-controls { display: flex; flex-direction: column; gap: 8px; }
+
+/* Four big turn buttons: one row on a wide screen, two rows on a phone. */
+.lab-light-turn { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; }
+.lab-light-rot { min-height: 48px; padding: 0 8px; font-size: 0.85rem; }
+.lab-light-rot span { font-size: 1.25rem; line-height: 1; }
+
+.lab-light-refrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; color: var(--lab-muted); }
+.lab-light-refrow .lab-seg button { min-height: 44px; }
+
+.lab-light-tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.lab-light-drag { font-size: 0.72rem; }
+@media (pointer: coarse) { .lab-light-drag { display: none; } }
+
+/* Shelf */
+.lab-light-shelf-h { font-size: 0.85rem !important; }
+.lab-light-shelf-2 { margin-top: 12px; }
+.lab-light-ico { flex: 0 0 auto; width: 32px; height: 32px; display: grid; place-items: center; font-size: 1.35rem;
+  border-radius: 10px; background: var(--lab-surface); border: 1px solid var(--lab-rule); }
+.lab-item.lab-light-on { border-color: var(--lab-accent); background: var(--lab-accent-soft); box-shadow: inset 0 0 0 1px var(--lab-accent); }
+
+/* Notebook: readings taken the wrong way stay visible, struck through. */
+.lab-light-bad { color: var(--lab-danger); font-weight: 700; }
+.lab-light-bad-row td:not(:last-child) { text-decoration: line-through; color: var(--lab-muted); }
+.lab-log li.lab-light-log-bad { border-left-color: var(--lab-danger); }

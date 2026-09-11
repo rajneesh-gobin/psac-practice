@@ -155,6 +155,102 @@ const GradeAccess = (() => {
   return { ownGrade, liveGrades, granted, allowed, allows, childChoices, gameGrades, flagsFor };
 })();
 
+// ── A child's parent controls: the master copy and the device's copy ────────
+// students.settings is the master copy. DB.restrictions in the progress blob is
+// the device's copy, taken at PIN login and refreshed by
+// Auth._refreshChildSettings(); Admin › Members edits the master on a family's
+// behalf. Pure, so it is tested under Node (scripts/test-support-settings.js).
+// ⚠ A key NOT in PARENT_KEYS belongs to the device alone and must survive a
+//   refresh - dropping it would reset device state no parent ever set.
+const SupportSettings = (() => {
+  const PARENT_KEYS = ['lockedChapters', 'maxDifficulty', 'examDisabled', 'hintsDisabled',
+    'minigamesDisabled', 'allowedGrades', 'crossGradeSearch', 'crossGradePractice', 'games'];
+  const LEVELS = { 1: 'Basic', 2: 'Medium', 3: 'Hard', 4: 'Word problems' };
+
+  const _obj = x => (x && typeof x === 'object' && !Array.isArray(x)) ? x : {};
+  const _canon = v => JSON.stringify(v === undefined ? null : v, (k, x) =>
+    (x && typeof x === 'object' && !Array.isArray(x))
+      ? Object.keys(x).sort().reduce((o, key) => { o[key] = x[key]; return o; }, {})
+      : x);
+
+  function mergeServer(local, server) {
+    const out = {};
+    const l = _obj(local), s = _obj(server);
+    Object.keys(l).forEach(k => { if (!PARENT_KEYS.includes(k)) out[k] = l[k]; });
+    Object.keys(s).forEach(k => { out[k] = s[k]; });
+    if (!Array.isArray(out.lockedChapters)) out.lockedChapters = [];
+    return out;
+  }
+
+  function differs(a, b) {
+    return PARENT_KEYS.some(k => _canon(_obj(a)[k]) !== _canon(_obj(b)[k]));
+  }
+
+  // Plain words for every control that is NOT at its default. An empty list
+  // means "nothing has been changed", which is itself the answer to half the
+  // support calls.
+  function describe(settings) {
+    const s = _obj(settings), out = [];
+    if (s.examDisabled) out.push('Exam mode is switched off');
+    if (s.hintsDisabled) out.push('Hints are switched off');
+    if (s.minigamesDisabled) out.push('The Game Zone is switched off');
+    const lvl = Number(s.maxDifficulty);
+    if (lvl >= 1 && lvl < 4) out.push(`Questions stop at Level ${lvl} (${LEVELS[lvl]})`);
+    const locked = Array.isArray(s.lockedChapters) ? s.lockedChapters.length : 0;
+    if (locked) out.push(`${locked} chapter${locked === 1 ? '' : 's'} locked by the parent`);
+    if (Array.isArray(s.allowedGrades)) {
+      if (s.allowedGrades.length) out.push(`Extra grades unlocked: ${s.allowedGrades.join(', ')}`);
+    } else if (s.crossGradePractice || s.crossGradeSearch) {
+      out.push('Every other grade unlocked (older setting)');
+    }
+    if (s.games && typeof s.games === 'object') out.push('Game Zone settings customised');
+    return out;
+  }
+
+  // Why a chapter is open or closed for this child, layer by layer. Every
+  // reason is collected, not just the first: "locked by the parent AND
+  // switched off site-wide" needs two fixes, and naming one hides the other.
+  // ctx: { chapterId, packId, packGrade, childGrade, settings, grantedGrades,
+  //        global, planAllowed, entitled, expired, free, accountDisabled,
+  //        blockedUntil, now }
+  function explainChapter(ctx) {
+    const c = ctx || {}, g = _obj(c.global), s = _obj(c.settings);
+    const packGrade = Number(c.packGrade), reasons = [];
+    const now = c.now ? new Date(c.now) : new Date();
+    if (c.accountDisabled) reasons.push({ who: 'account', text: 'The parent account is disabled' });
+    if (c.blockedUntil && new Date(c.blockedUntil) > now) {
+      reasons.push({ who: 'account', text: 'The parent account is blocked for now' });
+    }
+    if ((g.disabled_grades || []).map(Number).includes(packGrade)) {
+      reasons.push({ who: 'admin', text: `Grade ${packGrade} is switched off site-wide` });
+    }
+    if ((g.disabled_subjects || []).includes(c.packId)) {
+      reasons.push({ who: 'admin', text: 'This subject is switched off site-wide' });
+    }
+    if ((g.disabled_chapters || []).includes(c.chapterId)) {
+      reasons.push({ who: 'admin', text: 'This chapter is switched off site-wide' });
+    }
+    if (packGrade !== Number(c.childGrade)
+        && !(c.grantedGrades || []).map(Number).includes(packGrade)) {
+      reasons.push({ who: 'parent', text: `Grade ${packGrade} is not unlocked for this child` });
+    }
+    if ((s.lockedChapters || []).includes(c.chapterId)) {
+      reasons.push({ who: 'parent', text: 'Locked by the parent' });
+    }
+    if (!c.free) {
+      if (c.expired) {
+        if (!c.entitled) reasons.push({ who: 'expiry', text: 'Account expired - only chapters bought with credits stay open' });
+      } else if (g.plan_enforcement_enabled === true && Array.isArray(c.planAllowed)
+                 && !c.planAllowed.includes(c.chapterId) && !c.entitled) {
+        reasons.push({ who: 'plan', text: 'Not included in the family’s plan' });
+      }
+    }
+    return { open: reasons.length === 0, reasons };
+  }
+
+  return { PARENT_KEYS, LEVELS, mergeServer, differs, describe, explainChapter };
+})();
+
 function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
   const shuffled = shuffle([...new Set(options.filter(o => o !== answer))]);
   const finalOpts = shuffle([answer, ...shuffled.slice(0, 3)]);
@@ -682,4 +778,4 @@ function _paperWatermarkCSS(text, opts) {
 //   paper builders in from the command line, and a paper generated there has
 //   to be the SAME document the app prints. The browser ignores this line -
 //   `module` is undefined there and every function above is already a global.
-if (typeof module !== 'undefined' && module.exports) module.exports = { _paperWatermarkCSS };
+if (typeof module !== 'undefined' && module.exports) module.exports = { _paperWatermarkCSS, SupportSettings };

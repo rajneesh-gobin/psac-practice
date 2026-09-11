@@ -498,6 +498,11 @@
   status = 200
 
 [[redirects]]
+  from   = "/api/teacher-approved-email"
+  to     = "/.netlify/functions/teacher-approved-email"
+  status = 200
+
+[[redirects]]
   from   = "/api/admin-teacher-activity"
   to     = "/.netlify/functions/admin-teacher-activity"
   status = 200

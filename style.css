@@ -1863,14 +1863,6 @@ body.has-bottom-nav .pr-actions { bottom: calc(4rem + env(safe-area-inset-bottom
 .feedback-pop   { animation: feedbackPop   0.38s cubic-bezier(.34,1.56,.64,1) both; }
 .feedback-shake { animation: feedbackShake 0.45s ease both; }
 
-/* A gentle, one-time parent onboarding nudge. This deliberately stops after
-   three shakes: continuous movement would look like an error or a broken UI. */
-@keyframes studentViewNudge {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-4px); }
-  40%, 80% { transform: translateX(4px); }
-}
-.student-view-nudge { animation: studentViewNudge 0.55s ease-in-out 2; }
 @keyframes feedbackEncourage {
   0%   { opacity: 0; transform: translateY(5px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -1878,7 +1870,7 @@ body.has-bottom-nav .pr-actions { bottom: calc(4rem + env(safe-area-inset-bottom
 .feedback-encourage { animation: feedbackEncourage 0.26s ease-out both; }
 .feedback-buddy { display: inline-block; flex: 0 0 auto; }
 @media (prefers-reduced-motion: reduce) {
-  .feedback-pop, .feedback-shake, .feedback-encourage, .student-view-nudge, .mcq-opt.correct, .mcq-opt.wrong { animation: none; }
+  .feedback-pop, .feedback-shake, .feedback-encourage, .mcq-opt.correct, .mcq-opt.wrong { animation: none; }
 }
 .kid-calm .feedback-pop, .kid-calm .feedback-shake, .kid-calm .feedback-encourage,
 .kid-calm .mcq-opt.correct, .kid-calm .mcq-opt.wrong { animation: none !important; }

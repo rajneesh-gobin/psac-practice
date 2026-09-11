@@ -11,13 +11,17 @@ function element() {
   Object.defineProperty(el, 'innerHTML', { get() { return this._html; }, set(v) { this._html = v; this.options.length = 0; [...String(v).matchAll(/value="([^"]*)"[^>]*>([^<]*)/g)].forEach(x => this.options.push({ value: x[1], textContent: x[2] })); } });
   return el;
 }
-for (const id of ['qm-grade','qm-subject','qm-chapter','qm-difficulty','qm-search','qm-include-unpublished','qm-list','qm-load-more','qm-has-image','qm-protected']) nodes[id] = element();
+for (const id of ['qm-grade','qm-subject','qm-chapter','qm-difficulty','qm-search','qm-include-unpublished','qm-list','qm-count','qm-has-image','qm-protected']) nodes[id] = element();
 const filters = [];
 const packs = [{id:'grade5-english',name:'English',grade:5,chapters:[{id:'verbs',name:'Verbs'}]}, {id:'grade1-english',name:'English',grade:1,comingSoon:true,chapters:[]}];
 const ctx = vm.createContext({
   SUBJECT_PACKS:packs, document:{getElementById:id=>nodes[id],createElement:element},
   _esc:s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'),
   _setCount(){},
+  // The shared admin pager lives outside the QM slice this test runs.
+  _setRangeCount(){}, _renderPager(){}, _pagerTarget(){ return null; }, _pagerScroll(){},
+  _lastPage:(t,s)=>typeof t==='number'?Math.max(1,Math.ceil(t/s)):null,
+  _pagerState:(page,last,shown,size)=>({lastPage:last,hasNext:last!==null?page<last:shown===size}),
   _sb:{from(){
     const q = {};
     for (const method of ['select','eq','order','range','in','ilike','or']) q[method]=(...args)=>{filters.push([method,...args]);return q;};

@@ -130,7 +130,7 @@ function filtersFor(kind, status, search) {
   // Every AdminPanel.x( named in the reports panel must be exported, or the
   // control is a button that throws.
   const panelStart = html.indexOf('id="admin-tab-reports"');
-  const panel = html.slice(panelStart, html.indexOf('</div>', html.indexOf('admin-reports-more')));
+  const panel = html.slice(panelStart, html.indexOf('</nav>', html.indexOf('id="admin-reports-pager"')));
   for (const m of panel.matchAll(/AdminPanel\.(\w+)\(/g))
     assert.ok(new RegExp(`\\b${m[1]}\\b`).test(adminExports), 'AdminPanel must export ' + m[1]);
 

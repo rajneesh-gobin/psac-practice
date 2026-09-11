@@ -1,0 +1,63 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Quadrat Field - only what labs.css does not already give.
+   Loaded by lab_core.js when the lab opens. Every class is .lab-quadrat-*.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN: no utility classes.
+   ══════════════════════════════════════════════ */
+
+/* Plot / quadrat switch above the picture */
+.lab-quadrat-views { display: flex; width: 100%; }
+.lab-quadrat-views button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 8px; font-size: 0.85rem; }
+
+/* Readout chips over the canvas, top-left, wrapping on a phone */
+.lab-quadrat-chips {
+  position: absolute; top: 8px; left: 8px; right: 8px; display: flex; flex-wrap: wrap; gap: 5px;
+  pointer-events: none;
+}
+.lab-quadrat-count b { font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.lab-quadrat .lab-contents { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lab-quadrat canvas { touch-action: manipulation; cursor: pointer; }
+
+/* Gloves toggle: the shared goggles pill, with its own words */
+.lab-quadrat-gloves { font-size: 0.85rem; }
+
+/* Every control in this lab is a 44px tap target, the shared small ones included */
+.lab-quadrat .lab-coach-tip { width: 44px; height: 44px; }
+.lab-quadrat .lab-btn-sm { min-height: 44px; }
+.lab-quadrat .lab-link { min-height: 44px; }
+
+/* Set-up panel: labelled rows of option buttons */
+.lab-quadrat-set h2 { margin-bottom: 8px; }
+.lab-quadrat-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.lab-quadrat-label { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); }
+.lab-quadrat-opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 6px; }
+.lab-quadrat-opts.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lab-quadrat-opt {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  min-width: 44px; min-height: 44px; padding: 4px 10px; border-radius: 10px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface-2); color: var(--lab-ink); font: inherit; font-size: 0.8rem; font-weight: 700;
+  line-height: 1.2; text-align: center; cursor: pointer; touch-action: manipulation;
+}
+.lab-quadrat-opt small { font-size: 0.66rem; font-weight: 500; color: var(--lab-muted); }
+.lab-quadrat-opt:hover { border-color: var(--lab-accent); }
+.lab-quadrat-opt[aria-pressed="true"] { background: var(--lab-accent); border-color: var(--lab-accent); color: var(--lab-accent-ink); }
+.lab-quadrat-opt[aria-pressed="true"] small { color: var(--lab-accent-ink); opacity: 0.85; }
+.lab-quadrat-opt.is-warn { border-color: var(--lab-warn); background: var(--lab-warn-soft); color: var(--lab-warn); }
+.lab-quadrat-opt:active { transform: scale(0.97); }
+
+/* Notebook: the working under the table, and the running-estimate graph */
+.lab-quadrat-sum { margin: 0 0 4px; font-size: 0.82rem; line-height: 1.45; }
+.lab-quadrat-true { margin: 0 0 8px; font-size: 0.82rem; font-weight: 700; color: var(--lab-ok); }
+.lab-quadrat-chart { display: block; width: 100%; height: auto; margin: 4px 0 10px; }
+.lab-quadrat-chart .is-axis { stroke: var(--lab-rule); }
+.lab-quadrat-chart .is-run { stroke: var(--lab-accent); fill: none; }
+.lab-quadrat-chart .is-dot { fill: var(--lab-accent); }
+.lab-quadrat-chart .is-true { stroke: var(--lab-ok); stroke-dasharray: 5 4; }
+.lab-quadrat-chart text { fill: var(--lab-muted); font-size: 10px; font-family: system-ui, sans-serif; }
+.lab-quadrat-chart text.is-true-t { fill: var(--lab-ok); font-weight: 700; }
+.lab-table td small { color: var(--lab-muted); }
+
+/* Under a formula in a discovery card */
+.lab-quadrat-note { margin: 2px 0 6px !important; font-size: 0.78rem !important; color: var(--lab-muted); }
+
+@media (prefers-reduced-motion: reduce) { .lab-quadrat-opt:active { transform: none; } }
+.kid-calm .lab-quadrat-opt:active { transform: none; }

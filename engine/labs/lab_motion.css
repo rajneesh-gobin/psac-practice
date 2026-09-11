@@ -1,0 +1,54 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Motion Track - only what engine/labs/labs.css does not
+   already give every lab. Every class here starts .lab-motion-.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN.
+   ⚠ Nothing here animates or transforms .screen or its ancestors.
+   ══════════════════════════════════════════════ */
+
+/* Run chip top-left over the wall. Warning chips sit in a row UNDER the
+   canvas: over it they covered the end of the track, where the trolley stops. */
+.lab-motion-chip { position: absolute; top: 8px; left: 8px; max-width: calc(100% - 16px); flex-wrap: wrap; }
+.lab-motion-status { display: flex; flex-wrap: wrap; gap: 6px; padding: 7px 8px 0; background: var(--lab-surface); border-top: 1px solid var(--lab-rule); }
+.lab-motion-status:empty { display: none; }
+.lab-motion-status + .lab-motion-contents { border-top: 0; }
+/* The reading sits under the canvas, not over the graph's time axis. */
+.lab-motion-contents { position: static; background: var(--lab-surface); color: var(--lab-ink); font-size: 0.8rem; font-weight: 600;
+  padding: 7px 10px; border-top: 1px solid var(--lab-rule); text-align: left; line-height: 1.4; }
+
+.lab-motion-controls { display: flex; flex-direction: column; gap: 8px; }
+
+/* Ramp height: lower · value · raise */
+.lab-motion-hrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr); gap: 8px; align-items: stretch; }
+.lab-motion-hbtn { min-height: 48px; padding: 0 6px; font-size: 0.85rem; }
+.lab-motion-hval { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  border: 1px solid var(--lab-rule); border-radius: 12px; background: var(--lab-surface); padding: 4px; line-height: 1.2; }
+.lab-motion-hval b { font-size: 1rem; font-variant-numeric: tabular-nums; }
+.lab-motion-hval small { font-size: 0.68rem; color: var(--lab-muted); }
+
+/* Option rows: the label above, the choices sharing the full width. */
+.lab-motion-optrow { display: flex; flex-direction: column; gap: 4px; }
+.lab-motion-optrow > span { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--lab-muted); }
+.lab-motion-seg { display: flex; width: 100%; border: 1px solid var(--lab-rule); border-radius: 12px; overflow: hidden; }
+.lab-motion-seg button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 4px 6px; border: 0; border-left: 1px solid var(--lab-rule);
+  background: var(--lab-surface-2); color: var(--lab-muted); font-weight: 700; font-size: 0.8rem; line-height: 1.15; cursor: pointer; white-space: normal; }
+.lab-motion-seg button:first-child { border-left: 0; }
+.lab-motion-seg button[aria-pressed="true"] { background: var(--lab-accent); color: var(--lab-accent-ink); }
+
+.lab-motion-tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.lab-motion-routes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.lab-motion-route { min-height: 52px; padding: 4px 8px; flex-direction: column; gap: 0; font-size: 0.82rem; line-height: 1.2; white-space: normal; }
+.lab-motion-route small { font-weight: 500; font-size: 0.68rem; color: var(--lab-muted); }
+.lab-motion-route[aria-pressed="true"] { border-color: var(--lab-accent); background: var(--lab-accent-soft); box-shadow: inset 0 0 0 1px var(--lab-accent); }
+
+/* Shelf */
+.lab-motion-shelf-h { font-size: 0.85rem !important; }
+.lab-motion-ico { flex: 0 0 auto; width: 32px; height: 32px; display: grid; place-items: center; font-size: 1.35rem;
+  border-radius: 10px; background: var(--lab-surface); border: 1px solid var(--lab-rule); }
+.lab-item.lab-motion-on { border-color: var(--lab-accent); background: var(--lab-accent-soft); box-shadow: inset 0 0 0 1px var(--lab-accent); }
+
+/* Notebook: readings taken the wrong way stay visible, struck through. */
+.lab-motion-bad { color: var(--lab-danger); font-weight: 700; }
+.lab-motion-bad-row td:not(:last-child) { text-decoration: line-through; color: var(--lab-muted); }
+.lab-log li.lab-motion-log-bad { border-left-color: var(--lab-danger); }
+.lab-motion-mean { margin: 0 0 10px; font-size: 0.78rem; color: var(--lab-warn); font-weight: 600; }
+.lab-motion-table td, .lab-motion-table th { white-space: nowrap; }

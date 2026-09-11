@@ -152,7 +152,7 @@ const AdminPanel = (() => {
     if (panel) panel.classList.remove('hidden');
     if (name === 'reports')   loadReports();
     if (name === 'teachers')  loadTeachers();
-    if (name === 'roles')     { _rolesQuery = ''; const rs = document.getElementById('admin-roles-search'); if (rs) rs.value = ''; loadRoles(); }
+    if (name === 'roles')     { _rolesQuery = ''; const rs = document.getElementById('admin-roles-search'); if (rs) rs.value = ''; loadRoles(1); }
     if (name === 'plans')     loadPlans();
     if (name === 'questions') QM.tabOpen();
     if (name === 'syllabus')  Syllabus.open();
@@ -175,6 +175,10 @@ const AdminPanel = (() => {
     suspended: { label: '🚫 Suspended', cls: 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' },
   };
 
+  // Status per id as last loaded, so an approval can tell a first approval
+  // (email the teacher) from the tier toggle, which also sends 'approved'.
+  let _teacherQueueStatus = {};
+
   async function loadTeacherQueue() {
     const el = document.getElementById('admin-teacher-queue');
     if (!el || !_sb) return;
@@ -186,6 +190,7 @@ const AdminPanel = (() => {
     }
 
     const rows    = data.requests || [];
+    _teacherQueueStatus = Object.fromEntries(rows.map(r => [r.id, r.status]));
     const pending = rows.filter(r => r.status === 'pending');
     const others  = rows.filter(r => r.status !== 'pending');
 
@@ -199,7 +204,9 @@ const AdminPanel = (() => {
           <span class="text-sm font-bold text-gray-800 dark:text-white">${_esc(r.full_name || r.id)}</span>
           <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
           ${r.status === 'approved'
-            ? `<span class="text-xs text-gray-500 dark:text-gray-400">${_esc(r.tier)}</span>` : ''}
+            ? `<span class="text-xs text-gray-500 dark:text-gray-400">${_esc(r.tier)}</span>${r.auto
+                ? ' <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300" title="Approved automatically after verifying their email">⚡ auto</span>'
+                : ''}` : ''}
           <span class="text-xs text-gray-500 dark:text-gray-400 ml-auto">${when}</span>
         </div>
         <p data-member-email="${r.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[r.id] || '')}</p>
@@ -245,6 +252,7 @@ const AdminPanel = (() => {
     if (!_sb) return;
     if (status === 'suspended' && !confirm('Suspend this teacher? They keep access to past results but cannot set new work.')) return;
     if (status === 'rejected'  && !confirm('Reject this application?')) return;
+    const wasApproved = _teacherQueueStatus[userId] === 'approved';
     const { data, error } = await _sb.rpc('admin_set_teacher_status',
       { p_user_id: userId, p_status: status, p_tier: tier || null });
     if (error || !data?.ok) {
@@ -253,11 +261,33 @@ const AdminPanel = (() => {
       toast('Could not update: ' + why, 3500);
       return;
     }
-    toast('Teacher status: ' + status, 2000);
+    if (status === 'approved' && !wasApproved) {
+      toast('Teacher approved ✅ - ' + await _emailTeacherApproved(userId), 5000);
+    } else {
+      toast('Teacher status: ' + status, 2000);
+    }
     await loadTeacherQueue();
     await loadMembers();
     // Keep the header badge honest after a decision.
     if (typeof Auth !== 'undefined' && Auth.refreshAdminBadge) Auth.refreshAdminBadge();
+  }
+
+  // Returns the second half of the toast. Never throws: the approval has
+  // already happened, and a mail failure must not read as though it had not.
+  // ⚠ Say WHY - a missing Gmail credential and an undeployed function look the
+  //   same to the admin otherwise, and both leave the teacher waiting.
+  async function _emailTeacherApproved(userId) {
+    try {
+      await _adminApi('/api/teacher-approved-email', { user_id: userId });
+      return 'approval email sent';
+    } catch (e) {
+      const why = String(e?.message || '');
+      console.warn('[AdminPanel] approval email not sent:', why);
+      if (/not_configured/.test(why)) return 'no email sent: mail is not set up on the server (GMAIL_USER / GMAIL_APP_PASSWORD)';
+      if (/not available/.test(why))  return 'no email sent: /api/teacher-approved-email is not deployed yet';
+      if (/no_email/.test(why))       return 'no email sent: that account has no address';
+      return 'no email sent: ' + why.slice(0, 80);
+    }
   }
 
   // ── Members ────────────────────────────────
@@ -271,9 +301,13 @@ const AdminPanel = (() => {
 
   // Expected ~1000 users/month means the unfiltered member list would only
   // ever grow - pulling every row on every tab open/refresh doesn't scale.
-  // Same page-and-"Load more" shape as Question Manager's _fetchAndRender().
+  // ⚠ Numbered pages, not "Load more": appending rows grew the list without end
+  //   and never said how far there was to go. The total comes back on the same
+  //   query (count: 'exact'), so "Page 3 of 22" costs no extra request.
   const MEMBERS_PAGE = 30;
-  let _membersOffset  = 0;
+  let _membersPage     = 1;
+  let _membersLastPage = null;
+  let _membersReq      = 0;
   let _membersQuery   = '';
   let _membersFilterTimer = null;
   let _memberStatusFilter = 'active'; // active | pending | all
@@ -348,7 +382,7 @@ const AdminPanel = (() => {
       _renderPendingRegistrations({ inMainList });
       if (inMainList) {
         _setCount('admin-members-count', _pendingRegistrations.length, null, 'pending registrations');
-        document.getElementById('admin-members-more')?.classList.add('hidden');
+        _renderPager('admin-members', _membersPage, null);
       }
     } catch (error) {
       if (target) target.innerHTML = `<p class="text-sm text-red-500 text-center py-5">${_esc(error.message)}</p>`;
@@ -361,20 +395,20 @@ const AdminPanel = (() => {
 
   function setMemberStatusFilter(filter) {
     _memberStatusFilter = ['active', 'pending', 'all'].includes(filter) ? filter : 'active';
-    _membersOffset = 0;
+    _membersPage = 1;
     _members = [];
     _pendingRegistrations = [];
     _pendingCursor = null;
-    loadMembers(true);
+    loadMembers(1);
   }
 
   function setMemberVisibilityFilters() {
     // These filters apply to activated profiles. Pending registrations have no
     // profile, expiry or disabled state yet, so they remain visible in the
     // dedicated confirmation queue.
-    _membersOffset = 0;
+    _membersPage = 1;
     _members = [];
-    loadMembers(true);
+    loadMembers(1);
   }
 
   async function activatePendingRegistration(userId) {
@@ -614,22 +648,32 @@ const AdminPanel = (() => {
         console.error("[AdminPanel] leftover rows after delete:", result.purge_failures);
         toast("Some related records could not be removed - check the console.", 6000);
       }
-      await loadMembers(true);
+      await loadMembers();
     } catch (error) {
       console.error("[AdminPanel.deleteMemberAccount]", error);
       toast(error.message || "Could not delete the account.", 7000);
     }
   }
 
-  async function loadMembers(reset = true) {
+  // loadMembers()   reloads the page the admin is on (after an action on a row)
+  // loadMembers(1)  goes to the first page (a filter or the search changed)
+  async function loadMembers(page = _membersPage) {
     if (!_sb) return;
     if (_memberStatusFilter === 'pending') {
-      await loadPendingRegistrations(reset, true);
+      // Pending registrations page by server cursor and have no total, so they
+      // keep their own "load more" and the numbered pager is hidden.
+      _renderPager('admin-members', _membersPage, null);
+      await loadPendingRegistrations(true, true);
       return;
     }
-    if (reset) { _membersOffset = 0; _members = []; _memberEmailsUnavailable = false; }
+    _membersPage = Math.max(1, Math.floor(Number(page) || 1));
+    // ⚠ Tapping Next twice quickly must not let the slower first answer paint
+    //   over the second. Only the latest request may render.
+    const req  = ++_membersReq;
+    const from = (_membersPage - 1) * MEMBERS_PAGE;
+    _memberEmailsUnavailable = false;
     const el = document.getElementById('admin-members-list');
-    if (reset && el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
+    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
     const visibility = _memberVisibility();
     const visibleRoles = visibility.admins ? ['parent', 'admin'] : ['parent'];
     let membersQuery = _sb.from('profiles')
@@ -642,7 +686,7 @@ const AdminPanel = (() => {
               { count: 'exact' })
       .in('role', visibleRoles)
       .order('created_at', { ascending: false })
-      .range(_membersOffset, _membersOffset + MEMBERS_PAGE - 1);
+      .range(from, from + MEMBERS_PAGE - 1);
     if (!visibility.expired) membersQuery = membersQuery.or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`);
     if (!visibility.disabled) membersQuery = membersQuery.eq('disabled', false);
     // full_name only - the "or email" in the placeholder is aspirational,
@@ -655,6 +699,7 @@ const AdminPanel = (() => {
       _plansForSelect.length ? Promise.resolve({ data: _plansForSelect }) :
         _sb.from('plans').select('id, name, price_mur').order('price_mur'),
     ]);
+    if (req !== _membersReq) return;
     if (profilesRes.error) {
       // 42703 = unknown column, i.e. supabase-schema.sql has not been run
       // on this database. Retry without the two credit columns rather than
@@ -667,11 +712,12 @@ const AdminPanel = (() => {
                   { count: 'exact' })
           .in('role', visibleRoles)
           .order('created_at', { ascending: false })
-          .range(_membersOffset, _membersOffset + MEMBERS_PAGE - 1);
+          .range(from, from + MEMBERS_PAGE - 1);
         if (!visibility.expired) retry = retry.or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`);
         if (!visibility.disabled) retry = retry.eq('disabled', false);
         if (_membersQuery) retry = retry.ilike('full_name', `%${_membersQuery}%`);
         const again = await retry;
+        if (req !== _membersReq) return;
         if (!again.error) { profilesRes.data = again.data; profilesRes.count = again.count; profilesRes.error = null; }
       }
       if (profilesRes.error) {
@@ -680,21 +726,97 @@ const AdminPanel = (() => {
       }
     }
     _plansForSelect = plansRes.data || _plansForSelect;
-    const rows = profilesRes.data || [];
+    const rows  = profilesRes.data || [];
+    const total = typeof profilesRes.count === 'number' ? profilesRes.count : null;
+    _membersLastPage = total === null ? null : Math.max(1, Math.ceil(total / MEMBERS_PAGE));
+    // The page can disappear under the admin - deleting the only account on
+    // the last page - so land on the last page that still exists.
+    if (!rows.length && _membersLastPage !== null && _membersPage > _membersLastPage) {
+      await loadMembers(_membersLastPage);
+      return;
+    }
     await _attachMemberFamilySummaries(rows);
-    _members = reset ? rows : _members.concat(rows);
-    _membersOffset += rows.length;
+    if (req !== _membersReq) return;
+    _members = rows;
     _renderMembers(_members);
-    _setCount('admin-members-count', _members.length, profilesRes.count, 'accounts');
-    const moreBtn = document.getElementById('admin-members-more');
-    if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < MEMBERS_PAGE);
-    if (_memberStatusFilter === 'all') await loadPendingRegistrations(reset, false);
+    _setRangeCount('admin-members-count', from, rows.length, total, 'accounts');
+    _renderPager('admin-members', _membersPage, _pagerState(_membersPage, _membersLastPage, rows.length, MEMBERS_PAGE));
+    if (_memberStatusFilter === 'all') await loadPendingRegistrations(true, false);
     else document.getElementById('admin-pending-registrations')?.classList.add('hidden');
   }
 
-  async function loadMoreMembers() {
-    if (_memberStatusFilter === 'pending') { await loadMorePendingRegistrations(); return; }
-    await loadMembers(false);
+  // ── Numbered pagers, shared by every paged admin list ──────────────────
+  // Members, Teachers, Reports, Roles and the Question Manager all page the same
+  // way: « First · ‹ Prev · [Page X of Y] · Next › · Last ». Each list has its
+  // own static markup in index.html - ids <prefix>-pager, -first, -prev, -page,
+  // -next, -last - because the Tailwind CDN only generates classes it saw at its
+  // first scan, so buttons injected from here would get no styles.
+  // Function declarations, not consts: QM below is built while this IIFE is
+  // still running, and only a declaration is hoisted that far.
+  function _setRangeCount(elId, from, shown, total, noun) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const n = x => x.toLocaleString('en-GB');
+    if (!shown) { el.textContent = `No ${noun} found.`; return; }
+    const range = `${n(from + 1)}–${n(from + shown)}`;
+    el.textContent = total === null ? `Showing ${range}` : `Showing ${range} of ${n(total)} ${noun}`;
+  }
+
+  function _lastPage(total, size) {
+    return typeof total === 'number' ? Math.max(1, Math.ceil(total / size)) : null;
+  }
+
+  // With no total (a count that failed), "is there a next page" falls back to
+  // whether this page came back full.
+  function _pagerState(page, lastPage, shown, size) {
+    return { lastPage, hasNext: lastPage !== null ? page < lastPage : shown === size };
+  }
+
+  // state: null hides the pager; otherwise { lastPage, hasNext }. A single page
+  // needs no pager either.
+  function _renderPager(prefix, page, state) {
+    const pager = document.getElementById(prefix + '-pager');
+    if (!pager) return;
+    const known = typeof state?.lastPage === 'number';
+    pager.classList.toggle('hidden', !state || (known && state.lastPage <= 1));
+    if (!state) return;
+    const off = (k, v) => { const b = document.getElementById(prefix + '-' + k); if (b) b.disabled = v; };
+    off('first', page <= 1);
+    off('prev',  page <= 1);
+    off('next',  !state.hasNext);
+    off('last',  !known || page >= state.lastPage);
+    const sel = document.getElementById(prefix + '-page');
+    if (sel) {
+      const pages = known ? state.lastPage : page + (state.hasNext ? 1 : 0);
+      sel.innerHTML = Array.from({ length: pages }, (_, i) =>
+        `<option value="${i + 1}">Page ${i + 1} of ${known ? state.lastPage : '?'}</option>`).join('');
+      sel.value = String(page);
+    }
+  }
+
+  // Where a pager control points: 'first' | 'prev' | 'next' | 'last' | a page
+  // number from the <select>. null when it would not move, so no request is made.
+  function _pagerTarget(where, page, last) {
+    let t = where === 'first' ? 1
+          : where === 'prev'  ? page - 1
+          : where === 'next'  ? page + 1
+          : where === 'last'  ? (last || page)
+          : Number(where);
+    t = Math.max(1, Math.floor(t || 1));
+    if (typeof last === 'number') t = Math.min(t, last);
+    return t === page ? null : t;
+  }
+
+  // The pager sits below the rows; after a page change the admin wants the top.
+  function _pagerScroll(countId) {
+    document.getElementById(countId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+
+  async function membersPage(where) {
+    const t = _pagerTarget(where, _membersPage, _membersLastPage);
+    if (t === null) return;
+    await loadMembers(t);
+    _pagerScroll('admin-members-count');
   }
 
   // Debounced so 1000 users' worth of typing doesn't fire a query per
@@ -704,7 +826,7 @@ const AdminPanel = (() => {
     clearTimeout(_membersFilterTimer);
     _membersFilterTimer = setTimeout(() => {
       _membersQuery = (query || '').trim();
-      loadMembers(true);
+      loadMembers(1);
     }, 300);
   }
 
@@ -1200,8 +1322,21 @@ const AdminPanel = (() => {
     // Load family → students
     const { data: fam } = await _sb.from('families').select('id').eq('parent_id', profileId).maybeSingle();
     if (!fam) { panel.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">No family found.</p>'; return; }
-    const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at').eq('family_id', fam.id);
-    _familyStudents[profileId] = kids || [];
+    // ⚠ LIVE children only. The collapsed card counts with `deleted_at IS NULL`
+    // (_attachMemberFamilySummaries), so an unfiltered roster here reads
+    // "👶 1 child" above six cards - five of them the soft-deleted `.del.<id8>`
+    // rows soft_delete_student() leaves behind. Same optional-column fallback as
+    // Store.getFamilyStudents: 42501 too, because students has COLUMN-LEVEL
+    // grants, so a missing GRANT SELECT (deleted_at) reads as permission denied.
+    let kidsRes = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at, settings')
+      .eq('family_id', fam.id).is('deleted_at', null).order('created_at');
+    if (kidsRes.error && (kidsRes.error.code === '42703' || kidsRes.error.code === 'PGRST204'
+        || kidsRes.error.code === '42501')) {
+      console.warn('[AdminPanel] deleted_at unreadable - a removed child may appear:', kidsRes.error.message);
+      kidsRes = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at, settings').eq('family_id', fam.id);
+    }
+    if (kidsRes.error) console.warn('[AdminPanel] could not load children:', kidsRes.error.message);
+    _familyStudents[profileId] = kidsRes.data || [];
     _renderChildren(profileId);
     // Paint the roster first, then fill the numbers in - a family list should
     // not wait on a progress query.
@@ -1353,8 +1488,12 @@ const AdminPanel = (() => {
           <span class="text-gray-500 dark:text-gray-400">@${_esc(k.username)}</span>
           <span class="text-gray-500 dark:text-gray-400">Grade ${k.grade || '?'}</span>
           ${k.expires_at ? `<span class="text-orange-500 font-semibold">⏳ ${new Date(k.expires_at) < new Date() ? 'Expired' : 'Expires'} ${k.expires_at.slice(0,10)}</span>` : ''}
+          <button onclick="AdminPanel.toggleChildSettings('${profileId}','${k.id}')"
+            class="ml-auto shrink-0 px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 transition-colors font-semibold">
+            ⚙️ Settings ${_openChildSettings.has(k.id) ? '▾' : '▸'}
+          </button>
           <button onclick="AdminPanel.forceLogout('${k.id}','${_esc(k.display_name)}')"
-            class="ml-auto shrink-0 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 transition-colors font-semibold">
+            class="shrink-0 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 transition-colors font-semibold">
             ⏏ Force Logout
           </button>
         </div>
@@ -1366,7 +1505,309 @@ const AdminPanel = (() => {
             class="border border-gray-200 dark:border-gray-600 rounded px-1.5 py-0.5 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 text-xs">
           ${k.expires_at ? `<button onclick="AdminPanel.setStudentExpiry('${k.id}','${_esc(k.display_name)}','')" class="text-red-400 hover:text-red-600" title="Remove expiry">✕</button>` : ''}
         </div>
+        ${_openChildSettings.has(k.id) ? `<div id="child-settings-${k.id}" class="mt-2 p-2 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/20">${_childSettingsHtml(profileId, k)}</div>` : ''}
       </div>`).join('<hr class="border-gray-100 dark:border-gray-700 my-0.5">');
+  }
+
+  // ══════════════════════════════════════════════
+  //  A FAMILY'S SETTINGS, FIXED FROM HERE (super admin)
+  //
+  //  A parent rings: "my child cannot see Science". This shows what the child's
+  //  settings actually say, why each chapter is open or closed, and lets a
+  //  super admin change the parent's controls on their behalf - without
+  //  signing in as anybody.
+  //  ⚠ Every write goes through admin_patch_student_settings(), which changes
+  //    only the keys named, refuses anything that is not a parent control, and
+  //    records who changed what in admin_actions. Writing the whole settings
+  //    object from here would undo whatever the parent changed meanwhile.
+  //  ⚠ The child's device picks the change up when the app next opens or comes
+  //    back on screen (Auth._refreshChildSettings); a device still on an older
+  //    app version only at its next PIN login - which Force Logout brings on.
+  //  ⚠ The chapter verdicts mirror _planAllowsChapter / _adminBlocksChapter;
+  //    the server (questions.js) is what actually decides.
+  // ══════════════════════════════════════════════
+  const _openChildSettings = new Set();
+  const _childActions  = {};   // studentId -> rows | null (null = unreadable)
+  const _familyContext = {};   // profileId -> { entitled:Set, planAllowed, planName }
+
+  function _findKid(studentId) {
+    for (const key of Object.keys(_familyStudents)) {
+      const kid = (_familyStudents[key] || []).find(s => s.id === studentId);
+      if (kid) return { profileId: key, kid };
+    }
+    return null;
+  }
+
+  async function toggleChildSettings(profileId, studentId) {
+    if (_openChildSettings.has(studentId)) _openChildSettings.delete(studentId);
+    else _openChildSettings.add(studentId);
+    _renderChildren(profileId);
+    if (!_openChildSettings.has(studentId)) return;
+    await Promise.all([
+      _settings ? null : loadSettings().catch(() => {}),
+      _loadFamilyContext(profileId),
+      _loadChildActions(studentId),
+    ]);
+    _renderChildren(profileId);
+  }
+
+  async function _loadFamilyContext(profileId) {
+    if (_familyContext[profileId]) return;
+    const ctx = { entitled: new Set(), entitlementsKnown: true, planAllowed: null, planName: '' };
+    try {
+      const { data, error } = await _sb.from('chapter_entitlements').select('*').eq('user_id', profileId);
+      if (error) ctx.entitlementsKnown = false;
+      const now = new Date();
+      (data || []).forEach(r => {
+        if (!r.expires_at || new Date(r.expires_at) > now) ctx.entitled.add(r.chapter_id);
+      });
+    } catch (_) { ctx.entitlementsKnown = false; }
+    try {
+      const { plan } = await Store.getUserPlan(profileId);
+      ctx.planAllowed = plan?.features?.allowed_chapters || null;
+      ctx.planName = plan?.name || '';
+    } catch (_) {}
+    _familyContext[profileId] = ctx;
+  }
+
+  async function _loadChildActions(studentId) {
+    try {
+      const { data, error } = await _sb.from('admin_actions')
+        .select('created_at, action, detail')
+        .eq('target_student', studentId)
+        .order('created_at', { ascending: false })
+        .limit(8);
+      _childActions[studentId] = error ? null : (data || []);
+    } catch (_) { _childActions[studentId] = null; }
+  }
+
+  function _fmtSettingValue(v) {
+    if (v === null || v === undefined) return 'not set';
+    if (Array.isArray(v)) return v.length ? v.join(', ') : 'none';
+    if (typeof v === 'boolean') return v ? 'on' : 'off';
+    if (typeof v === 'object') return 'custom';
+    return String(v);
+  }
+
+  function _childActionsHtml(studentId) {
+    const rows = _childActions[studentId];
+    if (rows === undefined) return '';
+    if (rows === null) return '<p class="text-[11px] text-gray-400 mt-2">Change history unavailable - the 20260911 admin migration is not applied yet.</p>';
+    if (!rows.length) return '<p class="text-[11px] text-gray-400 mt-2">No admin has changed this child’s settings.</p>';
+    return `<div class="mt-2 space-y-0.5">
+      <p class="text-[11px] font-semibold text-gray-500 dark:text-gray-400">Recent admin changes</p>
+      ${rows.map(r => {
+        const d = r.detail || {};
+        const what = r.action === 'student_settings'
+          ? Object.keys(d.after || {}).map(k => `${_esc(k)}: ${_esc(_fmtSettingValue((d.before || {})[k]))} → ${_esc(_fmtSettingValue(d.after[k]))}`).join('; ')
+          : _esc(r.action.replace(/_/g, ' '));
+        return `<p class="text-[11px] text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleString()} · ${what}${d.reason ? ` · <i>${_esc(d.reason)}</i>` : ''}</p>`;
+      }).join('')}
+    </div>`;
+  }
+
+  function _childSettingsHtml(profileId, k) {
+    const SS = typeof SupportSettings !== 'undefined' ? SupportSettings : null;
+    const GA = typeof GradeAccess !== 'undefined' ? GradeAccess : null;
+    if (!SS || !GA) return '<p class="text-[11px] text-red-500">This page is out of date - reload it.</p>';
+    const s   = k.settings || {};
+    const sid = k.id;
+    const isSA = typeof Auth !== 'undefined' && Auth.isSuperAdmin?.();
+    const dis  = isSA ? '' : 'disabled';
+    const member = _members.find(m => m.id === profileId) || {};
+    const fam = _familyContext[profileId];
+    const gs  = _settings || {};
+    const now = new Date();
+    const expired = !!((member.expires_at && new Date(member.expires_at) < now)
+                    || (k.expires_at && new Date(k.expires_at) < now));
+    const granted = GA.granted(s);
+    const own = Number(k.grade);
+    const notes = SS.describe(s);
+
+    const toggle = (key, label) => `
+      <label class="inline-flex items-center gap-1.5 mr-3 mb-1 cursor-pointer text-xs">
+        <input type="checkbox" ${s[key] ? '' : 'checked'} ${dis}
+          onchange="AdminPanel.patchChildSettings('${sid}', { ${key}: !this.checked })">
+        <span>${label}</span>
+      </label>`;
+
+    const level = Number(s.maxDifficulty) || 4;
+    const levelSel = `
+      <label class="inline-flex items-center gap-1.5 mr-3 mb-1 text-xs">
+        <span>Hardest level</span>
+        <select ${dis} onchange="AdminPanel.patchChildSettings('${sid}', { maxDifficulty: Number(this.value) })"
+          class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-1.5 py-0.5 bg-white dark:bg-gray-700 dark:text-white">
+          ${[1, 2, 3, 4].map(n => `<option value="${n}" ${n === level ? 'selected' : ''}>${n} · ${SS.LEVELS[n]}</option>`).join('')}
+        </select>
+      </label>`;
+
+    const others = GA.liveGrades().filter(g => g !== own);
+    const gradeBoxes = others.length ? `
+      <div class="flex flex-wrap items-center gap-1 mt-1 text-xs">
+        <span class="text-gray-500 dark:text-gray-400 mr-1">Extra grades</span>
+        ${others.map(g => `
+          <label class="inline-flex items-center gap-1 mr-2 cursor-pointer">
+            <input type="checkbox" ${granted.includes(g) ? 'checked' : ''} ${dis}
+              onchange="AdminPanel.toggleChildGrade('${sid}', ${g}, this.checked)">
+            <span>G${g}</span>
+          </label>`).join('')}
+      </div>` : '';
+
+    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+      .filter(p => p && !p.comingSoon && (Number(p.grade) === own || granted.includes(Number(p.grade))))
+      .sort((a, b) => (Number(a.grade) !== own) - (Number(b.grade) !== own) || Number(a.grade) - Number(b.grade));
+    const isFree = g => (typeof FREE_GRADES !== 'undefined' && Array.isArray(FREE_GRADES)) ? FREE_GRADES.includes(g) : g <= 2;
+
+    const subjects = packs.map(p => {
+      const pg = Number(p.grade);
+      const chapters = p._chapters || p.chapters || [];
+      const verdicts = chapters.map(ch => ({ ch, v: SS.explainChapter({
+        chapterId: ch.id, packId: p.id, packGrade: pg, childGrade: own, settings: s,
+        grantedGrades: granted, global: gs, planAllowed: fam ? fam.planAllowed : null,
+        entitled: fam ? fam.entitled.has(ch.id) : false, expired, free: isFree(pg),
+        accountDisabled: !!member.disabled, blockedUntil: member.blocked_until, now,
+      }) }));
+      const closed = verdicts.filter(x => !x.v.open).length;
+      const rows = verdicts.map(({ ch, v }) => {
+        const locked = (s.lockedChapters || []).includes(ch.id);
+        return `
+          <div class="flex items-start gap-2 py-0.5 text-[11px]">
+            <label class="inline-flex items-center gap-1 shrink-0 cursor-pointer" title="Locked by the parent">
+              <input type="checkbox" ${locked ? 'checked' : ''} ${dis}
+                onchange="AdminPanel.toggleChildChapter('${sid}', '${_esc(ch.id)}', this.checked)">
+              <span>🔒</span>
+            </label>
+            <span class="flex-1 min-w-0">${_esc(ch.icon || '')} ${_esc(ch.name || ch.id)}</span>
+            <span class="shrink-0 text-right ${v.open ? 'text-green-600 dark:text-green-400' : 'text-red-500'}">
+              ${v.open ? 'open' : v.reasons.map(r => _esc(r.text)).join('<br>')}
+            </span>
+          </div>`;
+      }).join('');
+      return `
+        <details class="border-t border-gray-100 dark:border-gray-700 py-1">
+          <summary class="cursor-pointer text-xs py-0.5">
+            ${_esc(p.icon || '📘')} G${pg} ${_esc(p.subject || p.name || p.id)}
+            <span class="${closed ? 'text-red-500 font-semibold' : 'text-green-600 dark:text-green-400'}">
+              · ${closed ? `${closed} of ${chapters.length} closed` : 'all open'}
+            </span>
+          </summary>
+          <div class="pl-2 pb-1">${rows || '<p class="text-[11px] text-gray-400">No chapters.</p>'}</div>
+        </details>`;
+    }).join('');
+
+    const context = [
+      fam ? (fam.planName ? `Plan: ${_esc(fam.planName)}` : '') : 'Loading plan…',
+      gs.plan_enforcement_enabled === true ? 'plan limits ON' : 'plan limits off',
+      expired ? '<span class="text-red-500 font-semibold">account expired</span>' : '',
+      fam && !fam.entitlementsKnown ? 'purchases unreadable' : (fam && fam.entitled.size ? `${fam.entitled.size} chapter(s) bought` : ''),
+    ].filter(Boolean).join(' · ');
+
+    return `
+      <div class="text-xs">
+        <p class="font-semibold text-gray-700 dark:text-gray-200">What is not at its default</p>
+        ${notes.length
+          ? `<ul class="list-disc pl-5 text-gray-600 dark:text-gray-300">${notes.map(n => `<li>${_esc(n)}</li>`).join('')}</ul>`
+          : '<p class="text-gray-500 dark:text-gray-400">Nothing - every control is at its default.</p>'}
+        <p class="text-[11px] text-gray-400 mt-1">${context}</p>
+
+        ${isSA ? '' : '<p class="text-[11px] text-amber-600 mt-2">Only a super admin can change these.</p>'}
+        <div class="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+          <input id="child-reason-${sid}" type="text" maxlength="300" ${dis}
+            placeholder="Why - e.g. who asked, or a ticket (saved with each change)"
+            class="w-full text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 mb-2 bg-transparent dark:text-white">
+          ${toggle('examDisabled', 'Exam mode')}
+          ${toggle('hintsDisabled', 'Hints')}
+          ${toggle('minigamesDisabled', 'Game Zone')}
+          ${levelSel}
+          ${gradeBoxes}
+        </div>
+
+        <div class="mt-2">
+          <p class="font-semibold text-gray-700 dark:text-gray-200">Why can or can’t they see it?</p>
+          ${subjects || '<p class="text-gray-500 dark:text-gray-400">No live subjects for this grade.</p>'}
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+          <button ${dis} onclick="AdminPanel.resetChildPin('${sid}')"
+            class="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 font-semibold">🔑 Set a new PIN</button>
+          <button onclick="AdminPanel.forceLogout('${sid}','${_esc(k.display_name)}')"
+            class="px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 font-semibold">⏏ Apply now (signs the child out)</button>
+          <span class="text-[11px] text-gray-400">Otherwise the child’s app picks changes up the next time it opens.</span>
+        </div>
+        ${_childActionsHtml(sid)}
+      </div>`;
+  }
+
+  async function _logAdminAction(action, targetUser, targetStudent, detail) {
+    if (!_sb) return;
+    try {
+      await _sb.rpc('admin_log_action', { p_action: action, p_target_user: targetUser || null,
+        p_target_student: targetStudent || null, p_detail: detail || {} });
+    } catch (_) { /* a missing record must never block the action itself */ }
+  }
+
+  async function patchChildSettings(studentId, patch) {
+    const found = _findKid(studentId);
+    if (!found || !_sb) return false;
+    const reason = document.getElementById(`child-reason-${studentId}`)?.value || null;
+    const { data, error } = await _sb.rpc('admin_patch_student_settings',
+      { p_student: studentId, p_patch: patch, p_reason: reason });
+    if (error || !data || data.ok !== true) {
+      const why = error
+        ? (error.code === 'PGRST202'
+            ? 'The database is not updated for this yet - apply migrations/20260911_admin_support_panel.sql.'
+            : 'Could not save: ' + error.message)
+        : ({ not_authorised: 'Only a super admin can change a family’s settings.',
+             not_found: 'That child no longer exists.',
+             bad_key: 'That is not a parent setting.',
+             bad_value: 'That value is not allowed.' }[data?.error] || 'The change was refused.');
+      toast(why, 4000);
+      _renderChildren(found.profileId);   // repaint the control back to what the server holds
+      return false;
+    }
+    found.kid.settings = data.settings;
+    if (data.changed) {
+      toast('Saved ✅ - the child’s app picks it up next time it opens.', 2500);
+      await _loadChildActions(studentId);
+    }
+    _renderChildren(found.profileId);
+    return true;
+  }
+
+  function toggleChildChapter(studentId, chapterId, lock) {
+    const found = _findKid(studentId);
+    if (!found) return false;
+    const cur = new Set((found.kid.settings || {}).lockedChapters || []);
+    if (lock) cur.add(chapterId); else cur.delete(chapterId);
+    return patchChildSettings(studentId, { lockedChapters: [...cur] });
+  }
+
+  // Same rule as the parent's own control (Auth.toggleGradeAccess): never the
+  // child's own grade, only live grades, and the two legacy booleans written
+  // alongside so a device on an older app version reads the same permission.
+  function toggleChildGrade(studentId, grade, on) {
+    const found = _findKid(studentId);
+    if (!found || typeof GradeAccess === 'undefined') return false;
+    const g = Number(grade), own = Number(found.kid.grade);
+    const live = GradeAccess.liveGrades();
+    const cur = new Set(GradeAccess.granted(found.kid.settings || {}));
+    if (on) cur.add(g); else cur.delete(g);
+    const list = [...cur].filter(x => live.includes(x) && x !== own).sort((a, b) => a - b);
+    return patchChildSettings(studentId, { allowedGrades: list, ...GradeAccess.flagsFor(list) });
+  }
+
+  async function resetChildPin(studentId) {
+    const found = _findKid(studentId);
+    if (!found) return;
+    const pin = prompt(`New PIN for ${found.kid.display_name} (4 to 6 digits).\n\nRead it out to the parent - it is not shown again.`);
+    if (pin === null) return;
+    if (!/^\d{4,6}$/.test(pin.trim())) { toast('A PIN is 4 to 6 digits.', 2500); return; }
+    const ok = await Store.setStudentPin(studentId, pin.trim());
+    if (!ok) { toast('Could not set the PIN - nothing changed.', 3000); return; }
+    await _logAdminAction('child_pin_reset', found.profileId, studentId, {});
+    await _loadChildActions(studentId);
+    _renderChildren(found.profileId);
+    toast(`PIN changed for ${found.kid.display_name}.`, 3000);
   }
 
   async function updateMemberName(userId, newName) {
@@ -1421,6 +1862,7 @@ const AdminPanel = (() => {
       const idx = (_familyStudents[key] || []).findIndex(s => s.id === studentId);
       if (idx >= 0) _familyStudents[key][idx].session_version = newVersion;
     }
+    _logAdminAction('force_logout', null, studentId, {});
     toast(`${studentName} has been logged out`, 3000);
   }
 
@@ -1428,6 +1870,14 @@ const AdminPanel = (() => {
     if (!newRole || !_sb) return;
     const current = _members.find(m => m.id === userId);
     if (current?.role === newRole) return; // no change
+    // The database refuses this for anyone but a super admin (guard_profiles_
+    // privileged); saying so here keeps the <select> from showing a role it
+    // does not hold.
+    if ((newRole === 'admin' || current?.role === 'admin') && !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) {
+      toast('Only a super admin can grant or remove admin rights.', 3500);
+      _patchMember(userId, { role: current?.role });
+      return;
+    }
     if (!confirm(`Change role to "${newRole}"?`)) {
       // The <select> already shows the new value; the database does not. Repaint
       // from the cached row so the two agree again - the old unconditional
@@ -1567,6 +2017,11 @@ const AdminPanel = (() => {
     const lbToggle = document.getElementById('admin-leaderboard-toggle');
     if (lbToggle) lbToggle.checked = _settings.leaderboard_enabled === true;
     _styleToggle(lbToggle);
+    // Teacher auto-approval. The same === true reading: an older blob has no
+    // such key, and request_teacher_access() treats that as OFF too.
+    const taToggle = document.getElementById('admin-teacher-auto-toggle');
+    if (taToggle) taToggle.checked = _settings.teacher_auto_approve === true;
+    _styleToggle(taToggle);
 
     // Plan enforcement toggle
     const enfToggle = document.getElementById('admin-enforcement-toggle');
@@ -1620,6 +2075,27 @@ const AdminPanel = (() => {
     });
   }
 
+  // ⚠ This only records the admin's choice. request_teacher_access() reads it
+  //   in the database and decides there - and still sends anyone an admin has
+  //   rejected, suspended or revoked back to the queue.
+  async function toggleTeacherAutoApprove(on) {
+    if (!_settings) return;
+    const repaint = () => {
+      const t = document.getElementById('admin-teacher-auto-toggle');
+      if (t) t.checked = _settings.teacher_auto_approve === true;
+      _styleToggle(t);
+    };
+    if (on && !confirm('Approve teachers automatically?\n\nAnyone who signs up as a teacher and clicks the link in their verification email will get teacher tools straight away (unverified tier), without you reviewing them.\n\nApplications already waiting stay in your queue, and anyone you rejected or suspended still needs you.\n\nYou can switch this off at any time.')) {
+      repaint();
+      return;
+    }
+    const prev = JSON.stringify(_settings);
+    _settings.teacher_auto_approve = on;
+    await _commitSettings(prev, on
+      ? 'Teachers are now approved automatically once they verify their email'
+      : 'Teacher applications now wait for your approval', repaint);
+  }
+
   // ⚠ This makes every child's name and score visible to every other child in
   //   the app. It is a safeguarding decision, not a feature flag, which is why
   //   it ships OFF and why the confirmation names what actually becomes visible.
@@ -1648,7 +2124,9 @@ const AdminPanel = (() => {
       .forEach(id => _set(id, '…'));
     const [pRes, sRes, fRes] = await Promise.all([
       _sb.from('profiles').select('id, role, disabled, teacher_status', { count: 'exact', head: false }),
-      _sb.from('students').select('id', { count: 'exact', head: true }),
+      // Soft-deleted children are still rows. Counting them told an admin the
+      // app had more pupils than it has - one test family alone carried five.
+      _sb.from('students').select('id', { count: 'exact', head: true }).is('deleted_at', null),
       _sb.from('families').select('id', { count: 'exact', head: true }),
     ]);
 
@@ -1660,8 +2138,8 @@ const AdminPanel = (() => {
     const tPending  = tList.filter(t => t.teacher_status === 'pending').length;
 
     _set('stat-total-users',    profiles.length);
-    _set('stat-total-students', sRes.data?.length ?? '-');
-    _set('stat-total-families', fRes.data?.length ?? '-');
+    _set('stat-total-students', sRes.count ?? '-');
+    _set('stat-total-families', fRes.count ?? '-');
     _set('stat-total-teachers', tList.length);
 
     _set('hstat-parents',   parents);
@@ -1680,15 +2158,18 @@ const AdminPanel = (() => {
   // with no limit - harmless at today's zero teachers, and a growing page load
   // with no ceiling as soon as that changes.
   const TEACHERS_PAGE = 30;
-  let _teachersOffset = 0;
+  let _teachersPage = 1, _teachersLastPage = null, _teachersReq = 0;
 
-  async function loadTeachers(reset = true) {
+  // loadTeachers() reloads the page the admin is on; loadTeachers(1) the first.
+  // ⚠ The sort control orders the page on screen, not the whole table: two of
+  //   its orders are by activity, which the profiles query cannot see.
+  async function loadTeachers(page = _teachersPage) {
     if (!_sb) return;
+    _teachersPage = Math.max(1, Math.floor(Number(page) || 1));
+    const req  = ++_teachersReq;
+    const from = (_teachersPage - 1) * TEACHERS_PAGE;
     const el = document.getElementById('admin-teachers-list');
-    if (reset) {
-      _teachersOffset = 0; _teachers = [];
-      if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading teachers…</p>';
-    }
+    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading teachers…</p>';
     const { data, error, count } = await _sb.from('profiles')
       .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, teacher_tier',
               { count: 'exact' })
@@ -1698,23 +2179,32 @@ const AdminPanel = (() => {
       // that share a status in an arbitrary order, and two pages of an unstable
       // sort can repeat one row and skip another.
       .order('created_at', { ascending: false })
-      .range(_teachersOffset, _teachersOffset + TEACHERS_PAGE - 1);
+      .range(from, from + TEACHERS_PAGE - 1);
+    if (req !== _teachersReq) return;
     if (error) {
-      if (el && reset) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load teachers.</p>';
+      if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load teachers.</p>';
+      _renderPager('admin-teachers', _teachersPage, null);
       return;
     }
-    const rows = data || [];
-    _teachers = reset ? rows : _teachers.concat(rows);
-    _teachersOffset += rows.length;
+    const rows  = data || [];
+    const total = typeof count === 'number' ? count : null;
+    _teachersLastPage = _lastPage(total, TEACHERS_PAGE);
+    if (!rows.length && _teachersLastPage !== null && _teachersPage > _teachersLastPage) {
+      await loadTeachers(_teachersLastPage);
+      return;
+    }
+    _teachers = rows;
     _renderTeachers(_teachers);
-    _setCount('admin-teachers-count', _teachers.length, count, 'teachers');
+    _setRangeCount('admin-teachers-count', from, rows.length, total, 'teachers');
+    _renderPager('admin-teachers', _teachersPage, _pagerState(_teachersPage, _teachersLastPage, rows.length, TEACHERS_PAGE));
     _loadTeacherActivity(rows.map(t => t.id));
-    const moreBtn = document.getElementById('admin-teachers-more');
-    if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < TEACHERS_PAGE);
   }
 
-  async function loadMoreTeachers() {
-    await loadTeachers(false);
+  async function teachersPage(where) {
+    const t = _pagerTarget(where, _teachersPage, _teachersLastPage);
+    if (t === null) return;
+    await loadTeachers(t);
+    _pagerScroll('admin-teachers-count');
   }
 
   function _renderTeachers(list) {
@@ -1918,9 +2408,11 @@ const AdminPanel = (() => {
 
   async function teacherApprove(userId) {
     if (!_sb) return;
+    const wasApproved = _teachers.find(x => x.id === userId)?.teacher_status === 'approved';
     const { error } = await _sb.from('profiles').update({ teacher_status: 'approved' }).eq('id', userId);
     if (error) { toast('Error: ' + error.message, 3000); return; }
-    toast('Teacher approved ✅', 2000);
+    toast(wasApproved ? 'Teacher approved ✅' : 'Teacher approved ✅ - ' + await _emailTeacherApproved(userId),
+          wasApproved ? 2000 : 5000);
     const t = _teachers.find(x => x.id === userId);
     if (t) { t.teacher_status = 'approved'; _renderTeachers(_teachers); }
     if (typeof Auth !== 'undefined' && Auth.refreshAdminBadge) Auth.refreshAdminBadge();
@@ -1956,7 +2448,7 @@ const AdminPanel = (() => {
   // queries the rest of the table just when you are searching for someone to
   // promote.
   const ROLES_PAGE = 40;
-  let _rolesOffset  = 0;
+  let _rolesPage = 1, _rolesLastPage = null, _rolesReq = 0;
   let _rolesAll     = [];
   let _rolesQuery   = '';
   let _rolesFilterTimer = null;
@@ -1994,45 +2486,57 @@ const AdminPanel = (() => {
     clearTimeout(_rolesFilterTimer);
     _rolesFilterTimer = setTimeout(() => {
       _rolesQuery = (query || '').trim();
-      loadRoles(true);
+      loadRoles(1);
     }, 300);
   }
 
   // Same 1000-users/month reasoning as Members: this used to pull every
   // profile row (not just admins) in one unbounded query.
-  async function loadRoles(reset = true) {
+  // loadRoles() reloads the page the admin is on; loadRoles(1) the first.
+  async function loadRoles(page = _rolesPage) {
     if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
     const listEl = document.getElementById('admin-roles-list');
     if (!listEl) return;
-    if (reset) { _rolesOffset = 0; _rolesAll = []; listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>'; }
+    _rolesPage = Math.max(1, Math.floor(Number(page) || 1));
+    const req  = ++_rolesReq;
+    const from = (_rolesPage - 1) * ROLES_PAGE;
+    listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
     let query = _sb.from('profiles')
       .select('id, full_name, role, is_super_admin', { count: 'exact' })
       .order('full_name')
-      .range(_rolesOffset, _rolesOffset + ROLES_PAGE - 1);
+      .range(from, from + ROLES_PAGE - 1);
     // No search = the people this tab exists to manage. A search = the whole
     // table, because the account you want to promote is a parent today.
     if (_rolesQuery) query = query.ilike('full_name', `%${_rolesQuery}%`);
     else             query = query.or('role.eq.admin,is_super_admin.eq.true');
     const { data, error, count } = await query;
+    if (req !== _rolesReq) return;
     if (error) {
-      // An RLS denial or a network failure is NOT an empty database. Reporting
-      // it as "No profiles found" also hid the Load more button, so paging
-      // could not be retried without leaving and re-entering the tab.
+      // An RLS denial or a network failure is NOT an empty database - say so,
+      // rather than "No profiles found".
       console.error('[Admin.loadRoles]', error.message);
-      if (reset) listEl.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Could not load roles. Please try Refresh.</p>';
+      listEl.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Could not load roles. Please try Refresh.</p>';
+      _renderPager('admin-roles', _rolesPage, null);
       return;
     }
-    const rows = data || [];
-    _rolesAll = reset ? rows : _rolesAll.concat(rows);
-    _rolesOffset += rows.length;
+    const rows  = data || [];
+    const total = typeof count === 'number' ? count : null;
+    _rolesLastPage = _lastPage(total, ROLES_PAGE);
+    if (!rows.length && _rolesLastPage !== null && _rolesPage > _rolesLastPage) {
+      await loadRoles(_rolesLastPage);
+      return;
+    }
+    _rolesAll = rows;
     _renderRoles();
-    _setCount('admin-roles-count', _rolesAll.length, count, _rolesQuery ? 'matching accounts' : 'administrators');
-    const moreBtn = document.getElementById('admin-roles-more');
-    if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < ROLES_PAGE);
+    _setRangeCount('admin-roles-count', from, rows.length, total, _rolesQuery ? 'matching accounts' : 'administrators');
+    _renderPager('admin-roles', _rolesPage, _pagerState(_rolesPage, _rolesLastPage, rows.length, ROLES_PAGE));
   }
 
-  async function loadMoreRoles() {
-    await loadRoles(false);
+  async function rolesPage(where) {
+    const t = _pagerTarget(where, _rolesPage, _rolesLastPage);
+    if (t === null) return;
+    await loadRoles(t);
+    _pagerScroll('admin-roles-count');
   }
 
   // .select('id') so a row blocked by RLS - or already a super admin, which the
@@ -2600,7 +3104,7 @@ const AdminPanel = (() => {
   const _REPORT_STATUS_WORD = { resolved: 'Marked resolved.', wont_fix: 'Closed as not a problem.', open: 'Reopened.', in_review: 'Marked in review.' };
 
   async function _afterReportAction() {
-    await Promise.all([loadReports(true), _loadReportBadge(), _loadPendingReports()]);
+    await Promise.all([loadReports(), _loadReportBadge(), _loadPendingReports()]);
   }
 
   async function resolveReport(id) {
@@ -2626,7 +3130,7 @@ const AdminPanel = (() => {
         }
         toast('Report and its conversation deleted.', 2200);
         await Promise.all([
-          loadReports(true),
+          loadReports(),
           _loadReportBadge(),
           _loadPendingReports(),
         ]);
@@ -2674,7 +3178,7 @@ const AdminPanel = (() => {
   }
 
   const REPORTS_PAGE = 30;
-  let _reportsOffset  = 0;
+  let _reportsPage = 1, _reportsLastPage = null, _reportsReq = 0, _reportsBankLoaded = false;
   let _reportsAll     = [];
   let _reportsTotal   = null;
   // 'all' | 'questions' | 'contact'. Reset lives in loadReports(), not in the
@@ -2731,13 +3235,13 @@ const AdminPanel = (() => {
   function setReportKind(kind) {
     _reportKind = ['all', 'questions', 'contact'].includes(kind) ? kind : 'all';
     _syncReportTools();
-    loadReports(true);
+    loadReports(1);
   }
 
   function setReportStatusFilter(status) {
     _reportStatus = ['all', 'open', 'resolved', 'wont_fix'].includes(status) ? status : 'all';
     _syncReportTools();
-    loadReports(true);
+    loadReports(1);
   }
 
   // Debounced: every keystroke would otherwise be a count query and a page
@@ -2749,7 +3253,7 @@ const AdminPanel = (() => {
       if (next === _reportSearch) return;
       _reportSearch = next;
       _syncReportTools();
-      loadReports(true);
+      loadReports(1);
     }, 350);
   }
 
@@ -2759,7 +3263,7 @@ const AdminPanel = (() => {
     if (next === _reportSearch) return;
     _reportSearch = next;
     _syncReportTools();
-    loadReports(true);
+    loadReports(1);
   }
 
   function clearReportSearch() {
@@ -2767,7 +3271,7 @@ const AdminPanel = (() => {
     if (!_reportSearch) { const b = document.getElementById('rep-search'); if (b) b.value = ''; return; }
     _reportSearch = '';
     _syncReportTools();
-    loadReports(true);
+    loadReports(1);
   }
 
   function toggleReportOpen(id, open) {
@@ -2822,23 +3326,27 @@ const AdminPanel = (() => {
           ? `${res.deleted} report${res.deleted === 1 ? '' : 's'} deleted.`
           : `${res.deleted} of ${res.requested} deleted - the rest were already gone or refused.`, 3500);
         _reportsSelected.clear();
-        await Promise.all([loadReports(true), _loadReportBadge(), _loadPendingReports()]);
+        await Promise.all([loadReports(), _loadReportBadge(), _loadPendingReports()]);
       },
       { icon: '🗑', okLabel: `Delete ${ids.length}`, danger: true }
     );
   }
 
-  async function loadReports(reset = true) {
+  // loadReports() reloads the page the admin is on (after resolving or deleting
+  // a report); loadReports(1) goes to the first (a filter or the search changed).
+  async function loadReports(page = _reportsPage) {
     const el = document.getElementById('admin-reports-list');
-    if (reset) {
-      _reportsOffset = 0; _reportsAll = [];
-      if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
+    _reportsPage = Math.max(1, Math.floor(Number(page) || 1));
+    const req  = ++_reportsReq;
+    const from = (_reportsPage - 1) * REPORTS_PAGE;
+    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
+    if (!_reportsBankLoaded) {
       // Ensure question bank is fully loaded across all grades so the live lookup
       // works. loadAllForGrade, NOT loadForStudent: the latter now resolves once
       // the child's active subject is in and prefetches the rest in the
       // background, which is right for a child and wrong here - a report can name
       // a question in any subject, and the lookup runs the moment this resolves.
-      // Only needed once, not on every "load more" page.
+      // Only needed once, not on every page.
       if (typeof QuestionLoader !== 'undefined') {
         await Promise.allSettled([
           QuestionLoader.loadAllForGrade(4),
@@ -2846,16 +3354,28 @@ const AdminPanel = (() => {
           QuestionLoader.loadAllForGrade(6),
         ]);
       }
+      _reportsBankLoaded = true;
     }
-    // Total fetched only on reset - a Load more page does not change it.
-    if (reset) { _reportsTotal = await Store.countReports(_reportKind, _reportStatus, _reportSearch); _reportsSelected.clear(); }
-    const page = await Store.loadReports(_reportsOffset, REPORTS_PAGE, _reportKind, _reportStatus, _reportSearch);
-    _reportsOffset += page.length;
-    _reportsAll = reset ? page : _reportsAll.concat(page);
-    _setCount('admin-reports-count', _reportsAll.length, _reportsTotal, 'reports');
+    // ⚠ The total is re-read with EVERY page, not only when a filter changes:
+    //   resolving or deleting reports moves it, and a stale one reads "Page 4 of 3".
+    const [total, rows] = await Promise.all([
+      Store.countReports(_reportKind, _reportStatus, _reportSearch),
+      Store.loadReports(from, REPORTS_PAGE, _reportKind, _reportStatus, _reportSearch),
+    ]);
+    if (req !== _reportsReq) return;
+    _reportsTotal = typeof total === 'number' ? total : null;
+    _reportsLastPage = _lastPage(_reportsTotal, REPORTS_PAGE);
+    if (!rows.length && _reportsLastPage !== null && _reportsPage > _reportsLastPage) {
+      await loadReports(_reportsLastPage);
+      return;
+    }
+    // A tick for bulk delete means "this row, which I can see". Another page's
+    // rows cannot be seen, so every page starts with nothing selected.
+    _reportsSelected.clear();
+    _reportsAll = rows || [];
+    _setRangeCount('admin-reports-count', from, _reportsAll.length, _reportsTotal, 'reports');
+    _renderPager('admin-reports', _reportsPage, _pagerState(_reportsPage, _reportsLastPage, _reportsAll.length, REPORTS_PAGE));
     _syncReportTools();
-    const moreBtn = document.getElementById('admin-reports-more');
-    if (moreBtn) moreBtn.classList.toggle('hidden', page.length < REPORTS_PAGE);
     if (!_reportsAll.length) {
       // "No reports yet" is a lie the moment a filter is on - the queue may be
       // full and simply not match. Say which it is, and offer the way back.
@@ -3037,15 +3557,18 @@ const AdminPanel = (() => {
     }).join('');
   }
 
-  async function loadMoreReports() {
-    await loadReports(false);
+  async function reportsPage(where) {
+    const t = _pagerTarget(where, _reportsPage, _reportsLastPage);
+    if (t === null) return;
+    await loadReports(t);
+    _pagerScroll('admin-reports-count');
   }
 
   function resetReportFilters() {
     clearTimeout(_repSearchTimer);
     _reportKind = 'all'; _reportStatus = 'all'; _reportSearch = '';
     _syncReportTools();
-    loadReports(true);
+    loadReports(1);
   }
 
   // ── Create pre-activated account (super admin only) ───────────
@@ -3358,7 +3881,8 @@ const AdminPanel = (() => {
 
   // ── Question Manager ─────────────────────────────────────────────────────
   const QM = (() => {
-    let _offset    = 0;
+    let _qmPage    = 1;
+    let _qmLastPage = null;
     const PAGE     = 50;
     let _qmTotal   = null;
     let _editingId = null;
@@ -3566,20 +4090,26 @@ const AdminPanel = (() => {
     }
 
     // ── Search / list ────────────────────────────────────────────────────
+    // qmSearch() is a new question (a filter changed) - back to page 1.
+    // _fetchAndRender() reloads the page the admin is on, after an edit.
     async function qmSearch() {
-      _offset = 0; _qmTotal = null;
+      _qmPage = 1; _qmTotal = null;
       _el('qm-list').innerHTML = '<p class="text-sm text-gray-400 p-4">Loading…</p>';
-      _el('qm-load-more').classList.add('hidden');
-      await _fetchAndRender(true);
+      _renderPager('qm', _qmPage, null);
+      await _fetchAndRender();
     }
 
-    async function qmLoadMore() {
-      _offset += PAGE;
-      await _fetchAndRender(false);
+    async function qmPage(where) {
+      const t = _pagerTarget(where, _qmPage, _qmLastPage);
+      if (t === null) return;
+      _qmPage = t;
+      await _fetchAndRender();
+      _pagerScroll('qm-count');
     }
 
-    async function _fetchAndRender(replace) {
+    async function _fetchAndRender() {
       const request = ++_listRequest;
+      const from    = (_qmPage - 1) * PAGE;
       const grade    = _el('qm-grade').value;
       const subject  = _el('qm-subject').value;
       const chapter  = _el('qm-chapter').value;
@@ -3595,7 +4125,7 @@ const AdminPanel = (() => {
         .select('id,subject_id,chapter_id,difficulty,data,protected', { count: 'exact' })
         .eq('is_past_paper', false)
         .order('subject_id').order('chapter_id').order('difficulty').order('id')
-        .range(_offset, _offset + PAGE - 1);
+        .range(from, from + PAGE - 1);
 
       if (grade)   q = q.eq('grade', parseInt(grade));
       if (!_el('qm-include-unpublished')?.checked) q = q.in('subject_id', SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => p.id));
@@ -3615,20 +4145,21 @@ const AdminPanel = (() => {
       }
 
       const rows = data || [];
-      // Updated on EVERY page, not just the first. It used to be inside
-      // `if (replace)`, so after a Load more the line still reported the first
-      // page's numbers while the list underneath had grown.
       _qmTotal = (typeof count === 'number') ? count : _qmTotal;
-      _setCount('qm-count', _offset + rows.length, _qmTotal, 'questions');
+      _qmLastPage = _lastPage(_qmTotal, PAGE);
+      // A delete can empty the last page under the admin; land on the last real one.
+      if (!rows.length && _qmLastPage !== null && _qmPage > _qmLastPage) {
+        _qmPage = _qmLastPage;
+        await _fetchAndRender();
+        return;
+      }
+      _setRangeCount('qm-count', from, rows.length, _qmTotal, 'questions');
 
-      if (replace) { _rows = rows; _rowById.clear(); }
-      else _rows = _rows.concat(rows);
+      _rows = rows;
+      _rowById.clear();
       rows.forEach(r => _rowById.set(r.id, r));
       _renderList();
-
-      const loadMore = _el('qm-load-more');
-      if (rows.length === PAGE) loadMore.classList.remove('hidden');
-      else loadMore.classList.add('hidden');
+      _renderPager('qm', _qmPage, _pagerState(_qmPage, _qmLastPage, rows.length, PAGE));
     }
 
     function _cardHTML(r, previewOn) {
@@ -4062,7 +4593,7 @@ const AdminPanel = (() => {
 
       toast('Question saved ✅', 1500);
       qmCloseForm();
-      qmSearch();
+      _fetchAndRender();
     }
 
     // ── Protection toggle ─────────────────────────────────────────────────
@@ -4070,7 +4601,7 @@ const AdminPanel = (() => {
       const { error } = await _sb.from('questions').update({ protected: protect }).eq('id', id);
       if (error) { toast('Failed: ' + error.message, 2500); return; }
       toast(protect ? '🔒 Protected' : '🔓 Unprotected', 1500);
-      _fetchAndRender(true);
+      _fetchAndRender();
     }
 
     // ── Delete ────────────────────────────────────────────────────────────
@@ -4083,7 +4614,7 @@ const AdminPanel = (() => {
       if (error) { toast('Delete failed: ' + error.message, 3000); return; }
       if (!data?.length) { toast('Delete refused — the question is still there.', 3500); return; }
       toast('Deleted ✅', 1500);
-      qmSearch();
+      _fetchAndRender();
     }
 
     function tabOpen() {
@@ -4093,7 +4624,7 @@ const AdminPanel = (() => {
       _loadReportBadge();
     }
 
-    return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmSubjectFilter, qmOpenForm, qmCloseForm,
+    return { tabOpen, qmSearch, qmPage,qmGradeFilter, qmSubjectFilter, qmOpenForm, qmCloseForm,
              qmFormGradeChange, qmFormSubjectChange, qmFormChapterChange,
              qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmUploadImage, qmSave, qmDelete, qmTogglePreviewMode,
              qmPreview, qmPreviewForm, qmPreviewToggle, qmClosePreview,
@@ -4516,16 +5047,17 @@ const AdminPanel = (() => {
     loadSecurityEvents();
   }
 
-  return { render, showTab, loadMembers, loadMoreMembers, filterMembers, copyMemberEmails, setMemberStatusFilter, setMemberVisibilityFilters,
+  return { render, showTab, loadMembers, membersPage, filterMembers, copyMemberEmails, setMemberStatusFilter, setMemberVisibilityFilters,
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
-    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, toggleLeaderboard, loadStats, loadReports, loadMoreReports, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleQmReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, filterRoles, loadPlans, togglePlan, loadJuice, saveJuiceSettings, confirmJuice, rejectJuice, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeacherQueue, setTeacherStatus, teachersPage, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, toggleLeaderboard, loadStats, loadReports, reportsPage, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleQmReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, rolesPage, setRole, filterRoles, loadPlans, togglePlan, loadJuice, saveJuiceSettings, confirmJuice, rejectJuice, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier, sortTeachers, refreshTeacherActivity,
-    qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
+    toggleTeacherAutoApprove, toggleChildSettings, patchChildSettings, toggleChildChapter, toggleChildGrade, resetChildPin,
+    qmSearch: QM.qmSearch, qmPage: QM.qmPage, qmGradeFilter: QM.qmGradeFilter,
     qmSubjectFilter: QM.qmSubjectFilter, qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,
     qmFormGradeChange: QM.qmFormGradeChange, qmFormSubjectChange: QM.qmFormSubjectChange,
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,

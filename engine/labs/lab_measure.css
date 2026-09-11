@@ -1,0 +1,55 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Measurement Lab - only what labs.css does not already have.
+   Every class is prefixed .lab-measure- (other labs load their own sheets
+   into the same page).
+   ⚠ Nothing here animates .screen or its ancestors.
+   ══════════════════════════════════════════════ */
+
+.lab-measure .lab-tool:disabled { opacity: 0.42; cursor: default; }
+.lab-measure .lab-tool b { font-weight: 700; }
+
+/* Shelf: the instrument or thing that is chosen */
+.lab-measure-ico { flex: 0 0 auto; width: 30px; text-align: center; font-size: 1.4rem; line-height: 1; }
+.lab-measure .lab-item[aria-pressed="true"] { border-color: var(--lab-accent); background: var(--lab-accent-soft); box-shadow: inset 0 0 0 1px var(--lab-accent); }
+.lab-measure-step { margin: 12px 0 8px; font-weight: 700; color: var(--lab-ink); }
+
+/* The reading box, under the tools */
+.lab-measure-read {
+  display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 14px;
+  background: var(--lab-surface); border: 1px solid var(--lab-rule);
+}
+.lab-measure-read label { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); }
+.lab-measure-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.lab-measure-input {
+  flex: 1 1 auto; min-width: 0; width: 100%; min-height: 44px; padding: 0 12px; border-radius: 12px;
+  border: 2px solid var(--lab-rule); background: var(--lab-surface-2); color: var(--lab-ink);
+  font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.lab-measure-input:disabled { opacity: 0.55; }
+.lab-measure-input.is-right { border-color: var(--lab-ok); background: var(--lab-ok-soft); }
+.lab-measure-input.is-wrong { border-color: var(--lab-danger); background: var(--lab-danger-soft); }
+.lab-measure-unit { flex: 0 0 auto; min-width: 2.2em; font-weight: 800; font-size: 0.95rem; }
+.lab-measure-row .lab-btn { flex: 0 0 auto; }
+/* .lab-btn sets display:inline-flex, which beats the browser's own [hidden]. */
+.lab-measure-row .lab-btn[hidden] { display: none; }
+.lab-measure-row .lab-btn[data-act="neg"] { min-width: 44px; padding: 0 10px; font-size: 1.1rem; }
+/* The shared segmented control is 38px tall; a phone tap target is 44px. */
+.lab-measure .lab-seg button { min-height: 44px; }
+
+/* Notebook: the reading and its conversions */
+.lab-measure-conv { display: block; font-size: 0.7rem; color: var(--lab-muted); font-weight: 500; }
+.lab-measure-prec { white-space: nowrap; font-size: 0.72rem; color: var(--lab-muted); }
+
+/* "Right tool for the job" */
+.lab-measure-job { margin: 0 0 10px; padding: 10px 12px; border-radius: 12px; background: var(--lab-accent-soft); font-weight: 700; font-size: 0.95rem; line-height: 1.4; }
+.lab-measure-job small { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lab-muted); margin-bottom: 2px; }
+
+/* Help: the units table */
+.lab-measure-units { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.lab-measure-units th, .lab-measure-units td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--lab-rule); }
+.lab-measure-units thead th { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lab-muted); }
+
+@media (max-width: 420px) {
+  .lab-measure .lab-tool { font-size: 0.68rem; }
+  .lab-measure-row .lab-btn { padding: 0 12px; }
+}

@@ -1123,13 +1123,38 @@ const _IDLE_NUDGES = {
   'exam-config':    { target: 'start-exam-btn',          text: 'All set? Tap here to begin your mock exam. 📝' },
   results:          { target: 'results-review',          text: 'Scroll down to see which ones you got wrong - that is the useful bit. 🔍' },
   syllabus:         { target: 'syllabus-list',           text: 'Tap a chapter to see what it covers, then practise it. 📖' },
-  parent:           { target: 'pd-no-children-add-btn',  text: 'Add your child here to start tracking their revision. 👶' },
+  parent:           () => _parentIdleNudge(),
 };
 
 const _IDLE_AFTER_MS   = 15000;
 const _IDLE_MAX_PER_SCREEN = 2;
 let _idleTimer  = null;
 let _idleCounts = {};
+
+// The parent dashboard points at the parent's NEXT step: add a first child,
+// then hand the device over. New parents who had just added a child did not
+// know where to go from there, so the hand-over nudge repeats a little more than
+// the others - and stops for good the first time this parent uses student mode,
+// because after that it is only noise on a control they already know.
+// ⚠ An unreadable localStorage reads as "used": quiet is the safe failure.
+function _studentModeUsedKey() {
+  const parentId = typeof Auth !== 'undefined' ? Auth.getParentProfile?.()?.id : null;
+  return `psac_student_mode_used:${parentId || 'device'}`;
+}
+function _markStudentModeUsed() {
+  try { localStorage.setItem(_studentModeUsedKey(), '1'); } catch (_) {}
+}
+function _studentModeUsed() {
+  try { return !!localStorage.getItem(_studentModeUsedKey()); } catch (_) { return true; }
+}
+function _parentIdleNudge() {
+  if (_hintTargetVisible(document.getElementById('pd-no-children-add-btn'))) {
+    return { target: 'pd-no-children-add-btn', text: 'Add your child here to start tracking their revision. 👶' };
+  }
+  if (_studentModeUsed()) return null;
+  return { target: 'pd-student-view-btn', max: 3,
+           text: 'Ready for your child? Tap here to hand the device over - they sign in with their PIN. 🎒' };
+}
 
 function _idleNudgeAllowed() {
   if (typeof _isParentSession === 'function' && _isParentSession() && S.currentScreen !== 'parent') return false;
@@ -1160,16 +1185,23 @@ function _clearIdleNudge() {
 
 function _armIdleNudge(screenId) {
   _clearIdleNudge();
-  const cfg = _IDLE_NUDGES[screenId];
+  // An entry may be a function, for a screen whose next step depends on state
+  // (the parent dashboard). Resolved again when the timer fires, because that
+  // state can change in between - a child added in the meantime moves it on.
+  const resolve = () => { const e = _IDLE_NUDGES[screenId]; return typeof e === 'function' ? e() : e; };
+  const cfg = resolve();
   if (!cfg) return;
-  if ((_idleCounts[screenId] || 0) >= _IDLE_MAX_PER_SCREEN) return;
+  // Counted per TARGET, so the add-child nudge cannot spend the hand-over's.
+  const countKey = screenId + ':' + cfg.target;
+  if ((_idleCounts[countKey] || 0) >= (cfg.max || _IDLE_MAX_PER_SCREEN)) return;
 
   _idleTimer = setTimeout(() => {
     if (S.currentScreen !== screenId || !_idleNudgeAllowed()) return;
+    if (resolve()?.target !== cfg.target) return;
     const el = document.getElementById(cfg.target);
     if (!_hintTargetVisible(el) || !_inViewport(el)) return;
 
-    _idleCounts[screenId] = (_idleCounts[screenId] || 0) + 1;
+    _idleCounts[countKey] = (_idleCounts[countKey] || 0) + 1;
     el.classList.add('attn-nudge');
     // The class is removed on the next interaction (see the listeners below) or
     // when the animation's own run finishes, whichever comes first.
@@ -1186,7 +1218,12 @@ function _armIdleNudge(screenId) {
 // on the capture phase so nothing can swallow them before we see them.
 ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(evt => {
   window.addEventListener(evt, () => {
-    if (!_idleTimer && !document.querySelector('.attn-nudge')) return;
+    // ⚠ A screen whose next step is worked out from state (the parent dashboard)
+    //   re-arms on every interaction: with nothing to point at, no timer was
+    //   left running, so the parent who then adds a child from the empty
+    //   dashboard would never be shown the hand-over switch until they navigated.
+    if (!_idleTimer && !document.querySelector('.attn-nudge')
+        && typeof _IDLE_NUDGES[S.currentScreen] !== 'function') return;
     _clearIdleNudge();
     _armIdleNudge(S.currentScreen);
   }, { passive: true, capture: true });
@@ -1339,10 +1376,12 @@ function showStudentViewGuide() {
     localStorage.setItem(_studentViewGuideKey(), '1');
   } catch (_) {}
   callout.classList.remove('hidden');
-  button.classList.remove('student-view-nudge');
-  // Restart the short, finite animation without leaving a constantly moving UI.
+  // The same finite .attn-nudge shake every other "press this" button uses, so
+  // the dashboard's later idle reminders on this button look like this one.
+  button.classList.remove('attn-nudge');
   void button.offsetWidth;
-  button.classList.add('student-view-nudge');
+  button.classList.add('attn-nudge');
+  setTimeout(() => button.classList.remove('attn-nudge'), 2600);
   clearTimeout(_studentViewGuideTimer);
   _studentViewGuideTimer = setTimeout(dismissStudentViewGuide, 12000);
 }
@@ -1351,7 +1390,7 @@ function dismissStudentViewGuide() {
   clearTimeout(_studentViewGuideTimer);
   _studentViewGuideTimer = null;
   document.getElementById('pd-student-view-callout')?.classList.add('hidden');
-  document.getElementById('pd-student-view-btn')?.classList.remove('student-view-nudge');
+  document.getElementById('pd-student-view-btn')?.classList.remove('attn-nudge');
 }
 
 function shareChildLoginWhatsApp() {
@@ -2268,7 +2307,7 @@ function _launchConfetti() {
 // nobody was ever studying. Patching each button was a losing game (there are
 // a dozen entry points into these screens); this catches all of them at once.
 const _KID_ONLY_SCREENS = new Set([
-  'student-home', 'dashboard', 'chapter-select', 'syllabus', 'interactive-map', 'past-papers', 'analytics',
+  'student-home', 'dashboard', 'chapter-select', 'syllabus', 'interactive-map', 'past-papers', 'analytics', 'labs',
   'subject-select', 'grade-select', 'practice', 'exam-config', 'exam',
   'results', 'assignment-complete', 'search', 'schedule', 'inbox',
   'practice-hub', 'subject-hub', 'cloze-list', 'cloze-play',
@@ -2531,6 +2570,8 @@ function showScreen(id) {
   //   there and withGroup resolves on a microtask.
   if (id === 'teacher') RoleModules.withGroup('teacher', () => TeacherMode.render());
   if (id === 'forum')   RoleModules.withGroup('forum',   () => Forum.render());
+  if (id === 'labs')    RoleModules.withGroup('labs',    () => Labs.render());
+  if (id === 'student-home') _syncLabsNote();
   if (id === 'calendar'  && typeof Calendar  !== 'undefined') Calendar.render();
   const searchBtn  = document.getElementById('search-btn');
   const isAuth     = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
@@ -9775,6 +9816,37 @@ function _renderShBadges() {
 }
 
 // ── Student Home Hub ──────────────────────────────────────────────────────────
+// ── Science Labs (NCE only) ──────────────────────────────────
+// Interactive virtual labs, docs/labs/PLAN.md. The lab code lives in
+// engine/labs/ and is fetched on demand (RoleModules group 'labs'), so a
+// primary child never downloads any of it.
+// ⚠ NCE stage only, and only a grade that actually HAS a lab: a Grade 7 or 8
+//   pupil sees nothing until their own labs exist (plan decision 2), rather
+//   than a door into Grade 9 chemistry.
+// ⚠ "Their grade" means the grade on screen PLUS every grade at or above their
+//   own that a parent ticked in ⚙️ Controls › Grade access. A parent who unlocks
+//   Grade 9 for a younger child has chosen to let them work at Grade 9, labs
+//   included. Reading SELECTED_GRADE alone hid it: opening any Grade 5 subject
+//   sets it straight back to 5.
+// ⚠ A parent can switch labs off per child (DB.restrictions.labsDisabled).
+const _LAB_GRADES = [9];
+function _labsAvailable() {
+  if (typeof DB !== 'undefined' && DB && DB.restrictions && DB.restrictions.labsDisabled) return false;
+  const grades = new Set([Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0)]);
+  if (typeof GradeAccess !== 'undefined') GradeAccess.childChoices().forEach(g => grades.add(Number(g)));
+  return [...grades].some(g => g && _gradeStage(g).id === 'secondary' && _LAB_GRADES.includes(g));
+}
+// display, not .hidden: .sh-note sets its own display in style.css, which
+// loads after the Tailwind CDN and would win over its .hidden.
+function _syncLabsNote() {
+  const note = document.getElementById('sh-note-labs');
+  if (note) note.style.display = _labsAvailable() ? '' : 'none';
+}
+function openLabs() {
+  if (!_labsAvailable()) { toast('🔬 Science Labs are for NCE pupils.', 2500); return; }
+  showScreen('labs');
+}
+
 const StudentHome = (() => {
   function tab(name) {
     const screen = document.getElementById('screen-student-home');

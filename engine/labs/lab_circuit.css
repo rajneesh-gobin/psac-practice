@@ -1,0 +1,72 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Circuit Board - only what engine/labs/labs.css does not
+   already give every lab. Every class here starts .lab-circuit-.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN.
+   ⚠ Nothing here animates or transforms .screen or its ancestors.
+   ══════════════════════════════════════════════ */
+
+/* The view toggle in the top bar: neutral, not the red "goggles off" pill. */
+.lab-circuit-viewbtn {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; border-radius: 999px;
+  border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); color: var(--lab-accent);
+  font-weight: 700; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
+}
+.lab-circuit-viewbtn[aria-pressed="true"] { background: var(--lab-accent); color: var(--lab-accent-ink); }
+
+/* Chips over the board never block a tap on the spaces underneath. */
+.lab-circuit-chip { position: absolute; top: 10px; left: 10px; max-width: calc(64% - 10px); flex-wrap: wrap; pointer-events: none; }
+.lab-circuit-status { position: absolute; top: 10px; right: 8px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; max-width: 34%; pointer-events: none; }
+.lab-circuit-contents { pointer-events: none; }
+
+/* One real button per space between two points, laid over the canvas. */
+.lab-circuit-slots { position: absolute; inset: 0; pointer-events: none; }
+.lab-circuit-slot {
+  position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; pointer-events: auto;
+  border-radius: 12px; border: 2px dashed transparent; background: transparent; cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.lab-circuit-slots.is-placing .lab-circuit-slot.is-empty { border-color: rgba(29, 106, 150, 0.55); background: rgba(255, 255, 255, 0.35); }
+.lab-circuit-slot:hover { border-color: var(--lab-accent); }
+.lab-circuit-slot.is-over { border-style: solid; border-color: var(--lab-accent); background: rgba(29, 106, 150, 0.18); }
+.lab-circuit-slot.is-next { border-style: solid; border-color: var(--lab-star); background: rgba(255, 210, 90, 0.28); }
+
+/* The palette of parts under the board: picture + standard symbol + name. */
+.lab-circuit-palette-wrap { display: flex; flex-direction: column; gap: 6px; }
+.lab-circuit-palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; }
+.lab-circuit-tool {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px;
+  padding: 4px 3px; border-radius: 12px; border: 1px solid var(--lab-rule); background: var(--lab-surface);
+  color: var(--lab-ink); font-size: 0.72rem; line-height: 1.1; cursor: pointer; touch-action: manipulation; user-select: none;
+}
+.lab-circuit-tool b { font-weight: 700; }
+.lab-circuit-tool[aria-pressed="true"] { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); }
+.lab-circuit-tool-top { display: flex; align-items: center; gap: 2px; font-size: 1.05rem; line-height: 1; }
+.lab-circuit-tool .lab-circuit-svg { width: 34px; height: 17px; }
+.lab-circuit-svg { display: block; color: var(--lab-ink); }
+.lab-circuit-phint { font-size: 0.76rem; }
+@media (pointer: coarse) { .lab-circuit-drag { display: none; } }
+.lab-circuit-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* The shelf: every component with its picture and its symbol. */
+.lab-circuit-h { font-size: 0.85rem !important; }
+.lab-circuit-kinds { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.lab-circuit-kind {
+  display: flex; align-items: center; gap: 8px; min-height: 58px; padding: 8px 10px; border-radius: 12px; text-align: left;
+  border: 1px solid var(--lab-rule); background: var(--lab-surface-2); color: var(--lab-ink); cursor: pointer; font: inherit;
+}
+.lab-circuit-kind.is-on { border-color: var(--lab-accent); background: var(--lab-accent-soft); }
+.lab-circuit-pic { flex: 0 0 auto; width: 32px; height: 32px; display: grid; place-items: center; font-size: 1.3rem;
+  border-radius: 10px; background: var(--lab-surface); border: 1px solid var(--lab-rule); }
+.lab-circuit-kind-sym { flex: 0 0 auto; width: 52px; padding: 2px; border-radius: 8px; background: #FBFAF4; }
+.lab-circuit-kind-sym .lab-circuit-svg, .lab-circuit-symcell .lab-circuit-svg { width: 48px; height: 24px; color: #18222C; }
+.lab-circuit-symcell { background: #FBFAF4; }
+.lab-circuit-quick-h { margin-top: 12px; }
+.lab-circuit-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.lab-circuit-quick .lab-btn { min-height: 44px; }
+
+.lab-log li.lab-circuit-log-bad { border-left-color: var(--lab-danger); }
+
+@media (max-width: 420px) {
+  .lab-circuit-viewbtn { padding: 0 10px; font-size: 0.78rem; }
+  .lab-circuit-kinds { grid-template-columns: minmax(0, 1fr); }
+}

@@ -35,6 +35,9 @@ const Store = (() => {
       // practice and follow-up state plus a 90-entry mission history.
       learningCoach: { version:1, topics:{}, history:[], mission:null },
       games:        {},
+      // Science Labs (engine/labs/, NCE only): { mixing: { disc, missions,
+      // hazards, intro } }. Like games, never fed to recordAnswer().
+      labs:         {},
       // The unfinished practice set, so it can be resumed on ANOTHER DEVICE.
       // { practice: { chapterId: { subjectId, qIds, idx, answers, ts } } }
       // ⚠ Deliberately bounded and deliberately in the blob: it is one small

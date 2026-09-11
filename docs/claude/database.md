@@ -18,7 +18,7 @@ same drift, and regenerate rather than adding a file.**
 
 | Thing | Where |
 |---|---|
-| The schema | `supabase-schema.sql` — 56 tables · 187 constraints · 74 indexes · 131 functions · 12 triggers · 81 policies (re-measured 2026-09-10 AFTER the device-cap and class-hub migrations; the generator prints the counts) |
+| The schema | `supabase-schema.sql` — 57 tables · 188 constraints · 76 indexes · 133 functions · 12 triggers · 82 policies (re-measured 2026-09-11 AFTER the admin-support migration; the generator prints the counts) |
 | Regenerate | `SUPABASE_ACCESS_TOKEN=sbp_… node scripts/dump-schema.js` |
 | Test | `scripts/sql-tests/run-schema-tests.sh` |
 
@@ -171,6 +171,63 @@ Five functions, and only one of them grants anything.
 - Tested by `scripts/sql-tests/run-juice-tests.sh` (26 assertions on a real
   postgres, as `authenticated`), `scripts/test-juice-payments.js` (the client
   half) and `scripts/test-juice-ui.js` (both screens at 360px).
+
+### Teacher auto-approval (2026-09-11, APPLIED)
+Applied to production 2026-09-11, re-applied to prove idempotency, schema
+regenerated. Verified on production, not inferred: both bodies replaced, one
+overload each, `proacl` unchanged, `has_table_privilege('postgres','auth.users',
+'SELECT')` true. The switch is absent (= OFF), so nothing changed for any user.
+`migrations/20260911_teacher_auto_approve.sql` replaces `request_teacher_access()`
+and `admin_teacher_requests()`. Admin › Content › Registration → *Approve teachers
+automatically* writes `global_settings.teacher_auto_approve` (**default off**).
+- On, `request_teacher_access()` approves the caller itself (role `teacher`, tier
+  **`unverified`**, `teacher_decided_by = NULL`) only if `auth.users.email_confirmed_at`
+  is set **and** `teacher_decided_at IS NULL`. Rejected, suspended or revoked
+  applicants go to the queue whatever the switch says.
+- ⚠ **"Confirmed" means "clicked" only while `mailer_autoconfirm` is OFF.**
+- ⚠ **It is the first function to read `auth.users`**; the read is wrapped so a
+  lost privilege fails to "not confirmed", never to an error on every application.
+- ⚠ The switch is compared as JSON `true`, never cast — a stray string must not
+  break applications.
+- Manual approval emails the teacher via `/api/teacher-approved-email`, which
+  mails only an account that is `role='teacher'` and `approved` **now**, with fixed
+  text. Tier toggles do not email.
+- Tests: `scripts/sql-tests/run-teacher-approve-tests.sh` (21 assertions, as
+  `authenticated`) and `scripts/test-teacher-approved-email.js`.
+
+### Admin support panel (2026-09-11, APPLIED)
+`migrations/20260911_admin_support_panel.sql`. Tested on a fresh postgres by
+`scripts/sql-tests/run-admin-support-tests.sh` (37 assertions, as
+`authenticated`: fresh build, migration twice, behaviour). **Applied to
+production 2026-09-11**, re-applied to prove idempotency, schema regenerated.
+Verified on production, not inferred: the live `guard_profiles_privileged()`
+body matched the dump before applying; afterwards one overload of each new
+function, `admin_actions` RLS on with `authenticated=r` only, the guard
+trigger still enabled. The client (admin.js/auth.js/helpers.js) is NOT
+deployed yet; until it is, nothing calls these.
+- ⚠⚠ **Before it, any admin could make anyone an admin — or themselves super
+  admin.** `authenticated` has table-level UPDATE on `profiles`, `profiles_update`
+  admits `is_admin()`, and `guard_profiles_privileged()` returned early for any
+  admin. `is_super_admin()` existed and nothing called it. The guard now RAISES
+  `42501 only_super_admin` when a non-super admin changes `is_super_admin` or
+  moves `role` across the **admin** boundary. Parent↔teacher moves by a plain
+  admin (`admin_set_teacher_status`) are untouched, and so is the silent revert
+  for non-admins (a parent's whole-row save must not error). Measured first: both
+  production admins are super admins, so nobody lost anything.
+- **`admin_actions`** — who changed what, for whom. RLS on; `authenticated` has
+  SELECT (policy: `is_admin()`) and **no write grant**, like `credit_ledger`; only
+  the two SECURITY DEFINER functions write it. No FKs, like `security_events`.
+- **`admin_patch_student_settings(student, patch, reason)`** — super admin only.
+  Changes a child's parent controls **key by key**: the parent's Controls tab
+  writes the whole `settings` object, so a whole-object write from the admin side
+  would undo whatever the parent changed meanwhile. Accepts only the nine
+  parent-control keys, type-checked; one bad key refuses the whole patch; a JSON
+  `null` removes a key; a no-op writes nothing and logs nothing.
+- **`admin_log_action(action, user, student, detail)`** — any admin; records
+  actions that happen elsewhere (force logout, child PIN reset). ⚠ Called from
+  the admin's browser after the fact: a note, not evidence.
+- ⚠ `proacl` was read on production after applying: both functions show
+  `authenticated` + `service_role` and **no anon, no `=X`**.
 
 ### Other database facts worth keeping
 - ⚠ **`public.profiles` has NO email column** — the address is in `auth.users`,

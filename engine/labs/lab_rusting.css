@@ -1,0 +1,73 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Rusting Lab - only what labs.css does not already give.
+   Loaded by lab_core.js when the lab opens. Every class is .lab-rusting-*.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN: no utility classes.
+   ⚠ A primary lab (Grade 6): bigger text, and every tap target at least 44px.
+   ══════════════════════════════════════════════ */
+
+/* Three tubes / stop the rust switch above the picture */
+.lab-rusting-rigs { display: flex; width: 100%; }
+.lab-rusting-rigs button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 8px; font-size: 0.88rem; }
+
+/* Readout chips over the canvas, top-left, wrapping on a phone */
+.lab-rusting-chips {
+  position: absolute; top: 8px; left: 8px; right: 8px; display: flex; flex-wrap: wrap; gap: 5px;
+  pointer-events: none;
+}
+.lab-rusting-chips .lab-chip { font-size: 0.8rem; }
+.lab-rusting .lab-contents { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.8rem; }
+
+/* Lab assistant and guide box: larger words for younger readers, 44px buttons */
+.lab-rusting .lab-coach p { font-size: 1rem; }
+.lab-rusting .lab-coach-tip { width: 44px; height: 44px; }
+.lab-rusting .lab-guide-say { font-size: 1.08rem; }
+.lab-rusting-guide-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lab-rusting-guide-head .lab-guide-meta { flex: 1; min-width: 0; }
+.lab-rusting .lab-rusting-say { min-height: 44px; min-width: 44px; }
+.lab-rusting .lab-btn-sm { min-height: 44px; }
+
+/* Adult-helper toggle in the top bar */
+.lab-rusting .lab-goggles { gap: 4px; }
+
+/* Tools under the picture: 3 × 2 */
+.lab-rusting-tools { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lab-rusting-tools .lab-tool { position: relative; min-height: 64px; font-size: 0.78rem; }
+.lab-rusting-toolsign { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; font-style: normal; }
+.lab-rusting-toolsign .lab-sign-mini { width: 18px; height: 18px; }
+.lab-rusting-danger { border-color: var(--lab-danger); background: var(--lab-danger-soft); color: var(--lab-danger); }
+
+/* Set-up panel: labelled rows of option buttons */
+.lab-rusting-set h2 { margin-bottom: 8px; }
+.lab-rusting-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.lab-rusting-label { font-size: 0.76rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); }
+.lab-rusting-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-rusting-opts.is-wide { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.lab-rusting-opts.is-four { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.lab-rusting-opts.is-five { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.lab-rusting-opt {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  min-width: 44px; min-height: 44px; padding: 4px 8px; border-radius: 10px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface-2); color: var(--lab-ink); font: inherit; font-size: 0.85rem; font-weight: 700;
+  line-height: 1.2; text-align: center; cursor: pointer; touch-action: manipulation;
+}
+.lab-rusting-opt.is-big { font-size: 1.1rem; }
+.lab-rusting-opt small { font-size: 0.68rem; font-weight: 500; color: var(--lab-muted); }
+.lab-rusting-opt:hover { border-color: var(--lab-accent); }
+.lab-rusting-opt[aria-pressed="true"] { background: var(--lab-accent); border-color: var(--lab-accent); color: var(--lab-accent-ink); }
+.lab-rusting-opt[aria-pressed="true"] small { color: var(--lab-accent-ink); opacity: 0.85; }
+.lab-rusting-opt:active { transform: scale(0.97); }
+.lab-rusting-opt:disabled { opacity: 0.45; cursor: default; }
+
+/* "Oil layer: Yes / No" rows */
+.lab-rusting-pair { display: flex; align-items: center; gap: 6px; }
+.lab-rusting-pair > span { flex: 1 1 auto; min-width: 0; font-size: 0.85rem; font-weight: 700; line-height: 1.25; }
+.lab-rusting-pair .lab-rusting-opt { flex: 0 0 60px; }
+
+/* Notebook */
+.lab-rusting-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; border: 1px solid rgba(0, 0, 0, 0.2); }
+.lab-rusting-yes { color: var(--lab-ok); font-weight: 700; }
+.lab-rusting-no { color: var(--lab-danger); font-weight: 700; }
+.lab-rusting-some { color: var(--lab-warn); font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) { .lab-rusting-opt:active { transform: none; } }
+.kid-calm .lab-rusting-opt:active { transform: none; }

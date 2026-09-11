@@ -222,3 +222,23 @@ database is a **decision**, not a pending run.
     noticing; the byte budget fixed the symptom, not the cause. Run
     `node netlify/build-questions.js && node scripts/test-question-cache-budget.js`
     after any large content addition — it fails when a grade stops fitting.
+
+16. ⚠ **Teacher auto-approval: the SQL is APPLIED (2026-09-11), the client is
+    NOT DEPLOYED** (see [database.md](database.md)). Still to do: deploy, so the
+    admin toggle and the `/api/teacher-approved-email` redirect and function exist
+    (POST must answer 401); set `GMAIL_USER` / `GMAIL_APP_PASSWORD` on Netlify, or
+    every manual approval toasts "no email sent: mail is not set up".
+
+17. ⚠ **Admin support panel: the SQL is APPLIED (2026-09-11); the
+    client is NOT DEPLOYED** (2026-09-11, see [database.md](database.md) and
+    [features.md](features.md)). In this order:
+    1. ✅ Done 2026-09-11: the live `guard_profiles_privileged()` body was
+       diffed against the dump first (identical), the migration applied twice,
+       `proacl` read on production, the schema regenerated.
+    2. Deploy `engine/helpers.js`, `engine/auth.js`, `engine/admin.js` (all three
+       are shell-cached — bump `SHELL_VERSION` unless the pending deploy already
+       carries a bump nobody has shipped).
+    Not built yet, deliberately: removing a co-parent and setting a reminder time
+    for a family (both refuse admins today — `remove_family_member` has no admin
+    branch, `push-subscribe.js` `_callerOwns` has none), purchased-chapter grants,
+    and a teacher-account panel.
