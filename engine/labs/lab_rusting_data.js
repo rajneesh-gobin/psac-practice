@@ -369,7 +369,7 @@ const LabRustingData = (() => {
       exam: 'Tube A needs boiled water. Boiling drives the air out of the water. An adult does this part.',
     },
     sharp: {
-      signs: ['irritant'],
+      signs: ['sharp'],
       title: () => 'Ouch! A rusty nail can cut you',
       happened: () => 'You picked up a rusty nail with your fingers. Its point scratched your skin.',
       why: 'Rusty nails can be sharp and dirty. Germs can get into a cut.',

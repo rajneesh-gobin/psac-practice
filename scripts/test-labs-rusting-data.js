@@ -192,7 +192,7 @@ ok('the Diagram 6 question gives the paper’s answer first: Nail B only (PSAC 2
 ok('only PSAC papers that exist in the question bank are quoted (2021, 2024, 2025)',
    (src.match(/PSAC (\d{4})/g) || []).length > 0 && (src.match(/PSAC (\d{4})/g) || []).every(m => /202[145]/.test(m)),
    (src.match(/PSAC (\d{4})/g) || []).filter(m => !/202[145]/.test(m)));
-const SIGNS = ['corrosive', 'explosive', 'flammable', 'pressure', 'toxic', 'irritant', 'oxidising', 'electric', 'hot', 'eye', 'biohazard'];
+const SIGNS = ['corrosive', 'explosive', 'flammable', 'pressure', 'toxic', 'irritant', 'oxidising', 'electric', 'hot', 'eye', 'biohazard', 'warning', 'sharp'];
 for (const [id, H] of Object.entries(P.HAZARDS)) {
   ok(`hazard ${id}: real signs, what happened, why, what to do instead and the exam point`,
      H.signs.length && H.signs.every(s => SIGNS.includes(s)) && H.title() && H.happened() && H.why && H.instead && H.exam);

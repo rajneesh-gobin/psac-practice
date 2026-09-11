@@ -36,6 +36,29 @@ const LabPhoto = (() => {
   let _panel = 'sandbox', _mission = null, _guide = null;
   let _parts = [], _fx = [], _shake = 0, _busy = false, _instant = false;
   let _colors = null, _tipIdx = -1, _said = {}, _emit = 0;
+  // Primary levels (Grades 4 and 6): two pots, seed dishes, waterweed.
+  let _g = 9, _pots = null, _seeds = null, _weed = null, _wprev = null, _wruns = [], _potRuns = [], _seedRuns = [];
+  let _lapse = null, _talking = false, _obs = null;
+
+  // The grade the lab is being used at (Labs.grade(), LAB_SPEC §9). Anything
+  // the lab has no level for is the original Grade 9 level.
+  function _grade() {
+    let g = null;
+    try { g = typeof Labs.grade === 'function' ? Number(Labs.grade()) : null; } catch (e) { g = null; }
+    return P().LEVELS[g] ? g : 9;
+  }
+  const _primary = () => _g !== 9;
+  const _mine = list => list.filter(x => (x.grades || [9]).includes(_g));
+  const _level = () => P().LEVELS[_g];
+  const _introKey = () => _g === 9 ? 'intro' : 'intro_g' + _g;
+
+  function _newPots() { return { sel: 'A', twin: true, A: P().newPot(), B: P().newPot(), day: 0, res: null, check: null }; }
+  function _newSeeds() { const d = {}; P().DISHES.forEach(i => { d[i] = P().newDish(); }); return { sel: 1, dishes: d, day: 0, res: null, look: false }; }
+  function _newWeed() {
+    return { dist: 30, lampOn: true, water: 'soda', temp: P().ROOM_TEMP, shield: false, counting: null, last: null, gas: 0, heatNow: 0, relit: 0 };
+  }
+  // The waterweed is drawn by the pondweed painter: give it the pondweed's shape.
+  const _weedView = () => Object.assign({}, _weed, { water: P().WEED_WATERS[_weed.water].model });
 
   function _newPond() {
     return { dist: 30, lampOn: true, water: 'low', temp: P().ROOM_TEMP, shield: false, counting: null, last: null, gas: 0, heatNow: 0, relit: 0 };
@@ -47,15 +70,18 @@ const LabPhoto = (() => {
   function _resetBench() {
     _pond = _newPond(); _leaf = _newLeaf('green'); _bunsen = false; _bathHot = false;
     _prev = null; _parts = []; _fx = []; _said = {}; _busy = false;
+    _pots = _newPots(); _seeds = _newSeeds(); _weed = _newWeed(); _wprev = null; _wruns = []; _lapse = null;
+    if (_level() && !_level().rigs.includes(_rig)) _rig = _level().rigs[0];
   }
   const _setup = () => ({ plant: _leaf.plant, destarched: _leaf.destarched, cover: _leaf.cover, day: _leaf.day });
 
   // ══ Shell ════════════════════════════════════
   function _shellHTML() {
-    return `<div class="lab lab-photo">
+    const Lv = _level(), prim = _primary();
+    return `<div class="lab lab-photo${prim ? ' is-primary' : ''}">
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-act="hub" aria-label="Back to Science Labs">←</button>
-        <div class="lab-top-title"><span class="lab-eyebrow">Biology · Grade 9</span><h1>Photosynthesis Lab</h1></div>
+        <div class="lab-top-title"><span class="lab-eyebrow">${esc(Lv.eyebrow)}</span><h1>Photosynthesis Lab</h1></div>
         <div class="lab-top-actions">
           <button type="button" class="lab-icon-btn" data-act="help" aria-label="How the lab works">?</button>
         </div>
@@ -63,17 +89,17 @@ const LabPhoto = (() => {
       <div class="lab-body">
         <div class="lab-stage">
           <div class="lab-seg lab-photo-rigs" role="group" aria-label="Choose the rig">
-            <button type="button" data-set="rig" data-v="pond">🌿 Pondweed &amp; lamp</button>
-            <button type="button" data-set="rig" data-v="leaf">🍃 Starch test</button>
+            ${Lv.rigs.map(r => `<button type="button" data-set="rig" data-v="${r}">${P().RIG_NAMES[r]}</button>`).join('')}
           </div>
           <div class="lab-canvas-wrap" id="lab-photo-stage">
-            <canvas id="lab-canvas" role="img" aria-label="The photosynthesis bench"></canvas>
+            <canvas id="lab-canvas" role="img" aria-label="${prim ? 'Plants on the bench' : 'The photosynthesis bench'}"></canvas>
             <div class="lab-photo-chips" id="lab-photo-chips"></div>
             <div class="lab-contents" id="lab-contents"></div>
           </div>
           <div class="lab-coach">
             <span class="lab-coach-face" aria-hidden="true">🧑‍🔬</span>
             <p id="lab-coach-text" aria-live="polite"></p>
+            ${prim ? '<button type="button" class="lab-coach-tip lab-photo-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>' : ''}
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
@@ -93,10 +119,19 @@ const LabPhoto = (() => {
 
   function mount(root) {
     _root = root;
-    if (!_pond) _resetBench();
+    // ⚠ The module outlives the screen: a bench left at one grade must not
+    //   greet a pupil at another with its guide, mission or notebook.
+    const g = _grade();
+    if (!_pond || g !== _g) {
+      _g = g; _guide = null; _mission = null; _panel = 'sandbox';
+      _runs = []; _leafRuns = []; _log = []; _potRuns = []; _seedRuns = []; _tipIdx = -1;
+      _rig = _level().rigs[0];
+      _resetBench();
+    }
     root.innerHTML = _shellHTML();
     _cv = $('lab-canvas');
     _cx = _cv.getContext('2d');
+    _cv.addEventListener('click', _canvasTap);
     _resize();
     _wire();
     _renderPanel();
@@ -104,20 +139,72 @@ const LabPhoto = (() => {
     _syncSet();
     _readouts();
     const st = Labs.store('photo');
-    if (!st.intro) _intro();
+    const prim = _primary();
+    if (!st[_introKey()]) _intro();
     else if (_guide) _guideEnter();
-    else if (_mission) _coach('Back on your mission - carry on where you left off.');
-    else _coach(Object.keys(st.guides).length
-      ? 'Welcome back! Pick a guided experiment or a mission below - or set up the rig yourself.'
-      : '👋 New here? Pick a guided experiment below and I’ll show you exactly what to tap.');
+    else if (_mission) _coach(prim ? 'Back on your mission. Carry on where you left off.' : 'Back on your mission - carry on where you left off.');
+    else _coach(_mine(P().GUIDES).some(G => st.guides[G.id])
+      ? (prim ? 'Welcome back! Pick a guided experiment or a mission below.' : 'Welcome back! Pick a guided experiment or a mission below - or set up the rig yourself.')
+      : (prim ? '👋 New here? Pick a guided experiment below. I will show you what to tap.' : '👋 New here? Pick a guided experiment below and I’ll show you exactly what to tap.'));
     if (!_resizeWired) { window.addEventListener('resize', () => { if (_cv && _cv.isConnected) _resize(); }); _resizeWired = true; }
+    // ⚠ Leaving the Labs screen must stop speech at once, and coming back must
+    //   restart the loop: once the loop sees it is off-screen it stops for good.
+    if (_obs) _obs.disconnect();
+    const scr = root.closest('.screen');
+    if (scr && typeof MutationObserver !== 'undefined') {
+      _obs = new MutationObserver(() => {
+        if (scr.classList.contains('hidden')) { _hush(); _stop(); }
+        else if (_root && _cv && !_raf) _start();
+      });
+      _obs.observe(scr, { attributes: true, attributeFilter: ['class'] });
+    }
     _start();
   }
 
   function unmount() {
+    _hush();
+    if (_obs) { _obs.disconnect(); _obs = null; }
     _stop();
     _root = null; _cv = null; _cx = null;
   }
+
+  // ══ Read aloud (primary levels; never automatic) ══
+  const _synth = () => (typeof window !== 'undefined' && window.speechSynthesis) || null;
+  // Emoji and arrows would be read out by name ("light bulb", "right arrow").
+  const _plain = s => String(s || '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]/gu, '').replace(/\s+/g, ' ').trim();
+  function _voice() {
+    const ss = _synth();
+    const vs = ss && typeof ss.getVoices === 'function' ? ss.getVoices() || [] : [];
+    const norm = v => (v.lang || '').replace('_', '-').toLowerCase();
+    for (const m of [v => norm(v) === 'en-gb', v => norm(v).startsWith('en-'), v => norm(v).startsWith('en')]) {
+      const hit = vs.filter(m);
+      if (hit.length) return hit.find(v => v.localService) || hit[0];
+    }
+    return null;
+  }
+  function _say(text) {
+    const ss = _synth(), t = _plain(text);
+    if (!ss || typeof SpeechSynthesisUtterance === 'undefined') { _coach('Read-aloud does not work in this browser.'); return; }
+    if (!t) return;
+    _hush();
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = 'en-GB'; u.rate = 0.95;
+    const v = _voice(); if (v) { try { u.voice = v; } catch (e) {} }
+    u.onend = u.onerror = () => { _talking = false; };
+    _talking = true;
+    try { ss.speak(u); } catch (e) { _talking = false; }
+  }
+  // Cancel only when something is speaking - cancel-then-speak stalls Chrome.
+  function _hush() {
+    const ss = _synth();
+    if (!ss) { _talking = false; return; }
+    if (_talking || ss.speaking || ss.pending) { try { ss.cancel(); } catch (e) {} }
+    _talking = false;
+  }
+  // Every overlay goes through these, so speech never talks over a card.
+  function _overlay(html, o) { _hush(); return Labs.overlay(html, o); }
+  function _hazardCard(o) { _hush(); return Labs.hazardCard(o); }
+  function _resultCard(o) { _hush(); return Labs.resultCard(o); }
 
   function _readColors() {
     const cs = getComputedStyle(_root.querySelector('.lab') || _root);
@@ -169,6 +256,15 @@ const LabPhoto = (() => {
     if (r.bottom < 80 || r.top > window.innerHeight - 80) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
+  // Tapping a pot or a dish on the picture chooses it (the shelf buttons do
+  // the same, and are the way that always works).
+  function _canvasTap(e) {
+    if (!_primary() || _busy || !_cv) return;
+    const r = _cv.getBoundingClientRect(), x = (e.clientX - r.left) / (r.width || 1);
+    if (_rig === 'pots') { const id = x < 0.5 ? 'A' : 'B'; if (id === 'A' || _pots.twin) _set('pot', id); }
+    else if (_rig === 'seeds') _set('dish', String(Math.min(4, Math.max(1, Math.floor(x * 4) + 1))));
+  }
+
   function _do(tok) {
     const i = tok.indexOf(':');
     if (i > 0) _set(tok.slice(0, i), tok.slice(i + 1));
@@ -177,9 +273,24 @@ const LabPhoto = (() => {
 
   function _act(act) {
     switch (act) {
-      case 'hub': Labs.backToHub(); break;
+      case 'hub': _hush(); Labs.backToHub(); break;
       case 'help': _help(); break;
       case 'tip': _nextTip(); break;
+      case 'say-coach': { const el = $('lab-coach-text'); if (el) _say(el.textContent); break; }
+      case 'say-guide': { const el = _root && _root.querySelector('#lab-guide .lab-guide-say'); if (el) _say(el.textContent); break; }
+      case 'week': if (_primary()) week(); break;
+      case 'days': if (_primary()) days(); break;
+      case 'look': if (_primary()) look(); break;
+      case 'wcount': if (_primary()) wcount(); break;
+      case 'wcloser': case 'wfurther': {
+        if (!_primary()) break;
+        const D = P().WEED_DISTS, i = D.indexOf(_weed.dist);
+        const j = act === 'wcloser' ? Math.min(D.length - 1, i + 1) : Math.max(0, i - 1);
+        if (j === i) { _coach(act === 'wcloser' ? 'The lamp is as close as it goes: 20 cm.' : 'The lamp is as far as it goes: 50 cm.'); break; }
+        _set('wdist', String(D[j]));
+        break;
+      }
+      case 'fresh': if (_primary()) fresh(); break;
       case 'quiz': _quiz(); break;
       case 'exit-mission': _mission = null; _coach('Back to free experimenting. The bench is all yours.'); _renderPanel(); break;
       case 'mission-restart': if (_mission) { const id = _mission.id; startMission(id); } break;
@@ -207,18 +318,25 @@ const LabPhoto = (() => {
   function _coach(text) {
     const el = $('lab-coach-text');
     if (!el) return;
+    if (el.textContent !== text) _hush();
     el.textContent = text;
     el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new');
   }
   function _nextTip() {
-    const f = P().FACTS;
+    const f = _primary() ? P().FACTS_G[_g] : P().FACTS;
     _tipIdx = (_tipIdx + 1) % f.length;
     _coach('💡 ' + f[_tipIdx]);
   }
 
   // ══ Settings ═════════════════════════════════
+  const POT_KEYS = ['pot', 'spot', 'drink', 'soil', 'leaves', 'twin'];
+  const SEED_KEYS = ['dish', 'wet', 'place'];
+  const WEED_KEYS = ['wlamp', 'wdist', 'wwater'];
+  const G9_KEYS = ['dist', 'lamp', 'water', 'temp', 'shield', 'plant', 'cover', 'day', 'bunsen'];
   function _set(k, v) {
-    if (_busy) { _coach('One thing at a time - let that finish first.'); return; }
+    if (_busy) { _coach(_primary() ? 'One thing at a time. Let that finish first.' : 'One thing at a time - let that finish first.'); return; }
+    if (_primary()) { if (G9_KEYS.includes(k)) return; if (_setPrimary(k, v)) return; }
+    else if (POT_KEYS.includes(k) || SEED_KEYS.includes(k) || WEED_KEYS.includes(k)) return;
     const p = _pond;
     const pondKey = ['dist', 'lamp', 'water', 'temp', 'shield'].includes(k);
     if (pondKey && p.counting) { _coach('Wait for the count to finish before you change anything.'); return; }
@@ -303,6 +421,96 @@ const LabPhoto = (() => {
     _after(k + ':' + v);
   }
 
+  // The primary settings (pots, seed dishes, waterweed). Returns true when the
+  // key was handled - or refused - here.
+  function _freshWeek() { if (_pots.day || _pots.res) { _pots.day = 0; _pots.res = null; _pots.check = null; } }
+  function _freshSeeds() { if (_seeds.day || _seeds.res) { _seeds.day = 0; _seeds.res = null; } _seeds.look = false; }
+  function _setPrimary(k, v) {
+    const D = P();
+    if (k === 'rig') {
+      if (!_level().rigs.includes(v)) return true;
+      if (_weed.counting) { _coach('Wait for the count to finish first.'); return true; }
+      _rig = v;
+      _renderTools();
+      if (_panel !== 'found') _renderPanel();
+      _coach(v === 'pots' ? (_g === 4 ? 'Two plant pots. Change where one stands, its water or its soil. Then wait 7 days.'
+                                      : 'Two plant pots. Take away light, water or leaves from one. Then wait 7 days.')
+        : v === 'seeds' ? 'Four dishes of bean seeds on cotton wool. Change a dish, then wait 4 days.'
+        : 'Waterweed under a funnel. Move the lamp, then count the bubbles for a minute.');
+      _after('rig:' + v);
+      return true;
+    }
+    const rigFor = POT_KEYS.includes(k) ? 'pots' : SEED_KEYS.includes(k) ? 'seeds' : WEED_KEYS.includes(k) ? 'weed' : null;
+    if (!rigFor) return true;
+    if (!_level().rigs.includes(rigFor) || (k === 'soil' && _g !== 4) || (k === 'leaves' && _g !== 6)) return true;
+    if (rigFor === 'weed' && _weed.counting) { _coach('Wait for the count to finish before you change anything.'); return true; }
+    if (_rig !== rigFor) { _rig = rigFor; _renderTools(); if (_panel !== 'found') _renderPanel(); }
+    if (rigFor === 'pots') {
+      const s = _pots;
+      if (k === 'pot') {
+        if (v !== 'A' && v !== 'B') return true;
+        if (v === 'B' && !s.twin) { _coach('There is no pot B. Choose “Two plants” first.'); return true; }
+        s.sel = v;
+        _coach(`Pot ${v} chosen. Now change ONE thing about it.`);
+      } else if (k === 'twin') {
+        if (v !== 'on' && v !== 'off') return true;
+        s.twin = v === 'on';
+        if (!s.twin) s.sel = 'A';
+        _freshWeek();
+        _coach(s.twin ? 'Two plants side by side. Pot B can be your test plant.' : 'Only one plant now: pot A. What will you compare it with?');
+      } else {
+        const map = { spot: D.SPOTS, drink: D.DRINKS, soil: D.SOILS, leaves: D.LEAVES };
+        if (!map[k][v]) return true;
+        s[s.sel][k] = v;
+        _freshWeek();
+        const n = 'Pot ' + s.sel;
+        const say = {
+          spot: { sun: `${n} is on the sunny windowsill.`, dark: `${n} is in the dark cupboard. It is warm there, but dark.`,
+                  lamp: `${n} is right under a lamp. The bulb gets very hot…` },
+          drink: { some: `${n} gets a little water every day.`, none: `${n} gets no water at all.`, flood: `${n} will stand in water all week.` },
+          soil: { rich: `${n} has soil with compost. It is full of minerals.`, sand: `${n} has plain sand. Sand has hardly any minerals.` },
+          leaves: { on: `${n} keeps its leaves.`, off: `All the leaves are cut off ${n.toLowerCase()}.` },
+        };
+        _coach(say[k][v]);
+      }
+    } else if (rigFor === 'seeds') {
+      const s = _seeds;
+      if (k === 'dish') {
+        if (!D.DISHES.includes(+v)) return true;
+        s.sel = +v;
+        _coach(`Dish ${v} chosen.`);
+      } else {
+        const map = { wet: D.WETS, place: D.PLACES };
+        if (!map[k][v]) return true;
+        s.dishes[s.sel][k] = v;
+        _freshSeeds();
+        const n = 'Dish ' + s.sel;
+        const say = {
+          wet: { damp: `${n}: damp cotton wool.`, dry: `${n}: dry cotton wool. No water.`, drown: `${n}: the seeds are under water. No air can reach them.` },
+          place: { cupboard: `${n} is in the warm dark cupboard.`, window: `${n} is on the sunny windowsill.`, fridge: `${n} is in the cold fridge. It is cold and dark.` },
+        };
+        _coach(say[k][v]);
+      }
+    } else {
+      const w = _weed;
+      if (k === 'wlamp') {
+        if (v !== 'on' && v !== 'off') return true;
+        w.lampOn = v === 'on';
+        _coach(w.lampOn ? 'Lamp on.' : 'Lamp off. The room is dark now.');
+      } else if (k === 'wdist') {
+        if (!D.WEED_DISTS.includes(+v)) return true;
+        w.dist = +v;
+        _coach(w.lampOn ? `Lamp at ${v} cm from the waterweed.` : `Lamp moved to ${v} cm. It is still switched off.`);
+      } else {
+        if (!D.WEED_WATERS[v]) return true;
+        w.water = v;
+        _coach(v === 'soda' ? 'Pond water with baking soda. It has carbon dioxide in it.' : 'Boiled and cooled water. Boiling drove out the carbon dioxide.');
+      }
+    }
+    _after(k + ':' + v);
+    return true;
+  }
+
   // After any change: repaint and tell the guide.
   function _after(token) {
     _syncSet();
@@ -315,6 +523,11 @@ const LabPhoto = (() => {
     if (!_root) return;
     const cur = { rig: _rig, dist: String(_pond.dist), lamp: _pond.lampOn ? 'on' : 'off', water: _pond.water,
                   temp: String(_pond.temp), shield: _pond.shield ? 'on' : 'off', plant: _leaf.plant, cover: _leaf.cover, day: _leaf.day || '' };
+    if (_primary()) {
+      const pt = _pots[_pots.sel], ds = _seeds.dishes[_seeds.sel];
+      Object.assign(cur, { pot: _pots.sel, twin: _pots.twin ? 'on' : 'off', spot: pt.spot, drink: pt.drink, soil: pt.soil, leaves: pt.leaves,
+        dish: String(_seeds.sel), wet: ds.wet, place: ds.place, wlamp: _weed.lampOn ? 'on' : 'off', wdist: String(_weed.dist), wwater: _weed.water });
+    }
     _root.querySelectorAll('[data-set]').forEach(b => {
       const k = b.dataset.set;
       if (k in cur) b.setAttribute('aria-pressed', String(cur[k] === b.dataset.v));
@@ -444,6 +657,202 @@ const LabPhoto = (() => {
     }, { lit: enough });
   }
 
+  // ══ Primary: a week in two pots, four days of seeds, the waterweed ══
+  const _words = list => list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1] : (list[0] || '');
+
+  function fresh() {
+    if (_busy) { _coach('One thing at a time. Let that finish first.'); return; }
+    if (_rig === 'seeds') { const s = _seeds.sel; _seeds = _newSeeds(); _seeds.sel = s; _coach('Fresh bean seeds on damp cotton wool, in the warm dark cupboard.'); }
+    else if (_rig === 'pots') { const t = _pots.twin; _pots = _newPots(); _pots.twin = t; _coach('Fresh young plants. Both pots are the same again.'); }
+    else return;
+    _after('fresh');
+  }
+
+  // A simulated time-lapse: the days run in _step(), so the plants grow on the
+  // canvas; Calm Mode (and the tests' instant mode) jumps straight to the end.
+  function week() {
+    if (_busy) return;
+    if (_rig !== 'pots') _set('rig', 'pots');
+    const s = _pots, D = P();
+    if (s.res) { _coach('That week is over. Change something to start again with new plants.'); return; }
+    const check = D.potCheck(_g, s);
+    s.res = {};
+    (s.twin ? ['A', 'B'] : ['A']).forEach(id => { s.res[id] = D.potResult(s[id]); });
+    s.check = check;
+    _busy = true;
+    const hot = !!(check && check.hazard);
+    _lapse = { kind: 'pots', t: 0, to: hot ? 1 : D.WEEK_DAYS, sec: hot ? 1.2 : 3.5 };
+    _coach(hot ? 'Fast-forwarding… watch the plant under the lamp!' : 'Fast-forwarding one week… watch both plants.');
+    if (_instant || Labs.calm()) _endLapse();
+    _readouts();
+  }
+
+  function days() {
+    if (_busy) return;
+    if (_rig !== 'seeds') _set('rig', 'seeds');
+    const s = _seeds, D = P();
+    if (s.res) { _coach('Those seeds are done. Change a dish to start again with new seeds.'); return; }
+    s.res = {};
+    D.DISHES.forEach(i => { s.res[i] = D.seedResult(s.dishes[i]); });
+    s.look = false;
+    _busy = true;
+    _lapse = { kind: 'seeds', t: 0, to: D.SEED_DAYS, sec: 3 };
+    _coach('Fast-forwarding 4 days… watch the seeds.');
+    if (_instant || Labs.calm()) _endLapse();
+    _readouts();
+  }
+
+  function _endLapse() {
+    const L = _lapse;
+    if (!L) return;
+    _lapse = null;
+    _busy = false;
+    if (L.kind === 'pots') { _pots.day = L.to; _endWeek(); }
+    else { _seeds.day = L.to; _endSeeds(); }
+  }
+
+  function _endWeek() {
+    const s = _pots, D = P(), check = s.check;
+    if (check && check.hazard) { _hazard(check.hazard); return; }
+    const ids = s.twin ? ['A', 'B'] : ['A'];
+    const run = { n: _potRuns.length + 1, twin: s.twin, pots: ids.map(id => ({ id, set: Object.assign({}, s[id]), res: s.res[id] })) };
+    _potRuns.unshift(run);
+    if (_potRuns.length > 12) _potRuns.length = 12;
+    _logEntry({ title: `Week ${run.n}: after 7 days`, obs: run.pots.map(p => `Pot ${p.id}: ${p.res.words}`).join(' ') });
+    let card = null;
+    if (check && check.card) {
+      if (_mission) _mission.errors++;
+      card = check.card === 'two_things'
+        ? _resCard('two_things', { list: _words(check.changed.map(x => D.POT_VAR_WORDS[x])) }, 'Change one thing at a time. Tap “New plants” and try again.')
+        : check.card === 'flood'
+          ? _resCard('flood', {}, 'A little water each day. Tap “New plants” and try again.')
+          : _resCard('no_control', {}, 'Choose “Two plants”, so pot B can be the control.');
+    } else D.potDiscoveries(_g, s).forEach(_discover);
+    if (!card) {
+      const ch = s.twin ? D.potDiff(_g, s.A, s.B) : [];
+      _coach(!s.twin ? `Pot A: ${s.res.A.words} Grow a second plant next time, to compare.`
+        : !ch.length ? 'Both plants were the same, so both grew the same. Change ONE thing in pot B to test it.'
+        : `A fair test! Only ${D.POT_VAR_WORDS[ch[0]]} was different. Compare pot A and pot B.`);
+      if (_mission) _missionPots();
+    }
+    _readouts();
+    _refresh();
+    if (card) card();
+    _guideEvent('week');
+  }
+
+  function _missionPots() {
+    const ms = _mission, D = P(), M = D.MISSIONS.find(x => x.id === ms.id);
+    if (!M || !M.fair || !_pots.twin) return;
+    const s = _pots, ch = D.potDiff(_g, s.A, s.B);
+    const test = D.isNormal(s.A) ? s.B : D.isNormal(s.B) ? s.A : null;
+    if (ch.length !== 1 || !M.fair.includes(ch[0]) || !test || test[ch[0]] !== D.POT_TEST_VALUE[ch[0]]) {
+      if (!ms.success) _coach('That is not one of the two tests. Look at the list in the mission.');
+      return;
+    }
+    ms.results[ch[0]] = true;
+    const n = M.fair.filter(f => ms.results[f]).length;
+    if (n >= M.fair.length && !ms.success) { ms.success = true; _coach('Both fair tests done! Tap “Answer the questions”.'); Labs.confetti(); }
+    else if (!ms.success) _coach(`Fair test ${n} of ${M.fair.length} done. Now the other test. Change only that one thing.`);
+  }
+
+  function _endSeeds() {
+    const s = _seeds, D = P();
+    const run = { n: _seedRuns.length + 1, dishes: D.DISHES.map(i => ({ i, set: Object.assign({}, s.dishes[i]), res: s.res[i] })) };
+    _seedRuns.unshift(run);
+    if (_seedRuns.length > 8) _seedRuns.length = 8;
+    _logEntry({ title: `Seeds ${run.n}: after 4 days`, obs: run.dishes.map(d => `Dish ${d.i}: ${d.res.words}`).join(' ') });
+    const check = D.seedCheck(s.dishes);
+    let card = null;
+    if (check) {
+      if (_mission) _mission.errors++;
+      card = _resCard('fridge_two', {}, 'Compare the fridge with the warm dark cupboard. Then try again.');
+    } else D.seedDiscoveries(s.dishes).forEach(_discover);
+    if (!card) {
+      const n = run.dishes.filter(d => d.res.sprouted).length;
+      _coach(n ? `${n} of 4 dishes sprouted. What was different about the others?` : 'No seeds sprouted at all. Something they need is missing.');
+      const ms = _mission;
+      if (ms && ms.id === 'g4_seeds') {
+        const M = D.MISSIONS.find(x => x.id === 'g4_seeds'), got = D.seedDiscoveries(s.dishes);
+        if (M.finds.every(f => got.includes(f)) && !ms.success) { ms.success = true; _coach('Water, warmth and air: all three found! Tap “Answer the questions”.'); Labs.confetti(); }
+        else if (!ms.success) _coach('Not all three yet. Set the dishes like the list in the mission, then wait 4 days.');
+      }
+    }
+    _readouts();
+    _refresh();
+    if (card) card();
+    _guideEvent('days');
+  }
+
+  function look() {
+    if (_busy) return;
+    if (_rig !== 'seeds') _set('rig', 'seeds');
+    const s = _seeds;
+    if (!s.res || s.day < 3) { _coach('Nothing to see yet. Wait 4 days first.'); return; }
+    if (!s.res[s.sel].sprouted) { _coach(`Dish ${s.sel} did not sprout. Choose a dish that did.`); return; }
+    s.look = true;
+    _discover('g4_root');
+    _logEntry({ title: 'A close look', obs: 'A white root came out first and grew down. Then a shoot grew up.', note: true });
+    _coach('Look! The root came out first and grows down. Then the shoot grows up.');
+    _after('look');
+  }
+
+  function wcount() {
+    if (_busy) return;
+    if (_rig !== 'weed') _set('rig', 'weed');
+    const w = _weed;
+    if (w.counting) { _coach('Already counting. Keep watching the bubbles.'); return; }
+    const run = P().weedRun(w);
+    w.counting = { t: 0, run, shown: 0 };
+    _coach(run.lampOn ? 'Counting the bubbles for one minute… watch the funnel.' : 'Counting for one minute, in the dark…');
+    if (_instant || Labs.calm()) _finishWeed();
+    _readouts();
+  }
+
+  function _finishWeed() {
+    const w = _weed, c = w.counting, D = P();
+    if (!c) return;
+    w.counting = null;
+    const run = c.run;
+    run.n = _wruns.length + 1;
+    w.gas += run.bubbles;
+    w.last = run;
+    _wruns.unshift(run);
+    if (_wruns.length > 30) _wruns.length = 30;
+    const prev = _wprev;
+    _wprev = run;
+    _logEntry({ title: `Count ${run.n}: ${run.bubbles} bubbles in a minute`,
+      obs: `${run.lampOn ? `Lamp at ${run.dist} cm` : 'Lamp off'} · ${D.WEED_WATERS[run.water].name.toLowerCase()}. ${run.bubbles === 0 ? 'Not one bubble.' : 'The bubbles are oxygen.'}` });
+    D.weedDiscoveries(prev, run, _wruns).forEach(_discover);
+    let card = null;
+    const ch = D.weedDiff(prev, run);
+    if (ch.length >= 2) {
+      if (_mission) _mission.errors++;
+      card = _resCard('two_things', { weed: true, list: _words(ch.map(x => D.WEED_VAR_WORDS[x])) }, 'Change one thing at a time. Everything else stays the same.');
+    } else {
+      _coach(run.bubbles === 0
+        ? (run.lampOn ? 'No bubbles at all. Something the waterweed needs is missing.' : 'No bubbles in the dark. Plants need light to make food.')
+        : `${run.bubbles} bubbles in a minute. Change ONE thing and count again.`);
+      if (_mission && _mission.id === 'g6_gases') _missionWeed(run);
+    }
+    _readouts();
+    _refresh();
+    if (card) card();
+    _guideEvent('wcount');
+  }
+
+  function _missionWeed(run) {
+    const ms = _mission, M = P().MISSIONS.find(x => x.id === 'g6_gases');
+    if (run.lampOn && ms.baseDist && run.dist !== ms.baseDist) { _coach(`Keep the lamp at ${ms.baseDist} cm for every count. It must not change.`); return; }
+    const t = M.tests.findIndex(x => x.lampOn === run.lampOn && x.water === run.water);
+    if (t < 0) { _coach('That test is not on the list. Look at the three tests in the mission.'); return; }
+    if (run.lampOn) ms.baseDist = ms.baseDist || run.dist;
+    ms.results[t] = run.bubbles;
+    const n = Object.keys(ms.results).length;
+    if (n >= M.tests.length && !ms.success) { ms.success = true; _coach('All three tests done. Which one made bubbles? Tap “Answer the questions”.'); Labs.confetti(); }
+    else if (!ms.success) _coach(`Test recorded (${n} of 3). Change ONE thing for the next test.`);
+  }
+
   // ══ Leaf and starch test ═════════════════════
   function _leafGuard() {
     if (_busy) { _coach('One thing at a time - let that finish first.'); return false; }
@@ -571,10 +980,10 @@ const LabPhoto = (() => {
     });
   }
 
-  function _resCard(id, ctx) {
+  function _resCard(id, ctx, closeMsg) {
     const R = P().RESULTS[id];
-    return () => Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened(ctx), instead: R.instead, exam: R.exam,
-      onClose: () => _coach('Pick another leaf and try again - every step in its place.') });
+    return () => _resultCard({ icon: R.icon, title: R.title, happened: R.happened(ctx), instead: R.instead, exam: R.exam,
+      onClose: () => _coach(closeMsg || 'Pick another leaf and try again - every step in its place.') });
   }
 
   // ══ Hazards ══════════════════════════════════
@@ -584,13 +993,26 @@ const LabPhoto = (() => {
     st.hazards[id] = (st.hazards[id] || 0) + 1;
     Labs.persist();
     if (_mission) _mission.errors++;
+    // The hot lamp: the scorching has already played on the canvas (the week
+    // stopped on day 1); the plant goes back to the windowsill when the card closes.
+    if (id === 'hot_lamp') {
+      _hazardCard({ signs: H.signs, title: H.title(), happened: H.happened(), why: H.why, instead: H.instead, exam: H.exam,
+        button: 'Lamp away - try again safely',
+        onClose: () => {
+          ['A', 'B'].forEach(k => { if (_pots[k].spot === 'lamp') _pots[k].spot = 'sun'; });
+          _pots.day = 0; _pots.res = null; _pots.check = null;
+          _syncSet(); _readouts();
+          _coach('The lamp is away and the plant is back on the windowsill. Sunlight is best.');
+        } });
+      return;
+    }
     _busy = true;
     _fxAdd('fire', () => {
       _busy = false;
       _bunsen = false;
       _renderTools();
       _readouts();
-      Labs.hazardCard({ signs: H.signs, title: H.title(), happened: H.happened(), why: H.why, instead: H.instead, exam: H.exam,
+      _hazardCard({ signs: H.signs, title: H.title(), happened: H.happened(), why: H.why, instead: H.instead, exam: H.exam,
         button: 'Fire out - try again safely',
         onClose: () => _coach('The fire is out and the Bunsen is off. Ethanol goes only in a water bath, with no flame anywhere near.') });
     }, { over: id === 'ethanol_flame' });
@@ -599,6 +1021,21 @@ const LabPhoto = (() => {
   // ══ Simulation ═══════════════════════════════
   function _step(dt) {
     if (!dt) return;
+    if (_primary()) {
+      if (_lapse) {
+        _lapse.t += dt;
+        const k = Math.min(1, _lapse.t / _lapse.sec);
+        (_lapse.kind === 'pots' ? _pots : _seeds).day = _lapse.to * k;
+        if (k >= 1) _endLapse();
+      }
+      const w = _weed.counting;
+      if (w) {
+        w.t += dt;
+        w.shown = Math.round(w.run.bubbles * Math.min(1, w.t / COUNT_SEC));
+        if (w.t >= COUNT_SEC) _finishWeed();
+      }
+      return;
+    }
     const c = _pond.counting;
     if (c) {
       c.t += dt;

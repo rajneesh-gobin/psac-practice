@@ -526,9 +526,646 @@ const LabPhotoData = (() => {
       ] },
   ];
 
+  // ══════════════════════════════════════════════
+  //  PRIMARY LEVELS - PSAC Grade 4 and Grade 6 (docs/labs/LAB_SPEC.md §8, §9)
+  //
+  //  ⚠ Not the Grade 9 level in easier words. Each grade has its own rigs,
+  //    guides, missions and discoveries, tagged `grades: [4]` or `[6]`; anything
+  //    untagged above is the original Grade 9 level. Ids carry the grade
+  //    (g4_…, g6_…) so progress for different grades never shares a key in
+  //    Labs.store('photo').
+  //  ⚠ Grade 4 is grounded in g4sci-plants ("Conditions needed for plants to
+  //    grow well (water, sunlight, air, warmth, minerals)", subsections growth,
+  //    reproduction, photosynthesis): the dark cupboard, the wilted plant,
+  //    compost and minerals, Mira's and Sasha's one-difference tests, and
+  //    germination needing water, air and warmth but not light.
+  //    Grade 6 is grounded in g6-plants ("Photosynthesis (light + water + CO₂ →
+  //    food + oxygen)"): the leaf as the food factory, Gas A and Gas B, and the
+  //    PSAC papers in subjects/grade6-science/questions/past_paper_*.js -
+  //    2023 (Gas A and Gas B, two other conditions), 2021 (the leaf makes
+  //    food; describe the process) and 2019 (dust blocks sunlight).
+  //  ⚠ No starch test, no iodine, no ethanol, no Bunsen at these levels - that
+  //    stays Grade 9. scripts/test-labs-photo-data.js fails if one creeps in.
+  // ══════════════════════════════════════════════
+  const GRADES = [4, 6, 9];
+  const LEVELS = {
+    4: { eyebrow: 'Science · Grade 4', rigs: ['pots', 'seeds'], first: 'g4_light' },
+    6: { eyebrow: 'Science · Grade 6', rigs: ['pots', 'weed'], first: 'g6_bubbles' },
+    9: { eyebrow: 'Biology · Grade 9', rigs: ['pond', 'leaf'], first: 'bubbles' },
+  };
+  const RIG_NAMES = { pond: '🌿 Pondweed &amp; lamp', leaf: '🍃 Starch test', pots: '🪴 Plant pots', seeds: '🌱 Seed dishes', weed: '🫧 Waterweed' };
+
+  // ── Two plant pots and a week of growth ─────────
+  const POT_START = 6;          // cm: a young bean plant on day 0
+  const WEEK_DAYS = 7, SEED_DAYS = 4;
+  const SPOTS = {
+    sun:  { name: 'Sunny windowsill', short: 'Window', icon: '☀️', meta: 'Light and warmth' },
+    dark: { name: 'Dark cupboard', short: 'Cupboard', icon: '🚪', meta: 'Warm, but no light' },
+    lamp: { name: 'Under a hot lamp', short: 'Hot lamp', icon: '💡', meta: 'The bulb almost touches it' },
+  };
+  const DRINKS = {
+    some:  { name: 'A little water', short: 'Watered', icon: '💧', meta: 'Every day' },
+    none:  { name: 'No water', short: 'No water', icon: '🚫', meta: 'Never watered' },
+    flood: { name: 'Far too much', short: 'Too much', icon: '🌊', meta: 'The pot stands in water' },
+  };
+  const SOILS = {
+    rich: { name: 'Soil with compost', short: 'Compost', icon: '🟫', meta: 'Full of minerals' },
+    sand: { name: 'Plain sand', short: 'Sand', icon: '🟨', meta: 'Hardly any minerals' },
+  };
+  const LEAVES = {
+    on:  { name: 'Leaves on', short: 'Leaves on', icon: '🌿', meta: 'Green leaves' },
+    off: { name: 'Leaves cut off', short: 'No leaves', icon: '✂️', meta: 'Every leaf removed' },
+  };
+  // What a pupil can change in a pot, per grade: soil and minerals are Grade 4;
+  // the leaf as the food factory is Grade 6.
+  const POT_VARS = { 4: ['spot', 'drink', 'soil'], 6: ['spot', 'drink', 'leaves'] };
+  const POT_VAR_WORDS = { spot: 'where it stood', drink: 'the water', soil: 'the soil', leaves: 'the leaves' };
+  const POT_TEST_VALUE = { spot: 'dark', drink: 'none', soil: 'sand', leaves: 'off' };
+  const newPot = () => ({ spot: 'sun', drink: 'some', soil: 'rich', leaves: 'on' });
+  const isNormal = p => p.spot === 'sun' && p.drink === 'some' && p.soil === 'rich' && p.leaves === 'on';
+  const LEAF_COLOURS = { green: '#3FA052', pale: '#A9C766', yellow: '#D9C84E', brown: '#8C6B3E', scorched: '#4A3322', none: '#3FA052' };
+
+  // One pot after a week. Order matters: the worst thing wins.
+  //  - under a hot lamp the leaves scorch within a day (a hazard, see HAZARDS)
+  //  - no water: it wilts and dries out
+  //  - far too much water: the roots get no air and rot, the leaves yellow
+  //  - no leaves: no food is made, so it cannot grow
+  //  - dark: pale yellow leaves on a long thin stem (it stretches for light)
+  //  - sand: few minerals, so small with pale green leaves
+  function potResult(p) {
+    const r = (grew, leaf, stem, words, fast) => ({ grew, height: POT_START + grew, leaf, stem, words, fast: !!fast,
+                                                   healthy: leaf === 'green' && stem === 'strong' });
+    if (p.spot === 'lamp') return r(0, 'scorched', 'droopy', 'Burnt brown leaves. The hot bulb scorched them.', true);
+    if (p.drink === 'none') return r(0, 'brown', 'droopy', 'Wilted and brown. It dried out.');
+    if (p.drink === 'flood') return r(1, 'yellow', 'droopy', 'Yellow and droopy. Its roots began to rot.');
+    if (p.leaves === 'off') return r(0, 'none', 'thin', 'No new growth. With no leaves it made no food.');
+    if (p.spot === 'dark') return r(p.soil === 'sand' ? 2 : 5, 'yellow', 'thin', 'Pale yellow leaves on a long, thin, floppy stem.');
+    if (p.soil === 'sand') return r(3, 'pale', 'thin', 'Small, with pale green leaves.');
+    return r(7, 'green', 'strong', 'Green and strong. It grew 7 cm.');
+  }
+  const potDiff = (g, a, b) => POT_VARS[g].filter(k => a[k] !== b[k]);
+
+  // s = { A, B, twin }. What stops or spoils the week: the hot lamp first (it
+  // stops the week), then the mistakes that teach.
+  function potCheck(g, s) {
+    const list = s.twin ? [s.A, s.B] : [s.A];
+    if (list.some(p => p.spot === 'lamp')) return { hazard: 'hot_lamp' };
+    if (list.some(p => p.drink === 'flood')) return { card: 'flood' };
+    if (!s.twin) return isNormal(s.A) ? null : { card: 'no_control' };
+    const ch = potDiff(g, s.A, s.B);
+    if (ch.length >= 2) return { card: 'two_things', changed: ch };
+    return null;
+  }
+  // What a clean week unlocks. A week with a card unlocks nothing: the test
+  // was spoiled, so it shows nothing for certain.
+  function potDiscoveries(g, s) {
+    if (potCheck(g, s)) return [];
+    const out = [], list = s.twin ? [s.A, s.B] : [s.A];
+    list.forEach(p => {
+      if (isNormal(p)) out.push(`g${g}_healthy`);
+      const rest = POT_VARS[g].filter(k => p[k] !== newPot()[k]);
+      if (rest.length !== 1) return;
+      if (p.spot === 'dark') out.push(`g${g}_dark`);
+      if (p.drink === 'none') out.push(`g${g}_dry`);
+      if (g === 4 && p.soil === 'sand') out.push('g4_sand');
+      if (g === 6 && p.leaves === 'off') out.push('g6_noleaf');
+    });
+    if (s.twin && potDiff(g, s.A, s.B).length === 1 && (isNormal(s.A) || isNormal(s.B))) out.push(`g${g}_fair`);
+    return [...new Set(out)];
+  }
+
+  // ── Seed dishes (Grade 4): bean seeds on cotton wool ──
+  const WETS = {
+    damp:  { name: 'Damp cotton wool', short: 'Damp', icon: '💧', meta: 'Wet, with air around it' },
+    dry:   { name: 'Dry cotton wool', short: 'Dry', icon: '🏜️', meta: 'No water at all' },
+    drown: { name: 'Under water', short: 'Under water', icon: '🌊', meta: 'No air reaches the seeds' },
+  };
+  const PLACES = {
+    cupboard: { name: 'Warm dark cupboard', short: 'Cupboard', icon: '🚪', meta: 'Warm, no light' },
+    window:   { name: 'Sunny windowsill', short: 'Window', icon: '☀️', meta: 'Warm, with light' },
+    fridge:   { name: 'Cold fridge', short: 'Fridge', icon: '❄️', meta: 'Cold and dark' },
+  };
+  const DISHES = [1, 2, 3, 4];
+  const newDish = () => ({ wet: 'damp', place: 'cupboard' });
+  // A seed needs water, air and warmth to sprout. It does NOT need light: it
+  // lives on the food stored inside it until its leaves open.
+  function seedNeeds(d) { return { water: d.wet !== 'dry', air: d.wet !== 'drown', warm: d.place !== 'fridge', light: d.place === 'window' }; }
+  function seedSprouts(d) { const n = seedNeeds(d); return n.water && n.air && n.warm; }
+  // 0 a hard dry seed · 1 swollen with water · 2 a root · 3 a shoot · 4 first leaves.
+  // The root always comes first (g4sci-plants: "Which part of a seed appears first?").
+  function seedStage(d, day) {
+    if (d.wet === 'dry' || !(day > 0)) return 0;
+    if (!seedSprouts(d)) return 1;
+    return Math.max(1, Math.min(4, Math.floor(day)));
+  }
+  function seedResult(d) {
+    const n = seedNeeds(d);
+    if (!n.water) return { sprouted: false, words: 'Nothing happened. The seeds stayed hard and dry.' };
+    if (seedSprouts(d)) return { sprouted: true, words: n.light ? 'Sprouted! A root, a shoot and small green leaves.' : 'Sprouted! A root, a shoot and pale yellow leaves.' };
+    const why = [!n.air && 'no air reached them', !n.warm && 'it was too cold'].filter(Boolean).join(' and ');
+    return { sprouted: false, words: `They swelled up but did not sprout: ${why}.` };
+  }
+  function seedDiscoveries(ds) {
+    if (seedCheck(ds)) return [];
+    const L = DISHES.map(i => ds[i]), out = [];
+    const has = (w, p) => L.some(d => d.wet === w && d.place === p);
+    if (L.some(seedSprouts)) out.push('g4_sprout');
+    ['cupboard', 'window'].forEach(p => {
+      if (has('damp', p) && has('dry', p)) out.push('g4_seed_water');
+      if (has('damp', p) && has('drown', p)) out.push('g4_seed_air');
+    });
+    if (has('damp', 'cupboard') && has('damp', 'fridge')) out.push('g4_seed_warm');
+    if (has('damp', 'cupboard') && has('damp', 'window')) out.push('g4_seed_dark');
+    return [...new Set(out)];
+  }
+  // The classic unfair seed test: the fridge is cold AND dark, the windowsill
+  // warm AND light - with no warm dark cupboard to compare, two things changed.
+  function seedCheck(ds) {
+    const L = DISHES.map(i => ds[i]);
+    const has = (w, p) => L.some(d => d.wet === w && d.place === p);
+    if (has('damp', 'fridge') && has('damp', 'window') && !has('damp', 'cupboard')) return { card: 'fridge_two' };
+    return null;
+  }
+
+  // ── Waterweed (Grade 6): the same lamp and funnel, three settings ──
+  // Uses the pondweed model above, at room temperature with no heat from the
+  // lamp. Baking soda (sodium hydrogencarbonate) gives off carbon dioxide.
+  const WEED_DISTS = [50, 30, 20];
+  const WEED_WATERS = {
+    soda:   { name: 'Pond water + baking soda', short: 'Has CO₂', icon: '🧂', meta: 'Baking soda adds carbon dioxide', model: 'high' },
+    boiled: { name: 'Boiled and cooled water', short: 'No CO₂', icon: '♨️', meta: 'Boiling drove the carbon dioxide out', model: 'none' },
+  };
+  function weedRun(c) {
+    const bubbles = Math.round(rate({ dist: c.dist, lampOn: c.lampOn, water: WEED_WATERS[c.water].model, temp: ROOM_TEMP }));
+    return { dist: c.dist, lampOn: !!c.lampOn, water: c.water, bubbles };
+  }
+  const WEED_VAR_WORDS = { light: 'the light', water: 'the water' };
+  function weedDiff(a, b) {
+    if (!a || !b) return [];
+    const out = [];
+    if (a.lampOn !== b.lampOn || (a.lampOn && a.dist !== b.dist)) out.push('light');
+    if (a.water !== b.water) out.push('water');
+    return out;
+  }
+  // runs = every count so far, newest first (including cur).
+  function weedDiscoveries(prev, cur, runs) {
+    if (weedDiff(prev, cur).length >= 2) return [];
+    const out = [];
+    if (cur.lampOn && cur.bubbles > 0) out.push('g6_bubbles');
+    if (cur.lampOn && cur.water === 'soda' && cur.dist === 50) out.push('g6_dim');
+    if (!cur.lampOn) out.push('g6_nolight');
+    if (cur.lampOn && cur.water === 'boiled') out.push('g6_noco2');
+    if (prev && prev.lampOn && cur.lampOn && prev.water === cur.water && cur.dist < prev.dist && cur.bubbles > prev.bubbles) out.push('g6_closer');
+    const seen = f => runs.some(f);
+    if (seen(r => r.lampOn && r.water === 'soda' && r.bubbles > 0) && seen(r => !r.lampOn && r.water === 'soda' && r.bubbles === 0)
+        && seen(r => r.lampOn && r.water === 'boiled' && r.bubbles === 0)) out.push('g6_both');
+    return out;
+  }
+
+  // The Grade 6 syllabus: "light + water + CO₂ → food + oxygen".
+  const PEQ = {
+    word: 'carbon dioxide + water → food + oxygen',
+    over: 'using sunlight, trapped by the green chlorophyll in the leaves',
+  };
+
+  // The words for every primary step. A guide step or a discovery's "how" is
+  // one of these tokens; scripts/test-labs-photo-data.js checks every one.
+  function primaryStep(on) {
+    const [k, v] = String(on).split(':');
+    const place = { sun: 'on the sunny windowsill', dark: 'in the dark cupboard', lamp: 'right under the hot lamp' };
+    const where = { cupboard: 'in the warm dark cupboard', window: 'on the sunny windowsill', fridge: 'in the cold fridge' };
+    switch (k) {
+      case 'rig': return v === 'pots' ? { on, say: 'Go to the two plant pots.', btn: '🪴 Plant pots' }
+        : v === 'seeds' ? { on, say: 'Go to the seed dishes.', btn: '🌱 Seed dishes' }
+        : v === 'weed' ? { on, say: 'Go to the waterweed.', btn: '🫧 Waterweed' } : null;
+      case 'pot': return SPOT_OK(v, ['A', 'B']) && { on, say: `Tap pot ${v}.`, btn: `Pot ${v}` };
+      case 'spot': return SPOTS[v] ? { on, say: `Put the pot ${place[v]}.`, btn: `${SPOTS[v].icon} ${SPOTS[v].name}` } : null;
+      case 'drink': return v === 'none' ? { on, say: 'Give it no water at all.', btn: '🚫 No water' }
+        : v === 'some' ? { on, say: 'Give it a little water every day.', btn: '💧 A little water' }
+        : v === 'flood' ? { on, say: 'Give it far too much water.', btn: '🌊 Far too much' } : null;
+      case 'soil': return v === 'sand' ? { on, say: 'Grow it in plain sand.', btn: '🟨 Plain sand' }
+        : v === 'rich' ? { on, say: 'Grow it in soil with compost.', btn: '🟫 Soil with compost' } : null;
+      case 'leaves': return v === 'off' ? { on, say: 'Cut off all of its leaves.', btn: '✂️ Cut off the leaves' }
+        : v === 'on' ? { on, say: 'Keep its leaves on.', btn: '🌿 Leaves on' } : null;
+      case 'twin': return v === 'on' ? { on, say: 'Grow a second plant to compare.', btn: '🪴 Two plants' }
+        : v === 'off' ? { on, say: 'Grow only one plant.', btn: 'One plant only' } : null;
+      case 'week': return v === undefined ? { on, say: 'Fast-forward 7 days. Watch the plants!', btn: '⏩ Wait 7 days' } : null;
+      case 'dish': return SPOT_OK(v, ['1', '2', '3', '4']) && { on, say: `Tap dish ${v}.`, btn: `Dish ${v}` };
+      case 'wet': return v === 'dry' ? { on, say: 'Make the cotton wool dry. No water.', btn: '🏜️ Dry cotton wool' }
+        : v === 'damp' ? { on, say: 'Make the cotton wool damp.', btn: '💧 Damp cotton wool' }
+        : v === 'drown' ? { on, say: 'Cover the seeds with water. No air can reach them.', btn: '🌊 Under water' } : null;
+      case 'place': return PLACES[v] ? { on, say: `Put the dish ${where[v]}.`, btn: `${PLACES[v].icon} ${PLACES[v].name}` } : null;
+      case 'days': return v === undefined ? { on, say: 'Fast-forward 4 days. Which seeds sprout?', btn: '⏩ Wait 4 days' } : null;
+      case 'look': return v === undefined ? { on, say: 'Look closely at a seed that sprouted.', btn: '🔍 Look closely' } : null;
+      case 'wlamp': return v === 'off' ? { on, say: 'Switch the lamp off. The room goes dark.', btn: '🌑 Lamp off' }
+        : v === 'on' ? { on, say: 'Switch the lamp on.', btn: '💡 Lamp on' } : null;
+      case 'wdist': return WEED_DISTS.includes(+v) ? { on, say: `Put the lamp ${v} cm from the waterweed.`, btn: `💡 Lamp at ${v} cm` } : null;
+      case 'wwater': return v === 'boiled' ? { on, say: 'Use boiled and cooled water. It has no carbon dioxide.', btn: '♨️ Boiled and cooled water' }
+        : v === 'soda' ? { on, say: 'Use pond water with baking soda. It has carbon dioxide.', btn: '🧂 Pond water + baking soda' } : null;
+      case 'wcount': return v === undefined ? { on, say: 'Count the bubbles for one minute.', btn: '⏱ Count 1 minute' } : null;
+    }
+    return null;
+  }
+  function SPOT_OK(v, list) { return list.includes(v); }
+  // Which rig a primary token belongs to.
+  function primaryRig(on) {
+    const k = String(on).split(':')[0];
+    if (k === 'rig') return String(on).split(':')[1];
+    if (['pot', 'spot', 'drink', 'soil', 'leaves', 'twin', 'week'].includes(k)) return 'pots';
+    if (['dish', 'wet', 'place', 'days', 'look'].includes(k)) return 'seeds';
+    if (['wlamp', 'wdist', 'wwater', 'wcount'].includes(k)) return 'weed';
+    return null;
+  }
+
+  // ── Primary discoveries ─────────────────────────
+  const PD = (grade, id, icon, title, hint, how, saw, learn, eq) => ({ id, icon, title, hint, how, saw, learn, eq: !!eq, grades: [grade] });
+  const PRIMARY_DISCOVERIES = [
+    PD(4, 'g4_healthy', '🌱', 'A healthy plant', 'A sunny window, a little water, good soil',
+      ['rig:pots', 'week'],
+      'After a week on the sunny windowsill, the plant was green and strong. It grew 7 cm.',
+      'It had light, water, air, warmth and minerals. So it had everything it needs to grow well.'),
+    PD(4, 'g4_dark', '🚪', 'No light: pale and weak', 'Put one plant in a dark cupboard for a week',
+      ['rig:pots', 'pot:B', 'spot:dark', 'week'],
+      'The plant in the cupboard had pale yellow leaves. Its stem was long, thin and floppy.',
+      'A plant needs light to make its food. In the dark it stretches to find light, and grows weak.'),
+    PD(4, 'g4_dry', '🥀', 'No water: it wilts', 'Stop watering one plant',
+      ['rig:pots', 'pot:B', 'drink:none', 'week'],
+      'The plant with no water wilted. Its leaves went brown and dry.',
+      'Roots take in water from the soil. Without water, a plant dries out and wilts.'),
+    PD(4, 'g4_sand', '🟨', 'Minerals from the soil', 'Grow one plant in plain sand',
+      ['rig:pots', 'pot:B', 'soil:sand', 'week'],
+      'The plant in sand grew only 3 cm. Its leaves were pale green.',
+      'Soil with compost is full of minerals. Sand has hardly any. Plants need minerals to grow well.'),
+    PD(4, 'g4_fair', '⚖️', 'A fair test', 'Change ONE thing in pot B. Keep the rest the same.',
+      ['rig:pots', 'pot:B', 'drink:none', 'week'],
+      'The two pots were the same in every way but one. So that one thing caused the difference.',
+      'A fair test changes only ONE thing. Everything else stays the same. Then you know what caused it.'),
+    PD(4, 'g4_sprout', '🌱', 'The seeds sprout', 'Bean seeds on damp cotton wool, somewhere warm',
+      ['rig:seeds', 'days'],
+      'After 4 days on damp cotton wool, the bean seeds sprouted.',
+      'When a seed starts to grow, it is called germination. The seed has its own food inside.'),
+    PD(4, 'g4_root', '🔍', 'The root comes first', 'Look closely at a seed that has sprouted',
+      ['rig:seeds', 'days', 'look'],
+      'A white root came out first and grew down. Then a shoot grew up.',
+      'The root comes first. It holds the young plant and takes in water. Then the shoot grows up.'),
+    PD(4, 'g4_seed_water', '💧', 'Seeds need water', 'Compare a dry dish with a damp dish',
+      ['rig:seeds', 'dish:2', 'wet:dry', 'days'],
+      'Seeds on dry cotton wool stayed hard. Seeds on damp cotton wool sprouted.',
+      'A seed soaks up water first. The water wakes up the tiny plant inside it.'),
+    PD(4, 'g4_seed_warm', '❄️', 'Seeds need warmth', 'A cold fridge and a warm cupboard - both dark',
+      ['rig:seeds', 'dish:2', 'place:fridge', 'days'],
+      'Seeds in the cold fridge did not sprout. Seeds in the warm cupboard did.',
+      'Seeds need warmth to sprout. The fridge and the cupboard are both dark, so only the warmth was different.'),
+    PD(4, 'g4_seed_air', '🫧', 'Seeds need air', 'Cover some seeds with water',
+      ['rig:seeds', 'dish:2', 'wet:drown', 'days'],
+      'Seeds under water swelled up, but they did not sprout.',
+      'Seeds need air to sprout. Water covering them keeps the air away.'),
+    PD(4, 'g4_seed_dark', '🌑', 'No light needed to sprout', 'Compare the windowsill with the dark cupboard',
+      ['rig:seeds', 'dish:2', 'place:window', 'days'],
+      'Seeds sprouted in the dark cupboard AND on the windowsill.',
+      'Seeds do not need light to sprout. The young plant needs light later, to make its food.'),
+
+    PD(6, 'g6_healthy', '🌿', 'A plant making food', 'Sunlight, water and green leaves',
+      ['rig:pots', 'week'],
+      'With light, water and its leaves, the plant stayed green and grew 7 cm.',
+      'Leaves use sunlight, water and carbon dioxide to make food. The plant uses the food to grow.', true),
+    PD(6, 'g6_dark', '🚪', 'No light, no food', 'A week in a dark cupboard',
+      ['rig:pots', 'pot:B', 'spot:dark', 'week'],
+      'The plant in the cupboard turned pale yellow. Its stem grew thin and floppy.',
+      'Leaves need sunlight to make food. With no light, no food is made and the plant grows weak.'),
+    PD(6, 'g6_noleaf', '✂️', 'The leaf is the food factory', 'Cut all the leaves off one plant',
+      ['rig:pots', 'pot:B', 'leaves:off', 'week'],
+      'The plant with no leaves did not grow at all in a week.',
+      'The leaves make the food. With no leaves, the plant cannot make food, so it cannot grow.'),
+    PD(6, 'g6_dry', '🥀', 'Water is needed', 'Give one plant no water',
+      ['rig:pots', 'pot:B', 'drink:none', 'week'],
+      'The plant with no water wilted. Its leaves went brown.',
+      'Water from the roots is one of the things the leaves use to make food.'),
+    PD(6, 'g6_fair', '⚖️', 'A fair test', 'Change ONE thing in pot B. Keep the rest the same.',
+      ['rig:pots', 'pot:B', 'drink:none', 'week'],
+      'The two pots were the same in every way but one. So that one thing caused the difference.',
+      'A fair test changes only ONE thing. Everything else stays the same.'),
+    PD(6, 'g6_bubbles', '🫧', 'Bubbles of oxygen', 'Waterweed in the light',
+      ['rig:weed', 'wcount'],
+      'Small bubbles rose from the waterweed and collected at the top of the tube.',
+      'The bubbles are oxygen. Plants give out oxygen when they make food.', true),
+    PD(6, 'g6_dim', '🌥️', 'Dim light, few bubbles', 'Put the lamp far away',
+      ['rig:weed', 'wdist:50', 'wcount'],
+      'With the lamp 50 cm away, only 5 bubbles came in a minute.',
+      'Dim light means slow food-making. So the plant gives out less oxygen.'),
+    PD(6, 'g6_closer', '💡', 'More light, more bubbles', 'Count, then bring the lamp closer and count again',
+      ['rig:weed', 'wdist:50', 'wcount', 'wdist:20', 'wcount'],
+      'Moving the lamp from 50 cm to 20 cm gave 30 bubbles instead of 5.',
+      'Brighter light makes the plant make food faster. So it gives out more oxygen.'),
+    PD(6, 'g6_nolight', '🌑', 'No light, no bubbles', 'Switch the lamp off',
+      ['rig:weed', 'wlamp:off', 'wcount'],
+      'With the lamp off, not one bubble came in a whole minute.',
+      'Plants need light to make food. In the dark they give out no oxygen.'),
+    PD(6, 'g6_noco2', '♨️', 'No carbon dioxide, no bubbles', 'Waterweed in boiled and cooled water',
+      ['rig:weed', 'wwater:boiled', 'wcount'],
+      'In boiled and cooled water there were no bubbles, even with the lamp on.',
+      'Boiling drives the carbon dioxide out of water. Plants need carbon dioxide to make food.'),
+    PD(6, 'g6_both', '🔑', 'Light AND carbon dioxide', 'No carbon dioxide, then both, then no light',
+      ['rig:weed', 'wwater:boiled', 'wcount', 'wwater:soda', 'wcount', 'wlamp:off', 'wcount'],
+      'Bubbles came only when there was light AND carbon dioxide.',
+      'A plant needs both to make food. Take either one away and it stops.', true),
+  ];
+  DISCOVERIES.push(...PRIMARY_DISCOVERIES);
+
+  // ── Primary hazards and mistakes that teach ─────
+  HAZARDS.hot_lamp = {
+    signs: ['hot'],
+    title: () => 'Too hot! The bulb burnt the leaves',
+    happened: () => 'You put the plant right under a hot lamp. The bulb got hot and burnt the leaves brown.',
+    why: 'A lamp bulb can get hot enough to burn your skin. Dry leaves or paper touching it could catch fire.',
+    instead: 'Keep lamps well away from plants and hands. A sunny windowsill is best. Ask an adult to set up any lamp.',
+    exam: 'Plants need light and warmth to grow. They do not need heat that burns them.',
+  };
+  RESULTS.flood = { icon: '🌊', title: 'Too much water',
+    happened: () => 'The pot stood in water all week. The roots could not get air, so they began to rot. The leaves turned yellow.',
+    instead: 'Give a little water each day. Let the extra water drain out of the hole in the pot.',
+    exam: 'Roots need air too. Too much water harms a plant, just like too little.' };
+  RESULTS.two_things = { icon: '⚖️', title: 'Not a fair test - two things changed',
+    happened: c => (c && c.weed)
+      ? `Between your last two counts you changed ${c.list}. Which change made the difference? You cannot tell.`
+      : `Pot A and pot B were different in two ways: ${c && c.list}. Which one made the difference? You cannot tell.`,
+    instead: 'Change only ONE thing. Keep everything else the same. That is a fair test.',
+    exam: 'Exam questions often show two plants. Look for the ONE thing that is different.' };
+  RESULTS.no_control = { icon: '🪴', title: 'Nothing to compare with',
+    happened: () => 'You tested only one plant. Did your test change it? With nothing to compare, you cannot tell.',
+    instead: 'Grow a second plant in normal conditions, next to it. This plant is called the control.',
+    exam: 'A fair test compares two plants: the one you changed and the control.' };
+  RESULTS.fridge_two = { icon: '❄️', title: 'Two things changed: cold AND dark',
+    happened: () => 'The fridge seeds did not sprout. But the fridge is cold AND dark. The windowsill is warm AND light.',
+    instead: 'Compare the fridge with the warm dark cupboard. Then only the warmth is different.',
+    exam: 'A fair test changes one thing only. Here, change only the warmth.' };
+
+  const FACTS_G = {
+    4: [
+      'Plants need water, sunlight, air, warmth and minerals to grow well.',
+      'Roots take in water and minerals from the soil.',
+      'The stem carries water up from the roots to the leaves.',
+      'Leaves make the plant’s food, using sunlight.',
+      'Leaves are green because of chlorophyll. It traps sunlight.',
+      'A seed has a tiny plant and a store of food inside it.',
+      'Germination is when a seed starts to grow.',
+      'A seed needs water, air and warmth to sprout - but not light.',
+      'Compost and manure add minerals to the soil.',
+      'Plants give out oxygen, the gas we breathe in.',
+      'Too much water is bad for a plant. Its roots need air too.',
+      'Sugar cane grows well in sunny, warm Mauritius.',
+    ],
+    6: [
+      'Plants make their own food. This is called photosynthesis.',
+      'Carbon dioxide + water, with sunlight, make food and oxygen.',
+      'Carbon dioxide gets into a leaf through tiny holes called stomata.',
+      'The leaf is the plant’s food factory.',
+      'Chlorophyll is the green colouring in leaves. It traps sunlight.',
+      'Plants give out oxygen when they make food. Animals breathe it in.',
+      'Plants respire day and night. They make food only in the light.',
+      'Plants are producers. Every food chain starts with a green plant.',
+      'The sun is the main source of energy for plants.',
+      'Baking soda gives off carbon dioxide in water.',
+      'Boiling water drives out the gases that were dissolved in it.',
+      'Dust on leaves blocks sunlight, so the leaves make less food.',
+    ],
+  };
+
+  // ── Primary missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  const PRIMARY_MISSIONS = [
+    { id: 'g4_needs', icon: '🌞', title: 'Light and water', rig: 'pots', grades: [4], fair: ['spot', 'drink'],
+      blurb: 'Two fair tests. Does a plant need light? Does it need water?',
+      intro: 'Do two fair tests with pot B. First the dark cupboard, then no water. Change one thing each time.',
+      steps: { spot: '🚪 Test 1: pot B in the dark cupboard. Change nothing else.',
+               drink: '💧 Test 2: pot B back on the windowsill, with no water.' },
+      quiz: [
+        { q: 'Pot A was on the windowsill. Pot B was in the cupboard. What was different?',
+          options: ['Only the light', 'Only the water', 'The soil and the water', 'Nothing at all'],
+          why: 'Both pots had the same water and soil. Only the light was different.' },
+        { q: 'What happened to the plant in the dark cupboard?',
+          options: ['It turned pale yellow and weak', 'It turned darker green', 'It grew lots of flowers', 'It stayed exactly the same'],
+          why: 'With no light, a plant cannot make its food. It turns pale and weak.' },
+        { q: 'What happened to the plant with no water?',
+          options: ['It wilted and turned brown', 'It grew faster than pot A', 'It turned bright blue', 'It grew more leaves'],
+          why: 'A plant needs water. Without it, the plant dries out and wilts.' },
+        { q: 'Why do we keep everything else the same?',
+          options: ['So we know what caused the change', 'So the test is quicker', 'So the plants look nicer', 'So we need fewer pots'],
+          why: 'Change ONE thing only. Then that one thing caused what you see. This is a fair test.' },
+        { q: 'Which list shows what a plant needs to grow well?',
+          options: ['Water, sunlight, air, warmth and minerals', 'Only water and darkness', 'Sand, cold air and no water', 'Only sunlight, nothing else'],
+          why: 'A plant needs water, sunlight, air and warmth. It gets minerals from the soil.' },
+        { q: 'Compost is mixed into the soil. What does it give the plant?',
+          options: ['Minerals', 'Sunlight', 'Warmth', 'Air'],
+          why: 'Compost adds minerals to the soil. The roots take them in with water.' },
+      ] },
+    { id: 'g4_seeds', icon: '🫘', title: 'Wake up the seeds', rig: 'seeds', grades: [4],
+      finds: ['g4_seed_water', 'g4_seed_warm', 'g4_seed_air'],
+      setup: { 1: { wet: 'damp', place: 'cupboard' }, 2: { wet: 'dry', place: 'cupboard' }, 3: { wet: 'damp', place: 'fridge' }, 4: { wet: 'drown', place: 'cupboard' } },
+      blurb: 'Four dishes of bean seeds. Find the three things a seed needs.',
+      intro: 'Dish 1 is the control: damp, in the warm cupboard. Change ONE thing in each other dish.',
+      quiz: [
+        { q: 'Seeds on DRY cotton wool did not sprout. What was missing?',
+          options: ['Water', 'Light', 'Soil', 'Wind'],
+          why: 'Dish 2 was just like dish 1, but dry. So the seeds needed water.' },
+        { q: 'Seeds in the fridge did not sprout. What was missing?',
+          options: ['Warmth', 'Water', 'Soil', 'Light'],
+          why: 'The fridge and the cupboard are both dark. Only the cold was different.' },
+        { q: 'Seeds under water did not sprout. What was missing?',
+          options: ['Air', 'Water', 'Warmth', 'Light'],
+          why: 'The water kept the air away from the seeds. Seeds need air to sprout.' },
+        { q: 'Seeds sprouted in the dark cupboard. What does this show?',
+          options: ['Seeds do not need light to sprout', 'Seeds need darkness to live', 'Seeds need soil to sprout', 'Seeds grow only at night'],
+          why: 'A seed lives on its own stored food. It needs light later, for its leaves.' },
+        { q: 'Which part comes out of a seed first?',
+          options: ['The root', 'The flower', 'The fruit', 'The leaves'],
+          why: 'The root comes first. It grows down and takes in water.' },
+        { q: 'What is it called when a seed starts to grow?',
+          options: ['Germination', 'Pollination', 'Evaporation', 'Melting'],
+          why: 'Germination is when a seed starts to grow into a new plant.' },
+      ] },
+    { id: 'g6_gases', icon: '🫧', title: 'Gas A and Gas B', rig: 'weed', grades: [6],
+      // In this order each count changes ONE thing from the one before it.
+      tests: [
+        { lampOn: true, water: 'boiled', label: '1 · Light ✓ · carbon dioxide ✗ (boiled water)' },
+        { lampOn: true, water: 'soda', label: '2 · Light ✓ · carbon dioxide ✓ (baking soda)' },
+        { lampOn: false, water: 'soda', label: '3 · Light ✗ · carbon dioxide ✓ (lamp off)' },
+      ],
+      blurb: 'The PSAC 2023 question: which gas goes in, which gas comes out?',
+      intro: 'Do three counts, in this order: no carbon dioxide, then both, then no light. Keep the lamp in one place.',
+      quiz: [
+        { q: 'A leaf takes in Gas A from the air to make food. What is Gas A?',
+          options: ['Carbon dioxide', 'Oxygen', 'Nitrogen', 'Water vapour'],
+          why: 'PSAC 2023 paper. Leaves take in carbon dioxide to make food.' },
+        { q: 'The plant gives out Gas B. The bubbles were Gas B. What is it?',
+          options: ['Oxygen', 'Carbon dioxide', 'Nitrogen', 'Smoke'],
+          why: 'Plants give out oxygen when they make food. We breathe it in.' },
+        { q: 'Give two OTHER conditions a plant needs to make food.',
+          options: ['Sunlight and water', 'Darkness and sand', 'Wind and salt', 'Smoke and ice'],
+          why: 'PSAC 2023 paper. Sunlight and water - and green chlorophyll in the leaves.' },
+        { q: 'In boiled and cooled water there were no bubbles. Why?',
+          options: ['Boiling took the carbon dioxide out', 'The water was far too hot', 'The lamp was switched off', 'Boiling added too much oxygen'],
+          why: 'Boiling drives the carbon dioxide out. With no carbon dioxide, no food is made.' },
+        { q: 'With the lamp off, what happened?',
+          options: ['No bubbles: no light, no food-making', 'More bubbles than before', 'The waterweed turned red', 'The same number of bubbles'],
+          why: 'Plants need light to make food. No food-making means no oxygen bubbles.' },
+        { q: 'Why did the lamp stay in the same place for every count?',
+          options: ['To make it a fair test', 'To make more bubbles', 'To keep the water cold', 'To save electricity'],
+          why: 'Only the light or the carbon dioxide changed. Everything else stayed the same.' },
+      ] },
+    { id: 'g6_food', icon: '🏭', title: 'The leaf, the food factory', rig: 'pots', grades: [6], fair: ['leaves', 'spot'],
+      blurb: 'Two fair tests. Does a plant need its leaves? Does it need light?',
+      intro: 'Do two fair tests with pot B. First cut off its leaves, then try the dark cupboard. Change one thing each time.',
+      steps: { leaves: '✂️ Test 1: cut all the leaves off pot B. Change nothing else.',
+               spot: '🚪 Test 2: pot B keeps its leaves, but goes in the dark cupboard.' },
+      quiz: [
+        { q: 'Which part of a plant mainly makes its food?',
+          options: ['The leaf', 'The root', 'The flower', 'The fruit'],
+          why: 'PSAC 2021 paper. The green leaf is the plant’s food factory.' },
+        { q: 'The plant with no leaves did not grow. Why?',
+          options: ['With no leaves, it could make no food', 'It had too much water', 'Its roots were cut off', 'It was too warm'],
+          why: 'Leaves make the food. No leaves, no food, so no growth.' },
+        { q: 'How does a plant make its food?',
+          options: ['Carbon dioxide and water, with sunlight, make food and oxygen', 'Oxygen and soil make carbon dioxide', 'Food and oxygen make water', 'Sunlight and sand make soil'],
+          why: 'PSAC 2021 paper asks this. Say what is used and what is made.' },
+        { q: 'Dust from a stone crusher covers the leaves of trees. What happens?',
+          options: ['Less sunlight reaches the leaves, so less food is made', 'The trees get more oxygen', 'The dust gives the leaves minerals', 'The trees grow faster'],
+          why: 'PSAC 2019 paper. Dust blocks sunlight, so the leaves make less food.' },
+        { q: 'The plant in the dark cupboard turned pale. What was missing?',
+          options: ['Sunlight', 'Water', 'Soil', 'Air'],
+          why: 'It had water, soil and air. Only the light was missing.' },
+        { q: 'Pots A and B were the same except for ONE thing. What is this called?',
+          options: ['A fair test', 'A food chain', 'Germination', 'Pollination'],
+          why: 'A fair test changes one thing and keeps the rest the same.' },
+      ] },
+  ];
+  MISSIONS.push(...PRIMARY_MISSIONS);
+
+  // ── Primary guided experiments ──────────────────
+  const PRIMARY_GUIDES = [
+    { id: 'g4_light', icon: '☀️', title: 'Window or cupboard?', grades: [4],
+      blurb: 'Does a plant need light? Put one plant in a dark cupboard.',
+      lesson: 'The plant on the windowsill stayed green and strong. The plant in the cupboard turned pale and weak. Plants need light.',
+      steps: [
+        { on: 'rig:pots', say: 'Go to the two plant pots.', btn: '🪴 Plant pots' },
+        { on: 'pot:B', say: 'Tap pot B. This is the one we will change.', btn: '🅱️ Choose pot B' },
+        { on: 'spot:dark', say: 'Put pot B in the dark cupboard. Pot A stays on the sunny windowsill.', btn: '🚪 Pot B in the cupboard' },
+        { on: 'week', say: 'Fast-forward one week. Watch both plants!', btn: '⏩ Wait 7 days' },
+      ] },
+    { id: 'g4_water', icon: '💧', title: 'Water or no water?', grades: [4],
+      blurb: 'Stop watering one plant. What happens to it?',
+      lesson: 'The plant with no water wilted and went brown. The watered plant stayed green. Plants need water.',
+      steps: [
+        { on: 'rig:pots', say: 'Go to the two plant pots.', btn: '🪴 Plant pots' },
+        { on: 'pot:B', say: 'Tap pot B.', btn: '🅱️ Choose pot B' },
+        { on: 'drink:none', say: 'Give pot B no water at all. Pot A gets a little every day.', btn: '🚫 No water for pot B' },
+        { on: 'week', say: 'Fast-forward one week.', btn: '⏩ Wait 7 days' },
+      ] },
+    { id: 'g4_seeds', icon: '🫘', title: 'What does a seed need?', grades: [4],
+      blurb: 'Four dishes of bean seeds. Change one thing in each.',
+      lesson: 'Only dish 1 sprouted, in the dark. Seeds need water, air and warmth to sprout. They do not need light.',
+      steps: [
+        { on: 'rig:seeds', say: 'Go to the seed dishes. Each has bean seeds on damp cotton wool.', btn: '🌱 Seed dishes' },
+        { on: 'dish:2', say: 'Tap dish 2.', btn: 'Dish 2' },
+        { on: 'wet:dry', say: 'Make dish 2 DRY. No water on its cotton wool.', btn: '🏜️ Dry cotton wool' },
+        { on: 'dish:3', say: 'Tap dish 3.', btn: 'Dish 3' },
+        { on: 'place:fridge', say: 'Put dish 3 in the cold fridge.', btn: '❄️ Cold fridge' },
+        { on: 'dish:4', say: 'Tap dish 4.', btn: 'Dish 4' },
+        { on: 'wet:drown', say: 'Cover the seeds in dish 4 with water. No air can reach them.', btn: '🌊 Under water' },
+        { on: 'days', say: 'Fast-forward 4 days. Which seeds sprout?', btn: '⏩ Wait 4 days' },
+      ] },
+    { id: 'g4_soil', icon: '🟫', title: 'Soil or sand?', grades: [4],
+      blurb: 'Grow one plant in plain sand. Does it grow as well?',
+      lesson: 'The plant in sand grew small, with pale leaves. Soil with compost has minerals. Plants need minerals.',
+      steps: [
+        { on: 'rig:pots', say: 'Go to the two plant pots.', btn: '🪴 Plant pots' },
+        { on: 'pot:B', say: 'Tap pot B.', btn: '🅱️ Choose pot B' },
+        { on: 'soil:sand', say: 'Grow pot B in plain sand. Pot A keeps its soil with compost.', btn: '🟨 Plain sand for pot B' },
+        { on: 'week', say: 'Fast-forward one week.', btn: '⏩ Wait 7 days' },
+      ] },
+    { id: 'g6_bubbles', icon: '🫧', title: 'Waterweed bubbles', grades: [6],
+      blurb: 'Shine a lamp on waterweed. Count the bubbles of oxygen.',
+      lesson: 'The waterweed gave off bubbles of oxygen. With the lamp closer, it made more. More light, more food-making.',
+      steps: [
+        { on: 'rig:weed', say: 'Go to the waterweed. It sits under a funnel in water.', btn: '🫧 Waterweed' },
+        { on: 'wdist:50', say: 'Put the lamp far away: 50 cm.', btn: '💡 Lamp at 50 cm' },
+        { on: 'wcount', say: 'Count the bubbles for one minute.', btn: '⏱ Count 1 minute' },
+        { on: 'wdist:20', say: 'Bring the lamp close: 20 cm. Change nothing else.', btn: '💡 Lamp at 20 cm' },
+        { on: 'wcount', say: 'Count again. More bubbles, or fewer?', btn: '⏱ Count 1 minute' },
+      ] },
+    { id: 'g6_leaves', icon: '✂️', title: 'Leaves make the food', grades: [6],
+      blurb: 'Cut all the leaves off one plant. Can it still grow?',
+      lesson: 'The plant with no leaves did not grow. The leaf is where a plant makes its food.',
+      steps: [
+        { on: 'rig:pots', say: 'Go to the two plant pots.', btn: '🪴 Plant pots' },
+        { on: 'pot:B', say: 'Tap pot B.', btn: '🅱️ Choose pot B' },
+        { on: 'leaves:off', say: 'Cut all the leaves off pot B. Change nothing else.', btn: '✂️ Cut off the leaves' },
+        { on: 'week', say: 'Fast-forward one week.', btn: '⏩ Wait 7 days' },
+      ] },
+    { id: 'g6_light', icon: '🚪', title: 'Light to make food', grades: [6],
+      blurb: 'No light, no food? Test it with two plants.',
+      lesson: 'In the dark the plant could not make food. It turned pale and weak. Light is needed to make food.',
+      steps: [
+        { on: 'rig:pots', say: 'Go to the two plant pots.', btn: '🪴 Plant pots' },
+        { on: 'pot:B', say: 'Tap pot B.', btn: '🅱️ Choose pot B' },
+        { on: 'spot:dark', say: 'Put pot B in the dark cupboard. Pot A stays in the sun.', btn: '🚪 Pot B in the cupboard' },
+        { on: 'week', say: 'Fast-forward one week.', btn: '⏩ Wait 7 days' },
+      ] },
+    { id: 'g6_co2', icon: '♨️', title: 'Take away the carbon dioxide', grades: [6],
+      blurb: 'Waterweed in boiled water. Will it still bubble?',
+      lesson: 'In boiled and cooled water there were no bubbles. Plants need carbon dioxide to make food.',
+      steps: [
+        { on: 'rig:weed', say: 'Go to the waterweed.', btn: '🫧 Waterweed' },
+        { on: 'wcount', say: 'First count the bubbles in pond water with baking soda.', btn: '⏱ Count 1 minute' },
+        { on: 'wwater:boiled', say: 'Now use boiled and cooled water. It has no carbon dioxide.', btn: '♨️ Boiled and cooled water' },
+        { on: 'wcount', say: 'Count again. Any bubbles?', btn: '⏱ Count 1 minute' },
+      ] },
+  ];
+  GUIDES.push(...PRIMARY_GUIDES);
+
+  // ── Welcome and help, per primary grade ─────────
+  const PRIMARY_TEXT = {
+    4: {
+      welcome: [
+        ['New here?', 'Tap “Show me how”. I will show you what to tap, one step at a time.'],
+        ['Two plant pots.', 'Move a plant, or change its water or soil. Then fast-forward a week.'],
+        ['Seed dishes.', 'Bean seeds on cotton wool. Find out what makes them sprout.'],
+        ['Be fair.', 'Change ONE thing at a time. Keep everything else the same.'],
+        ['Hear it.', 'Tap 🔊 and the words are read out to you.'],
+      ],
+      help: [
+        ['What a plant needs', ['Light, water, air, warmth and minerals from the soil.', 'Roots take in water. Leaves make the food, using light.']],
+        ['Seeds', ['A seed needs water, air and warmth to sprout.', 'It does not need light. The root comes out first.']],
+        ['A fair test', ['Change ONE thing only.', 'Keep everything else the same.', 'Grow a second plant to compare. It is called the control.']],
+        ['Stay safe', ['Never put a plant right under a hot lamp. Bulbs get hot.', 'Ask an adult before you use a lamp.']],
+      ],
+      how: ['<b>Choose</b> a guided experiment or a mission.', '<b>Follow the yellow box</b>. The thing to tap glows yellow.', '<b>Watch</b>, then read your notebook.'],
+    },
+    6: {
+      welcome: [
+        ['New here?', 'Tap “Show me how”. I will show you what to tap, one step at a time.'],
+        ['Two plant pots.', 'Take away light, water or leaves. Then fast-forward a week.'],
+        ['Waterweed.', 'Shine a lamp on it and count the bubbles of oxygen.'],
+        ['Be fair.', 'Change ONE thing at a time. Keep everything else the same.'],
+        ['Hear it.', 'Tap 🔊 and the words are read out to you.'],
+      ],
+      help: [
+        ['Photosynthesis', ['Plants make their own food in their leaves.', 'They need sunlight, water, carbon dioxide and green chlorophyll.', 'They give out oxygen.']],
+        ['The waterweed', ['The bubbles are oxygen.', 'A closer lamp gives brighter light.', 'Boiled and cooled water has no carbon dioxide.']],
+        ['A fair test', ['Change ONE thing only.', 'Keep everything else the same.', 'Compare with a plant you did not change: the control.']],
+        ['Stay safe', ['Never put a plant right under a hot lamp. Bulbs get hot.', 'Ask an adult before you use a lamp.']],
+      ],
+      how: ['<b>Choose</b> a guided experiment or a mission.', '<b>Follow the yellow box</b>. The thing to tap glows yellow.', '<b>Watch</b>, then read your notebook.'],
+    },
+  };
+
   return { DISTANCES, TEMPS, ROOM_TEMP, LIGHT_K, WATERS, TF, LAMP_HEAT, HEAT_CARD_AT, GAS_FOR_SPLINT,
            light, tempFactor, rate, limiting, LIMIT_WORDS, countRun, VAR_NAMES, changedVars, pondDiscoveries,
            LEAF_W, LEAF_H, PLANTS, COVERS, cellInfo, starchMap, starchReading, IODINE, describe, isExperiment, leafDiscoveries,
-           EQUATION, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES };
+           EQUATION, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES,
+           GRADES, LEVELS, RIG_NAMES, POT_START, WEEK_DAYS, SEED_DAYS, SPOTS, DRINKS, SOILS, LEAVES, POT_VARS, POT_VAR_WORDS,
+           POT_TEST_VALUE, newPot, isNormal, LEAF_COLOURS, potResult, potDiff, potCheck, potDiscoveries,
+           WETS, PLACES, DISHES, newDish, seedNeeds, seedSprouts, seedStage, seedResult, seedDiscoveries, seedCheck,
+           WEED_DISTS, WEED_WATERS, weedRun, WEED_VAR_WORDS, weedDiff, weedDiscoveries, PEQ,
+           primaryStep, primaryRig, FACTS_G, PRIMARY_TEXT };
 })();
 if (typeof window !== 'undefined') window.LabPhotoData = LabPhotoData;

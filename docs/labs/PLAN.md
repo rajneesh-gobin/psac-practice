@@ -3,30 +3,51 @@
 > Status 2026-09-11: **Phase 0 built — the Mixing Bench — not yet deployed.**
 > Readable version of the plan published as an Artifact ("NCE Science Labs").
 
-## Build status (2026-09-11, evening) — read this first when resuming
-- **Live (`ready: true`, tests re-run by the lead):** mixing, light, photo,
-  separation, measure.
-- **Were building in parallel when the session paused** (each owns only its five
-  files — `engine/labs/lab_<id>_data.js`, `lab_<id>.js`, `lab_<id>.css`,
-  `scripts/test-labs-<id>-data.js`, `scripts/test-labs-<id>.js`): circuit (port
-  9405), motion (9406), quadrat (9407), microscope (9408), rusting (G6, 9409),
-  materials (G4, 9410). A build that did not finish may have left some of its
-  files half-written: check that all five exist, run both tests and
-  `node scripts/check.js`, and rebuild from `LAB_SPEC.md` if they fail.
-- **Queued:** water (Water & States, G4/G7), air (Air & Burning, G4/G6/G7) —
-  primary labs per `LAB_SPEC.md` §8; already registered in `Labs.LABS`.
-- **After the builds:** the per-grade layer (below), picture options in
-  `Labs.quiz`, and the 44px tap-target fixes in `labs.css` (`.lab-seg`,
-  `.lab-coach-tip`, `.lab-btn-sm`).
-- Also from the build reports: an `examLabel` option on `Labs.hazardCard` /
-  `resultCard` ("📝 In the PSAC exam" for primary labs — the Rusting Lab rewrites
-  the heading itself today); and check every lab restarts its animation loop
-  after leaving and returning to the Labs screen (the Rusting Lab found its loop
-  stopped for good and now watches the screen; the Photosynthesis Lab has the
-  same pattern). Motion Track now uses the new `warning` (ISO W001 "Caution")
-  sign.
-- **Verified since:** quadrat, circuit, motion (live); rusting (G6) verified and
-  `ready`, hidden until the hub lists Science labs.
+## Build status (2026-09-11, late evening) — read this first when resuming
+- **Batch complete. All nine Grade 9 labs are live** (`ready: true`, every data
+  test, browser test and `check.js` re-run by the lead, not taken from the build
+  reports): mixing, separation, light, measure, circuit, motion, photo, quadrat,
+  microscope.
+- **Primary labs built and verified, `ready`, but not yet visible:** rusting
+  (G6), materials (G4). The hub lists only Chemistry/Physics/Biology, so they
+  appear when the per-grade layer adds the Science group and the grade picker.
+- Each lab owns five files — `engine/labs/lab_<id>_data.js`, `lab_<id>.js`,
+  `lab_<id>.css`, `scripts/test-labs-<id>-data.js`, `scripts/test-labs-<id>.js`;
+  browser tests use ports 9401–9410, one per lab.
+- ⚠ Commit `5136b04` "labs" (not made by this session) already holds most of
+  the lab work; what is uncommitted after it is listed by `git status`.
+- **Batch A done — the per-grade layer (2026-09-11, night):**
+  - every `Labs.LABS` row carries `grades`; the hub shows the labs for one grade,
+    with a **"My grade"** picker only when the child may use more than one grade
+    that has labs (own grade + parent-granted grades ABOVE it, never below);
+  - **Grade 5 has no core science in the app, so it borrows the Grade 4 and 6
+    labs** (`Labs.GRADE_ALIASES = { 5: [4, 6] }`);
+  - **`Labs.grade()`** = the grade the open lab is being used at (a Grade 5
+    pupil in the Materials Tester gets 4, in the Rusting Lab 6);
+  - hazard/result cards say "📝 In the PSAC exam" (≤ 6) or "📝 On the NCE paper"
+    (9) by themselves; `examLabel` overrides;
+  - new ISO 7010 `sharp` sign (W022) — the cracked slide, cracked glass and rusty
+    nail no longer borrow the chemical "Harmful" diamond;
+  - `Labs.quiz` options may be `{ label, svg }`; 44px tap targets throughout;
+  - `_LAB_GRADES = [4, 5, 6, 9]` in app.js — ⚠ must equal the ready grades in
+    `Labs.LABS` plus 5; `scripts/test-labs-grades.js` fails if they drift;
+  - ⚠ the picked grade is reset when the child (own grade / usable grades)
+    changes — switching child never reloads the page, and a Grade 6 child
+    opened on the Grade 9 a sibling had chosen.
+- **Batch B in progress:** water (Water & States, G4) and air (Air & Burning,
+  G4/G6) — new primary labs; Grade 4/6 levels for the Circuit Board and the
+  Photosynthesis Lab. Browser ports 9412–9415. On each report: verify, then add
+  the grades to the `L(...)` row AND `_LAB_GRADES`, flip `ready`, re-run
+  `test-labs-grades.js` (its per-grade expectations change).
+- **Batch C (queued):** Light G4 (transparent/opaque, shadows), Measurement
+  G4/G7/G8, Separation G8/G7, Mixing G8, Microscope G7, Circuit G7; then the
+  new labs Magnets (G8, G4), Food Tests (G8), Forces & Pressure (G8).
+- Still to check: every lab restarts its animation loop after leaving and
+  returning to the Labs screen (Rusting and Photosynthesis do).
+- **Verified since:** quadrat, circuit, motion (live); rusting (G6) and
+  materials (G4) verified and `ready`, hidden until the hub lists Science labs.
+  ⚠ The Materials Tester already calls `Labs.grade()` if it exists (falling back
+  to Grade 4 for its eyebrow) — the per-grade layer must provide it.
 - A lab is switched on by adding `, true` to its `L(...)` line in `lab_core.js`
   only after its data test, browser test and `check.js` pass.
 
@@ -57,7 +78,7 @@
   **`docs/labs/LAB_SPEC.md`**.
 - Wiring: RoleModules group `labs` (registry.js), `#screen-labs` and the
   `#sh-note-labs` sticky note (index.html), `openLabs()` / `_labsAvailable()` /
-  `_LAB_GRADES = [9]` (app.js), `labs: {}` in `Store._defaultStudent()`.
+  `_LAB_GRADES` (app.js), `labs: {}` in `Store._defaultStudent()`.
 - ⚠ **Who sees Labs:** the grade on screen OR any grade at or above the child's
   own that a parent ticked in ⚙️ Controls › 🎓 Grade access
   (`GradeAccess.childChoices()`) must be in `_LAB_GRADES`. Reading

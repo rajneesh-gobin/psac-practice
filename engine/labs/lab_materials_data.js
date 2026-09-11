@@ -365,7 +365,7 @@ const LabMaterialsData = (() => {
       exam: 'Exam tip: wires are covered in plastic or rubber because they are insulators - they stop electric shocks (PSAC 2025 Q6c asks what an insulator is).',
     },
     glass: {
-      signs: ['irritant'], fx: 'crack',
+      signs: ['sharp'], fx: 'crack',
       title: () => 'Careful! Glass breaks',
       happened: c => `You tried to bend the ${c.name ? c.name.toLowerCase() : 'glass'}. Glass is rigid. It cannot bend, so it cracked into sharp pieces.`,
       why: 'Broken glass has very sharp edges. Even tiny pieces can cut your skin badly.',

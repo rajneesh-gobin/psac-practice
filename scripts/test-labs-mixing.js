@@ -76,21 +76,22 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   ok('no lab code is loaded before anyone opens a lab',
      await ev("typeof Labs === 'undefined' && ![...document.scripts].some(s => /engine\\/labs\\//.test(s.src))"));
   const noteShown = async g => ev(`(() => { SELECTED_GRADE = ${g}; showScreen('student-home'); return getComputedStyle(document.getElementById('sh-note-labs')).display !== 'none'; })()`);
-  ok('a Grade 6 (PSAC) pupil does not see Science Labs', !(await noteShown(6)));
+  // Grades 4-6 have their own primary labs now - scripts/test-labs-grades.js
+  // covers them. Grade 7 still has none, so it is the "no labs yet" case here.
   ok('a Grade 7 pupil does not see it yet (no Grade 7 lab)', !(await noteShown(7)));
   ok('a Grade 9 (NCE) pupil sees Science Labs', await noteShown(9));
-  // A younger child whose parent ticked Grade 9 in ⚙️ Controls › Grade access.
+  // A child whose parent ticked Grade 9 in ⚙️ Controls › Grade access.
   const withGrant = async grant => ev(`(() => {
     if (typeof DB === 'undefined' || !DB) DB = {};
     DB.restrictions = ${grant ? '{ allowedGrades: [9] }' : '{}'};
-    SELECTED_GRADE = 5; showScreen('student-home');
+    SELECTED_GRADE = 7; showScreen('student-home');
     const shown = getComputedStyle(document.getElementById('sh-note-labs')).display !== 'none';
     DB.restrictions = {};
     return shown; })()`);
-  ok('a Grade 5 pupil sees Science Labs once a parent grants Grade 9', await withGrant(true));
+  ok('a Grade 7 pupil sees Science Labs once a parent grants Grade 9', await withGrant(true));
   ok('…and not without that grant', !(await withGrant(false)));
-  await ev("SELECTED_GRADE = 6; openLabs(); true");
-  ok('openLabs() refuses a primary pupil', (await ev('S.currentScreen')) !== 'labs');
+  await ev("SELECTED_GRADE = 7; openLabs(); true");
+  ok('openLabs() refuses a grade with no labs', (await ev('S.currentScreen')) !== 'labs');
 
   // ── The hub ─────────────────────────────────────
   console.log('\n-- the hub');

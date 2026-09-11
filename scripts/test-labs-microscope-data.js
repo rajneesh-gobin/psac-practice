@@ -253,7 +253,7 @@ ok('the magnification mission needs a find-M and the ×15 000 figure', D.MISSION
    && D.MISSIONS.find(m => m.id === 'mag').need.map(D.figure).some(f => f.mag === 15000));
 
 console.log('\nHazards, result cards and facts');
-const SIGNS = ['corrosive', 'explosive', 'flammable', 'pressure', 'toxic', 'irritant', 'oxidising', 'electric', 'hot', 'eye', 'biohazard'];
+const SIGNS = ['corrosive', 'explosive', 'flammable', 'pressure', 'toxic', 'irritant', 'oxidising', 'electric', 'hot', 'eye', 'biohazard', 'warning', 'sharp'];
 const hctx = { knob: 'coarse', obj: 40 };
 for (const [id, H] of Object.entries(D.HAZARDS)) {
   ok(`hazard ${id}: real signs, what happened, why, what to do instead and the exam point`,

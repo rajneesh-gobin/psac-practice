@@ -1,0 +1,75 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Water & States - only what labs.css does not already give.
+   Loaded by lab_core.js when the lab opens. Every class is .lab-water-*.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN: no utility classes.
+   ⚠ A primary lab (Grade 4): bigger text, and every tap target at least 44px.
+   ══════════════════════════════════════════════ */
+
+/* Heat / drying / jar switch above the picture */
+.lab-water-rigs { display: flex; width: 100%; }
+.lab-water-rigs button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 6px; font-size: 0.82rem; line-height: 1.15; }
+
+/* Readout chips over the canvas, top-left, wrapping on a phone */
+.lab-water-chips {
+  position: absolute; top: 8px; left: 8px; right: 8px; display: flex; flex-wrap: wrap; gap: 5px;
+  pointer-events: none;
+}
+.lab-water-chips .lab-chip { font-size: 0.8rem; }
+.lab-water .lab-contents { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.8rem; }
+
+/* Lab assistant and guide box: larger words for younger readers, 44px buttons */
+.lab-water .lab-coach p { font-size: 1rem; }
+.lab-water .lab-coach-tip { width: 44px; height: 44px; }
+.lab-water .lab-guide-say { font-size: 1.08rem; }
+.lab-water-guide-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lab-water-guide-head .lab-guide-meta { flex: 1; min-width: 0; }
+.lab-water .lab-water-say { min-height: 44px; min-width: 44px; }
+.lab-water .lab-btn-sm { min-height: 44px; }
+.lab-water .lab-link { min-height: 44px; }
+
+/* Adult-helper toggle in the top bar */
+.lab-water .lab-goggles { gap: 4px; min-height: 44px; }
+
+/* Tools under the picture */
+.lab-water-tools { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lab-water-tools[data-rig="jar"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lab-water-tools .lab-tool { position: relative; min-height: 64px; font-size: 0.78rem; }
+.lab-water-toolsign { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; font-style: normal; }
+.lab-water-toolsign .lab-sign-mini { width: 18px; height: 18px; }
+.lab-water-danger { border-color: var(--lab-danger); background: var(--lab-danger-soft); color: var(--lab-danger); }
+
+/* Set-up panel: labelled rows of option buttons */
+.lab-water-set h2 { margin-bottom: 8px; }
+.lab-water-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.lab-water-label { font-size: 0.76rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); }
+.lab-water-opts { display: grid; gap: 6px; }
+.lab-water-opts.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lab-water-opts.is-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lab-water-opt {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  min-width: 44px; min-height: 44px; padding: 4px 6px; border-radius: 10px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface-2); color: var(--lab-ink); font: inherit; font-size: 0.85rem; font-weight: 700;
+  line-height: 1.2; text-align: center; cursor: pointer; touch-action: manipulation; overflow-wrap: anywhere;
+}
+.lab-water-opt.is-big { font-size: 1.1rem; }
+.lab-water-opt.is-hot { border-color: var(--lab-danger); }
+.lab-water-opt small { font-size: 0.68rem; font-weight: 500; color: var(--lab-muted); }
+.lab-water-opt:hover { border-color: var(--lab-accent); }
+.lab-water-opt[aria-pressed="true"] { background: var(--lab-accent); border-color: var(--lab-accent); color: var(--lab-accent-ink); }
+.lab-water-opt[aria-pressed="true"] small { color: var(--lab-accent-ink); opacity: 0.85; }
+.lab-water-opt:active { transform: scale(0.97); }
+
+/* "Fan: Yes / No" rows */
+.lab-water-pair { display: flex; align-items: center; gap: 6px; }
+.lab-water-pair > span { flex: 1 1 auto; min-width: 0; font-size: 0.85rem; font-weight: 700; line-height: 1.25; }
+.lab-water-pair .lab-water-opt { flex: 0 0 64px; }
+
+/* Notebook */
+.lab-water-yes { color: var(--lab-ok); font-weight: 700; }
+.lab-water-no { color: var(--lab-muted); font-weight: 600; }
+.lab-water-bar { display: block; width: 100%; max-width: 90px; height: 6px; border-radius: 99px; background: var(--lab-surface-2); margin-bottom: 3px; overflow: hidden; }
+.lab-water-bar > i { display: block; height: 100%; background: #4E9FD8; }
+.lab-water-log-bad { border-left-color: var(--lab-danger) !important; }
+
+@media (prefers-reduced-motion: reduce) { .lab-water-opt:active { transform: none; } }
+.kid-calm .lab-water-opt:active { transform: none; }

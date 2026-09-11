@@ -225,7 +225,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   ok('…the tester is back on the battery, and the hazard is counted', (await dbg()).power === 'battery' && await ev("Labs.store('materials').hazards.mains >= 1"));
   await station('bend'); await tray('glass');
   ov = await overlay();
-  ok('trying to bend the glass tile: it cracks - HARMFUL hazard card, “tell an adult”', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Harmful') && /Glass breaks/.test(ov.text) && /tell an adult/.test(ov.text), ov);
+  ok('trying to bend the glass tile: it cracks - SHARP hazard card, “tell an adult”', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Sharp - can cut') && /Glass breaks/.test(ov.text) && /tell an adult/.test(ov.text), ov);
   await closeOv();
   ok('…and glass is recorded as rigid', (await dbg()).results.glass.bend === 'rigid');
   await tray('cork');

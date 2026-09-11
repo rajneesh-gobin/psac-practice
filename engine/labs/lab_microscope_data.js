@@ -149,7 +149,10 @@ const LabMicroscopeData = (() => {
       if (near && mid === 'gap') continue;
       if ((CELLS[mid] && CELLS[mid].white) && (gx === 0 || gy === 0) && near) continue;
       const r = rnd();
-      const jx = (rnd() - 0.5) * 6, jy = (rnd() - 0.5) * 6;
+      // More scatter away from the pointer, so low power does not read as a grid;
+      // less next to it, so nothing covers the pointer's cell.
+      const jit = near ? 6 : 10;
+      const jx = (rnd() - 0.5) * jit, jy = (rnd() - 0.5) * jit;
       if (r < 0.84) out.push({ type: 'rbc', x: gx * step + jx, y: gy * step + jy, rot: rnd() * 6.283 });
       else if (r < 0.92 && !near) out.push({ type: 'platelet', x: gx * step + jx, y: gy * step + jy, rot: rnd() * 6.283 });
     }
@@ -415,7 +418,7 @@ const LabMicroscopeData = (() => {
   const SAFETY_EXAM = 'Safety precautions earn marks on the NCE science papers (for example Chemistry 2022 Q5(a)(ii)).';
   const HAZARDS = {
     crack: {
-      signs: ['irritant'],
+      signs: ['sharp'],
       title: () => 'Crack! The lens hit the slide',
       happened: c => c.knob === 'nosepiece'
         ? `You swung the ×${c.obj} objective into place with the lens already low. The long high-power lens hit the slide and cracked the glass.`

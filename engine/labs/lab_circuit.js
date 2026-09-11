@@ -19,11 +19,16 @@
 //    from the palette onto a space) is for mouse and pen only.
 //  ⚠ Calm Mode and reduced motion: the circuit is still solved and drawn, the
 //    charge dots stand still, effects apply at once.
+//  ⚠ THREE LEVELS: Labs.grade() is 4, 6 or 9, and only that grade's guides,
+//    missions and discoveries show (LAB_SPEC §9). Grades 4 and 6 get simpler
+//    words, read-aloud 🔊, things to test in a gap (conductors / insulators)
+//    and the ⚠️ "Would it be safe?" row; meters, resistors and fuses are
+//    Grade 9 only. Everything Grade 9 does is unchanged.
 // ══════════════════════════════════════════════
 const LabCircuit = (() => {
   const D = () => LabCircuitData;
   const FRAME_MS = 1000 / 30;
-  const FX_DUR = { short: 1.2, pop: 0.8, fuse: 0.8 };
+  const FX_DUR = { short: 1.2, pop: 0.8, fuse: 0.8, zap: 1.0 };
 
   const $ = id => document.getElementById(id);
   const esc = s => Labs.esc(s);
@@ -36,6 +41,24 @@ const LabCircuit = (() => {
   let _panel = 'sandbox', _mission = null, _guide = null;
   let _log = [], _readings = [], _fx = [], _busy = false, _instant = false;
   let _tipIdx = -1, _undo = [], _hadGap = false, _vmSeen = false, _drag = null, _suppressClick = false;
+  let _talking = false, _obs = null, _lastGrade = null;
+  let _tests = {}, _gapPrev = false, _gapFilled = false, _warm = false;   // Grades 4 and 6 only
+
+  // ── The grade the board is being used at ──
+  // Labs.grade() is 4, 6 or 9; a grade this lab has no level for is 9.
+  const _g = () => {
+    const g = typeof Labs !== 'undefined' && typeof Labs.grade === 'function' ? Number(Labs.grade()) : 9;
+    return D().GRADES.includes(g) ? g : 9;
+  };
+  const _primary = () => _g() <= 6;
+  const _mine = list => D().forGrade(list, _g());
+  const _discs = () => _mine(D().DISCOVERIES);
+  // A primary grade has its own wording for some cards: short_circuit → short_circuit_p.
+  const _cid = base => (_primary() && (D().HAZARDS[base + '_p'] || D().RESULTS[base + '_p']) ? base + '_p' : base);
+  const _job = k => (_primary() && D().JOBS_P[k]) || D().KINDS[k].job;
+  const _lc = k => D().KINDS[k].name.toLowerCase();
+  // The first-visit welcome is shown once per grade.
+  const _introKey = () => (_primary() ? 'intro' + _g() : 'intro');
 
   const TOOL_INFO = {
     hand:   { icon: '✋', name: 'Hand', meta: 'Switch, unscrew, turn round' },
@@ -45,12 +68,13 @@ const LabCircuit = (() => {
 
   // ══ Shell ════════════════════════════════════
   function _shellHTML() {
-    return `<div class="lab lab-circuit">
+    const g = _g(), P = g <= 6;
+    return `<div class="lab lab-circuit${P ? ' is-primary' : ''}">
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-act="hub" aria-label="Back to Science Labs">←</button>
-        <div class="lab-top-title"><span class="lab-eyebrow">Physics · Grade 9</span><h1>Circuit Board</h1></div>
+        <div class="lab-top-title"><span class="lab-eyebrow">${P ? 'Science' : 'Physics'} · Grade ${g}</span><h1>Circuit Board</h1></div>
         <div class="lab-top-actions">
-          <button type="button" id="lab-circuit-view" class="lab-circuit-viewbtn" data-act="view" aria-pressed="false"><span aria-hidden="true" id="lab-circuit-view-ico">✏️</span><span id="lab-circuit-view-label">Symbols</span></button>
+          ${D().symbolsFor(g) ? '<button type="button" id="lab-circuit-view" class="lab-circuit-viewbtn" data-act="view" aria-pressed="false"><span aria-hidden="true" id="lab-circuit-view-ico">✏️</span><span id="lab-circuit-view-label">Symbols</span></button>' : ''}
           <button type="button" class="lab-icon-btn" data-act="help" aria-label="How the board works">?</button>
         </div>
       </header>
@@ -66,15 +90,23 @@ const LabCircuit = (() => {
           <div class="lab-coach">
             <span class="lab-coach-face" aria-hidden="true">🧑‍🔬</span>
             <p id="lab-coach-text" aria-live="polite"></p>
+            ${P ? '<button type="button" class="lab-coach-tip lab-circuit-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>' : ''}
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-circuit-palette" class="lab-circuit-palette-wrap"></div>
-          <div class="lab-tools lab-circuit-actions">
-            <button type="button" class="lab-tool" data-act="read"><span aria-hidden="true">📝</span>Take a reading</button>
+          <div class="lab-tools lab-circuit-actions${P ? ' is-two' : ''}">
+            ${P ? '' : '<button type="button" class="lab-tool" data-act="read"><span aria-hidden="true">📝</span>Take a reading</button>'}
             <button type="button" class="lab-tool" data-act="undo"><span aria-hidden="true">↩️</span>Undo</button>
             <button type="button" class="lab-tool" data-act="clear"><span aria-hidden="true">🗑️</span>Clear the board</button>
           </div>
+          ${P ? `<section class="lab-circuit-safety" aria-label="Would it be safe?">
+            <p class="lab-hint"><b>⚠️ Would it be safe?</b> Tap one to see what would happen.</p>
+            <div class="lab-tools lab-circuit-actions">
+              <button type="button" class="lab-tool" data-act="mains"><span aria-hidden="true">🔌</span>Wall socket</button>
+              <button type="button" class="lab-tool" data-act="wet"><span aria-hidden="true">💧</span>Wet hands</button>
+              <button type="button" class="lab-tool" data-act="cable"><span aria-hidden="true">✂️</span>Split cable</button>
+            </div></section>` : ''}
         </div>
         <div class="lab-side">
           <div class="lab-tabs" role="tablist" aria-label="Bench, missions and discoveries">
@@ -90,6 +122,15 @@ const LabCircuit = (() => {
 
   function mount(root) {
     _root = root;
+    // ⚠ The board, a mission and a guide survive leaving the lab - but not a
+    //   change of grade: a Grade 9 ammeter has no place on a Grade 4 bench.
+    const g = _g();
+    if (_lastGrade !== null && _lastGrade !== g) {
+      _layout = {}; _undo = []; _readings = []; _log = []; _tests = {}; _fx = []; _t = 0;
+      _mission = null; _guide = null; _tool = 'hand'; _panel = 'sandbox'; _busy = false;
+    }
+    _lastGrade = g;
+    if (!D().symbolsFor(g)) _view = 'picture';
     root.innerHTML = _shellHTML();
     _cv = $('lab-circuit-canvas');
     _cx = _cv.getContext('2d');
@@ -102,17 +143,31 @@ const LabCircuit = (() => {
     _syncView();
     _paint();
     const st = Labs.store('circuit');
-    if (!st.intro) _intro();
+    if (!st[_introKey()]) _intro();
     else if (_guide) _guideEnter();
     else if (_mission) _coach('Back on your mission - carry on where you left off.');
     else _coach(Object.keys(st.guides).length
       ? 'Welcome back! Pick a guided experiment or a mission below - or build your own circuit.'
       : '👋 New here? Pick a guided experiment below and I’ll show you exactly what to tap.');
     if (!_resizeWired) { window.addEventListener('resize', () => { if (_cv && _cv.isConnected) _resize(); }); _resizeWired = true; }
+    // ⚠ Leaving the Labs screen must stop speech at once, and coming back must
+    //   restart the loop: once the loop sees it is off-screen it stops for good
+    //   (the Rusting Lab measured both).
+    if (_obs) _obs.disconnect();
+    const scr = root.closest('.screen');
+    if (scr && typeof MutationObserver !== 'undefined') {
+      _obs = new MutationObserver(() => {
+        if (scr.classList.contains('hidden')) { _hush(); _stop(); }
+        else if (_root && _cv && !_raf) _start();
+      });
+      _obs.observe(scr, { attributes: true, attributeFilter: ['class'] });
+    }
     _start();
   }
 
   function unmount() {
+    _hush();
+    if (_obs) { _obs.disconnect(); _obs = null; }
     _stop();
     _drag = null;
     _root = null; _cv = null; _cx = null;
@@ -227,6 +282,11 @@ const LabCircuit = (() => {
       case 'hub': Labs.backToHub(); break;
       case 'help': _help(); break;
       case 'tip': _nextTip(); break;
+      case 'say-coach': { const el = $('lab-coach-text'); if (el) _say(el.textContent); break; }
+      case 'say-guide': { const G = _gdef(), s = G && G.steps[_guide.step]; if (s) _say(s.say); break; }
+      case 'mains': _danger('mains'); break;
+      case 'wet': _danger('wet_hands'); break;
+      case 'cable': _danger('cable'); break;
       case 'view': setView(_view === 'picture' ? 'symbols' : 'picture'); break;
       case 'read': read(); break;
       case 'undo': undo(); break;
@@ -242,11 +302,12 @@ const LabCircuit = (() => {
   function _coach(text) {
     const el = $('lab-coach-text');
     if (!el) return;
+    _hush();
     el.textContent = text;
     el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new');
   }
   function _nextTip() {
-    const f = D().FACTS;
+    const f = D().FACTS_BY_GRADE[_g()] || D().FACTS;
     _tipIdx = (_tipIdx + 1) % f.length;
     _coach('💡 ' + f[_tipIdx]);
   }
@@ -256,6 +317,39 @@ const LabCircuit = (() => {
   }
 
   // ══ Actions ══════════════════════════════════
+  // ══ Read aloud (Grades 4 and 6) ══════════════
+  // Never automatic: only the 🔊 buttons call _say(). Speech stops on every new
+  // coach line, guide step, overlay, unmount and screen change.
+  function _voice() {
+    try {
+      const vs = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices()) || [];
+      const en = vs.filter(v => /^en/i.test(v.lang || ''));
+      return en.find(v => /en[-_]GB/i.test(v.lang) && v.localService) || en.find(v => v.localService) || en[0] || null;
+    } catch (e) { return null; }
+  }
+  function _say(text) {
+    const ss = window.speechSynthesis;
+    if (!ss || typeof SpeechSynthesisUtterance === 'undefined') { _coach('Read-aloud does not work in this browser.'); return; }
+    _hush();
+    const clean = String(text || '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{3030}\u{FE0F}\u{200D}]/gu, '')
+      .replace(/→/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!clean) return;
+    const u = new SpeechSynthesisUtterance(clean);
+    u.lang = 'en-GB'; u.rate = 0.95;
+    const v = _voice(); if (v) u.voice = v;
+    u.onend = u.onerror = () => { _talking = false; };
+    _talking = true;
+    try { ss.speak(u); } catch (e) { _talking = false; }
+  }
+  // cancel() only while speaking - cancel-then-speak stalls Chrome.
+  function _hush() {
+    if (!_talking) return;
+    _talking = false;
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+  }
+  // Every overlay goes through here, so speech never talks over a card.
+  const _ov = (html, o) => { _hush(); return Labs.overlay(html, o); };
+
   function _snap() { _undo.push(JSON.stringify(_layout)); if (_undo.length > 30) _undo.shift(); }
   const _switchSlot = () => Object.keys(_layout).sort().find(k => _layout[k].kind === 'switch');
 
@@ -267,7 +361,8 @@ const LabCircuit = (() => {
     const K = D().KINDS[t];
     _coach(t === 'hand' ? '✋ Tap a switch to open or close it, a bulb to unscrew it, or a cell to turn it round.'
       : t === 'eraser' ? '🧽 Tap a part on the board to take it off.'
-      : `${K.icon} ${K.name} picked. Now tap a space between two points on the board. ${K.job}`);
+      : K.obj ? `${K.icon} ${K.name} picked. Now tap the gap in the circuit to test it.`
+      : `${K.icon} ${K.name} picked. Now tap a space between two points on the board. ${_job(t)}`);
   }
 
   // What a tap on a space does depends on the part in the hand.
@@ -287,6 +382,7 @@ const LabCircuit = (() => {
     else if (p.kind === 'bulb') setBulb(slot, !(p.out || p.blown));
     else if (p.kind === 'cell') flip(slot);
     else if (p.kind === 'fuse' && p.blown) { _snap(); p.blown = false; _t = 0; _coach('New fuse fitted. If whatever made the current too big is still there, it will melt again.'); _afterChange('fuse:new'); }
+    else if (D().OBJECTS[p.kind]) _coach(`That is the ${_lc(p.kind)} you are testing. Pick another thing and tap here to swap it.`);
     else _coach(`That is a ${toolName(p.kind).toLowerCase()} - there is nothing to switch. Use 🧽 Remove to take it off.`);
   }
 
@@ -298,7 +394,9 @@ const LabCircuit = (() => {
     _layout[slot] = kind === 'switch' ? { kind, open: true } : { kind };
     _t = 0;
     _coach(was ? `${K.name} in place of the ${toolName(was.kind).toLowerCase()}.`
-      : kind === 'cell' ? 'Cell placed. Its long line (+) is the end with the gold cap. Tap it with ✋ to turn it round.'
+      : K.obj ? `${K.name} in the gap. Close the switch to test it.`
+      : kind === 'cell' ? (_primary() ? 'Cell placed. Its + end has the gold cap. Tap it with ✋ to turn it round.'
+                                      : 'Cell placed. Its long line (+) is the end with the gold cap. Tap it with ✋ to turn it round.')
       : kind === 'switch' ? 'Switch placed - it starts OPEN. Tap it with ✋ to close it.'
       : kind === 'ammeter' ? 'Ammeter placed. It measures the current flowing THROUGH it, so it belongs in the loop.'
       : kind === 'voltmeter' ? 'Voltmeter placed. It measures the voltage between its two ends, so it goes ACROSS a component.'
@@ -352,10 +450,11 @@ const LabCircuit = (() => {
 
   function build(id) {
     if (!D().PRESETS[id] || !_guard()) return;
-    if (_mission && _mission.id === 'light') { _coach('This mission is to build the circuit yourself - part by part. You can do it!'); return; }
+    if (_mission && (_mission.id === 'light' || _mission.kind === 'torch')) { _coach('This mission is to build the circuit yourself - part by part. You can do it!'); return; }
+    if (_mission && _mission.kind === 'fix') { _coach('Mend this torch yourself - no ready-made circuits in this mission!'); return; }
     _snap();
     _layout = D().layoutOf(id);
-    _hadGap = false; _vmSeen = false; _t = 0;
+    _hadGap = false; _vmSeen = false; _t = 0; _gapFilled = false;
     if (_tool !== 'hand') { _tool = 'hand'; _renderPalette(); }
     _coach(`${D().PRESETS[id].name}. The switch is open - tap it with ✋ (or use the yellow box) to close it.`);
     _afterChange('build:' + id);
@@ -381,9 +480,11 @@ const LabCircuit = (() => {
 
   function setView(v) {
     if (v !== 'picture' && v !== 'symbols') return;
+    if (v === 'symbols' && !D().symbolsFor(_g())) return;
     _view = v;
     _syncView();
-    _coach(v === 'symbols' ? '✏️ Circuit-diagram view: every part drawn with its standard symbol, the way the exam draws it.'
+    _coach(v === 'symbols' ? (_primary() ? '✏️ Symbols view: the same circuit, drawn with simple symbols. This is an extra - you will use it at secondary school.'
+                                         : '✏️ Circuit-diagram view: every part drawn with its standard symbol, the way the exam draws it.')
                            : '🖼️ Picture view: the real components on the board.');
     _checkDisc('view:' + v, _sol);
     _draw(0);
@@ -421,23 +522,34 @@ const LabCircuit = (() => {
       return;
     }
     let carded = false;
+    const P = _primary();
     if (dg.over.length) {
       const k = dg.over[0], v = _sol.bulbs[k].V, cells = _sol.cells;
       dg.over.forEach(b => { _layout[b].blown = true; });
       _sol = C.solve(_layout);
-      _logEntry({ title: 'A bulb blew', bad: true, obs: `${f1(v)} V across a bulb made for 3 V: the filament overheated and melted.` });
+      _logEntry({ title: 'A bulb blew', bad: true, obs: P ? `${cells} cells were too much for the bulb: its thin wire got too hot and melted.`
+                                                          : `${f1(v)} V across a bulb made for 3 V: the filament overheated and melted.` });
       _result('bulb_blown', { cells, v: f1(v) }, 'pop', false, k);
       carded = true;
     }
-    if (!carded) {
+    if (!carded && !P) {
       if (dg.vmSeries.length) {
         if (!_vmSeen) { _vmSeen = true; _result('voltmeter_series', { v: f2(_sol.meters[dg.vmSeries[0]].value) }, null, false); carded = true; }
       } else _vmSeen = false;
     }
     const gap = C.hasGap(_layout);
-    if (!carded && evt === 'switch:on' && gap) { _result('open_circuit', {}, null, false); carded = true; }
-    if (gap) _hadGap = true;
-    if (!carded) _narrate(evt, prev);
+    if (P) {
+      if (_gapPrev && !gap && /^place:.*:wire$/.test(evt)) _gapFilled = true;
+      _gapPrev = gap;
+      _recordTests();
+      const m = carded ? null : C.primaryMistake(_layout, _sol, evt);
+      if (m) { _result(m, {}, null, false); carded = true; }
+    } else {
+      if (!carded && evt === 'switch:on' && gap) { _result('open_circuit', {}, null, false); carded = true; }
+      if (gap) _hadGap = true;
+    }
+    _warm = false;
+    if (!carded) (P ? _narrateP : _narrate)(evt, prev);
     _checkDisc(evt, prev);
     _missionEvent(evt, prev);
     _paint();
@@ -474,40 +586,97 @@ const LabCircuit = (() => {
   }
 
   // ══ Hazards and mistakes ════════════════════
-  function _hazard(id, dg) {
-    const H = D().HAZARDS[id];
+  // Grades 4/6: what the lab assistant says, in Grade 4-6 words.
+  function _narrateP(evt, prev) {
+    const C = D(), s = _sol, lit = C.litBulbs(s), prevLit = prev ? C.litBulbs(prev) : [];
+    const tests = C.objectTests(_layout).filter(t => t.result);
+    if (tests.length && (evt === 'switch:on' || /^place:/.test(evt))) {
+      const t = tests.find(x => evt === `place:${x.slot}:${x.obj}`) || tests[0], n = _lc(t.obj);
+      const dim = lit.some(k => s.bulbs[k].brightness < 0.5);
+      _coach(t.result === 'conductor' ? `The bulb lights${dim ? ', but only dimly' : ''}! The ${n} lets electricity through. It is a conductor.`
+                                      : `The bulb stays dark. The ${n} stops the electricity. It is an insulator.`);
+      return;
+    }
+    const bright = lit.some(k => s.bulbs[k].brightness >= 3);
+    if (evt === 'switch:on' && lit.length) {
+      _coach(bright ? 'The bulb lights up - very brightly! Two cells push harder than one.'
+                    : 'The bulb lights up! The circuit is complete, so electricity flows all the way round. Watch the moving dots.');
+      _logEntry({ title: 'Switch closed', obs: bright ? 'The bulb lit very brightly with two cells.' : 'The circuit was complete, and the bulb lit.' });
+    } else if (evt === 'switch:off' && prevLit.length) {
+      _coach('Switch open: that makes a gap, so the electricity stops and the bulb goes out.');
+      _logEntry({ title: 'Switch opened', obs: 'The bulb went out. An open switch is a gap in the circuit.' });
+    } else if (/^bulb:.*:out$/.test(evt) && prevLit.length) {
+      _coach('You unscrewed the bulb. That makes a gap, so the light goes out.');
+      _logEntry({ title: 'Bulb unscrewed', obs: 'The light went out. A loose bulb makes a gap.' });
+    } else if (/^bulb:.*:in$/.test(evt)) _coach('Bulb screwed back in.');
+    else if (evt.startsWith('place:') && lit.length && !prevLit.length) _coach('The bulb lights! The last gap is closed, so electricity can flow all the way round.');
+    else if (/^place:.*:cell$/.test(evt) && bright) _coach('A second cell - the bulb is much brighter now!');
+  }
+
+  // Grades 4/6: remember what each thing tested as, and note it the first time.
+  function _recordTests() {
+    const C = D();
+    for (const t of C.objectTests(_layout)) {
+      if (!t.result) continue;
+      const first = !_tests[t.obj];
+      _tests[t.obj] = t.result;
+      if (!first) continue;
+      const O = C.OBJECTS[t.obj], name = O.name.toLowerCase();
+      _logEntry({ title: `Tested: ${O.name}`, obs: t.result === 'conductor'
+        ? `The bulb lit${O.R > 1 ? ', but dimly' : ''}. The ${name} is a conductor.` : `The bulb stayed dark. The ${name} is an insulator.` });
+    }
+  }
+
+  function _hazard(base, dg) {
+    const id = _cid(base), H = D().HAZARDS[id], P = _primary(), sc = base === 'short_circuit';
     const st = Labs.store('circuit');
     st.hazards[id] = (st.hazards[id] || 0) + 1;
     Labs.persist();
     if (_mission) _mission.hazards++;
-    _logEntry({ title: 'Short circuit!', bad: true, obs: `A huge current (about ${Math.round(_sol.cellI)} A) rushed round a path with almost no resistance. The wire and the cell got hot and no bulb lit.` });
+    if (sc) _logEntry({ title: 'Short circuit!', bad: true, obs: P ? 'The electricity took a short cut round the bulb. The wire and the cell got hot, and the bulb went dark.'
+      : `A huge current (about ${Math.round(_sol.cellI)} A) rushed round a path with almost no resistance. The wire and the cell got hot and no bulb lit.` });
+    else _logEntry({ title: H.title(dg), bad: true, obs: H.log });
     _busy = true;
-    _coach('🔥 Short circuit! Look at the wire glowing…');
+    _coach(sc ? '🔥 Short circuit! Look at the wire glowing…' : '⚡ Stop! Look at the board…');
     _fxAdd(H.fx, () => {
       _busy = false;
+      _hush();
       Labs.hazardCard({ signs: H.signs, title: H.title(dg), happened: H.happened(dg), why: H.why, instead: H.instead, exam: H.exam,
-        button: 'Take that wire off',
-        onClose: () => { _restore(); _coach('I’ve taken back the move that caused the short circuit. Keep a bulb or a resistor in every loop.'); } });
+        button: sc ? 'Take that wire off' : 'Got it - I will stay safe',
+        onClose: () => {
+          if (sc) { _restore(); _coach(P ? 'I took that wire off again. Always keep the bulb in the loop.' : 'I’ve taken back the move that caused the short circuit. Keep a bulb or a resistor in every loop.'); }
+          else _coach('Remember: our cells are safe to use. Sockets, wet hands and damaged cables are not. Ask an adult.');
+        } });
     });
   }
 
-  function _result(id, ctx, fx, undoAfter, slot) {
-    const R = D().RESULTS[id];
+  // Grades 4/6: the ⚠️ "Would it be safe?" row - dangers that exist only at home.
+  function _danger(id) {
+    if (!_primary() || !_guard() || !D().HAZARDS[id]) return;
+    _hazard(id, null);
+  }
+
+  function _result(base, ctx, fx, undoAfter, slot) {
+    const id = _cid(base), R = D().RESULTS[id];
     const st = Labs.store('circuit');
     st.hazards[id] = (st.hazards[id] || 0) + 1;
     Labs.persist();
-    if (_mission) _mission.mistakes++;
-    if (id !== 'bulb_blown') _logEntry({ title: R.title(ctx), bad: true, obs: R.happened(ctx) });
+    // Mending a torch means closing the switch to see what is still wrong: not a mistake.
+    if (_mission && !(_mission.kind === 'fix' && base === 'open_circuit')) _mission.mistakes++;
+    if (base !== 'bulb_blown') _logEntry({ title: R.title(ctx), bad: true, obs: R.happened(ctx) });
     _busy = true;
     const show = () => {
       _busy = false;
+      _hush();
       Labs.resultCard({ icon: R.icon, title: R.title(ctx), happened: R.happened(ctx), instead: R.instead, exam: R.exam,
         button: undoAfter ? 'Take the meter out' : 'Got it',
         onClose: () => {
           if (undoAfter) { _restore(); _coach('Meter taken back off. Put the ammeter IN the loop, where a wire was.'); }
-          else if (id === 'open_circuit') _coach('Find the gap: follow the loop round from the cell and fill the empty space with a wire.');
-          else if (id === 'voltmeter_series') _coach('Put a wire back where the voltmeter is, then connect the voltmeter across the bulb.');
-          else if (id === 'bulb_blown') _coach('Put a 〰️ wire in place of one cell, then tap the bulb with ✋ to fit a new one.');
+          else if (base === 'open_circuit') _coach('Find the gap: follow the loop round from the cell and fill the empty space with a wire.');
+          else if (base === 'voltmeter_series') _coach('Put a wire back where the voltmeter is, then connect the voltmeter across the bulb.');
+          else if (base === 'bulb_blown') _coach('Put a 〰️ wire in place of one cell, then tap the bulb with ✋ to fit a new one.');
+          else if (base === 'cells_wrong') _coach('Tap one of the cells with ✋ to turn it round.');
+          else if (base === 'no_cell') _coach('Pick 🔋 Cell under the board and put it in the loop.');
         } });
     };
     if (fx) _fxAdd(fx, show, slot); else show();
@@ -558,7 +727,15 @@ const LabCircuit = (() => {
   }
 
   // ══ Discoveries from the state of the board ═══
+  // Grades 4/6: a discovery is unlocked by its `when` fact, worked out in the data file.
+  function _checkDiscP(evt, prev, warm) {
+    const f = D().facts({ layout: _layout, sol: _sol, prev, evt, view: _view, tests: _tests, gapFilled: _gapFilled, warm: !!warm });
+    if (D().litBulbs(_sol).length) _gapFilled = false;
+    for (const d of _discs()) if (d.when && f.has(d.when)) _discover(d.id);
+  }
+
   function _checkDisc(evt, prev) {
+    if (_primary()) { _checkDiscP(evt, prev); return; }
     const C = D(), s = _sol, lit = C.litBulbs(s), arr = C.arrangement(s);
     const prevLit = prev ? C.litBulbs(prev) : [], prevArr = prev ? C.arrangement(prev) : 'none';
     if (lit.length) _discover('first_light');
@@ -581,19 +758,22 @@ const LabCircuit = (() => {
   function _step(dt) {
     if (!dt || !_sol) return;
     if (_sol.flowing) _t += dt;
+    // A bulb left on for 10 s has got warm (Grades 4/6: light AND heat).
+    if (!_warm && _primary() && _t >= 10 - 1e-9 && D().litBulbs(_sol).length) { _warm = true; _checkDiscP('warm', _sol, true); _readouts(); }
     const G = _gdef(), s = G && G.steps[_guide.step];
     if (s && s.on.startsWith('wait:') && _t >= +s.on.split(':')[1] - 1e-9) _guideEvent(s.on);
   }
 
   // ══ Missions ═════════════════════════════════
   function startMission(id) {
-    const M = D().MISSIONS.find(x => x.id === id);
+    const M = _mine(D().MISSIONS).find(x => x.id === id);
     if (!M || _busy) return;
     _stopGuide(true);
-    _layout = {}; _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = [];
-    _mission = { id, hazards: 0, mistakes: 0, success: false, read: false, series: null, parallel: null, sBreak: false, pBreak: false };
+    _layout = M.kind === 'sort' ? D().layoutOf('tester') : M.kind === 'fix' ? D().layoutOf('broken') : {};
+    _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = []; _tests = {}; _gapFilled = false; _gapPrev = D().hasGap(_layout);
+    _mission = { id, kind: M.kind || null, hazards: 0, mistakes: 0, success: false, read: false, series: null, parallel: null, sBreak: false, pBreak: false, tested: {} };
     _sol = D().solve(_layout);
-    _tool = id === 'light' ? 'cell' : 'hand';
+    _tool = id === 'light' || M.kind === 'torch' ? 'cell' : 'hand';
     _panel = 'missions';
     _coach(M.intro);
     _renderPalette();
@@ -629,6 +809,7 @@ const LabCircuit = (() => {
   }
   function _missionEvent(evt, prev) {
     const ms = _mission, C = D();
+    if (ms && ms.kind && !ms.success) { _missionP(); return; }
     if (!ms || ms.success || ms.id !== 'compare' || !prev || !/^bulb:.*:out$/.test(evt)) return;
     const pa = C.arrangement(prev), lit = C.litBulbs(_sol);
     if (pa === 'series' && !lit.length) ms.sBreak = true;
@@ -644,9 +825,27 @@ const LabCircuit = (() => {
     }
   }
 
+  // Grades 4/6: a torch to build, a torch to mend, or six things to sort.
+  function _torchWorks() {
+    const C = D();
+    return C.litBulbs(_sol).length > 0 && Object.keys(_layout).some(k => _layout[k].kind === 'switch' && !_layout[k].open && C.switchControls(_layout, k));
+  }
+  function _missionP() {
+    const ms = _mission, C = D();
+    if (ms.kind === 'sort') {
+      C.objectTests(_layout).forEach(t => { if (t.result) ms.tested[t.obj] = t.result; });
+      if (C.TEST_OBJECTS.every(o => ms.tested[o])) { ms.success = true; _coach('🎯 All six things tested! Tap “Answer the questions” to finish.'); }
+    } else if (_torchWorks() && (ms.kind !== 'torch' || ['cell', 'bulb', 'switch'].every(_has))) {
+      ms.success = true;
+      _coach(ms.kind === 'fix' ? '🎯 Fixed! The torch lights, and the switch works. Tap “Answer the questions”.'
+                               : '🎯 Your torch works, and the switch turns it on and off. Tap “Answer the questions”.');
+    }
+  }
+
   function _quiz() {
     const ms = _mission;
     if (!ms || !ms.success) return;
+    _hush();
     const M = D().MISSIONS.find(x => x.id === ms.id);
     Labs.quiz(M.quiz, { title: M.title, onDone: r => {
       let s = 3;
@@ -659,8 +858,13 @@ const LabCircuit = (() => {
       st.missions[ms.id] = { stars: Math.max(prev.stars || 0, s), last: s, at: Date.now() };
       Labs.persist();
       const lines = [];
-      lines.push(ms.hazards ? `${ms.hazards} short circuit${ms.hazards === 1 ? '' : 's'} - none next time for an extra star.` : 'No short circuits. 🔥');
-      lines.push(ms.mistakes ? `${ms.mistakes} wiring mistake${ms.mistakes === 1 ? '' : 's'} (a meter in the wrong place, a gap, a blown bulb).` : 'Every meter in the right place. ⏲️');
+      if (ms.kind) {
+        lines.push(ms.hazards ? `${ms.hazards} danger${ms.hazards === 1 ? '' : 's'} (a short circuit, a socket, wet hands or a split cable) - none next time for an extra star.` : 'Safe all the way through. 🦺');
+        lines.push(ms.mistakes ? `${ms.mistakes} wiring mistake${ms.mistakes === 1 ? '' : 's'} (a gap, a blown bulb, cells the wrong way).` : 'No wiring mistakes. 🔌');
+      } else {
+        lines.push(ms.hazards ? `${ms.hazards} short circuit${ms.hazards === 1 ? '' : 's'} - none next time for an extra star.` : 'No short circuits. 🔥');
+        lines.push(ms.mistakes ? `${ms.mistakes} wiring mistake${ms.mistakes === 1 ? '' : 's'} (a meter in the wrong place, a gap, a blown bulb).` : 'Every meter in the right place. ⏲️');
+      }
       if (r.firstTry < r.total - 1) lines.push('Get all but one question right first time for another star.');
       Labs.missionDone({ icon: M.icon, title: M.title, stars: s, score: r.firstTry, total: r.total, lines,
         onAgain: () => startMission(ms.id),
@@ -677,10 +881,11 @@ const LabCircuit = (() => {
 
   function startGuide(idOrDef) {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
-    const G = adhoc || D().GUIDES.find(g => g.id === idOrDef);
+    const G = adhoc || _mine(D().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
     _mission = null;
     _layout = {}; _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = [];
+    _tests = {}; _gapFilled = false; _gapPrev = false;
     _sol = D().solve(_layout);
     _tool = 'hand';
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -710,13 +915,15 @@ const LabCircuit = (() => {
   function _guideEnter() {
     const G = _gdef();
     if (!G) return;
+    _hush();
     let s = G.steps[_guide.step];
     while (s && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     const box = $('lab-guide');
     if (box) {
       const n = G.steps.length, i = _guide.step;
-      box.innerHTML = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>
+      const meta = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>`;
+      box.innerHTML = `${_primary() ? `<div class="lab-circuit-guide-head">${meta}<button type="button" class="lab-btn lab-btn-sm lab-circuit-say" data-act="say-guide" aria-label="Read this step aloud">🔊</button></div>` : meta}
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
         ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
@@ -756,33 +963,35 @@ const LabCircuit = (() => {
   // ── Discoveries: every card opens ─────────────
   function _autoStep(on) {
     const [k, a, b] = on.split(':');
-    const C = D();
+    const C = D(), P = _primary();
     switch (k) {
-      case 'build': return { on, say: `Lay out: ${C.PRESETS[a].name.toLowerCase()}.`, btn: '🔌 Lay out the circuit' };
-      case 'place': return { on, say: `Put a ${C.KINDS[b].name.toLowerCase()} in the glowing space.`, btn: `${C.KINDS[b].icon} Place the ${C.KINDS[b].name.toLowerCase()}` };
+      case 'build': return P ? { on, say: `Set out ${C.PRESETS[a].name.toLowerCase()}.`, btn: '🔌 Set out the circuit' }
+                             : { on, say: `Lay out: ${C.PRESETS[a].name.toLowerCase()}.`, btn: '🔌 Lay out the circuit' };
+      case 'place': return C.KINDS[b].obj ? { on, say: `Put the ${_lc(b)} in the glowing gap.`, btn: `${C.KINDS[b].icon} Put in the ${_lc(b)}` }
+                                          : { on, say: `Put a ${C.KINDS[b].name.toLowerCase()} in the glowing space.`, btn: `${C.KINDS[b].icon} Place the ${C.KINDS[b].name.toLowerCase()}` };
       case 'remove': return { on, say: 'Take the glowing part off the board.', btn: '🧽 Remove it' };
       case 'switch': return a === 'on' ? { on, say: 'Close the switch.', btn: '🔘 Close the switch' } : { on, say: 'Open the switch.', btn: '🔘 Open the switch' };
       case 'bulb': return b === 'out' ? { on, say: 'Unscrew the glowing bulb from its holder.', btn: '🔧 Unscrew the bulb' } : { on, say: 'Screw the bulb back in.', btn: '🔧 Screw it back in' };
       case 'flip': return { on, say: 'Turn the glowing cell round, so its + end faces the other way.', btn: '🔄 Turn the cell round' };
       case 'read': return { on, say: 'Take a reading from the meters.', btn: '📝 Take a reading' };
-      case 'wait': return { on, say: `Leave the current flowing for ${a} seconds…` };
+      case 'wait': return { on, say: P ? `Leave the bulb on for ${a} seconds. Watch it closely.` : `Leave the current flowing for ${a} seconds…` };
       case 'view': return a === 'symbols' ? { on, say: 'Switch to the circuit-diagram view.', btn: '✏️ Show the circuit symbols' } : { on, say: 'Switch back to the picture view.', btn: '🖼️ Show the picture' };
     }
     return { on, say: on };
   }
 
   function discoveryGuide(id) {
-    const d = D().DISCOVERIES.find(x => x.id === id);
+    const d = _discs().find(x => x.id === id);
     if (!d) return;
     startGuide({ id: 'disc-' + id, adhoc: true, icon: d.icon, title: d.title, lesson: d.learn, steps: d.how.map(_autoStep) });
   }
 
   function _discDetail(id) {
-    const d = D().DISCOVERIES.find(x => x.id === id);
+    const d = _discs().find(x => x.id === id);
     if (!d) return;
     const found = !!Labs.store('circuit').disc[id];
     if (!found) {
-      Labs.overlay(`
+      _ov(`
         <div class="lab-done">
           <p class="lab-done-icon" aria-hidden="true">❔</p>
           <p class="lab-rs-kicker">Locked discovery</p>
@@ -796,7 +1005,7 @@ const LabCircuit = (() => {
         </div>`, { cls: 'is-done' });
       return;
     }
-    Labs.overlay(`
+    _ov(`
       <div class="lab-done">
         <p class="lab-done-icon" aria-hidden="true">${d.icon}</p>
         <p class="lab-rs-kicker">Discovery</p>
@@ -806,7 +1015,7 @@ const LabCircuit = (() => {
         <section class="lab-hz-sec is-what"><h3>What you saw</h3><p>${esc(d.saw)}</p></section>
         ${d.formula ? `<section class="lab-hz-sec"><h3>The rule</h3><p class="lab-eq">${esc(d.formula)}</p></section>` : ''}
         <section class="lab-hz-sec is-exam"><h3>Why it happens</h3><p>${esc(d.learn)}</p></section>
-        ${d.exam ? `<section class="lab-hz-sec"><h3>📝 On the NCE paper</h3><p>${esc(d.exam)}</p></section>` : ''}
+        ${d.exam ? `<section class="lab-hz-sec"><h3>${_primary() ? '📝 In the PSAC exam' : '📝 On the NCE paper'}</h3><p>${esc(d.exam)}</p></section>` : ''}
       </div>
       <div class="lab-ov-actions">
         <button type="button" class="lab-btn" data-ov-close>Close</button>
@@ -820,8 +1029,8 @@ const LabCircuit = (() => {
     const st = Labs.store('circuit');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
-    const next = G.adhoc ? null : D().GUIDES.find(g => !st.guides[g.id]);
-    Labs.overlay(`
+    const next = G.adhoc ? null : _mine(D().GUIDES).find(g => !st.guides[g.id]);
+    _ov(`
       <div class="lab-done">
         <p class="lab-done-icon" aria-hidden="true">${G.icon}</p>
         <p class="lab-rs-kicker">Experiment complete</p>
@@ -890,12 +1099,12 @@ const LabCircuit = (() => {
       <ol class="lab-how">
         <li><b>Choose</b> a guided experiment (the best place to start) or a mission.</li>
         <li><b>Follow the yellow box</b> under the board. The thing to tap next glows yellow.</li>
-        <li><b>Watch the circuit</b> - the moving dots are the current - then read your notebook.</li>
+        <li>${_primary() ? '<b>Watch the bulb</b> - the moving dots show the electricity flowing.' : '<b>Watch the circuit</b> - the moving dots are the current - then read your notebook.'}</li>
       </ol>
       <h3>🧭 Guided experiments <small>start here · step by step</small></h3>
-      <div class="lab-start-list">${D().GUIDES.map(guide).join('')}</div>
-      <h3>🎯 Missions <small>exam-style questions · earn stars</small></h3>
-      <div class="lab-start-list">${D().MISSIONS.map(mission).join('')}</div>
+      <div class="lab-start-list">${_mine(D().GUIDES).map(guide).join('')}</div>
+      <h3>🎯 Missions <small>${_primary() ? 'questions · earn stars' : 'exam-style questions · earn stars'}</small></h3>
+      <div class="lab-start-list">${_mine(D().MISSIONS).map(mission).join('')}</div>
       <p class="lab-hint">Or build freely: pick a part under the board, then tap a space to place it.</p>
     </section>`;
   }
@@ -923,33 +1132,55 @@ const LabCircuit = (() => {
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
+  // ⚠ Only THIS grade's discoveries count. Labs.discover()'s own "(n/total)"
+  //   counts every key in the store - every grade's - so the count is put in
+  //   the title here instead, from this grade's set.
   function _discover(id) {
-    const d = D().DISCOVERIES.find(x => x.id === id);
-    if (Labs.discover('circuit', id, { title: d && d.title, total: D().DISCOVERIES.length })) _refresh();
+    const all = _discs(), d = all.find(x => x.id === id);
+    if (!d) return;
+    const st = Labs.store('circuit');
+    if (st.disc[id]) return;
+    const n = all.filter(x => st.disc[x.id]).length + 1;
+    if (Labs.discover('circuit', id, { title: `${d.title} (${n}/${all.length})` })) _refresh();
   }
   function _foundCount() {
-    const n = $('lab-found-n');
-    if (n) n.textContent = `${Object.keys(Labs.store('circuit').disc).length}/${D().DISCOVERIES.length}`;
+    const n = $('lab-found-n'), all = _discs(), st = Labs.store('circuit');
+    if (n) n.textContent = `${all.filter(d => st.disc[d.id]).length}/${all.length}`;
   }
 
   function _shelfHTML() {
-    const C = D();
-    return `<section class="lab-shelf" id="lab-circuit-shelf" aria-label="Components">
-      <div class="lab-shelf-head"><h2 class="lab-circuit-h">Components and their symbols</h2><p class="lab-hint">Tap one to pick it, then tap a space on the board.</p></div>
-      <div class="lab-circuit-kinds">${Object.keys(C.KINDS).map(k => {
-        const K = C.KINDS[k];
-        return `<button type="button" class="lab-circuit-kind${_tool === k ? ' is-on' : ''}" data-tool="${k}">
+    const C = D(), g = _g(), P = g <= 6;
+    const card = k => {
+      const K = C.KINDS[k];
+      return `<button type="button" class="lab-circuit-kind${_tool === k ? ' is-on' : ''}" data-tool="${k}">
           <span class="lab-circuit-pic" aria-hidden="true">${K.icon}</span>
-          <span class="lab-circuit-kind-sym" title="Circuit symbol">${C.SYMBOL[k]}</span>
-          <span class="lab-item-text"><b>${esc(K.name)}</b><small>${esc(K.job)}</small></span></button>`; }).join('')}</div>
+          ${P ? '' : `<span class="lab-circuit-kind-sym" title="Circuit symbol">${C.SYMBOL[k]}</span>`}
+          <span class="lab-item-text"><b>${esc(K.name)}</b><small>${esc(_job(k))}</small></span></button>`;
+    };
+    return `<section class="lab-shelf" id="lab-circuit-shelf" aria-label="Components">
+      <div class="lab-shelf-head"><h2 class="lab-circuit-h">${P ? 'The parts' : 'Components and their symbols'}</h2><p class="lab-hint">Tap one to pick it, then tap a space on the board.</p></div>
+      <div class="lab-circuit-kinds">${C.kindsFor(g).map(card).join('')}</div>
+      ${P ? `<div class="lab-shelf-head lab-circuit-quick-h"><h2 class="lab-circuit-h">Things to test</h2><p class="lab-hint">Put one in a gap and close the switch. Does the bulb light?</p></div>
+      <div class="lab-circuit-kinds">${C.TEST_OBJECTS.map(card).join('')}</div>` : ''}
       <div class="lab-shelf-head lab-circuit-quick-h"><h2 class="lab-circuit-h">Quick layouts</h2><p class="lab-hint">A ready-made circuit to start from.</p></div>
-      <div class="lab-circuit-quick">${C.QUICK.map(id => `<button type="button" class="lab-btn lab-btn-sm" data-build="${id}">${esc(C.PRESETS[id].name)}</button>`).join('')}</div>
+      <div class="lab-circuit-quick">${(C.QUICK_BY_GRADE[g] || C.QUICK).map(id => `<button type="button" class="lab-btn lab-btn-sm" data-build="${id}">${esc(C.PRESETS[id].name)}</button>`).join('')}</div>
     </section>`;
+  }
+
+  // Grades 4/6: the notebook's results table - what each thing did to the bulb.
+  function _testsTable() {
+    const C = D(), rows = C.TEST_OBJECTS.filter(o => _tests[o]);
+    if (!rows.length) return '';
+    return `<div class="lab-table-wrap"><table class="lab-table">
+      <caption>Conductor or insulator?</caption>
+      <thead><tr><th scope="col">Thing</th><th scope="col">Made of</th><th scope="col">Bulb</th><th scope="col">So it is</th></tr></thead>
+      <tbody>${rows.map(o => { const O = C.OBJECTS[o], on = _tests[o] === 'conductor';
+        return `<tr><td>${O.icon} ${esc(O.name)}</td><td>${esc(O.made)}</td><td>${on ? (O.R > 1 ? 'lit (dim)' : 'lit') : 'dark'}</td><td><b>${on ? 'a conductor' : 'an insulator'}</b></td></tr>`; }).join('')}</tbody></table></div>`;
   }
 
   function _notebookHTML() {
     const rows = _readings.slice(-8).reverse();
-    const tbl = rows.length ? `<div class="lab-table-wrap"><table class="lab-table">
+    const tbl = _primary() ? _testsTable() : rows.length ? `<div class="lab-table-wrap"><table class="lab-table">
       <caption>Meter readings</caption>
       <thead><tr><th scope="col">Circuit</th><th scope="col">Current</th><th scope="col">Voltage</th><th scope="col">Bulbs</th></tr></thead>
       <tbody>${rows.map(r => `<tr><td>${esc(r.label)}</td><td>${r.amps.length ? r.amps.map(a => f2(a) + ' A').join(', ') : '-'}</td>
@@ -959,7 +1190,7 @@ const LabCircuit = (() => {
       ? `<ol class="lab-log">${_log.slice(0, 14).map(e => `<li class="${e.note ? 'is-note' : ''}${e.bad ? ' lab-circuit-log-bad' : ''}">
           <b>${esc(e.title)}</b><p>${esc(e.obs)}</p>
           ${e.formula ? `<p class="lab-eq">${esc(e.formula)}</p>` : ''}</li>`).join('')}</ol>`
-      : '<p class="lab-empty">Your observations and meter readings appear here as you build.</p>';
+      : `<p class="lab-empty">${_primary() ? 'What you see appears here as you build and test.' : 'Your observations and meter readings appear here as you build.'}</p>`;
     return `<section class="lab-notebook" id="lab-notebook" aria-label="Lab notebook"><h2>Lab notebook</h2>${tbl}${list}</section>`;
   }
 
@@ -1016,7 +1247,7 @@ const LabCircuit = (() => {
 
   function _foundHTML() {
     const st = Labs.store('circuit');
-    const all = D().DISCOVERIES;
+    const all = _discs();
     const n = all.filter(d => st.disc[d.id]).length;
     return `<section class="lab-found"><h2>Discoveries <span>${n} of ${all.length}</span></h2>
       <p class="lab-hint">Tap any card. Found ones show what happened and why; locked ones show you how to find them.</p>

@@ -9816,25 +9816,28 @@ function _renderShBadges() {
 }
 
 // ── Student Home Hub ──────────────────────────────────────────────────────────
-// ── Science Labs (NCE only) ──────────────────────────────────
+// ── Science Labs ─────────────────────────────────────────────
 // Interactive virtual labs, docs/labs/PLAN.md. The lab code lives in
 // engine/labs/ and is fetched on demand (RoleModules group 'labs'), so a
-// primary child never downloads any of it.
-// ⚠ NCE stage only, and only a grade that actually HAS a lab: a Grade 7 or 8
-//   pupil sees nothing until their own labs exist (plan decision 2), rather
-//   than a door into Grade 9 chemistry.
+// child who never opens Labs downloads none of it.
+// ⚠ Only a grade that actually HAS a lab: a Grade 7 or 8 pupil sees nothing
+//   until their own labs exist, rather than a door into Grade 9 chemistry.
+// ⚠ _LAB_GRADES must equal the grades in Labs.LABS (lab_core.js) that have a
+//   ready lab, plus 5, which borrows the Grade 4 and 6 primary labs
+//   (Labs.GRADE_ALIASES). It is duplicated because this runs before that file
+//   is ever loaded; scripts/test-labs-grades.js fails if the two drift.
 // ⚠ "Their grade" means the grade on screen PLUS every grade at or above their
 //   own that a parent ticked in ⚙️ Controls › Grade access. A parent who unlocks
 //   Grade 9 for a younger child has chosen to let them work at Grade 9, labs
 //   included. Reading SELECTED_GRADE alone hid it: opening any Grade 5 subject
 //   sets it straight back to 5.
 // ⚠ A parent can switch labs off per child (DB.restrictions.labsDisabled).
-const _LAB_GRADES = [9];
+const _LAB_GRADES = [4, 5, 6, 9];
 function _labsAvailable() {
   if (typeof DB !== 'undefined' && DB && DB.restrictions && DB.restrictions.labsDisabled) return false;
   const grades = new Set([Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0)]);
   if (typeof GradeAccess !== 'undefined') GradeAccess.childChoices().forEach(g => grades.add(Number(g)));
-  return [...grades].some(g => g && _gradeStage(g).id === 'secondary' && _LAB_GRADES.includes(g));
+  return [...grades].some(g => g && _LAB_GRADES.includes(g));
 }
 // display, not .hidden: .sh-note sets its own display in style.css, which
 // loads after the Tailwind CDN and would win over its .hidden.
@@ -9843,7 +9846,7 @@ function _syncLabsNote() {
   if (note) note.style.display = _labsAvailable() ? '' : 'none';
 }
 function openLabs() {
-  if (!_labsAvailable()) { toast('🔬 Science Labs are for NCE pupils.', 2500); return; }
+  if (!_labsAvailable()) { toast('🔬 There are no Science Labs for your grade yet.', 2500); return; }
   showScreen('labs');
 }
 

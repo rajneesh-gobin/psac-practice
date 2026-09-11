@@ -206,7 +206,7 @@ process.on('SIGINT', () => quit(130));
   await ev("document.getElementById('lab-overlay')?.remove(); true");
   await act('hand');
   ov = await overlay();
-  ok('picking up the rusty nail by hand: HARMFUL hazard - tell an adult, wash the cut', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Harmful') && /tell an adult/i.test(ov.text) && /Wash the cut/.test(ov.text), ov);
+  ok('picking up the rusty nail by hand: SHARP hazard - tell an adult, wash the cut', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Sharp - can cut') && /tell an adult/i.test(ov.text) && /Wash the cut/.test(ov.text), ov);
   await closeOv();
   ok('the hazards are counted in the lab store', await ev("Labs.store('rusting').hazards.kettle >= 1 && Labs.store('rusting').hazards.sharp >= 1"));
   await act('tweezers');

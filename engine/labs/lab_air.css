@@ -1,0 +1,64 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Air & Burning - only what engine/labs/labs.css does not
+   already give every lab. Every class here starts .lab-air.
+   ⚠ Injected by innerHTML, never scanned by the Tailwind CDN.
+   ⚠ Nothing here animates or transforms .screen or its ancestors.
+   ⚠ Grades 4 and 6: tap targets are at least 44px, pictures are big, words are few.
+   ══════════════════════════════════════════════ */
+
+/* Over the picture: the station and its readings top-left, the result top-right. */
+.lab-air-tl { position: absolute; top: 10px; left: 10px; max-width: 58%; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.lab-air-chip { flex-wrap: wrap; }
+.lab-air-status { display: flex; flex-wrap: wrap; gap: 4px; }
+.lab-air-verdict {
+  position: absolute; top: 10px; right: 10px; max-width: 40%;
+  padding: 5px 12px; border-radius: 14px; background: var(--lab-ok-soft); color: var(--lab-ok);
+  border: 2px solid var(--lab-ok); font-size: 0.95rem; font-weight: 800; line-height: 1.2; text-align: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.lab-air-verdict.is-bad { background: var(--lab-warn-soft); color: var(--lab-warn); border-color: var(--lab-warn); }
+
+/* The safety toggle in the top bar. */
+.lab-air-safety {
+  min-height: 44px; min-width: 44px; padding: 0 10px; border-radius: 999px; border: 2px solid var(--lab-warn);
+  background: var(--lab-warn-soft); color: var(--lab-warn); font-weight: 800; font-size: 0.8rem; cursor: pointer; white-space: nowrap;
+}
+.lab-air-safety[aria-pressed="true"] { border-color: var(--lab-ok); background: var(--lab-ok-soft); color: var(--lab-ok); }
+
+/* Read-aloud and fact buttons: 44px for small fingers. */
+.lab-air .lab-coach-tip { width: 44px; height: 44px; }
+.lab-air .lab-btn-sm { min-height: 44px; }
+.lab-air-sayrow { display: flex; align-items: flex-start; gap: 8px; }
+.lab-air-sayrow .lab-guide-say { flex: 1; }
+
+.lab-air-controls { display: flex; flex-direction: column; gap: 8px; }
+.lab-air-stations { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.lab-air-st {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px; min-width: 0;
+  padding: 4px 3px; border-radius: 12px; border: 1px solid var(--lab-rule); background: var(--lab-surface); color: var(--lab-ink);
+  font-size: 0.72rem; font-weight: 700; line-height: 1.1; text-align: center; cursor: pointer;
+}
+.lab-air-st span { font-size: 1.35rem; line-height: 1; }
+.lab-air-st[aria-pressed="true"] { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); }
+.lab-air-ask { margin: 0; font-size: 0.9rem; line-height: 1.4; }
+
+/* Pickers (jar, candle, fire, jar temperature): big, two to four to a row. */
+.lab-air-label { margin: 2px 0 0; font-size: 0.78rem; font-weight: 800; color: var(--lab-muted); }
+.lab-air-pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; }
+.lab-air-opt {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-height: 52px; min-width: 0;
+  padding: 4px; border-radius: 12px; border: 1px solid var(--lab-rule); background: var(--lab-surface-2); color: var(--lab-ink);
+  font-size: 0.74rem; font-weight: 700; line-height: 1.15; text-align: center; cursor: pointer;
+}
+.lab-air-opt small { font-size: 0.66rem; font-weight: 600; color: var(--lab-muted); }
+.lab-air-opt[aria-pressed="true"] { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); }
+
+/* Actions: full-width rows of big buttons. */
+.lab-air-acts { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.lab-air-acts .lab-btn { min-height: 48px; justify-content: center; text-align: center; white-space: normal; }
+.lab-air-acts .lab-air-risky { border-style: dashed; }
+
+/* Notebook */
+.lab-air-table td, .lab-air-table th { white-space: nowrap; font-size: 0.76rem; }
+.lab-air-table td.is-bad { color: var(--lab-danger); font-weight: 700; }
+.lab-log li.lab-air-log-bad { border-left-color: var(--lab-danger); }
+.lab-air-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

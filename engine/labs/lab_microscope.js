@@ -1364,7 +1364,8 @@ const LabMicroscope = (() => {
       c.beginPath(); c.arc(x, y, 5.5 * u, 0, Math.PI * 2); c.stroke();
       if (P) {
         c.font = '700 10px system-ui, sans-serif'; c.textAlign = 'left';
-        const tw = c.measureText(P.name).width + 8, tx = Math.min(x + 6 * u, _W * 0.44 - tw), ty = Math.max(12, y - 7 * u);
+        // Kept left of the eyepiece view, which starts at 44u + 12.
+        const tw = c.measureText(P.name).width + 8, tx = Math.max(2, Math.min(x + 6 * u, 44 * u + 6 - tw)), ty = Math.max(12, y - 7 * u);
         c.fillStyle = `rgba(255,255,255,${0.92 * a})`; c.fillRect(tx, ty - 10, tw, 14);
         c.fillStyle = `rgba(20,33,29,${a})`; c.fillText(P.name, tx + 4, ty);
       }
@@ -1379,12 +1380,16 @@ const LabMicroscope = (() => {
   function _drawLabels() {
     const c = _cx, D = M();
     _bg();
-    const u = Math.min((_H - 20) / 100, (_W * 0.36) / 44);
-    const ox = (_W - 40 * u) / 2, oy = 8;
-    const at = _scopeShape(ox, oy, u);
     const left = ['eyepiece', 'tube', 'nosepiece', 'objective', 'clips', 'stage', 'diaphragm', 'light'];
     const right = ['arm', 'coarse', 'fine', 'base'];
-    c.font = '700 10px system-ui, sans-serif';
+    // Size the microscope to whatever room the longest labels leave, so no
+    // label runs off either edge of a phone.
+    c.font = `700 ${_W < 380 ? 9.5 : 10.5}px system-ui, sans-serif`;
+    const widest = ids => Math.max(...ids.map(id => c.measureText(D.PARTS.find(p => p.id === id).name).width));
+    const lw = widest(left) + 14, rw = widest(right) + 14;
+    const u = Math.max(1.2, Math.min((_H - 20) / 100, (_W - lw - rw - 8) / 44));
+    const ox = lw + Math.max(0, (_W - lw - rw - 44 * u) / 2), oy = 8;
+    const at = _scopeShape(ox, oy, u);
     const put = (ids, side) => ids.forEach((id, i) => {
       const P = D.PARTS.find(p => p.id === id), [x, y] = at[id];
       const ly = side === 'left' ? 16 + i * ((_H - 30) / (ids.length - 1)) : _H * 0.3 + i * (_H * 0.6 / (ids.length - 1));
@@ -1412,7 +1417,9 @@ const LabMicroscope = (() => {
     } else {
       const img = _fieldImage(Math.round(2 * r));
       if (img) c.drawImage(img, cx - r, cy - r, 2 * r, 2 * r);
-      const b = Math.min(1, bright / 0.42);
+      // Full brightness from a half-open diaphragm at ×400 up; below the data's
+      // "too dark" line the view is nearly black.
+      const b = Math.max(0, Math.min(1, (bright - 0.08) / 0.16));
       c.fillStyle = `rgba(0,0,0,${(1 - b) * 0.92})`;
       c.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     }
@@ -1557,7 +1564,7 @@ const LabMicroscope = (() => {
         c.globalAlpha = 1;
         if (mm % 10 === 0) c.fillText(String(mm / 10), x, ry + 20);
       }
-      c.textAlign = 'left'; c.fillText('cm', rx + rl * s - 6, ry + 20);
+      c.textAlign = 'right'; c.fillText('cm', rx - 3, ry + 20);
       if (t >= 1) {
         const xe = start + len * s;
         c.strokeStyle = '#C0262D'; c.lineWidth = 2;

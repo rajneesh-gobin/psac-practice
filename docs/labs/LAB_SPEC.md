@@ -146,9 +146,33 @@ grades named in your brief. Everything else in this spec still applies, plus:
 - **Smaller minimums:** at least 3 guided experiments, at least 10 discoveries,
   at least 2 missions with 5 simpler questions each.
 - **Top bar eyebrow:** `Science · Grade <n>` (or `Grades 4 & 6`).
-- **Opening it in tests:** `openLabs()` refuses non-NCE grades until the per-grade
-  layer lands, so use `SELECTED_GRADE = <grade>; showScreen('labs');`, wait for
-  `window.Labs`, then `Labs.openLab('<id>')`.
+- **Opening it in tests:** `SELECTED_GRADE = <grade>; showScreen('labs');`, wait
+  for `window.Labs`, then `Labs.openLab('<id>')`.
+- The exam section of a hazard/result card now says "📝 In the PSAC exam" by
+  itself for Grades 4–6 (from `Labs.grade()`); pass `examLabel` only to override.
+
+## 9. Grade levels inside a lab
+A lab can serve more than one grade (the Separation Station at Grade 8 AND 9,
+say). The hub's "My grade" picker decides the grade, and **`Labs.grade()`**
+tells the open lab which grade it is being used at.
+- Tag every guided experiment, mission and discovery with `grades: [...]` in the
+  data file, and show **only** the ones for `Labs.grade()` — in the start panel,
+  the Missions tab, the Discoveries tab and its counter. Content without a tag is
+  treated as the lab's original grade.
+- A lower-grade level is **not** the Grade 9 level with easier words: it teaches
+  that grade's syllabus (find it in `subjects/grade<N>-science/_manifest.js` and
+  its question files), with that grade's reading level and exam (PSAC for 4–6).
+  Shared apparatus is fine; shared questions are not.
+- The top-bar eyebrow shows the grade in use.
+- Tests: open the lab at each grade it serves (`SELECTED_GRADE = <n>` before
+  `showScreen('labs')`) and check that grade's content appears and another
+  grade's does not; every discovery recipe at every grade still unlocks.
+- ⚠ Do not edit `lab_core.js` or `app.js` to add your grade — report it. The lead
+  adds it to `Labs.LABS[…].grades` and `_LAB_GRADES` together (a test fails if
+  they drift).
+- `Labs.quiz` options may be `{ label, svg }` for "pick the apparatus" questions.
+- Signs now include `sharp` (broken glass, a point) and `warning` (a general
+  physical danger) — never borrow the chemical `irritant` for those.
 
 ## 7. Report back
 Files created; counts of guided experiments / discoveries / missions / hazard and

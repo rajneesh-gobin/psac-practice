@@ -18,8 +18,12 @@
 //    `window.LabX = LabX`, because a top-level const never lands on window.
 // ══════════════════════════════════════════════
 const Labs = (() => {
-  const L = (id, icon, name, subject, global, blurb, ready) => ({
-    id, icon, name, subject, global, blurb, ready: !!ready,
+  // `grades`: the grades a lab has content for. When a lab gains a level (a
+  // Grade 8 set in the Separation Station, say) add the grade here AND to
+  // _LAB_GRADES in app.js, which the home note reads before this file is ever
+  // loaded - scripts/test-labs-grades.js fails if the two disagree.
+  const L = (id, icon, name, subject, global, blurb, grades, ready) => ({
+    id, icon, name, subject, global, blurb, grades, ready: !!ready,
     files: [`engine/labs/lab_${id}_data.js`, `engine/labs/lab_${id}.js`],
     css: `engine/labs/lab_${id}.css`,
   });
@@ -27,31 +31,72 @@ const Labs = (() => {
   // any registered lab regardless - that is how a lab is tested before it is
   // switched on here.
   const LABS = [
-    { id: 'mixing', icon: '🧪', name: 'Mixing Bench', subject: 'Chemistry', global: 'LabMixing', ready: true,
+    { id: 'mixing', icon: '🧪', name: 'Mixing Bench', subject: 'Chemistry', global: 'LabMixing', grades: [9], ready: true,
       blurb: 'Metals, acids and alkalis. Make things fizz, pop and change colour - and find out why.',
       files: ['engine/labs/lab_chem_data.js', 'engine/labs/lab_mixing.js'], css: null },
-    L('separation', '⚗️', 'Separation Station', 'Chemistry', 'LabSeparation', 'Build a distillation rig, grow crystals and sublime a solid.', true),
-    L('light',      '🔦', 'Light Bench',        'Physics',   'LabLight',      'Mirrors, glass blocks and a protractor. Bend a beam of light.', true),
-    L('measure',    '📏', 'Measurement Lab',    'Physics',   'LabMeasure',    'Read a measuring cylinder and a vernier caliper - and beat parallax error.', true),
-    L('circuit',    '💡', 'Circuit Board',      'Physics',   'LabCircuit',    'Snap cells, bulbs and switches into series and parallel circuits.', true),
-    L('motion',     '🛷', 'Motion Track',       'Physics',   'LabMotion',     'Roll a trolley down a ramp and watch its speed-time graph draw itself.', true),
-    L('photo',      '🌿', 'Photosynthesis Lab', 'Biology',   'LabPhoto',      'Pondweed, a lamp and a bubble counter. What does a plant need?', true),
-    L('quadrat',    '🟩', 'Quadrat Field',      'Biology',   'LabQuadrat',    'Throw quadrats on a Mauritian habitat and estimate a population.', true),
-    L('microscope', '🔬', 'Microscope',         'Biology',   'LabMicroscope', 'Look at blood cells, measure the drawing and work out the magnification.'),
-    // Primary (PSAC Grades 4-6) labs - docs/labs/LAB_SPEC.md §8. Subject
-    // 'Science' is not in SUBJECTS yet, so the hub does not list them until the
-    // per-grade layer lands; Labs.openLab() still loads them for their tests.
-    L('rusting',   '🔩', 'Rusting Lab',       'Science', 'LabRusting',   'Three test tubes, three iron nails. What does iron need to rust?', true),
-    L('materials', '🧲', 'Materials Tester',  'Science', 'LabMaterials', 'Test objects with a magnet, a torch, a circuit and a bowl of water.'),
-    L('water',     '💧', 'Water & States',    'Science', 'LabWater',     'Melt, boil, evaporate and condense - and make a water cycle in a jar.'),
-    L('air',       '🕯️', 'Air & Burning',     'Science', 'LabAir',       'What does a flame need? Candles, jars and the fire triangle.'),
+    L('separation', '⚗️', 'Separation Station', 'Chemistry', 'LabSeparation', 'Build a distillation rig, grow crystals and sublime a solid.', [9], true),
+    L('light',      '🔦', 'Light Bench',        'Physics',   'LabLight',      'Mirrors, glass blocks and a protractor. Bend a beam of light.', [9], true),
+    L('measure',    '📏', 'Measurement Lab',    'Physics',   'LabMeasure',    'Read a measuring cylinder and a vernier caliper - and beat parallax error.', [9], true),
+    L('circuit',    '💡', 'Circuit Board',      'Physics',   'LabCircuit',    'Snap cells, bulbs and switches into series and parallel circuits.', [9], true),
+    L('motion',     '🛷', 'Motion Track',       'Physics',   'LabMotion',     'Roll a trolley down a ramp and watch its speed-time graph draw itself.', [9], true),
+    L('photo',      '🌿', 'Photosynthesis Lab', 'Biology',   'LabPhoto',      'Pondweed, a lamp and a bubble counter. What does a plant need?', [9], true),
+    L('quadrat',    '🟩', 'Quadrat Field',      'Biology',   'LabQuadrat',    'Throw quadrats on a Mauritian habitat and estimate a population.', [9], true),
+    L('microscope', '🔬', 'Microscope',         'Biology',   'LabMicroscope', 'Look at blood cells, measure the drawing and work out the magnification.', [9], true),
+    // Primary (PSAC Grades 4-6) labs - docs/labs/LAB_SPEC.md §8.
+    L('rusting',   '🔩', 'Rusting Lab',       'Science', 'LabRusting',   'Three test tubes, three iron nails. What does iron need to rust?', [6], true),
+    L('materials', '🧲', 'Materials Tester',  'Science', 'LabMaterials', 'Test objects with a magnet, a torch, a circuit and a bowl of water.', [4], true),
+    L('water',     '💧', 'Water & States',    'Science', 'LabWater',     'Melt, boil, evaporate and condense - and make a water cycle in a jar.', [4]),
+    L('air',       '🕯️', 'Air & Burning',     'Science', 'LabAir',       'What does a flame need? Candles, jars and the fire triangle.', [4, 6]),
   ];
-  const SUBJECTS = ['Chemistry', 'Physics', 'Biology'];
+  // ⚠ The app has no core Grade 5 science yet (docs/labs/PLAN.md), so a Grade 5
+  //   pupil uses the primary labs built for Grades 4 and 6.
+  const GRADE_ALIASES = { 5: [4, 6] };
+  const SUBJECTS = ['Science', 'Chemistry', 'Physics', 'Biology'];
 
   let _open = null;           // the lab on the bench, or null for the hub
   let _mem = {};              // progress when there is no DB (a preview with no child)
   let _ovClose = null, _lastFocus = null;
   const _loading = new Map();
+
+  // ── Grades ───────────────────────────────────
+  let _grade = null;          // the grade picked in the hub
+  let _labGrade = null;       // the grade the open lab is being used at
+
+  const _serves = (l, g) => l.grades.includes(g) || (GRADE_ALIASES[g] || []).some(a => l.grades.includes(a));
+  function labsFor(g) { return LABS.filter(l => _serves(l, Number(g))); }
+  function _ownGrade() {
+    if (typeof GradeAccess !== 'undefined') return Number(GradeAccess.ownGrade());
+    return Number(typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 9;
+  }
+  // What this child may pick: their own grade and any a parent unlocked ABOVE
+  // it (GradeAccess.childChoices - a child aims up, never quietly down), and
+  // only grades with at least one ready lab.
+  function usableGrades() {
+    const choices = typeof GradeAccess !== 'undefined' ? GradeAccess.childChoices() : [_ownGrade()];
+    return [...new Set(choices.map(Number))].filter(g => labsFor(g).some(l => l.ready)).sort((a, b) => a - b);
+  }
+  // ⚠ The pick belongs to ONE child: switching child never reloads the page,
+  //   so a Grade 6 child would otherwise open on the Grade 9 a sibling chose.
+  let _gradeKey = '';
+  function _pickGrade() {
+    const usable = usableGrades();
+    const own = _ownGrade(), key = own + ':' + usable.join();
+    if (key !== _gradeKey) { _gradeKey = key; _grade = null; }
+    if (_grade && usable.includes(_grade)) return _grade;
+    _grade = usable.includes(own) ? own : (usable.find(g => g >= own) || usable[0] || null);
+    return _grade;
+  }
+  // The grade a lab is used at: the one picked, or - for a Grade 5 pupil in a
+  // lab built for 4 and 6 - the grade that lab actually has content for.
+  function _gradeForLab(l) {
+    const g = _grade || _ownGrade();
+    if (l.grades.includes(g)) return g;
+    const alias = (GRADE_ALIASES[g] || []).find(a => l.grades.includes(a));
+    if (alias) return alias;
+    return l.grades.find(x => x >= g) || l.grades[l.grades.length - 1];
+  }
+  // A lab asks this which grade's guides, missions and discoveries to show.
+  function grade() { return _labGrade; }
 
   const esc = s => String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -145,12 +190,13 @@ const Labs = (() => {
     corrosive: 'Corrosive', explosive: 'Explosive', flammable: 'Flammable', pressure: 'Gas under pressure',
     toxic: 'Toxic', irritant: 'Harmful', oxidising: 'Oxidising',
     electric: 'Electric shock', hot: 'Hot surface', eye: 'Bright light', biohazard: 'Biological hazard',
-    warning: 'Caution',
+    warning: 'Caution', sharp: 'Sharp - can cut',
   };
   // `warning` is the ISO 7010 general-warning "!" (W001), for a physical danger
-  // no other sign names - a trolley off the end of a bench. The GHS "Harmful"
-  // diamond says chemical, and borrowing it said the wrong thing.
-  const TRIANGLE = new Set(['electric', 'hot', 'eye', 'biohazard', 'warning']);
+  // no other sign names - a trolley off the end of a bench. `sharp` is W022,
+  // for broken glass or a point. The GHS "Harmful" diamond says CHEMICAL, and
+  // three labs had borrowed it for a cracked slide, cracked glass and a nail.
+  const TRIANGLE = new Set(['electric', 'hot', 'eye', 'biohazard', 'warning', 'sharp']);
   const GLYPH = {
     corrosive: '<rect x="18" y="20" width="8" height="15" rx="2" transform="rotate(-32 22 27)"/>'
              + '<rect x="38" y="20" width="8" height="15" rx="2" transform="rotate(32 42 27)"/>'
@@ -172,6 +218,7 @@ const Labs = (() => {
     eye:       '<path d="M19 39c6.5-8.5 19.5-8.5 26 0-6.5 8.5-19.5 8.5-26 0z" fill="none" stroke="#111" stroke-width="2.8"/><circle cx="32" cy="39" r="4"/>'
              + '<path d="M32 22v5M22 25l3 4M42 25l-3 4" stroke="#111" stroke-width="2.4" stroke-linecap="round"/>',
     warning:   '<rect x="29.3" y="22" width="5.4" height="17" rx="2.7"/><circle cx="32" cy="45" r="3.2"/>',
+    sharp:     '<path d="M20 49 25.5 31 30 40 34.5 24 38.5 38 44 32 44 49Z"/>',
     biohazard: '<circle cx="32" cy="31" r="5.5" fill="none" stroke="#111" stroke-width="2.8"/>'
              + '<circle cx="25.5" cy="42" r="5.5" fill="none" stroke="#111" stroke-width="2.8"/>'
              + '<circle cx="38.5" cy="42" r="5.5" fill="none" stroke="#111" stroke-width="2.8"/><circle cx="32" cy="38" r="2.4"/>',
@@ -219,6 +266,14 @@ const Labs = (() => {
     try { if (_lastFocus && _lastFocus.isConnected) _lastFocus.focus({ preventScroll: true }); } catch (e) {}
   }
 
+  // Which exam the "📝" section points at: PSAC for Grades 4-6, the NCE paper
+  // for Grade 9. A lab can still pass its own `examLabel`.
+  function _examLabel(o) {
+    if (o.examLabel) return o.examLabel;
+    const g = _labGrade || _grade || 9;
+    return g <= 6 ? '📝 In the PSAC exam' : g >= 9 ? '📝 On the NCE paper' : '📝 In your exams';
+  }
+
   // A mistake: the sign, what happened, why it matters, what to do instead,
   // and where the same point earns marks on the paper.
   function hazardCard(o) {
@@ -232,7 +287,7 @@ const Labs = (() => {
         <section class="lab-hz-sec is-what"><h3>What happened</h3><p>${esc(o.happened)}</p></section>
         <section class="lab-hz-sec is-why"><h3>Why it’s dangerous</h3><p>${esc(o.why)}</p></section>
         <section class="lab-hz-sec is-do"><h3>✅ Do this instead</h3><p>${esc(o.instead)}</p></section>
-        ${o.exam ? `<section class="lab-hz-sec is-exam"><h3>📝 On the NCE paper</h3><p>${esc(o.exam)}</p></section>` : ''}
+        ${o.exam ? `<section class="lab-hz-sec is-exam"><h3>${esc(_examLabel(o))}</h3><p>${esc(o.exam)}</p></section>` : ''}
       </div>
       <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>${esc(o.button || 'Got it - try again safely')}</button></div>`,
       { cls: 'is-hazard', onClose: o.onClose });
@@ -248,7 +303,7 @@ const Labs = (() => {
       <div class="lab-hz-body">
         <section class="lab-hz-sec is-what"><h3>What happened</h3><p>${esc(o.happened)}</p></section>
         <section class="lab-hz-sec is-do"><h3>✅ What you should have done</h3><p>${esc(o.instead)}</p></section>
-        ${o.exam ? `<section class="lab-hz-sec is-exam"><h3>📝 On the NCE paper</h3><p>${esc(o.exam)}</p></section>` : ''}
+        ${o.exam ? `<section class="lab-hz-sec is-exam"><h3>${esc(_examLabel(o))}</h3><p>${esc(o.exam)}</p></section>` : ''}
       </div>
       <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>${esc(o.button || 'Got it')}</button></div>`,
       { cls: 'is-result', onClose: o.onClose });
@@ -258,6 +313,13 @@ const Labs = (() => {
     for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
     return a;
   }
+
+  // An option is text, or { label, svg } for the paper's "pick the apparatus"
+  // questions (Chemistry 2024 Q1(1)). The svg comes from a lab's own data file,
+  // never from a pupil, so it is inserted as markup; the label is escaped.
+  const _optHTML = t => (t && typeof t === 'object')
+    ? `<span class="lab-quiz-pic" aria-hidden="true">${t.svg || ''}</span><span>${esc(t.label || '')}</span>`
+    : `<span>${esc(t)}</span>`;
 
   // One question per screen, one try each, the reason shown either way.
   // A question's FIRST option is the answer (in each lab's data file); shuffled here.
@@ -274,7 +336,7 @@ const Labs = (() => {
         <div class="lab-quiz-bar" aria-hidden="true"><i style="width:${Math.round((i / qs.length) * 100)}%"></i></div>
         <h2 id="lab-ov-title" class="lab-quiz-q">${esc(q.q)}</h2>
         <div class="lab-quiz-opts">${q.opts.map((op, k) =>
-          `<button type="button" class="lab-quiz-opt" data-k="${k}"><span class="lab-quiz-letter">${'ABCD'[k]}</span><span>${esc(op.t)}</span></button>`).join('')}</div>
+          `<button type="button" class="lab-quiz-opt" data-k="${k}"><span class="lab-quiz-letter">${'ABCD'[k]}</span>${_optHTML(op.t)}</button>`).join('')}</div>
         <div class="lab-quiz-fb" aria-live="polite"></div>`;
       const b = card.querySelector('.lab-quiz-opt');
       if (b) b.focus({ preventScroll: true });
@@ -322,9 +384,9 @@ const Labs = (() => {
 
   // ── Hub ──────────────────────────────────────
   function _hubHTML() {
-    // The LAB's grade, not the child's: a Grade 5 pupil a parent has given
-    // Grade 9 access is still doing Grade 9 science in here.
-    const g = (typeof _LAB_GRADES !== 'undefined' && _LAB_GRADES.length) ? _LAB_GRADES.join(' & ') : 9;
+    const g = _pickGrade();
+    const usable = usableGrades();
+    const list = g ? labsFor(g) : [];
     const card = l => {
       if (!l.ready) {
         return `<div class="lab-card is-soon" aria-disabled="true">
@@ -344,22 +406,36 @@ const Labs = (() => {
         <span class="lab-card-meta">${meta}</span>
         <span class="lab-card-go" aria-hidden="true">Open the lab →</span></button>`;
     };
+    // One grade needs no picker. More than one - their own plus grades a parent
+    // unlocked above it - gets "My grade", and the labs follow the pick.
+    const picker = usable.length > 1
+      ? `<div class="lab-grade-picker" role="group" aria-label="Choose a grade">
+          <span class="lab-grade-label">My grade:</span>
+          ${usable.map(x => `<button type="button" class="lab-grade-chip" data-grade="${x}" aria-pressed="${x === g}">Grade ${x}</button>`).join('')}
+        </div>`
+      : '';
+    const body = g
+      ? SUBJECTS.filter(sub => list.some(l => l.subject === sub)).map(sub => `<section class="lab-hub-subject" aria-label="${sub}">
+          <h2 class="lab-card-subject">${sub}</h2>
+          <div class="lab-hub-grid">${list.filter(l => l.subject === sub).map(card).join('')}</div>
+        </section>`).join('')
+      : '<p class="lab-hub-lede">There are no labs for your grade yet - they are on the way.</p>';
     return `<div class="lab lab-hub">
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-hub-exit aria-label="Back to my board">←</button>
-        <div class="lab-top-title"><span class="lab-eyebrow">NCE · Grade ${esc(g)}</span><h1>Science Labs</h1></div>
+        <div class="lab-top-title"><span class="lab-eyebrow">${g ? `${g <= 6 ? 'PSAC' : 'NCE'} · Grade ${esc(g)}` : 'Science'}</span><h1>Science Labs</h1></div>
       </header>
+      ${picker}
       <p class="lab-hub-lede">Real experiments with real science. Get it wrong and you’ll see exactly what would have happened - and what to do instead.</p>
-      ${SUBJECTS.map(sub => `<section class="lab-hub-subject" aria-label="${sub}">
-        <h2 class="lab-card-subject">${sub}</h2>
-        <div class="lab-hub-grid">${LABS.filter(l => l.subject === sub).map(card).join('')}</div>
-      </section>`).join('')}
+      ${body}
       <p class="lab-hub-foot">🥽 These labs follow real school-lab safety rules. Nothing here is for trying at home.</p>
     </div>`;
   }
 
   function _wireHub(root) {
     root.onclick = e => {
+      const gb = e.target.closest('[data-grade]');
+      if (gb) { _grade = Number(gb.dataset.grade); render(); return; }
       const c = e.target.closest('[data-lab]');
       if (c) { openLab(c.dataset.lab); return; }
       if (e.target.closest('[data-hub-exit]')) exit();
@@ -391,8 +467,10 @@ const Labs = (() => {
   }
 
   function openLab(id) {
-    if (!LABS.find(x => x.id === id)) return;
+    const l = LABS.find(x => x.id === id);
+    if (!l) return;
     _open = id;
+    _labGrade = _gradeForLab(l);
     render();
     const root = document.getElementById('labs-root');
     if (root) root.scrollIntoView({ block: 'start' });
@@ -419,7 +497,8 @@ const Labs = (() => {
     else if (typeof showScreen === 'function') showScreen('student-home');
   }
 
-  return { LABS, SIGN_LABELS, render, openLab, backToHub, exit, store, persist, discover, stars, confetti,
+  return { LABS, SIGN_LABELS, GRADE_ALIASES, render, openLab, backToHub, exit, grade, labsFor, usableGrades,
+           store, persist, discover, stars, confetti,
            calm, esc, sign, overlay, closeOverlay, hazardCard, resultCard, quiz, missionDone };
 })();
 if (typeof window !== 'undefined') window.Labs = Labs;

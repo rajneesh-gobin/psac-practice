@@ -33,8 +33,26 @@
 //  - Brightness ∝ power: P = I²R, shown as a multiple of one bulb on one cell
 //    (0.75 W). The pupil sees it in words; V = IR is used in the syllabus's own
 //    terms (resistance = voltage ÷ current).
+//
+//  ⚠ THREE LEVELS (docs/labs/LAB_SPEC.md §9). Content with no `grades` is the
+//    original Grade 9 set. The PSAC levels are grounded in the app's own banks:
+//    - Grade 4: g4sci-materials ("Which of these is a good ELECTRICAL
+//      CONDUCTOR?", copper inside / plastic or rubber outside) and g4sci-energy
+//      (a torch's battery stores chemical energy, a bulb gives light and some
+//      heat, switch off to save energy). No circuit symbols at Grade 4.
+//    - Grade 6: g6-energy (the wire carries the current, the cell stores
+//      chemical energy, insulators, copper wire, safety at home), depth_hard
+//      ("chemical → electrical → light and heat") and exam_depth (copper is a
+//      conductor, the plastic covering an insulator). Symbols are NOT in the
+//      Grade 6 bank, so they are offered as a labelled extra only.
+//    Paper references are quoted only from past_paper_*.js: PSAC 2024 Q1 (the
+//    energy at the output of a switched-on television) and PSAC 2023 (why
+//    used cells must not be thrown into the environment).
+//    Progress never collides: every primary id carries its grade (g4_…, g6_…).
 // ══════════════════════════════════════════════
 const LabCircuitData = (() => {
+  const GRADES = [4, 6, 9];
+  const forGrade = (list, g) => list.filter(x => (x.grades || [9]).includes(g));
   const COLS = 4, ROWS = 3, NODES = COLS * ROWS;
   const EMF = 1.5;
   const R = { wire: 1e-6, closed: 1e-6, cell: 1e-4, bulb: 3, resistor: 3, ammeter: 1e-6, voltmeter: 1e6, fuse: 1e-6 };
@@ -81,6 +99,34 @@ const LabCircuitData = (() => {
   };
   const TOOLS = ['hand', 'wire', 'cell', 'bulb', 'switch', 'ammeter', 'voltmeter', 'resistor', 'fuse', 'eraser'];
 
+  // ── Primary: things to test in the gap (Grades 4 and 6) ──
+  // A pencil lead is graphite: it conducts, but far less well than a metal, so
+  // in series with the 3 Ω bulb (R = 3 Ω) the bulb glows at a quarter of its
+  // normal brightness - dim, as it does in a school tester. Metals are
+  // milliohms. Dry rubber, plastic and wood are insulators (conductance 0).
+  const OBJECTS = {
+    spoon:  { name: 'Metal spoon',   icon: '🥄', made: 'steel, a metal',         metal: true,  R: 0.001 },
+    coin:   { name: 'Coin',          icon: '🪙', made: 'metal',                  metal: true,  R: 0.001 },
+    lead:   { name: 'Pencil lead',   icon: '✏️', made: 'graphite, not a metal',  metal: false, R: 3 },
+    rubber: { name: 'Rubber',        icon: '⬜', made: 'rubber',                 metal: false, R: 0 },
+    ruler:  { name: 'Plastic ruler', icon: '📏', made: 'plastic',                metal: false, R: 0 },
+    stick:  { name: 'Wooden stick',  icon: '🪵', made: 'dry wood',               metal: false, R: 0 },
+  };
+  const TEST_OBJECTS = Object.keys(OBJECTS);
+  for (const [k, o] of Object.entries(OBJECTS))
+    KINDS[k] = { name: o.name, icon: o.icon, meta: 'Made of ' + o.made, job: `A thing to test. It is made of ${o.made}. Put it in a gap and close the switch.`, obj: true };
+  // What each part does, in Grade 4-6 words (the Grade 9 text talks of charge and terminals).
+  const JOBS_P = {
+    wire:   'Joins the parts. Copper inside carries the electricity; plastic outside keeps you safe.',
+    cell:   'Gives the circuit its energy. A battery is one or more cells.',
+    bulb:   'Lights up when electricity flows through it.',
+    switch: 'Opens and closes a gap in the circuit.',
+  };
+  const TOOLS_P = ['hand', 'wire', 'cell', 'bulb', 'switch', 'eraser'];
+  const toolsFor = g => (g <= 6 ? TOOLS_P : TOOLS);
+  const kindsFor = g => (g <= 6 ? ['wire', 'cell', 'bulb', 'switch'] : ['wire', 'cell', 'bulb', 'switch', 'ammeter', 'voltmeter', 'resistor', 'fuse']);
+  const symbolsFor = g => g !== 4;   // Grade 4 draws pictures only; Grade 6 sees symbols as an extra
+
   // ── Ready-made layouts ────────────────────────
   // Every one is the same outer loop: the cell top-left, the switch on the
   // left side, the bulb along the bottom. The switch starts OPEN.
@@ -99,16 +145,25 @@ const LabCircuitData = (() => {
     parallel_amm: P('Two bulbs in parallel with an ammeter', { h11: 'bulb', v11: 'wire', v21: 'wire', h20: 'ammeter' }),
     resistor:     P('A bulb, a resistor and an ammeter', { h20: 'ammeter', v31: 'resistor' }),
     fuse:         P('A bulb with a fuse in the circuit', { h20: 'fuse', v11: 'wire', v21: 'wire' }),
+    // Primary
+    tester:       P('A tester with a gap for testing things', { v31: null }),
+    switch_right: P('A circuit with the switch on the other side', { v00: 'wire', v31: 'switch' }),
+    broken:       P('A torch that does not work', { v31: null, h12: 'bulb:out' }),
   };
   // Quick layouts offered on the shelf (the others belong to guides and missions).
   const QUICK = ['single', 'series2', 'parallel2', 'twocells', 'meters', 'resistor', 'fuse'];
+  const QUICK_BY_GRADE = { 4: ['single', 'gap', 'tester'], 6: ['single', 'tester', 'twocells', 'switch_right'], 9: QUICK };
+  // The gap a tester leaves for the thing being tested.
+  const TEST_SLOT = 'v31';
 
+  // A part is written 'kind' or 'kind:out' (a bulb unscrewed from its holder).
   function layoutOf(id) {
     const p = PRESETS[id], out = {};
     if (!p) return out;
-    for (const [slot, kind] of Object.entries(p.parts)) {
-      if (!kind) continue;
-      out[slot] = kind === 'switch' ? { kind, open: true } : { kind };
+    for (const [slot, spec] of Object.entries(p.parts)) {
+      if (!spec) continue;
+      const [kind, state] = spec.split(':');
+      out[slot] = kind === 'switch' ? { kind, open: true } : state === 'out' ? { kind, out: true } : { kind };
     }
     return out;
   }
@@ -125,7 +180,8 @@ const LabCircuitData = (() => {
       case 'fuse': return p.blown ? 0 : 1 / R.fuse;
       case 'cell': return 1 / R.cell;
     }
-    return 0;
+    const o = OBJECTS[p.kind];
+    return o && o.R ? 1 / o.R : 0;
   }
 
   // Gaussian elimination with partial pivoting. G is small (12 × 12).
@@ -285,6 +341,67 @@ const LabCircuitData = (() => {
     return !!m && m.kind === 'ammeter' && m.value > 0.01 && Math.abs(m.value - sol.cellI) < 0.01;
   }
 
+  // ── Primary: testing things in a gap ──────────
+  // A fair test: every switch closed, no short circuit, and with a plain wire
+  // in place of the object the bulb WOULD light. Then the object is a conductor
+  // if the bulb lights and an insulator if it stays dark. Otherwise null (the
+  // rest of the circuit is not working, so the test says nothing yet).
+  function testResult(layout, slot) {
+    const p = layout[slot];
+    if (!p || !OBJECTS[p.kind]) return null;
+    if (Object.values(layout).some(q => q && q.kind === 'switch' && q.open)) return null;
+    const sol = solve(layout);
+    if (sol.short) return null;
+    const s2 = solve(Object.assign({}, layout, { [slot]: { kind: 'wire' } }));
+    if (s2.short || !litBulbs(s2).length) return null;
+    return litBulbs(sol).length ? 'conductor' : 'insulator';
+  }
+  function objectTests(layout) {
+    return Object.keys(layout).sort().filter(k => layout[k] && OBJECTS[layout[k].kind])
+      .map(slot => ({ slot, obj: layout[slot].kind, result: testResult(layout, slot) }));
+  }
+
+  // What a Grade 4/6 pupil has just shown, as the facts the primary discoveries
+  // are unlocked by (their `when`). o = { layout, sol, prev (the solution before
+  // the change), evt, view, tests (object → result so far), gapFilled, warm }.
+  const WHENS = ['lit', 'switch_off', 'switch_moved', 'gap_fixed', 'unscrew', 'warm', 'brighter', 'symbols', 'sorted',
+    'conductor:metal', 'insulator:any', ...TEST_OBJECTS.flatMap(x => ['conductor:' + x, 'insulator:' + x])];
+  function facts(o) {
+    const f = new Set(), sol = o.sol, lit = litBulbs(sol), prevLit = o.prev ? litBulbs(o.prev) : [], evt = o.evt || '';
+    if (lit.length) f.add('lit');
+    if (lit.length && o.gapFilled) f.add('gap_fixed');
+    if (evt === 'switch:off' && prevLit.length && !lit.length) {
+      f.add('switch_off');
+      const sw = Object.keys(o.layout).filter(k => o.layout[k].kind === 'switch');
+      if (sw.length && !sw.includes('v00')) f.add('switch_moved');
+    }
+    if (/^bulb:.*:out$/.test(evt) && prevLit.length && !lit.length) f.add('unscrew');
+    if (lit.some(k => sol.bulbs[k].brightness >= 3)) f.add('brighter');
+    if (o.view === 'symbols' && lit.length) f.add('symbols');
+    if (o.warm && lit.length) f.add('warm');
+    for (const t of objectTests(o.layout)) {
+      if (!t.result) continue;
+      f.add(t.result + ':' + t.obj);
+      if (t.result === 'conductor' && OBJECTS[t.obj].metal) f.add('conductor:metal');
+      if (t.result === 'insulator') f.add('insulator:any');
+    }
+    if (o.tests && TEST_OBJECTS.every(x => o.tests[x])) f.add('sorted');
+    return f;
+  }
+
+  // The wrong-but-safe mistakes at Grades 4 and 6 (the result card to show, or
+  // null). An insulator in the loop is a TEST, not a gap: no card for it.
+  function primaryMistake(layout, sol, evt) {
+    const parts = Object.values(layout).filter(Boolean);
+    const closed = parts.every(p => p.kind !== 'switch' || !p.open);
+    const bulb = parts.some(p => p.kind === 'bulb');
+    const insulated = objectTests(layout).some(t => t.result === 'insulator');
+    if (/^(switch:on$|flip:|place:.*:cell$)/.test(evt || '') && closed && bulb && sol.cells >= 2 && sol.cellI < 1e-3 && !hasGap(layout) && !insulated) return 'cells_wrong';
+    if (evt === 'switch:on' && bulb && !sol.cells) return 'no_cell';
+    if (evt === 'switch:on' && hasGap(layout) && !insulated) return 'open_circuit';
+    return null;
+  }
+
   // ── The two formulas the syllabus names, and V = IR ──
   const charge = (I, t) => I * t;          // Q = It
   const energy = (Q, V) => Q * V;          // W = QV
@@ -408,6 +525,114 @@ const LabCircuitData = (() => {
       formula: 'Q = It = 0.50 A × 10 s = 5.0 C;   W = QV = 5.0 C × 1.5 V = 7.5 J',
       learn: 'Current is the rate of flow of charge: one ampere is one coulomb every second. Potential difference is the energy per coulomb, so each coulomb gives the bulb 1.5 J.',
       exam: 'Q = It and W = QV are the two formulas the P5 syllabus names; Physics 2021 Q1(j) is a Q = It calculation.' },
+
+    // ── Grade 4 (g4sci-materials, g4sci-energy) ──
+    // A primary discovery is unlocked by its `when` fact (see facts() above).
+    { id: 'g4_light', grades: [4], when: 'lit', icon: '💡', title: 'The bulb lights up', hint: 'Close the switch on a complete circuit',
+      how: ['build:single', ON],
+      saw: 'You closed the switch and the bulb lit up. The moving dots show electricity flowing.',
+      learn: 'Electricity flows only round a complete loop. We call the loop a circuit. It goes from the cell, through the wires and the bulb, and back.',
+      exam: 'A torch lights only when its circuit is complete.' },
+    { id: 'g4_switch', grades: [4], when: 'switch_off', icon: '🔘', title: 'Switch off, light off', hint: 'Open the switch while the bulb is lit',
+      how: ['build:single', ON, OFF],
+      saw: 'You opened the switch. The bulb went out at once.',
+      learn: 'An open switch makes a gap in the circuit, so the electricity stops. Switch off lights you are not using. It saves energy.' },
+    { id: 'g4_gap', grades: [4], when: 'gap_fixed', icon: '🧩', title: 'Mind the gap', hint: 'Fill the gap in a broken circuit',
+      how: ['build:gap', 'place:v31:wire', ON],
+      saw: 'One wire was missing. You put it back, closed the switch, and the bulb lit.',
+      learn: 'Every part must join the next. A missing wire leaves a gap, and electricity cannot jump across it.' },
+    { id: 'g4_loose', grades: [4], when: 'unscrew', icon: '🔧', title: 'A loose bulb', hint: 'Unscrew the bulb while it is lit',
+      how: ['build:single', ON, 'bulb:h12:out'],
+      saw: 'You unscrewed the bulb and the light went out.',
+      learn: 'A loose bulb makes a gap too. If a torch will not light, check that the bulb is screwed in.' },
+    { id: 'g4_warm', grades: [4], when: 'warm', icon: '🔥', title: 'Light and heat', hint: 'Leave a bulb on for 10 seconds',
+      how: ['build:single', ON, 'wait:10'],
+      saw: 'The bulb stayed on for 10 seconds. It gave out light, and it got warm.',
+      formula: 'electrical energy → light energy + heat energy',
+      learn: 'A bulb changes electrical energy into light. It gives out some heat as well. That is why an old bulb feels hot.' },
+    { id: 'g4_spoon', grades: [4], when: 'conductor:spoon', icon: '🥄', title: 'A spoon lets it through', hint: 'Test the metal spoon in the gap',
+      how: ['build:tester', 'place:v31:spoon', ON],
+      saw: 'With the metal spoon in the gap, the bulb lit up.',
+      learn: 'The spoon is made of metal. Metals let electricity pass through them. A material that does this is a conductor.',
+      exam: 'Most metals are good conductors of electricity.' },
+    { id: 'g4_coin', grades: [4], when: 'conductor:coin', icon: '🪙', title: 'A coin lets it through', hint: 'Test the coin in the gap',
+      how: ['build:tester', 'place:v31:coin', ON],
+      saw: 'With the coin in the gap, the bulb lit up.',
+      learn: 'A coin is metal, so it is a conductor. Electricity passes through it easily.' },
+    { id: 'g4_lead', grades: [4], when: 'conductor:lead', icon: '✏️', title: 'Pencil lead conducts!', hint: 'Test the pencil lead in the gap',
+      how: ['build:tester', 'place:v31:lead', ON],
+      saw: 'With the pencil lead in the gap, the bulb lit up, but only dimly.',
+      learn: 'Pencil lead is graphite, not metal. It is a conductor, but not a very good one. So the bulb glows dimly.' },
+    { id: 'g4_rubber', grades: [4], when: 'insulator:rubber', icon: '⬜', title: 'Rubber stops it', hint: 'Test the rubber in the gap',
+      how: ['build:tester', 'place:v31:rubber', ON],
+      saw: 'With the rubber in the gap, the bulb stayed dark.',
+      learn: 'Rubber does not let electricity pass. A material like this is an insulator. Rubber on a cable keeps you safe from shocks.' },
+    { id: 'g4_ruler', grades: [4], when: 'insulator:ruler', icon: '📏', title: 'Plastic stops it', hint: 'Test the plastic ruler in the gap',
+      how: ['build:tester', 'place:v31:ruler', ON],
+      saw: 'With the plastic ruler in the gap, the bulb stayed dark.',
+      learn: 'Plastic is an insulator. That is why wires are covered in plastic. You can touch them safely.' },
+    { id: 'g4_stick', grades: [4], when: 'insulator:stick', icon: '🪵', title: 'Wood stops it', hint: 'Test the wooden stick in the gap',
+      how: ['build:tester', 'place:v31:stick', ON],
+      saw: 'With the wooden stick in the gap, the bulb stayed dark.',
+      learn: 'Dry wood is an insulator. Electricity cannot pass through it.' },
+    { id: 'g4_sorted', grades: [4], when: 'sorted', icon: '🗂️', title: 'All sorted!', hint: 'Test all six things, one after another',
+      how: ['build:tester', 'place:v31:spoon', ON, 'place:v31:coin', 'place:v31:lead', 'place:v31:rubber', 'place:v31:ruler', 'place:v31:stick'],
+      saw: 'You tested all six things. Three lit the bulb and three did not.',
+      formula: 'conductors: spoon, coin, pencil lead  ·  insulators: rubber, plastic ruler, wooden stick',
+      learn: 'Conductors let electricity through. Insulators stop it. A wire uses both: copper inside to carry it, plastic outside for safety.',
+      exam: 'Know why a wire is copper inside and plastic outside.' },
+
+    // ── Grade 6 (g6-energy, g6-materials) ──
+    { id: 'g6_circuit', grades: [6], when: 'lit', icon: '💡', title: 'A complete circuit', hint: 'Close the switch on a complete circuit',
+      how: ['build:single', ON],
+      saw: 'You closed the switch and the bulb lit up. The dots show the electric current.',
+      learn: 'The cell pushes an electric current round the circuit. The wire carries the current. The bulb uses it to make light.',
+      exam: 'Know the job of each part: the cell gives energy, the wire carries the current, the switch opens and closes the circuit.' },
+    { id: 'g6_switch', grades: [6], when: 'switch_off', icon: '🔘', title: 'The switch breaks the circuit', hint: 'Open the switch while the bulb is lit',
+      how: ['build:single', ON, OFF],
+      saw: 'You opened the switch. The current stopped and the bulb went out.',
+      learn: 'An open switch is a gap. The current stops everywhere in the loop, not only near the switch.' },
+    { id: 'g6_anywhere', grades: [6], when: 'switch_moved', icon: '↪️', title: 'A switch works anywhere', hint: 'Use a switch on the other side of the circuit',
+      how: ['build:switch_right', ON, OFF],
+      saw: 'The switch was on the other side of the bulb. It still turned the bulb off.',
+      learn: 'There is only one loop, so a gap anywhere stops the current. The switch can go before or after the bulb.' },
+    { id: 'g6_fault', grades: [6], when: 'gap_fixed', icon: '🧩', title: 'Find the fault', hint: 'Mend a circuit that has a gap',
+      how: ['build:gap', 'place:v31:wire', ON],
+      saw: 'A wire was missing. With it back and the switch closed, the bulb lit.',
+      learn: 'When a torch will not work, look for the fault. It may be a gap, a loose bulb, or a cell the wrong way round.' },
+    { id: 'g6_loose', grades: [6], when: 'unscrew', icon: '🔧', title: 'A loose bulb is a gap', hint: 'Unscrew the bulb while it is lit',
+      how: ['build:single', ON, 'bulb:h12:out'],
+      saw: 'You unscrewed the bulb. The current stopped and the light went out.',
+      learn: 'The current must pass through the bulb. A loose bulb breaks the circuit, just like a gap.' },
+    { id: 'g6_metal', grades: [6], when: 'conductor:metal', icon: '🪙', title: 'Metals conduct', hint: 'Test a coin or a metal spoon in the gap',
+      how: ['build:tester', 'place:v31:coin', ON],
+      saw: 'With the metal in the gap, the bulb lit up brightly.',
+      learn: 'Metals are good conductors of electricity. That is why the inside of an electric wire is copper, a metal.',
+      exam: 'Copper is used for wires because it is a good conductor and bends easily.' },
+    { id: 'g6_graphite', grades: [6], when: 'conductor:lead', icon: '✏️', title: 'A non-metal that conducts', hint: 'Test the pencil lead in the gap',
+      how: ['build:tester', 'place:v31:lead', ON],
+      saw: 'The pencil lead lit the bulb, but only dimly.',
+      learn: 'Pencil lead is graphite. It is not a metal, yet it conducts. It lets less current through than a metal, so the bulb is dim.' },
+    { id: 'g6_insulate', grades: [6], when: 'insulator:any', icon: '📏', title: 'Insulators stop the current', hint: 'Test the plastic ruler in the gap',
+      how: ['build:tester', 'place:v31:ruler', ON],
+      saw: 'With the plastic in the gap, the bulb stayed dark.',
+      learn: 'Plastic, rubber and wood are insulators. The plastic coating on a wire stops the current reaching your hand.',
+      exam: 'The plastic covering of a wire is an insulator; the copper inside is a conductor.' },
+    { id: 'g6_brighter', grades: [6], when: 'brighter', icon: '🔋', title: 'Two cells, brighter bulb', hint: 'Use two cells instead of one',
+      how: ['build:twocells', ON],
+      saw: 'With two cells the bulb was much brighter than with one.',
+      learn: 'Two cells in a row push harder than one, so more current flows through the bulb. Too many cells would blow it.' },
+    { id: 'g6_energy', grades: [6], when: 'warm', icon: '🔥', title: 'From cell to light', hint: 'Leave a bulb on for 10 seconds',
+      how: ['build:single', ON, 'wait:10'],
+      saw: 'After 10 seconds the bulb was still shining, and it had got warm.',
+      formula: 'chemical energy (cell) → electrical energy → light + heat',
+      learn: 'The cell stores chemical energy. In the circuit it becomes electrical energy. The bulb changes it into light and some heat.',
+      exam: 'PSAC 2024 Q1 asked for the energy coming out of a switched-on television. Name the energy going in and coming out.' },
+    { id: 'g6_symbols', grades: [6], when: 'symbols', icon: '✏️', title: 'Draw it with symbols', hint: 'Switch to the symbols view',
+      how: ['build:single', ON, 'view:symbols'],
+      saw: 'The same circuit, drawn with simple symbols instead of pictures.',
+      formula: 'cell: a long and a short line  ·  bulb: a circle with a cross  ·  switch: a lifted line',
+      learn: 'Scientists draw circuits with symbols. This is an extra: you will use it at secondary school. It is beyond the PSAC syllabus.' },
   ];
 
   // ── Hazards: the mistakes that stop the experiment ───
@@ -419,6 +644,42 @@ const LabCircuitData = (() => {
       why: 'A wire has almost no resistance, so nothing limits the current. It heats the wire and the cell very quickly: a real battery can leak, burn your fingers or even catch fire. Short circuits in mains wiring start house fires.',
       instead: 'Always keep something that uses the energy - a bulb or a resistor - in the loop. Never connect a wire straight across a cell. If a wire gets hot, open the switch at once.',
       exam: 'A short circuit is a path with almost no resistance. A fuse protects a circuit by melting when the current is too big. A safety precaution is asked on the NCE science papers (e.g. Chemistry 2022 Q5(a)(ii)).',
+    },
+    // ── Grades 4 and 6 ──
+    short_circuit_p: {
+      grades: [4, 6], signs: ['hot'], fx: 'short',
+      title: () => 'Short circuit - the wire is getting hot',
+      happened: () => 'Your wire made a short cut from one end of the cell to the other. The electricity rushed round the short cut, not through the bulb. The bulb went dark, and the wire and the cell got hot. This is called a short circuit.',
+      why: 'A short circuit makes wires and cells hot very fast. A real battery can leak or burn your fingers. In a house, a short circuit can start a fire.',
+      instead: 'Always keep the bulb in the loop. Never join the two ends of a cell with just a wire. If a wire gets hot, let go and ask an adult.',
+      exam: 'Electricity takes the easiest path. A path with nothing in it to use the energy is a short circuit.',
+    },
+    mains: {
+      grades: [4, 6], signs: ['electric'], fx: 'zap',
+      log: 'Tried to run the circuit from a wall socket. Mains electricity can kill.',
+      title: () => 'Stop! That is mains electricity',
+      happened: () => 'You tried to power the circuit from the socket on the wall. Our bulb is made for small cells. Mains electricity is about 150 times stronger than one cell. The bulb would burst, and you could get a deadly shock.',
+      why: 'Mains electricity can pass through your body. It can burn you and stop your heart. A cell is safe to hold. A socket is not.',
+      instead: 'Use only cells (batteries) for experiments. Never push anything into a socket. Leave plugs and sockets to an adult.',
+      exam: 'One safety rule at home: never push anything into a socket.',
+    },
+    wet_hands: {
+      grades: [4, 6], signs: ['electric'], fx: 'zap',
+      log: 'Reached for a plug with wet hands. Water and mains electricity do not mix.',
+      title: () => 'Wet hands and electricity do not mix',
+      happened: () => 'You reached for a plug with wet hands. Tap water lets electricity pass. From a socket, it could flow into your body and give you a bad shock.',
+      why: 'Wet skin lets mains electricity into your body much more easily than dry skin. A shock can burn you or stop your heart.',
+      instead: 'Dry your hands before you touch a switch or a plug. Keep water and drinks away from sockets. Our cells are safe even with wet hands - they are far too weak to hurt you.',
+      exam: 'Keep electrical things away from water. Never touch them with wet hands.',
+    },
+    cable: {
+      grades: [4, 6], signs: ['electric'], fx: 'zap',
+      log: 'Picked up a lamp with a split cable. The bare copper could give a shock.',
+      title: () => 'A damaged cable is dangerous',
+      happened: () => 'You picked up a lamp whose cable is split. The plastic is broken and the copper inside shows. Touching it while it is plugged in could give you a shock.',
+      why: 'The plastic round a cable is an insulator. It keeps the electricity inside. Once it splits, the bare copper can pass mains electricity into your hand.',
+      instead: 'Never touch a split or burnt cable, and never use it. Tell an adult. They will switch it off at the socket and have it mended.',
+      exam: 'The plastic covering of a cable is an insulator. It stops electric shocks.',
     },
   };
 
@@ -452,9 +713,38 @@ const LabCircuitData = (() => {
       instead: 'Match the battery to the bulb. This bulb is made for up to 3 V - two cells. Put a wire in place of one cell, then tap the bulb with ✋ to fit a new one.',
       exam: 'More cells in series → more voltage → more current → a brighter bulb (until it blows). V = IR.',
     },
+    // ── Grades 4 and 6 ──
+    open_circuit_p: {
+      grades: [4, 6], icon: '🧩',
+      title: () => 'Nothing lights - there is a gap',
+      happened: () => 'You closed the switch, but there is a gap somewhere in the loop. Electricity cannot jump across a gap, so the bulb stays dark.',
+      instead: 'Follow the loop with your finger, from the cell all the way round and back. Fill the empty space with a wire, or screw in a loose bulb.',
+      exam: 'A bulb lights only when the circuit is complete, with no gaps.',
+    },
+    no_cell_p: {
+      grades: [4, 6], icon: '🔋',
+      title: () => 'No cell - nothing gives the energy',
+      happened: () => 'You closed the switch, but there is no cell on the board. Wires, a switch and a bulb cannot make electricity on their own.',
+      instead: 'Pick a 🔋 cell and put it in the loop. The cell gives the circuit its energy.',
+      exam: 'A cell (battery) stores chemical energy. In a circuit it becomes electrical energy.',
+    },
+    bulb_blown_p: {
+      grades: [4, 6], icon: '💥',
+      title: () => 'Too many cells - the bulb blew',
+      happened: c => `You used ${c.cells} cells. That was too much for this little bulb. Its thin wire got so hot that it melted. It flashed, then went dark for good.`,
+      instead: 'Use no more than two cells with this bulb. Put a wire in place of one cell. Then tap the bulb with ✋ to fit a new one.',
+      exam: 'More cells make a bulb brighter, until it blows.',
+    },
+    cells_wrong_p: {
+      grades: [4, 6], icon: '↔️',
+      title: () => 'The cells are facing each other',
+      happened: () => 'The loop is complete, but the bulb stays dark. One cell is the wrong way round, so the two cells push against each other.',
+      instead: 'Tap one cell with ✋ to turn it round. The + end of one cell must touch the other end of the next, as in a torch.',
+      exam: 'Put cells into a torch the way the + sign shows.',
+    },
   };
 
-  const SIGN_LABELS = { hot: 'Hot surface' };
+  const SIGN_LABELS = { hot: 'Hot surface', electric: 'Electric shock' };
 
   // Short, true facts for the 💡 button, tied to P5.
   const FACTS = [
@@ -471,6 +761,32 @@ const LabCircuitData = (() => {
     'Mains electricity in Mauritius is 230 V - about 150 times the voltage of one cell. Never experiment with mains sockets.',
     'Wet skin conducts far better than dry skin. Never touch a switch or a plug with wet hands.',
   ];
+  const FACTS_BY_GRADE = {
+    4: [
+      'A torch has cells inside. People often call them batteries.',
+      'A conductor lets electricity pass through it. Most metals are conductors.',
+      'An insulator stops electricity. Plastic, rubber and dry wood are insulators.',
+      'A wire is copper inside and plastic outside. The copper carries the electricity. The plastic keeps you safe.',
+      'A bulb gives out light and a little heat.',
+      'Switch off lights you are not using. It saves energy.',
+      'The cells in this lab are safe to touch. A socket on the wall is not.',
+      'Never touch a switch or a plug with wet hands.',
+      'Pencil lead is not really lead. It is graphite mixed with clay.',
+      'A cell stores chemical energy. A torch turns it into light.',
+    ],
+    6: [
+      'A cell stores chemical energy. In a circuit it becomes electrical energy.',
+      'Electricity flows round a complete circuit as an electric current.',
+      'Copper is used for wires because it is a very good conductor, and it bends easily.',
+      'The plastic coating on a wire is an insulator. It stops electric shocks.',
+      'Two cells in a row push harder than one, so the bulb glows brighter.',
+      'Most electricity in Mauritius comes from power stations that burn fuel. Switching off saves fuel.',
+      'An LED bulb gives as much light as an old bulb but uses far less electricity.',
+      'Mains electricity is about 150 times stronger than one cell. Never experiment with it.',
+      'Used cells must not be thrown away outside. Their chemicals can pollute soil and water.',
+      'Dry your hands before you touch a switch or a plug.',
+    ],
+  };
 
   // ── Missions ──
   // A question's FIRST option is the answer; the quiz shuffles them.
@@ -528,6 +844,98 @@ const LabCircuitData = (() => {
           why: 'There is only one path, and charge is not used up, so the current is the same everywhere in a series circuit.' },
       ],
     },
+
+    // ── Grade 4 ── `kind` says what the bench checks: torch | sort | fix.
+    {
+      id: 'g4_torch', grades: [4], kind: 'torch', icon: '🔦', title: 'Make a torch',
+      blurb: 'Build a circuit part by part: a cell, a switch, a bulb and wires. Then switch it on.',
+      intro: 'Make a torch! The board is empty. Put a cell, a switch and a bulb in one loop. Join the gaps with wires. Then close the switch.',
+      quiz: [
+        { q: 'Why did the bulb light when you closed the switch?',
+          options: ['The circuit was complete, with no gaps', 'The switch makes the electricity', 'The bulb keeps light stored inside it', 'The wires are coloured red'],
+          why: 'Electricity flows only round a complete loop. Closing the switch closed the last gap.' },
+        { q: 'Which part gives the circuit its energy?',
+          options: ['The cell', 'The switch', 'The wire', 'The bulb'],
+          why: 'The cell stores chemical energy. The circuit turns it into light.' },
+        { q: 'What does a switch do?',
+          options: ['It opens and closes a gap in the circuit', 'It makes the cell much stronger', 'It changes light into heat', 'It stores electricity for later'],
+          why: 'Open, the switch makes a gap and the bulb goes out. Closed, the circuit is complete.' },
+        { q: 'A torch will not light. What should you check first?',
+          options: ['That the circuit is complete and the bulb is screwed in', 'That the torch case is shiny and new', 'That the torch was kept in the dark', 'That the room lights are switched off'],
+          why: 'A gap or a loose bulb breaks the circuit, so no electricity flows.' },
+        { q: 'A bulb gives out light. What else does it give out?',
+          options: ['Heat', 'Water', 'Air', 'Sound'],
+          why: 'A bulb changes electrical energy into light and some heat. That is why it feels warm.' },
+      ],
+    },
+    {
+      id: 'g4_sort', grades: [4], kind: 'sort', icon: '🥄', title: 'Conductor or insulator?',
+      blurb: 'Test all six things in the gap. Which ones light the bulb?',
+      intro: 'Conductor or insulator? Pick a thing under the board and put it in the gap. Close the switch. Test all six.',
+      quiz: [
+        { q: 'Which of these is a conductor of electricity?',
+          options: ['A metal spoon', 'A plastic ruler', 'A rubber', 'A wooden stick'],
+          why: 'The spoon is metal. Metals let electricity pass, so the bulb lit.' },
+        { q: 'Why did the bulb stay dark with the rubber in the gap?',
+          options: ['Rubber is an insulator', 'Rubber is a metal', 'Rubber is too heavy', 'Rubber is too small'],
+          why: 'An insulator does not let electricity pass, so there was still a gap in the circuit.' },
+        { q: 'Electric wires are covered in plastic. Why?',
+          options: ['Plastic is an insulator, so it stops shocks', 'Plastic makes the electricity flow faster', 'Plastic is a conductor, like copper', 'Plastic makes the wire look nicer'],
+          why: 'The copper inside carries the electricity. The plastic outside keeps it away from your hands.' },
+        { q: 'The pencil lead made the bulb glow dimly. What does this show?',
+          options: ['Pencil lead conducts, but not as well as metal', 'Pencil lead is an insulator', 'Pencil lead is made of metal', 'Pencil lead makes its own electricity'],
+          why: 'Graphite lets some electricity through - less than a metal - so the bulb is dim.' },
+        { q: 'What is an insulator?',
+          options: ['A material that does not let electricity pass', 'A material that lets electricity pass easily', 'A machine that makes electricity', 'A wire that joins a cell to a bulb'],
+          why: 'Plastic, rubber and dry wood are insulators. Metals are conductors.' },
+      ],
+    },
+
+    // ── Grade 6 ──
+    {
+      id: 'g6_fix', grades: [6], kind: 'fix', icon: '🔧', title: 'Fix the torch',
+      blurb: 'This torch does not work. Find the faults and make it light.',
+      intro: 'Fix the torch! It has two faults. Find them both, mend them, then close the switch.',
+      quiz: [
+        { q: 'The torch had a gap in its circuit. What happened to the current?',
+          options: ['No current flowed anywhere', 'Current flowed only near the cell', 'The current jumped across the gap', 'The current flowed the other way'],
+          why: 'A circuit is one loop. A gap anywhere stops the current everywhere.' },
+        { q: 'An unscrewed bulb stops the torch working. Why?',
+          options: ['It makes a gap, so the circuit is broken', 'It uses up all the energy of the cell', 'It turns the current into sound', 'It turns the cell the wrong way round'],
+          why: 'The current must pass through the bulb. A loose bulb leaves a gap.' },
+        { q: 'What is the job of the wire in a circuit?',
+          options: ['To carry the electric current', 'To store energy for later', 'To change electricity into light', 'To make the bulb brighter'],
+          why: 'The wire is a conductor. It carries the current from the cell to the bulb and back.' },
+        { q: 'Which energy change happens in a lit torch?',
+          options: ['Chemical → electrical → light and heat', 'Light → electrical → chemical', 'Heat → chemical → sound', 'Electrical → chemical → movement'],
+          why: 'The cell stores chemical energy. It becomes electrical energy, then light and heat in the bulb.' },
+        { q: 'Why should used cells not be thrown into the environment?',
+          options: ['Their chemicals can pollute soil and water', 'They start to glow in the dark', 'They grow into new cells in the soil', 'They make the soil too cold for plants'],
+          why: 'Cells hold chemicals that can harm living things. PSAC 2023 asked this. Take used cells to a collection point.' },
+      ],
+    },
+    {
+      id: 'g6_wire', grades: [6], kind: 'sort', icon: '🧵', title: 'What makes a good wire?',
+      blurb: 'Test six things in the gap. Which could carry the current like a wire?',
+      intro: 'What makes a good wire? Put each thing in the gap and close the switch. Test all six.',
+      quiz: [
+        { q: 'Which metal is used inside electric wires?',
+          options: ['Copper', 'Iron', 'Gold', 'Lead'],
+          why: 'Copper is a very good conductor, and it bends easily. Gold conducts too, but costs far too much.' },
+        { q: 'In your tests, which things did NOT light the bulb?',
+          options: ['The rubber, the plastic ruler and the wooden stick', 'The spoon, the coin and the pencil lead', 'Only the coin', 'All six things'],
+          why: 'Rubber, plastic and wood are insulators. The metals and the graphite are conductors.' },
+        { q: 'Which of these could NOT be used as a wire in a circuit?',
+          options: ['A plastic ruler', 'A metal spoon', 'A coin', 'A strip of copper'],
+          why: 'A wire must be a conductor. Plastic is an insulator, so no current would flow.' },
+        { q: 'Pencil lead lit the bulb, but dimly. Pencil lead is made of:',
+          options: ['Graphite, a non-metal that conducts', 'Lead, a heavy metal', 'Plastic, an insulator', 'Rubber, from a tree'],
+          why: 'Pencil lead is graphite mixed with clay. Graphite conducts, but less well than a metal.' },
+        { q: 'Which of these is a safe thing to do with electricity at home?',
+          options: ['Dry your hands before touching a switch', 'Push a key into a socket to test it', 'Use a lamp whose cable is split', 'Pull a plug out by its cable'],
+          why: 'Water lets electricity into your body. Never touch switches or plugs with wet hands.' },
+      ],
+    },
   ];
 
   // ── Guided experiments: "I landed here - what do I do?" ──
@@ -566,13 +974,75 @@ const LabCircuitData = (() => {
         { on: 'place:h10:cell', say: 'Now add a second cell, in series with the first (in the glowing space).',     btn: '🔋 Add a second cell' },
         { on: 'read',           say: 'Take a reading again. What changed?',                                        btn: '📝 Take a reading' },
       ] },
+
+    // ── Grade 4 ──
+    { id: 'g4-light', grades: [4], icon: '💡', title: 'Light a bulb',
+      blurb: 'Find the gap, fill it, and switch on.',
+      lesson: 'A bulb lights only when the circuit is complete. A circuit is one unbroken loop: from the cell, through the bulb, and back. A gap or an open switch stops the electricity.',
+      steps: [
+        { on: 'build:gap',      say: 'Set out a cell, a switch, a bulb and some wires.',               btn: '🔌 Set out the circuit' },
+        { on: 'place:v31:wire', say: 'Look round the loop. There is a gap! Put a wire in the glowing space.', btn: '〰️ Put a wire in the gap' },
+        { on: 'switch:on',      say: 'Now close the switch.',                                           btn: '🔘 Close the switch' },
+        { on: 'switch:off',     say: 'The bulb lights! Now open the switch. What happens?',            btn: '🔘 Open the switch' },
+      ] },
+    { id: 'g4-test', grades: [4], icon: '🥄', title: 'Conductor or insulator?',
+      blurb: 'Put things in the gap. Which ones let the electricity through?',
+      lesson: 'The spoon and the pencil lead lit the bulb, so they are conductors. The plastic ruler did not, so it is an insulator. Metals conduct. Plastic, rubber and wood do not.',
+      steps: [
+        { on: 'build:tester',     say: 'Set out a tester. It has a gap on the right for testing things.', btn: '🔌 Set out the tester' },
+        { on: 'place:v31:spoon',  say: 'Put the metal spoon in the gap.',                                btn: '🥄 Put in the spoon' },
+        { on: 'switch:on',        say: 'Close the switch. Does the bulb light?',                         btn: '🔘 Close the switch' },
+        { on: 'place:v31:ruler',  say: 'It lights! Now swap the spoon for the plastic ruler.',           btn: '📏 Put in the ruler' },
+        { on: 'place:v31:lead',   say: 'Dark! Now try the pencil lead.',                                 btn: '✏️ Put in the pencil lead' },
+      ] },
+    { id: 'g4-energy', grades: [4], icon: '🔥', title: 'Light and heat',
+      blurb: 'Leave a bulb on. What does it give out?',
+      lesson: 'A bulb changes electrical energy into light. It gives out some heat too. An unscrewed bulb makes a gap, so the light goes out.',
+      steps: [
+        { on: 'build:single', say: 'Set out a cell, a switch and a bulb.',                  btn: '🔌 Set out the circuit' },
+        { on: 'switch:on',    say: 'Close the switch.',                                      btn: '🔘 Close the switch' },
+        { on: 'wait:10',      say: 'Leave the bulb on for 10 seconds. Watch it closely.' },
+        { on: 'bulb:h12:out', say: 'See the heat rising? Now unscrew the bulb.',             btn: '🔧 Unscrew the bulb' },
+      ] },
+
+    // ── Grade 6 ──
+    { id: 'g6-fault', grades: [6], icon: '🔧', title: 'Find the faults',
+      blurb: 'A torch that will not light. Find what is wrong.',
+      lesson: 'The torch had two faults: a gap and a loose bulb. Each one broke the circuit. With both mended, the circuit was complete and the current could flow.',
+      steps: [
+        { on: 'build:broken',   say: 'Here is a torch that does not work. Look at the loop closely.', btn: '🔌 Set out the torch' },
+        { on: 'place:v31:wire', say: 'Fault 1: a wire is missing. Put a wire in the glowing space.',  btn: '〰️ Fill the gap' },
+        { on: 'bulb:h12:in',    say: 'Fault 2: the bulb is loose. Screw it in.',                      btn: '🔧 Screw in the bulb' },
+        { on: 'switch:on',      say: 'Both faults mended. Now close the switch.',                     btn: '🔘 Close the switch' },
+      ] },
+    { id: 'g6-wire', grades: [6], icon: '🧵', title: 'What makes a good wire?',
+      blurb: 'Test a coin, a rubber and a pencil lead in the gap.',
+      lesson: 'The coin (a metal) and the pencil lead (graphite) let the current through, so they are conductors. The rubber did not: it is an insulator. A wire needs a conductor inside and an insulator outside.',
+      steps: [
+        { on: 'build:tester',     say: 'Set out a tester. The gap on the right is for testing things.', btn: '🔌 Set out the tester' },
+        { on: 'place:v31:coin',   say: 'Put the coin in the gap.',                                      btn: '🪙 Put in the coin' },
+        { on: 'switch:on',        say: 'Close the switch. Does the current flow?',                      btn: '🔘 Close the switch' },
+        { on: 'place:v31:rubber', say: 'It lights! Now swap the coin for the rubber.',                  btn: '⬜ Put in the rubber' },
+        { on: 'place:v31:lead',   say: 'Dark! Now try the pencil lead.',                                btn: '✏️ Put in the pencil lead' },
+      ] },
+    { id: 'g6-cells', grades: [6], icon: '🔋', title: 'More cells, more light',
+      blurb: 'Add a second cell. Then draw the circuit with symbols.',
+      lesson: 'Two cells in a row push harder than one, so more current flows and the bulb is brighter. Scientists draw circuits with simple symbols - an extra you will use at secondary school.',
+      steps: [
+        { on: 'build:single',   say: 'Set out one cell, a switch and a bulb.',                         btn: '🔌 Set out the circuit' },
+        { on: 'switch:on',      say: 'Close the switch. Look how bright the bulb is.',                 btn: '🔘 Close the switch' },
+        { on: 'place:h10:cell', say: 'Now add a second cell in the glowing space.',                    btn: '🔋 Add a second cell' },
+        { on: 'view:symbols',   say: 'Much brighter! Now see the circuit drawn with symbols.',         btn: '✏️ Show the symbols' },
+      ] },
   ];
 
-  return { COLS, ROWS, NODES, EMF, R, SHORT_A, FUSE_A, BULB_MAX_V, P_REF, LIT, FS,
-           SLOTS, SYMBOL, KINDS, TOOLS, PRESETS, QUICK, layoutOf,
+  return { GRADES, forGrade, COLS, ROWS, NODES, EMF, R, SHORT_A, FUSE_A, BULB_MAX_V, P_REF, LIT, FS,
+           SLOTS, SYMBOL, KINDS, TOOLS, PRESETS, QUICK, QUICK_BY_GRADE, TEST_SLOT, layoutOf,
+           OBJECTS, TEST_OBJECTS, JOBS_P, toolsFor, kindsFor, symbolsFor,
            solve, loopThrough, hasGap, fusesOver, diagnose, arrangement, ARR_NAMES, brightnessWord,
            switchControls, ammeterInSeries, litBulbs,
+           testResult, objectTests, WHENS, facts, primaryMistake,
            charge, energy, resistance, seriesR, parallelR, round2, reading,
-           DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, MISSIONS, GUIDES };
+           DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_BY_GRADE, MISSIONS, GUIDES };
 })();
 if (typeof window !== 'undefined') window.LabCircuitData = LabCircuitData;

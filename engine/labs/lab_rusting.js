@@ -807,7 +807,7 @@ const LabRusting = (() => {
       <button type="button" class="lab-tool" data-act="week"><span aria-hidden="true">⏩</span>Wait to day 7</button>
       <button type="button" class="lab-tool" data-act="hour"><span aria-hidden="true">⏱</span>Look after 1 hour</button>
       <button type="button" class="lab-tool" data-act="tweezers"><span aria-hidden="true">🔍</span>Tweezers: look closely</button>
-      <button type="button" class="lab-tool lab-rusting-danger" data-act="hand"><i class="lab-rusting-toolsign">${Labs.sign('irritant', true)}</i><span aria-hidden="true">🖐️</span>Pick up by hand</button>
+      <button type="button" class="lab-tool lab-rusting-danger" data-act="hand"><i class="lab-rusting-toolsign">${Labs.sign('sharp', true)}</i><span aria-hidden="true">🖐️</span>Pick up by hand</button>
       <button type="button" class="lab-tool" data-act="reset"><span aria-hidden="true">🔄</span>Start again</button>`;
     _highlight();
   }

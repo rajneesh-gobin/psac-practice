@@ -2622,14 +2622,14 @@
               <div class="sh-note-title">Game Zone</div>
               <div class="sh-note-desc">Rs 1 Billion quiz, Quick Fire, Island Explorer &amp; more!</div>
             </button>
-            <!-- Science Labs: NCE only, and only a grade that has a lab. Shown by
-                 _syncLabsNote() in app.js; starts hidden so a primary child never
-                 sees it flash. -->
+            <!-- Science Labs: only for a grade that has a lab. Shown by
+                 _syncLabsNote() in app.js; starts hidden so a child in a grade
+                 with no lab never sees it flash. -->
             <button id="sh-note-labs" class="sh-note sh-note-blue" onclick="openLabs()" style="display:none">
               <div class="sh-note-tape"></div>
               <div class="sh-note-icon">🔬</div>
               <div class="sh-note-title">Science Labs</div>
-              <div class="sh-note-desc">Mix chemicals, make things fizz &amp; pop - real experiments</div>
+              <div class="sh-note-desc">Real experiments - fizz, magnets, rust, light &amp; more</div>
             </button>
             <button class="sh-note sh-note-pink" onclick="showScreen('interactive-map')">
               <div class="sh-note-tape"></div>

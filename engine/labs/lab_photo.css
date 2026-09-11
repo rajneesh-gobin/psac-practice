@@ -46,5 +46,15 @@
 /* Under an equation in a discovery card */
 .lab-photo-over { margin: 2px 0 6px !important; font-size: 0.78rem !important; color: var(--lab-muted); }
 
+/* ── Primary levels (Grades 4 and 6) ───────────── */
+.lab-photo-tools.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lab-photo-tools.is-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lab-photo.is-primary .lab-coach p { font-size: 1rem; }
+.lab-photo.is-primary .lab-guide-say { font-size: 1.08rem; }
+.lab-photo .lab-photo-say { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+.lab-photo-guide-head { display: flex; align-items: center; gap: 8px; }
+.lab-photo-guide-head .lab-guide-meta { flex: 1; min-width: 0; }
+.lab-photo-opts.is-pick .lab-photo-opt { min-width: 64px; font-size: 0.9rem; }
+
 @media (prefers-reduced-motion: reduce) { .lab-photo-opt:active { transform: none; } }
 .kid-calm .lab-photo-opt:active { transform: none; }
