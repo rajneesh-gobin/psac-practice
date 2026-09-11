@@ -66,6 +66,28 @@
 
 .lab-log li.lab-circuit-log-bad { border-left-color: var(--lab-danger); }
 
+/* ── Grades 4 and 6 ── */
+/* Read-aloud: a 44px 🔊 beside the lab assistant and in the guide box's head. */
+.lab-circuit .lab-circuit-say { min-height: 44px; min-width: 44px; }
+.lab-circuit-guide-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lab-circuit-guide-head .lab-guide-meta { flex: 1; min-width: 0; }
+.lab-circuit.is-primary .lab-guide-say { font-size: 1.08rem; }
+.lab-circuit.is-primary .lab-btn-sm { min-height: 44px; }
+/* Bigger pictures, no symbols, in the palette. */
+.lab-circuit-tool-top.is-big { font-size: 1.45rem; }
+/* Undo + Clear only (no meters to read). */
+.lab-circuit-actions.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* ⚠️ "Would it be safe?" - the dangers that exist only at home. */
+.lab-circuit-safety { display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 12px;
+  border: 2px dashed var(--lab-danger); background: var(--lab-surface); }
+.lab-circuit-safety .lab-hint { margin: 0; }
+
+/* ── Grade 7 ── */
+/* The circuit diagram a "Build it from the diagram" mission asks for: ink on paper, in both themes. */
+.lab-circuit-target { margin: 4px 0 8px; padding: 6px; border-radius: 12px; border: 1px solid var(--lab-rule);
+  background: #FBFAF4; color: #18222C; }
+.lab-circuit-target-svg { display: block; width: 100%; max-width: 300px; height: auto; margin: 0 auto; }
+
 @media (max-width: 420px) {
   .lab-circuit-viewbtn { padding: 0 10px; font-size: 0.78rem; }
   .lab-circuit-kinds { grid-template-columns: minmax(0, 1fr); }

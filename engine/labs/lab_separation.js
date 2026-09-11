@@ -15,11 +15,16 @@
 //  ⚠ Calm Mode and reduced motion: the simulation still runs and the rig still
 //    shows its state, but nothing moves and effects apply at once.
 //  ⚠ Every control is a real <button> that works with a tap; nothing needs a drag.
+//  ⚠ THREE LEVELS (LAB_SPEC §9): Labs.grade() is 7, 8 or 9 and only that
+//    grade's benches, guides, missions and discoveries show. Grade 8 has
+//    filtration, evaporation, chromatography and its own "Which technique?";
+//    Grade 7 has dissolving, evaporation, a ready-made distillation rig and
+//    "Element, compound or mixture?". Everything Grade 9 does is unchanged.
 // ══════════════════════════════════════════════
 const LabSeparation = (() => {
   const SD = LabSeparationData;
   const FRAME_MS = 1000 / 30;
-  const FX_DUR = { spit: 0.9, bump: 1.25, burst: 1.3, haze: 1.5, rod: 1.1, drop: 1.0 };
+  const FX_DUR = { spit: 0.9, bump: 1.25, burst: 1.3, haze: 1.5, rod: 1.1, drop: 1.0, crack: 1.0 };
   const VW = 340, VH = 260;   // the scene is drawn in this design space and scaled to fit
 
   const $ = id => document.getElementById(id);
@@ -32,16 +37,24 @@ const LabSeparation = (() => {
   const rnd = () => Math.random();
 
   const MODES = {
-    distil:  { icon: '⚗️', name: 'Distillation',     label: 'Distil' },
-    crystal: { icon: '💎', name: 'Crystallisation',  label: 'Crystallise' },
-    sublime: { icon: '🟣', name: 'Sublimation',      label: 'Sublime' },
-    choose:  { icon: '🤔', name: 'Which technique?', label: 'Which technique?' },
+    distil:   { icon: '⚗️', name: 'Distillation',     label: 'Distil' },
+    crystal:  { icon: '💎', name: 'Crystallisation',  label: 'Crystallise' },
+    sublime:  { icon: '🟣', name: 'Sublimation',      label: 'Sublime' },
+    choose:   { icon: '🤔', name: 'Which technique?', label: 'Which technique?' },
+    filter:   { icon: '🧻', name: 'Filtration',       label: 'Filter' },
+    evap:     { icon: '♨️', name: 'Evaporation',      label: 'Evaporate' },
+    chroma:   { icon: '🌈', name: 'Chromatography',   label: 'Chromatography' },
+    dissolve: { icon: '🥄', name: 'Dissolving',       label: 'Dissolve' },
   };
   const MODE_INTRO = {
     distil:  'Distillation: build the rig from the shelf below - tap a choice for each part. Then goggles on and heat.',
     crystal: 'Crystallisation: a basin of blue copper(II) sulfate solution. Heat it, test it with the glass rod, then let it cool.',
     sublime: 'Sublimation: choose the mixture, where to work and what goes over the dish. Then heat it gently.',
     choose:  'Which technique? Pick one for each mixture - then the reason it works.',
+    filter:  'Filtration: set up the filter from the shelf below - the mixture, the filter paper, the beaker and how you pour. Then tap 🫗 Pour.',
+    evap:    'Evaporation: choose what goes in the basin. Goggles on, then heat - and stop when crystals appear at the edge.',
+    chroma:  'Chromatography: choose the ink, the start line and the water level. Then stand the paper in the water.',
+    dissolve:'Dissolving: choose a solid and a beaker of water on the balance. Tip it in, then stir.',
   };
   const CARD_NEXT = {
     water_top: 'Fix it on the shelf: Liebig condenser → water IN at the bottom. Then heat again.',
@@ -51,6 +64,15 @@ const LabSeparation = (() => {
     no_funnel: 'Put an inverted funnel with a cotton wool plug over the dish, then heat again.',
     no_plug: 'Choose “Funnel + cotton wool plug” on the shelf, then heat again.',
     wrong_tech: 'Try another technique for this mixture.',
+    g8_torn: 'Choose “Folded into a cone” on the shelf, then pour again.',
+    g8_overflow: 'Choose “Slowly, down a glass rod” on the shelf, then pour again.',
+    g8_dry: 'Tap “Start again” - and turn the heat off at the first crystals this time.',
+    g8_under: 'Set the water below the start line on the shelf, then stand the paper in again.',
+    g8_pen: 'Choose “Drawn in pencil” for the start line, then stand the paper in again.',
+    g7_dry: 'Tap “Start again” - and turn the heat off at the first crystals this time.',
+    g7_charred: 'Tap “Start again”. To get sugar back, use sugar water and leave it to dry.',
+    wrong_tech8: 'Try another technique for this mixture.',
+    wrong_kind7: 'Try again for this substance.',
   };
 
   let _root = null, _cv = null, _cx = null, _W = 0, _H = 0, _s = 1, _ox = 0, _oy = 0;
@@ -59,6 +81,36 @@ const LabSeparation = (() => {
   let _log = [], _parts = [], _fx = [], _cards = [], _shake = 0, _busy = false, _instant = false;
   let _colors = null, _tipIdx = -1;
   let _dist = null, _cry = null, _sub = null, _ch = null;
+  let _fil = null, _eva = null, _chr = null, _dis = null, _lastGrade = null;
+
+  // ══ Grade levels (LAB_SPEC §9) ═══════════════
+  // Labs.grade() is 7, 8 or 9; a grade this lab has no level for is 9. Only
+  // that grade's benches, guides, missions and discoveries show.
+  const _g = () => {
+    const g = typeof Labs !== 'undefined' && typeof Labs.grade === 'function' ? Number(Labs.grade()) : 9;
+    return SD.GRADES.includes(g) ? g : 9;
+  };
+  const _mine = list => SD.forGrade(list, _g());
+  const _guides = () => _mine(SD.GUIDES);
+  const _missions = () => _mine(SD.MISSIONS);
+  const _discs = () => _mine(SD.DISCOVERIES);
+  const _modes = () => SD.MODES_BY_GRADE[_g()];
+  const _chSet = () => SD.CHOOSE[_g()];
+  const _mdef = () => _mission && SD.MISSIONS.find(x => x.id === _mission.id);
+  const _modeName = m => (m === 'choose' ? _chSet().modeLabel : MODES[m].name);
+  const _modeLabel = m => (m === 'choose' ? _chSet().modeLabel : MODES[m].label);
+  const _modeIcon = m => (m === 'choose' && _g() === 7 ? '🔹' : MODES[m].icon);
+  const _modeIntro = m => (m === 'choose' && _g() === 7 ? 'Element, compound or mixture? Sort each substance - then pick the reason.' : MODE_INTRO[m]);
+  const _gogHaz = () => (_g() === 9 ? 'no_goggles' : 'lo_goggles');
+  const _introKey = () => (_g() === 9 ? 'intro' : 'intro' + _g());
+  const PTABLES = {
+    distil: [SD.PARTS, SD.PART_ORDER], sublime: [SD.SUB_PARTS, SD.SUB_ORDER], filter: [SD.FIL_PARTS, SD.FIL_ORDER],
+    evap: [SD.EVA_PARTS, SD.EVA_ORDER], chroma: [SD.CHR_PARTS, SD.CHR_ORDER], dissolve: [SD.DIS_PARTS, SD.DIS_ORDER],
+  };
+  const _ptMode = k => Object.keys(PTABLES).find(m => PTABLES[m][0][k]);
+  const _partDef = k => { const m = _ptMode(k); return m ? PTABLES[m][0][k] : null; };
+  const _stateOf = m => ({ distil: _dist, sublime: _sub, filter: _fil, evap: _eva, chroma: _chr, dissolve: _dis })[m];
+  const _optOk = (P, o) => !P.optGrades || !P.optGrades[o] || P.optGrades[o].includes(_g());
 
   // ══ State ════════════════════════════════════
   function _newDist(parts, T) {
@@ -78,21 +130,43 @@ const LabSeparation = (() => {
              sublimate: 0, escaped: 0, done: false, flagged: {} };
   }
   function _newCh() { return { idx: 0, phase: 'tech', done: {}, order: [] }; }
+  function _newFil(parts) {
+    const p = Object.assign({ fmix: null, paper: null, fbeaker: null, pouring: null }, parts || {});
+    return { parts: p, pouring: false, poured: 0, filtrate: 0, cloudy: false, done: false, broken: false, flagged: {} };
+  }
+  function _newEva(parts) {
+    const p = Object.assign({ emix: null }, parts || {});
+    const M = p.emix && SD.EVAP_MIXES[p.emix];
+    return { parts: p, heat: false, heated: false, T: SD.ROOM, water: M ? M.water : 0, edge: false, leave: false,
+             done: false, dry: false, charred: false, melted: false };
+  }
+  function _newChr(parts) {
+    const p = Object.assign({ ink: null, line: null, level: null }, parts || {});
+    return { parts: p, running: false, t: 0, front: 0, done: false, washed: false, smear: false, flagged: {} };
+  }
+  function _newDis(parts) {
+    const p = Object.assign({ solid: null, dbeaker: null }, parts || {});
+    return { parts: p, added: false, stir: 0, dissolved: 0, done: false, broken: false, settled: false };
+  }
   function _resetAll() {
     _dist = _newDist(); _cry = _newCry(); _sub = _newSub(); _ch = _newCh();
+    _fil = _newFil(); _eva = _newEva(); _chr = _newChr(); _dis = _newDis();
     _parts = []; _cards = []; _fx = [];
   }
-  const _state = () => (_mode === 'distil' ? _dist : _mode === 'crystal' ? _cry : _mode === 'sublime' ? _sub : null);
+  const _state = () => (_mode === 'distil' ? _dist : _mode === 'crystal' ? _cry : _mode === 'sublime' ? _sub : _mode === 'evap' ? _eva : null);
   const _heating = () => { const s = _state(); return !!(s && s.heat); };
-  function _allHeatOff() { if (_dist) { _dist.heat = false; _dist.boiling = false; } if (_cry) _cry.heat = false; if (_sub) _sub.heat = false; }
-  const _curMix = () => SD.MIXTURES[_ch.idx];
+  function _allHeatOff() {
+    if (_dist) { _dist.heat = false; _dist.boiling = false; } if (_cry) _cry.heat = false; if (_sub) _sub.heat = false;
+    if (_eva) _eva.heat = false;
+  }
+  const _curMix = () => _chSet().items[_ch.idx];
 
   // ══ Shell ════════════════════════════════════
   function _shellHTML() {
     return `<div class="lab lab-separation">
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-act="hub" aria-label="Back to Science Labs">←</button>
-        <div class="lab-top-title"><span class="lab-eyebrow">Chemistry · Grade 9</span><h1>Separation Station</h1></div>
+        <div class="lab-top-title"><span class="lab-eyebrow">${_g() <= 8 ? 'Science' : 'Chemistry'} · Grade ${_g()}</span><h1>Separation Station</h1></div>
         <div class="lab-top-actions">
           <button type="button" id="lab-goggles" class="lab-goggles" data-act="goggles" aria-pressed="false"><span aria-hidden="true">🥽</span><span id="lab-goggles-label">Goggles off</span></button>
           <button type="button" class="lab-icon-btn" data-act="help" aria-label="How the Separation Station works">?</button>
@@ -128,7 +202,13 @@ const LabSeparation = (() => {
 
   function mount(root) {
     _root = root;
-    if (!_dist) _resetAll();
+    // A different grade is a different level: start it on a clean bench.
+    const g = _g();
+    if (!_dist || _lastGrade !== g) {
+      _lastGrade = g; _mission = null; _guide = null; _log = []; _tipIdx = -1;
+      _resetAll();
+      _mode = _modes()[0];
+    }
     root.innerHTML = _shellHTML();
     _cv = $('lab-canvas');
     _cx = _cv.getContext('2d');
@@ -138,8 +218,9 @@ const LabSeparation = (() => {
     _syncTools();
     _syncGoggles();
     _readouts();
+    _setAria();
     const st = Labs.store('separation');
-    if (!st.intro) _intro();
+    if (!st[_introKey()]) _intro();
     else if (_guide) _guideEnter();
     else if (_mission) _coach('Back on your mission - carry on where you left off.');
     else _coach(Object.keys(st.guides).length
@@ -217,6 +298,11 @@ const LabSeparation = (() => {
       case 'cool-slow': cool('slow'); break;
       case 'cool-fast': cool('fast'); break;
       case 'reset': reset(); break;
+      case 'pour': pour(); break;
+      case 'run': run(); break;
+      case 'add': add(); break;
+      case 'stir': stir(); break;
+      case 'leave': leave(); break;
       case 'quiz': _quiz(); break;
       case 'exit-mission': _mission = null; _coach('Back to free experimenting. Every bench is yours.'); _renderPanel(); break;
       case 'guide-stop': _stopGuide(false); break;
@@ -231,7 +317,7 @@ const LabSeparation = (() => {
     el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new');
   }
   function _nextTip() {
-    const f = SD.FACTS;
+    const f = _g() === 9 ? SD.FACTS : SD.FACTS_LOW;
     _tipIdx = (_tipIdx + 1) % f.length;
     _coach('💡 ' + f[_tipIdx]);
   }
@@ -255,37 +341,40 @@ const LabSeparation = (() => {
   }
 
   function setMode(m, silent) {
-    if (!MODES[m] || _busy) return;
-    const M = _mission && SD.MISSIONS.find(x => x.id === _mission.id);
-    if (M && m !== M.mode) { _coach(`You are on a mission on the ${MODES[M.mode].name.toLowerCase()} bench. Leave the mission to switch.`); return; }
+    if (!MODES[m] || _busy || !_modes().includes(m)) return;
+    const M = _mdef();
+    if (M && m !== M.mode) { _coach(`You are on a mission on the ${_modeName(M.mode).toLowerCase()} bench. Leave the mission to switch.`); return; }
     const changed = m !== _mode;
     if (changed) {
       _allHeatOff();
       _mode = m; _parts = [];
       _renderPanel(); _syncTools(); _readouts(); _setAria();
-      if (!silent) _coach(MODE_INTRO[m]);
+      if (!silent) _coach(_modeIntro(m));
     }
     _guideEvent('mode:' + m);
   }
   function _setAria() {
     if (!_cv) return;
     _cv.setAttribute('aria-label', { distil: 'A simple distillation rig on the bench', crystal: 'An evaporating basin of copper(II) sulfate solution on a tripod',
-      sublime: 'An evaporating dish on a tripod, for sublimation', choose: 'A beaker holding a mixture to separate' }[_mode]);
+      sublime: 'An evaporating dish on a tripod, for sublimation', choose: _g() === 7 ? 'A substance to sort' : 'A beaker holding a mixture to separate',
+      filter: 'A filter funnel on a stand, over a beaker', evap: 'An evaporating basin on a tripod, over a Bunsen burner',
+      chroma: 'A strip of chromatography paper hanging in a beaker of water', dissolve: 'A beaker of water on a balance' }[_mode]);
   }
 
   function setPart(k, v) {
     if (_busy) { _coach('One thing at a time - let that finish first.'); return; }
     if (SD.PARTS[k]) _setDistPart(k, v);
     else if (SD.SUB_PARTS[k]) _setSubPart(k, v);
+    else if (_ptMode(k)) _setGenPart(k, v);
   }
 
   function heatOn() {
-    if (_busy || _mode === 'choose') return;
+    if (_busy || !['distil', 'crystal', 'sublime', 'evap'].includes(_mode)) return;
     if (_mode === 'distil') {
       const D = _dist, chk = SD.checkRig(D.parts);
       if (chk.missing.length) { _coach(`The rig is not finished. Still to add: ${chk.missing.map(k => SD.PARTS[k].name.toLowerCase()).join(', ')}.`); return; }
       if (D.done) { _coach('This run is finished. Tap “Clear the bench” to start again with a fresh flask.'); return; }
-      if (!_goggles) { _hazard('no_goggles', { what: 'the ' + SD.FLASKS[D.parts.flask].long }); return; }
+      if (!_goggles) { _hazard(_gogHaz(), { what: 'the ' + SD.FLASKS[D.parts.flask].long }); return; }
       D.heat = true;
       _coach('Burner on. Watch the thermometer and the flask.');
     } else if (_mode === 'crystal') {
@@ -295,6 +384,14 @@ const LabSeparation = (() => {
       if (!_goggles) { _hazard('no_goggles', { what: 'the copper(II) sulfate solution' }); return; }
       C.heat = true; C.heated = true;
       _coach('Heating the solution. Water is evaporating - test it with the glass rod every so often.');
+    } else if (_mode === 'evap') {
+      const E = _eva, M = E.parts.emix && SD.EVAP_MIXES[E.parts.emix];
+      if (!M) { _coach('Choose what goes in the basin first - on the shelf below.'); return; }
+      if (E.dry || E.charred || E.done) { _coach('This basin is finished. Tap “Start again” for a fresh one.'); return; }
+      if (E.leave) { _coach('It is drying on its own now. Tap “Start again” for a fresh basin.'); return; }
+      if (!_goggles) { _hazard(_gogHaz(), { what: 'the ' + M.name.toLowerCase() }); return; }
+      E.heat = true; E.heated = true;
+      _coach(M.water ? 'Heating. Watch the edge of the liquid - stop when the first crystals appear.' : 'Heating the dry sugar. Watch what happens to it.');
     } else {
       const U = _sub, chk = SD.checkSublime(U.parts);
       if (chk.missing.length) { _coach(`Not ready yet. Still to choose: ${chk.missing.map(k => SD.SUB_PARTS[k].name.toLowerCase()).join(', ')}.`); return; }
@@ -314,6 +411,7 @@ const LabSeparation = (() => {
     s.heat = false;
     if (_mode === 'distil') { _dist.boiling = false; _coach('Burner off.'); }
     else if (_mode === 'crystal') _coach(_cry.heated ? 'Heat off. Now let it cool - slowly or quickly?' : 'Heat off.');
+    else if (_mode === 'evap') _coach(_eva.edge ? 'Heat off. Now leave it to dry - tap 🪟 Leave to dry.' : 'Heat off.');
     else _coach('Burner off.');
     _syncTools(); _readouts();
     _guideEvent('heat-off');
@@ -324,7 +422,11 @@ const LabSeparation = (() => {
     if (_mode === 'distil') { _dist = _newDist(); _coach('Clean glassware. Build the rig again from the shelf.'); }
     else if (_mode === 'crystal') { _cry = _newCry(); _coach('A fresh basin: 60 cm³ of water with 9 g of copper(II) sulfate dissolved.'); }
     else if (_mode === 'sublime') { _sub = _newSub(); _coach('A clean dish. Choose the mixture, where to work and the cover.'); }
-    else { _ch = _newCh(); if (_mission && _mission.id === 'sorter') _mission.success = false; _coach('All six mixtures are back in the queue.'); }
+    else if (_mode === 'filter') { _fil = _newFil(); _coach('Clean apparatus. Set up the filter again from the shelf.'); }
+    else if (_mode === 'evap') { _eva = _newEva(); _coach('A clean basin. Choose what goes in it.'); }
+    else if (_mode === 'chroma') { _chr = _newChr(); _coach('A fresh strip of paper and a clean beaker.'); }
+    else if (_mode === 'dissolve') { _dis = _newDis(); _coach('A fresh beaker of water. Choose a solid.'); }
+    else { _ch = _newCh(); if (_mission && _mdef().mode === 'choose') _mission.success = false; _coach(`All six ${_chSet().noun} are back in the queue.`); }
     _parts = []; _cards = [];
     _afterChange('reset');
   }
@@ -446,6 +548,7 @@ const LabSeparation = (() => {
     _logEntry({ title: `Distilled: ${F.name.toLowerCase()}`,
       obs: `${f0(D.dist)} cm³ of clear, colourless distillate collected in the conical flask. The thermometer at the side arm read 100 °C: the vapour was water. The ${F.solute} stayed behind in the flask, now more concentrated (${f0(D.vol)} cm³ left).` });
     _discover(D.parts.flask === 'sea' ? 'd_sea' : 'd_ink');
+    _discover((SD.DONE_DISC.distil[_g()] || {})[D.parts.flask]);
     const ms = _mission;
     if (ms && ms.id === 'seawater') {
       if (D.parts.flask === 'sea') {
@@ -621,9 +724,247 @@ const LabSeparation = (() => {
     _guideEvent('wait:sublimate');
   }
 
+  // ══ Grades 7 and 8: filtration, evaporation, chromatography, dissolving ══
+  const NEWS = { filter: _newFil, evap: _newEva, chroma: _newChr, dissolve: _newDis };
+  const READY = { filter: ' Ready - tap 🫗 Pour.', evap: ' Goggles on, then heat - or leave it to evaporate on its own.',
+                  chroma: ' Ready - tap 💧 Stand in water.', dissolve: ' Ready - tip it in, then stir.' };
+  function _setState(m, s) { if (m === 'filter') _fil = s; else if (m === 'evap') _eva = s; else if (m === 'chroma') _chr = s; else if (m === 'dissolve') _dis = s; }
+  function _setGenPart(k, v) {
+    const m = _ptMode(k), [table, order] = PTABLES[m], P = table[k];
+    if (!P.options[v] || !_optOk(P, v)) return;
+    if (_mode !== m) setMode(m, true);
+    if (_mode !== m) return;
+    const s = _stateOf(m);
+    if (s.heat || s.pouring || s.running || s.stir > 0) { _coach('Let that finish first, then change it.'); return; }
+    const parts = Object.assign({}, s.parts, { [k]: v });
+    _setState(m, NEWS[m](parts));
+    _parts = [];
+    const chk = SD.checkParts(table, order, parts);
+    _coach(`${P.name}: ${P.options[v].toLowerCase()}.` + (chk.missing.length ? '' : READY[m]));
+    _afterChange('part:' + k + ':' + v);
+  }
+  const _missingSay = (table, missing) => `Not ready yet. Still to choose: ${missing.map(k => table[k].name.toLowerCase()).join(', ')}.`;
+  function _goalMet(mode, key, val) {
+    const ms = _mission, M = _mdef();
+    if (!ms || !M || M.mode !== mode) return null;
+    return !M.goal || M.goal[key] === val;
+  }
+
+  // ── Filtration ──
+  function pour() {
+    if (_busy || _mode !== 'filter') return;
+    const F = _fil, chk = SD.checkFilter(F.parts);
+    if (chk.missing.length) { _coach(_missingSay(SD.FIL_PARTS, chk.missing)); return; }
+    if (F.done || F.broken || F.flagged.any) { _coach('This one is finished. Tap “Start again” for clean apparatus.'); return; }
+    if (F.pouring) return;
+    F.pouring = true;
+    _guideEvent('pour');
+    if (F.parts.fbeaker === 'cracked') { F.pouring = false; F.broken = true; _hazard('g8_cracked', {}); return; }
+    _coach(F.parts.pouring === 'rod' ? 'Pouring slowly down the glass rod…' : 'Tipping it all in at once…');
+    _syncTools(); _readouts();
+  }
+  function _stepFil(dt) {
+    const F = _fil, P = SD.FILTER;
+    if (!F.pouring) return;
+    const M = SD.FIL_MIXES[F.parts.fmix];
+    F.poured = Math.min(1, F.poured + (F.parts.pouring === 'fast' ? P.pourFast : P.pourRod) * dt);
+    F.filtrate = Math.max(F.filtrate, Math.min(F.poured * P.vol - P.wet, F.filtrate + P.flow * dt));
+    const errs = SD.checkFilter(F.parts).errors.filter(e => SD.RESULTS[e] && M.residue);
+    if (errs.length && F.poured >= P.cardAt && !F.flagged.any) {
+      F.flagged.any = true; F.pouring = false; F.cloudy = true;
+      _syncTools();
+      errs.forEach(e => _result(e, { residue: M.residue }));
+      return;
+    }
+    if (F.poured >= 1 && F.filtrate >= P.vol - P.wet - 1e-9) { F.pouring = false; F.done = true; _filDone(); }
+  }
+  function _filDone() {
+    const F = _fil, M = SD.FIL_MIXES[F.parts.fmix];
+    _logEntry({ title: `Filtered: ${M.name.toLowerCase()}`,
+      obs: M.residue
+        ? `The ${M.residue} stayed on the filter paper - the residue. ${f0(F.filtrate)} cm³ of ${M.filtrate} ran through into the beaker - the filtrate.${M.salty ? ' A drop of it evaporated on a watch glass leaves salt behind: the dissolved salt went through the paper.' : ''}`
+        : `Nothing was left on the filter paper. ${f0(F.filtrate)} cm³ of ${M.filtrate} ran through - the dissolved salt passed straight through the paper.` });
+    _discover(SD.DONE_DISC.filter[F.parts.fmix]);
+    const goal = _goalMet('filter', 'fmix', F.parts.fmix);
+    if (goal === true) { _mission.success = true; _coach('🎯 Clear filtrate! Tap “Answer the questions” to finish the mission.'); Labs.confetti(); }
+    else if (goal === false) _coach(`This mission needs ${SD.FIL_MIXES[_mdef().goal.fmix].name.toLowerCase()}. Tap “Start again”.`);
+    else _coach(M.residue ? `The ${M.residue} is the residue; the liquid in the beaker is the filtrate.` : 'The dissolved salt went straight through the paper - filtering cannot get it out.');
+    _syncTools(); _refresh(); _readouts();
+    _guideEvent('wait:filtrate');
+  }
+
+  // ── Evaporation ──
+  function leave() {
+    if (_busy || _mode !== 'evap') return;
+    const E = _eva, M = E.parts.emix && SD.EVAP_MIXES[E.parts.emix];
+    if (!M) { _coach('Choose what goes in the basin first.'); return; }
+    if (E.heat) { _coach('Turn the heat off first, then leave it to dry.'); return; }
+    if (E.dry || E.charred || E.done) { _coach('This basin is finished. Tap “Start again”.'); return; }
+    if (!M.water) { _coach('Dry sugar has no water in it - there is nothing to evaporate.'); return; }
+    if (E.leave) { _coach('It is already drying.'); return; }
+    E.leave = true;
+    _coach('Left somewhere warm to dry (time-lapse - really this takes a day or two). Watch the basin…');
+    _syncTools(); _readouts();
+    _guideEvent('leave');
+  }
+  function _stepEva(dt) {
+    const E = _eva, K = SD.EVAP, M = E.parts.emix && SD.EVAP_MIXES[E.parts.emix];
+    if (!M) return;
+    if (E.heat) {
+      if (E.water > 0) {
+        E.T = Math.min(K.boils, E.T + K.heatRate * dt);
+        if (E.T < K.boils) return;
+        E.water = Math.max(0, E.water - K.evap * dt);
+        if (!E.edge && !M.chars && E.water <= SD.edgePoint(E.parts.emix)) {
+          E.edge = true;
+          _logEntry({ title: 'Crystals at the edge', note: true,
+            obs: `With ${f1(E.water)} cm³ of water left, the first ${M.solid} crystals appeared round the edge of the liquid. Time to stop heating.` });
+          _coach('Crystals at the edge! Turn the heat off now and leave it to dry.');
+          _guideEvent('wait:edge');
+        }
+        if (E.water <= K.dry) {
+          E.water = 0;
+          if (!M.chars) {
+            E.heat = false; E.dry = true;
+            _syncTools();
+            _busy = true;
+            _fxAdd('spit', () => { _busy = false; _result(SD.DRY_CARD[_g()] || 'g8_dry', {}); });
+          }
+        }
+      } else {
+        E.T = Math.min(K.charAt + 20, E.T + K.heatRate * dt);
+        if (!E.melted && E.T >= K.sugarMelts) {
+          E.melted = true;
+          _logEntry({ title: 'The sugar melts', note: true, obs: `At about ${K.sugarMelts} °C the sugar melted into a runny liquid and started to turn brown.` });
+        }
+        if (E.T >= K.charAt && !E.charred) {
+          E.charred = true; E.heat = false;
+          _logEntry({ title: 'The sugar burns', note: true, obs: 'The brown liquid turned black and gave off smoke. A black solid was left.' });
+          _syncTools();
+          _result('g7_charred', { what: M.water ? 'the sugar water' : 'dry sugar' });
+        }
+      }
+    } else if (E.leave && !E.done) {
+      E.T = Math.max(SD.ROOM, E.T - 7 * dt);
+      E.water = Math.max(0, E.water - K.leave * dt);
+      if (E.water <= 0) { E.done = true; E.leave = false; _evaDone(); }
+    } else E.T = Math.max(SD.ROOM, E.T - 7 * dt);
+  }
+  function _evaDone() {
+    const E = _eva, M = SD.EVAP_MIXES[E.parts.emix];
+    _logEntry({ title: `Evaporated: ${M.name.toLowerCase()}`,
+      obs: `All the water evaporated and ${M.grams} g of ${M.solid} crystals were left in the basin. Nothing new was made - it is the same ${M.solid} that was dissolved.` });
+    _discover((SD.DONE_DISC.evap[_g()] || {})[E.parts.emix]);
+    const goal = _goalMet('evap', 'emix', E.parts.emix);
+    if (goal === true) { _mission.success = true; _coach(`🎯 The ${M.solid} is back! Tap “Answer the questions” to finish the mission.`); Labs.confetti(); }
+    else if (goal === false) _coach(`This mission needs ${SD.EVAP_MIXES[_mdef().goal.emix].name.toLowerCase()}. Tap “Start again”.`);
+    else _coach(`The ${M.solid} is back, unchanged${_g() === 7 ? ' - dissolving is a physical change' : ''}.`);
+    _syncTools(); _refresh();
+    _guideEvent('wait:dry');
+  }
+
+  // ── Chromatography ──
+  function run() {
+    if (_busy || _mode !== 'chroma') return;
+    const R = _chr, chk = SD.checkChroma(R.parts);
+    if (chk.missing.length) { _coach(_missingSay(SD.CHR_PARTS, chk.missing)); return; }
+    if (R.done || R.flagged.any) { _coach('This paper has been used. Tap “Start again” for a fresh strip.'); return; }
+    if (R.running) return;
+    R.running = true;
+    _coach('The bottom of the paper is in the water. Watch the water soak up the paper…');
+    _syncTools(); _readouts();
+    _guideEvent('run');
+  }
+  function _stepChr(dt) {
+    const R = _chr, C = SD.CHROMA;
+    if (!R.running) return;
+    R.t += dt;
+    R.front = Math.min(C.top, R.front + C.rise * dt);
+    if (R.parts.level === 'high') R.washed = true;
+    if (R.parts.line === 'pen' && R.front >= C.penAt * 0.5) R.smear = true;
+    const errs = SD.checkChroma(R.parts).errors;
+    const due = (R.parts.level === 'high' && R.t >= C.underAt) || (R.parts.line === 'pen' && R.front >= C.penAt);
+    if (errs.length && due && !R.flagged.any) {
+      R.flagged.any = true; R.running = false;
+      _syncTools();
+      errs.forEach(e => _result(e, {}));
+      return;
+    }
+    if (!errs.length && R.front >= C.top - 1e-9) { R.running = false; R.done = true; _chrDone(); }
+  }
+  function _chrDone() {
+    const R = _chr, I = SD.INKS[R.parts.ink], names = I.dyes.map(d => d.name).join(', ');
+    _logEntry({ title: `Chromatogram: ${I.name.toLowerCase()}`,
+      obs: I.dyes.length > 1
+        ? `The spot separated into ${I.dyes.length} spots (${names}) at different heights. The ${I.dyes[0].name} dye travelled furthest - it dissolves best in the water.`
+        : `The spot moved up the paper but stayed as one ${names} spot: a single dye.` });
+    _discover(SD.DONE_DISC.chroma[R.parts.ink]);
+    const goal = _goalMet('chroma', 'ink', R.parts.ink);
+    if (goal === true) { _mission.success = true; _coach(`🎯 ${I.dyes.length} dyes found in the black ink! Tap “Answer the questions” to finish the mission.`); Labs.confetti(); }
+    else if (goal === false) _coach(`This mission needs ${SD.INKS[_mdef().goal.ink].name.toLowerCase()}. Tap “Start again”.`);
+    else _coach(I.dyes.length > 1 ? `${I.dyes.length} spots: this ink is a mixture of ${I.dyes.length} dyes.` : 'One spot: a single dye, not a mixture of dyes.');
+    _syncTools(); _refresh(); _readouts();
+    _guideEvent('wait:chromatogram');
+  }
+
+  // ── Dissolving ──
+  function add() {
+    if (_busy || _mode !== 'dissolve') return;
+    const V = _dis, chk = SD.checkDissolve(V.parts);
+    if (chk.missing.length) { _coach(_missingSay(SD.DIS_PARTS, chk.missing)); return; }
+    if (V.broken) { _coach('Tap “Start again” for a fresh beaker.'); return; }
+    if (V.added) { _coach('It is already in the water. Tap 🥢 Stir.'); return; }
+    V.added = true;
+    const S = SD.SOLIDS[V.parts.solid], m = f1(SD.massOnBalance(V.parts.solid, true));
+    _logEntry({ title: 'On the balance',
+      obs: `Before: ${f1(SD.DISSOLVE.water)} g of water, and ${f1(S.grams)} g of ${S.name.toLowerCase()} on the weighing boat. After tipping it in, the balance reads ${m} g.` });
+    _coach(`The ${S.name.toLowerCase()} is in the water and the balance reads ${m} g. Now stir.`);
+    _afterChange('add');
+  }
+  function stir() {
+    if (_busy || _mode !== 'dissolve') return;
+    const V = _dis;
+    if (!V.added) { _coach('Tip the solid into the water first.'); return; }
+    if (V.done || V.broken) { _coach('Tap “Start again” for a fresh beaker.'); return; }
+    if (V.stir > 0) return;
+    V.stir = SD.DISSOLVE.stirFor;
+    _guideEvent('stir');
+    if (V.parts.dbeaker === 'cracked') { V.stir = 0; V.broken = true; _hazard('g7_cracked', {}); return; }
+    _coach('Stirring with a glass rod…');
+    _syncTools(); _readouts();
+  }
+  function _stepDis(dt) {
+    const V = _dis;
+    if (!(V.stir > 0) || V.done) return;
+    const S = SD.SOLIDS[V.parts.solid];
+    V.stir = Math.max(0, V.stir - dt);
+    if (S.dissolves) {
+      V.dissolved = Math.min(1, V.dissolved + S.rate * dt);
+      if (V.dissolved >= 1 - 1e-9) { V.dissolved = 1; V.stir = 0; V.done = true; _disDone(); return; }
+    }
+    if (V.stir <= 0) {
+      if (!S.dissolves) { V.done = true; V.settled = true; _disDone(); }
+      else { _coach('Not all dissolved yet - stir again.'); _syncTools(); }
+    }
+  }
+  function _disDone() {
+    const V = _dis, S = SD.SOLIDS[V.parts.solid], m = f1(SD.massOnBalance(V.parts.solid, true));
+    _logEntry({ title: S.dissolves ? `${S.name} dissolved` : 'The sand did not dissolve',
+      obs: S.dissolves
+        ? `The ${S.name.toLowerCase()} disappeared, leaving ${S.solution}. The balance still reads ${m} g: nothing was lost.`
+        : `After stirring, the sand was still there as grains and sank to the bottom. The balance reads ${m} g. Sand is insoluble in water.` });
+    _discover(SD.DONE_DISC.dissolve[V.parts.solid]);
+    const goal = _goalMet('dissolve', 'solid', V.parts.solid);
+    if (goal === true) { _mission.success = true; _coach(`🎯 Dissolved - and still ${m} g! Tap “Answer the questions” to finish the mission.`); Labs.confetti(); }
+    else if (goal === false) _coach(`This mission needs ${SD.SOLIDS[_mdef().goal.solid].name.toLowerCase()}. Tap “Start again”.`);
+    else _coach(S.dissolves ? `It dissolved, and the balance still reads ${m} g. The ${S.name.toLowerCase()} is still there.` : 'Sand is insoluble - it does not dissolve, however long you stir.');
+    _syncTools(); _refresh(); _readouts();
+    _guideEvent(S.dissolves ? 'wait:dissolved' : 'wait:settled');
+  }
+
   // ══ Which technique? ═════════════════════════
   function _selectMix(id) {
-    const i = SD.MIXTURES.findIndex(m => m.id === id);
+    const i = _chSet().items.findIndex(m => m.id === id);
     if (i < 0 || _busy) return;
     if (_mode !== 'choose') setMode('choose', true);
     if (_mode !== 'choose') return;
@@ -633,38 +974,40 @@ const LabSeparation = (() => {
 
   function pickTech(t) {
     if (_busy || _mode !== 'choose') return;
-    const mx = _curMix();
-    if (!mx || _ch.done[mx.id] || _ch.phase !== 'tech' || !SD.TECHNIQUES[t]) return;
+    const mx = _curMix(), set = _chSet();
+    if (!mx || _ch.done[mx.id] || _ch.phase !== 'tech' || !set.kinds[t]) return;
     if (t === mx.tech) {
       _ch.phase = 'why';
-      _coach(`Yes - ${SD.TECHNIQUES[t].name.toLowerCase()}. Now pick the reason it works.`);
+      _coach(`Yes - ${set.kinds[t].name.toLowerCase()}. Now pick the reason it works.`);
     } else {
-      _result('wrong_tech', { why: mx.wrong[t], right: mx.tech });
+      _result(set.card, { why: mx.wrong[t], right: mx.tech });
     }
     _refreshBench(); _readouts(); _highlight();
   }
 
   function pickWhy(p) {
     if (_busy || _mode !== 'choose') return;
-    const mx = _curMix();
-    if (!mx || _ch.phase !== 'why' || !SD.PRINCIPLES[p]) return;
-    const T = SD.TECHNIQUES[mx.tech];
-    if (p !== SD.TECH_PRINCIPLE[mx.tech]) {
+    const mx = _curMix(), set = _chSet();
+    if (!mx || _ch.phase !== 'why' || !set.principles[p]) return;
+    const T = set.kinds[mx.tech];
+    if (p !== set.kindPrinciple[mx.tech]) {
       if (_mission) _mission.mistakes++;
-      const other = Object.keys(SD.TECH_PRINCIPLE).find(k => SD.TECH_PRINCIPLE[k] === p);
-      _coach(`Not that one - that is the idea behind ${SD.TECHNIQUES[other].name.toLowerCase()}. Why does ${T.name.toLowerCase()} work here?`);
+      const other = Object.keys(set.kindPrinciple).find(k => set.kindPrinciple[k] === p);
+      _coach(_g() === 7
+        ? `Not that one - that describes ${other === 'element' ? 'an' : 'a'} ${set.kinds[other].name.toLowerCase()}. ${set.q2(T.name.toLowerCase())}`
+        : `Not that one - that is the idea behind ${set.kinds[other].name.toLowerCase()}. Why does ${T.name.toLowerCase()} work here?`);
       return;
     }
     _ch.done[mx.id] = true; _ch.order.push(mx.id);
-    _logEntry({ title: `${mx.name} → ${T.name}`, obs: `You want ${mx.want}. ${SD.PRINCIPLES[p]}` });
-    _discover('ch_right');
-    const all = SD.MIXTURES.every(m => _ch.done[m.id]);
+    _logEntry({ title: `${mx.name} → ${T.name}`, obs: `${_g() === 7 ? mx.want + '.' : 'You want ' + mx.want + '.'} ${set.principles[p]}` });
+    _discover(set.discRight);
+    const all = set.items.every(m => _ch.done[m.id]);
     if (all) {
-      _discover('ch_all');
-      if (_mission && _mission.id === 'sorter') { _mission.success = true; _coach('🎯 All six sorted! Tap “Answer the questions” to finish the mission.'); Labs.confetti(); }
-      else _coach('All six mixtures sorted - you are a technique expert.');
+      _discover(set.discAll);
+      if (_mission && _mdef().mode === 'choose') { _mission.success = true; _coach('🎯 All six sorted! Tap “Answer the questions” to finish the mission.'); Labs.confetti(); }
+      else _coach(_g() === 7 ? 'All six substances sorted - you know your elements, compounds and mixtures.' : 'All six mixtures sorted - you are a technique expert.');
     } else {
-      _ch.idx = SD.MIXTURES.findIndex(m => !_ch.done[m.id]);
+      _ch.idx = set.items.findIndex(m => !_ch.done[m.id]);
       _ch.phase = 'tech';
       _coach(`Right: ${T.name.toLowerCase()}. Next mixture…`);
     }
@@ -673,13 +1016,13 @@ const LabSeparation = (() => {
   }
 
   function choose(id) {
-    const mx = SD.MIXTURES.find(m => m.id === id);
+    const set = _chSet(), mx = set.items.find(m => m.id === id);
     if (!mx) return;
     if (_mode !== 'choose') setMode('choose', true);
     if (_ch.done[id]) { _guideEvent('choose:' + id); return; }
     _selectMix(id);
     pickTech(mx.tech);
-    pickWhy(SD.TECH_PRINCIPLE[mx.tech]);
+    pickWhy(set.kindPrinciple[mx.tech]);
   }
 
   // ══ Hazards and result cards ═════════════════
@@ -700,7 +1043,9 @@ const LabSeparation = (() => {
     });
   }
   function _afterHazard(id) {
-    if (id === 'no_goggles') _coach('Tap 🥽 at the top to put your goggles on, then heat again.');
+    if (id === 'no_goggles' || id === 'lo_goggles') _coach('Tap 🥽 at the top to put your goggles on, then heat again.');
+    else if (id === 'g8_cracked') { _fil = _newFil(Object.assign({}, _fil.parts, { fbeaker: null })); _coach('Fresh apparatus. Choose a clean beaker this time, then pour again.'); }
+    else if (id === 'g7_cracked') { _dis = _newDis(Object.assign({}, _dis.parts, { dbeaker: null })); _coach('A fresh start. Choose a beaker that is not cracked.'); }
     else if (id === 'bumping') {
       _dist.T = SD.ROOM; _dist.boiling = false; _dist.heatT = 0; _dist.readings = []; _dist.nextRead = 0;
       _coach('The flask has been left to cool. Add anti-bumping granules on the shelf, then heat again.');
@@ -733,11 +1078,15 @@ const LabSeparation = (() => {
     if (_mode === 'distil') _stepDist(dt);
     else if (_mode === 'crystal') _stepCry(dt);
     else if (_mode === 'sublime') _stepSub(dt);
+    else if (_mode === 'filter') _stepFil(dt);
+    else if (_mode === 'evap') _stepEva(dt);
+    else if (_mode === 'chroma') _stepChr(dt);
+    else if (_mode === 'dissolve') _stepDis(dt);
   }
 
   // ══ Missions ═════════════════════════════════
   function startMission(id) {
-    const M = SD.MISSIONS.find(x => x.id === id);
+    const M = _missions().find(x => x.id === id);
     if (!M || _busy) return;
     _stopGuide(true);
     _mission = null;
@@ -754,7 +1103,7 @@ const LabSeparation = (() => {
     const ms = _mission;
     if (!ms || !ms.success) return;
     const M = SD.MISSIONS.find(x => x.id === ms.id);
-    const allow = ms.id === 'sorter' ? 1 : 0;
+    const allow = M.mode === 'choose' ? 1 : 0;
     Labs.quiz(M.quiz, { title: M.title, onDone: r => {
       let s = 3;
       if (ms.hazards) s--;
@@ -767,7 +1116,8 @@ const LabSeparation = (() => {
       Labs.persist();
       const lines = [];
       lines.push(ms.hazards ? `${ms.hazards} safety mistake${ms.hazards === 1 ? '' : 's'} - no hazards next time for an extra star.` : 'No safety mistakes. 🥽');
-      if (ms.id === 'seawater') lines.push(ms.mistakes ? 'Your rig had a mistake in it - build it right first time for another star.' : 'Rig built right first time. ⚗️');
+      if (M.good) lines.push(ms.mistakes > allow ? M.bad : M.good);
+      else if (ms.id === 'seawater') lines.push(ms.mistakes ? 'Your rig had a mistake in it - build it right first time for another star.' : 'Rig built right first time. ⚗️');
       else if (ms.id === 'crystals') lines.push(ms.mistakes ? 'Heated to dryness or cooled too soon - stop exactly at the crystallisation point for another star.' : 'Stopped at exactly the right moment. 💎');
       else lines.push(ms.mistakes > allow ? `${ms.mistakes} wrong picks - one slip is allowed for the star.` : 'Sorted with hardly a slip. 🧰');
       if (r.firstTry < r.total - 1) lines.push('Get all but one question right first time for another star.');
@@ -800,7 +1150,7 @@ const LabSeparation = (() => {
     const [k, a, b] = on.split(':');
     if (k === 'goggles') return _goggles;
     if (k === 'mode') return _mode === a;
-    if (k === 'part') return SD.PARTS[a] ? (_mode === 'distil' && _dist.parts[a] === b) : (_mode === 'sublime' && _sub.parts[a] === b);
+    if (k === 'part') { const m = _ptMode(a); return !!m && _mode === m && _stateOf(m).parts[a] === b; }
     if (k === 'heat') return _heating();
     if (k === 'choose') return !!_ch.done[a];
     return false;
@@ -850,21 +1200,31 @@ const LabSeparation = (() => {
     else if (k === 'drop') drop();
     else if (k === 'reset') reset();
     else if (k === 'choose') choose(a);
+    else if (k === 'pour') pour();
+    else if (k === 'run') run();
+    else if (k === 'add') add();
+    else if (k === 'stir') stir();
+    else if (k === 'leave') leave();
   }
 
   // ── Discoveries: every card opens ─────────────
   function _autoStep(on) {
     const [k, a, b] = on.split(':');
     if (k === 'goggles') return { on, say: 'Put on your goggles first - you are going to heat something.', btn: '🥽 Put on goggles' };
-    if (k === 'mode') return { on, say: `Open the ${MODES[a].name.toLowerCase()} bench.`, btn: `${MODES[a].icon} ${MODES[a].name}` };
+    if (k === 'mode') return { on, say: `Open the ${_modeName(a).toLowerCase()} bench.`, btn: `${_modeIcon(a)} ${_modeName(a)}` };
     if (k === 'build') {
       const R = SD.RIGS[a];
       return { on, say: `Set up ${R.label}.${SD.checkRig(R.parts).ok ? '' : ' Look closely at the picture - then see what happens.'}`, btn: '🔧 Set it up' };
     }
     if (k === 'part') {
-      const P = SD.PARTS[a] || SD.SUB_PARTS[a];
+      const P = _partDef(a);
       return { on, say: `${P.name}: ${P.options[b]}.`, btn: `${P.icon} ${P.options[b]}` };
     }
+    if (k === 'pour') return { on, say: 'Pour the mixture into the filter.', btn: '🫗 Pour' };
+    if (k === 'run') return { on, say: 'Stand the paper in the water.', btn: '💧 Stand it in the water' };
+    if (k === 'add') return { on, say: 'Tip the solid into the water.', btn: '🥄 Tip it in' };
+    if (k === 'stir') return { on, say: 'Stir with a glass rod.', btn: '🥢 Stir' };
+    if (k === 'leave') return { on, say: 'Leave the basin somewhere warm to dry.', btn: '🪟 Leave it to dry' };
     if (k === 'heat') return { on, say: 'Light the burner and start heating.', btn: '🔥 Start heating' };
     if (k === 'heat-off') return { on, say: 'Turn the heat off.', btn: '🧯 Turn off the heat' };
     if (k === 'rod') return { on, say: 'Dip a glass rod in and take it out. No crystals on it? Keep heating and test again.', btn: '🥢 Test with the glass rod' };
@@ -874,11 +1234,14 @@ const LabSeparation = (() => {
     if (k === 'drop') return { on, say: 'Put a drop of the distillate on a watch glass and let it evaporate.', btn: '💧 Test a drop' };
     if (k === 'reset') return { on, say: 'Clear the bench.', btn: '🧽 Clear the bench' };
     if (k === 'choose') {
-      const mx = SD.MIXTURES.find(m => m.id === a), T = SD.TECHNIQUES[mx.tech];
-      return { on, say: `${mx.name} - you want ${mx.want}. Which technique, and why?`, btn: `${T.icon} ${T.name}` };
+      const set = _chSet(), mx = set.items.find(m => m.id === a), T = set.kinds[mx.tech];
+      return { on, say: _g() === 7 ? `${mx.name} (${mx.want}) - element, compound or mixture? And why?` : `${mx.name} - you want ${mx.want}. Which technique, and why?`, btn: `${T.icon} ${T.name}` };
     }
     if (k === 'wait') return { on, say: { boil: 'Watch - it is heating up…', 100: 'Watch the thermometer…', distillate: 'Watch the distillate collect…',
-      crystals: 'Watch the crystals grow as it cools…', sublimate: 'Watch the vapour and the funnel above it…' }[a] || 'Keep watching…' };
+      crystals: 'Watch the crystals grow as it cools…', sublimate: 'Watch the vapour and the funnel above it…',
+      filtrate: 'Watch the filter paper and the beaker below…', edge: 'Watch the edge of the liquid for the first crystals…',
+      dry: 'Watch the basin as it dries…', chromatogram: 'Watch the water climb the paper…',
+      dissolved: 'Watch the solid as you stir - and the balance…', settled: 'Watch the sand as you stir…' }[a] || 'Keep watching…' };
     return { on, say: 'Watch what happens…' };
   }
 
@@ -929,7 +1292,7 @@ const LabSeparation = (() => {
     const st = Labs.store('separation');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
-    const next = G.adhoc ? null : SD.GUIDES.find(g => !st.guides[g.id]);
+    const next = G.adhoc ? null : _guides().find(g => !st.guides[g.id]);
     Labs.overlay(`
       <div class="lab-done">
         <p class="lab-done-icon" aria-hidden="true">${G.icon}</p>
@@ -975,9 +1338,10 @@ const LabSeparation = (() => {
     else if (k === 'cool') sel = `.lab-tools [data-act="cool-${a}"]`;
     else if (k === 'drop') sel = '.lab-tools [data-act="drop"]';
     else if (k === 'reset') sel = '.lab-tools [data-act="reset"]';
+    else if (['pour', 'run', 'add', 'stir', 'leave'].includes(k)) sel = `.lab-tools [data-act="${k}"]`;
     else if (k === 'choose') {
-      const mx = SD.MIXTURES.find(m => m.id === a);
-      if (mx && _curMix().id === a) sel = _ch.phase === 'tech' ? `[data-tech="${mx.tech}"]` : `[data-why="${SD.TECH_PRINCIPLE[mx.tech]}"]`;
+      const set = _chSet(), mx = set.items.find(m => m.id === a);
+      if (mx && _curMix().id === a) sel = _ch.phase === 'tech' ? `[data-tech="${mx.tech}"]` : `[data-why="${set.kindPrinciple[mx.tech]}"]`;
       else sel = `[data-mix="${a}"]`;
     }
     const el = sel && _root.querySelector(sel);
@@ -1009,9 +1373,9 @@ const LabSeparation = (() => {
         <li><b>Watch the apparatus</b>, then read what happened in your lab notebook.</li>
       </ol>
       <h3>🧭 Guided experiments <small>start here · step by step</small></h3>
-      <div class="lab-start-list">${SD.GUIDES.map(guide).join('')}</div>
+      <div class="lab-start-list">${_guides().map(guide).join('')}</div>
       <h3>🎯 Missions <small>exam-style questions · earn stars</small></h3>
-      <div class="lab-start-list">${SD.MISSIONS.map(mission).join('')}</div>
+      <div class="lab-start-list">${_missions().map(mission).join('')}</div>
       <p class="lab-hint">Or experiment freely: pick a technique below and build it yourself.</p>
     </section>`;
   }
@@ -1047,18 +1411,22 @@ const LabSeparation = (() => {
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
   function _discover(id) {
     if (!id) return;
-    const d = SD.DISCOVERIES.find(x => x.id === id);
-    if (Labs.discover('separation', id, { title: d && d.title, total: SD.DISCOVERIES.length })) _refresh();
+    // Only this grade's discoveries count - another grade's are not on its shelf.
+    const all = _discs(), d = all.find(x => x.id === id);
+    if (!d) return;
+    if (Labs.discover('separation', id, { title: d.title, total: all.length })) _refresh();
   }
   function _foundCount() {
     const n = $('lab-found-n');
-    if (n) n.textContent = `${Object.keys(Labs.store('separation').disc).length}/${SD.DISCOVERIES.length}`;
+    if (!n) return;
+    const st = Labs.store('separation'), all = _discs();
+    n.textContent = `${all.filter(d => st.disc[d.id]).length}/${all.length}`;
   }
 
   function _modesHTML() {
     if (_mission) return '';
-    return `<div class="lab-separation-modes" role="group" aria-label="Choose a technique">${Object.keys(MODES).map(m =>
-      `<button type="button" data-mode="${m}" aria-pressed="${_mode === m}"><span aria-hidden="true">${MODES[m].icon}</span> ${esc(MODES[m].label)}</button>`).join('')}</div>`;
+    return `<div class="lab-separation-modes" role="group" aria-label="Choose a technique">${_modes().map(m =>
+      `<button type="button" data-mode="${m}" aria-pressed="${_mode === m}"><span aria-hidden="true">${_modeIcon(m)}</span> ${esc(_modeLabel(m))}</button>`).join('')}</div>`;
   }
 
   function _partRows(table, order, parts) {
@@ -1066,7 +1434,7 @@ const LabSeparation = (() => {
       const P = table[k];
       return `<div class="lab-separation-part">
         <div class="lab-separation-part-head"><span aria-hidden="true">${P.icon}</span><span class="lab-separation-part-name"><b>${esc(P.name)}</b><small>${esc(P.hint)}</small></span></div>
-        <div class="lab-separation-opts">${Object.keys(P.options).map(o =>
+        <div class="lab-separation-opts">${Object.keys(P.options).filter(o => _optOk(P, o)).map(o =>
           `<button type="button" class="lab-separation-opt" data-part="${k}" data-opt="${o}" aria-pressed="${parts[k] === o}">${esc(P.options[o])}</button>`).join('')}</div>
       </div>`;
     }).join('');
@@ -1101,22 +1469,55 @@ const LabSeparation = (() => {
         <p class="lab-separation-rigstate${chk.missing.length ? '' : ' is-ok'}">${chk.missing.length ? 'Choose one of each to get ready.' : 'Ready to heat.'}</p>
       </section>`;
     }
-    const mx = _curMix(), n = Object.keys(_ch.done).length, done = !!_ch.done[mx.id];
+    if (_mode === 'filter') {
+      const chk = SD.checkFilter(_fil.parts), n = SD.FIL_ORDER.length - chk.missing.length;
+      return `<section class="lab-shelf" id="lab-bench" aria-label="Filtration apparatus">
+        <div class="lab-shelf-head"><h2>Filtration</h2><p class="lab-hint">A filter funnel in a stand. Tap a choice for each part.</p></div>
+        ${_partRows(SD.FIL_PARTS, SD.FIL_ORDER, _fil.parts)}
+        <p class="lab-separation-rigstate${chk.missing.length ? '' : ' is-ok'}">${n} of ${SD.FIL_ORDER.length} chosen${chk.missing.length ? '' : ' - ready to pour'}</p>
+      </section>`;
+    }
+    if (_mode === 'evap') {
+      const M = _eva.parts.emix && SD.EVAP_MIXES[_eva.parts.emix];
+      return `<section class="lab-shelf" id="lab-bench" aria-label="Evaporation">
+        <div class="lab-shelf-head"><h2>Evaporation</h2><p class="lab-hint">An evaporating basin on a tripod and gauze, over a Bunsen burner.</p></div>
+        ${_partRows(SD.EVA_PARTS, SD.EVA_ORDER, _eva.parts)}
+        <p class="lab-hint">${M ? (M.water ? `${M.grams} g of ${M.solid} dissolved in ${M.water} cm³ of water. Use the buttons under the picture: 🔥 heat, then 🪟 leave it to dry.` : `${M.grams} g of dry sugar - no water at all.`) : 'Choose what goes in the basin.'}</p>
+        ${_g() === 8 ? `<p class="lab-hint">Salt dissolves about as well in cold water as in hot (${SD.EVAP_MIXES.salt.sol} g in 100 g of water at 20 °C, ${SD.EVAP_MIXES.salt.solHot} g at 100 °C), so you get it back by evaporating the water.</p>` : ''}
+      </section>`;
+    }
+    if (_mode === 'chroma') {
+      const chk = SD.checkChroma(_chr.parts);
+      return `<section class="lab-shelf" id="lab-bench" aria-label="Chromatography apparatus">
+        <div class="lab-shelf-head"><h2>Chromatography</h2><p class="lab-hint">A strip of chromatography paper hangs from a rod into a beaker. The water is the solvent.</p></div>
+        ${_partRows(SD.CHR_PARTS, SD.CHR_ORDER, _chr.parts)}
+        <p class="lab-separation-rigstate${chk.missing.length ? '' : ' is-ok'}">${chk.missing.length ? 'Choose one of each to get ready.' : 'Ready - stand it in the water.'}</p>
+      </section>`;
+    }
+    if (_mode === 'dissolve') {
+      const chk = SD.checkDissolve(_dis.parts);
+      return `<section class="lab-shelf" id="lab-bench" aria-label="Dissolving">
+        <div class="lab-shelf-head"><h2>Dissolving</h2><p class="lab-hint">A beaker of 100 g of water on a balance, and a solid on a weighing boat.</p></div>
+        ${_partRows(SD.DIS_PARTS, SD.DIS_ORDER, _dis.parts)}
+        <p class="lab-separation-rigstate${chk.missing.length ? '' : ' is-ok'}">${chk.missing.length ? 'Choose one of each to get ready.' : 'Ready - tip it in, then stir.'}</p>
+      </section>`;
+    }
+    const set = _chSet(), mx = _curMix(), n = Object.keys(_ch.done).length, done = !!_ch.done[mx.id];
     let body;
-    if (done) body = `<p class="lab-separation-q is-ok">✓ Sorted: ${esc(SD.TECHNIQUES[mx.tech].name)}</p>`;
-    else if (_ch.phase === 'tech') body = `<p class="lab-separation-q">1 · Which technique?</p>
-      <div class="lab-separation-choices">${Object.keys(SD.TECHNIQUES).map(t => {
-        const T = SD.TECHNIQUES[t];
-        return `<button type="button" class="lab-separation-choice" data-tech="${t}"><b><span aria-hidden="true">${T.icon}</span> ${esc(T.name)}</b><small>Keeps ${esc(T.gets)}</small></button>`;
+    if (done) body = `<p class="lab-separation-q is-ok">✓ Sorted: ${esc(set.kinds[mx.tech].name)}</p>`;
+    else if (_ch.phase === 'tech') body = `<p class="lab-separation-q">1 · ${esc(set.q1)}</p>
+      <div class="lab-separation-choices">${Object.keys(set.kinds).map(t => {
+        const T = set.kinds[t];
+        return `<button type="button" class="lab-separation-choice" data-tech="${t}"><b><span aria-hidden="true">${T.icon}</span> ${esc(T.name)}</b><small>${esc(set.getsLabel)} ${esc(T.gets)}</small></button>`;
       }).join('')}</div>`;
-    else body = `<p class="lab-separation-q">2 · Why does ${esc(SD.TECHNIQUES[mx.tech].name.toLowerCase())} work here?</p>
-      <div class="lab-separation-why">${Object.keys(SD.PRINCIPLES).map(p =>
-        `<button type="button" class="lab-separation-choice" data-why="${p}">${esc(SD.PRINCIPLES[p])}</button>`).join('')}</div>`;
-    return `<section class="lab-shelf" id="lab-bench" aria-label="Which technique?">
-      <div class="lab-shelf-head"><h2>Which technique?</h2><p class="lab-hint">${n} of ${SD.MIXTURES.length} sorted</p></div>
-      <div class="lab-separation-chips">${SD.MIXTURES.map((m, i) =>
+    else body = `<p class="lab-separation-q">2 · ${esc(set.q2(set.kinds[mx.tech].name.toLowerCase()))}</p>
+      <div class="lab-separation-why">${Object.keys(set.principles).map(p =>
+        `<button type="button" class="lab-separation-choice" data-why="${p}">${esc(set.principles[p])}</button>`).join('')}</div>`;
+    return `<section class="lab-shelf" id="lab-bench" aria-label="${esc(set.q1)}">
+      <div class="lab-shelf-head"><h2>${esc(set.q1)}</h2><p class="lab-hint">${n} of ${set.items.length} sorted</p></div>
+      <div class="lab-separation-chips">${set.items.map((m, i) =>
         `<button type="button" class="lab-separation-chip${_ch.done[m.id] ? ' is-done' : ''}" data-mix="${m.id}" aria-pressed="${i === _ch.idx}">${_ch.done[m.id] ? '✓ ' : ''}${esc(m.name)}</button>`).join('')}</div>
-      <div class="lab-separation-mix"><b>${esc(mx.name)}</b><small>You want: ${esc(mx.want)}</small></div>
+      <div class="lab-separation-mix"><b>${esc(mx.name)}</b><small>${esc(set.wantLabel)}: ${esc(mx.want)}</small></div>
       ${body}
     </section>`;
   }
@@ -1133,11 +1534,26 @@ const LabSeparation = (() => {
         <caption>Glass-rod tests</caption>
         <thead><tr><th scope="col">Water left (cm³)</th><th scope="col">Crystals on the rod?</th></tr></thead>
         <tbody>${_cry.rods.slice(-8).map(r => `<tr><td>${f0(r.water)}</td><td>${r.positive ? 'Yes - stop heating' : 'No - keep heating'}</td></tr>`).join('')}</tbody></table></div>`;
-    } else if (_mode === 'choose' && _ch.order.length) {
+    } else if (_mode === 'dissolve' && _dis.added) {
+      const S = SD.SOLIDS[_dis.parts.solid], m = SD.massOnBalance(_dis.parts.solid, true);
       table = `<div class="lab-table-wrap"><table class="lab-table">
-        <caption>Results: choosing a technique</caption>
-        <thead><tr><th scope="col">Mixture</th><th scope="col">Technique</th></tr></thead>
-        <tbody>${_ch.order.map(id => { const m = SD.MIXTURES.find(x => x.id === id); return `<tr><th scope="row">${esc(m.name)}</th><td>${esc(SD.TECHNIQUES[m.tech].name)}</td></tr>`; }).join('')}</tbody></table></div>`;
+        <caption>Readings: the balance</caption>
+        <thead><tr><th scope="col">When</th><th scope="col">Mass (g)</th></tr></thead>
+        <tbody><tr><th scope="row">Water alone</th><td>${f1(SD.DISSOLVE.water)}</td></tr>
+          <tr><th scope="row">${esc(S.name)} tipped in</th><td>${f1(m)}</td></tr>
+          ${_dis.done ? `<tr><th scope="row">After stirring</th><td>${f1(m)}</td></tr>` : ''}</tbody></table></div>`;
+    } else if (_mode === 'chroma' && _chr.done) {
+      const I = SD.INKS[_chr.parts.ink];
+      table = `<div class="lab-table-wrap"><table class="lab-table">
+        <caption>Results: the chromatogram of ${esc(I.name.toLowerCase())}</caption>
+        <thead><tr><th scope="col">Spot</th><th scope="col">How far it moved</th></tr></thead>
+        <tbody>${I.dyes.map(d => `<tr><th scope="row">${esc(d.name)}</th><td>${Math.round(d.rf * 100)}% as far as the water</td></tr>`).join('')}</tbody></table></div>`;
+    } else if (_mode === 'choose' && _ch.order.length) {
+      const set = _chSet(), g7 = _g() === 7;
+      table = `<div class="lab-table-wrap"><table class="lab-table">
+        <caption>${g7 ? 'Results: sorting substances' : 'Results: choosing a technique'}</caption>
+        <thead><tr><th scope="col">${g7 ? 'Substance' : 'Mixture'}</th><th scope="col">${g7 ? 'It is…' : 'Technique'}</th></tr></thead>
+        <tbody>${_ch.order.map(id => { const m = set.items.find(x => x.id === id); return `<tr><th scope="row">${esc(m.name)}</th><td>${esc(set.kinds[m.tech].name)}</td></tr>`; }).join('')}</tbody></table></div>`;
     }
     const list = _log.length
       ? `<ol class="lab-log">${_log.slice(0, 14).map(e => `<li class="${e.note ? 'is-note' : ''}"><b>${esc(e.title)}</b><p>${esc(e.obs)}</p></li>`).join('')}</ol>`
@@ -1154,7 +1570,7 @@ const LabSeparation = (() => {
   function _missionListHTML() {
     const st = Labs.store('separation');
     return `<section class="lab-missions"><h2>Missions</h2><p class="lab-hint">Finish the experiment, answer the exam-style questions, earn up to three stars.</p>
-      ${SD.MISSIONS.map(M => {
+      ${_missions().map(M => {
         const best = (st.missions[M.id] && st.missions[M.id].stars) || 0;
         return `<article class="lab-mission-card">
           <span class="lab-mission-icon" aria-hidden="true">${M.icon}</span>
@@ -1188,12 +1604,41 @@ const LabSeparation = (() => {
         ${li(C.cool === 'slow', 'Turn off the heat and cool it slowly')}
         ${li(ms.success, 'Grow big crystals')}
         ${li(false, 'Answer the questions')}</ul>`;
-    } else {
-      const n = Object.keys(_ch.done).length;
+    } else if (M.mode === 'filter') {
+      const F = _fil, chk = SD.checkFilter(F.parts);
       body = `<ul class="lab-steps">
-        ${li(n === SD.MIXTURES.length, `Choose the technique and the reason for all ${SD.MIXTURES.length} mixtures`)}
+        ${li(!chk.missing.length, `Set up the filter (${SD.FIL_ORDER.length - chk.missing.length} of ${SD.FIL_ORDER.length})`)}
+        ${li(F.poured > 0, 'Pour the muddy water')}
+        ${li(ms.success, 'Collect a clear filtrate')}
+        ${li(false, 'Answer the questions')}</ul>`;
+    } else if (M.mode === 'chroma') {
+      const R = _chr, chk = SD.checkChroma(R.parts);
+      body = `<ul class="lab-steps">
+        ${li(!chk.missing.length, `Set up the paper (${SD.CHR_ORDER.length - chk.missing.length} of ${SD.CHR_ORDER.length})`)}
+        ${li(R.front > 0, 'Stand it in the water')}
+        ${li(ms.success, 'See the dyes separate')}
+        ${li(false, 'Answer the questions')}</ul>`;
+    } else if (M.mode === 'dissolve') {
+      const V = _dis, chk = SD.checkDissolve(V.parts);
+      body = `<ul class="lab-steps">
+        ${li(!chk.missing.length, 'Choose the salt and a beaker of water')}
+        ${li(V.added, 'Tip it in and read the balance')}
+        ${li(ms.success, 'Stir until it dissolves')}
+        ${li(false, 'Answer the questions')}</ul>`;
+    } else if (M.mode === 'evap') {
+      const E = _eva;
+      body = `<ul class="lab-steps">
+        ${li(_goggles, '🥽 Goggles on')}
+        ${li(E.heated, 'Heat the salt water')}
+        ${li(E.edge, 'Stop at the first crystals')}
+        ${li(E.leave || ms.success, 'Leave it to dry')}
+        ${li(false, 'Answer the questions')}</ul>`;
+    } else {
+      const set = _chSet(), n = Object.keys(_ch.done).length;
+      body = `<ul class="lab-steps">
+        ${li(n === set.items.length, _g() === 7 ? `Sort all ${set.items.length} substances and give the reason` : `Choose the technique and the reason for all ${set.items.length} mixtures`)}
         ${li(false, 'Answer the questions')}</ul>
-        <p class="lab-progress-text">${n} of ${SD.MIXTURES.length} mixtures sorted</p>`;
+        <p class="lab-progress-text">${n} of ${set.items.length} ${set.noun} sorted</p>`;
     }
     return `<section class="lab-mission" id="lab-mission" aria-label="Mission">
       <div class="lab-mission-head"><span aria-hidden="true">${M.icon}</span><h2>${esc(M.title)}</h2>
@@ -1205,7 +1650,7 @@ const LabSeparation = (() => {
 
   function _foundHTML() {
     const st = Labs.store('separation');
-    const all = SD.DISCOVERIES;
+    const all = _discs();
     const n = all.filter(d => st.disc[d.id]).length;
     return `<section class="lab-found"><h2>Discoveries <span>${n} of ${all.length}</span></h2>
       <p class="lab-hint">Tap any card. Found ones show what happened and why; locked ones show you how to find them.</p>
@@ -1225,12 +1670,42 @@ const LabSeparation = (() => {
     if (_mode === 'distil') html = heat + btn('drop', '💧', 'Test a drop') + btn('reset', '🧽', 'Clear the bench');
     else if (_mode === 'crystal') html = heat + btn('rod', '🥢', 'Glass rod') + btn('cool-slow', '🐢', 'Cool slowly') + btn('cool-fast', '❄️', 'Cool quickly') + btn('reset', '🧽', 'Start again');
     else if (_mode === 'sublime') html = heat + btn('reset', '🧽', 'Clear the bench');
+    else if (_mode === 'filter') html = btn('pour', '🫗', 'Pour') + btn('reset', '🧽', 'Start again');
+    else if (_mode === 'evap') html = heat + btn('leave', '🪟', 'Leave to dry') + btn('reset', '🧽', 'Start again');
+    else if (_mode === 'chroma') html = btn('run', '💧', 'Stand in water') + btn('reset', '🧽', 'Start again');
+    else if (_mode === 'dissolve') html = btn('add', '🥄', 'Tip it in') + btn('stir', '🥢', 'Stir') + btn('reset', '🧽', 'Start again');
     else html = btn('reset', '🧽', 'Start the sort again');
     t.innerHTML = html;
     _highlight();
   }
 
   function _intro() {
+    const g = _g();
+    if (g !== 9) {
+      const first = _guides()[0];
+      Labs.overlay(`
+        <div class="lab-intro">
+          <p class="lab-done-icon" aria-hidden="true">⚗️</p>
+          <h2 id="lab-ov-title">Welcome to the Separation Station</h2>
+          <ul class="lab-intro-list">
+            <li><b>New here?</b> Tap “Show me how” and I’ll walk you through it, one tap at a time.</li>
+            <li><b>Four benches.</b> ${g === 8
+              ? 'Filter muddy water, evaporate salt water, separate the dyes in ink - and choose the right technique for a mixture.'
+              : 'Dissolve solids, get the salt back by evaporating, get the water back by distilling - and sort elements, compounds and mixtures.'}</li>
+            <li><b>Get it wrong safely.</b> ${g === 8 ? 'Tear the filter paper or heat the basin dry' : 'Heat sugar too hard or stir in a cracked beaker'} and you’ll see what happens and what to do instead. Nothing here can hurt you.</li>
+            <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${_discs().length} discoveries to collect.</li>
+          </ul>
+        </div>
+        <div class="lab-ov-actions">
+          <button type="button" class="lab-btn" data-ov-close>I’ll explore on my own</button>
+          <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="${first.id}" data-autofocus>Show me how →</button>
+        </div>`,
+        { cls: 'is-intro', onClose: () => {
+          const st = Labs.store('separation'); st[_introKey()] = true; Labs.persist();
+          _coach('First rule of the lab: tap 🥽 to put on your goggles before you heat anything.');
+        } });
+      return;
+    }
     Labs.overlay(`
       <div class="lab-intro">
         <p class="lab-done-icon" aria-hidden="true">⚗️</p>
@@ -1240,7 +1715,7 @@ const LabSeparation = (() => {
           <li><b>Four benches.</b> Distil sea water, grow copper(II) sulfate crystals, sublime iodine - and choose the right technique for a mixture.</li>
           <li><b>Build it yourself.</b> Put each part where you think it goes. If it is wrong, you will see exactly what happens.</li>
           <li><b>Get it wrong safely.</b> Heat a sealed rig or forget the granules and you’ll see the hazard, what happened, and what to do instead. Nothing here can hurt you.</li>
-          <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${SD.DISCOVERIES.length} discoveries to collect.</li>
+          <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${_discs().length} discoveries to collect.</li>
         </ul>
       </div>
       <div class="lab-ov-actions">
@@ -1254,6 +1729,34 @@ const LabSeparation = (() => {
   }
 
   function _help() {
+    const g = _g();
+    if (g !== 9) {
+      const set = _chSet();
+      Labs.overlay(`
+        <h2 id="lab-ov-title" class="lab-help-title">How the Separation Station works</h2>
+        <div class="lab-help">
+          <section><h3>Using the benches</h3><ul>
+            <li>Pick a bench: ${_modes().map(m => esc(_modeLabel(m))).join(', ')}.</li>
+            <li>Set up the apparatus by tapping a choice for each part on the shelf.</li>
+            <li>Use the buttons under the picture. ${esc(SD.TIME_LAPSE)}.</li>
+            <li>Everything you see and measure goes into the lab notebook.</li></ul></section>
+          <section><h3>Lab safety rules</h3><ul>
+            <li>Goggles on before you heat anything.</li>
+            <li>Check glassware for cracks before you use it. Never touch broken glass - tell the teacher.</li>
+            <li>Stop heating a basin when the first crystals appear - never heat it dry.</li>
+            <li>Never taste anything in a lab.</li></ul></section>
+          <section><h3>${esc(set.q1)}</h3>
+            <div class="lab-table-wrap"><table class="lab-table"><thead><tr><th scope="col">${g === 7 ? 'Kind' : 'Technique'}</th><th scope="col">${esc(set.getsLabel)}…</th></tr></thead>
+            <tbody>${Object.keys(set.kinds).map(t => `<tr><th scope="row">${set.kinds[t].icon} ${esc(set.kinds[t].name)}</th><td>${esc(set.kinds[t].gets)}. ${esc(set.principles[set.kindPrinciple[t]])}</td></tr>`).join('')}</tbody></table></div></section>
+          <section><h3>Useful words</h3><ul>
+            ${g === 8
+              ? '<li><b>Residue</b>: the solid left on the filter paper. <b>Filtrate</b>: the liquid that runs through.</li><li><b>Soluble</b>: it dissolves. <b>Insoluble</b>: it does not.</li><li><b>Solvent</b>: the liquid that dissolves things - water, in the chromatography bench.</li>'
+              : '<li><b>Solute</b>: the solid that dissolves. <b>Solvent</b>: the liquid it dissolves in. <b>Solution</b>: the two together.</li><li><b>Physical change</b>: no new substance is made - it can be undone. <b>Chemical change</b>: new substances are made.</li><li>100 g of water + 5 g of salt = 105 g of salt solution.</li>'}</ul></section>
+        </div>
+        <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Back to the bench</button></div>`,
+        { cls: 'is-help' });
+      return;
+    }
     Labs.overlay(`
       <h2 id="lab-ov-title" class="lab-help-title">How the Separation Station works</h2>
       <div class="lab-help">
@@ -1308,10 +1811,38 @@ const LabSeparation = (() => {
       if (U.parts.place === 'hood') chips.push(chip('🏠 Fume cupboard'));
       if (U.heat && U.heatT >= (M ? M.onset : 99)) chips.push(chip('💨 Subliming', 'is-warm'));
       text = M ? `Dish: ${f1(U.left)} g of ${M.short} + ${M.other} · On the funnel: ${f1(U.sublimate)} g` : 'The dish is empty.';
+    } else if (_mode === 'filter') {
+      const F = _fil, M = F.parts.fmix && SD.FIL_MIXES[F.parts.fmix];
+      r = M ? `🫗 ${f0(F.poured * 100)}% poured <small>filtrate: ${f1(F.filtrate)} cm³</small>` : '<small>Choose a mixture on the shelf below</small>';
+      if (F.pouring) chips.push(chip('🫗 Pouring', 'is-warm'));
+      if (F.cloudy) chips.push(chip('⚠️ Cloudy filtrate', 'is-danger'));
+      else if (F.done) chips.push(chip('✓ Clear filtrate'));
+      text = M ? `${M.name} · ${M.residue ? 'the paper catches the ' + M.residue : 'nothing for the paper to catch'}` : 'Set up the filter: tap the parts on the shelf below.';
+    } else if (_mode === 'evap') {
+      const E = _eva, M = E.parts.emix && SD.EVAP_MIXES[E.parts.emix];
+      r = M ? `🌡️ ${f0(E.T)} °C <small>${M.water ? f1(E.water) + ' cm³ of water left' : 'dry sugar'}</small>` : '<small>Choose what goes in the basin</small>';
+      if (E.heat) chips.push(chip(E.T >= SD.EVAP.boils && E.water > 0 ? '♨️ Evaporating' : '🔥 Heating', 'is-warm'));
+      if (E.edge && !E.done && !E.dry) chips.push(chip('💠 Crystals at the edge'));
+      if (E.leave) chips.push(chip('🪟 Drying slowly'));
+      if (M && E.heat && E.water > 0 && E.water < 3 && !M.chars) chips.push(chip('⚠️ Nearly dry - it will spit!', 'is-danger'));
+      text = !M ? 'The basin is empty.' : E.charred ? 'A black, burnt mass - not sugar any more.' : E.dry ? 'A dry crust of salt.'
+        : E.done ? `${M.grams} g of ${M.solid} crystals in the basin` : `Evaporating basin: ${M.name.toLowerCase()}`;
+    } else if (_mode === 'chroma') {
+      const R = _chr, I = R.parts.ink && SD.INKS[R.parts.ink];
+      r = `💧 Solvent front <small>${f0(R.front / SD.CHROMA.top * 100)}% of the way up</small>`;
+      if (R.running) chips.push(chip('💧 Water rising'));
+      if (R.done && I) chips.push(chip(`${I.dyes.length} spot${I.dyes.length === 1 ? '' : 's'}`));
+      text = I ? `${I.name}${R.parts.line ? ' on a start line in ' + (R.parts.line === 'pen' ? 'felt-tip pen' : 'pencil') : ''}` : 'Choose an ink on the shelf below.';
+    } else if (_mode === 'dissolve') {
+      const V = _dis, S = V.parts.solid && SD.SOLIDS[V.parts.solid];
+      r = `⚖️ ${f1(V.parts.dbeaker ? SD.massOnBalance(V.parts.solid, V.added) : 0)} g <small>on the balance</small>`;
+      if (V.stir > 0) chips.push(chip('🥢 Stirring'));
+      if (V.done && S) chips.push(chip(S.dissolves ? '✓ Dissolved' : 'Not dissolved'));
+      text = S ? `${S.grams} g of ${S.name.toLowerCase()}${V.added ? ' in 100 g of water' : ' on the weighing boat'}` : 'Choose a solid on the shelf below.';
     } else {
-      const mx = _curMix();
-      r = `Sorted ${Object.keys(_ch.done).length} of ${SD.MIXTURES.length}`;
-      text = `${mx.name} - you want ${mx.want}`;
+      const mx = _curMix(), set = _chSet();
+      r = `Sorted ${Object.keys(_ch.done).length} of ${set.items.length}`;
+      text = _g() === 7 ? `${mx.name} - ${mx.want}` : `${mx.name} - you want ${mx.want}`;
     }
     if (rd) rd.innerHTML = r;
     if (st) st.innerHTML = chips.join('');
@@ -1324,7 +1855,7 @@ const LabSeparation = (() => {
   function _fxAdd(type, done, data) {
     if (_instant || Labs.calm() || !_cx) { if (done) done(); return; }
     const f = { type, t: 0, dur: FX_DUR[type] || 0.6, done, data: data || {} };
-    if (type === 'spit' || type === 'bump' || type === 'burst') f.parts = _burst(type);
+    if (type === 'spit' || type === 'bump' || type === 'burst' || type === 'crack') f.parts = _burst(type === 'crack' ? 'burst' : type);
     _fx.push(f);
   }
   function _burst(type) {
@@ -1715,21 +2246,216 @@ const LabSeparation = (() => {
     }
   }
 
+  // ── Grades 7 and 8 benches ──
+  const _wob = (calm, ms) => (calm ? 0.5 : (Date.now() % ms) / ms);
+  function _beaker(c, x0, y0, x1, y1) {
+    c.strokeStyle = _colors.glass; c.lineWidth = 2.2; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(x0 - 3, y0); c.lineTo(x0, y0 + 3); c.lineTo(x0, y1); c.lineTo(x1, y1); c.lineTo(x1, y0); c.stroke();
+  }
+  function _crackLine(c, x, y) {
+    c.strokeStyle = '#2B3F47'; c.lineWidth = 1.3;
+    c.beginPath(); c.moveTo(x, y); c.lineTo(x - 9, y + 11); c.lineTo(x - 3, y + 20); c.lineTo(x - 13, y + 34); c.stroke();
+  }
+
+  function _drawFilter(c) {
+    const F = _fil, p = F.parts, M = p.fmix && SD.FIL_MIXES[p.fmix], P = SD.FILTER, calm = Labs.calm() || _instant;
+    c.fillStyle = '#6F7D82'; c.fillRect(262, 40, 5, 200); c.fillRect(244, 236, 42, 5); c.fillRect(206, 72, 58, 4);
+    const bx0 = 136, bx1 = 204, by0 = 158, by1 = 238;
+    if (p.fbeaker) {
+      if (F.filtrate > 0) {
+        const h = (F.filtrate / P.vol) * 62;
+        c.fillStyle = F.cloudy && M ? _rgba(M.liquid, 0.85) : 'rgba(190,225,240,0.8)';
+        c.fillRect(bx0 + 1, by1 - h, bx1 - bx0 - 2, h);
+      }
+      _beaker(c, bx0, by0, bx1, by1);
+      if (p.fbeaker === 'cracked') _crackLine(c, bx1 - 2, 176);
+      _text(c, 'beaker', 170, 252);
+      if (F.filtrate > 4) _text(c, 'filtrate', 170, by1 - 5, 'center', _colors.ink, 8);
+    } else _dash(c, () => c.rect(bx0, by0, bx1 - bx0, by1 - by0));
+    // the cone of filter paper and what sits in it
+    const cone = () => { c.moveTo(134, 70); c.lineTo(170, 116); c.lineTo(206, 70); c.closePath(); };
+    if (p.paper) {
+      c.fillStyle = 'rgba(250,248,240,0.95)'; c.strokeStyle = '#B9B3A6'; c.lineWidth = 1.4;
+      c.beginPath(); cone(); c.fill(); c.stroke();
+      if (M && F.poured > 0) {
+        c.save(); c.beginPath(); cone(); c.clip();
+        const sit = Math.max(0, F.poured * P.vol - F.filtrate - P.wet);
+        const h = Math.min(46, (sit / 18) * 46 + (p.pouring === 'fast' && F.flagged.any ? 46 : 0));
+        if (h > 0.5) { c.fillStyle = _rgba(M.liquid, 0.75); c.fillRect(120, 116 - h, 100, h); }
+        if (M.residue) { c.fillStyle = M.residueColor; c.fillRect(120, 116 - 4 - 10 * F.poured, 100, 4 + 10 * F.poured); }
+        c.restore();
+      }
+      if (p.paper === 'torn') {
+        c.fillStyle = _colors.top; c.strokeStyle = '#B9B3A6'; c.lineWidth = 1;
+        c.beginPath(); c.moveTo(166, 98); c.lineTo(173, 92); c.lineTo(171, 101); c.lineTo(177, 99); c.lineTo(169, 108); c.closePath(); c.fill(); c.stroke();
+      }
+      _text(c, 'filter paper', 214, 94, 'left');
+    } else _dash(c, cone);
+    // the funnel
+    c.strokeStyle = _colors.glass; c.lineWidth = 2.4; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(128, 66); c.lineTo(166, 118); c.lineTo(166, 160); c.moveTo(212, 66); c.lineTo(174, 118); c.lineTo(174, 160); c.stroke();
+    _text(c, 'filter funnel', 170, 58);
+    // drips from the stem
+    if (p.fbeaker && M && (F.pouring || (F.poured > 0 && !F.done && !F.flagged.any))) {
+      c.fillStyle = F.cloudy ? _rgba(M.liquid, 0.95) : 'rgba(70,150,220,0.9)';
+      c.beginPath(); c.arc(170, 164 + _wob(calm, 500) * 14, 1.9, 0, Math.PI * 2); c.fill();
+    }
+    // the mixture, held above the funnel
+    if (M) {
+      const lx0 = 30, lx1 = 82, ly0 = 22, ly1 = 76, left = (1 - F.poured);
+      if (left > 0.01) { c.fillStyle = _rgba(M.liquid, 0.8); const h = left * 40; c.fillRect(lx0 + 1, ly1 - h, lx1 - lx0 - 2, h); }
+      if (M.residue && left > 0.01) { c.fillStyle = M.residueColor; c.fillRect(lx0 + 1, ly1 - 5 * left, lx1 - lx0 - 2, 5 * left); }
+      _beaker(c, lx0, ly0, lx1, ly1);
+      _text(c, M.name.toLowerCase(), 56, 90);
+      if (F.pouring) {
+        if (p.pouring === 'rod') { c.strokeStyle = 'rgba(200,225,235,0.95)'; c.lineWidth = 3; c.beginPath(); c.moveTo(78, 24); c.lineTo(160, 96); c.stroke(); }
+        c.strokeStyle = _rgba(M.liquid, 0.85); c.lineWidth = p.pouring === 'fast' ? 7 : 2.5; c.lineCap = 'round';
+        c.beginPath(); c.moveTo(84, 24); c.quadraticCurveTo(128, 20, p.pouring === 'rod' ? 158 : 168, p.pouring === 'rod' ? 94 : 80); c.stroke();
+      }
+    }
+  }
+
+  function _drawEvap(c) {
+    const E = _eva, M = E.parts.emix && SD.EVAP_MIXES[E.parts.emix], K = SD.EVAP, calm = Labs.calm() || _instant;
+    if (E.leave || (E.done && !E.dry)) _text(c, E.done ? 'dried slowly' : 'left somewhere warm to dry', 170, 206);
+    else { _tripod(c, 170, 172); _burner(c, 170, E.heat); _text(c, 'tripod & gauze', 212, 166, 'left'); }
+    c.save(); c.beginPath(); _basinPath(c); c.clip();
+    let lvl = 170;
+    if (M) {
+      if (M.chars && E.water <= 0 && (E.melted || E.charred || E.T > 120)) {
+        const k = E.charred ? 1 : clamp((E.T - 150) / (K.charAt - 150), 0, 1);
+        c.fillStyle = `rgb(${Math.round(236 - 206 * k)},${Math.round(214 - 190 * k)},${Math.round(170 - 150 * k)})`;
+        c.fillRect(110, 160, 120, 20);
+      } else if (E.water > 0) {
+        lvl = 170 - Math.min(1, E.water / 50) * 40;
+        c.fillStyle = _rgba(M.color, 0.8); c.fillRect(110, lvl, 120, 175 - lvl);
+        c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(114, lvl); c.lineTo(226, lvl); c.stroke();
+        if (E.edge) {
+          c.fillStyle = M.crystal; c.strokeStyle = 'rgba(90,110,120,0.5)'; c.lineWidth = 0.6;
+          [118, 123, 128, 212, 217, 222].forEach((x, i) => { const y = _basinY(x) - 3 - (i % 2) * 2; c.fillRect(x - 1.8, y, 3.6, 3.6); c.strokeRect(x - 1.8, y, 3.6, 3.6); });
+        }
+      } else if (!E.done && !E.dry) {
+        c.fillStyle = M.crystal; c.strokeStyle = 'rgba(90,110,120,0.4)'; c.lineWidth = 0.5;
+        for (let i = 0; i < 30; i++) { const x = 132 + ((i * 41) % 76); c.fillRect(x, _basinY(x) - 3 - ((i * 7) % 5), 2.6, 2.6); }
+      }
+      if (E.done) {
+        c.fillStyle = M.crystal; c.strokeStyle = 'rgba(70,90,100,0.55)'; c.lineWidth = 0.8;
+        [[136, 6], [148, 7], [160, 5.5], [172, 7], [184, 6], [196, 6.5], [206, 5]].forEach(([x, s]) => { const y = _basinY(x) - s - 1; c.fillRect(x - s / 2, y, s, s); c.strokeRect(x - s / 2, y, s, s); });
+      }
+      if (E.dry) {
+        c.fillStyle = '#F4F6F7'; c.fillRect(110, 162, 120, 12);
+        c.fillStyle = 'rgba(150,165,175,0.9)';
+        for (let i = 0; i < 26; i++) c.fillRect(126 + ((i * 41) % 88), 162 + ((i * 13) % 8), 1.6, 1.6);
+      }
+    }
+    c.restore();
+    c.beginPath(); _basinPath(c); c.strokeStyle = '#9EAAB0'; c.lineWidth = 3; c.stroke();
+    c.beginPath(); c.moveTo(108, 124); c.lineTo(232, 124); c.strokeStyle = '#B8C3C8'; c.lineWidth = 3; c.stroke();
+    _text(c, 'evaporating basin', 170, 116);
+    if (M && E.heat && E.water > 0 && E.T >= K.boils) {
+      c.strokeStyle = 'rgba(255,255,255,0.75)'; c.lineWidth = 1.4;
+      const ph = _wob(calm, 1200) * 8;
+      [150, 172, 192].forEach(x => { c.beginPath(); c.moveTo(x, lvl - 4 - ph); c.quadraticCurveTo(x + 4, lvl - 10 - ph, x, lvl - 16 - ph); c.stroke(); });
+    }
+    if (M && M.chars && E.T > 200) {
+      c.fillStyle = 'rgba(110,110,110,0.45)';
+      const ph = _wob(calm, 1500) * 10;
+      [[160, 104], [176, 96], [168, 86]].forEach(([x, y]) => { c.beginPath(); c.arc(x, y - ph, 7, 0, Math.PI * 2); c.fill(); });
+    }
+  }
+
+  function _drawChroma(c) {
+    const R = _chr, p = R.parts, I = p.ink && SD.INKS[p.ink];
+    const bx0 = 110, bx1 = 230, by0 = 120, by1 = 238, base = 210, top = 44, px0 = 158, px1 = 182, pb = 232;
+    const waterY = p.level === 'high' ? 196 : 222;
+    c.fillStyle = '#8A979C'; c.fillRect(120, 38, 100, 4);
+    if (p.level) { c.fillStyle = R.washed && I && R.t > 0.3 ? _rgba(I.color, 0.35) : 'rgba(160,205,235,0.6)'; c.fillRect(bx0 + 1, waterY, bx1 - bx0 - 2, by1 - waterY); }
+    c.fillStyle = '#FFFFFF'; c.strokeStyle = 'rgba(0,0,0,0.25)'; c.lineWidth = 1;
+    c.fillRect(px0, top, px1 - px0, pb - top); c.strokeRect(px0, top, px1 - px0, pb - top);
+    const frontY = waterY - (R.front / SD.CHROMA.top) * (waterY - top - 8) * SD.CHROMA.top;
+    if (R.front > 0) {
+      c.fillStyle = 'rgba(160,205,235,0.35)'; c.fillRect(px0, frontY, px1 - px0, pb - frontY);
+      _dash(c, () => { c.moveTo(px0 - 6, frontY); c.lineTo(px1 + 6, frontY); });
+      _text(c, 'solvent front', px1 + 8, frontY + 3, 'left');
+    }
+    if (p.line) {
+      c.strokeStyle = p.line === 'pen' ? '#6A3FA0' : '#6B6B6B'; c.lineWidth = 1.2;
+      c.beginPath(); c.moveTo(px0, base); c.lineTo(px1, base); c.stroke();
+      _text(c, 'start line', px0 - 6, base + 3, 'right');
+    }
+    if (R.smear) {
+      const g = c.createLinearGradient(0, base, 0, Math.min(base, frontY));
+      g.addColorStop(0, 'rgba(106,63,160,0.55)'); g.addColorStop(1, 'rgba(106,63,160,0.05)');
+      c.fillStyle = g; c.fillRect(px0 + 2, Math.min(base, frontY), px1 - px0 - 4, Math.max(0, base - frontY));
+    }
+    if (I && !(R.washed && R.t > 0.3)) {
+      const travel = Math.max(0, base - frontY);
+      if (travel < 1) { c.fillStyle = I.color; c.beginPath(); c.arc(170, base, 4, 0, Math.PI * 2); c.fill(); }
+      else I.dyes.forEach(d => { c.fillStyle = d.color; c.beginPath(); c.ellipse(170, base - d.rf * travel, 5, 3.6, 0, 0, Math.PI * 2); c.fill(); });
+    }
+    _beaker(c, bx0, by0, bx1, by1);
+    _text(c, 'chromatography paper', px0 - 6, 70, 'right');
+    _text(c, p.level ? 'water (solvent)' : 'beaker', 170, 252);
+  }
+
+  function _drawDissolve(c) {
+    const V = _dis, p = V.parts, S = p.solid && SD.SOLIDS[p.solid], calm = Labs.calm() || _instant;
+    c.fillStyle = '#C9D2D5'; c.fillRect(80, 224, 160, 16);
+    c.fillStyle = '#9AA6AA'; c.fillRect(92, 218, 136, 6);
+    c.fillStyle = '#1F3A2E'; c.fillRect(128, 228, 64, 10);
+    _text(c, `${f1(p.dbeaker ? SD.massOnBalance(p.solid, V.added) : 0)} g`, 160, 236.5, 'center', '#9EF0B5', 8.5, 700);
+    _text(c, 'balance', 60, 236, 'center');
+    const bx0 = 122, bx1 = 198, by0 = 140, by1 = 218;
+    if (p.dbeaker && !V.broken) {
+      c.fillStyle = 'rgba(190,225,240,0.6)'; c.fillRect(bx0 + 1, 164, bx1 - bx0 - 2, by1 - 164);
+      if (V.added && S) {
+        const n = S.dissolves ? Math.round(26 * (1 - V.dissolved)) : 26;
+        c.fillStyle = S.color; c.strokeStyle = 'rgba(80,90,90,0.45)'; c.lineWidth = 0.5;
+        const swirl = V.stir > 0 && !calm;
+        for (let i = 0; i < n; i++) {
+          const x = bx0 + 6 + ((i * 37) % (bx1 - bx0 - 12));
+          const y = swirl ? 172 + ((i * 29 + Date.now() / 25) % 40) : by1 - 3 - ((i * 7) % 5);
+          c.fillRect(x, y, 2.6, 2.6); c.strokeRect(x, y, 2.6, 2.6);
+        }
+      }
+      _beaker(c, bx0, by0, bx1, by1);
+      if (p.dbeaker === 'cracked') _crackLine(c, bx1 - 2, 150);
+      if (V.stir > 0) {
+        const w = (_wob(calm, 700) - 0.5) * 16;
+        c.strokeStyle = 'rgba(200,225,235,0.95)'; c.lineWidth = 3; c.lineCap = 'round';
+        c.beginPath(); c.moveTo(186 + w, 112); c.lineTo(160 + w * 0.3, 212); c.stroke();
+      }
+      _text(c, 'beaker of water', 160, 132);
+    } else if (!p.dbeaker) _dash(c, () => c.rect(bx0, by0, bx1 - bx0, by1 - by0));
+    if (S && !V.added) {
+      c.fillStyle = '#E4E8EA'; c.strokeStyle = _colors.glass; c.lineWidth = 1.2;
+      c.beginPath(); c.moveTo(250, 206); c.lineTo(300, 206); c.lineTo(294, 216); c.lineTo(256, 216); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = S.color; c.strokeStyle = 'rgba(80,90,90,0.45)'; c.lineWidth = 0.5;
+      for (let i = 0; i < 16; i++) { const x = 258 + ((i * 13) % 34), y = 202 + ((i * 5) % 5); c.fillRect(x, y, 2.6, 2.6); c.strokeRect(x, y, 2.6, 2.6); }
+      _text(c, `${S.grams} g of ${S.name.toLowerCase()}`, 275, 196);
+    }
+  }
+
   function _drawChoose(c) {
-    const mx = _curMix(), done = !!_ch.done[mx.id], L = mx.look;
+    const set = _chSet(), mx = _curMix(), done = !!_ch.done[mx.id], L = mx.look;
     _text(c, mx.name, 170, 30, 'center', _colors.ink, 15, 800);
-    _text(c, 'You want: ' + mx.want, 170, 48, 'center', _colors.muted, 10, 600);
+    _text(c, set.wantLabel + ': ' + mx.want, 170, 48, 'center', _colors.muted, 10, 600);
     c.save();
     c.beginPath(); c.moveTo(122, 72); c.lineTo(122, 218); c.lineTo(218, 218); c.lineTo(218, 72); c.clip();
     if (L.liquid) { c.fillStyle = _rgba(L.liquid, 0.75); c.fillRect(120, 118, 100, 102); }
     const g = (col, n, y0, h) => { c.fillStyle = col; for (let i = 0; i < n; i++) c.fillRect(126 + ((i * 47) % 88), y0 + ((i * 29) % h), 3, 3); };
     if (L.other) g(L.other, L.liquid ? 70 : 60, L.liquid ? 204 : 186, L.liquid ? 12 : 30);
     if (L.solid) g(L.solid, 60, 187, 28);
+    if (!L.liquid && !L.solid) {
+      c.strokeStyle = 'rgba(90,120,130,0.55)'; c.lineWidth = 1;
+      for (let i = 0; i < 14; i++) { c.beginPath(); c.arc(132 + ((i * 47) % 76), 90 + ((i * 31) % 118), 2.4, 0, Math.PI * 2); c.stroke(); }
+      _text(c, 'a gas', 170, 150, 'center', _colors.muted, 10, 600);
+    }
     c.restore();
     c.strokeStyle = _colors.glass; c.lineWidth = 2.4; c.lineJoin = 'round';
     c.beginPath(); c.moveTo(116, 70); c.lineTo(122, 76); c.lineTo(122, 218); c.lineTo(218, 218); c.lineTo(218, 76); c.stroke();
-    if (done) _text(c, '✓ ' + SD.TECHNIQUES[mx.tech].name, 170, 246, 'center', _colors.ok, 13, 800);
-    else _text(c, _ch.phase === 'why' ? SD.TECHNIQUES[mx.tech].name + ' - but why?' : 'Which technique?', 170, 246, 'center', _colors.muted, 12, 700);
+    if (done) _text(c, '✓ ' + set.kinds[mx.tech].name, 170, 246, 'center', _colors.ok, 13, 800);
+    else _text(c, _ch.phase === 'why' ? set.kinds[mx.tech].name + ' - but why?' : set.q1, 170, 246, 'center', _colors.muted, 12, 700);
   }
 
   function _rgba(hex, a) {
@@ -1755,13 +2481,17 @@ const LabSeparation = (() => {
     if (_mode === 'distil') _drawDistil(c);
     else if (_mode === 'crystal') _drawCrystal(c);
     else if (_mode === 'sublime') _drawSublime(c);
+    else if (_mode === 'filter') _drawFilter(c);
+    else if (_mode === 'evap') _drawEvap(c);
+    else if (_mode === 'chroma') _drawChroma(c);
+    else if (_mode === 'dissolve') _drawDissolve(c);
     else _drawChoose(c);
     _drawFx(c, dt);
     c.restore();
   }
 
   function _fxOrigin() {
-    return _mode === 'distil' ? [70, 64] : _mode === 'crystal' ? [170, 128] : [170, 158];
+    return _mode === 'distil' ? [70, 64] : (_mode === 'crystal' || _mode === 'evap') ? [170, 128] : [170, 158];
   }
   function _drawFx(c, dt) {
     const full = [-_ox / _s, -_oy / _s, _W / _s, _H / _s];
@@ -1791,6 +2521,16 @@ const LabSeparation = (() => {
           c.save(); c.translate(px, py); c.rotate(q.rot + f.t * 8);
           c.fillStyle = 'rgba(200,228,240,0.9)'; c.strokeStyle = _colors.glass; c.lineWidth = 0.8;
           c.beginPath(); c.moveTo(-q.r * 2, 0); c.lineTo(0, -q.r * 1.4); c.lineTo(q.r * 1.8, q.r); c.closePath(); c.fill(); c.stroke();
+          c.restore();
+        });
+      } else if (f.type === 'crack') {
+        const [x, y] = _mode === 'filter' ? [200, 196] : [196, 180];
+        _shake = Math.max(_shake, 0.45 * (1 - k));
+        f.parts.forEach(q => {
+          const px = x + q.vx * 0.3 * f.t, py = y + Math.abs(q.vy) * 0.15 * f.t + 180 * f.t * f.t;
+          c.save(); c.translate(px, py); c.rotate(q.rot + f.t * 6);
+          c.fillStyle = 'rgba(200,228,240,0.9)'; c.strokeStyle = _colors.glass; c.lineWidth = 0.8;
+          c.beginPath(); c.moveTo(-q.r * 1.6, 0); c.lineTo(0, -q.r * 1.2); c.lineTo(q.r * 1.4, q.r); c.closePath(); c.fill(); c.stroke();
           c.restore();
         });
       } else if (f.type === 'haze') {
@@ -1854,7 +2594,12 @@ const LabSeparation = (() => {
   }
   function _debug() {
     const D = _dist || _newDist(), C = _cry || _newCry(), U = _sub || _newSub(), K = _ch || _newCh();
-    return { mode: _mode, goggles: _goggles, busy: _busy, panel: _panel, guide: _guide && { id: _guide.id, step: _guide.step },
+    const F = _fil || _newFil(), E = _eva || _newEva(), R = _chr || _newChr(), V = _dis || _newDis();
+    return { grade: _g(), mode: _mode, modes: _modes().slice(), goggles: _goggles, busy: _busy, panel: _panel, guide: _guide && { id: _guide.id, step: _guide.step },
+             fil: { parts: Object.assign({}, F.parts), pouring: F.pouring, poured: F.poured, filtrate: F.filtrate, cloudy: F.cloudy, done: F.done, broken: F.broken },
+             eva: { parts: Object.assign({}, E.parts), heat: E.heat, T: E.T, water: E.water, edge: E.edge, leave: E.leave, done: E.done, dry: E.dry, charred: E.charred },
+             chr: { parts: Object.assign({}, R.parts), running: R.running, front: R.front, done: R.done, washed: R.washed, smear: R.smear },
+             dis: { parts: Object.assign({}, V.parts), added: V.added, stir: V.stir, dissolved: V.dissolved, done: V.done, settled: V.settled, broken: V.broken },
              dist: { parts: Object.assign({}, D.parts), heat: D.heat, T: D.T, read: D.read, vol: D.vol, dist: D.dist, boiling: D.boiling,
                      jacket: D.jacket, pressure: D.pressure, done: D.done, readings: D.readings.length, escaped: D.escaped },
              cry: { heat: C.heat, T: C.T, water: C.water, cool: C.cool, crystals: C.crystals, onset: C.onset, done: C.done, dry: C.dry, rods: C.rods.length, rodOK: C.rodOK },
@@ -1866,6 +2611,6 @@ const LabSeparation = (() => {
   }
 
   return { mount, unmount, startMission, startGuide, discoveryGuide, setMode, setPart, build, heatOn, heatOff, rod, cool, drop,
-           reset, goggles, pickTech, pickWhy, choose, _test, _tick, _debug };
+           reset, goggles, pickTech, pickWhy, choose, pour, leave, run, add, stir, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabSeparation = LabSeparation;

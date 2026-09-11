@@ -172,7 +172,10 @@ tells the open lab which grade it is being used at.
   they drift).
 - `Labs.quiz` options may be `{ label, svg }` for "pick the apparatus" questions.
 - Signs now include `sharp` (broken glass, a point) and `warning` (a general
-  physical danger) — never borrow the chemical `irritant` for those.
+  physical danger) — never borrow the chemical `irritant` for those — and the
+  mandatory `goggles` (ISO 7010 M004 "Wear eye protection", a blue disc) to pair
+  with the hazard sign whenever eye protection is the lesson. `eye` means
+  "Bright light" and must not stand in for it.
 
 ## 7. Report back
 Files created; counts of guided experiments / discoveries / missions / hazard and

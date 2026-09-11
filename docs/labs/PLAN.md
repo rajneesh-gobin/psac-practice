@@ -3,6 +3,10 @@
 > Status 2026-09-11: **Phase 0 built — the Mixing Bench — not yet deployed.**
 > Readable version of the plan published as an Artifact ("NCE Science Labs").
 
+> ⏸ **Paused 2026-09-11 (night). What is left — in-flight builds, the next
+> batch, the optional batch, open questions, the commit checklist — is in
+> [`lab_plan.md`](lab_plan.md). Start there.**
+
 ## Build status (2026-09-11, late evening) — read this first when resuming
 - **Batch complete. All nine Grade 9 labs are live** (`ready: true`, every data
   test, browser test and `check.js` re-run by the lead, not taken from the build
@@ -34,12 +38,48 @@
   - ⚠ the picked grade is reset when the child (own grade / usable grades)
     changes — switching child never reloads the page, and a Grade 6 child
     opened on the Grade 9 a sibling had chosen.
-- **Batch B in progress:** water (Water & States, G4) and air (Air & Burning,
-  G4/G6) — new primary labs; Grade 4/6 levels for the Circuit Board and the
-  Photosynthesis Lab. Browser ports 9412–9415. On each report: verify, then add
+- **Batch B in progress:** ✅ water (Water & States, G4) verified by the lead
+  (data 110/0, browser 85/0, grades 30/0) and `ready`; ✅ air (Air & Burning,
+  G4/G6) verified (data 123/0, browser 96/0, grades 30/0) and `ready` — to
+  confirm before release: the fire service number 115 and "1 litre of air
+  weighs about 1.2 g" (from the builder's own knowledge, not the repo);
+  limewater is beyond the app's Grade 6 questions; ✅ Circuit Board G4/G6
+  levels (data 185/0, registered `[4, 6, 9]`); ✅ Photosynthesis G4/G6 levels
+  (data 157/0, registered `[4, 6, 9]`) — primary ids carry their grade
+  (`g4_…`, `g6_…`); Grade 4 level for the Light Bench (started early, first of
+  Batch C). Browser ports 9412–9416. ⚠ Commit `eb9c86b` "test" (another
+  session) swept in a half-built `lab_water.js` with a duplicate `_tick` bug;
+  the fix is in the working tree only. On each report: verify, then add
   the grades to the `L(...)` row AND `_LAB_GRADES`, flip `ready`, re-run
   `test-labs-grades.js` (its per-grade expectations change).
-- **Batch C (queued):** Light G4 (transparent/opaque, shadows), Measurement
+- **New mandatory `goggles` sign** (ISO 7010 M004 "Wear eye protection", blue
+  disc) — `eye` reads "Bright light" and had nothing to say about splashes.
+  Separation's spitting-basin cards and the Mixing Bench's two no-goggles cards
+  now pair it with the hazard sign. ✅ Mixing Bench Grade 8 (kitchen acids and
+  alkalis, litmus, neutralisation) registered `[8, 9]`.
+- ✅ Circuit G7 registered `[4, 6, 7, 9]`; ✅ new lab **Food Tests** (G8 —
+  iodine, Benedict's, biuret, grease spot, ethanol) `ready`; ✅ Measurement
+  G7/G8 (displacement, density, float or sink) registered `[4, 7, 8, 9]`.
+  Nothing in flight. Remaining work:
+  [`lab_plan.md`](lab_plan.md).
+- **Hub cards count progress per grade** (`_tag()` in `persist()` stamps each
+  discovery/mission written since the lab opened with `Labs.grade()`; untagged
+  = the lab's highest grade). Cards sit under "Science" at Grades 4-6, and a
+  row's blurb may be `{ 9: '…', 4: '…' }`. Full browser suite re-run after
+  that change: all green (grades 34/0, circuit 181/0, the rest unchanged).
+- **Batch C (in progress):** ✅ Light G4 (data 105/0, browser 130/0 on the real
+  path, registered `[4, 9]`; Grade 6 has light content too — shadows through
+  the day, the Moon, eclipses — a possible later level), ✅ Measurement G4 (data
+  137/0, registered `[4, 9]`; Grade 6 has no measuring-instrument content),
+  ✅ Separation G7/G8 (data 216/0, registered `[7, 8, 9]`; **Grade 8's first
+  lab — `_LAB_GRADES` now `[4, 5, 6, 7, 8, 9]`**; follow-ups: the Grade 7
+  distillation bench reuses the Grade 9 faulty-rig cards, which quote Grade 9
+  papers), ✅ Microscope G7 (data 180/0, browser 117/0 on the
+  real path, registered `[7, 9]`; **Grade 7's first lab — `_LAB_GRADES` now
+  `[4, 5, 6, 7, 9]`**; stains and cover slips are lab method, not in the Grade
+  7 pack, and are never an exam point), Mixing G8 (9420). Tests now use Grade 3
+  as "a grade with no lab". Hub cards sit under "Science" up to Grade 8. When a G7/G8 level lands, add
+  7/8 to `_LAB_GRADES` — Grades 7-8 have no lab yet. Queued after: Light G4 (transparent/opaque, shadows), Measurement
   G4/G7/G8, Separation G8/G7, Mixing G8, Microscope G7, Circuit G7; then the
   new labs Magnets (G8, G4), Food Tests (G8), Forces & Pressure (G8).
 - Still to check: every lab restarts its animation loop after leaving and

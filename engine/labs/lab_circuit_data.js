@@ -48,10 +48,25 @@
 //    Paper references are quoted only from past_paper_*.js: PSAC 2024 Q1 (the
 //    energy at the output of a switched-on television) and PSAC 2023 (why
 //    used cells must not be thrown into the environment).
-//    Progress never collides: every primary id carries its grade (g4_…, g6_…).
+//    - Grade 7 (NCE, lower secondary): g7s-electricity in
+//      subjects/grade7-science - "Identify the main parts of an electric
+//      circuit. Recognise cells, batteries, bulbs, switches and resistors. Draw
+//      circuits using conventional symbols. Investigate the workings of simple
+//      circuits." The bank asks: which symbol is the switch/cell/lamp/resistor
+//      (-003, -004, -009, -010, -017), a diagram with a gap (-018, hd-064),
+//      series vs parallel and house wiring (-006, -012, -016, hd-061..063),
+//      more cells = brighter, then burnt out (-011, hd-069), three 1.5 V cells
+//      = 4.5 V (-020), ammeter in series / voltmeter across and the units A, V,
+//      Ω (-008, -013, -015, -019), the resistor limits the current (-007),
+//      copper conducts / plastic insulates (-014, hd-070), the fuse (hd-066),
+//      why symbols are standard (hd-067). NO numerical V = IR, Q = It or W = QV:
+//      those are Grade 9. There is no Grade 7 past paper in the app, so no
+//      paper is quoted; the exam heading is "📝 In your exams".
+//    Progress never collides: every id below Grade 9 carries its grade (g4_…,
+//    g6_…, g7_…).
 // ══════════════════════════════════════════════
 const LabCircuitData = (() => {
-  const GRADES = [4, 6, 9];
+  const GRADES = [4, 6, 7, 9];
   const forGrade = (list, g) => list.filter(x => (x.grades || [9]).includes(g));
   const COLS = 4, ROWS = 3, NODES = COLS * ROWS;
   const EMF = 1.5;
@@ -122,10 +137,23 @@ const LabCircuitData = (() => {
     bulb:   'Lights up when electricity flows through it.',
     switch: 'Opens and closes a gap in the circuit.',
   };
+  // Grade 7: what each part does, in the words of the Grade 7 bank (the Grade 9
+  // text talks of charge and terminals; Grade 7 names the symbol).
+  const JOBS_7 = {
+    wire:      'Joins the parts. Copper inside conducts the current; plastic outside is an insulator.',
+    cell:      'Provides the energy that pushes the current round. In its symbol the long line is + and the short line is −.',
+    bulb:      'A lamp. It lights when a current flows through it. Its symbol is a circle with a cross.',
+    switch:    'Opens and closes the circuit. Open, it leaves a gap; closed, it completes the loop.',
+    ammeter:   'Measures the current, in amperes (A). It goes IN SERIES, in the loop.',
+    voltmeter: 'Measures the voltage across a part, in volts (V). It goes ACROSS the part, one lead each side.',
+    resistor:  'Limits the current, so less of it flows. Its symbol is a plain rectangle.',
+    fuse:      'A thin wire that melts if the current gets too big, and so breaks the circuit.',
+  };
   const TOOLS_P = ['hand', 'wire', 'cell', 'bulb', 'switch', 'eraser'];
   const toolsFor = g => (g <= 6 ? TOOLS_P : TOOLS);
   const kindsFor = g => (g <= 6 ? ['wire', 'cell', 'bulb', 'switch'] : ['wire', 'cell', 'bulb', 'switch', 'ammeter', 'voltmeter', 'resistor', 'fuse']);
-  const symbolsFor = g => g !== 4;   // Grade 4 draws pictures only; Grade 6 sees symbols as an extra
+  // Grade 4 draws pictures only; Grade 6 sees symbols as an extra; Grades 7 and 9 as the syllabus draws them.
+  const symbolsFor = g => g !== 4;
 
   // ── Ready-made layouts ────────────────────────
   // Every one is the same outer loop: the cell top-left, the switch on the
@@ -149,10 +177,13 @@ const LabCircuitData = (() => {
     tester:       P('A tester with a gap for testing things', { v31: null }),
     switch_right: P('A circuit with the switch on the other side', { v00: 'wire', v31: 'switch' }),
     broken:       P('A torch that does not work', { v31: null, h12: 'bulb:out' }),
+    // Grade 7: the only switch is on one branch, as a light switch is in a house.
+    branch_switch: P('Two lamps in parallel, a switch on one branch', { h11: 'bulb', v11: 'switch', v21: 'wire', v00: 'wire' }),
   };
   // Quick layouts offered on the shelf (the others belong to guides and missions).
   const QUICK = ['single', 'series2', 'parallel2', 'twocells', 'meters', 'resistor', 'fuse'];
-  const QUICK_BY_GRADE = { 4: ['single', 'gap', 'tester'], 6: ['single', 'tester', 'twocells', 'switch_right'], 9: QUICK };
+  const QUICK_BY_GRADE = { 4: ['single', 'gap', 'tester'], 6: ['single', 'tester', 'twocells', 'switch_right'],
+                           7: ['single', 'series2', 'parallel2', 'branch_switch', 'twocells', 'resistor', 'fuse'], 9: QUICK };
   // The gap a tester leaves for the thing being tested.
   const TEST_SLOT = 'v31';
 
@@ -361,11 +392,29 @@ const LabCircuitData = (() => {
       .map(slot => ({ slot, obj: layout[slot].kind, result: testResult(layout, slot) }));
   }
 
-  // What a Grade 4/6 pupil has just shown, as the facts the primary discoveries
+  // Are the meters where they belong? An ammeter carrying the cell's current to
+  // a lit lamp, and a voltmeter whose reading is the voltage of a lit lamp.
+  function meterChecks(sol) {
+    const lit = litBulbs(sol);
+    const across = Object.keys(sol.meters).sort().filter(k => sol.meters[k].kind === 'voltmeter' && sol.meters[k].value > 0.1
+      && lit.some(b => Math.abs(sol.bulbs[b].V - sol.meters[k].value) < 0.02));
+    return { ammeter: lit.length > 0 && Object.keys(sol.meters).some(k => ammeterInSeries(sol, k)),
+             voltmeter: across.length > 0, volts: across.map(k => sol.meters[k].value) };
+  }
+  // One loop: every part of these kinds carries the whole of the cell's current.
+  function oneLoop(sol, kinds) {
+    const els = sol.els.filter(e => kinds.includes(e.kind));
+    return sol.flowing && kinds.every(k => els.some(e => e.kind === k)) && els.every(e => Math.abs(Math.abs(e.I) - sol.cellI) < 1e-3);
+  }
+
+  // What a Grade 4/6/7 pupil has just shown, as the facts their discoveries
   // are unlocked by (their `when`). o = { layout, sol, prev (the solution before
-  // the change), evt, view, tests (object → result so far), gapFilled, warm }.
+  // the change), evt, view, tests (object → result so far), gapFilled, warm,
+  // fuse (a fuse has just melted) }.
   const WHENS = ['lit', 'switch_off', 'switch_moved', 'gap_fixed', 'unscrew', 'warm', 'brighter', 'symbols', 'sorted',
-    'conductor:metal', 'insulator:any', ...TEST_OBJECTS.flatMap(x => ['conductor:' + x, 'insulator:' + x])];
+    'conductor:metal', 'insulator:any', ...TEST_OBJECTS.flatMap(x => ['conductor:' + x, 'insulator:' + x]),
+    'series_two', 'series_break', 'parallel_two', 'parallel_keeps', 'branch_off', 'resistor_dims',
+    'ammeter_series', 'voltmeter_across', 'cells_add', 'fuse_melts'];
   function facts(o) {
     const f = new Set(), sol = o.sol, lit = litBulbs(sol), prevLit = o.prev ? litBulbs(o.prev) : [], evt = o.evt || '';
     if (lit.length) f.add('lit');
@@ -386,6 +435,24 @@ const LabCircuitData = (() => {
       if (t.result === 'insulator') f.add('insulator:any');
     }
     if (o.tests && TEST_OBJECTS.every(x => o.tests[x])) f.add('sorted');
+    // Grade 7: series and parallel, the resistor, the meters, the fuse.
+    const arr = arrangement(sol), prevArr = o.prev ? arrangement(o.prev) : 'none';
+    if (arr === 'series' && lit.length === 2) f.add('series_two');
+    if (arr === 'parallel' && lit.length === 2 && lit.every(k => sol.bulbs[k].brightness >= 0.9)) f.add('parallel_two');
+    if (/^bulb:.*:out$/.test(evt)) {
+      if (prevArr === 'series' && !lit.length) f.add('series_break');
+      if (prevArr === 'parallel' && lit.length === 1 && sol.bulbs[lit[0]].brightness >= 0.9) f.add('parallel_keeps');
+    }
+    if (evt === 'switch:off' && prevLit.length >= 2 && lit.length && lit.length < prevLit.length) f.add('branch_off');
+    const res = sol.els.filter(e => e.kind === 'resistor' && Math.abs(e.I) > 0.01);
+    if (res.length && lit.some(k => Math.abs(sol.bulbs[k].I - Math.abs(res[0].I)) < 1e-3 && sol.bulbs[k].brightness < 0.5)) f.add('resistor_dims');
+    if (evt === 'read') {
+      const m = meterChecks(sol);
+      if (m.ammeter) f.add('ammeter_series');
+      if (m.voltmeter) f.add('voltmeter_across');
+      if (sol.cells >= 2 && m.volts.some(v => Math.abs(v - sol.cells * EMF) < 0.02)) f.add('cells_add');
+    }
+    if (o.fuse) f.add('fuse_melts');
     return f;
   }
 
@@ -633,6 +700,83 @@ const LabCircuitData = (() => {
       saw: 'The same circuit, drawn with simple symbols instead of pictures.',
       formula: 'cell: a long and a short line  ·  bulb: a circle with a cross  ·  switch: a lifted line',
       learn: 'Scientists draw circuits with symbols. This is an extra: you will use it at secondary school. It is beyond the PSAC syllabus.' },
+
+    // ── Grade 7 (g7s-electricity: circuit_parts, circuit_symbols, simple_circuits) ──
+    { id: 'g7_circuit', grades: [7], when: 'lit', icon: '💡', title: 'A complete circuit', hint: 'Close the switch on a complete circuit',
+      how: ['build:single', ON],
+      saw: 'You closed the switch and the lamp lit. The moving dots show the current flowing all the way round the loop.',
+      formula: 'cell → wire → switch → wire → lamp → wire → back to the cell',
+      learn: 'A circuit is a complete loop. The cell provides the energy, the wires carry the current, and the lamp changes the energy into light and some heat. Break the loop anywhere and the current stops.',
+      exam: 'Know the job of each part: the cell provides the energy, the switch opens and closes the circuit, the lamp gives out light.' },
+    { id: 'g7_switch', grades: [7], when: 'switch_off', icon: '🔘', title: 'Open switch, no current', hint: 'Open the switch while the lamp is lit',
+      how: ['build:single', ON, OFF],
+      saw: 'You opened the switch. The lamp went out and the dots stopped everywhere in the loop.',
+      learn: 'A switch is a gap you can close. Open (off), it breaks the circuit, so no current flows anywhere - not only near the switch. Closed (on), the loop is complete again.',
+      exam: 'In a circuit diagram, an open switch is drawn as a line lifted away from its contact.' },
+    { id: 'g7_gap', grades: [7], when: 'gap_fixed', icon: '🧩', title: 'Find the break', hint: 'Mend a circuit that has a gap in its wire',
+      how: ['build:gap', 'place:v31:wire', ON],
+      saw: 'A wire was missing on the right. You filled the gap, closed the switch, and the lamp lit.',
+      learn: 'Trace a circuit with your finger, on the board or in a diagram, from the cell all the way round. A break anywhere makes an open circuit, and no current flows.',
+      exam: 'A diagram shows a lamp that does not light: look for a break in the wire before you blame the cell or the lamp.' },
+    { id: 'g7_symbols', grades: [7], when: 'symbols', icon: '✏️', title: 'Circuit symbols', hint: 'Switch to the circuit-diagram view with the lamp lit',
+      how: ['build:single', ON, 'view:symbols'],
+      saw: 'The same circuit, drawn as a circuit diagram: standard symbols joined by straight wires.',
+      formula: 'cell: a long line (+) and a short line (−) · lamp: a circle with a cross · switch: a lifted line · resistor: a plain rectangle',
+      learn: 'Standard symbols mean anyone can read a diagram, whatever language they speak. Wires are drawn straight, with square corners: what matters is what joins to what.',
+      exam: 'Exam questions show four symbols and ask which one is the switch, the cell, the lamp or the resistor.' },
+    { id: 'g7_resistor', grades: [7], when: 'resistor_dims', icon: '🟫', title: 'A resistor limits the current', hint: 'Put a resistor in the loop with the lamp',
+      how: ['build:resistor', ON],
+      saw: 'With a resistor in the loop the lamp was dim, and the ammeter read 0.25 A instead of 0.50 A.',
+      formula: 'more resistance → less current → a dimmer lamp',
+      learn: 'A resistor opposes the current, so less current flows round the whole loop. Resistance is measured in ohms (Ω). Resistors protect other parts from too big a current.',
+      exam: 'The symbol for a resistor is a plain rectangle. Its job is to limit the current.' },
+    { id: 'g7_series', grades: [7], when: 'series_two', icon: '🔗', title: 'Two lamps in series', hint: 'Put two lamps one after the other in one loop',
+      how: ['build:series2', ON],
+      saw: 'Two lamps in one loop both lit, but both were dim.',
+      learn: 'In series there is only one path for the current. The two lamps share the voltage of the cell, so each one gets less and glows dimly.' },
+    { id: 'g7_series_out', grades: [7], when: 'series_break', icon: '💔', title: 'One out, all out', hint: 'Unscrew a lamp in a series circuit',
+      how: ['build:series2', ON, 'bulb:h12:out'],
+      saw: 'You unscrewed one lamp, and the other went out too.',
+      learn: 'A series circuit is a single loop. Take out any part and the loop is broken, so the current stops everywhere.',
+      exam: 'Two lamps in series: if one breaks, the other goes off as well.' },
+    { id: 'g7_parallel', grades: [7], when: 'parallel_two', icon: '🔀', title: 'Two lamps in parallel', hint: 'Give each lamp its own branch',
+      how: ['build:parallel2', ON],
+      saw: 'Each of the two lamps was as bright as one lamp on its own.',
+      learn: 'In parallel each lamp sits on its own branch and gets the full voltage of the cell, so each glows at full brightness. The cell has to supply both branches.' },
+    { id: 'g7_parallel_on', grades: [7], when: 'parallel_keeps', icon: '🧍', title: 'Each on its own path', hint: 'Unscrew a lamp in a parallel circuit',
+      how: ['build:parallel2', ON, 'bulb:h12:out'],
+      saw: 'You unscrewed one lamp. The other stayed lit, just as bright as before.',
+      learn: 'Each branch of a parallel circuit is its own complete path back to the cell. Breaking one branch leaves the others working.',
+      exam: 'Two lamps in parallel: if one breaks, the other stays on.' },
+    { id: 'g7_branch', grades: [7], when: 'branch_off', icon: '🏠', title: 'Wired like a house', hint: 'Open a switch that sits on one branch only',
+      how: ['build:branch_switch', ON, OFF],
+      saw: 'The switch was on one branch. Opening it put out its own lamp, and the other lamp stayed on.',
+      learn: 'A switch controls only the branch it is on. The lights in a house are in parallel, each with its own switch, so each one can be switched on and off by itself.',
+      exam: 'Why are house lights wired in parallel? Each can be switched on its own, and one broken lamp does not put out the rest.' },
+    { id: 'g7_cells', grades: [7], when: 'cells_add', icon: '🔋', title: 'Cells in series add up', hint: 'Measure across the lamp with two cells in series',
+      how: ['build:meters', 'place:h10:cell', ON, READ],
+      saw: 'With two cells in series the voltmeter read 3.00 V across the lamp, and the lamp was far brighter.',
+      formula: '1.5 V + 1.5 V = 3.0 V   (three cells: 1.5 V + 1.5 V + 1.5 V = 4.5 V)',
+      learn: 'Cells joined end to end, in series, add their voltages. A battery is two or more cells joined together. A bigger voltage pushes a bigger current, so the lamp is brighter - but too many cells burn it out.',
+      exam: 'Three 1.5 V cells in series make a 4.5 V battery.' },
+    { id: 'g7_ammeter', grades: [7], when: 'ammeter_series', icon: '⏲️', title: 'Using an ammeter', hint: 'Take a reading with an ammeter in the loop',
+      how: ['build:meters', ON, READ],
+      saw: 'The ammeter, in the loop with the lamp, read 0.50 A.',
+      formula: 'current is measured in amperes (A) - ammeter IN SERIES',
+      learn: 'The current you want to measure must flow through the ammeter, so it goes in the loop, in series. It has almost no resistance, so it does not change the current.',
+      exam: 'An ammeter measures current, in amperes, and is always connected in series.' },
+    { id: 'g7_voltmeter', grades: [7], when: 'voltmeter_across', icon: '🎚️', title: 'Using a voltmeter', hint: 'Take a reading with a voltmeter across the lamp',
+      how: ['build:meters', ON, READ],
+      saw: 'The voltmeter, connected across the lamp, read 1.50 V: the voltage of the cell.',
+      formula: 'voltage is measured in volts (V) - voltmeter ACROSS the part',
+      learn: 'A voltmeter compares the two ends of a part, so it goes across it, in parallel: one lead on each side. Almost no current flows through it.',
+      exam: 'A voltmeter measures the voltage across a part, in volts, and is connected in parallel with it.' },
+    { id: 'g7_fuse', grades: [7], when: 'fuse_melts', icon: '🧵', title: 'The fuse did its job', hint: 'Make a short cut round the lamp - with a fuse in the loop',
+      how: ['build:fuse', ON, 'place:h11:wire'],
+      saw: 'The new wire made a short cut round the lamp. The current shot up, the thin fuse wire melted, and the circuit was broken before anything else got hot.',
+      formula: 'current too big → the fuse melts → the circuit is broken',
+      learn: 'A fuse is a weak point built in on purpose. It fails first, so the wiring never gets hot enough to start a fire.',
+      exam: 'Why build a weak point into a circuit on purpose? The fuse breaks the circuit before the wiring can overheat.' },
   ];
 
   // ── Hazards: the mistakes that stop the experiment ───
@@ -680,6 +824,42 @@ const LabCircuitData = (() => {
       why: 'The plastic round a cable is an insulator. It keeps the electricity inside. Once it splits, the bare copper can pass mains electricity into your hand.',
       instead: 'Never touch a split or burnt cable, and never use it. Tell an adult. They will switch it off at the socket and have it mended.',
       exam: 'The plastic covering of a cable is an insulator. It stops electric shocks.',
+    },
+    // ── Grade 7 ──
+    g7_short_circuit: {
+      grades: [7], signs: ['hot'], fx: 'short',
+      title: () => 'Short circuit - the wire is getting hot',
+      happened: () => 'Your wire joined the two ends of the cell with nothing in between to use the energy. A very big current rushed round that short path. The wire and the cell got hot, and the lamp went dark.',
+      why: 'A wire has almost no resistance, so nothing limits the current. It heats the wire and the cell very fast. A real battery can leak, burn you or even catch fire, and short circuits in house wiring start fires.',
+      instead: 'Always keep a lamp or a resistor in the loop. Never join the two ends of a cell with just a wire. If a wire gets hot, open the switch at once.',
+      exam: 'A fuse is a weak point built in on purpose. It melts when the current is too big, and breaks the circuit before the wiring overheats.',
+    },
+    g7_mains: {
+      grades: [7], signs: ['electric'], fx: 'zap',
+      log: 'Tried to run the circuit from a wall socket. Mains electricity (230 V) can kill.',
+      title: () => 'Stop! That is mains electricity',
+      happened: () => 'You tried to power the circuit from a wall socket. Mains electricity in Mauritius is 230 V - about 150 times the voltage of one 1.5 V cell. The lamp would burst, and you could get a deadly shock.',
+      why: 'At 230 V a current can be driven through your body. It can burn you and stop your heart. A 1.5 V cell is far too weak to do that.',
+      instead: 'Use only cells for experiments. Never push anything into a socket. Leave plugs, sockets and house wiring to an adult or an electrician.',
+      exam: 'A house is wired in parallel, so every socket gets the full mains voltage. Never treat a socket like a cell.',
+    },
+    g7_wet_hands: {
+      grades: [7], signs: ['electric'], fx: 'zap',
+      log: 'Reached for a plug with wet hands. Tap water and mains electricity do not mix.',
+      title: () => 'Wet hands and mains electricity do not mix',
+      happened: () => 'You reached for a plug with wet hands. Tap water conducts electricity, so a current from the socket could flow into your body.',
+      why: 'Wet skin lets a current into your body much more easily than dry skin. At mains voltage that current can burn you or stop your heart.',
+      instead: 'Dry your hands before you touch a switch or a plug. Keep water and drinks away from sockets. Our 1.5 V cells are safe even with wet hands.',
+      exam: 'Tap water is a conductor, so keep water away from sockets, plugs and switches.',
+    },
+    g7_cable: {
+      grades: [7], signs: ['electric'], fx: 'zap',
+      log: 'Picked up a lamp with a split cable. The bare copper could give a shock.',
+      title: () => 'A damaged cable is dangerous',
+      happened: () => 'You picked up a lamp whose cable is split. The plastic coating is broken and the copper inside shows. Touching it while it is plugged in could give you a shock.',
+      why: 'Copper is a very good conductor, so it carries the current. The plastic round it is an insulator that keeps the current inside. Once the plastic splits, the bare copper can pass mains current into your hand.',
+      instead: 'Never touch or use a split or burnt cable. Tell an adult, who will switch it off at the socket and have it mended.',
+      exam: 'Wires are copper because copper conducts well. They are coated in plastic because plastic is an insulator.',
     },
   };
 
@@ -742,6 +922,49 @@ const LabCircuitData = (() => {
       instead: 'Tap one cell with ✋ to turn it round. The + end of one cell must touch the other end of the next, as in a torch.',
       exam: 'Put cells into a torch the way the + sign shows.',
     },
+    // ── Grade 7 ──
+    g7_open_circuit: {
+      grades: [7], icon: '🧩',
+      title: () => 'Nothing lights - the circuit has a break',
+      happened: () => 'You closed the switch, but the loop is broken somewhere. The current cannot flow across a gap, so there is no current anywhere and the lamp stays off.',
+      instead: 'Trace the loop with your finger, from the cell all the way round and back, just as you would trace a circuit diagram. Fill the empty space with a wire.',
+      exam: 'A diagram shows a lamp that does not light: look for a break in the wire before you blame the cell or the lamp.',
+    },
+    g7_no_cell: {
+      grades: [7], icon: '🔋',
+      title: () => 'No cell - nothing pushes the current',
+      happened: () => 'You closed the switch, but there is no cell on the board. Wires, a switch and a lamp cannot make a current on their own.',
+      instead: 'Pick 🔋 Cell and put it in the loop. The cell, or a battery of cells, provides the energy.',
+      exam: 'The cell (or battery) is the part of a circuit that provides the electrical energy.',
+    },
+    g7_cells_wrong: {
+      grades: [7], icon: '↔️',
+      title: () => 'The cells are facing each other',
+      happened: () => 'The loop is complete, but the lamp stays dark. One cell is turned round, so the two cells push the current in opposite directions and cancel out.',
+      instead: 'Tap one cell with ✋ to turn it round. In a diagram, the long line (+) of one cell faces the short line (−) of the next.',
+      exam: 'In the symbol for a cell, the long line is the positive (+) terminal and the short line is the negative (−).',
+    },
+    g7_bulb_blown: {
+      grades: [7], icon: '💥',
+      title: () => 'Too many cells - the lamp burnt out',
+      happened: c => `With ${c.cells} cells in series (${c.v} V), the lamp had far more voltage than it is made for. The bigger voltage pushed a bigger current through its thin wire, the filament. It glowed very brightly, overheated and broke.`,
+      instead: 'Match the battery to the lamp: this one is made for up to two cells (3 V). Put a wire in place of one cell, then tap the lamp with ✋ to fit a new one.',
+      exam: 'Cells in series add their voltages: 1.5 V + 1.5 V + 1.5 V = 4.5 V. More voltage drives more current, which is why a lamp can burn out.',
+    },
+    g7_ammeter_parallel: {
+      grades: [7], icon: '⏲️',
+      title: () => 'The ammeter is across the lamp, not in the loop',
+      happened: () => 'An ammeter has almost no resistance. Connected across the lamp, it made a short cut round it: the lamp went out and the needle shot past the end of the scale.',
+      instead: 'An ammeter goes IN SERIES. Take a wire out of the loop and put the ammeter in its place, so the current flows through it.',
+      exam: 'An ammeter measures current, in amperes (A), and is always connected in series.',
+    },
+    g7_voltmeter_series: {
+      grades: [7], icon: '🎚️',
+      title: () => 'The voltmeter is in the loop, not across the lamp',
+      happened: c => `A voltmeter has a very high resistance. Standing in the loop, it let almost no current through, so the lamp went out. It read ${c.v} V - the voltage of the cell, not of the lamp.`,
+      instead: 'Put a wire back where the voltmeter is. Then connect the voltmeter ACROSS the lamp, one lead to each end of it.',
+      exam: 'A voltmeter measures the voltage across a part, in volts (V), and is connected in parallel with it.',
+    },
   };
 
   const SIGN_LABELS = { hot: 'Hot surface', electric: 'Electric shock' };
@@ -786,6 +1009,41 @@ const LabCircuitData = (() => {
       'Used cells must not be thrown away outside. Their chemicals can pollute soil and water.',
       'Dry your hands before you touch a switch or a plug.',
     ],
+    7: [
+      'A circuit must be a complete loop before a current can flow.',
+      'A battery is two or more cells joined together, though people often call one cell a battery.',
+      'In the symbol for a cell, the long thin line is the positive (+) end and the short thick line is the negative (−).',
+      'Current is measured in amperes (A) with an ammeter. Voltage is measured in volts (V) with a voltmeter.',
+      'Resistance is measured in ohms (Ω). A resistor limits the current in a circuit.',
+      'Three 1.5 V cells in series make a 4.5 V battery: the voltages add up.',
+      'Copper is used for wires because it conducts electricity very well. The plastic coating is an insulator.',
+      'The lights in a house are wired in parallel, so each one can be switched on and off by itself.',
+      'A fuse is a thin wire that melts if the current gets too big. It breaks the circuit before the wiring overheats.',
+      'Standard circuit symbols mean anyone can read a diagram, whatever language they speak.',
+      'Mauritius burns bagasse, the waste left from crushing sugar cane, to make some of its electricity.',
+    ],
+  };
+
+  // Grade 7 "Build it from the diagram": a cell, an open switch, a resistor and
+  // a lamp in one loop, drawn with the standard symbols (the long line of the
+  // cell is +). No labels - reading the symbols is the mission.
+  const DIAGRAM_G7 = '<svg viewBox="0 0 240 140" class="lab-circuit-target-svg" role="img" aria-label="A circuit diagram to build">'
+    + '<g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">'
+    + '<path d="M30 30H74M86 30H130M160 30H210V55M210 85V110H134M106 110H30V30"/>'
+    + '<path d="M74 16v28"/><path d="M86 22v16" stroke-width="5"/>'
+    + '<path d="M130 30 156 16"/>'
+    + '<rect x="202" y="55" width="16" height="30"/>'
+    + '<circle cx="120" cy="110" r="14"/><path d="M110.1 100.1l19.8 19.8M129.9 100.1 110.1 119.9"/>'
+    + '</g><g fill="currentColor"><circle cx="130" cy="30" r="3"/><circle cx="160" cy="30" r="3"/></g>'
+    + '<text x="70" y="12" font-size="12" font-weight="700" fill="currentColor" font-family="system-ui,sans-serif">+</text></svg>';
+  const PIC7 = {
+    switch:    { label: 'A line lifted away from a contact',        svg: SYMBOL.switch },
+    cell:      { label: 'A long thin line beside a short thick one', svg: SYMBOL.cell },
+    bulb:      { label: 'A circle with a cross inside',             svg: SYMBOL.bulb },
+    resistor:  { label: 'A plain rectangle',                        svg: SYMBOL.resistor },
+    fuse:      { label: 'A rectangle with a wire through it',       svg: SYMBOL.fuse },
+    ammeter:   { label: 'A circle with an A inside',                svg: SYMBOL.ammeter },
+    voltmeter: { label: 'A circle with a V inside',                 svg: SYMBOL.voltmeter },
   };
 
   // ── Missions ──
@@ -936,6 +1194,75 @@ const LabCircuitData = (() => {
           why: 'Water lets electricity into your body. Never touch switches or plugs with wet hands.' },
       ],
     },
+
+    // ── Grade 7 ── `kind`: diagram (build the drawn circuit) | sp7 (series and
+    // parallel, one lamp unscrewed in each) | meters7 (both meters in place, a reading).
+    {
+      id: 'g7_diagram', grades: [7], kind: 'diagram', icon: '✏️', title: 'Build it from the diagram',
+      blurb: 'A circuit diagram shows four parts in one loop. Read the symbols, build it for real, then switch it on.',
+      intro: 'Build it from the diagram! Read the symbols in the mission box. Put each part in ONE loop, join the gaps with wires, then close the switch.',
+      quiz: [
+        { q: 'Which of these is the circuit symbol for a switch?',
+          options: [PIC7.switch, PIC7.cell, PIC7.bulb, PIC7.resistor],
+          why: 'A switch is drawn as a line lifted away from its contact: a gap that can be closed. The long and short lines are a cell, the crossed circle is a lamp and the rectangle is a resistor.' },
+        { q: 'Which of these is the circuit symbol for a cell?',
+          options: [PIC7.cell, PIC7.fuse, PIC7.voltmeter, PIC7.ammeter],
+          why: 'A cell is one long thin line and one short thick line. The circles with a letter are meters, and a rectangle with a wire through it is a fuse.' },
+        { q: 'In the symbol for a cell, which line is the positive (+) terminal?',
+          options: ['The long thin line', 'The short thick line', 'The wire on its left', 'The gap between the lines'],
+          why: 'The long line is positive (+) and the short line is negative (−). Cells in a battery must all face the same way.' },
+        { q: 'The lamp in your circuit glowed only dimly. Which part made it dim?',
+          options: ['The resistor, because it limits the current', 'The switch, because it was closed', 'The wires, because they are copper', 'The cell, because it was a new one'],
+          why: 'A resistor opposes the current, so less current flows through the lamp and it glows dimly. Take the resistor out and the lamp is brighter.' },
+        { q: 'Why are circuit diagrams drawn with standard symbols, not pictures of the parts?',
+          options: ['Anyone can read them, whatever their language', 'They show the real size of every part', 'They show the colour of every wire', 'They make the diagram harder to copy'],
+          why: 'Everyone agrees on the same symbols, so a diagram means the same thing everywhere. What matters is which part joins to which.' },
+      ],
+    },
+    {
+      id: 'g7_sp', grades: [7], kind: 'sp7', icon: '🔀', title: 'Two lamps, two ways',
+      blurb: 'Wire two lamps in series, then in parallel. Unscrew one lamp in each and watch the other.',
+      intro: 'Two lamps, two ways! Lay out each circuit from the mission box, close the switch, then unscrew one lamp and watch the other.',
+      quiz: [
+        { q: 'In your series circuit you took out one lamp. What did the other lamp do?',
+          options: ['It went out too', 'It stayed on, as bright as before', 'It became much brighter', 'It began to flash on and off'],
+          why: 'A series circuit has only one path. Break it anywhere and the current stops everywhere.' },
+        { q: 'In your parallel circuit you took out one lamp. What did the other lamp do?',
+          options: ['It stayed on', 'It went out too', 'It went dimmer', 'It flickered, then went out'],
+          why: 'Each lamp in a parallel circuit has its own path back to the cell, so it keeps working.' },
+        { q: 'Two lamps in series glow dimly. The same two lamps in parallel glow brightly. Why?',
+          options: ['In series the lamps share the voltage of the cell', 'In parallel the cell makes a bigger voltage', 'Series circuits use much thinner wires', 'In parallel the lamps are nearer the cell'],
+          why: 'In series each lamp gets only part of the cell’s voltage. In parallel each branch gets the full voltage.' },
+        { q: 'A house has ten lights. Why are they wired in parallel, not in series?',
+          options: ['Each light can be switched on and off by itself', 'Parallel wiring makes every light dimmer', 'Series wiring would need no switches', 'Parallel wiring uses no electricity at all'],
+          why: 'In parallel each light has its own branch and its own switch. In series, one broken lamp would put every light out.' },
+        { q: 'A circuit diagram shows two lamps side by side, each on its own branch. How are they connected?',
+          options: ['In parallel', 'In series', 'They are not connected', 'As a short circuit'],
+          why: 'Side-by-side branches, each with its own path to the cell, are parallel. Lamps one after the other in a single loop are in series.' },
+      ],
+    },
+    {
+      id: 'g7_meters', grades: [7], kind: 'meters7', icon: '⏲️', title: 'Measure it',
+      blurb: 'Add an ammeter and a voltmeter to a working lamp circuit, each in the right place. Then take a reading.',
+      intro: 'Measure it! The lamp circuit is ready. Put an ammeter IN the loop and a voltmeter ACROSS the lamp, close the switch and take a reading.',
+      quiz: [
+        { q: 'Which of these is the circuit symbol for an ammeter?',
+          options: [PIC7.ammeter, PIC7.voltmeter, PIC7.bulb, PIC7.resistor],
+          why: 'An ammeter is a circle with an A inside. A circle with a V is a voltmeter, and a circle with a cross is a lamp.' },
+        { q: 'What does an ammeter measure, and in which unit?',
+          options: ['Current, in amperes (A)', 'Voltage, in volts (V)', 'Resistance, in ohms (Ω)', 'Energy, in joules (J)'],
+          why: 'An ammeter measures the current flowing through it. The unit of current is the ampere, or amp.' },
+        { q: 'How must a voltmeter be connected to measure the voltage of a lamp?',
+          options: ['Across the lamp, one lead on each side', 'In the loop, in place of a wire', 'To the positive end of the cell only', 'It needs no wires to measure'],
+          why: 'A voltmeter compares the two ends of a part, so it goes across the part, in parallel with it.' },
+        { q: 'Three 1.5 V cells are joined in series to make a battery. What is its voltage?',
+          options: ['4.5 V', '1.5 V', '3.0 V', '0.5 V'],
+          why: 'Cells in series add their voltages: 1.5 V + 1.5 V + 1.5 V = 4.5 V.' },
+        { q: 'Which unit is resistance measured in?',
+          options: ['The ohm (Ω)', 'The volt (V)', 'The ampere (A)', 'The watt (W)'],
+          why: 'Resistance is measured in ohms. The volt is the unit of voltage, and the ampere the unit of current.' },
+      ],
+    },
   ];
 
   // ── Guided experiments: "I landed here - what do I do?" ──
@@ -1034,15 +1361,55 @@ const LabCircuitData = (() => {
         { on: 'place:h10:cell', say: 'Now add a second cell in the glowing space.',                    btn: '🔋 Add a second cell' },
         { on: 'view:symbols',   say: 'Much brighter! Now see the circuit drawn with symbols.',         btn: '✏️ Show the symbols' },
       ] },
+
+    // ── Grade 7 ──
+    { id: 'g7-parts', grades: [7], icon: '✏️', title: 'Parts and their symbols',
+      blurb: 'Light a lamp, see it as a circuit diagram, then add a resistor.',
+      lesson: 'A circuit needs a cell to provide the energy, wires to carry the current, and a complete loop. A switch opens and closes that loop. In a circuit diagram each part has a standard symbol. The cell is a long and a short line, and the lamp a circle with a cross. The switch is a lifted line, and the resistor a plain rectangle. The resistor limits the current, so the lamp went dim.',
+      steps: [
+        { on: 'build:single',       say: 'Lay out a cell, a switch, a lamp and some wires.',                     btn: '🔌 Lay out the circuit' },
+        { on: 'switch:on',          say: 'Close the switch. The loop is now complete.',                          btn: '🔘 Close the switch' },
+        { on: 'view:symbols',       say: 'The lamp lights. Now see the same circuit drawn with standard symbols.', btn: '✏️ Show the circuit symbols' },
+        { on: 'place:v31:resistor', say: 'Swap the glowing wire for a resistor, a plain rectangle. Watch the lamp.', btn: '🟫 Put in a resistor' },
+      ] },
+    { id: 'g7-sp', grades: [7], icon: '🔀', title: 'Series or parallel?',
+      blurb: 'Two lamps, two ways. Which are brighter - and which keep working?',
+      lesson: 'In SERIES there is only one path. The two lamps share the voltage of the cell, so each is dim, and a break anywhere puts both out. In PARALLEL each lamp has its own branch and the full voltage. Each is as bright as one lamp alone, and one can go out while the other stays on. That is why a house is wired in parallel.',
+      steps: [
+        { on: 'build:series2',   say: 'Lay out two lamps in SERIES: one after the other, in a single loop.', btn: '🔌 Lay out two lamps in series' },
+        { on: 'switch:on',       say: 'Close the switch. How bright are the lamps?',                         btn: '🔘 Close the switch' },
+        { on: 'bulb:h12:out',    say: 'Both are dim. Now unscrew one of the lamps.',                         btn: '🔧 Unscrew a lamp' },
+        { on: 'build:parallel2', say: 'Both went out! Now lay out two lamps in PARALLEL, each on its own branch.', btn: '🔌 Lay out two lamps in parallel' },
+        { on: 'switch:on',       say: 'Close the switch. Compare the brightness.',                           btn: '🔘 Close the switch' },
+        { on: 'bulb:h12:out',    say: 'Both are bright. Unscrew one lamp again.',                            btn: '🔧 Unscrew a lamp' },
+      ] },
+    { id: 'g7-meters', grades: [7], icon: '⏲️', title: 'Measure current and voltage',
+      blurb: 'Use an ammeter and a voltmeter. Then add a second cell.',
+      lesson: 'The ammeter was IN SERIES, in the loop, so the current flowed through it: 0.50 A with one cell, 1.00 A with two. The voltmeter was ACROSS the lamp: 1.50 V with one cell, 3.00 V with two. Cells in series add their voltages, 1.5 V + 1.5 V = 3 V, and the bigger voltage pushed a bigger current through the lamp.',
+      steps: [
+        { on: 'build:meters',   say: 'Lay out a circuit with an ammeter in the loop and a voltmeter across the lamp.', btn: '🔌 Lay out the circuit' },
+        { on: 'switch:on',      say: 'Close the switch.',                                                          btn: '🔘 Close the switch' },
+        { on: 'read',           say: 'Take a reading from both meters.',                                           btn: '📝 Take a reading' },
+        { on: 'place:h10:cell', say: 'Now add a second cell in series with the first, in the glowing space.',      btn: '🔋 Add a second cell' },
+        { on: 'read',           say: 'Take a reading again. What changed?',                                        btn: '📝 Take a reading' },
+      ] },
+    { id: 'g7-fuse', grades: [7], icon: '🧵', title: 'A fuse protects the circuit',
+      blurb: 'Make a short cut round the lamp - with a fuse in the loop.',
+      lesson: 'The new wire made a short cut round the lamp, so the current shot up. The thin wire inside the fuse melted and broke the circuit before the other wires could overheat. A fuse is a weak point built in on purpose: it fails first, so that nothing else does.',
+      steps: [
+        { on: 'build:fuse',     say: 'Lay out a lamp circuit with a fuse in the loop.',                   btn: '🔌 Lay out the circuit' },
+        { on: 'switch:on',      say: 'Close the switch. The lamp lights as normal.',                     btn: '🔘 Close the switch' },
+        { on: 'place:h11:wire', say: 'Now put a wire across the lamp: a short cut round it. Watch the fuse.', btn: '〰️ Add the short-cut wire' },
+      ] },
   ];
 
   return { GRADES, forGrade, COLS, ROWS, NODES, EMF, R, SHORT_A, FUSE_A, BULB_MAX_V, P_REF, LIT, FS,
            SLOTS, SYMBOL, KINDS, TOOLS, PRESETS, QUICK, QUICK_BY_GRADE, TEST_SLOT, layoutOf,
-           OBJECTS, TEST_OBJECTS, JOBS_P, toolsFor, kindsFor, symbolsFor,
+           OBJECTS, TEST_OBJECTS, JOBS_P, JOBS_7, toolsFor, kindsFor, symbolsFor,
            solve, loopThrough, hasGap, fusesOver, diagnose, arrangement, ARR_NAMES, brightnessWord,
-           switchControls, ammeterInSeries, litBulbs,
+           switchControls, ammeterInSeries, litBulbs, meterChecks, oneLoop,
            testResult, objectTests, WHENS, facts, primaryMistake,
            charge, energy, resistance, seriesR, parallelR, round2, reading,
-           DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_BY_GRADE, MISSIONS, GUIDES };
+           DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_BY_GRADE, MISSIONS, GUIDES, DIAGRAM_G7 };
 })();
 if (typeof window !== 'undefined') window.LabCircuitData = LabCircuitData;

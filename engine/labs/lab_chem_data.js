@@ -14,6 +14,14 @@
 //
 //  Units: amounts in mmol and volumes in cm³, so mmol/cm³ is mol/dm³ and
 //  pH = -log10 of that. Dilute acid and alkali are 1.0 mol/dm³ (of H⁺ / OH⁻).
+//
+//  ⚠ TWO LEVELS (LAB_SPEC §9): Labs.grade() is 8 or 9. Every guide, mission and
+//    discovery carries `grades`; untagged means the original Grade 9 set, and
+//    Grade 8 ids start `g8_` so progress never collides. The Grade 8 level is
+//    grounded in subjects/grade8-science, chapter g8s-acids (Acids, Bases &
+//    Salts) and the neutralisation part of g8s-sts: household acids and bases,
+//    litmus, universal indicator and the pH scale, acid + metal / carbonate,
+//    and neutralisation in everyday life. No alkali metals, no reactivity series.
 // ══════════════════════════════════════════════
 const LabChem = (() => {
 
@@ -24,6 +32,17 @@ const LabChem = (() => {
     water:     { name: 'Distilled water',          short: 'Water',             formula: 'H₂O',       pour: 5,    h: 0,   oh: 0,                                        swatch: '#CFE8F3', meta: '5 cm³' },
     naoh:      { name: 'Dilute sodium hydroxide',  short: 'Sodium hydroxide',  formula: 'NaOH(aq)',  pour: 5,    h: 0,   oh: 1.0,                   corrosive: true, swatch: '#E6F1EC', meta: '1.0 mol/dm³ · 5 cm³' },
     indicator: { name: 'Universal indicator',      short: 'Indicator',         formula: '3 drops',   pour: 0.15, h: 0,   oh: 0,   indicator: true,                     swatch: '#6DBE45', meta: '3 drops' },
+    // ── Grade 8 shelf only. `ph` is the pH of the substance on its own
+    //    (g8s-acids-006/-011/-016/-018, g8s-hd-088). h / oh are how much acid or
+    //    base it holds (mol/dm³), which decides how much it takes to neutralise.
+    //    A mixture's pH always lies between the pHs of what went into it - see pHMix().
+    lemon:      { name: 'Lemon juice',             short: 'Lemon juice',      formula: '5 cm³', pour: 5, h: 0.5, oh: 0,   ph: 2,  sample: true, swatch: '#F4EDB0', meta: 'From the kitchen' },
+    vinegar:    { name: 'Vinegar',                 short: 'Vinegar',          formula: '5 cm³', pour: 5, h: 0.8, oh: 0,   ph: 3,  sample: true, swatch: '#EFE3C8', meta: 'From the kitchen' },
+    salt:       { name: 'Salt solution',           short: 'Salt solution',    formula: '5 cm³', pour: 5, h: 0,   oh: 0,   ph: 7,  sample: true, swatch: '#E3EEF4', meta: 'Table salt in water' },
+    bakingsoda: { name: 'Baking soda solution',    short: 'Baking soda',      formula: '5 cm³', pour: 5, h: 0,   oh: 1.0, ph: 8,  sample: true, fizz: true, swatch: '#F1F1EC', meta: 'Sodium hydrogencarbonate in water' },
+    toothpaste: { name: 'Toothpaste',              short: 'Toothpaste',       formula: '5 cm³', pour: 5, h: 0,   oh: 0.3, ph: 9,  sample: true, cloudy: 0.25, swatch: '#E4F0F7', meta: 'Mixed with water' },
+    antacid:    { name: 'Antacid',                 short: 'Antacid',          formula: '5 cm³', pour: 5, h: 0,   oh: 1.0, ph: 10, sample: true, cloudy: 0.3, swatch: '#F6F6F2', meta: 'Magnesium hydroxide (milk of magnesia)' },
+    bleach:     { name: 'Household bleach',        short: 'Bleach',           formula: '5 cm³', pour: 5, h: 0,   oh: 1.0, ph: 13, corrosive: true, hazard: 'g8_bleach', swatch: '#EEF4DE', meta: 'Brought from home' },
   };
 
   // piece = mmol of metal in one piece. rank = position in the reactivity series.
@@ -251,7 +270,7 @@ const LabChem = (() => {
   // where the same point earns marks on the NCE paper.
   const HAZARDS = {
     no_goggles: {
-      signs: ['corrosive'], fx: 'splash',
+      signs: ['corrosive', 'goggles'], fx: 'splash',
       title: () => 'Stop - protect your eyes',
       happened: c => `You reached for ${c.what} without safety goggles. As it went in, a drop splashed up towards your face.`,
       why: 'Acids and alkalis are corrosive: they attack living tissue. A single splash in the eye can damage it permanently - and alkalis are even worse for eyes than acids.',
@@ -276,9 +295,34 @@ const LabChem = (() => {
       instead: 'Leave the tube open while it fizzes. To test the gas, hold a lighted splint at the mouth; to collect it, hold an empty tube upside down over the mouth.',
       exam: 'A stoppered tube is only safe when the reaction has finished. Hydrogen is tested with a lighted splint - it burns with a squeaky pop.',
     },
+    // ── Grade 8 ──
+    g8_no_goggles: {
+      signs: ['corrosive', 'goggles'], fx: 'splash',
+      title: () => 'Stop - protect your eyes',
+      happened: c => `You reached for ${c.what} without safety goggles. As you poured, a drop splashed up towards your eyes.`,
+      why: 'Lab acids and alkalis are corrosive: they attack and damage skin and eyes. One splash in the eye can hurt it badly - and alkalis are even worse for eyes than acids.',
+      instead: 'Put on safety goggles before you use a lab acid or alkali. Tap 🥽 at the top. If a splash ever reaches an eye, rinse it with lots of clean water and tell your teacher at once.',
+      exam: '“Give one safety precaution” - wear safety goggles, because the acid is corrosive.',
+    },
+    g8_taste: {
+      signs: ['toxic'], fx: 'splash',
+      title: () => 'Stop - never taste a chemical',
+      happened: c => `You were about to taste the ${c.what} to find out if it is sour.`,
+      why: 'In a lab you cannot know what is safe. Many chemicals are toxic (poisonous) or corrosive, and a tube or dropper may still hold something from before. Acids do taste sour - but tasting is never a test.',
+      instead: 'Use an indicator. Litmus paper tells you acid or alkali; universal indicator even gives the pH. Never taste, eat or drink anything in the lab.',
+      exam: '“How can you show that a liquid is acidic?” - add universal indicator (or dip blue litmus paper) and look at the colour. Never taste it.',
+    },
+    g8_bleach: {
+      signs: ['corrosive'], fx: 'splash',
+      title: () => 'Stop - bleach is a strong alkali',
+      happened: () => 'You poured household bleach straight from the bottle. Some splashed onto your hand, and it felt slippery - that is the alkali starting to attack your skin.',
+      why: 'Bleach is a strong alkali, about pH 13, and it is corrosive. It is far stronger than anything else on this shelf. Mixed with an acid - vinegar, or some toilet cleaners - it also gives off a poisonous gas.',
+      instead: 'Use only what your teacher gives you. At home, only adults use bleach: with gloves, with a window open, and never mixed with another cleaner. You do not need to test it: bleach is about pH 13, so universal indicator would turn purple.',
+      exam: 'Household bleach is about pH 13: strongly alkaline, so universal indicator turns purple.',
+    },
   };
 
-  const SIGN_LABELS = { corrosive: 'Corrosive', explosive: 'Explosive', flammable: 'Flammable', pressure: 'Gas under pressure' };
+  const SIGN_LABELS = { corrosive: 'Corrosive', explosive: 'Explosive', flammable: 'Flammable', pressure: 'Gas under pressure', toxic: 'Toxic', goggles: 'Wear eye protection' };
 
   // Short, true facts for the 💡 button. Tied to the chapters, never trivia for its own sake.
   const FACTS = [
@@ -397,8 +441,280 @@ const LabChem = (() => {
       ] },
   ];
 
+  // ══ Grade 8 level ═══════════════════════════════
+  // Evidence (subjects/grade8-science/questions): litmus colours g8s-acids-001,
+  // -014, -020; universal indicator and the pH scale -006, -007, -016, g8s-hd-081,
+  // -082; household acids and bases -011, -018, g8s-hd-088; metal + acid ->
+  // hydrogen and the squeaky pop -003, -012, -019, g8s-hd-083; carbonate + acid
+  // -> carbon dioxide and limewater -004, -017, g8s-hd-084, -087; neutralisation,
+  // antacids and lime -005, -009, -010, -013, g8s-hd-079, -080, -085; symbol
+  // equations are Grade 8 work too (g8s-chem-language, balancing_equations).
+  const GRADES = [8, 9];
+  const forGrade = (list, g) => list.filter(x => (x.grades || [9]).includes(Number(g)));
+
+  const SOLIDS8 = {
+    magnesium: { name: 'Magnesium',    sym: 'Mg',    piece: 1.5, look: 'ribbon',  color: '#C7CCD2', meta: 'Ribbon, 3 cm' },
+    zinc:      { name: 'Zinc',         sym: 'Zn',    piece: 1.5, look: 'granule', color: '#9DA6AD', meta: 'Granules' },
+    marble:    { name: 'Marble chips', sym: 'CaCO₃', piece: 1.5, look: 'chips',   color: '#ECE8DF', meta: 'Calcium carbonate', plural: true },
+  };
+  // 'hcl' = the lab acid; 'weak' = only kitchen acids (vinegar, lemon juice).
+  const MEDIUM_NAMES8 = { hcl: 'dilute hydrochloric acid', weak: 'a kitchen acid', neutral: 'a neutral liquid', alkali: 'an alkali', dry: 'a dry tube' };
+  // co2: mmol of carbon dioxide per mmol of solid (a carbonate); h2 as above.
+  const REACTIONS8 = {
+    'magnesium|hcl':  R({ rate: 0.10, uses: 'h', per: 2, h2: 1, warm: true, disc: 'g8_mg_hcl',
+      obs: 'Lots of fizzing. The tube gets warm and the magnesium ribbon gets smaller until it disappears.',
+      word: 'magnesium + hydrochloric acid → magnesium chloride + hydrogen', sym: 'Mg + 2HCl → MgCl₂ + H₂' }),
+    'zinc|hcl':       R({ rate: 0.025, uses: 'h', per: 2, h2: 1, disc: 'g8_zn_hcl',
+      obs: 'Steady fizzing. The zinc granules slowly get smaller.',
+      word: 'zinc + hydrochloric acid → zinc chloride + hydrogen', sym: 'Zn + 2HCl → ZnCl₂ + H₂' }),
+    'marble|hcl':     R({ rate: 0.03, uses: 'h', per: 2, co2: 1, disc: 'g8_marble',
+      obs: 'Fizzing! A gas bubbles off and the marble chips slowly get smaller.',
+      word: 'calcium carbonate + hydrochloric acid → calcium chloride + water + carbon dioxide', sym: 'CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂' }),
+    'magnesium|weak': R({ rate: 0.006, uses: 'h', per: 2, h2: 1,
+      obs: 'Slow bubbling. A kitchen acid is a weak acid, so magnesium reacts with it much more slowly than with hydrochloric acid.',
+      word: 'magnesium + acid → a salt + hydrogen', sym: '' }),
+    'zinc|weak':      NONE('Hardly anything. A kitchen acid is a weak acid, and zinc reacts with it far too slowly to see.'),
+    'marble|weak':    R({ rate: 0.005, uses: 'h', per: 2, co2: 1,
+      obs: 'Slow fizzing. A kitchen acid is a weak acid, so the marble chips react slowly.',
+      word: 'calcium carbonate + acid → a salt + water + carbon dioxide', sym: '' }),
+  };
+  const NONE8 = {
+    neutral: 'No visible reaction. There is no acid in the tube for it to react with.',
+    alkali:  'No visible reaction with an alkali.',
+  };
+  function reaction8(solid, medium) {
+    if (!SOLIDS8[solid]) return null;
+    if (medium === 'dry') return DRY;
+    return REACTIONS8[solid + '|' + medium] || (NONE8[medium] ? NONE(NONE8[medium]) : null);
+  }
+
+  // Which base met which acid ('hcl', or 'weak' for a kitchen acid).
+  const NEUTRAL8 = {
+    'hcl|naoh':        { salt: 'sodium chloride',    word: NEUTRAL.hcl.word, sym: NEUTRAL.hcl.sym },
+    'hcl|antacid':     { salt: 'magnesium chloride', word: 'hydrochloric acid + magnesium hydroxide → magnesium chloride + water', sym: 'Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O' },
+    'hcl|bakingsoda':  { salt: 'sodium chloride',    word: 'hydrochloric acid + sodium hydrogencarbonate → sodium chloride + water + carbon dioxide', sym: 'NaHCO₃ + HCl → NaCl + H₂O + CO₂' },
+    'weak|bakingsoda': { salt: 'a salt',             word: 'acid + sodium hydrogencarbonate → salt + water + carbon dioxide', sym: '' },
+    any:               { salt: 'a salt',             word: 'acid + base → salt + water', sym: '' },
+  };
+  const BASES8 = ['antacid', 'bakingsoda', 'toothpaste', 'naoh'];
+  function neutral8(acid, base) {
+    return NEUTRAL8[acid + '|' + base] || (base === 'bakingsoda' ? NEUTRAL8['weak|bakingsoda'] : NEUTRAL8.any);
+  }
+
+  // The pH of a substance on its own; a lab liquid without `ph` sits at the
+  // end of the scale its acid or alkali puts it.
+  function phOf(id) {
+    const L = LIQUIDS[id];
+    if (!L) return 7;
+    if (L.ph != null) return L.ph;
+    return L.h > 0 ? 0 : L.oh > 0 ? 14 : 7;
+  }
+  // Grade 8 pH: the acid/base arithmetic above, kept between the pHs of the
+  // things that were mixed. Vinegar is a weak acid (pH 3 however much of it
+  // there is), dilution moves an acid towards 7 but never past it (g8s-hd-086),
+  // and too much antacid leaves pH 10, not 14 - an antacid is a weak base.
+  function pHMix(h, oh, v, ids) {
+    const p = pH(h, oh, v);
+    if (p == null) return null;
+    const phs = (ids && ids.length ? ids : ['water']).map(phOf);
+    return Math.max(Math.min(...phs), Math.min(Math.max(...phs), p));
+  }
+  // Litmus (g8s-acids-001, -014, -020): an acid turns blue litmus red, an alkali
+  // turns red litmus blue, and a neutral liquid changes neither.
+  function litmus(paper, p) {
+    if (p == null) return paper;
+    if (p < 6.5) return 'red';
+    if (p > 7.5) return 'blue';
+    return paper;
+  }
+
+  // Universal indicator in ONE substance (plus water) unlocks that substance's card.
+  const IND8 = { hcl: 'g8_ui_strong', lemon: 'g8_ui_weak', vinegar: 'g8_ui_weak', water: 'g8_ui_neutral', salt: 'g8_ui_neutral',
+                 bakingsoda: 'g8_ui_mild', toothpaste: 'g8_ui_mild', antacid: 'g8_ui_mild', naoh: 'g8_ui_purple' };
+
+  const L8 = id => 'liquid:' + id;
+  DISCOVERIES.push(
+    { id: 'g8_ui_strong', grades: [8], icon: '🔴', title: 'Red: a strong acid', hint: 'Universal indicator in the lab acid',
+      how: [G, HCL, IND], saw: 'Universal indicator turned red: pH 0. The lower the pH, the more acidic.',
+      learn: 'Hydrochloric acid is a strong acid. Universal indicator is red at pH 0 to 2. (An indicator is a dye that changes colour with pH.)' },
+    { id: 'g8_ui_weak', grades: [8], icon: '🍋', title: 'Kitchen acids', hint: 'Universal indicator in vinegar',
+      how: [L8('vinegar'), IND], saw: 'Universal indicator turned orange: pH 3.',
+      learn: 'Vinegar and lemon juice are acids. Vinegar turns universal indicator orange (pH 3), lemon juice red (pH 2). Acids taste sour - but in a lab you never taste anything.' },
+    { id: 'g8_ui_neutral', grades: [8], icon: '🟩', title: 'Green: neutral', hint: 'Universal indicator in salt solution',
+      how: [L8('salt'), IND], saw: 'Universal indicator turned green: pH 7.',
+      learn: 'Salt solution and pure water are neutral: pH 7, neither acid nor alkali. Green tells you the pH - it does not tell you what the substance is.' },
+    { id: 'g8_ui_mild', grades: [8], icon: '🧁', title: 'Weak alkalis at home', hint: 'Universal indicator in baking soda solution',
+      how: [L8('bakingsoda'), IND], saw: 'Universal indicator turned blue-green: pH 8.',
+      learn: 'Baking soda, toothpaste and antacids are weak alkalis: pH 8 to 10, blue-green to blue. An alkali is a base that dissolves in water.' },
+    { id: 'g8_ui_purple', grades: [8], icon: '🟣', title: 'Purple: a strong alkali', hint: 'Universal indicator in sodium hydroxide',
+      how: [G, NAOH, IND], saw: 'Universal indicator turned purple: pH 14.',
+      learn: 'Sodium hydroxide is a strong alkali. Purple means pH 12 to 14. Household bleach is about pH 13 - strongly alkaline too.' },
+    { id: 'g8_litmus_acid', grades: [8], icon: '🟥', title: 'Acids turn blue litmus red', hint: 'Blue litmus paper in vinegar',
+      how: [L8('vinegar'), 'litmus:blue'], saw: 'The blue litmus paper turned red.',
+      learn: 'Litmus is a simple indicator. An acid turns blue litmus RED. (Acid - Red.)' },
+    { id: 'g8_litmus_alkali', grades: [8], icon: '🟦', title: 'Alkalis turn red litmus blue', hint: 'Red litmus paper in toothpaste',
+      how: [L8('toothpaste'), 'litmus:red'], saw: 'The red litmus paper turned blue.',
+      learn: 'An alkali turns red litmus BLUE. (Base - Blue.) Litmus tells you acid or alkali - but not how strong it is.' },
+    { id: 'g8_litmus_logic', grades: [8], icon: '🤔', title: 'What “no change” means', hint: 'Red litmus in salt solution - then decide what it tells you',
+      how: [L8('salt'), 'litmus:red', 'conclude'], saw: 'The red litmus paper stayed red, and you decided: it is not an alkali.',
+      learn: 'Red litmus only changes colour in an alkali. If it stays red, the liquid is NOT an alkali - it could be an acid OR neutral. To tell which, use blue litmus or universal indicator.' },
+    { id: 'g8_mg_hcl', grades: [8], icon: '⚡', title: 'Metal + acid', hint: 'Magnesium in hydrochloric acid',
+      rx8: 'magnesium|hcl', how: [G, HCL, 'solid:magnesium', SEE],
+      learn: 'Metal + acid → salt + hydrogen. The fizzing is hydrogen gas. Hydrochloric acid always makes chloride salts.' },
+    { id: 'g8_zn_hcl', grades: [8], icon: '🫧', title: 'Zinc fizzes gently', hint: 'Zinc in hydrochloric acid',
+      rx8: 'zinc|hcl', how: [G, HCL, 'solid:zinc', SEE],
+      learn: 'Zinc reacts in the same way as magnesium - metal + acid → salt + hydrogen - but more slowly.' },
+    { id: 'g8_pop', grades: [8], icon: '💥', title: 'The squeaky pop', hint: 'Test the gas from magnesium and acid with a lighted splint',
+      how: [G, HCL, 'solid:magnesium', SEE, 'pop'], saw: 'A squeaky pop at the mouth of the tube.',
+      learn: 'Hydrogen burns with a squeaky pop when a lighted splint is held at the mouth of the tube. It is the test for hydrogen.' },
+    { id: 'g8_marble', grades: [8], icon: '🪨', title: 'Marble chips fizz', hint: 'Marble chips in hydrochloric acid',
+      rx8: 'marble|hcl', how: [G, HCL, 'solid:marble', SEE],
+      learn: 'Marble is calcium carbonate. Acid + carbonate → salt + water + carbon dioxide. That is why acid rain eats away marble and limestone buildings.' },
+    { id: 'g8_limewater', grades: [8], icon: '🥛', title: 'Limewater turns milky', hint: 'Test the gas from marble chips with limewater',
+      how: [G, HCL, 'solid:marble', SEE, 'lime'], saw: 'The limewater turned milky.',
+      learn: 'Carbon dioxide turns limewater milky. It is the test for carbon dioxide.' },
+    { id: 'g8_splint_out', grades: [8], icon: '🕯️', title: 'The flame goes out', hint: 'A lighted splint in the gas from marble chips',
+      how: [G, HCL, 'solid:marble', SEE, 'out'], saw: 'The lighted splint went out - no pop.',
+      learn: 'Carbon dioxide does not burn, and it puts a flame out. No pop means the gas is not hydrogen.' },
+    { id: 'g8_soda_fizz', grades: [8], icon: '🫧', title: 'Kitchen fizz', hint: 'Pour baking soda solution into vinegar',
+      how: [L8('vinegar'), L8('bakingsoda')], saw: 'Lots of fizzing as the baking soda met the vinegar.',
+      word: NEUTRAL8['weak|bakingsoda'].word,
+      learn: 'Baking soda (sodium hydrogencarbonate) is a base, so it neutralises the acid - and, like a carbonate, it gives off carbon dioxide as it does.' },
+    { id: 'g8_antacid', grades: [8], icon: '💊', title: 'How an antacid works', hint: 'Add antacid to acid that has universal indicator in it',
+      how: [G, HCL, IND, L8('antacid')], saw: 'The antacid neutralised the acid: the indicator went from red to green, pH 7.',
+      word: NEUTRAL8['hcl|antacid'].word, sym: NEUTRAL8['hcl|antacid'].sym,
+      learn: 'An antacid is a base. It neutralises acid: acid + base → salt + water. That is how it eases indigestion, which is caused by too much stomach acid.' },
+  );
+
+  // Wrong but safe: what happened and what to do instead.
+  const RESULTS8 = {
+    mixed: { icon: '🧪', title: 'Two samples in one tube',
+      happened: c => `You added ${c.added} to a tube that still held ${c.held}. The colour now belongs to a mixture - not to either one. It is like using a dirty dropper.`,
+      instead: 'Test one sample per clean tube: tap “Empty & rinse” before every new sample, and rinse the dropper too. Then each colour belongs to one substance.',
+      exam: 'A reliable test: use a clean test tube and a clean dropper for every sample.' },
+    litmus: { icon: '🟥', title: 'Red litmus can’t prove an acid',
+      happened: c => `Red litmus stayed red in the ${c.what}, and you decided it is an acid. But red litmus stays red in water and salt solution too - it only changes colour in an alkali.`,
+      instead: 'Say only what the test shows: red litmus staying red means “not an alkali”. To show an acid, dip BLUE litmus (an acid turns it red) or use universal indicator.',
+      exam: 'Acids turn blue litmus red; alkalis turn red litmus blue. No change in red litmus means the liquid is not alkaline - it could be acidic or neutral.' },
+    indicator: { icon: '🌈', title: 'Too much indicator',
+      happened: () => 'You added universal indicator again. The colour got so deep and dark that it is hard to match to the colour chart - and more indicator does not make the reading any better.',
+      instead: 'Two or three drops is enough. If you are not sure of the colour, hold the tube against something white and compare it with the pH colour chart.',
+      exam: 'Add a few drops of universal indicator, then match the colour to the pH chart.' },
+    overshoot: { icon: '💊', title: 'Too much antacid - now it’s alkaline',
+      happened: c => `Drop ${c.drops} took the tube past neutral to pH ${c.p}: ${c.colour}, alkaline. Near the end, one drop of antacid is enough to swing it.`,
+      instead: 'Add the antacid one drop at a time and swirl after each. When a drop makes a green flash that fades, you are only a drop or two away - slow right down.',
+      exam: 'Neutralisation is complete at pH 7, when universal indicator turns green. More antacid than you need does not help - the stomach needs some acid to digest food.' },
+  };
+
+  const FACTS8 = [
+    'Your stomach makes hydrochloric acid, about pH 2, to help digest food.',
+    'Indigestion is too much stomach acid. An antacid is a base that neutralises some of it.',
+    'Farmers spread lime, a base, on soil that is too acidic, so their crops grow better.',
+    'Toothpaste is slightly alkaline. It neutralises the acid that bacteria make on your teeth.',
+    'A bee sting is acidic. Baking soda, a mild base, can neutralise it.',
+    'Acid rain eats away marble and limestone, because they are carbonates.',
+    'Litmus says acid or alkali. Universal indicator says HOW acidic or alkaline - it gives the pH.',
+    'The pH scale runs from 0 to 14: below 7 is acidic, 7 is neutral, above 7 is alkaline.',
+    'Adding water to an acid raises its pH towards 7 - but never past it, because water is neutral.',
+    'Hydrochloric acid makes chlorides, sulphuric acid makes sulphates and nitric acid makes nitrates.',
+    'Never taste anything in the lab to test it. Use an indicator instead.',
+  ];
+
+  // A question's FIRST option is the answer; the quiz shuffles them.
+  MISSIONS.push(
+    {
+      id: 'g8_survey', grades: [8], icon: '🔎', title: 'pH Survey',
+      blurb: 'Test five things from the kitchen with universal indicator, then sort them.',
+      samples: ['lemon', 'vinegar', 'salt', 'bakingsoda', 'toothpaste'],
+      intro: 'pH Survey! For each sample: pour it into a clean tube, add universal indicator and read the pH. Empty & rinse between samples.',
+      quiz: [
+        { q: 'Which sample was the most acidic?',
+          options: ['Lemon juice', 'Vinegar', 'Baking soda', 'Toothpaste'],
+          why: 'The lower the pH, the more acidic: lemon juice was pH 2 and vinegar pH 3. Baking soda and toothpaste were above 7 - alkaline.' },
+        { q: 'Baking soda solution turned universal indicator blue-green, pH 8. What kind of substance is it?',
+          options: ['A weak alkali', 'A strong acid', 'A neutral substance', 'A strong alkali'],
+          why: 'Just above 7 is weakly alkaline. A strong alkali would turn it purple, pH 12 to 14.' },
+        { q: 'Why did you rinse the tube between samples?',
+          options: ['A left-over sample would change the colour and pH', 'Rinsing makes the indicator work faster', 'Wet glass shows the colours more brightly', 'Indicator only works in a brand new tube'],
+          why: 'Two samples mixed give the colour of a mixture, not of either one. One sample per clean tube keeps every result reliable.' },
+        { q: 'Household bleach is about pH 13. What colour would universal indicator turn in it?',
+          options: ['Purple', 'Green', 'Orange', 'Red'],
+          why: 'pH 12 to 14 is strongly alkaline, and universal indicator is purple there. Green is pH 7; orange and red are acids.' },
+        { q: 'Why is universal indicator more useful than litmus for this survey?',
+          options: ['It shows how acidic or alkaline, not just which', 'It is the only indicator that works in water', 'It changes colour more slowly', 'It can be used again and again'],
+          why: 'Litmus only says acid or alkali. Universal indicator gives a pH number, so you could put all five samples in order.' },
+      ],
+    },
+    {
+      id: 'g8_antacid', grades: [8], icon: '💊', title: 'Settle the Stomach', base: 'antacid',
+      blurb: 'Neutralise “stomach acid” with an antacid, one drop at a time.',
+      intro: 'Settle the Stomach! The tube holds hydrochloric acid with universal indicator - red, like an upset stomach. Add antacid drop by drop until it turns exactly green.',
+      quiz: [
+        { q: 'Indigestion is caused by too much stomach acid. How does an antacid help?',
+          options: ['It is a base that neutralises some of the acid', 'It makes the stomach produce more acid', 'It is an acid that cancels out the pain', 'It soaks up the food that caused it'],
+          why: 'Antacids contain a base, such as magnesium hydroxide. It neutralises the extra acid and the pH rises.' },
+        { q: 'Complete the word equation for neutralisation: acid + base → …',
+          options: ['salt + water', 'salt + hydrogen', 'salt + carbon dioxide', 'water + oxygen'],
+          why: 'Acid + metal gives hydrogen, and acid + carbonate gives carbon dioxide. Acid + base gives salt + water.' },
+        { q: 'The antacid was magnesium hydroxide and the acid was hydrochloric acid. Which salt formed?',
+          options: ['Magnesium chloride', 'Magnesium sulphate', 'Sodium chloride', 'Magnesium carbonate'],
+          why: 'Hydrochloric acid always makes chlorides: Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O.' },
+        { q: 'A farmer’s soil is too acidic for his crops. What should he spread on it?',
+          options: ['Lime, a base', 'Vinegar, an acid', 'Salt, which is neutral', 'Lemon juice, an acid'],
+          why: 'Lime neutralises the acid in the soil and raises the pH, so the crops grow better.' },
+        { q: 'Why is toothpaste made slightly alkaline?',
+          options: ['To neutralise acid that attacks your teeth', 'To make it taste sweeter', 'Because acids cannot clean anything', 'To stop it from drying out'],
+          why: 'Bacteria on your teeth make acid from sugar, and the acid attacks tooth enamel. A mildly alkaline paste neutralises it.' },
+      ],
+    },
+  );
+
+  GUIDES.push(
+    { id: 'g8_kitchen', grades: [8], icon: '🍋', title: 'Acid or alkali? The kitchen test',
+      blurb: 'Use universal indicator on vinegar, then on baking soda.',
+      lesson: 'Universal indicator changes colour with pH. Vinegar turned it orange (pH 3): an acid. Baking soda turned it blue-green (pH 8): a weak alkali. Below 7 is acidic, 7 is neutral, above 7 is alkaline.',
+      steps: [
+        { on: 'liquid:vinegar',    say: 'Pour some vinegar into the test tube.',                                    btn: '🧪 Pour vinegar' },
+        { on: 'liquid:indicator',  say: 'Add universal indicator. It is a dye that changes colour with pH.',         btn: '🌈 Add universal indicator' },
+        { on: 'rinse',             say: 'Orange: pH 3, an acid. Now empty and rinse the tube.',                      btn: '🧽 Empty & rinse' },
+        { on: 'liquid:bakingsoda', say: 'Pour baking soda solution into the clean tube.',                            btn: '🧪 Pour baking soda' },
+        { on: 'liquid:indicator',  say: 'Add universal indicator again. Compare the colour.',                        btn: '🌈 Add universal indicator' },
+      ] },
+    { id: 'g8_litmus', grades: [8], icon: '🟥', title: 'The litmus test',
+      blurb: 'Blue and red litmus paper: which one changes, and when?',
+      lesson: 'An acid turns blue litmus red. An alkali turns red litmus blue. Litmus tells you acid or alkali - but not how strong it is.',
+      steps: [
+        { on: 'liquid:vinegar',    say: 'Pour some vinegar into the test tube.',                                    btn: '🧪 Pour vinegar' },
+        { on: 'litmus:blue',       say: 'Dip a strip of blue litmus paper in it. Watch the colour.',                 btn: '🟦 Dip blue litmus' },
+        { on: 'rinse',             say: 'Blue litmus turned red: vinegar is an acid. Now empty and rinse the tube.', btn: '🧽 Empty & rinse' },
+        { on: 'liquid:toothpaste', say: 'Pour in some toothpaste mixed with water.',                                 btn: '🧪 Pour toothpaste' },
+        { on: 'litmus:red',        say: 'Now dip a strip of red litmus paper.',                                      btn: '🟥 Dip red litmus' },
+      ] },
+    { id: 'g8_neutralise', grades: [8], icon: '💊', title: 'How an antacid works',
+      blurb: 'Neutralise an acid with an antacid - and watch it turn green.',
+      lesson: 'Acid + base → salt + water: this is neutralisation. The antacid (magnesium hydroxide) cancelled out the hydrochloric acid, and the indicator went from red to green, pH 7.',
+      steps: [
+        { on: 'goggles',           say: 'Put on your goggles - you are using a lab acid.',                           btn: '🥽 Put on goggles' },
+        { on: 'liquid:hcl',        say: 'Pour dilute hydrochloric acid - the same acid your stomach makes.',         btn: '🧪 Pour hydrochloric acid' },
+        { on: 'liquid:indicator',  say: 'Add universal indicator. What colour does it turn?',                        btn: '🌈 Add universal indicator' },
+        { on: 'liquid:antacid',    say: 'Red: strongly acidic, like an upset stomach. Now pour in the antacid.',     btn: '💊 Pour antacid' },
+      ] },
+    { id: 'g8_fizz', grades: [8], icon: '🪨', title: 'Fizz and test the gas',
+      blurb: 'Drop marble chips into acid, then find out which gas they make.',
+      lesson: 'Acid + carbonate → salt + water + carbon dioxide. The limewater turned milky, so the gas was carbon dioxide.',
+      steps: [
+        { on: 'goggles',           say: 'Goggles on first.',                                                          btn: '🥽 Put on goggles' },
+        { on: 'liquid:hcl',        say: 'Pour dilute hydrochloric acid into the tube.',                              btn: '🧪 Pour hydrochloric acid' },
+        { on: 'solid:marble',      say: 'Drop in some marble chips. Marble is calcium carbonate.',                   btn: '🪨 Add marble chips' },
+        { on: 'observe',           say: 'Watch the tube for a few seconds. What happens to the chips?' },
+        { on: 'lime',              say: 'Fizzing! Test the gas: bubble it through limewater.',                        btn: '🥛 Test with limewater' },
+      ] },
+  );
+
   return { LIQUIDS, METALS, MEDIUM_NAMES, REACTIONS, reaction, fizzRating, FIZZ_WORDS, NEUTRAL,
            pH, indicatorColor, indicatorName, pHMeaning, INDICATOR,
-           DISCOVERIES, HAZARDS, SIGN_LABELS, FACTS, MISSIONS, GUIDES };
+           DISCOVERIES, HAZARDS, SIGN_LABELS, FACTS, MISSIONS, GUIDES,
+           GRADES, forGrade, SOLIDS8, MEDIUM_NAMES8, REACTIONS8, reaction8, NEUTRAL8, BASES8, neutral8,
+           phOf, pHMix, litmus, IND8, RESULTS8, FACTS8 };
 })();
 if (typeof window !== 'undefined') window.LabChem = LabChem;

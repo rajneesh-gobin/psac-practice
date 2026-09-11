@@ -12,13 +12,13 @@
 // Run:  CHROME_PATH=<Chrome for Testing> node scripts/test-labs-separation.js
 // ⚠ Served over file:// (Chrome for Testing here cannot reach 127.0.0.1), and
 //   the page target's URL is asserted before anything is driven.
-// ⚠ Debugging port 9403 - the other lab builds use 9401, 9402 and 9404.
+// ⚠ Debugging port 9418 (LAB_DBG_PORT overrides) - other lab builds use other ports.
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), os = require('node:os');
 const { spawn } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 
 const ROOT = path.resolve(__dirname, '..');
-const DBG = 9403;
+const DBG = Number(process.env.LAB_DBG_PORT) || 9418;
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const get = u => new Promise((res, rej) => http.get(u, r => { let s = ''; r.on('data', v => s += v); r.on('end', () => { try { res(JSON.parse(s)); } catch (e) { rej(e); } }); }).on('error', rej));
@@ -156,7 +156,9 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   const nb = await ev("document.getElementById('lab-notebook').textContent.replace(/\\s+/g,' ')");
   ok('the notebook has a readings table (time, thermometer, distillate) and the result', /Thermometer \(°C\)/.test(nb) && /100\.0/.test(nb) && /Distilled: sea water/.test(nb), nb.slice(0, 400));
   ok('discoveries: pure water from sea water, steady at 100 °C', await ev("['d_sea','d_100'].every(id => Labs.store('separation').disc[id])"));
-  const counter = () => ev("({ shown: document.getElementById('lab-found-n').textContent, saved: Object.keys(Labs.store('separation').disc).length + '/' + LabSeparationData.DISCOVERIES.length })");
+  // The counter shows only the grade in use: Grade 9's saved discoveries out of Grade 9's total.
+  const counter = (g = 9) => ev(`(() => { const D = LabSeparationData, st = Labs.store('separation'), mine = D.forGrade(D.DISCOVERIES, ${g});
+    return { shown: document.getElementById('lab-found-n').textContent, saved: mine.filter(d => st.disc[d.id]).length + '/' + mine.length }; })()`);
   let cnt = await counter();
   ok('the ✨ counter matches what is saved', cnt.shown === cnt.saved, cnt);
   await tool('drop');
@@ -169,7 +171,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   await ev("LabSeparation.build('correct'); true");
   await tool('heat');
   ov = await overlay();
-  ok('heating without goggles is stopped with a HOT SURFACE hazard card', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Hot surface') && /protect your eyes/.test(ov.text), ov);
+  ok('heating without goggles is stopped with a HOT SURFACE hazard card and the WEAR EYE PROTECTION sign', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Hot surface') && ov.signs.includes('Wear eye protection') && /protect your eyes/.test(ov.text), ov);
   ok('…which says what happened, why, what to do instead and the NCE paper point',
      ov && /What happened/.test(ov.text) && /Why it’s dangerous/.test(ov.text) && /Do this instead/.test(ov.text) && /On the NCE paper/.test(ov.text));
   ok('…and the burner never lit', (await dbg()).dist.heat === false);
@@ -305,39 +307,45 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
 
   // Every clue must be solvable: follow each discovery's own "Show me how" from
   // a clean bench, reading (closing) any card it produces on the way.
-  const discIds = await ev('LabSeparationData.DISCOVERIES.map(d => d.id)');
-  const unsolved = [];
-  for (const id of discIds) {
-    const res = await ev(`(() => {
-      const st = Labs.store('separation'); delete st.disc['${id}'];
-      document.getElementById('lab-overlay')?.remove();
-      LabSeparation.discoveryGuide('${id}');
-      for (let k = 0; k < 220 && LabSeparation._debug().guide; k++) {
-        const ov = document.getElementById('lab-overlay');
-        if (ov) { const b = ov.querySelector('[data-ov-close]'); if (b) b.click(); else ov.remove(); continue; }
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
-        if (btn) btn.click();
-        LabSeparation._tick(0.5);
-      }
-      if (LabSeparation._debug().guide) return 'guide never finished at step ' + LabSeparation._debug().guide.step;
-      document.getElementById('lab-overlay')?.remove();
-      return !!st.disc['${id}'];
-    })()`);
-    if (res !== true) unsolved.push(id + ' → ' + res);
-  }
-  ok(`all ${discIds.length} discoveries unlock by following their own “Show me how”`, unsolved.length === 0, unsolved);
+  const solveAll = async g => {
+    const list = await ev(`LabSeparationData.forGrade(LabSeparationData.DISCOVERIES, ${g}).map(d => d.id)`);
+    const unsolved = [];
+    for (const id of list) {
+      const res = await ev(`(() => {
+        const st = Labs.store('separation'); delete st.disc['${id}'];
+        document.getElementById('lab-overlay')?.remove();
+        LabSeparation.discoveryGuide('${id}');
+        for (let k = 0; k < 220 && LabSeparation._debug().guide; k++) {
+          const ov = document.getElementById('lab-overlay');
+          if (ov) { const b = ov.querySelector('[data-ov-close]'); if (b) b.click(); else ov.remove(); continue; }
+          const btn = document.querySelector('#lab-guide [data-guide-do]');
+          if (btn) btn.click();
+          LabSeparation._tick(0.5);
+        }
+        if (LabSeparation._debug().guide) return 'guide never finished at step ' + LabSeparation._debug().guide.step;
+        document.getElementById('lab-overlay')?.remove();
+        return !!st.disc['${id}'];
+      })()`);
+      if (res !== true) unsolved.push(id + ' → ' + res);
+    }
+    return { list, unsolved };
+  };
+  const solved9 = await solveAll(9), discIds = solved9.list;
+  ok(`all ${discIds.length} discoveries unlock by following their own “Show me how”`, solved9.unsolved.length === 0, solved9.unsolved);
   cnt = await counter();
   ok('…and the counter says so', cnt.shown === `${discIds.length}/${discIds.length}` && cnt.saved === cnt.shown, cnt);
 
   // ── Missions ────────────────────────────────────
   console.log('\n-- missions');
-  const answerAll = idx => ev(`(() => {
-    const qs = LabSeparationData.MISSIONS[${idx}].quiz;
+  // A mission by index (the Grade 9 ones come first) or by id. A picture option's
+  // text is its label.
+  const answerAll = which => ev(`(() => {
+    const M = LabSeparationData.MISSIONS, qs = (typeof ${JSON.stringify(which)} === 'number' ? M[${JSON.stringify(which)}] : M.find(m => m.id === ${JSON.stringify(which)})).quiz;
     for (let i = 0; i < qs.length; i++) {
       const card = document.querySelector('#lab-overlay .lab-ov-card');
       const q = card.querySelector('.lab-quiz-q').textContent;
-      const def = qs.find(x => x.q === q);
-      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild.textContent === def.options[0]);
+      const def = qs.find(x => x.q === q), want = typeof def.options[0] === 'object' ? def.options[0].label : def.options[0];
+      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild.textContent === want);
       btn.click();
       card.querySelector('[data-next]').click();
     }
@@ -427,6 +435,244 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   }
   ok('every bench fits a 360px phone (no control past the edge of the screen)', fitAll.every(f => f.root <= f.vw && !f.off.length), fitAll);
   ok('…with tap targets at least 40px tall', fitAll.every(f => !f.small.filter(s => !/lab-link/.test(s)).length), fitAll.map(f => f.small));
+
+  // ── Grade levels (LAB_SPEC §9) ───────────────────
+  // ⚠ Until the lead lists Grades 7/8 on the separation row in Labs.LABS,
+  //   Labs.grade() answers 9 for this lab whatever the pupil's grade. atGrade()
+  //   then overrides Labs.grade (and prints a NOTE); once registered it takes the
+  //   real path with no edit.
+  await ev('window.__labsGrade = Labs.grade; true');
+  const registeredAt = {};
+  const atGrade = async n => {
+    await ev(`(() => { if (typeof Labs !== 'undefined') { Labs.closeOverlay(true); Labs.backToHub(); } SELECTED_GRADE = ${n}; showScreen('labs'); return true; })()`);
+    let up = false;
+    for (let i = 0; i < 40 && !up; i++) { await sleep(150); up = await ev("typeof Labs !== 'undefined' && !!document.getElementById('labs-root')"); }
+    await ev('Labs.grade = window.__labsGrade; Labs.backToHub(); true');
+    const registered = await ev(`Labs.labsFor(${n}).some(l => l.id === 'separation')`);
+    registeredAt[n] = registered;
+    if (!registered) {
+      console.log(`NOTE Grade ${n}: Labs.LABS does not list Grade ${n} on the separation row yet, so Labs.grade is overridden to ${n} for this run.`);
+      await ev(`Labs.grade = () => ${n}; true`);
+    }
+    await ev("Labs.openLab('separation'); true");
+    let opened = false;
+    for (let i = 0; i < 40 && !opened; i++) { await sleep(150); opened = await ev("!!document.querySelector('#labs-root .lab-separation')"); }
+    return opened;
+  };
+  const view = g => ev(`(() => { const D = LabSeparationData;
+    return { eyebrow: document.querySelector('.lab-eyebrow').textContent,
+      guides: [...document.querySelectorAll('.lab-start [data-guide]')].map(b => b.dataset.guide).join(),
+      missions: [...document.querySelectorAll('.lab-start [data-mission]')].map(b => b.dataset.mission).join(),
+      modes: [...document.querySelectorAll('.lab-separation-modes [data-mode]')].map(b => b.dataset.mode).join(),
+      wantGuides: D.forGrade(D.GUIDES, ${g}).map(x => x.id).join(), wantMissions: D.forGrade(D.MISSIONS, ${g}).map(x => x.id).join(),
+      wantModes: D.MODES_BY_GRADE[${g}].join(), counter: document.getElementById('lab-found-n').textContent,
+      total: D.forGrade(D.DISCOVERIES, ${g}).length, grade: LabSeparation._debug().grade }; })()`);
+  const tabIds = async (panel, sel, attr) => { await must(`[data-panel="${panel}"]`); return ev(`[...document.querySelectorAll('${sel}')].map(b => b.dataset.${attr}).join()`); };
+  const offGrade = (g, csv) => ev(`(() => { const D = LabSeparationData, mine = new Set([...D.GUIDES, ...D.MISSIONS, ...D.DISCOVERIES].filter(x => (x.grades || [9]).includes(${g})).map(x => x.id));
+    return ${JSON.stringify(csv)}.split(',').filter(id => id && !mine.has(id)); })()`);
+  const fits = async g => {
+    const out = [];
+    for (const m of await ev(`LabSeparationData.MODES_BY_GRADE[${g}]`)) {
+      await mode(m);
+      out.push(await ev(`(() => { const vw = innerWidth;
+        const off = [...document.querySelectorAll('#labs-root button, #labs-root canvas')]
+          .filter(e => e.getBoundingClientRect().width && e.getBoundingClientRect().right > vw + 0.5)
+          .map(e => (e.dataset.part || e.dataset.act || e.dataset.mode || e.dataset.tech || e.tagName) + ' → ' + Math.round(e.getBoundingClientRect().right));
+        const small = [...document.querySelectorAll('#labs-root .lab-body button')].filter(e => { const r = e.getBoundingClientRect(); return r.width && r.height < 44 && !e.classList.contains('lab-link'); })
+          .map(e => e.className + ':' + Math.round(e.getBoundingClientRect().height));
+        return { m: '${m}', root: document.getElementById('labs-root').scrollWidth, vw, off, small }; })()`));
+    }
+    return out;
+  };
+  const ensureGoggles = async on => { if ((await dbg()).goggles !== on) await must('#lab-goggles'); };
+  const examHead = async () => ev("(() => { const h = document.querySelector('#lab-overlay .is-exam h3'); return h ? h.textContent : ''; })()");
+
+  for (const G of [
+    { g: 8, welcome: /Filter muddy water/, first: 'g8_filter', modes: 'filter,evap,chroma,choose' },
+    { g: 7, welcome: /Dissolve solids/, first: 'g7_dissolve', modes: 'dissolve,evap,distil,choose' },
+  ]) {
+    const g = G.g;
+    console.log(`\n-- Grade ${g}`);
+    ok(`Grade ${g}: the Separation Station opens`, await atGrade(g));
+    ov = await overlay();
+    ok(`Grade ${g}: its own first-visit welcome, with “Show me how”`, ov && /Welcome to the Separation Station/.test(ov.text) && G.welcome.test(ov.text) && /Show me how/.test(ov.text), ov);
+    await closeOv();
+    await ev('LabSeparation._test({ instant: true }); true');
+    const v = await view(g);
+    ok(`Grade ${g}: the bench runs at Grade ${g} and the eyebrow says “Science · Grade ${g}”`, v.grade === g && v.eyebrow === `Science · Grade ${g}`, v);
+    ok(`Grade ${g}: the start panel lists exactly its own guided experiments and missions`, v.guides === v.wantGuides && v.missions === v.wantMissions && v.guides.split(',').length >= 3 && v.missions.split(',').length >= 2, v);
+    ok(`Grade ${g}: no other grade's guide or mission shows`, !(await offGrade(g, v.guides + ',' + v.missions)).length);
+    ok(`Grade ${g}: its own benches (${G.modes})`, v.modes === G.modes && v.modes === v.wantModes, v.modes);
+    ok(`Grade ${g}: the ✨ counter starts at 0/${v.total} - Grade 9's saved discoveries do not count here`, v.counter === `0/${v.total}`, v.counter);
+    const mt = await tabIds('missions', '.lab-missions [data-mission]', 'mission');
+    ok(`Grade ${g}: the Missions tab lists only its own missions`, mt === v.wantMissions, mt);
+    const ft = await tabIds('found', '.lab-found-card', 'disc');
+    ok(`Grade ${g}: the Discoveries tab shows only its own ${v.total} cards`, ft.split(',').length === v.total && !(await offGrade(g, ft)).length, ft);
+    await must('[data-panel="sandbox"]');
+
+    // A guided experiment, end to end, from the start panel.
+    await must(`.lab-start [data-guide="${G.first}"]`);
+    const gr = await ev(`(() => {
+      for (let k = 0; k < 200 && LabSeparation._debug().guide; k++) { const b = document.querySelector('#lab-guide [data-guide-do]'); if (b) b.click(); LabSeparation._tick(0.5); }
+      const ov = document.getElementById('lab-overlay');
+      return { guide: !!LabSeparation._debug().guide, ov: ov ? ov.textContent.replace(/\\s+/g, ' ').slice(0, 500) : '', saved: !!Labs.store('separation').guides['${G.first}'] }; })()`);
+    ok(`Grade ${g}: guided experiment “${G.first}” runs end to end and says what you found out`, !gr.guide && /Experiment complete/.test(gr.ov) && /What you found out/.test(gr.ov) && gr.saved, gr);
+    await closeOv();
+
+    // The hot-basin hazard: heating without goggles.
+    await ensureGoggles(false);
+    await mode('evap'); await tool('reset');
+    await part('emix', 'salt');
+    await tool('heat');
+    ov = await overlay();
+    ok(`Grade ${g}: heating the basin without goggles is stopped with a HOT SURFACE hazard card and the WEAR EYE PROTECTION sign`, ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Hot surface') && ov.signs.includes('Wear eye protection') && /protect your eyes/.test(ov.text) && /What happened/.test(ov.text) && /Do this instead/.test(ov.text), ov);
+    if (registeredAt[g]) ok(`Grade ${g}: its exam heading is “In your exams”, not the NCE paper`, /In your exams/.test(await examHead()));
+    ok(`Grade ${g}: the Grade 7-8 card quotes no Grade 9 paper`, ov && !/Chemistry 20\d\d/.test(ov.text), ov);
+    await closeOv();
+    await ensureGoggles(true);
+    await tool('heat'); await tick(40);
+    ov = await overlay();
+    ok(`Grade ${g}: salt water heated to dryness spits - a result card`, ov && /is-result/.test(ov.cls) && /spat/.test(ov.text) && (await dbg()).eva.dry, ov);
+    await closeOv();
+
+    if (g === 8) {
+      await mode('filter');
+      for (const [k, o] of [['fmix', 'muddy'], ['paper', 'cone'], ['fbeaker', 'cracked'], ['pouring', 'rod']]) await part(k, o);
+      await tool('pour');
+      ov = await overlay();
+      ok('Grade 8: pouring into a cracked beaker - a SHARP hazard card (broken glass)', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Sharp - can cut') && /cracked/.test(ov.text) && /dustpan/.test(ov.text), ov);
+      await closeOv();
+      ok('…and the bench takes the cracked beaker away', (await dbg()).fil.parts.fbeaker === null);
+      await part('fbeaker', 'sound'); await part('paper', 'torn');
+      await tool('pour'); await tick(4);
+      ov = await overlay();
+      d = await dbg();
+      ok('Grade 8: a torn filter paper - result card, and the filtrate is cloudy', hasCard(ov, /came out cloudy/) && /What you should have done/.test(ov.text) && d.fil.cloudy, { ov, fil: d.fil });
+      await closeOv();
+      await part('paper', 'cone'); await part('pouring', 'fast');
+      await tool('pour'); await tick(1);
+      ov = await overlay();
+      ok('Grade 8: tipping it all in at once - it went over the top of the paper', hasCard(ov, /went over the top/), ov);
+      await closeOv();
+      await part('pouring', 'rod');
+      await tool('pour'); await tick(10);
+      d = await dbg();
+      ok('Grade 8: set up right, the mud stays on the paper and 48 cm³ of clear filtrate collects', d.fil.done && !d.fil.cloudy && Math.abs(d.fil.filtrate - 48) < 0.01 && /residue/.test(d.log[0]), d.fil);
+      await mode('chroma');
+      for (const [k, o] of [['ink', 'green'], ['line', 'pencil'], ['level', 'high']]) await part(k, o);
+      await tool('run'); await tick(3);
+      ov = await overlay();
+      ok('Grade 8: the spot under the water washes away - result card', hasCard(ov, /spots washed away/), ov);
+      await closeOv();
+      await part('level', 'low'); await part('line', 'pen');
+      await tool('run'); await tick(5);
+      ov = await overlay();
+      ok('Grade 8: a start line in felt-tip pen runs - result card', hasCard(ov, /start line ran/) && /pencil/.test(ov.text), ov);
+      await closeOv();
+      await part('line', 'pencil'); await part('ink', 'black');
+      await tool('run'); await tick(9);
+      d = await dbg();
+      ok('Grade 8: black ink separates into three spots', d.chr.done && /3 spots/.test(d.log[0]), d);
+      await mode('choose');
+      await must('[data-tech="decantation"]');
+      ov = await overlay();
+      ok('Grade 8: decanting muddy water - “Not the right technique”, and what would really happen', hasCard(ov, /Not the right technique/) && /still cloudy/.test(ov.text) && /filtration/i.test(ov.text), ov);
+      await closeOv();
+    } else {
+      await mode('dissolve');
+      for (const [k, o] of [['solid', 'salt'], ['dbeaker', 'cracked']]) await part(k, o);
+      await tool('add'); await tool('stir');
+      ov = await overlay();
+      ok('Grade 7: stirring in a cracked beaker - a SHARP hazard card', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Sharp - can cut') && /cracked/.test(ov.text), ov);
+      await closeOv();
+      await part('dbeaker', 'sound'); await part('solid', 'sugar');
+      ok('Grade 7: the balance reads 100.0 g before the sugar goes in', /100\.0 g/.test(await ev("document.getElementById('lab-read').textContent")));
+      await tool('add');
+      ok('…105.0 g after', /105\.0 g/.test(await ev("document.getElementById('lab-read').textContent")));
+      await tool('stir'); await tick(5);
+      d = await dbg();
+      ok('…and still 105.0 g when it has dissolved', d.dis.done && d.dis.dissolved === 1 && /105\.0 g/.test(await ev("document.getElementById('lab-read').textContent")), d.dis);
+      await mode('evap'); await tool('reset');
+      await part('emix', 'sugar');
+      await tool('heat'); await tick(12);
+      ov = await overlay();
+      ok('Grade 7: dry sugar heated strongly turns black - a chemical-change result card', hasCard(ov, /sugar turned black/) && /chemical change/.test(ov.text) && (await dbg()).eva.charred, ov);
+      await closeOv();
+      await mode('choose');
+      await must('[data-tech="compound"]');
+      ov = await overlay();
+      ok('Grade 7: calling iron a compound - “Look again”, and why', hasCard(ov, /Look again/) && /iron atoms only/.test(ov.text), ov);
+      await closeOv();
+      ok('Grade 7: the sorting bench offers element, compound and mixture', (await ev("[...document.querySelectorAll('[data-tech]')].map(b => b.dataset.tech).join()")) === 'element,compound,mixture');
+    }
+
+    // Every discovery at this grade unlocks through its own "Show me how".
+    const sv = await solveAll(g);
+    ok(`Grade ${g}: all ${sv.list.length} discoveries unlock by following their own “Show me how”`, sv.unsolved.length === 0, sv.unsolved);
+    cnt = await counter(g);
+    ok(`Grade ${g}: …and the counter says ${sv.list.length}/${sv.list.length}`, cnt.shown === `${sv.list.length}/${sv.list.length}` && cnt.saved === cnt.shown, cnt);
+
+    // A mission to three stars.
+    await ensureGoggles(true);
+    if (g === 8) {
+      await ev("LabSeparation.startMission('g8_clear'); true");
+      for (const [k, o] of [['fmix', 'muddy'], ['paper', 'cone'], ['fbeaker', 'sound'], ['pouring', 'rod']]) await part(k, o);
+      await tool('pour'); await tick(10);
+      d = await dbg();
+      ok('Grade 8: “Clear water from muddy water” - set up from the shelf and filtered: mission success', d.mission && d.mission.success && !d.mission.hazards && !d.mission.mistakes, d.mission);
+      await must('[data-act="quiz"]');
+      ok('…its 5 questions (one picks the apparatus from pictures) end with 3 stars', (await answerAll('g8_clear')) === '3 of 3 stars');
+      ok('…the stars are saved under the Grade 8 id', await ev("Labs.store('separation').missions.g8_clear.stars === 3"));
+    } else {
+      await ev("LabSeparation.startMission('g7_back'); true");
+      await part('emix', 'salt');
+      await tool('heat');
+      for (let i = 0; i < 30 && !(await dbg()).eva.edge; i++) await tick(1);
+      await tool('heat'); await tool('leave'); await tick(16);
+      d = await dbg();
+      ok('Grade 7: “Get the salt back” - heat to the first crystals, then leave to dry: mission success', d.mission && d.mission.success && !d.mission.hazards && !d.mission.mistakes && d.eva.done, d);
+      await must('[data-act="quiz"]');
+      ok('…3 stars', (await answerAll('g7_back')) === '3 of 3 stars');
+      ok('…the stars are saved under the Grade 7 id', await ev("Labs.store('separation').missions.g7_back.stars === 3"));
+    }
+    await closeOv();
+
+    // Calm Mode: the crack effect first animates, then (calm) applies at once.
+    await ev("LabSeparation._test({ instant: false }); true");
+    await must('[data-panel="sandbox"]');
+    const crackSetup = g === 8
+      ? async () => { await mode('filter'); await tool('reset'); for (const [k, o] of [['fmix', 'muddy'], ['paper', 'cone'], ['fbeaker', 'cracked'], ['pouring', 'rod']]) await part(k, o); await tool('pour'); }
+      : async () => { await mode('dissolve'); await tool('reset'); for (const [k, o] of [['solid', 'salt'], ['dbeaker', 'cracked']]) await part(k, o); await tool('add'); await tool('stir'); };
+    await crackSetup();
+    d = await dbg();
+    ok(`Grade ${g}: with animation on, the broken glass flies first (the card waits for it)`, d.busy === true && d.fx === 1 && !(await overlay()), d);
+    await sleep(1400);
+    ok('…then the card lands', !!(await overlay()));
+    await closeOv();
+    await ev("document.documentElement.classList.add('kid-calm'); true");
+    await crackSetup();
+    d = await dbg();
+    ok(`Grade ${g}: in Calm Mode the card comes at once, with no animation`, d.busy === false && d.fx === 0 && !!(await overlay()), d);
+    await closeOv();
+    await ev("document.documentElement.classList.remove('kid-calm'); true");
+    await ev('LabSeparation._test({ instant: true }); true');
+
+    const fg = await fits(g);
+    ok(`Grade ${g}: every bench fits a 360px phone (no control past the edge)`, fg.every(f => f.root <= f.vw && !f.off.length), fg);
+    ok(`Grade ${g}: …with tap targets at least 44px tall`, fg.every(f => !f.small.length), fg.map(f => f.small));
+  }
+
+  // Back at Grade 9: only the Grade 9 level, exactly as before.
+  console.log('\n-- back to Grade 9');
+  ok('Grade 9: the Separation Station opens again', await atGrade(9));
+  const v9 = await view(9);
+  ok('Grade 9: “Chemistry · Grade 9”, its own four benches, guides and missions - nothing from Grades 7 or 8',
+     v9.grade === 9 && v9.eyebrow === 'Chemistry · Grade 9' && v9.guides === v9.wantGuides && v9.missions === v9.wantMissions
+     && v9.modes === 'distil,crystal,sublime,choose' && !(await offGrade(9, v9.guides + ',' + v9.missions)).length, v9);
+  ok(`Grade 9: the counter still reads ${v9.total}/${v9.total} - the lower grades' discoveries are not added to it`, v9.counter === `${v9.total}/${v9.total}`, v9.counter);
+  const ft9 = await tabIds('found', '.lab-found-card', 'disc');
+  ok('Grade 9: the Discoveries tab shows only Grade 9 cards', ft9.split(',').length === v9.total && !(await offGrade(9, ft9)).length);
+  await ev('Labs.grade = window.__labsGrade; true');
 
   await ev("showScreen('student-home'); true");
   ok('leaving the screen stops the animation loop cleanly', await ev("typeof S !== 'undefined' && S.currentScreen !== 'labs'"));

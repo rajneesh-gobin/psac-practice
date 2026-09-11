@@ -54,7 +54,8 @@
 .lab-photo .lab-photo-say { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
 .lab-photo-guide-head { display: flex; align-items: center; gap: 8px; }
 .lab-photo-guide-head .lab-guide-meta { flex: 1; min-width: 0; }
-.lab-photo-opts.is-pick .lab-photo-opt { min-width: 64px; font-size: 0.9rem; }
+.lab-photo-optsign { display: inline-block; width: 16px; height: 16px; margin-right: 3px; vertical-align: -3px; font-style: normal; }
+.lab-photo-optsign .lab-sign-mini { width: 16px; height: 16px; }
 
 @media (prefers-reduced-motion: reduce) { .lab-photo-opt:active { transform: none; } }
 .kid-calm .lab-photo-opt:active { transform: none; }

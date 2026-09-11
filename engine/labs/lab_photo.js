@@ -586,12 +586,12 @@ const LabPhoto = (() => {
     const R = P().RESULTS.two_vars;
     const list = ch.map(x => P().VAR_NAMES[x]);
     const words = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1] : list[0];
-    return () => Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened({ list: words, a: a.bubbles, b: b.bubbles }),
+    return () => _resultCard({ icon: R.icon, title: R.title, happened: R.happened({ list: words, a: a.bubbles, b: b.bubbles }),
       instead: R.instead, exam: R.exam, onClose: () => _coach('Change one thing at a time. Everything else stays the same.') });
   }
   function _heatCard(run) {
     const R = P().RESULTS.lamp_heat;
-    return () => Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened({ dist: run.dist, t0: run.temp, t1: run.tempEnd }),
+    return () => _resultCard({ icon: R.icon, title: R.title, happened: R.happened({ dist: run.dist, t0: run.temp, t1: run.tempEnd }),
       instead: R.instead, exam: R.exam, onClose: () => _coach('Tap “Heat shield: In” in the set-up, then count again.') });
   }
 
@@ -1049,7 +1049,7 @@ const LabPhoto = (() => {
 
   // ══ Missions ═════════════════════════════════
   function startMission(id) {
-    const M = P().MISSIONS.find(x => x.id === id);
+    const M = _mine(P().MISSIONS).find(x => x.id === id);
     if (!M || _busy) return;
     _stopGuide(true);
     _resetBench();
@@ -1067,6 +1067,7 @@ const LabPhoto = (() => {
     const ms = _mission;
     if (!ms || !ms.success) return;
     const M = P().MISSIONS.find(x => x.id === ms.id);
+    _hush();
     Labs.quiz(M.quiz, { title: M.title, onDone: r => {
       let s = 3;
       if (ms.errors) s--;
@@ -1079,6 +1080,7 @@ const LabPhoto = (() => {
       const lines = [];
       lines.push(ms.errors ? `${ms.errors} mistake${ms.errors === 1 ? '' : 's'} on the bench - a clean run earns an extra star.` : 'A clean, fair, safe experiment. ⚖️');
       if (r.firstTry < r.total - 1) lines.push('Get all but one question right first time for another star.');
+      _hush();
       Labs.missionDone({ icon: M.icon, title: M.title, stars: s, score: r.firstTry, total: r.total, lines,
         onAgain: () => startMission(ms.id),
         onClose: () => { _mission = null; _renderPanel(); _coach('Mission saved. Try another mission, or go and hunt for discoveries.'); } });
@@ -1090,7 +1092,7 @@ const LabPhoto = (() => {
 
   function startGuide(idOrDef) {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
-    const G = adhoc || P().GUIDES.find(g => g.id === idOrDef);
+    const G = adhoc || _mine(P().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
     _mission = null;
     _resetBench();
@@ -1109,6 +1111,20 @@ const LabPhoto = (() => {
   function _satisfied(tok) {
     const [k, v] = tok.split(':');
     if (v === undefined) return false;
+    if (_primary()) {
+      switch (k) {
+        case 'rig': return _rig === v;
+        case 'pot': return _pots.sel === v;
+        case 'spot': case 'drink': case 'soil': case 'leaves': return _pots[_pots.sel][k] === v && !_pots.res;
+        case 'twin': return _pots.twin === (v === 'on');
+        case 'dish': return String(_seeds.sel) === v;
+        case 'wet': case 'place': return _seeds.dishes[_seeds.sel][k] === v && !_seeds.res;
+        case 'wlamp': return _weed.lampOn === (v === 'on');
+        case 'wdist': return _weed.dist === +v;
+        case 'wwater': return _weed.water === v;
+      }
+      return false;
+    }
     switch (k) {
       case 'rig': return _rig === v;
       case 'dist': return _pond.dist === +v;
@@ -1126,13 +1142,15 @@ const LabPhoto = (() => {
   function _guideEnter() {
     const G = _gdef();
     if (!G) return;
+    _hush();
     let s = G.steps[_guide.step];
     while (s && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     const box = $('lab-guide');
     if (box) {
       const n = G.steps.length, i = _guide.step;
-      box.innerHTML = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>
+      const meta = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>`;
+      box.innerHTML = `${_primary() ? `<div class="lab-photo-guide-head">${meta}<button type="button" class="lab-btn lab-btn-sm lab-photo-say" data-act="say-guide" aria-label="Read this step aloud">🔊</button></div>` : meta}
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
         ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
@@ -1159,6 +1177,7 @@ const LabPhoto = (() => {
 
   // The words for a discovery's "how" tokens.
   function _autoStep(on) {
+    if (_primary()) return P().primaryStep(on) || { on, say: on, btn: on };
     const [k, v] = on.split(':');
     const D = P();
     switch (k) {
@@ -1190,12 +1209,13 @@ const LabPhoto = (() => {
   }
 
   function discoveryGuide(id) {
-    const d = P().DISCOVERIES.find(x => x.id === id);
+    const d = _mine(P().DISCOVERIES).find(x => x.id === id);
     if (!d) return;
     startGuide({ id: 'disc-' + id, adhoc: true, icon: d.icon, title: d.title, lesson: d.learn, steps: d.how.map(_autoStep) });
   }
 
   function _eqHTML() {
+    if (_primary()) return _pEqHTML();
     const E = P().EQUATION;
     return `<section class="lab-hz-sec"><h3>The equation</h3>
       <p class="lab-eq">${esc(E.word)}</p><p class="lab-photo-over">(${esc(E.over)})</p>
@@ -1203,11 +1223,11 @@ const LabPhoto = (() => {
   }
 
   function _discDetail(id) {
-    const d = P().DISCOVERIES.find(x => x.id === id);
+    const d = _mine(P().DISCOVERIES).find(x => x.id === id);
     if (!d) return;
     const found = !!Labs.store('photo').disc[id];
     if (!found) {
-      Labs.overlay(`
+      _overlay(`
         <div class="lab-done">
           <p class="lab-done-icon" aria-hidden="true">❔</p>
           <p class="lab-rs-kicker">Locked discovery</p>
@@ -1221,7 +1241,7 @@ const LabPhoto = (() => {
         </div>`, { cls: 'is-done' });
       return;
     }
-    Labs.overlay(`
+    _overlay(`
       <div class="lab-done">
         <p class="lab-done-icon" aria-hidden="true">${d.icon}</p>
         <p class="lab-rs-kicker">Discovery</p>
@@ -1244,8 +1264,8 @@ const LabPhoto = (() => {
     const st = Labs.store('photo');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
-    const next = G.adhoc ? null : P().GUIDES.find(g => !st.guides[g.id]);
-    Labs.overlay(`
+    const next = G.adhoc ? null : _mine(P().GUIDES).find(g => !st.guides[g.id]);
+    _overlay(`
       <div class="lab-done">
         <p class="lab-done-icon" aria-hidden="true">${G.icon}</p>
         <p class="lab-rs-kicker">Experiment complete</p>
@@ -1304,6 +1324,7 @@ const LabPhoto = (() => {
         <span class="lab-start-text"><b>${esc(M.title)}</b><small>${esc(M.blurb)}</small>${Labs.stars(best)}</span>
         <button type="button" class="lab-btn lab-btn-sm" data-mission="${M.id}">${best ? 'Play again' : 'Start'}</button></div>`;
     };
+    if (_primary()) return _pStartHTML(guide, mission);
     return `<section class="lab-start" aria-label="What to do here">
       <h2>What would you like to do?</h2>
       <ol class="lab-how">
@@ -1312,9 +1333,9 @@ const LabPhoto = (() => {
         <li><b>Watch the rig</b>, then read your results in the lab notebook.</li>
       </ol>
       <h3>🧭 Guided experiments <small>start here · step by step</small></h3>
-      <div class="lab-start-list">${P().GUIDES.map(guide).join('')}</div>
+      <div class="lab-start-list">${_mine(P().GUIDES).map(guide).join('')}</div>
       <h3>🎯 Missions <small>exam-style questions · earn stars</small></h3>
-      <div class="lab-start-list">${P().MISSIONS.map(mission).join('')}</div>
+      <div class="lab-start-list">${_mine(P().MISSIONS).map(mission).join('')}</div>
       <p class="lab-hint">Or experiment freely: set up the rig below.</p>
     </section>`;
   }
@@ -1345,16 +1366,17 @@ const LabPhoto = (() => {
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
   function _discover(id) {
     const d = P().DISCOVERIES.find(x => x.id === id);
-    if (Labs.discover('photo', id, { title: d && d.title, total: P().DISCOVERIES.length })) _refresh();
+    if (Labs.discover('photo', id, { title: d && d.title, total: _mine(P().DISCOVERIES).length })) _refresh();
   }
   function _foundCount() {
     const n = $('lab-found-n');
-    if (n) n.textContent = `${Object.keys(Labs.store('photo').disc).length}/${P().DISCOVERIES.length}`;
+    if (n) { const all = _mine(P().DISCOVERIES), st = Labs.store('photo'); n.textContent = `${all.filter(d => st.disc[d.id]).length}/${all.length}`; }
   }
 
   function _renderTools() {
     const box = $('lab-photo-tools');
     if (!box) return;
+    if (_primary()) { _pToolsHTML(box); _highlight(); return; }
     const sign = k => `<i class="lab-photo-toolsign">${Labs.sign(k, true)}</i>`;
     if (_rig === 'pond') {
       box.className = 'lab-tools lab-photo-tools';
@@ -1389,6 +1411,7 @@ const LabPhoto = (() => {
     return 'Plant: ' + bits.join(' · ');
   }
   function _shelfHTML() {
+    if (_primary()) return _pShelfHTML();
     const D = P();
     if (_rig === 'pond') {
       return `<section class="lab-shelf lab-photo-set" aria-label="Set up the pondweed rig">
@@ -1423,6 +1446,7 @@ const LabPhoto = (() => {
   }
 
   function _notebookHTML() {
+    if (_primary()) return _pNotebookHTML();
     const D = P(), ms = _mission;
     let table = '';
     if (ms && ms.id === 'light') {
@@ -1469,7 +1493,7 @@ const LabPhoto = (() => {
   function _missionListHTML() {
     const st = Labs.store('photo');
     return `<section class="lab-missions"><h2>Missions</h2><p class="lab-hint">Do the experiment fairly and safely, answer the exam-style questions, earn up to three stars.</p>
-      ${P().MISSIONS.map(M => {
+      ${_mine(P().MISSIONS).map(M => {
         const best = (st.missions[M.id] && st.missions[M.id].stars) || 0;
         return `<article class="lab-mission-card">
           <span class="lab-mission-icon" aria-hidden="true">${M.icon}</span>
@@ -1484,7 +1508,8 @@ const LabPhoto = (() => {
     if (!ms) return '';
     const M = P().MISSIONS.find(x => x.id === ms.id);
     let body = '';
-    if (ms.id === 'light') {
+    if (_primary()) body = _pMissionBody(M, ms);
+    else if (ms.id === 'light') {
       const n = Object.keys(ms.results).length;
       body = `<ul class="lab-steps">
         <li class="${_pond.water === 'high' || ms.base ? 'is-done' : ''}">🧂 Add sodium hydrogencarbonate (plenty of carbon dioxide)</li>
@@ -1523,7 +1548,7 @@ const LabPhoto = (() => {
 
   function _foundHTML() {
     const st = Labs.store('photo');
-    const all = P().DISCOVERIES;
+    const all = _mine(P().DISCOVERIES);
     const n = all.filter(d => st.disc[d.id]).length;
     return `<section class="lab-found"><h2>Discoveries <span>${n} of ${all.length}</span></h2>
       <p class="lab-hint">Tap any card. Found ones show what happened and why; locked ones show you how to find them.</p>
@@ -1534,7 +1559,8 @@ const LabPhoto = (() => {
   }
 
   function _intro() {
-    Labs.overlay(`
+    if (_primary()) { _pIntro(); return; }
+    _overlay(`
       <div class="lab-intro">
         <p class="lab-done-icon" aria-hidden="true">🌿</p>
         <h2 id="lab-ov-title">Welcome to the Photosynthesis Lab</h2>
@@ -1557,8 +1583,9 @@ const LabPhoto = (() => {
   }
 
   function _help() {
+    if (_primary()) { _pHelp(); return; }
     const E = P().EQUATION;
-    Labs.overlay(`
+    _overlay(`
       <h2 id="lab-ov-title" class="lab-help-title">How the Photosynthesis Lab works</h2>
       <div class="lab-help">
         <section><h3>Photosynthesis</h3>
@@ -1588,8 +1615,322 @@ const LabPhoto = (() => {
   }
 
   // ══ Readouts ═════════════════════════════════
+  // ══ Primary panels (Grades 4 and 6) ══════════
+  function _pStartHTML(guide, mission) {
+    const T = P().PRIMARY_TEXT[_g];
+    return `<section class="lab-start is-primary" aria-label="What to do here">
+      <h2>What would you like to do?</h2>
+      <ol class="lab-how">${T.how.map(h => `<li>${h}</li>`).join('')}</ol>
+      <h3>🧭 Guided experiments <small>start here · step by step</small></h3>
+      <div class="lab-start-list">${_mine(P().GUIDES).map(guide).join('')}</div>
+      <h3>🎯 Missions <small>questions · earn stars</small></h3>
+      <div class="lab-start-list">${_mine(P().MISSIONS).map(mission).join('')}</div>
+      <p class="lab-hint">Or try things yourself: set up the ${_rig === 'seeds' ? 'seed dishes' : _rig === 'weed' ? 'waterweed' : 'plant pots'} below.</p>
+    </section>`;
+  }
+
+  function _pToolsHTML(box) {
+    const t = (act, icon, label) => `<button type="button" class="lab-tool" data-act="${act}"><span aria-hidden="true">${icon}</span>${label}</button>`;
+    if (_rig === 'pots') {
+      box.className = 'lab-tools lab-photo-tools is-two';
+      box.innerHTML = t('week', '⏩', 'Wait 7 days') + t('fresh', '🔄', 'New plants');
+    } else if (_rig === 'seeds') {
+      box.className = 'lab-tools lab-photo-tools is-three';
+      box.innerHTML = t('days', '⏩', 'Wait 4 days') + t('look', '🔍', 'Look closely') + t('fresh', '🔄', 'New seeds');
+    } else {
+      box.className = 'lab-tools lab-photo-tools is-three';
+      box.innerHTML = t('wcloser', '◀', 'Lamp closer') + t('wfurther', '▶', 'Lamp further') + t('wcount', '⏱', 'Count 1 minute');
+    }
+  }
+
+  function _pShelfHTML() {
+    const D = P();
+    const row = (label, inner, wide) => `<div class="lab-photo-row"><span class="lab-photo-label">${label}</span><div class="lab-photo-opts${wide ? ' is-wide' : ''}">${inner}</div></div>`;
+    const opts = (k, map, sign) => Object.keys(map).map(v => _opt(k, v, (sign && sign[v] ? `<i class="lab-photo-optsign">${Labs.sign(sign[v], true)}</i>` : '') + map[v].icon + ' ' + map[v].name, map[v].meta)).join('');
+    if (_rig === 'pots') {
+      const which = D.POT_VARS[_g];
+      return `<section class="lab-shelf lab-photo-set" aria-label="Set up the plant pots">
+        <h2>Set up the plant pots</h2>
+        ${row('1 · Choose a pot', _opt('pot', 'A', '🅰️ Pot A') + _opt('pot', 'B', '🅱️ Pot B'))}
+        ${row('2 · Where does it stand?', opts('spot', D.SPOTS, { lamp: 'hot' }), true)}
+        ${row('3 · Water', opts('drink', D.DRINKS), true)}
+        ${which.includes('soil') ? row('4 · Soil', opts('soil', D.SOILS), true) : ''}
+        ${which.includes('leaves') ? row('4 · Leaves', opts('leaves', D.LEAVES), true) : ''}
+        ${row('5 · How many plants?', _opt('twin', 'on', '🪴🪴 Two plants', 'One to change, one to compare') + _opt('twin', 'off', '🪴 One plant', 'Nothing to compare'), true)}
+        <p class="lab-hint">Change ONE thing in pot B. Then ⏩ wait 7 days.</p>
+      </section>`;
+    }
+    if (_rig === 'seeds') {
+      return `<section class="lab-shelf lab-photo-set" aria-label="Set up the seed dishes">
+        <h2>Set up the seed dishes</h2>
+        ${row('1 · Choose a dish', D.DISHES.map(i => _opt('dish', i, 'Dish ' + i)).join(''))}
+        ${row('2 · Cotton wool', opts('wet', D.WETS), true)}
+        ${row('3 · Where does it go?', opts('place', D.PLACES), true)}
+        <p class="lab-hint">Dish 1 is the control. Change ONE thing in each other dish. Then ⏩ wait 4 days.</p>
+      </section>`;
+    }
+    return `<section class="lab-shelf lab-photo-set" aria-label="Set up the waterweed">
+      <h2>Set up the waterweed</h2>
+      ${row('💡 Lamp distance', D.WEED_DISTS.map(d => _opt('wdist', d, d + ' cm')).join(''))}
+      ${row('Lamp', _opt('wlamp', 'on', '💡 On') + _opt('wlamp', 'off', '🌑 Off'))}
+      ${row('💧 Water', opts('wwater', D.WEED_WATERS), true)}
+      <p class="lab-hint">The room is dark: the lamp is the only light. Change ONE thing, then ⏱ count for a minute.</p>
+    </section>`;
+  }
+
+  function _pNotebookHTML() {
+    const D = P(), ms = _mission, dash = '<span class="lab-muted">-</span>';
+    const tbl = (cap, head, rows) => `<div class="lab-table-wrap"><table class="lab-table"><caption>${cap}</caption>
+      <thead><tr>${head.map(h => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+    let table = '';
+    if (ms && ms.id === 'g6_gases') {
+      const M = D.MISSIONS.find(x => x.id === 'g6_gases');
+      table = tbl('Results: light and carbon dioxide (PSAC 2023)', ['Test', 'Light', 'Carbon dioxide', 'Bubbles in a minute'],
+        M.tests.map((t, i) => `<tr><th scope="row">${i + 1}</th><td>${t.lampOn ? 'yes' : 'no'}</td><td>${t.water === 'soda' ? 'yes' : 'no'}</td><td>${ms.results[i] != null ? ms.results[i] : dash}</td></tr>`).join(''));
+    }
+    const soil = _g === 4;
+    const pots = _potRuns.length ? tbl('Plant pots after 7 days', ['Pot', 'Place', 'Water', soil ? 'Soil' : 'Leaves', 'After 7 days'],
+      _potRuns.slice(0, 4).flatMap(r => r.pots.map(p => `<tr><th scope="row">${p.id}<small> wk ${r.n}</small></th><td>${esc(D.SPOTS[p.set.spot].short)}</td><td>${esc(D.DRINKS[p.set.drink].short)}</td>
+        <td>${esc((soil ? D.SOILS[p.set.soil] : D.LEAVES[p.set.leaves]).short)}</td><td>${esc(p.res.words)}</td></tr>`)).join('')) : '';
+    const seeds = _seedRuns.length ? tbl('Seed dishes after 4 days', ['Dish', 'Cotton wool', 'Place', 'Sprouted?'],
+      _seedRuns.slice(0, 2).flatMap(r => r.dishes.map(d => `<tr><th scope="row">${d.i}<small> try ${r.n}</small></th><td>${esc(D.WETS[d.set.wet].short)}</td><td>${esc(D.PLACES[d.set.place].short)}</td>
+        <td>${d.res.sprouted ? '<b>Yes</b>' : 'No'}</td></tr>`)).join('')) : '';
+    const weed = _wruns.length ? tbl('Every waterweed count', ['#', 'Lamp', 'Water', 'Bubbles in a minute'],
+      _wruns.slice(0, 10).map(r => `<tr><th scope="row">${r.n}</th><td>${r.lampOn ? r.dist + ' cm' : 'off'}</td><td>${esc(D.WEED_WATERS[r.water].short)}</td><td><b>${r.bubbles}</b></td></tr>`).join('')) : '';
+    const list = _log.length
+      ? `<ol class="lab-log">${_log.slice(0, 10).map(e => `<li class="${e.note ? 'is-note' : ''}"><b>${esc(e.title)}</b><p>${esc(e.obs)}</p></li>`).join('')}</ol>`
+      : '<p class="lab-empty">What you see goes here as you experiment.</p>';
+    return `<section class="lab-notebook" id="lab-notebook" aria-label="Lab notebook"><h2>Lab notebook</h2>${table}${pots}${seeds}${weed}${list}</section>`;
+  }
+
+  function _pMissionBody(M, ms) {
+    const D = P(), done = b => b ? 'is-done' : '';
+    if (M.fair) {
+      const n = M.fair.filter(f => ms.results[f]).length;
+      return `<ul class="lab-steps">${M.fair.map(f => `<li class="${done(ms.results[f])}">${esc(M.steps[f])}</li>`).join('')}
+        <li class="${done(ms.success)}">📝 Answer the questions</li></ul>
+        <p class="lab-progress-text">${n} of ${M.fair.length} fair tests done · ⏩ wait 7 days after each change</p>`;
+    }
+    if (M.setup) {
+      return `<ul class="lab-steps">${D.DISHES.map(i => {
+          const w = M.setup[i], cur = _seeds.dishes[i];
+          return `<li class="${done(cur.wet === w.wet && cur.place === w.place)}">Dish ${i}: ${esc(D.WETS[w.wet].name.toLowerCase())}, ${esc(D.PLACES[w.place].name.toLowerCase())}${i === 1 ? ' (the control)' : ''}</li>`;
+        }).join('')}
+        <li class="${done(!!_seeds.res)}">⏩ Wait 4 days</li>
+        <li class="${done(ms.success)}">📝 Answer the questions</li></ul>`;
+    }
+    const n = Object.keys(ms.results).length;
+    return `<ul class="lab-steps">${M.tests.map((t, i) => `<li class="${done(ms.results[i] != null)}">${esc(t.label)}</li>`).join('')}
+      <li class="${done(ms.success)}">📝 Answer the questions</li></ul>
+      <p class="lab-progress-text">${n} of ${M.tests.length} tests done · keep the lamp in one place</p>`;
+  }
+
+  function _pEqHTML() {
+    const E = P().PEQ;
+    return `<section class="lab-hz-sec"><h3>How plants make food</h3>
+      <p class="lab-eq">${esc(E.word)}</p><p class="lab-photo-over">(${esc(E.over)})</p></section>`;
+  }
+
+  function _pIntro() {
+    const T = P().PRIMARY_TEXT[_g], n = _mine(P().DISCOVERIES).length;
+    _overlay(`
+      <div class="lab-intro">
+        <p class="lab-done-icon" aria-hidden="true">🌱</p>
+        <h2 id="lab-ov-title">Welcome to the Photosynthesis Lab</h2>
+        <ul class="lab-intro-list">${T.welcome.map(([b, t]) => `<li><b>${esc(b)}</b> ${esc(t)}</li>`).join('')}
+          <li><b>Earn stars.</b> Missions end with questions. There are ${n} discoveries to find.</li></ul>
+      </div>
+      <div class="lab-ov-actions">
+        <button type="button" class="lab-btn" data-ov-close>I will explore on my own</button>
+        <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="${_level().first}" data-autofocus>Show me how →</button>
+      </div>`,
+      { cls: 'is-intro', onClose: () => {
+        const st = Labs.store('photo'); st[_introKey()] = true; Labs.persist();
+        _coach('Pick a guided experiment below, or set things up yourself.');
+      } });
+  }
+
+  function _pHelp() {
+    const T = P().PRIMARY_TEXT[_g];
+    _overlay(`
+      <h2 id="lab-ov-title" class="lab-help-title">How the lab works</h2>
+      <div class="lab-help">${T.help.map(([h, items]) => `<section><h3>${esc(h)}</h3><ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></section>`).join('')}</div>
+      <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Back to the bench</button></div>`,
+      { cls: 'is-help' });
+  }
+
+  function _pReadouts() {
+    const D = P(), chips = $('lab-photo-chips'), line = $('lab-contents');
+    let h = '', t = '';
+    if (_rig === 'pots') {
+      const s = _pots, p = s[s.sel];
+      h = `<span class="lab-chip">🪴 Pot ${s.sel}</span><span class="lab-chip lab-photo-count">📅 Day <b>${Math.floor(s.day)}</b> of ${D.WEEK_DAYS}</span>`;
+      t = `Pot ${s.sel}: ${D.SPOTS[p.spot].short} · ${D.DRINKS[p.drink].short} · ${_g === 4 ? D.SOILS[p.soil].short : D.LEAVES[p.leaves].short}${s.twin ? '' : ' · no second plant'}`;
+    } else if (_rig === 'seeds') {
+      const s = _seeds, d = s.dishes[s.sel];
+      h = `<span class="lab-chip">🌱 Dish ${s.sel}</span><span class="lab-chip lab-photo-count">📅 Day <b>${Math.floor(s.day)}</b> of ${D.SEED_DAYS}</span>`;
+      t = `Dish ${s.sel}: ${D.WETS[d.wet].short} · ${D.PLACES[d.place].short}`;
+    } else {
+      const w = _weed;
+      h = w.lampOn ? `<span class="lab-chip">💡 ${w.dist} cm</span>` : '<span class="lab-chip">🌑 Lamp off</span>';
+      h += `<span class="lab-chip">💧 ${esc(D.WEED_WATERS[w.water].short)}</span>`;
+      if (w.counting) h += `<span class="lab-chip lab-photo-count">⏱ Counting… <b>${w.counting.shown}</b></span>`;
+      else if (w.last) h += `<span class="lab-chip lab-photo-count">Last count: <b>${w.last.bubbles}</b> <small>bubbles</small></span>`;
+      t = w.gas > 0 ? 'Oxygen collected in the tube' : 'No gas collected yet';
+    }
+    if (chips) chips.innerHTML = h;
+    if (line) line.textContent = t;
+  }
+
+  // ══ Primary drawing: two pots, four seed dishes ══
+  function _mix(a, b, k) {
+    const h = x => [1, 3, 5].map(i => parseInt(x.slice(i, i + 2), 16));
+    const A = h(a), B = h(b);
+    return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * Math.max(0, Math.min(1, k)))).join(',')})`;
+  }
+  function _room(bench) {
+    const c = _cx, bg = c.createLinearGradient(0, 0, 0, _H);
+    bg.addColorStop(0, _colors.top); bg.addColorStop(1, _colors.bot);
+    c.fillStyle = bg; c.fillRect(-12, -12, _W + 24, _H + 24);
+    c.fillStyle = _colors.bench; c.fillRect(-12, bench, _W + 24, _H - bench + 12);
+  }
+  function _label(text, x, y, sel) {
+    const c = _cx;
+    c.font = '700 11px system-ui, sans-serif'; c.textAlign = 'center';
+    c.fillStyle = _colors.ink; c.fillText(text, x, y);
+    if (sel) { c.fillStyle = '#E0A100'; c.fillRect(x - 18, y + 3, 36, 3); }
+  }
+
+  function _drawPots() {
+    const c = _cx, D = P(), s = _pots;
+    const bench = _H * 0.8, top = _H * 0.2;
+    _room(bench);
+    ['A', 'B'].forEach((id, i) => {
+      const cx = _W * (i ? 0.73 : 0.27), bw = Math.min(150, _W * 0.42), x0 = cx - bw / 2;
+      if (id === 'B' && !s.twin) {
+        c.strokeStyle = 'rgba(0,0,0,0.25)'; c.setLineDash([5, 4]); c.lineWidth = 1.5;
+        c.strokeRect(x0 + 8, top, bw - 16, bench - top - 6); c.setLineDash([]);
+        c.font = '600 11px system-ui, sans-serif'; c.textAlign = 'center'; c.fillStyle = _colors.ink;
+        c.fillText('No second plant', cx, (top + bench) / 2);
+        return;
+      }
+      const pot = s[id], r = s.res && s.res[id];
+      const k = r ? (r.fast ? Math.min(1, s.day) : s.day / D.WEEK_DAYS) : 0;
+      const potH = Math.min(44, _H * 0.15), potW = Math.min(58, bw * 0.42), soilY = bench - potH;
+      const scale = (soilY - top - 22) / 14;
+      const h = (D.POT_START + (r ? r.grew * k : 0)) * scale;
+      const tipY = soilY - h;
+      // where it stands
+      if (pot.spot === 'dark') {
+        c.fillStyle = '#2B231C'; c.fillRect(x0 + 8, top, bw - 16, bench - top);
+        c.fillStyle = '#7A5A3C'; c.fillRect(x0 + 2, top - 4, 7, bench - top + 4);
+      } else {
+        c.fillStyle = pot.spot === 'sun' ? '#CFE8F7' : '#EEE7D8'; c.fillRect(x0 + 8, top, bw - 16, bench - top - 6);
+        if (pot.spot === 'sun') {
+          c.strokeStyle = '#FFFFFF'; c.lineWidth = 4; c.strokeRect(x0 + 8, top, bw - 16, bench - top - 6);
+          c.beginPath(); c.moveTo(cx, top); c.lineTo(cx, bench - 6); c.stroke();
+          c.fillStyle = '#FFD24A'; c.beginPath(); c.arc(x0 + bw - 26, top + 18, 10, 0, Math.PI * 2); c.fill();
+        } else {
+          // a desk lamp bent right over the plant, its bulb almost touching
+          const by = Math.max(top + 14, tipY - 12);
+          c.strokeStyle = '#5A6670'; c.lineWidth = 4;
+          c.beginPath(); c.moveTo(x0 + bw - 16, bench - 4); c.lineTo(x0 + bw - 16, top + 6); c.lineTo(cx + 10, by - 10); c.stroke();
+          const glow = c.createRadialGradient(cx + 4, by, 1, cx + 4, by, 26);
+          glow.addColorStop(0, '#FFF6D0'); glow.addColorStop(0.4, 'rgba(255,170,60,0.9)'); glow.addColorStop(1, 'rgba(255,120,40,0)');
+          c.fillStyle = glow; c.beginPath(); c.arc(cx + 4, by, 26, 0, Math.PI * 2); c.fill();
+          c.fillStyle = '#3E4A52'; c.beginPath(); c.moveTo(cx - 10, by - 12); c.lineTo(cx + 18, by - 12); c.lineTo(cx + 12, by - 4); c.lineTo(cx - 4, by - 4); c.closePath(); c.fill();
+        }
+      }
+      // saucer of standing water when over-watered
+      if (pot.drink === 'flood') {
+        c.fillStyle = 'rgba(90,160,215,0.75)'; c.beginPath(); c.ellipse(cx, bench - 3, potW * 0.75, 6, 0, 0, Math.PI * 2); c.fill();
+      }
+      // the pot and its soil
+      c.fillStyle = '#B5653A';
+      c.beginPath(); c.moveTo(cx - potW / 2, soilY); c.lineTo(cx + potW / 2, soilY); c.lineTo(cx + potW * 0.36, bench); c.lineTo(cx - potW * 0.36, bench); c.closePath(); c.fill();
+      const dryK = pot.drink === 'none' ? k : 0;
+      c.fillStyle = pot.soil === 'sand' ? '#DCC48A' : _mix(pot.drink === 'flood' ? '#2E2016' : '#4A3222', '#9C8062', dryK);
+      c.fillRect(cx - potW / 2 + 2, soilY - 3, potW - 4, 6);
+      // the plant
+      const leafCol = r ? _mix(D.LEAF_COLOURS.green, D.LEAF_COLOURS[r.leaf], k) : D.LEAF_COLOURS.green;
+      const droop = r && r.stem === 'droopy' ? k : 0, thin = r && r.stem === 'thin' ? k : 0;
+      const tipX = cx + droop * 14;
+      c.strokeStyle = _mix('#3B7A34', r ? D.LEAF_COLOURS[r.leaf === 'none' ? 'green' : r.leaf] : '#3B7A34', k * 0.6);
+      c.lineWidth = 3.2 - 1.6 * thin; c.lineCap = 'round';
+      c.beginPath(); c.moveTo(cx, soilY - 2); c.quadraticCurveTo(cx, tipY + h * 0.2, tipX, tipY + droop * 10); c.stroke();
+      const leavesOn = pot.leaves !== 'off';
+      [0.4, 0.65, 0.9].forEach((f, j) => {
+        const ly = soilY - h * f + (droop * 10 * f), lx = cx + droop * 14 * f * f;
+        if (!leavesOn) { c.fillStyle = '#3B7A34'; c.fillRect(lx - 3, ly - 1, 6, 2); return; }
+        const sz = (8 + j * 1.5) * (1 - 0.3 * thin) * (pot.soil === 'sand' && r ? 1 - 0.25 * k : 1);
+        [-1, 1].forEach(side => {
+          c.save(); c.translate(lx + side * sz * 0.8, ly);
+          c.rotate(side * (0.35 + droop * 0.9));
+          c.fillStyle = leafCol; c.beginPath(); c.ellipse(0, 0, sz, sz * 0.45, 0, 0, Math.PI * 2); c.fill();
+          c.restore();
+        });
+      });
+      // smoke off scorched leaves
+      if (r && r.leaf === 'scorched' && s.day > 0.2) {
+        c.strokeStyle = 'rgba(90,90,90,0.55)'; c.lineWidth = 2;
+        for (let j = -1; j <= 1; j++) { c.beginPath(); c.moveTo(cx + j * 8, tipY + 6); c.quadraticCurveTo(cx + j * 8 + 7, tipY - 8, cx + j * 8, tipY - 20); c.stroke(); }
+      }
+      _label('Pot ' + id, cx, bench + 13, s.sel === id);
+    });
+  }
+
+  function _drawSeeds() {
+    const c = _cx, D = P(), s = _seeds;
+    const bench = _H * 0.8, top = _H * 0.2, col = _W / 4;
+    _room(bench);
+    D.DISHES.forEach((i, j) => {
+      const d = s.dishes[i], cx = col * (j + 0.5), x0 = col * j;
+      const dark = d.place === 'cupboard';
+      c.fillStyle = { cupboard: '#2B231C', window: '#CFE8F7', fridge: '#DDEFF7' }[d.place];
+      c.fillRect(x0 + 3, top, col - 6, bench - top - 4);
+      c.textAlign = 'center';
+      c.font = '16px system-ui, sans-serif'; c.fillText(D.PLACES[d.place].icon, cx, top + 20);
+      // ⚠ Fixed inks: the theme's --lab-ink is light in dark mode, and these
+      //   backgrounds (a window, a fridge, the magnifier) are always light.
+      c.font = '700 10px system-ui, sans-serif'; c.fillStyle = dark ? '#EDE6DA' : '#14211D'; c.fillText(D.PLACES[d.place].short, cx, top + 34);
+      const rx = Math.min(34, col * 0.4), dy = bench - 14;
+      c.fillStyle = d.wet === 'dry' ? '#FFFFFF' : '#D6E4EC';
+      c.beginPath(); c.ellipse(cx, dy, rx, 8, 0, 0, Math.PI * 2); c.fill();
+      const stage = D.seedStage(d, s.day), shootCol = d.place === 'window' ? '#5DAA4F' : '#E6D98A';
+      [-12, 0, 12].forEach(dx => {
+        const bx = cx + dx * rx / 34, by = dy - 3, big = stage >= 1 ? 1.3 : 1;
+        if (stage >= 2) { c.strokeStyle = '#F6F1E4'; c.lineWidth = 1.8; c.beginPath(); c.moveTo(bx + 2, by + 2); c.quadraticCurveTo(bx + 6, by + 6, bx + 3, by + 11); c.stroke(); }
+        if (stage >= 3) { c.strokeStyle = shootCol; c.lineWidth = 2; c.beginPath(); c.moveTo(bx, by - 3); c.quadraticCurveTo(bx - 3, by - 12, bx, by - 20); c.stroke(); }
+        if (stage >= 4) { c.fillStyle = shootCol; [-1, 1].forEach(side => { c.beginPath(); c.ellipse(bx + side * 4, by - 21, 4, 2, side * 0.4, 0, Math.PI * 2); c.fill(); }); }
+        c.fillStyle = '#C9A26B'; c.beginPath(); c.ellipse(bx, by, 5 * big, 3.4 * big, 0, 0, Math.PI * 2); c.fill();
+      });
+      if (d.wet === 'drown') { c.fillStyle = 'rgba(110,175,225,0.55)'; c.beginPath(); c.ellipse(cx, dy - 6, rx, 10, 0, 0, Math.PI * 2); c.fill(); }
+      c.strokeStyle = _colors.glass; c.lineWidth = 1.5; c.beginPath(); c.ellipse(cx, dy, rx + 2, 9, 0, 0, Math.PI * 2); c.stroke();
+      _label('Dish ' + i, cx, bench + 13, s.sel === i);
+      // the close look: a magnifying glass over the chosen dish
+      if (s.look && s.sel === i) {
+        const my = top + (bench - top) * 0.5, mr = Math.min(col * 0.46, 42);
+        c.fillStyle = '#FFFFFF'; c.strokeStyle = '#5A6670'; c.lineWidth = 3;
+        c.beginPath(); c.arc(cx, my, mr, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillStyle = '#C9A26B'; c.beginPath(); c.ellipse(cx, my, 10, 7, 0, 0, Math.PI * 2); c.fill();
+        c.strokeStyle = '#D9CBA8'; c.lineWidth = 3; c.beginPath(); c.moveTo(cx + 4, my + 5); c.quadraticCurveTo(cx + 12, my + 16, cx + 6, my + mr - 6); c.stroke();
+        c.strokeStyle = shootCol; c.beginPath(); c.moveTo(cx, my - 6); c.quadraticCurveTo(cx - 6, my - 18, cx, my - mr + 6); c.stroke();
+        c.font = '700 9px system-ui, sans-serif'; c.fillStyle = '#14211D'; c.textAlign = 'left';
+        c.fillText('shoot', cx + 5, my - mr * 0.55); c.fillText('root', cx + 12, my + mr * 0.45);
+      }
+    });
+  }
+
+  function _pDebugPots() { const s = _pots || _newPots(); return { sel: s.sel, twin: s.twin, A: Object.assign({}, s.A), B: Object.assign({}, s.B), day: s.day, res: !!s.res }; }
+  function _pDebugSeeds() {
+    const s = _seeds || _newSeeds();
+    return { sel: s.sel, day: s.day, look: s.look, dishes: JSON.parse(JSON.stringify(s.dishes)), sprouted: P().DISHES.map(i => !!(s.res && s.res[i] && s.res[i].sprouted)) };
+  }
+  function _pDebugWeed() { const w = _weed || _newWeed(); return { dist: w.dist, lampOn: w.lampOn, water: w.water, counting: !!w.counting, last: w.last && { bubbles: w.last.bubbles, dist: w.last.dist } }; }
+
   function _readouts() {
     if (!_root || !_pond) return;
+    if (_primary()) { _pReadouts(); return; }
     const D = P(), p = _pond, L = _leaf;
     const chips = $('lab-photo-chips');
     if (chips) {
@@ -1630,7 +1971,8 @@ const LabPhoto = (() => {
     return `rgba(${parseInt(h.slice(0, 2), 16)},${parseInt(h.slice(2, 4), 16)},${parseInt(h.slice(4, 6), 16)},${a})`;
   }
 
-  function _pondGeom() {
+  function _pondGeom(p) {
+    p = p || _pond;
     const bw = Math.min(150, _W * 0.36), bx = _W - bw - Math.max(12, _W * 0.05);
     // Kept below the two rows of readout chips (the gas collects at the top of
     // the tube, so it must never sit under them) and above the status strip.
@@ -1638,14 +1980,15 @@ const LabPhoto = (() => {
     const wx = bx + bw / 2;
     const fm = bBot - 8, fw = bw * 0.62, apex = fm - bw * 0.3, stemTop = wTop + 14;
     const tubeTop = _H * 0.27, tw = 16;
-    const D = P().DISTANCES, f = (_pond.dist - D[0]) / (D[D.length - 1] - D[0]);
+    const D = P().DISTANCES, f = (p.dist - D[0]) / (D[D.length - 1] - D[0]);
     const lampX = (bx - 22) - f * (bx - 22 - 30), lampY = _H * 0.62;
     return { bw, bx, bTop, bBot, wTop, wx, fm, fw, apex, stemTop, tubeTop, tw, lampX, lampY };
   }
 
   function _animate(dt) {
-    if (!dt || Labs.calm() || _rig !== 'pond') { if (_rig !== 'pond') _parts = []; return; }
-    const g = _pondGeom(), p = _pond;
+    const wr = _rig === 'weed' && _primary();
+    if (!dt || Labs.calm() || (_rig !== 'pond' && !wr)) { if (_rig !== 'pond' && !wr) _parts = []; return; }
+    const p = wr ? _weedView() : _pond, g = _pondGeom(p);
     const r = P().rate({ dist: p.dist, lampOn: p.lampOn, water: p.water, temp: p.temp + (p.counting ? p.heatNow : 0) });
     _emit += (r / COUNT_SEC) * dt;
     while (_emit >= 1 && _parts.length < 120) {
@@ -1653,7 +1996,7 @@ const LabPhoto = (() => {
       _parts.push({ x: g.wx + (Math.random() - 0.5) * g.fw * 0.5, y: g.fm - 10 - Math.random() * 8, r: 1.4 + Math.random() * 1.6, vy: 60 + Math.random() * 30, ph: Math.random() * 6 });
     }
     if (_emit > 1) _emit = 1;
-    const gasY = _gasY(g);
+    const gasY = _gasY(g, p);
     for (let i = _parts.length - 1; i >= 0; i--) {
       const b = _parts[i];
       b.y -= b.vy * dt;
@@ -1662,9 +2005,9 @@ const LabPhoto = (() => {
       if (b.y <= gasY + 2) _parts.splice(i, 1);
     }
   }
-  function _gasY(g) {
+  function _gasY(g, p) {
     const len = (g.apex - 6) - g.tubeTop;
-    return g.tubeTop + 4 + Math.min(len * 0.7, (_pond.gas / 80) * len * 0.6);
+    return g.tubeTop + 4 + Math.min(len * 0.7, ((p || _pond).gas / 80) * len * 0.6);
   }
 
   function _draw(dt) {
@@ -1676,13 +2019,17 @@ const LabPhoto = (() => {
       c.translate((Math.random() - 0.5) * 8 * _shake, (Math.random() - 0.5) * 8 * _shake);
       _shake = Math.max(0, _shake - dt * 1.4);
     }
-    if (_rig === 'pond') _drawPond(); else _drawLeafBench();
+    if (_rig === 'pond') _drawPond(_pond);
+    else if (_rig === 'leaf') _drawLeafBench();
+    else if (_rig === 'pots') _drawPots();
+    else if (_rig === 'seeds') _drawSeeds();
+    else _drawPond(_weedView());
     _drawFx(dt);
     c.restore();
   }
 
-  function _drawPond() {
-    const c = _cx, g = _pondGeom(), p = _pond, D = P();
+  function _drawPond(p) {
+    const c = _cx, g = _pondGeom(p), D = P();
     const dark = !p.lampOn;
     const bg = c.createLinearGradient(0, 0, 0, _H);
     bg.addColorStop(0, dark ? '#1A2330' : _colors.top); bg.addColorStop(1, dark ? '#10161F' : _colors.bot);
@@ -1740,8 +2087,8 @@ const LabPhoto = (() => {
     const ttB = g.apex - 6;
     c.fillStyle = 'rgba(170,212,232,0.4)';
     c.fillRect(g.wx - g.tw / 2, g.tubeTop, g.tw, ttB - g.tubeTop);
-    const gy = _gasY(g);
-    c.fillStyle = _pond.relit > 0 ? `rgba(255,240,190,${0.6 + 0.3 * _pond.relit})` : (dark ? '#1A2330' : _colors.top);
+    const gy = _gasY(g, p);
+    c.fillStyle = p.relit > 0 ? `rgba(255,240,190,${0.6 + 0.3 * p.relit})` : (dark ? '#1A2330' : _colors.top);
     c.fillRect(g.wx - g.tw / 2 + 1, g.tubeTop + 1, g.tw - 2, gy - g.tubeTop);
     c.strokeStyle = _colors.glass; c.lineWidth = 2;
     c.beginPath(); c.moveTo(g.wx - g.tw / 2, ttB); c.lineTo(g.wx - g.tw / 2, g.tubeTop + g.tw / 2);
@@ -2022,7 +2369,7 @@ const LabPhoto = (() => {
   function _tick(sec) { const n = Math.ceil(sec / 0.05); for (let i = 0; i < n; i++) _step(0.05); _readouts(); }
   function _debug() {
     const p = _pond || _newPond(), L = _leaf || _newLeaf();
-    return { rig: _rig, busy: _busy, panel: _panel, bunsen: _bunsen, bathHot: _bathHot,
+    return { grade: _g, talking: _talking, looping: !!_raf, pots: _pDebugPots(), seeds: _pDebugSeeds(), weed: _pDebugWeed(), rig: _rig, busy: _busy, panel: _panel, bunsen: _bunsen, bathHot: _bathHot,
              pond: { dist: p.dist, lampOn: p.lampOn, water: p.water, temp: p.temp, shield: p.shield, gas: p.gas, counting: !!p.counting,
                      last: p.last && { bubbles: p.last.bubbles, dist: p.last.dist, temp: p.last.temp, tempEnd: p.last.tempEnd } },
              runs: _runs.length,

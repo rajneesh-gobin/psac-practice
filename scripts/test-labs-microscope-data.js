@@ -158,26 +158,29 @@ const ids = D.DISCOVERIES.map(d => d.id);
 ok('at least 12 discoveries, ids unique', ids.length >= 12 && new Set(ids).size === ids.length, ids.length);
 const SETS = { rig: ['scope', 'measure'], slide: Object.keys(D.SLIDES), light: Object.keys(D.LIGHTS), diaphragm: Object.keys(D.DIAPHRAGM),
   eye: D.EYEPIECES.map(String), obj: D.OBJECTIVES.map(String), coarse: ['up', 'down'], fine: ['up', 'down'], focus: ['near', 'sharp'],
-  move: Object.keys(D.MOVES), id: D.CELL_IDS, fig: D.FIGURES.map(f => f.id), ruler: ['cell', 'inner', 'eye'] };
+  move: Object.keys(D.MOVES), id: D.CELL_IDS, fig: D.FIGURES.map(f => f.id), ruler: ['cell', 'inner', 'eye'],
+  stain: Object.keys(D.STAINS), cover: Object.keys(D.COVERS), part: D.PART_IDS, kind: ['plant', 'animal'] };
 const ACTS = ['clips', 'lower', 'draw', 'convert', 'divide', 'multiply', 'answer'];
 const tokenOk = on => { const [k, v] = on.split(':'); return v !== undefined ? !!SETS[k] && SETS[k].includes(v) : ACTS.includes(k); };
 const bad = D.DISCOVERIES.filter(d => !d.learn || !d.hint || !d.saw || !d.title || !d.icon || !Array.isArray(d.how) || !d.how.length || !d.how.every(tokenOk));
 ok('every discovery says what you saw, why, and has a valid “how to find it” recipe', bad.length === 0, bad.map(d => d.id));
 ok('no recipe or guide ever takes a dangerous step', D.DISCOVERIES.map(d => d.how).concat(D.GUIDES.map(G => G.steps.map(s => s.on)))
-   .every(h => !h.some(t => ['prick', 'sun', 'coarse:down', 'multiply'].includes(t))));
+   .every(h => !h.some(t => ['prick', 'sun', 'coarse:down', 'multiply', 'cover:drop', 'swab', 'splash', 'press'].includes(t))));
 
 // A small model of the bench, run through each recipe with the data functions.
 function runRecipe(how) {
-  const s = { slide: null, clipped: false, light: 'off', diaph: 'mid', eye: 10, obj: 10, z: D.Z_START, pos: { x: 0, y: 0 } };
+  const s = { slide: null, clipped: false, light: 'off', diaph: 'mid', eye: 10, obj: 10, z: D.Z_START, pos: { x: 0, y: 0 }, stain: null, cover: null, lowSeen: false };
   let w = { fig: 'rbc', ruler: null, converted: false, op: null };
   const found = new Set(), cards = [];
   const V = () => D.view(s);
-  const disc = (prev, tok) => D.scopeDiscoveries(prev, V(), tok).forEach(x => found.add(x));
+  const g7 = () => !!(s.slide && D.SLIDES[s.slide].g7);
+  const disc = (prev, tok) => { D.scopeDiscoveries(prev, V(), tok).forEach(x => found.add(x)); if (V().sharp && V().obj < 40) s.lowSeen = true; };
   const knob = (k, dir) => {
     const nz = D.clampZ(s.z + (dir === 'up' ? 1 : -1) * (k === 'coarse' ? D.COARSE : D.FINE));
-    if (s.slide && D.clearance(nz, s.obj) <= 0) { cards.push('crack'); return; }
+    if (s.slide && D.clearance(nz, s.obj) <= 0) { cards.push(g7() ? 'g7_crack' : 'crack'); return; }
     const prev = V(); s.z = nz;
-    if (k === 'coarse' && s.obj === 40 && prev.seen && !V().seen) cards.push('lost_image');
+    if (k === 'coarse' && s.obj === 40 && prev.seen && !V().seen) cards.push(g7() ? 'g7_lost_image' : 'lost_image');
+    else if (D.highFirst(prev, V(), k, s.lowSeen)) cards.push('g7_highfirst');
     disc(prev, k + ':' + dir);
   };
   for (const t of how) {
@@ -192,29 +195,36 @@ function runRecipe(how) {
       continue;
     }
     if (k === 'coarse' || k === 'fine') { knob(k, v); continue; }
-    if (k === 'slide') { s.slide = v; s.clipped = false; s.z = D.Z_START; s.pos = { x: 0, y: 0 }; }
-    else if (k === 'clips') s.clipped = !!s.slide;
+    if (k === 'slide') { s.slide = v; s.clipped = false; s.z = D.Z_START; s.pos = { x: 0, y: 0 }; s.stain = null; s.cover = null; s.lowSeen = false; }
+    else if (k === 'stain') { if (!g7() || s.cover || s.stain) { cards.push('stain refused'); continue; } s.stain = v; }
+    else if (k === 'cover') { if (!g7() || s.cover) { cards.push('cover refused'); continue; } s.cover = v; if (v === 'drop') cards.push('g7_bubbles'); }
+    else if (k === 'clips') { if (g7() && !s.cover) { cards.push('clips: uncovered'); continue; } s.clipped = !!s.slide; }
     else if (k === 'light') s.light = v; else if (k === 'diaphragm') s.diaph = v; else if (k === 'eye') s.eye = +v;
-    else if (k === 'obj') { if (s.slide && D.clearance(s.z, +v) <= 0) { cards.push('crack'); continue; } s.obj = +v; }
-    else if (k === 'lower') { if (s.slide && s.z > D.lowerTo(s.obj)) s.z = D.lowerTo(s.obj); }
+    else if (k === 'obj') { if (s.slide && D.clearance(s.z, +v) <= 0) { cards.push(g7() ? 'g7_crack' : 'crack'); continue; } s.obj = +v; }
+    else if (k === 'lower') { if (g7() && !s.cover) { cards.push('lower: uncovered'); continue; } if (s.slide && s.z > D.lowerTo(s.obj)) s.z = D.lowerTo(s.obj); }
     else if (k === 'move') { const r = D.move(s.pos, v); s.pos = { x: r.x, y: r.y }; }
     else if (k === 'id') { const r = D.identify(V(), v); if (r.ok) found.add(v); else cards.push('id:' + r.why); }
+    else if (k === 'part') { const r = D.identifyPart(V(), v); if (r.ok) found.add('g7_' + v); else cards.push('part:' + r.why); }
+    else if (k === 'kind') { const r = D.classify(V(), v); if (r.ok) found.add('g7_' + v); else cards.push('kind:' + r.why); }
     else if (k === 'draw') { const r = D.identify(V(), V().under); if (r.ok) found.add('drawing'); else cards.push('draw:' + r.why); }
     else if (k === 'fig') w = { fig: v, ruler: null, converted: false, op: null };
     else if (k === 'ruler') w = { fig: w.fig, ruler: v, converted: false, op: null };
     else if (k === 'convert') w.converted = true;
     else if (k === 'divide' || k === 'multiply') w.op = k;
     else if (k === 'answer') { const f = D.figure(w.fig), r = D.work(f, w); if (r.correct) D.measureDiscoveries(f, r).forEach(x => found.add(x)); else cards.push(r.error); }
-    if (['slide', 'clips', 'light', 'diaphragm', 'eye', 'obj', 'lower', 'move'].includes(k)) disc(prev, t);
+    if (['slide', 'clips', 'light', 'diaphragm', 'eye', 'obj', 'lower', 'move', 'stain', 'cover'].includes(k)) disc(prev, t);
   }
   return { found, cards };
 }
+const gradeOf = x => (x.grades || [9]);
 const unsolved = D.DISCOVERIES.map(d => ({ d, r: runRecipe(d.how) })).filter(x => !x.r.found.has(x.d.id) || x.r.cards.length)
   .map(x => x.d.id + ' -> found ' + [...x.r.found].join('/') + (x.r.cards.length ? ' cards ' + x.r.cards.join('/') : ''));
 ok('every recipe leads to its own discovery with no mistake on the way', unsolved.length === 0, unsolved);
 const reachable = new Set();
 D.DISCOVERIES.forEach(d => runRecipe(d.how).found.forEach(x => reachable.add(x)));
 ok('every id the model can unlock is a real discovery', [...reachable].every(x => ids.includes(x)), [...reachable].filter(x => !ids.includes(x)));
+const crossed = D.DISCOVERIES.filter(d => [...runRecipe(d.how).found].some(x => { const o = D.DISCOVERIES.find(y => y.id === x); return !o || !gradeOf(o).some(g => gradeOf(d).includes(g)); }));
+ok('a recipe unlocks only discoveries of its own grade (a Grade 7 slide never collects a Grade 9 card)', crossed.length === 0, crossed.map(d => d.id));
 ok('the bench names the discovery it unlocks outside the data functions', bench.includes("_discover('drawing')"));
 ok('the mistakes really are mistakes in the model: high power first + coarse down cracks; skipping the conversion is caught',
    runRecipe(['slide:blood', 'clips', 'light:lamp', 'obj:40', 'lower', 'coarse:down']).cards[0] === 'crack'
@@ -235,14 +245,16 @@ ok('the ×15 000 paper question is a guide', D.GUIDES.some(G => G.steps.some(s =
 console.log('\nMissions');
 ok('at least 2 missions', D.MISSIONS.length >= 2);
 const firstNum = s => { const m = /[\d][\d\s]*\.?\d*/.exec(String(s)); return m ? +m[0].replace(/\s/g, '') : NaN; };
+const optLabel = o => (o && typeof o === 'object') ? o.label : o;
+const svgOk = o => typeof o !== 'object' || (typeof o.svg === 'string' && /^<svg[\s\S]*<\/svg>$/.test(o.svg) && !/<text/i.test(o.svg));
 for (const Ms of D.MISSIONS) {
-  const badQ = Ms.quiz.filter(q => !q.q || !q.why || q.options.length !== 4 || new Set(q.options).size !== 4 || q.options.some(o => !o));
+  const badQ = Ms.quiz.filter(q => !q.q || !q.why || q.options.length !== 4 || new Set(q.options.map(optLabel)).size !== 4 || q.options.some(o => !optLabel(o) || !svgOk(o)));
   ok(`${Ms.title}: ${Ms.quiz.length} questions, each with 4 distinct options and a reason`, Ms.quiz.length >= 5 && badQ.length === 0, badQ.map(q => q.q));
   ok(`${Ms.title}: has a goal, a blurb and a bench`, !!(Ms.intro && Ms.blurb && Ms.icon && (Ms.rig === 'scope' || Ms.rig === 'measure')));
   for (const q of Ms.quiz.filter(x => x.calc)) {
     const c = q.calc;
     const want = c.kind === 'total' ? D.total(c.eye, c.obj) : c.kind === 'mag' ? D.magnification(c.imageMm, c.actualUm)
-      : c.kind === 'actualMm' ? D.actualMm(c.imageMm, c.mag) : D.UM_PER_MM;
+      : c.kind === 'actualMm' ? D.actualMm(c.imageMm, c.mag) : c.kind === 'image' ? D.imageOf(c.actualMm, c.mag) : D.UM_PER_MM;
     ok(`“${q.q.slice(0, 60)}…”: the first option (${q.options[0]}) is the computed answer, ${want}`, near(firstNum(q.options[0]), want) && near(c.answer, want), { opt: q.options[0], want });
   }
 }
@@ -263,25 +275,117 @@ ok('blood is a BIOHAZARD, direct sunlight an EYE hazard, the cracked slide a war
 ok('the crack card tells you to start on low power and focus away from the slide', /LOW-power/.test(D.HAZARDS.crack.instead) && /UP, away from the slide/.test(D.HAZARDS.crack.instead));
 ok('the crack card works for the nosepiece too', /swung the ×40/.test(D.HAZARDS.crack.happened({ knob: 'nosepiece', obj: 40 })));
 ok('the blood card is factual: prepared sterile slides, never share lancets', /prepared/.test(D.HAZARDS.blood.instead) && /sterile/.test(D.HAZARDS.blood.instead) && /share/.test(D.HAZARDS.blood.instead));
-const rctx = { mode: 'findM', image: '60', actual: '8', mag: '15 000', mm: '0.002', shown: '×7.5', rightShown: '×7500', innerName: 'the pale centre', inner: '24', eye: '50', wrongMm: '450 000', metres: '450', total: 400 };
+const rctx = { mode: 'findM', image: '60', actual: '8', mag: '15 000', mm: '0.002', shown: '×7.5', rightShown: '×7500', innerName: 'the pale centre', inner: '24', eye: '50', wrongMm: '450 000', metres: '450', total: 400,
+               part: 'nucleus', slide: 'onion skin' };
 for (const [id, R] of Object.entries(D.RESULTS)) {
   const txt = R.happened(rctx) + R.happened(Object.assign({}, rctx, { mode: 'findActual' }));
   ok(`result card ${id}: what happened, what to do instead and the exam point`, !!(R.icon && R.title && txt && !/undefined/.test(txt) && R.instead && R.exam));
 }
 ok('the no-conversion card shows the ×1000 error', /1000 times too small/.test(D.RESULTS.no_convert.happened(rctx)) && /1 mm = 1000 µm/.test(D.RESULTS.no_convert.instead));
-const used = id => bench.includes(`'${id}'`) || bench.includes(`RESULTS.${id}`) || bench.includes(`HAZARDS.${id}`);
+// A Grade 7 card may be reached through _cid('crack') → 'g7_crack'.
+const used = id => bench.includes(`'${id}'`) || bench.includes(`RESULTS.${id}`) || bench.includes(`HAZARDS.${id}`)
+  || (id.startsWith('g7_') && /'g7_' \+ base/.test(bench) && bench.includes(`_cid('${id.slice(3)}')`));
 const allCards = Object.keys(D.HAZARDS).concat(Object.keys(D.RESULTS));
 ok('every hazard and result card is reachable from the bench', allCards.every(id => used(id) || /RESULTS\[r\.error\]/.test(bench)), allCards.filter(id => !used(id)));
 ok('every error work() can return has a result card', ['no_convert', 'wrong_dim', 'by_eye', 'multiply'].every(e => !!D.RESULTS[e]));
 ok('at least 3 mistakes that teach', allCards.length >= 3, allCards.length);
 ok('the 💡 facts are there', D.FACTS.length >= 10 && D.FACTS.every(f => typeof f === 'string' && f.length > 20));
-const texts = D.DISCOVERIES.map(d => d.learn + ' ' + d.saw).concat(D.FACTS);
+const texts = D.DISCOVERIES.map(d => d.learn + ' ' + d.saw).concat(D.FACTS, D.FACTS_G7);
 ok('nothing beyond the syllabus is unlabelled: the inverted image, the field of view, cell counts',
    texts.every(t => !/upside down|field of view is|4\.5 mm|cubic millimetre|million/i.test(t) || /beyond the NCE syllabus/.test(t)),
    texts.filter(t => /upside down|field of view is|4\.5 mm|cubic millimetre|million/i.test(t) && !/beyond the NCE syllabus/.test(t)));
 ok('the paper references are real ones from the blueprint (2023 Q5(a), 2024 Q4(e)(ii))',
    /2023 Q5\(a\)/.test(Object.values(D.RESULTS).map(r => r.exam).join(' ')) && /2024 Q4\(e\)\(ii\)/.test(Object.values(D.RESULTS).map(r => r.exam).join(' ')));
 ok('no regex lookbehind anywhere in the lab (Safari)', !/\(\?<[=!]/.test(src) && !/\(\?<[=!]/.test(bench));
+
+// ══ Grade levels (LAB_SPEC §9) ══════════════════
+console.log('\nGrade levels');
+const by = (list, g) => D.forGrade(list, g);
+ok('the lab declares Grades 7 and 9', D.GRADES.join() === '7,9');
+const tagged = [...D.GUIDES, ...D.MISSIONS, ...D.DISCOVERIES];
+ok('every guide, mission and discovery is untagged (Grade 9) or tagged with a grade the lab declares', tagged.every(x => gradeOf(x).every(g => D.GRADES.includes(g))));
+ok('every Grade 7 id starts g7_, and every g7_ id is Grade 7 only (progress never collides)',
+   tagged.every(x => (x.id.indexOf('g7_') === 0) === (gradeOf(x).join() === '7')), tagged.filter(x => (x.id.indexOf('g7_') === 0) !== (gradeOf(x).join() === '7')).map(x => x.id));
+ok('Grade 9 is exactly as it was: 5 guides, 16 discoveries, 3 missions',
+   by(D.GUIDES, 9).length === 5 && by(D.DISCOVERIES, 9).length === 16 && by(D.MISSIONS, 9).length === 3);
+ok('Grade 7 has at least 3 guides, 10 discoveries and 2 missions of 5+ questions',
+   by(D.GUIDES, 7).length >= 3 && by(D.DISCOVERIES, 7).length >= 10 && by(D.MISSIONS, 7).length >= 2 && by(D.MISSIONS, 7).every(m => m.quiz.length >= 5),
+   { guides: by(D.GUIDES, 7).length, discs: by(D.DISCOVERIES, 7).length, missions: by(D.MISSIONS, 7).length });
+ok('no Grade 7 question repeats a Grade 9 question', by(D.MISSIONS, 7).every(m => m.quiz.every(q => !by(D.MISSIONS, 9).some(n => n.quiz.some(p => p.q === q.q)))));
+ok('the slides split by grade: blood smears for 9; onion skin, cheek cells and a leaf for 7',
+   Object.keys(D.SLIDES).filter(k => gradeOf(D.SLIDES[k]).includes(9)).join() === 'blood,unstained'
+   && Object.keys(D.SLIDES).filter(k => gradeOf(D.SLIDES[k]).includes(7)).join() === 'onion,cheek,leaf');
+
+console.log('\nGrade 7: plant and animal cells');
+ok('onion skin and a leaf are plant cells; cheek cells are animal cells; onion and cheek need a stain, a leaf does not',
+   D.SLIDES.onion.kind === 'plant' && D.SLIDES.leaf.kind === 'plant' && D.SLIDES.cheek.kind === 'animal'
+   && D.SLIDES.onion.needsStain && D.SLIDES.cheek.needsStain && !D.SLIDES.leaf.needsStain);
+ok('iodine is the stain for onion skin, methylene blue for cheek cells', D.STAINS.iodine.for === 'onion' && D.STAINS.blue.for === 'cheek');
+const at = (sl, ...moves) => { let p = { x: 0, y: 0 }; moves.forEach(m => { const r = D.move(p, m); p = { x: r.x, y: r.y }; }); return D.partUnder(sl, p); };
+ok('onion skin: the pointer starts on the nucleus; left → vacuole; right → cell wall; up → cytoplasm (the recipes rely on it)',
+   at('onion') === 'nucleus' && at('onion', 'left') === 'vacuole' && at('onion', 'right') === 'wall' && at('onion', 'up') === 'cytoplasm',
+   [at('onion'), at('onion', 'left'), at('onion', 'right'), at('onion', 'up')]);
+ok('cheek cells: nucleus; left → cytoplasm; left twice → cell membrane', at('cheek') === 'nucleus' && at('cheek', 'left') === 'cytoplasm' && at('cheek', 'left', 'left') === 'membrane');
+ok('pondweed leaf: chloroplast; left → cell wall; up → vacuole', at('leaf') === 'chloroplast' && at('leaf', 'left') === 'wall' && at('leaf', 'up') === 'vacuole');
+const sample = sl => { const n = {}; for (let x = -300; x < 300; x += 1.9) for (let y = -200; y < 200; y += 1.3) { const p = D.partAt(sl, x, y); n[p] = (n[p] || 0) + 1; } return n; };
+const so = sample('onion'), sc = sample('cheek'), sl = sample('leaf');
+ok('onion skin: wall, cytoplasm, nucleus and vacuole - and NO chloroplasts anywhere', so.wall && so.cytoplasm && so.nucleus && so.vacuole && !so.chloroplast, so);
+ok('cheek cells: membrane, cytoplasm and nucleus - NO wall, vacuole or chloroplasts', sc.membrane && sc.cytoplasm && sc.nucleus && !sc.wall && !sc.vacuole && !sc.chloroplast, sc);
+ok('leaf cells: wall, vacuole and chloroplasts', sl.wall && sl.vacuole && sl.chloroplast && !sl.membrane, sl);
+ok('plant-only parts are marked so; the membrane, cytoplasm and nucleus are in every cell',
+   ['wall', 'vacuole', 'chloroplast'].every(p => D.CELL_PARTS[p].plantOnly) && ['membrane', 'cytoplasm', 'nucleus'].every(p => !D.CELL_PARTS[p].plantOnly));
+ok('an onion cell is 50 µm = 0.05 mm wide, and at ×100 its image is 5 mm (the pack’s g7s-cells-019 shape)',
+   D.ONION_WIDTH_UM === 50 && D.umToMm(D.ONION_WIDTH_UM) === 0.05 && D.imageOf(0.05, 100) === 5 && /0\.05 mm × 100 = 5 mm/.test(D.DISCOVERIES.find(d => d.id === 'g7_zoom').formula));
+ok('the cheek cells in a tile never overlap one another (the pointer can only ever be in one cell)',
+   D.CHEEK.every((a, i) => D.CHEEK.every((b, j) => i >= j || Math.hypot(a.x - b.x, a.y - b.y) > a.R * 1.2 + b.R * 1.2)));
+const vs = o => D.view(Object.assign({ slide: 'onion', clipped: true, light: 'lamp', diaph: 'mid', eye: 10, obj: 40, z: D.FOCUS_AT[40], pos: { x: 0, y: 0 }, stain: 'iodine', cover: 'angle' }, o));
+ok('with no cover slip nothing can be seen; a dropped cover slip traps bubbles', !vs({ cover: null }).visible && vs({ cover: 'drop' }).bubbles && !vs({}).bubbles);
+ok('unstained onion cannot be named (a result card); a leaf needs no stain', D.identifyPart(vs({ stain: null }), 'nucleus').why === 'unstained'
+   && D.identifyPart(vs({ slide: 'leaf', stain: null }), 'chloroplast').ok);
+ok('naming needs ×400 and a sharp image', D.identifyPart(vs({ obj: 10, z: 0 }), 'nucleus').why === 'too_small' && D.identifyPart(vs({ z: 50 }), 'nucleus').why === 'blurred');
+ok('plant or animal: onion is plant, cheek is animal, and the wrong answer is caught',
+   D.classify(vs({}), 'plant').ok && D.classify(vs({ slide: 'cheek', stain: 'blue' }), 'animal').ok && !D.classify(vs({ slide: 'cheek', stain: 'blue' }), 'plant').ok);
+const G7HIGH = (sl, st) => ['rig:scope', 'slide:' + sl].concat(st ? ['stain:' + st] : [], ['cover:angle', 'clips', 'light:lamp', 'obj:4', 'lower', 'focus:near', 'focus:sharp', 'obj:40', 'focus:sharp']);
+ok('the Grade 7 mistakes are mistakes in the model: a dropped cover slip traps bubbles; high power first shows nothing; no stain; coarse at ×400',
+   runRecipe(['slide:onion', 'stain:iodine', 'cover:drop']).cards[0] === 'g7_bubbles'
+   && runRecipe(['slide:onion', 'stain:iodine', 'cover:angle', 'clips', 'light:lamp', 'obj:40', 'lower', 'coarse:up']).cards[0] === 'g7_highfirst'
+   && runRecipe(G7HIGH('onion', null).concat(['part:nucleus'])).cards[0] === 'part:unstained'
+   && runRecipe(G7HIGH('onion', 'iodine').concat(['coarse:up'])).cards[0] === 'g7_lost_image'
+   && runRecipe(['slide:onion', 'stain:iodine', 'cover:angle', 'clips', 'light:lamp', 'obj:40', 'lower', 'coarse:down']).cards[0] === 'g7_crack');
+ok('…and focusing properly never trips “high power first”', by(D.GUIDES, 7).every(G => !runRecipe(G.steps.map(s => s.on)).cards.length));
+ok('every Grade 7 guide makes its slide in order: specimen, stain (not for a leaf), cover slip at an angle, then clips',
+   by(D.GUIDES, 7).every(G => { const s = G.steps.map(x => x.on), sp = s.findIndex(t => t.indexOf('slide:') === 0), st = s.findIndex(t => t.indexOf('stain:') === 0), cv = s.indexOf('cover:angle'), cl = s.indexOf('clips');
+     return sp >= 0 && cv > sp && cl > cv && (s[sp] === 'slide:leaf' ? st < 0 : st > sp && st < cv); }));
+for (const Ms of by(D.MISSIONS, 7)) {
+  const miss = Ms.need.filter(k => {
+    const sl2 = (Ms.needSlide && Ms.needSlide[k]) || Ms.slide;
+    if (k === 'plant' || k === 'animal') return D.SLIDES[sl2].kind !== k;
+    for (let x = D.FIELD_X[0]; x <= D.FIELD_X[1]; x++) for (let y = D.FIELD_Y[0]; y <= D.FIELD_Y[1]; y++) if (D.partUnder(sl2, { x, y }) === k) return false;
+    return true;
+  });
+  ok(`${Ms.title}: everything it asks for can be found on its slide`, miss.length === 0 && Ms.need.every(k => Ms.needs[k]), miss);
+}
+const onionQ = D.MISSIONS.find(m => m.id === 'g7_onionparts').quiz;
+ok('the picture questions: the right drawing comes first, the pointer where its label says, no names inside the drawings',
+   /clear middle/.test(onionQ[0].options[0].label) && onionQ[0].options[0].svg === D.PICS.onionAt.vacuole
+   && /thick outer edge/.test(onionQ[1].options[0].label) && onionQ[1].options[0].svg === D.PICS.onionAt.wall
+   && D.MISSIONS.find(m => m.id === 'g7_compare').quiz[0].options[0].svg === D.PICS.cheek);
+const g7h = ['g7_swab', 'g7_stain', 'g7_crack', 'g7_sun'].map(k => D.HAZARDS[k]);
+ok('Grade 7 hazards: cheek swab = BIOHAZARD, stain splash = irritant (Harmful), cracked cover slip = SHARP, sunlight = EYE',
+   D.HAZARDS.g7_swab.signs.join() === 'biohazard' && D.HAZARDS.g7_stain.signs.join() === 'irritant' && D.HAZARDS.g7_crack.signs.join() === 'sharp' && D.HAZARDS.g7_sun.signs.join() === 'eye');
+ok('the swab card: your own cheek, a fresh bud, into disinfectant; the stain card: goggles, one drop, rinse an eye with water',
+   /OWN cheek/.test(D.HAZARDS.g7_swab.instead) && /fresh/.test(D.HAZARDS.g7_swab.instead) && /disinfectant/.test(D.HAZARDS.g7_swab.instead)
+   && /goggles/i.test(D.HAZARDS.g7_stain.instead) && /ONE drop/.test(D.HAZARDS.g7_stain.instead) && /rinse/.test(D.HAZARDS.g7_stain.instead));
+ok('the crack card covers both the pressed cover slip and the lens', /cover slip broke/.test(D.HAZARDS.g7_crack.title({ knob: 'press' })) && /lens hit/.test(D.HAZARDS.g7_crack.title({ knob: 'coarse', obj: 40 }))
+   && /thumb/.test(D.HAZARDS.g7_crack.happened({ knob: 'press' })) && /LOW-power/.test(D.HAZARDS.g7_crack.instead));
+ok('at least 3 Grade 7 mistakes that teach (hazards + result cards)', g7h.length + ['g7_bubbles', 'g7_highfirst', 'g7_nostain', 'g7_lost_image'].filter(k => D.RESULTS[k]).length >= 3);
+const g7texts = [...by(D.DISCOVERIES, 7).map(d => d.learn + ' ' + d.saw + ' ' + (d.formula || '')), ...by(D.MISSIONS, 7).map(m => m.intro + ' ' + m.quiz.map(q => q.why).join(' ')),
+  ...by(D.GUIDES, 7).map(G => G.lesson + ' ' + G.steps.map(s => s.say).join(' ')), ...g7h.map(H => H.exam + H.why + H.instead),
+  ...['g7_bubbles', 'g7_highfirst', 'g7_nostain', 'g7_lost_image'].map(k => D.RESULTS[k].exam + D.RESULTS[k].instead), ...D.FACTS_G7];
+const paperish = t => /Q\d+\(|\b20\d\d\b|\bNCE\b|\bpaper\b/.test(t) || /haemoglobin|phagocyte|lymphocyte|platelet/i.test(t);
+ok('Grade 7 quotes no paper reference and nothing from the Grade 9 blood chapter', g7texts.every(t => !paperish(t)),
+   g7texts.filter(paperish).map(t => t.slice(0, 80)));
+ok('Grade 7 has its own 💡 facts', D.FACTS_G7.length >= 10 && D.FACTS_G7.every(f => typeof f === 'string' && f.length > 20));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

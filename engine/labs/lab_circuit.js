@@ -19,11 +19,16 @@
 //    from the palette onto a space) is for mouse and pen only.
 //  ⚠ Calm Mode and reduced motion: the circuit is still solved and drawn, the
 //    charge dots stand still, effects apply at once.
-//  ⚠ THREE LEVELS: Labs.grade() is 4, 6 or 9, and only that grade's guides,
+//  ⚠ FOUR LEVELS: Labs.grade() is 4, 6, 7 or 9, and only that grade's guides,
 //    missions and discoveries show (LAB_SPEC §9). Grades 4 and 6 get simpler
 //    words, read-aloud 🔊, things to test in a gap (conductors / insulators)
 //    and the ⚠️ "Would it be safe?" row; meters, resistors and fuses are
-//    Grade 9 only. Everything Grade 9 does is unchanged.
+//    Grade 7 and 9 only. Grade 7 (NCE, g7s-electricity) is about the parts and
+//    their standard symbols, series and parallel, where each meter goes and
+//    cells adding up - it has the ⚠️ row too, and NO Q = It, W = QV or V = IR
+//    arithmetic (that is Grade 9). Its discoveries, like the primary ones, are
+//    unlocked by facts worked out in the data file. Everything Grade 9 does is
+//    unchanged.
 // ══════════════════════════════════════════════
 const LabCircuit = (() => {
   const D = () => LabCircuitData;
@@ -51,14 +56,24 @@ const LabCircuit = (() => {
     return D().GRADES.includes(g) ? g : 9;
   };
   const _primary = () => _g() <= 6;
+  const _is7 = () => _g() === 7;
+  // Grades 4, 6 and 7 unlock discoveries by the facts the data file works out.
+  const _byFacts = () => _g() !== 9;
   const _mine = list => D().forGrade(list, _g());
   const _discs = () => _mine(D().DISCOVERIES);
-  // A primary grade has its own wording for some cards: short_circuit → short_circuit_p.
-  const _cid = base => (_primary() && (D().HAZARDS[base + '_p'] || D().RESULTS[base + '_p']) ? base + '_p' : base);
-  const _job = k => (_primary() && D().JOBS_P[k]) || D().KINDS[k].job;
+  // A grade has its own wording for some cards: short_circuit → short_circuit_p
+  // (Grades 4/6) or g7_short_circuit (Grade 7).
+  const _cid = base => {
+    const H = D().HAZARDS, R = D().RESULTS;
+    if (_is7()) return H['g7_' + base] || R['g7_' + base] ? 'g7_' + base : base;
+    return _primary() && (H[base + '_p'] || R[base + '_p']) ? base + '_p' : base;
+  };
+  const _job = k => (_primary() && D().JOBS_P[k]) || (_is7() && D().JOBS_7[k]) || D().KINDS[k].job;
   const _lc = k => D().KINDS[k].name.toLowerCase();
   // The first-visit welcome is shown once per grade.
-  const _introKey = () => (_primary() ? 'intro' + _g() : 'intro');
+  const _introKey = () => (_g() === 9 ? 'intro' : 'intro' + _g());
+  // The same rule as Labs' own cards: PSAC up to Grade 6, the NCE paper at 9.
+  const _examHead = () => (_g() <= 6 ? '📝 In the PSAC exam' : _g() >= 9 ? '📝 On the NCE paper' : '📝 In your exams');
 
   const TOOL_INFO = {
     hand:   { icon: '✋', name: 'Hand', meta: 'Switch, unscrew, turn round' },
@@ -72,7 +87,7 @@ const LabCircuit = (() => {
     return `<div class="lab lab-circuit${P ? ' is-primary' : ''}">
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-act="hub" aria-label="Back to Science Labs">←</button>
-        <div class="lab-top-title"><span class="lab-eyebrow">${P ? 'Science' : 'Physics'} · Grade ${g}</span><h1>Circuit Board</h1></div>
+        <div class="lab-top-title"><span class="lab-eyebrow">${g === 9 ? 'Physics' : 'Science'} · Grade ${g}</span><h1>Circuit Board</h1></div>
         <div class="lab-top-actions">
           ${D().symbolsFor(g) ? '<button type="button" id="lab-circuit-view" class="lab-circuit-viewbtn" data-act="view" aria-pressed="false"><span aria-hidden="true" id="lab-circuit-view-ico">✏️</span><span id="lab-circuit-view-label">Symbols</span></button>' : ''}
           <button type="button" class="lab-icon-btn" data-act="help" aria-label="How the board works">?</button>
@@ -100,7 +115,7 @@ const LabCircuit = (() => {
             <button type="button" class="lab-tool" data-act="undo"><span aria-hidden="true">↩️</span>Undo</button>
             <button type="button" class="lab-tool" data-act="clear"><span aria-hidden="true">🗑️</span>Clear the board</button>
           </div>
-          ${P ? `<section class="lab-circuit-safety" aria-label="Would it be safe?">
+          ${P || g === 7 ? `<section class="lab-circuit-safety" aria-label="Would it be safe?">
             <p class="lab-hint"><b>⚠️ Would it be safe?</b> Tap one to see what would happen.</p>
             <div class="lab-tools lab-circuit-actions">
               <button type="button" class="lab-tool" data-act="mains"><span aria-hidden="true">🔌</span>Wall socket</button>
@@ -450,8 +465,9 @@ const LabCircuit = (() => {
 
   function build(id) {
     if (!D().PRESETS[id] || !_guard()) return;
-    if (_mission && (_mission.id === 'light' || _mission.kind === 'torch')) { _coach('This mission is to build the circuit yourself - part by part. You can do it!'); return; }
+    if (_mission && (_mission.id === 'light' || _mission.kind === 'torch' || _mission.kind === 'diagram')) { _coach('This mission is to build the circuit yourself - part by part. You can do it!'); return; }
     if (_mission && _mission.kind === 'fix') { _coach('Mend this torch yourself - no ready-made circuits in this mission!'); return; }
+    if (_mission && _mission.kind === 'meters7') { _coach('Add the two meters to this circuit yourself - no ready-made layouts in this mission!'); return; }
     _snap();
     _layout = D().layoutOf(id);
     _hadGap = false; _vmSeen = false; _t = 0; _gapFilled = false;
@@ -538,10 +554,11 @@ const LabCircuit = (() => {
       } else _vmSeen = false;
     }
     const gap = C.hasGap(_layout);
-    if (P) {
+    if (_byFacts()) {
+      // Grades 4, 6 and 7: a gap, no cell, or cells facing each other each get a card.
       if (_gapPrev && !gap && /^place:.*:wire$/.test(evt)) _gapFilled = true;
       _gapPrev = gap;
-      _recordTests();
+      if (P) _recordTests();
       const m = carded ? null : C.primaryMistake(_layout, _sol, evt);
       if (m) { _result(m, {}, null, false); carded = true; }
     } else {
@@ -550,7 +567,7 @@ const LabCircuit = (() => {
     }
     _warm = false;
     if (!carded) (P ? _narrateP : _narrate)(evt, prev);
-    _checkDisc(evt, prev);
+    _checkDisc(evt, prev, fz.length > 0);
     _missionEvent(evt, prev);
     _paint();
     _guideEvent(evt);
@@ -562,12 +579,12 @@ const LabCircuit = (() => {
     const words = lit.map(k => C.brightnessWord(s.bulbs[k].brightness));
     if (evt === 'switch:on') {
       if (lit.length) {
-        _coach(lit.length === 1 ? `The bulb lights (${words[0]})! The circuit is complete, so charge flows all the way round - watch the moving dots.`
+        _coach(lit.length === 1 ? `The bulb lights (${words[0]})! The circuit is complete, so ${_is7() ? 'the current' : 'charge'} flows all the way round - watch the moving dots.`
           : `${lit.length} bulbs light: ${words.join(' and ')}. ${arr === 'series' ? 'One loop, shared voltage - so each is dim.' : arr === 'parallel' ? 'Each has its own branch and the full voltage.' : ''}`);
         _logEntry({ title: 'Switch closed', obs: `${C.ARR_NAMES[arr][0].toUpperCase() + C.ARR_NAMES[arr].slice(1)}: ${lit.length === 1 ? 'the bulb is ' + words[0] : 'the bulbs are ' + words.join(' and ')}.` });
       } else if (s.cells >= 2 && s.cellI < 1e-3 && !C.hasGap(_layout)) {
         _coach('The loop is complete, but nothing lights. Are the cells facing the same way? Look at the + ends.');
-      } else if (!s.cells) _coach('Switch closed - but there is no cell to push the charge round. Add a 🔋 cell.');
+      } else if (!s.cells) _coach(`Switch closed - but there is no cell to push ${_is7() ? 'a current' : 'the charge'} round. Add a 🔋 cell.`);
     } else if (evt === 'switch:off' && prev && C.litBulbs(prev).length) {
       _coach('Switch open: the circuit is broken, so the current stops everywhere and the bulbs go out.');
       _logEntry({ title: 'Switch opened', obs: 'Every bulb went out at once: an open switch is a gap, and no current flows anywhere in the loop.' });
@@ -581,7 +598,7 @@ const LabCircuit = (() => {
       _coach('The bulb went out! The two cells now push in opposite directions and cancel each other.');
       _logEntry({ title: 'Cells facing each other', obs: 'With one cell turned round the bulb went out: +1.5 V − 1.5 V = 0 V.' });
     } else if (evt.startsWith('place:') && lit.length && prev && !C.litBulbs(prev).length) {
-      _coach(`The bulb lights! The last gap is closed, so the charge can flow all the way round.`);
+      _coach(`The bulb lights! The last gap is closed, so ${_is7() ? 'the current' : 'the charge'} can flow all the way round.`);
     }
   }
 
@@ -652,7 +669,7 @@ const LabCircuit = (() => {
 
   // Grades 4/6: the ⚠️ "Would it be safe?" row - dangers that exist only at home.
   function _danger(id) {
-    if (!_primary() || !_guard() || !D().HAZARDS[id]) return;
+    if (_g() === 9 || !_guard() || !D().HAZARDS[_cid(id)]) return;
     _hazard(id, null);
   }
 
@@ -707,11 +724,13 @@ const LabCircuit = (() => {
     const parts = [];
     if (r.amps.length) parts.push(`current ${r.amps.map(a => f2(a) + ' A').join(' and ')}`);
     if (r.volts.length) parts.push(`voltage ${r.volts.map(v => f2(v) + ' V').join(' and ')}`);
+    // ⚠ Grade 7 reads the meters but does no Q = It or V = IR arithmetic - that is Grade 9.
+    const g9 = !_is7();
     let formula = '';
-    if (r.Q != null) formula = `In ${r.t} s: Q = It = ${f2(r.amps[0])} A × ${r.t} s = ${f1(r.Q)} C` + (r.W != null ? `;  W = QV = ${f1(r.Q)} C × ${f2(r.volts[0])} V = ${f1(r.W)} J` : '');
-    else if (r.amps.length && r.volts.length && r.amps[0] > 0.01 && lit.length === 1) formula = `R = V ÷ I = ${f2(r.volts[0])} V ÷ ${f2(r.amps[0])} A = ${f1(C.resistance(r.volts[0], r.amps[0]))} Ω`;
+    if (g9 && r.Q != null) formula = `In ${r.t} s: Q = It = ${f2(r.amps[0])} A × ${r.t} s = ${f1(r.Q)} C` + (r.W != null ? `;  W = QV = ${f1(r.Q)} C × ${f2(r.volts[0])} V = ${f1(r.W)} J` : '');
+    else if (g9 && r.amps.length && r.volts.length && r.amps[0] > 0.01 && lit.length === 1) formula = `R = V ÷ I = ${f2(r.volts[0])} V ÷ ${f2(r.amps[0])} A = ${f1(C.resistance(r.volts[0], r.amps[0]))} Ω`;
     _logEntry({ title: `Reading: ${r.label}`, obs: parts.join(', ') + '.', formula });
-    _coach(`📝 Recorded: ${parts.join(', ')}.${r.Q != null ? ` And ${f1(r.Q)} C of charge has flowed so far.` : ''}`);
+    _coach(`📝 Recorded: ${parts.join(', ')}.${g9 && r.Q != null ? ` And ${f1(r.Q)} C of charge has flowed so far.` : ''}`);
     // Discoveries a reading can unlock
     const amm = Object.keys(s.meters).filter(k => s.meters[k].kind === 'ammeter' && s.meters[k].value > 0.01);
     const vms = Object.keys(s.meters).filter(k => s.meters[k].kind === 'voltmeter' && s.meters[k].value > 0.1);
@@ -721,21 +740,22 @@ const LabCircuit = (() => {
     if (amm.length >= 2 && amm.every(k => Math.abs(s.meters[k].value - s.meters[amm[0]].value) < 0.005)) _discover('same_current');
     if (C.arrangement(s) === 'series' && lit.length === 2 && vms.some(k => matchesBulb(s.meters[k].value) && s.meters[k].value < 0.8 * s.cells * C.EMF)) _discover('volts_share');
     if (amm.length && _t >= 10 - 1e-9) _discover('charge_flow');
+    if (_is7()) _checkDiscP('read', s);
     _missionRead(s, r);
     _refresh();
     _guideEvent('read');
   }
 
   // ══ Discoveries from the state of the board ═══
-  // Grades 4/6: a discovery is unlocked by its `when` fact, worked out in the data file.
-  function _checkDiscP(evt, prev, warm) {
-    const f = D().facts({ layout: _layout, sol: _sol, prev, evt, view: _view, tests: _tests, gapFilled: _gapFilled, warm: !!warm });
+  // Grades 4/6/7: a discovery is unlocked by its `when` fact, worked out in the data file.
+  function _checkDiscP(evt, prev, warm, fuse) {
+    const f = D().facts({ layout: _layout, sol: _sol, prev, evt, view: _view, tests: _tests, gapFilled: _gapFilled, warm: !!warm, fuse: !!fuse });
     if (D().litBulbs(_sol).length) _gapFilled = false;
     for (const d of _discs()) if (d.when && f.has(d.when)) _discover(d.id);
   }
 
-  function _checkDisc(evt, prev) {
-    if (_primary()) { _checkDiscP(evt, prev); return; }
+  function _checkDisc(evt, prev, fuse) {
+    if (_byFacts()) { _checkDiscP(evt, prev, false, fuse); return; }
     const C = D(), s = _sol, lit = C.litBulbs(s), arr = C.arrangement(s);
     const prevLit = prev ? C.litBulbs(prev) : [], prevArr = prev ? C.arrangement(prev) : 'none';
     if (lit.length) _discover('first_light');
@@ -769,11 +789,11 @@ const LabCircuit = (() => {
     const M = _mine(D().MISSIONS).find(x => x.id === id);
     if (!M || _busy) return;
     _stopGuide(true);
-    _layout = M.kind === 'sort' ? D().layoutOf('tester') : M.kind === 'fix' ? D().layoutOf('broken') : {};
+    _layout = M.kind === 'sort' ? D().layoutOf('tester') : M.kind === 'fix' ? D().layoutOf('broken') : M.kind === 'meters7' ? D().layoutOf('single') : {};
     _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = []; _tests = {}; _gapFilled = false; _gapPrev = D().hasGap(_layout);
     _mission = { id, kind: M.kind || null, hazards: 0, mistakes: 0, success: false, read: false, series: null, parallel: null, sBreak: false, pBreak: false, tested: {} };
     _sol = D().solve(_layout);
-    _tool = id === 'light' || M.kind === 'torch' ? 'cell' : 'hand';
+    _tool = id === 'light' || M.kind === 'torch' || M.kind === 'diagram' ? 'cell' : M.kind === 'meters7' ? 'ammeter' : 'hand';
     _panel = 'missions';
     _coach(M.intro);
     _renderPalette();
@@ -805,11 +825,19 @@ const LabCircuit = (() => {
       else if (arr === 'parallel' && inSeries) { ms.parallel = r.amps[0]; _coach(`Parallel reading: ${f2(r.amps[0])} A. Now unscrew one bulb with ✋.`); }
       else _coach('Read with both bulbs lit and the ammeter next to the cell - lay out one of the two circuits from the mission box.');
       _missionCheck();
+    } else if (ms.kind === 'meters7') {
+      const m = C.meterChecks(s);
+      if (m.ammeter && m.voltmeter) {
+        ms.read = true; ms.success = true;
+        _coach(`🎯 ${f2(r.amps[0])} A through the lamp and ${f2(m.volts[0])} V across it, each meter in the right place. Tap “Answer the questions”!`);
+      } else if (!C.litBulbs(s).length) _coach('The lamp is not lit yet - is the loop complete and the switch closed?');
+      else if (!m.ammeter) _coach('Put the ammeter IN the loop, in place of a wire, so all the current flows through it.');
+      else _coach('Now the voltmeter: connect it ACROSS the lamp, one lead to each end of it.');
     }
   }
   function _missionEvent(evt, prev) {
     const ms = _mission, C = D();
-    if (ms && ms.kind && !ms.success) { _missionP(); return; }
+    if (ms && ms.kind && !ms.success) { _missionP(evt, prev); return; }
     if (!ms || ms.success || ms.id !== 'compare' || !prev || !/^bulb:.*:out$/.test(evt)) return;
     const pa = C.arrangement(prev), lit = C.litBulbs(_sol);
     if (pa === 'series' && !lit.length) ms.sBreak = true;
@@ -826,15 +854,29 @@ const LabCircuit = (() => {
   }
 
   // Grades 4/6: a torch to build, a torch to mend, or six things to sort.
+  // Grade 7: a circuit from its diagram, series and parallel, or the two meters.
   function _torchWorks() {
     const C = D();
     return C.litBulbs(_sol).length > 0 && Object.keys(_layout).some(k => _layout[k].kind === 'switch' && !_layout[k].open && C.switchControls(_layout, k));
   }
-  function _missionP() {
+  const DIAGRAM_PARTS = ['cell', 'switch', 'bulb', 'resistor'];
+  function _missionP(evt, prev) {
     const ms = _mission, C = D();
     if (ms.kind === 'sort') {
       C.objectTests(_layout).forEach(t => { if (t.result) ms.tested[t.obj] = t.result; });
       if (C.TEST_OBJECTS.every(o => ms.tested[o])) { ms.success = true; _coach('🎯 All six things tested! Tap “Answer the questions” to finish.'); }
+    } else if (ms.kind === 'sp7') {
+      if (prev && /^bulb:.*:out$/.test(evt || '')) {
+        const pa = C.arrangement(prev), lit = C.litBulbs(_sol);
+        if (pa === 'series' && !lit.length && !ms.sBreak) { ms.sBreak = true; if (!ms.pBreak) _coach('Series: one lamp out, and the other went out too. Now lay out the parallel circuit.'); }
+        if (pa === 'parallel' && lit.length === 1 && !ms.pBreak) { ms.pBreak = true; if (!ms.sBreak) _coach('Parallel: one lamp out, and the other stayed on. Now lay out the series circuit.'); }
+      }
+      if (ms.sBreak && ms.pBreak) { ms.success = true; _coach('🎯 Both circuits built and tested. Tap “Answer the questions” to finish the mission.'); }
+    } else if (ms.kind === 'diagram') {
+      if (_torchWorks() && C.oneLoop(_sol, DIAGRAM_PARTS)) { ms.success = true; _coach('🎯 Just like the diagram: four parts in one loop, and the switch works. Tap “Answer the questions”.'); }
+      else if (_torchWorks()) _coach('The lamp lights - but the diagram has all four parts in ONE loop. Check the resistor and the switch are in it.');
+    } else if (ms.kind === 'meters7') {
+      // A reading finishes this one (see _missionRead).
     } else if (_torchWorks() && (ms.kind !== 'torch' || ['cell', 'bulb', 'switch'].every(_has))) {
       ms.success = true;
       _coach(ms.kind === 'fix' ? '🎯 Fixed! The torch lights, and the switch works. Tap “Answer the questions”.'
@@ -860,7 +902,7 @@ const LabCircuit = (() => {
       const lines = [];
       if (ms.kind) {
         lines.push(ms.hazards ? `${ms.hazards} danger${ms.hazards === 1 ? '' : 's'} (a short circuit, a socket, wet hands or a split cable) - none next time for an extra star.` : 'Safe all the way through. 🦺');
-        lines.push(ms.mistakes ? `${ms.mistakes} wiring mistake${ms.mistakes === 1 ? '' : 's'} (a gap, a blown bulb, cells the wrong way).` : 'No wiring mistakes. 🔌');
+        lines.push(ms.mistakes ? `${ms.mistakes} wiring mistake${ms.mistakes === 1 ? '' : 's'} (${_is7() ? 'a gap, a meter in the wrong place, a burnt-out lamp, cells the wrong way' : 'a gap, a blown bulb, cells the wrong way'}).` : 'No wiring mistakes. 🔌');
       } else {
         lines.push(ms.hazards ? `${ms.hazards} short circuit${ms.hazards === 1 ? '' : 's'} - none next time for an extra star.` : 'No short circuits. 🔥');
         lines.push(ms.mistakes ? `${ms.mistakes} wiring mistake${ms.mistakes === 1 ? '' : 's'} (a meter in the wrong place, a gap, a blown bulb).` : 'Every meter in the right place. ⏲️');
@@ -1015,7 +1057,7 @@ const LabCircuit = (() => {
         <section class="lab-hz-sec is-what"><h3>What you saw</h3><p>${esc(d.saw)}</p></section>
         ${d.formula ? `<section class="lab-hz-sec"><h3>The rule</h3><p class="lab-eq">${esc(d.formula)}</p></section>` : ''}
         <section class="lab-hz-sec is-exam"><h3>Why it happens</h3><p>${esc(d.learn)}</p></section>
-        ${d.exam ? `<section class="lab-hz-sec"><h3>${_primary() ? '📝 In the PSAC exam' : '📝 On the NCE paper'}</h3><p>${esc(d.exam)}</p></section>` : ''}
+        ${d.exam ? `<section class="lab-hz-sec"><h3>${_examHead()}</h3><p>${esc(d.exam)}</p></section>` : ''}
       </div>
       <div class="lab-ov-actions">
         <button type="button" class="lab-btn" data-ov-close>Close</button>
@@ -1202,8 +1244,8 @@ const LabCircuit = (() => {
 
   function _missionListHTML() {
     const st = Labs.store('circuit');
-    return `<section class="lab-missions"><h2>Missions</h2><p class="lab-hint">Build it, measure it, answer the exam-style questions, earn up to three stars.</p>
-      ${D().MISSIONS.map(M => {
+    return `<section class="lab-missions"><h2>Missions</h2><p class="lab-hint">${_primary() ? 'Build it, test it, answer the questions, earn up to three stars.' : 'Build it, measure it, answer the exam-style questions, earn up to three stars.'}</p>
+      ${_mine(D().MISSIONS).map(M => {
         const best = st.missions[M.id]?.stars || 0;
         return `<article class="lab-mission-card">
           <span class="lab-mission-icon" aria-hidden="true">${M.icon}</span>
@@ -1219,7 +1261,49 @@ const LabCircuit = (() => {
     const M = D().MISSIONS.find(x => x.id === ms.id);
     const li = (done, text) => `<li class="${done ? 'is-done' : ''}">${esc(text)}</li>`;
     let body;
-    if (ms.id === 'light') {
+    if (ms.kind === 'torch') {
+      const parts = ['cell', 'bulb', 'switch'].every(_has), loop = parts && !D().hasGap(_layout);
+      body = `<ul class="lab-steps">
+          ${li(parts, 'Put a cell, a bulb and a switch on the board')}
+          ${li(loop, 'Join them into ONE loop with wires')}
+          ${li(ms.success, 'Close the switch - the bulb lights')}${li(false, 'Answer the questions')}</ul>
+        <p class="lab-progress-text">Hint: the outer ring of spaces makes one loop. The parts are under the board.</p>`;
+    } else if (ms.kind === 'fix') {
+      const whole = {};
+      Object.keys(_layout).forEach(k => { whole[k] = _layout[k].kind === 'bulb' ? { kind: 'bulb' } : _layout[k]; });
+      const gapOk = !D().hasGap(whole), bulbOk = !Object.values(_layout).some(p => p.kind === 'bulb' && (p.out || p.blown));
+      body = `<ul class="lab-steps">
+          ${li(gapOk, 'Fault 1: find the gap and fill it with a wire')}
+          ${li(bulbOk, 'Fault 2: find the loose bulb and screw it in with ✋')}
+          ${li(ms.success, 'Close the switch - the torch lights')}${li(false, 'Answer the questions')}</ul>`;
+    } else if (ms.kind === 'diagram') {
+      const parts = DIAGRAM_PARTS.every(_has), loop = parts && !D().hasGap(_layout);
+      body = `<div class="lab-circuit-target">${D().DIAGRAM_G7}</div>
+        <ul class="lab-steps">
+          ${li(parts, 'Put the four parts in the diagram on the board')}
+          ${li(loop, 'Join them into ONE loop with wires, in the same order')}
+          ${li(ms.success, 'Close the switch - the lamp lights')}${li(false, 'Answer the questions')}</ul>
+        <p class="lab-progress-text">Hint: the outer ring of spaces makes one loop. The parts are under the board.</p>`;
+    } else if (ms.kind === 'sp7') {
+      body = `<div class="lab-circuit-quick">
+          <button type="button" class="lab-btn lab-btn-sm" data-build="series2">🔗 Lay out: series</button>
+          <button type="button" class="lab-btn lab-btn-sm" data-build="parallel2">🔀 Lay out: parallel</button></div>
+        <ul class="lab-steps">
+          ${li(ms.sBreak, 'Series: close the switch, then unscrew one lamp - watch the other')}
+          ${li(ms.pBreak, 'Parallel: close the switch, then unscrew one lamp - watch the other')}${li(false, 'Answer the questions')}</ul>`;
+    } else if (ms.kind === 'meters7') {
+      body = `<ul class="lab-steps">
+          ${li(_has('ammeter') && _has('voltmeter'), 'Put an ammeter IN the loop and a voltmeter ACROSS the lamp')}
+          ${li(D().litBulbs(_sol).length > 0, 'Close the switch - the lamp lights')}
+          ${li(ms.read, 'Take a reading with both meters in the right places')}${li(false, 'Answer the questions')}</ul>
+        <p class="lab-progress-text">Hint: swap a wire in the loop for the ammeter. For the voltmeter, add a short wire up from each end of the lamp, then put the voltmeter between them.</p>`;
+    } else if (ms.kind === 'sort') {
+      body = `<ul class="lab-steps">${D().TEST_OBJECTS.map(o => {
+          const O = D().OBJECTS[o], r = ms.tested[o];
+          return li(!!r, `${O.icon} ${O.name}${r ? (r === 'conductor' ? ': the bulb lights - a conductor' : ': the bulb stays dark - an insulator') : ''}`);
+        }).join('')}${li(false, 'Answer the questions')}</ul>
+        <p class="lab-progress-text">Pick a thing under the board, tap the gap on the right, then close the switch.</p>`;
+    } else if (ms.id === 'light') {
       const p = _lightProgress();
       body = `<ul class="lab-steps">
           ${li(p.parts, 'Put a cell, a bulb, a switch and an ammeter on the board')}
@@ -1261,13 +1345,17 @@ const LabCircuit = (() => {
   function _renderPalette() {
     const c = $('lab-circuit-palette');
     if (!c) return;
-    const C = D();
-    c.innerHTML = `<div class="lab-circuit-palette" role="toolbar" aria-label="Parts and tools">${C.TOOLS.map(t => {
+    const C = D(), P = _primary();
+    // Grades 4/6: a bigger picture and no symbol (Grade 4 has no symbols at all).
+    const btn = t => {
       const K = C.KINDS[t], T = TOOL_INFO[t];
-      const inner = K ? `<span class="lab-circuit-tool-top"><span aria-hidden="true">${K.icon}</span>${C.SYMBOL[t]}</span><b>${esc(K.name)}</b>`
-                      : `<span class="lab-circuit-tool-top"><span aria-hidden="true">${T.icon}</span></span><b>${esc(T.name)}</b>`;
-      return `<button type="button" class="lab-circuit-tool" data-tool="${t}" aria-pressed="${_tool === t}" title="${esc(K ? K.meta : T.meta)}">${inner}</button>`;
-    }).join('')}</div>
+      const inner = K ? `<span class="lab-circuit-tool-top${P ? ' is-big' : ''}"><span aria-hidden="true">${K.icon}</span>${P ? '' : C.SYMBOL[t]}</span><b>${esc(K.name)}</b>`
+                      : `<span class="lab-circuit-tool-top${P ? ' is-big' : ''}"><span aria-hidden="true">${T.icon}</span></span><b>${esc(T.name)}</b>`;
+      return `<button type="button" class="lab-circuit-tool" data-tool="${t}" aria-pressed="${_tool === t}" title="${esc(K ? (P ? _job(t) : K.meta) : T.meta)}">${inner}</button>`;
+    };
+    c.innerHTML = `<div class="lab-circuit-palette" role="toolbar" aria-label="Parts and tools">${C.toolsFor(_g()).map(btn).join('')}</div>
+    ${P ? `<p class="lab-hint lab-circuit-phint"><b>Things to test:</b> put one in a gap, then close the switch.</p>
+    <div class="lab-circuit-palette" role="toolbar" aria-label="Things to test">${C.TEST_OBJECTS.map(btn).join('')}</div>` : ''}
     <p class="lab-hint lab-circuit-phint">${_tool === 'hand' ? '✋ Tap a switch, a bulb or a cell on the board to use it.' : _tool === 'eraser' ? '🧽 Tap a part on the board to remove it.' : `Now tap a space on the board to place the ${esc(toolName(_tool).toLowerCase())}.`} <span class="lab-circuit-drag">With a mouse you can also drag a part onto the board.</span></p>`;
     _root && _root.querySelectorAll('.lab-circuit-kind').forEach(b => b.classList.toggle('is-on', b.dataset.tool === _tool));
     _highlight();
@@ -1307,7 +1395,55 @@ const LabCircuit = (() => {
   }
 
   function _intro() {
-    Labs.overlay(`
+    const first = _mine(D().GUIDES)[0];
+    if (_primary()) {
+      _ov(`
+      <div class="lab-intro">
+        <p class="lab-done-icon" aria-hidden="true">💡</p>
+        <h2 id="lab-ov-title">Welcome to the Circuit Board</h2>
+        <ul class="lab-intro-list">
+          <li><b>New here?</b> Tap “Show me how”. I will show you how to light a bulb, one tap at a time.</li>
+          <li><b>Build.</b> Pick a part under the board: a wire, a cell, a bulb or a switch. Then tap a space to put it there.</li>
+          <li><b>Switch on.</b> Tap the switch with ✋ to close it. The moving dots show electricity flowing.</li>
+          <li><b>Test things.</b> Put a spoon, a coin or a ruler in a gap. Does the bulb light?</li>
+          <li><b>Stay safe.</b> The ⚠️ buttons show why sockets, wet hands and split cables are dangerous. Our cells are safe.</li>
+          <li><b>Earn stars.</b> Missions end with questions. There are ${_discs().length} discoveries to collect.</li>
+        </ul>
+        <p class="lab-hint">Tap 🔊 next to my words and I will read them to you.</p>
+      </div>
+      <div class="lab-ov-actions">
+        <button type="button" class="lab-btn" data-ov-close>I’ll explore on my own</button>
+        <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="${first.id}" data-autofocus>Show me how →</button>
+      </div>`,
+      { cls: 'is-intro', onClose: () => {
+        const st = Labs.store('circuit'); st[_introKey()] = true; Labs.persist();
+        _coach('Pick a part under the board, then tap a space to put it there. Or start a guided experiment below.');
+      } });
+      return;
+    }
+    const done = () => { const st = Labs.store('circuit'); st[_introKey()] = true; Labs.persist(); };
+    if (_is7()) {
+      _ov(`
+      <div class="lab-intro">
+        <p class="lab-done-icon" aria-hidden="true">💡</p>
+        <h2 id="lab-ov-title">Welcome to the Circuit Board</h2>
+        <ul class="lab-intro-list">
+          <li><b>New here?</b> Tap “Show me how” and I’ll walk you through a circuit and its symbols, one tap at a time.</li>
+          <li><b>Build.</b> Pick a part under the board - a wire, a cell, a lamp, a switch, a resistor or a meter - then tap a space between two points.</li>
+          <li><b>Read the symbols.</b> ✏️ at the top redraws your circuit as a circuit diagram, with the standard symbols.</li>
+          <li><b>Measure.</b> An ammeter goes IN the loop; a voltmeter goes ACROSS a part. 📝 records what they read.</li>
+          <li><b>Stay safe.</b> A short circuit gets hot. The ⚠️ buttons show why sockets, wet hands and split cables are dangerous.</li>
+          <li><b>Earn stars.</b> Missions end with exam-style questions. There are ${_discs().length} discoveries to collect.</li>
+        </ul>
+      </div>
+      <div class="lab-ov-actions">
+        <button type="button" class="lab-btn" data-ov-close>I’ll explore on my own</button>
+        <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="${first.id}" data-autofocus>Show me how →</button>
+      </div>`,
+      { cls: 'is-intro', onClose: () => { done(); _coach('Pick a part under the board, then tap a space to place it - or start a guided experiment below.'); } });
+      return;
+    }
+    _ov(`
       <div class="lab-intro">
         <p class="lab-done-icon" aria-hidden="true">💡</p>
         <h2 id="lab-ov-title">Welcome to the Circuit Board</h2>
@@ -1317,22 +1453,90 @@ const LabCircuit = (() => {
           <li><b>Switch on.</b> Tap a switch with ✋ to close it. The moving dots show the current; bulbs glow as brightly as the maths says.</li>
           <li><b>Draw it like the exam.</b> ✏️ at the top shows your circuit with standard symbols.</li>
           <li><b>Get it wrong safely.</b> Make a short circuit or put a meter in the wrong place and see what would really happen. Nothing here can hurt you.</li>
-          <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${D().DISCOVERIES.length} discoveries to collect.</li>
+          <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${_discs().length} discoveries to collect.</li>
         </ul>
       </div>
       <div class="lab-ov-actions">
         <button type="button" class="lab-btn" data-ov-close>I’ll explore on my own</button>
-        <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="light" data-autofocus>Show me how →</button>
+        <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="${first.id}" data-autofocus>Show me how →</button>
       </div>`,
       { cls: 'is-intro', onClose: () => {
-        const st = Labs.store('circuit'); st.intro = true; Labs.persist();
+        const st = Labs.store('circuit'); st[_introKey()] = true; Labs.persist();
         _coach('Pick a part under the board, then tap a space to place it - or start a guided experiment below.');
       } });
   }
 
-  function _help() {
+  // Grades 4/6: the words a 9-11-year-old needs, and the safety rules.
+  function _helpP() {
+    const C = D(), g = _g();
+    _ov(`
+      <h2 id="lab-ov-title" class="lab-help-title">How the Circuit Board works</h2>
+      <div class="lab-help">
+        <section><h3>Using the board</h3><ul>
+          <li>Pick a part under the board, then tap a space between two points.</li>
+          <li>✋ Hand: tap a switch to open or close it, a bulb to unscrew it, a cell to turn it round.</li>
+          <li>🧽 Remove takes a part off. ↩️ Undo takes back your last move.</li>
+          <li>To test a thing, put it in a gap in the circuit and close the switch.</li></ul></section>
+        <section><h3>Words to know</h3><ul>
+          <li><b>Circuit</b>: a complete loop that electricity flows round.</li>
+          <li><b>Cell</b>: gives the circuit its energy. A battery is one or more cells.</li>
+          <li><b>Switch</b>: opens and closes a gap in the circuit.</li>
+          <li><b>Conductor</b>: a material that lets electricity pass, like metal.</li>
+          <li><b>Insulator</b>: a material that stops electricity, like plastic, rubber or wood.</li>
+          <li><b>Short circuit</b>: a short cut round the bulb. It makes the wire hot.</li></ul></section>
+        ${C.symbolsFor(g) ? `<section><h3>Symbols (an extra)</h3><p class="lab-hint">You will use these at secondary school. They are beyond the PSAC syllabus.</p>
+          <div class="lab-table-wrap"><table class="lab-table lab-circuit-symtable"><thead><tr><th scope="col">Part</th><th scope="col">Symbol</th></tr></thead>
+          <tbody>${C.kindsFor(g).map(k => `<tr><td>${C.KINDS[k].icon} ${esc(C.KINDS[k].name)}</td><td class="lab-circuit-symcell">${C.SYMBOL[k]}</td></tr>`).join('')}</tbody></table></div></section>` : ''}
+        <section><h3>Stay safe</h3><ul>
+          <li>The cells in this lab are safe to touch, even with wet hands.</li>
+          <li>Mains electricity from a socket is not. Never push anything into a socket.</li>
+          <li>Never touch a switch or a plug with wet hands.</li>
+          <li>Never touch a split or damaged cable. Ask an adult.</li></ul></section>
+      </div>
+      <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Back to the board</button></div>`,
+      { cls: 'is-help' });
+  }
+
+  // Grade 7: the parts, their symbols and the words - no Q = It, W = QV or V = IR.
+  function _help7() {
     const C = D();
-    Labs.overlay(`
+    _ov(`
+      <h2 id="lab-ov-title" class="lab-help-title">How the Circuit Board works</h2>
+      <div class="lab-help">
+        <section><h3>Using the board</h3><ul>
+          <li>Pick a part under the board, then tap a space between two points. Tap a filled space to swap its part.</li>
+          <li>✋ Hand: tap a switch to open or close it, a lamp to unscrew it, a cell to turn it round.</li>
+          <li>🧽 Remove takes a part off. ↩️ Undo takes back your last move.</li>
+          <li>📝 Take a reading records the meters in your notebook. ✏️ at the top redraws the board as a circuit diagram.</li></ul></section>
+        <section><h3>Circuit symbols</h3>
+          <div class="lab-table-wrap"><table class="lab-table lab-circuit-symtable"><thead><tr><th scope="col">Part</th><th scope="col">Symbol</th><th scope="col">What it does</th></tr></thead>
+          <tbody>${C.kindsFor(7).map(k => `<tr><td>${C.KINDS[k].icon} ${esc(C.KINDS[k].name)}</td><td class="lab-circuit-symcell">${C.SYMBOL[k]}</td><td>${esc(_job(k))}</td></tr>`).join('')}</tbody></table></div></section>
+        <section><h3>Words to know</h3><ul>
+          <li><b>Current</b>: the flow of electricity round a circuit. It is measured in amperes (A) with an ammeter.</li>
+          <li><b>Voltage</b>: the push from the cell that drives the current. It is measured in volts (V) with a voltmeter.</li>
+          <li><b>Resistance</b>: how much a part opposes the current. It is measured in ohms (Ω).</li>
+          <li><b>Series</b>: parts one after another in a single loop. <b>Parallel</b>: parts side by side, each on its own branch.</li>
+          <li><b>Conductor</b>: a material that lets a current through, like copper. <b>Insulator</b>: one that stops it, like plastic.</li></ul></section>
+        <section><h3>The rules</h3><ul>
+          <li>A lamp lights only in a complete (closed) circuit.</li>
+          <li>Series: one path, so one break stops everything; the lamps share the voltage.</li>
+          <li>Parallel: each branch has its own path and the full voltage, so it works on its own.</li>
+          <li>Ammeter IN SERIES. Voltmeter ACROSS the part.</li>
+          <li>Cells in series add their voltages: 1.5 V + 1.5 V = 3 V.</li></ul></section>
+        <section><h3>Safety</h3><ul>
+          <li>Never join the two ends of a cell with just a wire - a short circuit makes the wire and the cell hot.</li>
+          <li>Never experiment with mains sockets (230 V in Mauritius), and never touch a switch or a plug with wet hands.</li>
+          <li>Never touch a split or damaged cable. Tell an adult.</li></ul></section>
+      </div>
+      <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Back to the board</button></div>`,
+      { cls: 'is-help' });
+  }
+
+  function _help() {
+    if (_primary()) { _helpP(); return; }
+    if (_is7()) { _help7(); return; }
+    const C = D();
+    _ov(`
       <h2 id="lab-ov-title" class="lab-help-title">How the Circuit Board works</h2>
       <div class="lab-help">
         <section><h3>Using the board</h3><ul>
@@ -1369,13 +1573,15 @@ const LabCircuit = (() => {
     const sw = Object.keys(_layout).filter(k => _layout[k].kind === 'switch');
     const swText = !sw.length ? 'no switch' : sw.every(k => _layout[k].open) ? 'switch open' : 'switch closed';
     const chip = $('lab-circuit-chip');
-    if (chip) chip.innerHTML = `${s.flowing ? '⚡ Current flowing' : s.short ? '🔥 Short circuit' : '○ No current'} <small>${s.cells} cell${s.cells === 1 ? '' : 's'} · ${swText}</small>`;
+    const P = _primary();
+    if (chip) chip.innerHTML = `${s.flowing ? (P ? '⚡ Electricity flowing' : '⚡ Current flowing') : s.short ? '🔥 Short circuit' : (P ? '○ No electricity flowing' : '○ No current')} <small>${s.cells} cell${s.cells === 1 ? '' : 's'} · ${swText}</small>`;
     const st = $('lab-circuit-status');
     if (st) {
       const chips = [];
       const amm = Object.keys(s.meters).filter(k => s.meters[k].kind === 'ammeter');
       if (s.short) chips.push('<span class="lab-chip is-danger">🔥 Wire hot!</span>');
-      else if (s.flowing && amm.length) chips.push(`<span class="lab-chip">⏱️ ${Math.floor(_t)} s</span>`);
+      else if (s.flowing && amm.length && !_is7()) chips.push(`<span class="lab-chip">⏱️ ${Math.floor(_t)} s</span>`);
+      else if (P && s.flowing && _t >= 10 - 1e-9 && C.litBulbs(s).length) chips.push('<span class="lab-chip">🔥 Bulb warm</span>');
       st.innerHTML = chips.join('');
     }
     const c = $('lab-circuit-contents');
@@ -1384,7 +1590,7 @@ const LabCircuit = (() => {
       const amm = Object.keys(s.meters).filter(k => s.meters[k].kind === 'ammeter');
       if (ms.length) {
         let txt = ms.join(' · ');
-        if (s.flowing && amm.length && _t >= 1) txt += ` · Q = It = ${f1(C.charge(C.round2(s.meters[amm[0]].value), Math.floor(_t)))} C`;
+        if (s.flowing && amm.length && _t >= 1 && !_is7()) txt += ` · Q = It = ${f1(C.charge(C.round2(s.meters[amm[0]].value), Math.floor(_t)))} C`;
         c.textContent = txt;
       } else {
         const n = {};
@@ -1451,6 +1657,7 @@ const LabCircuit = (() => {
     }
     _drawDots(g, sym);
     for (const id of parts) if (_layout[id].kind !== 'wire') _drawBody(g, id, sym);
+    if (_primary() && _sol.flowing && _t >= 10 - 1e-9) _drawHeat(g);
     _drawNodes(g, sym);
     _drawFx(dt, g);
     c.restore();
@@ -1469,8 +1676,10 @@ const LabCircuit = (() => {
   }
   function _drawLeads(g, id, sym) {
     const p = _layout[id], e = _ends(g, id);
+    // A thing being tested: the leads (the tester's clips) reach right up to it.
+    const inner = D().OBJECTS[p.kind] ? (sym ? 14 : p.kind === 'coin' ? 11 : e.half * 0.85) : e.half;
     const segs = p.kind === 'wire' ? [[e.A, e.B]]
-      : [[e.A, [e.mid[0] - e.u[0] * e.half, e.mid[1] - e.u[1] * e.half]], [[e.mid[0] + e.u[0] * e.half, e.mid[1] + e.u[1] * e.half], e.B]];
+      : [[e.A, [e.mid[0] - e.u[0] * inner, e.mid[1] - e.u[1] * inner]], [[e.mid[0] + e.u[0] * inner, e.mid[1] + e.u[1] * inner], e.B]];
     for (const [a, b] of segs) {
       if (sym) _line(a, b, COL.ink, 2.2);
       else { _line(a, b, COL.wire, 5); _line(a, b, COL.wireHi, 1.3); }
@@ -1523,7 +1732,7 @@ const LabCircuit = (() => {
   function _drawBody(g, id, sym) {
     const c = _cx, C = D(), p = _layout[id], e = _ends(g, id), h = e.half;
     const bulb = _sol.bulbs[id], meter = _sol.meters[id];
-    const elongated = p.kind === 'cell' || p.kind === 'switch' || p.kind === 'resistor' || p.kind === 'fuse';
+    const elongated = p.kind === 'cell' || p.kind === 'switch' || p.kind === 'resistor' || p.kind === 'fuse' || !!C.OBJECTS[p.kind];
     // a glow under a lit bulb, in both views
     if (p.kind === 'bulb' && bulb && bulb.lit) {
       const bb = Math.min(4, bulb.brightness), r = 14 + 20 * Math.sqrt(bb);
@@ -1571,6 +1780,7 @@ const LabCircuit = (() => {
           c.fillStyle = COL.paper; c.beginPath(); c.arc(0, 0, 12, 0, Math.PI * 2); c.fill(); c.stroke();
           _text(p.kind === 'ammeter' ? 'A' : 'V', 0, 1, '700 13px system-ui, sans-serif', COL.ink);
           break;
+        default: if (C.OBJECTS[p.kind]) _drawObj(p.kind, h, true);
       }
     } else {
       switch (p.kind) {
@@ -1628,6 +1838,7 @@ const LabCircuit = (() => {
           _text(p.kind === 'ammeter' ? 'A' : 'V', 0, 11, '800 10px system-ui, sans-serif', '#37474F');
           break;
         }
+        default: if (C.OBJECTS[p.kind]) _drawObj(p.kind, h, false);
       }
     }
     c.restore();
@@ -1650,6 +1861,63 @@ const LabCircuit = (() => {
     if (p.kind === 'bulb' && (p.blown || p.out)) {
       const [ox, oy] = e.s.dir === 'h' ? [0, 26] : [30, 0];
       _pill(p.blown ? 'blown' : 'unscrewed', e.mid[0] + ox, e.mid[1] + oy);
+    }
+    // No standard symbol exists for "a thing being tested": its picture sits in a box.
+    if (sym && C.OBJECTS[p.kind]) _text(C.OBJECTS[p.kind].icon, e.mid[0], e.mid[1] + 1, '13px system-ui, sans-serif', COL.ink);
+  }
+
+  // Grades 4/6: the things to test, drawn along the slot (local x runs along it).
+  function _drawObj(k, h, sym) {
+    const c = _cx;
+    if (sym) { c.fillStyle = COL.paper; c.strokeStyle = COL.ink; c.lineWidth = 1.6; c.fillRect(-14, -10, 28, 20); c.strokeRect(-14, -10, 28, 20); return; }
+    switch (k) {
+      case 'spoon':
+        c.fillStyle = '#B0BEC5'; c.strokeStyle = '#78909C'; c.lineWidth = 1;
+        c.beginPath(); c.ellipse(-h * 0.55, 0, 9, 7, 0, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillRect(-h * 0.55 + 8, -2, h * 1.4 - 8, 4);
+        break;
+      case 'coin':
+        c.fillStyle = '#D4A537'; c.strokeStyle = '#8D6E1F'; c.lineWidth = 1.4;
+        c.beginPath(); c.arc(0, 0, 11, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.beginPath(); c.arc(0, 0, 7.5, 0, Math.PI * 2); c.stroke();
+        break;
+      case 'lead':
+        c.fillStyle = '#37474F'; c.fillRect(-h * 0.85, -2.5, h * 1.7, 5);
+        c.fillStyle = 'rgba(255,255,255,0.35)'; c.fillRect(-h * 0.85, -2.5, h * 1.7, 1.4);
+        break;
+      case 'rubber':
+        c.fillStyle = '#F48FB1'; c.fillRect(-14, -7, 16, 14);
+        c.fillStyle = '#64B5F6'; c.fillRect(2, -7, 12, 14);
+        c.strokeStyle = 'rgba(0,0,0,0.3)'; c.lineWidth = 1; c.strokeRect(-14, -7, 28, 14);
+        break;
+      case 'ruler':
+        c.fillStyle = 'rgba(144,202,249,0.9)'; c.strokeStyle = '#5C8FB8'; c.lineWidth = 1;
+        c.fillRect(-h * 0.85, -6, h * 1.7, 12); c.strokeRect(-h * 0.85, -6, h * 1.7, 12);
+        c.strokeStyle = '#2F5C80';
+        for (let i = 0, x = -h * 0.8; x < h * 0.82; i++, x += 5) { c.beginPath(); c.moveTo(x, -6); c.lineTo(x, i % 2 ? -3 : 0); c.stroke(); }
+        break;
+      case 'stick':
+        c.fillStyle = '#A1887F'; c.fillRect(-h * 0.85, -4, h * 1.7, 8);
+        c.strokeStyle = '#6D4C41'; c.lineWidth = 0.8;
+        c.beginPath(); c.moveTo(-h * 0.75, -1); c.lineTo(h * 0.55, -1); c.moveTo(-h * 0.45, 2); c.lineTo(h * 0.75, 2); c.stroke();
+        break;
+    }
+  }
+
+  // Grades 4/6: heat rising off a bulb that has been on for 10 s (still, in Calm Mode).
+  function _drawHeat(g) {
+    const c = _cx, C = D(), ph = Labs.calm() ? 0 : _clock * 4;
+    c.strokeStyle = 'rgba(230,90,30,0.75)'; c.lineWidth = 2; c.lineCap = 'round';
+    for (const k of C.litBulbs(_sol)) {
+      const [x, y] = _slotMid(g, C.SLOTS[k]);
+      for (let i = -1; i <= 1; i++) {
+        c.beginPath();
+        for (let j = 0; j <= 12; j++) {
+          const yy = y - 24 - j * 1.8, xx = x + i * 9 + Math.sin(j * 0.7 + ph + i) * 2.5;
+          if (j) c.lineTo(xx, yy); else c.moveTo(xx, yy);
+        }
+        c.stroke();
+      }
     }
   }
   function _pill(t, x, y) {
@@ -1686,6 +1954,16 @@ const LabCircuit = (() => {
         const gl = c.createRadialGradient(at[0], at[1], 0, at[0], at[1], r);
         gl.addColorStop(0, `rgba(255,255,255,${1 - p})`); gl.addColorStop(0.5, `rgba(255,210,80,${0.8 * (1 - p)})`); gl.addColorStop(1, 'rgba(255,160,40,0)');
         c.fillStyle = gl; c.beginPath(); c.arc(at[0], at[1], r, 0, Math.PI * 2); c.fill();
+      }
+      else if (f.type === 'zap') {
+        // Mains, wet hands, a split cable: a flash and a lightning bolt before the card.
+        const x = _W / 2, y = _H / 2, s = 1 + 0.4 * p;
+        c.fillStyle = `rgba(255,250,200,${0.85 * (1 - p)})`; c.fillRect(0, 0, _W, _H);
+        c.fillStyle = `rgba(255,200,0,${1 - 0.6 * p})`; c.strokeStyle = '#1B2A24'; c.lineWidth = 3; c.lineJoin = 'round';
+        c.beginPath(); c.moveTo(x + 8 * s, y - 40 * s); c.lineTo(x - 14 * s, y + 4 * s); c.lineTo(x, y + 4 * s);
+        c.lineTo(x - 8 * s, y + 40 * s); c.lineTo(x + 16 * s, y - 6 * s); c.lineTo(x + 2 * s, y - 6 * s); c.closePath(); c.fill(); c.stroke();
+        c.font = `800 ${Math.round(18 + 8 * p)}px system-ui, sans-serif`; c.textAlign = 'center';
+        c.lineWidth = 4; c.strokeText('DANGER!', x, y - 50 * s); c.fillStyle = '#E53935'; c.fillText('DANGER!', x, y - 50 * s);
       }
       if (f.t >= f.dur) { _fx.splice(k, 1); if (f.done) f.done(); }
     }
@@ -1725,14 +2003,15 @@ const LabCircuit = (() => {
     Object.keys(s.meters).forEach(k => { meters[k] = s.meters[k].value; });
     return { layout: JSON.parse(JSON.stringify(_layout)), view: _view, tool: _tool, t: _t, clock: _clock, busy: _busy, panel: _panel,
              cellI: s.cellI, short: s.short, flowing: s.flowing, arrangement: D().arrangement(s), bulbs, meters,
-             guide: _guide && { id: _guide.id, step: _guide.step },
+             guide: _guide && { id: _guide.id, step: _guide.step }, grade: _g(), tests: Object.assign({}, _tests),
              readings: _readings.map(r => ({ label: r.label, amps: r.amps, volts: r.volts, Q: r.Q })),
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
              mission: _mission && { id: _mission.id, success: _mission.success, hazards: _mission.hazards, mistakes: _mission.mistakes,
-                                    read: _mission.read, series: _mission.series, parallel: _mission.parallel, sBreak: _mission.sBreak, pBreak: _mission.pBreak } };
+                                    read: _mission.read, series: _mission.series, parallel: _mission.parallel, sBreak: _mission.sBreak, pBreak: _mission.pBreak,
+                                    kind: _mission.kind, tested: Object.assign({}, _mission.tested) } };
   }
 
   return { mount, unmount, startMission, startGuide, discoveryGuide, build, place, remove, tapSlot, toggleSwitch, setBulb, flip,
-           read, setView, setTool, undo, clearBoard, _test, _tick, _debug };
+           read, setView, setTool, undo, clearBoard, danger: _danger, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabCircuit = LabCircuit;

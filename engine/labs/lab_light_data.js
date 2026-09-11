@@ -161,14 +161,20 @@ const LabLightData = (() => {
   function cardsPath(aligned) { return aligned ? 'through' : 'blocked'; }
 
   // ── The shelf ─────────────────────────────────
+  // `grades` as everywhere in this file: untagged = the original Grade 9 level.
   const SETUPS = {
     mirror: { icon: '🪞', name: 'Plane mirror', meta: 'On a sheet of paper' },
     block:  { icon: '🧊', name: 'Glass block', meta: 'Rectangular · 11 × 6 cm' },
-    cards:  { icon: '🕳️', name: 'Three cards with holes', meta: 'Rectilinear propagation' },
+    cards:  { icon: '🕳️', name: 'Three cards with holes', meta: 'Rectilinear propagation', meta4: 'Does light go in straight lines?', grades: [4, 9] },
+    shadow: { icon: '🌑', name: 'Shadow bench', meta: 'Torch, holder and a white screen', grades: [4] },
+    bounce: { icon: '🪞', name: 'Safety mirror', meta: 'Plastic, with smooth edges', grades: [4] },
+    cracked:{ icon: '💔', name: 'Old cracked mirror', meta: 'Found at the back of a cupboard', grades: [4], hazard: 'g4_sharp' },
   };
   const SOURCES = {
     raybox: { icon: '🔦', name: 'Ray box', meta: '12 V lamp · gets hot', short: 'Ray box', hot: true },
     laser:  { icon: '🔴', name: 'Laser pointer', meta: 'Class 2 · never look into it', short: 'Laser', laser: true },
+    torch:  { icon: '🔦', name: 'Torch', meta: 'Battery torch · very bright', short: 'Torch', sign: 'eye', grades: [4] },
+    lamp:   { icon: '💡', name: 'Desk lamp', meta: 'Old bulb · gets hot', short: 'Lamp', hot: true, sign: 'hot', grades: [4] },
   };
 
   // ── Discoveries ────────────────────────────────
@@ -295,7 +301,7 @@ const LabLightData = (() => {
     },
   };
 
-  const SIGN_LABELS = { eye: 'Bright light', hot: 'Hot surface' };
+  const SIGN_LABELS = { eye: 'Bright light', hot: 'Hot surface', sharp: 'Sharp - can cut' };
 
   // Short, true facts for the 💡 button, tied to P2.
   const FACTS = [
@@ -410,9 +416,324 @@ const LabLightData = (() => {
       ] },
   ];
 
+  // ══════════════════════════════════════════════
+  //  GRADE 4 (PSAC) - light and shadows
+  //
+  //  ⚠ Grounded in subjects/grade4-science:
+  //    g4sci-materials - "transparent/opaque"; g4s-mat-001 (glass is
+  //    transparent), g4s-mat-004 (opaque: wood, stone, metal, cardboard;
+  //    translucent: frosted glass, tracing paper), g4s-mat-011 (frosted glass
+  //    is translucent), g4sc-mat-052/053 (the three words defined);
+  //    g4sci-energy - light is a form of energy, the Sun is a source, and a
+  //    torch changes electrical energy into light (g4sc-energy-002).
+  //  ⚠ Shadows through the day (the Sun's height) are GRADE 6 (g6sc-hd-059),
+  //    not Grade 4, so they are not here. No angles, no protractor, no
+  //    refraction at Grade 4: the mirror obeys the same law (trace() above)
+  //    but no angle is ever shown.
+  //  ⚠ The Materials Tester already sorts materials with a torch. This level
+  //    is about LIGHT: shadows (how dark, how big, what shape), straight lines
+  //    and a mirror bounce.
+  // ══════════════════════════════════════════════
+  const GRADES = [4, 9];
+  const LEVELS = {
+    4: { eyebrow: 'Science · Grade 4', setup: 'shadow', source: 'torch' },
+    9: { eyebrow: 'Physics · Grade 9', setup: 'mirror', source: 'raybox' },
+  };
+
+  // What goes in the holder. Every one stands 5 cm tall.
+  const OBJECTS = {
+    card:    { icon: '🌳', name: 'Card tree',       light: 'opaque',      shape: 'tree' },
+    book:    { icon: '📕', name: 'Book',            light: 'opaque',      shape: 'block' },
+    wood:    { icon: '🪵', name: 'Wooden block',    light: 'opaque',      shape: 'block' },
+    glass:   { icon: '🪟', name: 'Glass sheet',     light: 'transparent', shape: 'block' },
+    tracing: { icon: '📄', name: 'Tracing paper',   light: 'translucent', shape: 'block' },
+    frosted: { icon: '🥛', name: 'Frosted plastic', light: 'translucent', shape: 'block' },
+  };
+  // `through`: how much of the light reaches the screen behind it - used only
+  // to shade the drawing (clear glass passes about 90%).
+  const LIGHT_WORDS = {
+    transparent: { shadow: 'almost no shadow',     lets: 'Light goes through. You can see through it clearly.', through: 0.9 },
+    translucent: { shadow: 'a pale, fuzzy shadow', lets: 'Some light goes through. Things look blurry.',        through: 0.45 },
+    opaque:      { shadow: 'a dark shadow',        lets: 'No light goes through. It blocks the light.',         through: 0 },
+  };
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+  // Side view along a table, in cm from the torch's start line. A small torch
+  // lies on the table and shines along it, so every shadow starts at the
+  // table. Similar triangles: shadow = object × (torch→screen) ÷ (torch→object).
+  // A Grade 4 child reads a 30 cm ruler to the nearest cm. No position gives a
+  // 15 cm shadow, so an upside-down ruler never reads the right number by luck.
+  const SHADOW = { objCm: 5, screenAt: 60, rulerCm: 30, positions: [10, 12, 15, 25, 30, 50], start: 15,
+                   torchAt: { front: 0, back: -10 } };
+  function shadowCm(objAt, torch) {
+    const t = SHADOW.torchAt[torch || 'front'];
+    return SHADOW.objCm * (SHADOW.screenAt - t) / (objAt - t);
+  }
+  //   ruler: 'zero' (0 at the bottom of the shadow) | 'flip' (30 at the bottom)
+  function readShadow(objAt, torch, ruler) {
+    const trueCm = shadowCm(objAt, torch), realCm = Math.round(trueCm);
+    const flip = ruler === 'flip';
+    return { trueCm, realCm, cm: flip ? SHADOW.rulerCm - realCm : realCm, ok: !flip };
+  }
+
+  // Top view: the torch shines at a mirror standing on the table, 30° from
+  // straight on; the light bounces onto the wall (wallY block-units away).
+  // The teddy sits where the light lands with the mirror turned 10°.
+  const BOUNCE = { beta: 30, target: 10, wallY: -1.6, hitWidth: 0.15 };
+  function bounceSpot(tau) {
+    const t = trace({ setup: 'mirror', beta: BOUNCE.beta, tau });
+    if (t.out[1] >= 0) return null;
+    return t.out[0] * (BOUNCE.wallY / t.out[1]);
+  }
+  function bounceHits(tau) {
+    const x = bounceSpot(tau), X = bounceSpot(BOUNCE.target);
+    return x !== null && Math.abs(x - X) < BOUNCE.hitWidth;
+  }
+
+  const S4 = 'setup:shadow', ON4 = 'power:on';
+  const G4_DISCOVERIES = [
+    { id: 'g4_source', icon: '🔦', title: 'A light source', hint: 'Switch on the torch',
+      how: [S4, ON4],
+      saw: 'The torch lit up the white screen. It gives out its own light.',
+      learn: 'A light source gives out its own light. The Sun, a torch and a lamp are light sources. A torch changes electrical energy from its batteries into light.' },
+    { id: 'g4_shadow', icon: '🌑', title: 'A dark shadow', hint: 'Shine the torch at the book',
+      how: [S4, 'obj:book', ON4],
+      saw: 'The book stopped the light. A dark shadow appeared on the screen.',
+      formula: 'opaque → a dark shadow',
+      learn: 'The book is opaque: no light goes through it. A shadow is the dark place where the light cannot reach.' },
+    { id: 'g4_shape', icon: '🌳', title: 'Same shape', hint: 'Look at the card tree’s shadow',
+      how: [S4, 'obj:card', ON4],
+      saw: 'The shadow had the same shape as the card tree.',
+      learn: 'Light goes past the edges of the tree, but not through it. So the shadow copies the shape of the object.' },
+    { id: 'g4_pale', icon: '📄', title: 'A pale shadow', hint: 'Shine the torch at the tracing paper',
+      how: [S4, 'obj:tracing', ON4],
+      saw: 'The tracing paper made a pale, fuzzy shadow. Some light got through.',
+      formula: 'translucent → a pale shadow',
+      learn: 'Tracing paper is translucent. It lets some light through, but you cannot see clearly through it. Frosted plastic is translucent too.' },
+    { id: 'g4_clear', icon: '🪟', title: 'Almost no shadow', hint: 'Shine the torch at the glass sheet',
+      how: [S4, 'obj:glass', ON4],
+      saw: 'The glass sheet hardly made a shadow. The light went straight through.',
+      formula: 'transparent → almost no shadow',
+      learn: 'Glass is transparent. Light goes through it, so you can see through it clearly. That is why windows are made of glass.' },
+    { id: 'g4_no_light', icon: '🌚', title: 'No light, no shadow', hint: 'Switch the torch off with the tree in place',
+      how: [S4, 'obj:card', ON4, 'power:off'],
+      saw: 'When the torch went off, the shadow went too.',
+      learn: 'A shadow needs light. With no light, everything is dark, so there is no shadow to see.' },
+    { id: 'g4_words', icon: '🔤', title: 'Name all three', hint: 'Name glass, tracing paper and wood',
+      how: [S4, ON4, 'obj:glass', 'name:transparent', 'obj:tracing', 'name:translucent', 'obj:wood', 'name:opaque'],
+      saw: 'You named a transparent, a translucent and an opaque material from their shadows.',
+      formula: 'no shadow: transparent · pale shadow: translucent · dark shadow: opaque',
+      learn: 'The shadow tells you the word. The more light a material blocks, the darker its shadow.' },
+    { id: 'g4_measure', icon: '📏', title: 'Measure a shadow', hint: 'Use the ruler on the screen',
+      how: [S4, 'obj:card', ON4, 'ruler:zero', 'measure'],
+      saw: 'You measured the card tree’s shadow with the 0 of the ruler at the bottom.',
+      learn: 'Put the 0 at the bottom of the shadow and read the number at the top. The tree is only 5 cm tall, but its shadow can be much taller.' },
+    { id: 'g4_bigger', icon: '⬆️', title: 'Nearer means bigger', hint: 'Measure, move the tree nearer the torch, measure again',
+      how: [S4, 'obj:card', ON4, 'measure', 'pos:10', 'measure'],
+      saw: 'You moved the card tree nearer the torch. Its shadow got bigger.',
+      formula: 'nearer the torch → a bigger shadow',
+      learn: 'Light spreads out from the torch. Near the torch, the tree blocks a wide part of it, so the shadow is big.' },
+    { id: 'g4_smaller', icon: '⬇️', title: 'Further means smaller', hint: 'Measure, move the tree away from the torch, measure again',
+      how: [S4, 'obj:card', ON4, 'measure', 'pos:50', 'measure'],
+      saw: 'You moved the card tree away from the torch. Its shadow got smaller.',
+      formula: 'further from the torch → a smaller shadow',
+      learn: 'Far from the torch, the tree blocks only a thin part of the spreading light. So the shadow is small.' },
+    { id: 'g4_fair', icon: '⚖️', title: 'A fair test', hint: 'Measure at three places, torch kept still',
+      how: [S4, 'obj:card', ON4, 'pos:10', 'measure', 'pos:25', 'measure', 'pos:50', 'measure'],
+      saw: 'Three measurements at three places. You moved only the card tree, never the torch.',
+      learn: 'A fair test changes one thing and keeps everything else the same. Then you know what made the difference.' },
+    { id: 'g4_straight', icon: '📐', title: 'Light goes straight', hint: 'Shine the torch through three holes',
+      how: ['setup:cards', ON4, 'look'],
+      saw: 'With the three holes in a straight line, a spot of light reached the screen.',
+      learn: 'Light travels in straight lines. It went straight through all three holes.' },
+    { id: 'g4_blocked', icon: '🚧', title: 'Out of line', hint: 'Move one card, then look at the screen',
+      how: ['setup:cards', ON4, 'cards:move', 'look'],
+      saw: 'With the middle card moved, the spot on the screen went out. The light stopped on the card.',
+      learn: 'Light cannot bend round the card. That is also why shadows form.' },
+    { id: 'g4_bounce', icon: '🪞', title: 'Light bounces', hint: 'Shine the torch at the mirror',
+      how: ['setup:bounce', ON4],
+      saw: 'The light hit the mirror and bounced off onto the wall.',
+      learn: 'A mirror is very smooth and shiny, so light bounces off it. This is called reflection.' },
+    { id: 'g4_target', icon: '🧸', title: 'Light up the teddy', hint: 'Turn the mirror to aim the light',
+      how: ['setup:bounce', ON4, 'tilt:' + BOUNCE.target],
+      saw: 'You turned the mirror, and the bounced light landed on the teddy.',
+      learn: 'Turning the mirror changes where the light bounces. Mirrors can send light into a dark corner.' },
+    { id: 'g4_safe_pack', icon: '🧤', title: 'Cool before you carry', hint: 'Pack the desk lamp away safely',
+      how: [S4, 'source:lamp', ON4, 'power:off', 'cool', 'pack'],
+      saw: 'You switched the lamp off, let it cool, then packed it away by its base.',
+      learn: 'A bulb gives out heat as well as light. Let it cool before anyone touches it.' },
+  ];
+
+  const G4_HAZARDS = {
+    g4_eye: {
+      signs: ['eye'], fx: 'flash',
+      title: () => 'Stop - never stare into a bright light',
+      happened: c => `You looked straight into the ${c.src || 'torch'}. The bright light went right into your eyes. Now you see blurry spots.`,
+      why: 'A bright torch can hurt the back of your eye. The Sun is much brighter still. It can harm your eyes for ever.',
+      instead: 'Look at the light on the screen, never into the torch. Never look at the Sun, even with sunglasses.',
+      exam: 'Staying safe with light: never look straight at the Sun or a bright torch. Look at where the light lands.',
+    },
+    g4_hot: {
+      signs: ['hot'], fx: 'burn',
+      title: () => 'Ouch - the lamp is hot',
+      happened: () => 'You picked up the desk lamp by its shade just after switching it off. The old bulb had been on a while. The shade burnt your fingers.',
+      why: 'An old bulb turns a lot of electricity into heat, not just light. It stays hot for minutes after you switch it off.',
+      instead: 'Switch off and wait for the lamp to cool. Then ask an adult to move it, holding it by its base.',
+      exam: 'A bulb changes electrical energy into light AND heat. That is why it gets hot.',
+    },
+    g4_sharp: {
+      signs: ['sharp'], fx: 'crack',
+      title: () => 'Careful - broken glass cuts',
+      happened: () => 'You picked up an old mirror with a crack across it. A sharp edge of glass caught your finger.',
+      why: 'Cracked glass has edges as sharp as a knife. A small piece can break off and cut you.',
+      instead: 'Never touch broken glass. Tell an adult straight away. In the lab, use the plastic safety mirror.',
+      exam: 'Lab safety: tell an adult about broken glass. Never pick it up yourself.',
+    },
+  };
+
+  const G4_RESULTS = {
+    g4_label: {
+      icon: '🔤',
+      title: c => c.obj === 'tracing' && c.said === 'transparent' ? 'Tracing paper is not transparent' : `The ${c.name.toLowerCase()} is not ${c.said}`,
+      happened: c => `You called the ${c.name.toLowerCase()} ${c.said}. But look at the screen: it made ${LIGHT_WORDS[c.is].shadow}. ${LIGHT_WORDS[c.is].lets} So it is ${c.is}.`,
+      instead: 'Look at the shadow first. Almost no shadow: transparent. A pale, fuzzy shadow: translucent. A dark shadow: opaque.',
+      exam: 'Tracing paper and frosted glass are translucent. Some light gets through, but you cannot see clearly through them.',
+    },
+    g4_unfair: {
+      icon: '⚖️',
+      title: () => 'Not a fair test - two things changed',
+      happened: c => `Between your two measurements you moved the torch AND the card tree. The shadow went from ${c.from} cm to ${c.to} cm. But which move did that? You cannot tell.`,
+      instead: 'Change only ONE thing. Keep the torch still, move only the card tree, then measure again.',
+      exam: 'A fair test changes one thing at a time and keeps everything else the same.',
+    },
+    g4_ruler: {
+      icon: '📏',
+      title: () => 'You measured from the wrong end',
+      happened: c => `Your ruler was upside down, with its ${SHADOW.rulerCm} cm end at the bottom of the shadow. It read ${c.cm} cm. The shadow is really ${c.realCm} cm tall: ${SHADOW.rulerCm} − ${c.cm} = ${c.realCm}.`,
+      instead: 'Put the 0 of the ruler at the bottom of the shadow. Read the number at the top of the shadow.',
+      exam: 'When you measure with a ruler, always start from the 0 mark.',
+    },
+  };
+
+  // Short sentences for a 9-year-old, for the 💡 button at Grade 4.
+  const FACTS_G4 = [
+    'The Sun is our biggest light source. It gives us light and heat.',
+    'A torch changes electrical energy from its batteries into light.',
+    'Light travels in straight lines. It cannot bend round corners.',
+    'A shadow is the dark shape where light cannot reach.',
+    'Opaque things, like wood and card, make dark shadows.',
+    'Glass is transparent. That is why windows are made of glass.',
+    'Frosted glass is translucent. It lets light into a bathroom, but nobody can see in.',
+    'A shadow is always on the side away from the light.',
+    'Move a toy nearer a torch and its shadow grows bigger.',
+    'A mirror is very smooth and shiny, so light bounces off it.',
+    'Shadow puppets work because your hands block the light.',
+    'Never look straight at the Sun, even with sunglasses.',
+  ];
+
+  const G4_MISSIONS = [
+    {
+      id: 'g4_detective', icon: '🕵️', title: 'Shadow detective', setup: 'shadow',
+      blurb: 'Shine the torch at different things. Name one transparent, one translucent and one opaque.',
+      intro: 'Shadow detective! Switch on the torch. Put things in the holder and look at each shadow. Then name the material.',
+      quiz: [
+        { q: 'Which of these is transparent?',
+          options: ['Glass', 'Tracing paper', 'Wood', 'Card'],
+          why: 'You can see clearly through glass. The light goes straight through it.' },
+        { q: 'Tracing paper lets some light through, but things look blurry. It is…',
+          options: ['translucent', 'transparent', 'opaque', 'shiny'],
+          why: 'Translucent means some light gets through, but you cannot see clearly.' },
+        { q: 'Why does a book make a dark shadow?',
+          options: ['It is opaque, so it blocks the light', 'It is transparent', 'It gives out its own light', 'It lets all the light through'],
+          why: 'A book is opaque. No light goes through it, so there is a dark shadow behind it.' },
+        { q: 'A bathroom window lets light in, but nobody can see in. What is it made of?',
+          options: ['Frosted glass', 'Clear glass', 'Wood', 'Metal'],
+          why: 'Frosted glass is translucent: light comes in, but you cannot see clearly through it.' },
+        { q: 'What two things do you need to make a shadow?',
+          options: ['A light and an opaque object', 'Only an opaque object', 'Only a transparent object', 'A mirror and some water'],
+          why: 'A shadow forms when an opaque object blocks light. No light, no shadow.' },
+      ],
+    },
+    {
+      id: 'g4_sizes', icon: '📏', title: 'Grow a shadow', setup: 'shadow',
+      blurb: 'Measure the card tree’s shadow at three places. Keep the torch still.',
+      intro: 'Grow a shadow! Switch on the torch. Measure the card tree’s shadow at three places. Move only the tree, never the torch.',
+      quiz: [
+        { q: 'You move a toy nearer the torch. What happens to its shadow?',
+          options: ['It gets bigger', 'It gets smaller', 'It stays the same size', 'It disappears'],
+          why: 'Near the torch, the toy blocks a wide part of the light, so its shadow grows.' },
+        { q: 'The card tree was 15 cm from the torch. Its shadow was 20 cm tall. Now it is 25 cm from the torch. How tall could the shadow be?',
+          options: ['12 cm', '20 cm', '30 cm', '60 cm'],
+          why: 'Further from the torch means a smaller shadow. The bench measured 12 cm.' },
+        { q: 'In a fair test of shadow size, what do you change?',
+          options: ['Only where the object stands', 'The torch and the object', 'The torch, the object and the screen', 'Nothing at all'],
+          why: 'Change one thing only - where the object stands. Keep the torch and the screen still.' },
+        { q: 'Where does the 0 on the ruler go when you measure a shadow?',
+          options: ['At the bottom of the shadow', 'At the top of the shadow', 'In the middle of the shadow', 'Anywhere on the screen'],
+          why: 'Start at 0 at the bottom, then read the number at the top of the shadow.' },
+        { q: 'Why does a shadow form?',
+          options: ['Light goes in straight lines and cannot bend round things', 'Light bends round the object', 'The object gives out darkness', 'Light goes through opaque things'],
+          why: 'Light travels in straight lines. An opaque object stops it, and the space behind is dark.' },
+      ],
+    },
+  ];
+
+  const G4_GUIDES = [
+    { id: 'g4_shadows', icon: '🌑', title: 'Make a shadow',
+      blurb: 'Shine a torch at card, tracing paper and glass. Which shadow is darkest?',
+      lesson: 'Opaque things block all the light, so they make a dark shadow. Translucent things let some light through: a pale shadow. Transparent glass lets the light through: almost no shadow.',
+      steps: [
+        { on: 'setup:shadow', say: 'Put the shadow bench on the table.',               btn: '🌑 Place the shadow bench' },
+        { on: 'obj:card',     say: 'Put the card tree in the holder.',                  btn: '🌳 Card tree in the holder' },
+        { on: 'power:on',     say: 'Switch on the torch. Look at the screen.',          btn: '🔦 Switch on the torch' },
+        { on: 'obj:tracing',  say: 'Now try tracing paper. Is the shadow as dark?',     btn: '📄 Tracing paper in the holder' },
+        { on: 'obj:glass',    say: 'Now try the glass sheet. Can you see a shadow?',    btn: '🪟 Glass sheet in the holder' },
+      ] },
+    { id: 'g4_size', icon: '📏', title: 'Big shadow, small shadow',
+      blurb: 'Move the card tree nearer the torch, then further away. Measure each shadow.',
+      lesson: 'Nearer the torch, the shadow is bigger. Further away, it is smaller. You moved only the tree, so it was a fair test.',
+      steps: [
+        { on: 'setup:shadow', say: 'Put the shadow bench on the table.',               btn: '🌑 Place the shadow bench' },
+        { on: 'obj:card',     say: 'Put the card tree in the holder.',                  btn: '🌳 Card tree in the holder' },
+        { on: 'power:on',     say: 'Switch on the torch.',                              btn: '🔦 Switch on the torch' },
+        { on: 'measure',      say: 'Measure the shadow with the ruler.',                btn: '📏 Measure the shadow' },
+        { on: 'pos:10',       say: 'Move the card tree near the torch.',               btn: '◀ Move the tree to 10 cm' },
+        { on: 'measure',      say: 'Measure the shadow again. Is it bigger?',           btn: '📏 Measure the shadow' },
+        { on: 'pos:50',       say: 'Now move the tree far from the torch.',             btn: '▶ Move the tree to 50 cm' },
+        { on: 'measure',      say: 'Measure it again. What happened?',                  btn: '📏 Measure the shadow' },
+      ] },
+    { id: 'g4_straight', icon: '🕳️', title: 'Does light go in straight lines?',
+      blurb: 'Shine a torch through three holes. Then move one card.',
+      lesson: 'The light reached the screen only when the three holes were in a straight line. Light travels in straight lines. It cannot bend round a card.',
+      steps: [
+        { on: 'setup:cards',  say: 'Stand three cards with holes in a row.',            btn: '🕳️ Set up the three cards' },
+        { on: 'power:on',     say: 'Switch on the torch behind them.',                  btn: '🔦 Switch on the torch' },
+        { on: 'look',         say: 'Look at the screen. Is there a spot of light?',     btn: '👀 Look at the screen' },
+        { on: 'cards:move',   say: 'Slide the middle card a little to one side.',       btn: '↔ Move the middle card' },
+        { on: 'look',         say: 'Look at the screen again.',                         btn: '👀 Look at the screen' },
+      ] },
+    { id: 'g4_mirror', icon: '🪞', title: 'Bounce the light',
+      blurb: 'Use a mirror to shine light on the teddy in the corner.',
+      lesson: 'Light bounces off a smooth, shiny mirror. That is called reflection. Turning the mirror changes where the light goes.',
+      steps: [
+        { on: 'setup:bounce', say: 'Put the safety mirror on the table.',               btn: '🪞 Place the safety mirror' },
+        { on: 'power:on',     say: 'Switch on the torch. Where does the light go?',     btn: '🔦 Switch on the torch' },
+        { on: 'tilt:' + BOUNCE.target, say: 'Turn the mirror until the light lands on the teddy.', btn: '↻ Turn the mirror' },
+      ] },
+  ];
+
+  // One list per kind, each item tagged with its grades (untagged = Grade 9).
+  const tag4 = x => Object.assign(x, { grades: [4] });
+  G4_DISCOVERIES.forEach(d => DISCOVERIES.push(tag4(d)));
+  G4_MISSIONS.forEach(m => MISSIONS.push(tag4(m)));
+  G4_GUIDES.forEach(g => GUIDES.push(tag4(g)));
+  Object.keys(G4_HAZARDS).forEach(k => { HAZARDS[k] = tag4(G4_HAZARDS[k]); });
+  Object.keys(G4_RESULTS).forEach(k => { RESULTS[k] = tag4(G4_RESULTS[k]); });
+
   return { N_AIR, N_GLASS, LIMITS, BLOCK, BOX_DIST, RAY_LEN, PARALLAX_DEG, HEAT,
            reflectAngle, refractAngle, emergentAngle, criticalAngle, lateralShift, fromSurface, readAngle,
            reflectDir, refractDir, between, frame, trace, reading, cardsPath,
-           SETUPS, SOURCES, DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, MISSIONS, GUIDES };
+           GRADES, LEVELS, OBJECTS, LIGHT_WORDS, SHADOW, shadowCm, readShadow, BOUNCE, bounceSpot, bounceHits, cap,
+           SETUPS, SOURCES, DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_G4, MISSIONS, GUIDES };
 })();
 if (typeof window !== 'undefined') window.LabLightData = LabLightData;

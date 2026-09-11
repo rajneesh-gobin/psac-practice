@@ -23,11 +23,17 @@
 //  ⚠ Every control is a tap on a real <button>; there is nothing to drag. A
 //    cell is named by bringing it under the eyepiece POINTER, not by tapping
 //    the picture - which is how it is done at a real microscope, too.
+//  ⚠ TWO LEVELS: Labs.grade() is 7 or 9 and only that grade's guides, missions
+//    and discoveries show (LAB_SPEC §9). Grade 7 makes its own slides (onion
+//    skin, cheek cells, a pondweed leaf: specimen, stain, cover slip) and names
+//    the PARTS of a cell under the pointer; the measuring desk, the blood
+//    slides and the drawings are Grade 9 only. Everything Grade 9 does is
+//    unchanged.
 // ══════════════════════════════════════════════
 const LabMicroscope = (() => {
   const M = () => LabMicroscopeData;
   const FRAME_MS = 1000 / 30;
-  const FX_DUR = { crack: 1.3, glare: 1.0, drop: 1.1, blurout: 0.7, stamp: 0.6 };
+  const FX_DUR = { crack: 1.3, glare: 1.0, drop: 1.1, blurout: 0.7, stamp: 0.6, slip: 1.1, germs: 1.0, splash: 1.0 };
 
   const $ = id => document.getElementById(id);
   const esc = s => Labs.esc(s);
@@ -41,10 +47,30 @@ const LabMicroscope = (() => {
   let _fx = [], _shake = 0, _busy = false, _instant = false;
   let _colors = null, _tipIdx = -1, _said = {};
   let _vc = null, _vcSmall = null, _vcKey = '';
+  let _lastGrade = null;
   const _cellsMemo = new Map();
 
+  // ── The grade the microscope is being used at ──
+  // Labs.grade() is 7 or 9; a grade this lab has no level for is 9.
+  const _g = () => {
+    const g = typeof Labs !== 'undefined' && typeof Labs.grade === 'function' ? Number(Labs.grade()) : 9;
+    return M().GRADES.includes(g) ? g : 9;
+  };
+  const _is7 = () => _g() === 7;
+  const _mine = list => M().forGrade(list, _g());
+  const _discs = () => _mine(M().DISCOVERIES);
+  const _guides = () => _mine(M().GUIDES);
+  const _missions = () => _mine(M().MISSIONS);
+  // A card with its own Grade 7 wording: crack → g7_crack.
+  const _cid = base => (_is7() && (M().HAZARDS['g7_' + base] || M().RESULTS['g7_' + base]) ? 'g7_' + base : base);
+  const _slideOk = k => !!M().SLIDES[k] && (M().SLIDES[k].grades || [9]).includes(_g());
+  const _g7slide = () => !!(_s && _s.slide && M().SLIDES[_s.slide].g7);
+  // The first-visit welcome is shown once per grade.
+  const _introKey = () => (_is7() ? 'intro7' : 'intro');
+
   function _newScope() {
-    return { slide: null, clipped: false, light: 'off', diaph: 'mid', eye: 10, obj: 10, z: M().Z_START, pos: { x: 0, y: 0 } };
+    return { slide: null, clipped: false, light: 'off', diaph: 'mid', eye: 10, obj: 10, z: M().Z_START, pos: { x: 0, y: 0 },
+             stain: null, cover: null, lowSeen: false };
   }
   function _newSheet(fig) { return { fig: fig || 'rbc', ruler: null, converted: false, op: null, done: null }; }
   function _resetBench() {
@@ -60,17 +86,17 @@ const LabMicroscope = (() => {
     return `<div class="lab lab-microscope">
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-act="hub" aria-label="Back to Science Labs">←</button>
-        <div class="lab-top-title"><span class="lab-eyebrow">Biology · Grade 9</span><h1>Microscope</h1></div>
+        <div class="lab-top-title"><span class="lab-eyebrow">${_is7() ? 'Science · Grade 7' : 'Biology · Grade 9'}</span><h1>Microscope</h1></div>
         <div class="lab-top-actions">
           <button type="button" class="lab-icon-btn" data-act="help" aria-label="How the lab works">?</button>
         </div>
       </header>
       <div class="lab-body">
         <div class="lab-stage">
-          <div class="lab-seg lab-microscope-rigs" role="group" aria-label="Choose the bench">
+          ${_is7() ? '' : `<div class="lab-seg lab-microscope-rigs" role="group" aria-label="Choose the bench">
             <button type="button" data-set="rig" data-v="scope">🔬 Microscope</button>
             <button type="button" data-set="rig" data-v="measure">📏 Measure a drawing</button>
-          </div>
+          </div>`}
           <div class="lab-canvas-wrap" id="lab-microscope-stage">
             <canvas id="lab-canvas" role="img" aria-label="The microscope bench"></canvas>
             <div class="lab-microscope-chips" id="lab-microscope-chips"></div>
@@ -98,7 +124,13 @@ const LabMicroscope = (() => {
 
   function mount(root) {
     _root = root;
-    if (!_s) _resetBench();
+    // A different grade is a different bench: nothing carries over.
+    const g = _g();
+    if (!_s || _lastGrade !== g) {
+      _resetBench(); _guide = null; _mission = null; _rig = 'scope'; _panel = 'sandbox';
+      _ids = []; _drawings = []; _calcs = []; _log = []; _tipIdx = -1;
+    }
+    _lastGrade = g;
     root.innerHTML = _shellHTML();
     _cv = $('lab-canvas');
     _cx = _cv.getContext('2d');
@@ -109,7 +141,7 @@ const LabMicroscope = (() => {
     _syncSet();
     _readouts();
     const st = Labs.store('microscope');
-    if (!st.intro) _intro();
+    if (!st[_introKey()]) _intro();
     else if (_guide) _guideEnter();
     else if (_mission) _coach('Back on your mission - carry on where you left off.');
     else _coach(Object.keys(st.guides).length
@@ -196,7 +228,10 @@ const LabMicroscope = (() => {
       case 'draw': draw(); break;
       case 'labels': _toggleLabels(); break;
       case 'prick': _hazard('blood'); break;
-      case 'sun': _hazard('sun'); break;
+      case 'sun': _hazard(_cid('sun')); break;
+      case 'swab': _hazard('g7_swab'); break;
+      case 'splash': _hazard('g7_stain'); break;
+      case 'press': press(); break;
       case 'convert': convert(); break;
       case 'divide': operate('divide'); break;
       case 'multiply': operate('multiply'); break;
@@ -212,7 +247,7 @@ const LabMicroscope = (() => {
     el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new');
   }
   function _nextTip() {
-    const f = M().FACTS;
+    const f = _is7() ? M().FACTS_G7 : M().FACTS;
     _tipIdx = (_tipIdx + 1) % f.length;
     _coach('💡 ' + f[_tipIdx]);
   }
@@ -227,7 +262,13 @@ const LabMicroscope = (() => {
   }
 
   // ══ Settings ═════════════════════════════════
-  const SCOPE_KEYS = ['slide', 'light', 'diaphragm', 'eye', 'obj', 'coarse', 'fine', 'move', 'id'];
+  const SCOPE_KEYS = ['slide', 'light', 'diaphragm', 'eye', 'obj', 'coarse', 'fine', 'move', 'id', 'stain', 'cover', 'part', 'kind'];
+  // Grade 7: what making each slide looks like.
+  const MAKE7 = {
+    onion: 'You peeled a thin layer of onion skin (the epidermis) with forceps and laid it flat in a drop of water on a clean slide, on the stage. Next: one drop of stain, then a cover slip.',
+    cheek: 'You gently scraped the inside of your own cheek with a clean cotton bud and smeared it in a drop of water on a slide, on the stage. The used bud went straight into the disinfectant. Next: one drop of stain, then a cover slip.',
+    leaf: 'You laid one small pondweed leaf flat in a drop of water on a slide, on the stage. It is so thin that light passes through it. Next: a cover slip - no stain needed.',
+  };
   const SHEET_KEYS = ['fig', 'ruler'];
   function _set(k, v) {
     if (_busy) { _coach('One thing at a time - let that finish first.'); return; }
@@ -245,16 +286,59 @@ const LabMicroscope = (() => {
         _after('rig:' + v);
         return;
       case 'slide': {
-        if (!D.SLIDES[v]) return;
-        if (_s.slide === v) { _coach('That slide is already on the stage.'); return; }
+        if (!_slideOk(v)) return;
+        const made = !!D.SLIDES[v].g7;
+        if (_s.slide === v && !made) { _coach('That slide is already on the stage.'); return; }
         const prev = _view();
         _s.slide = v; _s.clipped = false; _s.z = D.Z_START; _s.pos = { x: 0, y: 0 };
+        _s.stain = null; _s.cover = null; _s.lowSeen = false;
         _cracked = false; _snap();
         _mark('stage');
-        _coach(`${D.SLIDES[v].name} on the stage, over the hole in the middle. The lens was raised first, so nothing could scrape the slide.${v === 'unstained' ? ' No stain on this one.' : ''}`);
+        _coach(made ? MAKE7[v]
+          : `${D.SLIDES[v].name} on the stage, over the hole in the middle. The lens was raised first, so nothing could scrape the slide.${v === 'unstained' ? ' No stain on this one.' : ''}`);
         _scopeAfter('slide:' + v, prev);
         return;
       }
+      case 'stain': {
+        if (!D.STAINS[v]) return;
+        if (!_g7slide()) { _coach('Make a slide first - onion skin, cheek cells or a leaf.'); return; }
+        if (_s.cover) { _coach('The cover slip is already on. Add the stain BEFORE the cover slip - choose the specimen again to make a fresh slide.'); return; }
+        if (_s.stain) { _coach('It already has a drop of stain. One drop is enough.'); return; }
+        const prev = _view();
+        _s.stain = v;
+        _mark('stage');
+        _coach(_s.slide === 'leaf'
+          ? `${D.STAINS[v].name} added. A leaf does not need it - its chloroplasts are green already - but it does no harm.`
+          : `One drop of ${D.STAINS[v].name.toLowerCase()}. It colours the parts of the cells so you can see them. Now the cover slip.`);
+        _scopeAfter('stain:' + v, prev);
+        return;
+      }
+      case 'cover': {
+        if (!D.COVERS[v]) return;
+        if (!_g7slide()) { _coach('Make a slide first - onion skin, cheek cells or a leaf.'); return; }
+        if (_s.cover) { _coach('There is already a cover slip on this slide.'); return; }
+        const prev = _view();
+        _s.cover = v;
+        _mark('stage');
+        if (v === 'drop') {
+          if (_mission) _mission.errors++;
+          _coach('The cover slip fell flat onto the drop.');
+          _scopeAfter('cover:drop', prev);
+          _busy = true;
+          _fxAdd('slip', () => {
+            _busy = false;
+            const R = D.RESULTS.g7_bubbles;
+            Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened({}), instead: R.instead, exam: R.exam,
+              onClose: () => _coach('Choose the specimen again to make a fresh slide - and lower the cover slip at an angle.') });
+          });
+          return;
+        }
+        _coach('One edge first, then slowly down at an angle: the water spread out and pushed the air away. No bubbles.');
+        _scopeAfter('cover:' + v, prev);
+        return;
+      }
+      case 'part': part(v); return;
+      case 'kind': kind(v); return;
       case 'light': {
         if (!D.LIGHTS[v]) return;
         const prev = _view();
@@ -348,7 +432,7 @@ const LabMicroscope = (() => {
   function _syncSet() {
     if (!_root) return;
     const cur = { rig: _rig, slide: _s.slide || '', light: _s.light, diaphragm: _s.diaph, eye: String(_s.eye), obj: String(_s.obj),
-                  fig: _w.fig, ruler: _w.ruler || '' };
+                  fig: _w.fig, ruler: _w.ruler || '', stain: _s.stain || '', cover: _s.cover || '' };
     _root.querySelectorAll('[data-set]').forEach(b => {
       const k = b.dataset.set;
       if (k in cur) b.setAttribute('aria-pressed', String(cur[k] === b.dataset.v));
@@ -369,8 +453,12 @@ const LabMicroscope = (() => {
     const cur = _view();
     _snap();
     D.scopeDiscoveries(prev, cur, tok).forEach(_discover);
+    if (cur.sharp && cur.obj < 40) _s.lowSeen = true;
     if (cur.sharp && !(prev && prev.sharp && prev.total === cur.total && prev.slide === cur.slide && prev.light === cur.light)) {
-      _logEntry({ title: `Sharp image at ×${cur.total}`, obs: `${D.SLIDES[cur.slide].name} · eyepiece ×${cur.eye} × objective ×${cur.obj} = ×${cur.total}. ${cur.obj === 40 ? 'Single cells can be seen and named.' : cur.obj === 10 ? 'Cells bigger, fewer in view.' : 'Hundreds of tiny dots - too small to name.'}` });
+      const seen = cur.g7
+        ? (cur.obj === 40 ? 'The parts of a cell can be seen and named.' : cur.obj === 10 ? 'Cells bigger, fewer in view.' : 'Many small cells - too small to name their parts.')
+        : (cur.obj === 40 ? 'Single cells can be seen and named.' : cur.obj === 10 ? 'Cells bigger, fewer in view.' : 'Hundreds of tiny dots - too small to name.');
+      _logEntry({ title: `Sharp image at ×${cur.total}`, obs: `${D.SLIDES[cur.slide].name} · eyepiece ×${cur.eye} × objective ×${cur.obj} = ×${cur.total}. ${seen}` });
     }
     _missionScope(prev, cur, tok);
     _after(tok);
@@ -381,6 +469,7 @@ const LabMicroscope = (() => {
     _toRig('scope');
     if (!_s.slide) { _coach('Put a slide on the stage first, then clip it.'); return; }
     if (_s.clipped) { _coach('The slide is already held by the clips.'); return; }
+    if (_g7slide() && !_s.cover) { _coach('Put a cover slip on first, then clip the slide.'); return; }
     const prev = _view();
     _s.clipped = true;
     _mark('clips');
@@ -393,6 +482,7 @@ const LabMicroscope = (() => {
     _toRig('scope');
     const D = M();
     if (!_s.slide) { _coach('Put a slide on the stage first - there is nothing to lower the lens onto.'); return; }
+    if (_g7slide() && !_s.cover) { _coach(D.ID_SAY_G7.uncovered); return; }
     const to = D.lowerTo(_s.obj);
     if (_s.z <= to) { _coach('The lens is already just above the slide. Now look through the eyepiece and focus UPWARDS.'); return; }
     const prev = _view();
@@ -423,14 +513,21 @@ const LabMicroscope = (() => {
     if (knob === 'coarse' && _s.obj === 40 && prev.seen && !cur.seen) {
       if (_mission) _mission.errors++;
       card = () => {
-        const R = D.RESULTS.lost_image;
+        const R = D.RESULTS[_cid('lost_image')];
         Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened({ mm: D.fmt(D.COARSE / 10), total: cur.total }), instead: R.instead, exam: R.exam,
           onClose: () => _coach('Fine focus only at high power. Try the fine focus back down a little at a time - or go back to low power.') });
+      };
+    } else if (D.highFirst(prev, cur, knob, _s.lowSeen)) {
+      if (_mission) _mission.errors++;
+      card = () => {
+        const R = D.RESULTS.g7_highfirst;
+        Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened({ mm: D.fmt(D.COARSE / 10), total: cur.total }), instead: R.instead, exam: R.exam,
+          onClose: () => _coach('Swing in the ×4 objective, lower the lens watching from the side, and focus upwards. Then go to ×40.') });
       };
     }
     const mm = D.fmt(step / 10);
     const what = !_s.slide ? 'No slide on the stage.'
-      : !cur.visible ? (cur.dark ? 'Too dark to see anything.' : '')
+      : !cur.visible ? (!cur.covered ? 'No cover slip yet.' : cur.dark ? 'Too dark to see anything.' : '')
       : cur.focus === 'sharp' ? `Sharp! ×${cur.total}.`
       : cur.focus === 'near' ? (knob === 'coarse' ? 'The cells have appeared - now finish with the FINE focus.' : 'Nearly sharp - a little more.')
       : cur.focus === 'blurred' ? 'Blurred - keep going.' : 'Nothing but light yet.';
@@ -443,6 +540,7 @@ const LabMicroscope = (() => {
   function _focusStep(kind) {
     const D = M(), v = _view();
     if (!_s.slide) { _coach('Put a slide on the stage first.'); return; }
+    if (!v.covered) { _coach(D.ID_SAY_G7.uncovered); return; }
     if (!v.visible) { _coach('It is too dark to focus - switch the light on, or open the diaphragm.'); return; }
     if (kind === 'near' && v.seen) return;
     if (kind === 'sharp' && v.sharp) return;
@@ -494,9 +592,98 @@ const LabMicroscope = (() => {
     _after('id:' + guess);
   }
 
+  // ══ Grade 7: name the part, and the kind of cell ══
+  function part(guess) {
+    if (_busy) return;
+    const D = M();
+    if (!D.CELL_PARTS[guess]) return;
+    const v = _view();
+    if (v.slide && !v.g7) return;
+    const r = D.identifyPart(v, guess);
+    const P = D.CELL_PARTS[guess];
+    if (!r.ok) {
+      if (r.why === 'unstained') { _noStain(P.name.toLowerCase()); return; }
+      if (r.why === 'wrong') {
+        if (_mission) _mission.errors++;
+        _coach(P.plantOnly && v.kind === 'animal'
+          ? `Cheek cells are animal cells - they have no ${P.name.toLowerCase()}. Look again at what is under the pointer.`
+          : `Not the ${P.name.toLowerCase()} - the ${P.name.toLowerCase()} is ${P.look.charAt(0).toLowerCase() + P.look.slice(1)}. Look again at what is under the pointer.`);
+      } else _coach(D.ID_SAY_G7[r.why]);
+      return;
+    }
+    _discover('g7_' + guess);
+    _ids.unshift({ part: guess, slide: v.slide, total: v.total });
+    if (_ids.length > 20) _ids.length = 20;
+    _logEntry({ title: `Named: ${P.name}`, obs: `${D.SLIDES[v.slide].name} at ×${v.total}. ${P.look}. ${P.job}` });
+    _coach(_missionTick(guess, v, `Yes - the ${P.name.toLowerCase()}. ${P.job}`));
+    _after('part:' + guess);
+  }
+
+  function kind(k) {
+    if (_busy) return;
+    const D = M();
+    if (k !== 'plant' && k !== 'animal') return;
+    const v = _view();
+    if (v.slide && !v.g7) return;
+    const r = D.classify(v, k);
+    if (!r.ok) {
+      if (r.why === 'unstained') { _noStain('kind of cell'); return; }
+      if (r.why === 'wrong') {
+        if (_mission) _mission.errors++;
+        _coach(k === 'plant'
+          ? 'Look again: is there a thick cell wall? A big clear vacuole? Green chloroplasts? Without them it is not a plant cell.'
+          : 'Look again: that thick outer wall and the big clear vacuole belong to a plant cell.');
+      } else _coach(D.ID_SAY_G7[r.why]);
+      return;
+    }
+    _discover('g7_' + k);
+    _logEntry({ title: `${D.SLIDES[v.slide].name}: ${k === 'plant' ? 'a plant cell' : 'an animal cell'}`,
+      obs: k === 'animal' ? 'A cell membrane, cytoplasm and a nucleus - but no cell wall, no large vacuole and no chloroplasts.'
+        : v.slide === 'leaf' ? 'A cell wall, a large vacuole and green chloroplasts.'
+        : 'A cell wall and a large vacuole. No chloroplasts: an onion bulb grows out of the light.' });
+    _coach(_missionTick(k, v, k === 'plant' ? 'Yes - a plant cell: it has a cell wall and a large vacuole.' : 'Yes - an animal cell: no cell wall, no large vacuole, no chloroplasts.'));
+    _after('kind:' + k);
+  }
+
+  // A Grade 7 mission ticks off one thing the pupil found, on the right slide.
+  function _missionTick(key, v, msg) {
+    const ms = _mission;
+    if (!ms || !ms.need.includes(key)) return msg;
+    const Ms = M().MISSIONS.find(x => x.id === ms.id);
+    const want = (Ms.needSlide && Ms.needSlide[key]) || Ms.slide;
+    if (want && v.slide !== want) return `${msg} (For the mission, do this on the ${M().SLIDES[want].name.toLowerCase()}.)`;
+    ms.found[key] = true;
+    const n = ms.need.filter(x => ms.found[x]).length;
+    if (n >= ms.need.length && !ms.success) { ms.success = true; Labs.confetti(); return 'All found! Tap “Answer the questions” to finish the mission.'; }
+    return ms.success ? msg : `${msg} (${n}/${ms.need.length} for the mission)`;
+  }
+
+  function _noStain(what) {
+    const D = M(), v = _view();
+    if (_mission) _mission.errors++;
+    const R = D.RESULTS.g7_nostain;
+    _busy = true;
+    _fxAdd('stamp', () => {
+      _busy = false;
+      Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened({ part: what, slide: D.SLIDES[v.slide].name.toLowerCase() }), instead: R.instead, exam: R.exam,
+        onClose: () => _coach('Make the slide again, with one drop of stain before the cover slip.') });
+    });
+  }
+
+  // Pressing on a cover slip: the thin glass cracks.
+  function press() {
+    if (_busy) return;
+    _toRig('scope');
+    if (!_g7slide() || !_s.cover) { _coach('There is no cover slip to press on. Make a slide and lower a cover slip first.'); return; }
+    _cracked = true;
+    _mark('stage');
+    _hazard('g7_crack', { knob: 'press', obj: _s.obj });
+  }
+
   function draw() {
     if (_busy) return;
     _toRig('scope');
+    if (_g7slide()) { _coach('Name the part under the pointer instead - the drawings are for the blood slides.'); return; }
     const D = M(), v = _view();
     const r = v.under ? D.identify(v, v.under) : { ok: false, why: 'no_slide' };
     if (!r.ok) { _coach(r.why === 'wrong' ? 'Focus a cell under the pointer first.' : D.ID_SAY[r.why]); return; }
@@ -602,7 +789,7 @@ const LabMicroscope = (() => {
     _s.z = D.FOCUS_AT[obj] - D.WORK_DIST[obj];
     _cracked = true;
     _mark('objective');
-    _hazard('crack', { knob, obj });
+    _hazard(_cid('crack'), { knob, obj });
   }
 
   function _hazard(id, ctx) {
@@ -614,18 +801,24 @@ const LabMicroscope = (() => {
     st.hazards[id] = (st.hazards[id] || 0) + 1;
     Labs.persist();
     if (_mission) _mission.errors++;
-    if (id === 'sun') { _s.light = 'mirror'; _mark('light'); }
+    const crack = id === 'crack' || id === 'g7_crack', sun = id === 'sun' || id === 'g7_sun';
+    if (sun) { _s.light = 'mirror'; _mark('light'); }
     _busy = true;
     _readouts();
-    _fxAdd(id === 'crack' ? 'crack' : id === 'sun' ? 'glare' : 'drop', () => {
+    _fxAdd(crack ? 'crack' : sun ? 'glare' : id === 'g7_swab' ? 'germs' : id === 'g7_stain' ? 'splash' : 'drop', () => {
       _busy = false;
       Labs.hazardCard({ signs: H.signs, title: H.title(ctx || {}), happened: H.happened(ctx || {}), why: H.why, instead: H.instead, exam: H.exam,
-        button: id === 'crack' ? 'Swept up safely - try again' : 'Got it - try again safely',
+        button: crack ? 'Swept up safely - try again' : 'Got it - try again safely',
         onClose: () => {
-          if (id === 'crack') {
+          if (crack) {
             _s.slide = null; _s.clipped = false; _s.z = D.Z_START; _zv = _s.z; _cracked = false;
-            _coach('Your teacher swept the broken slide into the broken-glass bin. Take a new slide - and start on low power.');
-          } else if (id === 'sun') _coach('The mirror is back on the window. Never aim it at the Sun.');
+            _s.stain = null; _s.cover = null; _s.lowSeen = false;
+            _coach(id === 'g7_crack'
+              ? 'Your teacher swept the broken glass into the broken-glass bin. Make a new slide - lower the cover slip gently, and start on low power.'
+              : 'Your teacher swept the broken slide into the broken-glass bin. Take a new slide - and start on low power.');
+          } else if (sun) _coach('The mirror is back on the window. Never aim it at the Sun.');
+          else if (id === 'g7_swab') _coach('A fresh cotton bud for you, and the used one straight into the disinfectant. Then wash your hands.');
+          else if (id === 'g7_stain') _coach('Goggles on. Squeeze gently - one drop at a time, straight onto the specimen.');
           else _coach('Prepared slides only. They are sterile and sealed, and far better stained than anything you could make.');
           _syncSet(); _readouts(); _refresh();
         } });
@@ -722,6 +915,8 @@ const LabMicroscope = (() => {
       case 'ruler': return _w.ruler === v && !_w.done;
       case 'convert': return _w.converted && !_w.done;
       case 'divide': return _w.op === 'divide' && !_w.done;
+      case 'stain': return _s.stain === v;
+      case 'cover': return _s.cover === v;
     }
     return false;
   }
@@ -768,8 +963,19 @@ const LabMicroscope = (() => {
     const D = M();
     switch (k) {
       case 'rig': return v === 'scope' ? { on, say: 'Go to the microscope.', btn: '🔬 Microscope' } : { on, say: 'Go to the measuring desk.', btn: '📏 Measure a drawing' };
-      case 'slide': return v === 'blood' ? { on, say: 'Put the prepared, stained blood smear on the stage.', btn: '🩸 Prepared blood smear' }
-        : { on, say: 'Put the UNSTAINED smear on the stage.', btn: '🩸 Unstained smear' };
+      case 'slide': return ({
+        blood: { on, say: 'Put the prepared, stained blood smear on the stage.', btn: '🩸 Prepared blood smear' },
+        unstained: { on, say: 'Put the UNSTAINED smear on the stage.', btn: '🩸 Unstained smear' },
+        onion: { on, say: 'Make a slide: a thin layer of onion skin, flat in a drop of water.', btn: '🧅 Onion skin' },
+        cheek: { on, say: 'Make a slide of your OWN cheek cells, scraped with a clean cotton bud. The used bud goes into the disinfectant.', btn: '👄 My cheek cells' },
+        leaf: { on, say: 'Make a slide: one small pondweed leaf, flat in a drop of water.', btn: '🌿 Pondweed leaf' },
+      })[v] || { on, say: on, btn: on };
+      case 'stain': return { on, say: `Add ONE drop of ${D.STAINS[v].name.toLowerCase()}.`, btn: `💧 ${D.STAINS[v].name}` };
+      case 'cover': return v === 'angle' ? { on, say: 'Lower a cover slip slowly, one edge first, at an angle.', btn: '🔲 Cover slip at an angle' }
+        : { on, say: 'Drop the cover slip flat.', btn: '⬇️ Drop it flat' };
+      case 'part': { const P = D.CELL_PARTS[v]; return { on, say: `Name the part under the pointer: it is the ${P.name.toLowerCase()} (${P.look.charAt(0).toLowerCase() + P.look.slice(1)}).`, btn: `${P.icon} ${P.name}` }; }
+      case 'kind': return v === 'plant' ? { on, say: 'Decide: a cell wall and a big vacuole - a plant cell.', btn: '🌿 Plant cell' }
+        : { on, say: 'Decide: no cell wall - an animal cell.', btn: '👄 Animal cell' };
       case 'clips': return { on, say: 'Hold the slide still with the stage clips.', btn: '📎 Clip the slide' };
       case 'light': return v === 'lamp' ? { on, say: 'Switch on the lamp.', btn: '💡 Lamp on' }
         : v === 'mirror' ? { on, say: 'Use the mirror: tilt it to catch light from a bright window.', btn: '🪞 Mirror, aimed at a window' }
@@ -844,7 +1050,7 @@ const LabMicroscope = (() => {
     const st = Labs.store('microscope');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
-    const next = G.adhoc ? null : M().GUIDES.find(g => !st.guides[g.id]);
+    const next = G.adhoc ? null : _guides().find(g => !st.guides[g.id]);
     Labs.overlay(`
       <div class="lab-done">
         <p class="lab-done-icon" aria-hidden="true">${G.icon}</p>
@@ -916,10 +1122,10 @@ const LabMicroscope = (() => {
         <li><b>Watch the eyepiece</b>, then read your results in the lab notebook.</li>
       </ol>
       <h3>🧭 Guided experiments <small>start here · step by step</small></h3>
-      <div class="lab-start-list">${M().GUIDES.map(guide).join('')}</div>
+      <div class="lab-start-list">${_guides().map(guide).join('')}</div>
       <h3>🎯 Missions <small>exam-style questions · earn stars</small></h3>
-      <div class="lab-start-list">${M().MISSIONS.map(mission).join('')}</div>
-      <p class="lab-hint">Or experiment freely: set up the microscope below.</p>
+      <div class="lab-start-list">${_missions().map(mission).join('')}</div>
+      <p class="lab-hint">${_is7() ? 'Or experiment freely: make a slide below.' : 'Or experiment freely: set up the microscope below.'}</p>
     </section>`;
   }
 
@@ -946,13 +1152,18 @@ const LabMicroscope = (() => {
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
+  // Only this grade's discoveries count here, so a Grade 7 bench never
+  // collects a Grade 9 card (and the counter never mixes the two).
   function _discover(id) {
-    const d = M().DISCOVERIES.find(x => x.id === id);
-    if (Labs.discover('microscope', id, { title: d && d.title, total: M().DISCOVERIES.length })) _refresh();
+    const L = _discs(), d = L.find(x => x.id === id);
+    if (!d) return;
+    if (Labs.discover('microscope', id, { title: d.title, total: L.length })) _refresh();
   }
   function _foundCount() {
     const n = $('lab-found-n');
-    if (n) n.textContent = `${Object.keys(Labs.store('microscope').disc).length}/${M().DISCOVERIES.length}`;
+    if (!n) return;
+    const st = Labs.store('microscope'), L = _discs();
+    n.textContent = `${L.filter(d => st.disc[d.id]).length}/${L.length}`;
   }
 
   function _renderTools() {
@@ -984,9 +1195,15 @@ const LabMicroscope = (() => {
           <button type="button" class="lab-tool" data-set="move" data-v="down" aria-label="Move the slide down"><span aria-hidden="true">▼</span>Down</button>
           <button type="button" class="lab-tool" data-set="move" data-v="right" aria-label="Move the slide right"><span aria-hidden="true">▶</span>Right</button>
         </div></div>
-        <div class="lab-microscope-toolgrp"><p class="lab-microscope-toolhead">Name the cell under the pointer</p>
+        ${_is7() ? `<div class="lab-microscope-toolgrp"><p class="lab-microscope-toolhead">Name the part under the pointer</p>
+        <div class="lab-tools lab-microscope-three">${D.PART_IDS.map(id => `<button type="button" class="lab-tool" data-set="part" data-v="${id}"><span aria-hidden="true">${D.CELL_PARTS[id].icon}</span>${esc(D.CELL_PARTS[id].name)}</button>`).join('')}</div></div>
+        <div class="lab-microscope-toolgrp"><p class="lab-microscope-toolhead">Plant cell or animal cell?</p>
+        <div class="lab-tools lab-microscope-two">
+          <button type="button" class="lab-tool" data-set="kind" data-v="plant"><span aria-hidden="true">🌿</span>Plant cell</button>
+          <button type="button" class="lab-tool" data-set="kind" data-v="animal"><span aria-hidden="true">👄</span>Animal cell</button></div></div>`
+        : `<div class="lab-microscope-toolgrp"><p class="lab-microscope-toolhead">Name the cell under the pointer</p>
         <div class="lab-tools">${D.CELL_IDS.map(id => `<button type="button" class="lab-tool" data-set="id" data-v="${id}"><span aria-hidden="true">${D.CELLS[id].icon}</span>${esc(D.CELLS[id].short)}</button>`).join('')}</div>
-        <button type="button" class="lab-btn lab-btn-wide" data-act="draw">✏️ Draw the cell in my notebook</button></div>`;
+        <button type="button" class="lab-btn lab-btn-wide" data-act="draw">✏️ Draw the cell in my notebook</button></div>`}`;
     }
     _syncSet();
     _highlight();
@@ -998,23 +1215,43 @@ const LabMicroscope = (() => {
   function _shelfHTML() {
     const D = M();
     const sign = k => `<i class="lab-microscope-optsign">${Labs.sign(k, true)}</i>`;
+    // Clips, light, diaphragm, eyepiece and objective: the same microscope at every grade.
+    const rows = n => `<div class="lab-microscope-row"><span class="lab-microscope-label">${n} · Hold it still</span>
+          <div class="lab-microscope-opts is-wide"><button type="button" class="lab-microscope-opt" data-act="clips" aria-pressed="false">📎 Clip the slide<small>the two stage clips</small></button></div></div>
+        <div class="lab-microscope-row"><span class="lab-microscope-label">${n + 1} · Light</span>
+          <div class="lab-microscope-opts is-wide">${Object.keys(D.LIGHTS).map(k => _opt('light', k, { lamp: '💡 ', mirror: '🪞 ', off: '⚫ ' }[k] + D.LIGHTS[k].name, D.LIGHTS[k].meta)).join('')}
+            <button type="button" class="lab-microscope-opt lab-microscope-danger" data-act="sun">${sign('eye')}☀️ Mirror at the Sun<small>direct sunlight</small></button></div></div>
+        <div class="lab-microscope-row"><span class="lab-microscope-label">${n + 2} · Diaphragm</span>
+          <div class="lab-microscope-opts">${Object.keys(D.DIAPHRAGM).map(k => _opt('diaphragm', k, D.DIAPHRAGM[k].name)).join('')}</div></div>
+        <div class="lab-microscope-row"><span class="lab-microscope-label">${n + 3} · Eyepiece</span>
+          <div class="lab-microscope-opts">${D.EYEPIECES.map(e => _opt('eye', e, '×' + e)).join('')}</div></div>
+        <div class="lab-microscope-row"><span class="lab-microscope-label">${n + 4} · Objective (turn the nosepiece)</span>
+          <div class="lab-microscope-opts">${D.OBJECTIVES.map(o => _opt('obj', o, '×' + o, D.OBJ[o].short)).join('')}</div></div>`;
+    if (_rig === 'scope' && _is7()) {
+      const icon = { onion: '🧅 ', cheek: '👄 ', leaf: '🌿 ' };
+      return `<section class="lab-shelf lab-microscope-set" aria-label="Make a slide and set up the microscope">
+        <h2>Make a slide</h2>
+        <div class="lab-microscope-row"><span class="lab-microscope-label">1 · Specimen</span>
+          <div class="lab-microscope-opts is-wide">${Object.keys(D.SLIDES).filter(_slideOk).map(k => _opt('slide', k, icon[k] + D.SLIDES[k].name, D.SLIDES[k].meta)).join('')}
+            <button type="button" class="lab-microscope-opt lab-microscope-danger" data-act="swab">${sign('biohazard')}🦠 Borrow a used cotton bud<small>a friend’s</small></button></div></div>
+        <div class="lab-microscope-row"><span class="lab-microscope-label">2 · Stain (before the cover slip)</span>
+          <div class="lab-microscope-opts is-wide">${Object.keys(D.STAINS).map(k => _opt('stain', k, '💧 ' + D.STAINS[k].name, D.STAINS[k].meta)).join('')}
+            <button type="button" class="lab-microscope-opt lab-microscope-danger" data-act="splash">${sign('irritant')}💦 Squeeze the dropper hard<small>no goggles</small></button></div></div>
+        <div class="lab-microscope-row"><span class="lab-microscope-label">3 · Cover slip</span>
+          <div class="lab-microscope-opts is-wide">${Object.keys(D.COVERS).map(k => _opt('cover', k, (k === 'angle' ? '🔲 ' : '⬇️ ') + D.COVERS[k].name, D.COVERS[k].meta)).join('')}
+            <button type="button" class="lab-microscope-opt lab-microscope-danger" data-act="press">${sign('sharp')}👍 Press it down hard<small>to flatten it</small></button></div></div>
+        <h2>Set up the microscope</h2>
+        ${rows(4)}
+        <p class="lab-hint">Low power first. Then use the focus buttons under the picture, and name the part under the pointer.</p>
+      </section>`;
+    }
     if (_rig === 'scope') {
       return `<section class="lab-shelf lab-microscope-set" aria-label="Set up the microscope">
         <h2>Set up the microscope</h2>
         <div class="lab-microscope-row"><span class="lab-microscope-label">1 · Slide</span>
-          <div class="lab-microscope-opts is-wide">${Object.keys(D.SLIDES).map(k => _opt('slide', k, '🩸 ' + D.SLIDES[k].name, D.SLIDES[k].meta)).join('')}
+          <div class="lab-microscope-opts is-wide">${Object.keys(D.SLIDES).filter(_slideOk).map(k => _opt('slide', k, '🩸 ' + D.SLIDES[k].name, D.SLIDES[k].meta)).join('')}
             <button type="button" class="lab-microscope-opt lab-microscope-danger" data-act="prick">${sign('biohazard')}💉 Prick a finger<small>for fresh blood</small></button></div></div>
-        <div class="lab-microscope-row"><span class="lab-microscope-label">2 · Hold it still</span>
-          <div class="lab-microscope-opts is-wide"><button type="button" class="lab-microscope-opt" data-act="clips" aria-pressed="false">📎 Clip the slide<small>the two stage clips</small></button></div></div>
-        <div class="lab-microscope-row"><span class="lab-microscope-label">3 · Light</span>
-          <div class="lab-microscope-opts is-wide">${Object.keys(D.LIGHTS).map(k => _opt('light', k, { lamp: '💡 ', mirror: '🪞 ', off: '⚫ ' }[k] + D.LIGHTS[k].name, D.LIGHTS[k].meta)).join('')}
-            <button type="button" class="lab-microscope-opt lab-microscope-danger" data-act="sun">${sign('eye')}☀️ Mirror at the Sun<small>direct sunlight</small></button></div></div>
-        <div class="lab-microscope-row"><span class="lab-microscope-label">4 · Diaphragm</span>
-          <div class="lab-microscope-opts">${Object.keys(D.DIAPHRAGM).map(k => _opt('diaphragm', k, D.DIAPHRAGM[k].name)).join('')}</div></div>
-        <div class="lab-microscope-row"><span class="lab-microscope-label">5 · Eyepiece</span>
-          <div class="lab-microscope-opts">${D.EYEPIECES.map(e => _opt('eye', e, '×' + e)).join('')}</div></div>
-        <div class="lab-microscope-row"><span class="lab-microscope-label">6 · Objective (turn the nosepiece)</span>
-          <div class="lab-microscope-opts">${D.OBJECTIVES.map(o => _opt('obj', o, '×' + o, D.OBJ[o].short)).join('')}</div></div>
+        ${rows(2)}
         <p class="lab-hint">Total magnification = eyepiece × objective. Then use the focus buttons under the picture.</p>
       </section>`;
     }
@@ -1054,10 +1291,15 @@ const LabMicroscope = (() => {
 
   function _notebookHTML() {
     const D = M();
-    const ids = _ids.length ? `<div class="lab-table-wrap"><table class="lab-table">
+    const cellRows = _ids.filter(r => r.cell), partRows = _ids.filter(r => r.part);
+    const parts = partRows.length ? `<div class="lab-table-wrap"><table class="lab-table">
+        <caption>Parts I named</caption>
+        <thead><tr><th scope="col">Part</th><th scope="col">Seen in</th><th scope="col">What it looked like</th><th scope="col">Its job</th></tr></thead>
+        <tbody>${partRows.slice(0, 8).map(r => { const P = D.CELL_PARTS[r.part]; return `<tr><th scope="row">${esc(P.name)}</th><td>${esc(D.SLIDES[r.slide].name)} · ×${r.total}</td><td>${esc(P.look)}</td><td>${esc(P.job)}</td></tr>`; }).join('')}</tbody></table></div>` : '';
+    const ids = cellRows.length ? `<div class="lab-table-wrap"><table class="lab-table">
         <caption>Cells I named</caption>
         <thead><tr><th scope="col">Cell</th><th scope="col">Seen at</th><th scope="col">What it looked like</th><th scope="col">Its job</th></tr></thead>
-        <tbody>${_ids.slice(0, 8).map(r => { const C = D.CELLS[r.cell]; return `<tr><th scope="row">${esc(C.name)}</th><td>×${r.total}</td><td>${esc(C.clue)}</td><td>${esc(C.job)}</td></tr>`; }).join('')}</tbody></table></div>` : '';
+        <tbody>${cellRows.slice(0, 8).map(r => { const C = D.CELLS[r.cell]; return `<tr><th scope="row">${esc(C.name)}</th><td>×${r.total}</td><td>${esc(C.clue)}</td><td>${esc(C.job)}</td></tr>`; }).join('')}</tbody></table></div>` : '';
     const drawings = _drawings.length ? `<div class="lab-microscope-drawings">${_drawings.slice(0, 3).map(d => {
         const C = D.CELLS[d.cell], dr = D.DRAW[d.cell];
         return `<figure class="lab-microscope-fig">${_cellSVG(d.cell)}<figcaption><b>${esc(C.name)}</b> · drawing ${dr.widthMm} mm wide, real ${C.sizeUm} µm = ${D.fmt(D.umToMm(C.sizeUm))} mm · magnification = ${dr.widthMm} ÷ ${D.fmt(D.umToMm(C.sizeUm))} = ×${D.fmt(d.mag)}</figcaption></figure>`;
@@ -1068,8 +1310,9 @@ const LabMicroscope = (() => {
         <tbody>${_calcs.slice(0, 8).map(r => `<tr><th scope="row">${esc(r.title)}</th><td class="lab-eq">${r.lines.map(esc).join('<br>')}</td><td><b>${esc(r.shown)}</b> ${r.correct ? '✓' : `✗<br><small class="lab-muted">should be ${esc(r.right)}</small>`}</td></tr>`).join('')}</tbody></table></div>` : '';
     const list = _log.length
       ? `<ol class="lab-log">${_log.slice(0, 10).map(e => `<li class="${e.note ? 'is-note' : ''}"><b>${esc(e.title)}</b><p>${esc(e.obs)}</p></li>`).join('')}</ol>`
+      : _is7() ? '<p class="lab-empty">What you see and the parts of cells you name appear here.</p>'
       : '<p class="lab-empty">What you see, the cells you name, your drawings and your calculations appear here.</p>';
-    return `<section class="lab-notebook" id="lab-notebook" aria-label="Lab notebook"><h2>Lab notebook</h2>${ids}${drawings}${calcs}${list}</section>`;
+    return `<section class="lab-notebook" id="lab-notebook" aria-label="Lab notebook"><h2>Lab notebook</h2>${ids}${parts}${drawings}${calcs}${list}</section>`;
   }
 
   function _logEntry(e) {
@@ -1081,7 +1324,7 @@ const LabMicroscope = (() => {
   function _missionListHTML() {
     const st = Labs.store('microscope');
     return `<section class="lab-missions"><h2>Missions</h2><p class="lab-hint">Work carefully and safely, answer the exam-style questions, earn up to three stars.</p>
-      ${M().MISSIONS.map(Ms => {
+      ${_missions().map(Ms => {
         const best = (st.missions[Ms.id] && st.missions[Ms.id].stars) || 0;
         return `<article class="lab-mission-card">
           <span class="lab-mission-icon" aria-hidden="true">${Ms.icon}</span>
@@ -1112,6 +1355,11 @@ const LabMicroscope = (() => {
       body = `<ul class="lab-steps">${D.CELL_IDS.map(id => `<li class="${tick(ms.found[id])}">${D.CELLS[id].icon} ${esc(D.CELLS[id].name)}</li>`).join('')}
         <li class="${tick(ms.success)}">📝 Answer the questions</li></ul>
         <p class="lab-progress-text">${n} of 4 named · move the slide to find the white cells</p>`;
+    } else if (Ms.needs) {
+      const n = ms.need.filter(k => ms.found[k]).length;
+      body = `<ul class="lab-steps">${ms.need.map(k => `<li class="${tick(ms.found[k])}">${esc(Ms.needs[k])}</li>`).join('')}
+        <li class="${tick(ms.success)}">📝 Answer the questions</li></ul>
+        <p class="lab-progress-text">${n} of ${ms.need.length} done · low power first, then ×400</p>`;
     } else {
       body = `<ul class="lab-steps">${ms.need.map(id => { const f = D.figure(id); return `<li class="${tick(ms.done[id])}">${D.CELLS[f.cell].icon} ${esc(f.title)}: ${esc(f.blurb)}</li>`; }).join('')}
         <li class="${tick(ms.success)}">📝 Answer the questions</li></ul>`;
@@ -1128,7 +1376,7 @@ const LabMicroscope = (() => {
 
   function _foundHTML() {
     const st = Labs.store('microscope');
-    const all = M().DISCOVERIES;
+    const all = _discs();
     const n = all.filter(d => st.disc[d.id]).length;
     return `<section class="lab-found"><h2>Discoveries <span>${n} of ${all.length}</span></h2>
       <p class="lab-hint">Tap any card. Found ones show what happened and why; locked ones show you how to find them.</p>
@@ -1139,30 +1387,69 @@ const LabMicroscope = (() => {
   }
 
   function _intro() {
-    Labs.overlay(`
-      <div class="lab-intro">
-        <p class="lab-done-icon" aria-hidden="true">🔬</p>
-        <h2 id="lab-ov-title">Welcome to the Microscope</h2>
-        <ul class="lab-intro-list">
+    const items = _is7() ? `
+          <li><b>New here?</b> Tap “Show me how” and I’ll walk you through your first slide, one tap at a time.</li>
+          <li><b>Make your own slides.</b> Onion skin, your own cheek cells and a pondweed leaf - with a stain and a cover slip.</li>
+          <li><b>Name the parts.</b> Focus at ×400, move the slide and name the nucleus, the cell wall, the vacuole, a chloroplast… Then decide: plant cell or animal cell?</li>
+          <li><b>Get it wrong safely.</b> Trap air bubbles, forget the stain, crack a cover slip - you’ll see what happened and what to do instead. Nothing here can hurt you.</li>
+          <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${_discs().length} discoveries to collect.</li>` : `
           <li><b>New here?</b> Tap “Show me how” and I’ll walk you through your first look, one tap at a time.</li>
           <li><b>Look at real blood.</b> Set up the microscope, focus a stained blood smear, go to ×400 and name red cells, white cells and platelets.</li>
           <li><b>Measure and calculate.</b> Use the ruler on a printed drawing to work out a magnification - the paper’s ×15 000 question too.</li>
           <li><b>Get it wrong safely.</b> Crack a slide, forget the units - you’ll see what happened and what to do instead. Nothing here can hurt you.</li>
-          <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${M().DISCOVERIES.length} discoveries to collect.</li>
+          <li><b>Earn stars.</b> Missions end with exam-style questions. And there are ${_discs().length} discoveries to collect.</li>`;
+    Labs.overlay(`
+      <div class="lab-intro">
+        <p class="lab-done-icon" aria-hidden="true">🔬</p>
+        <h2 id="lab-ov-title">Welcome to the Microscope</h2>
+        <ul class="lab-intro-list">${items}
         </ul>
       </div>
       <div class="lab-ov-actions">
         <button type="button" class="lab-btn" data-ov-close>I’ll explore on my own</button>
-        <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="firstlook" data-autofocus>Show me how →</button>
+        <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-guide="${_guides()[0].id}" data-autofocus>Show me how →</button>
       </div>`,
       { cls: 'is-intro', onClose: () => {
-        const st = Labs.store('microscope'); st.intro = true; Labs.persist();
+        const st = Labs.store('microscope'); st[_introKey()] = true; Labs.persist();
         _coach('Pick a guided experiment below, or set up the microscope yourself.');
       } });
   }
 
   function _help() {
     const D = M();
+    if (_is7()) {
+      Labs.overlay(`
+      <h2 id="lab-ov-title" class="lab-help-title">How the Microscope works</h2>
+      <div class="lab-help">
+        <section><h3>The parts of the microscope</h3><ul>${D.PARTS.map(p => `<li><b>${esc(p.name)}</b> - ${esc(p.job)}</li>`).join('')}</ul></section>
+        <section><h3>Making a slide</h3><ol class="lab-disc-steps">
+          <li>Lay the specimen flat in a drop of water on a clean slide: a thin layer of onion skin, cells from inside your own cheek on a clean cotton bud, or one thin pondweed leaf.</li>
+          <li>Add ONE drop of stain: iodine solution for onion skin, methylene blue for cheek cells. A leaf needs none - its chloroplasts are green.</li>
+          <li>Lower a cover slip (a thin square of glass) slowly, one edge first, at an angle, so no air bubbles are trapped.</li></ol></section>
+        <section><h3>Focusing, in order</h3><ol class="lab-disc-steps">
+          <li>Slide on the stage, over the hole; clip it; light on.</li>
+          <li>Turn the nosepiece to the LOW-power objective (×4).</li>
+          <li>Watching from the SIDE, lower the lens until it is just above the slide.</li>
+          <li>Looking through the eyepiece, turn the coarse focus so the lens moves UP, away from the slide, until the image appears.</li>
+          <li>Sharpen it with the fine focus.</li>
+          <li>Swing in a stronger objective; use ONLY the fine focus at high power.</li></ol></section>
+        <section><h3>The parts of a cell</h3><ul>
+          ${D.PART_IDS.map(id => { const P = D.CELL_PARTS[id]; return `<li><b>${esc(P.name)}</b>${P.plantOnly ? ' (plant cells only)' : ''} - ${esc(P.look)}. ${esc(P.job)}</li>`; }).join('')}</ul></section>
+        <section><h3>Plant cell or animal cell?</h3>
+          <p>Both have a cell membrane, cytoplasm and a nucleus. Only plant cells have a cell wall, a large vacuole and - if they get light - chloroplasts.</p>
+          <p class="lab-eq">image size = actual size × magnification</p>
+          <p class="lab-hint">An onion cell 0.05 mm wide looks 5 mm wide at ×100.</p></section>
+        <section><h3>Lab safety rules</h3><ul>
+          <li>Scrape only your own cheek, with a fresh cotton bud. Used buds go straight into disinfectant; wash your hands.</li>
+          <li>Wear goggles with stains, and add one drop at a time.</li>
+          <li>Never press on a cover slip. Tell your teacher about broken glass - do not pick it up.</li>
+          <li>Never aim the mirror at the Sun - it can damage your eyes.</li>
+          <li>Carry the microscope with one hand on the arm and one under the base.</li></ul></section>
+      </div>
+      <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Back to the bench</button></div>`,
+      { cls: 'is-help' });
+      return;
+    }
     Labs.overlay(`
       <h2 id="lab-ov-title" class="lab-help-title">How the Microscope works</h2>
       <div class="lab-help">
@@ -1205,8 +1492,10 @@ const LabMicroscope = (() => {
         + `<span class="lab-chip${v.sharp ? ' lab-microscope-ok' : ''}">🎯 ${esc(focus)}</span>`
         + `<span class="lab-chip">${_s.light === 'lamp' ? '💡 Lamp' : _s.light === 'mirror' ? '🪞 Mirror' : '⚫ No light'} <small>${esc(D.DIAPHRAGM[_s.diaph].name.toLowerCase())}</small></span>`;
       if (c) c.textContent = _labels ? 'The parts of a light microscope' : _s.slide
-        ? `${D.SLIDES[_s.slide].name}${_s.clipped ? ' · clipped' : ' · not clipped'} · view enlarged for your screen`
-        : 'Put a slide on the stage to begin';
+        ? (_g7slide()
+          ? `${D.SLIDES[_s.slide].name}${_s.stain ? ' · ' + D.STAINS[_s.stain].name.toLowerCase() : ''} · ${_s.cover ? 'cover slip on' : 'no cover slip'}${_s.clipped ? ' · clipped' : ''}`
+          : `${D.SLIDES[_s.slide].name}${_s.clipped ? ' · clipped' : ' · not clipped'} · view enlarged for your screen`)
+        : _is7() ? 'Make a slide to begin' : 'Put a slide on the stage to begin';
     } else {
       const f = D.figure(_w.fig);
       const r = _w.ruler ? D.work(f, _w) : null;
@@ -1309,8 +1598,12 @@ const LabMicroscope = (() => {
     if (s.slide) {
       c.fillStyle = 'rgba(200,230,240,0.9)'; c.strokeStyle = 'rgba(40,80,100,0.7)'; c.lineWidth = 1;
       c.fillRect(X(9), Y(slideTop), 20 * u, 1.4 * u); c.strokeRect(X(9), Y(slideTop), 20 * u, 1.4 * u);
-      c.fillStyle = s.slide === 'blood' ? 'rgba(200,80,110,0.8)' : 'rgba(210,190,150,0.8)';
+      c.fillStyle = D.SLIDE_TINT[s.slide + (s.stain ? 'Stained' : '')] || D.SLIDE_TINT[s.slide];
       c.fillRect(X(15), Y(slideTop) - 1, 8 * u, 1.5);
+      if (s.cover) {
+        c.fillStyle = 'rgba(220,238,246,0.95)'; c.strokeStyle = 'rgba(40,80,100,0.6)';
+        c.fillRect(X(14), Y(slideTop) - 2.4, 10 * u, 1.2); c.strokeRect(X(14), Y(slideTop) - 2.4, 10 * u, 1.2);
+      }
       if (_cracked) {
         c.strokeStyle = '#1B1B1B'; c.lineWidth = 1.2;
         c.beginPath(); c.moveTo(X(19), Y(slideTop)); c.lineTo(X(16), Y(slideTop + 1.4)); c.moveTo(X(19), Y(slideTop)); c.lineTo(X(23), Y(slideTop + 1.4));
@@ -1440,7 +1733,7 @@ const LabMicroscope = (() => {
     const D = M(), s = _s;
     const q = D.blur(_zv, s.obj);
     const k = q >= 3 ? 18 : 1 + Math.min(12, q * 4);
-    const key = [size, s.slide, s.eye, s.obj, _pan.x.toFixed(3), _pan.y.toFixed(3), k.toFixed(2)].join('|');
+    const key = [size, s.slide, s.stain || '', s.cover || '', s.eye, s.obj, _pan.x.toFixed(3), _pan.y.toFixed(3), k.toFixed(2)].join('|');
     if (_vc && _vcKey === key) return _vc;
     if (!_vc) { _vc = document.createElement('canvas'); _vcSmall = document.createElement('canvas'); }
     _vc.width = size; _vc.height = size;
@@ -1456,8 +1749,73 @@ const LabMicroscope = (() => {
     return _vc;
   }
 
+  // Grade 7 tissue, drawn from the SAME geometry (LabMicroscopeData.partAt)
+  // that decides which part is under the pointer. The image is inverted like
+  // the blood smear: a point right of the pointer on the slide is drawn left.
+  function _paintTissue(g, size) {
+    const D = M(), s = _s, C = D.COLOURS_G7, v = _view();
+    const px = size / D.viewUmG7(s.eye, s.obj);
+    const P = D.G7_POINTS[s.slide];
+    const cxu = P.o[0] + _pan.x * P.dx, cyu = P.o[1] + _pan.y * P.dy, half = size / 2 / px;
+    const X = x => size / 2 - (x - cxu) * px, Y = y => size / 2 - (y - cyu) * px;
+    if (s.slide === 'cheek') {
+      const col = v.stained ? C.cheek : C.cheekPlain, T = D.CHEEK_TILE;
+      g.fillStyle = col.bg; g.fillRect(0, 0, size, size);
+      for (let tx = Math.floor((cxu - half) / T) - 1; tx <= Math.ceil((cxu + half) / T) + 1; tx++) {
+        for (let ty = Math.floor((cyu - half) / T) - 1; ty <= Math.ceil((cyu + half) / T) + 1; ty++) {
+          D.CHEEK.forEach(c => {
+            const ox = tx * T + c.x, oy = ty * T + c.y;
+            if (Math.abs(ox - cxu) > half + 45 || Math.abs(oy - cyu) > half + 45) return;
+            g.beginPath();
+            for (let k = 0; k <= 48; k++) {
+              const th = k / 48 * Math.PI * 2, rr = D.cheekR(c, th);
+              const x = X(ox + Math.cos(th) * rr), y = Y(oy + Math.sin(th) * rr);
+              if (k) g.lineTo(x, y); else g.moveTo(x, y);
+            }
+            g.closePath(); g.fillStyle = col.cyto; g.fill();
+            g.strokeStyle = col.mem; g.lineWidth = Math.max(0.6, D.CHEEK_MEM * px * 0.8); g.stroke();
+            g.fillStyle = col.nuc; g.beginPath(); g.arc(X(ox + c.nx), Y(oy + c.ny), Math.max(0.6, D.CHEEK_NUC * px), 0, Math.PI * 2); g.fill();
+          });
+        }
+      }
+    } else {
+      const T = D.TISSUE[s.slide], leaf = s.slide === 'leaf';
+      const col = leaf ? C.leaf : v.stained ? C.onion : C.onionPlain;
+      const dots = leaf && T.chlR * px >= 0.5;
+      g.fillStyle = col.wall; g.fillRect(0, 0, size, size);
+      const r0 = Math.floor((cyu - half) / T.h) - 1, r1 = Math.ceil((cyu + half) / T.h) + 1;
+      for (let r = r0; r <= r1; r++) {
+        const off = (r & 1) ? T.w / 2 : 0;
+        const i0 = Math.floor((cxu - half - off) / T.w) - 1, i1 = Math.ceil((cxu + half - off) / T.w) + 1;
+        for (let i = i0; i <= i1; i++) {
+          const x0 = off + i * T.w, y0 = r * T.h;
+          const rect = (a, w) => {
+            const xa = X(x0 + a), xb = X(x0 + T.w - a), ya = Y(y0 + a), yb = Y(y0 + T.h - a);
+            g.fillRect(Math.min(xa, xb), Math.min(ya, yb), Math.abs(xb - xa), Math.abs(yb - ya));
+          };
+          g.fillStyle = leaf && !dots ? '#79B25C' : col.cyto; rect(T.wall);
+          g.fillStyle = col.vac; rect(T.band);
+          if (dots) {
+            g.fillStyle = col.chl;
+            D.leafChloros(i, r).forEach(p => { g.beginPath(); g.arc(X(x0 + p.x), Y(y0 + p.y), T.chlR * px, 0, Math.PI * 2); g.fill(); });
+          } else if (!leaf) {
+            const n = D.onionNucleus(i, r);
+            g.fillStyle = col.nuc; g.beginPath(); g.arc(X(x0 + n.x), Y(y0 + n.y), T.nucR * px, 0, Math.PI * 2); g.fill();
+          }
+        }
+      }
+    }
+    if (v.bubbles) {
+      D.BUBBLES.forEach(b => {
+        g.fillStyle = C.bubble.fill; g.beginPath(); g.arc(X(b.x), Y(b.y), b.R * px, 0, Math.PI * 2); g.fill();
+        g.strokeStyle = C.bubble.rim; g.lineWidth = Math.max(1, b.R * px * 0.18); g.stroke();
+      });
+    }
+  }
+
   function _paintField(g, size) {
     const D = M(), s = _s;
+    if (D.SLIDES[s.slide].g7) { _paintTissue(g, size); return; }
     const col = D.COLOURS[D.SLIDES[s.slide].stained ? 'stained' : 'unstained'];
     g.fillStyle = col.bg; g.fillRect(0, 0, size, size);
     const px = size / D.viewUm(s.eye, s.obj);          // pixels per µm
@@ -1623,6 +1981,31 @@ const LabMicroscope = (() => {
           }
           break;
         }
+        case 'slip': {
+          // The cover slip falls flat onto the drop, and rings of trapped air appear.
+          const x = _W * 0.7, y = _H * 0.5, yy = y - 60 * (1 - Math.min(1, k * 1.6));
+          c.fillStyle = 'rgba(200,230,245,0.9)'; c.strokeStyle = '#2A4A5A'; c.lineWidth = 1;
+          c.fillRect(x - 40, yy - 3, 80, 6); c.strokeRect(x - 40, yy - 3, 80, 6);
+          if (k > 0.6) {
+            c.strokeStyle = '#1F2327'; c.lineWidth = 2.5;
+            [[-22, 20, 8], [6, 28, 12], [26, 16, 6]].forEach(([dx, dy, r]) => { c.beginPath(); c.arc(x + dx, y + dy, r * (k - 0.5) * 2, 0, Math.PI * 2); c.stroke(); });
+          }
+          break;
+        }
+        case 'germs': {
+          c.font = '30px system-ui, sans-serif'; c.textAlign = 'center';
+          c.globalAlpha = Math.sin(Math.PI * k);
+          for (let i = 0; i < 3; i++) c.fillText('🦠', _W * (0.56 + 0.14 * i), _H * 0.42 + Math.sin(k * 6 + i * 2) * 10);
+          c.globalAlpha = 1;
+          break;
+        }
+        case 'splash': {
+          const x = _W * 0.7, y = _H * 0.4;
+          c.fillStyle = `rgba(150,80,20,${0.9 * (1 - k * 0.5)})`;
+          for (let i = 0; i < 9; i++) { const a = i * 0.7, d = 10 + k * 50; c.beginPath(); c.arc(x + Math.cos(a) * d, y + Math.sin(a) * d * 0.7, 4 - (i % 3), 0, Math.PI * 2); c.fill(); }
+          c.font = '30px system-ui, sans-serif'; c.textAlign = 'center'; c.fillText('💦', x, y);
+          break;
+        }
         case 'stamp': {
           c.fillStyle = `rgba(192,38,45,${0.8 * k})`; c.font = `800 ${Math.round(60 - 20 * k)}px system-ui, sans-serif`; c.textAlign = 'center';
           c.fillText('✗', _W * 0.82, _H * 0.3);
@@ -1664,9 +2047,10 @@ const LabMicroscope = (() => {
   function _debug() {
     const s = _s || _newScope(), w = _w || _newSheet();
     const v = M().view(s);
-    return { rig: _rig, busy: _busy, panel: _panel, labels: _labels, cracked: _cracked,
-             scope: { slide: s.slide, clipped: s.clipped, light: s.light, diaph: s.diaph, eye: s.eye, obj: s.obj, z: s.z, zv: _zv, pos: { x: s.pos.x, y: s.pos.y } },
-             view: { total: v.total, focus: v.focus, sharp: v.sharp, dark: v.dark, visible: v.visible, under: v.under },
+    return { rig: _rig, busy: _busy, panel: _panel, labels: _labels, cracked: _cracked, grade: _g(),
+             scope: { slide: s.slide, clipped: s.clipped, light: s.light, diaph: s.diaph, eye: s.eye, obj: s.obj, z: s.z, zv: _zv, pos: { x: s.pos.x, y: s.pos.y },
+                      stain: s.stain, cover: s.cover, lowSeen: s.lowSeen },
+             view: { total: v.total, focus: v.focus, sharp: v.sharp, dark: v.dark, visible: v.visible, under: v.under, covered: v.covered, stained: v.stained, bubbles: v.bubbles },
              sheet: { fig: w.fig, ruler: w.ruler, converted: w.converted, op: w.op, done: w.done && { shown: w.done.shown, correct: w.done.correct, error: w.done.error } },
              ids: _ids.map(x => x.cell), drawings: _drawings.length, calcs: _calcs.length,
              guide: _guide && { id: _guide.id, step: _guide.step },

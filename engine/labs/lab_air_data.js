@@ -288,6 +288,9 @@ const LabAirData = (() => {
     return no('');
   }
   function settle(st) { st.running = null; }
+  // A new set of tests (a mission starts, the notebook is cleared): there is
+  // no earlier run to compare with, so nothing can be "not a fair test" yet.
+  function newSeries(st) { st.prev = null; }
 
   // A guide step already true on the bench is skipped.
   function satisfied(st, tok) {
@@ -515,7 +518,7 @@ const LabAirData = (() => {
       happened: () => 'The teacher came to light the candle. Your hair was loose and your sleeves were down.',
       why: 'Loose hair and floppy sleeves can swing into a flame. They catch fire very fast.',
       instead: 'Tie long hair back and roll up your sleeves. Only an adult lights the candle.',
-      exam: 'Exam tip: a safety rule near a flame is to tie long hair back and never leave a flame alone.',
+      exam: 'Exam tip: near a flame, tie long hair back. Never leave a flame alone.',
       after: 'Tap 🎀 to tie your hair back. Then ask the teacher again.',
     },
     hot_jar: {
@@ -790,7 +793,7 @@ const LabAirData = (() => {
 
   return { GRADES, STATIONS, JARS, JAR_ORDER, CANDLES, SECONDS_PER_LITRE, UNCOVERED_CAP, LATE_S, SPEED, O2_AIR, O2_OUT, AIR,
            FIRES, METHODS, FUEL_OFF, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, TOK_STATION,
-           forGrade, station, burnTime, o2At, jarName, methodName, fireResult, newState, apply, settle, satisfied,
+           forGrade, station, burnTime, o2At, jarName, methodName, fireResult, newState, apply, settle, newSeries, satisfied,
            stepText, recipeTexts, unlocks, keyOf, missionProgress };
 })();
 if (typeof window !== 'undefined') window.LabAirData = LabAirData;

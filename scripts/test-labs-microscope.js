@@ -20,7 +20,7 @@ const { spawn } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 
 const ROOT = path.resolve(__dirname, '..');
-const DBG = 9408;
+const DBG = 9419;
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const get = u => new Promise((res, rej) => http.get(u, r => { let s = ''; r.on('data', v => s += v); r.on('end', () => { try { res(JSON.parse(s)); } catch (e) { rej(e); } }); }).on('error', rej));
@@ -171,15 +171,18 @@ process.on('SIGINT', () => quit(130));
   ok('the finished experiment is remembered, and the next one offered', await ev("!!Labs.store('microscope').guides.firstlook") && /Next: Go to high power/.test(ov.text));
   ok('the notebook recorded the sharp image', /Sharp image at ×40/.test(await ev("document.getElementById('lab-notebook').textContent")));
   ok('a discovery was collected on the way (blood on low power)', await ev("!!Labs.store('microscope').disc.low_power"));
-  const counter = () => ev("({ shown: document.getElementById('lab-found-n').textContent, saved: Object.keys(Labs.store('microscope').disc).length + '/' + LabMicroscopeData.DISCOVERIES.length })");
+  // The counter shows only the open grade's discoveries.
+  const counterG = n => ev(`(() => { const L = LabMicroscopeData.forGrade(LabMicroscopeData.DISCOVERIES, ${n}), st = Labs.store('microscope');
+    return { shown: document.getElementById('lab-found-n').textContent, saved: L.filter(d => st.disc[d.id]).length + '/' + L.length }; })()`);
+  const counter = () => counterG(9);
   let cnt = await counter();
   ok('the ✨ counter matches what is saved', cnt.shown === cnt.saved, cnt);
   await closeOv();
   ok('back on the Bench tab, the start panel shows it done', await ev("/✓ done/.test(document.querySelector('.lab-start').textContent)"));
 
-  const guideRuns = await ev(`(() => {
+  const runAllGuides = g => ev(`(() => {
     const out = {};
-    for (const G of LabMicroscopeData.GUIDES) {
+    for (const G of LabMicroscopeData.forGrade(LabMicroscopeData.GUIDES, ${g})) {
       document.getElementById('lab-overlay')?.remove();
       LabMicroscope.startGuide(G.id);
       let k = 0;
@@ -192,6 +195,7 @@ process.on('SIGINT', () => quit(130));
     }
     document.getElementById('lab-overlay')?.remove();
     return out; })()`);
+  const guideRuns = await runAllGuides(9);
   ok('every guided experiment runs to its “Experiment complete” with no mistake card', Object.values(guideRuns).every(v => v === 'done'), guideRuns);
 
   // ── Hazards ─────────────────────────────────────
@@ -257,7 +261,8 @@ process.on('SIGINT', () => quit(130));
       const card = document.querySelector('#lab-overlay .lab-ov-card');
       const q = card.querySelector('.lab-quiz-q').textContent;
       const def = qs.find(x => x.q === q);
-      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild.textContent === def.options[0]);
+      const want = typeof def.options[0] === 'object' ? def.options[0].label : def.options[0];
+      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild.textContent === want);
       btn.click();
       card.querySelector('[data-next]').click();
     }
@@ -353,9 +358,8 @@ process.on('SIGINT', () => quit(130));
     ok('…and “Show me how” starts a guide for it', !!(await dbg()).guide);
     await act('guide-stop');
   }
-  const discIds = await ev('LabMicroscopeData.DISCOVERIES.map(d => d.id)');
-  const unsolved = [];
-  for (const id of discIds) {
+  const discIds = await ev('LabMicroscopeData.forGrade(LabMicroscopeData.DISCOVERIES, 9).map(d => d.id)');
+  const unlockAll = async ids => { const out = []; for (const id of ids) {
     const res = await ev(`(() => {
       const st = Labs.store('microscope'); delete st.disc['${id}'];
       document.getElementById('lab-overlay')?.remove();
@@ -370,11 +374,221 @@ process.on('SIGINT', () => quit(130));
       document.getElementById('lab-overlay')?.remove();
       return !!st.disc['${id}'];
     })()`);
-    if (res !== true) unsolved.push(id + ' → ' + res);
-  }
+    if (res !== true) out.push(id + ' → ' + res);
+  } return out; };
+  const unsolved = await unlockAll(discIds);
   ok(`all ${discIds.length} discoveries unlock by following their own “Show me how”`, unsolved.length === 0, unsolved);
   cnt = await counter();
   ok('…and the counter says so', cnt.shown === cnt.saved && cnt.shown === `${discIds.length}/${discIds.length}`, cnt);
+
+  // ══ Grade 7 ═══════════════════════════════════
+  // ⚠ Until the lead adds 7 to the microscope row in Labs.LABS, Labs.grade()
+  //   says 9 for this lab. atGrade() then overrides Labs.grade (and prints a
+  //   NOTE); once registered, the real path runs with no edit here.
+  await ev('window.__labsGrade = Labs.grade; true');
+  const atGrade = async n => {
+    await ev(`(() => { if (typeof Labs !== 'undefined') { Labs.closeOverlay(true); Labs.backToHub(); } SELECTED_GRADE = ${n}; showScreen('labs'); return true; })()`);
+    for (let i = 0; i < 40; i++) { await sleep(150); if (await ev("typeof window.Labs !== 'undefined' && !!document.getElementById('labs-root')")) break; }
+    await ev('Labs.grade = window.__labsGrade; Labs.backToHub(); true');
+    const registered = await ev(`Labs.labsFor(${n}).some(l => l.id === 'microscope')`);
+    if (!registered) {
+      console.log(`NOTE Grade ${n}: Labs.LABS does not list Grade ${n} on the microscope row yet, so Labs.grade is overridden to ${n} for this run.`);
+      await ev(`Labs.grade = () => ${n}; true`);
+    }
+    await ev("Labs.openLab('microscope'); true");
+    for (let i = 0; i < 60; i++) { await sleep(150); if (await ev(`!!document.querySelector('#labs-root .lab-microscope') && LabMicroscope._debug().grade === ${n}`)) break; }
+    return registered;
+  };
+  const ids = g => ev(`(() => { const D = LabMicroscopeData, f = l => D.forGrade(l, ${g}).map(x => x.id); return { guides: f(D.GUIDES), missions: f(D.MISSIONS), discs: f(D.DISCOVERIES) }; })()`);
+  const G7 = await ids(7), G9 = await ids(9);
+  const shown = () => ev(`(() => { const all = s => [...document.querySelectorAll(s)];
+    return { guides: all('.lab-start [data-guide]').map(b => b.dataset.guide), missions: all('.lab-start [data-mission]').map(b => b.dataset.mission),
+             slides: all('#lab-panel [data-set="slide"]').map(b => b.dataset.v), parts: all('#lab-microscope-tools [data-set="part"]').map(b => b.dataset.v),
+             kinds: all('#lab-microscope-tools [data-set="kind"]').map(b => b.dataset.v), cells: all('#lab-microscope-tools [data-set="id"]').length,
+             draw: !!document.querySelector('#labs-root [data-act="draw"]'), prick: !!document.querySelector('#labs-root [data-act="prick"]'),
+             measure: !!document.querySelector('#labs-root [data-set="rig"][data-v="measure"]'),
+             eyebrow: document.querySelector('.lab-microscope .lab-eyebrow').textContent, counter: document.getElementById('lab-found-n').textContent }; })()`);
+
+  console.log('\n-- Grade 7: opening');
+  const reg7 = await atGrade(7);
+  d = await dbg();
+  ok('Grade 7: the microscope opens at Grade 7 on a fresh bench', d.grade === 7 && d.scope.slide === null && !d.guide && !d.mission, { grade: d.grade, slide: d.scope.slide });
+  ov = await overlay();
+  ok('Grade 7: its own welcome - make your own slides - whose “Show me how” starts the onion guide',
+     ov && /Make your own slides/.test(ov.text) && /Show me how/.test(ov.text) && (await ev("(document.querySelector('#lab-overlay [data-guide]') || {}).dataset?.guide")) === G7.guides[0], ov);
+  await closeOv();
+  ok('…remembered for Grade 7 on its own', await ev("Labs.store('microscope').intro7 === true"));
+  let sh = await shown();
+  ok('Grade 7 top bar: “Science · Grade 7”, and no measuring desk', /Science · Grade 7/.test(sh.eyebrow) && !sh.measure, sh);
+  ok('Grade 7 start panel: only the Grade 7 guided experiments and missions',
+     sh.guides.join() === G7.guides.join() && sh.missions.join() === G7.missions.join() && G7.guides.length >= 3 && G7.missions.length >= 2
+     && !sh.guides.some(x => G9.guides.includes(x)) && !sh.missions.some(x => G9.missions.includes(x)), sh);
+  ok('Grade 7 shelf: onion skin, cheek cells and a leaf - no blood smears, no finger prick', sh.slides.join() === 'onion,cheek,leaf' && !sh.prick, sh);
+  ok('Grade 7 tools: name the part (6), plant or animal - no blood-cell buttons, no drawing', sh.parts.length === 6 && sh.kinds.join() === 'plant,animal' && sh.cells === 0 && !sh.draw, sh);
+  ok(`Grade 7 counter counts only Grade 7 discoveries (0/${G7.discs.length})`, sh.counter === `0/${G7.discs.length}` && G7.discs.length >= 10, sh.counter);
+  await act('help');
+  ov = await overlay();
+  ok('Grade 7 help: making a slide, the cover slip, both stains, the parts of a cell, plant or animal - and no blood',
+     ov && /Making a slide/.test(ov.text) && /cover slip/.test(ov.text) && /iodine/.test(ov.text) && /methylene blue/.test(ov.text) && /Chloroplast/.test(ov.text)
+     && /Plant cell or animal cell/.test(ov.text) && !/Plasma/.test(ov.text), ov && ov.text.slice(0, 200));
+  await closeOv();
+  await act('tip');
+  ok('Grade 7 💡 gives a Grade 7 fact', await ev("LabMicroscopeData.FACTS_G7.some(f => document.getElementById('lab-coach-text').textContent.includes(f))"));
+  await ev('LabMicroscope._test({ instant: true }); true');
+
+  console.log('\n-- Grade 7: a guided experiment');
+  await click('.lab-start [data-guide="g7_onion"]');
+  g = await gs();
+  ok('Onion skin cells: opens at step 2 - make the slide - and the onion-skin button glows', g.box && /Step 2 of 13/.test(g.text) && /onion/.test(g.text) && g.next === 'slide:onion', g);
+  await click('[data-guide-do]');
+  g = await gs();
+  ok('then ONE drop of iodine glows', g.next === 'stain:iodine' && /iodine/.test(g.text), g);
+  await click('[data-guide-do]');
+  g = await gs();
+  ok('then the cover slip, lowered at an angle', g.next === 'cover:angle' && /angle/.test(g.text), g);
+  await click('[data-guide-do]');
+  d = await dbg();
+  ok('…the slide is stained and covered, with no bubbles; then the clips glow', d.scope.stain === 'iodine' && d.scope.cover === 'angle' && !d.view.bubbles && (await gs()).next === 'clips', d.scope);
+  let endG = 'stuck';
+  for (let k = 0; k < 30; k++) {
+    const t = await ev("(() => { if (!LabMicroscope._debug().guide) return 'done'; if (document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result')) return 'card'; document.querySelector('#lab-guide [data-guide-do]').click(); return 'step'; })()");
+    if (t !== 'step') { endG = t; break; }
+  }
+  ov = await overlay();
+  ok('…it runs to “Experiment complete”, the nucleus named at ×400', endG === 'done' && ov && /Experiment complete/.test(ov.text) && (await dbg()).view.total === 400, { endG, ov });
+  ok('…the nucleus discovery is collected and the notebook has a “Parts I named” table',
+     await ev("!!Labs.store('microscope').disc.g7_nucleus") && /Parts I named/.test(await ev("document.getElementById('lab-notebook').textContent")));
+  ok('…and the next Grade 7 experiment is offered', ov && /Next: Your own cheek cells/.test(ov.text), ov && ov.text.slice(0, 300));
+  cnt = await counterG(7);
+  ok('the ✨ counter matches what is saved for Grade 7', cnt.shown === cnt.saved, cnt);
+  await closeOv();
+  const guideRuns7 = await runAllGuides(7);
+  ok('every Grade 7 guided experiment runs to its end with no mistake card', Object.keys(guideRuns7).length >= 3 && Object.values(guideRuns7).every(v => v === 'done'), guideRuns7);
+
+  console.log('\n-- Grade 7: hazards');
+  const freshBench7 = async () => { await ev("document.getElementById('lab-overlay')?.remove(); LabMicroscope.startGuide('g7_onion'); true"); await act('guide-stop'); };
+  const MAKE = (sl, st) => [`[data-set="slide"][data-v="${sl}"]`, ...(st ? [`[data-set="stain"][data-v="${st}"]`] : []), '[data-set="cover"][data-v="angle"]', '[data-act="clips"]', '[data-set="light"][data-v="lamp"]'];
+  const LOW7 = (sl, st) => [...MAKE(sl, st), ...LOW.slice(SETUP.length)];
+  const HIGH7 = (sl, st) => [...LOW7(sl, st), '[data-set="obj"][data-v="40"]', '[data-set="fine"][data-v="up"]'];
+  const examHead = t => reg7 ? /In your exams/.test(t) : true;
+  if (!reg7) console.log('NOTE the exam heading on a card comes from Labs’ own grade: it will read “In your exams” once Grade 7 is registered.');
+  await freshBench7();
+  await act('swab');
+  ov = await overlay();
+  ok('borrowing a used cotton bud: a BIOLOGICAL HAZARD card - your own cheek, a fresh bud, into disinfectant',
+     ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Biological hazard') && /disinfectant/.test(ov.text) && /OWN cheek/.test(ov.text) && examHead(ov.text), ov);
+  await closeOv();
+  await act('splash');
+  ov = await overlay();
+  ok('squeezing the stain dropper hard: a HARMFUL (irritant) card - goggles, one drop, rinse an eye',
+     ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Harmful') && /goggles/i.test(ov.text) && /rinse/.test(ov.text), ov);
+  await closeOv();
+  await clicks('[data-set="slide"][data-v="onion"]', '[data-set="stain"][data-v="iodine"]', '[data-set="cover"][data-v="angle"]');
+  await ev('LabMicroscope._test({ instant: false }); true');
+  await act('press');
+  const midP = { ov: await overlay(), d: await dbg() };
+  await sleep(1800);
+  ov = await overlay();
+  ok('pressing hard on the cover slip: it cracks on the canvas first, then a SHARP card',
+     midP.ov === null && midP.d.busy && midP.d.cracked && ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Sharp - can cut') && /cover slip broke/.test(ov.text), { mid: midP.ov, busy: midP.d.busy, ov });
+  await ev('LabMicroscope._test({ instant: true }); true');
+  await closeOv();
+  d = await dbg();
+  ok('…and the broken slide is gone: make a new one', d.scope.slide === null && d.scope.cover === null && !d.cracked, d.scope);
+  await clicks(...MAKE('onion', 'iodine'), '[data-set="obj"][data-v="40"]', '[data-act="lower"]', '[data-set="coarse"][data-v="down"]');
+  ov = await overlay();
+  ok('high power, lowered, coarse DOWN: the Grade 7 crack card - low power first, focus upwards', ov && /is-hazard/.test(ov.cls) && /lens hit the slide/.test(ov.text) && /LOW-power/.test(ov.text), ov);
+  await closeOv();
+  await act('sun');
+  ov = await overlay();
+  ok('aiming the mirror at the Sun: a BRIGHT LIGHT (eye) card in Grade 7 words', ov && /is-hazard/.test(ov.cls) && ov.signs.includes('Bright light') && /never at the Sun/.test(ov.text) && !/Chemistry 20/.test(ov.text), ov);
+  await closeOv();
+  ok('the Grade 7 hazards are counted in the lab store', await ev("['g7_swab','g7_stain','g7_crack','g7_sun'].every(k => Labs.store('microscope').hazards[k] >= 1)"));
+
+  console.log('\n-- Grade 7: mistakes that teach');
+  await freshBench7();
+  await clicks('[data-set="slide"][data-v="onion"]', '[data-set="stain"][data-v="iodine"]');
+  await ev('LabMicroscope._test({ instant: false }); true');
+  await click('[data-set="cover"][data-v="drop"]');
+  const midB = { ov: await overlay(), d: await dbg() };
+  await sleep(1500);
+  ov = await overlay();
+  ok('dropping the cover slip flat: it falls on the canvas first, then “Air bubbles” - lower it at an angle',
+     midB.ov === null && midB.d.busy && ov && /is-result/.test(ov.cls) && /Air bubbles/.test(ov.text) && /at an angle/.test(ov.text) && examHead(ov.text), { mid: midB.ov, ov });
+  ok('…and the bubbles stay on the slide', (await dbg()).view.bubbles === true);
+  await ev('LabMicroscope._test({ instant: true }); true');
+  await closeOv();
+  await freshBench7();
+  await clicks(...MAKE('onion', 'iodine'), '[data-set="obj"][data-v="40"]', '[data-act="lower"]', '[data-set="coarse"][data-v="up"]');
+  await resultCard('starting on high power: “Nothing to see on high power” - start on low power', /Nothing to see on high power/);
+  await freshBench7();
+  await clicks(...HIGH7('onion', null));
+  d = await dbg();
+  ok('unstained onion at ×400 is sharp - and the “Why add a stain?” discovery is collected', d.view.sharp && d.view.total === 400 && !d.view.stained && await ev("!!Labs.store('microscope').disc.g7_stain"), d.view);
+  await click('[data-set="part"][data-v="nucleus"]');
+  await resultCard('naming the nucleus with no stain: “No stain - the cells are almost invisible”', /No stain/);
+  await freshBench7();
+  await clicks(...HIGH7('onion', 'iodine'), '[data-set="coarse"][data-v="up"]');
+  await resultCard('coarse focus at ×400: the Grade 7 “The image vanished” card', /fine focus knob/i);
+  await freshBench7();
+  await clicks(...HIGH7('cheek', 'blue'), '[data-set="part"][data-v="wall"]');
+  ok('naming a cell wall on a cheek cell: “animal cells have no cell wall”', /animal cells - they have no cell wall/.test(await ev("document.getElementById('lab-coach-text').textContent")));
+
+  console.log('\n-- Grade 7: missions');
+  await ev("LabMicroscope.startMission('g7_onionparts'); true");
+  await clicks(...HIGH7('onion', 'iodine'), '[data-set="part"][data-v="nucleus"]', '[data-set="move"][data-v="left"]', '[data-set="part"][data-v="vacuole"]',
+               '[data-set="move"][data-v="right"]', '[data-set="move"][data-v="right"]', '[data-set="part"][data-v="wall"]',
+               '[data-set="move"][data-v="left"]', '[data-set="move"][data-v="up"]', '[data-set="part"][data-v="cytoplasm"]');
+  d = await dbg();
+  ok('Parts of a plant cell: the nucleus, vacuole, wall and cytoplasm found on stained onion, no mistakes', d.mission && d.mission.success && d.mission.found.length === 4 && d.mission.errors === 0, d.mission);
+  await act('quiz');
+  ok('…3 stars, the picture questions included', (await answerAll('g7_onionparts')) === '3 of 3 stars');
+  ok('…saved', await ev("Labs.store('microscope').missions.g7_onionparts.stars === 3"));
+  await closeOv();
+  await ev("LabMicroscope.startMission('g7_compare'); true");
+  await clicks(...HIGH7('cheek', 'blue'), '[data-set="move"][data-v="left"]', '[data-set="move"][data-v="left"]', '[data-set="part"][data-v="membrane"]', '[data-set="kind"][data-v="animal"]',
+               ...HIGH7('leaf', null), '[data-set="part"][data-v="chloroplast"]', '[data-set="kind"][data-v="plant"]');
+  d = await dbg();
+  ok('Plant or animal?: cheek = animal (membrane), leaf = plant (chloroplast), no mistakes', d.mission && d.mission.success && d.mission.found.length === 4 && d.mission.errors === 0, d.mission);
+  await act('quiz');
+  ok('…3 stars', (await answerAll('g7_compare')) === '3 of 3 stars');
+  await closeOv();
+  await click('[data-panel="missions"]');
+  ok('the Missions tab lists only the Grade 7 missions', await ev(`[...document.querySelectorAll('#lab-panel [data-mission]')].map(b => b.dataset.mission).join() === ${JSON.stringify(G7.missions.join())}`));
+  await click('[data-panel="sandbox"]');
+
+  console.log('\n-- Grade 7: calm, phone');
+  await freshBench7();
+  await ev("document.documentElement.classList.add('kid-calm'); LabMicroscope._test({ instant: false }); true");
+  await clicks('[data-set="slide"][data-v="onion"]', '[data-set="stain"][data-v="iodine"]', '[data-set="cover"][data-v="drop"]');
+  ov = await overlay();
+  ok('in Calm Mode the bubbles card appears at once, with no animation', ov && /Air bubbles/.test(ov.text) && (await dbg()).busy === false, ov);
+  await closeOv();
+  await ev("document.documentElement.classList.remove('kid-calm'); LabMicroscope._test({ instant: true }); true");
+  await freshBench7();
+  await fit('360px, Grade 7 bench and shelf: no control past the screen edge, every tap target at least 44px');
+  await click('[data-panel="found"]');
+  await fit('360px, Grade 7 discoveries: the same');
+  await click('[data-panel="sandbox"]');
+
+  console.log('\n-- Grade 7: discoveries');
+  await click('[data-panel="found"]');
+  ok('the Discoveries tab shows only the Grade 7 cards', await ev(`[...document.querySelectorAll('.lab-found-card')].map(b => b.dataset.disc).join() === ${JSON.stringify(G7.discs.join())}`));
+  const unsolved7 = await unlockAll(G7.discs);
+  ok(`all ${G7.discs.length} Grade 7 discoveries unlock by following their own “Show me how”`, unsolved7.length === 0, unsolved7);
+  cnt = await counterG(7);
+  ok('…and the Grade 7 counter says so', cnt.shown === cnt.saved && cnt.shown === `${G7.discs.length}/${G7.discs.length}`, cnt);
+
+  console.log('\n-- back to Grade 9');
+  await atGrade(9);
+  sh = await shown();
+  ok('Grade 9 again: “Biology · Grade 9”, the measuring desk, the blood slides, the Grade 9 guides and missions - no Grade 7 content',
+     /Biology · Grade 9/.test(sh.eyebrow) && sh.measure && sh.slides.join() === 'blood,unstained' && sh.prick && sh.cells === 4 && sh.parts.length === 0
+     && sh.guides.join() === G9.guides.join() && sh.missions.join() === G9.missions.join(), sh);
+  ok('…and its counter still shows the Grade 9 set, untouched by Grade 7', sh.counter === `${G9.discs.length}/${G9.discs.length}`, sh.counter);
+  await click('[data-panel="found"]');
+  ok('…its Discoveries tab shows only the Grade 9 cards', await ev(`[...document.querySelectorAll('.lab-found-card')].map(b => b.dataset.disc).join() === ${JSON.stringify(G9.discs.join())}`));
+  await ev('Labs.grade = window.__labsGrade; true');
 
   await ev("showScreen('student-home'); true");
   await sleep(300);

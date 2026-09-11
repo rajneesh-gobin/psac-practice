@@ -22,8 +22,11 @@ const Labs = (() => {
   // Grade 8 set in the Separation Station, say) add the grade here AND to
   // _LAB_GRADES in app.js, which the home note reads before this file is ever
   // loaded - scripts/test-labs-grades.js fails if the two disagree.
+  // `blurb` may be { 9: '…', 4: '…' } when a lab reads differently per grade.
   const L = (id, icon, name, subject, global, blurb, grades, ready) => ({
-    id, icon, name, subject, global, blurb, grades, ready: !!ready,
+    id, icon, name, subject, global, grades, ready: !!ready,
+    blurb: typeof blurb === 'object' ? blurb[grades[grades.length - 1]] : blurb,
+    blurbs: typeof blurb === 'object' ? blurb : null,
     files: [`engine/labs/lab_${id}_data.js`, `engine/labs/lab_${id}.js`],
     css: `engine/labs/lab_${id}.css`,
   });
@@ -31,22 +34,43 @@ const Labs = (() => {
   // any registered lab regardless - that is how a lab is tested before it is
   // switched on here.
   const LABS = [
-    { id: 'mixing', icon: '🧪', name: 'Mixing Bench', subject: 'Chemistry', global: 'LabMixing', grades: [9], ready: true,
+    { id: 'mixing', icon: '🧪', name: 'Mixing Bench', subject: 'Chemistry', global: 'LabMixing', grades: [8, 9], ready: true,
       blurb: 'Metals, acids and alkalis. Make things fizz, pop and change colour - and find out why.',
+      blurbs: { 9: 'Metals, acids and alkalis. Make things fizz, pop and change colour - and find out why.',
+                8: 'Kitchen acids and alkalis: universal indicator, litmus and neutralisation.' },
       files: ['engine/labs/lab_chem_data.js', 'engine/labs/lab_mixing.js'], css: null },
-    L('separation', '⚗️', 'Separation Station', 'Chemistry', 'LabSeparation', 'Build a distillation rig, grow crystals and sublime a solid.', [9], true),
-    L('light',      '🔦', 'Light Bench',        'Physics',   'LabLight',      'Mirrors, glass blocks and a protractor. Bend a beam of light.', [9], true),
-    L('measure',    '📏', 'Measurement Lab',    'Physics',   'LabMeasure',    'Read a measuring cylinder and a vernier caliper - and beat parallax error.', [9], true),
-    L('circuit',    '💡', 'Circuit Board',      'Physics',   'LabCircuit',    'Snap cells, bulbs and switches into series and parallel circuits.', [9], true),
+    L('separation', '⚗️', 'Separation Station', 'Chemistry', 'LabSeparation', {
+      9: 'Build a distillation rig, grow crystals and sublime a solid.',
+      8: 'Filter muddy water, evaporate salt water and split ink into its dyes.',
+      7: 'Dissolve salt, weigh it, then get it back - and sort mixtures from compounds.' }, [7, 8, 9], true),
+    L('light',      '🔦', 'Light Bench',        'Physics',   'LabLight',      {
+      9: 'Mirrors, glass blocks and a protractor. Bend a beam of light.',
+      4: 'A torch, a screen and shadows. What lets light through - and what blocks it?' }, [4, 9], true),
+    L('measure',    '📏', 'Measurement Lab',    'Physics',   'LabMeasure',    {
+      9: 'Read a measuring cylinder and a vernier caliper - and beat parallax error.',
+      4: 'Rulers, jugs, thermometers and scales. Pick the right tool and read it right.',
+      7: 'Read a measuring cylinder, find a stone’s volume by displacement and weigh it.',
+      8: 'Mass ÷ volume: find each density, then watch it float or sink in water.' }, [4, 7, 8, 9], true),
+    L('circuit',    '💡', 'Circuit Board',      'Physics',   'LabCircuit',    {
+      9: 'Snap cells, bulbs and switches into series and parallel circuits.',
+      4: 'Build a circuit and light a bulb. Which things let electricity through?',
+      6: 'Light a bulb, find conductors and insulators - and stay safe with electricity.',
+      7: 'Build circuits from their symbols, wire series and parallel, place the meters.' }, [4, 6, 7, 9], true),
     L('motion',     '🛷', 'Motion Track',       'Physics',   'LabMotion',     'Roll a trolley down a ramp and watch its speed-time graph draw itself.', [9], true),
-    L('photo',      '🌿', 'Photosynthesis Lab', 'Biology',   'LabPhoto',      'Pondweed, a lamp and a bubble counter. What does a plant need?', [9], true),
+    L('photo',      '🌿', 'Photosynthesis Lab', 'Biology',   'LabPhoto',      {
+      9: 'Pondweed, a lamp and a bubble counter. What does a plant need?',
+      4: 'Grow plants in the light and the dark. What does a plant need to grow?',
+      6: 'Plants make their own food. Test light, water and leaves - and count the bubbles.' }, [4, 6, 9], true),
     L('quadrat',    '🟩', 'Quadrat Field',      'Biology',   'LabQuadrat',    'Throw quadrats on a Mauritian habitat and estimate a population.', [9], true),
-    L('microscope', '🔬', 'Microscope',         'Biology',   'LabMicroscope', 'Look at blood cells, measure the drawing and work out the magnification.', [9], true),
+    L('microscope', '🔬', 'Microscope',         'Biology',   'LabMicroscope', {
+      9: 'Look at blood cells, measure the drawing and work out the magnification.',
+      7: 'Make your own slides: onion skin, cheek cells and a leaf. Name the parts of a cell.' }, [7, 9], true),
     // Primary (PSAC Grades 4-6) labs - docs/labs/LAB_SPEC.md §8.
     L('rusting',   '🔩', 'Rusting Lab',       'Science', 'LabRusting',   'Three test tubes, three iron nails. What does iron need to rust?', [6], true),
     L('materials', '🧲', 'Materials Tester',  'Science', 'LabMaterials', 'Test objects with a magnet, a torch, a circuit and a bowl of water.', [4], true),
-    L('water',     '💧', 'Water & States',    'Science', 'LabWater',     'Melt, boil, evaporate and condense - and make a water cycle in a jar.', [4]),
-    L('air',       '🕯️', 'Air & Burning',     'Science', 'LabAir',       'What does a flame need? Candles, jars and the fire triangle.', [4, 6]),
+    L('water',     '💧', 'Water & States',    'Science', 'LabWater',     'Melt, boil, evaporate and condense - and make a water cycle in a jar.', [4], true),
+    L('air',       '🕯️', 'Air & Burning',     'Science', 'LabAir',       'What does a flame need? Candles, jars and the fire triangle.', [4, 6], true),
+    L('food',      '🥪', 'Food Tests',        'Science', 'LabFood',      'Test foods for starch, sugar, protein and fat - and read the colours.', [8], true),
   ];
   // ⚠ The app has no core Grade 5 science yet (docs/labs/PLAN.md), so a Grade 5
   //   pupil uses the primary labs built for Grades 4 and 6.
@@ -88,8 +112,7 @@ const Labs = (() => {
   }
   // The grade a lab is used at: the one picked, or - for a Grade 5 pupil in a
   // lab built for 4 and 6 - the grade that lab actually has content for.
-  function _gradeForLab(l) {
-    const g = _grade || _ownGrade();
+  function _gradeForLab(l, g = _grade || _ownGrade()) {
     if (l.grades.includes(g)) return g;
     const alias = (GRADE_ALIASES[g] || []).find(a => l.grades.includes(a));
     if (alias) return alias;
@@ -156,7 +179,31 @@ const Labs = (() => {
     s.disc = s.disc || {}; s.missions = s.missions || {}; s.hazards = s.hazards || {}; s.guides = s.guides || {};
     return s;
   }
+  // Which grade a discovery or mission belongs to, so the hub shows a Grade 4
+  // pupil their Grade 4 progress, not Grade 9's. Labs write missions straight
+  // into their store, so persist() - which every lab calls after a write - tags
+  // whatever changed since the lab opened with the grade it is being used at.
+  // Untagged (older) progress counts as the lab's original, highest grade.
+  let _openedAt = 0;
+  const _stamp = v => typeof v === 'number' ? v : (v && v.at) || 0;
+  function _tag() {
+    const l = _open && LABS.find(x => x.id === _open);
+    if (!l || !_labGrade) return;
+    const s = store(l.id); s.gr = s.gr || {};
+    [['d', s.disc], ['m', s.missions]].forEach(([k, obj]) => Object.keys(obj).forEach(id => {
+      if (_stamp(obj[id]) >= _openedAt) s.gr[k + ':' + id] = _labGrade;
+    }));
+  }
+  function _progress(l, lg) {
+    const s = store(l.id), gr = s.gr || {}, top = l.grades[l.grades.length - 1];
+    const mine = (k, id) => (gr[k + ':' + id] || top) === lg;
+    return {
+      found: Object.keys(s.disc).filter(id => mine('d', id)).length,
+      stars: Object.entries(s.missions).filter(([id]) => mine('m', id)).reduce((a, [, m]) => a + ((m && m.stars) || 0), 0),
+    };
+  }
   function persist() {
+    try { _tag(); } catch (e) { console.warn('[Labs] tag', e); }
     if (typeof save === 'function' && typeof DB !== 'undefined' && DB) { try { save(DB); } catch (e) { console.warn('[Labs] save', e); } }
   }
 
@@ -166,7 +213,8 @@ const Labs = (() => {
     if (s.disc[id]) return false;
     s.disc[id] = Date.now();
     persist();
-    const n = Object.keys(s.disc).length;
+    const l = LABS.find(x => x.id === lab);
+    const n = l && _labGrade && _open === lab ? _progress(l, _labGrade).found : Object.keys(s.disc).length;
     if (typeof toast === 'function') {
       toast(`✨ New discovery: ${info && info.title ? info.title : id}${info && info.total ? ` (${n}/${info.total})` : ''}`, 2600);
     }
@@ -191,7 +239,12 @@ const Labs = (() => {
     toxic: 'Toxic', irritant: 'Harmful', oxidising: 'Oxidising',
     electric: 'Electric shock', hot: 'Hot surface', eye: 'Bright light', biohazard: 'Biological hazard',
     warning: 'Caution', sharp: 'Sharp - can cut',
+    goggles: 'Wear eye protection',
   };
+  // `goggles` is a MANDATORY sign (ISO 7010 M004, white on a blue disc): it
+  // says what to wear, not what the danger is - pair it with the hazard sign.
+  // `eye` is "Bright light" and must not stand in for it.
+  const MANDATORY = new Set(['goggles']);
   // `warning` is the ISO 7010 general-warning "!" (W001), for a physical danger
   // no other sign names - a trolley off the end of a bench. `sharp` is W022,
   // for broken glass or a point. The GHS "Harmful" diamond says CHEMICAL, and
@@ -219,12 +272,16 @@ const Labs = (() => {
              + '<path d="M32 22v5M22 25l3 4M42 25l-3 4" stroke="#111" stroke-width="2.4" stroke-linecap="round"/>',
     warning:   '<rect x="29.3" y="22" width="5.4" height="17" rx="2.7"/><circle cx="32" cy="45" r="3.2"/>',
     sharp:     '<path d="M20 49 25.5 31 30 40 34.5 24 38.5 38 44 32 44 49Z"/>',
+    goggles:   '<path d="M12 29c0-4 3-6.5 7-6.5h26c4 0 7 2.5 7 6.5v5c0 4.5-3 7.5-7 7.5h-7l-6-5.5-6 5.5h-7c-4 0-7-3-7-7.5z" fill="#fff"/>'
+             + '<ellipse cx="22.5" cy="32" rx="6" ry="4.5" fill="#1F5FAD"/><ellipse cx="41.5" cy="32" rx="6" ry="4.5" fill="#1F5FAD"/>',
     biohazard: '<circle cx="32" cy="31" r="5.5" fill="none" stroke="#111" stroke-width="2.8"/>'
              + '<circle cx="25.5" cy="42" r="5.5" fill="none" stroke="#111" stroke-width="2.8"/>'
              + '<circle cx="38.5" cy="42" r="5.5" fill="none" stroke="#111" stroke-width="2.8"/><circle cx="32" cy="38" r="2.4"/>',
   };
   function sign(kind, mini) {
-    const frame = TRIANGLE.has(kind)
+    const frame = MANDATORY.has(kind)
+      ? `<circle cx="32" cy="32" r="28" fill="#1F5FAD"/>`
+      : TRIANGLE.has(kind)
       ? `<path d="M32 6 L60 55 H4 Z" fill="#FFD200" stroke="#111" stroke-width="${mini ? 5 : 3.5}" stroke-linejoin="round"/>`
       : `<rect x="13" y="13" width="38" height="38" rx="3" transform="rotate(45 32 32)" fill="#fff" stroke="#D0131A" stroke-width="${mini ? 6 : 4.5}"/>`;
     const svg = `<svg viewBox="0 0 64 64" aria-hidden="true" class="${mini ? 'lab-sign-mini' : 'lab-sign-svg'}">${frame}<g fill="#111">${GLYPH[kind] || ''}</g></svg>`;
@@ -383,6 +440,7 @@ const Labs = (() => {
   }
 
   // ── Hub ──────────────────────────────────────
+  const _blurb = (l, g) => (l.blurbs && l.blurbs[_gradeForLab(l, g)]) || l.blurb;
   function _hubHTML() {
     const g = _pickGrade();
     const usable = usableGrades();
@@ -395,14 +453,12 @@ const Labs = (() => {
           <span class="lab-card-blurb">${esc(l.blurb)}</span>
           <span class="lab-card-meta">Coming soon</span></div>`;
       }
-      const s = store(l.id);
-      const found = Object.keys(s.disc).length;
-      const earned = Object.values(s.missions).reduce((a, m) => a + (m.stars || 0), 0);
-      const meta = found || earned ? `✨ ${found} found · ★ ${earned} stars` : 'Not started yet';
+      const p = _progress(l, _gradeForLab(l, g));
+      const meta = p.found || p.stars ? `✨ ${p.found} found · ★ ${p.stars} stars` : 'Not started yet';
       return `<button type="button" class="lab-card" data-lab="${l.id}">
         <span class="lab-card-icon" aria-hidden="true">${l.icon}</span>
         <span class="lab-card-name">${esc(l.name)}</span>
-        <span class="lab-card-blurb">${esc(l.blurb)}</span>
+        <span class="lab-card-blurb">${esc(_blurb(l, g))}</span>
         <span class="lab-card-meta">${meta}</span>
         <span class="lab-card-go" aria-hidden="true">Open the lab →</span></button>`;
     };
@@ -414,10 +470,14 @@ const Labs = (() => {
           ${usable.map(x => `<button type="button" class="lab-grade-chip" data-grade="${x}" aria-pressed="${x === g}">Grade ${x}</button>`).join('')}
         </div>`
       : '';
+    // Science is one subject up to Grade 8 (PSAC and the Grade 7-8 packs); only
+    // Grade 9 splits into Biology, Chemistry and Physics. So a Grade 9 physics
+    // lab used at Grade 4 or 7 sits under Science with that grade's other labs.
+    const subj = l => _gradeForLab(l, g) <= 8 ? 'Science' : l.subject;
     const body = g
-      ? SUBJECTS.filter(sub => list.some(l => l.subject === sub)).map(sub => `<section class="lab-hub-subject" aria-label="${sub}">
+      ? SUBJECTS.filter(sub => list.some(l => subj(l) === sub)).map(sub => `<section class="lab-hub-subject" aria-label="${sub}">
           <h2 class="lab-card-subject">${sub}</h2>
-          <div class="lab-hub-grid">${list.filter(l => l.subject === sub).map(card).join('')}</div>
+          <div class="lab-hub-grid">${list.filter(l => subj(l) === sub).map(card).join('')}</div>
         </section>`).join('')
       : '<p class="lab-hub-lede">There are no labs for your grade yet - they are on the way.</p>';
     return `<div class="lab lab-hub">
@@ -469,7 +529,7 @@ const Labs = (() => {
   function openLab(id) {
     const l = LABS.find(x => x.id === id);
     if (!l) return;
-    _open = id;
+    _open = id; _openedAt = Date.now();
     _labGrade = _gradeForLab(l);
     render();
     const root = document.getElementById('labs-root');

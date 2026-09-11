@@ -75,14 +75,17 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     DB.restrictions = ${grant ? `{ allowedGrades: ${JSON.stringify(grant)} }` : '{}'};
     SELECTED_GRADE = ${g}; showScreen('student-home');
     return getComputedStyle(document.getElementById('sh-note-labs')).display !== 'none'; })()`);
-  for (const [g, want, why] of [[4, true, 'Materials Tester'], [5, true, 'borrows Grades 4 and 6'], [6, true, 'Rusting Lab'],
-                                [7, false, 'no Grade 7 lab yet'], [8, false, 'no Grade 8 lab yet'], [9, true, 'nine labs']]) {
+  // Grade 3 stands for "a grade with no lab": Grades 1-3 are never planned one.
+  for (const [g, want, why] of [[3, false, 'no lab for Grade 3'], [4, true, 'Materials Tester'], [5, true, 'borrows Grades 4 and 6'],
+                                [6, true, 'Rusting Lab'], [7, true, 'the Microscope'], [9, true, 'nine labs']]) {
     ok(`Grade ${g} ${want ? 'sees' : 'does not see'} Science Labs (${why})`, (await note(g)) === want);
   }
-  ok('Grade 7 sees it once a parent grants Grade 9', await note(7, [9]));
+  const lg8 = await ev('_LAB_GRADES.includes(8)');
+  ok(`Grade 8 ${lg8 ? 'sees' : 'does not see'} Science Labs, as _LAB_GRADES says`, (await note(8)) === lg8);
+  ok('Grade 3 sees it once a parent grants Grade 9', await note(3, [9]));
   ok('no lab code has loaded yet', await ev("typeof Labs === 'undefined'"));
-  await ev("DB.restrictions = {}; SELECTED_GRADE = 7; showScreen('student-home'); openLabs(); true");
-  ok('openLabs() refuses Grade 7 with no grant', (await ev('S.currentScreen')) !== 'labs');
+  await ev("DB.restrictions = {}; SELECTED_GRADE = 3; showScreen('student-home'); openLabs(); true");
+  ok('openLabs() refuses Grade 3 with no grant', (await ev('S.currentScreen')) !== 'labs');
 
   // ── The hub for each grade ────────────────────────────
   console.log('\n-- the hub');
@@ -99,21 +102,31 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
         subjects: [...r.querySelectorAll('.lab-hub-subject > h2')].map(h => h.textContent) }; })()`);
   };
 
-  let h = await hub(4);
-  ok('Grade 4: "PSAC · Grade 4", no picker, the Materials Tester', h.eyebrow === 'PSAC · Grade 4' && !h.chips.length && h.labs.join() === 'materials', h);
-  ok('…with Water & States and Air & Burning coming soon, all under Science',
-     h.soon.includes('Water & States') && h.soon.includes('Air & Burning') && h.subjects.join() === 'Science', h);
-  h = await hub(6);
-  ok('Grade 6: the Rusting Lab, Air & Burning coming soon', h.eyebrow === 'PSAC · Grade 6' && h.labs.join() === 'rusting' && h.soon.join() === 'Air & Burning', h);
+  // What each grade's hub should hold, from the registry - so switching a lab
+  // on (or giving an old lab a new grade) does not need this test edited.
+  const want = g => ev(`({ labs: Labs.labsFor(${g}).filter(l => l.ready).map(l => l.id).sort().join(),
+    soon: Labs.labsFor(${g}).filter(l => !l.ready).map(l => l.name).sort().join() })`);
+  const same = (h, w) => h.labs.slice().sort().join() === w.labs && h.soon.slice().sort().join() === w.soon;
+  let h = await hub(4), w = await want(4);
+  ok('Grade 4: "PSAC · Grade 4", no picker, exactly the Grade 4 labs', h.eyebrow === 'PSAC · Grade 4' && !h.chips.length && same(h, w), { h, w });
+  ok('…the Materials Tester and Water & States among them, all under Science',
+     h.labs.includes('materials') && h.labs.includes('water') && !h.labs.includes('rusting') && h.subjects.join() === 'Science', h);
+  h = await hub(6); w = await want(6);
+  ok('Grade 6: exactly the Grade 6 labs, the Rusting Lab among them', h.eyebrow === 'PSAC · Grade 6' && same(h, w) && h.labs.includes('rusting') && !h.labs.includes('materials'), { h, w });
   h = await hub(5);
   ok('Grade 5 borrows the primary labs built for Grades 4 and 6', h.eyebrow === 'PSAC · Grade 5' && h.labs.includes('materials') && h.labs.includes('rusting'), h);
   h = await hub(9);
   ok('Grade 9: "NCE · Grade 9", nine labs under Chemistry, Physics and Biology',
      h.eyebrow === 'NCE · Grade 9' && h.labs.length === 9 && h.subjects.join() === 'Chemistry,Physics,Biology' && !h.labs.includes('rusting'), h);
+  h = await hub(7); w = await want(7);
+  ok('Grade 7: "NCE · Grade 7", exactly the Grade 7 labs, the Microscope under Science',
+     h.eyebrow === 'NCE · Grade 7' && !h.chips.length && same(h, w) && h.labs.includes('microscope') && !h.labs.includes('mixing') && h.subjects.join() === 'Science', { h, w });
   h = await hub(7, [9]);
-  ok('Grade 7 with Grade 9 unlocked opens straight onto Grade 9, no picker', h.screen === 'labs' && h.eyebrow === 'NCE · Grade 9' && !h.chips.length && h.labs.length === 9, h);
+  ok('Grade 7 with Grade 9 unlocked: "My grade" offers 7 and 9, starting on 7', h.chips.join() === 'Grade 7,Grade 9' && h.pressed === 'Grade 7', h);
+  h = await hub(3, [9]);
+  ok('Grade 3 with Grade 9 unlocked opens straight onto Grade 9, no picker', h.screen === 'labs' && h.eyebrow === 'NCE · Grade 9' && !h.chips.length && h.labs.length === 9, h);
   h = await hub(6, [9]);
-  ok('Grade 6 with Grade 9 unlocked: "My grade" offers 6 and 9, starting on 6', h.chips.join() === 'Grade 6,Grade 9' && h.pressed === 'Grade 6' && h.labs.join() === 'rusting', h);
+  ok('Grade 6 with Grade 9 unlocked: "My grade" offers 6 and 9, starting on 6', h.chips.join() === 'Grade 6,Grade 9' && h.pressed === 'Grade 6' && h.labs.includes('rusting') && !h.labs.includes('mixing'), h);
   await ev("document.querySelector('.lab-grade-chip[data-grade=\"9\"]').click(); true");
   h = await ev(`({ pressed: (document.querySelector('.lab-grade-chip[aria-pressed="true"]') || {}).textContent, eyebrow: document.querySelector('#labs-root .lab-eyebrow').textContent,
     labs: [...document.querySelectorAll('#labs-root .lab-card[data-lab]')].map(b => b.dataset.lab) })`);
@@ -124,7 +137,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     return { off, small, root: document.getElementById('labs-root').scrollWidth, vw }; })()`);
   ok('the hub with its picker fits a 360px phone, chips at least 44px tall', fit.off.length === 0 && fit.small === 0 && fit.root <= fit.vw, fit);
   h = await hub(6, [4]);
-  ok('a grant BELOW their own grade (catch-up) adds no picker: a child aims up', !h.chips.length && h.labs.join() === 'rusting', h);
+  ok('a grant BELOW their own grade (catch-up) adds no picker: a child aims up', !h.chips.length && h.labs.includes('rusting') && !h.labs.includes('mixing'), h);
 
   // ── The sync the home note depends on ─────────────────
   const sync = await ev(`(() => {
@@ -147,16 +160,47 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   await ev('Labs.backToHub(); true');
   await openAt('rusting', 'LabRusting');
   ok('…and in the Rusting Lab at Grade 6', (await ev('Labs.grade()')) === 6);
-  await ev(`Labs.hazardCard({ signs: ['sharp'], title: 'Test', happened: 'h', why: 'w', instead: 'i', exam: 'e' }); true`);
-  let ov = await ev(`(() => { const o = document.getElementById('lab-overlay'); return o && { text: o.textContent, signs: [...o.querySelectorAll('.lab-sign figcaption')].map(f => f.textContent) }; })()`);
+  await ev(`Labs.hazardCard({ signs: ['sharp', 'goggles'], title: 'Test', happened: 'h', why: 'w', instead: 'i', exam: 'e' }); true`);
+  let ov = await ev(`(() => { const o = document.getElementById('lab-overlay'); return o && { text: o.textContent, signs: [...o.querySelectorAll('.lab-sign figcaption')].map(f => f.textContent),
+    blue: [...o.querySelectorAll('.lab-sign svg circle')].some(c => c.getAttribute('fill') === '#1F5FAD') }; })()`);
   ok('a primary lab’s exam point says “In the PSAC exam”', ov && /In the PSAC exam/.test(ov.text) && !/NCE paper/.test(ov.text), ov);
   ok('the new Sharp sign has its own label', ov && ov.signs.includes('Sharp - can cut'), ov);
+  ok('the goggles sign is a blue mandatory disc saying “Wear eye protection”', ov && ov.signs.includes('Wear eye protection') && ov.blue, ov);
   await ev('Labs.closeOverlay(true); Labs.backToHub(); true');
-  await openAt('mixing', 'LabMixing');
-  ok('a Grade 9 lab opened from Grade 5 is used at Grade 9', (await ev('Labs.grade()')) === 9);
+  // The Motion Track is Grade 9 only (the Mixing Bench now has a Grade 8 level,
+  // which a Grade 5 pupil would get as the nearest grade above their own).
+  await openAt('motion', 'LabMotion');
+  ok('a Grade 9-only lab opened from Grade 5 is used at Grade 9', (await ev('Labs.grade()')) === 9);
   await ev(`Labs.hazardCard({ signs: ['corrosive'], title: 'Test', happened: 'h', why: 'w', instead: 'i', exam: 'e' }); true`);
   ok('…and its exam point says “On the NCE paper”', /On the NCE paper/.test(await ev("document.getElementById('lab-overlay').textContent")));
   await ev('Labs.closeOverlay(true); true');
+
+  // ── Progress is counted per grade ──────────────────────
+  // A Grade 9 lab that gained a Grade 4 level must not show a Grade 4 pupil
+  // their Grade 9 discoveries on its hub card.
+  console.log('\n-- progress per grade');
+  const card = id => ev(`(() => { const c = document.querySelector('.lab-card[data-lab="${id}"]');
+    return c && { meta: c.querySelector('.lab-card-meta').textContent, blurb: c.querySelector('.lab-card-blurb').textContent,
+      subject: c.closest('.lab-hub-subject').querySelector('h2').textContent }; })()`);
+  await ev('Labs.backToHub(); true');
+  await hub(9);
+  await openAt('circuit', 'LabCircuit');
+  await ev(`(() => { const s = Labs.store('circuit'); s.disc = {}; s.missions = {}; s.gr = {};
+    Labs.discover('circuit', 'test-g9-only', { title: 'Test' }); Labs.closeOverlay(true); return true; })()`);
+  await ev('Labs.backToHub(); true');
+  let c9 = await card('circuit');
+  ok('a Grade 9 discovery shows on the Grade 9 hub card', c9 && /1 found/.test(c9.meta) && c9.subject === 'Physics', c9);
+  await hub(4);
+  const c4 = await card('circuit');
+  ok('…but not on the Grade 4 card, which sits under Science with its own blurb',
+     c4 && c4.meta === 'Not started yet' && c4.subject === 'Science' && c4.blurb !== c9.blurb && !/series/.test(c4.blurb), c4);
+  await openAt('circuit', 'LabCircuit');
+  await ev(`(() => { Labs.discover('circuit', 'test-g4-only', { title: 'Test' }); Labs.closeOverlay(true); return true; })()`);
+  await ev('Labs.backToHub(); true');
+  ok('a Grade 4 discovery counts on the Grade 4 card only', /1 found/.test((await card('circuit')).meta));
+  await hub(9);
+  ok('…and Grade 9 still shows just its own one', /1 found/.test((await card('circuit')).meta));
+  await ev(`(() => { const s = Labs.store('circuit'); s.disc = {}; s.missions = {}; s.gr = {}; Labs.persist(); return true; })()`);
 
   // ── Picture answer options ─────────────────────────────
   await ev(`Labs.quiz([{ q: 'Which is a beaker?', why: 'It has a lip and straight sides.',

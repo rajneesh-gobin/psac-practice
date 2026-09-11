@@ -185,7 +185,7 @@ const LabAir = (() => {
       case 'say-coach': { const el = $('lab-coach-text'); if (el) speak(el.textContent); break; }
       case 'say-guide': { const el = _root && _root.querySelector('#lab-guide .lab-guide-say'); if (el) speak(el.textContent); break; }
       case 'quiz': _quiz(); break;
-      case 'clear': _runs = []; _log = []; _refresh(); _coach('Notebook cleared. Start a new set of tests!'); break;
+      case 'clear': _runs = []; _log = []; D().newSeries(_st); _refresh(); _coach('Notebook cleared. Start a new set of tests!'); break;
       case 'exit-mission': _mission = null; _coach('Back to exploring. Try anything you like.'); _renderPanel(); _renderControls(); break;
       case 'guide-stop': _stopGuide(false); break;
     }
@@ -385,6 +385,7 @@ const LabAir = (() => {
     if (!M || _busy) return;
     _stopGuide(true);
     _mission = { id, keys: new Set(), hazards: 0, mistakes: 0, success: false };
+    D().newSeries(_st);
     if (M.station && _st.station !== M.station) D().apply(_st, 'station:' + M.station, _g());
     _panel = 'missions';
     _coach(M.intro);

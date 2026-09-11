@@ -9820,8 +9820,8 @@ function _renderShBadges() {
 // Interactive virtual labs, docs/labs/PLAN.md. The lab code lives in
 // engine/labs/ and is fetched on demand (RoleModules group 'labs'), so a
 // child who never opens Labs downloads none of it.
-// ⚠ Only a grade that actually HAS a lab: a Grade 7 or 8 pupil sees nothing
-//   until their own labs exist, rather than a door into Grade 9 chemistry.
+// ⚠ Only a grade that actually HAS a lab: a pupil in a grade with none sees
+//   nothing until their own labs exist, rather than a door into Grade 9 chemistry.
 // ⚠ _LAB_GRADES must equal the grades in Labs.LABS (lab_core.js) that have a
 //   ready lab, plus 5, which borrows the Grade 4 and 6 primary labs
 //   (Labs.GRADE_ALIASES). It is duplicated because this runs before that file
@@ -9832,7 +9832,7 @@ function _renderShBadges() {
 //   included. Reading SELECTED_GRADE alone hid it: opening any Grade 5 subject
 //   sets it straight back to 5.
 // ⚠ A parent can switch labs off per child (DB.restrictions.labsDisabled).
-const _LAB_GRADES = [4, 5, 6, 9];
+const _LAB_GRADES = [4, 5, 6, 7, 8, 9];
 function _labsAvailable() {
   if (typeof DB !== 'undefined' && DB && DB.restrictions && DB.restrictions.labsDisabled) return false;
   const grades = new Set([Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0)]);

@@ -1,0 +1,30 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Food Tests - only what labs.css does not already give.
+   Loaded by lab_core.js when the lab opens. Every class is .lab-food-*.
+   ⚠ Injected markup is never scanned by the Tailwind CDN: define it all here.
+   ══════════════════════════════════════════════ */
+
+/* Six tube buttons, one over each tube on the canvas. */
+.lab-food-slots { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.lab-food-slots button {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  min-width: 0; min-height: 44px; padding: 4px 2px; border-radius: 12px; border: 1px solid var(--lab-rule);
+  background: var(--lab-surface); color: var(--lab-ink); font-weight: 800; font-size: 0.9rem; line-height: 1;
+  cursor: pointer; touch-action: manipulation;
+}
+.lab-food-slots button[aria-pressed="true"] { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); color: var(--lab-accent); }
+
+/* The colour of a tube, always next to its word. */
+.lab-food-dot {
+  display: inline-block; width: 16px; height: 9px; border-radius: 4px; vertical-align: middle;
+  background: var(--c, transparent); border: 1px solid rgba(0, 0, 0, 0.28);
+}
+.lab-food-dot.is-empty { background: transparent; border-style: dashed; }
+
+/* The chip over the rack: which tube, what is in it, what it shows. */
+.lab-food-now { position: absolute; top: 8px; left: 8px; max-width: calc(100% - 16px); flex-wrap: wrap; }
+
+/* Seven tools: four to a row. */
+.lab-food-tools { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.lab-food .lab-table tr.is-mistake td, .lab-food .lab-table tr.is-mistake th { color: var(--lab-warn); }

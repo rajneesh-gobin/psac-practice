@@ -70,6 +70,9 @@ console.log('\nEquations balance');
 const eqs = [];
 for (const [k, r] of Object.entries(C.REACTIONS)) if (r.sym) eqs.push([k, r.sym]);
 for (const [k, n] of Object.entries(C.NEUTRAL)) eqs.push(['neutral ' + k, n.sym]);
+for (const [k, r] of Object.entries(C.REACTIONS8)) if (r.sym) eqs.push(['Grade 8 ' + k, r.sym]);
+for (const [k, n] of Object.entries(C.NEUTRAL8)) if (n.sym) eqs.push(['Grade 8 neutral ' + k, n.sym]);
+for (const d of C.DISCOVERIES) if (d.sym) eqs.push(['discovery ' + d.id, d.sym]);
 for (const [k, e] of eqs) { const b = balanced(e); ok(`${k}: ${e}`, b.ok, b.ok ? undefined : { left: b.a, right: b.b }); }
 ok('the atom counter itself catches an unbalanced equation', !balanced('Mg + HCl → MgCl₂ + H₂').ok);
 
@@ -106,7 +109,8 @@ ok('indicator: red at pH 1, green at 7, purple at 13',
 console.log('\nDiscoveries');
 const ids = C.DISCOVERIES.map(d => d.id);
 ok('discovery ids are unique', new Set(ids).size === ids.length);
-const fromData = new Set(Object.values(C.REACTIONS).map(r => r.disc).filter(Boolean));
+const fromData = new Set([...Object.values(C.REACTIONS), ...Object.values(C.REACTIONS8)].map(r => r.disc).filter(Boolean)
+  .concat(Object.values(C.IND8)));
 ok('every discovery a reaction names exists', [...fromData].every(id => ids.includes(id)), [...fromData].filter(id => !ids.includes(id)));
 const unreachable = ids.filter(id => !fromData.has(id) && !bench.includes(`'${id}'`));
 ok('every discovery can be found (named by a reaction or by the bench)', unreachable.length === 0, unreachable);
@@ -116,10 +120,12 @@ const tokenOk = on => {
   const [k, id] = on.split(':');
   if (k === 'liquid') return !!C.LIQUIDS[id];
   if (k === 'metal') return !!C.METALS[id];
-  return ['goggles', 'rinse', 'observe', 'pop', 'glow', 'demo-end'].includes(on);
+  if (k === 'solid') return !!C.SOLIDS8[id];
+  if (k === 'litmus') return id === 'red' || id === 'blue';
+  return ['goggles', 'rinse', 'observe', 'pop', 'glow', 'demo-end', 'out', 'lime', 'conclude'].includes(on);
 };
 const badDisc = C.DISCOVERIES.filter(d => !d.learn || !d.hint || !Array.isArray(d.how) || !d.how.length
-  || !d.how.every(tokenOk) || (d.rx ? !C.REACTIONS[d.rx] : !d.saw) || (d.eq && !C.NEUTRAL[d.eq]));
+  || !d.how.every(tokenOk) || (d.rx ? !C.REACTIONS[d.rx] : d.rx8 ? !C.REACTIONS8[d.rx8] : !d.saw) || (d.eq && !C.NEUTRAL[d.eq]));
 ok('every discovery says why it happens, what you saw, and has a valid “how to find it” recipe', badDisc.length === 0, badDisc.map(d => d.id));
 ok('a discovery recipe never puts an alkali metal anywhere but plain water',
    C.DISCOVERIES.every(d => !d.how.some(s => /metal:(sodium|potassium)/.test(s)) || d.how.filter(s => s.startsWith('liquid:')).every(s => s === 'liquid:water')));
@@ -142,6 +148,75 @@ for (const [id, H] of Object.entries(C.HAZARDS)) {
   ok(`hazard ${id} explains what happened, why, what to do and the exam point`,
      H.signs.length && H.signs.every(s => C.SIGN_LABELS[s]) && H.title(ctxArgs) && H.happened(ctxArgs) && H.why && H.instead && H.exam);
 }
+
+// ── Grade levels (LAB_SPEC §9) ──────────────────────
+console.log('\nGrade levels');
+const all = [...C.GUIDES, ...C.MISSIONS, ...C.DISCOVERIES];
+ok('GRADES is [8, 9]', C.GRADES.join() === '8,9', C.GRADES);
+ok('every guide, mission and discovery is untagged (Grade 9) or tagged with grades the lab declares',
+   all.every(x => !x.grades || (x.grades.length && x.grades.every(g => C.GRADES.includes(g)))), all.filter(x => x.grades && !x.grades.every(g => C.GRADES.includes(g))).map(x => x.id));
+ok('every Grade 8 id starts g8_, and no Grade 9 id does (progress never collides)',
+   all.every(x => (x.grades || [9]).includes(8) === x.id.startsWith('g8_')), all.filter(x => (x.grades || [9]).includes(8) !== x.id.startsWith('g8_')).map(x => x.id));
+const n9 = [C.GUIDES, C.MISSIONS, C.DISCOVERIES].map(l => C.forGrade(l, 9).length);
+ok('the Grade 9 set is unchanged: 4 guides, 2 missions, 21 discoveries', n9.join() === '4,2,21', n9);
+const g8 = { guides: C.forGrade(C.GUIDES, 8), missions: C.forGrade(C.MISSIONS, 8), disc: C.forGrade(C.DISCOVERIES, 8) };
+ok('Grade 8 has at least 3 guides, 2 missions and 10 discoveries', g8.guides.length >= 3 && g8.missions.length >= 2 && g8.disc.length >= 10,
+   { guides: g8.guides.length, missions: g8.missions.length, disc: g8.disc.length });
+ok('no Grade 8 item is also a Grade 9 item', ![...g8.guides, ...g8.missions, ...g8.disc].some(x => C.forGrade([x], 9).length));
+ok('every Grade 8 mission has at least 5 questions', g8.missions.every(M => M.quiz.length >= 5), g8.missions.map(M => M.quiz.length));
+const g9q = new Set(C.forGrade(C.MISSIONS, 9).flatMap(M => M.quiz.map(q => q.q)));
+ok('no Grade 8 question repeats a Grade 9 one', g8.missions.every(M => M.quiz.every(q => !g9q.has(q.q))));
+const g8tokens = [...g8.guides.flatMap(G => G.steps.map(s => s.on)), ...g8.disc.flatMap(d => d.how)];
+ok('Grade 8 recipes and guides use no alkali metal and no Grade 9 metal token', !g8tokens.some(t => t.startsWith('metal:')), g8tokens.filter(t => t.startsWith('metal:')));
+ok('Grade 8 solids hold no alkali metal', Object.values(C.SOLIDS8).every(s => !s.alkali) && !C.SOLIDS8.sodium && !C.SOLIDS8.potassium);
+ok('Grade 9 recipes never use a Grade 8 token', !C.forGrade(C.DISCOVERIES, 9).some(d => d.how.some(t => /^(solid|litmus):|^(lime|out|conclude)$/.test(t))));
+
+console.log('\nGrade 8 chemistry');
+const P = { lemon: 2, vinegar: 3, salt: 7, water: 7, bakingsoda: 8, toothpaste: 9, antacid: 10, bleach: 13, hcl: 0, naoh: 14, indicator: 7 };
+ok('each substance has the pH the Grade 8 chapter gives it (vinegar 3, salt 7, bleach 13 …)',
+   Object.entries(P).every(([id, p]) => C.phOf(id) === p), Object.fromEntries(Object.keys(P).map(id => [id, C.phOf(id)])));
+const Lq = C.LIQUIDS;
+const mixPH = (ids, vol) => { let h = 0, oh = 0, v = 0; ids.forEach(([id, cm3]) => { h += cm3 * Lq[id].h; oh += cm3 * Lq[id].oh; v += cm3; }); return C.pHMix(h, oh, v, ids.map(x => x[0])); };
+ok('vinegar with universal indicator reads pH 3 (orange), lemon juice pH 2 (red)',
+   mixPH([['vinegar', 5], ['indicator', 0.15]]) === 3 && C.indicatorName(3) === 'orange' && mixPH([['lemon', 5], ['indicator', 0.15]]) === 2 && C.indicatorName(2) === 'red');
+ok('salt solution is green, pH 7; baking soda blue-green, pH 8; antacid blue, pH 10',
+   mixPH([['salt', 5], ['indicator', 0.15]]) === 7 && mixPH([['bakingsoda', 5], ['indicator', 0.15]]) === 8 && C.indicatorName(8) === 'blue-green'
+   && mixPH([['antacid', 5], ['indicator', 0.15]]) === 10 && C.indicatorName(10) === 'blue');
+ok('diluting an acid with water raises the pH towards 7 but never past it (g8s-hd-086)',
+   (() => { const a = mixPH([['hcl', 5]]), b = mixPH([['hcl', 5], ['water', 15]]); const c = mixPH([['vinegar', 5], ['water', 15]]); return b > a && b < 7 && c >= 3 && c < 7; })());
+ok('5 cm³ of antacid neutralises 5 cm³ of the lab acid exactly: pH 7',
+   C.pHMix(5, 5, 10.15, ['hcl', 'indicator', 'antacid']) === 7);
+ok('Settle the Stomach: 19 drops still acidic (pH < 2), 20 drops pH 7, 21 drops overshoots to pH 10 - not 14, an antacid is a weak base',
+   C.pHMix(5, 19 * drop, 5.15 + 19 * drop, ['hcl', 'indicator', 'antacid']) < 2
+   && C.pHMix(5, 20 * drop, 5.15 + 20 * drop, ['hcl', 'indicator', 'antacid']) === 7
+   && C.pHMix(5, 21 * drop, 5.15 + 21 * drop, ['hcl', 'indicator', 'antacid']) === 10);
+ok('the lab acid and alkali alone read the same as at Grade 9 (pH 0 and 14)', C.pHMix(5, 0, 5, ['hcl']) === C.pH(5, 0, 5) && C.pHMix(0, 5, 5, ['naoh']) === C.pH(0, 5, 5));
+ok('litmus: acid turns blue litmus red; alkali turns red litmus blue; neutral changes neither; red stays red in an acid',
+   C.litmus('blue', 3) === 'red' && C.litmus('red', 9) === 'blue' && C.litmus('red', 7) === 'red' && C.litmus('blue', 7) === 'blue' && C.litmus('red', 2) === 'red' && C.litmus('blue', 10) === 'blue');
+const media = ['hcl', 'weak', 'neutral', 'alkali', 'dry'];
+ok('every Grade 8 solid has an outcome in the lab acid, a kitchen acid, a neutral liquid, an alkali and a dry tube',
+   Object.keys(C.SOLIDS8).every(s => media.every(m => C.reaction8(s, m))), Object.keys(C.SOLIDS8).flatMap(s => media.filter(m => !C.reaction8(s, m)).map(m => s + '|' + m)));
+ok('nothing reacts without an acid', Object.keys(C.SOLIDS8).every(s => ['neutral', 'alkali', 'dry'].every(m => ['none', 'dry'].includes(C.reaction8(s, m).kind))));
+ok('metals give hydrogen and the carbonate gives carbon dioxide, each using the acid',
+   Object.entries(C.REACTIONS8).filter(([, r]) => r.kind === 'react').every(([k, r]) => r.uses === 'h' && (k.startsWith('marble') ? r.co2 > 0 && !r.h2 : r.h2 > 0 && !r.co2)));
+ok('magnesium reacts faster than zinc in the lab acid, and faster in the lab acid than in a kitchen acid',
+   C.reaction8('magnesium', 'hcl').rate > C.reaction8('zinc', 'hcl').rate && C.reaction8('magnesium', 'hcl').rate > C.reaction8('magnesium', 'weak').rate
+   && C.reaction8('marble', 'hcl').rate > C.reaction8('marble', 'weak').rate);
+ok('the pop and limewater recipes make enough gas to test (> 0.03 mmol at the mouth after the watch step)',
+   C.reaction8('magnesium', 'hcl').rate * 6 * (1 - Math.exp(-1)) > 0.03 && C.reaction8('marble', 'hcl').rate * 6 * (1 - Math.exp(-1)) > 0.03);
+ok('every liquid a Grade 8 indicator card names is on the shelf', Object.keys(C.IND8).every(id => C.LIQUIDS[id]));
+const survey = C.MISSIONS.find(M => M.id === 'g8_survey');
+ok('the pH Survey samples are all household liquids with an indicator card', survey.samples.every(id => C.LIQUIDS[id] && C.LIQUIDS[id].sample && C.IND8[id]));
+ok('only baking soda fizzes (a hydrogencarbonate); bleach never reaches the tube (it is a hazard)',
+   Object.entries(C.LIQUIDS).filter(([, L]) => L.fizz).map(([id]) => id).join() === 'bakingsoda' && C.LIQUIDS.bleach.hazard === 'g8_bleach' && !!C.HAZARDS.g8_bleach);
+ok('Grade 8 hazards: goggles (corrosive), tasting (toxic), bleach (corrosive)',
+   C.HAZARDS.g8_no_goggles.signs.includes('corrosive') && C.HAZARDS.g8_taste.signs.includes('toxic') && C.HAZARDS.g8_bleach.signs.includes('corrosive'));
+for (const [id, R] of Object.entries(C.RESULTS8)) {
+  const ctxArgs = { added: 'vinegar', held: 'lemon juice', what: 'salt solution', drops: 21, p: '10.0', colour: 'blue' };
+  ok(`result card ${id} says what happened, what to do instead and the exam point`, !!(R.icon && R.title && (typeof R.happened === 'function' ? R.happened(ctxArgs) : R.happened) && R.instead && R.exam));
+  ok(`result card ${id} is used by the bench`, bench.includes(`RESULTS8.${id}`));
+}
+ok('Grade 8 has its own facts', C.FACTS8.length >= 8);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

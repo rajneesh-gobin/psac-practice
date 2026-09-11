@@ -1019,7 +1019,7 @@ const LabWater = (() => {
     </section>`;
   }
 
-  function _tick(b) { return b ? '<span class="lab-water-yes">✓ yes</span>' : '<span class="lab-water-no">not yet</span>'; }
+  function _seen(b) { return b ? '<span class="lab-water-yes">✓ yes</span>' : '<span class="lab-water-no">not yet</span>'; }
   function _notebookHTML() {
     const D = P();
     let table = '';
@@ -1045,9 +1045,9 @@ const LabWater = (() => {
           <caption>The water cycle after ${n * D.JAR_STEP} minutes</caption>
           <thead><tr><th scope="col">Step</th><th scope="col">What it means</th><th scope="col">Seen?</th></tr></thead>
           <tbody>
-            <tr><th scope="row">Evaporation</th><td>Water turns into vapour</td><td>${_tick(n > 0 && D.jarVapour(j) > 0)}</td></tr>
-            <tr><th scope="row">Condensation</th><td>Vapour turns into drops</td><td>${_tick(drops > 0)}</td></tr>
-            <tr><th scope="row">Precipitation</th><td>Drops fall like rain</td><td>${_tick(st === 'rain')}</td></tr>
+            <tr><th scope="row">Evaporation</th><td>Water turns into vapour</td><td>${_seen(n > 0 && D.jarVapour(j) > 0)}</td></tr>
+            <tr><th scope="row">Condensation</th><td>Vapour turns into drops</td><td>${_seen(drops > 0)}</td></tr>
+            <tr><th scope="row">Precipitation</th><td>Drops fall like rain</td><td>${_seen(st === 'rain')}</td></tr>
           </tbody></table></div>
         <p class="lab-fair">🌧️ The sun heats the sea. Vapour cools into clouds. Rain falls.</p>`;
     }

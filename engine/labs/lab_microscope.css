@@ -24,6 +24,8 @@
 .lab-microscope-toolhead { margin: 0; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--lab-muted); }
 .lab-microscope-toolgrp .lab-btn-wide { margin-top: 2px; }
 .lab-tools.lab-microscope-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* Grade 7: plant cell or animal cell? - two big buttons */
+.lab-tools.lab-microscope-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .lab-microscope .lab-tool[aria-pressed="true"] { border-color: var(--lab-accent); background: var(--lab-accent-soft); }
 
 /* Set-up panel: labelled rows of option buttons */

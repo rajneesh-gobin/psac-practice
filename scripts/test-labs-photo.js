@@ -1,23 +1,35 @@
 'use strict';
 // Science Labs › Photosynthesis Lab, driven in a real browser.
 //
-// Proves the lab end to end: it loads its own three files when opened, lands
-// with "What would you like to do?", a guided experiment runs to its end,
-// every discovery unlocks by following its own "Show me how", every hazard and
-// result card fires and explains itself, all three missions can be finished
-// with three stars, the animation loop really runs, Calm Mode applies effects
-// at once, and the bench fits a 360px phone with no page errors.
+// Proves the lab end to end at every grade it serves.
+//  Grade 9 (the original level): it loads its own three files when opened,
+//  lands with "What would you like to do?", a guided experiment runs to its
+//  end, every discovery unlocks by following its own "Show me how", every
+//  hazard and result card fires and explains itself, all three missions can be
+//  finished with three stars, the animation loop really runs, Calm Mode
+//  applies effects at once, and the bench fits a 360px phone.
+//  Grades 4 and 6 (PSAC, LAB_SPEC §8/§9): that grade's guides, missions and
+//  discoveries show and no other grade's; the eyebrow names the grade; 🔊
+//  read-aloud speaks only when tapped and is cancelled by an overlay, a step
+//  change, leaving the screen and closing the lab; each new hazard and result
+//  card; a guided experiment and missions to three stars; every discovery
+//  unlocks by its own "Show me how"; the time-lapse runs; Calm Mode; 360px.
+//  Progress for the three grades stays apart in Labs.store('photo').
 //
 // Run:  CHROME_PATH=<Chrome for Testing> node scripts/test-labs-photo.js
 // ⚠ Served over file:// (Chrome for Testing here cannot reach 127.0.0.1), and
 //   the page target's URL is asserted before anything is driven.
-// ⚠ Port 9402 is this lab's; the other lab builds use 9401, 9403 and 9404.
+// ⚠ Port 9415 is this lab's; the other lab builds use their own.
+// ⚠ Until the lead registers grades 4 and 6 on the photo row of Labs.LABS,
+//   Labs.grade() says 9 for this lab whatever the pupil's grade. atGrade()
+//   then overrides Labs.grade (and prints a NOTE); once registered, the test
+//   takes the real path with no edit.
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), os = require('node:os');
 const { spawn } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 
 const ROOT = path.resolve(__dirname, '..');
-const DBG = 9402;
+const DBG = 9415;
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const get = u => new Promise((res, rej) => http.get(u, r => { let s = ''; r.on('data', v => s += v); r.on('end', () => { try { res(JSON.parse(s)); } catch (e) { rej(e); } }); }).on('error', rej));
@@ -73,12 +85,83 @@ const quit = code => {
   const closeOv = () => click('#lab-overlay [data-ov-close]');
   const set = (k, v) => clicks(`[data-set="${k}"][data-v="${v}"]`);
   const act = a => clicks(`[data-act="${a}"]`);
-  // A clean bench with no guide and no mission, on the pondweed rig: start a
-  // guide, stop it (that resets the bench), then pick the rig.
-  const freshBench = async () => {
-    await ev("document.getElementById('lab-overlay')?.remove(); LabPhoto.startGuide('bubbles'); true");
+  const speech = () => ev('({ spoken: window.__tts.spoken.slice(), cancels: window.__tts.cancels })');
+  // Content for one grade: untagged items are the original Grade 9 level.
+  const forGrade = (kind, g) => `LabPhotoData.${kind}.filter(x => (x.grades || [9]).includes(${g}))`;
+  // A clean bench with no guide and no mission: start a guide, stop it (that
+  // resets the bench), then pick the rig.
+  const freshBench = async (rig = 'pond', guide = 'bubbles') => {
+    await ev(`document.getElementById('lab-overlay')?.remove(); LabPhoto.startGuide('${guide}'); true`);
     await act('guide-stop');
-    await set('rig', 'pond');
+    await set('rig', rig);
+  };
+  const counter = g => ev(`(() => { const all = ${forGrade('DISCOVERIES', g)}, st = Labs.store('photo');
+    return { shown: document.getElementById('lab-found-n').textContent, saved: all.filter(d => st.disc[d.id]).length + '/' + all.length }; })()`);
+  const answerAll = id => ev(`(() => {
+    const qs = LabPhotoData.MISSIONS.find(m => m.id === '${id}').quiz;
+    for (let i = 0; i < qs.length; i++) {
+      const card = document.querySelector('#lab-overlay .lab-ov-card');
+      const q = card.querySelector('.lab-quiz-q').textContent;
+      const def = qs.find(x => x.q === q);
+      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild.textContent === def.options[0]);
+      btn.click();
+      card.querySelector('[data-next]').click();
+    }
+    const done = document.querySelector('#lab-overlay .lab-done .lab-stars');
+    return done ? done.getAttribute('aria-label') : 'no result card';
+  })()`);
+  const resultCard = async (label, re) => { const o = await overlay(); ok(label, o && /is-result/.test(o.cls) && /What happened/.test(o.text) && /What you should have done/.test(o.text) && re.test(o.text), o); await closeOv(); };
+  const fit = async label => {
+    const f = await ev(`(() => { const vw = innerWidth;
+      const off = [...document.querySelectorAll('#labs-root button, #labs-root canvas')]
+        .filter(e => e.getBoundingClientRect().width > 0 && e.getBoundingClientRect().right > vw + 0.5)
+        .map(e => (e.getAttribute('data-set') || e.getAttribute('data-act') || e.getAttribute('data-panel') || e.tagName) + ' → ' + Math.round(e.getBoundingClientRect().right));
+      const small = [...document.querySelectorAll('#labs-root .lab-photo-opt, #labs-root .lab-tool, #labs-root .lab-photo-rigs button, #labs-root .lab-photo-say')]
+        .filter(e => e.getBoundingClientRect().width > 0 && (e.getBoundingClientRect().height < 43.5 || e.getBoundingClientRect().width < 43.5)).length;
+      return { vw, root: document.getElementById('labs-root').scrollWidth, off, small }; })()`);
+    ok(label, f.root <= f.vw && f.off.length === 0 && f.small === 0, f);
+  };
+  // Follow every discovery's own "Show me how" from a fresh bench.
+  const unlockAll = async g => {
+    const ids = await ev(`${forGrade('DISCOVERIES', g)}.map(d => d.id)`);
+    const unsolved = [];
+    for (const id of ids) {
+      const res = await ev(`(() => {
+        const st = Labs.store('photo'); delete st.disc['${id}'];
+        document.getElementById('lab-overlay')?.remove();
+        LabPhoto.discoveryGuide('${id}');
+        if (!LabPhoto._debug().guide) return 'no guide started';
+        for (let k = 0; k < 24 && LabPhoto._debug().guide; k++) {
+          const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
+          if (o) return 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 90);
+          const btn = document.querySelector('#lab-guide [data-guide-do]');
+          if (btn) btn.click(); else LabPhoto._tick(7);
+        }
+        if (LabPhoto._debug().guide) return 'guide never finished at step ' + LabPhoto._debug().guide.step;
+        document.getElementById('lab-overlay')?.remove();
+        return !!st.disc['${id}'];
+      })()`);
+      if (res !== true) unsolved.push(id + ' → ' + res);
+    }
+    return { ids, unsolved };
+  };
+  // Open the lab at grade n - the real way when the lab is registered for n.
+  const atGrade = async n => {
+    await ev("document.getElementById('lab-overlay')?.remove(); if (typeof Labs !== 'undefined' && document.querySelector('#labs-root .lab-photo')) Labs.backToHub(); true");
+    await ev(`SELECTED_GRADE = ${n}; showScreen('labs'); true`);
+    let hub = false;
+    for (let i = 0; i < 40 && !hub; i++) { await sleep(250); hub = await ev("typeof window.Labs !== 'undefined' && !!document.querySelector('#labs-root .lab-hub')"); }
+    const real = await ev(`Labs.labsFor(${n}).some(l => l.id === 'photo')`);
+    if (real) await ev('if (window.__realGrade) { Labs.grade = window.__realGrade; } true');
+    else {
+      console.log(`NOTE Grade ${n}: the photo lab is not registered for Grade ${n} yet (Labs.LABS / _LAB_GRADES), so Labs.grade is overridden to ${n}.`);
+      await ev(`window.__realGrade = window.__realGrade || Labs.grade; Labs.grade = () => ${n}; true`);
+    }
+    await ev("Labs.openLab('photo'); true");
+    let mounted = false;
+    for (let i = 0; i < 60 && !mounted; i++) { await sleep(150); mounted = await ev("typeof window.LabPhoto !== 'undefined' && !!document.querySelector('#labs-root .lab-photo')"); }
+    ok(`Grade ${n}: the lab opens`, mounted && (await ev('LabPhoto._debug().grade')) === n, await ev('LabPhoto._debug().grade'));
+    return real;
   };
 
   await call('Page.navigate', { url: PAGE });
@@ -88,8 +171,15 @@ const quit = code => {
   if (!url.startsWith('file:')) { console.log('REFUSING: the page target is ' + url + ', not the file we navigated to.'); quit(1); return; }
   ok('app loaded', ready === true);
   await sleep(2500);
+  // A stand-in for the speech engine: records what is spoken and cancelled.
+  await ev(`(() => { const t = { spoken: [], cancels: 0, speaking: false, pending: false,
+      speak(u) { this.spoken.push(u.text); }, cancel() { this.cancels++; }, getVoices() { return []; } };
+    Object.defineProperty(window, 'speechSynthesis', { value: t, configurable: true, writable: true });
+    window.__tts = t; return true; })()`);
 
-  // ── Opening the lab ─────────────────────────────
+  // ══════════════════════════════════════════════
+  //  GRADE 9 - the original level
+  // ══════════════════════════════════════════════
   console.log('\n-- opening the lab');
   await ev("SELECTED_GRADE = 9; openLabs(); true");
   let hub = false;
@@ -110,6 +200,8 @@ const quit = code => {
   ok('the welcome is remembered', await ev("Labs.store('photo').intro === true"));
   ok('top bar: back, Biology · Grade 9, title and help',
      await ev("!!document.querySelector('.lab-photo .lab-top [data-act=\"hub\"]') && /Biology · Grade 9/.test(document.querySelector('.lab-photo .lab-eyebrow').textContent) && !!document.querySelector('.lab-photo [data-act=\"help\"]')"));
+  ok('Grade 9 is unchanged: no read-aloud button, and its own two rigs',
+     await ev("!document.querySelector('.lab-photo [data-act=\"say-coach\"]') && [...document.querySelectorAll('.lab-photo-rigs [data-v]')].map(b => b.dataset.v).join() === 'pond,leaf'"));
   await act('help');
   ov = await overlay();
   ok('help explains the word equation and the starch-test order', ov && /carbon dioxide \+ water → glucose \+ oxygen/.test(ov.text) && /Boil the leaf/.test(ov.text), ov && ov.text.slice(0, 200));
@@ -118,11 +210,11 @@ const quit = code => {
   ok('💡 gives a fact', /💡/.test(await ev("document.getElementById('lab-coach-text').textContent")));
   await ev('LabPhoto._test({ instant: true }); true');
 
-  // ── Landing ─────────────────────────────────────
   console.log('\n-- what to do here');
   ok('the Bench tab opens with “What would you like to do?”, 4 guided experiments and 3 missions',
      await ev("!!document.querySelector('.lab-start') && /What would you like to do/.test(document.querySelector('.lab-start').textContent) && document.querySelectorAll('.lab-start [data-guide]').length === 4 && document.querySelectorAll('.lab-start [data-mission]').length === 3"));
   ok('the tabs are Bench, Missions and Discoveries, with a counter', await ev("[...document.querySelectorAll('.lab-tabs [data-panel]')].map(b => b.dataset.panel).join() === 'sandbox,missions,found' && /\\/17$/.test(document.getElementById('lab-found-n').textContent)"));
+  ok('no primary guide or mission appears at Grade 9', await ev("[...document.querySelectorAll('.lab-start [data-guide], .lab-start [data-mission]')].every(b => !/^g\\d_/.test(b.dataset.guide || b.dataset.mission))"));
 
   await click('.lab-start [data-guide="bubbles"]');
   const gs = () => ev(`({ box: !document.getElementById('lab-guide').hidden, text: document.getElementById('lab-guide').textContent.replace(/\\s+/g, ' '),
@@ -147,13 +239,11 @@ const quit = code => {
   ok('…31 bubbles per minute, more than at 30 cm', (await dbg()).pond.last.bubbles === 31);
   ok('the finished experiment is remembered, and the next one offered', await ev("!!Labs.store('photo').guides.bubbles") && /Next: Test a leaf for starch/.test(ov.text));
   ok('discoveries were collected on the way (the bubbles, closer lamp)', await ev("['bubbles','closer_faster'].every(id => Labs.store('photo').disc[id])"));
-  const counter = () => ev("({ shown: document.getElementById('lab-found-n').textContent, saved: Object.keys(Labs.store('photo').disc).length + '/' + LabPhotoData.DISCOVERIES.length })");
-  let cnt = await counter();
+  let cnt = await counter(9);
   ok('the ✨ counter matches what is saved', cnt.shown === cnt.saved, cnt);
   await closeOv();
   ok('back on the Bench tab, the start panel shows it done', await ev("/✓ done/.test(document.querySelector('.lab-start').textContent)"));
 
-  // ── Hazards ─────────────────────────────────────
   console.log('\n-- hazards');
   await freshBench();
   await clicks('[data-set="rig"][data-v="leaf"]', '[data-act="pick"]', '[data-set="bunsen"][data-v="on"]');
@@ -175,9 +265,7 @@ const quit = code => {
   ok('…and the ethanol step did not happen', !(await dbg()).leaf.steps.includes('ethanol'));
   ok('the hazards are counted in the lab store', await ev("Labs.store('photo').hazards.ethanol_flame >= 1 && Labs.store('photo').hazards.ethanol_lit >= 1"));
 
-  // ── Result cards ────────────────────────────────
   console.log('\n-- mistakes that teach');
-  const resultCard = async (label, re) => { const o = await overlay(); ok(label, o && /is-result/.test(o.cls) && /What happened/.test(o.text) && /What you should have done/.test(o.text) && re.test(o.text), o); await closeOv(); };
   await freshBench();
   await clicks('[data-set="rig"][data-v="leaf"]', '[data-act="pick"]', '[data-set="bunsen"][data-v="on"]', '[data-act="boil"]', '[data-set="bunsen"][data-v="off"]', '[data-act="iodine"]');
   ok('skip the ethanol: the leaf stays green under the iodine', (await dbg()).leaf.reading === 'masked');
@@ -201,25 +289,10 @@ const quit = code => {
   ok('no heat shield, lamp at 10 cm: the water warms from 25 °C to 31 °C', (await dbg()).pond.last.tempEnd === 31);
   await resultCard('…“The lamp heated the water” card', /25 °C to 31 °C/);
 
-  // ── The notebook ────────────────────────────────
   const nbText = await ev("document.getElementById('lab-notebook').textContent.replace(/\\s+/g, ' ')");
   ok('the notebook has a table of every count and a table of starch tests', /Every pondweed count/.test(nbText) && /Starch tests/.test(nbText), nbText.slice(0, 300));
 
-  // ── Missions ───────────────────────────────────
   console.log('\n-- missions');
-  const answerAll = id => ev(`(() => {
-    const qs = LabPhotoData.MISSIONS.find(m => m.id === '${id}').quiz;
-    for (let i = 0; i < qs.length; i++) {
-      const card = document.querySelector('#lab-overlay .lab-ov-card');
-      const q = card.querySelector('.lab-quiz-q').textContent;
-      const def = qs.find(x => x.q === q);
-      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild.textContent === def.options[0]);
-      btn.click();
-      card.querySelector('[data-next]').click();
-    }
-    const done = document.querySelector('#lab-overlay .lab-done .lab-stars');
-    return done ? done.getAttribute('aria-label') : 'no result card';
-  })()`);
   await ev("LabPhoto.startMission('light'); true");
   await clicks('[data-set="water"][data-v="high"]', '[data-set="shield"][data-v="on"]');
   for (const dd of [50, 40, 30, 20]) { await set('dist', dd); await act('count'); }
@@ -252,7 +325,6 @@ const quit = code => {
   ok('…3 stars', (await answerAll('starch')) === '3 of 3 stars');
   await closeOv();
 
-  // ── Motion, calm, phone ────────────────────────
   console.log('\n-- motion, calm, phone');
   await freshBench();
   await ev('LabPhoto._test({ instant: false }); true');
@@ -270,21 +342,10 @@ const quit = code => {
   await clicks('[data-set="rig"][data-v="leaf"]', '[data-set="day"][data-v="light"]');
   ok('in Calm Mode a day in the sun applies at once, with no animation', (await dbg()).leaf.day === 'light' && (await dbg()).busy === false);
   await ev("document.documentElement.classList.remove('kid-calm'); LabPhoto._test({ instant: true }); true");
-  const fit = async label => {
-    const f = await ev(`(() => { const vw = innerWidth;
-      const off = [...document.querySelectorAll('#labs-root button, #labs-root canvas')]
-        .filter(e => e.getBoundingClientRect().width > 0 && e.getBoundingClientRect().right > vw + 0.5)
-        .map(e => (e.getAttribute('data-set') || e.getAttribute('data-act') || e.getAttribute('data-panel') || e.tagName) + ' → ' + Math.round(e.getBoundingClientRect().right));
-      const small = [...document.querySelectorAll('#labs-root .lab-photo-opt, #labs-root .lab-tool, #labs-root .lab-photo-rigs button')]
-        .filter(e => e.getBoundingClientRect().width > 0 && (e.getBoundingClientRect().height < 43.5 || e.getBoundingClientRect().width < 43.5)).length;
-      return { vw, root: document.getElementById('labs-root').scrollWidth, off, small }; })()`);
-    ok(label, f.root <= f.vw && f.off.length === 0 && f.small === 0, f);
-  };
   await fit('360px, starch bench: no control past the screen edge, every tap target at least 44px');
   await set('rig', 'pond');
   await fit('360px, pondweed rig: the same');
 
-  // ── Discoveries ────────────────────────────────
   console.log('\n-- discoveries');
   await click('[data-panel="found"]');
   ok('the Discoveries tab shows 17 cards, found and locked', await ev("document.querySelectorAll('.lab-found-card').length === 17 && document.querySelectorAll('.lab-found-card.is-found').length >= 6 && /Clue:/.test(document.querySelector('.lab-found').textContent)"));
@@ -302,32 +363,237 @@ const quit = code => {
     ok('…and “Show me how” starts a guide for it', !!(await dbg()).guide);
     await act('guide-stop');
   }
-  const discIds = await ev('LabPhotoData.DISCOVERIES.map(d => d.id)');
-  const unsolved = [];
-  for (const id of discIds) {
-    const res = await ev(`(() => {
-      const st = Labs.store('photo'); delete st.disc['${id}'];
-      document.getElementById('lab-overlay')?.remove();
-      LabPhoto.discoveryGuide('${id}');
-      for (let k = 0; k < 20 && LabPhoto._debug().guide; k++) {
-        const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
-        if (o) return 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
-        if (btn) btn.click(); else LabPhoto._tick(7);
-      }
-      if (LabPhoto._debug().guide) return 'guide never finished at step ' + LabPhoto._debug().guide.step;
-      document.getElementById('lab-overlay')?.remove();
-      return !!st.disc['${id}'];
-    })()`);
-    if (res !== true) unsolved.push(id + ' → ' + res);
-  }
-  ok(`all ${discIds.length} discoveries unlock by following their own “Show me how”`, unsolved.length === 0, unsolved);
-  cnt = await counter();
-  ok('…and the counter says so', cnt.shown === cnt.saved && cnt.shown === `${discIds.length}/${discIds.length}`, cnt);
+  let un = await unlockAll(9);
+  ok(`all ${un.ids.length} discoveries unlock by following their own “Show me how”`, un.unsolved.length === 0 && un.ids.length === 17, un.unsolved);
+  cnt = await counter(9);
+  ok('…and the counter says so', cnt.shown === cnt.saved && cnt.shown === `${un.ids.length}/${un.ids.length}`, cnt);
 
-  await ev("showScreen('student-home'); true");
+  // ══════════════════════════════════════════════
+  //  GRADES 4 AND 6 - the PSAC levels
+  // ══════════════════════════════════════════════
+  const PRIMARY = {
+    4: { rigs: 'pots,seeds', first: 'g4_light', other: 6, mission: 'g4_needs' },
+    6: { rigs: 'pots,weed', first: 'g6_bubbles', other: 4, mission: 'g6_gases' },
+  };
+  for (const n of [4, 6]) {
+    const L = PRIMARY[n];
+    console.log(`\n-- Grade ${n}: opening`);
+    const spokenBefore = (await speech()).spoken.length;
+    const real = await atGrade(n);
+    await sleep(300);
+    ov = await overlay();
+    ok(`Grade ${n}: a first visit at this grade shows its own welcome, with “Show me how”`, ov && /Welcome to the Photosynthesis Lab/.test(ov.text) && /Show me how/.test(ov.text) && /🔊/.test(ov.text) && !/starch test/i.test(ov.text), ov && ov.text.slice(0, 300));
+    ok(`Grade ${n}: nothing was read aloud on its own`, (await speech()).spoken.length === spokenBefore);
+    await closeOv();
+    ok(`Grade ${n}: the welcome is remembered for this grade only`, await ev(`Labs.store('photo')['intro_g${n}'] === true`));
+    ok(`Grade ${n}: the eyebrow says “Science · Grade ${n}”, and its own rigs`,
+       await ev(`document.querySelector('.lab-photo .lab-eyebrow').textContent === 'Science · Grade ${n}' && [...document.querySelectorAll('.lab-photo-rigs [data-v]')].map(b => b.dataset.v).join() === '${L.rigs}'`));
+    ok(`Grade ${n}: no Grade 9 apparatus - no starch bench, no iodine, no Bunsen`,
+       await ev("!document.querySelector('[data-set=\"rig\"][data-v=\"leaf\"], [data-act=\"iodine\"], [data-set=\"bunsen\"], [data-act=\"flame\"]')"));
+    await ev('LabPhoto._test({ instant: true }); true');
+    const want = await ev(`({ g: ${forGrade('GUIDES', n)}.map(x => x.id), m: ${forGrade('MISSIONS', n)}.map(x => x.id), d: ${forGrade('DISCOVERIES', n)}.length })`);
+    const shown = await ev("({ g: [...document.querySelectorAll('.lab-start [data-guide]')].map(b => b.dataset.guide), m: [...document.querySelectorAll('.lab-start [data-mission]')].map(b => b.dataset.mission), n: document.getElementById('lab-found-n').textContent })");
+    ok(`Grade ${n}: the start panel shows exactly this grade's ${want.g.length} guides and ${want.m.length} missions, none from Grade 9 or Grade ${L.other}`,
+       JSON.stringify(shown.g) === JSON.stringify(want.g) && JSON.stringify(shown.m) === JSON.stringify(want.m) && want.g.length >= 3 && want.m.length >= 2, { shown, want });
+    ok(`Grade ${n}: the ✨ counter counts this grade's ${want.d} discoveries`, new RegExp(`/${want.d}$`).test(shown.n) && want.d >= 10, shown.n);
+    await click('[data-panel="missions"]');
+    ok(`Grade ${n}: the Missions tab lists only this grade's missions`,
+       await ev(`JSON.stringify([...document.querySelectorAll('.lab-missions [data-mission]')].map(b => b.dataset.mission)) === JSON.stringify(${JSON.stringify(want.m)})`));
+    await click('[data-panel="found"]');
+    ok(`Grade ${n}: the Discoveries tab shows only this grade's ${want.d} cards`,
+       await ev(`document.querySelectorAll('.lab-found-card').length === ${want.d} && [...document.querySelectorAll('.lab-found-card')].every(c => c.dataset.disc.startsWith('g${n}_'))`));
+    await click('[data-panel="sandbox"]');
+
+    console.log(`\n-- Grade ${n}: read aloud`);
+    await act('tip');
+    const coachText = await ev("document.getElementById('lab-coach-text').textContent");
+    await act('say-coach');
+    let sp = await speech();
+    ok(`Grade ${n}: 🔊 on the lab assistant speaks its words, without the emoji`, sp.spoken.length >= 1 && coachText.includes(sp.spoken[sp.spoken.length - 1].slice(0, 12)) && !/💡/.test(sp.spoken[sp.spoken.length - 1]), sp);
+    const c0 = sp.cancels;
+    await act('help');
+    ok(`Grade ${n}: opening an overlay cancels the speech`, (await speech()).cancels > c0);
+    ov = await overlay();
+    ok(`Grade ${n}: help is written for this grade (a fair test, stay safe) with no starch test`, ov && /fair test/i.test(ov.text) && /hot lamp/i.test(ov.text) && !/iodine|ethanol/i.test(ov.text), ov && ov.text.slice(0, 200));
+    await closeOv();
+
+    console.log(`\n-- Grade ${n}: a guided experiment`);
+    await click(`.lab-start [data-guide="${L.first}"]`);
+    g = await gs();
+    ok(`Grade ${n}: the guide box opens with a 🔊 button and the thing to tap glows`, g.box && !!(await ev("document.querySelector('#lab-guide [data-act=\"say-guide\"]')")) && !!g.next, g);
+    const spoken0 = (await speech()).spoken.length;
+    await click('#lab-guide [data-act="say-guide"]');
+    sp = await speech();
+    ok(`Grade ${n}: 🔊 on the guide box reads the step`, sp.spoken.length === spoken0 + 1 && g.text.includes(sp.spoken[sp.spoken.length - 1].slice(0, 10)), sp.spoken.slice(-1));
+    const c1 = sp.cancels;
+    await ev("window.__tts.speaking = true; true");
+    await click('[data-guide-do]');
+    await ev("window.__tts.speaking = false; true");
+    ok(`Grade ${n}: the next step cancels the speech`, (await speech()).cancels > c1, await speech());
+    for (let k = 0; k < 12 && (await dbg()).guide; k++) await click('[data-guide-do]');
+    ov = await overlay();
+    ok(`Grade ${n}: the guided experiment runs to “What you found out”`, ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text), ov);
+    ok(`Grade ${n}: it is remembered`, await ev(`!!Labs.store('photo').guides['${L.first}']`));
+    await closeOv();
+    cnt = await counter(n);
+    ok(`Grade ${n}: discoveries came on the way, and the counter matches what is saved`, cnt.shown === cnt.saved && !/^0\//.test(cnt.saved), cnt);
+
+    console.log(`\n-- Grade ${n}: the hot lamp`);
+    await freshBench('pots', L.first);
+    await clicks('[data-set="pot"][data-v="B"]', '[data-set="spot"][data-v="lamp"]');
+    await ev('LabPhoto._test({ instant: false }); true');
+    await act('week');
+    const midH = { ov: await overlay(), busy: (await dbg()).busy };
+    await sleep(1800);
+    ov = await overlay();
+    ok(`Grade ${n}: a plant under a hot lamp: the leaves scorch on the canvas first, then the card`, midH.ov === null && midH.busy === true && ov && /is-hazard/.test(ov.cls), { midH, ov: ov && ov.cls });
+    await ev('LabPhoto._test({ instant: true }); true');
+    ok(`Grade ${n}: …a HOT SURFACE hazard card: what happened, why, what to do instead and the exam point`,
+       ov && ov.signs.includes('Hot surface') && /What happened/.test(ov.text) && /Why it’s dangerous/.test(ov.text) && /Do this instead/.test(ov.text) && /adult/.test(ov.text), ov);
+    if (real) ok(`Grade ${n}: …its exam section says “In the PSAC exam”, from Labs.grade()`, /In the PSAC exam/.test(ov.text), ov.text.slice(0, 400));
+    else console.log(`NOTE Grade ${n}: the exam heading follows the shell's own grade, so “In the PSAC exam” is checked only once the lab is registered for Grade ${n}.`);
+    await closeOv();
+    d = await dbg();
+    ok(`Grade ${n}: …and the plant is back on the windowsill`, d.pots.B.spot === 'sun' && !d.pots.res, d.pots);
+    ok(`Grade ${n}: the hazard is counted in the lab store`, await ev("Labs.store('photo').hazards.hot_lamp >= 1"));
+
+    console.log(`\n-- Grade ${n}: mistakes that teach`);
+    await freshBench('pots', L.first);
+    await clicks('[data-set="pot"][data-v="B"]', '[data-set="spot"][data-v="dark"]', '[data-set="drink"][data-v="none"]', '[data-act="week"]');
+    await resultCard(`Grade ${n}: pot B in the dark AND with no water: “Not a fair test - two things changed”`, /where it stood and the water/);
+    await freshBench('pots', L.first);
+    await clicks('[data-set="pot"][data-v="B"]', '[data-set="drink"][data-v="flood"]', '[data-act="week"]');
+    ok(`Grade ${n}: far too much water: the plant turns yellow and droops`, /roots began to rot/.test((await dbg()).log[0]), (await dbg()).log[0]);
+    await resultCard(`Grade ${n}: …the “Too much water” card`, /could not get air/);
+    await freshBench('pots', L.first);
+    await clicks('[data-set="twin"][data-v="off"]', '[data-set="spot"][data-v="dark"]', '[data-act="week"]');
+    await resultCard(`Grade ${n}: one plant in the dark with nothing to compare: the “no control” card`, /control/);
+    if (n === 4) {
+      await freshBench('seeds', L.first);
+      await clicks('[data-set="dish"][data-v="1"]', '[data-set="place"][data-v="window"]', '[data-set="dish"][data-v="2"]', '[data-set="place"][data-v="fridge"]',
+                   '[data-set="dish"][data-v="3"]', '[data-set="place"][data-v="window"]', '[data-set="dish"][data-v="4"]', '[data-set="place"][data-v="window"]', '[data-act="days"]');
+      await resultCard('Grade 4: fridge seeds against windowsill seeds: “Two things changed: cold AND dark”', /cold AND dark/);
+    } else {
+      await freshBench('weed', L.first);
+      await act('wcount');
+      await clicks('[data-set="wwater"][data-v="boiled"]', '[data-set="wlamp"][data-v="off"]', '[data-act="wcount"]');
+      await resultCard('Grade 6: lamp off AND boiled water between counts: “Not a fair test - two things changed”', /the light and the water/);
+    }
+
+    console.log(`\n-- Grade ${n}: missions`);
+    if (n === 4) {
+      await ev("LabPhoto.startMission('g4_needs'); true");
+      await clicks('[data-set="pot"][data-v="B"]', '[data-set="spot"][data-v="dark"]', '[data-act="week"]');
+      await clicks('[data-set="spot"][data-v="sun"]', '[data-set="drink"][data-v="none"]', '[data-act="week"]');
+      d = await dbg();
+      ok('Grade 4: Light and water: both fair tests done, no mistakes', d.mission && d.mission.success && d.mission.errors === 0, d.mission);
+      ok('Grade 4: …the notebook has a table of the plant pots', /Plant pots after 7 days/.test(await ev("document.getElementById('lab-notebook').textContent")));
+      await act('quiz');
+      ok('Grade 4: …3 stars', (await answerAll('g4_needs')) === '3 of 3 stars');
+      await closeOv();
+      await ev("LabPhoto.startMission('g4_seeds'); true");
+      await clicks('[data-set="dish"][data-v="2"]', '[data-set="wet"][data-v="dry"]', '[data-set="dish"][data-v="3"]', '[data-set="place"][data-v="fridge"]',
+                   '[data-set="dish"][data-v="4"]', '[data-set="wet"][data-v="drown"]', '[data-act="days"]');
+      d = await dbg();
+      ok('Grade 4: Wake up the seeds: water, warmth and air found in one go', d.mission && d.mission.success && d.mission.errors === 0 && d.seeds.sprouted.join() === 'true,false,false,false', d);
+      await act('quiz');
+      ok('Grade 4: …3 stars', (await answerAll('g4_seeds')) === '3 of 3 stars');
+      await closeOv();
+    } else {
+      await ev("LabPhoto.startMission('g6_gases'); true");
+      await clicks('[data-set="wwater"][data-v="boiled"]', '[data-act="wcount"]', '[data-set="wwater"][data-v="soda"]', '[data-act="wcount"]', '[data-set="wlamp"][data-v="off"]', '[data-act="wcount"]');
+      d = await dbg();
+      ok('Grade 6: Gas A and Gas B: three tests, bubbles only with light AND carbon dioxide', d.mission && d.mission.success && d.mission.errors === 0
+         && d.mission.results[0] === 0 && d.mission.results[1] > 0 && d.mission.results[2] === 0, d.mission);
+      await act('quiz');
+      ok('Grade 6: …3 stars', (await answerAll('g6_gases')) === '3 of 3 stars');
+      await closeOv();
+      await ev("LabPhoto.startMission('g6_food'); true");
+      await clicks('[data-set="pot"][data-v="B"]', '[data-set="leaves"][data-v="off"]', '[data-act="week"]');
+      await clicks('[data-set="leaves"][data-v="on"]', '[data-set="spot"][data-v="dark"]', '[data-act="week"]');
+      d = await dbg();
+      ok('Grade 6: The leaf, the food factory: both fair tests done', d.mission && d.mission.success && d.mission.errors === 0, d.mission);
+      await act('quiz');
+      ok('Grade 6: …3 stars', (await answerAll('g6_food')) === '3 of 3 stars');
+      await closeOv();
+    }
+    ok(`Grade ${n}: the stars are saved under this grade's own mission ids`, await ev(`${forGrade('MISSIONS', n)}.every(M => Labs.store('photo').missions[M.id] && Labs.store('photo').missions[M.id].stars === 3)`));
+
+    console.log(`\n-- Grade ${n}: time-lapse, calm, phone`);
+    await freshBench('pots', L.first);
+    await ev('LabPhoto._test({ instant: false }); true');
+    await act('week');
+    await sleep(1500);
+    d = await dbg();
+    ok(`Grade ${n}: with animation on, the week runs as a time-lapse (day ${d.pots.day.toFixed(1)} of 7)`, d.busy && d.pots.day > 0.5 && d.pots.day < 6.5
+       && /Day [1-6] of 7/.test(await ev("document.getElementById('lab-photo-chips').textContent")), d.pots);
+    await ev('LabPhoto._tick(4); true');
+    ok(`Grade ${n}: …and ends on day 7 in the notebook`, (await dbg()).pots.day === 7 && !(await dbg()).busy);
+    ok(`Grade ${n}: the canvas has drawn the pots`, await ev("(() => { const c = document.getElementById('lab-canvas'); const p = c.getContext('2d').getImageData(c.width / 2, c.height * 0.8, 1, 1).data; return p[3] > 0; })()"));
+    await ev("document.documentElement.classList.add('kid-calm'); true");
+    await act('fresh');
+    await act('week');
+    ok(`Grade ${n}: in Calm Mode the week applies at once`, (await dbg()).pots.day === 7 && !(await dbg()).busy);
+    const rig2 = L.rigs.split(',')[1];
+    await set('rig', rig2);
+    await act(rig2 === 'seeds' ? 'days' : 'wcount');
+    d = await dbg();
+    ok(`Grade ${n}: in Calm Mode the ${rig2 === 'seeds' ? 'four days' : 'count'} apply at once too`, rig2 === 'seeds' ? d.seeds.day === 4 && !d.busy : !d.weed.counting && !!d.weed.last);
+    await ev("document.documentElement.classList.remove('kid-calm'); LabPhoto._test({ instant: true }); true");
+    await fit(`Grade ${n}, 360px, ${rig2}: no control past the screen edge, every tap target at least 44px`);
+    await set('rig', 'pots');
+    await fit(`Grade ${n}, 360px, pots: the same`);
+
+    console.log(`\n-- Grade ${n}: discoveries`);
+    un = await unlockAll(n);
+    ok(`Grade ${n}: all ${un.ids.length} discoveries unlock by following their own “Show me how”`, un.unsolved.length === 0 && un.ids.length >= 10, un.unsolved);
+    cnt = await counter(n);
+    ok(`Grade ${n}: …and the counter says so`, cnt.shown === cnt.saved && cnt.shown === `${un.ids.length}/${un.ids.length}`, cnt);
+    await click('[data-panel="found"]');
+    await click(`.lab-found-card.is-found[data-disc="${n === 4 ? 'g4_dark' : 'g6_bubbles'}"]`);
+    ov = await overlay();
+    ok(`Grade ${n}: a found discovery explains itself in this grade's words`, ov && /What you saw/.test(ov.text) && /Why it happens/.test(ov.text)
+       && (n === 6 ? /carbon dioxide \+ water → food \+ oxygen/.test(ov.text) && !/C₆H₁₂O₆/.test(ov.text) : /pale yellow/.test(ov.text)), ov && ov.text.slice(0, 300));
+    await closeOv();
+    await click('[data-panel="sandbox"]');
+  }
+
+  // ── Progress kept apart ──────────────────────────
+  console.log('\n-- progress per grade');
+  const st = await ev("(() => { const s = Labs.store('photo'); return { disc: Object.keys(s.disc), missions: Object.keys(s.missions), guides: Object.keys(s.guides) }; })()");
+  ok('the store holds each grade under its own ids (g4_…, g6_… and the Grade 9 ones), with nothing shared',
+     st.disc.some(x => x.startsWith('g4_')) && st.disc.some(x => x.startsWith('g6_')) && st.disc.includes('bubbles') && st.disc.includes('g6_bubbles') && st.missions.includes('light') && st.missions.includes('g4_needs'), st);
+  await atGrade(9);
   await sleep(300);
-  ok('leaving the Labs screen stops the animation loop cleanly', errors.length === 0);
+  cnt = await counter(9);
+  ok('back at Grade 9: its counter still reads 17/17 - the primary discoveries do not leak into it', cnt.shown === '17/17' && cnt.shown === cnt.saved, cnt);
+  ok('…the Grade 9 eyebrow, rigs and missions are back', await ev("/Biology · Grade 9/.test(document.querySelector('.lab-photo .lab-eyebrow').textContent) && [...document.querySelectorAll('.lab-photo-rigs [data-v]')].map(b => b.dataset.v).join() === 'pond,leaf'"));
+  await atGrade(4);
+  await sleep(300);
+  cnt = await counter(4);
+  ok('back at Grade 4: its own counter, from its own ids', cnt.shown === cnt.saved && /^11\/11$/.test(cnt.shown), cnt);
+
+  // ── Leaving ─────────────────────────────────────
+  console.log('\n-- leaving');
+  await act('say-coach');
+  ok('…the lab knows it is speaking', (await dbg()).talking === true);
+  const c2 = (await speech()).cancels;
+  // ⚠ showScreen('student-home') can bounce with no child signed in; go
+  //   somewhere that certainly hides the Labs screen, and check that it did.
+  await ev("showScreen('landing'); true");
+  await sleep(400);
+  const left = await ev("({ hidden: document.getElementById('screen-labs').classList.contains('hidden'), talking: LabPhoto._debug().talking, looping: LabPhoto._debug().looping })");
+  ok('leaving the Labs screen cancels the speech and stops the loop', left.hidden && !left.talking && !left.looping && (await speech()).cancels > c2, left);
+  await ev("showScreen('labs'); true");
+  await sleep(300);
+  await ev("if (!document.querySelector('#labs-root .lab-photo')) Labs.openLab('photo'); true");
+  await sleep(300);
+  await act('say-coach');
+  const c3 = (await speech()).cancels;
+  ok('…speaking again after coming back, and the loop restarted', await ev('LabPhoto._debug().talking && LabPhoto._debug().looping'));
+  await ev('Labs.backToHub(); true');
+  ok('closing the lab (unmount) cancels the speech', (await speech()).cancels > c3 && (await dbg()).talking === false, await speech());
+  if (await ev('!!window.__realGrade')) await ev('Labs.grade = window.__realGrade; true');
   ok('no page errors along the way', errors.length === 0, errors.slice(0, 5));
 
   console.log('\n' + checks + ' passed, ' + failed + ' failed');
