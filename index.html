@@ -6510,14 +6510,19 @@
     (function () {
       if (location.hostname !== 'psac-practice.netlify.app') return;
 
-      // Show the migration modal as soon as the DOM is ready.
+      // Installed PWA (standalone) users: redirect immediately — tapping the home
+      // screen icon should land them straight on nouklass.com with no extra step.
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.location.replace('https://nouklass.com/');
+        return;
+      }
+
+      // Browser visitors: show the migration modal.
       document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('migration-modal').style.display = 'flex';
       });
 
       // Wrap showScreen so any attempt to open the auth screen redirects instead.
-      // app.js defines showScreen at classic-script top level, so it is available
-      // by the time any onclick fires. We replace it once after DOMContentLoaded.
       document.addEventListener('DOMContentLoaded', function () {
         var _orig = window.showScreen;
         window.showScreen = function (id) {
