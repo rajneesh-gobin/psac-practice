@@ -60,6 +60,7 @@ const LabMotion = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <div class="lab-task-strip">Set the variables and observe how motion changes.</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-motion-controls" class="lab-motion-controls"></div>
         </div>
@@ -131,7 +132,7 @@ const LabMotion = (() => {
       if (rt) { setRoute(rt.dataset.route); return; }
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
-      if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -570,8 +571,10 @@ const LabMotion = (() => {
       box.innerHTML = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
-        <button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>
-        <button type="button" class="lab-link" data-act="guide-stop">Stop the guide</button>`;
+        <div class="lab-guide-actions">
+          <button type="button" class="lab-guide-hint-btn" data-guide-hint aria-label="Show me where to go">💡 Hint</button>
+          <button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>
+        </div>`;
       box.hidden = false;
     }
     _highlight();
@@ -602,6 +605,17 @@ const LabMotion = (() => {
       case 'area': area(); break;
       case 'walk': walk(); break;
     }
+  }
+
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // ── Discoveries: every card opens ─────────────
@@ -713,6 +727,7 @@ const LabMotion = (() => {
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
@@ -727,7 +742,17 @@ const LabMotion = (() => {
       default: sel = `#lab-motion-controls [data-act="${k}"]`;
     }
     const el = sel && _root.querySelector(sel);
-    if (el) el.classList.add('is-next');
+    if (el) {
+      el.classList.add('is-next');
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      const guideBox = _root.querySelector('#lab-guide');
+      _root.querySelectorAll('[data-act],[data-add],[data-set],[data-h],[data-route]').forEach(other => {
+        if (other !== el && !el.contains(other) && !other.contains(el)
+            && !(guideBox && guideBox.contains(other))) {
+          other.classList.add('is-guide-dim');
+        }
+      });
+    }
   }
 
   function _startHTML() {

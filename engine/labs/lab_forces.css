@@ -1,0 +1,144 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Forces & Pressure
+   All classes prefixed .lab-forces-
+   Shared classes come from engine/labs/labs.css
+   ══════════════════════════════════════════════ */
+
+/* CSS custom properties used by the canvas drawing code */
+.lab-forces {
+  --lab-forces-bg:     #EDF4F2;
+  --lab-forces-bench:  #C4D6D2;
+  --lab-forces-spring: #5E7E7A;
+  --lab-forces-hook:   #37474F;
+  --lab-forces-ground: #8AAF8A;
+  --lab-forces-sand:   #D9C99A;
+  --lab-forces-ink:    #14211D;
+}
+
+/* ── Mode bar (bench / pressure toggle) ──── */
+.lab-forces-mode-bar {
+  display: flex;
+  gap: 0;
+  margin: 0 0 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid var(--lab-border, #C2CFCD);
+  align-self: center;
+}
+.lab-forces-mode-bar button {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 12px;
+  font: 600 14px/1.2 system-ui, sans-serif;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--lab-ink, #14211D);
+  transition: background 0.18s, color 0.18s;
+}
+.lab-forces-mode-bar button + button {
+  border-left: 1.5px solid var(--lab-border, #C2CFCD);
+}
+.lab-forces-mode-bar button[aria-pressed="true"] {
+  background: var(--lab-accent, #1D6A96);
+  color: #fff;
+}
+
+/* ── Chips overlay on canvas ──── */
+.lab-forces-chips {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+/* ── Shelf section ──── */
+.lab-forces-shelf {
+  margin-top: 6px;
+}
+
+/* Objects grid */
+.lab-forces-objects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 6px;
+}
+
+/* Pad grid */
+.lab-forces-pads {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.lab-item.is-danger {
+  border-color: #C62828;
+  background: #fff5f5;
+}
+
+.lab-item.is-active {
+  border-color: var(--lab-accent, #1D6A96);
+  background: rgba(29, 106, 150, 0.09);
+  font-weight: 700;
+}
+
+.lab-item-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  display: block;
+  text-align: center;
+}
+
+/* Force row (10 N / 20 N / 50 N) */
+.lab-forces-force-row {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 4px;
+}
+
+.lab-forces-fBtn {
+  flex: 1;
+  min-height: 44px;
+  border: 1.5px solid var(--lab-border, #C2CFCD);
+  border-radius: 8px;
+  background: transparent;
+  font: 700 14px/1 system-ui, sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  color: var(--lab-ink, #14211D);
+}
+.lab-forces-fBtn.is-active,
+.lab-forces-fBtn[aria-pressed="true"] {
+  background: var(--lab-accent, #1D6A96);
+  color: #fff;
+  border-color: var(--lab-accent, #1D6A96);
+}
+
+/* Tools row */
+.lab-forces-tools {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.lab-forces-tools .lab-tool,
+.lab-forces-tools .lab-btn {
+  flex: 1;
+  min-height: 44px;
+}
+
+/* Notebook value column — monospace for alignment */
+.lab-forces-val {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  color: var(--lab-accent, #1D6A96);
+}
+
+/* ── Calm / reduced motion ──── */
+@media (prefers-reduced-motion: reduce) {
+  .lab-forces-mode-bar button { transition: none; }
+  .lab-forces-fBtn { transition: none; }
+}

@@ -149,6 +149,13 @@
   outline: 3px solid var(--lab-star); outline-offset: 2px;
   box-shadow: 0 0 0 6px rgba(228, 161, 27, 0.28);
   animation: labNext 1.3s ease-in-out infinite;
+  position: relative; z-index: 2;
+}
+/* Everything else during a guide step — fades out so only the target stands out. */
+.lab-root .is-guide-dim {
+  opacity: 0.28;
+  pointer-events: none;
+  transition: opacity 0.2s;
 }
 @keyframes labNext { 50% { box-shadow: 0 0 0 11px rgba(228, 161, 27, 0.1); } }
 
@@ -186,6 +193,26 @@
 .lab-tool:active, .lab-item:active, .lab-btn:active { transform: scale(0.97); }
 
 /* ── Side: tabs, shelf, notebook ── */
+/* On mobile the bench canvas sits first in the DOM; bring the "What would you
+   like to do?" panel above it so a student arriving on a phone sees the start
+   panel and the guided-experiment buttons before they scroll. */
+@media (max-width: 899px) {
+  .lab-side { order: -1; }
+  /* Once a guided experiment is active, flip back so the canvas + instruction
+     appear FIRST — the child needs to see the instrument, not the shelf. */
+  .lab-body:has(.lab-guide:not([hidden])) .lab-side { order: 0; }
+}
+/* Pin the active guide instruction to the top of the viewport so "Tap X"
+   stays in view while the child taps elements on the canvas below it.
+   A box-shadow separates it visually from the canvas that scrolls behind it. */
+@media (max-width: 899px) {
+  .lab-guide:not([hidden]) {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+  }
+}
 .lab-side { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 /* Three tabs share the width and wrap their own label rather than scrolling
    the row sideways: at 360px a scrolled row hid half of "Discoveries". */
@@ -357,7 +384,10 @@
 .lab-hz-sec.is-exam h3 { color: var(--lab-accent); }
 
 .is-quiz .lab-ov-card, .lab-ov-card:has(.lab-quiz-q) { padding: 18px; }
-.lab-quiz-meta { margin: 0 0 8px; font-size: 0.75rem; font-weight: 700; color: var(--lab-muted); }
+.lab-quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.lab-quiz-meta { margin: 0; font-size: 0.75rem; font-weight: 700; color: var(--lab-muted); }
+.lab-quiz-exit { background: none; border: none; padding: 4px 6px; border-radius: 6px; color: var(--lab-muted); font-size: 1rem; cursor: pointer; line-height: 1; }
+.lab-quiz-exit:hover { background: var(--lab-surface-2); color: var(--lab-ink); }
 .lab-quiz-bar { height: 6px; border-radius: 99px; background: var(--lab-surface-2); overflow: hidden; margin-bottom: 14px; }
 .lab-quiz-bar i { display: block; height: 100%; background: var(--lab-accent); }
 .lab-quiz-q { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px !important; }
@@ -410,9 +440,62 @@
   .lab-item { padding: 8px; gap: 8px; }
 }
 
+/* ── Idle hint: pulse the first actionable button after 9 s of inactivity ── */
+@keyframes lab-idle-hint {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0    rgba(59, 130, 246, 0.55); }
+  40%  { transform: scale(1.07); box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);   }
+  100% { transform: scale(1);    box-shadow: 0 0 0 0    rgba(59, 130, 246, 0);   }
+}
+.is-idle-hint {
+  animation: lab-idle-hint 1.3s ease-out 2;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Guide hint button ── */
+.lab-guide-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.lab-guide-hint-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 2px solid #3b82f6;
+  background: transparent;
+  color: #3b82f6;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s;
+}
+.lab-guide-hint-btn:hover { background: rgba(59,130,246,0.1); }
+.lab-guide-hint-btn:active { opacity: 0.7; }
+
+/* ── Permanent task strip ── */
+.lab-task-strip {
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--lab-fg);
+  padding: 7px 14px;
+  background: var(--lab-surface);
+  border-radius: 10px;
+  border: 1.5px solid var(--lab-rule);
+  margin: 0 0 6px;
+}
+.lab-task-strip strong { color: var(--lab-accent); }
+
 @media (prefers-reduced-motion: reduce) {
   .lab-coach p.is-new, .lab-root .is-next { animation: none; }
   .lab-tool:active, .lab-item:active, .lab-btn:active { transform: none; }
+  .is-idle-hint { animation: none; outline: 2px solid #3b82f6; }
 }
 .kid-calm .lab-coach p.is-new, .kid-calm .lab-root .is-next { animation: none !important; }
 .kid-calm .lab-tool:active, .kid-calm .lab-item:active, .kid-calm .lab-btn:active { transform: none; }
+.kid-calm .is-idle-hint { animation: none !important; outline: 2px solid #3b82f6; }

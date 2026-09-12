@@ -1,0 +1,283 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Gas Tests  (Science, Grade 7)
+   All classes prefixed .lab-gastests-
+   No Tailwind utilities here — lab_core.js / labs.css provide the shell.
+   ══════════════════════════════════════════════ */
+
+/* ── Station selector buttons ─────────────────────────────────────────────── */
+.lab-gastests-stations {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--lab-side-bg, #F4F8FC);
+  border-bottom: 1px solid var(--lab-border, #D0DDE8);
+  flex-wrap: wrap;
+}
+
+.lab-gastests-station-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border: 1.5px solid var(--lab-border, #C8D8E4);
+  border-radius: 2rem;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--lab-ink, #14211D);
+  min-height: 44px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.lab-gastests-station-btn:hover,
+.lab-gastests-station-btn:focus-visible {
+  background: #EAF4FF;
+  border-color: #4D8AB8;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(77,138,184,0.35);
+}
+
+.lab-gastests-station-btn.is-active {
+  background: #1A5C90;
+  color: #fff;
+  border-color: #1A5C90;
+}
+
+.lab-gastests-station-name {
+  font-size: 0.82rem;
+}
+
+/* ── Tool buttons ─────────────────────────────────────────────────────────── */
+/* lab_core.js / labs.css provides .lab-tool; no override needed unless we want
+   a gas-tests-specific look. */
+
+/* ── Canvas stage ─────────────────────────────────────────────────────────── */
+/* lab_core.js provides .lab-canvas-wrap and the sizing; the canvas fills it. */
+#lab-gastests-canvas {
+  width: 100%;
+  display: block;
+  border-radius: 0.4rem;
+  background: transparent;
+}
+
+/* ── Status line ──────────────────────────────────────────────────────────── */
+#lab-status {
+  font-size: 0.78rem;
+  color: var(--lab-muted, #5A7080);
+  padding: 0.2rem 0.5rem;
+  min-height: 1.4em;
+}
+
+/* ── Start / sandbox panel ────────────────────────────────────────────────── */
+.lab-start-steps {
+  margin: 0.4rem 0 0.75rem 1.15rem;
+  padding: 0;
+  font-size: 0.84rem;
+  color: var(--lab-ink, #14211D);
+  line-height: 1.6;
+}
+
+.lab-start-sub {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--lab-muted, #5A7080);
+  margin: 0.75rem 0 0.35rem;
+}
+
+.lab-start-guides {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.lab-start-guide {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid var(--lab-border, #D0DDE8);
+  border-radius: 0.5rem;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-align: left;
+  min-height: 44px;
+  width: 100%;
+  color: var(--lab-ink, #14211D);
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.lab-start-guide:hover,
+.lab-start-guide:focus-visible {
+  background: #EAF4FF;
+  border-color: #4D8AB8;
+  outline: none;
+}
+
+.lab-start-guide.is-done {
+  border-color: #58A85A;
+  background: #F0FAF0;
+}
+
+.lab-start-guide .lab-start-arrow {
+  margin-left: auto;
+  color: var(--lab-muted, #7A90A0);
+}
+
+/* ── Mission panel ────────────────────────────────────────────────────────── */
+.lab-mission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.lab-mission-card {
+  padding: 0.7rem 0.75rem;
+  border: 1.5px solid var(--lab-border, #D0DDE8);
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.lab-mission-head {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-bottom: 0.35rem;
+}
+
+.lab-mission-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.lab-mission-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.lab-mission-stars {
+  font-size: 0.85rem;
+  margin: 0.1rem 0 0;
+}
+
+.lab-mission-blurb {
+  font-size: 0.82rem;
+  color: var(--lab-muted, #5A7080);
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+.lab-mission-active {
+  padding: 0.5rem 0;
+}
+
+.lab-mission-hint {
+  font-size: 0.82rem;
+  color: var(--lab-muted, #5A7080);
+  margin: 0 0 0.6rem;
+}
+
+/* ── Discoveries panel ────────────────────────────────────────────────────── */
+.lab-found-header {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--lab-muted, #5A7080);
+  padding: 0.4rem 0 0.5rem;
+}
+
+.lab-found-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.45rem;
+}
+
+.lab-found-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.55rem 0.4rem;
+  border: 1.5px solid var(--lab-border, #D0DDE8);
+  border-radius: 0.5rem;
+  background: #F6F9FC;
+  cursor: pointer;
+  text-align: center;
+  min-height: 44px;
+  font-size: 0.76rem;
+  color: var(--lab-muted, #7A90A0);
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.lab-found-card:hover,
+.lab-found-card:focus-visible {
+  background: #EAF4FF;
+  border-color: #4D8AB8;
+  outline: none;
+}
+
+.lab-found-card.is-found {
+  background: #fff;
+  border-color: #58A85A;
+  color: var(--lab-ink, #14211D);
+}
+
+.lab-found-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.lab-found-title {
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+/* ── Guide box ────────────────────────────────────────────────────────────── */
+/* .lab-guide is provided by labs.css; the tokens inside are generic */
+
+/* ── Calm mode ────────────────────────────────────────────────────────────── */
+/* In calm mode the bench still works; animations skip to end-state.
+   No special override needed beyond what lab_core.js handles. */
+
+/* ── Responsive: 360 px minimum ──────────────────────────────────────────── */
+@media (max-width: 420px) {
+  .lab-gastests-stations {
+    padding: 0.4rem 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .lab-gastests-station-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .lab-found-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+/* ── Table (used in air-composition overlay) ─────────────────────────────── */
+.lab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.lab-table th,
+.lab-table td {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--lab-border, #D0DDE8);
+  text-align: left;
+}
+
+.lab-table th {
+  background: var(--lab-side-bg, #F4F8FC);
+  font-weight: 700;
+}
+
+.lab-table tr:nth-child(even) td {
+  background: #FAFCFE;
+}

@@ -185,6 +185,7 @@ const LabSeparation = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <div class="lab-task-strip">Build the rig, then run the experiment — or explore freely!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-separation-tools" id="lab-tools"></div>
         </div>
@@ -264,7 +265,7 @@ const LabSeparation = (() => {
       if (a) { _act(a.dataset.act); return; }
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
-      if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -337,7 +338,7 @@ const LabSeparation = (() => {
     b.setAttribute('aria-pressed', String(_goggles));
     b.classList.toggle('is-on', _goggles);
     const l = $('lab-goggles-label');
-    if (l) l.textContent = _goggles ? 'Goggles on' : 'Goggles off';
+    if (l) l.textContent = _goggles ? 'Goggles on' : 'Put on goggles';
   }
 
   function setMode(m, silent) {
@@ -1038,7 +1039,7 @@ const LabSeparation = (() => {
       _busy = false;
       if (H.card) _discover(SD.CARD_DISC[H.card]);
       Labs.hazardCard({ signs: H.signs, title: H.title(ctx), happened: H.happened(ctx), why: H.why,
-        instead: H.instead, exam: H.exam, button: H.reset ? 'Get fresh glassware' : 'Got it - try again safely',
+        instead: H.instead, exam: val(H.exam, Labs.grade()), button: H.reset ? 'Get fresh glassware' : 'Got it - try again safely',
         onClose: () => { _afterHazard(id); if (H.card) _guideEvent('card:' + H.card); } });
     });
   }
@@ -1064,7 +1065,7 @@ const LabSeparation = (() => {
     if (!_cards.length || _busy || $('lab-overlay')) return;
     const k = _cards.shift(), R = SD.RESULTS[k.id];
     Labs.resultCard({ icon: R.icon, title: val(R.title, k.ctx), happened: val(R.happened, k.ctx), instead: val(R.instead, k.ctx),
-      exam: R.exam, button: _cards.length ? 'Next →' : 'Got it',
+      exam: val(R.exam, Labs.grade()), button: _cards.length ? 'Next →' : 'Got it',
       onClose: () => {
         _guideEvent('card:' + k.id);
         if (_cards.length) _showCard();
@@ -1168,9 +1169,10 @@ const LabSeparation = (() => {
       box.innerHTML = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
-        ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
-                : '<p class="lab-guide-wait">⏳ Keep watching the apparatus…</p>'}
-        <button type="button" class="lab-link" data-act="guide-stop">Stop the guide</button>`;
+        <div class="lab-guide-actions">
+          <button type="button" class="lab-guide-hint-btn" data-guide-hint aria-label="Show me where to go">💡 Hint</button>
+          <button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>
+        </div>`;
       box.hidden = false;
     }
     _highlight();
@@ -1181,6 +1183,17 @@ const LabSeparation = (() => {
     if (!G) return;
     const s = G.steps[_guide.step];
     if (s && s.on === token) { _guide.step++; _guideEnter(); }
+  }
+
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function _guideDo() {
@@ -1325,6 +1338,7 @@ const LabSeparation = (() => {
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
@@ -1345,7 +1359,17 @@ const LabSeparation = (() => {
       else sel = `[data-mix="${a}"]`;
     }
     const el = sel && _root.querySelector(sel);
-    if (el) el.classList.add('is-next');
+    if (el) {
+      el.classList.add('is-next');
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      const guideBox = _root.querySelector('#lab-guide');
+      _root.querySelectorAll('[data-act],[data-mode],[data-part],[data-opt],[data-mix],[data-tech],[data-why]').forEach(other => {
+        if (other !== el && !el.contains(other) && !other.contains(el)
+            && !(guideBox && guideBox.contains(other))) {
+          other.classList.add('is-guide-dim');
+        }
+      });
+    }
   }
 
   // ══ Panels ═══════════════════════════════════

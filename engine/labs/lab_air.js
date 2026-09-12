@@ -79,6 +79,7 @@ const LabAir = (() => {
             <button type="button" class="lab-coach-tip" data-act="say-coach" aria-label="Read this out loud">🔊</button>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <div class="lab-task-strip">Follow the guide — or investigate properties of air freely!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-air-controls" class="lab-air-controls"></div>
         </div>
@@ -157,7 +158,7 @@ const LabAir = (() => {
       if (a) { _act(a.dataset.act); return; }
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
-      if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -460,8 +461,10 @@ const LabAir = (() => {
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <div class="lab-air-sayrow"><p class="lab-guide-say">${esc(txt.say)}</p>
           <button type="button" class="lab-coach-tip" data-act="say-guide" aria-label="Read this step out loud">🔊</button></div>
-        <button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(txt.btn)}</button>
-        <button type="button" class="lab-link" data-act="guide-stop">Stop the guide</button>`;
+        <div class="lab-guide-actions">
+          <button type="button" class="lab-guide-hint-btn" data-guide-hint aria-label="Show me where to go">💡 Hint</button>
+          <button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>
+        </div>`;
       box.hidden = false;
     }
     _highlight();
@@ -474,8 +477,17 @@ const LabAir = (() => {
     else _highlight();
   }
 
-  // The guide's button always completes its step: it first puts right
-  // whatever the pupil changed meanwhile (a jar still on, an unlit candle).
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
   function _guideDo() {
     const G = _gdef();
     if (!G || _busy) return;
@@ -576,13 +588,24 @@ const LabAir = (() => {
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
     const where = D().TOK_STATION[s.split(':')[0]];
     const sel = where && !where.includes(_st.station) ? `[data-tok="station:${where[0]}"]` : `[data-tok="${s}"]`;
     const el = _root.querySelector(sel);
-    if (el) el.classList.add('is-next');
+    if (el) {
+      el.classList.add('is-next');
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      const guideBox = _root.querySelector('#lab-guide');
+      _root.querySelectorAll('[data-tok]').forEach(other => {
+        if (other !== el && !el.contains(other) && !other.contains(el)
+            && !(guideBox && guideBox.contains(other))) {
+          other.classList.add('is-guide-dim');
+        }
+      });
+    }
   }
 
   // ══ Panels ═══════════════════════════════════

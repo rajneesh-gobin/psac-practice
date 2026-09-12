@@ -65,3 +65,15 @@
   .lab-measure .lab-tool { font-size: 0.68rem; }
   .lab-measure-row .lab-btn { padding: 0 12px; }
 }
+/* Keep the reading form (and its Check button) pinned to the bottom of the
+   viewport on a phone so the child never has to scroll down to submit a
+   reading. The box-shadow lifts it above the canvas and tools it covers. */
+@media (max-width: 899px) {
+  .lab-measure-read {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.12);
+  }
+}

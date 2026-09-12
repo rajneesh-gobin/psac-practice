@@ -1726,6 +1726,9 @@ function _unlockOrientation() {
 
 // ── Mobile: Text-to-speech ──────────────────────────────────────────────────
 let _ttsSpeaking = false;
+// true once the child has tapped the button — causes loadPracticeQuestion to
+// auto-read each new question so they never have to tap again mid-session.
+let _ttsAutoRead = false;
 // A French passage read out by an English voice is worse than no audio at all,
 // so the utterance language follows the active pack rather than being fixed.
 function _ttsLang() {
@@ -1910,6 +1913,30 @@ function _ttsStop() {
   try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (_) {}
 }
 
+// Keeps the practice TTS button label in sync with the three states:
+//   reading now  → "⏹ Stop reading"
+//   auto-read on → "🔊 Re-read"   (finished naturally; next question will auto-read)
+//   off          → "🔊 Read it to me"
+function _updateTtsBtn() {
+  const btn = document.getElementById('practice-tts-btn');
+  if (!btn) return;
+  const ico = btn.querySelector('.pr-tool-ico');
+  const lbl = btn.querySelector('.pr-tool-lbl');
+  if (_ttsSpeaking) {
+    if (ico) ico.textContent = '⏹';
+    if (lbl) lbl.textContent = 'Stop reading';
+    btn.title = 'Stop reading aloud';
+  } else if (_ttsAutoRead) {
+    if (ico) ico.textContent = '🔊';
+    if (lbl) lbl.textContent = 'Re-read';
+    btn.title = 'Read the question again';
+  } else {
+    if (ico) ico.textContent = '🔊';
+    if (lbl) lbl.textContent = 'Read it to me';
+    btn.title = 'Read the question and the choices aloud, one at a time';
+  }
+}
+
 // ⚠ Warned ONCE per session, not per tap. With no French voice installed the
 // engine reads French with whatever it has - "l'école" in an English accent -
 // and the child has no way to know the app is not simply wrong. utt.lang is
@@ -1943,7 +1970,7 @@ function speakQuestion(mode) {
   // has to tap twice to hear anything. `=== false` on purpose: an engine that
   // does not expose .speaking must keep the plain toggle.
   if (_ttsSpeaking && speechSynthesis.speaking === false) _ttsSpeaking = false;
-  if (_ttsSpeaking) { _ttsStop(); return; }
+  if (_ttsSpeaking) { _ttsAutoRead = false; _ttsStop(); _updateTtsBtn(); return; }
 
   const lang  = _ttsLang();
   const parts = _ttsSentences(_ttsBlanks(text, lang)).map(s => ({ text: s, el: null }));
@@ -1973,6 +2000,8 @@ function speakQuestion(mode) {
   if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
   _ttsClearHighlight();
   _ttsSpeaking = true;
+  _ttsAutoRead = true;
+  _updateTtsBtn();
   const last = parts.length - 1;
   parts.forEach((part, i) => {
     const utt = new SpeechSynthesisUtterance(part.text);
@@ -1981,7 +2010,7 @@ function speakQuestion(mode) {
     utt.onstart = () => { _ttsClearHighlight(); if (part.el) part.el.classList.add('tts-reading'); };
     const done = () => {
       if (part.el) part.el.classList.remove('tts-reading');
-      if (i === last) _ttsSpeaking = false;
+      if (i === last) { _ttsSpeaking = false; _updateTtsBtn(); }
     };
     utt.onend   = done;
     utt.onerror = () => { done(); _ttsStop(); };
@@ -2331,6 +2360,7 @@ const _ADULT_ONLY_SCREENS = new Set(['forum', 'parent-messages', 'teacher']);
 const _REFRESH_RESTORE_SCREENS = new Set([
   'subject-hub', 'practice-hub', 'chapter-select', 'subject-select', 'dashboard',
   'syllabus', 'analytics', 'schedule', 'inbox', 'past-papers', 'interactive-map',
+  'labs', 'student-home',
 ]);
 // These paint from CHAPTERS / ACTIVE_PACK. Without a restored pack they open
 // empty, and an empty chapter list is worse than the hub.
@@ -8213,6 +8243,7 @@ window.startKidMission = async function() {
 // Every call from markup passes two arguments, so the default keeps the public
 // signature exactly as it was.
 function startChapterDirect(chapterId, forceDiff, _attempt) {
+  _ttsAutoRead = false;
   const mode = _practiceMode;
   _practiceMode = null;
   const resume = _practiceResume;
@@ -10620,6 +10651,11 @@ function loadPracticeQuestion() {
   }
   _updateDiffBadge(q);
   updateSessionStats();
+  _updateTtsBtn();
+  // Auto-read if the child turned reading on earlier this session. The 150 ms
+  // delay lets the answer area finish rendering before speechSynthesis.speak()
+  // reads the options list (it reads whatever is in the DOM at call time).
+  if (_ttsAutoRead) setTimeout(() => speakQuestion('practice'), 150);
 }
 
 // Read-only recap for a question S.practice.answers already has a record of -

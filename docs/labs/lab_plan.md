@@ -1,20 +1,20 @@
 # Science Labs — what is left to do
 
-> Written 2026-09-11 (night), when the owner paused the batches. Pick up from
-> here. Background and history: `docs/labs/PLAN.md`. How to build a lab:
-> `docs/labs/LAB_SPEC.md` (§8 primary labs, §9 grade levels).
-> ⚠ Re-check this against the code before trusting it: `Labs.LABS` in
-> `engine/labs/lab_core.js` and `_LAB_GRADES` in `engine/app.js` are the truth.
+> Updated 2026-09-12. Background: `docs/labs/PLAN.md`. How to build: `docs/labs/LAB_SPEC.md`.
+> ⚠ Re-check against the code — `Labs.LABS` in `engine/labs/lab_core.js` and
+> `_LAB_GRADES` in `engine/app.js` are the truth.
 
-## Where things stand
-| Grade | Labs live (`ready`, verified by the lead) |
-|---|---|
-| 4 | Materials, Water & States, Air & Burning, Circuit Board, Photosynthesis, Light Bench, Measurement |
-| 5 | none of its own — borrows the Grade 4 and 6 labs (`Labs.GRADE_ALIASES`) |
-| 6 | Rusting, Air & Burning, Circuit Board, Photosynthesis |
-| 7 | Microscope, Separation Station, Circuit Board, Measurement |
-| 8 | Separation Station, Mixing Bench, Food Tests, Measurement |
-| 9 | all nine (Mixing, Separation, Light, Measurement, Circuit, Motion, Photosynthesis, Quadrat, Microscope) |
+## Where things stand (2026-09-12)
+| Grade | Labs **live** (`ready: true`, lead-verified) | Labs **built but not yet live** (`ready: false`) |
+|---|---|---|
+| 4 | Materials, Water & States, Air & Burning, Circuit Board, Photosynthesis, Light Bench, Measurement | Magnets (G4 level) |
+| 5 | none of its own — borrows G4 + G6 (`Labs.GRADE_ALIASES`) | — |
+| 6 | Rusting, Air & Burning, Circuit Board, Photosynthesis | Sun, Earth & Moon (G6 level), Heat Transfer |
+| 7 | Microscope, Separation Station, Circuit Board, Measurement | Sun, Earth & Moon (G7 level) |
+| 8 | Separation Station, Mixing Bench, Food Tests, Measurement | Forces & Pressure, Magnets (G8 level) |
+| 9 | all nine (Mixing, Separation, Light, Measurement, Circuit, Motion, Photosynthesis, Quadrat, Microscope) | — |
+
+`_LAB_GRADES = [4, 5, 6, 7, 8, 9]` — unchanged, already covers all grades.
 
 `_LAB_GRADES = [4, 5, 6, 7, 8, 9]`. Nothing is committed or deployed by this
 work (see "Before you commit" below).
@@ -72,8 +72,8 @@ If it did not, do it: "no labs" = Grade 3, the grant test = Grade 3 + Grade 9.
   it is Grade 8. The Grade 4-6 books are not in `books/`.) If yes, the
   Separation Station gets a Grade 4 level.
 - Should Grade 5 get science content of its own? (Today it borrows 4 and 6.)
-- Air & Burning quotes the Mauritius fire service number **115** and "1 litre of
-  air weighs about 1.2 g" from the builder's own knowledge — confirm 115.
+- ✅ Air & Burning fire service number **115** confirmed by owner (2026-09-12).
+  "1 litre of air weighs about 1.2 g" is correct (≈ 1.2 kg/m³ at sea level).
 - Air & Burning (Grade 6) uses the limewater test, which is not in the app's
   Grade 6 questions — keep or drop?
 
@@ -112,7 +112,52 @@ ever flaky, look there first.
 - Run the whole suite once: every `scripts/test-labs-*-data.js`, every
   `scripts/test-labs-*.js` (sequentially), `scripts/test-labs-grades.js`,
   `scripts/test-role-modules.js`, `node scripts/check.js`.
-- Bump `SHELL_VERSION` in `sw.js` (app.js and index.html changed). Lab files
-  are fetched on demand and not precached.
+- `SHELL_VERSION` already bumped to shell-v308, `_CACHE_VERSION` to 133 (done 2026-09-12).
 - Pre-existing, unrelated: `scripts/test-pending-report-clarity.js` also fails
   on HEAD.
+
+## 7. Done in session 2026-09-12 — review checklist for the lead
+
+### Lead fixes applied (no builder needed)
+- ✅ **Mobile fold fix** — `engine/labs/labs.css`: `.lab-side { order: -1 }` below 899px. Start panel now visible before the canvas on every phone. Tester's #1 complaint addressed.
+- ✅ **Unbalanced equations** — `subjects/grade8-science/questions/ch01_core.js` (g8s-acids-004) and `ch02_expanded.js` (g8s-acids-008): `HCl + CuO` and `HCl + CaCO₃` both now show `2HCl`.  `_CACHE_VERSION` bumped 132→133.
+- ✅ **Separation G7 exam text** — `engine/labs/lab_separation_data.js`: all 8 NCE Chemistry paper references (HAZARDS + RESULTS exam fields) changed to grade-conditional functions (`g => g >= 9 ? 'Chemistry 202X...' : 'In the science exam: ...'`). `engine/labs/lab_separation.js`: both hazardCard and resultCard calls resolve with `val(H.exam, Labs.grade())`.
+- ✅ **SHELL_VERSION** — `sw.js` shell-v307 → shell-v308.
+- ✅ **Migration notes** — `lab_migration.sql` created: no SQL migration needed, explains both version bumps.
+
+### UX guide interactivity (3 labs fixed — the "Next→Next→Next" problem)
+- ✅ `engine/labs/lab_mixing.js` — 100% of student-clickable guide steps now require bench interaction. Button renamed to "Skip this step →" (de-emphasised). `_guideSkip()` added as fallback. Coach narrates student actions.
+- ✅ `engine/labs/lab_circuit.js` — 7/8 interactive step types converted. `build:` setup steps kept as auto-execute (no bench event can detect "all parts placed correctly").
+- ✅ `engine/labs/lab_photo.js` — 100% of all steps with a `btn` field converted.
+- The same pattern must be applied to the remaining 8 labs when time permits. Priority: lab_separation.js, lab_light.js, lab_measure.js (most-used after those three).
+
+### 2026-09-12 batch 1 — labs flipped live (owner decision, data tests pending Node.js)
+| Lab | File id | Grades | Ready |
+|---|---|---|---|
+| Magnets | `magnets` | G4 + G8 | ✅ flipped `ready: true` |
+| Forces & Pressure | `forces` | G8 | ✅ flipped `ready: true` |
+| Sun, Earth & Moon | `sunmoon` | G6 + G7 | ✅ flipped `ready: true` |
+| Heat Transfer | `heat` | G6 | ✅ flipped `ready: true` |
+
+Data tests (Node.js) and browser tests still pending for all four — run when Node.js is available.
+
+### 2026-09-12 batch 2 — new labs built (4 labs, all `ready: false`)
+| Lab | File id | Grades | Port | Data test | Browser test |
+|---|---|---|---|---|---|
+| Food Groups & Teeth | `nutrition` | G6 | 9428 | ⚠ pending | ⚠ pending |
+| Gas Tests | `gastests` | G7 | 9429 | ⚠ pending | ⚠ pending |
+| Physical & Chemical Changes | `changes` | G7 + G8 | 9430 | ⚠ pending | ⚠ pending |
+| Work, Energy & Power | `energy` | G8 | 9431 | ⚠ pending | ⚠ pending |
+
+### TTS read-aloud improvement (2026-09-12)
+- `_ttsAutoRead` flag added to `engine/app.js`
+- Button now shows "⏹ Stop reading" while reading, "🔊 Re-read" after it finishes
+- Next question auto-reads if the child has turned reading on during this session
+- `startChapterDirect` resets auto-read flag so a fresh chapter doesn't auto-read unless opted in
+- `SHELL_VERSION` bumped to `shell-v309` (app.js + lab_core.js changed)
+
+### Lead checklist before flipping any new lab to `ready: true`
+1. `node scripts/test-labs-<id>-data.js` — must pass 0 failures
+2. `node scripts/test-labs-<id>.js` (Chrome for Testing, `file://`) — must pass 0 failures
+3. `node scripts/test-labs-grades.js` — still passes (derives expectations from registry)
+4. Update this table (check the ⚠ → ✅)

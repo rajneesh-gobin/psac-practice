@@ -3774,15 +3774,21 @@ const Auth = (() => {
       _setPinBusy(false);
 
       if (session) {
-        // Via closeParentPin so the keydown listener is detached too - otherwise
-        // every digit typed on the dashboard afterwards would still feed the pad.
-        closeParentPin();
+        // Keep the modal spinner running while parent data loads — closing it
+        // before the dashboard is ready leaves a blank screen for several seconds.
+        // The dashboard renders behind the still-visible modal; we dismiss once
+        // the data is ready and the screen is already painted.
+        _setPinBusy(true);
         if (_parentProfile) {
           if (_parentSessionLoad) await _parentSessionLoad;
           else await _loadParentFamily();
+          _setPinBusy(false);
+          closeParentPin();
           _openParentDashboard();
         } else {
           await _handleParentSession(session);
+          _setPinBusy(false);
+          closeParentPin();
         }
         return;
       }

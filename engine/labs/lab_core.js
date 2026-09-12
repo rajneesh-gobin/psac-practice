@@ -71,6 +71,31 @@ const Labs = (() => {
     L('water',     '💧', 'Water & States',    'Science', 'LabWater',     'Melt, boil, evaporate and condense - and make a water cycle in a jar.', [4], true),
     L('air',       '🕯️', 'Air & Burning',     'Science', 'LabAir',       'What does a flame need? Candles, jars and the fire triangle.', [4, 6], true),
     L('food',      '🥪', 'Food Tests',        'Science', 'LabFood',      'Test foods for starch, sugar, protein and fat - and read the colours.', [8], true),
+    L('sunmoon',   '🌍', 'Sun, Earth & Moon', 'Science', 'LabSunmoon',  {
+      6: 'Spin Earth to create day and night. Place a shadow stick. Trigger eclipses.',
+      7: 'Explore eight moon phases, tidal locking, seasons and eclipse geometry.' }, [6, 7], true),
+    L('forces',    '⚖️', 'Forces & Pressure', 'Science', 'LabForces',
+      'Hang weights on a spring balance and press pads into soft ground — measure force and pressure.', [8], true),
+    L('magnets',   '🧲', 'Magnets',           'Science', 'LabMagnets', {
+      4: 'Test objects with a magnet. Which things are pulled? Sort them — magnetic or not.',
+      8: 'Two bar magnets, iron filings and a plotting compass. Map the invisible field.' }, [4, 8], true),
+    L('heat',      '🔥', 'Heat Transfer',     'Science', 'LabHeat',
+      'Conduction, convection and radiation. Three stations, three big ideas.', [6], true),
+    L('nutrition', '🥦', 'Food Groups & Teeth', 'Science', 'LabNutrition', {
+      6: 'Build a balanced meal, test food groups, and label the four types of teeth.' }, [6], true),
+    L('gastests',  '💨', 'Gas Tests',          'Science', 'LabGastests',
+      'Collect gas and test it: does the glowing splint relight? Does limewater go milky? Does the lit splint pop?', [7], true),
+    L('changes',   '🔥', 'Physical & Chemical Changes', 'Science', 'LabChanges', {
+      7: 'Sort changes into physical and chemical. Can you reverse it? Was a new substance made?',
+      8: 'Classify reactions by observation: colour change, gas, precipitate, temperature shift.' }, [7, 8], true),
+    L('energy',    '⚡', 'Work, Energy & Power', 'Science', 'LabEnergy',
+      'Pull a weight up a ramp and calculate the work done. Do it faster — compare the power.', [8], true),
+    { id: 'periodic', icon: '⚗️', name: 'Periodic Table', subject: 'Chemistry', global: 'LabPeriodic',
+      grades: [9], ready: true,
+      blurb: 'Explore all 118 elements — filter by type, build compound formulae.',
+      blurbs: null,
+      files: ['engine/labs/lab_periodic_data.js', 'engine/labs/lab_periodic.js'],
+      css: 'engine/labs/lab_periodic.css' },
   ];
   // ⚠ The app has no core Grade 5 science yet (docs/labs/PLAN.md), so a Grade 5
   //   pupil uses the primary labs built for Grades 4 and 6.
@@ -389,7 +414,10 @@ const Labs = (() => {
       const q = qs[i];
       answered = false;
       card.innerHTML = `
-        <p class="lab-quiz-meta">${esc(o.title || 'Questions')} · Question ${i + 1} of ${qs.length}</p>
+        <div class="lab-quiz-header">
+          <p class="lab-quiz-meta">${esc(o.title || 'Questions')} · Question ${i + 1} of ${qs.length}</p>
+          <button type="button" class="lab-quiz-exit" data-quiz-exit aria-label="Exit quiz">✕</button>
+        </div>
         <div class="lab-quiz-bar" aria-hidden="true"><i style="width:${Math.round((i / qs.length) * 100)}%"></i></div>
         <h2 id="lab-ov-title" class="lab-quiz-q">${esc(q.q)}</h2>
         <div class="lab-quiz-opts">${q.opts.map((op, k) =>
@@ -399,6 +427,7 @@ const Labs = (() => {
       if (b) b.focus({ preventScroll: true });
     };
     card.addEventListener('click', e => {
+      if (e.target.closest('[data-quiz-exit]')) { closeOverlay(true); return; }
       const opt = e.target.closest('.lab-quiz-opt');
       if (opt && !answered) {
         answered = true;
@@ -502,6 +531,50 @@ const Labs = (() => {
     };
   }
 
+  // ── Idle hint ─────────────────────────────────────────────────────────────────
+  // After 9 s of silence, pulse the most relevant tappable button so a child
+  // who is stuck knows where to start. Resets on any tap or key press.
+  const _HINT_SEL = [
+    '.lab-changes-zone',
+    '.lab-nutrition-food-btn:not(.lab-nutrition-food-placed)',
+    '.lab-start-item',
+    'button[data-scenario]:not(:disabled)',
+    '.lab-card:not(.is-soon)',
+    '.lab-btn-primary:not([disabled])',
+  ].join(',');
+
+  let _hintTimer = 0, _hintRoot = null;
+
+  function _clearHint() {
+    clearTimeout(_hintTimer); _hintTimer = 0;
+    if (_hintRoot) _hintRoot.querySelectorAll('.is-idle-hint').forEach(el => el.classList.remove('is-idle-hint'));
+  }
+
+  function _scheduleHint() {
+    _hintTimer = setTimeout(() => {
+      const el = _hintRoot && _hintRoot.querySelector(_HINT_SEL);
+      if (!el) { _scheduleHint(); return; }
+      el.classList.add('is-idle-hint');
+      el.addEventListener('animationend', () => { el.classList.remove('is-idle-hint'); _scheduleHint(); }, { once: true });
+    }, 9000);
+  }
+
+  function _resetHint() { _clearHint(); _scheduleHint(); }
+
+  function _startIdleHint(root) {
+    if (_hintRoot !== root) {
+      if (_hintRoot) {
+        _hintRoot.removeEventListener('pointerdown', _resetHint, true);
+        _hintRoot.removeEventListener('keydown',     _resetHint, true);
+      }
+      _hintRoot = root;
+      root.addEventListener('pointerdown', _resetHint, { passive: true, capture: true });
+      root.addEventListener('keydown',     _resetHint, { passive: true, capture: true });
+    }
+    _clearHint();
+    _scheduleHint();
+  }
+
   function render() {
     _css();
     const root = document.getElementById('labs-root');
@@ -510,7 +583,7 @@ const Labs = (() => {
     if (l) {
       const mod = _module(l);
       root.onclick = null;
-      if (mod) { mod.mount(root); return; }
+      if (mod) { mod.mount(root); _startIdleHint(root); return; }
       root.innerHTML = `<div class="lab"><p class="lab-hub-lede">Opening the ${esc(l.name)}…</p></div>`;
       _ensure(l).then(ok => {
         if (_open !== l.id) return;
@@ -522,8 +595,13 @@ const Labs = (() => {
       return;
     }
     _open = null;
+    // Restore the last open lab after a page refresh.
+    let savedLab = null;
+    try { savedLab = sessionStorage.getItem('psac-open-lab'); } catch (_) {}
+    if (savedLab && LABS.find(x => x.id === savedLab)) { openLab(savedLab); return; }
     root.innerHTML = _hubHTML();
     _wireHub(root);
+    _startIdleHint(root);
   }
 
   function openLab(id) {
@@ -531,6 +609,7 @@ const Labs = (() => {
     if (!l) return;
     _open = id; _openedAt = Date.now();
     _labGrade = _gradeForLab(l);
+    try { sessionStorage.setItem('psac-open-lab', id); } catch (_) {}
     render();
     const root = document.getElementById('labs-root');
     if (root) root.scrollIntoView({ block: 'start' });
@@ -546,6 +625,7 @@ const Labs = (() => {
     closeOverlay(true);
     _unmountOpen();
     _open = null;
+    try { sessionStorage.removeItem('psac-open-lab'); } catch (_) {}
     render();
   }
 
@@ -553,6 +633,7 @@ const Labs = (() => {
     closeOverlay(true);
     _unmountOpen();
     _open = null;
+    try { sessionStorage.removeItem('psac-open-lab'); } catch (_) {}
     if (typeof StudentHome !== 'undefined' && StudentHome.open) StudentHome.open();
     else if (typeof showScreen === 'function') showScreen('student-home');
   }

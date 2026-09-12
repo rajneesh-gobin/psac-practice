@@ -74,6 +74,7 @@ const LabFood = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <p class="lab-task-strip">Add a sample to the tube, then add the right reagent — compare with the control!</p>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-food-tools" id="lab-food-tools">
             <button type="button" class="lab-tool" data-act="bath" id="lab-food-bath"><span aria-hidden="true">🛁</span><em>Water bath</em></button>
@@ -167,7 +168,7 @@ const LabFood = (() => {
       if (sl) { select(+sl.dataset.slot); return; }
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
-      if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -577,8 +578,7 @@ const LabFood = (() => {
       box.innerHTML = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
-        ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
-                : '<p class="lab-guide-wait">⏳ Keep watching the rack…</p>'}
+        <div class="lab-guide-actions"><button type="button" class="lab-guide-hint-btn" data-guide-hint>💡 Hint</button></div>
         <button type="button" class="lab-link" data-act="guide-stop">Stop the guide</button>`;
       box.hidden = false;
     }
@@ -592,21 +592,15 @@ const LabFood = (() => {
     if (s && s.on === token) { _guide.step++; _guideEnter(); }
   }
 
-  function _guideDo() {
-    const G = _gdef();
-    if (!G) return;
-    const s = G.steps[_guide.step];
-    if (!s) return;
-    const [kind, id] = s.on.split(':');
-    if (kind === 'goggles') { if (!_goggles) goggles(); }
-    else if (kind === 'slot') select(+id);
-    else if (kind === 'food') addFood(id);
-    else if (kind === 'test') addTest(id);
-    else if (kind === 'bath') bath();
-    else if (kind === 'burner-off') { if (_burner) burner(); }
-    else if (kind === 'rinse') rinse();
-    else if (kind === 'read') read();
-    else if (kind === 'clean') clean();
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function _autoStep(on) {

@@ -1,0 +1,355 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Work, Energy & Power (Grade 8)
+   All classes prefixed .lab-energy-
+   Shared classes come from engine/labs/labs.css
+   ══════════════════════════════════════════════ */
+
+/* CSS custom properties used by the canvas drawing code */
+.lab-energy {
+  --lab-energy-bg:      #EDF2FF;
+  --lab-energy-ramp:    #E2E8F0;
+  --lab-energy-surface: #64748B;
+  --lab-energy-rope:    #78716C;
+  --lab-energy-accent:  #1D4ED8;
+  --lab-energy-floor:   #CBD5E1;
+  --lab-energy-ink:     #1E293B;
+}
+
+/* ── Mode bar (lift / ramp toggle) ──── */
+.lab-energy-mode-bar {
+  display: flex;
+  gap: 0;
+  margin: 0 0 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid var(--lab-border, #CBD5E1);
+}
+
+.lab-energy-mode-btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 10px;
+  font: 600 14px/1.2 system-ui, sans-serif;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--lab-ink, #1E293B);
+  transition: background 0.18s, color 0.18s;
+  text-align: center;
+}
+
+.lab-energy-mode-btn + .lab-energy-mode-btn {
+  border-left: 1.5px solid var(--lab-border, #CBD5E1);
+}
+
+.lab-energy-mode-btn.active,
+.lab-energy-mode-btn[aria-pressed="true"] {
+  background: var(--lab-accent, #1D4ED8);
+  color: #fff;
+}
+
+/* ── Mass buttons ──── */
+.lab-energy-mass-row {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 6px;
+}
+
+.lab-energy-mass-btn {
+  flex: 1;
+  min-height: 44px;
+  border: 2px solid var(--lab-border, #CBD5E1);
+  border-radius: 8px;
+  background: transparent;
+  font: 600 14px/1 system-ui, sans-serif;
+  cursor: pointer;
+  color: var(--lab-ink, #1E293B);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.lab-energy-mass-btn.active {
+  background: var(--lab-accent, #1D4ED8);
+  color: #fff;
+  border-color: var(--lab-accent, #1D4ED8);
+}
+
+/* ── Height buttons ──── */
+.lab-energy-height-row {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.lab-energy-height-btn {
+  flex: 1;
+  min-height: 44px;
+  border: 1.5px solid var(--lab-border, #CBD5E1);
+  border-radius: 8px;
+  background: transparent;
+  font: 600 14px/1 system-ui, sans-serif;
+  cursor: pointer;
+  color: var(--lab-ink, #1E293B);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.lab-energy-height-btn.active {
+  background: var(--lab-accent, #1D4ED8);
+  color: #fff;
+  border-color: var(--lab-accent, #1D4ED8);
+}
+
+/* ── Action row ──── */
+.lab-energy-action-row {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 6px;
+  flex-wrap: wrap;
+}
+
+.lab-energy-action-row > button {
+  flex: 1;
+  min-height: 44px;
+  min-width: 80px;
+}
+
+.lab-energy-pull-btn {
+  font-weight: 700;
+}
+
+.lab-energy-timer-btn {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Chips overlay on canvas ──── */
+.lab-energy-chips {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+/* Work chip accent */
+.lab-chip-w b {
+  color: #1D4ED8;
+}
+
+/* Power chip accent */
+.lab-chip-p b {
+  color: #6D28D9;
+}
+
+/* ── Readout label ──── */
+.lab-energy-label {
+  font: 700 11px/1.5 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lab-ink, #1E293B);
+  opacity: 0.65;
+  margin: 6px 0 2px;
+}
+
+/* ── Notebook ──── */
+.lab-log {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lab-log-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(29, 78, 216, 0.05);
+  border: 1px solid rgba(29, 78, 216, 0.12);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.lab-log-n {
+  font-weight: 700;
+  color: #1D4ED8;
+  margin-right: 4px;
+}
+
+/* ── Guide item shelf entries ──── */
+.lab-energy-guide-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--lab-border, #CBD5E1);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  min-height: 52px;
+  width: 100%;
+  margin-bottom: 4px;
+  font: inherit;
+  color: var(--lab-ink, #1E293B);
+  transition: background 0.15s;
+}
+
+.lab-energy-guide-item:hover {
+  background: rgba(29, 78, 216, 0.06);
+}
+
+.lab-energy-guide-item.lab-found {
+  border-color: #22C55E;
+  background: rgba(34, 197, 94, 0.06);
+}
+
+/* ── Mission card ──── */
+.lab-mission-card {
+  border: 1.5px solid var(--lab-border, #CBD5E1);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.lab-mission-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.lab-mission-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.lab-mission-stars {
+  margin-left: auto;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.lab-mission-start {
+  width: 100%;
+  min-height: 44px;
+}
+
+/* ── Discoveries ──── */
+.lab-found-count {
+  font: 700 13px/1.5 system-ui, sans-serif;
+  color: #1D4ED8;
+  margin-bottom: 8px;
+}
+
+.lab-found-card,
+.lab-locked-card {
+  border-radius: 10px;
+  border: 1.5px solid var(--lab-border, #CBD5E1);
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.lab-found-card {
+  border-color: #22C55E;
+  background: rgba(34, 197, 94, 0.04);
+}
+
+.lab-found-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.lab-found-saw,
+.lab-found-learn {
+  font-size: 12px;
+  margin: 3px 0;
+  color: var(--lab-ink, #1E293B);
+  opacity: 0.85;
+}
+
+.lab-hint {
+  font-size: 12px;
+  margin: 3px 0;
+  color: var(--lab-ink, #1E293B);
+  opacity: 0.65;
+  font-style: italic;
+}
+
+.lab-found-badge {
+  margin-left: auto;
+  color: #22C55E;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.lab-found-again,
+.lab-disc-how {
+  margin-top: 6px;
+  width: 100%;
+  min-height: 44px;
+}
+
+/* ── Start panel ──── */
+.lab-start-wrap {
+  padding: 8px 0;
+}
+
+.lab-start-title {
+  font: 700 16px/1.3 system-ui, sans-serif;
+  margin: 0 0 4px;
+}
+
+.lab-start-sub {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.lab-start-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1.5px solid var(--lab-border, #CBD5E1);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 8px;
+  font: inherit;
+  color: var(--lab-ink, #1E293B);
+  min-height: 52px;
+  transition: background 0.15s;
+}
+
+.lab-start-item:hover {
+  background: rgba(29, 78, 216, 0.06);
+}
+
+.lab-start-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Glow "is-next" (guide navigation hint) ──── */
+.is-next {
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.45);
+  border-color: #1D4ED8 !important;
+}
+
+/* ── Calm / reduced motion ──── */
+@media (prefers-reduced-motion: reduce) {
+  .lab-energy-mode-btn,
+  .lab-energy-mass-btn,
+  .lab-energy-height-btn { transition: none; }
+}
+
+html.kid-calm .lab-energy-mode-btn,
+html.kid-calm .lab-energy-mass-btn,
+html.kid-calm .lab-energy-height-btn { transition: none; }
