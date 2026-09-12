@@ -2126,7 +2126,7 @@ const Auth = (() => {
 
     _setAuthLoading(true);
     const { error } = await _sb.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://psac-practice.netlify.app/',
+      redirectTo: location.origin + '/',
     });
     _setAuthLoading(false);
 
@@ -2165,7 +2165,7 @@ const Auth = (() => {
   async function sendRecoveryForPending() {
     if (!_sb || !_pendingVerifyEmail) return;
     const { error } = await _sb.auth.resetPasswordForEmail(_pendingVerifyEmail, {
-      redirectTo: 'https://psac-practice.netlify.app/',
+      redirectTo: location.origin + '/',
     });
     if (error) { toast(_emailErrorText(error, 'password-reset link'), 6000); return; }
     toast('Password-reset email sent. Check your inbox.', 4000);
@@ -2222,7 +2222,7 @@ const Auth = (() => {
     _setAuthLoading(true);
     const { error } = await _sb.auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: false, emailRedirectTo: 'https://psac-practice.netlify.app/' },
+      options: { shouldCreateUser: false, emailRedirectTo: location.origin + '/' },
     });
     _setAuthLoading(false);
 
@@ -2245,7 +2245,7 @@ const Auth = (() => {
     if (!_sb) return;
     const { error } = await _sb.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: 'https://psac-practice.netlify.app/' },
+      options: { redirectTo: location.origin + '/' },
     });
     if (error) _showAuthError(error.message);
   }
