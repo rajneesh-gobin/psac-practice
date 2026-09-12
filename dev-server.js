@@ -145,5 +145,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`\n  PSAC Practice — dev server running at http://localhost:${PORT}\n`);
+  console.log(`\n  Nou Klass — dev server running at http://localhost:${PORT}\n`);
 });

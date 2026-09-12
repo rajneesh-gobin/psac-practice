@@ -14,7 +14,7 @@ async function sendEmail({ to, subject, html }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       personalizations: [{ to: [{ email: to }] }],
-      from: { email: 'noreply@psac-practice.com', name: 'PSAC Practice' },
+      from: { email: 'noreply@psac-practice.com', name: 'Nou Klass' },
       subject,
       content: [{ type: 'text/html', value: html }],
     }),
@@ -73,7 +73,7 @@ export default async function handler(request, env) {
   <div style="max-width:480px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
     <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:24px 28px;color:#fff">
       <div style="font-size:22px;font-weight:bold">📊 Assignment Complete!</div>
-      <div style="opacity:.85;margin-top:4px;font-size:14px">PSAC Exam Practice - Parent Notification</div>
+      <div style="opacity:.85;margin-top:4px;font-size:14px">Nou Klass - Parent Notification</div>
     </div>
     <div style="padding:24px 28px">
       <p style="margin:0 0 16px;color:#374151;font-size:15px"><strong>${safeDisplayName}</strong> just finished <strong>${safeLabel}</strong>.</p>

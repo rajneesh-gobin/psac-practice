@@ -2043,7 +2043,7 @@ const TeacherClassroomDetail = (() => {
 
   function shareLink() {
     const url  = `${location.origin}?classroom=${encodeURIComponent(_classId)}`;
-    const text = `Join my classroom "${_className}" on PSAC Practice!\n${url}\nYou will need your pupil PIN.`;
+    const text = `Join my classroom "${_className}" on Nou Klass!\n${url}\nYou will need your pupil PIN.`;
     const wa   = `https://wa.me/?text=${encodeURIComponent(text)}`;
     if (navigator.share) {
       navigator.share({ title: _className, text, url }).catch(err => {

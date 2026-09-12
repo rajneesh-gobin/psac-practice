@@ -41,7 +41,20 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age':       '86400',
 };
 
-const ROUTES = {
+// The client (question_loader.js, app.js) calls /.netlify/functions/* URLs.
+// We alias every route under both /api/* and /.netlify/functions/* so the
+// existing client code works on Cloudflare without modification.
+function makeRoutes(map) {
+  const out = {};
+  for (const [path, handler] of Object.entries(map)) {
+    out[path] = handler;
+    // e.g. /api/questions → /.netlify/functions/questions
+    out['/.netlify/functions/' + path.replace('/api/', '')] = handler;
+  }
+  return out;
+}
+
+const ROUTES = makeRoutes({
   '/api/questions':               questionsHandler,
   '/api/check-answer':            checkAnswerHandler,
   '/api/submit-exam':             submitExamHandler,
@@ -70,13 +83,14 @@ const ROUTES = {
   '/api/admin-delete-account':    adminDeleteAccountHandler,
   '/api/admin-member-emails':     adminMemberEmailsHandler,
   '/api/admin-teacher-activity':  adminTeacherActivityHandler,
-};
+});
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    if (request.method === 'OPTIONS' && url.pathname.startsWith('/api/')) {
+    if (request.method === 'OPTIONS' &&
+        (url.pathname.startsWith('/api/') || url.pathname.startsWith('/.netlify/functions/'))) {
       return new Response('', { status: 200, headers: CORS_HEADERS });
     }
 

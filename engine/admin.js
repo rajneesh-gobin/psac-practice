@@ -3515,7 +3515,7 @@ const AdminPanel = (() => {
               ${isContact ? `<div class="border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-3 mb-3">
                 <p class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 mb-1">Sent from the contact form - no account</p>
                 ${meta.guestEmail
-                  ? `<a href="mailto:${_esc(meta.guestEmail)}?subject=${encodeURIComponent('Re: your message to PSAC Exam Practice')}"
+                  ? `<a href="mailto:${_esc(meta.guestEmail)}?subject=${encodeURIComponent('Re: your message to Nou Klass')}"
                        class="text-sm font-semibold text-indigo-600 dark:text-indigo-300 underline break-all">✉️ ${_esc(meta.guestEmail)}</a>
                      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Replying in the app will not reach them - use this address.</p>`
                   : '<p class="text-sm text-amber-600 dark:text-amber-400">No email address left - there is no way to reply to this one.</p>'}

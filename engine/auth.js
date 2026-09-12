@@ -2388,7 +2388,7 @@ const Auth = (() => {
   function _inviteText() {
     // ⚠ All 8 Grade 9 packs live as of 2026-09-09. Keep in step with
     //   _appShareText() (app.js) and the landing page.
-    return `Join me on PSAC Exam Practice - free revision for PSAC Grades 4–6, plus all 8 NCE Grade 9 subjects: Maths, ICT, Biology, Chemistry, Physics, English, French and Social & Modern Studies! 📚`;
+    return `Join me on Nou Klass — Exam Practice - free revision for PSAC Grades 4–6, plus all 8 NCE Grade 9 subjects: Maths, ICT, Biology, Chemistry, Physics, English, French and Social & Modern Studies! 📚`;
   }
 
   async function openInviteModal() {
@@ -2454,7 +2454,7 @@ const Auth = (() => {
     const link = _inviteLink();
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'PSAC Exam Practice', text: _inviteText(), url: link });
+        await navigator.share({ title: 'Nou Klass — Exam Practice', text: _inviteText(), url: link });
         return;
       } catch(e) {
         if (e.name === 'AbortError') return; // user cancelled the share sheet

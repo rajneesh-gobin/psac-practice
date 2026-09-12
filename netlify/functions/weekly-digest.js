@@ -285,7 +285,7 @@ exports.handler = async () => {
     </div>
     <div style="padding:24px 28px">
       <p style="margin:0 0 16px;color:#374151;font-size:15px">
-        Here's what your ${students.length === 1 ? 'child' : 'children'} did on PSAC Exam Practice over the last seven days.
+        Here's what your ${students.length === 1 ? 'child' : 'children'} did on Nou Klass over the last seven days.
       </p>
       ${summary}
       ${alert}
@@ -313,7 +313,7 @@ exports.handler = async () => {
         </a>
       </div>
       <p style="margin:20px 0 0;color:#9ca3af;font-size:12px;text-align:center">
-        Sent every Sunday · PSAC Exam Practice
+        Sent every Sunday · Nou Klass
       </p>
     </div>
   </div>
@@ -322,7 +322,7 @@ exports.handler = async () => {
       // Same reason as notify.js: the result used to be discarded, so a digest
       // the server refused was indistinguishable from one it delivered - across
       // every parent, every week, with nothing in the logs.
-      const _res = await sendEmail(parentEmail, `PSAC Exam Practice - Weekly Report (${weekStr})`, html);
+      const _res = await sendEmail(parentEmail, `Nou Klass - Weekly Report (${weekStr})`, html);
       // ⚠ Count DELIVERED, not attempted. `sent++` ran unconditionally, so the
       // closing log line reported a full run whether or not one email left the
       // building - which is the same defect that hid this bug in the first place.
