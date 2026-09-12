@@ -1,7 +1,7 @@
 -- ══════════════════════════════════════════════════════════════════════════
 --  PSAC Exam Practice — CONSOLIDATED DATABASE SCHEMA
 --
---  GENERATED FROM THE LIVE DATABASE on 2026-09-11
+--  GENERATED FROM THE LIVE DATABASE on 2026-09-12
 --  (project xawvjwsiqhtxgpocdqgm, PostgreSQL 17.6).
 --
 --  This one file replaces 31 incremental migrations — every supabase-*.sql,
@@ -16,7 +16,7 @@
 --  • Answering "what is really deployed?": read this, not a migration file.
 --  • Re-running it against production: every statement is idempotent, so it is
 --    safe — but it is a SNAPSHOT, not a diff. It drops nothing, so an object
---    added to production since 2026-09-11 survives; and it overwrites function,
+--    added to production since 2026-09-12 survives; and it overwrites function,
 --    policy and trigger definitions with the ones recorded here, so regenerate
 --    before you re-run or you will roll a later fix backwards.
 --
@@ -2798,7 +2798,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 133 functions, verbatim from pg_get_functiondef().
+-- 135 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -4272,6 +4272,36 @@ BEGIN
 END;
 $function$;
 
+-- ── get_grade_questions_for_client(p_grade integer, p_allowed_chapters text[], p_blocked_chapters text[], p_blocked_subjects text[])
+CREATE OR REPLACE FUNCTION public.get_grade_questions_for_client(p_grade integer, p_allowed_chapters text[] DEFAULT NULL::text[], p_blocked_chapters text[] DEFAULT NULL::text[], p_blocked_subjects text[] DEFAULT NULL::text[])
+ RETURNS jsonb
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+  select coalesce(
+    jsonb_object_agg(subject_id, qs),
+    '{}'::jsonb
+  )
+  from (
+    select
+      subject_id,
+      jsonb_agg(
+        case
+          when data->>'type' in ('symmetry-line', 'expr', 'slots') then data
+          else data - 'answer' - 'hint' - 'explanation'
+        end
+      ) as qs
+    from questions
+    where grade = p_grade
+      and is_past_paper = false
+      and (p_blocked_subjects is null or subject_id != all(p_blocked_subjects))
+      and (p_allowed_chapters is null or data->>'chapterId' = any(p_allowed_chapters))
+      and (p_blocked_chapters is null or data->>'chapterId' != all(p_blocked_chapters))
+    group by subject_id
+  ) sub
+$function$;
+
 -- ── get_my_friend_code()
 CREATE OR REPLACE FUNCTION public.get_my_friend_code()
  RETURNS text
@@ -4412,6 +4442,31 @@ AS $function$
     AND (p_grade IS NULL OR s.grade = p_grade)
   ORDER BY sp.points DESC, s.created_at ASC
   LIMIT greatest(1, least(200, coalesce(p_limit, 50)));
+$function$;
+
+-- ── get_questions_for_client(p_subject_id text, p_chapter_id text, p_difficulty integer, p_allowed_chapters text[], p_blocked_chapters text[])
+CREATE OR REPLACE FUNCTION public.get_questions_for_client(p_subject_id text, p_chapter_id text DEFAULT NULL::text, p_difficulty integer DEFAULT NULL::integer, p_allowed_chapters text[] DEFAULT NULL::text[], p_blocked_chapters text[] DEFAULT NULL::text[])
+ RETURNS jsonb
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+  select coalesce(
+    jsonb_agg(
+      case
+        when data->>'type' in ('symmetry-line', 'expr', 'slots') then data
+        else data - 'answer' - 'hint' - 'explanation'
+      end
+    ),
+    '[]'::jsonb
+  )
+  from questions
+  where subject_id = p_subject_id
+    and is_past_paper = false
+    and (p_chapter_id is null or data->>'chapterId' = p_chapter_id)
+    and (p_difficulty is null or (data->>'difficulty')::int = p_difficulty)
+    and (p_allowed_chapters is null or data->>'chapterId' = any(p_allowed_chapters))
+    and (p_blocked_chapters is null or data->>'chapterId' != all(p_blocked_chapters))
 $function$;
 
 -- ── get_student_reports(p_student_id uuid)
@@ -8998,11 +9053,13 @@ GRANT EXECUTE ON FUNCTION public.forum_set_author() TO anon, authenticated, serv
 GRANT EXECUTE ON FUNCTION public.gen_guest_code() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.gen_invite_code() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_classroom_feed(p_slug text, p_token uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_grade_questions_for_client(p_grade integer, p_allowed_chapters text[], p_blocked_chapters text[], p_blocked_subjects text[]) TO service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_friend_code() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_friends() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_points() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_points_rank(p_grade integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_points_leaderboard(p_grade integer, p_limit integer) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_questions_for_client(p_subject_id text, p_chapter_id text, p_difficulty integer, p_allowed_chapters text[], p_blocked_chapters text[]) TO service_role;
 GRANT EXECUTE ON FUNCTION public.get_student_reports(p_student_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_profiles_privileged() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_students_privileged() TO anon, authenticated, service_role;
