@@ -6476,5 +6476,17 @@
     </div>
   </div>
 
+  <!-- Auto-open auth when arriving from the old domain via ?signin=1 -->
+  <script>
+    (function () {
+      if (new URLSearchParams(location.search).get('signin') !== '1') return;
+      history.replaceState(null, '', location.pathname);
+      requestAnimationFrame(function () {
+        setTimeout(function () {
+          if (typeof showScreen === 'function') showScreen('auth');
+        }, 80);
+      });
+    })();
+  </script>
 </body>
 </html>
