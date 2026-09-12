@@ -436,6 +436,7 @@ const LabAir = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _forGrade(D().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('air', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
@@ -448,6 +449,7 @@ const LabAir = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('air');
     const G = _gdef();
     if (!G) return;
     _hush();
@@ -551,6 +553,7 @@ const LabAir = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('air', G)) { _stopGuide(true); return; }
     const st = Labs.store(LAB);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1272,6 +1275,16 @@ const LabAir = (() => {
              mission: _mission && { id: _mission.id, keys: [..._mission.keys], mistakes: _mission.mistakes, hazards: _mission.hazards, success: _mission.success } };
   }
 
-  return { mount, unmount, act, startGuide, startMission, discoveryGuide, speak, _test, _tick, _debug };
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () =>  _forGrade(D().GUIDES),
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _st, _stGrade, _panel, _guide, _runs, _log, _view, _verdict, _verdictBad, _watch }),
+    restore: state => { ({ _st, _stGrade, _panel, _guide, _runs, _log, _view, _verdict, _verdictBad, _watch } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, act, startGuide, startMission, discoveryGuide, speak, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabAir = LabAir;

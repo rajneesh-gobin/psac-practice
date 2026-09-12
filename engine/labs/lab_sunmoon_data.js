@@ -292,6 +292,15 @@ const LabSunmoonData = (() => {
   //   observe                — tap "Observe" button
   //   reset                  — tap Reset
   const GUIDES = [
+    { id: 'seasons_guide', icon: '🌍', grades: [7], title: 'Why are seasons opposite?',
+      blurb: 'Compare Earth in June and December. Which hemisphere tilts toward the Sun?',
+      lesson: 'Earth keeps its axis tilted as it orbits the Sun. In December the Southern Hemisphere tilts toward the Sun, so Mauritius has summer. In June it tilts away, so Mauritius has winter. Daily spinning causes day and night, not seasons.',
+      steps: [
+        { on: 'season:june', say: 'Tap Earth in June. Look at the direction of the axis.' },
+        { on: 'observe', say: 'Tap Observe to record which hemisphere tilts toward the Sun.' },
+        { on: 'season:december', say: 'Tap Earth in December. The axis still points the same way.' },
+        { on: 'observe', say: 'Tap Observe. Compare the season in Mauritius.' }
+      ] },
     // ─ Grade 6 ─────────────────────────────────
     { id: 'day_night_guide', icon: '🌓', grades: [6],
       title: 'Why do we have day and night?',
@@ -309,8 +318,11 @@ const LabSunmoonData = (() => {
       steps: [
         { on: 'stick:on',     say: 'Tap 📏 Shadow Stick to place a stick on Earth.' },
         { on: 'time:sunrise', say: 'Tap 🌅 Set to Sunrise — see how long the shadow is.' },
+        { on: 'observe', say: 'Tap Observe to record this shadow before changing the time.' },
         { on: 'time:noon',    say: 'Tap 🌞 Set to Noon — watch the shadow shorten.' },
+        { on: 'observe', say: 'Tap Observe to record this shadow before changing the time.' },
         { on: 'time:sunset',  say: 'Tap 🌇 Set to Sunset — the shadow is long again.' },
+        { on: 'observe', say: 'Tap Observe to record this shadow before changing the time.' },
       ] },
     { id: 'solar_eclipse_guide', icon: '🌑', grades: [6],
       title: 'Solar eclipse — the Moon blocks the Sun',
@@ -460,10 +472,10 @@ const LabSunmoonData = (() => {
   // Helper: mission is ready when student has done the required setup.
   // Accepts a state object from the bench.
   function missionReady(id, state) {
-    if (id === 'shadow_detective') return state.stickObserved >= 2;
+    if (id === 'shadow_detective') return !!state.stickOn && ['sunrise', 'noon', 'sunset'].every(t => !!state.shadowObservations?.[t]);
     if (id === 'eclipse_spotter') return state.solarSeen && state.lunarSeen;
     if (id === 'phase_tracker')   return state.phasesVisited && state.phasesVisited.size >= 8;
-    if (id === 'seasons_explorer') return state.spinning;
+    if (id === 'seasons_explorer') return !!state.seasonSeen?.june && !!state.seasonSeen?.december;
     return false;
   }
 

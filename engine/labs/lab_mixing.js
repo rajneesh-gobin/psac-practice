@@ -880,6 +880,7 @@ const LabMixing = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || LabChem.GUIDES.find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('mixing', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _reset();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -892,6 +893,7 @@ const LabMixing = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('mixing');
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
@@ -1045,6 +1047,7 @@ const LabMixing = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('mixing', G)) { _stopGuide(true); return; }
     const st = Labs.store('mixing');
     // A discovery's "Show me how" is not one of the four guided experiments;
     // the discovery it unlocked is the record of it.
@@ -1866,7 +1869,17 @@ const LabMixing = (() => {
                                     overshot: _mission.overshot, mixed: _mission.mixed, success: _mission.success, hazards: _mission.hazards, waiting: _mission.waiting } };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, addLiquid, addMetal, splint, bung, rinse, goggles, drop,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => LabChem.GUIDES,
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _tube, _goggles, _panel, _shelf, _guide, _log, _said, _grade }),
+    restore: state => { ({ _tube, _goggles, _panel, _shelf, _guide, _log, _said, _grade } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, addLiquid, addMetal, splint, bung, rinse, goggles, drop,
            litmus, limewater, taste, conclude, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMixing = LabMixing;

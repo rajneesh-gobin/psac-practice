@@ -534,6 +534,7 @@ const LabMotion = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || D().GUIDES.find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('motion', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _reset();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -560,6 +561,7 @@ const LabMotion = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('motion');
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
@@ -691,6 +693,7 @@ const LabMotion = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('motion', G)) { _stopGuide(true); return; }
     const st = Labs.store('motion');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1411,7 +1414,17 @@ const LabMotion = (() => {
                                     routes: Object.keys(_mission.routes), mistakes: _mission.mistakes, hazards: _mission.hazards, success: _mission.success } };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, place, setHeight, stepHeight, setOpt, setBlock, setRoute,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => D().GUIDES,
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _b, _panel, _guide, _log, _runs, _walks, _run, _walk, _fall, _runN, _swK, _said }),
+    restore: state => { ({ _b, _panel, _guide, _log, _runs, _walks, _run, _walk, _fall, _runN, _swK, _said } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, place, setHeight, stepHeight, setOpt, setBlock, setRoute,
            run, gradient, area, walk, clearGraph, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMotion = LabMotion;

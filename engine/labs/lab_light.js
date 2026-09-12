@@ -951,6 +951,7 @@ const LabLight = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _mine(D().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('light', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _reset();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -987,6 +988,7 @@ const LabLight = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('light');
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
@@ -1144,6 +1146,7 @@ const LabLight = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('light', G)) { _stopGuide(true); return; }
     const st = Labs.store('light');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -2179,7 +2182,17 @@ const LabLight = (() => {
                                     lifted: _mission.lifted, success: _mission.success } };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, place, setSource, power, toggleNormal, toggleProtractor,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(D().GUIDES),
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _b, _panel, _guide, _log, _readings, _g }),
+    restore: state => { ({ _b, _panel, _guide, _log, _readings, _g } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, place, setSource, power, toggleNormal, toggleProtractor,
            placeProtractor, setRef, toggleEye, rotate, setAngle, setTilt, read, look, moveCard, lift, pack,
            putObj, movePos, setPos, moveTorch, setRuler, measure, nameIt, stare,
            _test, _tick, _debug };

@@ -885,6 +885,7 @@ const LabMicroscope = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || M().GUIDES.find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('microscope', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _resetBench();
     _rig = 'scope';
@@ -923,6 +924,7 @@ const LabMicroscope = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('microscope');
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
@@ -1052,6 +1054,7 @@ const LabMicroscope = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('microscope', G)) { _stopGuide(true); return; }
     const st = Labs.store('microscope');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -2074,7 +2077,17 @@ const LabMicroscope = (() => {
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs) };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => M().GUIDES,
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _rig, _s, _w, _labels, _zv, _pan, _rulerT, _cracked, _ids, _drawings, _calcs, _log, _panel, _guide, _said, _lastGrade }),
+    restore: state => { ({ _rig, _s, _w, _labels, _zv, _pan, _rulerT, _cracked, _ids, _drawings, _calcs, _log, _panel, _guide, _said, _lastGrade } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMicroscope = LabMicroscope;

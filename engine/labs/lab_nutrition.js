@@ -546,6 +546,7 @@ const LabNutrition = (() => {
   function _startGuide(guideId) {
     const G = P().GUIDES.find(g => g.id === guideId);
     if (!G) return;
+    if (Labs.studyBegin && Labs.studyBegin('nutrition', G, () => _startGuide(guideId))) return;
     _ttsStop();
     _guide = G; _guideStep = 0;
     _renderGuide();
@@ -570,6 +571,7 @@ const LabNutrition = (() => {
   }
 
   function _finishGuide() {
+    if (_guide && Labs.studyComplete) Labs.studyComplete('nutrition', _guide);
     _guide = null;
     $('lab-guide') && ($('lab-guide').hidden = true);
     _renderPanel();
@@ -621,6 +623,7 @@ const LabNutrition = (() => {
   }
 
   function _renderGuide() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('nutrition');
     const el = $('lab-guide');
     if (!el) return;
     if (!_guide) { el.hidden = true; return; }
@@ -983,6 +986,16 @@ const LabNutrition = (() => {
     };
   }
 
-  return { mount, unmount, _test, _tick, _debug };
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => P().GUIDES,
+    start: _startGuide,
+    snapshot: () => _busy ? null : ({ _station, _meal, _tappedTeeth, _guide, _guideStep, _panel, _log }),
+    restore: state => { ({ _station, _meal, _tappedTeeth, _guide, _guideStep, _panel, _log } = state); },
+    refresh: () => { if (_guide) _renderGuide(); },
+    stop: () => { _guide = null; _renderGuide(); _renderPanel(); }
+  };
+  return { study, mount, unmount, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabNutrition = LabNutrition;

@@ -960,6 +960,7 @@ const LabMeasure = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _forG(DATA().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('measure', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _inst = null; _spec = null; _zoom = 1; _eye = 'level'; _tared = false; _timed = false;
     _clock = { run: false, t: 0, target: 0, speed: 1 };
@@ -988,6 +989,7 @@ const LabMeasure = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('measure');
     const G = _gdef();
     if (!G) return;
     _hush();
@@ -1125,6 +1127,7 @@ const LabMeasure = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('measure', G)) { _stopGuide(true); return; }
     const st = Labs.store(LAB);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -2280,7 +2283,17 @@ const LabMeasure = (() => {
              talking: _talking, looping: !!_raf, crack: _crack, splash: _splash, tapped: _tapped, hit: _hit };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, selectInstrument, selectSpecimen, zoomIn, zoomOut,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _forG(DATA().GUIDES),
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _inst, _spec, _zoom, _eye, _align, _tared, _timed, _tapped, _clock, _phase, _marks, _hit, _panel, _group, _guide, _rows, _log, _stGrade, _trial, _readTrial, _trialVals, _bk }),
+    restore: state => { ({ _inst, _spec, _zoom, _eye, _align, _tared, _timed, _tapped, _clock, _phase, _marks, _hit, _panel, _group, _guide, _rows, _log, _stGrade, _trial, _readTrial, _trialVals, _bk } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, selectInstrument, selectSpecimen, zoomIn, zoomOut,
            setEye, setAlign, tare, tapGlass, liftCylinder, startTiming, stir, check, showReading, misread, choose, speak, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMeasure = LabMeasure;

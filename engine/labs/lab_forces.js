@@ -683,6 +683,7 @@ const LabForces = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _mine(P().GUIDES).find(g => g.id === idOrDef);
     if (!G) return;
+    if (Labs.studyBegin && Labs.studyBegin('forces', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
@@ -692,6 +693,7 @@ const LabForces = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('forces');
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
@@ -779,6 +781,7 @@ const LabForces = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('forces', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides = st.guides || {}; st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1140,7 +1143,17 @@ const LabForces = (() => {
     };
   }
 
-  return { mount, unmount, startGuide, discoveryGuide, startMission,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(P().GUIDES),
+    start: startGuide,
+    snapshot: () => ({ _mode, _hook, _pad, _force, _applied, _reads, _panel, _guide, _springExt, _indentAnim }),
+    restore: state => { ({ _mode, _hook, _pad, _force, _applied, _reads, _panel, _guide, _springExt, _indentAnim } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startGuide, discoveryGuide, startMission,
            _placeObj, _setPad, _setForce, _applyForce, _read, _removeObj, _switchMode,
            _test, _tick, _debug };
 })();

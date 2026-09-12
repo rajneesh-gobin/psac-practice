@@ -675,6 +675,7 @@ const LabQuadrat = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || P().GUIDES.find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('quadrat', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _resetBench();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -699,6 +700,7 @@ const LabQuadrat = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('quadrat');
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
@@ -818,6 +820,7 @@ const LabQuadrat = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('quadrat', G)) { _stopGuide(true); return; }
     const st = Labs.store('quadrat');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1494,7 +1497,17 @@ const LabQuadrat = (() => {
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs) };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, place, tapPlant, count, estimate,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => P().GUIDES,
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _events, _plants, _sp, _gloves, _view, _series, _serialN, _q, _hist, _log, _panel, _guide, _seed, _estShow }),
+    restore: state => { ({ _events, _plants, _sp, _gloves, _view, _series, _serialN, _q, _hist, _log, _panel, _guide, _seed, _estShow } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, place, tapPlant, count, estimate,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabQuadrat = LabQuadrat;

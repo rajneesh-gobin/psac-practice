@@ -1095,6 +1095,7 @@ const LabPhoto = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _mine(P().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('photo', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _resetBench();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -1141,6 +1142,7 @@ const LabPhoto = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('photo');
     const G = _gdef();
     if (!G) return;
     _hush();
@@ -1307,6 +1309,7 @@ const LabPhoto = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('photo', G)) { _stopGuide(true); return; }
     const st = Labs.store('photo');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -2436,7 +2439,17 @@ const LabPhoto = (() => {
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs) };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, count,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(P().GUIDES),
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _rig, _pond, _leaf, _bunsen, _bathHot, _prev, _runs, _leafRuns, _log, _panel, _guide, _said, _g, _pots, _seeds, _weed, _wprev, _wruns, _potRuns, _seedRuns }),
+    restore: state => { ({ _rig, _pond, _leaf, _bunsen, _bathHot, _prev, _runs, _leafRuns, _log, _panel, _guide, _said, _g, _pots, _seeds, _weed, _wprev, _wruns, _potRuns, _seedRuns } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, count,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabPhoto = LabPhoto;

@@ -547,6 +547,7 @@ const LabFood = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _mine(P().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('food', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _resetRack();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -564,6 +565,7 @@ const LabFood = (() => {
     || (on === 'rinse' && !_spatula) || (on.startsWith('slot:') && _rack.sel === +on.split(':')[1] - 1);
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('food');
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
@@ -673,6 +675,7 @@ const LabFood = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('food', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1206,7 +1209,17 @@ const LabFood = (() => {
                                     mistakes: _mission.mistakes, success: _mission.success } };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, select, addFood, addTest, read, bath, burner, flame, taste, rinse, clean, goggles,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(P().GUIDES),
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _rack, _burner, _bathT, _goggles, _spatula, _panel, _shelf, _guide, _reads }),
+    restore: state => { ({ _rack, _burner, _bathT, _goggles, _spatula, _panel, _shelf, _guide, _reads } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, select, addFood, addTest, read, bath, burner, flame, taste, rinse, clean, goggles,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabFood = LabFood;

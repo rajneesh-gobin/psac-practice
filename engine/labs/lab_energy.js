@@ -178,6 +178,7 @@ const LabEnergy = (() => {
   }
 
   function _startGuide(G, adhoc) {
+    if (Labs.studyBegin && Labs.studyBegin('energy', G, () => _startGuide(G, adhoc))) return;
     _guide = G; _guideStep = 0; _adhocGuide = !!adhoc;
     _renderGuide();
     _coach(G.steps[0].say);
@@ -192,6 +193,7 @@ const LabEnergy = (() => {
     if (_guideStep >= _guide.steps.length) {
       // Guide complete
       const G = _guide;
+      if (Labs.studyComplete && Labs.studyComplete('energy', G)) { _guide = null; _renderGuide(); return; }
       if (!_adhocGuide) {
         const st = Labs.store(ID); st.guides = st.guides || {}; st.guides[G.id] = Date.now(); Labs.persist();
       }
@@ -206,6 +208,7 @@ const LabEnergy = (() => {
   }
 
   function _renderGuide() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('energy');
     const el = $('lab-guide');
     if (!el) return;
     if (!_guide) { el.classList.remove('is-visible'); return; }
@@ -813,6 +816,16 @@ const LabEnergy = (() => {
     };
   }
 
-  return { mount, unmount, _test, _tick, _debug };
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => P().GUIDES,
+    start: id => _startGuide(P().GUIDES.find(g => g.id === id)),
+    snapshot: () => ({ _mode, _massIdx, _heightIdx, _pos, _posAnim, _pullDone, _timeS, _timedResult, _panel, _guide, _guideStep, _log, _adhocGuide }),
+    restore: state => { ({ _mode, _massIdx, _heightIdx, _pos, _posAnim, _pullDone, _timeS, _timedResult, _panel, _guide, _guideStep, _log, _adhocGuide } = state); },
+    refresh: () => { if (_guide) _renderGuide(); },
+    stop: () => { _guide = null; _renderGuide(); _renderPanel(); }
+  };
+  return { study, mount, unmount, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabEnergy = LabEnergy;

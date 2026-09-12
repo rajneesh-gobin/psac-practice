@@ -297,7 +297,7 @@ const LabPhotoData = (() => {
     { id: 'control', icon: '⚖️', title: 'The control leaf', hint: 'The same flask, but WITHOUT soda lime',
       how: ['rig:leaf', 'plant:green', 'destarch', 'cover:flask', 'day:light', 'pick', ...TEST],
       saw: 'The leaf in the flask without soda lime turned blue-black.',
-      learn: 'The control is identical except for the one factor being tested. Because it made starch, the soda-lime leaf's result must be due to the missing carbon dioxide - not the flask.' },
+      learn: 'The control is identical except for the one factor being tested. Because it made starch, the soda-lime leaf\'s result must be due to the missing carbon dioxide - not the flask.' },
   ];
 
   // ── Hazards: the mistakes that stop the experiment ───
@@ -403,7 +403,7 @@ const LabPhotoData = (() => {
     },
     {
       id: 'needs', icon: '🔬', title: 'What does a plant need?', rig: 'pond',
-      blurb: 'The 2024 paper's experiment: light and carbon dioxide, each present or absent.',
+      blurb: 'The 2024 paper\'s experiment: light and carbon dioxide, each present or absent.',
       intro: 'Biology 2024 Q5(b), in a dark room whose only light is the lamp. Run four tests - light with and without carbon dioxide, and no light with and without it. Use boiled and cooled water for "no CO₂" and sodium hydrogencarbonate for "CO₂". Keep the lamp distance and temperature the same.',
       tests: [
         { lampOn: true, co2: false, label: 'Light ✓ · CO₂ ✗' },
@@ -905,7 +905,7 @@ const LabPhotoData = (() => {
       'Plants need water, sunlight, air, warmth and minerals to grow well.',
       'Roots take in water and minerals from the soil.',
       'The stem carries water up from the roots to the leaves.',
-      'Leaves make the plant's food, using sunlight.',
+      'Leaves make the plant\'s food, using sunlight.',
       'Leaves are green because of chlorophyll. It traps sunlight.',
       'A seed has a tiny plant and a store of food inside it.',
       'Germination is when a seed starts to grow.',
@@ -919,7 +919,7 @@ const LabPhotoData = (() => {
       'Plants make their own food. This is called photosynthesis.',
       'Carbon dioxide + water, with sunlight, make food and oxygen.',
       'Carbon dioxide gets into a leaf through tiny holes called stomata.',
-      'The leaf is the plant's food factory.',
+      'The leaf is the plant\'s food factory.',
       'Chlorophyll is the green colouring in leaves. It traps sunlight.',
       'Plants give out oxygen when they make food. Animals breathe it in.',
       'Plants respire day and night. They make food only in the light.',
@@ -1020,7 +1020,7 @@ const LabPhotoData = (() => {
       quiz: [
         { q: 'Which part of a plant mainly makes its food?',
           options: ['The leaf', 'The root', 'The flower', 'The fruit'],
-          why: 'PSAC 2021 paper. The green leaf is the plant's food factory.' },
+          why: 'PSAC 2021 paper. The green leaf is the plant\'s food factory.' },
         { q: 'The plant with no leaves did not grow. Why?',
           options: ['With no leaves, it could make no food', 'It had too much water', 'Its roots were cut off', 'It was too warm'],
           why: 'Leaves make the food. No leaves, no food, so no growth.' },

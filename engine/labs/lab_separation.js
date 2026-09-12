@@ -1135,6 +1135,7 @@ const LabSeparation = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || SD.GUIDES.find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('separation', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _resetAll();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -1158,6 +1159,7 @@ const LabSeparation = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('separation');
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
@@ -1302,6 +1304,7 @@ const LabSeparation = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('separation', G)) { _stopGuide(true); return; }
     const st = Labs.store('separation');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -2634,7 +2637,17 @@ const LabSeparation = (() => {
              mission: _mission && Object.assign({}, _mission) };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, setMode, setPart, build, heatOn, heatOff, rod, cool, drop,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => SD.GUIDES,
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _mode, _goggles, _panel, _guide, _log, _dist, _cry, _sub, _ch, _fil, _eva, _chr, _dis, _lastGrade }),
+    restore: state => { ({ _mode, _goggles, _panel, _guide, _log, _dist, _cry, _sub, _ch, _fil, _eva, _chr, _dis, _lastGrade } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, setMode, setPart, build, heatOn, heatOff, rod, cool, drop,
            reset, goggles, pickTech, pickWhy, choose, pour, leave, run, add, stir, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabSeparation = LabSeparation;

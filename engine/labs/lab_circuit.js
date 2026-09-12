@@ -927,6 +927,7 @@ const LabCircuit = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _mine(D().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('circuit', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _layout = {}; _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = [];
     _tests = {}; _gapFilled = false; _gapPrev = false;
@@ -957,6 +958,7 @@ const LabCircuit = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('circuit');
     const G = _gdef();
     if (!G) return;
     _hush();
@@ -1098,6 +1100,7 @@ const LabCircuit = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('circuit', G)) { _stopGuide(true); return; }
     const st = Labs.store('circuit');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1139,6 +1142,12 @@ const LabCircuit = (() => {
     const s = G && G.steps[_guide.step];
     if (!s) return;
     const [k, a, b] = s.on.split(':');
+    // Operating an existing part must not place the last selected component.
+    if (['switch', 'bulb', 'flip'].includes(k) && _tool !== 'hand') {
+      _tool = 'hand';
+      _renderPalette();
+      return;
+    }
     const sels = [];
     switch (k) {
       case 'place': sels.push(`#lab-circuit-slots [data-slot="${a}"]`); if (_tool !== b) sels.push(`#lab-circuit-palette [data-tool="${b}"]`); break;
@@ -2055,7 +2064,17 @@ const LabCircuit = (() => {
                                     kind: _mission.kind, tested: Object.assign({}, _mission.tested) } };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide, build, place, remove, tapSlot, toggleSwitch, setBulb, flip,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(D().GUIDES),
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _layout, _sol, _view, _tool, _t, _panel, _guide, _log, _readings, _undo, _hadGap, _vmSeen, _lastGrade, _tests, _gapPrev, _gapFilled, _warm }),
+    restore: state => { ({ _layout, _sol, _view, _tool, _t, _panel, _guide, _log, _readings, _undo, _hadGap, _vmSeen, _lastGrade, _tests, _gapPrev, _gapFilled, _warm } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, build, place, remove, tapSlot, toggleSwitch, setBulb, flip,
            read, setView, setTool, undo, clearBoard, danger: _danger, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabCircuit = LabCircuit;

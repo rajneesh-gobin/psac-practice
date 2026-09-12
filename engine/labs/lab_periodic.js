@@ -9,6 +9,28 @@ const LabPeriodic = (() => {
   let _selected = null;
   let _formulaA = null;
   let _formulaB = null;
+  let _studyStep = null;
+  const INVESTIGATION = { id: 'salt', grades: [9], title: 'Which elements make table salt?',
+    blurb: 'Find sodium and chlorine, then read the formula they form.',
+    lesson: 'Sodium is a metal and chlorine is a non-metal. Sodium chloride contains sodium and chlorine in a 1:1 ratio, so its formula is NaCl.',
+    steps: [{ say: 'Tap Na (sodium), element 11.' }, { say: 'Tap Cl (chlorine), element 17. Read the formula below the table.' }] };
+
+  function startGuide(id) {
+    if (id !== INVESTIGATION.id) return;
+    if (Labs.studyBegin && Labs.studyBegin(ID, INVESTIGATION, () => startGuide(id))) return;
+    _formulaA = null; _formulaB = null; _studyStep = 0;
+    _applyFilter('g9'); _renderFormula(); _studyRefresh();
+  }
+  function _studyRefresh() {
+    let guide = _root.querySelector('#lab-guide');
+    if (!guide) { guide = document.createElement('div'); guide.id = 'lab-guide'; guide.className = 'lab-guide'; _root.querySelector('.lab-pt-wrap').prepend(guide); }
+    guide.hidden = _studyStep === null;
+    _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    if (_studyStep === null) return;
+    guide.textContent = INVESTIGATION.steps[_studyStep].say;
+    _root.querySelector(`[data-n="${_studyStep === 0 ? 11 : 17}"]`)?.classList.add('is-next');
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint(ID);
+  }
 
   function mount(root) {
     _root = root;
@@ -20,7 +42,10 @@ const LabPeriodic = (() => {
     _renderFormula();
   }
 
-  function unmount() { _root = null; }
+  function unmount() {
+    if (_root) { _root.removeEventListener('click', _onClick); _root.removeEventListener('mouseover', _onHover); _root.removeEventListener('mouseout', _onHoverOut); }
+    _root = null;
+  }
 
   function _shellHTML() {
     const legend = Object.entries(D().TYPES).map(([, v]) =>
@@ -253,6 +278,11 @@ const LabPeriodic = (() => {
       _formulaB = el;
     }
     _renderFormula();
+    if (_studyStep === 0 && el.n === 11) { _studyStep = 1; _studyRefresh(); }
+    else if (_studyStep === 1 && _formulaA?.n === 11 && el.n === 17) {
+      _studyStep = null; _studyRefresh();
+      if (Labs.studyComplete) Labs.studyComplete(ID, INVESTIGATION);
+    }
   }
 
   function _onHover(e) {
@@ -264,6 +294,13 @@ const LabPeriodic = (() => {
     if (!e.relatedTarget || !e.relatedTarget.closest('.lab-pt-el')) _hoverHighlight(null);
   }
 
-  return { mount, unmount, id: ID };
+  const study = {
+    guides: () => [INVESTIGATION], start: startGuide,
+    snapshot: () => ({ _filter, _selected, _formulaA, _formulaB, _studyStep }),
+    restore: state => { ({ _filter, _selected, _formulaA, _formulaB, _studyStep } = state); },
+    refresh: () => { _applyFilter(_filter); _renderDetail(_selected); _renderFormula(); _studyRefresh(); },
+    stop: () => { _studyStep = null; _studyRefresh(); }
+  };
+  return { study, mount, unmount, id: ID };
 })();
 if (typeof window !== 'undefined') window.LabPeriodic = LabPeriodic;

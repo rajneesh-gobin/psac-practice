@@ -270,7 +270,7 @@ const LabLightData = (() => {
       title: () => 'Stop - never look along a laser beam',
       happened: () => 'You put your eye to the holes with a laser pointer behind them. The holes were in line, so the beam went straight through all three - and straight into your eye.',
       why: 'A laser beam does not spread out, so all of its energy lands on one tiny spot at the back of your eye (the retina). Even a school laser pointer can damage it permanently in less than a second - and a laser beam bounced off a mirror is just as dangerous.',
-      instead: 'Only look through the holes when the light is an ordinary lamp. With a laser, look at the spot it makes on a white screen at the end. Never point a laser at anyone's face.',
+      instead: 'Only look through the holes when the light is an ordinary lamp. With a laser, look at the spot it makes on a white screen at the end. Never point a laser at anyone\'s face.',
       exam: 'A safety precaution is asked on the NCE science papers (for example Chemistry 2022 Q5(a)(ii)). For a light experiment: never look directly into a laser beam or a bright lamp - view the beam on a screen.',
     },
     hot_lamp: {
@@ -289,7 +289,7 @@ const LabLightData = (() => {
       icon: '📐',
       title: c => c.setup === 'mirror' ? 'You measured from the mirror, not the normal' : 'You measured from the glass surface, not the normal',
       happened: c => `Your protractor counted from the ${c.setup === 'mirror' ? 'mirror' : 'surface of the block'}, so it read ${c.i}° for the angle of incidence. The real angle of incidence is ${c.trueI}°, because angles in a ray diagram are always measured from the normal: 90° − ${c.trueI}° = ${c.i}°.${c.setup === 'mirror' ? ' (Both your readings were wrong by the same amount, so they still looked equal - that is why this mistake is so easy to miss.)' : ''}`,
-      instead: 'Draw the normal first: a dashed line at 90° to the surface where the ray hits it. Put the protractor's centre on that point and count from the normal - 0° along the normal.',
+      instead: 'Draw the normal first: a dashed line at 90° to the surface where the ray hits it. Put the protractor\'s centre on that point and count from the normal - 0° along the normal.',
       exam: 'Physics 2022 Q4(b): measure the angle of incidence with the protractor, from the normal. If a question gives the angle between the ray and the SURFACE, the angle of incidence is 90° minus it.',
     },
     parallax: {
@@ -501,7 +501,7 @@ const LabLightData = (() => {
       saw: 'The book stopped the light. A dark shadow appeared on the screen.',
       formula: 'opaque → a dark shadow',
       learn: 'The book is opaque: no light goes through it. A shadow is the dark place where the light cannot reach.' },
-    { id: 'g4_shape', icon: '🌳', title: 'Same shape', hint: 'Look at the card tree's shadow',
+    { id: 'g4_shape', icon: '🌳', title: 'Same shape', hint: 'Look at the card tree\'s shadow',
       how: [S4, 'obj:card', ON4],
       saw: 'The shadow had the same shape as the card tree.',
       learn: 'Light goes past the edges of the tree, but not through it. So the shadow copies the shape of the object.' },
@@ -526,7 +526,7 @@ const LabLightData = (() => {
       learn: 'The shadow tells you the word. The more light a material blocks, the darker its shadow.' },
     { id: 'g4_measure', icon: '📏', title: 'Measure a shadow', hint: 'Use the ruler on the screen',
       how: [S4, 'obj:card', ON4, 'ruler:zero', 'measure'],
-      saw: 'You measured the card tree's shadow with the 0 of the ruler at the bottom.',
+      saw: 'You measured the card tree\'s shadow with the 0 of the ruler at the bottom.',
       learn: 'Put the 0 at the bottom of the shadow and read the number at the top. The tree is only 5 cm tall, but its shadow can be much taller.' },
     { id: 'g4_bigger', icon: '⬆️', title: 'Nearer means bigger', hint: 'Measure, move the tree nearer the torch, measure again',
       how: [S4, 'obj:card', ON4, 'measure', 'pos:10', 'measure'],
@@ -656,8 +656,8 @@ const LabLightData = (() => {
     },
     {
       id: 'g4_sizes', icon: '📏', title: 'Grow a shadow', setup: 'shadow',
-      blurb: 'Measure the card tree's shadow at three places. Keep the torch still.',
-      intro: 'Grow a shadow! Switch on the torch. Measure the card tree's shadow at three places. Move only the tree, never the torch.',
+      blurb: 'Measure the card tree\'s shadow at three places. Keep the torch still.',
+      intro: 'Grow a shadow! Switch on the torch. Measure the card tree\'s shadow at three places. Move only the tree, never the torch.',
       quiz: [
         { q: 'You move a toy nearer the torch. What happens to its shadow?',
           options: ['It gets bigger', 'It gets smaller', 'It stays the same size', 'It disappears'],

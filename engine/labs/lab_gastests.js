@@ -531,6 +531,7 @@ const LabGastests = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _mine(D().GUIDES).find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('gastests', G, () => _startGuide(idOrDef))) return;
     _mission = null;
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _guide_step = 0;
@@ -545,6 +546,7 @@ const LabGastests = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('gastests');
     _hush();
     const G = _gdef();
     if (!G) return;
@@ -630,6 +632,7 @@ const LabGastests = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('gastests', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides = st.guides || {}; st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1115,7 +1118,17 @@ const LabGastests = (() => {
     };
   }
 
-  return { mount, unmount, _test, _tick, _debug };
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(D().GUIDES),
+    start: _startGuide,
+    snapshot: () => _busy ? null : ({ _panel, _guide, _guide_step, _goggles, _active, _said, _stations }),
+    restore: state => { ({ _panel, _guide, _guide_step, _goggles, _active, _said, _stations } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, _test, _tick, _debug };
 })();
 
 if (typeof window !== 'undefined') window.LabGastests = LabGastests;

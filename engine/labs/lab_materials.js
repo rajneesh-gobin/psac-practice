@@ -640,6 +640,7 @@ const LabMaterials = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || D().GUIDES.find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('materials', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
@@ -665,6 +666,7 @@ const LabMaterials = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('materials');
     const G = _gdef();
     if (!G) return;
     _hush();
@@ -786,6 +788,7 @@ const LabMaterials = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('materials', G)) { _stopGuide(true); return; }
     const st = Labs.store(LAB);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1429,7 +1432,17 @@ const LabMaterials = (() => {
                                     hazards: _mission.hazards, success: _mission.success } };
   }
 
-  return { mount, unmount, setStation, setLights, setPower, test, openSort, guess, openJob, pickJob, startMission, startGuide,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => D().GUIDES,
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _b, _panel, _guide, _log, _results, _sortProp, _seenMetalCard }),
+    restore: state => { ({ _b, _panel, _guide, _log, _results, _sortProp, _seenMetalCard } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, setStation, setLights, setPower, test, openSort, guess, openJob, pickJob, startMission, startGuide,
            discoveryGuide, speak, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMaterials = LabMaterials;

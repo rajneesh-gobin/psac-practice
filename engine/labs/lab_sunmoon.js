@@ -32,6 +32,8 @@ const LabSunmoon = (() => {
   let _eclipseType = null;       // 'solar' | 'lunar' | null
   let _phasesVisited = new Set();
   let _stickObserved = 0;
+  let _shadowObservations = {};
+  let _season = null, _seasonSeen = {};
   let _solarSeen = false, _lunarSeen = false;
   let _panel = 'sandbox', _mission = null, _guide = null;
   let _fx = [], _busy = false, _instant = false;
@@ -212,6 +214,8 @@ const LabSunmoon = (() => {
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
       if (dc) { _discDetail(dc.dataset.disc); return; }
+      const season = e.target.closest('[data-season]');
+      if (season) { _setSeason(season.dataset.season); return; }
       const p = e.target.closest('[data-panel]');
       if (p) { _panel = p.dataset.panel; _renderPanel(); return; }
       const m = e.target.closest('[data-mission]');
@@ -288,11 +292,12 @@ const LabSunmoon = (() => {
   }
 
   function _setTime(v) {
+    _season = null;
     const times = { sunrise: 0.28, noon: 0.5, sunset: 0.72 };
     if (!(v in times)) return;
     _observeTime = v;
     _earthSpin = times[v];
-    _stickObserved++;
+    // Selecting a time is setup, not a recorded observation.
     _syncSet();
     const msgs = {
       sunrise: 'Sunrise. The Sun is just above the horizon. Shadows are at their longest.',
@@ -350,8 +355,21 @@ const LabSunmoon = (() => {
     return lines[idx] || '';
   }
 
+  function _setSeason(value) {
+    if (!['june', 'december'].includes(value)) return;
+    _season = value; _spinning = false; _orbiting = false;
+    _coach(value === 'june' ? 'June: the Northern Hemisphere tilts toward the Sun. Mauritius is in the Southern Hemisphere.' : 'December: the Southern Hemisphere tilts toward the Sun. Compare the same axis direction.');
+    _draw(0); _after('season:' + value);
+  }
+
   function _observe() {
+    if (_season) {
+      _seasonSeen[_season] = true;
+      _coach(_season === 'june' ? 'June: Mauritius has winter. The Southern Hemisphere tilts away from the Sun.' : 'December: Mauritius has summer. The Southern Hemisphere tilts toward the Sun.');
+      _after('observe'); _checkFinds(); return;
+    }
     _stickObserved++;
+    if (_stickOn) _shadowObservations[_observeTime] = _shadowLengthLabel();
     const et = _getEclipseType();
     if (et) {
       if (et === 'solar') { _solarSeen = true; _coach('Solar eclipse observed! The Moon\'s shadow covers part of Earth.'); }
@@ -369,6 +387,7 @@ const LabSunmoon = (() => {
     _spinning = false; _orbiting = false; _stickOn = false;
     _moonAngle = Math.PI; _earthSpin = 0.5; _observeTime = 'noon';
     _eclipseType = null; _stickObserved = 0; _solarSeen = false; _lunarSeen = false;
+    _shadowObservations = {}; _season = null; _seasonSeen = {};
     _syncSet();
     _coach('Reset. Earth and Moon are back to the starting position.');
     _after('reset');
@@ -418,7 +437,7 @@ const LabSunmoon = (() => {
   function _state() {
     return { grade: _g(), spinning: _spinning, orbiting: _orbiting, stickOn: _stickOn,
              observeTime: _observeTime, eclipseType: _eclipseType, phasesVisited: _phasesVisited,
-             stickObserved: _stickObserved, solarSeen: _solarSeen, lunarSeen: _lunarSeen,
+             stickObserved: _stickObserved, shadowObservations: _shadowObservations, seasonSeen: _seasonSeen, solarSeen: _solarSeen, lunarSeen: _lunarSeen,
              dayTime: _dayTime(), moonAngle: _moonAngle };
   }
 
@@ -487,6 +506,7 @@ const LabSunmoon = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || _mine(D().GUIDES).find(g => g.id === idOrDef);
     if (!G) return;
+    if (Labs.studyBegin && Labs.studyBegin('sunmoon', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _reset();
     _guide = { id: G.id, step: 0, def: adhoc || null };
@@ -505,15 +525,17 @@ const LabSunmoon = (() => {
       case 'orbit':   return _orbiting === (v === 'on');
       case 'stick':   return _stickOn === (v === 'on');
       case 'time':    return _observeTime === v;
+      case 'season': return _season === v;
       case 'eclipse': return _eclipseType === v;
       case 'phase':   return _phaseIdx() === Number(v);
-      case 'observe': return _stickObserved > 0 || _solarSeen || _lunarSeen;
+      case 'observe': return false; // Each observation requires a fresh action.
       case 'reset':   return false;
     }
     return false;
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('sunmoon');
     const G = _gdef();
     if (!G) return;
     _hush();
@@ -628,6 +650,7 @@ const LabSunmoon = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('sunmoon', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -668,6 +691,7 @@ const LabSunmoon = (() => {
       case 'orbit':   return '[data-act="orbit"]';
       case 'stick':   return '[data-act="stick"]';
       case 'time':    return `[data-set="time"][data-v="${v}"]`;
+      case 'season':  return `[data-season="${v}"]`;
       case 'eclipse': return `[data-set="eclipse"][data-v="${v}"]`;
       case 'phase':   return '[data-act="phase-next"]';
       case 'observe': return '[data-act="observe"]';
@@ -787,25 +811,25 @@ const LabSunmoon = (() => {
     if (ms.id === 'shadow_detective') {
       steps = `<ul class="lab-steps">
         <li class="${_stickOn ? 'is-done' : ''}">📏 Turn on the Shadow Stick</li>
-        <li class="${_stickObserved >= 1 ? 'is-done' : ''}">🌅 Observe at sunrise</li>
-        <li class="${_observeTime === 'noon' && _stickObserved >= 2 ? 'is-done' : ''}">🌞 Observe at noon</li>
-        <li class="${_stickObserved >= 3 ? 'is-done' : ''}">🌇 Observe at sunset</li>
-        <li class="${ms.success ? 'is-done' : ''}">📝 Answer the questions</li></ul>`;
+        <li class="${_shadowObservations.sunrise ? 'is-done' : ''}">🌅 Observe at sunrise</li>
+        <li class="${_shadowObservations.noon ? 'is-done' : ''}">🌞 Observe at noon</li>
+        <li class="${_shadowObservations.sunset ? 'is-done' : ''}">🌇 Observe at sunset</li>
+        <li>📝 Answer the questions</li></ul>`;
     } else if (ms.id === 'eclipse_spotter') {
       steps = `<ul class="lab-steps">
         <li class="${_orbiting ? 'is-done' : ''}">🌙 Orbit the Moon</li>
         <li class="${_solarSeen ? 'is-done' : ''}">🌑 See a solar eclipse</li>
         <li class="${_lunarSeen ? 'is-done' : ''}">🌕 See a lunar eclipse</li>
-        <li class="${ms.success ? 'is-done' : ''}">📝 Answer the questions</li></ul>`;
+        <li>📝 Answer the questions</li></ul>`;
     } else if (ms.id === 'phase_tracker') {
       steps = `<ul class="lab-steps">
         <li class="${_phasesVisited.size >= 4 ? 'is-done' : ''}">🌒 See 4 or more phases (${_phasesVisited.size} so far)</li>
         <li class="${_phasesVisited.size >= 8 ? 'is-done' : ''}">🌕 Complete all 8 phases</li>
-        <li class="${ms.success ? 'is-done' : ''}">📝 Answer the questions</li></ul>`;
+        <li>📝 Answer the questions</li></ul>`;
     } else {
       steps = `<ul class="lab-steps">
-        <li class="${_spinning ? 'is-done' : ''}">🌍 Spin Earth to observe seasons</li>
-        <li class="${ms.success ? 'is-done' : ''}">📝 Answer the questions</li></ul>`;
+        <li class="${_seasonSeen.june ? 'is-done' : ''}">Observe Earth in June</li><li class="${_seasonSeen.december ? 'is-done' : ''}">Observe Earth in December</li>
+        <li>📝 Answer the questions</li></ul>`;
     }
 
     return `<section class="lab-mission" id="lab-mission" aria-label="Mission">
@@ -836,6 +860,7 @@ const LabSunmoon = (() => {
     if (!box) return;
     const is7 = _g() === 7;
     box.innerHTML = `
+      ${is7 ? '<button type="button" class="lab-tool" data-season="june">Earth in June</button><button type="button" class="lab-tool" data-season="december">Earth in December</button>' : ''}
       <button type="button" class="lab-tool" data-act="spin" aria-pressed="${_spinning}"><span aria-hidden="true">🌍</span>Spin Earth</button>
       <button type="button" class="lab-tool" data-act="orbit" aria-pressed="${_orbiting}"><span aria-hidden="true">🌙</span>Orbit Moon</button>
       <button type="button" class="lab-tool" data-act="stick" aria-pressed="${_stickOn}"><span aria-hidden="true">📏</span>Shadow Stick</button>
@@ -1005,6 +1030,22 @@ const LabSunmoon = (() => {
     c.restore();
   }
 
+  function _drawSeasons(c) {
+    const x = _W / 2, y = _H * 0.42, orbit = _W * 0.30, r = Math.min(22, _W * 0.065);
+    c.strokeStyle = '#64748b'; c.beginPath(); c.ellipse(x, y, orbit, orbit * 0.5, 0, 0, Math.PI * 2); c.stroke();
+    c.fillStyle = '#fbbf24'; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+    const ex = x + (_season === 'june' ? -orbit : orbit);
+    c.fillStyle = '#60a5fa'; c.beginPath(); c.arc(ex, y, r, 0, Math.PI * 2); c.fill();
+    // Earth's axis keeps the SAME direction as Earth revolves around the Sun.
+    const dx = Math.sin(23.5 * Math.PI / 180) * r * 1.6, dy = Math.cos(23.5 * Math.PI / 180) * r * 1.6;
+    c.strokeStyle = '#fff'; c.lineWidth = 2; c.beginPath(); c.moveTo(ex - dx, y + dy); c.lineTo(ex + dx, y - dy); c.stroke();
+    c.fillStyle = '#fff'; c.font = '14px sans-serif'; c.textAlign = 'center';
+    c.fillText('N', ex + dx, y - dy - 8); c.fillText('S', ex - dx, y + dy + 17);
+    c.fillText('Sun', x, y + r + 22);
+    c.fillText(_season === 'june' ? 'June — Mauritius: winter' : 'December — Mauritius: summer', x, _H - 56);
+    c.fillText('Axis tilt: 23.5° · diagram not to scale', x, _H - 28);
+  }
+
   function _draw(dt) {
     if (!_cx) return;
     const c = _cx;
@@ -1017,13 +1058,18 @@ const LabSunmoon = (() => {
 
     // Stars
     c.fillStyle = 'rgba(255,255,255,0.7)';
-    const rnd = k => (Math.sin(k * 12.9898 + 78.233) * 43758.5453) % 1;
+    const rnd = k => {
+      const value = Math.sin(k * 12.9898 + 78.233) * 43758.5453;
+      return value - Math.floor(value); // Fraction in [0, 1), even when value is negative.
+    };
     const posW = _W * 0.82; // keep stars in left region, away from panel area
     for (let i = 0; i < 60; i++) {
       const sx = rnd(i + 1) * posW, sy = rnd(i + 31) * _H;
       const sr = 0.5 + rnd(i + 61) * 1.2;
       c.beginPath(); c.arc(sx, sy, sr, 0, 2 * Math.PI); c.fill();
     }
+
+    if (_season) { _drawSeasons(c); c.restore(); return; }
 
     // Layout constants
     const PHASE_H  = 44;               // phase strip height at bottom
@@ -1312,7 +1358,17 @@ const LabSunmoon = (() => {
     };
   }
 
-  return { mount, unmount, startMission, startGuide, discoveryGuide,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(D().GUIDES),
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _spinning, _orbiting, _stickOn, _moonAngle, _earthSpin, _observeTime, _eclipseType, _phasesVisited, _stickObserved, _shadowObservations, _season, _seasonSeen, _solarSeen, _lunarSeen, _panel, _guide, _log, _lastGrade }),
+    restore: state => { ({ _spinning, _orbiting, _stickOn, _moonAngle, _earthSpin, _observeTime, _eclipseType, _phasesVisited, _stickObserved, _shadowObservations, _season, _seasonSeen, _solarSeen, _lunarSeen, _panel, _guide, _log, _lastGrade } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabSunmoon = LabSunmoon;

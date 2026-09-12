@@ -1043,6 +1043,7 @@ const LabChanges = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || D().GUIDES.find(g => g.id === idOrDef);
     if (!G) return;
+    if (Labs.studyBegin && Labs.studyBegin('changes', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _current = null; _phase = 'idle'; _phaseT = 0;
     const classify = $('lab-changes-classify');
@@ -1056,6 +1057,7 @@ const LabChanges = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('changes');
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
@@ -1115,6 +1117,7 @@ const LabChanges = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('changes', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
     if (G.adhoc && G.discId) _discover(G.discId);
@@ -1239,6 +1242,16 @@ const LabChanges = (() => {
     };
   }
 
-  return { mount, unmount, _test: _testHook, _tick, _debug, startGuide, startMission, selectScenario, discoveryGuide, identifySign };
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(D().GUIDES),
+    start: startGuide,
+    snapshot: () => ({ _grade, _current, _phaseT, _phase, _chips, _signsChosen, _signsFound, _classified, _guide, _panel, _said }),
+    restore: state => { ({ _grade, _current, _phaseT, _phase, _chips, _signsChosen, _signsFound, _classified, _guide, _panel, _said } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, _test: _testHook, _tick, _debug, startGuide, startMission, selectScenario, discoveryGuide, identifySign };
 })();
 if (typeof window !== 'undefined') window.LabChanges = LabChanges;

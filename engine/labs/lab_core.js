@@ -552,7 +552,7 @@ const Labs = (() => {
 
   function _scheduleHint() {
     _hintTimer = setTimeout(() => {
-      const el = _hintRoot && _hintRoot.querySelector(_HINT_SEL);
+      const el = _hintRoot && (_hintRoot.querySelector('.is-next:not(.is-guide-dim)') || _hintRoot.querySelector('#lab-study .lab-btn-primary') || _hintRoot.querySelector(_HINT_SEL));
       if (!el) { _scheduleHint(); return; }
       el.classList.add('is-idle-hint');
       el.addEventListener('animationend', () => { el.classList.remove('is-idle-hint'); _scheduleHint(); }, { once: true });
@@ -583,7 +583,20 @@ const Labs = (() => {
     if (l) {
       const mod = _module(l);
       root.onclick = null;
-      if (mod) { mod.mount(root); _startIdleHint(root); return; }
+      if (mod) {
+        try {
+          if (window.LabStudy) LabStudy.detach();
+          mod.mount(root);
+          if (window.LabStudy) LabStudy.attach(root, l, mod);
+          _startIdleHint(root);
+        } catch (err) {
+          console.error('[Labs] Could not open ' + l.id, err);
+          try { mod.unmount(); } catch (_) {}
+          root.innerHTML = `<div class="lab"><h2>This experiment could not open</h2><p>Your saved work is safe. Try opening it again.</p><button type="button" class="lab-btn lab-btn-primary" data-retry>Try again</button><button type="button" class="lab-btn" data-back>Choose another lab</button></div>`;
+          root.onclick = e => { if (e.target.closest('[data-retry]')) render(); if (e.target.closest('[data-back]')) backToHub(); };
+        }
+        return;
+      }
       root.innerHTML = `<div class="lab"><p class="lab-hub-lede">Opening the ${esc(l.name)}…</p></div>`;
       _ensure(l).then(ok => {
         if (_open !== l.id) return;
@@ -616,6 +629,7 @@ const Labs = (() => {
   }
 
   function _unmountOpen() {
+    if (window.LabStudy) LabStudy.detach();
     const l = _open && LABS.find(x => x.id === _open);
     const m = l && _module(l);
     if (m && m.unmount) m.unmount();
@@ -639,6 +653,9 @@ const Labs = (() => {
   }
 
   return { LABS, SIGN_LABELS, GRADE_ALIASES, render, openLab, backToHub, exit, grade, labsFor, usableGrades,
+           studyBegin: (...args) => window.LabStudy ? LabStudy.begin(...args) : false,
+           studyComplete: (...args) => window.LabStudy ? LabStudy.complete(...args) : false,
+           studyCheckpoint: (...args) => window.LabStudy && LabStudy.checkpoint(...args),
            store, persist, discover, stars, confetti,
            calm, esc, sign, overlay, closeOverlay, hazardCard, resultCard, quiz, missionDone };
 })();

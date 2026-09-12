@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="../"><title>Science Labs study preview</title>
+<link rel="stylesheet" href="engine/labs/labs.css"><style>body{margin:0;padding:12px;background:#f1f5f9;font-family:system-ui,sans-serif}#screen-labs{max-width:1100px;margin:auto}button,textarea{font:inherit}</style></head>
+<body><main id="screen-labs" class="screen"><div id="labs-root" class="lab-root"></div></main>
+<script>
+const params = new URLSearchParams(location.search);
+var SELECTED_GRADE = Number(params.get('grade') || 6);
+var DB = JSON.parse(localStorage.getItem('lab-study-preview') || '{}');
+var S = {currentScreen:'labs'};
+function save(){localStorage.setItem('lab-study-preview',JSON.stringify(DB));}
+function toast(){}
+</script>
+<script src="engine/labs/lab_study.js"></script><script src="engine/labs/lab_core.js"></script>
+<script>Labs.openLab(params.get('lab') || 'circuit');</script></body></html>

@@ -776,6 +776,7 @@ const LabMagnets = (() => {
   function startGuide(id) {
     const G = _mine(P().GUIDES).find(g => g.id === id);
     if (!G) return;
+    if (Labs.studyBegin && Labs.studyBegin('magnets', G, () => startGuide(id))) return;
     _mission = null;
     if (_is4() && _g4) _resetG4();
     if (_is8() && _g8) _resetG8();
@@ -793,6 +794,7 @@ const LabMagnets = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('magnets');
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
@@ -834,6 +836,7 @@ const LabMagnets = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('magnets', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!st.guides) st.guides = {};
     st.guides[G.id] = Date.now();
@@ -1075,6 +1078,16 @@ const LabMagnets = (() => {
     };
   }
 
-  return { mount, unmount, _test, _tick, _debug };
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => _mine(P().GUIDES),
+    start: startGuide,
+    snapshot: () => ({ _panel, _guide, _g4, _g8, _events }),
+    restore: state => { ({ _panel, _guide, _g4, _g8, _events } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMagnets = LabMagnets;

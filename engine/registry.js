@@ -223,6 +223,7 @@ const RoleModules = (() => {
     // files (data, bench, stylesheet) when that lab is opened - see
     // Labs.LABS / _ensure() in lab_core.js - so the hub costs one file.
     labs: [
+      'engine/labs/lab_study.js',
       'engine/labs/lab_core.js',
     ],
   };

@@ -861,6 +861,7 @@ const LabHeat = (() => {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
     const G = adhoc || P().GUIDES.find(g => g.id === idOrDef);
     if (!G || _busy) return;
+    if (Labs.studyBegin && Labs.studyBegin('heat', G, () => startGuide(idOrDef))) return;
     _mission = null;
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
@@ -891,6 +892,7 @@ const LabHeat = (() => {
   }
 
   function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('heat');
     const G = _gdef();
     if (!G) return;
     _hush();
@@ -940,6 +942,7 @@ const LabHeat = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (Labs.studyComplete && Labs.studyComplete('heat', G)) { _stopGuide(true); return; }
     const lSt = Labs.store(ID);
     if (!G.adhoc) { lSt.guides = lSt.guides || {}; lSt.guides[G.id] = Date.now(); Labs.persist(); }
     _stopGuide(true);
@@ -1386,7 +1389,17 @@ const LabHeat = (() => {
     };
   }
 
-  return { mount, unmount, startGuide, discoveryGuide, startMission,
+
+  // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
+  const study = {
+    guides: () => P().GUIDES,
+    start: startGuide,
+    snapshot: () => _busy ? null : ({ _st, _panel, _guide, _log }),
+    restore: state => { ({ _st, _panel, _guide, _log } = state); },
+    refresh: () => { if (_guide) _guideEnter(); },
+    stop: () => { _stopGuide(true); }
+  };
+  return { study, mount, unmount, startGuide, discoveryGuide, startMission,
            set: _set, act: _do, tick: _tick, addDye: _addDye, readTemp: _readTemp,
            _test, _tick: _tick_hook, _debug };
 })();

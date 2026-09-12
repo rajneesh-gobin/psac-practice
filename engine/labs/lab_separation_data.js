@@ -481,7 +481,7 @@ const LabSeparationData = (() => {
         { q: 'Why does the salt stay behind in the flask?',
           options: ['Its boiling point is far higher than 100 °C', 'It is too heavy for the steam to carry', 'It reacts with the glass of the flask', 'It dissolves in the cold condenser water'],
           why: 'Salt boils at 1413 °C. At 100 °C only the water turns to vapour.' },
-        { q: 'A pupil's rig has two errors: the conical flask is sealed with a bung, and the water enters the condenser at the top. Which corrections are right?',
+        { q: 'A pupil\'s rig has two errors: the conical flask is sealed with a bung, and the water enters the condenser at the top. Which corrections are right?',
           options: ['Remove the bung; connect the water in at the bottom', 'Add a second bung; connect the water in at the bottom', 'Remove the bung; turn the cooling water off', 'Add more granules; heat the flask more strongly'],
           why: 'A heated rig must be open at the receiver end, and the cooling water goes in at the bottom. Chemistry 2025 Q5(b)(iii) asks for two errors like these.' },
         { q: 'Why are anti-bumping granules added to the flask?',
