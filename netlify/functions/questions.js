@@ -469,6 +469,50 @@ async function _dbQueryPastPapers(grade, sbUrl, sbSrk) {
   return data;
 }
 
+// ── Supabase RPC helpers ─────────────────────────────────────────────────────
+// These call server-side RPCs that do filtering + answer-stripping in SQL,
+// keeping CPU time in the Worker under the 10ms Cloudflare free-tier limit.
+// Both return null on any failure so the caller falls through to the JS path.
+
+async function _rpcGetSubjectQuestions(subjectId, chapterId, difficulty, allowedChapters, blockedChapters, sbUrl, sbSrk) {
+  if (!sbSrk) return null;
+  try {
+    const r = await fetch(`${sbUrl}/rest/v1/rpc/get_questions_for_client`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: sbSrk, Authorization: `Bearer ${sbSrk}` },
+      body: JSON.stringify({
+        p_subject_id:       subjectId,
+        p_chapter_id:       chapterId || null,
+        p_difficulty:       difficulty || null,
+        p_allowed_chapters: allowedChapters || null,
+        p_blocked_chapters: blockedChapters && blockedChapters.length ? blockedChapters : null,
+      }),
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    return Array.isArray(data) ? data : null;
+  } catch (_) { return null; }
+}
+
+async function _rpcGetGradeQuestions(grade, allowedChapters, blockedChapters, blockedSubjects, sbUrl, sbSrk) {
+  if (!sbSrk) return null;
+  try {
+    const r = await fetch(`${sbUrl}/rest/v1/rpc/get_grade_questions_for_client`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: sbSrk, Authorization: `Bearer ${sbSrk}` },
+      body: JSON.stringify({
+        p_grade:            parseInt(grade),
+        p_allowed_chapters: allowedChapters || null,
+        p_blocked_chapters: blockedChapters && blockedChapters.length ? blockedChapters : null,
+        p_blocked_subjects: blockedSubjects && blockedSubjects.length ? blockedSubjects : null,
+      }),
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    return data && typeof data === 'object' && !Array.isArray(data) ? data : null;
+  } catch (_) { return null; }
+}
+
 // ── Auth cache ───────────────────────────────────────────────────────────────
 // Verifying a caller costs a Supabase round trip (~100-300 ms of billed time)
 // and the answer barely changes minute to minute. Keyed on the credential
@@ -878,7 +922,21 @@ exports.handler = async (event) => {
   // Batch endpoint: ?all=1&grade=N — returns all subjects for the grade in one call
   if (batchAll && batchGrade) {
     try {
-      // Try DB first
+      // Primary path: RPC does filtering + stripping in SQL (~3ms CPU)
+      const blockedSubjArr = _blockedSubjects.size ? [..._blockedSubjects] : null;
+      const blockedChArr   = _blockedSet.size       ? [..._blockedSet]       : null;
+      const rpcBundle = await _rpcGetGradeQuestions(
+        batchGrade,
+        _allowedChapters,   // null = no plan restriction
+        blockedChArr,
+        blockedSubjArr,
+        SB_URL, SB_SRK
+      );
+      if (rpcBundle) {
+        return { statusCode: 200, headers, body: JSON.stringify(rpcBundle) };
+      }
+
+      // Fallback: DB query + JS filter (used when RPC unavailable)
       const dbBundle = await _dbQueryGrade(batchGrade, SB_URL, SB_SRK);
       if (dbBundle) {
         const out = {};
@@ -928,7 +986,20 @@ exports.handler = async (event) => {
   }
 
   try {
-    // Try DB first
+    // Primary path: RPC does filtering + stripping in SQL (~3ms CPU)
+    const rpcQs = await _rpcGetSubjectQuestions(
+      subjectId,
+      chapterId,
+      difficulty,
+      _isFreeSubjectId(subjectId) ? null : _allowedChapters,
+      _blockedSet.size ? [..._blockedSet] : null,
+      SB_URL, SB_SRK
+    );
+    if (rpcQs) {
+      return { statusCode: 200, headers, body: JSON.stringify(rpcQs) };
+    }
+
+    // Fallback: DB query + JS filter (used when RPC unavailable)
     let subjectQs = await _dbQuerySubject(subjectId, SB_URL, SB_SRK);
 
     // Fall back to per-subject bundle. Reading grade5.json to answer a
