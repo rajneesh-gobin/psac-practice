@@ -85,7 +85,7 @@ export default async function handler(request, env) {
           <div style="height:100%;width:${barPct}%;background:${barColor};border-radius:99px"></div>
         </div>
       </div>
-      <a href="https://nouklass.workers.dev/" style="display:block;text-align:center;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:600;font-size:15px">View Full Dashboard →</a>
+      <a href="https://nouklass.com/" style="display:block;text-align:center;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:600;font-size:15px">View Full Dashboard →</a>
     </div>
   </div>
 </body></html>`;

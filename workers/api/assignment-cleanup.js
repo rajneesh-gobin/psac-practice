@@ -30,5 +30,5 @@ export default async function handler(request, env) {
 
 // Cloudflare Cron Trigger entry point (add to wrangler.toml: crons = ["17 2 * * *"])
 export async function scheduled(event, env, ctx) {
-  await handler(new Request('https://nouklass.workers.dev/api/assignment-cleanup', { method: 'POST' }), env);
+  await handler(new Request('https://nouklass.com/api/assignment-cleanup', { method: 'POST' }), env);
 }

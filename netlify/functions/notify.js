@@ -105,7 +105,7 @@ exports.handler = async (event) => {
           <div style="height:100%;width:${barPct}%;background:${barColor};border-radius:99px;transition:width .4s"></div>
         </div>
       </div>
-      <a href="https://psac-practice.netlify.app/"
+      <a href="https://nouklass.com/"
         style="display:block;text-align:center;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:600;font-size:15px">
         View Full Dashboard →
       </a>
