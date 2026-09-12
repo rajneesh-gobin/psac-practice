@@ -296,8 +296,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
       if (!card) return 'no card at question ' + i;
       const q = card.querySelector('.lab-quiz-q') ? card.querySelector('.lab-quiz-q').textContent : '';
       const def = qs.find(x => x.q === q) || qs[i];
-      const opts = def.opts || def.options;
-      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild && b.lastElementChild.textContent === opts[def.ans]);
+      const btn = [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild && b.lastElementChild.textContent === def.options[0]);
       if (!btn) return 'could not find correct answer button for: ' + (def.q || '?');
       btn.click();
       const nx = card.querySelector('[data-next]'); if (nx) nx.click();
