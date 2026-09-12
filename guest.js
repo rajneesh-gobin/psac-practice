@@ -725,7 +725,7 @@ function drawCard() {
   x.fillText(msg, W / 2, 880);
 
   x.font = '400 27px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-  x.fillText('Practise free at psac-practice.netlify.app', W / 2, 990);
+  x.fillText('Practise free at nouklass.com', W / 2, 990);
   return c;
 }
 
