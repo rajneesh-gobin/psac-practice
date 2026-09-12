@@ -24,7 +24,7 @@
 //  The maths (scripts/test-labs-quadrat-data.js checks every line):
 //    mean per quadrat   = total counted ÷ number of quadrats
 //    estimate           = mean × (area of the plot ÷ area of one quadrat)
-//    Plants never cross the plot's outer edge, and with the edge rule every
+//    Plants never cross the plot\'s outer edge, and with the edge rule every
 //    plant is counted in exactly ONE of the 400 grid squares - so counting all
 //    400 squares gives the true population exactly.
 // ══════════════════════════════════════════════
@@ -34,7 +34,7 @@ const LabQuadratData = (() => {
   const FIELD = { w: 20, h: 20, area: 400, seed: 20260911,
                   place: 'A study plot in a forest clearing, Black River Gorges' };
   const QUAD = { side: 1, area: 1 };
-  const R = 0.08;                 // m - the half-width of a plant's base, for the edge rule
+  const R = 0.08;                 // m - the half-width of a plant\'s base, for the edge rule
   const MIN_Q = 5;                // fewer quadrats than this: "too few to trust"
   const MISSION_Q = 10;           // the missions ask for at least this many
 
@@ -378,14 +378,14 @@ const LabQuadratData = (() => {
     'Lantana berries are poisonous, especially green unripe ones. Never eat any fruit or berry you find during fieldwork.',
   ];
 
-  // ── The model's own numbers, for the quiz ────────
+  // ── The model\'s own numbers, for the quiz ────────
   const _T0 = makeField([]), _T1 = makeField(['spread']), _T2 = makeField(['spread', 'weed']);
   const TRUE = {
     guava0: truePop(_T0, 'guava'), guava1: truePop(_T1, 'guava'), guava2: truePop(_T2, 'guava'),
     ebony0: truePop(_T0, 'ebony'), ebony1: truePop(_T1, 'ebony'), ebony2: truePop(_T2, 'ebony'),
   };
 
-  // The calculation question, built from the pupil's OWN counts.
+  // The calculation question, built from the pupil\'s OWN counts.
   function calcQuestion(counts, name) {
     const e = estimate(counts);
     const right = e.rounded;
@@ -404,7 +404,7 @@ const LabQuadratData = (() => {
     };
   }
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'estimate', icon: '🧮', title: 'Estimate the population', sp: 'guava', need: MISSION_Q,
@@ -457,7 +457,7 @@ const LabQuadratData = (() => {
       intro: `Survey the strawberry guava (at least ${MIN_Q} random quadrats, then estimate). Let ten years of invasion pass and survey again. Then weed out the invaders and survey a third time.`,
       stages: [[], ['spread'], ['spread', 'weed']],
       quiz: [
-        { q: `In ten years the ranger's full count of strawberry guava rose from ${TRUE.guava0} to ${TRUE.guava1}. What kind of threat to biodiversity is this?`,
+        { q: `In ten years the ranger\'s full count of strawberry guava rose from ${TRUE.guava0} to ${TRUE.guava1}. What kind of threat to biodiversity is this?`,
           options: ['An invasive alien species spreading', 'A natural calamity, like a cyclone', 'Pollution of the soil', 'Over-fishing'],
           why: 'Strawberry guava was brought to Mauritius by people and spreads with nothing to control it - an invasive alien species (Biology 2022 Q1(5) asks about invasive aliens).' },
         { q: `Over the same ten years the ebony seedlings fell from ${TRUE.ebony0} to ${TRUE.ebony1}. Suggest why.`,

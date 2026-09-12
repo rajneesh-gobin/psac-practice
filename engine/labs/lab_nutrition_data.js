@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs — Food Groups & Teeth (Science, PSAC Grade 6).
 //
@@ -12,7 +12,7 @@
 //    diet") and `teeth` ("Human teeth: milk teeth vs permanent teeth. Types of
 //    teeth: incisors, canines, premolars, molars. Functions of each type of
 //    tooth").
-//  ⚠ Food tests (iodine, Benedict's, Biuret, grease spot) are named and their
+//  ⚠ Food tests (iodine, Benedict\'s, Biuret, grease spot) are named and their
 //    colour changes stated. Grade 6 pupils name the test and colour only;
 //    they do not run it at PSAC.
 //  ⚠ Primary lab (docs/labs/LAB_SPEC.md §8): every guide, mission and discovery
@@ -93,9 +93,9 @@ const LabNutritionData = (() => {
     iodine:   { name: 'Iodine solution',     short: 'Iodine',     nutrient: 'starch (carbohydrates)',
                 before: 'orange-brown', after: 'blue-black',
                 note: 'Iodine turns blue-black when starch is present.' },
-    benedict: { name: "Benedict's solution", short: "Benedict's", nutrient: 'sugar',
+    benedict: { name: "Benedict\'s solution", short: "Benedict\'s", nutrient: 'sugar',
                 before: 'blue', after: 'orange or red',
-                note: "Benedict's turns orange or red when sugar is present." },
+                note: "Benedict\'s turns orange or red when sugar is present." },
     biuret:   { name: 'Biuret solution',     short: 'Biuret',     nutrient: 'protein',
                 before: 'blue', after: 'purple',
                 note: 'Biuret solution turns purple when protein is present.' },

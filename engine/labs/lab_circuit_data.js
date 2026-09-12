@@ -24,21 +24,21 @@
 //    1.5 V with a negligible internal resistance (0.0001 Ω - "ideal", but a
 //    short circuit still has a number). Wires, closed switches, ammeters and
 //    fuses are 0.000001 Ω - far below the cell, as in real life, so in a short
-//    the cell's own resistance takes the voltage and the bulbs go dark. A
+//    the cell\'s own resistance takes the voltage and the bulbs go dark. A
 //    voltmeter is 1 MΩ.
-//  - Solved by nodal analysis (Kirchhoff's current law at every point), so
+//  - Solved by nodal analysis (Kirchhoff\'s current law at every point), so
 //    series, parallel, a short circuit, an ammeter across a bulb and a
 //    voltmeter in the loop all come out of the same maths - nothing is a
 //    special case in the drawing code.
 //  - Brightness ∝ power: P = I²R, shown as a multiple of one bulb on one cell
-//    (0.75 W). The pupil sees it in words; V = IR is used in the syllabus's own
+//    (0.75 W). The pupil sees it in words; V = IR is used in the syllabus\'s own
 //    terms (resistance = voltage ÷ current).
 //
 //  ⚠ THREE LEVELS (docs/labs/LAB_SPEC.md §9). Content with no `grades` is the
-//    original Grade 9 set. The PSAC levels are grounded in the app's own banks:
+//    original Grade 9 set. The PSAC levels are grounded in the app\'s own banks:
 //    - Grade 4: g4sci-materials ("Which of these is a good ELECTRICAL
 //      CONDUCTOR?", copper inside / plastic or rubber outside) and g4sci-energy
-//      (a torch's battery stores chemical energy, a bulb gives light and some
+//      (a torch\'s battery stores chemical energy, a bulb gives light and some
 //      heat, switch off to save energy). No circuit symbols at Grade 4.
 //    - Grade 6: g6-energy (the wire carries the current, the cell stores
 //      chemical energy, insulators, copper wire, safety at home), depth_hard
@@ -392,7 +392,7 @@ const LabCircuitData = (() => {
       .map(slot => ({ slot, obj: layout[slot].kind, result: testResult(layout, slot) }));
   }
 
-  // Are the meters where they belong? An ammeter carrying the cell's current to
+  // Are the meters where they belong? An ammeter carrying the cell\'s current to
   // a lit lamp, and a voltmeter whose reading is the voltage of a lit lamp.
   function meterChecks(sol) {
     const lit = litBulbs(sol);
@@ -401,7 +401,7 @@ const LabCircuitData = (() => {
     return { ammeter: lit.length > 0 && Object.keys(sol.meters).some(k => ammeterInSeries(sol, k)),
              voltmeter: across.length > 0, volts: across.map(k => sol.meters[k].value) };
   }
-  // One loop: every part of these kinds carries the whole of the cell's current.
+  // One loop: every part of these kinds carries the whole of the cell\'s current.
   function oneLoop(sol, kinds) {
     const els = sol.els.filter(e => kinds.includes(e.kind));
     return sol.flowing && kinds.every(k => els.some(e => e.kind === k)) && els.every(e => Math.abs(Math.abs(e.I) - sol.cellI) < 1e-3);
@@ -1047,7 +1047,7 @@ const LabCircuitData = (() => {
   };
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'light', icon: '💡', title: 'Light the bulb',

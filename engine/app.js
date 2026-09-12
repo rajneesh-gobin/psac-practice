@@ -10328,10 +10328,33 @@ document.getElementById('exam-flag-btn').addEventListener('click', () => {
   document.getElementById('exam-flag-btn').textContent = S.exam.flagged.has(S.exam.idx) ? '🚩 Flagged' : '🚩 Flag';
   updateNavGrid();
 });
-document.getElementById('exam-hint-btn').addEventListener('click', () => {
+document.getElementById('exam-hint-btn').addEventListener('click', async () => {
   const q = S.exam.qs[S.exam.idx];
-  document.getElementById('exam-hint-text').innerHTML = _prettyMath(q?.hint || 'No hint available.');
-  document.getElementById('exam-hint-box').classList.toggle('hidden');
+  const hintBox  = document.getElementById('exam-hint-box');
+  const hintText = document.getElementById('exam-hint-text');
+  hintBox.classList.toggle('hidden');
+  if (!hintBox.classList.contains('hidden') && !S.exam._hintCache?.[q?.id]) {
+    hintText.innerHTML = _prettyMath(q?.hint || 'Loading…');
+    try {
+      const _h = await _pushAuthHeaders();
+      const _r = await fetch('/api/check-answer', {
+        method: 'POST', headers: _h,
+        body: JSON.stringify({ subjectId: ACTIVE_PACK?.id, questionId: q.id, userAnswer: '', hintOnly: true }),
+      });
+      if (_r.ok) {
+        const _d = await _r.json();
+        if (!S.exam._hintCache) S.exam._hintCache = {};
+        S.exam._hintCache[q.id] = _d.hint || null;
+        hintText.innerHTML = _prettyMath(_d.hint || 'No hint available.');
+      } else {
+        hintText.innerHTML = _prettyMath('Hint not available offline.');
+      }
+    } catch (_e) {
+      hintText.innerHTML = _prettyMath('Hint not available offline.');
+    }
+  } else if (!hintBox.classList.contains('hidden')) {
+    hintText.innerHTML = _prettyMath(S.exam._hintCache?.[q?.id] || 'No hint available.');
+  }
 });
 document.getElementById('exit-exam-btn').addEventListener('click', () => {
   _confirmModal('Exit this exam? All your answers will be lost.', () => {
@@ -10345,27 +10368,72 @@ document.getElementById('submit-exam-btn').addEventListener('click', () => {
   _confirmModal("Submit your exam now? You can't go back after submission.", submitExam, { icon: '📝', okLabel: 'Submit Exam', danger: false });
 });
 
-function submitExam() {
+async function submitExam() {
   _clearExamResume();
   _releaseWakeLock(); _unlockOrientation();
   clearInterval(S.exam.timer);
   saveCurrentExamAnswer();
   const timeTaken = Math.round((S.exam.duration - Math.max(0, (S.exam.endTime - Date.now()) / 1000)));
-  let correct = 0;
-  const chapterStats = {};
+
+  // Build the answers payload for the server
+  const _serverAnswers = S.exam.qs.map((q, i) => ({
+    questionId: q.id,
+    userAnswer: S.exam.answers[i] != null ? String(S.exam.answers[i]) : '',
+  }));
+
+  // Grade server-side; fall back to client-side on network failure.
+  let correct, pct, chapterStats, _reviewMap;
+  try {
+    const _h = await _pushAuthHeaders();
+    const _r = await fetch('/api/submit-exam', {
+      method: 'POST', headers: _h,
+      body: JSON.stringify({
+        subjectId: ACTIVE_PACK?.id,
+        examType:  S.exam.type || 'exam',
+        timeTaken,
+        answers:   _serverAnswers,
+      }),
+    });
+    if (!_r.ok) throw new Error('http ' + _r.status);
+    const _d = await _r.json();
+    correct      = _d.correct;
+    pct          = _d.pct;
+    chapterStats = {};
+    for (const [id, st] of Object.entries(_d.chapterStats || {})) {
+      chapterStats[id] = { name: CHAPTERS.find(c=>c.id===id)?.name||id, total: st.total, correct: st.correct };
+    }
+    // Build a Map<questionId, reviewRow> for _renderExamReview()
+    _reviewMap = new Map((_d.review || []).map(row => [row.questionId, row]));
+  } catch (_e) {
+    correct = 0;
+    chapterStats = {};
+    _reviewMap = null;
+    S.exam.qs.forEach((q, i) => {
+      if (!chapterStats[q.chapterId]) chapterStats[q.chapterId] = { name: CHAPTERS.find(c=>c.id===q.chapterId)?.name||q.chapterId, total: 0, correct: 0 };
+      chapterStats[q.chapterId].total++;
+      const ans = S.exam.answers[i];
+      const ok = ans != null && checkAnswer(q, ans);
+      if (ok) { correct++; chapterStats[q.chapterId].correct++; }
+    });
+    pct = Math.round(correct / S.exam.qs.length * 100);
+  }
+
+  // Store review map so _renderExamReview() can show correctAnswer/explanation
+  S.exam.reviewMap = _reviewMap;
+
+  // Process each question: retire/record mistakes, log progress
   S.exam.qs.forEach((q, i) => {
-    if (!chapterStats[q.chapterId]) chapterStats[q.chapterId] = { name: CHAPTERS.find(c=>c.id===q.chapterId)?.name||q.chapterId, total: 0, correct: 0 };
-    chapterStats[q.chapterId].total++;
     const ans = S.exam.answers[i];
-    const ok = ans != null && checkAnswer(q, ans);
+    const row = _reviewMap?.get(q.id);
+    const ok  = row ? row.ok : (ans != null && checkAnswer(q, ans));
     // Getting it right in an exam retires a recorded mistake too - the child
     // learned it, and where they proved it does not matter.
-    if (ok) { correct++; chapterStats[q.chapterId].correct++; _retireMistake(q.id); }
+    if (ok) { _retireMistake(q.id); }
     else if (ans != null) _recordMistake(q, ans, q.chapterId, 'exam');
     recordAnswer(q.chapterId, ok, 'exam', ans != null && ans !== '' ? q.id : undefined);
   });
+
   const total = S.exam.qs.length;
-  const pct = Math.round(correct / total * 100);
   DB.stats.examCount++;
   if (pct > DB.stats.bestScore) DB.stats.bestScore = pct;
   _dayBucket().e++;
@@ -10427,11 +10495,16 @@ function _renderExamReview() {
   const box = document.getElementById('results-review');
   if (!box || !S.exam?.qs) return;
 
+  const _rm = S.exam.reviewMap;
   const rows = S.exam.qs.map((q, i) => {
-    const ua = S.exam.answers[i];
+    const ua  = S.exam.answers[i];
+    const row = _rm?.get(q.id);
     // S.exam.flagged is a Set, so the old `S.exam.flagged[i]` was always
     // undefined and the 🚩 marker never appeared on a single reviewed question.
-    return { q, i, ua, ok: ua != null && checkAnswer(q, ua),
+    return { q, i, ua,
+             ok: row ? row.ok : (ua != null && checkAnswer(q, ua)),
+             correctAnswer: row?.correctAnswer ?? (q.answer != null ? String(q.answer) : null),
+             explanation:   row?.explanation   ?? (q.explanation || ''),
              answered: ua != null && String(ua).trim() !== '',
              flagged: !!(S.exam.flagged && S.exam.flagged.has && S.exam.flagged.has(i)) };
   });
@@ -10452,7 +10525,7 @@ function _renderExamReview() {
     return;
   }
 
-  box.innerHTML = shown.map(({ q, i, ua, ok, answered, flagged }) => {
+  box.innerHTML = shown.map(({ q, i, ua, ok, correctAnswer, explanation, answered, flagged }) => {
     const ch = CHAPTERS.find(c => c.id === q.chapterId);
     // A symmetry answer is an array of [row,col] pairs. Interpolating it printed
     // "Correct: 1,4,2,6,2,5" - a run of coordinates that means nothing to a
@@ -10470,8 +10543,8 @@ function _renderExamReview() {
           ${ok ? '' : (isSym
             ? `<div class="mt-1 text-red-600 dark:text-red-400">${answered ? 'Not quite' : 'Not answered'} - the correct ${q.type === 'symmetry-line' ? 'line or lines' : 'cells'} are shown during practice.</div>`
             : `<div class="mt-1 text-red-600 dark:text-red-400">Your answer: ${answered ? yours : '<i>(not answered)</i>'}</div>`)}
-          ${isSym ? '' : `<div class="mt-1 text-green-600 dark:text-green-400 font-medium">✓ Correct: ${_prettyMath(_profEsc(String(q.answer ?? '')))}</div>`}
-          <div class="mt-1 text-gray-500 dark:text-gray-400 text-xs">${q.explanation || ''}</div>
+          ${isSym ? '' : `<div class="mt-1 text-green-600 dark:text-green-400 font-medium">✓ Correct: ${_prettyMath(_profEsc(String(correctAnswer ?? '')))}</div>`}
+          <div class="mt-1 text-gray-500 dark:text-gray-400 text-xs">${explanation || ''}</div>
         </div>
       </div>
     </div>`;
@@ -10615,8 +10688,9 @@ function loadPracticeQuestion() {
   document.getElementById('practice-hint-box').classList.add('hidden');
   _setPracticeHelpOpen(false);
   _nhPopulate(q);
-  S.practice.hintShown = false;
-  S.practice.hintIdx   = 0;
+  S.practice.hintShown   = false;
+  S.practice.hintIdx     = 0;
+  S.practice.fetchedHint = null;
   const _hintBtn = document.getElementById('practice-hint-btn');
   if (_hintBtn) {
     _hintBtn.disabled = false;
@@ -10737,9 +10811,9 @@ function _explanationSentences(html) {
     .filter(t => t.length > 12);
 }
 
-function _buildHints(q) {
+function _buildHints(q, serverHint) {
   const ch = CHAPTERS.find(c => c.id === q.chapterId);
-  const h1 = q.hint || `Think about what you know about ${ch ? ch.name : 'this topic'}.`;
+  const h1 = serverHint || q.hint || `Think about what you know about ${ch ? ch.name : 'this topic'}.`;
   if (q.type === 'symmetry-line') {
     return [
       h1,
@@ -10764,21 +10838,34 @@ function _buildHints(q) {
 
   const h3 = q.type === 'mcq'
     ? 'Try eliminating options you know are wrong - that narrows it down quickly.'
-    : `The answer is <b>${q.answer}</b> - try to understand why before moving on.`;
+    : 'Try your best answer — submit to reveal the correct one.';
   return [h1, h2, h3];
 }
 
-document.getElementById('practice-hint-btn').addEventListener('click', () => {
+document.getElementById('practice-hint-btn').addEventListener('click', async () => {
   const q = S.practice.qs[S.practice.idx];
   if (!q) return;
   // _buildHints() always returns 3 steps; a plan may allow fewer. Clamped to
   // that 3 so a plan claiming 99 does not promise hints that do not exist.
   const MAX_HINTS = _hintCap();
   if ((S.practice.hintIdx || 0) >= MAX_HINTS) { _showCapModal('hints'); return; }
+
+  // Fetch authored hint from server on the first tap — hint is stripped from q.
+  if (!S.practice.hintIdx) {
+    try {
+      const _h = await _pushAuthHeaders();
+      const _r = await fetch('/api/check-answer', {
+        method: 'POST', headers: _h,
+        body: JSON.stringify({ subjectId: ACTIVE_PACK?.id, questionId: q.id, userAnswer: '', hintOnly: true }),
+      });
+      if (_r.ok) { const _d = await _r.json(); S.practice.fetchedHint = _d.hint || null; }
+    } catch (_e) { S.practice.fetchedHint = null; }
+  }
+
   S.practice.hintIdx = (S.practice.hintIdx || 0) + 1;
   S.practice.hintShown = true;
 
-  const hints   = _buildHints(q);
+  const hints   = _buildHints(q, S.practice.fetchedHint);
   const hint    = hints[S.practice.hintIdx - 1] || 'Think carefully about the problem.';
   const numEl   = document.getElementById('practice-hint-num');
   const remEl   = document.getElementById('practice-hints-remaining');
@@ -10853,7 +10940,7 @@ function pauseExamForLater() {
   showScreen('dashboard');
 }
 
-function practiceSubmit() {
+async function practiceSubmit() {
   _ttsStop();
   const q = S.practice.qs[S.practice.idx];
   const ua = getSelectedAnswer('practice-answer-area', q?.type);
@@ -10868,7 +10955,26 @@ function practiceSubmit() {
     return;
   }
 
-  const ok = checkAnswer(q, ua);
+  // Grade server-side; fall back to client-side on network failure.
+  // answer/hint/explanation are stripped from q by the server, so correctAnswer
+  // and explanation come from the API response when wrong.
+  let ok, correctAnswer, explanation;
+  try {
+    const _h = await _pushAuthHeaders();
+    const _r = await fetch('/api/check-answer', {
+      method: 'POST', headers: _h,
+      body: JSON.stringify({ subjectId: ACTIVE_PACK?.id, questionId: q.id, userAnswer: ua }),
+    });
+    if (!_r.ok) throw new Error('http ' + _r.status);
+    const _d = await _r.json();
+    ok = _d.correct;
+    correctAnswer = _d.correctAnswer ?? null;
+    explanation   = _d.explanation  ?? null;
+  } catch (_e) {
+    ok = checkAnswer(q, ua);
+    correctAnswer = q.answer != null ? String(q.answer) : null;
+    explanation   = q.explanation || null;
+  }
 
   // This is the event that turns the child's family's referral into credits for
   // whoever invited them - the anti-abuse rule is that a sign-up alone earns
@@ -10883,9 +10989,9 @@ function practiceSubmit() {
     ASSIGNMENT_TEST_ANSWERS.push({
       question:      q.question,
       userAnswer:    ua || '-',
-      correctAnswer: q.answer,
+      correctAnswer: correctAnswer ?? '—',
       correct:       ok,
-      explanation:   q.explanation || '',
+      explanation:   explanation || '',
     });
     ASSIGNMENT_SCORE.attempted++;
     if (ok) ASSIGNMENT_SCORE.correct++;
@@ -10951,14 +11057,14 @@ function practiceSubmit() {
       ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
       : q.type === 'symmetry-line'
       ? 'Your correctly placed lines are green. The correct line or lines you missed are shown as orange dashes.'
-      : `Not quite. Correct answer: <b>${_prettyMath(String(q.answer))}</b>`;
+      : `Not quite. Correct answer: <b>${_prettyMath(String(correctAnswer ?? '—'))}</b>`;
     fb.innerHTML = `
       <div class="flex items-start gap-3">
         <span class="text-3xl feedback-buddy" aria-hidden="true">${reaction.icon}</span>
         <div class="flex-1 min-w-0">
           <div class="font-bold mb-1">${reaction.text}</div>
           ${ok ? '' : `<div class="font-semibold mb-1">${answerLine}</div>`}
-          <div class="text-sm">${_prettyMath(q.explanation || "")}</div>
+          <div class="text-sm">${_prettyMath(explanation || "")}</div>
           ${_learnMoreHTML(q)}
         </div>
       </div>`;

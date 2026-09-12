@@ -541,6 +541,16 @@
   status = 200
 
 [[redirects]]
+  from   = "/api/check-answer"
+  to     = "/.netlify/functions/check-answer"
+  status = 200
+
+[[redirects]]
+  from   = "/api/submit-exam"
+  to     = "/.netlify/functions/submit-exam"
+  status = 200
+
+[[redirects]]
   from   = "/api/assignment-open"
   to     = "/.netlify/functions/assignment-open"
   status = 200

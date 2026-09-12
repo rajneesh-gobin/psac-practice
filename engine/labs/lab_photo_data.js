@@ -371,7 +371,7 @@ const LabPhotoData = (() => {
     'Iodine solution is brown-orange. It turns blue-black only where there is starch.',
   ];
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'light', icon: '💡', title: 'Light and bubbles', rig: 'pond', need: 4,
@@ -537,7 +537,7 @@ const LabPhotoData = (() => {
   //  ⚠ Grade 4 is grounded in g4sci-plants ("Conditions needed for plants to
   //    grow well (water, sunlight, air, warmth, minerals)", subsections growth,
   //    reproduction, photosynthesis): the dark cupboard, the wilted plant,
-  //    compost and minerals, Mira's and Sasha's one-difference tests, and
+  //    compost and minerals, Mira\'s and Sasha\'s one-difference tests, and
   //    germination needing water, air and warmth but not light.
   //    Grade 6 is grounded in g6-plants ("Photosynthesis (light + water + CO₂ →
   //    food + oxygen)"): the leaf as the food factory, Gas A and Gas B, and the
@@ -728,7 +728,7 @@ const LabPhotoData = (() => {
     over: 'using sunlight, trapped by the green chlorophyll in the leaves',
   };
 
-  // The words for every primary step. A guide step or a discovery's "how" is
+  // The words for every primary step. A guide step or a discovery\'s "how" is
   // one of these tokens; scripts/test-labs-photo-data.js checks every one.
   function primaryStep(on) {
     const [k, v] = String(on).split(':');
@@ -931,7 +931,7 @@ const LabPhotoData = (() => {
     ],
   };
 
-  // ── Primary missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Primary missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   const PRIMARY_MISSIONS = [
     { id: 'g4_needs', icon: '🌞', title: 'Light and water', rig: 'pots', grades: [4], fair: ['spot', 'drink'],
       blurb: 'Two fair tests. Does a plant need light? Does it need water?',

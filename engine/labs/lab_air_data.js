@@ -69,7 +69,7 @@ const LabAirData = (() => {
   const LATE_S = 2;               // a stopwatch started late misses this much
   const SPEED = 5;                // the bench plays burns 5 times faster than real life
   const O2_AIR = 21, O2_OUT = 16; // % oxygen: fresh air, and when the flame dies
-  // Dry air, MIE Grade 6 Pupil's Book Table 2 (g6sci-air-012).
+  // Dry air, MIE Grade 6 Pupil\'s Book Table 2 (g6sci-air-012).
   const AIR = [
     { gas: 'Nitrogen', pct: 78.1 }, { gas: 'Oxygen', pct: 21.0 },
     { gas: 'Carbon dioxide', pct: 0.03 }, { gas: 'Other gases (argon)', pct: 0.87 },
@@ -617,7 +617,7 @@ const LabAirData = (() => {
   // ── Missions ───────────────────────────────────
   // A req key comes from keyOf(event). `run:<jar>` reqs must all be met with
   // the SAME candle - that is what makes the comparison fair.
-  // A question's FIRST option is the answer; Labs.quiz shuffles them.
+  // A question\'s FIRST option is the answer; Labs.quiz shuffles them.
   const MISSIONS = [
     {
       id: 'jar_race', grades: [4], icon: '🏁', title: 'Jar race', station: 'jars',

@@ -3,7 +3,7 @@
 //  Science Labs - the physics behind the Measurement Lab (NCE Grade 9, P1).
 //
 //  ⚠ THE SCIENCE LIVES HERE, NOT IN THE DRAWING. Every true value, every
-//    instrument's precision and range, how each scale is read, every mistake
+//    instrument\'s precision and range, how each scale is read, every mistake
 //    and what it reads as - all of it is decided in this file. lab_measure.js
 //    only draws the scale where this file says it is and asks judge() whether
 //    a typed reading is right. If a reading looks wrong on screen, fix it HERE.
@@ -26,7 +26,7 @@
 //  GRADE 4 (PSAC). A second, separate set: its own instruments, things to
 //  measure, guides, discoveries, missions and mistake cards, every one tagged
 //  `grades: [4]`. Anything untagged is the original Grade 9 set, and
-//  forGrade() is the only filter. Grounded in the app's own Grade 4 bank:
+//  forGrade() is the only filter. Grounded in the app\'s own Grade 4 bank:
 //  chapter g4sci-enr-equipment (subsection `measuring`: which instrument
 //  measures length, mass, time, volume and temperature, and in which unit),
 //  subjects/grade4-science/questions/depth_hard.js g4sci-hd-065 (a pencil
@@ -51,7 +51,7 @@
 //  g8s-inquiry-004/-019 (displacement), -005/-010/-016 and g8s-hd-001/-002
 //  (density = mass ÷ volume in g/cm³, 2.7 g/cm³ is aluminium, using the final
 //  reading is the slip), -011 (ice ≈ 0.92 g/cm³ floats), -014/g8s-hd-003 (a
-//  steel ship's average density), g8s-hd-010 (liquids layer by density); and
+//  steel ship\'s average density), g8s-hd-010 (liquids layer by density); and
 //  g8s-forces-003/-016 (weight in newtons, g = 10 N/kg). Neither pack uses an
 //  overflow (eureka) can or kg/m³, so the lab has no overflow can and marks
 //  kg/m³ as beyond the Grade 8 questions. No vernier, micrometer or "zero
@@ -60,7 +60,7 @@
 const LabMeasureData = (() => {
 
   const GRADES = [4, 7, 8, 9];
-  // Untagged content is the lab's original grade, 9.
+  // Untagged content is the lab\'s original grade, 9.
   const forGrade = (list, g) => list.filter(x => (x.grades || [9]).includes(g));
 
   const QUANTITIES = {
@@ -73,7 +73,7 @@ const LabMeasureData = (() => {
     force:   { name: 'weight',  si: 'newton',                    sym: 'N',     lab: 'N',     kid: 'weight (a force)' },
     density: { name: 'density', si: 'kilogram per cubic metre',  sym: 'kg/m³', lab: 'g/cm³', kid: 'density (the mass in each cm³)' },
   };
-  // Water's density, the line between floating and sinking in water.
+  // Water\'s density, the line between floating and sinking in water.
   const WATER = 1.0;
 
   // kind      which drawing and which reading rule
@@ -114,7 +114,7 @@ const LabMeasureData = (() => {
     // ── Grade 4 ── one shelf (group g4). Every scale here is read to a whole
     // mark, and each one counts in a different step: 1 cm, 50 ml, 2 °C, 20 g.
     // endMm: where the physical end of a ruler sits. The 30 cm ruler has a
-    // 1 cm gap before its 0 mark; a tape measure's hook IS its 0.
+    // 1 cm gap before its 0 mark; a tape measure\'s hook IS its 0.
     ruler30:      { kind: 'rule',       grades: [4], group: 'g4', name: 'Ruler (30 cm)',   short: 'Ruler',       icon: '📏', quantity: 'length', unit: 'cm', step: 1, dp: 0, maxMm: 300, endMm: -10,
                     prec: 'each mark is 1 cm', meta: 'Up to 30 cm · a gap before 0', hello: 'Look where the 0 mark is. It is not at the very end!',
                     how: 'Put one end of the object on the 0 mark. Read the mark at the other end.' },
@@ -136,7 +136,7 @@ const LabMeasureData = (() => {
                     how: 'Press Start. It stops by itself. Read where the red hand points.' },
 
     // ── Grades 7 and 8 ── one shelf (group g78). The cylinder and balance are
-    // shared; the block ruler is Grade 7's, the density bench Grade 8's.
+    // shared; the block ruler is Grade 7\'s, the density bench Grade 8\'s.
     cyl78:        { kind: 'cylinder',   grades: [7, 8], group: 'g78', name: 'Measuring cylinder', short: 'Cylinder', icon: '🧪', quantity: 'volume', unit: 'cm³', step: 1, dp: 0, max: 100,
                     prec: '1 cm³ (100 cm³ cylinder)', meta: '100 cm³ · a mark every 1 cm³', hello: 'Keep it on the bench. Read the bottom of the meniscus.',
                     how: 'Leave it on the bench. Bend down so your eye is level with the liquid. Read the bottom of the curved surface (the meniscus).' },
@@ -209,7 +209,7 @@ const LabMeasureData = (() => {
     soap7:    { grades: [7], for: ['block7'], icon: '🧼', name: 'Bar of soap', dims: [8, 5, 3], volume: 120, label: { volume: 'the volume of a bar of soap' }, color: '#9FD3C7' },
     sugar7:   { grades: [7], for: ['bal78'], icon: '🍬', name: 'Bag of sugar', mass: 250, label: { mass: 'the mass of a bag of sugar' }, color: '#F4F4EE' },
     // Grade 8: what the density bench shows. `density` is the true value and
-    // the data test checks it is mass ÷ volume. rho: a block's sides (dims),
+    // the data test checks it is mass ÷ volume. rho: a block\'s sides (dims),
     // a displacement (before/after, cm³), or a liquid weighed in a cylinder
     // (empty/full, g) of volume V.
     alu8:     { grades: [8], icon: '⬜', name: 'Aluminium block', density: 2.7, rho: { m: 108, dims: [5, 4, 2] }, label: { density: 'the density of aluminium' }, color: '#C8CDD2' },
@@ -222,7 +222,7 @@ const LabMeasureData = (() => {
     oil8:     { grades: [8], icon: '🫒', name: 'Cooking oil', density: 0.92, rho: { empty: 80, full: 126, V: 50, liquid: true }, label: { density: 'the density of cooking oil' }, color: '#E8C547' },
   };
 
-  // The metre rule's end is worn: the 0 and 1 mm marks have gone and the
+  // The metre rule\'s end is worn: the 0 and 1 mm marks have gone and the
   // physical end sits at the 2 mm mark. A pupil who butts an object against
   // that end and reads the far end straight off gets a length 0.2 cm too long.
   const RULE = { wornMm: 2, markMm: 10 };
@@ -239,7 +239,7 @@ const LabMeasureData = (() => {
   // too HIGH from above, too LOW from below.
   const PARALLAX = { radiusCm: 1.4, eyeRiseCm: 8, eyeDistCm: 30, cmPerCm3: 0.17 };
   // The Grade 4 jug is 5 cm across the inside radius, so 1 ml is 1/(π × 5²) =
-  // 0.0127 cm of height. Its scale is 5 cm in front of the liquid's centre, so
+  // 0.0127 cm of height. Its scale is 5 cm in front of the liquid\'s centre, so
   // an eye 8 cm high and 30 cm away sees it 5 × 8/30 = 1.33 cm off: 105 ml,
   // which is 100 ml to the nearest 50 ml mark - two marks too high or low.
   const jugCmPerMl = r => 1 / (Math.PI * r * r);
@@ -331,7 +331,7 @@ const LabMeasureData = (() => {
   // the bench draws (`scale`), and `mistakes`: for each named mistake, the
   // values a pupil who made it would type.
   // g (optional): only what that grade sees - a shared Grade 7/8 instrument
-  // lists each grade's own things.
+  // lists each grade\'s own things.
   function specimensFor(instId, g) {
     const I = INSTRUMENTS[instId];
     if (!I) return [];
@@ -393,7 +393,7 @@ const LabMeasureData = (() => {
       if (val > I.maxMm) {
         return { ok: false, why: 'range', msg: `The ${S.name.toLowerCase()} is too big: the ${I.name.toLowerCase()} opens only to ${I.maxMm >= 100 ? I.maxMm / 10 + ' cm' : I.maxMm + ' mm'}. Use the metre rule.` };
       }
-      const zMm = (I.zero || 0) * 10;          // a caliper's zero error, in mm
+      const zMm = (I.zero || 0) * 10;          // a caliper\'s zero error, in mm
       m.zero = I.zero || 0;
       m.scale = val + zMm;                     // where the vernier zero / thimble edge really is
       m.jaw = val;                             // where the moving jaw is
@@ -487,8 +487,8 @@ const LabMeasureData = (() => {
         + (S.swings ? ` That is ${S.swings} swings, so one swing takes ${val} ÷ ${S.swings} = ${clean(val / S.swings)} s.` : '');
     } else if (I.kind === 'thermometer') {
       if (S.hazard) return { ok: false, why: 'hazard', hazard: S.hazard, msg: 'Stop! Ask an adult to pour hot water.' };
-      if (val < I.min) return { ok: false, why: 'below', msg: `${S.name} is colder than ${I.min} °C, the bottom of this thermometer's range - the thread stays below the scale. Use the laboratory thermometer.` };
-      if (val > I.max) return { ok: false, why: 'burst', msg: `${S.name} is hotter than ${I.max} °C, the top of this thermometer's range.` };
+      if (val < I.min) return { ok: false, why: 'below', msg: `${S.name} is colder than ${I.min} °C, the bottom of this thermometer\'s range - the thread stays below the scale. Use the laboratory thermometer.` };
+      if (val > I.max) return { ok: false, why: 'burst', msg: `${S.name} is hotter than ${I.max} °C, the top of this thermometer\'s range.` };
       m.scale = val; m.want = clean(round(val, I.step));
       m.work = I.grades ? `The red line stops here. ${countOn(m.want, I)}`
         : `The top of the thread is level with the ${f(m.want)} mark, so the temperature is ${f(m.want)} °C (= ${fmt(toKelvin(m.want), I.dp)} K).`;
@@ -540,7 +540,7 @@ const LabMeasureData = (() => {
   }
 
   // ── Grade 4: a reading is a number AND a unit ──
-  // f: how many of the quantity's base unit (cm, ml, g, °C, s) one of it is.
+  // f: how many of the quantity\'s base unit (cm, ml, g, °C, s) one of it is.
   const UNITS = {
     mm: { q: 'length', f: 0.1, name: 'millimetres' }, cm: { q: 'length', f: 1, name: 'centimetres' }, m: { q: 'length', f: 100, name: 'metres' },
     ml: { q: 'volume', f: 1, name: 'millilitres' }, l: { q: 'volume', f: 1000, name: 'litres' },
@@ -1207,7 +1207,7 @@ const LabMeasureData = (() => {
     8: ['Density = mass ÷ volume, in g/cm³.', 'Volume of a block: length × width × height.', 'Volume of an odd shape: final − first reading.',
         'Mass of a liquid: full container − empty container.', 'Less dense than water (1.0 g/cm³): it floats.', 'Mop up a spill at once.'],
   };
-  // [bold lead, the rest] for the first-visit welcome (Grade 4's is in the bench).
+  // [bold lead, the rest] for the first-visit welcome (Grade 4\'s is in the bench).
   const INTRO_BY_GRADE = {
     7: [['New here?', 'Tap "Show me how". I will show you each tap.'], ['Measure volume.', 'Read a measuring cylinder, and find the volume of a stone by displacement.'],
         ['Measure mass.', 'Zero the balance first. Then weigh.'], ['Write the unit.', 'Type the number, then pick cm³, g or kg.'], ['Mistakes are fine here.', 'Try one and see what goes wrong.']],
@@ -1240,7 +1240,7 @@ const LabMeasureData = (() => {
   };
   // under: the fraction of the block below the water line, or 1 for a block
   // resting on the bottom. For a floating block that fraction IS its density
-  // ÷ water's (it sinks until it pushes aside its own weight of water).
+  // ÷ water\'s (it sinks until it pushes aside its own weight of water).
   function floatPic(under) {
     const h = 12, top = under >= 1 ? 44 - h : 20 - h * (1 - under);
     return `<svg viewBox="0 0 64 48"><rect x="24" y="${clean(top)}" width="16" height="${h}" fill="#B98B55" stroke="#5A4020"/>`
@@ -1293,7 +1293,7 @@ const LabMeasureData = (() => {
   const CHOICE_INSTRUMENTS4 = ['ruler30', 'tape', 'jug', 'thermo4', 'scale4', 'watch4'];
 
   // ── Missions ───────────────────────────────────
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'vernier', icon: '🔧', title: 'Read the vernier',
@@ -1382,7 +1382,7 @@ const LabMeasureData = (() => {
       ],
     },
 
-    // ── Grade 4 ── a task's `align`/`tared` must be true of the reading too.
+    // ── Grade 4 ── a task\'s `align`/`tared` must be true of the reading too.
     {
       id: 'g4_read', grades: [4], icon: '🔍', title: 'Read the scales',
       blurb: 'Measure with a ruler, a jug, a thermometer and a scale. Then answer 6 questions.',

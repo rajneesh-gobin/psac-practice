@@ -25,14 +25,14 @@
 //  measure it with a ruler); the track is 2.0 m long with a mark every 0.5 m.
 // ══════════════════════════════════════════════
 const LabMotionData = (() => {
-  const G = 10;              // m/s² - the pack's g = 10 N/kg
+  const G = 10;              // m/s² - the pack\'s g = 10 N/kg
   const TRACK = 2.0;         // m
   const MARK = 0.5;          // m between marks / light gates
   const FRICTION = 0.1;      // m/s² of rolling friction on a school trolley
   const PUSH = 1.0;          // m/s - the speed a gentle push gives
   const STILL_SEC = 3;       // how long the logger records a trolley that never moves
   const HEIGHTS = [0, 2, 10, 20, 30, 40, 50];   // cm the raised end can be set to
-  // A hand-held stopwatch is started LATE by the pupil's reaction time: you
+  // A hand-held stopwatch is started LATE by the pupil\'s reaction time: you
   // see the trolley move, then your thumb presses. Three typical values (s).
   const REACT = [0.25, 0.15, 0.30];
   // The speed-time grid is fixed so runs can be compared on one set of axes.
@@ -292,7 +292,7 @@ const LabMotionData = (() => {
     no_block: {
       signs: ['warning'], fx: 'fall',
       title: () => 'Stop - the trolley came off the end',
-      happened: c => `With no stop block, the trolley reached the end of the ramp at ${f1(c.v || 0)} m/s, shot off the edge of the bench and crashed to the floor - right next to someone's foot.`,
+      happened: c => `With no stop block, the trolley reached the end of the ramp at ${f1(c.v || 0)} m/s, shot off the edge of the bench and crashed to the floor - right next to someone\'s foot.`,
       why: 'A loaded school trolley weighs about a kilogram and has hard metal wheels. Falling from bench height it can crush toes, and it breaks itself and the light gates too. Reaching out to catch a fast trolley by hand is how fingers get trapped.',
       instead: 'Clamp a stop block (or a padded catch box) at the bottom of the ramp before every run. Keep feet, bags and hands out of the trolley\'s path, and never catch a moving trolley by hand.',
       exam: 'A safety precaution is asked on the NCE science papers (for example Chemistry 2022 Q5(a)(ii)). For a trolley on a ramp: a stop block or catch box at the end - never catch it by hand.',
@@ -343,7 +343,7 @@ const LabMotionData = (() => {
   ];
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'accel', icon: '📐', title: 'Find the acceleration', setup: 'ramp',

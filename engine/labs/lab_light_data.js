@@ -3,7 +3,7 @@
 //  Science Labs - the physics behind the Light Bench (NCE Grade 9, P2 Light).
 //
 //  ⚠ THE PHYSICS LIVES HERE, NOT IN THE ANIMATION. Every ray direction, every
-//    angle a protractor can read, every mistake's wrong number comes from this
+//    angle a protractor can read, every mistake\'s wrong number comes from this
 //    file. lab_light.js only scales these results to the canvas and draws them.
 //    If a ray looks wrong on screen, fix it HERE.
 //  ⚠ Grounded in g9s-p2-light (subjects/grade9-physics/_manifest.js):
@@ -15,7 +15,7 @@
 //    (name the type of error - parallax).
 //  ⚠ REFRACTIVE INDEX IS BEYOND THE NCE SYLLABUS (see the header of
 //    questions/p2_refraction.js: n = sin i / sin r is Form IV). The bench uses
-//    Snell's law with n = 1.5 so every angle is TRUE, but a pupil is only ever
+//    Snell\'s law with n = 1.5 so every angle is TRUE, but a pupil is only ever
 //    asked the qualitative facts: towards / away from the normal, smaller /
 //    larger angle, no bend along the normal, emergent ray parallel. Anywhere
 //    the number 1.5 or a sine is shown, it says "beyond the NCE syllabus".
@@ -53,7 +53,7 @@ const LabLightData = (() => {
 
   function reflectAngle(i) { return i; }
 
-  // Snell's law, n1 sin i = n2 sin r. Keeps the sign of i. Null past the
+  // Snell\'s law, n1 sin i = n2 sin r. Keeps the sign of i. Null past the
   // critical angle (never reached on this bench - see the header).
   function refractAngle(i, n1 = N_AIR, n2 = N_GLASS) {
     const s = n1 * sin(Math.abs(i)) / n2;
@@ -96,7 +96,7 @@ const LabLightData = (() => {
   function frame(beta, tau) {
     return {
       d: [sin(beta), cos(beta)],        // from the ray box towards P
-      n: [sin(tau), -cos(tau)],         // the normal, on the ray box's side
+      n: [sin(tau), -cos(tau)],         // the normal, on the ray box\'s side
       s: [cos(tau), sin(tau)],          // along the surface
     };
   }
@@ -121,7 +121,7 @@ const LabLightData = (() => {
       const t = refractDir(d, n, N_AIR, N_GLASS);
       const down = [-n[0], -n[1]];
       const Q = add(P, t, 1 / dot(t, down));           // where it reaches the far face
-      const e = refractDir(t, n, N_GLASS, N_AIR);       // the far face's normal on the glass side is n
+      const e = refractDir(t, n, N_GLASS, N_AIR);       // the far face\'s normal on the glass side is n
       out.inside = t; out.Q = Q; out.out = e;
       out.r = between(t, down);
       out.e = between(e, down);
@@ -135,7 +135,7 @@ const LabLightData = (() => {
     return out;
   }
 
-  // What the pupil's protractor reading comes out as.
+  // What the pupil\'s protractor reading comes out as.
   //   o = { setup, beta, tau, ref: 'normal'|'surface', eye: 'above'|'side' }
   function reading(o) {
     const i = Math.abs(o.beta + o.tau);
@@ -144,8 +144,8 @@ const LabLightData = (() => {
     const faults = [];
     if (o.ref === 'surface') { si = fromSurface(i); sr = fromSurface(r); faults.push('surface'); }
     if (o.eye === 'side') {
-      // A mirror's two rays sit either side of ONE normal, so a shifted scale
-      // pushes one reading up and the other down; a block's rays sit on
+      // A mirror\'s two rays sit either side of ONE normal, so a shifted scale
+      // pushes one reading up and the other down; a block\'s rays sit on
       // opposite halves of the circle and both move the same way.
       si += PARALLAX_DEG;
       sr += o.setup === 'mirror' ? -PARALLAX_DEG : PARALLAX_DEG;
@@ -321,7 +321,7 @@ const LabLightData = (() => {
   ];
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'law', icon: '🪞', title: 'Prove the law of reflection', setup: 'mirror',
@@ -426,7 +426,7 @@ const LabLightData = (() => {
   //    is translucent), g4sc-mat-052/053 (the three words defined);
   //    g4sci-energy - light is a form of energy, the Sun is a source, and a
   //    torch changes electrical energy into light (g4sc-energy-002).
-  //  ⚠ Shadows through the day (the Sun's height) are GRADE 6 (g6sc-hd-059),
+  //  ⚠ Shadows through the day (the Sun\'s height) are GRADE 6 (g6sc-hd-059),
   //    not Grade 4, so they are not here. No angles, no protractor, no
   //    refraction at Grade 4: the mirror obeys the same law (trace() above)
   //    but no angle is ever shown.
@@ -458,7 +458,7 @@ const LabLightData = (() => {
   };
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-  // Side view along a table, in cm from the torch's start line. A small torch
+  // Side view along a table, in cm from the torch\'s start line. A small torch
   // lies on the table and shines along it, so every shadow starts at the
   // table. Similar triangles: shadow = object × (torch→screen) ÷ (torch→object).
   // A Grade 4 child reads a 30 cm ruler to the nearest cm. No position gives a

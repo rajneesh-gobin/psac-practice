@@ -606,7 +606,7 @@ const LabRusting = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.on !== 'wait' && s.on !== 'week' && s.on !== 'hour') _coachGuide(s.on); }
   }
 
   function _guideHint() {
@@ -618,6 +618,22 @@ const LabRusting = (() => {
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function _coachGuide(on) {
+    const [k, v] = on.split(':');
+    if (k === 'rig')      return _coach('Tube set up. Label it clearly.');
+    if (on === 'adult')   return _coach('Adult supervising. Safety first with boiling water.');
+    if (k === 'tube')     return _coach('Test tube prepared.');
+    if (k === 'jar')      return _coach('Jar prepared.');
+    if (k === 'water')    return _coach('Water added.');
+    if (on === 'oil')     return _coach('Oil layer added. It seals the air out completely.');
+    if (on === 'dryer')   return _coach('Silica gel added. It absorbs any remaining moisture.');
+    if (on === 'cork')    return _coach('Cork in. The nail is sealed from outside air.');
+    if (k === 'coat')     return _coach('Nail coated.');
+    if (k === 'jwater')   return _coach('Water added to the jar.');
+    if (on === 'tweezers') return _coach('Nail removed with tweezers. Never touch a rusty nail with bare hands.');
+    _coach('Good — on to the next step.');
   }
 
   function _guideDo() {

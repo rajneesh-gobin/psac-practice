@@ -34,7 +34,7 @@
 //    is grounded in subjects/grade7-science, chapter g7s-cells ("Identify the
 //    parts of animal and plant cells under a microscope. Compare the structure
 //    of animal and plant cells."): g7s-cells-002 (a microscope views cells),
-//    -003 nucleus, -004/-016 membrane, -005/-020 cell wall and the onion's
+//    -003 nucleus, -004/-016 membrane, -005/-020 cell wall and the onion\'s
 //    brick shape, -006/-012/-018 chloroplast and chlorophyll, -011 vacuole,
 //    -013 onion vs cheek under a microscope, -017 labelled plant cell, -019
 //    image = actual × magnification (0.05 mm at ×100 = 5 mm), hd-025 wall +
@@ -163,7 +163,7 @@ const LabMicroscopeData = (() => {
   const VIEW_K = 24000;
   function viewUm(eye, obj) { return VIEW_K / total(eye, obj); }
 
-  // A deterministic smear: the pointer's cell at the centre of its field, red
+  // A deterministic smear: the pointer\'s cell at the centre of its field, red
   // cells on a jittered grid around it, a few platelets.
   function _rng(seed) {
     let a = seed >>> 0;
@@ -182,7 +182,7 @@ const LabMicroscopeData = (() => {
       if ((CELLS[mid] && CELLS[mid].white) && (gx === 0 || gy === 0) && near) continue;
       const r = rnd();
       // More scatter away from the pointer, so low power does not read as a grid;
-      // less next to it, so nothing covers the pointer's cell.
+      // less next to it, so nothing covers the pointer\'s cell.
       const jit = near ? 6 : 10;
       const jx = (rnd() - 0.5) * jit, jy = (rnd() - 0.5) * jit;
       if (r < 0.84) out.push({ type: 'rbc', x: gx * step + jx, y: gy * step + jy, rot: rnd() * 6.283 });
@@ -374,7 +374,7 @@ const LabMicroscopeData = (() => {
   }
 
   // ── A biological drawing of each cell ──────────
-  // The width the pupil's drawing is made; magnification of the drawing =
+  // The width the pupil\'s drawing is made; magnification of the drawing =
   // drawing width ÷ real width.
   const DRAW = {
     rbc:      { widthMm: 40, labels: ['cell membrane', 'cytoplasm full of haemoglobin', 'no nucleus (pale centre)'] },
@@ -427,7 +427,7 @@ const LabMicroscopeData = (() => {
   }
   const show = (v, unit) => unit ? `${fmt(v)} ${unit}` : `×${fmt(v)}`;
 
-  // The pupil's working. w = { ruler: 'cell'|'inner'|'eye'|null, converted, op: 'divide'|'multiply'|null }
+  // The pupil\'s working. w = { ruler: 'cell'|'inner'|'eye'|null, converted, op: 'divide'|'multiply'|null }
   function work(f, w) {
     const image = imageFor(f, w.ruler);
     let value, unit;
@@ -807,7 +807,7 @@ const LabMicroscopeData = (() => {
                       wall: 'Pointer on the thick outer edge', cytoplasm: 'Pointer on the thin layer inside the edge' };
   const _pickPart = (...order) => order.map(p => ({ label: PTR_LABEL[p], svg: PICS.onionAt[p] }));
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   // `calc` on a question lets the data test re-derive its answer.
   const MISSIONS = [
     {

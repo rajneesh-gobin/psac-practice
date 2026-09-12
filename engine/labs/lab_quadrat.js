@@ -725,7 +725,7 @@ const LabQuadrat = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) { _guide.step++; _guideEnter(); if (!token.startsWith('wait:')) _coachGuide(token); }
   }
 
   function _guideDo() {
@@ -744,6 +744,28 @@ const LabQuadrat = (() => {
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function _coachGuide(on) {
+    const [k, v] = on.split(':');
+    if (k === 'gloves') { _coach(v === 'on' ? 'Gloves on. Good field safety.' : 'Gloves off.'); return; }
+    if (k === 'species') { _coach('Species selected. Look for it in the quadrat.'); return; }
+    if (k === 'view') { _coach('View changed.'); return; }
+    if (on === 'throw') { _coach('Quadrat thrown randomly. Count everything inside it.'); return; }
+    if (on === 'thick') { _coach('You sampled the densest patches. Compare this estimate with random sampling — is it biased?'); return; }
+    if (on === 'count' || k === 'count') {
+      if (v === 'all') { _coach('All organisms counted.'); return; }
+      if (v === 'inside') { _coach('Inside count done.'); return; }
+      _coach('Count recorded. Keep going — more quadrats means more accuracy.'); return;
+    }
+    if (on === 'record') { _coach('Result recorded in the notebook.'); return; }
+    if (on === 'auto5') { _coach('Five quadrats sampled automatically.'); return; }
+    if (on === 'estimate') { _coach('Population estimated. The formula: mean per quadrat × total area ÷ quadrat area.'); return; }
+    if (on === 'new') { _coach('New quadrat placed.'); return; }
+    if (on === 'census') { _coach('Full census done. Compare with the estimate.'); return; }
+    if (k === 'event') { _coach('Environmental event noted.'); return; }
+    if (on === 'restore') { _coach('Habitat restored.'); return; }
+    _coach('Good — on to the next step.');
   }
 
   // The words for a discovery's "how" tokens.

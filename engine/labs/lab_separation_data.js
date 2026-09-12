@@ -89,7 +89,7 @@ const LabSeparationData = (() => {
   const PART_ORDER = ['flask', 'granules', 'thermo', 'condenser', 'receiver', 'burner'];
 
   // The order the bench deals with errors in when a faulty rig is heated:
-  // the dangerous ones stop it first. An error's id is the id of the card it shows.
+  // the dangerous ones stop it first. An error\'s id is the id of the card it shows.
   const ERROR_ORDER = ['sealed', 'bumping', 'water_top', 'thermo_liquid'];
 
   // parts: { flask: 'sea' | … | null, … } → what is missing, and which errors it has.
@@ -459,7 +459,7 @@ const LabSeparationData = (() => {
   ];
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'seawater', icon: '🌊', title: 'Pure water from sea water', mode: 'distil',
@@ -606,7 +606,7 @@ const LabSeparationData = (() => {
   // ══════════════════════════════════════════════
   //  GRADE LEVELS (LAB_SPEC §9). Everything above this line is the original
   //  Grade 9 level and carries no `grades` tag. Grades 7 and 8 are their own
-  //  levels, grounded only in the app's own packs:
+  //  levels, grounded only in the app\'s own packs:
   //  · Grade 8 - g8s-mixtures "Mixtures & Separation Techniques"
   //    (subjects/grade8-science/_manifest.js: "Separate mixtures by filtration,
   //    decantation and evaporation. Explain the principle behind each
@@ -619,7 +619,7 @@ const LabSeparationData = (() => {
   //    -017, -020, g7s-hd-131, g7s-hd-135), plus g7s-hd-047 (sugar dissolves,
   //    the mass does not change).
   //  Every new guide, mission and discovery id starts g7_ / g8_ so a lower
-  //  grade's progress never collides with Grade 9's.
+  //  grade\'s progress never collides with Grade 9\'s.
   // ══════════════════════════════════════════════
   const GRADES = [7, 8, 9];
   const forGrade = (list, g) => list.filter(x => (x.grades || [9]).includes(g));
@@ -629,7 +629,7 @@ const LabSeparationData = (() => {
     7: ['dissolve', 'evap', 'distil', 'choose'],
   };
 
-  // A part table's missing parts and the errors its wrong choices cause.
+  // A part table\'s missing parts and the errors its wrong choices cause.
   // Hazards (listed in `first`) come before wrong-but-safe result cards.
   function checkParts(table, order, parts, first) {
     const p = parts || {};
@@ -732,7 +732,7 @@ const LabSeparationData = (() => {
   const DIS_ORDER = ['solid', 'dbeaker'];
   const DISSOLVE = { water: 100, stirFor: 5 };
   const checkDissolve = parts => checkParts(DIS_PARTS, DIS_ORDER, parts, ['g7_cracked']);
-  // The balance reads the beaker's contents: the mass does not change on dissolving.
+  // The balance reads the beaker\'s contents: the mass does not change on dissolving.
   const massOnBalance = (solid, added) => DISSOLVE.water + (added && SOLIDS[solid] ? SOLIDS[solid].grams : 0);
 
   // ══ Which technique? (Grade 8) ═══════════════

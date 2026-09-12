@@ -35,7 +35,7 @@ const LabChem = (() => {
     // ── Grade 8 shelf only. `ph` is the pH of the substance on its own
     //    (g8s-acids-006/-011/-016/-018, g8s-hd-088). h / oh are how much acid or
     //    base it holds (mol/dm³), which decides how much it takes to neutralise.
-    //    A mixture's pH always lies between the pHs of what went into it - see pHMix().
+    //    A mixture\'s pH always lies between the pHs of what went into it - see pHMix().
     lemon:      { name: 'Lemon juice',             short: 'Lemon juice',      formula: '5 cm³', pour: 5, h: 0.5, oh: 0,   ph: 2,  sample: true, swatch: '#F4EDB0', meta: 'From the kitchen' },
     vinegar:    { name: 'Vinegar',                 short: 'Vinegar',          formula: '5 cm³', pour: 5, h: 0.8, oh: 0,   ph: 3,  sample: true, swatch: '#EFE3C8', meta: 'From the kitchen' },
     salt:       { name: 'Salt solution',           short: 'Salt solution',    formula: '5 cm³', pour: 5, h: 0,   oh: 0,   ph: 7,  sample: true, swatch: '#E3EEF4', meta: 'Table salt in water' },
@@ -64,7 +64,7 @@ const LabChem = (() => {
 
   // kind: 'react' | 'none' | 'demo' (teacher demonstration behind a screen)
   // rate  mmol of metal per second while there is plenty of reagent
-  // lag / lagRate        a slow start (aluminium's oxide layer)
+  // lag / lagRate        a slow start (aluminium\'s oxide layer)
   // stopAfter / lateRate a fast start that chokes (an insoluble coating)
   // uses 'h' | 'oh' and per: H⁺ or OH⁻ used per mmol of metal
   // makesOH: OH⁻ made per mmol of metal (metal + water)
@@ -143,7 +143,7 @@ const LabChem = (() => {
     return REACTIONS[metal + '|' + medium] || null;
   }
 
-  // How fast the notebook says it fizzed, 0-4, from the reaction's main rate.
+  // How fast the notebook says it fizzed, 0-4, from the reaction\'s main rate.
   function fizzRating(rx) {
     const r = rx && rx.kind !== 'none' ? rx.rate : 0;
     if (r >= 0.08) return 4;
@@ -167,7 +167,7 @@ const LabChem = (() => {
     if (net < -1e-7) return Math.min(14, 14 + Math.log10(-net));
     return 7;
   }
-  // The same fourteen colours as the plan's indicator strip; pH 0 shares pH 1's red.
+  // The same fourteen colours as the plan\'s indicator strip; pH 0 shares pH 1\'s red.
   const INDICATOR = ['#D81E24', '#E0242B', '#EA4A2A', '#F07A2A', '#F6A623', '#F4CF2A', '#C8D82C',
                      '#6DBE45', '#2FA36B', '#1F8F8E', '#2476B5', '#2F5AA8', '#45459A', '#5B3A8E', '#6B2C84'];
   function indicatorColor(p) { return INDICATOR[Math.max(0, Math.min(14, Math.round(p)))]; }
@@ -192,7 +192,7 @@ const LabChem = (() => {
 
   // ── Discoveries: things a pupil can find by experimenting ───
   // Each one can be opened from the Discoveries tab: a FOUND card shows what the
-  // pupil saw (the reaction's own `obs`, or `saw`), its equations and `learn`;
+  // pupil saw (the reaction\'s own `obs`, or `saw`), its equations and `learn`;
   // a LOCKED card shows `how` - the steps, in the guide vocabulary below - and
   // "Show me how" runs them as a guide. scripts/test-labs-mixing.js follows
   // every `how` and fails if any of them does not actually unlock its card.
@@ -341,7 +341,7 @@ const LabChem = (() => {
   ];
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'race', icon: '🏁', title: 'Reactivity Race',
@@ -395,7 +395,7 @@ const LabChem = (() => {
 
   // ── Guided experiments: "I landed here - what do I do?" ──
   // One action per step. `on` is what completes it: 'goggles', 'liquid:<id>',
-  // 'metal:<id>', 'rinse', 'observe' (a metal's reaction is recorded), 'pop'
+  // 'metal:<id>', 'rinse', 'observe' (a metal\'s reaction is recorded), 'pop'
   // (a successful lighted-splint test) or 'demo-end'. A step with `btn` gets a
   // button under the tube that does it; the same item glows on the shelf.
   const GUIDES = [
@@ -528,7 +528,7 @@ const LabChem = (() => {
     return paper;
   }
 
-  // Universal indicator in ONE substance (plus water) unlocks that substance's card.
+  // Universal indicator in ONE substance (plus water) unlocks that substance\'s card.
   const IND8 = { hcl: 'g8_ui_strong', lemon: 'g8_ui_weak', vinegar: 'g8_ui_weak', water: 'g8_ui_neutral', salt: 'g8_ui_neutral',
                  bakingsoda: 'g8_ui_mild', toothpaste: 'g8_ui_mild', antacid: 'g8_ui_mild', naoh: 'g8_ui_purple' };
 
@@ -620,7 +620,7 @@ const LabChem = (() => {
     'Never taste anything in the lab to test it. Use an indicator instead.',
   ];
 
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   MISSIONS.push(
     {
       id: 'g8_survey', grades: [8], icon: '🔎', title: 'pH Survey',

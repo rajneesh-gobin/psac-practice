@@ -181,3 +181,51 @@ This project's fixes are **measured, not eyeballed**.
 - The write step is not self-verifying: always reconcile "rows written" against a
   fresh count. A quote-style mismatch once skipped 119 questions *while reporting
   success*.
+
+---
+
+## Pre-deploy status — updated 2026-09-12
+
+### Version numbers (read from files, not this doc)
+- `SHELL_VERSION` → `shell-v309` (`sw.js`)
+- `_CACHE_VERSION` → `133` (`engine/question_loader.js`)
+
+### What is done — working tree only, not yet committed
+- ✅ Smart quotes fixed in all 13 `*_data.js` lab files (SyntaxError root cause)
+- ✅ Periodic table — mobile layout fix + back button added
+- ✅ Mobile fold fix — `labs.css` (start panel visible before canvas on phones)
+- ✅ Guide interactivity — `_coachGuide(on)` added to all 11 interactive labs (separation, light, measure, motion, quadrat, microscope, rusting, materials + the 3 previously fixed)
+- ✅ Separation G7 exam text — grade-conditional, no longer quotes Grade 9 papers
+- ✅ Unbalanced equations — `g8s-acids-004` and `g8s-acids-008` corrected
+- ✅ `lab_plan.md` updated to reflect current state
+
+### What is blocking — must resolve before commit
+1. **Run data tests** for all 8 untested labs (4 batch-1 + 4 batch-2). Node.js is not on the Claude Code shell PATH — use `! node` from the terminal:
+   ```
+   ! node scripts/test-labs-nutrition-data.js
+   ! node scripts/test-labs-gastests-data.js
+   ! node scripts/test-labs-changes-data.js
+   ! node scripts/test-labs-energy-data.js
+   ! node scripts/test-labs-magnets-data.js
+   ! node scripts/test-labs-forces-data.js
+   ! node scripts/test-labs-sunmoon-data.js
+   ! node scripts/test-labs-heat-data.js
+   ```
+2. **Run browser tests** (Chrome for Testing, `file://`) for the same 8 labs sequentially.
+3. **Flip `ready: true`** in `engine/labs/lab_core.js` for nutrition, gastests, changes, energy — only after both tests pass 0 failures.
+4. **Run full suite** (§6 of `docs/labs/lab_plan.md`) — last clean run was 2026-09-11 night, before the current batch of changes.
+
+### Commit scope — must be one commit, not piecemeal
+The working tree contains finished versions that supersede the half-built `eb9c86b` commit. The next commit must include ALL of:
+- `engine/labs/` (all lab JS + CSS files)
+- `scripts/test-labs-*.js`
+- `engine/app.js` (`_LAB_GRADES`, `openLabs` toast, TTS auto-read flag)
+- `index.html` (Labs note text)
+- `docs/` (lab_plan.md, this file)
+- `sw.js` (SHELL_VERSION bump)
+- `engine/question_loader.js` (\_CACHE\_VERSION bump)
+
+### Known non-blocking issues (do not hold the deploy for these)
+- Mixing Bench text links — inline `min-height:44px` should move to `.lab-mixing .lab-link` in `labs.css` (cosmetic)
+- Float accumulation in `_tick()` — fixed in `lab_food.js`; other labs with time thresholds may have the same flaky behaviour; fix on first failure
+- `scripts/test-pending-report-clarity.js` fails on HEAD — pre-existing, unrelated to labs

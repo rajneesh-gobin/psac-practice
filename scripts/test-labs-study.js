@@ -12,7 +12,8 @@ let chrome, server, ws;
 let failures = 0;
 async function main() {
   server = spawn(process.execPath, ['dev-server.js', String(PORT)], { cwd: ROOT, stdio: 'ignore', windowsHide: true });
-  chrome = spawn(process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe', [
+  assert(process.env.CHROME_PATH, 'Set CHROME_PATH to a Chrome for Testing executable');
+  chrome = spawn(process.env.CHROME_PATH, [
     '--headless=new', '--no-first-run', '--disable-extensions', '--remote-debugging-port=' + DEBUG,
     '--user-data-dir=' + profile, 'about:blank'
   ], { stdio: 'ignore', windowsHide: true });
@@ -78,19 +79,19 @@ async function main() {
     } catch (e) { failures++; console.log(`FAIL ${lab.id} grade ${grade}: ${e.message.slice(0, 800)}`); }
   }
   // Complete the circuit via actual highlighted student controls, with no action hooks.
-  for (const [id, grade] of [['circuit',6],['sunmoon',6],['sunmoon',7],['periodic',9]]) {
+  for (const [id, grade] of (process.env.STUDY_COMPLETE_ALL ? labs.flatMap(l => l.grades.map(g => [l.id,g])) : [['circuit',6],['sunmoon',6],['sunmoon',7],['periodic',9]])) {
     try {
       await open(id, grade); await click('[data-study-guide]'); await click('[data-study="unsure"]');
       for (let n = 0; n < 45 && await ev('document.querySelector("#labs-root").dataset.studyMode === "experiment"'); n++) {
         await ev(`(() => {
-          const targets = [...document.querySelectorAll('#lab-guide [data-guide-do], .is-next')].filter(el=>el.getClientRects().length && !el.disabled);
+          const targets = [...document.querySelectorAll('#lab-guide [data-guide-do], .is-next')].filter(el=>el.getClientRects().length && !el.disabled && !el.closest('#lab-study'));
           const el = targets.find(el => el.matches('[data-tool]')) || targets[0];
           if (!el) throw Error('No next control: '+document.querySelector('#lab-guide')?.innerText);
           el.click();
         })()`);
         await sleep(90);
       }
-      assert.equal(await ev('document.querySelector("#labs-root").dataset.studyMode'), 'explain', 'experiment reaches its own questions');
+      assert.equal(await ev('document.querySelector("#labs-root").dataset.studyMode'), 'explain', 'experiment reaches its own questions: ' + await ev('document.querySelector("#lab-guide")?.innerText'));
       await click('[data-study="review"]'); await click('[data-study="finish"]');
       assert.equal(await ev('document.querySelector("#labs-root").dataset.studyMode'), 'complete');
       assert(!errors.length, errors.join('\n'));

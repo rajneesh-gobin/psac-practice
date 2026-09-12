@@ -337,7 +337,7 @@ const LabWaterData = (() => {
     'jplace:sun': 'The jar is on a sunny window sill.',
   };
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   function missionReady(id, c) {
     if (id === 'states') { const f = c.flags || {}; return !!(f.zero && f.boil && f.steam && f.caught); }
     if (id === 'race') return c.h >= 3 && !dryMistakes(c.items, c.h).length && fairFactors(c.items).filter(f => f !== 'amt').length >= 2;

@@ -7,9 +7,9 @@
 //    guide, discovery, mission and quiz question comes from this file.
 //    lab_food.js only moves time along and draws it. If a tube shows the wrong
 //    colour, fix it HERE.
-//  ⚠ Grounded ONLY in the app's Grade 8 pack (subjects/grade8-science):
+//  ⚠ Grounded ONLY in the app\'s Grade 8 pack (subjects/grade8-science):
 //    chapter g8s-food ("Test a food sample to identify its components"),
-//    g8s-food-016 (Benedict's blue → brick-red for glucose; iodine blue-black
+//    g8s-food-016 (Benedict\'s blue → brick-red for glucose; iodine blue-black
 //    for starch; Biuret purple for protein; grease-spot or ethanol test for
 //    fat), g8s-food-011 (iodine orange-brown → blue-black; the emulsion test),
 //    g8s-hd-015 (one test answers one question), g8s-hd-022 (a small sample is
@@ -29,7 +29,7 @@ const LabFoodData = (() => {
   const SLOTS = 6;                 // test tubes in the rack
 
   // ── The reagents' colours ───────────────────
-  // Benedict's runs up a ladder as it is heated: the more reducing sugar, the
+  // Benedict\'s runs up a ladder as it is heated: the more reducing sugar, the
   // further up it goes. Green = a little, brick-red = a lot.
   const C = {
     iodine: '#B8651B', blueBlack: '#141633',
@@ -48,7 +48,7 @@ const LabFoodData = (() => {
 
   // ── Foods ────────────────────────────────────
   // Levels: starch/protein/fat 0-3, sugar (REDUCING sugar) 0-4 - the step of
-  // the Benedict's ladder it reaches. A food a test cannot "see" is 0.
+  // the Benedict\'s ladder it reaches. A food a test cannot "see" is 0.
   const FOODS = {
     water:    { name: 'Distilled water', short: 'water', swatch: '#CFE8F3', starch: 0, sugar: 0, protein: 0, fat: 0,
                 meta: 'The CONTROL - no nutrients', rich: 'nothing: it is the control' },
@@ -311,7 +311,7 @@ const LabFoodData = (() => {
   // One action per step. `on` is what completes it:
   //   goggles · slot:<n> · food:<id> · test:<id> · bath (tube into the water bath,
   //   which lights the burner) · burner-off · rinse (the spatula) · read · clean
-  //   (a fresh rack) · heated (a Benedict's tube has been hot long enough) ·
+  //   (a fresh rack) · heated (a Benedict\'s tube has been hot long enough) ·
   //   developed (a Biuret colour has come through) · dry (a grease spot has dried) ·
   //   card:<id> (a result card was read and closed).
   // A step with `btn` gets a button under the rack; the same control glows.
@@ -385,7 +385,7 @@ const LabFoodData = (() => {
   ];
 
   // ── Missions ────────────────────────────────
-  // A question's FIRST option is the answer; Labs.quiz() shuffles them.
+  // A question\'s FIRST option is the answer; Labs.quiz() shuffles them.
   // Picture options show a tube; the label always names the colour in words.
   function tubeSvg(hex, cloudy) {
     return `<svg viewBox="0 0 40 64" width="40" height="64" aria-hidden="true">`

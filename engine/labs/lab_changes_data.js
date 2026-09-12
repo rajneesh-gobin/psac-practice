@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs — the science behind Physical & Chemical Changes
 //  (Science, Grades 7 and 8 — LAB_SPEC §8 and §9)
@@ -102,7 +102,7 @@ const LabChangesData = (() => {
   //   'watch:<scenario_id>'  — select and watch a scenario
   //   'classify'             — correctly classify the current scenario
   //   'sign:<sign_id>'       — identify a sign (Grade 8)
-  // A question's FIRST option is the answer (bench shuffles them).
+  // A question\'s FIRST option is the answer (bench shuffles them).
   const DISCOVERIES = [
     // ── Grade 7: definition and classification ──
     { id: 'disc_physical', icon: '🔄', title: 'What makes a change physical', grades: [7, 8],
@@ -232,7 +232,7 @@ const LabChangesData = (() => {
   ];
 
   // ── Missions ─────────────────────────────────────────────────────
-  // A question's FIRST option is the answer; the bench shuffles them.
+  // A question\'s FIRST option is the answer; the bench shuffles them.
   const MISSIONS = [
     { id: 'classify_m', icon: '🔬', title: 'Physical or Chemical?', grades: [7, 8],
       blurb: 'Classify 5 changes. Use the two key questions.',
