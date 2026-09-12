@@ -6522,7 +6522,7 @@
         var _orig = window.showScreen;
         window.showScreen = function (id) {
           if (id === 'auth') {
-            window.location.href = 'https://nouklass.com';
+            window.location.href = 'https://nouklass.com/?signin=1';
             return;
           }
           return _orig && _orig(id);
