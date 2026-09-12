@@ -105,6 +105,35 @@
     📡 You're offline - your progress is saved locally and will sync when you reconnect
   </div>
 
+  <!-- ── Site-migration notice (psac-practice.netlify.app → nouklass.com) ──────
+       Shown automatically on the OLD domain only. Hidden everywhere else.
+       JS at the bottom of this file controls visibility + sign-in interception. -->
+  <div id="migration-modal" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)">
+    <div style="background:#1e1b4b;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:28px 24px;max-width:440px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.5);color:#fff;font-family:system-ui,sans-serif">
+      <div style="font-size:2.4rem;text-align:center;margin-bottom:12px">🏠➡️🎓</div>
+      <h2 style="margin:0 0 12px;font-size:1.2rem;font-weight:800;text-align:center;color:#a5b4fc">We have a new home!</h2>
+      <p style="margin:0 0 14px;font-size:.93rem;line-height:1.6;color:#c7d2fe">
+        We have moved from <b style="color:#fbbf24">psac-practice.netlify.app</b> to
+        <b style="color:#34d399">nouklass.com</b>.
+      </p>
+      <p style="margin:0 0 20px;font-size:.9rem;line-height:1.6;color:#a5b4fc">
+        All your progress, your children's scores, and any saved files are fully preserved —
+        nothing has been lost. Simply continue at the new address.
+        <br><br>
+        If you experience any issues, please contact us at
+        <a href="mailto:psacpractice@gmail.com" style="color:#fbbf24;text-decoration:underline">psacpractice@gmail.com</a>.
+      </p>
+      <a href="https://nouklass.com"
+        style="display:block;text-align:center;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;text-decoration:none;font-weight:700;font-size:1rem;padding:14px 20px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 16px rgba(79,70,229,.4)">
+        Go to Nou Klass →
+      </a>
+      <button onclick="document.getElementById('migration-modal').style.display='none'"
+        style="display:block;width:100%;text-align:center;background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);font-size:.82rem;padding:10px;border-radius:10px;cursor:pointer">
+        Stay on this page
+      </button>
+    </div>
+  </div>
+
   <!-- Revamp notice modal (triggered from the small banner on the landing page) -->
   <div id="modal-revamp-notice" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl max-h-[85vh] overflow-y-auto">
@@ -6476,5 +6505,30 @@
     </div>
   </div>
 
+  <!-- ── Migration script: only active on the old domain ────────────────────── -->
+  <script>
+    (function () {
+      if (location.hostname !== 'psac-practice.netlify.app') return;
+
+      // Show the migration modal as soon as the DOM is ready.
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('migration-modal').style.display = 'flex';
+      });
+
+      // Wrap showScreen so any attempt to open the auth screen redirects instead.
+      // app.js defines showScreen at classic-script top level, so it is available
+      // by the time any onclick fires. We replace it once after DOMContentLoaded.
+      document.addEventListener('DOMContentLoaded', function () {
+        var _orig = window.showScreen;
+        window.showScreen = function (id) {
+          if (id === 'auth') {
+            window.location.href = 'https://nouklass.com';
+            return;
+          }
+          return _orig && _orig(id);
+        };
+      });
+    })();
+  </script>
 </body>
 </html>
