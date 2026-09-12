@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs - the science behind the Materials Tester (PSAC Grade 4).
 //
@@ -394,7 +394,7 @@ const LabMaterialsData = (() => {
       icon: '🤔',
       title: () => 'You guessed without testing',
       happened: c => `You put the ${c.name.toLowerCase()} in a group, but you never tested it. A guess can be wrong - lots of people think every metal sticks to a magnet!`,
-      instead: 'Test it first, then sort it. Tap “Test it” and the result goes on the board by itself.',
+      instead: 'Test it first, then sort it. Tap "Test it" and the result goes on the board by itself.',
       exam: 'Exam tip: scientists answer a question by testing, not by guessing.',
     },
   };
@@ -472,7 +472,7 @@ const LabMaterialsData = (() => {
     {
       id: 'right_job', icon: '🧰', title: 'Pick the right material', station: null, grades: [4],
       blurb: 'Choose the best material for 5 jobs, then answer the questions.',
-      intro: 'Pick the right material! Open “Right material for the job” below and get 5 jobs right.',
+      intro: 'Pick the right material! Open "Right material for the job" below and get 5 jobs right.',
       reqs: [{ label: 'Get 5 jobs right', jobs: 5 }],
       quiz: [
         { q: 'Which material is best for a window?',

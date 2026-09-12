@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs - the biology behind the Photosynthesis Lab (NCE Grade 9).
 //
@@ -297,7 +297,7 @@ const LabPhotoData = (() => {
     { id: 'control', icon: '⚖️', title: 'The control leaf', hint: 'The same flask, but WITHOUT soda lime',
       how: ['rig:leaf', 'plant:green', 'destarch', 'cover:flask', 'day:light', 'pick', ...TEST],
       saw: 'The leaf in the flask without soda lime turned blue-black.',
-      learn: 'The control is identical except for the one factor being tested. Because it made starch, the soda-lime leaf’s result must be due to the missing carbon dioxide - not the flask.' },
+      learn: 'The control is identical except for the one factor being tested. Because it made starch, the soda-lime leaf's result must be due to the missing carbon dioxide - not the flask.' },
   ];
 
   // ── Hazards: the mistakes that stop the experiment ───
@@ -308,7 +308,7 @@ const LabPhotoData = (() => {
       happened: () => 'You held the tube of ethanol over the Bunsen flame. Ethanol boils at only 78 °C: its vapour poured out of the tube, met the flame and caught fire.',
       why: 'Ethanol is highly flammable - its vapour catches fire very easily. A burning tube can be dropped and spread burning ethanol across the bench, onto hands and clothes.',
       instead: 'Boil the water first, TURN OFF the Bunsen, then stand the tube of ethanol in the hot water - a water bath. The hot water is enough to make ethanol boil.',
-      exam: '“Why is the ethanol heated in a water bath and not over a flame?” - Ethanol is flammable (it catches fire easily).',
+      exam: '"Why is the ethanol heated in a water bath and not over a flame?" - Ethanol is flammable (it catches fire easily).',
     },
     ethanol_lit: {
       signs: ['flammable'],
@@ -325,7 +325,7 @@ const LabPhotoData = (() => {
     no_ethanol: { icon: '🟢', title: 'The green hid the colour',
       happened: () => 'You added iodine to a leaf that was still green. The dark green of the chlorophyll masks the colour change, so you cannot tell blue-black from orange-brown.',
       instead: 'After boiling, warm the leaf in ethanol in a water bath until it turns white. The chlorophyll dissolves into the ethanol, and the iodine result shows clearly.',
-      exam: '“Why is the leaf placed in hot ethanol?” - To remove the chlorophyll (decolourise the leaf) so the colour change with iodine can be seen.' },
+      exam: '"Why is the leaf placed in hot ethanol?" - To remove the chlorophyll (decolourise the leaf) so the colour change with iodine can be seen.' },
     no_boil: { icon: '🍃', title: 'The iodine could not get in',
       happened: c => c.late
         ? 'You boiled the leaf AFTER the ethanol. While it was in the ethanol its cells were still alive with their membranes whole, so hardly any chlorophyll came out, and the iodine could not reach the starch: the leaf stayed pale green with faint patches.'
@@ -338,19 +338,19 @@ const LabPhotoData = (() => {
         : c.cover === 'flask' ? 'The control leaf turned blue-black - but it would have done anyway: the starch was already in it, because the plant was never destarched.'
         : 'The green parts turned blue-black - but that starch may have been made days ago, before the experiment began. The plant was never destarched.',
       instead: 'Destarch the plant first: keep it in the dark for 48 hours so it uses up the starch in its leaves. Then any starch you find must have been made during the experiment.',
-      exam: '“Why is the plant kept in the dark for 48 hours first?” - To destarch it: to remove the starch already in its leaves. (Do not confuse it with removing chlorophyll, which is done later in ethanol.)' },
+      exam: '"Why is the plant kept in the dark for 48 hours first?" - To destarch it: to remove the starch already in its leaves. (Do not confuse it with removing chlorophyll, which is done later in ethanol.)' },
     two_vars_leaf: { icon: '⚖️', title: 'Two things changed at once',
       happened: () => 'You covered a VARIEGATED leaf with foil. The white edges had no chlorophyll AND the middle had no light, so when parts stayed orange-brown you cannot tell which factor was missing.',
       instead: 'Test one factor at a time: a plain green leaf with a foil strip tests light; a variegated leaf with no foil tests chlorophyll.',
-      exam: 'A fair test changes only ONE variable. “Name a controlled variable” is a paper question (Biology 2024 Q5(b)(i)).' },
+      exam: 'A fair test changes only ONE variable. "Name a controlled variable" is a paper question (Biology 2024 Q5(b)(i)).' },
     two_vars: { icon: '⚖️', title: 'Not a fair test - two things changed',
       happened: c => `Between your last two counts you changed ${c.list}. The bubbles went from ${c.a} to ${c.b} per minute - but which change caused it? There is no way to tell.`,
       instead: 'Change ONE variable (the independent variable), measure the bubbles per minute (the dependent variable) and keep everything else the same (the controlled variables).',
-      exam: '“Give one variable that needs to be kept constant” - Biology 2024 Q5(b)(i): the temperature of the water, the distance of the lamp, the type and size of pondweed.' },
+      exam: '"Give one variable that needs to be kept constant" - Biology 2024 Q5(b)(i): the temperature of the water, the distance of the lamp, the type and size of pondweed.' },
     lamp_heat: { icon: '🌡️', title: 'The lamp heated the water',
       happened: c => `With the lamp only ${c.dist} cm away and no heat shield, the water warmed from ${c.t0} °C to ${c.t1} °C during the count. The temperature changed as well as the light, so this reading is not a fair test.`,
       instead: 'Put a heat shield - a glass tank of water - between the lamp and the tube, and check the thermometer before and after every count.',
-      exam: '“Suggest an improvement to the set-up” - Biology 2024 Q5(b)(iii): use a heat shield or water bath to keep the temperature constant.' },
+      exam: '"Suggest an improvement to the set-up" - Biology 2024 Q5(b)(iii): use a heat shield or water bath to keep the temperature constant.' },
   };
 
   // Short, true facts for the 💡 button. Tied to the chapter, never trivia for its own sake.
@@ -393,9 +393,9 @@ const LabPhotoData = (() => {
         { q: 'Why was a heat shield (a tank of water) put between the lamp and the tube?',
           options: ['To stop the lamp heating the water, so the temperature stays constant', 'To make the light brighter', 'To give the pondweed more carbon dioxide', 'To collect the bubbles more easily'],
           why: 'A close lamp warms the water. Temperature also changes the rate, so it must be kept constant for a fair test.' },
-        { q: 'Did your results support the hypothesis “the closer the lamp, the faster the pondweed photosynthesises”?',
+        { q: 'Did your results support the hypothesis "the closer the lamp, the faster the pondweed photosynthesises"?',
           options: ['Yes, up to a point: the rate rose as the lamp came closer, then levelled off', 'No: the rate fell as the lamp came closer', 'Yes: the rate rose at every distance without stopping', 'A hypothesis cannot be tested by counting bubbles'],
-          why: 'The data support it while light is the limiting factor. Saying “up to a point” is what a careful scientist would write.' },
+          why: 'The data support it while light is the limiting factor. Saying "up to a point" is what a careful scientist would write.' },
         { q: 'Which gas makes up most of the bubbles?',
           options: ['Oxygen', 'Carbon dioxide', 'Hydrogen', 'Nitrogen'],
           why: 'carbon dioxide + water → glucose + oxygen. Oxygen is given off; a glowing splint relights in it.' },
@@ -403,8 +403,8 @@ const LabPhotoData = (() => {
     },
     {
       id: 'needs', icon: '🔬', title: 'What does a plant need?', rig: 'pond',
-      blurb: 'The 2024 paper’s experiment: light and carbon dioxide, each present or absent.',
-      intro: 'Biology 2024 Q5(b), in a dark room whose only light is the lamp. Run four tests - light with and without carbon dioxide, and no light with and without it. Use boiled and cooled water for “no CO₂” and sodium hydrogencarbonate for “CO₂”. Keep the lamp distance and temperature the same.',
+      blurb: 'The 2024 paper's experiment: light and carbon dioxide, each present or absent.',
+      intro: 'Biology 2024 Q5(b), in a dark room whose only light is the lamp. Run four tests - light with and without carbon dioxide, and no light with and without it. Use boiled and cooled water for "no CO₂" and sodium hydrogencarbonate for "CO₂". Keep the lamp distance and temperature the same.',
       tests: [
         { lampOn: true, co2: false, label: 'Light ✓ · CO₂ ✗' },
         { lampOn: false, co2: true, label: 'Light ✗ · CO₂ ✓' },
@@ -420,7 +420,7 @@ const LabPhotoData = (() => {
           why: 'Biology 2024 Q5(b)(ii). Bubbles came only when BOTH were present; take either away and there were none.' },
         { q: 'Why was the investigation done in a dark room?',
           options: ['So the lamp was the only source of light', 'So the bubbles were easier to see', 'To keep the water cold', 'Because pondweed only grows in the dark'],
-          why: 'Daylight from a window would light the “no light” tests too, and the comparison would be spoiled.' },
+          why: 'Daylight from a window would light the "no light" tests too, and the comparison would be spoiled.' },
         { q: 'How was the carbon dioxide removed from the water?',
           options: ['The water was boiled and then cooled', 'Iodine solution was added', 'Salt was dissolved in it', 'The lamp was switched off'],
           why: 'Boiling drives dissolved gases out of water. It is cooled again so the temperature matches the other tests.' },
@@ -905,7 +905,7 @@ const LabPhotoData = (() => {
       'Plants need water, sunlight, air, warmth and minerals to grow well.',
       'Roots take in water and minerals from the soil.',
       'The stem carries water up from the roots to the leaves.',
-      'Leaves make the plant’s food, using sunlight.',
+      'Leaves make the plant's food, using sunlight.',
       'Leaves are green because of chlorophyll. It traps sunlight.',
       'A seed has a tiny plant and a store of food inside it.',
       'Germination is when a seed starts to grow.',
@@ -919,7 +919,7 @@ const LabPhotoData = (() => {
       'Plants make their own food. This is called photosynthesis.',
       'Carbon dioxide + water, with sunlight, make food and oxygen.',
       'Carbon dioxide gets into a leaf through tiny holes called stomata.',
-      'The leaf is the plant’s food factory.',
+      'The leaf is the plant's food factory.',
       'Chlorophyll is the green colouring in leaves. It traps sunlight.',
       'Plants give out oxygen when they make food. Animals breathe it in.',
       'Plants respire day and night. They make food only in the light.',
@@ -1020,7 +1020,7 @@ const LabPhotoData = (() => {
       quiz: [
         { q: 'Which part of a plant mainly makes its food?',
           options: ['The leaf', 'The root', 'The flower', 'The fruit'],
-          why: 'PSAC 2021 paper. The green leaf is the plant’s food factory.' },
+          why: 'PSAC 2021 paper. The green leaf is the plant's food factory.' },
         { q: 'The plant with no leaves did not grow. Why?',
           options: ['With no leaves, it could make no food', 'It had too much water', 'Its roots were cut off', 'It was too warm'],
           why: 'Leaves make the food. No leaves, no food, so no growth.' },
@@ -1126,7 +1126,7 @@ const LabPhotoData = (() => {
   const PRIMARY_TEXT = {
     4: {
       welcome: [
-        ['New here?', 'Tap “Show me how”. I will show you what to tap, one step at a time.'],
+        ['New here?', 'Tap "Show me how". I will show you what to tap, one step at a time.'],
         ['Two plant pots.', 'Move a plant, or change its water or soil. Then fast-forward a week.'],
         ['Seed dishes.', 'Bean seeds on cotton wool. Find out what makes them sprout.'],
         ['Be fair.', 'Change ONE thing at a time. Keep everything else the same.'],
@@ -1142,7 +1142,7 @@ const LabPhotoData = (() => {
     },
     6: {
       welcome: [
-        ['New here?', 'Tap “Show me how”. I will show you what to tap, one step at a time.'],
+        ['New here?', 'Tap "Show me how". I will show you what to tap, one step at a time.'],
         ['Two plant pots.', 'Take away light, water or leaves. Then fast-forward a week.'],
         ['Waterweed.', 'Shine a lamp on it and count the bubbles of oxygen.'],
         ['Be fair.', 'Change ONE thing at a time. Keep everything else the same.'],

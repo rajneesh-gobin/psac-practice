@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs - the science behind Water & States (PSAC Grade 4).
 //
@@ -528,7 +528,7 @@ const LabWaterData = (() => {
       title: () => 'Hot! Ask an adult to use the hot plate',
       happened: () => 'You switched on the hot plate on your own. Your hand touched its hot top.',
       why: 'A hot plate burns skin badly. It stays hot after it is switched off.',
-      instead: 'Ask an adult to switch it on. Tap “Adult helper” first. Keep your hands away.',
+      instead: 'Ask an adult to switch it on. Tap "Adult helper" first. Keep your hands away.',
       exam: 'Heating is a job for an adult. Keep hands away from hot things.',
     },
     steam: {

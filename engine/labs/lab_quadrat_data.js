@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs - the biology and the arithmetic behind the Quadrat Field
 //  (NCE Grade 9, Biology B3 · Biodiversity).
@@ -67,7 +67,7 @@ const LabQuadratData = (() => {
               color: '#1F4F2E', leaf: '#3D7A4A', icon: '🌳', n: 360, bg: 0.15,
               patches: [[10, 8.5, 2.2], [17.5, 16.5, 1.8], [8, 18, 1.6]],
               meta: 'Invasive alien shrub' },
-    ebony: { name: 'Mauritian ebony seedling', short: 'ebony', plural: 'ebony seedlings', local: 'bois d’ébène', latin: 'Diospyros tessellaria', status: 'endemic',
+    ebony: { name: 'Mauritian ebony seedling', short: 'ebony', plural: 'ebony seedlings', local: 'bois d'ébène', latin: 'Diospyros tessellaria', status: 'endemic',
              color: '#7DD35F', leaf: '#4FA83A', icon: '🌱', n: 120, bg: 1, patches: [],
              meta: 'Endemic. Found nowhere else on Earth' },
     lantana: { name: 'Lantana', short: 'lantana', plural: 'lantana plants', local: 'vieille fille', latin: 'Lantana camara', status: 'invasive',
@@ -308,11 +308,11 @@ const LabQuadratData = (() => {
       learn: 'An invasive alien species is brought in from elsewhere and spreads at the expense of native species. In Mauritius, strawberry guava forms dense thickets in the native forest, and the native seedlings cannot grow in their shade.' },
     { id: 'cyclone', icon: '🌀', title: 'After the cyclone', hint: 'Let a cyclone cross the plot, then survey it',
       how: [G, 'species:guava', 'event:cyclone', 'auto5', 'estimate'],
-      saw: 'After the cyclone the ranger’s full count was lower for every species - and the strawberry guava was already sprouting in the gaps.',
+      saw: 'After the cyclone the ranger's full count was lower for every species - and the strawberry guava was already sprouting in the gaps.',
       learn: 'Cyclones are a natural threat to biodiversity in Mauritius (the cyclone season runs from November to April). They uproot trees and destroy habitats, and the open gaps they leave are quickly taken over by fast-growing invasive plants.' },
     { id: 'drought', icon: '☀️', title: 'After the drought', hint: 'A drought, then survey the ebony seedlings',
       how: [G, 'species:ebony', 'event:drought', 'auto5', 'estimate'],
-      saw: 'After the drought the ranger’s full count showed that many seedlings had died - the young ebony seedlings most of all.',
+      saw: 'After the drought the ranger's full count showed that many seedlings had died - the young ebony seedlings most of all.',
       learn: 'A drought is a natural threat: without water, plants die, and the animals that depend on them lose food and shelter. Young seedlings with short roots are the first to go.' },
     { id: 'spread', icon: '⏩', title: 'Ten years of invasion', hint: 'Let ten years pass, then survey the strawberry guava',
       how: [G, 'species:guava', 'event:spread', 'auto5', 'estimate'],
@@ -320,11 +320,11 @@ const LabQuadratData = (() => {
       learn: 'Invasive alien species are a human threat to biodiversity: people brought them to Mauritius, and with no natural enemies here they spread and crowd out native plants.' },
     { id: 'clearing', icon: '🪓', title: 'Habitat lost', hint: 'Clear a strip of the plot for farmland, then survey it',
       how: [G, 'species:guava', 'event:clear', 'auto5', 'estimate'],
-      saw: 'The cleared strip is bare earth - no plants and no habitat - and the ranger’s full count fell for the species that grew there.',
+      saw: 'The cleared strip is bare earth - no plants and no habitat - and the ranger's full count fell for the species that grew there.',
       learn: 'Deforestation - clearing forest for farms, roads or buildings - destroys habitats, so the species that lived there disappear from the area. Very little of Mauritius is still covered by good native forest.' },
     { id: 'conservation', icon: '🧑‍🌾', title: 'Conservation works', hint: 'Weed out the invaders, then survey the ebony seedlings',
       how: [G, 'species:ebony', 'event:weed', 'auto5', 'estimate'],
-      saw: 'With the invasive plants weeded out, the ranger’s count showed the ebony seedlings had increased.',
+      saw: 'With the invasive plants weeded out, the ranger's count showed the ebony seedlings had increased.',
       learn: 'Protecting habitats and controlling invasive species are the two conservation measures that work together. In Mauritius, fenced and weeded Conservation Management Areas let native plants grow back.' },
   ];
 
@@ -336,7 +336,7 @@ const LabQuadratData = (() => {
       happened: () => 'You reached into the quadrat with bare hands to part the plants and count them. There was lantana (vieille fille) inside: its stems are covered in small hooked prickles, and its rough leaves can make skin itchy and sore.',
       why: 'Scratches from prickly plants can become infected, and the sap and leaves of some plants irritate the skin. Lantana berries are poisonous, especially the green unripe ones - never eat any fruit or berry you find during fieldwork.',
       instead: 'Wear gloves and long sleeves for fieldwork. Move plants aside with a pencil or a stick instead of your fingers, never taste anything you find, and wash your hands when you finish.',
-      exam: '“State one safety precaution” earns a mark on the NCE science papers (for example Chemistry 2022 Q5(a)(ii)). For fieldwork: wear gloves, never eat any plant or berry, and wash your hands afterwards.',
+      exam: '"State one safety precaution" earns a mark on the NCE science papers (for example Chemistry 2022 Q5(a)(ii)). For fieldwork: wear gloves, never eat any plant or berry, and wash your hands afterwards.',
     },
   };
 
@@ -347,17 +347,17 @@ const LabQuadratData = (() => {
         ? `You put the quadrats where the ${c.name} were thickest. They held a mean of ${c.mean} each, so your estimate was ${c.est} - but the true population is ${c.trueN}. Your estimate is ${c.times} times the true number, because those squares are nothing like an average square of the plot.`
         : `You chose where to put ${c.k} of your quadrats instead of throwing them at random. Your estimate was ${c.est}; the true population is ${c.trueN}. Whether a chosen square is thick or bare, your choice - not chance - decided what was sampled, so the estimate cannot be trusted.`,
       instead: 'Place the quadrats at RANDOM - for example, use random numbers as x and y coordinates on a grid laid over the plot. Then every square, thick or bare, has the same chance of being sampled.',
-      exam: '“Why are quadrats placed at random?” - so that the sample represents the whole area and is not biased. Choosing the thickest patches gives an estimate that is far too high.' },
+      exam: '"Why are quadrats placed at random?" - so that the sample represents the whole area and is not biased. Choosing the thickest patches gives an estimate that is far too high.' },
     too_few: { icon: '📉', title: 'Too few quadrats to trust',
       happened: c => `You estimated the population from only ${c.n} quadrat${c.n === 1 ? '' : 's'}: ${c.est}. But these plants grow in patches - in this plot one quadrat can hold anything from ${c.min} to ${c.max} plants, so one quadrat alone could give an estimate anywhere from ${c.lo} to ${c.hi}.`,
       instead: `Use more quadrats - at least ${MIN_Q}, and ${MISSION_Q} or more is better - placed at random, and take the MEAN. The more quadrats, the more reliable the estimate.`,
-      exam: '“Suggest how the student could make the estimate more reliable” - use more quadrats, place them at random, and calculate the mean.' },
+      exam: '"Suggest how the student could make the estimate more reliable" - use more quadrats, place them at random, and calculate the mean.' },
     edge: { icon: '📐', title: 'Plants on the frame: no rule',
       happened: c => c.mode === 'all'
         ? `You counted all the ${c.name} touching the frame: ${c.said}. But ${c.extra} of them cross the bottom or right side - the next quadrat along would count them as well. With the edge rule the count is ${c.right}. Counted your way in every square, the estimate for the plot would be about ${c.pct}% too HIGH.`
         : `You counted only the ${c.name} wholly inside the frame: ${c.said}. But ${c.extra} of them cross the top or left side and belong to this quadrat. With the edge rule the count is ${c.right}. Counted your way in every square, the estimate for the plot would be about ${c.pct}% too LOW.`,
       instead: 'Choose ONE rule for plants on the frame and use it in every quadrat. A common rule: count a plant if it crosses the TOP or LEFT side; leave it out if it crosses the BOTTOM or RIGHT side. Then no plant is counted twice and none is missed. (The edge rule is beyond the NCE syllabus, but it keeps your counts fair.)',
-      exam: '“Suggest one way to improve the accuracy of the estimate” - count the plants in the same way in every quadrat, use more quadrats, and place them at random.' },
+      exam: '"Suggest one way to improve the accuracy of the estimate" - count the plants in the same way in every quadrat, use more quadrats, and place them at random.' },
   };
 
   // Short, true facts for the 💡 button. Tied to the chapter.
@@ -439,7 +439,7 @@ const LabQuadratData = (() => {
           why: 'The quadrats in the thickest patches held far more plants than an average square metre, so that estimate was far too high. The random quadrats represented the whole plot.' },
         { q: 'What is wrong with choosing where to put the quadrats?',
           options: ['The sample is biased - it does not represent the whole area', 'It causes a parallax error', 'It causes a zero error', 'It changes the area of the quadrat'],
-          why: 'Choosing the spots lets the person’s choice decide what is sampled - that is bias.' },
+          why: 'Choosing the spots lets the person's choice decide what is sampled - that is bias.' },
         { q: 'How are random positions usually chosen for quadrats?',
           options: ['Random numbers are used as x and y coordinates on a grid over the area', 'The quadrat is placed wherever the most species are', 'The quadrat is placed beside the path, where it is easiest to walk', 'The quadrat is always placed in the centre of the area'],
           why: 'A pair of random numbers from a table or a calculator gives the x and y coordinates, so nobody chooses the spot.' },
@@ -457,7 +457,7 @@ const LabQuadratData = (() => {
       intro: `Survey the strawberry guava (at least ${MIN_Q} random quadrats, then estimate). Let ten years of invasion pass and survey again. Then weed out the invaders and survey a third time.`,
       stages: [[], ['spread'], ['spread', 'weed']],
       quiz: [
-        { q: `In ten years the ranger’s full count of strawberry guava rose from ${TRUE.guava0} to ${TRUE.guava1}. What kind of threat to biodiversity is this?`,
+        { q: `In ten years the ranger's full count of strawberry guava rose from ${TRUE.guava0} to ${TRUE.guava1}. What kind of threat to biodiversity is this?`,
           options: ['An invasive alien species spreading', 'A natural calamity, like a cyclone', 'Pollution of the soil', 'Over-fishing'],
           why: 'Strawberry guava was brought to Mauritius by people and spreads with nothing to control it - an invasive alien species (Biology 2022 Q1(5) asks about invasive aliens).' },
         { q: `Over the same ten years the ebony seedlings fell from ${TRUE.ebony0} to ${TRUE.ebony1}. Suggest why.`,

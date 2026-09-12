@@ -97,7 +97,7 @@ const LabMeasure = (() => {
             ${_kid() ? '<button type="button" class="lab-coach-tip" data-act="say-coach" aria-label="Read this out loud">🔊</button>' : ''}
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <p class="lab-task-strip">Pick an instrument, then measure the specimen — read at eye level!</p>
+          <p class="lab-task-strip" id="lab-measure-strip">Pick an instrument from the shelf → then measure the specimen.</p>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools">
             <button type="button" class="lab-tool" data-act="zin"><span aria-hidden="true">🔍</span>Zoom in</button>
@@ -1426,6 +1426,12 @@ const LabMeasure = (() => {
     const D = DATA(), I = _I(), S = _S();
     const chip = $('lab-measure-chip');
     if (chip) chip.innerHTML = I ? `${I.icon} ${esc(I.short)} <small>${I.grades && !D.mid(I) ? 'each mark ' + esc(_markS(I)) : 'reads to ' + esc(I.prec)}</small>` : (_kid() ? 'Pick a tool' : 'Pick an instrument');
+    const strip = $('lab-measure-strip');
+    if (strip) {
+      if (!I) strip.textContent = _kid() ? 'Pick a tool from the shelf → the scale appears here.' : 'Pick an instrument from the shelf → its scale appears here.';
+      else if (!S) strip.textContent = _kid() ? `Good! Now pick what you will measure with the ${I.name.toLowerCase()}.` : `${I.name} ready. Now pick something to measure.`;
+      else strip.textContent = _kid() ? 'Read the scale — zoom in to see the marks.' : 'Read the scale at eye level — zoom in to see the smallest marks.';
+    }
     const st = $('lab-status');
     if (st) {
       const chips = [];
@@ -1574,10 +1580,13 @@ const LabMeasure = (() => {
   function _drawEmpty() {
     const c = _cx;
     c.fillStyle = _colors.muted; c.textAlign = 'center';
-    _font(15, 700);
-    c.fillText(DATA().EMPTY_ICONS[_g()] || '📏 🔧 🗜️ 🧪 ⏱️ 🌡️ ⚖️', _W / 2, _H * 0.42);
-    _font(13, 600);
-    c.fillText(_kid() ? 'Pick a tool from the shelf below' : 'Pick an instrument from the shelf below', _W / 2, _H * 0.56);
+    // Draw a simple lab icon — nothing that looks like a selectable instrument.
+    _font(40, 400);
+    c.fillText('🔬', _W / 2, _H * 0.38);
+    _font(14, 700);
+    c.fillText(_kid() ? '↓  Pick a tool from the shelf below' : '↓  Pick an instrument from the shelf below', _W / 2, _H * 0.56);
+    _font(12, 400);
+    c.fillText(_kid() ? 'Tap it — the scale will appear here.' : 'Tap one — its scale will appear here.', _W / 2, _H * 0.68);
   }
 
   function _line(x1, y1, x2, y2, col, w) {

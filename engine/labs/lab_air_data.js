@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs - the science behind Air & Burning (PSAC Grades 4 and 6).
 //
@@ -528,7 +528,7 @@ const LabAirData = (() => {
       why: 'The flame heated the glass. A hot jar can burn your fingers.',
       instead: 'Wait a few minutes for the jar to cool. Then ask an adult to lift it with a cloth.',
       exam: 'Exam tip: after a candle experiment the jar is hot. Let it cool before anyone touches it.',
-      after: 'Tap “Let it cool, then lift it”. The teacher will use a cloth.',
+      after: 'Tap "Let it cool, then lift it". The teacher will use a cloth.',
     },
     crack: {
       signs: ['sharp', 'hot'], fx: 'crack', grades: [4, 6],

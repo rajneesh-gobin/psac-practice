@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs - the chemistry behind the Separation Station (NCE Grade 9).
 //
@@ -355,8 +355,8 @@ const LabSeparationData = (() => {
       why: 'Heated liquids spit and boil over, and glass can crack when it is heated. A drop of boiling liquid in the eye can blind.',
       instead: 'Put on safety goggles before you heat anything, and keep them on until the apparatus has cooled. Tap 🥽 at the top.',
       exam: g => g >= 9
-        ? 'Safety precautions are asked on almost every paper (Chemistry 2021 Q5(c)(ii), 2022 Q5(a)(ii), 2025 Q3(b)(iii)): “Wear safety goggles when heating.”'
-        : 'In the science exam: you may be asked to name a safety precaution when heating — “wear safety goggles” is always a correct answer.',
+        ? 'Safety precautions are asked on almost every paper (Chemistry 2021 Q5(c)(ii), 2022 Q5(a)(ii), 2025 Q3(b)(iii)): "Wear safety goggles when heating."'
+        : 'In the science exam: you may be asked to name a safety precaution when heating — "wear safety goggles" is always a correct answer.',
     },
     bumping: {
       signs: ['hot'], fx: 'bump', card: 'bumping',
@@ -404,7 +404,7 @@ const LabSeparationData = (() => {
         : `The bulb was down in the flask, so it read the boiling LIQUID (${c.reading} °C - only close to 100 °C because inky water is nearly pure water). It did not measure the vapour going over into the condenser, which is what the reading is for.`,
       instead: 'Put the thermometer bulb level with the side arm (the opening to the condenser). There it sits in the vapour and reads the boiling point of what is distilling: 100 °C for water.',
       exam: g => g >= 9
-        ? 'A thermometer bulb dipping into the liquid is a classic error in “spot the errors in this distillation rig” (Chemistry 2025 Q5(b)(iii)).'
+        ? 'A thermometer bulb dipping into the liquid is a classic error in "spot the errors in this distillation rig" (Chemistry 2025 Q5(b)(iii)).'
         : 'In the science exam: you may be asked to spot errors in a distillation rig — a thermometer bulb dipping into the liquid instead of sitting in the vapour is a classic mistake.' },
     dryness: { icon: '⚪', title: 'Heated to dryness',
       happened: () => 'You kept heating until the water had gone. The last of it spat hot solid out of the basin, and the blue crystals lost their water of crystallisation and turned into a white powder (anhydrous copper(II) sulfate).',
@@ -418,13 +418,13 @@ const LabSeparationData = (() => {
       happened: c => `With nothing over the dish, the ${c.vapour} rose straight up the fume cupboard and was lost. Nothing re-formed as a solid.`,
       instead: 'Cover the dish with an inverted funnel. Its cool inside is where the vapour turns back into a solid - the sublimate. Plug the stem with cotton wool.',
       exam: g => g >= 9
-        ? 'Chemistry 2024 Q2(b)(i) labels this rig from a word bank: evaporating dish, Bunsen burner, tripod, sublimate (“beaker” is the extra word).'
+        ? 'Chemistry 2024 Q2(b)(i) labels this rig from a word bank: evaporating dish, Bunsen burner, tripod, sublimate ("beaker" is the extra word).'
         : 'In the science exam: you may be asked to identify the equipment needed for sublimation — an inverted funnel over the dish, with a cotton wool plug in its stem.' },
     no_plug: { icon: '☁️', title: 'Vapour escaped up the stem',
       happened: c => `Some ${c.solid} re-formed on the funnel, but a stream of ${c.vapour} escaped out of the open stem, so part of it was lost.`,
       instead: 'Push a cotton wool plug into the stem of the funnel so the vapour cannot escape.',
       exam: g => g >= 9
-        ? 'Chemistry 2024 Q2(b)(ii): “What precaution needs to be taken during sublimation to prevent vapours from escaping?” - an inverted funnel with a cotton wool plug.'
+        ? 'Chemistry 2024 Q2(b)(ii): "What precaution needs to be taken during sublimation to prevent vapours from escaping?" - an inverted funnel with a cotton wool plug.'
         : 'In the science exam: you may be asked what precaution stops vapour from escaping during sublimation — a cotton wool plug in the stem of the funnel.' },
     wrong_tech: { icon: '🧰', title: 'Not the right technique',
       happened: c => c.why,
@@ -481,7 +481,7 @@ const LabSeparationData = (() => {
         { q: 'Why does the salt stay behind in the flask?',
           options: ['Its boiling point is far higher than 100 °C', 'It is too heavy for the steam to carry', 'It reacts with the glass of the flask', 'It dissolves in the cold condenser water'],
           why: 'Salt boils at 1413 °C. At 100 °C only the water turns to vapour.' },
-        { q: 'A pupil’s rig has two errors: the conical flask is sealed with a bung, and the water enters the condenser at the top. Which corrections are right?',
+        { q: 'A pupil's rig has two errors: the conical flask is sealed with a bung, and the water enters the condenser at the top. Which corrections are right?',
           options: ['Remove the bung; connect the water in at the bottom', 'Add a second bung; connect the water in at the bottom', 'Remove the bung; turn the cooling water off', 'Add more granules; heat the flask more strongly'],
           why: 'A heated rig must be open at the receiver end, and the cooling water goes in at the bottom. Chemistry 2025 Q5(b)(iii) asks for two errors like these.' },
         { q: 'Why are anti-bumping granules added to the flask?',
@@ -530,7 +530,7 @@ const LabSeparationData = (() => {
           why: 'Solid → gas directly, and gas → solid again on a cold surface.' },
         { q: 'Label the sublimation rig. Word bank: evaporating dish · Bunsen burner · tripod · sublimate · beaker. What is the solid that forms on the cool funnel called?',
           options: ['Sublimate', 'Evaporating dish', 'Tripod', 'Beaker'],
-          why: 'The solid that re-forms from the vapour is the sublimate. In Chemistry 2024 Q2(b)(i), “beaker” is the extra word.' },
+          why: 'The solid that re-forms from the vapour is the sublimate. In Chemistry 2024 Q2(b)(i), "beaker" is the extra word.' },
         { q: 'What precaution stops the vapour escaping during sublimation?',
           options: ['An inverted funnel over the dish, with a cotton wool plug in its stem', 'Heating the mixture as strongly as possible', 'Leaving the dish uncovered', 'Adding water to the mixture first'],
           why: 'The funnel gives a cool surface to catch the vapour and the plug stops it escaping. Chemistry 2024 Q2(b)(ii).' },
@@ -885,7 +885,7 @@ const LabSeparationData = (() => {
     g8_torn: { icon: '🧻', title: 'The filtrate came out cloudy',
       happened: c => `The filter paper was torn, so the ${c.residue} slipped straight through the hole. The liquid in the beaker underneath is cloudy - it was never filtered.`,
       instead: 'Use a whole filter paper. Fold it in half, then in half again, and open it into a cone that fits the funnel. Wet it so it sticks to the glass.',
-      exam: 'A cloudy filtrate is a classic “what went wrong?” question: a torn filter paper, or liquid poured over the top of the paper.' },
+      exam: 'A cloudy filtrate is a classic "what went wrong?" question: a torn filter paper, or liquid poured over the top of the paper.' },
     g8_overflow: { icon: '🫗', title: 'It went over the top',
       happened: c => `You tipped it all in at once. The liquid rose above the top of the filter paper and ran down between the paper and the funnel, carrying ${c.residue} with it. The filtrate is cloudy.`,
       instead: 'Pour slowly, down a glass rod, and keep the liquid below the top edge of the filter paper.',
