@@ -93,6 +93,16 @@ If it did not, do it: "no labs" = Grade 3, the grant test = Grade 3 + Grade 9.
 - Parallel builds: at most 4, one port each (next free: 9424+), check free
   memory first (this laptop has ~5-7 GB free), briefs modelled on LAB_SPEC §8/§9.
 
+## Final check, 2026-09-11 (night) — after the last build
+Full suite, one Chrome at a time: syntax, all 14 data tests (1,929 checks),
+`test-role-modules.js` 24/0, `check.js` green, `test-labs-grades.js` 38/0 and
+all 15 browser tests green — except one intermittent Food Tests check (the
+water spot drying at exactly 5 min). Cause: `_tick(5)` sums 100 × 0.05 to
+4.99999…, so the `>= 5` threshold missed unless the live loop added time. Fixed
+in `lab_food.js` by rounding the accumulated time (`s.t`, `s.heat`).
+⚠ Other labs may accumulate float time the same way; if a threshold check is
+ever flaky, look there first.
+
 ## 6. Before you commit / deploy
 - ⚠ Commit `eb9c86b` "test" (made by another session mid-build) holds
   half-built versions of the water, air, circuit, photo and some light/measure
