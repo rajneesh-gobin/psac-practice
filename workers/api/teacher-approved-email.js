@@ -50,7 +50,7 @@ export default async function handler(request, env) {
   const email = (await userRes.json())?.email || null;
   if (!email) return json(404, { ok: false, error: 'no_email' });
 
-  const siteUrl = (env.SITE_URL || 'https://nouklass.workers.dev').replace(/\/+$/, '');
+  const siteUrl = (env.SITE_URL || 'https://nouklass.com').replace(/\/+$/, '');
   const first = String(profile.full_name || '').trim().split(/\s+/)[0] || 'there';
   const subject = 'Your Nou Klass teacher account is approved';
   const text = `Hello ${first},\n\nYour teacher account on Nou Klass has been approved.\n\nSign in at ${siteUrl}/ - your teacher tools are ready.\n\nNou Klass`;

@@ -59,5 +59,5 @@ export default async function handler(request, env) {
 }
 
 export async function scheduled(event, env, ctx) {
-  await handler(new Request('https://nouklass.workers.dev/api/classroom-purge', { method: 'POST' }), env);
+  await handler(new Request('https://nouklass.com/api/classroom-purge', { method: 'POST' }), env);
 }
