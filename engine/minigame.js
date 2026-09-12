@@ -1083,7 +1083,7 @@ const MiniGames = (() => {
           <div><b>${acc}%</b><span>accuracy</span></div>
         </div>
         <div class="qf-share-card" id="qf-share-card">
-          <div class="qf-share-top">⚡ Quick Fire · PSAC Practice</div>
+          <div class="qf-share-top">⚡ Quick Fire · Nou Klass</div>
           <div class="qf-share-score">${_qf.score}</div>
           <div class="qf-share-sub">${_qf.correct} correct · ${acc}% accuracy · best combo ×${1 + Math.min(4, Math.floor(_qf.bestCombo / 3))}</div>
           <div class="qf-share-foot">Can you beat me? 🎯</div>
@@ -1128,7 +1128,7 @@ const MiniGames = (() => {
   // the one thing safe to post, and it must stay that way.
   function _qfShareText() {
     const acc = _qf.answered ? Math.round(_qf.correct / _qf.answered * 100) : 0;
-    return `⚡ I scored ${_qf.score} in Quick Fire on PSAC Practice - ${_qf.correct} correct, ${acc}% accuracy! Can you beat me? 🎯`;
+    return `⚡ I scored ${_qf.score} in Quick Fire on Nou Klass - ${_qf.correct} correct, ${acc}% accuracy! Can you beat me? 🎯`;
   }
   function _qfShareUrl() {
     // A score-showcase landing page (no personal data in the URL) that invites
@@ -1152,7 +1152,7 @@ const MiniGames = (() => {
       x.textAlign = 'center'; x.fillStyle = '#fff';
       x.font = '600 46px system-ui,sans-serif'; x.fillText('⚡ QUICK FIRE', W / 2, 250);
       x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-      x.fillText('PSAC Exam Practice', W / 2, 315);
+      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
       x.fillStyle = '#fde047'; x.font = '800 300px system-ui,sans-serif';
       x.fillText(String(_qf.score), W / 2, 660);
       x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';

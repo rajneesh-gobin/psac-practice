@@ -21,7 +21,7 @@
 //    GMAIL_APP_PASSWORD  the 16-character Google App Password (NOT the account
 //                        password — Google has refused those over SMTP since
 //                        2022 and answers 535-5.7.8)
-//    MAIL_FROM_NAME      optional display name, default "PSAC Exam Practice"
+//    MAIL_FROM_NAME      optional display name, default "Nou Klass"
 // ══════════════════════════════════════════════
 'use strict';
 
@@ -29,7 +29,7 @@ const nodemailer = require('nodemailer');
 
 const USER = process.env.GMAIL_USER;
 const PASS = (process.env.GMAIL_APP_PASSWORD || '').replace(/\s+/g, '');
-const NAME = process.env.MAIL_FROM_NAME || 'PSAC Exam Practice';
+const NAME = process.env.MAIL_FROM_NAME || 'Nou Klass';
 
 // ⚠ The From address must BE the authenticated account. Gmail rewrites From to
 // the account it authenticated, so a different address is either replaced

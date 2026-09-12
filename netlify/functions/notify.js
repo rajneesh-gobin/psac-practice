@@ -91,7 +91,7 @@ exports.handler = async (event) => {
   <div style="max-width:480px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
     <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:24px 28px;color:#fff">
       <div style="font-size:22px;font-weight:bold">📊 Assignment Complete!</div>
-      <div style="opacity:.85;margin-top:4px;font-size:14px">PSAC Exam Practice - Parent Notification</div>
+      <div style="opacity:.85;margin-top:4px;font-size:14px">Nou Klass - Parent Notification</div>
     </div>
     <div style="padding:24px 28px">
       <p style="margin:0 0 16px;color:#374151;font-size:15px">
@@ -110,7 +110,7 @@ exports.handler = async (event) => {
         View Full Dashboard →
       </a>
       <p style="margin:16px 0 0;color:#9ca3af;font-size:12px;text-align:center">
-        You received this because you are a parent on PSAC Exam Practice.<br>
+        You received this because you are a parent on Nou Klass.<br>
         To unsubscribe, remove your email in account settings.
       </p>
     </div>

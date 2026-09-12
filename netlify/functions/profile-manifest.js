@@ -12,9 +12,9 @@ exports.handler = async event => {
   const icon = `/.netlify/functions/profile-icon?key=${encodeURIComponent(key)}&name=${encodeURIComponent(name)}&type=${type}`;
   const manifest = {
     id: `/installed/${type}/${key}`,
-    name: `${name} — PSAC Practice`,
+    name: `${name} — Nou Klass`,
     short_name: shortName,
-    description: type === 'teacher' ? 'Open my PSAC Practice teacher workspace' : `Open ${name}'s PSAC practice space`,
+    description: type === 'teacher' ? 'Open my Nou Klass teacher workspace' : `Open ${name}'s PSAC practice space`,
     start_url: `/?profile=${encodeURIComponent(key)}`,
     scope: '/', display: 'standalone', orientation: 'portrait-primary',
     background_color: type === 'teacher' ? '#173a27' : '#312e81',

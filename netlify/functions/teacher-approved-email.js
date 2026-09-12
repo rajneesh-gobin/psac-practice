@@ -50,12 +50,12 @@ exports.handler = async (event) => {
   if (!email) return json(404, { ok: false, error: 'no_email' });
 
   const first = String(profile.full_name || '').trim().split(/\s+/)[0] || 'there';
-  const subject = 'Your PSAC Exam Practice teacher account is approved';
+  const subject = 'Your Nou Klass teacher account is approved';
   const text = `Hello ${first},\n\n`
-    + 'Your teacher account on PSAC Exam Practice has been approved.\n\n'
+    + 'Your teacher account on Nou Klass has been approved.\n\n'
     + `Sign in at ${SITE_URL}/ - your teacher tools are ready: create a classroom, `
     + 'share a link with your pupils and set them work.\n\n'
-    + 'PSAC Exam Practice';
+    + 'Nou Klass';
   const html = `<!DOCTYPE html>
 <html><body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif">
   <div style="max-width:520px;margin:24px auto;background:#ffffff;border-radius:16px;overflow:hidden">
@@ -64,12 +64,12 @@ exports.handler = async (event) => {
     </div>
     <div style="padding:24px;color:#1f2937;font-size:15px;line-height:1.5">
       <p style="margin:0 0 12px">Hello ${_he(first)},</p>
-      <p style="margin:0 0 12px">Your teacher account on <b>PSAC Exam Practice</b> has been approved.</p>
+      <p style="margin:0 0 12px">Your teacher account on <b>Nou Klass</b> has been approved.</p>
       <p style="margin:0 0 20px">Sign in and your teacher tools are ready: create a classroom,
         share a link with your pupils and set them work.</p>
       <a href="${_he(SITE_URL)}/" style="display:inline-block;background:#4f46e5;color:#ffffff;text-decoration:none;font-weight:bold;padding:12px 20px;border-radius:10px">Sign in &rarr;</a>
       <p style="margin:24px 0 0;color:#9ca3af;font-size:12px">
-        You received this because you applied for a teacher account on PSAC Exam Practice.
+        You received this because you applied for a teacher account on Nou Klass.
       </p>
     </div>
   </div>

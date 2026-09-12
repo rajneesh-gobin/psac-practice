@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>⚡ Quick Fire score · PSAC Practice</title>
+<title>⚡ Quick Fire score · Nou Klass</title>
 <meta name="theme-color" content="#4f46e5">
 <!-- Social preview. The numbers are also injected into the text below from the
      query string, but these give link unfurlers something even before JS runs. -->
-<meta property="og:title" content="⚡ Quick Fire - PSAC Exam Practice">
-<meta property="og:description" content="I set a Quick Fire high score on PSAC Practice. Can you beat me?">
+<meta property="og:title" content="⚡ Quick Fire - Nou Klass">
+<meta property="og:description" content="I set a Quick Fire high score on Nou Klass. Can you beat me?">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
@@ -44,7 +44,7 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="kicker">⚡ QUICK FIRE · PSAC EXAM PRACTICE</div>
+  <div class="kicker">⚡ QUICK FIRE · NOU KLASS</div>
   <div class="card">
     <div class="bolt">⚡</div>
     <div class="score" id="score">-</div>
@@ -56,7 +56,7 @@
     <div class="challenge">Can you beat this? 🎯</div>
   </div>
   <a class="cta" href="/">🚀 Play Quick Fire free</a>
-  <p class="sub">Free exam revision for Mauritian primary students - <a href="/">psac-practice</a></p>
+  <p class="sub">Free exam revision for Mauritian primary students - <a href="/">Nou Klass</a></p>
 </div>
 <script>
   const p = new URLSearchParams(location.search);
@@ -64,7 +64,7 @@
   const s = clamp(p.get('s'), 100000), c = clamp(p.get('c'), 10000), a = clamp(p.get('a'), 100);
   const set = (id, v, suf) => { const el = document.getElementById(id); if (el) el.textContent = v === null ? '-' : v + (suf || ''); };
   set('score', s); set('correct', c); set('acc', a, '%');
-  document.title = s !== null ? `⚡ ${s} points on Quick Fire · PSAC Practice` : document.title;
+  document.title = s !== null ? `⚡ ${s} points on Quick Fire · Nou Klass` : document.title;
 </script>
 </body>
 </html>

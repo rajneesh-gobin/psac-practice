@@ -8,7 +8,7 @@ async function sendEmail({ to, subject, html, text }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       personalizations: [{ to: [{ email: to }] }],
-      from: { email: 'noreply@psac-practice.com', name: 'PSAC Practice' },
+      from: { email: 'noreply@psac-practice.com', name: 'Nou Klass' },
       subject,
       content: [
         ...(html ? [{ type: 'text/html', value: html }] : []),
@@ -52,8 +52,8 @@ export default async function handler(request, env) {
 
   const siteUrl = (env.SITE_URL || 'https://nouklass.workers.dev').replace(/\/+$/, '');
   const first = String(profile.full_name || '').trim().split(/\s+/)[0] || 'there';
-  const subject = 'Your PSAC Exam Practice teacher account is approved';
-  const text = `Hello ${first},\n\nYour teacher account on PSAC Exam Practice has been approved.\n\nSign in at ${siteUrl}/ - your teacher tools are ready.\n\nPSAC Exam Practice`;
+  const subject = 'Your Nou Klass teacher account is approved';
+  const text = `Hello ${first},\n\nYour teacher account on Nou Klass has been approved.\n\nSign in at ${siteUrl}/ - your teacher tools are ready.\n\nNou Klass`;
   const html = `<!DOCTYPE html>
 <html><body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif">
   <div style="max-width:520px;margin:24px auto;background:#ffffff;border-radius:16px;overflow:hidden">
@@ -62,7 +62,7 @@ export default async function handler(request, env) {
     </div>
     <div style="padding:24px;color:#1f2937;font-size:15px;line-height:1.5">
       <p style="margin:0 0 12px">Hello ${_he(first)},</p>
-      <p style="margin:0 0 12px">Your teacher account on <b>PSAC Exam Practice</b> has been approved.</p>
+      <p style="margin:0 0 12px">Your teacher account on <b>Nou Klass</b> has been approved.</p>
       <p style="margin:0 0 20px">Sign in and your teacher tools are ready: create a classroom, share a link with your pupils and set them work.</p>
       <a href="${_he(siteUrl)}/" style="display:inline-block;background:#4f46e5;color:#ffffff;text-decoration:none;font-weight:bold;padding:12px 20px;border-radius:10px">Sign in &rarr;</a>
     </div>

@@ -8,7 +8,7 @@
   <!-- Warm up CDN connections before the blocking script tags are reached -->
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <title>PSAC Exam Practice - PSAC Revision</title>
+  <title>Nou Klass — Exam Practice</title>
 
   <!-- PWA manifest -->
   <!-- Select a saved person's manifest before the browser fetches it. The URL
@@ -27,7 +27,7 @@
             const name = String(item.name || (item.type === 'teacher' ? 'Teacher' : 'Student')).slice(0, 48);
             const query = new URLSearchParams({ key, name, type: item.type });
             href = `/.netlify/functions/profile-manifest?${query}`;
-            document.title = `${name} - PSAC Practice`;
+            document.title = `${name} - Nou Klass`;
             window.__psacInstallProfileName = name;
             window.__psacInstallIcon = `/.netlify/functions/profile-icon?${query}`;
           }
@@ -50,7 +50,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta id="apple-app-title" name="apple-mobile-web-app-title" content="PSAC Practice">
+  <meta id="apple-app-title" name="apple-mobile-web-app-title" content="Nou Klass">
   <script>
     if (window.__psacInstallProfileName) {
       document.getElementById('apple-app-title').content = window.__psacInstallProfileName;
@@ -231,7 +231,7 @@
         <h3 class="text-lg font-bold text-gray-800 dark:text-white">🎁 Invite &amp; Rewards</h3>
         <button onclick="Auth.closeInviteModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Share PSAC Exam Practice with other families. Every friend who <b>creates an account</b> with your link counts towards the rewards below.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Share Nou Klass — Exam Practice with other families. Every friend who <b>creates an account</b> with your link counts towards the rewards below.</p>
 
       <!-- Credit balance + how it is earned. Filled by renderInviteCredits() in
            app.js; empty markup here so a failed network call leaves a blank
@@ -413,7 +413,7 @@
       <div class="flex items-center gap-2 min-w-0 flex-1">
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
         <div class="min-w-0 flex-1">
-          <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">PSAC Exam Practice</h1>
+          <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">Nou Klass — Exam Practice</h1>
           <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; all 8 NCE Grade 9 subjects</p>
         </div>
         <!-- Stats ride with the branding, not with the actions: they are
@@ -474,7 +474,7 @@
           data-menu-desc="Ask a question, see what other families are saying">
           <span class="hdr-ico" aria-hidden="true">💬</span><span class="hdr-word">Forum</span></button>
         <button id="pwa-install-btn" class="hdr-btn is-install hidden" data-hdr-pri="high" title="Install app on this device" aria-label="Install app on this device"
-          data-menu-desc="Add PSAC Practice to your home screen">
+          data-menu-desc="Add Nou Klass to your home screen">
           <span class="hdr-ico" aria-hidden="true">📲</span><span class="hdr-word">Install</span></button>
         <button id="theme-toggle" class="hdr-btn" data-hdr-pri="low" title="Toggle theme" aria-label="Toggle light or dark theme"
           data-menu-label="Appearance" data-menu-desc="Switch between light and dark">
@@ -533,7 +533,7 @@
         <div class="flex items-center gap-2.5 min-w-0">
           <span class="text-3xl select-none shrink-0">🎓</span>
           <div class="min-w-0">
-            <div class="text-base sm:text-lg font-black text-white leading-tight truncate">PSAC Exam Practice</div>
+            <div class="text-base sm:text-lg font-black text-white leading-tight truncate">Nou Klass — Exam Practice</div>
             <div class="text-xs text-indigo-300/70">Mauritius</div>
           </div>
         </div>
@@ -1078,7 +1078,7 @@
 
       <!-- Footer -->
       <footer class="text-center pb-10 text-indigo-200/75 text-xs px-4">
-        <p>PSAC Exam Practice · Mauritius · Grades 4–6 (Grades 1–3 &amp; 7–9 coming) · Maths · English · French · Science · History &amp; Geography</p>
+        <p>Nou Klass — Exam Practice · Mauritius · Grades 4–6 (Grades 1–3 &amp; 7–9 coming) · Maths · English · French · Science · History &amp; Geography</p>
         <p class="mt-1">Progress saved securely in the cloud · Installable app · Aligned to the MIE curriculum</p>
         <button onclick="showScreen('contact')" class="mt-2 text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">Contact the admins</button>
         <span class="mt-2 mx-2 text-indigo-200/40" aria-hidden="true">·</span>
@@ -1785,7 +1785,7 @@
            short screen. -->
       <div class="auth-brand text-center mb-6 select-none">
         <div class="auth-logo mb-2 drop-shadow-xl">🎓</div>
-        <h1 class="auth-title font-black text-white tracking-tight">PSAC Exam Practice</h1>
+        <h1 class="auth-title font-black text-white tracking-tight">Nou Klass — Exam Practice</h1>
         <p class="auth-sub text-indigo-300 text-sm mt-1">PSAC Prep · Grades 4–6 · Mauritius</p>
       </div>
 
@@ -1993,7 +1993,7 @@
         </div>
       </div>
 
-      <p class="text-white/70 text-xs mt-6 select-none">© 2025 PSAC Exam Practice · Mauritius PSAC Curriculum</p>
+      <p class="text-white/70 text-xs mt-6 select-none">© 2025 Nou Klass · Mauritius PSAC Curriculum</p>
     </div>
   </div>
 
@@ -3323,7 +3323,7 @@
       <div class="flex justify-between items-center mb-5">
         <div>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🛡️ Admin Panel</h2>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Superuser access - PSAC Exam Practice</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Superuser access - Nou Klass</p>
         </div>
       </div>
 
@@ -4444,7 +4444,7 @@
         <div class="ta-settings-grid">
           <button type="button" class="ta-settings-card" onclick="ProfileInstall.installTeacher()"><span>📲</span><strong>Install on this device</strong><small>Adds a teacher shortcut to your phone or computer.</small></button>
           <button type="button" class="ta-settings-card" onclick="showProfile()"><span>👤</span><strong>Account &amp; settings</strong><small>Your name, password and appearance.</small></button>
-          <button type="button" class="ta-settings-card" onclick="Auth.openInviteModal()"><span>🎁</span><strong>Invite friends</strong><small>Share PSAC Practice with other teachers and parents.</small></button>
+          <button type="button" class="ta-settings-card" onclick="Auth.openInviteModal()"><span>🎁</span><strong>Invite friends</strong><small>Share Nou Klass with other teachers and parents.</small></button>
           <button type="button" class="ta-settings-card" onclick="Auth.switchToStudentSelect()"><span>🎒</span><strong>Switch to student mode</strong><small>Hand this device to a pupil.</small></button>
         </div>
         <div class="ta-settings-note">
@@ -5780,7 +5780,7 @@
     onclick="if(event.target===this)ProfileInstall.closeLauncher()">
     <div class="profile-launch-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-launch-title">
       <div class="profile-launch-head">
-        <div><span class="profile-launch-kicker">THIS DEVICE</span><h2 id="profile-launch-title">Who is using PSAC Practice?</h2></div>
+        <div><span class="profile-launch-kicker">THIS DEVICE</span><h2 id="profile-launch-title">Who is using Nou Klass?</h2></div>
         <button onclick="ProfileInstall.closeLauncher()" aria-label="Close">✕</button>
       </div>
       <p class="profile-launch-explain">Choose a saved person. A child only enters their 4-digit PIN if their secure session has ended.</p>

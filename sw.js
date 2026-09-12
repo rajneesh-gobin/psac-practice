@@ -1,5 +1,5 @@
 'use strict';
-// ── MathMaster / PSAC Practice — Service Worker ──────────────────────────────
+// ── Nou Klass — Service Worker ───────────────────────────────────────────────
 // Strategy:
 //   Shell (HTML, CSS, engine JS): Cache-first — loads instantly offline
 //   Question files (subjects/**):  Stale-while-revalidate — serve cached, refresh in background
@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v328';
+const SHELL_VERSION = 'shell-v329';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -267,10 +267,10 @@ async function staleWhileRevalidate(request, cacheName) {
 self.addEventListener('push', event => {
   if (!event.data) return;
   let data;
-  try { data = event.data.json(); } catch { data = { title: 'PSAC Practice', body: event.data.text() }; }
+  try { data = event.data.json(); } catch { data = { title: 'Nou Klass', body: event.data.text() }; }
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'PSAC Practice', {
+    self.registration.showNotification(data.title || 'Nou Klass', {
       body:    data.body  || 'Tap to open the app.',
       icon:    data.icon  || '/icons/icon-192.png',
       badge:   data.badge || '/icons/icon-192.png',

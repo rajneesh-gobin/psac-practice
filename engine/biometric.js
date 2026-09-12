@@ -88,7 +88,7 @@ const Biometric = (() => {
       const cred = await navigator.credentials.create({
         publicKey: {
           challenge,
-          rp: { name: 'PSAC Exam Practice' },
+          rp: { name: 'Nou Klass — Exam Practice' },
           user: { id: userIdBuf, name: email || 'parent', displayName: email || 'Parent' },
           pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
           authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' },
