@@ -108,6 +108,7 @@ const LabCircuit = (() => {
             ${P ? '<button type="button" class="lab-coach-tip lab-circuit-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>' : ''}
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <div class="lab-task-strip">Build a circuit: connect the components and check if the bulb lights up.</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-circuit-palette" class="lab-circuit-palette-wrap"></div>
           <div class="lab-tools lab-circuit-actions${P ? ' is-two' : ''}">
@@ -234,6 +235,7 @@ const LabCircuit = (() => {
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
       if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -968,9 +970,13 @@ const LabCircuit = (() => {
       box.innerHTML = `${_primary() ? `<div class="lab-circuit-guide-head">${meta}<button type="button" class="lab-btn lab-btn-sm lab-circuit-say" data-act="say-guide" aria-label="Read this step aloud">🔊</button></div>` : meta}
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
-        ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
-                : '<p class="lab-guide-wait">⏳ Keep watching the board…</p>'}
-        <button type="button" class="lab-link" data-act="guide-stop">Stop the guide</button>`;
+        ${s.btn && s.on.startsWith('build:')
+          ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
+          : ''}
+        <div class="lab-guide-actions">
+          ${s.btn && !s.on.startsWith('build:') ? '<button type="button" class="lab-guide-hint-btn" data-guide-hint aria-label="Show me where to go">💡 Hint</button>' : ''}
+          <button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>
+        </div>`;
       box.hidden = false;
     }
     _highlight();
@@ -980,7 +986,7 @@ const LabCircuit = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.btn && !s.on.startsWith('build:')) _coachGuide(s.on); }
     else _highlight();
   }
 
@@ -1000,6 +1006,30 @@ const LabCircuit = (() => {
       case 'read': read(); break;
       case 'view': setView(a); break;
     }
+  }
+
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Brief positive narration shown when the student performs the bench action themselves.
+  // Not called for build steps (auto-execute) or wait steps (no btn).
+  function _coachGuide(on) {
+    const [k, a, b] = on.split(':');
+    if (k === 'place') { const K = D().KINDS[b]; if (K) _coach(`${K.name} placed! Now see what the circuit does.`); }
+    else if (k === 'remove') _coach('Part removed. On to the next step!');
+    else if (k === 'switch') _coach(a === 'on' ? 'Switch closed! Current is flowing — watch the bulb!' : 'Switch open. The circuit is broken — the bulb goes out.');
+    else if (k === 'bulb') _coach(b === 'out' ? 'Bulb unscrewed. What happened to the other one?' : 'Bulb screwed back in.');
+    else if (k === 'flip') _coach('Cell turned round! Watch what happens when they face each other.');
+    else if (k === 'read') _coach('Reading taken — check your lab notebook for the values!');
+    else if (k === 'view') _coach(a === 'symbols' ? 'Circuit-diagram view — this is how physicists draw it!' : 'Picture view — back to the real components!');
   }
 
   // ── Discoveries: every card opens ─────────────
@@ -1104,6 +1134,7 @@ const LabCircuit = (() => {
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
@@ -1117,7 +1148,20 @@ const LabCircuit = (() => {
       case 'read': sels.push('.lab-circuit-actions [data-act="read"]'); break;
       case 'view': sels.push('#lab-circuit-view'); break;
     }
-    sels.forEach(sel => { const el = _root.querySelector(sel); if (el) el.classList.add('is-next'); });
+    const guideBox = _root.querySelector('#lab-guide');
+    let firstEl = null;
+    sels.forEach(sel => {
+      const el = _root.querySelector(sel);
+      if (el) { el.classList.add('is-next'); if (!firstEl) firstEl = el; }
+    });
+    if (firstEl) {
+      firstEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      _root.querySelectorAll('[data-act],[data-slot],[data-tool]').forEach(other => {
+        if (!other.classList.contains('is-next') && !(guideBox && guideBox.contains(other))) {
+          other.classList.add('is-guide-dim');
+        }
+      });
+    }
   }
 
   function _startHTML() {

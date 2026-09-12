@@ -102,6 +102,7 @@ const LabPhoto = (() => {
             ${prim ? '<button type="button" class="lab-coach-tip lab-photo-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>' : ''}
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <div class="lab-task-strip">Set up the shot: choose your subject, lighting and angle, then take the photo!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-photo-tools" id="lab-photo-tools"></div>
         </div>
@@ -236,7 +237,7 @@ const LabPhoto = (() => {
       if (a) { _act(a.dataset.act); if (a.closest('.lab-panel')) _showStage(); return; }
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
-      if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -1153,9 +1154,10 @@ const LabPhoto = (() => {
       box.innerHTML = `${_primary() ? `<div class="lab-photo-guide-head">${meta}<button type="button" class="lab-btn lab-btn-sm lab-photo-say" data-act="say-guide" aria-label="Read this step aloud">🔊</button></div>` : meta}
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
-        ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
-                : '<p class="lab-guide-wait">⏳ Keep watching…</p>'}
-        <button type="button" class="lab-link" data-act="guide-stop">Stop the guide</button>`;
+        <div class="lab-guide-actions">
+          <button type="button" class="lab-guide-hint-btn" data-guide-hint aria-label="Show me where to go">💡 Hint</button>
+          <button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>
+        </div>`;
       box.hidden = false;
     }
     _highlight();
@@ -1165,7 +1167,7 @@ const LabPhoto = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.btn) _coachGuide(s.on); }
   }
 
   function _guideDo() {
@@ -1173,6 +1175,50 @@ const LabPhoto = (() => {
     if (!G) return;
     const s = G.steps[_guide.step];
     if (s) _do(s.on);
+  }
+
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Brief positive narration shown when the student performs the bench action themselves.
+  // Not called for observe/wait steps (no btn field).
+  function _coachGuide(on) {
+    const [k, v] = on.split(':');
+    if (k === 'rig') return;
+    if (k === 'dist') _coach(`Lamp moved to ${v} cm. Now count the bubbles!`);
+    else if (k === 'lamp') _coach(v === 'on' ? 'Lamp on — light is reaching the pondweed.' : 'Lamp off — no light for photosynthesis.');
+    else if (k === 'water') _coach('Water changed! Count the bubbles to see if it makes a difference.');
+    else if (k === 'temp') _coach(`Temperature set to ${v} °C. Now count the bubbles.`);
+    else if (k === 'shield') _coach(v === 'on' ? 'Heat shield in! It blocks the lamp\'s heat but not its light.' : 'Heat shield out.');
+    else if (k === 'plant') _coach('Plant chosen. Set up the experiment and give it a day in light or dark.');
+    else if (k === 'cover') _coach('Cover set. Now give the plant a day in light or dark.');
+    else if (k === 'day') _coach(v === 'light' ? 'A whole day in sunlight — now pick a leaf and test it for starch!' : 'A day in the dark — no photosynthesis.');
+    else if (k === 'pick') _coach('Leaf picked and laid on the tile. Now boil it — the first step of the starch test.');
+    else if (k === 'bunsen') _coach(v === 'on' ? 'Bunsen lit — the water is boiling.' : 'Bunsen off. Now it is safe to bring in the ethanol.');
+    else if (k === 'boil') _coach('Good — leaf boiled. Its cells are dead so chemicals can get in. Next: ethanol in the water bath.');
+    else if (k === 'ethanol') _coach('Ethanol step done! The chlorophyll is out. Now rinse the leaf in warm water.');
+    else if (k === 'rinse') _coach('Rinsed and soft again. Now the iodine — the final step.');
+    else if (k === 'iodine') _coach('Iodine added! Check your lab notebook for what the result tells you.');
+    else if (k === 'count') _coach('Count done — read the result in your lab notebook. Change ONE thing and count again.');
+    else if (k === 'splint') _coach('Glowing splint tested. Did it relight?');
+    else if (k === 'destarch') _coach('Destarched! The plant has used up all its stored starch. Ready to experiment.');
+    else if (k === 'spot' || k === 'drink' || k === 'soil' || k === 'leaves') _coach('Good — setting changed. Now wait 7 days to see what happens.');
+    else if (k === 'week') _coach('The week is up. Check your lab notebook for the results!');
+    else if (k === 'days') _coach('Four days are up. What happened to the seeds?');
+    else if (k === 'wcount') _coach('Bubble count done. How many did the waterweed make?');
+    else if (k === 'twin') _coach('Good — two plants side by side. Change ONE thing in pot B, then wait a week.');
+    else if (k === 'wet' || k === 'place') _coach('Setting changed. Wait 4 days to see what the seeds do.');
+    else if (k === 'wlamp') _coach(v === 'on' ? 'Lamp on. Count the bubbles!' : 'Lamp off. Count in the dark to compare.');
+    else if (k === 'wdist') _coach(`Lamp at ${v} cm. Count the bubbles and see if distance changes the rate.`);
+    else if (k === 'wwater') _coach('Water changed. Count the bubbles to compare.');
   }
 
   // The words for a discovery's "how" tokens.
@@ -1300,11 +1346,22 @@ const LabPhoto = (() => {
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
     const el = _root.querySelector('.lab-body ' + _selFor(s.on));
-    if (el) el.classList.add('is-next');
+    if (el) {
+      el.classList.add('is-next');
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      const guideBox = _root.querySelector('#lab-guide');
+      _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
+        if (other !== el && !el.contains(other) && !other.contains(el)
+            && !(guideBox && guideBox.contains(other))) {
+          other.classList.add('is-guide-dim');
+        }
+      });
+    }
   }
 
   // ══ Panels ═══════════════════════════════════

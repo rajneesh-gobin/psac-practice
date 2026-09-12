@@ -1,0 +1,308 @@
+/* ── Periodic Table Lab ──────────────────────────────────────────── */
+
+.lab-pt-wrap {
+  display: flex;
+  gap: 14px;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.lab-pt-left {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lab-pt-right {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Filter bar ── */
+.lab-pt-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.lab-pt-filter {
+  padding: 4px 11px;
+  border-radius: 20px;
+  border: 1.5px solid var(--lab-rule);
+  background: var(--lab-surface);
+  color: var(--lab-fg);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.lab-pt-filter:hover { border-color: var(--lab-accent); }
+.lab-pt-filter.is-active {
+  background: var(--lab-accent);
+  border-color: var(--lab-accent);
+  color: #fff;
+}
+
+/* ── Legend ── */
+.lab-pt-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 0.7rem;
+  color: var(--lab-muted);
+  align-items: center;
+}
+.lab-pt-leg-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.lab-pt-leg-label { vertical-align: middle; }
+
+/* ── Grid ── */
+.lab-pt-grid {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  gap: 2px;
+}
+
+/* ── Element cell ── */
+.lab-pt-el {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 1px;
+  border-radius: 4px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  min-height: 38px;
+  line-height: 1.1;
+  transition: transform 0.1s, opacity 0.18s, box-shadow 0.15s;
+  position: relative;
+  background: transparent;
+}
+.lab-pt-el:hover { transform: scale(1.18); z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.22); }
+.lab-pt-el-num {
+  font-size: 0.52rem;
+  color: var(--lab-muted);
+  line-height: 1;
+}
+.lab-pt-el-sym {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--lab-fg);
+  line-height: 1.1;
+}
+
+/* Hover interaction */
+.lab-pt-el.is-hover-dim   { opacity: 0.22; }
+.lab-pt-el.is-hover-match { opacity: 1; box-shadow: 0 0 0 2px currentColor; }
+.lab-pt-el.is-hovered     { opacity: 1; transform: scale(1.18); z-index: 10; box-shadow: 0 4px 14px rgba(0,0,0,0.28); }
+
+/* Filter interaction */
+.lab-pt-el.is-dim       { opacity: 0.18; }
+.lab-pt-el.is-highlight { opacity: 1; box-shadow: 0 0 0 2px var(--lab-accent); }
+
+/* Selected */
+.lab-pt-el.is-selected {
+  outline: 2.5px solid var(--lab-star);
+  outline-offset: 1px;
+  z-index: 5;
+}
+
+/* Grade 9 indicator dot */
+.lab-pt-el.is-g9::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lab-star);
+}
+
+/* ── F-block (lanthanides/actinides) ── */
+.lab-pt-fblock { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+.lab-pt-fblock-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.lab-pt-fblock-label {
+  font-size: 0.62rem;
+  color: var(--lab-muted);
+  width: 100px;
+  flex-shrink: 0;
+}
+
+/* ── Detail panel ── */
+.lab-pt-detail {
+  background: var(--lab-surface);
+  border: 1.5px solid var(--lab-rule);
+  border-radius: 14px;
+  padding: 12px;
+  min-height: 180px;
+  overflow-y: auto;
+  max-height: 420px;
+}
+.lab-pt-detail-empty {
+  color: var(--lab-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 40px;
+}
+.lab-pt-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid;
+}
+.lab-pt-detail-sym {
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1;
+  min-width: 60px;
+  text-align: center;
+}
+.lab-pt-detail-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--lab-fg);
+}
+.lab-pt-detail-type {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.lab-pt-detail-gp {
+  font-size: 0.72rem;
+  color: var(--lab-muted);
+  margin-top: 2px;
+}
+.lab-pt-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.lab-pt-detail-label { font-size: 0.75rem; color: var(--lab-muted); }
+.lab-pt-detail-val   { font-size: 0.85rem; font-weight: 700; }
+.lab-pt-detail-note  {
+  font-size: 0.8rem;
+  color: var(--lab-fg);
+  line-height: 1.5;
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin: 8px 0;
+}
+.lab-pt-detail-section {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lab-muted);
+  margin: 8px 0 4px;
+}
+.lab-pt-detail-cmpds {
+  margin: 0;
+  padding: 0 0 0 16px;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+.lab-pt-detail-muted { font-size: 0.78rem; color: var(--lab-muted); }
+.lab-pt-detail-g9 {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--lab-star);
+}
+
+/* ── Formula builder ── */
+.lab-pt-formula-box {
+  background: var(--lab-surface);
+  border: 1.5px solid var(--lab-rule);
+  border-radius: 14px;
+  padding: 12px;
+}
+.lab-pt-formula-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lab-accent);
+  margin-bottom: 4px;
+}
+.lab-pt-formula-hint { font-size: 0.75rem; color: var(--lab-muted); margin: 0 0 10px; }
+.lab-pt-formula-slots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.lab-pt-formula-slot {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 2px dashed var(--lab-rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+.lab-pt-formula-plus,
+.lab-pt-formula-arrow {
+  font-size: 1.1rem;
+  color: var(--lab-muted);
+  font-weight: 700;
+}
+.lab-pt-formula-result {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--lab-ok);
+  min-width: 50px;
+}
+.lab-pt-formula-explain {
+  font-size: 0.75rem;
+  color: var(--lab-muted);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+.lab-pt-formula-placeholder { color: var(--lab-muted); font-size: 1.4rem; }
+
+/* ── Mobile layout ── */
+/* The 18-column periodic table cannot fit in < 660 px without shrinking elements
+   to untappable sizes. Make the left column scroll horizontally instead. */
+@media (max-width: 700px) {
+  .lab-pt-wrap { flex-direction: column; }
+  .lab-pt-right { width: 100%; }
+  /* flex: none lets the section's height come from content. Without it,
+     flex-basis: 0 in column direction collapses the element to 0px, and the
+     forced overflow-y: auto (CSS spec side-effect of overflow-x: auto) hides
+     the entire grid inside a zero-height scroll container. */
+  .lab-pt-left { flex: none; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .lab-pt-grid { min-width: 660px; gap: 1px; }
+  .lab-pt-fblock { min-width: 660px; }
+  .lab-pt-el { min-height: 36px; }
+  .lab-pt-el-sym { font-size: 0.72rem; }
+  .lab-pt-el-num { display: none; }
+  .lab-pt-detail { max-height: none; }
+}

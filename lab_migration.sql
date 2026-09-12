@@ -1,0 +1,32 @@
+-- Science Labs — 2026-09-11 migration notes
+-- ─────────────────────────────────────────────────────────────────────────────
+-- NO SQL migration is required for the labs feature.
+--
+-- Labs progress lives entirely in `student_progress.data` (the DB blob):
+--   DB.labs = { <labId>: { discoveries: {}, missions: {}, hazards: {} } }
+--
+-- Store._defaultStudent() already includes `labs: {}`.
+-- The key-merge pattern in Store.js backfills every existing student
+-- automatically on their next load — no ALTER TABLE, no new column, no GRANT.
+--
+-- ─────────────────────────────────────────────────────────────────────────────
+-- What DID change in this batch and why:
+--
+-- 1. question_loader.js _CACHE_VERSION bumped 132 → 133
+--    Reason: two Grade 8 Science question explanations had unbalanced equations
+--    (g8s-acids-004 used HCl instead of 2HCl; g8s-acids-008 same error).
+--    The bump forces every returning student to re-fetch the corrected bundle.
+--    Without this, they would keep the wrong explanation for up to 7 days.
+--
+-- 2. sw.js SHELL_VERSION bumped shell-v307 → shell-v308
+--    Reason: engine/app.js, index.html, engine/labs/lab_core.js, and
+--    engine/registry.js all changed in the developer push (new labs, new grades,
+--    _LAB_GRADES expanded to [4,5,6,7,8,9]). The shell cache must be busted
+--    so returning users get the updated app.js and lab registration.
+--
+-- ─────────────────────────────────────────────────────────────────────────────
+-- After deploying, verify:
+--   GET /.netlify/functions/questions  → 401  (deployed, auth gate up)
+--   GET /netlify/question-bundles/     → 404  (blocked by netlify.toml rule)
+--   SW precache list in DevTools       → shell-v308 present
+-- ─────────────────────────────────────────────────────────────────────────────

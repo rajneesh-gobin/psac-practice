@@ -93,6 +93,7 @@ const LabLight = (() => {
             ${_primary() ? '<button type="button" class="lab-coach-tip lab-light-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>' : ''}
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <div class="lab-task-strip">Follow the guide — or investigate light freely!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-light-controls" class="lab-light-controls"></div>
         </div>
@@ -187,7 +188,7 @@ const LabLight = (() => {
       if (rf) { setRef(rf.dataset.ref); return; }
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
-      if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -422,7 +423,7 @@ const LabLight = (() => {
     b.setAttribute('aria-pressed', String(_b.power));
     b.classList.toggle('is-on', _b.power);
     const l = $('lab-light-power-label');
-    if (l) l.textContent = `${_src().short} ${_b.power ? 'on' : 'off'}`;
+    if (l) l.textContent = _b.power ? `${_src().short} on` : `Switch on ${_src().short.toLowerCase()}`;
   }
 
   function toggleNormal() {
@@ -999,9 +1000,10 @@ const LabLight = (() => {
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
         ${_primary() ? '<button type="button" class="lab-btn lab-btn-sm lab-light-say" data-act="say-guide" aria-label="Read this step aloud">🔊 Read it to me</button>' : ''}
-        ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
-                : '<p class="lab-guide-wait">⏳ Keep watching the bench…</p>'}
-        <button type="button" class="lab-link" data-act="guide-stop">Stop the guide</button>`;
+        <div class="lab-guide-actions">
+          <button type="button" class="lab-guide-hint-btn" data-guide-hint aria-label="Show me where to go">💡 Hint</button>
+          <button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>
+        </div>`;
       box.hidden = false;
     }
     _highlight();
@@ -1013,6 +1015,17 @@ const LabLight = (() => {
     const s = G.steps[_guide.step];
     if (s && s.on === token) { _guide.step++; _guideEnter(); }
     else _highlight();
+  }
+
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function _guideDo() {
@@ -1164,9 +1177,11 @@ const LabLight = (() => {
   }
 
   // The yellow glow on whatever the current guide step wants tapped.
+  // All other interactive controls are dimmed so only the target stands out.
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
@@ -1194,7 +1209,24 @@ const LabLight = (() => {
       case 'name': sel = `[data-name="${v}"]`; break;
     }
     const el = sel && _root.querySelector(sel);
-    if (el) el.classList.add('is-next');
+    if (el) {
+      el.classList.add('is-next');
+      // Scroll the target into view smoothly so it's always visible.
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      // Dim every other clickable so only the target stands out.
+      const DIM_SELS = [
+        '[data-add]', '[data-act]', '[data-obj]', '[data-pos]', '[data-rot]',
+        '[data-guide]', '[data-name]', '[data-ref]',
+        '#lab-light-power',
+      ];
+      const guideBox = _root.querySelector('#lab-guide');
+      _root.querySelectorAll(DIM_SELS.join(',')).forEach(other => {
+        if (other !== el && !el.contains(other) && !other.contains(el)
+            && !(guideBox && guideBox.contains(other))) {
+          other.classList.add('is-guide-dim');
+        }
+      });
+    }
   }
 
   function _startHTML() {

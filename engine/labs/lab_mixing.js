@@ -103,6 +103,7 @@ const LabMixing = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
+          <div class="lab-task-strip">Mix the substances and observe what changes!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools">${_g8() ? `
             <button type="button" class="lab-tool" data-act="litmus-red"><span aria-hidden="true">🟥</span>Red litmus</button>
@@ -194,7 +195,7 @@ const LabMixing = (() => {
       if (a) { _act(a.dataset.act, a); return; }
       const gd = e.target.closest('[data-guide]');
       if (gd) { startGuide(gd.dataset.guide); return; }
-      if (e.target.closest('[data-guide-do]')) { _guideDo(); return; }
+      if (e.target.closest('[data-guide-hint]')) { _guideHint(); return; }
       const dg = e.target.closest('[data-disc-go]');
       if (dg) { discoveryGuide(dg.dataset.discGo); return; }
       const dc = e.target.closest('[data-disc]');
@@ -316,7 +317,7 @@ const LabMixing = (() => {
     b.setAttribute('aria-pressed', String(_goggles));
     b.classList.toggle('is-on', _goggles);
     const l = $('lab-goggles-label');
-    if (l) l.textContent = _goggles ? 'Goggles on' : 'Goggles off';
+    if (l) l.textContent = _goggles ? 'Goggles on' : 'Put on goggles';
   }
 
   function _guard() {
@@ -904,9 +905,10 @@ const LabMixing = (() => {
       box.innerHTML = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <p class="lab-guide-say">${esc(s.say)}</p>
-        ${s.btn ? `<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-guide-do>${esc(s.btn)}</button>`
-                : '<p class="lab-guide-wait">⏳ Keep watching the tube…</p>'}
-        <button type="button" class="lab-link" style="min-height:44px" data-act="guide-stop">Stop the guide</button>`;
+        <div class="lab-guide-actions">
+          <button type="button" class="lab-guide-hint-btn" data-guide-hint aria-label="Show me where to go">💡 Hint</button>
+          <button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>
+        </div>`;
       box.hidden = false;
     }
     _highlight();
@@ -916,7 +918,7 @@ const LabMixing = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.btn) _coachGuide(s.on); }
   }
 
   function _guideDo() {
@@ -935,6 +937,35 @@ const LabMixing = (() => {
     else if (kind === 'litmus') litmus(id);
     else if (kind === 'lime') limewater();
     else if (kind === 'conclude') conclude('notalk');
+  }
+
+  function _guideHint() {
+    _highlight();
+    const el = _root.querySelector('.is-next');
+    if (!el) return;
+    el.classList.remove('is-idle-hint');
+    void el.offsetWidth;
+    el.classList.add('is-idle-hint');
+    el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Brief positive narration shown when the student performs the bench action themselves.
+  // Only called for steps that had a btn (i.e. required student interaction).
+  // Never called for observe/demo-end steps — the simulation already narrates those.
+  function _coachGuide(on) {
+    const [k, id] = on.split(':');
+    const kind = _kind(k);
+    if (kind === 'goggles') _coach('Goggles on! Now you are ready to use acids and alkalis safely.');
+    else if (kind === 'liquid') { const L = LabChem.LIQUIDS[id]; if (L) _coach(`Good — ${L.name.toLowerCase()} added. Watch the tube!`); }
+    else if (kind === 'metal' || kind === 'solid') { const M = _solid(id); if (M) _coach(`${M.name} in the tube! Watch what happens — the reaction takes a few seconds to start.`); }
+    else if (kind === 'rinse') _coach('Good — clean tube. Ready for the next step.');
+    else if (kind === 'pop') _coach('Squeaky pop! Hydrogen confirmed. Well done.');
+    else if (kind === 'out') _coach('Good — the flame went out. That rules out hydrogen. Try limewater to check for carbon dioxide!');
+    else if (kind === 'glow') _coach('Tested with the glowing splint. Did it relight?');
+    else if (kind === 'litmus') _coach(`${id === 'red' ? 'Red' : 'Blue'} litmus in — watch the colour!`);
+    else if (kind === 'lime') _coach('Limewater in — did it turn milky or stay clear?');
+    else if (kind === 'conclude') _coach('Good reasoning. Red litmus staying red only rules out an alkali.');
   }
 
   // ── Discoveries: every card opens ─────────────
@@ -1052,6 +1083,7 @@ const LabMixing = (() => {
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
+    _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
@@ -1066,7 +1098,17 @@ const LabMixing = (() => {
       : kind === 'lime' ? '.lab-tools [data-act="lime"]'
       : kind === 'conclude' ? '[data-conclude="notalk"]' : null;
     const el = sel && _root.querySelector(sel);
-    if (el) el.classList.add('is-next');
+    if (el) {
+      el.classList.add('is-next');
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      const guideBox = _root.querySelector('#lab-guide');
+      _root.querySelectorAll('[data-act],[data-add]').forEach(other => {
+        if (other !== el && !el.contains(other) && !other.contains(el)
+            && !(guideBox && guideBox.contains(other))) {
+          other.classList.add('is-guide-dim');
+        }
+      });
+    }
   }
 
   // What the Bench tab opens with when nothing is under way: what this page is

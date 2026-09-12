@@ -1,0 +1,341 @@
+/* ══════════════════════════════════════════════
+   Science Labs › Food Groups & Teeth — lab_nutrition.css
+   All classes prefixed .lab-nutrition-
+   Uses shared classes from labs.css for layout, tabs, panels, buttons.
+   ════════════════════════════════════════════ */
+
+/* ── Station toggle buttons ─────────────────────────────────────────────────── */
+.lab-nutrition-stations {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding: 6px 0 2px;
+  flex-shrink: 0;
+}
+
+.lab-nutrition-stn-btn {
+  flex: 1 1 0;
+  max-width: 160px;
+  padding: 8px 10px;
+  border: 2px solid #D0C8C0;
+  border-radius: 8px;
+  background: #F8F4EE;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-height: 44px;
+}
+
+.lab-nutrition-stn-btn.is-active {
+  background: #FFF8E1;
+  border-color: #F9C74F;
+  color: #5D4037;
+}
+
+.lab-nutrition-stn-btn:focus-visible {
+  outline: 3px solid #F9C74F;
+  outline-offset: 2px;
+}
+
+/* ── Food shelf ─────────────────────────────────────────────────────────────── */
+.lab-nutrition-shelf {
+  flex-shrink: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 8px 4px;
+  background: #FAF7F2;
+  border-top: 1px solid #EDE8DF;
+  border-bottom: 1px solid #EDE8DF;
+}
+
+.lab-nutrition-food-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  min-width: max-content;
+}
+
+.lab-nutrition-food-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 6px;
+  border: 2px solid #D8D0C8;
+  border-radius: 8px;
+  background: #FFF;
+  cursor: pointer;
+  min-width: 54px;
+  min-height: 64px;
+  font-size: 1.5rem;
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+  touch-action: manipulation;
+}
+
+.lab-nutrition-food-item small {
+  font-size: 0.65rem;
+  color: #555;
+  text-align: center;
+  line-height: 1.1;
+  max-width: 48px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lab-nutrition-food-item:not(.lab-nutrition-food-placed):hover,
+.lab-nutrition-food-item:not(.lab-nutrition-food-placed):focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  border-color: #F9C74F;
+  outline: none;
+}
+
+.lab-nutrition-food-placed {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-style: dashed;
+}
+
+/* ── Tooth shelf / hit targets ────────────────────────────────────────────────── */
+.lab-nutrition-tooth-row {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  padding: 8px;
+}
+
+.lab-nutrition-tooth-hit {
+  position: absolute;
+  top: 0;
+  height: 72px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.lab-nutrition-tooth-hit:hover,
+.lab-nutrition-tooth-hit:focus-visible {
+  background: rgba(33, 150, 243, 0.15);
+  outline: 2px solid #2196F3;
+}
+
+.lab-nutrition-label-btn {
+  min-height: 44px;
+  min-width: 120px;
+}
+
+/* ── Tooth label chips ────────────────────────────────────────────────────────── */
+.lab-nutrition-chips {
+  position: absolute;
+  bottom: 4px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.lab-nutrition-tooth-chip {
+  background: #E3F2FD;
+  color: #1565C0;
+  border: 1px solid #90CAF9;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── Tools row ───────────────────────────────────────────────────────────────── */
+.lab-nutrition-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.lab-nutrition-tools-sep {
+  font-size: 0.75rem;
+  color: #888;
+  padding: 0 4px;
+}
+
+.lab-nutrition-check {
+  font-weight: 700;
+  background: #E8F5E9;
+  border-color: #66BB6A;
+  color: #2E7D32;
+}
+
+.lab-nutrition-check:hover {
+  background: #C8E6C9;
+}
+
+/* ── Guide box inner ─────────────────────────────────────────────────────────── */
+.lab-nutrition-guide-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lab-nutrition-guide-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #8D6E00;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lab-nutrition-say-guide {
+  align-self: flex-end;
+}
+
+/* ── Read-aloud button ────────────────────────────────────────────────────────── */
+.lab-nutrition-say {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ── Found cards ─────────────────────────────────────────────────────────────── */
+.lab-found-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+
+.lab-found-card {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border: 1.5px solid #E0D8D0;
+  border-radius: 10px;
+  background: #FAF7F2;
+}
+
+.lab-found-card--found {
+  border-color: #80B918;
+  background: #F0F9E8;
+}
+
+.lab-found-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.lab-found-card p,
+.lab-found-card em {
+  font-size: 0.78rem;
+  margin: 0;
+  color: #555;
+}
+
+.lab-found-card strong {
+  font-size: 0.85rem;
+  color: #222;
+}
+
+/* ── Mission cards ───────────────────────────────────────────────────────────── */
+.lab-missions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px;
+}
+
+.lab-mission-card {
+  border: 1.5px solid #D0C8C0;
+  border-radius: 10px;
+  padding: 12px;
+  background: #FAF7F2;
+}
+
+.lab-mission-start {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #F9C74F;
+  border-radius: 8px;
+  background: #FFF8E1;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  min-height: 44px;
+  margin-bottom: 6px;
+}
+
+.lab-mission-start:hover {
+  background: #FFF3B0;
+}
+
+.lab-stars {
+  font-size: 1rem;
+}
+
+/* ── Responsive: 360px phones ─────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .lab-nutrition-stn-btn {
+    font-size: 0.78rem;
+    padding: 6px 6px;
+  }
+
+  .lab-nutrition-food-item {
+    min-width: 46px;
+    min-height: 58px;
+    font-size: 1.3rem;
+  }
+
+  .lab-nutrition-food-item small {
+    font-size: 0.6rem;
+  }
+}
+
+/* ── Calm Mode / reduced motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .lab-nutrition-food-item,
+  .lab-nutrition-stn-btn {
+    transition: none;
+  }
+}
+
+.kid-calm .lab-nutrition-food-item,
+.kid-calm .lab-nutrition-stn-btn {
+  transition: none;
+}
+
+/* ── Food drag-and-drop ── */
+.lab-nutrition-food-item {
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.lab-nutrition-food-item:active { cursor: grabbing; }
+
+.lab-nutrition-food-item.is-dragging {
+  opacity: 0.35;
+  cursor: grabbing;
+}
+
+.lab-nutrition-food-item.is-ghost {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  opacity: 0.92;
+  border-radius: 10px;
+  cursor: grabbing;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: #fff;
+  border: 2px solid #3b82f6;
+}

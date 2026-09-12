@@ -493,7 +493,6 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/extended_practice_bank.js',
       'subjects/grade5-french/questions/enrichment_relier_phrases.js',
       'subjects/grade5-french/questions/coverage_g5_balance.js',
-    ,
       'subjects/grade5-french/questions/rcp_textes.js'],
     'grade5-english': [
       'subjects/grade5-english/questions/depth_hard.js',
@@ -523,7 +522,6 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/coverage_comprehension_writing.js',
       'subjects/grade5-english/questions/coverage_vocabulary_spelling.js',
       'subjects/grade5-english/questions/enrichment_joining_sentences.js',
-    ,
       'subjects/grade5-english/questions/rcp_passages.js'],
     'grade5-science': [
       'subjects/grade5-science/questions/depth_hard.js',
@@ -551,7 +549,6 @@ const QuestionLoader = (() => {
       // top-up
       'subjects/grade5-science/questions/topup_g5_science.js',
       'subjects/grade5-science/questions/coverage_min5.js',
-    ,
       'subjects/grade5-science/questions/batch2_g5sci-enr-energy.js'],
     'grade5-history': [
       'subjects/grade5-history/questions/depth_hard.js',
@@ -902,7 +899,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 132;
+  const _CACHE_VERSION = 133;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

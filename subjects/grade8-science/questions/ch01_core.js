@@ -293,7 +293,7 @@ STATIC_QUESTIONS.push(
     options:['Salt + water + carbon dioxide','Salt + water + hydrogen gas','Salt + hydrogen + oxygen gas','Water + carbon + hydrogen gas'],
     answer:'Salt + water + carbon dioxide',
     hint:'The CO₂ produces effervescence (fizzing).',
-    explanation:'Acid + carbonate &rarr; <b>salt + water + carbon dioxide</b>. For example HCl + CaCO&#8323; &rarr; CaCl&#8322; + H&#8322;O + CO&#8322;. It is the carbon dioxide that causes the fizzing.' }),
+    explanation:'Acid + carbonate &rarr; <b>salt + water + carbon dioxide</b>. For example 2HCl + CaCO&#8323; &rarr; CaCl&#8322; + H&#8322;O + CO&#8322;. It is the carbon dioxide that causes the fizzing.' }),
 
   makeMCQ({ id:'g8s-acids-005', chapterId:'g8s-acids', difficulty:2, subsection:'neutralisation',
     question:'What is neutralisation?',

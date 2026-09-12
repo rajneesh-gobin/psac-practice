@@ -1,0 +1,206 @@
+/* ══════════════════════════════════════════════
+   Science Labs — Heat Transfer Lab
+   All classes prefixed .lab-heat-
+   ══════════════════════════════════════════════ */
+
+/* ── Station tabs ─────────────────────────────────────────────────────── */
+.lab-heat-stabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px 0;
+  border-bottom: 2px solid var(--lab-border, #CBD5D2);
+  background: var(--lab-cv-top, #F0F6F8);
+}
+.lab-heat-stabs button {
+  flex: 1;
+  padding: 8px 4px 6px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 6px 6px 0 0;
+  background: transparent;
+  font: 600 14px/1.2 system-ui, sans-serif;
+  color: var(--lab-ink, #14211D);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-height: 44px;
+}
+.lab-heat-stabs button:hover {
+  background: rgba(0,0,0,0.06);
+}
+.lab-heat-stabs button[aria-pressed="true"] {
+  border-bottom-color: var(--lab-accent, #2A8F6A);
+  background: rgba(42, 143, 106, 0.08);
+  color: var(--lab-accent, #2A8F6A);
+}
+.lab-heat-stabs button.is-next {
+  outline: 3px solid #E4A11B;
+  outline-offset: -2px;
+  animation: lab-heat-pulse 0.9s ease-in-out infinite alternate;
+}
+
+/* ── Tools panel ──────────────────────────────────────────────────────── */
+.lab-heat-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+.lab-heat-shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lab-heat-shelf h3 {
+  margin: 0;
+  font: 600 13px/1.2 system-ui, sans-serif;
+  color: var(--lab-muted, #596E69);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.lab-heat-mats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.lab-heat-matbtn {
+  font-size: 14px !important;
+  padding: 8px 6px !important;
+}
+.lab-heat-matbtn.is-on,
+.lab-heat-matbtn[aria-pressed="true"] {
+  background: var(--lab-accent, #2A8F6A);
+  color: #fff;
+  border-color: var(--lab-accent, #2A8F6A);
+}
+.lab-heat-burner-row,
+.lab-heat-row {
+  display: flex;
+  gap: 6px;
+}
+.lab-heat-burner-row .lab-tool,
+.lab-heat-row .lab-tool {
+  flex: 1;
+}
+.lab-heat-timebtns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.lab-heat-timebtns .lab-tool {
+  font-size: 0.78rem;
+}
+
+/* ── Chips (canvas overlay readouts) ──────────────────────────────────── */
+.lab-heat-chips {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  pointer-events: none;
+}
+.lab-chip {
+  padding: 2px 8px;
+  border-radius: 20px;
+  font: 700 10px/1.4 system-ui, sans-serif;
+  background: rgba(20, 33, 29, 0.72);
+  color: #fff;
+  white-space: nowrap;
+  backdrop-filter: blur(2px);
+}
+.lab-chip.is-warm {
+  background: rgba(200, 70, 0, 0.80);
+}
+
+/* ── Guide box ────────────────────────────────────────────────────────── */
+.lab-heat-guide-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  justify-content: space-between;
+}
+.lab-heat-guide-head .lab-guide-meta {
+  margin: 0;
+  flex: 1;
+}
+
+/* ── Notebook table ───────────────────────────────────────────────────── */
+.lab-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 10px;
+}
+.lab-table {
+  border-collapse: collapse;
+  width: 100%;
+  font: 12px/1.4 system-ui, sans-serif;
+}
+.lab-table caption {
+  font: 600 11px/1.4 system-ui, sans-serif;
+  text-align: left;
+  color: var(--lab-muted, #596E69);
+  margin-bottom: 4px;
+  caption-side: top;
+}
+.lab-table th,
+.lab-table td {
+  padding: 5px 8px;
+  border: 1px solid var(--lab-border, #CBD5D2);
+  text-align: center;
+}
+.lab-table th {
+  background: var(--lab-cv-top, #F0F6F8);
+  font-weight: 600;
+  text-align: left;
+}
+.lab-table tr:nth-child(even) td {
+  background: rgba(42, 143, 106, 0.04);
+}
+.lab-fair {
+  font: italic 11px/1.4 system-ui, sans-serif;
+  color: var(--lab-muted, #596E69);
+  margin: 4px 0 10px;
+}
+
+/* ── Highlight (next-step glow) ───────────────────────────────────────── */
+@keyframes lab-heat-pulse {
+  from { box-shadow: 0 0 0 0 rgba(228, 161, 27, 0.5); }
+  to   { box-shadow: 0 0 0 8px rgba(228, 161, 27, 0);  }
+}
+.lab-heat .is-next {
+  outline: 3px solid #E4A11B;
+  outline-offset: 2px;
+  animation: lab-heat-pulse 0.9s ease-in-out infinite alternate;
+}
+
+/* ── Tool button base (inherits .lab-tool from labs.css) ─────────────── */
+.lab-heat .lab-tool.is-on {
+  background: var(--lab-accent, #2A8F6A);
+  color: #fff;
+  border-color: var(--lab-accent, #2A8F6A);
+}
+
+/* ── Responsive: single-column when narrow ───────────────────────────── */
+@media (max-width: 400px) {
+  .lab-heat-stabs button {
+    font-size: 12px;
+    padding: 6px 2px 4px;
+  }
+  .lab-heat-mats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lab-heat-timebtns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Calm Mode — cut all animations ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .lab-heat .is-next,
+  .lab-heat-stabs button.is-next {
+    animation: none;
+    outline: 4px solid #E4A11B;
+  }
+}

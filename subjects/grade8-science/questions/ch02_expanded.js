@@ -531,7 +531,7 @@ STATIC_QUESTIONS.push(
     options:['Acid + Metal oxide → Salt + Water','Acid + Metal → Salt + Hydrogen','Acid + Carbonate → Salt + Water','Acid + Alkali → Salt + Oxygen'],
     answer:'Acid + Metal oxide → Salt + Water',
     hint:'Metal oxide is a base (it reacts with acids).',
-    explanation:'<b>Acid + metal oxide → salt + water.</b> For example HCl + CuO → CuCl&#8322; + H&#8322;O. Metal oxides count as bases because they react with acids to give a salt and water. An acid with a metal gives hydrogen instead, and with a carbonate it also gives carbon dioxide.' }),
+    explanation:'<b>Acid + metal oxide → salt + water.</b> For example 2HCl + CuO → CuCl&#8322; + H&#8322;O. Metal oxides count as bases because they react with acids to give a salt and water. An acid with a metal gives hydrogen instead, and with a carbonate it also gives carbon dioxide.' }),
 
   makeMCQ({ id:'g8s-acids-009', chapterId:'g8s-acids', difficulty:2, subsection:'neutralisation',
     question:'What pH would indicate that neutralisation is complete?',
