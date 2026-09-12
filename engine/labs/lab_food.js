@@ -459,9 +459,11 @@ const LabFood = (() => {
       const goal = s.bath ? _bathT : D.ROOM;
       s.T = s.T < goal ? Math.min(goal, s.T + 25 * dt) : Math.max(goal, s.T - 8 * dt);
       if (!s.test) return;
-      s.t += dt;
+      // Rounded: 100 steps of 0.05 otherwise sum to 4.99999…, and every
+      // threshold (paper dry at 5, Biuret, Benedict's heating) would miss by a hair.
+      s.t = Math.round((s.t + dt) * 1e6) / 1e6;
       if (s.test === 'benedicts' && s.T >= D.BENEDICT.minT) {
-        s.heat += dt;
+        s.heat = Math.round((s.heat + dt) * 1e6) / 1e6;
         if (s.heat >= D.BENEDICT.heatFor && !s.fired.heated) {
           s.fired.heated = true;
           const r = _res(s);
