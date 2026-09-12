@@ -70,7 +70,7 @@
 /* ── Top bar ── */
 /* The title claims at least 170px; on a phone that pushes the goggles and help
    buttons onto their own row instead of squeezing "Mixing Bench" into four lines. */
-.lab-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+.lab-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; position: sticky; top: 0; z-index: 20; background: var(--lab-bg); padding: 8px 0 8px; margin-top: -8px; }
 .lab-top-title { flex: 1 1 170px; min-width: 0; }
 .lab-top-title h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.01em; }
 .lab-eyebrow { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lab-muted); }

@@ -297,7 +297,7 @@ const LabPhotoData = (() => {
     { id: 'control', icon: '⚖️', title: 'The control leaf', hint: 'The same flask, but WITHOUT soda lime',
       how: ['rig:leaf', 'plant:green', 'destarch', 'cover:flask', 'day:light', 'pick', ...TEST],
       saw: 'The leaf in the flask without soda lime turned blue-black.',
-      learn: 'The control is identical except for the one factor being tested. Because it made starch, the soda-lime leaf's result must be due to the missing carbon dioxide - not the flask.' },
+      learn: 'The control is identical except for the one factor being tested. Because it made starch, the soda-lime leaf\'s result must be due to the missing carbon dioxide - not the flask.' },
   ];
 
   // ── Hazards: the mistakes that stop the experiment ───
@@ -371,7 +371,7 @@ const LabPhotoData = (() => {
     'Iodine solution is brown-orange. It turns blue-black only where there is starch.',
   ];
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'light', icon: '💡', title: 'Light and bubbles', rig: 'pond', need: 4,
@@ -403,7 +403,7 @@ const LabPhotoData = (() => {
     },
     {
       id: 'needs', icon: '🔬', title: 'What does a plant need?', rig: 'pond',
-      blurb: 'The 2024 paper's experiment: light and carbon dioxide, each present or absent.',
+      blurb: 'The 2024 paper\'s experiment: light and carbon dioxide, each present or absent.',
       intro: 'Biology 2024 Q5(b), in a dark room whose only light is the lamp. Run four tests - light with and without carbon dioxide, and no light with and without it. Use boiled and cooled water for "no CO₂" and sodium hydrogencarbonate for "CO₂". Keep the lamp distance and temperature the same.',
       tests: [
         { lampOn: true, co2: false, label: 'Light ✓ · CO₂ ✗' },
@@ -537,7 +537,7 @@ const LabPhotoData = (() => {
   //  ⚠ Grade 4 is grounded in g4sci-plants ("Conditions needed for plants to
   //    grow well (water, sunlight, air, warmth, minerals)", subsections growth,
   //    reproduction, photosynthesis): the dark cupboard, the wilted plant,
-  //    compost and minerals, Mira's and Sasha's one-difference tests, and
+  //    compost and minerals, Mira\'s and Sasha\'s one-difference tests, and
   //    germination needing water, air and warmth but not light.
   //    Grade 6 is grounded in g6-plants ("Photosynthesis (light + water + CO₂ →
   //    food + oxygen)"): the leaf as the food factory, Gas A and Gas B, and the
@@ -728,7 +728,7 @@ const LabPhotoData = (() => {
     over: 'using sunlight, trapped by the green chlorophyll in the leaves',
   };
 
-  // The words for every primary step. A guide step or a discovery's "how" is
+  // The words for every primary step. A guide step or a discovery\'s "how" is
   // one of these tokens; scripts/test-labs-photo-data.js checks every one.
   function primaryStep(on) {
     const [k, v] = String(on).split(':');
@@ -905,7 +905,7 @@ const LabPhotoData = (() => {
       'Plants need water, sunlight, air, warmth and minerals to grow well.',
       'Roots take in water and minerals from the soil.',
       'The stem carries water up from the roots to the leaves.',
-      'Leaves make the plant's food, using sunlight.',
+      'Leaves make the plant\'s food, using sunlight.',
       'Leaves are green because of chlorophyll. It traps sunlight.',
       'A seed has a tiny plant and a store of food inside it.',
       'Germination is when a seed starts to grow.',
@@ -919,7 +919,7 @@ const LabPhotoData = (() => {
       'Plants make their own food. This is called photosynthesis.',
       'Carbon dioxide + water, with sunlight, make food and oxygen.',
       'Carbon dioxide gets into a leaf through tiny holes called stomata.',
-      'The leaf is the plant's food factory.',
+      'The leaf is the plant\'s food factory.',
       'Chlorophyll is the green colouring in leaves. It traps sunlight.',
       'Plants give out oxygen when they make food. Animals breathe it in.',
       'Plants respire day and night. They make food only in the light.',
@@ -931,7 +931,7 @@ const LabPhotoData = (() => {
     ],
   };
 
-  // ── Primary missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Primary missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   const PRIMARY_MISSIONS = [
     { id: 'g4_needs', icon: '🌞', title: 'Light and water', rig: 'pots', grades: [4], fair: ['spot', 'drink'],
       blurb: 'Two fair tests. Does a plant need light? Does it need water?',
@@ -1020,7 +1020,7 @@ const LabPhotoData = (() => {
       quiz: [
         { q: 'Which part of a plant mainly makes its food?',
           options: ['The leaf', 'The root', 'The flower', 'The fruit'],
-          why: 'PSAC 2021 paper. The green leaf is the plant's food factory.' },
+          why: 'PSAC 2021 paper. The green leaf is the plant\'s food factory.' },
         { q: 'The plant with no leaves did not grow. Why?',
           options: ['With no leaves, it could make no food', 'It had too much water', 'Its roots were cut off', 'It was too warm'],
           why: 'Leaves make the food. No leaves, no food, so no growth.' },

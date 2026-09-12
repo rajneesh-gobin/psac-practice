@@ -79,7 +79,7 @@ const LabNutrition = (() => {
             <button type="button" class="lab-coach-tip lab-nutrition-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show a science fact">💡</button>
           </div>
-          <div class="lab-task-strip">Build a balanced meal — or explore the Teeth Lab!</div>
+          <div class="lab-task-strip">↓ Pick a food from the shelf — it lands on the plate.</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-nutrition-tools" id="lab-nutrition-tools"></div>
         </div>

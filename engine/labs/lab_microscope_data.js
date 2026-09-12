@@ -34,7 +34,7 @@
 //    is grounded in subjects/grade7-science, chapter g7s-cells ("Identify the
 //    parts of animal and plant cells under a microscope. Compare the structure
 //    of animal and plant cells."): g7s-cells-002 (a microscope views cells),
-//    -003 nucleus, -004/-016 membrane, -005/-020 cell wall and the onion's
+//    -003 nucleus, -004/-016 membrane, -005/-020 cell wall and the onion\'s
 //    brick shape, -006/-012/-018 chloroplast and chlorophyll, -011 vacuole,
 //    -013 onion vs cheek under a microscope, -017 labelled plant cell, -019
 //    image = actual × magnification (0.05 mm at ×100 = 5 mm), hd-025 wall +
@@ -163,7 +163,7 @@ const LabMicroscopeData = (() => {
   const VIEW_K = 24000;
   function viewUm(eye, obj) { return VIEW_K / total(eye, obj); }
 
-  // A deterministic smear: the pointer's cell at the centre of its field, red
+  // A deterministic smear: the pointer\'s cell at the centre of its field, red
   // cells on a jittered grid around it, a few platelets.
   function _rng(seed) {
     let a = seed >>> 0;
@@ -182,7 +182,7 @@ const LabMicroscopeData = (() => {
       if ((CELLS[mid] && CELLS[mid].white) && (gx === 0 || gy === 0) && near) continue;
       const r = rnd();
       // More scatter away from the pointer, so low power does not read as a grid;
-      // less next to it, so nothing covers the pointer's cell.
+      // less next to it, so nothing covers the pointer\'s cell.
       const jit = near ? 6 : 10;
       const jx = (rnd() - 0.5) * jit, jy = (rnd() - 0.5) * jit;
       if (r < 0.84) out.push({ type: 'rbc', x: gx * step + jx, y: gy * step + jy, rot: rnd() * 6.283 });
@@ -330,7 +330,7 @@ const LabMicroscopeData = (() => {
     membrane:    { name: 'Cell membrane', icon: '⭕', look: 'The very thin outer layer of the cell',
                    job: 'Controls what goes into and out of the cell.' },
     cytoplasm:   { name: 'Cytoplasm', icon: '🫧', look: 'The jelly inside the membrane, around the nucleus',
-                   job: 'A jelly where most of the cell's chemical reactions take place.' },
+                   job: 'A jelly where most of the cell\'s chemical reactions take place.' },
     nucleus:     { name: 'Nucleus', icon: '🟤', look: 'A dark, round spot, once it is stained',
                    job: 'Controls all the activities of the cell.' },
     vacuole:     { name: 'Vacuole', icon: '💧', look: 'The big clear space in the middle of a plant cell', plantOnly: true,
@@ -374,7 +374,7 @@ const LabMicroscopeData = (() => {
   }
 
   // ── A biological drawing of each cell ──────────
-  // The width the pupil's drawing is made; magnification of the drawing =
+  // The width the pupil\'s drawing is made; magnification of the drawing =
   // drawing width ÷ real width.
   const DRAW = {
     rbc:      { widthMm: 40, labels: ['cell membrane', 'cytoplasm full of haemoglobin', 'no nucleus (pale centre)'] },
@@ -427,7 +427,7 @@ const LabMicroscopeData = (() => {
   }
   const show = (v, unit) => unit ? `${fmt(v)} ${unit}` : `×${fmt(v)}`;
 
-  // The pupil's working. w = { ruler: 'cell'|'inner'|'eye'|null, converted, op: 'divide'|'multiply'|null }
+  // The pupil\'s working. w = { ruler: 'cell'|'inner'|'eye'|null, converted, op: 'divide'|'multiply'|null }
   function work(f, w) {
     const image = imageFor(f, w.ruler);
     let value, unit;
@@ -621,7 +621,7 @@ const LabMicroscopeData = (() => {
     { id: 'g7_cytoplasm', grades: [7], icon: '🫧', title: 'Cytoplasm', hint: 'At ×400 on onion skin, move the slide UP onto the thin layer inside the wall',
       how: G7_HIGH('onion', 'iodine').concat(['move:up', 'part:cytoplasm']),
       saw: 'A thin yellow layer lining the inside of the wall, around the big clear vacuole.',
-      learn: 'Cytoplasm is a jelly where most of the cell's chemical reactions take place. In a plant cell the big vacuole pushes it into a thin layer against the wall.' },
+      learn: 'Cytoplasm is a jelly where most of the cell\'s chemical reactions take place. In a plant cell the big vacuole pushes it into a thin layer against the wall.' },
     { id: 'g7_membrane', grades: [7], icon: '⭕', title: 'The cell membrane', hint: 'At ×400 on stained cheek cells, move LEFT twice to the very edge of a cell',
       how: G7_HIGH('cheek', 'blue').concat(['move:left', 'move:left', 'part:membrane']),
       saw: 'A very thin blue line around the cheek cell - and no thick wall outside it.',
@@ -657,8 +657,8 @@ const LabMicroscopeData = (() => {
       signs: ['biohazard'],
       title: () => 'Stop! No fresh blood in the school lab',
       happened: () => 'You picked up a lancet to prick your finger for a fresh drop of blood.',
-      why: 'Blood can carry infections, such as HIV, without the person knowing. A lancet or a slide that has touched someone's blood can pass an infection on, and even a tiny wound can become infected.',
-      instead: 'Use a prepared blood smear: it is sterile, stained and sealed under a cover slip. Never prick yourself or anyone else in class, never share or reuse a lancet, and never touch someone else's blood.',
+      why: 'Blood can carry infections, such as HIV, without the person knowing. A lancet or a slide that has touched someone\'s blood can pass an infection on, and even a tiny wound can become infected.',
+      instead: 'Use a prepared blood smear: it is sterile, stained and sealed under a cover slip. Never prick yourself or anyone else in class, never share or reuse a lancet, and never touch someone else\'s blood.',
       exam: 'HIV is passed on in infected blood - for example on shared needles or other sharp instruments. How HIV spreads and how to prevent it is part of the disease strand of the Biology paper.',
     },
     sun: {
@@ -672,7 +672,7 @@ const LabMicroscopeData = (() => {
     // ── Grade 7 ──
     g7_swab: {
       grades: [7], signs: ['biohazard'],
-      title: () => 'Stop! Never use someone else's cotton bud',
+      title: () => 'Stop! Never use someone else\'s cotton bud',
       happened: () => 'You picked up a cotton bud a friend had already used, to scrape the inside of your own cheek.',
       why: 'Saliva (spit) and cheek cells can carry germs - bacteria and viruses. A used bud passes them from one mouth to another, and a used bud left on the bench spreads them to anyone who touches it.',
       instead: 'Use a fresh, clean cotton bud and gently scrape only the inside of your OWN cheek. Put the used bud straight into a beaker of disinfectant (a liquid that kills germs). Wash your hands afterwards.',
@@ -709,7 +709,7 @@ const LabMicroscopeData = (() => {
   };
 
   // ── Wrong but safe: what went wrong and what to do instead ───
-  const MAG_EXAM = 'The paper's magnification questions - Biology 2023 Q5(a) (×15 000, 3 marks) and Biology 2024 Q4(e)(ii) (×8000, 2 marks) - need you to measure the printed drawing with a ruler, then divide.';
+  const MAG_EXAM = 'The paper\'s magnification questions - Biology 2023 Q5(a) (×15 000, 3 marks) and Biology 2024 Q4(e)(ii) (×8000, 2 marks) - need you to measure the printed drawing with a ruler, then divide.';
   const RESULTS = {
     no_convert: { icon: '📐', title: 'The units did not match',
       happened: c => c.mode === 'findM'
@@ -807,7 +807,7 @@ const LabMicroscopeData = (() => {
                       wall: 'Pointer on the thick outer edge', cytoplasm: 'Pointer on the thin layer inside the edge' };
   const _pickPart = (...order) => order.map(p => ({ label: PTR_LABEL[p], svg: PICS.onionAt[p] }));
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   // `calc` on a question lets the data test re-derive its answer.
   const MISSIONS = [
     {
@@ -869,7 +869,7 @@ const LabMicroscopeData = (() => {
     },
     {
       id: 'mag', icon: '📐', title: 'Work out the magnification', rig: 'measure',
-      blurb: 'Measure two drawings with the ruler: find a magnification, then the paper's ×15 000 question.',
+      blurb: 'Measure two drawings with the ruler: find a magnification, then the paper\'s ×15 000 question.',
       intro: 'Two drawings, the way the paper sets them. 1) The red blood cell: measure it with the ruler and find the magnification (its real width is 8 µm). 2) The platelet drawn at ×15 000: measure it and find its real size in µm. Make the units match!',
       need: ['rbc', 'platelet'],
       quiz: [
@@ -909,7 +909,7 @@ const LabMicroscopeData = (() => {
           why: 'The vacuole is the big clear space in the middle of a plant cell. It stores water and cell sap.' },
         { q: 'Which drawing points at the CELL WALL?',
           options: _pickPart('wall', 'vacuole', 'nucleus', 'cytoplasm'),
-          why: 'The cell wall is the thick outer edge. It is made of cellulose and holds the cell's shape.' },
+          why: 'The cell wall is the thick outer edge. It is made of cellulose and holds the cell\'s shape.' },
         { q: 'Which part of the cell controls all its activities?',
           options: ['The nucleus', 'The vacuole', 'The cell wall', 'The cytoplasm'],
           why: 'The nucleus is the control centre of the cell. Iodine stains it dark brown.' },
@@ -1002,7 +1002,7 @@ const LabMicroscopeData = (() => {
       ] },
     { id: 'hunt', icon: '🧭', title: 'Hunt for white cells',
       blurb: 'At ×400, move the slide to find a phagocyte and a lymphocyte - and draw one.',
-      lesson: 'White cells are rare, so you have to move the slide to find them. Both have a nucleus that the stain turns purple: a phagocyte's is in lobes, a lymphocyte's is large and round. Phagocytes engulf microbes; lymphocytes make antibodies.',
+      lesson: 'White cells are rare, so you have to move the slide to find them. Both have a nucleus that the stain turns purple: a phagocyte\'s is in lobes, a lymphocyte\'s is large and round. Phagocytes engulf microbes; lymphocytes make antibodies.',
       steps: [
         { on: 'rig:scope', say: 'Tap 🔬 to go to the microscope.' },
         { on: 'slide:blood', say: 'Tap 🩸 to put the blood smear on the stage.' },
@@ -1033,7 +1033,7 @@ const LabMicroscopeData = (() => {
         { on: 'answer', say: 'Tap ✅ to write the answer — no unit after a magnification!' },
       ] },
     { id: 'paper', icon: '📝', title: 'The ×15 000 question',
-      blurb: 'The paper's hardest sum: a platelet drawn at ×15 000. How big is it in µm?',
+      blurb: 'The paper\'s hardest sum: a platelet drawn at ×15 000. How big is it in µm?',
       lesson: 'Actual size = image size ÷ magnification = 30 mm ÷ 15 000 = 0.002 mm, and 0.002 mm × 1000 = 2 µm. The drawing is bigger than the platelet, so you divide - and then give the answer in the unit asked for.',
       steps: [
         { on: 'rig:measure', say: 'Tap 📏 to go to the measuring desk.' },

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs — Work, Energy & Power (Grade 8).
 //
@@ -253,7 +253,7 @@ const LabEnergyData = (() => {
         { on: 'read',       say: 'Tap 📋 Record — is the work the same?' },
       ] },
 
-    { id: 'power_race', icon: '⏱️', title: "Who's more powerful?", grades: D8,
+    { id: 'power_race', icon: '⏱️', title: "Who\'s more powerful?", grades: D8,
       blurb: 'Do the same job in different times and compare the power outputs.',
       lesson: 'Same 20 J of work — the person who does it faster has more power. P = W ÷ t.',
       steps: [

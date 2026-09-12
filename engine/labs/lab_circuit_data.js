@@ -24,21 +24,21 @@
 //    1.5 V with a negligible internal resistance (0.0001 Ω - "ideal", but a
 //    short circuit still has a number). Wires, closed switches, ammeters and
 //    fuses are 0.000001 Ω - far below the cell, as in real life, so in a short
-//    the cell's own resistance takes the voltage and the bulbs go dark. A
+//    the cell\'s own resistance takes the voltage and the bulbs go dark. A
 //    voltmeter is 1 MΩ.
-//  - Solved by nodal analysis (Kirchhoff's current law at every point), so
+//  - Solved by nodal analysis (Kirchhoff\'s current law at every point), so
 //    series, parallel, a short circuit, an ammeter across a bulb and a
 //    voltmeter in the loop all come out of the same maths - nothing is a
 //    special case in the drawing code.
 //  - Brightness ∝ power: P = I²R, shown as a multiple of one bulb on one cell
-//    (0.75 W). The pupil sees it in words; V = IR is used in the syllabus's own
+//    (0.75 W). The pupil sees it in words; V = IR is used in the syllabus\'s own
 //    terms (resistance = voltage ÷ current).
 //
 //  ⚠ THREE LEVELS (docs/labs/LAB_SPEC.md §9). Content with no `grades` is the
-//    original Grade 9 set. The PSAC levels are grounded in the app's own banks:
+//    original Grade 9 set. The PSAC levels are grounded in the app\'s own banks:
 //    - Grade 4: g4sci-materials ("Which of these is a good ELECTRICAL
 //      CONDUCTOR?", copper inside / plastic or rubber outside) and g4sci-energy
-//      (a torch's battery stores chemical energy, a bulb gives light and some
+//      (a torch\'s battery stores chemical energy, a bulb gives light and some
 //      heat, switch off to save energy). No circuit symbols at Grade 4.
 //    - Grade 6: g6-energy (the wire carries the current, the cell stores
 //      chemical energy, insulators, copper wire, safety at home), depth_hard
@@ -392,7 +392,7 @@ const LabCircuitData = (() => {
       .map(slot => ({ slot, obj: layout[slot].kind, result: testResult(layout, slot) }));
   }
 
-  // Are the meters where they belong? An ammeter carrying the cell's current to
+  // Are the meters where they belong? An ammeter carrying the cell\'s current to
   // a lit lamp, and a voltmeter whose reading is the voltage of a lit lamp.
   function meterChecks(sol) {
     const lit = litBulbs(sol);
@@ -401,7 +401,7 @@ const LabCircuitData = (() => {
     return { ammeter: lit.length > 0 && Object.keys(sol.meters).some(k => ammeterInSeries(sol, k)),
              voltmeter: across.length > 0, volts: across.map(k => sol.meters[k].value) };
   }
-  // One loop: every part of these kinds carries the whole of the cell's current.
+  // One loop: every part of these kinds carries the whole of the cell\'s current.
   function oneLoop(sol, kinds) {
     const els = sol.els.filter(e => kinds.includes(e.kind));
     return sol.flowing && kinds.every(k => els.some(e => e.kind === k)) && els.every(e => Math.abs(Math.abs(e.I) - sol.cellI) < 1e-3);
@@ -567,7 +567,7 @@ const LabCircuitData = (() => {
       learn: 'Charge is not used up. In a single loop, every coulomb that leaves the cell passes every point and comes back, so the current is the same everywhere.' },
     { id: 'volts_share', icon: '➗', title: 'Sharing the voltage', hint: 'Measure across one of two bulbs in series',
       how: ['build:series_volts', ON, READ],
-      saw: 'Across one of two bulbs in series the voltmeter read 0.75 V - half of the cell's 1.5 V.',
+      saw: 'Across one of two bulbs in series the voltmeter read 0.75 V - half of the cell\'s 1.5 V.',
       formula: 'series: V = V₁ + V₂ → 1.5 V = 0.75 V + 0.75 V',
       learn: 'In series the voltages across the components add up to the supply voltage. Two identical bulbs take half each.' },
     { id: 'resistor_dims', icon: '🟫', title: 'A resistor cuts the current', hint: 'Put a resistor in series with the bulb',
@@ -1047,7 +1047,7 @@ const LabCircuitData = (() => {
   };
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'light', icon: '💡', title: 'Light the bulb',
@@ -1081,7 +1081,7 @@ const LabCircuitData = (() => {
       quiz: [
         { q: 'Two identical bulbs are in series with one cell. Compared with one bulb on its own, each bulb is:',
           options: ['Dimmer', 'Brighter', 'Exactly as bright', 'Not lit at all'],
-          why: 'In series they share the cell's voltage and the current is halved, so each is dimmer.' },
+          why: 'In series they share the cell\'s voltage and the current is halved, so each is dimmer.' },
         { q: 'In your series circuit you unscrewed one bulb. What happened to the other one?',
           options: ['It went out, because the only path was broken', 'It stayed lit at the same brightness', 'It became brighter', 'It flickered on and off'],
           why: 'A series circuit is a single loop. Break it anywhere and the current stops everywhere.' },
@@ -1232,7 +1232,7 @@ const LabCircuitData = (() => {
           why: 'Each lamp in a parallel circuit has its own path back to the cell, so it keeps working.' },
         { q: 'Two lamps in series glow dimly. The same two lamps in parallel glow brightly. Why?',
           options: ['In series the lamps share the voltage of the cell', 'In parallel the cell makes a bigger voltage', 'Series circuits use much thinner wires', 'In parallel the lamps are nearer the cell'],
-          why: 'In series each lamp gets only part of the cell's voltage. In parallel each branch gets the full voltage.' },
+          why: 'In series each lamp gets only part of the cell\'s voltage. In parallel each branch gets the full voltage.' },
         { q: 'A house has ten lights. Why are they wired in parallel, not in series?',
           options: ['Each light can be switched on and off by itself', 'Parallel wiring makes every light dimmer', 'Series wiring would need no switches', 'Parallel wiring uses no electricity at all'],
           why: 'In parallel each light has its own branch and its own switch. In series, one broken lamp would put every light out.' },
@@ -1282,7 +1282,7 @@ const LabCircuitData = (() => {
       ] },
     { id: 'sp', icon: '🔀', title: 'Series or parallel?',
       blurb: 'Two bulbs, two ways. Which is brighter - and which keeps working?',
-      lesson: 'In SERIES there is one path: the bulbs share the cell's voltage, so each is dimmer, and one break puts them all out. In PARALLEL each bulb has its own path and the full voltage: each is as bright as a bulb alone, and one can go out while the other keeps working.',
+      lesson: 'In SERIES there is one path: the bulbs share the cell\'s voltage, so each is dimmer, and one break puts them all out. In PARALLEL each bulb has its own path and the full voltage: each is as bright as a bulb alone, and one can go out while the other keeps working.',
       steps: [
         { on: 'build:series2',   say: 'Lay out two bulbs in SERIES - one after the other, in a single loop.',   btn: '🔌 Lay out two bulbs in series' },
         { on: 'switch:on',       say: 'Tap the switch 🔘 to close it — how bright are the bulbs?',              btn: '🔘 Close the switch' },
@@ -1293,7 +1293,7 @@ const LabCircuitData = (() => {
       ] },
     { id: 'meters', icon: '⏲️', title: 'Measure current and voltage',
       blurb: 'Use an ammeter and a voltmeter - then add a second cell.',
-      lesson: 'The ammeter, in SERIES, measured the current: 0.50 A with one cell, 1.00 A with two. The voltmeter, ACROSS the bulb, read 1.50 V, then 3.00 V. Double the voltage, double the current: the bulb's resistance stayed at V ÷ I = 3 Ω.',
+      lesson: 'The ammeter, in SERIES, measured the current: 0.50 A with one cell, 1.00 A with two. The voltmeter, ACROSS the bulb, read 1.50 V, then 3.00 V. Double the voltage, double the current: the bulb\'s resistance stayed at V ÷ I = 3 Ω.',
       steps: [
         { on: 'build:meters',   say: 'Lay out a circuit with an ammeter in the loop and a voltmeter across the bulb.', btn: '🔌 Lay out the circuit' },
         { on: 'switch:on',      say: 'Tap the switch 🔘 to close it.',                                                 btn: '🔘 Close the switch' },

@@ -3,7 +3,7 @@
 //  Science Labs - the physics behind the Light Bench (NCE Grade 9, P2 Light).
 //
 //  ⚠ THE PHYSICS LIVES HERE, NOT IN THE ANIMATION. Every ray direction, every
-//    angle a protractor can read, every mistake's wrong number comes from this
+//    angle a protractor can read, every mistake\'s wrong number comes from this
 //    file. lab_light.js only scales these results to the canvas and draws them.
 //    If a ray looks wrong on screen, fix it HERE.
 //  ⚠ Grounded in g9s-p2-light (subjects/grade9-physics/_manifest.js):
@@ -15,7 +15,7 @@
 //    (name the type of error - parallax).
 //  ⚠ REFRACTIVE INDEX IS BEYOND THE NCE SYLLABUS (see the header of
 //    questions/p2_refraction.js: n = sin i / sin r is Form IV). The bench uses
-//    Snell's law with n = 1.5 so every angle is TRUE, but a pupil is only ever
+//    Snell\'s law with n = 1.5 so every angle is TRUE, but a pupil is only ever
 //    asked the qualitative facts: towards / away from the normal, smaller /
 //    larger angle, no bend along the normal, emergent ray parallel. Anywhere
 //    the number 1.5 or a sine is shown, it says "beyond the NCE syllabus".
@@ -53,7 +53,7 @@ const LabLightData = (() => {
 
   function reflectAngle(i) { return i; }
 
-  // Snell's law, n1 sin i = n2 sin r. Keeps the sign of i. Null past the
+  // Snell\'s law, n1 sin i = n2 sin r. Keeps the sign of i. Null past the
   // critical angle (never reached on this bench - see the header).
   function refractAngle(i, n1 = N_AIR, n2 = N_GLASS) {
     const s = n1 * sin(Math.abs(i)) / n2;
@@ -96,7 +96,7 @@ const LabLightData = (() => {
   function frame(beta, tau) {
     return {
       d: [sin(beta), cos(beta)],        // from the ray box towards P
-      n: [sin(tau), -cos(tau)],         // the normal, on the ray box's side
+      n: [sin(tau), -cos(tau)],         // the normal, on the ray box\'s side
       s: [cos(tau), sin(tau)],          // along the surface
     };
   }
@@ -121,7 +121,7 @@ const LabLightData = (() => {
       const t = refractDir(d, n, N_AIR, N_GLASS);
       const down = [-n[0], -n[1]];
       const Q = add(P, t, 1 / dot(t, down));           // where it reaches the far face
-      const e = refractDir(t, n, N_GLASS, N_AIR);       // the far face's normal on the glass side is n
+      const e = refractDir(t, n, N_GLASS, N_AIR);       // the far face\'s normal on the glass side is n
       out.inside = t; out.Q = Q; out.out = e;
       out.r = between(t, down);
       out.e = between(e, down);
@@ -135,7 +135,7 @@ const LabLightData = (() => {
     return out;
   }
 
-  // What the pupil's protractor reading comes out as.
+  // What the pupil\'s protractor reading comes out as.
   //   o = { setup, beta, tau, ref: 'normal'|'surface', eye: 'above'|'side' }
   function reading(o) {
     const i = Math.abs(o.beta + o.tau);
@@ -144,8 +144,8 @@ const LabLightData = (() => {
     const faults = [];
     if (o.ref === 'surface') { si = fromSurface(i); sr = fromSurface(r); faults.push('surface'); }
     if (o.eye === 'side') {
-      // A mirror's two rays sit either side of ONE normal, so a shifted scale
-      // pushes one reading up and the other down; a block's rays sit on
+      // A mirror\'s two rays sit either side of ONE normal, so a shifted scale
+      // pushes one reading up and the other down; a block\'s rays sit on
       // opposite halves of the circle and both move the same way.
       si += PARALLAX_DEG;
       sr += o.setup === 'mirror' ? -PARALLAX_DEG : PARALLAX_DEG;
@@ -270,7 +270,7 @@ const LabLightData = (() => {
       title: () => 'Stop - never look along a laser beam',
       happened: () => 'You put your eye to the holes with a laser pointer behind them. The holes were in line, so the beam went straight through all three - and straight into your eye.',
       why: 'A laser beam does not spread out, so all of its energy lands on one tiny spot at the back of your eye (the retina). Even a school laser pointer can damage it permanently in less than a second - and a laser beam bounced off a mirror is just as dangerous.',
-      instead: 'Only look through the holes when the light is an ordinary lamp. With a laser, look at the spot it makes on a white screen at the end. Never point a laser at anyone's face.',
+      instead: 'Only look through the holes when the light is an ordinary lamp. With a laser, look at the spot it makes on a white screen at the end. Never point a laser at anyone\'s face.',
       exam: 'A safety precaution is asked on the NCE science papers (for example Chemistry 2022 Q5(a)(ii)). For a light experiment: never look directly into a laser beam or a bright lamp - view the beam on a screen.',
     },
     hot_lamp: {
@@ -289,7 +289,7 @@ const LabLightData = (() => {
       icon: '📐',
       title: c => c.setup === 'mirror' ? 'You measured from the mirror, not the normal' : 'You measured from the glass surface, not the normal',
       happened: c => `Your protractor counted from the ${c.setup === 'mirror' ? 'mirror' : 'surface of the block'}, so it read ${c.i}° for the angle of incidence. The real angle of incidence is ${c.trueI}°, because angles in a ray diagram are always measured from the normal: 90° − ${c.trueI}° = ${c.i}°.${c.setup === 'mirror' ? ' (Both your readings were wrong by the same amount, so they still looked equal - that is why this mistake is so easy to miss.)' : ''}`,
-      instead: 'Draw the normal first: a dashed line at 90° to the surface where the ray hits it. Put the protractor's centre on that point and count from the normal - 0° along the normal.',
+      instead: 'Draw the normal first: a dashed line at 90° to the surface where the ray hits it. Put the protractor\'s centre on that point and count from the normal - 0° along the normal.',
       exam: 'Physics 2022 Q4(b): measure the angle of incidence with the protractor, from the normal. If a question gives the angle between the ray and the SURFACE, the angle of incidence is 90° minus it.',
     },
     parallax: {
@@ -321,7 +321,7 @@ const LabLightData = (() => {
   ];
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'law', icon: '🪞', title: 'Prove the law of reflection', setup: 'mirror',
@@ -426,7 +426,7 @@ const LabLightData = (() => {
   //    is translucent), g4sc-mat-052/053 (the three words defined);
   //    g4sci-energy - light is a form of energy, the Sun is a source, and a
   //    torch changes electrical energy into light (g4sc-energy-002).
-  //  ⚠ Shadows through the day (the Sun's height) are GRADE 6 (g6sc-hd-059),
+  //  ⚠ Shadows through the day (the Sun\'s height) are GRADE 6 (g6sc-hd-059),
   //    not Grade 4, so they are not here. No angles, no protractor, no
   //    refraction at Grade 4: the mirror obeys the same law (trace() above)
   //    but no angle is ever shown.
@@ -458,7 +458,7 @@ const LabLightData = (() => {
   };
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-  // Side view along a table, in cm from the torch's start line. A small torch
+  // Side view along a table, in cm from the torch\'s start line. A small torch
   // lies on the table and shines along it, so every shadow starts at the
   // table. Similar triangles: shadow = object × (torch→screen) ÷ (torch→object).
   // A Grade 4 child reads a 30 cm ruler to the nearest cm. No position gives a
@@ -501,7 +501,7 @@ const LabLightData = (() => {
       saw: 'The book stopped the light. A dark shadow appeared on the screen.',
       formula: 'opaque → a dark shadow',
       learn: 'The book is opaque: no light goes through it. A shadow is the dark place where the light cannot reach.' },
-    { id: 'g4_shape', icon: '🌳', title: 'Same shape', hint: 'Look at the card tree's shadow',
+    { id: 'g4_shape', icon: '🌳', title: 'Same shape', hint: 'Look at the card tree\'s shadow',
       how: [S4, 'obj:card', ON4],
       saw: 'The shadow had the same shape as the card tree.',
       learn: 'Light goes past the edges of the tree, but not through it. So the shadow copies the shape of the object.' },
@@ -526,7 +526,7 @@ const LabLightData = (() => {
       learn: 'The shadow tells you the word. The more light a material blocks, the darker its shadow.' },
     { id: 'g4_measure', icon: '📏', title: 'Measure a shadow', hint: 'Use the ruler on the screen',
       how: [S4, 'obj:card', ON4, 'ruler:zero', 'measure'],
-      saw: 'You measured the card tree's shadow with the 0 of the ruler at the bottom.',
+      saw: 'You measured the card tree\'s shadow with the 0 of the ruler at the bottom.',
       learn: 'Put the 0 at the bottom of the shadow and read the number at the top. The tree is only 5 cm tall, but its shadow can be much taller.' },
     { id: 'g4_bigger', icon: '⬆️', title: 'Nearer means bigger', hint: 'Measure, move the tree nearer the torch, measure again',
       how: [S4, 'obj:card', ON4, 'measure', 'pos:10', 'measure'],
@@ -656,8 +656,8 @@ const LabLightData = (() => {
     },
     {
       id: 'g4_sizes', icon: '📏', title: 'Grow a shadow', setup: 'shadow',
-      blurb: 'Measure the card tree's shadow at three places. Keep the torch still.',
-      intro: 'Grow a shadow! Switch on the torch. Measure the card tree's shadow at three places. Move only the tree, never the torch.',
+      blurb: 'Measure the card tree\'s shadow at three places. Keep the torch still.',
+      intro: 'Grow a shadow! Switch on the torch. Measure the card tree\'s shadow at three places. Move only the tree, never the torch.',
       quiz: [
         { q: 'You move a toy nearer the torch. What happens to its shadow?',
           options: ['It gets bigger', 'It gets smaller', 'It stays the same size', 'It disappears'],

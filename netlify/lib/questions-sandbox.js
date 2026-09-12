@@ -473,6 +473,20 @@ function normalise(v) {
     .replace(/kg/g, 'kg').replace(/min/g, 'min').replace(/\bpm\b/g, 'pm');
 }
 
+// 12.5 / 12.50 / 0.5 / .5 / 007 / 7 / 1,200 / 1200 all mean the same number.
+// normalise() is a string comparison so it marks every one of those wrong.
+// Only used when BOTH sides parse cleanly as a bare number — mirrors app.js.
+function _sameNumber(a, b) {
+  const num = s => {
+    const t = String(s == null ? '' : s).replace(/[\s,]/g, '').replace(/^rs\.?/i, '');
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(t)) return null;
+    const n = parseFloat(t);
+    return Number.isFinite(n) ? n : null;
+  };
+  const x = num(a), y = num(b);
+  return x !== null && y !== null && x === y;
+}
+
 function checkAnswer(q, userAnswer) {
   if (!q) return false;
   if (q.type === 'symmetry-line') return SymmetryLine.checkAnswer(q, userAnswer);
@@ -485,15 +499,27 @@ function checkAnswer(q, userAnswer) {
       return ans.every(([r, c]) => sel.has(`${r},${c}`));
     } catch { return false; }
   }
+  // ⚠ multi answers are arrays; JSON-encoded on the client, compared element-by-element.
+  if (q.type === 'multi') {
+    try {
+      const selected = JSON.parse(userAnswer || '[]').map(normalise).sort();
+      const answers  = (Array.isArray(q.answer) ? q.answer : []).map(normalise).sort();
+      return selected.length === answers.length && selected.every((v, i) => v === answers[i]);
+    } catch { return false; }
+  }
   if (userAnswer == null || userAnswer === '') return false;
-  // ⚠ normalise() below is the MATHS normaliser — it deletes "rs" anywhere in
-  // the string, so "cours" and "cou" grade as the same French word. A typed
-  // French answer goes through matchTypedAnswer() instead.
+  // ⚠ normalise() is the MATHS normaliser — it deletes "rs" anywhere in the
+  // string, so "cours" and "cou" grade as the same French word. Typed French
+  // goes through matchTypedAnswer() instead.
   if (q.type === 'text') {
     return matchTypedAnswer(q.acceptableAnswers || [q.answer], userAnswer, q).ok;
   }
+  // expr and slots use Assessment (symbolic algebra / slot marking) — the answer
+  // is kept in the stripped bundle for these two types only. Fall back to normalise
+  // comparison as a best-effort; Assessment is not available server-side here.
   const ua = normalise(userAnswer);
-  return [q.answer, ...(q.acceptableAnswers || [])].some(a => normalise(a) === ua);
+  const accepted = [q.answer, ...(q.acceptableAnswers || [])];
+  return accepted.some(a => normalise(a) === ua || _sameNumber(a, userAnswer));
 }
 
 // answers: [{ id, answer }] from the client. Returns the AUTHORITATIVE result.

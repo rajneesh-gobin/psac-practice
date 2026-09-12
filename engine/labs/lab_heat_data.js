@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs — the science behind the Heat Transfer Lab (PSAC Grade 6).
 //
@@ -122,7 +122,7 @@ const LabHeatData = (() => {
     // Cross-station
     const done = Object.keys(st.stationsDone || {}).length;
     if (done >= 3) found.push('disc_thermos');
-    // disc_jumper_warm: exploring wood's insulating behaviour links to trapped-air insulators
+    // disc_jumper_warm: exploring wood\'s insulating behaviour links to trapped-air insulators
     if (st.burner && st.materials.includes('wood') && ct > 120)
       found.push('disc_jumper_warm');
 

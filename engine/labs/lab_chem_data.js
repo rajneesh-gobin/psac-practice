@@ -35,7 +35,7 @@ const LabChem = (() => {
     // ── Grade 8 shelf only. `ph` is the pH of the substance on its own
     //    (g8s-acids-006/-011/-016/-018, g8s-hd-088). h / oh are how much acid or
     //    base it holds (mol/dm³), which decides how much it takes to neutralise.
-    //    A mixture's pH always lies between the pHs of what went into it - see pHMix().
+    //    A mixture\'s pH always lies between the pHs of what went into it - see pHMix().
     lemon:      { name: 'Lemon juice',             short: 'Lemon juice',      formula: '5 cm³', pour: 5, h: 0.5, oh: 0,   ph: 2,  sample: true, swatch: '#F4EDB0', meta: 'From the kitchen' },
     vinegar:    { name: 'Vinegar',                 short: 'Vinegar',          formula: '5 cm³', pour: 5, h: 0.8, oh: 0,   ph: 3,  sample: true, swatch: '#EFE3C8', meta: 'From the kitchen' },
     salt:       { name: 'Salt solution',           short: 'Salt solution',    formula: '5 cm³', pour: 5, h: 0,   oh: 0,   ph: 7,  sample: true, swatch: '#E3EEF4', meta: 'Table salt in water' },
@@ -64,7 +64,7 @@ const LabChem = (() => {
 
   // kind: 'react' | 'none' | 'demo' (teacher demonstration behind a screen)
   // rate  mmol of metal per second while there is plenty of reagent
-  // lag / lagRate        a slow start (aluminium's oxide layer)
+  // lag / lagRate        a slow start (aluminium\'s oxide layer)
   // stopAfter / lateRate a fast start that chokes (an insoluble coating)
   // uses 'h' | 'oh' and per: H⁺ or OH⁻ used per mmol of metal
   // makesOH: OH⁻ made per mmol of metal (metal + water)
@@ -143,7 +143,7 @@ const LabChem = (() => {
     return REACTIONS[metal + '|' + medium] || null;
   }
 
-  // How fast the notebook says it fizzed, 0-4, from the reaction's main rate.
+  // How fast the notebook says it fizzed, 0-4, from the reaction\'s main rate.
   function fizzRating(rx) {
     const r = rx && rx.kind !== 'none' ? rx.rate : 0;
     if (r >= 0.08) return 4;
@@ -167,7 +167,7 @@ const LabChem = (() => {
     if (net < -1e-7) return Math.min(14, 14 + Math.log10(-net));
     return 7;
   }
-  // The same fourteen colours as the plan's indicator strip; pH 0 shares pH 1's red.
+  // The same fourteen colours as the plan\'s indicator strip; pH 0 shares pH 1\'s red.
   const INDICATOR = ['#D81E24', '#E0242B', '#EA4A2A', '#F07A2A', '#F6A623', '#F4CF2A', '#C8D82C',
                      '#6DBE45', '#2FA36B', '#1F8F8E', '#2476B5', '#2F5AA8', '#45459A', '#5B3A8E', '#6B2C84'];
   function indicatorColor(p) { return INDICATOR[Math.max(0, Math.min(14, Math.round(p)))]; }
@@ -192,7 +192,7 @@ const LabChem = (() => {
 
   // ── Discoveries: things a pupil can find by experimenting ───
   // Each one can be opened from the Discoveries tab: a FOUND card shows what the
-  // pupil saw (the reaction's own `obs`, or `saw`), its equations and `learn`;
+  // pupil saw (the reaction\'s own `obs`, or `saw`), its equations and `learn`;
   // a LOCKED card shows `how` - the steps, in the guide vocabulary below - and
   // "Show me how" runs them as a guide. scripts/test-labs-mixing.js follows
   // every `how` and fails if any of them does not actually unlock its card.
@@ -217,7 +217,7 @@ const LabChem = (() => {
     { id: 'fe_h2so4', icon: '🟢', title: 'Iron in sulfuric acid', hint: 'Iron with the other acid',
       rx: 'iron|h2so4', how: [G, H2SO4, 'metal:iron', SEE],
       learn: 'Iron(II) sulfate is pale green too - the colour belongs to the iron, not to the acid.' },
-    { id: 'al_acid',  icon: '🛡️', title: 'Aluminium's secret shield', hint: 'Aluminium in an acid - be patient',
+    { id: 'al_acid',  icon: '🛡️', title: 'Aluminium\'s secret shield', hint: 'Aluminium in an acid - be patient',
       rx: 'aluminium|hcl', how: [G, HCL, 'metal:aluminium', SEE],
       learn: 'Aluminium is quite reactive, but a thin, tough layer of aluminium oxide covers it. Once the acid eats through that layer, the reaction speeds up.' },
     { id: 'ca_hcl',   icon: '🔥', title: 'Calcium in hydrochloric acid', hint: 'The most reactive metal allowed in acid',
@@ -341,13 +341,13 @@ const LabChem = (() => {
   ];
 
   // ── Missions ──
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'race', icon: '🏁', title: 'Reactivity Race',
       blurb: 'Test magnesium, zinc, iron and copper in the same acid, then rank them.',
       metals: ['magnesium', 'zinc', 'iron', 'copper'], liquid: 'hcl',
-      intro: 'Reactivity Race! Goggles on, then for each metal: pour dilute hydrochloric acid, add the metal, watch. Empty & rinse between metals so it's a fair test.',
+      intro: 'Reactivity Race! Goggles on, then for each metal: pour dilute hydrochloric acid, add the metal, watch. Empty & rinse between metals so it\'s a fair test.',
       quiz: [
         { q: 'Which list puts the metals from MOST to LEAST reactive?',
           options: ['Magnesium, zinc, iron, copper', 'Zinc, magnesium, copper, iron', 'Copper, iron, zinc, magnesium', 'Magnesium, iron, zinc, copper'],
@@ -372,7 +372,7 @@ const LabChem = (() => {
     {
       id: 'neutral', icon: '🎯', title: 'Hit pH 7',
       blurb: 'Neutralise hydrochloric acid with sodium hydroxide, one drop at a time.',
-      intro: 'Hit pH 7! The tube holds hydrochloric acid with universal indicator - it's red. Add sodium hydroxide drop by drop until it turns exactly green.',
+      intro: 'Hit pH 7! The tube holds hydrochloric acid with universal indicator - it\'s red. Add sodium hydroxide drop by drop until it turns exactly green.',
       quiz: [
         { q: 'What is the reaction between an acid and an alkali called?',
           options: ['Neutralisation', 'Oxidation', 'Displacement', 'Combustion'],
@@ -395,7 +395,7 @@ const LabChem = (() => {
 
   // ── Guided experiments: "I landed here - what do I do?" ──
   // One action per step. `on` is what completes it: 'goggles', 'liquid:<id>',
-  // 'metal:<id>', 'rinse', 'observe' (a metal's reaction is recorded), 'pop'
+  // 'metal:<id>', 'rinse', 'observe' (a metal\'s reaction is recorded), 'pop'
   // (a successful lighted-splint test) or 'demo-end'. A step with `btn` gets a
   // button under the tube that does it; the same item glows on the shelf.
   const GUIDES = [
@@ -528,7 +528,7 @@ const LabChem = (() => {
     return paper;
   }
 
-  // Universal indicator in ONE substance (plus water) unlocks that substance's card.
+  // Universal indicator in ONE substance (plus water) unlocks that substance\'s card.
   const IND8 = { hcl: 'g8_ui_strong', lemon: 'g8_ui_weak', vinegar: 'g8_ui_weak', water: 'g8_ui_neutral', salt: 'g8_ui_neutral',
                  bakingsoda: 'g8_ui_mild', toothpaste: 'g8_ui_mild', antacid: 'g8_ui_mild', naoh: 'g8_ui_purple' };
 
@@ -592,7 +592,7 @@ const LabChem = (() => {
       happened: c => `You added ${c.added} to a tube that still held ${c.held}. The colour now belongs to a mixture - not to either one. It is like using a dirty dropper.`,
       instead: 'Test one sample per clean tube: tap "Empty & rinse" before every new sample, and rinse the dropper too. Then each colour belongs to one substance.',
       exam: 'A reliable test: use a clean test tube and a clean dropper for every sample.' },
-    litmus: { icon: '🟥', title: 'Red litmus can't prove an acid',
+    litmus: { icon: '🟥', title: 'Red litmus can\'t prove an acid',
       happened: c => `Red litmus stayed red in the ${c.what}, and you decided it is an acid. But red litmus stays red in water and salt solution too - it only changes colour in an alkali.`,
       instead: 'Say only what the test shows: red litmus staying red means "not an alkali". To show an acid, dip BLUE litmus (an acid turns it red) or use universal indicator.',
       exam: 'Acids turn blue litmus red; alkalis turn red litmus blue. No change in red litmus means the liquid is not alkaline - it could be acidic or neutral.' },
@@ -600,7 +600,7 @@ const LabChem = (() => {
       happened: () => 'You added universal indicator again. The colour got so deep and dark that it is hard to match to the colour chart - and more indicator does not make the reading any better.',
       instead: 'Two or three drops is enough. If you are not sure of the colour, hold the tube against something white and compare it with the pH colour chart.',
       exam: 'Add a few drops of universal indicator, then match the colour to the pH chart.' },
-    overshoot: { icon: '💊', title: 'Too much antacid - now it's alkaline',
+    overshoot: { icon: '💊', title: 'Too much antacid - now it\'s alkaline',
       happened: c => `Drop ${c.drops} took the tube past neutral to pH ${c.p}: ${c.colour}, alkaline. Near the end, one drop of antacid is enough to swing it.`,
       instead: 'Add the antacid one drop at a time and swirl after each. When a drop makes a green flash that fades, you are only a drop or two away - slow right down.',
       exam: 'Neutralisation is complete at pH 7, when universal indicator turns green. More antacid than you need does not help - the stomach needs some acid to digest food.' },
@@ -620,7 +620,7 @@ const LabChem = (() => {
     'Never taste anything in the lab to test it. Use an indicator instead.',
   ];
 
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   MISSIONS.push(
     {
       id: 'g8_survey', grades: [8], icon: '🔎', title: 'pH Survey',
@@ -659,7 +659,7 @@ const LabChem = (() => {
         { q: 'The antacid was magnesium hydroxide and the acid was hydrochloric acid. Which salt formed?',
           options: ['Magnesium chloride', 'Magnesium sulphate', 'Sodium chloride', 'Magnesium carbonate'],
           why: 'Hydrochloric acid always makes chlorides: Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O.' },
-        { q: 'A farmer's soil is too acidic for his crops. What should he spread on it?',
+        { q: 'A farmer\'s soil is too acidic for his crops. What should he spread on it?',
           options: ['Lime, a base', 'Vinegar, an acid', 'Salt, which is neutral', 'Lemon juice, an acid'],
           why: 'Lime neutralises the acid in the soil and raises the pH, so the crops grow better.' },
         { q: 'Why is toothpaste made slightly alkaline?',

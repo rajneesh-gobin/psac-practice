@@ -24,7 +24,7 @@
 //  The maths (scripts/test-labs-quadrat-data.js checks every line):
 //    mean per quadrat   = total counted ÷ number of quadrats
 //    estimate           = mean × (area of the plot ÷ area of one quadrat)
-//    Plants never cross the plot's outer edge, and with the edge rule every
+//    Plants never cross the plot\'s outer edge, and with the edge rule every
 //    plant is counted in exactly ONE of the 400 grid squares - so counting all
 //    400 squares gives the true population exactly.
 // ══════════════════════════════════════════════
@@ -34,7 +34,7 @@ const LabQuadratData = (() => {
   const FIELD = { w: 20, h: 20, area: 400, seed: 20260911,
                   place: 'A study plot in a forest clearing, Black River Gorges' };
   const QUAD = { side: 1, area: 1 };
-  const R = 0.08;                 // m - the half-width of a plant's base, for the edge rule
+  const R = 0.08;                 // m - the half-width of a plant\'s base, for the edge rule
   const MIN_Q = 5;                // fewer quadrats than this: "too few to trust"
   const MISSION_Q = 10;           // the missions ask for at least this many
 
@@ -67,7 +67,7 @@ const LabQuadratData = (() => {
               color: '#1F4F2E', leaf: '#3D7A4A', icon: '🌳', n: 360, bg: 0.15,
               patches: [[10, 8.5, 2.2], [17.5, 16.5, 1.8], [8, 18, 1.6]],
               meta: 'Invasive alien shrub' },
-    ebony: { name: 'Mauritian ebony seedling', short: 'ebony', plural: 'ebony seedlings', local: 'bois d'ébène', latin: 'Diospyros tessellaria', status: 'endemic',
+    ebony: { name: 'Mauritian ebony seedling', short: 'ebony', plural: 'ebony seedlings', local: 'bois d\'ébène', latin: 'Diospyros tessellaria', status: 'endemic',
              color: '#7DD35F', leaf: '#4FA83A', icon: '🌱', n: 120, bg: 1, patches: [],
              meta: 'Endemic. Found nowhere else on Earth' },
     lantana: { name: 'Lantana', short: 'lantana', plural: 'lantana plants', local: 'vieille fille', latin: 'Lantana camara', status: 'invasive',
@@ -308,11 +308,11 @@ const LabQuadratData = (() => {
       learn: 'An invasive alien species is brought in from elsewhere and spreads at the expense of native species. In Mauritius, strawberry guava forms dense thickets in the native forest, and the native seedlings cannot grow in their shade.' },
     { id: 'cyclone', icon: '🌀', title: 'After the cyclone', hint: 'Let a cyclone cross the plot, then survey it',
       how: [G, 'species:guava', 'event:cyclone', 'auto5', 'estimate'],
-      saw: 'After the cyclone the ranger's full count was lower for every species - and the strawberry guava was already sprouting in the gaps.',
+      saw: 'After the cyclone the ranger\'s full count was lower for every species - and the strawberry guava was already sprouting in the gaps.',
       learn: 'Cyclones are a natural threat to biodiversity in Mauritius (the cyclone season runs from November to April). They uproot trees and destroy habitats, and the open gaps they leave are quickly taken over by fast-growing invasive plants.' },
     { id: 'drought', icon: '☀️', title: 'After the drought', hint: 'A drought, then survey the ebony seedlings',
       how: [G, 'species:ebony', 'event:drought', 'auto5', 'estimate'],
-      saw: 'After the drought the ranger's full count showed that many seedlings had died - the young ebony seedlings most of all.',
+      saw: 'After the drought the ranger\'s full count showed that many seedlings had died - the young ebony seedlings most of all.',
       learn: 'A drought is a natural threat: without water, plants die, and the animals that depend on them lose food and shelter. Young seedlings with short roots are the first to go.' },
     { id: 'spread', icon: '⏩', title: 'Ten years of invasion', hint: 'Let ten years pass, then survey the strawberry guava',
       how: [G, 'species:guava', 'event:spread', 'auto5', 'estimate'],
@@ -320,11 +320,11 @@ const LabQuadratData = (() => {
       learn: 'Invasive alien species are a human threat to biodiversity: people brought them to Mauritius, and with no natural enemies here they spread and crowd out native plants.' },
     { id: 'clearing', icon: '🪓', title: 'Habitat lost', hint: 'Clear a strip of the plot for farmland, then survey it',
       how: [G, 'species:guava', 'event:clear', 'auto5', 'estimate'],
-      saw: 'The cleared strip is bare earth - no plants and no habitat - and the ranger's full count fell for the species that grew there.',
+      saw: 'The cleared strip is bare earth - no plants and no habitat - and the ranger\'s full count fell for the species that grew there.',
       learn: 'Deforestation - clearing forest for farms, roads or buildings - destroys habitats, so the species that lived there disappear from the area. Very little of Mauritius is still covered by good native forest.' },
     { id: 'conservation', icon: '🧑‍🌾', title: 'Conservation works', hint: 'Weed out the invaders, then survey the ebony seedlings',
       how: [G, 'species:ebony', 'event:weed', 'auto5', 'estimate'],
-      saw: 'With the invasive plants weeded out, the ranger's count showed the ebony seedlings had increased.',
+      saw: 'With the invasive plants weeded out, the ranger\'s count showed the ebony seedlings had increased.',
       learn: 'Protecting habitats and controlling invasive species are the two conservation measures that work together. In Mauritius, fenced and weeded Conservation Management Areas let native plants grow back.' },
   ];
 
@@ -378,14 +378,14 @@ const LabQuadratData = (() => {
     'Lantana berries are poisonous, especially green unripe ones. Never eat any fruit or berry you find during fieldwork.',
   ];
 
-  // ── The model's own numbers, for the quiz ────────
+  // ── The model\'s own numbers, for the quiz ────────
   const _T0 = makeField([]), _T1 = makeField(['spread']), _T2 = makeField(['spread', 'weed']);
   const TRUE = {
     guava0: truePop(_T0, 'guava'), guava1: truePop(_T1, 'guava'), guava2: truePop(_T2, 'guava'),
     ebony0: truePop(_T0, 'ebony'), ebony1: truePop(_T1, 'ebony'), ebony2: truePop(_T2, 'ebony'),
   };
 
-  // The calculation question, built from the pupil's OWN counts.
+  // The calculation question, built from the pupil\'s OWN counts.
   function calcQuestion(counts, name) {
     const e = estimate(counts);
     const right = e.rounded;
@@ -404,7 +404,7 @@ const LabQuadratData = (() => {
     };
   }
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'estimate', icon: '🧮', title: 'Estimate the population', sp: 'guava', need: MISSION_Q,
@@ -439,7 +439,7 @@ const LabQuadratData = (() => {
           why: 'The quadrats in the thickest patches held far more plants than an average square metre, so that estimate was far too high. The random quadrats represented the whole plot.' },
         { q: 'What is wrong with choosing where to put the quadrats?',
           options: ['The sample is biased - it does not represent the whole area', 'It causes a parallax error', 'It causes a zero error', 'It changes the area of the quadrat'],
-          why: 'Choosing the spots lets the person's choice decide what is sampled - that is bias.' },
+          why: 'Choosing the spots lets the person\'s choice decide what is sampled - that is bias.' },
         { q: 'How are random positions usually chosen for quadrats?',
           options: ['Random numbers are used as x and y coordinates on a grid over the area', 'The quadrat is placed wherever the most species are', 'The quadrat is placed beside the path, where it is easiest to walk', 'The quadrat is always placed in the centre of the area'],
           why: 'A pair of random numbers from a table or a calculator gives the x and y coordinates, so nobody chooses the spot.' },
@@ -457,7 +457,7 @@ const LabQuadratData = (() => {
       intro: `Survey the strawberry guava (at least ${MIN_Q} random quadrats, then estimate). Let ten years of invasion pass and survey again. Then weed out the invaders and survey a third time.`,
       stages: [[], ['spread'], ['spread', 'weed']],
       quiz: [
-        { q: `In ten years the ranger's full count of strawberry guava rose from ${TRUE.guava0} to ${TRUE.guava1}. What kind of threat to biodiversity is this?`,
+        { q: `In ten years the ranger\'s full count of strawberry guava rose from ${TRUE.guava0} to ${TRUE.guava1}. What kind of threat to biodiversity is this?`,
           options: ['An invasive alien species spreading', 'A natural calamity, like a cyclone', 'Pollution of the soil', 'Over-fishing'],
           why: 'Strawberry guava was brought to Mauritius by people and spreads with nothing to control it - an invasive alien species (Biology 2022 Q1(5) asks about invasive aliens).' },
         { q: `Over the same ten years the ebony seedlings fell from ${TRUE.ebony0} to ${TRUE.ebony1}. Suggest why.`,

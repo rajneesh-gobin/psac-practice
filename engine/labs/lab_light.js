@@ -1013,8 +1013,37 @@ const LabLight = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
-    else _highlight();
+    if (s && s.on === token) {
+      _guide.step++; _guideEnter();
+      if (!s.on.startsWith('wait:') && !s.on.startsWith('observe') && !s.on.startsWith('cards:')) _coachGuide(s.on);
+    } else _highlight();
+  }
+
+  function _coachGuide(on) {
+    const [k, v] = on.split(':');
+    if (k === 'setup') { _coach('Bench set up. Ready to shine the ray box.'); return; }
+    if (k === 'source') { _coach(v === 'ray' ? 'Ray box in place. Point it at the mirror.' : 'Torch in place.'); return; }
+    if (k === 'power') { _coach(v === 'on' ? 'Ray box on. Watch the light ray appear.' : 'Ray box off.'); return; }
+    if (k === 'normal') { _coach('Normal line drawn. Measure from it, not the surface.'); return; }
+    if (k === 'protractor') { _coach('Protractor placed. Read the angle carefully.'); return; }
+    if (k === 'eye') { _coach('Eye moved. Look along the reflected ray.'); return; }
+    if (k === 'angle') { _coach('Angle set. Observe the reflected ray.'); return; }
+    if (k === 'tilt') { _coach('Glass block tilted. Watch the ray bend.'); return; }
+    if (k === 'read') { _coach('Angle read. Compare it with the incident angle.'); return; }
+    if (k === 'look') { _coach('Good observation. What do you notice?'); return; }
+    if (k === 'lift') { _coach('Glass block lifted. Did the ray shift?'); return; }
+    if (k === 'pack') { _coach('Equipment packed away safely.'); return; }
+    if (k === 'cool') { _coach('Lamp cooling down. Never touch a hot bulb.'); return; }
+    if (k === 'obj') { _coach('Objective lens selected.'); return; }
+    if (k === 'pos') { _coach('Object positioned.'); return; }
+    if (k === 'torch') { _coach('Torch adjusted.'); return; }
+    if (k === 'ruler') { _coach('Ruler placed. Measure carefully.'); return; }
+    if (k === 'measure') { _coach('Measurement taken.'); return; }
+    if (k === 'name') { _coach('Label written.'); return; }
+    if (on === 'read-bad') { _coach('That angle is wrong — see the result card for why.'); return; }
+    if (on === 'measure-bad') { _coach('Measurement error — see the result card.'); return; }
+    if (on === 'name-bad') { _coach('Incorrect label — check the result card.'); return; }
+    _coach('Good — on to the next step.');
   }
 
   function _guideHint() {

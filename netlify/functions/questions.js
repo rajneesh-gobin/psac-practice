@@ -832,6 +832,17 @@ exports.handler = async (event) => {
     return out;
   };
 
+  // Strip sensitive fields before sending to client.
+  // ⚠ Returns a NEW array — never mutates the cached source checkAnswer() needs.
+  // ⚠ symmetry-line, expr, slots keep their answer: their engines are client-only.
+  const _KEEP_ANSWER_TYPES = new Set(['symmetry-line', 'expr', 'slots']);
+  const _stripForClient = qs => qs.map(q => {
+    if (_KEEP_ANSWER_TYPES.has(q.type)) return q;
+    const o = Object.assign({}, q);
+    delete o.answer; delete o.hint; delete o.explanation;
+    return o;
+  });
+
   // The default header is `public, s-maxage=86400`, which lets Netlify's shared
   // CDN cache one response and hand it to everybody. That is fine while every
   // caller gets the identical payload — but the moment the body depends on WHO
@@ -873,7 +884,7 @@ exports.handler = async (event) => {
         const out = {};
         for (const [key, qs] of Object.entries(dbBundle)) {
           if (_blockedSubjects.has(key)) continue;
-          out[key] = _planFilter(qs, key);
+          out[key] = _stripForClient(_planFilter(qs, key));
         }
         return { statusCode: 200, headers, body: JSON.stringify(out) };
       }
@@ -886,7 +897,7 @@ exports.handler = async (event) => {
         const out = {};
         for (const [key, qs] of Object.entries(cachedBundle)) {
           if (_blockedSubjects.has(key)) continue;
-          out[key] = _planFilter(qs, key);
+          out[key] = _stripForClient(_planFilter(qs, key));
         }
         return { statusCode: 200, headers, body: JSON.stringify(out) };
       }
@@ -897,7 +908,7 @@ exports.handler = async (event) => {
       const result = {};
       for (const dir of allDirs) {
         if (_blockedSubjects.has(dir)) continue;
-        result[dir] = _planFilter(_loadSubject(dir), dir);
+        result[dir] = _stripForClient(_planFilter(_loadSubject(dir), dir));
       }
       return { statusCode: 200, headers, body: JSON.stringify(result) };
     } catch(e) {
@@ -935,13 +946,13 @@ exports.handler = async (event) => {
       let questions = _planFilter(subjectQs, subjectId);
       if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
       if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
-      return { statusCode: 200, headers, body: JSON.stringify(questions) };
+      return { statusCode: 200, headers, body: JSON.stringify(_stripForClient(questions)) };
     }
     // Last fallback: build dynamically
     let questions = _planFilter(_loadSubject(subjectId), subjectId);
     if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
     if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
-    return { statusCode: 200, headers, body: JSON.stringify(questions) };
+    return { statusCode: 200, headers, body: JSON.stringify(_stripForClient(questions)) };
   } catch(e) {
     console.error('[questions]', e);
     return { statusCode: 500, headers: errHeaders, body: JSON.stringify({ error: 'Server error' }) };

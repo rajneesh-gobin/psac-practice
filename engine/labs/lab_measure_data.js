@@ -3,7 +3,7 @@
 //  Science Labs - the physics behind the Measurement Lab (NCE Grade 9, P1).
 //
 //  ⚠ THE SCIENCE LIVES HERE, NOT IN THE DRAWING. Every true value, every
-//    instrument's precision and range, how each scale is read, every mistake
+//    instrument\'s precision and range, how each scale is read, every mistake
 //    and what it reads as - all of it is decided in this file. lab_measure.js
 //    only draws the scale where this file says it is and asks judge() whether
 //    a typed reading is right. If a reading looks wrong on screen, fix it HERE.
@@ -26,7 +26,7 @@
 //  GRADE 4 (PSAC). A second, separate set: its own instruments, things to
 //  measure, guides, discoveries, missions and mistake cards, every one tagged
 //  `grades: [4]`. Anything untagged is the original Grade 9 set, and
-//  forGrade() is the only filter. Grounded in the app's own Grade 4 bank:
+//  forGrade() is the only filter. Grounded in the app\'s own Grade 4 bank:
 //  chapter g4sci-enr-equipment (subsection `measuring`: which instrument
 //  measures length, mass, time, volume and temperature, and in which unit),
 //  subjects/grade4-science/questions/depth_hard.js g4sci-hd-065 (a pencil
@@ -51,7 +51,7 @@
 //  g8s-inquiry-004/-019 (displacement), -005/-010/-016 and g8s-hd-001/-002
 //  (density = mass ÷ volume in g/cm³, 2.7 g/cm³ is aluminium, using the final
 //  reading is the slip), -011 (ice ≈ 0.92 g/cm³ floats), -014/g8s-hd-003 (a
-//  steel ship's average density), g8s-hd-010 (liquids layer by density); and
+//  steel ship\'s average density), g8s-hd-010 (liquids layer by density); and
 //  g8s-forces-003/-016 (weight in newtons, g = 10 N/kg). Neither pack uses an
 //  overflow (eureka) can or kg/m³, so the lab has no overflow can and marks
 //  kg/m³ as beyond the Grade 8 questions. No vernier, micrometer or "zero
@@ -60,7 +60,7 @@
 const LabMeasureData = (() => {
 
   const GRADES = [4, 7, 8, 9];
-  // Untagged content is the lab's original grade, 9.
+  // Untagged content is the lab\'s original grade, 9.
   const forGrade = (list, g) => list.filter(x => (x.grades || [9]).includes(g));
 
   const QUANTITIES = {
@@ -73,7 +73,7 @@ const LabMeasureData = (() => {
     force:   { name: 'weight',  si: 'newton',                    sym: 'N',     lab: 'N',     kid: 'weight (a force)' },
     density: { name: 'density', si: 'kilogram per cubic metre',  sym: 'kg/m³', lab: 'g/cm³', kid: 'density (the mass in each cm³)' },
   };
-  // Water's density, the line between floating and sinking in water.
+  // Water\'s density, the line between floating and sinking in water.
   const WATER = 1.0;
 
   // kind      which drawing and which reading rule
@@ -114,7 +114,7 @@ const LabMeasureData = (() => {
     // ── Grade 4 ── one shelf (group g4). Every scale here is read to a whole
     // mark, and each one counts in a different step: 1 cm, 50 ml, 2 °C, 20 g.
     // endMm: where the physical end of a ruler sits. The 30 cm ruler has a
-    // 1 cm gap before its 0 mark; a tape measure's hook IS its 0.
+    // 1 cm gap before its 0 mark; a tape measure\'s hook IS its 0.
     ruler30:      { kind: 'rule',       grades: [4], group: 'g4', name: 'Ruler (30 cm)',   short: 'Ruler',       icon: '📏', quantity: 'length', unit: 'cm', step: 1, dp: 0, maxMm: 300, endMm: -10,
                     prec: 'each mark is 1 cm', meta: 'Up to 30 cm · a gap before 0', hello: 'Look where the 0 mark is. It is not at the very end!',
                     how: 'Put one end of the object on the 0 mark. Read the mark at the other end.' },
@@ -136,7 +136,7 @@ const LabMeasureData = (() => {
                     how: 'Press Start. It stops by itself. Read where the red hand points.' },
 
     // ── Grades 7 and 8 ── one shelf (group g78). The cylinder and balance are
-    // shared; the block ruler is Grade 7's, the density bench Grade 8's.
+    // shared; the block ruler is Grade 7\'s, the density bench Grade 8\'s.
     cyl78:        { kind: 'cylinder',   grades: [7, 8], group: 'g78', name: 'Measuring cylinder', short: 'Cylinder', icon: '🧪', quantity: 'volume', unit: 'cm³', step: 1, dp: 0, max: 100,
                     prec: '1 cm³ (100 cm³ cylinder)', meta: '100 cm³ · a mark every 1 cm³', hello: 'Keep it on the bench. Read the bottom of the meniscus.',
                     how: 'Leave it on the bench. Bend down so your eye is level with the liquid. Read the bottom of the curved surface (the meniscus).' },
@@ -148,7 +148,7 @@ const LabMeasureData = (() => {
                     how: 'With the pan empty, press Zero (tare) so it reads 0.0 g. Then put the object on and read the mass.' },
     dens8:        { kind: 'density',    grades: [8], group: 'g78', name: 'Density bench',      short: 'Density',  icon: '🧮', quantity: 'density', unit: 'g/cm³', step: 0.01, dp: 2,
                     prec: '0.01 g/cm³', meta: 'Mass ÷ volume · then float or sink?', hello: 'Find the mass and the volume. Then divide.',
-                    how: 'Density = mass ÷ volume. Take the mass from the balance and the volume from the block's sides or the cylinder. Give the answer in g/cm³.' },
+                    how: 'Density = mass ÷ volume. Take the mass from the balance and the volume from the block\'s sides or the cylinder. Give the answer in g/cm³.' },
   };
 
   // What there is to measure. One value per quantity it can be measured for.
@@ -209,7 +209,7 @@ const LabMeasureData = (() => {
     soap7:    { grades: [7], for: ['block7'], icon: '🧼', name: 'Bar of soap', dims: [8, 5, 3], volume: 120, label: { volume: 'the volume of a bar of soap' }, color: '#9FD3C7' },
     sugar7:   { grades: [7], for: ['bal78'], icon: '🍬', name: 'Bag of sugar', mass: 250, label: { mass: 'the mass of a bag of sugar' }, color: '#F4F4EE' },
     // Grade 8: what the density bench shows. `density` is the true value and
-    // the data test checks it is mass ÷ volume. rho: a block's sides (dims),
+    // the data test checks it is mass ÷ volume. rho: a block\'s sides (dims),
     // a displacement (before/after, cm³), or a liquid weighed in a cylinder
     // (empty/full, g) of volume V.
     alu8:     { grades: [8], icon: '⬜', name: 'Aluminium block', density: 2.7, rho: { m: 108, dims: [5, 4, 2] }, label: { density: 'the density of aluminium' }, color: '#C8CDD2' },
@@ -222,7 +222,7 @@ const LabMeasureData = (() => {
     oil8:     { grades: [8], icon: '🫒', name: 'Cooking oil', density: 0.92, rho: { empty: 80, full: 126, V: 50, liquid: true }, label: { density: 'the density of cooking oil' }, color: '#E8C547' },
   };
 
-  // The metre rule's end is worn: the 0 and 1 mm marks have gone and the
+  // The metre rule\'s end is worn: the 0 and 1 mm marks have gone and the
   // physical end sits at the 2 mm mark. A pupil who butts an object against
   // that end and reads the far end straight off gets a length 0.2 cm too long.
   const RULE = { wornMm: 2, markMm: 10 };
@@ -239,7 +239,7 @@ const LabMeasureData = (() => {
   // too HIGH from above, too LOW from below.
   const PARALLAX = { radiusCm: 1.4, eyeRiseCm: 8, eyeDistCm: 30, cmPerCm3: 0.17 };
   // The Grade 4 jug is 5 cm across the inside radius, so 1 ml is 1/(π × 5²) =
-  // 0.0127 cm of height. Its scale is 5 cm in front of the liquid's centre, so
+  // 0.0127 cm of height. Its scale is 5 cm in front of the liquid\'s centre, so
   // an eye 8 cm high and 30 cm away sees it 5 × 8/30 = 1.33 cm off: 105 ml,
   // which is 100 ml to the nearest 50 ml mark - two marks too high or low.
   const jugCmPerMl = r => 1 / (Math.PI * r * r);
@@ -331,7 +331,7 @@ const LabMeasureData = (() => {
   // the bench draws (`scale`), and `mistakes`: for each named mistake, the
   // values a pupil who made it would type.
   // g (optional): only what that grade sees - a shared Grade 7/8 instrument
-  // lists each grade's own things.
+  // lists each grade\'s own things.
   function specimensFor(instId, g) {
     const I = INSTRUMENTS[instId];
     if (!I) return [];
@@ -393,7 +393,7 @@ const LabMeasureData = (() => {
       if (val > I.maxMm) {
         return { ok: false, why: 'range', msg: `The ${S.name.toLowerCase()} is too big: the ${I.name.toLowerCase()} opens only to ${I.maxMm >= 100 ? I.maxMm / 10 + ' cm' : I.maxMm + ' mm'}. Use the metre rule.` };
       }
-      const zMm = (I.zero || 0) * 10;          // a caliper's zero error, in mm
+      const zMm = (I.zero || 0) * 10;          // a caliper\'s zero error, in mm
       m.zero = I.zero || 0;
       m.scale = val + zMm;                     // where the vernier zero / thimble edge really is
       m.jaw = val;                             // where the moving jaw is
@@ -487,8 +487,8 @@ const LabMeasureData = (() => {
         + (S.swings ? ` That is ${S.swings} swings, so one swing takes ${val} ÷ ${S.swings} = ${clean(val / S.swings)} s.` : '');
     } else if (I.kind === 'thermometer') {
       if (S.hazard) return { ok: false, why: 'hazard', hazard: S.hazard, msg: 'Stop! Ask an adult to pour hot water.' };
-      if (val < I.min) return { ok: false, why: 'below', msg: `${S.name} is colder than ${I.min} °C, the bottom of this thermometer's range - the thread stays below the scale. Use the laboratory thermometer.` };
-      if (val > I.max) return { ok: false, why: 'burst', msg: `${S.name} is hotter than ${I.max} °C, the top of this thermometer's range.` };
+      if (val < I.min) return { ok: false, why: 'below', msg: `${S.name} is colder than ${I.min} °C, the bottom of this thermometer\'s range - the thread stays below the scale. Use the laboratory thermometer.` };
+      if (val > I.max) return { ok: false, why: 'burst', msg: `${S.name} is hotter than ${I.max} °C, the top of this thermometer\'s range.` };
       m.scale = val; m.want = clean(round(val, I.step));
       m.work = I.grades ? `The red line stops here. ${countOn(m.want, I)}`
         : `The top of the thread is level with the ${f(m.want)} mark, so the temperature is ${f(m.want)} °C (= ${fmt(toKelvin(m.want), I.dp)} K).`;
@@ -540,7 +540,7 @@ const LabMeasureData = (() => {
   }
 
   // ── Grade 4: a reading is a number AND a unit ──
-  // f: how many of the quantity's base unit (cm, ml, g, °C, s) one of it is.
+  // f: how many of the quantity\'s base unit (cm, ml, g, °C, s) one of it is.
   const UNITS = {
     mm: { q: 'length', f: 0.1, name: 'millimetres' }, cm: { q: 'length', f: 1, name: 'centimetres' }, m: { q: 'length', f: 100, name: 'metres' },
     ml: { q: 'volume', f: 1, name: 'millilitres' }, l: { q: 'volume', f: 1000, name: 'litres' },
@@ -622,7 +622,7 @@ const LabMeasureData = (() => {
       learn: 'Parallax works both ways. The cure is the same: eye level with the mark, looking at the scale at right angles.' },
     { id: 'displacement', icon: '🪨', title: 'Volume by displacement', hint: 'Find the volume of a stone with a cylinder',
       how: ['inst:cylinder', 'spec:stone', 'read'],
-      saw: 'The stone pushed the water level up. The rise was the stone's volume.',
+      saw: 'The stone pushed the water level up. The rise was the stone\'s volume.',
       eq: 'volume of stone = level with stone − level before',
       learn: 'A solid pushes aside (displaces) its own volume of water, so an odd-shaped solid can be measured with a measuring cylinder.' },
     { id: 'rule_read', icon: '📏', title: 'Reading a metre rule', hint: 'Measure a pencil from the 1 cm mark',
@@ -667,7 +667,7 @@ const LabMeasureData = (() => {
       learn: 'The smaller the smallest division, the more precise the instrument: metre rule 1 mm, vernier 0.1 mm, micrometer 0.01 mm.' },
     { id: 'balance_zero', icon: '⚖️', title: 'Zero the balance', hint: 'Weigh a stone the right way',
       how: ['inst:balance', 'tare', 'spec:stone', 'read'],
-      saw: 'After you pressed Zero (tare), the empty balance read 0.0 g and then read the stone's mass directly.',
+      saw: 'After you pressed Zero (tare), the empty balance read 0.0 g and then read the stone\'s mass directly.',
       eq: 'mass = reading − empty reading',
       learn: 'A balance that does not read 0.0 g when empty has a zero error. Taring removes it; otherwise subtract the empty reading.' },
     { id: 'stopwatch_read', icon: '⏱️', title: 'Minutes into seconds', hint: 'Time water heating to the boil',
@@ -689,7 +689,7 @@ const LabMeasureData = (() => {
       how: ['inst:thermometer', 'spec:boiling', 'zoom', 'read'],
       saw: 'In boiling water the thread stopped at 100 °C.',
       eq: '100 °C = 373 K',
-      learn: 'Pure water boils at 100 °C at sea level - inside this thermometer's −10 °C to 110 °C range. On the central plateau of Mauritius it boils a little lower, because the air pressure is lower.' },
+      learn: 'Pure water boils at 100 °C at sea level - inside this thermometer\'s −10 °C to 110 °C range. On the central plateau of Mauritius it boils a little lower, because the air pressure is lower.' },
     { id: 'clinical', icon: '🩺', title: 'Precise but narrow', hint: 'Take a body temperature with the clinical thermometer',
       how: ['inst:clinical', 'spec:body', 'zoom', 'read'],
       saw: 'The clinical thermometer read to 0.1 °C, but only between 35 °C and 42 °C.',
@@ -786,7 +786,7 @@ const LabMeasureData = (() => {
       learn: 'Too high or too low, both are wrong. Keep the cylinder on the bench and bend down until your eye is level.' },
     { id: 'g7_displace', grades: [7], icon: '🪨', title: 'Volume by displacement', hint: 'Find the volume of a stone',
       how: ['inst:cyl78', 'spec:stone78', 'read'],
-      saw: 'The water rose from 50 cm³ to 68 cm³. The stone's volume is 68 − 50 = 18 cm³.',
+      saw: 'The water rose from 50 cm³ to 68 cm³. The stone\'s volume is 68 − 50 = 18 cm³.',
       eq: 'volume of solid = final reading − first reading',
       learn: 'A solid that sinks pushes aside (displaces) its own volume of water. This works for any odd shape that sinks and does not soak up water.' },
     { id: 'g7_start', grades: [7], icon: '➖', title: 'Take away the first reading', hint: 'A displacement mistake - write down only the new level',
@@ -798,7 +798,7 @@ const LabMeasureData = (() => {
       how: ['inst:cyl78', 'spec:bubble78', 'misread:bubble'],
       saw: 'A bubble stuck to the rough stone. It pushed the water up 1 cm³ more, so the volume came out 24 cm³, not 23 cm³.',
       eq: 'a bubble on the solid → the volume is too big',
-      learn: 'Air takes up space too. A bubble under the water adds its own volume to the solid's.' },
+      learn: 'Air takes up space too. A bubble under the water adds its own volume to the solid\'s.' },
     { id: 'g7_bubble_free', grades: [7], icon: '👆', title: 'Tap the bubble free', hint: 'Free the bubble, then read the rough stone',
       how: ['inst:cyl78', 'spec:bubble78', 'tap', 'read'],
       saw: 'You tapped the glass. The bubble floated up and the level fell to 63 cm³. 63 − 40 = 23 cm³.',
@@ -826,7 +826,7 @@ const LabMeasureData = (() => {
       learn: 'Look at the empty balance first. Press Zero, or take the empty reading off each mass.' },
     { id: 'g7_weight', grades: [7], icon: '🍎', title: 'Mass is not weight', hint: 'Write a mass in newtons',
       how: ['inst:bal78', 'tare', 'spec:sugar7', 'misread:weight'],
-      saw: '250 N is a weight, not a mass. The sugar's mass is 250 g (0.25 kg).',
+      saw: '250 N is a weight, not a mass. The sugar\'s mass is 250 g (0.25 kg).',
       eq: 'mass in kilograms (kg) · weight in newtons (N)',
       learn: 'Mass is the amount of matter. Weight is the pull of gravity on it, a force. On the Moon your mass stays the same but your weight is smaller.' },
 
@@ -868,7 +868,7 @@ const LabMeasureData = (() => {
       learn: 'Water expands when it freezes, so ice is less dense than water. An iceberg floats with about nine tenths of it under the sea.' },
     { id: 'g8_oil', grades: [8], icon: '🫒', title: 'Oil floats on water', hint: 'Find the density of cooking oil',
       how: ['inst:dens8', 'spec:oil8', 'read'],
-      saw: 'The oil's mass was 126 − 80 = 46 g in 50 cm³: 0.92 g/cm³. It sat on top of the water.',
+      saw: 'The oil\'s mass was 126 − 80 = 46 g in 50 cm³: 0.92 g/cm³. It sat on top of the water.',
       eq: 'mass of a liquid = full − empty · a less dense liquid floats on a denser one',
       learn: 'Liquids that do not mix form layers. The least dense one ends up on top.' },
     { id: 'g8_flip', grades: [8], icon: '🔄', title: 'Upside down', hint: 'A density mistake - divide the volume by the mass',
@@ -881,7 +881,7 @@ const LabMeasureData = (() => {
       saw: 'Dividing by 60 cm³ used the water as well as the copper. The copper is only 10 cm³.',
       eq: 'volume of the solid = final − first reading',
       learn: 'Work out the volume first, by taking away the first reading. Then divide.' },
-    { id: 'g8_total', grades: [8], icon: '🫙', title: 'Take off the cylinder', hint: 'A density mistake - leave the cylinder's mass in',
+    { id: 'g8_total', grades: [8], icon: '🫙', title: 'Take off the cylinder', hint: 'A density mistake - leave the cylinder\'s mass in',
       how: ['inst:dens8', 'spec:oil8', 'misread:total'],
       saw: '126 g is the oil AND the cylinder. The oil alone is 126 − 80 = 46 g.',
       eq: 'mass of a liquid = full − empty',
@@ -891,7 +891,7 @@ const LabMeasureData = (() => {
       saw: '0.60 kg/m³ would be a thousand times too small. Wood is 0.60 g/cm³, which is 600 kg/m³.',
       eq: '1 g/cm³ = 1000 kg/m³ (kg/m³ is beyond the Grade 8 questions)',
       learn: 'The unit is part of the answer. The same density is 0.6 in g/cm³ but 600 in kg/m³.' },
-    { id: 'g8_weight', grades: [8], icon: '🌍', title: 'Weight is a force', hint: 'Write the stone's mass in newtons',
+    { id: 'g8_weight', grades: [8], icon: '🌍', title: 'Weight is a force', hint: 'Write the stone\'s mass in newtons',
       how: ['inst:bal78', 'tare', 'spec:stone78', 'misread:weight'],
       saw: '45 N is a weight. The balance gave a mass: 45.0 g. On Earth, 45 g weighs about 0.45 N.',
       eq: 'weight (N) = mass (kg) × 10 N/kg on Earth',
@@ -905,7 +905,7 @@ const LabMeasureData = (() => {
       title: () => 'Stop - the clinical thermometer has burst',
       happened: c => `You put the clinical thermometer into ${c.what} at about ${c.temp} °C. Its scale stops at 42 °C, so the liquid inside expanded past the top of the tube with nowhere to go - and cracked the glass.`,
       why: 'Broken glass cuts, and hot water scalds. Older glass clinical thermometers hold mercury: the silver beads that spill out give off a toxic vapour, and mercury must never be touched or swept up by hand.',
-      instead: 'Check an instrument's RANGE before you use it. For hot water, use the laboratory thermometer (−10 °C to 110 °C). If a thermometer does break: step back, touch nothing and tell your teacher at once - they clear it up with the school's spill kit.',
+      instead: 'Check an instrument\'s RANGE before you use it. For hot water, use the laboratory thermometer (−10 °C to 110 °C). If a thermometer does break: step back, touch nothing and tell your teacher at once - they clear it up with the school\'s spill kit.',
       exam: 'Choosing an instrument means checking its range as well as its precision. Physics 2021 (Fig 1.3) asks for the range of a laboratory thermometer: −10 °C to 110 °C.',
     },
     // ── Grade 4: real, age-appropriate dangers only ──
@@ -1142,7 +1142,7 @@ const LabMeasureData = (() => {
   const FACTS = [
     'A vernier scale has 10 divisions in 9 mm, so each is 0.1 mm shorter than a millimetre. That tiny difference lets you read to 0.1 mm.',
     'A micrometer spindle moves 0.5 mm for each full turn of the thimble. The thimble has 50 divisions, so each is 0.01 mm.',
-    'Mercury's meniscus bulges UP - the opposite of water - so for mercury you read the top of the curve.',
+    'Mercury\'s meniscus bulges UP - the opposite of water - so for mercury you read the top of the curve.',
     'Your reaction time is about 0.2 s. Timing 10 swings and dividing by 10 makes that error ten times smaller for each swing.',
     'The kelvin is the SI unit of temperature: K = °C + 273. Water freezes at 273 K and boils at 373 K.',
     '1 cm³ is exactly 1 ml, and 1000 cm³ is 1 dm³ - one litre.',
@@ -1150,7 +1150,7 @@ const LabMeasureData = (() => {
     'To measure one sheet of paper with a ruler, measure a stack of 100 and divide by 100 - the same trick as timing 10 swings.',
     'Precision is how finely a scale reads. Accuracy is how close you are to the true value. A zero error makes a precise instrument inaccurate.',
     'A clinical thermometer reads 35-42 °C to 0.1 °C: very precise, but over a narrow range - just what a body temperature needs.',
-    'A measuring cylinder is far more accurate than a beaker: a beaker's marks are rough guides, a cylinder's are a real scale.',
+    'A measuring cylinder is far more accurate than a beaker: a beaker\'s marks are rough guides, a cylinder\'s are a real scale.',
   ];
   const FACTS4 = [
     'A ruler measures length in centimetres (cm). 100 cm make 1 metre (m).',
@@ -1193,7 +1193,7 @@ const LabMeasureData = (() => {
     'Aluminium is 2.7 g/cm³, steel about 7.9 g/cm³ and copper 8.9 g/cm³.',
     'Cork is only about 0.24 g/cm³, and most wood is 0.5 to 0.8 g/cm³. Both float.',
     'Ice is about 0.92 g/cm³, so it floats with about nine tenths of it under the water.',
-    'A steel ship floats because its hull holds air: its average density is less than water's.',
+    'A steel ship floats because its hull holds air: its average density is less than water\'s.',
     'Liquids that do not mix form layers, with the least dense on top. Oil floats on water.',
     'Every piece of the same substance has the same density, however big or small it is.',
     'The SI unit of density is kg/m³ (beyond the Grade 8 questions): 1 g/cm³ = 1000 kg/m³.',
@@ -1207,7 +1207,7 @@ const LabMeasureData = (() => {
     8: ['Density = mass ÷ volume, in g/cm³.', 'Volume of a block: length × width × height.', 'Volume of an odd shape: final − first reading.',
         'Mass of a liquid: full container − empty container.', 'Less dense than water (1.0 g/cm³): it floats.', 'Mop up a spill at once.'],
   };
-  // [bold lead, the rest] for the first-visit welcome (Grade 4's is in the bench).
+  // [bold lead, the rest] for the first-visit welcome (Grade 4\'s is in the bench).
   const INTRO_BY_GRADE = {
     7: [['New here?', 'Tap "Show me how". I will show you each tap.'], ['Measure volume.', 'Read a measuring cylinder, and find the volume of a stone by displacement.'],
         ['Measure mass.', 'Zero the balance first. Then weigh.'], ['Write the unit.', 'Type the number, then pick cm³, g or kg.'], ['Mistakes are fine here.', 'Try one and see what goes wrong.']],
@@ -1240,7 +1240,7 @@ const LabMeasureData = (() => {
   };
   // under: the fraction of the block below the water line, or 1 for a block
   // resting on the bottom. For a floating block that fraction IS its density
-  // ÷ water's (it sinks until it pushes aside its own weight of water).
+  // ÷ water\'s (it sinks until it pushes aside its own weight of water).
   function floatPic(under) {
     const h = 12, top = under >= 1 ? 44 - h : 20 - h * (1 - under);
     return `<svg viewBox="0 0 64 48"><rect x="24" y="${clean(top)}" width="16" height="${h}" fill="#B98B55" stroke="#5A4020"/>`
@@ -1269,7 +1269,7 @@ const LabMeasureData = (() => {
     { id: 'boil', job: 'The temperature of boiling water', quantity: 'temp', best: 'thermometer',
       why: 'its range (−10 °C to 110 °C) covers 100 °C.',
       not: { clinical: 'Its range stops at 42 °C. In boiling water it would burst.' } },
-    { id: 'fever', job: 'A pupil's body temperature, to 0.1 °C', quantity: 'temp', best: 'clinical',
+    { id: 'fever', job: 'A pupil\'s body temperature, to 0.1 °C', quantity: 'temp', best: 'clinical',
       why: 'it reads to 0.1 °C over 35-42 °C - the body-temperature range.',
       not: { thermometer: 'It reads only to 1 °C: it cannot tell 37.2 °C from 37.4 °C.' } },
   ];
@@ -1293,7 +1293,7 @@ const LabMeasureData = (() => {
   const CHOICE_INSTRUMENTS4 = ['ruler30', 'tape', 'jug', 'thermo4', 'scale4', 'watch4'];
 
   // ── Missions ───────────────────────────────────
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'vernier', icon: '🔧', title: 'Read the vernier',
@@ -1382,7 +1382,7 @@ const LabMeasureData = (() => {
       ],
     },
 
-    // ── Grade 4 ── a task's `align`/`tared` must be true of the reading too.
+    // ── Grade 4 ── a task\'s `align`/`tared` must be true of the reading too.
     {
       id: 'g4_read', grades: [4], icon: '🔍', title: 'Read the scales',
       blurb: 'Measure with a ruler, a jug, a thermometer and a scale. Then answer 6 questions.',
@@ -1464,8 +1464,8 @@ const LabMeasureData = (() => {
     // ── Grade 7 ──
     {
       id: 'g7_volume', grades: [7], icon: '🧪', title: 'Measure volume',
-      blurb: 'Read a cylinder, find a stone's volume by displacement and work out a block's. Then 5 questions.',
-      intro: 'Measure volume! Read the water at eye level, find the stone's volume by displacement, and work out the wooden block's volume.',
+      blurb: 'Read a cylinder, find a stone\'s volume by displacement and work out a block\'s. Then 5 questions.',
+      intro: 'Measure volume! Read the water at eye level, find the stone\'s volume by displacement, and work out the wooden block\'s volume.',
       tasks: [
         { id: 'water', text: 'Read the water in the cylinder - eye level', inst: 'cyl78', spec: 'water78', eye: 'level', need: 'For the mission, read it with your eye level.' },
         { id: 'stone', text: 'Find the volume of the stone by displacement', inst: 'cyl78', spec: 'stone78' },
@@ -1473,7 +1473,7 @@ const LabMeasureData = (() => {
       ],
       quiz: [
         { q: 'Which is used to measure the volume of a liquid accurately?', options: [{ label: 'Measuring cylinder', svg: PICS78.cylinder }, { label: 'Beaker', svg: PICS78.beaker }, { label: 'Electronic balance', svg: PICS78.balance }, { label: 'Ruler', svg: PICS78.ruler }],
-          why: 'A measuring cylinder has a real scale. A beaker's marks are only a rough guide, a balance measures mass and a ruler length.' },
+          why: 'A measuring cylinder has a real scale. A beaker\'s marks are only a rough guide, a balance measures mass and a ruler length.' },
         { q: 'Water stands at 30 cm³. A key is lowered in and the level rises to 37 cm³. What is the volume of the key?',
           options: ['7 cm³', '37 cm³', '30 cm³', '67 cm³'],
           why: 'Volume of the key = final − first reading = 37 − 30 = 7 cm³.' },
@@ -1499,7 +1499,7 @@ const LabMeasureData = (() => {
       quiz: [
         { q: 'What is the SI unit of mass?', options: ['kilogram (kg)', 'newton (N)', 'gram (g)', 'litre (l)'],
           why: 'The kilogram is the SI unit of mass. The newton is the unit of force, such as weight.' },
-        { q: 'A balance reads 1.5 g with nothing on the pan. A shell then reads 21.5 g. What is the shell's true mass?',
+        { q: 'A balance reads 1.5 g with nothing on the pan. A shell then reads 21.5 g. What is the shell\'s true mass?',
           options: ['20.0 g', '21.5 g', '23.0 g', '1.5 g'],
           why: 'Take the empty reading away: 21.5 − 1.5 = 20.0 g. Better still, press Zero first.' },
         { q: 'Which sentence about mass and weight is right?',
@@ -1526,10 +1526,10 @@ const LabMeasureData = (() => {
         { q: 'A block has a mass of 150 g and a volume of 50 cm³. What is its density?',
           options: ['3 g/cm³', '0.33 g/cm³', '7500 g/cm³', '100 g/cm³'],
           why: 'Density = mass ÷ volume = 150 ÷ 50 = 3 g/cm³.' },
-        { q: 'A pebble of mass 39 g is lowered into water. The level rises from 30 cm³ to 45 cm³. What is the pebble's density?',
+        { q: 'A pebble of mass 39 g is lowered into water. The level rises from 30 cm³ to 45 cm³. What is the pebble\'s density?',
           options: ['2.6 g/cm³', '0.87 g/cm³', '1.3 g/cm³', '0.38 g/cm³'],
           why: 'Volume = 45 − 30 = 15 cm³. Density = 39 ÷ 15 = 2.6 g/cm³. Dividing by 45 uses the water as well.' },
-        { q: 'An empty beaker is 60 g. With 100 cm³ of a liquid in it, it is 170 g. What is the liquid's density?',
+        { q: 'An empty beaker is 60 g. With 100 cm³ of a liquid in it, it is 170 g. What is the liquid\'s density?',
           options: ['1.1 g/cm³', '1.7 g/cm³', '0.6 g/cm³', '110 g/cm³'],
           why: 'Mass of liquid = 170 − 60 = 110 g. Density = 110 ÷ 100 = 1.1 g/cm³.' },
         { q: 'Which is the formula for density?',
@@ -1555,7 +1555,7 @@ const LabMeasureData = (() => {
           why: 'Cork is far less dense than water, so it floats high. A floating block sinks until it pushes aside its own weight of water.' },
         { q: 'Iron is about 7.9 g/cm³. What does an iron nail do in water?',
           options: ['It sinks, because it is denser than water', 'It floats, because it is a solid', 'It floats, because it is small', 'It sinks only if it is large'],
-          why: '7.9 g/cm³ is more than water's 1.0 g/cm³, so iron sinks, whatever its size.' },
+          why: '7.9 g/cm³ is more than water\'s 1.0 g/cm³, so iron sinks, whatever its size.' },
         { q: 'Ice is 0.92 g/cm³. Which picture shows an ice block in water?',
           options: [FP('Floats, mostly under the water', 0.92), FP('Floats, mostly above the water', 0.2), FP('Rests on the bottom', 1), FP('Floats exactly half in', 0.5)],
           why: 'Ice is only a little less dense than water, so it floats with about nine tenths under the water.' },
@@ -1563,7 +1563,7 @@ const LabMeasureData = (() => {
           options: ['The oil floats on top of the water', 'The oil sinks below the water', 'They mix into one liquid', 'The bigger volume goes on top'],
           why: 'Liquids that do not mix form layers, and the less dense one is on top.' },
         { q: 'Steel is denser than water. Why does a steel ship float?',
-          options: ['Its hull holds air, so its average density is less than water's', 'Steel is less dense than sea water', 'Its engines hold it up in the water', 'Salt water makes the steel lighter'],
+          options: ['Its hull holds air, so its average density is less than water\'s', 'Steel is less dense than sea water', 'Its engines hold it up in the water', 'Salt water makes the steel lighter'],
           why: 'The hull and the air inside it together have a lower average density than water. Fill it with water and it sinks.' },
       ],
     },
@@ -1757,7 +1757,7 @@ const LabMeasureData = (() => {
     // ── Grade 8 ──
     { id: 'g8_block', grades: [8], icon: '⬜', title: 'Density of a metal block',
       blurb: 'Mass ÷ volume for aluminium.',
-      lesson: 'Density = mass ÷ volume. Aluminium is 2.7 g/cm³ - more than water's 1.0 g/cm³, so it sinks.',
+      lesson: 'Density = mass ÷ volume. Aluminium is 2.7 g/cm³ - more than water\'s 1.0 g/cm³, so it sinks.',
       steps: [
         { on: 'inst:dens8',   say: 'Tap 🧮 the density bench to pick it.' },
         { on: 'spec:alu8',    say: 'Tap ⬜ the aluminium block.' },

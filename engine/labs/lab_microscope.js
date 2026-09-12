@@ -947,7 +947,7 @@ const LabMicroscope = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) _guide.step++;
+    if (s && s.on === token) { _guide.step++; _coachGuide(token); }
     _guideEnter();
   }
 
@@ -960,6 +960,35 @@ const LabMicroscope = (() => {
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function _coachGuide(on) {
+    const [k] = on.split(':');
+    if (k === 'rig')       return _coach('Microscope set up on the bench.');
+    if (k === 'slide')     return _coach('Slide placed on the stage. Clip it in.');
+    if (k === 'stain')     return _coach('Stain added. It highlights the cell structures.');
+    if (k === 'cover')     return _coach('Cover slip placed. Lower it gently to avoid bubbles.');
+    if (on === 'clips')    return _coach("Stage clips secured. The slide won't move now.");
+    if (k === 'light')     return _coach('Light adjusted. Bright but not glaring.');
+    if (k === 'diaphragm') return _coach('Diaphragm adjusted for contrast.');
+    if (k === 'obj')       return _coach('Objective lens selected. Start with the lowest power.');
+    if (on === 'lower')    return _coach('Lens lowered carefully. Never let it touch the slide.');
+    if (k === 'focus')     return _coach('Image coming into focus.');
+    if (k === 'coarse')    return _coach('Coarse focus adjusted.');
+    if (k === 'fine')      return _coach('Fine focus — sharper now.');
+    if (k === 'move')      return _coach('Stage moved to find the specimen.');
+    if (k === 'eye')       return _coach('Eyepiece adjusted.');
+    if (k === 'part')      return _coach('Part identified.');
+    if (k === 'kind')      return _coach('Cell type identified.');
+    if (k === 'id')        return _coach('Structure labelled.');
+    if (on === 'draw')     return _coach('Drawing started. Use clear lines, no shading.');
+    if (k === 'fig')       return _coach('Figure drawn.');
+    if (k === 'ruler')     return _coach('Ruler placed on the drawing.');
+    if (on === 'convert')  return _coach('Units converted. Remember: 1 mm = 1000 µm.');
+    if (on === 'divide')   return _coach('Division done. Check your decimal point.');
+    if (on === 'multiply') return _coach('Multiplication done. Check your decimal point.');
+    if (on === 'answer')   return _coach('Magnification calculated.');
+    _coach('Good — on to the next step.');
   }
 
   // The words for a discovery's "how" tokens.

@@ -584,7 +584,7 @@ const LabMotion = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) { _guide.step++; _guideEnter(); if (!s.on.startsWith('wait:')) _coachGuide(s.on); }
     else _highlight();
   }
 
@@ -616,6 +616,26 @@ const LabMotion = (() => {
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function _coachGuide(on) {
+    const [k, v] = on.split(':');
+    if (k === 'setup')        _coach(v === 'ramp' ? 'Track set up. Check it is straight and the sensor is connected.' : 'Out on the field. Take your measurements carefully.');
+    else if (k === 'height')  _coach(+v === 0 ? 'Track laid flat.' : `Ramp set to ${v} cm. A steeper ramp means more acceleration.`);
+    else if (k === 'start')   _coach('Trolley ready. Release it smoothly — don\'t push.');
+    else if (k === 'timer' && v === 'on')  _coach('Timer started. Watch the speed–time graph build.');
+    else if (k === 'timer' && v === 'off') _coach('Timer stopped. Look at the graph shape.');
+    else if (k === 'block' && v === 'on')  _coach('Block in place. The trolley will stop here.');
+    else if (k === 'block' && v === 'off') _coach('Block removed.');
+    else if (k === 'meaning') _coach('Graph section identified. Think about what that shape means.');
+    else if (k === 'route')   _coach('Route selected. Walk it at a steady pace.');
+    else if (k === 'disp')    _coach('Distance set.');
+    else if (on === 'run')    _coach('Run complete. Examine the speed–time graph.');
+    else if (on === 'gradient')     _coach('Gradient calculated. That is the acceleration.');
+    else if (on === 'gradient-bad') _coach('Incorrect gradient — see the result card.');
+    else if (on === 'area')   _coach('Area under the graph calculated. That is the distance.');
+    else if (on === 'walk')   _coach('Walked the route. Compare with the trolley run.');
+    else _coach('Good — on to the next step.');
   }
 
   // ── Discoveries: every card opens ─────────────

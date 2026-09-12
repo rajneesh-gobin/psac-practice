@@ -696,6 +696,7 @@ const LabMaterials = (() => {
       if (want && _b.station !== want) { _highlight(); return; }
       _guide.step++;
       _guideEnter();
+      _coachGuide(s.on);
     } else _highlight();
   }
 
@@ -718,6 +719,21 @@ const LabMaterials = (() => {
       case 'sort': openSort(v); break;
       case 'job': { const J = D().JOBS.find(j => j.id === v); if (J) pickJob(v, J.choices[0], true); break; }
     }
+  }
+
+  function _coachGuide(on) {
+    const [k, v] = on.split(':');
+    if (k === 'station') { _coach('Station selected. Read the instructions before testing.'); return; }
+    if (k === 'lights') { _coach(v === 'on' ? 'Station lights on. Ready to test.' : 'Lights off.'); return; }
+    if (k === 'test') {
+      const msgs = { conduct: 'Conductivity test done. Did the bulb light up?', magnet: 'Magnet test done. Was it attracted?',
+        transparent: 'Transparency test done. Can you see through it clearly?', hard: 'Hardness test done. Did it scratch?',
+        flex: 'Flexibility test done. Did it bend without breaking?' };
+      _coach(msgs[v] || 'Test completed. Record the result.'); return;
+    }
+    if (k === 'sort') { _coach('Material sorted into the right group.'); return; }
+    if (k === 'job') { _coach('Job matched to the right material.'); return; }
+    _coach('Good — on to the next step.');
   }
 
   function _guideHint() {

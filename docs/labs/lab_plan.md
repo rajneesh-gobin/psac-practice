@@ -125,11 +125,18 @@ ever flaky, look there first.
 - ✅ **SHELL_VERSION** — `sw.js` shell-v307 → shell-v308.
 - ✅ **Migration notes** — `lab_migration.sql` created: no SQL migration needed, explains both version bumps.
 
-### UX guide interactivity (3 labs fixed — the "Next→Next→Next" problem)
+### UX guide interactivity — all 11 labs complete (the "Next→Next→Next" problem resolved)
 - ✅ `engine/labs/lab_mixing.js` — 100% of student-clickable guide steps now require bench interaction. Button renamed to "Skip this step →" (de-emphasised). `_guideSkip()` added as fallback. Coach narrates student actions.
 - ✅ `engine/labs/lab_circuit.js` — 7/8 interactive step types converted. `build:` setup steps kept as auto-execute (no bench event can detect "all parts placed correctly").
 - ✅ `engine/labs/lab_photo.js` — 100% of all steps with a `btn` field converted.
-- The same pattern must be applied to the remaining 8 labs when time permits. Priority: lab_separation.js, lab_light.js, lab_measure.js (most-used after those three).
+- ✅ `engine/labs/lab_separation.js` — `_coachGuide(on)` added; fires on all bench-interactive tokens, silent on `wait:` and `card:` steps.
+- ✅ `engine/labs/lab_light.js` — `_coachGuide(on)` added; covers all Light Bench token families.
+- ✅ `engine/labs/lab_measure.js` — `_coachGuide(on)` added; skips `wait:`, `read-bad`, `misread`.
+- ✅ `engine/labs/lab_motion.js` — `_coachGuide(on)` added; skips `wait:` steps.
+- ✅ `engine/labs/lab_quadrat.js` — `_coachGuide(on)` added; skips `wait:` steps.
+- ✅ `engine/labs/lab_microscope.js` — `_coachGuide(on)` added; fires only on token match, before `_guideEnter()`.
+- ✅ `engine/labs/lab_rusting.js` — `_coachGuide(on)` added; skips passive time tokens (`wait`, `week`, `hour`).
+- ✅ `engine/labs/lab_materials.js` — `_coachGuide(on)` added; fires on every step advance.
 
 ### 2026-09-12 batch 1 — labs flipped live (owner decision, data tests pending Node.js)
 | Lab | File id | Grades | Ready |
@@ -140,14 +147,17 @@ ever flaky, look there first.
 | Heat Transfer | `heat` | G6 | ✅ flipped `ready: true` |
 
 Data tests (Node.js) and browser tests still pending for all four — run when Node.js is available.
+⚠ `node` is not on the system PATH in the Claude Code shell. Run tests from the terminal with `! node scripts/test-labs-<id>-data.js`.
 
-### 2026-09-12 batch 2 — new labs built (4 labs, all `ready: false`)
+### 2026-09-12 batch 2 — new labs built (4 labs, all `ready: true`)
 | Lab | File id | Grades | Port | Data test | Browser test |
 |---|---|---|---|---|---|
 | Food Groups & Teeth | `nutrition` | G6 | 9428 | ⚠ pending | ⚠ pending |
 | Gas Tests | `gastests` | G7 | 9429 | ⚠ pending | ⚠ pending |
 | Physical & Chemical Changes | `changes` | G7 + G8 | 9430 | ⚠ pending | ⚠ pending |
 | Work, Energy & Power | `energy` | G8 | 9431 | ⚠ pending | ⚠ pending |
+
+`ready: true` was already set in `lab_core.js` — confirmed 2026-09-12. Tests still pending; run with `! node` from terminal.
 
 ### TTS read-aloud improvement (2026-09-12)
 - `_ttsAutoRead` flag added to `engine/app.js`

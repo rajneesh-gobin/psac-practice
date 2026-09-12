@@ -2,7 +2,7 @@
 // ══════════════════════════════════════════════
 //  Science Labs - the science behind the Materials Tester (PSAC Grade 4).
 //
-//  ⚠ THE SCIENCE LIVES HERE, NOT IN THE ANIMATION. Every object's behaviour at
+//  ⚠ THE SCIENCE LIVES HERE, NOT IN THE ANIMATION. Every object\'s behaviour at
 //    every test station, every "right material for the job" answer, every
 //    hazard and every quiz question comes from this file. lab_materials.js only
 //    draws it. If a result looks wrong on screen, fix it HERE.
@@ -31,7 +31,7 @@
 //    vary were left out on purpose: coins (many "copper" coins are
 //    copper-plated STEEL and do stick), stainless-steel spoons (some stick,
 //    some do not), clear plastic rulers (most sink), rubber bands (some sink).
-//    The one honest "can't say": a cork is too short and thick to bend-test.
+//    The one honest "can\'t say": a cork is too short and thick to bend-test.
 //
 //  Open for Grade 7 ("metals vs non-metals"): every object carries `grades`,
 //  `material` points into MATERIALS (which knows `metal`), and a later level
@@ -155,7 +155,7 @@ const LabMaterialsData = (() => {
       how: 'Find out where the material comes from.' },
   ];
   const station = id => STATIONS.find(s => s.id === id) || null;
-  // The result a fair test gives: exactly the object's property.
+  // The result a fair test gives: exactly the object\'s property.
   function result(stationId, objId) {
     const s = station(stationId), o = obj(objId);
     if (!s || !o) return undefined;
@@ -419,7 +419,7 @@ const LabMaterialsData = (() => {
   // `reqs`: tests the pupil must do at `station` during the mission, as
   //   { ids: [...] } - these objects, { filter: 'metal'|'nonmetal'|'any' },
   //   or { jobs: n } - n different jobs answered right.
-  // A question's FIRST option is the answer; the quiz shuffles them.
+  // A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'magnet_hunt', icon: '🧲', title: 'Magnet hunt', station: 'magnet', grades: [4],

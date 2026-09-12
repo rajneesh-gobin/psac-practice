@@ -1015,7 +1015,10 @@ const LabMeasure = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) {
+      _guide.step++; _guideEnter();
+      if (!s.on.startsWith('wait:') && s.on !== 'read-bad' && s.on !== 'misread') _coachGuide(s.on);
+    }
     // A mistake card can do a step for the pupil (after the gap-before-0 card
     // the pencil is moved to 0): move on rather than ask for it again.
     else if (s && _satisfied(s.on)) _guideEnter();
@@ -1030,6 +1033,20 @@ const LabMeasure = (() => {
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function _coachGuide(on) {
+    const [k, v] = on.split(':');
+    if (k === 'inst') { const I = DATA().INSTRUMENTS[v]; _coach(I ? `${I.name} selected. Look at it carefully before you read.` : 'Instrument selected.'); }
+    else if (k === 'spec') { const S = DATA().SPECIMENS[v]; _coach(S ? `${S.name} chosen. Place it carefully on the instrument.` : 'Specimen chosen.'); }
+    else if (k === 'zoom') _coach('Zoomed in. Read the scale at eye level.');
+    else if (k === 'eye') _coach(v === 'level' ? 'Eye level — no parallax error now. Read the scale.' : 'Eye position changed. Now read the scale.');
+    else if (k === 'align') _coach('Aligned. Now read the mark at the other end.');
+    else if (k === 'tare') _coach(_kid() ? 'Pointer on 0. Ready to measure!' : 'Balance zeroed (tared). Now place the object on the pan.');
+    else if (k === 'tap') _coach('Bubble gone. Now read the bottom of the meniscus at eye level.');
+    else if (k === 'start') _coach('Timing started. Watch the stopwatch.');
+    else if (k === 'read') _coach('Reading taken. Well done!');
+    else _coach('Good — on to the next step.');
   }
 
   // A discovery's recipe, in words a pupil can follow.

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Science Labs - the science behind the Rusting Lab (PSAC Grade 6).
 //
@@ -12,14 +12,14 @@
 //    PSAC 2024 paper, Q4, Diagram 6 (questions/past_paper_2024.js,
 //    g6sc-pp24-013/014): tube A holds oil over water, tube B water, tube C
 //    dry air under a cork. "Which pin will change colour?" - Pin B only.
-//    The lab keeps the PAPER's letters, so its answer is the paper's answer.
+//    The lab keeps the PAPER\'s letters, so its answer is the paper\'s answer.
 //  ⚠ Primary lab (docs/labs/LAB_SPEC.md §8): every guide, mission and
 //    discovery carries `grades`, and every sentence is written for a
 //    9-11-year-old. scripts/test-labs-rusting-data.js checks both.
 //
 //  The model (the one the syllabus teaches): a nail rusts only where it
 //  meets BOTH water and air (oxygen). rust(days) = min(cap, rate × days), as a
-//  share of the nail's surface; rust can be seen from 5 %.
+//  share of the nail\'s surface; rust can be seen from 5 %.
 //    tap water, open to the air       0.15 a day   (covered by day 7)
 //    salt water, open to the air      0.30 a day   (twice as fast)
 //    boiled water, no oil             0.08 a day   (air mixes back in slowly)
@@ -421,7 +421,7 @@ const LabRustingData = (() => {
     'Rust is reddish-brown. That colour on an old gate or roof means rust.',
   ];
 
-  // ── Missions ── A question's FIRST option is the answer; the quiz shuffles them.
+  // ── Missions ── A question\'s FIRST option is the answer; the quiz shuffles them.
   const MISSIONS = [
     {
       id: 'needs', icon: '🔑', title: 'What does iron need to rust?', rig: 'tubes', grades: [6],

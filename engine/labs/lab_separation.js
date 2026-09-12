@@ -1182,7 +1182,7 @@ const LabSeparation = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (s && s.on === token) { _guide.step++; _guideEnter(); if (!s.on.startsWith('wait:') && !s.on.startsWith('card:')) _coachGuide(s.on); }
   }
 
   function _guideHint() {
@@ -1194,6 +1194,30 @@ const LabSeparation = (() => {
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function _coachGuide(on) {
+    const [k, a] = on.split(':');
+    if (k === 'goggles') return _coach('Goggles on — safe to heat now.');
+    if (k === 'mode') {
+      const msgs = { distil: 'Distillation bench open. Build the rig from the shelf.', crystal: 'Crystallisation bench open. Time to heat and test.', sublime: 'Sublimation bench ready. Choose the mixture.', filter: 'Filtration bench open. Set up the filter.', evap: 'Evaporation bench open. Choose your solution.', chroma: 'Chromatography bench open. Set up the paper.', dissolve: 'Dissolving bench open. Choose a solid.', choose: 'Which technique bench open. Read each mixture carefully.' };
+      return _coach(msgs[a] || 'Bench open. Follow the steps.');
+    }
+    if (k === 'build') return _coach('Rig assembled. Check it matches the diagram, then heat.');
+    if (k === 'part') return _coach('Good choice. Keep building the rig.');
+    if (k === 'heat') return _coach('Burner lit. Watch what happens as the temperature rises.');
+    if (k === 'heat-off') return _coach('Heat off. The mixture will cool now.');
+    if (k === 'rod') return _coach('Glass rod test done. Any crystals forming?');
+    if (k === 'cool') return _coach(a === 'slow' ? 'Cooling slowly — large crystals will form.' : 'Cold water cooling — smaller crystals, faster.');
+    if (k === 'drop') return _coach('Drop on the watch glass. Let it evaporate completely.');
+    if (k === 'reset') return _coach('Bench cleared. Ready to start again.');
+    if (k === 'pour') return _coach('Mixture poured into the filter. Watch the filtrate collect below.');
+    if (k === 'run') return _coach('Paper in the water. Watch the solvent climb.');
+    if (k === 'add') return _coach('Solid added. Now stir to help it dissolve.');
+    if (k === 'stir') return _coach('Good stirring. Is it dissolving?');
+    if (k === 'leave') return _coach('Basin left to dry. The solvent evaporates slowly.');
+    if (k === 'choose') return _coach('Technique chosen. Read the result carefully.');
+    _coach('Good — on to the next step.');
   }
 
   function _guideDo() {
