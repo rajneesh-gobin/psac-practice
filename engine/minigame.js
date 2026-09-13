@@ -564,27 +564,36 @@ const MiniGames = (() => {
       <p class="mg-load-sub">Getting your questions ready<span class="mg-load-dots"></span></p>
       <button class="mg-load-cancel" onclick="MiniGames.cancelLoading()">✕ Cancel</button>
     </div>`;
+
+    function _cleanup() {
+      document.removeEventListener('ql-questions-ready', _onReady);
+      document.removeEventListener('ql-auth-error', _onAuthErr);
+      if (_loadingTimer) { clearTimeout(_loadingTimer); _loadingTimer = null; }
+    }
+    const _onReady = () => {
+      if (!_loadingActive) { _cleanup(); return; }
+      launchFn();
+      // if launchFn called _cancelLoading(), _loadingActive is now false — done
+      // if not (somehow still not enough), leave screen up until timeout fires
+    };
     const _onAuthErr = () => {
-      if (!_loadingActive) return;
+      if (!_loadingActive) { _cleanup(); return; }
+      _cleanup();
       _cancelLoading();
       toast('Your session has expired — please sign out and sign back in.', 5000);
     };
+    document.addEventListener('ql-questions-ready', _onReady);
     document.addEventListener('ql-auth-error', _onAuthErr, { once: true });
+
+    // Safety timeout — gives up after 12 s if questions never arrive
+    _loadingTimer = setTimeout(() => {
+      if (!_loadingActive) return;
+      _cleanup();
+      _cancelLoading();
+      toast('Questions are taking longer than expected — check your connection and try again.', 4500);
+    }, 12000);
+
     _preloadGrade();
-    let ticks = 0;
-    function tick() {
-      if (!_loadingActive) { document.removeEventListener('ql-auth-error', _onAuthErr); return; }
-      ticks++;
-      if (ticks > 12) {
-        document.removeEventListener('ql-auth-error', _onAuthErr);
-        _cancelLoading();
-        toast('Questions are taking longer than expected — check your connection and try again.', 4500);
-        return;
-      }
-      launchFn();
-      if (_loadingActive) _loadingTimer = setTimeout(tick, 1500);
-    }
-    _loadingTimer = setTimeout(tick, 1500);
   }
 
   function _cancelLoading() {

@@ -902,7 +902,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 134;
+  const _CACHE_VERSION = 135;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
@@ -1637,6 +1637,7 @@ const QuestionLoader = (() => {
     // 'auth-error'  → 401: session expired; keep in _done (no retry) and notify UI
     if (ok === false || ok === 'rate-limited') _done.delete(subjectId);
     if (ok === 'auth-error') document.dispatchEvent(new CustomEvent('ql-auth-error'));
+    if (ok === true) document.dispatchEvent(new CustomEvent('ql-questions-ready'));
   }
 
   // Which subject to fetch before the others. ACTIVE_PACK is set once the child
