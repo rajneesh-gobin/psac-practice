@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v329';
+const SHELL_VERSION = 'shell-v334';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -44,6 +44,8 @@ const SHELL_FILES = [
   '/',
   '/index.html',
   '/style.css',
+  '/engine/tailwind-play.min.js',
+  '/engine/supabase-client.min.js',
   '/manifest.json',
   '/icons/icon.svg',
   '/engine/assessment.js',

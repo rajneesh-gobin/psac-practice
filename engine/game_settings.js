@@ -477,6 +477,7 @@ const GameSettings = (() => {
     }, extra || {}));
     res.context = c;
     res.loaded = questions.length;
+    res.poolSize = pool.length;
     if (res.warnings.length) console.warn(`[GameSettings] ${gameKey}: ${res.warnings.length} slot(s) fell back to another included subject`, res.warnings.slice(0, 5));
     return res;
   }
@@ -507,6 +508,9 @@ const GameSettings = (() => {
 
   // ── Parent card ──────────────────────────────
   let _open = false, _draft = null, _forId = null, _status = '';
+  // Grades whose questions are currently being fetched after the child tapped
+  // the chip. While loading, the chip is disabled and shows a spinner.
+  const _gradeLoading = new Set();
 
   function _saveable() { return typeof Auth !== 'undefined' && typeof Auth.saveGameSettings === 'function'; }
 
@@ -706,10 +710,15 @@ const GameSettings = (() => {
     const chips = choices.map(g => {
       const mine = g === grade;
       const sel = on.has(g);
-      return `<button type="button" class="mg-gchip${sel ? ' on' : ''}${mine ? ' mine' : ''}"
-        aria-pressed="${sel ? 'true' : 'false'}"
-        ${mine ? 'disabled aria-disabled="true" title="Your own grade is always included"'
-               : `onclick="GameSettings.toggleSourceGrade(${g})"`}>Grade ${g}${mine ? ' <small>yours</small>' : ''}</button>`;
+      const loading = _gradeLoading.has(g);
+      const cls = ['mg-gchip', sel ? 'on' : '', mine ? 'mine' : '', loading ? 'loading' : ''].filter(Boolean).join(' ');
+      const label = loading
+        ? `<span class="mg-gchip-spin" aria-hidden="true"></span>Grade ${g} <small>loading…</small>`
+        : `Grade ${g}${mine ? ' <small>yours</small>' : ''}`;
+      const attrs = (mine || loading)
+        ? 'disabled aria-disabled="true"'
+        : `onclick="GameSettings.toggleSourceGrade(${g})"`;
+      return `<button type="button" class="${cls}" aria-pressed="${sel ? 'true' : 'false'}" ${attrs}>${label}</button>`;
     }).join('');
     return `<div class="mg-gradebar" role="group" aria-label="Which grades game questions come from">
       <span class="mg-gradebar-label">🎓 Questions from</span>
@@ -726,18 +735,37 @@ const GameSettings = (() => {
     const own = childGrade();
     const g = Number(grade);
     const choices = (typeof GradeAccess !== 'undefined') ? GradeAccess.childChoices(own) : [own];
-    if (g === own || !choices.includes(g)) return;
+    if (g === own || !choices.includes(g) || _gradeLoading.has(g)) return;
     DB.games = DB.games || {};
     const cur = new Set((Array.isArray(DB.games.sourceGrades) ? DB.games.sourceGrades : []).map(Number));
-    if (cur.has(g)) cur.delete(g); else cur.add(g);
+    const adding = !cur.has(g);
+    if (adding) cur.add(g); else cur.delete(g);
     DB.games.sourceGrades = [...cur].filter(x => x !== own && choices.includes(x)).sort((a, b) => a - b);
     // ⚠ `save` inside this module is the parent card's own save(); the blob
     //   writer is the app-level one, which is a top-level function declaration
     //   and therefore genuinely on window.
     if (typeof window !== 'undefined' && typeof window.save === 'function') window.save(DB);
-    if (typeof MiniGames !== 'undefined' && MiniGames.renderHub) MiniGames.renderHub();
-    if (typeof toast === 'function') {
-      toast(cur.has(g) ? `🎓 Grade ${g} questions added to games.` : `Grade ${g} questions removed from games.`, 1800);
+
+    if (adding) {
+      // Show spinner on the chip and fetch questions. Hold the spinner for at
+      // least 10 s so the server has breathing room before another grade can
+      // be tapped, and the child sees the questions are actually being fetched.
+      _gradeLoading.add(g);
+      if (typeof MiniGames !== 'undefined' && MiniGames.renderHub) MiniGames.renderHub();
+
+      const loadPromise = (typeof QuestionLoader !== 'undefined' && QuestionLoader.loadAllForGrade)
+        ? QuestionLoader.loadAllForGrade(g).catch(() => {})
+        : Promise.resolve();
+      const minDelay = new Promise(resolve => setTimeout(resolve, 10000));
+
+      Promise.all([loadPromise, minDelay]).then(() => {
+        _gradeLoading.delete(g);
+        if (typeof MiniGames !== 'undefined' && MiniGames.renderHub) MiniGames.renderHub();
+        if (typeof toast === 'function') toast(`🎓 Grade ${g} questions ready!`, 2000);
+      });
+    } else {
+      if (typeof MiniGames !== 'undefined' && MiniGames.renderHub) MiniGames.renderHub();
+      if (typeof toast === 'function') toast(`Grade ${g} questions removed from games.`, 1800);
     }
   }
 

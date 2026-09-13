@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Apply saved theme before first paint so the spinner matches the app theme -->
   <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
-  <!-- Warm up CDN connections before the blocking script tags are reached -->
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <!-- (preconnects removed — Tailwind and Supabase are now self-hosted) -->
   <title>Nou Klass — Exam Practice</title>
 
   <!-- PWA manifest -->
@@ -66,7 +64,7 @@
   <!-- Fallback icon for older browsers -->
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="engine/tailwind-play.min.js"></script>
   <script>
     if (typeof tailwind !== 'undefined') {
       tailwind.config = {
@@ -3216,6 +3214,7 @@
         <p>Learn while you play - stars, lifelines and bragging rights!</p>
       </div>
       <div id="mg-hub"></div>
+      <div id="mg-loading" class="hidden"></div>
       <div id="mg-game" class="hidden"></div>
     </div>
     <!-- ── Global leaderboard ──
@@ -5809,7 +5808,7 @@
        loaded on demand by _loadScriptOnce() in engine/app.js instead. -->
 
   <!-- Supabase JS client (must load first) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="engine/supabase-client.min.js"></script>
   <!-- Supabase client singleton -->
   <script src="engine/supabase.js"></script>
   <!-- Content protection -->
