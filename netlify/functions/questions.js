@@ -879,13 +879,11 @@ exports.handler = async (event) => {
   // Strip sensitive fields before sending to client.
   // ⚠ Returns a NEW array — never mutates the cached source checkAnswer() needs.
   // ⚠ symmetry-line, expr, slots keep their answer: their engines are client-only.
-  const _KEEP_ANSWER_TYPES = new Set(['symmetry-line', 'expr', 'slots']);
-  const _stripForClient = qs => qs.map(q => {
-    if (_KEEP_ANSWER_TYPES.has(q.type)) return q;
-    const o = Object.assign({}, q);
-    delete o.answer; delete o.hint; delete o.explanation;
-    return o;
-  });
+  // ⚠ answers ARE sent to the client. The app is a learning tool, not an exam;
+  // the correct answer is in the source JS files and visible in DevTools anyway.
+  // Stripping it here broke every game (isValidMCQ rejects any q without answer)
+  // and also broke hint/explanation display in practice mode.
+  const _stripForClient = qs => qs;
 
   // The default header is `public, s-maxage=86400`, which lets Netlify's shared
   // CDN cache one response and hand it to everybody. That is fine while every

@@ -1,7 +1,9 @@
--- RPC 1: single subject (the common case)
--- Called by questions.js _rpcGetSubjectQuestions() as the primary path.
--- ⚠ answers are intentionally included: isValidMCQ() requires the answer field
--- and the app is a learning tool (answers are in source files anyway).
+-- Fix: include answer/hint/explanation in question responses.
+-- The previous RPC stripped these fields, breaking all games (isValidMCQ
+-- requires answer) and hint/explanation display in practice mode.
+-- ⚠ CREATE OR REPLACE is idempotent — safe to run whether or not the
+--   previous migration was applied.
+
 create or replace function get_questions_for_client(
   p_subject_id       text,
   p_chapter_id       text    default null,
@@ -29,7 +31,6 @@ $$;
 
 grant execute on function get_questions_for_client(text, text, int, text[], text[]) to anon, authenticated;
 
--- RPC 2: whole grade batch (used by QuestionLoader.loadGrade)
 create or replace function get_grade_questions_for_client(
   p_grade            int,
   p_allowed_chapters text[]  default null,
