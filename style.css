@@ -8026,7 +8026,10 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
 .dark .mg-gchip.loading .mg-gchip-spin { border-color: #4f46e5; border-top-color: #a5b4fc; }
 
 /* ── Game loading screen ────────────────────────────────────────────────── */
+/* ⚠ ID selector (#mg-loading) beats Tailwind's class-based .hidden — must
+   re-assert display:none when hidden or the 320px container stays in flow. */
 #mg-loading { display: flex; align-items: center; justify-content: center; min-height: 320px; padding: 24px; }
+#mg-loading.hidden { display: none; }
 .mg-load-card { text-align: center; padding: 36px 28px; max-width: 360px; width: 100%;
   background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(99,102,241,.12); }
 .dark .mg-load-card { background: #1e1b4b; box-shadow: 0 8px 32px rgba(0,0,0,.4); }

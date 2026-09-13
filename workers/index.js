@@ -41,6 +41,33 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age':       '86400',
 };
 
+// Security headers applied to every response (HTML, JS, assets).
+// Previously in netlify.toml [[headers]] — Cloudflare ignores that file.
+// CDN allowances removed from script-src/style-src: Tailwind and Supabase
+// are now self-hosted in engine/tailwind-play.min.js and supabase-client.min.js.
+const SECURITY_HEADERS = {
+  'X-Frame-Options':           'DENY',
+  'X-Content-Type-Options':    'nosniff',
+  'Referrer-Policy':           'strict-origin-when-cross-origin',
+  'Permissions-Policy':        'camera=(), microphone=(), geolocation=()',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'Content-Security-Policy':
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline'; " +
+    "style-src 'self' 'unsafe-inline'; " +
+    "connect-src 'self' https://*.supabase.co https://accounts.google.com; " +
+    "img-src 'self' data: https:; " +
+    "frame-src https://accounts.google.com; " +
+    "frame-ancestors 'none'; " +
+    "object-src 'none'",
+};
+
+function addSecurityHeaders(response) {
+  const r = new Response(response.body, response);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) r.headers.set(k, v);
+  return r;
+}
+
 // The client (question_loader.js, app.js) calls /.netlify/functions/* URLs.
 // We alias every route under both /api/* and /.netlify/functions/* so the
 // existing client code works on Cloudflare without modification.
@@ -95,16 +122,23 @@ export default {
     }
 
     const handler = ROUTES[url.pathname];
-    if (handler) return handler(request, env, ctx);
+    if (handler) return addSecurityHeaders(await handler(request, env, ctx));
 
     if (url.pathname.startsWith('/api/')) {
-      return new Response(JSON.stringify({ error: 'Not found' }), {
+      return addSecurityHeaders(new Response(JSON.stringify({ error: 'Not found' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
-      });
+      }));
     }
 
-    return env.ASSETS.fetch(request);
+    // Static assets — add security headers and long-cache for question images / fonts
+    const asset = await env.ASSETS.fetch(request);
+    const r = new Response(asset.body, asset);
+    for (const [k, v] of Object.entries(SECURITY_HEADERS)) r.headers.set(k, v);
+    if (url.pathname.startsWith('/assets/questions/') || url.pathname.startsWith('/fonts/')) {
+      r.headers.set('Cache-Control', 'public, max-age=2592000'); // 30 days
+    }
+    return r;
   },
 
   // Cloudflare Cron Triggers — add to wrangler.toml:

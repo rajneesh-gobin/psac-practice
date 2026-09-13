@@ -3145,14 +3145,7 @@ function _isSingleWordAnswer(q) {
   return a.length > 0 && a.length <= 20 && !/[\s\d]/.test(a);
 }
 
-// Returns true when this question should be displayed as a typed input instead
-// of MCQ buttons. The decision is random (50 %) and memoised per question id
-// so navigating away and back keeps the same presentation.
-function _shouldShowAsBlank(q) {
-  if (!_isSingleWordAnswer(q)) return false;
-  if (!_blankQuestions.has(q.id)) _blankQuestions.set(q.id, Math.random() < 0.5);
-  return _blankQuestions.get(q.id);
-}
+function _shouldShowAsBlank(_q) { return false; }
 
 // ── ANSWER CHECKING ───────────────────────────
 function normalise(v) {
