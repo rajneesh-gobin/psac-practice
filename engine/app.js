@@ -7022,13 +7022,22 @@ async function _renderFriendsLeaderboard(studentId) {
   const card   = document.getElementById('dash-friends');
   const listEl = document.getElementById('dash-friends-list');
   if (!card || !listEl || !studentId) return;
+  if (_friendsLbInFlight) return;
+  _friendsLbInFlight = true;
   card.classList.remove('hidden');
 
   _renderGlobalLbEntry();
-  const [friends, myCode] = await Promise.all([
-    Store.getFriends(),
-    Store.getMyFriendCode(),
-  ]);
+  let friends, myCode;
+  try {
+    [friends, myCode] = await Promise.all([
+      Store.getFriends(),
+      Store.getMyFriendCode(),
+    ]);
+  } catch (_) {
+    _friendsLbInFlight = false;
+    return;
+  }
+  _friendsLbInFlight = false;
   _friendCode = myCode;
 
   const self = {
@@ -7178,6 +7187,7 @@ async function _removeFriend(friendId, btn) {
 
 // ── FRIEND INVITE MODAL ───────────────────────
 let _friendCode = null;
+let _friendsLbInFlight = false;
 
 // ── Lazy CDN scripts ──────────────────────────
 // The scanner library is large and only needed from one button in one modal,
@@ -7688,12 +7698,14 @@ function renderDashboard() {
   // First-time hint for brand-new students
   _checkKidHints();
 
-  // Assignments from parent (Supabase - async, non-blocking)
-  _renderStudentAssignments(ACTIVE_STUDENT_ID);
-
-
-  // Friends leaderboard (Supabase - async, non-blocking)
-  _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
+  // Assignments and friends leaderboard are async Supabase calls. Skip them when
+  // the dashboard is not actually on screen (e.g. auth.js calls renderDashboard()
+  // before navigating — if the child is going to minigames the calls are wasted).
+  const _dashEl = document.getElementById('dashboard');
+  if (_dashEl && !_dashEl.classList.contains('hidden')) {
+    _renderStudentAssignments(ACTIVE_STUDENT_ID);
+    _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
+  }
 
   // Exam mode visibility (respect restrictions)
   const examCard = document.getElementById('btn-exam-mode');

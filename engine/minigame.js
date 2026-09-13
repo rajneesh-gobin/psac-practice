@@ -564,12 +564,19 @@ const MiniGames = (() => {
       <p class="mg-load-sub">Getting your questions ready<span class="mg-load-dots"></span></p>
       <button class="mg-load-cancel" onclick="MiniGames.cancelLoading()">✕ Cancel</button>
     </div>`;
+    const _onAuthErr = () => {
+      if (!_loadingActive) return;
+      _cancelLoading();
+      toast('Your session has expired — please sign out and sign back in.', 5000);
+    };
+    document.addEventListener('ql-auth-error', _onAuthErr, { once: true });
     _preloadGrade();
     let ticks = 0;
     function tick() {
-      if (!_loadingActive) return;
+      if (!_loadingActive) { document.removeEventListener('ql-auth-error', _onAuthErr); return; }
       ticks++;
       if (ticks > 12) {
+        document.removeEventListener('ql-auth-error', _onAuthErr);
         _cancelLoading();
         toast('Questions are taking longer than expected — check your connection and try again.', 4500);
         return;

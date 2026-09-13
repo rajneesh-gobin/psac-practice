@@ -694,7 +694,6 @@ const QuestionLoader = (() => {
       // top-up
       'subjects/grade6-english/questions/topup_g6_english.js',
       'subjects/grade6-english/questions/enrichment_joining_sentences.js',
-    ,
       'subjects/grade6-english/questions/rcp_passages.js'],
     'grade6-french': [
       'subjects/grade6-french/questions/depth_hard.js',
@@ -1549,6 +1548,7 @@ const QuestionLoader = (() => {
         console.warn('[QuestionLoader] Rate limited for', subjectId, '— retry in', retryAfter, 's');
         return 'rate-limited';
       }
+      if (resp.status === 401) { console.warn('[QuestionLoader] Auth error for', subjectId, '— session expired'); return 'auth-error'; }
       if (!resp.ok) { console.warn('[QuestionLoader] API error', resp.status); return false; }
 
       const incoming = await resp.json();
@@ -1585,6 +1585,7 @@ const QuestionLoader = (() => {
         console.warn('[QuestionLoader] Batch rate limited for grade', grade, '— retry in', retryAfter, 's');
         return false;
       }
+      if (resp.status === 401) { console.warn('[QuestionLoader] Batch auth error for grade', grade, '— session expired'); return 'auth-error'; }
       if (!resp.ok) return false;
 
       const bundle = await resp.json(); // { 'grade5-maths': [...], ... }
@@ -1631,9 +1632,11 @@ const QuestionLoader = (() => {
     } else {
       ok = await _loadFromAPI(subjectId);
     }
-    // false  → transient failure (no-auth race, network error): allow retry
+    // false        → transient failure (no-auth race, network error): allow retry
     // 'rate-limited' → 429 received: backoff is already set; allow retry after
+    // 'auth-error'  → 401: session expired; keep in _done (no retry) and notify UI
     if (ok === false || ok === 'rate-limited') _done.delete(subjectId);
+    if (ok === 'auth-error') document.dispatchEvent(new CustomEvent('ql-auth-error'));
   }
 
   // Which subject to fetch before the others. ACTIVE_PACK is set once the child
@@ -1715,6 +1718,10 @@ const QuestionLoader = (() => {
 
     // Batch fetch: one request for all subjects in this grade
     const batchOk = await _loadBatchForGrade(grade, packs);
+    if (batchOk === 'auth-error') {
+      document.dispatchEvent(new CustomEvent('ql-auth-error'));
+      return;
+    }
     if (!batchOk) {
       // Fallback: load individually
       for (const p of packs) await loadSubject(p.id);
