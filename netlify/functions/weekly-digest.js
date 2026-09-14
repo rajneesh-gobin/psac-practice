@@ -307,7 +307,7 @@ exports.handler = async () => {
         questions, so their accuracy is not a like-for-like comparison.
       </p>
       <div style="margin-top:24px;text-align:center">
-        <a href="https://psac-practice.netlify.app/"
+        <a href="https://nouklass.com/"
           style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:600;font-size:15px">
           Open Parent Dashboard →
         </a>

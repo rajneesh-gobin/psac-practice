@@ -6510,7 +6510,14 @@
     (function () {
       if (location.hostname !== 'psac-practice.netlify.app') return;
 
-      // Show the migration modal as soon as the DOM is ready.
+      // Installed PWA (standalone) users: redirect immediately — tapping the home
+      // screen icon should land them straight on nouklass.com with no extra step.
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.location.replace('https://nouklass.com/');
+        return;
+      }
+
+      // Browser visitors: show the migration modal.
       document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('migration-modal').style.display = 'flex';
       });
@@ -6522,7 +6529,7 @@
         var _orig = window.showScreen;
         window.showScreen = function (id) {
           if (id === 'auth') {
-            window.location.href = 'https://nouklass.com';
+            window.location.href = 'https://nouklass.com/?signin=1';
             return;
           }
           return _orig && _orig(id);

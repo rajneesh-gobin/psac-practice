@@ -17,7 +17,7 @@
 const { requireAdmin, json } = require('../lib/admin-auth');
 const { sendMail, logFailure } = require('../lib/mailer');
 
-const SITE_URL = (process.env.URL || 'https://psac-practice.netlify.app').replace(/\/+$/, '');
+const SITE_URL = (process.env.URL || 'https://nouklass.com').replace(/\/+$/, '');
 
 function _he(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
