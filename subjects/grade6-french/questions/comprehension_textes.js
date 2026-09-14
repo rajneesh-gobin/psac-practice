@@ -26,7 +26,7 @@
 // repérage (like the 2024 Soleil text and the 2023 jamblon text), and one
 // RÉCIT answered by inference (like the 2024 Wang et Chong tale).
 
-const _TORTUE = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6">
+const _TORTUE = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6;color:#0f172a">
 <b>La tortue géante de Rodrigues</b><br>
 Il y a quatre cents ans, des milliers de tortues géantes vivaient à Rodrigues. Elles
 étaient si nombreuses que les marins écrivaient qu'on pouvait marcher sur leurs
@@ -41,7 +41,7 @@ Aujourd'hui, à la réserve François Leguat, on élève des tortues venues d'Al
 île voisine. Elles ressemblent beaucoup à celles qui ont disparu et jouent le même
 rôle : en broutant, elles aident les graines des plantes indigènes à germer.</div>`;
 
-const _MARCHE = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6">
+const _MARCHE = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6;color:#0f172a">
 Le samedi, Ayaan accompagnait toujours son grand-père au marché. Il portait le panier,
 et son grand-père portait les histoires.<br><br>
 Ce matin-là, devant l'étal du marchand de légumes, le vieil homme s'arrêta plus

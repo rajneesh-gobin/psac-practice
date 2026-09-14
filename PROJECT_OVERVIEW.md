@@ -17,7 +17,7 @@ A **vanilla-JS single-page web app** for Mauritian primary-school students revis
 - **Personas:** Student, Parent, Teacher, Admin, Super Admin
 - **Hosting:** Netlify (static site + serverless functions)
 - **Backend:** Supabase (Postgres + Auth + RPC), project `xawvjwsiqhtxgpocdqgm`
-- **Live URL referenced in code:** `https://psac-practice.netlify.app/`
+- **Live URL referenced in code:** `https://nouklass.com/`
 - **PWA:** installable, offline-capable, push notifications
 
 No frameworks, no bundler on the frontend. Tailwind via CDN + a hand-written `style.css`.

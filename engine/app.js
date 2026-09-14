@@ -3145,14 +3145,7 @@ function _isSingleWordAnswer(q) {
   return a.length > 0 && a.length <= 20 && !/[\s\d]/.test(a);
 }
 
-// Returns true when this question should be displayed as a typed input instead
-// of MCQ buttons. The decision is random (50 %) and memoised per question id
-// so navigating away and back keeps the same presentation.
-function _shouldShowAsBlank(q) {
-  if (!_isSingleWordAnswer(q)) return false;
-  if (!_blankQuestions.has(q.id)) _blankQuestions.set(q.id, Math.random() < 0.5);
-  return _blankQuestions.get(q.id);
-}
+function _shouldShowAsBlank(_q) { return false; }
 
 // ── ANSWER CHECKING ───────────────────────────
 function normalise(v) {
@@ -5876,6 +5869,7 @@ function copyJuiceReference(ref, btn) {
 
 async function markJuiceSent(paymentId) {
   const note = prompt('If your Juice app gave you a reference number, type it here (optional):', '') || '';
+  toast('Recording your payment…', 4000);
   try {
     const { data, error } = await _sb.rpc('payment_mark_sent', { p_payment_id: paymentId, p_payer_note: note.slice(0, 120) });
     if (error) throw error;
@@ -7022,13 +7016,22 @@ async function _renderFriendsLeaderboard(studentId) {
   const card   = document.getElementById('dash-friends');
   const listEl = document.getElementById('dash-friends-list');
   if (!card || !listEl || !studentId) return;
+  if (_friendsLbInFlight) return;
+  _friendsLbInFlight = true;
   card.classList.remove('hidden');
 
   _renderGlobalLbEntry();
-  const [friends, myCode] = await Promise.all([
-    Store.getFriends(),
-    Store.getMyFriendCode(),
-  ]);
+  let friends, myCode;
+  try {
+    [friends, myCode] = await Promise.all([
+      Store.getFriends(),
+      Store.getMyFriendCode(),
+    ]);
+  } catch (_) {
+    _friendsLbInFlight = false;
+    return;
+  }
+  _friendsLbInFlight = false;
   _friendCode = myCode;
 
   const self = {
@@ -7178,6 +7181,7 @@ async function _removeFriend(friendId, btn) {
 
 // ── FRIEND INVITE MODAL ───────────────────────
 let _friendCode = null;
+let _friendsLbInFlight = false;
 
 // ── Lazy CDN scripts ──────────────────────────
 // The scanner library is large and only needed from one button in one modal,
@@ -7688,12 +7692,14 @@ function renderDashboard() {
   // First-time hint for brand-new students
   _checkKidHints();
 
-  // Assignments from parent (Supabase - async, non-blocking)
-  _renderStudentAssignments(ACTIVE_STUDENT_ID);
-
-
-  // Friends leaderboard (Supabase - async, non-blocking)
-  _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
+  // Assignments and friends leaderboard are async Supabase calls. Skip them when
+  // the dashboard is not actually on screen (e.g. auth.js calls renderDashboard()
+  // before navigating — if the child is going to minigames the calls are wasted).
+  const _dashEl = document.getElementById('dashboard');
+  if (_dashEl && !_dashEl.classList.contains('hidden')) {
+    _renderStudentAssignments(ACTIVE_STUDENT_ID);
+    _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
+  }
 
   // Exam mode visibility (respect restrictions)
   const examCard = document.getElementById('btn-exam-mode');
@@ -8139,7 +8145,6 @@ function _renderChapterSummary(chapters) {
       <div class="ch-sum-bar-head">
         <span>${unique} different bank questions recorded${available ? ` · ${available} questions currently loaded` : ''}</span>
       </div>
-      <p class="ch-sum-last">Includes bonus chapters. Answers may include repeats, not chapter completion. Different-question tracking starts with this update; earlier answers are kept but cannot be reconstructed. Counts refer to the loaded bank, not syllabus mastery.</p>
       <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet - pick any chapter to begin.'}</div>
     </div>`;
 }
@@ -10383,6 +10388,7 @@ async function submitExam() {
 
   // Grade server-side; fall back to client-side on network failure.
   let correct, pct, chapterStats, _reviewMap;
+  await _withRouteBusy('Marking your exam…', 'Sending your answers', async () => {
   try {
     const _h = await _pushAuthHeaders();
     const _r = await fetch('/api/submit-exam', {
@@ -10417,6 +10423,7 @@ async function submitExam() {
     });
     pct = Math.round(correct / S.exam.qs.length * 100);
   }
+  }); // _withRouteBusy
 
   // Store review map so _renderExamReview() can show correctAnswer/explanation
   S.exam.reviewMap = _reviewMap;
@@ -12450,7 +12457,10 @@ async function surpriseMe() {
 
   const pick = candidates[Math.floor(Math.random() * candidates.length)];
   toast(`🎲 Surprise! ${pick.pack.icon} ${pick.chapter.icon || ''} ${pick.chapter.name}`, 2200);
-  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(pick.pack.id).catch(() => {});
+  if (typeof PackLoader !== 'undefined') {
+    await _withRouteBusy('Opening ' + pick.chapter.name + '…', 'Loading the subject',
+      () => PackLoader.ensure(pick.pack.id).catch(() => {}));
+  }
   activateSubjectPack(pick.pack.id);
   if (typeof QuestionLoader !== 'undefined') {
     QuestionLoader.loadSubject(pick.pack.id)

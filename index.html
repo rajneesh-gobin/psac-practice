@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Apply saved theme before first paint so the spinner matches the app theme -->
   <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
-  <!-- Warm up CDN connections before the blocking script tags are reached -->
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <!-- (preconnects removed — Tailwind and Supabase are now self-hosted) -->
   <title>Nou Klass — Exam Practice</title>
 
   <!-- PWA manifest -->
@@ -66,7 +64,7 @@
   <!-- Fallback icon for older browsers -->
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="engine/tailwind-play.min.js"></script>
   <script>
     if (typeof tailwind !== 'undefined') {
       tailwind.config = {
@@ -3216,6 +3214,7 @@
         <p>Learn while you play - stars, lifelines and bragging rights!</p>
       </div>
       <div id="mg-hub"></div>
+      <div id="mg-loading" class="hidden"></div>
       <div id="mg-game" class="hidden"></div>
     </div>
     <!-- ── Global leaderboard ──
@@ -5809,7 +5808,7 @@
        loaded on demand by _loadScriptOnce() in engine/app.js instead. -->
 
   <!-- Supabase JS client (must load first) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="engine/supabase-client.min.js"></script>
   <!-- Supabase client singleton -->
   <script src="engine/supabase.js"></script>
   <!-- Content protection -->
@@ -6054,6 +6053,10 @@
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="sw-dot-3"></div>
       </div>
       <p id="sw-error" class="hidden text-xs text-red-500 text-center mb-3"></p>
+      <p id="sw-busy" class="hidden text-xs text-green-600 dark:text-green-400 text-center mb-3 flex items-center justify-center gap-1.5">
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 16 16" fill="none" style="animation:ps-spin .7s linear infinite" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-opacity=".25" stroke-width="2.5"/><path d="M8 2.5A5.5 5.5 0 0 1 13.5 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Signing in…
+      </p>
       <div class="grid grid-cols-3 gap-2 mb-4">
         <button onclick="Auth._swKey('1')" class="pin-key-btn">1</button>
         <button onclick="Auth._swKey('2')" class="pin-key-btn">2</button>
@@ -6094,7 +6097,10 @@
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="pin-dot-3"></div>
       </div>
       <p id="pin-entry-error" class="hidden text-xs text-red-500 text-center mb-3">Incorrect PIN. Try again.</p>
-      <p id="pin-entry-busy" class="hidden text-xs text-indigo-600 dark:text-indigo-300 text-center mb-3">PIN correct - reconnecting your parent sign-in…</p>
+      <p id="pin-entry-busy" class="hidden text-xs text-indigo-600 dark:text-indigo-300 text-center mb-3 flex items-center justify-center gap-1.5">
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 16 16" fill="none" style="animation:ps-spin .7s linear infinite" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-opacity=".25" stroke-width="2.5"/><path d="M8 2.5A5.5 5.5 0 0 1 13.5 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        PIN correct — loading your dashboard…
+      </p>
       <div class="grid grid-cols-3 gap-2 mb-4">
         <button onclick="Auth._pinKey('1')" class="pin-key-btn">1</button>
         <button onclick="Auth._pinKey('2')" class="pin-key-btn">2</button>
@@ -6476,5 +6482,17 @@
     </div>
   </div>
 
+  <!-- Auto-open auth when arriving from the old domain via ?signin=1 -->
+  <script>
+    (function () {
+      if (new URLSearchParams(location.search).get('signin') !== '1') return;
+      history.replaceState(null, '', location.pathname);
+      requestAnimationFrame(function () {
+        setTimeout(function () {
+          if (typeof showScreen === 'function') showScreen('auth');
+        }, 80);
+      });
+    })();
+  </script>
 </body>
 </html>

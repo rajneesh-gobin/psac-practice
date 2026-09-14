@@ -20,7 +20,7 @@
 ### Step 3 — Give it a custom name (optional)
 1. In Netlify, go to **Site configuration → Change site name**
 2. Type something like `psac-practice`
-3. Your URL becomes: `https://psac-practice.netlify.app`
+3. Your URL becomes: `https://nouklass.com` (custom domain) or `https://psac-practice.netlify.app` (Netlify default)
 
 ### Step 4 — Update the site later
 Whenever you make changes to the files:

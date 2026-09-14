@@ -263,20 +263,20 @@ netlify deploy --prod --dir=.deploy --functions=netlify/functions
 
 ### 8a. Shell version
 ```powershell
-(Invoke-WebRequest "https://psac-practice.netlify.app/sw.js").Content | Select-String "SHELL_VERSION"
+(Invoke-WebRequest "https://nouklass.com/sw.js").Content | Select-String "SHELL_VERSION"
 # Must show the new version you deployed
 ```
 
 ### 8b. Function endpoint
 ```powershell
-Invoke-WebRequest "https://psac-practice.netlify.app/.netlify/functions/questions" -Method POST
+Invoke-WebRequest "https://nouklass.com/.netlify/functions/questions" -Method POST
 # Must return 401 (deployed + auth gate working)
 # 404 means function not deployed — check --functions path
 ```
 
 ### 8c. Question bundles blocked
 ```powershell
-Invoke-WebRequest "https://psac-practice.netlify.app/netlify/question-bundles/grade9-biology.json"
+Invoke-WebRequest "https://nouklass.com/netlify/question-bundles/grade9-biology.json"
 # Must return 404 (blocked by netlify.toml rule)
 # 200 means the bundles are publicly accessible — a security issue
 ```

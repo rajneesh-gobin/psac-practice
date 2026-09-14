@@ -553,7 +553,7 @@ const QS2 = [
   // ══════════════════════════════════════════════
   makeNum({ id:'BAR01', chapterId:'graphs', subsection:'bar_chart', difficulty:1,
     question:`A bar chart shows books read in a week:
-<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:6px;margin:6px 0;font-size:13px;">
+<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:6px;margin:6px 0;font-size:13px;color:#0f172a;">
   Mon: ████████ 8<br>
   Tue: ██████ 6<br>
   Wed: ██████████ 10<br>
@@ -567,7 +567,7 @@ How many books were read on <b>Wednesday</b>?`,
 
   makeNum({ id:'BAR02', chapterId:'graphs', subsection:'bar_chart', difficulty:2,
     question:`A bar chart shows pupils' favourite sports:
-<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:6px;margin:6px 0;font-size:13px;">
+<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:6px;margin:6px 0;font-size:13px;color:#0f172a;">
   Football: 45<br>
   Cricket: 28<br>
   Swimming: 32<br>

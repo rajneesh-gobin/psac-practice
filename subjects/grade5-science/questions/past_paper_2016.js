@@ -33,7 +33,7 @@ STATIC_QUESTIONS.push(
     explanation:'A cactus has a thick, fleshy stem that stores large amounts of water. It also has waxy skin to reduce water loss and long roots to collect rainwater quickly when it does rain.' }),
 
   makeMCQ({ id:'g5sc-pp16-006', chapterId:'energy', subsection:'sources', difficulty:1,
-    question:'A car uses petrol to move. What is the <strong>source of energy</strong> for a car?',
+    question:'What is the <strong>source of energy</strong> for a car?',
     options:['Chemical energy (petrol)','Electrical energy','Solar energy','Wind energy'], answer:'Chemical energy (petrol)',
     hint:'Petrol is burned in the engine - what type of energy is stored in petrol?',
     explanation:'Petrol contains chemical energy. When it burns in the car\'s engine, this chemical energy is converted to movement (kinetic) energy to drive the car.' }),

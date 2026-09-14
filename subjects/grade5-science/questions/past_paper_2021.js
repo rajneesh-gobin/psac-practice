@@ -62,7 +62,7 @@ STATIC_QUESTIONS.push(
     explanation:'Condensation occurs when water vapour (gas) cools down and changes back into liquid water. In the water cycle, this forms clouds.' }),
 
   makeMCQ({ id:'g5sc-pp21-011', chapterId:'animals', subsection:'endangered', difficulty:2,
-    question:'The Kestrel is a bird found only in Mauritius. What type of bird is the Kestrel?',
+    question:'What type of bird is the Mauritius Kestrel?',
     options:['Extinct','Exotic','Endemic','Endangered'], answer:'Endemic',
     hint:'This word describes a species found naturally in one specific place and nowhere else.',
     explanation:'The Mauritius Kestrel (Falco punctatus) is endemic to Mauritius - it is found in the wild only on the island of Mauritius. It was saved from extinction through conservation.' }),

@@ -10,6 +10,10 @@
 
 const QuestionLoader = (() => {
   const _done = new Set();
+  // When a subject gets a 429, block retries until this timestamp passes.
+  // Keeps _done clear so a retry is possible after the window, but prevents
+  // the immediate re-attempt loop that made the rate problem self-reinforcing.
+  const _rateLimitedUntil = new Map();
 
   // file:// → local development without any server
   const _isFileProtocol = location.protocol === 'file:';
@@ -690,7 +694,6 @@ const QuestionLoader = (() => {
       // top-up
       'subjects/grade6-english/questions/topup_g6_english.js',
       'subjects/grade6-english/questions/enrichment_joining_sentences.js',
-    ,
       'subjects/grade6-english/questions/rcp_passages.js'],
     'grade6-french': [
       'subjects/grade6-french/questions/depth_hard.js',
@@ -899,7 +902,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 134;
+  const _CACHE_VERSION = 136;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
@@ -1539,6 +1542,13 @@ const QuestionLoader = (() => {
       }
 
       const resp = await fetch(`/.netlify/functions/questions?subject=${encodeURIComponent(subjectId)}`, { headers });
+      if (resp.status === 429) {
+        const retryAfter = Math.max(60, parseInt(resp.headers.get('Retry-After') || '60', 10));
+        _rateLimitedUntil.set(subjectId, Date.now() + retryAfter * 1000);
+        console.warn('[QuestionLoader] Rate limited for', subjectId, '— retry in', retryAfter, 's');
+        return 'rate-limited';
+      }
+      if (resp.status === 401) { console.warn('[QuestionLoader] Auth error for', subjectId, '— session expired'); return 'auth-error'; }
       if (!resp.ok) { console.warn('[QuestionLoader] API error', resp.status); return false; }
 
       const incoming = await resp.json();
@@ -1568,6 +1578,14 @@ const QuestionLoader = (() => {
       if (!headers['Authorization'] && !headers['X-Student-Token']) return false;
 
       const resp = await fetch(`/.netlify/functions/questions?all=1&grade=${grade}`, { headers });
+      if (resp.status === 429) {
+        const retryAfter = Math.max(60, parseInt(resp.headers.get('Retry-After') || '60', 10));
+        const until = Date.now() + retryAfter * 1000;
+        packs.forEach(p => _rateLimitedUntil.set(p.id, until));
+        console.warn('[QuestionLoader] Batch rate limited for grade', grade, '— retry in', retryAfter, 's');
+        return false;
+      }
+      if (resp.status === 401) { console.warn('[QuestionLoader] Batch auth error for grade', grade, '— session expired'); return 'auth-error'; }
       if (!resp.ok) return false;
 
       const bundle = await resp.json(); // { 'grade5-maths': [...], ... }
@@ -1595,6 +1613,12 @@ const QuestionLoader = (() => {
   // ── Public API ─────────────────────────────────
   async function loadSubject(subjectId) {
     if (!subjectId || _done.has(subjectId)) return;
+    // Respect rate-limit backoff set by a previous 429.
+    const blockedUntil = _rateLimitedUntil.get(subjectId);
+    if (blockedUntil) {
+      if (Date.now() < blockedUntil) return;
+      _rateLimitedUntil.delete(subjectId);
+    }
     // Added BEFORE the await so two concurrent calls do not both fetch, and
     // removed again if the load did not actually happen - see _loadFromAPI.
     // Without the rollback a transient failure was permanent for the session:
@@ -1608,7 +1632,12 @@ const QuestionLoader = (() => {
     } else {
       ok = await _loadFromAPI(subjectId);
     }
-    if (ok === false) _done.delete(subjectId);
+    // false        → transient failure (no-auth race, network error): allow retry
+    // 'rate-limited' → 429 received: backoff is already set; allow retry after
+    // 'auth-error'  → 401: session expired; keep in _done (no retry) and notify UI
+    if (ok === false || ok === 'rate-limited') _done.delete(subjectId);
+    if (ok === 'auth-error') document.dispatchEvent(new CustomEvent('ql-auth-error'));
+    if (ok === true) document.dispatchEvent(new CustomEvent('ql-questions-ready'));
   }
 
   // Which subject to fetch before the others. ACTIVE_PACK is set once the child
@@ -1690,6 +1719,10 @@ const QuestionLoader = (() => {
 
     // Batch fetch: one request for all subjects in this grade
     const batchOk = await _loadBatchForGrade(grade, packs);
+    if (batchOk === 'auth-error') {
+      document.dispatchEvent(new CustomEvent('ql-auth-error'));
+      return;
+    }
     if (!batchOk) {
       // Fallback: load individually
       for (const p of packs) await loadSubject(p.id);

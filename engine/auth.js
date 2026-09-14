@@ -1244,9 +1244,6 @@ const Auth = (() => {
 
     _updateHeaderProfileChip('student', { avatar: sess.avatar, display_name: sess.displayName });
 
-    // Resume session guard so an account-sharing kick still fires on refresh
-    _startSessionGuard(sess.id, sess.sessionVersion || 0);
-
     // Load progress from Supabase (or localStorage cache)
     const progress = await Store.loadStudentProgress(sess.id);
 
@@ -1262,7 +1259,16 @@ const Auth = (() => {
     Object.assign(DB, progress);
     // Settings a parent or an admin changed since this device last signed
     // in. Not awaited: the dashboard must not wait on it.
+    // ⚠ Must come BEFORE _startSessionGuard: the guard's online/visibilitychange
+    //   listeners call _checkVersion → _refreshChildSettings, and the 60-second
+    //   throttle only blocks the second call if _settingsLastRead is already set.
     _refreshChildSettings(sess.id, true);
+
+    // Resume session guard so an account-sharing kick still fires on refresh.
+    // Placed AFTER _refreshChildSettings so the guard's immediate online event
+    // (if it fires during the loadStudentProgress await) cannot duplicate the
+    // settings fetch — _settingsLastRead is already stamped.
+    _startSessionGuard(sess.id, sess.sessionVersion || 0);
 
     applyTheme(_preferredTheme(DB.theme));
     renderDashboard();
@@ -3343,6 +3349,14 @@ const Auth = (() => {
     el.classList.toggle('hidden', !msg);
   }
 
+  function _setSwBusy(on) {
+    const box = _el('modal-student-switch');
+    if (!box) return;
+    box.querySelectorAll('button').forEach(b => { b.disabled = on; });
+    _el('sw-busy')?.classList.toggle('hidden', !on);
+    if (on) _el('sw-error')?.classList.add('hidden');
+  }
+
   async function _swKey(k) {
     if (_swBusy) return;
     if (k === 'clear') { _swPin = ''; _swRenderDots(); _swError(''); return; }
@@ -3356,6 +3370,7 @@ const Auth = (() => {
 
     _swBusy = true;
     _swError('');
+    _setSwBusy(true);
     const pinEl = _el('student-pin');
     if (pinEl) pinEl.value = _swPin;
     const before = _handovers;
@@ -3363,6 +3378,7 @@ const Auth = (() => {
       await studentSignIn();
     } finally {
       _swBusy = false;
+      _setSwBusy(false);
     }
     // Success is the device actually being handed over. Checking
     // ACTIVE_STUDENT_ID would not work - pdSwitchStudent() has usually already

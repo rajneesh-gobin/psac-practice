@@ -26,7 +26,7 @@ STATIC_QUESTIONS.push(
     explanation:'In a torch, chemical energy stored in the battery is converted into electrical energy, which then becomes light energy in the bulb. The main transformation is chemical → light.' }),
 
   makeMCQ({ id:'g5sc-pp17-005', chapterId:'animals', subsection:'habitats', difficulty:2,
-    question:'The Cape Ground Squirrel lives in open, dry, sandy environments in Africa. What is its natural <strong>habitat</strong>?',
+    question:'What is the natural <strong>habitat</strong> of the Cape Ground Squirrel?',
     options:['Deserts','Rivers','Inside caves','Dense forests'], answer:'Deserts',
     hint:'This squirrel digs burrows in sandy, dry ground far from trees.',
     explanation:'The Cape Ground Squirrel lives in deserts and arid (very dry) grasslands in southern Africa. It is adapted to hot, dry conditions and digs burrows to escape the heat.' }),

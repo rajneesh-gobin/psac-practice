@@ -47,6 +47,10 @@ const MiniGames = (() => {
   let _pollTimer = null;  // crowd poll countdown + refresh
   let _pollCode = null;
 
+  // ── Game loading screen ───────────────────────
+  let _loadingActive = false;
+  let _loadingTimer  = null;
+
   // ⚠ In-progress games live only in memory. Persist to sessionStorage (per tab,
   // survives a refresh, dies on tab close) so a reload continues the game rather
   // than dropping the child back to the Game Zone. Keyed per student so two
@@ -509,8 +513,14 @@ const MiniGames = (() => {
   // EVERY grade this child's games may draw from, not just their own: a child
   // who added Grade 6 gets nothing at all until that grade's questions have
   // been fetched, and the failure reads as "not enough suitable questions".
+  let _preloadLastAt = 0;
   function _preloadGrade() {
     if (typeof QuestionLoader === 'undefined' || !QuestionLoader.loadAllForGrade) return;
+    // Throttle: don't fire again within 30 s. Repeated failed picks (e.g. while
+    // a 429 backoff is active) would otherwise hammer the API on every click.
+    const now = Date.now();
+    if (now - _preloadLastAt < 30000) return;
+    _preloadLastAt = now;
     let grades = [_childGrade()];
     try {
       const g = GameSettings.context('quickfire').grades;
@@ -522,10 +532,78 @@ const MiniGames = (() => {
   }
   // Two different failures, two different messages: "still loading" is a
   // wait; "not enough suitable questions" is the parent's settings.
+  // A poolSize < 25 means fewer questions survived the game-agnostic filters
+  // than billionaire needs (20) — almost always a loading/cache problem rather
+  // than a settings one, because any live grade's smallest subject has 300+
+  // questions before the per-game safe() filter runs.
   function _pickFailToast(res) {
-    if (!_bankLoaded() || !res || !res.loaded) { toast('Questions are still loading - try again in a moment!', 3000); _preloadGrade(); return; }
+    if (!_bankLoaded() || !res || !res.loaded || (res.poolSize !== undefined && res.poolSize < 25)) {
+      toast('Questions are still loading — try again in a moment!', 3000);
+      _preloadGrade();
+      return;
+    }
     toast(GameSettings.NO_QUESTIONS_MSG, 4500);
   }
+
+  // Show a full-panel loading screen while questions are fetched, then
+  // auto-launch the game. launchFn() is the game's own start function:
+  // when it eventually picks enough questions it calls _cancelLoading()
+  // and proceeds normally; when it fails it returns immediately (guarded by
+  // _loadingActive) so the tick loop can retry.
+  function _showGameLoading(icon, label, launchFn) {
+    if (_loadingActive) return;
+    _loadingActive = true;
+    const hub = $('mg-hub'), loading = $('mg-loading');
+    if (!loading) { _preloadGrade(); return; }
+    hub?.classList.add('hidden');
+    loading.classList.remove('hidden');
+    loading.innerHTML = `<div class="mg-load-card">
+      <span class="mg-load-icon">${icon}</span>
+      <div class="mg-load-ring"></div>
+      <p class="mg-load-title">${esc(label)}</p>
+      <p class="mg-load-sub">Getting your questions ready<span class="mg-load-dots"></span></p>
+      <button class="mg-load-cancel" onclick="MiniGames.cancelLoading()">✕ Cancel</button>
+    </div>`;
+
+    function _cleanup() {
+      document.removeEventListener('ql-questions-ready', _onReady);
+      document.removeEventListener('ql-auth-error', _onAuthErr);
+      if (_loadingTimer) { clearTimeout(_loadingTimer); _loadingTimer = null; }
+    }
+    const _onReady = () => {
+      if (!_loadingActive) { _cleanup(); return; }
+      launchFn();
+      // if launchFn called _cancelLoading(), _loadingActive is now false — done
+      // if not (somehow still not enough), leave screen up until timeout fires
+    };
+    const _onAuthErr = () => {
+      if (!_loadingActive) { _cleanup(); return; }
+      _cleanup();
+      _cancelLoading();
+      toast('Your session has expired — please sign out and sign back in.', 5000);
+    };
+    document.addEventListener('ql-questions-ready', _onReady);
+    document.addEventListener('ql-auth-error', _onAuthErr, { once: true });
+
+    // Safety timeout — gives up after 12 s if questions never arrive
+    _loadingTimer = setTimeout(() => {
+      if (!_loadingActive) return;
+      _cleanup();
+      _cancelLoading();
+      toast('Questions are taking longer than expected — check your connection and try again.', 4500);
+    }, 12000);
+
+    _preloadGrade();
+  }
+
+  function _cancelLoading() {
+    _loadingActive = false;
+    if (_loadingTimer) { clearTimeout(_loadingTimer); _loadingTimer = null; }
+    $('mg-loading')?.classList.add('hidden');
+    $('mg-hub')?.classList.remove('hidden');
+  }
+  function cancelLoading() { _cancelLoading(); }
+
   const _trimQ = q => ({ question: q.question, options: q.options.slice(0, 4), answer: q.answer,
     explanation: q.explanation, hint: q.hint, _id: q._id || q.id, _level: q._level,
     _label: _chapterLabel(q._chapterId || q.chapterId), _gk: false });
@@ -567,7 +645,16 @@ const MiniGames = (() => {
   // ── Starting a game ────────────────────────────
   function startBillionaire() {
     const { qs, res, cap } = _pickBillionaire();
-    if (!qs) { _pickFailToast(res); return; }
+    if (!qs) {
+      if (_loadingActive) return; // loading screen is already polling
+      if (!_bankLoaded() || !res || !res.loaded || (res.poolSize !== undefined && res.poolSize < 25)) {
+        _showGameLoading('💰', 'Who Wants to Be a Billionaire?', startBillionaire);
+      } else {
+        toast(GameSettings.NO_QUESTIONS_MSG, 4500);
+      }
+      return;
+    }
+    _cancelLoading();
     GameSettings.markUsed(qs.map(q => q._id));
     _muted = !!(typeof DB !== 'undefined' && DB.games?.billionaire?.muted);
     _g = {
@@ -945,7 +1032,16 @@ const MiniGames = (() => {
     // A big easy-first stream rather than a ladder - the picker spreads the
     // parent's subject mix through it and keeps every level under the cap.
     const res = GameSettings.pickForGame('quickfire', QF_STREAM, { safe: _timedSafe });
-    if (!res.questions.length) { _pickFailToast(res); return; }
+    if (!res.questions.length) {
+      if (_loadingActive) return;
+      if (!_bankLoaded() || !res.loaded || (res.poolSize !== undefined && res.poolSize < 25)) {
+        _showGameLoading('⚡', 'Quick Fire', startQuick);
+      } else {
+        toast(GameSettings.NO_QUESTIONS_MSG, 4500);
+      }
+      return;
+    }
+    _cancelLoading();
     GameSettings.markUsed(res.questions.map(q => q._id));
     const pool = res.questions.map(q => ({ question: q.question, options: q.options.slice(0, 4), answer: q.answer, _id: q._id, _level: q._level }));
     const c = res.context;
@@ -1902,7 +1998,16 @@ const MiniGames = (() => {
 
   function startBattle() {
     const { qs, res, rounds } = _pickBattle();
-    if (!qs) { _pickFailToast(res); return; }
+    if (!qs) {
+      if (_loadingActive) return;
+      if (!_bankLoaded() || !res || !res.loaded || (res.poolSize !== undefined && res.poolSize < 25)) {
+        _showGameLoading('⚔️', 'Brain Battle', startBattle);
+      } else {
+        toast(GameSettings.NO_QUESTIONS_MSG, 4500);
+      }
+      return;
+    }
+    _cancelLoading();
     GameSettings.markUsed(qs.map(q => q._id));
     _bb = { qs, rounds, round: 0, turn: 0, scores: [0, 0], phase: 'ready', over: false, locked: false };
     _audio();                                   // unlock audio inside the tap
@@ -2341,7 +2446,7 @@ const MiniGames = (() => {
   function _ttDebug() { return _tt && { round: _tt.round, phase: _tt.phase, score: _tt.score, perfect: _tt.perfect, picked: _tt.picked.slice(), locked: _tt.locked, over: _tt.over, items: _tt.rounds[_tt.round] ? _tt.rounds[_tt.round].map(f => ({ label: f.label, year: f.year })) : null, reveal: _tt.reveal && { gained: _tt.reveal.gained, perfect: _tt.reveal.perfect } }; }
 
   return { open, renderHub, startBillionaire, answer, life, walkAway, confirmQuit, toggleMute,
-           resumeOrHub,
+           resumeOrHub, cancelLoading,
            showHelp, closeHelp,
            shareWhatsApp, copyPollLink, syncTile, _debug, _wbDebug, _exDebug,
            startQuick, qfAnswer, qfQuit, qfShare, qfShareTo, _qfDebug,

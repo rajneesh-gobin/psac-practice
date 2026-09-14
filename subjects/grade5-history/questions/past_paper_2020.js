@@ -11,7 +11,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp20-002', chapterId:'discovery', subsection:'portuguese', difficulty:2,
     question:'Pedro Mascarenhas was a Portuguese explorer. The island group he discovered is named after him. What is this group of islands called?',
     options:['Chagos Islands','Comoro Islands','Mascarene Islands','Seychelles'], answer:'Mascarene Islands',
-    hint:'The name comes directly from his surname.',
+    hint:'This group includes Mauritius, Rodrigues and Réunion.',
     explanation:'The Mascarene Islands (Mauritius, Rodrigues, and Réunion) are named after Pedro Mascarenhas, the Portuguese explorer who sailed through them around 1512.' }),
 
   makeMCQ({ id:'g5h-pp20-003', chapterId:'discovery', subsection:'portuguese', difficulty:2,

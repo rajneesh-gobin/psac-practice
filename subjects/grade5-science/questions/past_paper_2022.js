@@ -68,7 +68,7 @@ STATIC_QUESTIONS.push(
     explanation:'Thermal power stations in Mauritius burn coal (a fossil fuel) to heat water and produce steam, which drives turbines connected to generators.' }),
 
   makeMCQ({ id:'g5sc-pp22-012', chapterId:'animals', subsection:'habitats', difficulty:1,
-    question:'The camel lives in the desert. Which of the following is the <strong>natural habitat</strong> of a camel?',
+    question:'Which of the following is the <strong>natural habitat</strong> of a camel?',
     options:['Deserts','Dense forests','Sea','Wetlands'], answer:'Deserts',
     hint:'Camels are adapted to live in dry, hot, sandy environments.',
     explanation:'Camels are perfectly adapted to life in deserts - their humps store fat for energy, and they can go long periods without drinking water.' }),
