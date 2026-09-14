@@ -284,7 +284,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Un arbre</b> a un tronc épais et donne de l\'ombre. Un buisson et un arbuste sont bien plus petits.' }),
 
   makeMCQ({ id:'g5fr-voc-041', chapterId:'fr-vocabulaire', subsection:'traduction', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/rain.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel temps fait-il ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><svg viewBox="0 0 200 160" style="width:100%;max-width:220px;height:auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="une image"><rect width="200" height="160" fill="#c8d8e8"/><ellipse cx="100" cy="52" rx="52" ry="28" fill="#6b7e90"/><ellipse cx="72" cy="58" rx="34" ry="22" fill="#6b7e90"/><ellipse cx="128" cy="58" rx="34" ry="22" fill="#6b7e90"/><line x1="64" y1="88" x2="58" y2="110" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="80" y1="84" x2="74" y2="106" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="96" y1="88" x2="90" y2="110" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="112" y1="84" x2="106" y2="106" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="128" y1="88" x2="122" y2="110" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="144" y1="84" x2="138" y2="106" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="72" y1="112" x2="66" y2="134" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="88" y1="108" x2="82" y2="130" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="104" y1="112" x2="98" y2="134" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="120" y1="108" x2="114" y2="130" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><line x1="136" y1="112" x2="130" y2="134" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/><rect x="0" y="146" width="200" height="14" fill="#4a7a4a"/><ellipse cx="88" cy="146" rx="14" ry="3" fill="none" stroke="#2563eb" stroke-width="1.5" opacity="0.6"/><ellipse cx="132" cy="146" rx="11" ry="2.5" fill="none" stroke="#2563eb" stroke-width="1.5" opacity="0.6"/></svg></div><b>Quel temps fait-il ?</b>',
     options:['Il fait beau','Il neige','Il pleut','Il y a du vent'],
     answer:'Il pleut',
     hint:'Les gouttes d\'eau tombent du ciel.',
@@ -308,12 +308,17 @@ STATIC_QUESTIONS.push(
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5fr-voc-044', chapterId:'fr-vocabulaire', subsection:'traduction', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/carrot.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel légume est-ce ?</b>',
-    options:['Une carotte','Une pomme de terre','Un oignon','Une tomate'],
-    answer:'Une carotte',
-    hint:'C\'est un légume orange, long, que les lapins adorent.',
-    explanation:'"<b>Une carotte</b>" = a carrot. Les légumes : une carotte (carrot), une pomme de terre (potato), un oignon (onion), une tomate (tomato).' }),
+  makeMCQ({ id:'g5fr-voc-044', chapterId:'fr-vocabulaire', subsection:'traduction', difficulty:2,
+    question:'Laquelle de ces phrases décrit correctement <b>une carotte</b> ?',
+    options:[
+      'C\'est un légume orange que l\'on peut manger cru ou cuit.',
+      'C\'est un fruit jaune et sucré qui pousse dans les arbres.',
+      'C\'est un légume vert et plat qui pousse dans l\'eau.',
+      'C\'est un légume blanc et rond avec une peau sèche et papery.'
+    ],
+    answer:'C\'est un légume orange que l\'on peut manger cru ou cuit.',
+    hint:'Pense à la couleur et à comment on prépare ce légume.',
+    explanation:'<b>Une carotte</b> est un légume <b>orange</b> que l\'on mange <b>cru</b> (raw — en salade) ou <b>cuit</b> (cooked — en soupe). Vocabulaire utile : <b>cru</b> = raw, <b>cuit</b> = cooked, <b>un légume</b> = a vegetable, <b>un fruit</b> = a fruit.' }),
 
   makeMCQ({ id:'g5fr-voc-045', chapterId:'fr-vocabulaire', subsection:'traduction', difficulty:1,
     question:'Complète la phrase avec le mot convenable.<br>« Au petit-déjeuner, Maya mange ................ que la poule a pondu ce matin. »',

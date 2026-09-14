@@ -3349,6 +3349,14 @@ const Auth = (() => {
     el.classList.toggle('hidden', !msg);
   }
 
+  function _setSwBusy(on) {
+    const box = _el('modal-student-switch');
+    if (!box) return;
+    box.querySelectorAll('button').forEach(b => { b.disabled = on; });
+    _el('sw-busy')?.classList.toggle('hidden', !on);
+    if (on) _el('sw-error')?.classList.add('hidden');
+  }
+
   async function _swKey(k) {
     if (_swBusy) return;
     if (k === 'clear') { _swPin = ''; _swRenderDots(); _swError(''); return; }
@@ -3362,6 +3370,7 @@ const Auth = (() => {
 
     _swBusy = true;
     _swError('');
+    _setSwBusy(true);
     const pinEl = _el('student-pin');
     if (pinEl) pinEl.value = _swPin;
     const before = _handovers;
@@ -3369,6 +3378,7 @@ const Auth = (() => {
       await studentSignIn();
     } finally {
       _swBusy = false;
+      _setSwBusy(false);
     }
     // Success is the device actually being handed over. Checking
     // ACTIVE_STUDENT_ID would not work - pdSwitchStudent() has usually already

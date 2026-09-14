@@ -6053,6 +6053,10 @@
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="sw-dot-3"></div>
       </div>
       <p id="sw-error" class="hidden text-xs text-red-500 text-center mb-3"></p>
+      <p id="sw-busy" class="hidden text-xs text-green-600 dark:text-green-400 text-center mb-3 flex items-center justify-center gap-1.5">
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 16 16" fill="none" style="animation:ps-spin .7s linear infinite" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-opacity=".25" stroke-width="2.5"/><path d="M8 2.5A5.5 5.5 0 0 1 13.5 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Signing in…
+      </p>
       <div class="grid grid-cols-3 gap-2 mb-4">
         <button onclick="Auth._swKey('1')" class="pin-key-btn">1</button>
         <button onclick="Auth._swKey('2')" class="pin-key-btn">2</button>
@@ -6093,7 +6097,10 @@
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="pin-dot-3"></div>
       </div>
       <p id="pin-entry-error" class="hidden text-xs text-red-500 text-center mb-3">Incorrect PIN. Try again.</p>
-      <p id="pin-entry-busy" class="hidden text-xs text-indigo-600 dark:text-indigo-300 text-center mb-3">PIN correct - reconnecting your parent sign-in…</p>
+      <p id="pin-entry-busy" class="hidden text-xs text-indigo-600 dark:text-indigo-300 text-center mb-3 flex items-center justify-center gap-1.5">
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 16 16" fill="none" style="animation:ps-spin .7s linear infinite" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-opacity=".25" stroke-width="2.5"/><path d="M8 2.5A5.5 5.5 0 0 1 13.5 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        PIN correct — loading your dashboard…
+      </p>
       <div class="grid grid-cols-3 gap-2 mb-4">
         <button onclick="Auth._pinKey('1')" class="pin-key-btn">1</button>
         <button onclick="Auth._pinKey('2')" class="pin-key-btn">2</button>

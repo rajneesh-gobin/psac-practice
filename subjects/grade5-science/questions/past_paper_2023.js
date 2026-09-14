@@ -38,7 +38,7 @@ STATIC_QUESTIONS.push(
     explanation:'Food contains chemical energy, which the body converts into movement, heat, and other forms of energy needed for daily activities.' }),
 
   makeMCQ({ id:'g5sc-pp23-007', chapterId:'energy', subsection:'sources', difficulty:1,
-    question:'Solar street lamps use the energy from the sun. Which <strong>source of energy</strong> do they use?',
+    question:'Which <strong>source of energy</strong> do solar street lamps use?',
     options:['Coal','Petrol','Solar energy','Wind energy'], answer:'Solar energy',
     hint:'These lamps work without being connected to the electricity grid.',
     explanation:'Solar street lamps use solar energy (sunlight) captured by solar panels, which is then converted to electrical energy to light the lamps at night.' }),

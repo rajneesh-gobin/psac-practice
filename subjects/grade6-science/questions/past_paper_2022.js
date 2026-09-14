@@ -76,7 +76,7 @@ STATIC_QUESTIONS.push(
     explanation:'One complete revolution of the Earth around the Sun takes 365¼ days - one year. Earth\'s rotation on its axis takes 24 hours (day/night). The Moon orbits Earth in about 28 days.' }),
 
   makeMCQ({ id:'g6sc-pp22-013', chapterId:'g6-energy', subsection:'sources', difficulty:1,
-    question:'Solar panels convert sunlight into electricity. Which <b>form of energy</b> do solar panels use?',
+    question:'Which <b>form of energy</b> do solar panels use?',
     options:['Chemical energy','Heat energy','Light energy','Movement energy'], answer:'Light energy',
     hint:'Solar panels need sunshine to work.',
     explanation:'Solar panels use light energy from the Sun and convert it directly into electrical energy. They do not need heat - they work even on cold, bright days.' }),

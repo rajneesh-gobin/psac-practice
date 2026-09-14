@@ -20,7 +20,7 @@ STATIC_QUESTIONS.push(
   // ── Q1: 5 MCQs (circle the correct answer) ──────────────────────────────
 
   makeMCQ({ id:'g6sc-pp24-001', chapterId:'g6-animals', subsection:'habitats', difficulty:1,
-    question:'Tigers eat the flesh of other animals. What type of animal is the tiger?',
+    question:'What type of animal is the tiger?',
     options:['Carnivorous','Granivorous','Herbivorous','Omnivorous'], answer:'Carnivorous',
     hint:'An animal that eats only meat/flesh has a specific name.',
     explanation:'Carnivorous animals eat other animals\' flesh. (Herbivores eat plants; omnivores eat both.)',
