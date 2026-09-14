@@ -321,10 +321,16 @@ and 0 `cloze` rows**. It now loads through `netlify/lib/questions-sandbox.js`, a
 ---
 
 ## Grades, pricing, and `comingSoon`
-- **Registered: grades 1–9.** Live: **4, 5, 6** plus five Grade 9 packs
-  (**grade9-maths, grade9-ict, grade9-biology, grade9-chemistry,
-  grade9-physics**). Every other pack is a `comingSoon: true` placeholder
-  (one manifest + one sample question).
+- **Registered: grades 1–9. 46 of the 49 packs are LIVE** (re-measured
+  2026-09-14 from the manifests). The only `comingSoon: true` packs left are
+  **grade1-ict, grade2-ict, grade3-ict**. Everything else — all of grades 1–3,
+  4–6, 7, 8 and all eight Grade 9 packs — carries real content and passes
+  `scripts/test-live-pack-content.js` (92 checks, 0 failures).
+  ⚠ **This brief said "Live: 4, 5, 6 plus five Grade 9 packs" until 2026-09-14**,
+  long after grades 1–3, 7 and 8 had shipped, so a session reading it was told
+  that two-thirds of the product did not exist. The flag is one character and
+  the only thing that tracks it is a test — **re-run the measurement below
+  before writing a coverage number anywhere.**
   ⚠ **There is no `grade9-science` pack.** It existed for one day and was split
     on 2026-09-08, because the NCE sets Biology, Chemistry and Physics as three
     independent 45-minute / 50-mark papers. Chapter and question ids keep the
@@ -340,31 +346,42 @@ and 0 `cloze` rows**. It now loads through `netlify/lib/questions-sandbox.js`, a
   single definition. The 7–9 subject list is confirmed against the MIE NCF/TLS
   ([pending.md](docs/claude/pending.md) item 10) — but confirm which packs have real
   content before writing there.
-- ⚠ **Coverage copy is "Grades 4–6, plus NCE Grade 9 Mathematics, ICT,
-  Biology, Chemistry and Physics"** — that, and only that, is what a child can
-  actually practise. **20 live packs, 214 chapters, 17,612 practisable
-  questions, 194 past-paper items** (re-measured 2026-09-08 after the science
-  split, from the built bundles). ⚠ **Name the SUBJECT, never the grade**:
-  Grade 9 registers eight packs and three hold **one sample question each**
-  (English, French, Social & Modern Studies). ⚠ **Judge by CONTENT, not by the
-  `comingSoon` flag** — those three were flipped to `comingSoon: false` on
-  2026-09-08 while still empty, and `test-exam-paper-shape` failed at once with
-  *"a full exam dealt 1 of 40 questions"*. "Grade 9 is live" or "NCE is live" promises three
-  subjects that open empty. ⚠ **"Science" is now wrong too** — a parent reading
-  it looks for one subject and finds three cards.
-  The landing page, `_appShareText()` (app.js) and `_inviteText()` (auth.js) name
-  the live Grade 9 subjects, each with a comment saying why, and have been
-  changed **all three together** three times — "and ICT", "and Science", then
-  the three sciences by name — because a
-  share message and an invite that disagree with the landing page is how a parent
-  arrives expecting something that is not there. ⚠ A WhatsApp message cannot be corrected
-  once forwarded.
-- ⚠ **Count what PROJECTS, not what is stored.** 833 of the practisable total
-  comes from 667 grade9-maths `task` items via `Assessment.projectToItems()`; a
-  raw task is in `_POOL_TYPES_EXCLUDED` and has no `question` field at all, so
-  counting bundle rows advertises questions no child can ever be dealt. (Verified
-  before publishing: all 19 chapters project to something; only 2 tasks —
-  drawing/construction — yield nothing online, by design.)
+- ⚠⚠ **The coverage copy is now STALE IN THE OTHER DIRECTION, and that is an
+  OPEN PRODUCT DECISION.** The landing page, `_appShareText()` (app.js) and
+  `_inviteText()` (auth.js) still say **"Grades 4–6, plus NCE Grade 9
+  Mathematics, ICT, Biology, Chemistry and Physics"**. Measured 2026-09-14 that
+  understates the product by more than half: **46 live packs, 457 chapters,
+  34,272 practisable questions, 194 past-paper items**, spanning grades 1–9.
+  ⚠ **Do not fix this in one place.** The three surfaces have been changed all
+  together three times already, for the reason below; decide the wording once
+  and apply it to all three in a single pass.
+  ⚠ **Judge by CONTENT, not by the `comingSoon` flag.** On 2026-09-08 three
+  Grade 9 packs were flipped to `comingSoon: false` holding **one sample
+  question each**, and the only thing that noticed was `test-exam-paper-shape`,
+  whose message — *"a full exam dealt 1 of 40 questions"* — reads as a bug in the
+  assembler rather than as "this pack should not be live yet". Those three have
+  since been written: English 845, French 1,152, Social & Modern Studies 441
+  practisable items. `scripts/test-live-pack-content.js` is now the gate.
+  ⚠ **Name the SUBJECT, never the grade**, and never say "Science" — a parent
+  reading it looks for one subject and finds three cards.
+  **The reason they move together:** each of the three carries a comment saying
+  why, and all three have been changed in one pass three times already — "and
+  ICT", "and Science", then the three sciences by name — because a share message
+  and an invite that disagree with the landing page is how a parent arrives
+  expecting something that is not there. ⚠ A WhatsApp message cannot be
+  corrected once forwarded.
+- ⚠ **Count what a child can be DEALT, not what is stored.** A raw `task` is in
+  `_POOL_TYPES_EXCLUDED` and has no `question` field at all, so counting bundle
+  rows advertises questions no child can ever be dealt — 754 of grade9-maths'
+  1,760 rows are tasks. (Verified before publishing: all 19 chapters project to
+  something; only 2 tasks — drawing/construction — yield nothing online, by
+  design.)
+  ⚠ **But do NOT add a projection on top of the bundle any more.**
+  `build-questions.js` runs `Assessment.expandTasks()` at build time, so the
+  auto-markable parts are already ordinary rows. Filtering the built bundle with
+  `isPoolQuestion()` counts each part exactly once; the older "rows + 833
+  projected items" sum double-counts. See "Content, measured" under Current
+  state.
 
 ### The `comingSoon` rule
 > Anything that builds a list a **parent or child** sees filters `!p.comingSoon`.
@@ -553,30 +570,60 @@ staged CLI deploy, and the harness traps. Headlines:
 
 ## Current state
 
-### Content, measured 2026-09-08
-**18 live packs, 210 chapters, 16,502 practisable questions**, plus 164 past-paper
-items and the `comingSoon` placeholder packs. ⚠ **Measured by executing the
-manifests and counting distinct ids in the BUILT bundles**
-(`node netlify/build-questions.js`) — not by adding up numbers written here.
-Re-measure rather than carrying these forward, and count what **projects**.
+### Content, measured 2026-09-14
+**46 live packs, 457 chapters, 34,272 practisable questions**, plus 194
+past-paper items and the 3 `comingSoon` ICT placeholders.
 
-Per-pack (grades 4–6, measured the same way):
-| pack | q | pack | q | pack | q |
+⚠ **How this was measured — reproduce it, do not carry the numbers forward.**
+Build the bundles (`node netlify/build-questions.js`), then count **distinct
+ids that pass `isPoolQuestion()`** — `!!q.question && !_POOL_TYPES_EXCLUDED.has(q.type)`,
+where the excluded types are `cloze`, `task` and `errorhunt` — across every
+pack whose manifest is not `comingSoon: true`.
+
+⚠⚠ **Do NOT add a task projection on top any more.**
+`netlify/build-questions.js` calls `Assessment.expandTasks()` at build time
+(line 433), so a task's auto-markable parts are already materialised as ordinary
+rows in the bundle. Measured on grade9-maths: 1,760 rows (754 `task` + 1,006
+poolable), and `expandTasks()` re-run on the BUILT bundle yields **0** new items,
+because every projected id is already there. The old "1,545 rows, of which 667
+tasks project to 833 items" arithmetic double-counts those parts today.
+
+Per-pack practisable / chapters, all 46, measured the same way:
+| pack | q | ch | pack | q | ch |
 |---|---|---|---|---|---|
-| grade4-maths | 662 | grade5-maths | 1,419 | grade6-maths | 705 |
-| grade4-english | 873 | grade5-english | 645 | grade6-english | 890 |
-| grade4-french | 2,121 | grade5-french | 2,295 | grade6-french | 2,234 |
-| grade4-history | 558 | grade5-history | 532 | grade6-history | 460 |
-| grade4-science | 344 | grade5-science | 424 | grade6-science | 463 |
+| grade1-english | 547 | 6 | grade5-english | 807 | 10 |
+| grade1-french | 391 | 5 | grade5-french | 2,383 | 16 |
+| grade1-health | 252 | 3 | grade5-history | 664 | 12 |
+| grade1-maths | 849 | 9 | grade5-maths | 1,431 | 18 |
+| grade2-english | 579 | 6 | grade5-science | 499 | 8 |
+| grade2-french | 498 | 5 | grade6-english | 972 | 8 |
+| grade2-health | 252 | 3 | grade6-french | 2,288 | 14 |
+| grade2-maths | 975 | 11 | grade6-history | 540 | 9 |
+| grade3-english | 499 | 6 | grade6-maths | 717 | 11 |
+| grade3-french | 416 | 5 | grade6-science | 564 | 10 |
+| grade3-health | 180 | 3 | grade7-english | 459 | 14 |
+| grade3-maths | 1,009 | 13 | grade7-french | 212 | 5 |
+| grade3-ssee | 350 | 8 | grade7-maths | 727 | 24 |
+| grade4-english | 942 | 8 | grade7-science | 442 | 14 |
+| grade4-french | 2,164 | 14 | grade7-social-modern-studies | 159 | 5 |
+| grade4-history | 648 | 9 | grade8-english | 406 | 14 |
+| grade4-maths | 762 | 6 | grade8-french | 197 | 5 |
+| grade4-science | 420 | 10 | grade8-maths | 613 | 16 |
+| grade9-biology | 857 | 6 | grade8-science | 402 | 13 |
+| grade9-chemistry | 921 | 7 | grade8-social-modern-studies | 151 | 5 |
+| grade9-english | 845 | 17 | grade9-maths | 1,006 | 19 |
+| grade9-french | 1,152 | 11 | grade9-physics | 976 | 7 |
+| grade9-ict | 1,708 | 12 | grade9-social-modern-studies | 441 | 17 |
 
-Grade 9, all `comingSoon: false`: **grade9-maths 1,711 practisable** (1,545 rows,
-of which 667 `task`s project to 833 items via `Assessment.projectToItems()`),
-**grade9-ict 524**, **grade9-chemistry 218**, **grade9-biology 189**,
-**grade9-physics 178**.
-⚠ The Grades 4-6 table above is STALE — another session is writing content in
-this same working tree and eight of those fifteen packs grew on 2026-09-08
-(grade5-english 645 -> 705, grade4-french 2,121 -> 2,141 among them). Re-count
-from the built bundles; do not add to these numbers.
+⚠ **Another session writes content into this same working tree.** Eight packs
+moved between 2026-09-08 and 2026-09-14 while this section still claimed the
+2026-09-08 figures. Re-count from the built bundles; never add to a number
+written here.
+
+⚠ **The import figures below are from 2026-09-08 and the corpus has since grown
+~2.3× — they describe a database that no longer matches the bank.** Re-check
+against the live table before quoting any of it; the importer never deletes, so
+a re-import adds rather than reconciles.
 
 The live `questions` table held **14,893 rows** at the 2026-09-08 import (14,729
 practice + 164 past papers): `mcq 12,322 · numeric 2,024 · text 305 · cloze 60 ·

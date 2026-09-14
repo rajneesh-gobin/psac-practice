@@ -28,6 +28,11 @@ colliding and what keeps the batch shippable.
   constant. The coordinator does that once, at the end.
 
 ## ID namespace — yours alone
+> ⚠ **Fixed 2026-09-14.** The verification snippet below used to filter on
+> `/-fam-/`, which silently matches NOTHING in the three science packs: they use
+> the infixes `bfam` / `cfam` / `pfam`, so the id reads `g9s-bfam-001-a` and the
+> substring is `-bfam-`. An agent running the old snippet saw "loaded 0" and had
+> no way to tell that from a genuinely empty file. It is now `/-[bcp]?fam-/`.
 `<pack-prefix>-fam-NNN-<variant>` where NNN is 001+ and `<variant>` is `a`,`b`,
 `c`,`d`,`e`. Example: `g9sms-fam-007-c`.
 - The pack prefix is whatever the existing questions in your pack already use
@@ -101,7 +106,7 @@ Run these and make them pass for YOUR file:
 ```
 node --check subjects/<pack>/questions/family_expansion.js
 node -e "const {loadSubject}=require('./netlify/lib/questions-sandbox.js');
-  const qs=loadSubject('<pack>'); const f=qs.filter(q=>/-fam-/.test(q.id));
+  const qs=loadSubject('<pack>'); const f=qs.filter(q=>/-[bcp]?fam-/.test(q.id));
   console.log('loaded',f.length,'ids unique',new Set(f.map(q=>q.id)).size);
   const bad=f.filter(q=>!q.question||!q.chapterId||!q.subsection);
   console.log('missing fields',bad.length); if(bad.length) console.log(bad.slice(0,3));"
