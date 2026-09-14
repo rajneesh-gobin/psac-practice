@@ -76,7 +76,13 @@ if (args.error) { console.error(args.error + '\n\n' + USAGE); process.exit(2); }
 function _loadDotEnv() {
   const envPath = path.join(ROOT, '.env');
   if (!fs.existsSync(envPath)) return;
-  for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+  // ⚠ Split on /\r?\n/, not '\n'. A CRLF .env — which is what every Windows
+  //   editor writes — leaves a trailing \r on each line, and \r is a regex line
+  //   terminator: `.` cannot match it and `$` will not match before it, so the
+  //   pattern below failed on EVERY line and the file parsed to {}. The error
+  //   then read "SUPABASE_SERVICE_ROLE_KEY is not set" while the key was
+  //   sitting in .env, correctly named.
+  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
     const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
     if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
   }
