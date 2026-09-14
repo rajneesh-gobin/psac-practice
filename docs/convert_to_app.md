@@ -1,4 +1,4 @@
-# Convert PSAC Practice to an Android App (TWA)
+# Convert Nou Klass to an Android App (TWA)
 
 > **Self-contained brief.** A future Claude session reading this file should be
 > able to execute every step without any other context. Verify the live site URL
@@ -14,15 +14,15 @@ project is `/.well-known/assetlinks.json` (a domain ownership proof).
 
 | | |
 |---|---|
-| **Live URL** | `https://psac-practice.netlify.app` |
-| **Package name** | `app.netlify.psacpractice.twa` |
-| **App name** | PSAC Practice |
-| **Short name** | PSAC Practice |
+| **Live URL** | `https://nouklass.com` |
+| **Package name** | `com.nouklass.app` |
+| **App name** | Nou Klass |
+| **Short name** | Nou Klass |
 | **Theme colour** | `#3b82f6` (from `manifest.json`) |
 | **Background colour** | `#1e1b4b` (from `manifest.json`) |
 | **Icon 512** | `/icons/icon-512.png` |
 | **Orientation** | portrait |
-| **Keystore file** | `psac-release.keystore` (keep this file forever + backed up) |
+| **Keystore file** | `nouklass-release.keystore` (keep this file forever + backed up) |
 | **Key alias** | `psac` |
 
 > ⚠ The keystore is the ONE thing that can never be regenerated. If lost, you
@@ -62,14 +62,14 @@ Do this ONCE. Store the output file safely.
 
 ```powershell
 keytool -genkey -v `
-  -keystore psac-release.keystore `
+  -keystore nouklass-release.keystore `
   -alias psac `
   -keyalg RSA `
   -keysize 2048 `
   -validity 10000
 
 # When prompted:
-# - First and last name: PSAC Practice (or your name)
+# - First and last name: Nou Klass (or your name)
 # - Organizational unit: Education
 # - Organization: (your org)
 # - City/Locality: Port Louis
@@ -81,7 +81,7 @@ keytool -genkey -v `
 Then extract the SHA-256 fingerprint — you need this for Step 2:
 
 ```powershell
-keytool -list -v -keystore psac-release.keystore -alias psac
+keytool -list -v -keystore nouklass-release.keystore -alias psac
 
 # Look for the line:  SHA256: AA:BB:CC:DD:...
 # Copy the full colon-separated hex string — 32 pairs of hex digits
@@ -101,7 +101,7 @@ repo root, create `.well-known/assetlinks.json` at the project root.
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "app.netlify.psacpractice.twa",
+    "package_name": "com.nouklass.app",
     "sha256_cert_fingerprints": [
       "AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99"
     ]
@@ -143,7 +143,7 @@ blanket doc-blocker rule above it:
 
 ```powershell
 # Must return 200 and valid JSON
-Invoke-WebRequest "https://psac-practice.netlify.app/.well-known/assetlinks.json"
+Invoke-WebRequest "https://nouklass.com/.well-known/assetlinks.json"
 
 # Or in a browser — it must show the raw JSON, not a 404
 ```
@@ -154,23 +154,23 @@ Invoke-WebRequest "https://psac-practice.netlify.app/.well-known/assetlinks.json
 
 ```powershell
 # Create a new folder for the Android project (outside the web repo)
-mkdir C:\psac-android
-cd C:\psac-android
+mkdir C:\nouklass-android
+cd C:\nouklass-android
 
 # Initialise — Bubblewrap reads the manifest.json from the live site
-bubblewrap init --manifest https://psac-practice.netlify.app/manifest.json
+bubblewrap init --manifest https://nouklass.com/manifest.json
 ```
 
 When Bubblewrap prompts, use these values:
 
 | Prompt | Value |
 |---|---|
-| Application ID (package name) | `app.netlify.psacpractice.twa` |
-| App name | `PSAC Practice` |
-| Short name | `PSAC Practice` |
-| Host | `psac-practice.netlify.app` |
+| Application ID (package name) | `com.nouklass.app` |
+| App name | `Nou Klass` |
+| Short name | `Nou Klass` |
+| Host | `nouklass.com` |
 | Start URL | `/` |
-| Signing key path | path to `psac-release.keystore` |
+| Signing key path | path to `nouklass-release.keystore` |
 | Key alias | `psac` |
 | Keystore password | (the one you set in Step 1) |
 | Key password | (the one you set in Step 1) |
@@ -186,7 +186,7 @@ When Bubblewrap prompts, use these values:
 ## Step 4 — Build the APK / AAB
 
 ```powershell
-cd C:\psac-android
+cd C:\nouklass-android
 
 # Build a debug APK (for local testing on a real device)
 bubblewrap build
@@ -219,7 +219,7 @@ Check the Digital Asset Link verification:
 
 ```powershell
 # Google's verification tool — paste this URL in a browser:
-# https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://psac-practice.netlify.app&relation=delegate_permission/common.handle_all_urls
+# https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://nouklass.com&relation=delegate_permission/common.handle_all_urls
 # Must return a non-empty statements array with your package name
 ```
 
@@ -244,8 +244,8 @@ Check the Digital Asset Link verification:
    # produces app-release.aab
    ```
 4. Fill in the store listing:
-   - **Title**: PSAC Practice
-   - **Short description**: Mauritius PSAC exam revision for Grades 4–6
+   - **Title**: Nou Klass
+   - **Short description**: Mauritius exam revision for Grades 4–6 — nouklass.com
    - **Full description**: Include grades, subjects, offline capability, no ads
    - **Screenshots**: take on a real Android phone (at least 2 phone screenshots required)
    - **Feature graphic**: 1024×500 px banner (required)
@@ -270,7 +270,7 @@ Capacitor wraps the web app in a WKWebView and builds a native iOS app.
 
 ```powershell
 npm install -g @capacitor/cli @capacitor/core @capacitor/ios
-npx cap init "PSAC Practice" app.netlify.psacpractice
+npx cap init "Nou Klass" com.nouklass.app
 npx cap add ios
 # Copy the web files, then:
 npx cap open ios   # opens Xcode
@@ -290,8 +290,8 @@ Requires:
 | `.well-known/assetlinks.json` | **CREATE** — new file, domain proof |
 | `netlify.toml` | **EDIT** — add Content-Type header + 200 redirect for assetlinks |
 | `scripts/prepare-deploy.js` | **EDIT** — add `.well-known/assetlinks.json` to allowlist |
-| `psac-release.keystore` | **CREATE** — keep outside the repo, never commit |
-| `C:\psac-android\` | **CREATE** — Android project folder, outside the repo |
+| `nouklass-release.keystore` | **CREATE** — keep outside the repo, never commit |
+| `C:\nouklass-android\` | **CREATE** — Android project folder, outside the repo |
 
 ---
 
@@ -301,14 +301,14 @@ Requires:
 [ ] JDK installed (keytool works)
 [ ] Node.js 18+ installed
 [ ] Bubblewrap installed globally (npm i -g @bubblewrap/cli)
-[ ] psac-release.keystore generated and backed up
+[ ] nouklass-release.keystore generated and backed up
 [ ] SHA-256 fingerprint extracted and saved
 [ ] .well-known/assetlinks.json created with real fingerprint
 [ ] netlify.toml updated (Content-Type header + 200 redirect)
 [ ] prepare-deploy.js allowlist updated
 [ ] Deployed → verified /.well-known/assetlinks.json returns 200 + JSON
 [ ] Digital Asset Link verified via Google's tool
-[ ] Bubblewrap project initialised at C:\psac-android
+[ ] Bubblewrap project initialised at C:\nouklass-android
 [ ] APK built and tested on a real Android device
 [ ] TWA confirmed working (no address bar, display-mode: standalone)
 [ ] AAB built for Play Store
@@ -323,7 +323,7 @@ Requires:
 |---|---|---|
 | Address bar still visible in app | Digital Asset Link not verified | Check SHA-256 matches; re-deploy assetlinks.json; wait ~5 min for CDN |
 | `assetlinks.json` returns 404 | Not in allowlist or netlify.toml blocking it | Add to prepare-deploy.js allowlist; add 200 redirect in netlify.toml |
-| Bubblewrap fails to read manifest | Live site unreachable or manifest has errors | Check `https://psac-practice.netlify.app/manifest.json` in browser |
+| Bubblewrap fails to read manifest | Live site unreachable or manifest has errors | Check `https://nouklass.com/manifest.json` in browser |
 | Play Store rejects APK | Target SDK too low | Bump targetSdkVersion to 34 in `twa-manifest.json` and rebuild |
 | Splash screen wrong colour | Bubblewrap used cached manifest | Edit `twa-manifest.json` → `themeColor` / `backgroundColor` and rebuild |
 | iOS PWA missing push notifications | iOS < 16.4 | Nothing to do — older iOS does not support web push |

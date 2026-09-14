@@ -31,7 +31,7 @@
     }));
   };
 
-  const P1 = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6">
+  const P1 = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6;color:#0f172a">
 Every Saturday, Yash helped his mother at the vegetable stall in the market at
 Quatre Bornes.<br><br>
 They arrived before six, while the tarpaulins were still being tied, and by seven
@@ -68,7 +68,7 @@ did not argue about.<br><br>
 That was a Saturday in June. Yash is grown up now and cannot remember the old
 lady's face at all. He remembers her hand.</div>`;
 
-  const P2 = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6">
+  const P2 = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6;color:#0f172a">
 The banyan tree in the school yard is older than the school itself.<br><br>
 Nobody knows exactly how old. The oldest photograph in the head teacher's office
 was taken in 1937, when the school was two wooden rooms and a bell on a post, and

@@ -28,7 +28,7 @@
 // text answered by retrieval (like the 2024 Messi text and the 2022 Spiders
 // text), and one NARRATIVE answered by inference (like the 2024 Mia story).
 
-const _KESTREL = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6">
+const _KESTREL = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6;color:#0f172a">
 <b>The Bird That Came Back</b><br>
 The Mauritius kestrel is a small falcon found nowhere else on Earth. It hunts in the
 forest, flying low between the trees, and feeds mainly on geckos, which it snatches
@@ -42,7 +42,7 @@ releasing the young birds back into protected forest. It was slow work. Today th
 are about <b>400</b> Mauritius kestrels flying free, and the bird is no longer one of
 the rarest in the world.</div>`;
 
-const _STORM = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6">
+const _STORM = `<div style="background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 10px;margin:8px 0;border-radius:4px;line-height:1.6;color:#0f172a">
 Riya was halfway home from the shop when the sky turned the colour of wet slate. She
 had promised her grandmother she would be back before dark, and she had promised
 herself she would not run.<br><br>

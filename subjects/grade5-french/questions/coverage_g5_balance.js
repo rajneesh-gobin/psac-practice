@@ -280,7 +280,7 @@
   // ══ fr-textes ═════════════════════════════════════════════════════════════
   // Each stimulus is written out once and reused by its questions, exactly the
   // shape the existing fr-textes questions have.
-  const box = (t) => `<div style="background:#f8fafc;border-left:4px solid #6366f1;padding:10px 12px;margin-bottom:10px;border-radius:8px;font-size:0.95em">${t}</div>`;
+  const box = (t) => `<div style="background:#f8fafc;border-left:4px solid #6366f1;padding:10px 12px;margin-bottom:10px;border-radius:8px;font-size:0.95em;color:#0f172a">${t}</div>`;
 
   const COURRIEL = box(
     '<b>De :</b> club.nature@ecolerosehill.mu<br>'
