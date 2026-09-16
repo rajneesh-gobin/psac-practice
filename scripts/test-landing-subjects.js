@@ -129,5 +129,30 @@ if (fs.existsSync(bundles)) {
   }
 }
 
+// ── How many games there are, said in three places ──────────────────────────
+// ⚠ Adding French Ninja moved ONE number and left two behind: the stat block
+//   said 8 while the Game Zone showcase listed 7 cards and the Kids Mode list
+//   still read "seven learning games". minigame.js is the only authority —
+//   mg-card-live is what a child can actually tap.
+const mg = fs.readFileSync(path.join(ROOT, 'engine/minigame.js'), 'utf8');
+const liveGames = (mg.match(/mg-card-live/g) || []).length;
+ok('minigame.js has live game cards', liveGames > 0);
+
+const WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
+const statBlock = +((landing.match(/>(\d+)<\/div>\s*<div[^>]*>\s*learning games/) || [])[1] || 0);
+ok(`the stat block says ${liveGames}`, statBlock === liveGames, `it says ${statBlock}`);
+
+const spelled = (landing.match(/\b([a-z]+) learning games\b/) || [])[1];
+ok(`the Game Zone line says "${WORDS[liveGames]}"`, spelled === WORDS[liveGames],
+  `it says "${spelled}"`);
+
+// The showcase: one card per game, plus the dashed "in the workshop" panel.
+const arcade = landing.slice(landing.indexOf('Learning that plays like an arcade'));
+const showcase = arcade.slice(0, arcade.indexOf('</section>'));
+const cardTitles = [...showcase.matchAll(/<h3[^>]*>([^<]*)<\/h3>/g)].map((m) => m[1]);
+const playable = cardTitles.filter((t) => !/workshop/i.test(t));
+ok(`the showcase lists ${liveGames} playable games`, playable.length === liveGames,
+  `it lists ${playable.length}: ${playable.join(', ')}`);
+
 console.log(`${checks - fails}/${checks} landing-subject checks passed`);
 process.exit(fails ? 1 : 0);

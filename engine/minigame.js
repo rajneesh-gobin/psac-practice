@@ -2502,7 +2502,7 @@ const MiniGames = (() => {
           : { 1: 1, 2: 4, 3: 5 };
     const byBand = { 1: [], 2: [], 3: [] };
     for (const p of bank) (byBand[p.band] || byBand[1]).push(p);
-    for (const b of [1, 2, 3]) byBand[b] = _shuffle(byBand[b].slice());
+    for (const b of [1, 2, 3]) byBand[b] = shuffle(byBand[b].slice());
 
     const out = [];
     for (const b of [1, 2, 3]) {
@@ -2511,10 +2511,10 @@ const MiniGames = (() => {
     }
     // Top up from anything left, so a thin band never shortens the run.
     if (out.length < FN_PHRASES) {
-      const rest = _shuffle(bank.filter(p => !out.includes(p)));
+      const rest = shuffle(bank.filter(p => !out.includes(p)));
       out.push(...rest.slice(0, FN_PHRASES - out.length));
     }
-    return _shuffle(out).slice(0, FN_PHRASES);
+    return shuffle(out).slice(0, FN_PHRASES);
   }
 
   function startFrNinja() {
