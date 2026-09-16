@@ -132,7 +132,11 @@ ok('a refresh can resume a run', /saved\.game === 'frninja'/.test(mg));
 // ── the rules the game must not break ──────────────────────────────────────
 // ⚠ THE rule every minigame inherits. A replay must not distort the mastery,
 //   mistake and daily reporting parents rely on.
-const fnBlock = (mg.match(/FRENCH NINJA[\s\S]*?function open\(\) \{/) || [''])[0];
+// ⚠ Stop at the NEXT game banner, not at open(). This used to read to the end
+//   of whatever game happened to be last in the file, so adding Memory Reef
+//   after French Ninja pulled ITS _awardRun() into this block and the
+//   count-of-one check failed on a file French Ninja had not changed.
+const fnBlock = (mg.match(/FRENCH NINJA[\s\S]*?(?=\n\s*\/\/ ══ [A-Z]|function open\(\) \{)/) || [''])[0];
 ok('French Ninja never calls recordAnswer()', !/recordAnswer\s*\(/.test(fnBlock));
 ok('French Ninja never calls _recordDaily()', !/_recordDaily\s*\(/.test(fnBlock));
 ok('a finished run awards points once, through _awardRun',

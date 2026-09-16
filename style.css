@@ -10011,3 +10011,47 @@ button.tc-cd-stat:focus-visible { outline: 3px solid #f4ce52; outline-offset: 2p
 @media (max-width: 430px) {
   .tc-cd-nav .tc-cd-nav-btn span { font-size: .72rem; }
 }
+
+/* ══ Memory Reef ═══════════════════════════════════════════════════════════
+   ⚠ The board is a CSS grid whose column count comes from --rf-cols, set
+     inline per board size (4 or 5). Hard-coding 4 would deal the 5×4 board as
+     five rows of four, which is a different and much harder game.
+   ⚠ Cells are square via aspect-ratio, so a 5-wide board on a 360px phone
+     still fits without the grid scrolling sideways. */
+.rf-stage { max-width:560px; margin:0 auto; border-radius:20px; padding:14px 12px 16px;
+  display:flex; flex-direction:column; gap:10px;
+  background:radial-gradient(120% 90% at 50% 0%, #042f2e 0%, #0c4a6e 60%, #081026 100%);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.5); }
+.rf-topbar { display:flex; align-items:center; gap:8px; }
+.rf-pearls { flex:0 0 auto; font-weight:800; font-size:.85rem; color:#5eead4; }
+.rf-progress { flex:1; text-align:center; font-weight:800; font-size:.85rem; color:#bae6fd; }
+.rf-streak { flex:0 0 auto; font-size:.9rem; font-weight:800; color:#fbbf24; }
+.rf-quit { flex:0 0 auto; padding:4px 10px; }
+.rf-instruction { text-align:center; font-size:.85rem; color:#bae6fd; margin:2px 0 0; }
+
+.rf-board { display:grid; grid-template-columns:repeat(var(--rf-cols,4), 1fr); gap:8px; }
+.rf-cell { aspect-ratio:1/1; border-radius:14px; border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(160deg,#0e7490,#075985);
+  display:flex; align-items:center; justify-content:center; padding:4px;
+  cursor:pointer; transition:transform .12s ease, background .18s ease, opacity .25s ease;
+  box-shadow:0 2px 0 rgba(0,0,0,.35); }
+.rf-cell:active { transform:scale(.95); }
+.rf-cell[disabled] { cursor:default; }
+.rf-face { font-size:1.7rem; line-height:1; }
+/* ⚠ A flipped card holds a WORD, not an emoji, and French words are long
+     ("la bibliothèque"). Shrink and wrap rather than overflow the shell. */
+.rf-up .rf-face { font-size:.8rem; font-weight:700; line-height:1.15; text-align:center;
+  word-break:break-word; hyphens:auto; }
+.rf-up { background:linear-gradient(160deg,#f8fafc,#e2e8f0); color:#0f172a; }
+/* The two sides are tinted differently so a child can see at a glance which
+   half of the pair they are looking at. */
+.rf-up.rf-fr { background:linear-gradient(160deg,#fef3c7,#fde68a); }
+.rf-up.rf-en { background:linear-gradient(160deg,#dbeafe,#bfdbfe); }
+.rf-done { opacity:.45; box-shadow:none; }
+.mg-card-rf .mg-card-art { background:linear-gradient(135deg,#0e7490,#2563eb); }
+
+@media (max-width:380px) {
+  .rf-board { gap:6px; }
+  .rf-face { font-size:1.4rem; }
+  .rf-up .rf-face { font-size:.68rem; }
+}

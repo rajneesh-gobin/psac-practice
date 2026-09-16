@@ -75,6 +75,12 @@ const MiniGames = (() => {
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'frninja', fn: _fn }));
       else if (kind === 'timetravel' && _tt && !_tt.over)
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'timetravel', tt: _tt }));
+      // ⚠ Saved WITHOUT the in-flight turn: `flipped` and `locked` are dropped
+      //   on resume below. A refresh landing mid-peek would otherwise restore
+      //   two face-up cards with no timer left to turn them back, and the board
+      //   would sit there permanently locked.
+      else if (kind === 'reef' && _rf && !_rf.over)
+        sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'reef', rf: _rf }));
     } catch (_) {}
   }
   function _clearPersist() { try { sessionStorage.removeItem(_stateKey()); } catch (_) {} }
@@ -101,11 +107,20 @@ const MiniGames = (() => {
       && Array.isArray(saved.fn.phrases) && saved.fn.idx < saved.fn.phrases.length && _allowed();
     const canT = saved && saved.game === 'timetravel' && saved.tt && !saved.tt.over
       && Array.isArray(saved.tt.rounds) && saved.tt.round < saved.tt.rounds.length && _allowed();
+    // ⚠ Resumable only while the board is intact: cards + matched indices must
+    //   still describe the same game, and every matched pair must exist.
+    const canR = saved && saved.game === 'reef' && saved.rf && !saved.rf.over
+      && Array.isArray(saved.rf.cards) && saved.rf.cards.length === saved.rf.pairs * 2
+      && Array.isArray(saved.rf.matched) && saved.rf.matched.length < saved.rf.pairs && _allowed();
     if (typeof showScreen === 'function') showScreen('minigames');   // hub via the render hook
-    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF) { _clearPersist(); return; }
+    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF && !canR) { _clearPersist(); return; }
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
-    if (canF) {
+    if (canR) {
+      // ⚠ Drop the in-flight turn, never restore it — see _persist().
+      _rf = saved.rf; _rf.flipped = []; _rf.locked = false;
+      _reefRender();
+    } else if (canF) {
       _fn = saved.fn; _fn.revealing = false; _fn.tapped = _fn.tapped || [];
       _fnRender(); _fnStartTimer();
     } else if (canB) {
@@ -335,6 +350,7 @@ const MiniGames = (() => {
     if (_qfTimer) { clearInterval(_qfTimer); _qfTimer = null; }
     if (_njTimer) { clearInterval(_njTimer); _njTimer = null; }
     if (_fnTimer) { clearInterval(_fnTimer); _fnTimer = null; }
+    if (_rfTimer) { clearTimeout(_rfTimer); _rfTimer = null; }
     _stopPoll();
     if (!_allowed()) { el.innerHTML = '<p class="mg-note">🔒 Games are switched off by your parent right now.</p>'; return; }
     _preloadGrade();
@@ -348,6 +364,7 @@ const MiniGames = (() => {
     const bb = (typeof DB !== 'undefined' && DB.games?.battle) || {};
     const tt = (typeof DB !== 'undefined' && DB.games?.timetravel) || {};
     const fnb = (typeof DB !== 'undefined' && DB.games?.frninja) || {};
+    const rf = (typeof DB !== 'undefined' && DB.games?.reef) || {};
     el.innerHTML = `
       ${mixLine ? `<p class="mg-mix-line">🎯 ${esc(mixLine)}</p>` : ''}
       ${(typeof GameSettings !== 'undefined' && GameSettings.childGradeBar) ? GameSettings.childGradeBar() : ''}
@@ -423,14 +440,15 @@ const MiniGames = (() => {
         </span>
         <span class="mg-card-go">PLAY ›</span>
       </button>
-      <div class="mg-card mg-card-soon">
+      <button class="mg-card mg-card-live mg-card-rf" onclick="MiniGames.startReef()">
         <span class="mg-card-art">🐠</span>
         <span class="mg-card-body">
           <b>Memory Reef</b>
           <span>Flip the shells and match French words to their English meanings - the fewer flips, the more pearls you keep!</span>
+          ${rf.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${rf.bestScore} pts · ${rf.plays || 0} dives</span>` : '<span class=\"mg-card-best\">🌟 Take your first dive!</span>'}
         </span>
-        <span class="mg-card-lock">COMING SOON</span>
-      </div>
+        <span class="mg-card-go">PLAY ›</span>
+      </button>
       <div class="mg-card mg-card-soon">
         <span class="mg-card-art">🧪</span>
         <span class="mg-card-body">
@@ -2808,6 +2826,301 @@ const MiniGames = (() => {
     renderHub();
   }
 
+  // ══ MEMORY REEF ═══════════════════════════════
+  // Design intent is in the COMING SOON block near the top of this file.
+  //
+  // ⚠ NO TIMER, deliberately. Recall is the skill being practised and a clock
+  //   turns it into a speed test — the same reason Story Sprint waits for
+  //   "I've finished reading". Pearls are the pressure instead, and a child who
+  //   thinks for ten seconds loses nothing.
+  // ⚠ Pearls can never fall below one per pair, so a child who has a bad board
+  //   still finishes with something. A floor of zero would mean the last third
+  //   of a losing board is played for nothing.
+  const _REEF_BOARDS = { 1: { cols: 4, rows: 3 }, 2: { cols: 4, rows: 4 }, 3: { cols: 5, rows: 4 } };
+  const REEF_MATCH = 15;   // points per pair found
+  const REEF_PEARL = 10;   // points per pearl still in the shell at the end
+  const REEF_PEEK = 900;   // ms a mismatched pair stays face-up
+
+  let _rf = null, _rfTimer = null;
+
+  function _rfEsc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function _reefBand() {
+    const g = _childGrade();
+    return g <= 4 ? 1 : g <= 6 ? 2 : 3;
+  }
+
+  // ⚠ THE BOARD INVARIANT (stated in full in minigame_pairs.js): at most one
+  //   pair per `group`, and never a repeated French or English word. A child
+  //   who flips "l'armoire" and then "cupboard" must not be told they are
+  //   wrong about something they are right about.
+  // ⚠ Falls back to neighbouring bands rather than dealing a short board — a
+  //   half-empty grid reads as a broken game, not as a small one.
+  function _reefPick(band, want) {
+    const bank = (window.MINIGAME_PAIRS || []).filter(p => p && p.fr && p.en);
+    if (!bank.length) return [];
+    const order = [band, band - 1, band + 1, band - 2, band + 2].filter(b => b >= 1 && b <= 3);
+    const out = [], usedGroup = new Set(), usedFr = new Set(), usedEn = new Set();
+    for (const b of order) {
+      for (const p of shuffle(bank.filter(x => x.band === b))) {
+        if (out.length >= want) break;
+        if (p.group && usedGroup.has(p.group)) continue;
+        if (usedFr.has(p.fr) || usedEn.has(p.en)) continue;
+        out.push(p);
+        if (p.group) usedGroup.add(p.group);
+        usedFr.add(p.fr); usedEn.add(p.en);
+      }
+      if (out.length >= want) break;
+    }
+    return out;
+  }
+
+  function startReef() {
+    if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
+    clearTimeout(_rfTimer); _rfTimer = null;
+    const band = _reefBand();
+    const board = _REEF_BOARDS[band] || _REEF_BOARDS[1];
+    const want = (board.cols * board.rows) / 2;
+    const picked = _reefPick(band, want);
+    if (picked.length < want) { toast('Memory Reef is not available right now.', 3000); return; }
+    const cards = shuffle(picked.flatMap((p, i) => ([
+      { pair: i, side: 'fr', text: p.fr },
+      { pair: i, side: 'en', text: p.en },
+    ])));
+    _rf = {
+      cards, band, cols: board.cols, rows: board.rows, pairs: want,
+      flipped: [], matched: [], turns: 0, wasted: 0,
+      pearls: want * 3, streak: 0, bestStreak: 0, locked: false, over: false,
+    };
+    $('mg-hub')?.classList.add('hidden');
+    $('mg-game')?.classList.remove('hidden');
+    _reefRender();
+    _persist('reef');
+  }
+
+  function rfTap(i) {
+    if (!_rf || _rf.over || _rf.locked) return;
+    const card = _rf.cards[i];
+    if (!card) return;
+    if (_rf.matched.includes(card.pair) || _rf.flipped.includes(i)) return;
+    if (_rf.flipped.length >= 2) return;
+
+    _rf.flipped.push(i);
+    if (_rf.flipped.length < 2) { _reefRender(); _persist('reef'); return; }
+
+    const [a, b] = _rf.flipped.map(n => _rf.cards[n]);
+    _rf.turns++;
+    // ⚠ Two cards of the SAME pair but the same side cannot happen — each pair
+    //   contributes exactly one fr and one en card — so matching on pair id is
+    //   enough and does not need a side check.
+    const hit = a.pair === b.pair;
+    if (hit) {
+      _rf.matched.push(a.pair);
+      _rf.streak++;
+      if (_rf.streak > _rf.bestStreak) _rf.bestStreak = _rf.streak;
+      _rf.flipped = [];
+      _reefRender();
+      if (_rf.matched.length >= _rf.pairs) { _reefFinish(); return; }
+      _persist('reef');
+      return;
+    }
+
+    // A miss: show both for a beat, spend a pearl, then turn them back.
+    _rf.streak = 0;
+    _rf.wasted++;
+    _rf.pearls = Math.max(_rf.pairs, _rf.pearls - 1);
+    _rf.locked = true;
+    _reefRender();
+    _rfTimer = setTimeout(() => {
+      if (!_rf || _rf.over) return;
+      _rf.flipped = [];
+      _rf.locked = false;
+      _reefRender();
+      _persist('reef');
+    }, REEF_PEEK);
+  }
+
+  function _reefRender() {
+    if (!_rf) return;
+    const el = $('mg-game');
+    if (!el) return;
+    const cells = _rf.cards.map((c, i) => {
+      const matched = _rf.matched.includes(c.pair);
+      const up = matched || _rf.flipped.includes(i);
+      const cls = ['rf-cell', up ? 'rf-up' : '', matched ? 'rf-done' : '',
+        c.side === 'fr' ? 'rf-fr' : 'rf-en'].filter(Boolean).join(' ');
+      // ⚠ A face-down shell must not name its word in aria-label — a screen
+      //   reader would hand the child the whole board.
+      const label = up ? _rfEsc(c.text) : 'Hidden shell ' + (i + 1);
+      return `<button class="${cls}" ${up || _rf.locked ? 'disabled' : ''}
+          onclick="MiniGames.rfTap(${i})" aria-label="${label}">
+          <span class="rf-face">${up ? _rfEsc(c.text) : '🐚'}</span>
+        </button>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="rf-stage">
+        <div class="rf-topbar">
+          <span class="rf-pearls">🫧 ${_rf.pearls} pearls</span>
+          <span class="rf-progress">${_rf.matched.length}/${_rf.pairs} pairs</span>
+          ${_rf.streak > 1 ? `<span class="rf-streak">🔥 ${_rf.streak} in a row</span>` : ''}
+          <button class="mg-btn-ghost rf-quit" onclick="MiniGames.rfQuit()">✕</button>
+        </div>
+        <p class="rf-instruction">Flip two shells — match the French word to its English meaning.</p>
+        <div class="rf-board" style="--rf-cols:${_rf.cols}">${cells}</div>
+      </div>`;
+  }
+
+  function _reefFinish() {
+    if (!_rf) return;
+    _rf.over = true;
+    clearTimeout(_rfTimer); _rfTimer = null;
+    _clearPersist();
+    const perfect = _rf.wasted === 0;
+    _rf.score = _rf.matched.length * REEF_MATCH + _rf.pearls * REEF_PEARL;
+    _rf.size = _rf.cols + '×' + _rf.rows;
+    _reefSaveBest();
+    const best = ((typeof DB !== 'undefined' && DB.games?.reef?.sizes) || {})[_rf.size] || {};
+    const isRecord = _rf.score >= (best.bestScore || 0) && _rf.score > 0;
+    if (isRecord && typeof launchConfetti === 'function') launchConfetti(90);
+    const grade = perfect ? { t: 'Perfect dive! 🥇', s: 'Not one wasted flip.' }
+      : _rf.wasted <= _rf.pairs ? { t: 'Great memory! 🥈', s: 'You kept most of your pearls.' }
+        : _rf.wasted <= _rf.pairs * 2 ? { t: 'Nice work! 🥉', s: 'The reef is starting to look familiar.' }
+          : { t: 'Keep diving! 💪', s: 'Say each word out loud as you flip it — it sticks better.' };
+
+    $('mg-game').innerHTML = `
+      <div class="qf-end mg-pop">
+        <div class="qf-end-emoji">🐠</div>
+        <h3>${grade.t}</h3>
+        <p>${grade.s}</p>
+        <div class="qf-scoreboard">
+          <div><b>${_rf.score}</b><span>points</span></div>
+          <div><b>${_rf.pearls}</b><span>pearls kept</span></div>
+          <div><b>${_rf.turns}</b><span>flips</span></div>
+        </div>
+        ${isRecord ? '<p class="bq-best">🏅 New personal best!</p>'
+        : best.bestScore ? `<p class="bq-best">🏅 Your best on ${_rf.size}: ${best.bestScore} pts</p>` : ''}
+        <div class="mg-share-row">
+          <button class="mg-btn-primary" onclick="MiniGames.rfShare()">📤 Share my score</button>
+          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
+            onclick="MiniGames.rfShareTo('fb')">📘</button>
+          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
+            onclick="MiniGames.rfShareTo('wa')">💬</button>
+          <button class="mg-share-ic" title="Copy" aria-label="Copy score"
+            onclick="MiniGames.rfShareTo('copy', this)">🔗</button>
+        </div>
+        <div class="mg-end-row">
+          <button class="mg-btn-primary" onclick="MiniGames.startReef()">🔁 Dive again</button>
+          <button class="mg-btn-ghost" onclick="MiniGames.renderHub()">🎮 All games</button>
+        </div>
+      </div>`;
+  }
+
+  // ⚠ Bests are kept PER BOARD SIZE. A 4×3 board and a 5×4 board are different
+  //   games, and one leaderboard across both would tell a Grade 2 child they
+  //   are worse at memory than their Grade 8 sibling for structural reasons.
+  function _reefSaveBest() {
+    if (typeof DB === 'undefined' || !DB.stats) return;
+    DB.games = DB.games || {};
+    const g = DB.games.reef = DB.games.reef || { plays: 0, bestScore: 0, sizes: {} };
+    g.sizes = g.sizes || {};
+    g.plays++;
+    if (_rf.score > (g.bestScore || 0)) g.bestScore = _rf.score;
+    const s = g.sizes[_rf.size] = g.sizes[_rf.size] || { bestScore: 0, bestPearls: 0, bestFlips: 0 };
+    if (_rf.score > (s.bestScore || 0)) s.bestScore = _rf.score;
+    if (_rf.pearls > (s.bestPearls || 0)) s.bestPearls = _rf.pearls;
+    // ⚠ FEWER flips is better, so this is a minimum — seeded on the first run
+    //   rather than compared against a zero that nothing can beat.
+    if (!s.bestFlips || _rf.turns < s.bestFlips) s.bestFlips = _rf.turns;
+    _awardRun('reef');
+    if (typeof save === 'function') save(DB);
+  }
+
+  function _rfShareText() {
+    return `🐠 I scored ${_rf.score} in Memory Reef on Nou Klass - ${_rf.pairs} French words matched `
+      + `in ${_rf.turns} flips, ${_rf.pearls} pearls kept! Can you dive cleaner? 🫧`;
+  }
+  function _rfShareUrl() {
+    const qs = `g=rf&s=${_rf.score}&c=${_rf.pairs}&a=${_rf.pearls}`;
+    return new URL(`score.html?${qs}`, location.href).href;
+  }
+
+  async function _rfScoreImage() {
+    try {
+      const W = 1080, H = 1080, c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const x = c.getContext('2d');
+      const g = x.createLinearGradient(0, 0, W, H);
+      g.addColorStop(0, '#042f2e'); g.addColorStop(.55, '#0e7490'); g.addColorStop(1, '#2563eb');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      x.textAlign = 'center'; x.fillStyle = '#fff';
+      x.font = '600 46px system-ui,sans-serif'; x.fillText('🐠 MEMORY REEF', W / 2, 250);
+      x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
+      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillStyle = '#5eead4'; x.font = '800 300px system-ui,sans-serif';
+      x.fillText(String(_rf.score), W / 2, 660);
+      x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
+      x.fillText('POINTS', W / 2, 730);
+      x.font = '500 44px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.92)';
+      x.fillText(`${_rf.pairs} pairs   ·   ${_rf.turns} flips   ·   ${_rf.pearls} pearls`, W / 2, 850);
+      x.font = '700 50px system-ui,sans-serif'; x.fillStyle = '#fff';
+      x.fillText('Can you dive cleaner? 🫧', W / 2, 960);
+      const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+      return blob ? new File([blob], 'memory-reef-score.png', { type: 'image/png' }) : null;
+    } catch (_) { return null; }
+  }
+
+  async function rfShare() {
+    if (!_rf) return;
+    const text = _rfShareText(), url = _rfShareUrl();
+    const file = await _rfScoreImage();
+    if (navigator.share) {
+      try {
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], text: text + '\n' + url });
+        } else {
+          await navigator.share({ title: 'Memory Reef score', text, url });
+        }
+        return;
+      } catch (_) { return; }
+    }
+    rfShareTo('copy');
+  }
+
+  function rfShareTo(where, btn) {
+    if (!_rf) return;
+    const text = _rfShareText(), url = _rfShareUrl();
+    if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+    else if (where === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank', 'noopener');
+    else if (where === 'copy') {
+      const full = text + '\n' + url;
+      const done = () => { if (btn) { const o = btn.textContent; btn.textContent = '✅'; setTimeout(() => btn.textContent = o, 1600); } };
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(full).then(done).catch(() => prompt('Copy your score:', full));
+      else prompt('Copy your score:', full);
+    }
+  }
+
+  function rfQuit() {
+    if (_rf && !_rf.over && _rf.matched.length > 0 && !confirm('Leave Memory Reef? This dive won\'t be saved.')) return;
+    clearTimeout(_rfTimer); _rfTimer = null;
+    _clearPersist();
+    _rf = null;
+    renderHub();
+  }
+
+  function _rfDebug() {
+    return _rf && {
+      pairs: _rf.pairs, cols: _rf.cols, rows: _rf.rows, band: _rf.band,
+      flipped: _rf.flipped.slice(), matched: _rf.matched.slice(),
+      turns: _rf.turns, wasted: _rf.wasted, pearls: _rf.pearls,
+      streak: _rf.streak, locked: _rf.locked, over: _rf.over,
+      cards: _rf.cards.map(c => ({ pair: c.pair, side: c.side })),
+    };
+  }
+
   function open() {
     if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
     showScreen('minigames');
@@ -2835,5 +3148,6 @@ const MiniGames = (() => {
            startNinja, njAnswer, njQuit, _njDebug, _njMakeQ,
            startBattle, bbReady, bbAnswer, bbQuit, _bbDebug, _pickBattle,
            startTimeTravel, ttPick, ttUndo, ttNext, ttQuit, _ttDebug, _pickTimeTravel,
-           startFrNinja, fnTap, fnQuit, fnShare, fnShareTo, _fnDebug, _fnPick };
+           startFrNinja, fnTap, fnQuit, fnShare, fnShareTo, _fnDebug, _fnPick,
+           startReef, rfTap, rfQuit, rfShare, rfShareTo, _rfDebug, _reefPick };
 })();
