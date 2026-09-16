@@ -64,6 +64,10 @@ ok('found _appShareText() in app.js', !!shareText);
 ok('found _inviteText() in auth.js', !!inviteText);
 
 const SURFACES = {
+  // ⚠ The <meta name="description"> is the SEARCH RESULT, added 2026-09-16. It
+  //   is the only surface here a parent reads BEFORE they ever reach the site,
+  //   so a stale range in it is a promise broken before the first click.
+  'meta description':    meta('description'),
   'og:description':      meta('og:description'),
   'twitter:description': meta('twitter:description'),
   'og:image:alt':        meta('og:image:alt'),
@@ -110,10 +114,25 @@ if (claimed) {
 //   live and populated but named nowhere. A review, not a failure — naming a
 //   grade in the share copy is a product decision, and the banner artwork has
 //   to be redrawn to match it.
+// ⚠ "Named" has to mean what a READER would take as named, so every range in
+//   the copy is expanded, not just the first one the parity check reads. The
+//   first version matched a literal "Grades 8" and reported grade 8 unnamed
+//   while the copy plainly said "Grades 7–9" — a review line that sends the
+//   next person redrawing a banner for a grade already covered is worse than
+//   no review line at all.
+const namedGrades = (() => {
+  const all = Object.values(SURFACES).join(' ');
+  const named = new Set();
+  for (const m of all.matchAll(/Grades\s+(\d)\s*[–-]\s*(\d)/g)) {
+    for (let g = +m[1]; g <= +m[2]; g++) named.add(g);
+  }
+  for (const m of all.matchAll(/Grades?\s+(\d)\b/g)) named.add(+m[1]);
+  return named;
+})();
+
 if (claimed) {
   const unnamed = [...new Set(packs.filter((p) => !p.comingSoon).map((p) => p.grade))]
-    .filter((g) => g < claimed[0] || g > claimed[1])
-    .filter((g) => !new RegExp('Grades?\\s+' + g).test(Object.values(SURFACES).join(' ')))
+    .filter((g) => !namedGrades.has(g))
     .sort();
   if (unnamed.length) {
     console.log('  REVIEW  live but named on no share surface: grade ' + unnamed.join(', '));

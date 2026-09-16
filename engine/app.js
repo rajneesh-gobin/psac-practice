@@ -1402,21 +1402,39 @@ function shareChildLoginWhatsApp() {
 // for by name as a WhatsApp button, and wa.me works for a visitor who isn't
 // signed in yet (no referral code, no Auth dependency at all).
 function _appShareText() {
-  // ⚠ Keep this string, the landing page, index.html's og:description and
+  // ⚠ Keep this string, the landing page, index.html's og:/meta description and
   //   _inviteText() (auth.js) in step — a WhatsApp message cannot be corrected
-  //   once forwarded.
-  // ⚠ "Grades 4–6" until 2026-09-16, when it was re-measured: grades 1-3 went
-  //   live too, so this was UNDER-promising. 46 live packs, the thinnest at 25.9
-  //   questions per chapter. Grades 7-8 are live as well and are deliberately
-  //   still not named here — the shared Facebook banner artwork says
-  //   "PSAC Grades 1–6 · NCE Grade 9", and copy that outruns the picture beside
-  //   it is the same broken promise in the other direction.
-  return 'Nou Klass — Exam Practice 🎓 - free, fun revision for Grades 1–6! Maths, English, French, '
-    + 'Science and History & Geography, all aligned with the Mauritius MIE curriculum. XP, '
-    + 'streaks and real-time parent tracking built in.\n\n'
-    + '🆕 Full NCE Grade 9 coverage now live: Maths, ICT, Biology, Chemistry, Physics, '
-    + 'English, French and Social & Modern Studies — all 8 subjects, '
-    + 'just as the exam sets them.\n\nWorth a look:';
+  //   once forwarded. scripts/test-share-copy-parity.js fails if they drift.
+  // ⚠ WHATSAPP-ONLY, so *asterisk bold* is safe here and nowhere else.
+  //   shareAppWhatsApp() is the single caller (checked, not assumed) — the
+  //   Facebook card is built from the og: tags instead and never sees this.
+  //   ⚠ If a second caller is ever added, the asterisks become literal rubbish
+  //   in whatever it is: split the string rather than dropping the formatting.
+  // ⚠ THE GRADE RANGE IS PHRASED THE WAY THE LANDING HERO PHRASES IT, and that
+  //   is load-bearing twice over. It names the full 1-9 coverage a parent is
+  //   being sold, while the FIRST "Grades N–M" in the string stays "Grades 1–6"
+  //   — which is the range the parity test reads, and the range drawn into
+  //   assets/og-banner.jpg ("PSAC Grades 1–6 · NCE Grade 9"). A flat
+  //   "Grades 1–9" would say the same thing and contradict the picture.
+  // ⚠ Every number below was measured 2026-09-16 from the built bundles, and
+  //   every feature was read out of the code, not remembered:
+  //   34,392 questions · 926 past-paper items (2016-2024) · 7 live games
+  //   (mg-card-live in minigame.js) · "Print / Save as PDF" + a separate
+  //   answer key (app.js) · "no advertising"/"no tracking" (privacy.html).
+  // ⚠ "free right now" is the sanctioned wording and carries NO end date on any
+  //   surface. Never write "free forever" here: grades 3-9 are paid in the
+  //   pricing model, and only grades 1-2 are free permanently.
+  return '🎓 *Nou Klass* — free PSAC & NCE exam practice, made in Mauritius 🇲🇺\n\n'
+    + '*34,000+ practice questions*, aligned with the Mauritius MIE syllabus — '
+    + 'and everything is *free right now*.\n\n'
+    + '📚 Grades 1–6 (PSAC) and Grades 7–9 (NCE)\n'
+    + '✏️ Maths · English · French · Science · History & Geography\n'
+    + '📝 926 real past-paper questions (2016–2024)\n'
+    + '📄 Print or save a full 40-question exam paper as *PDF* — with a separate answer key for you\n'
+    + '📊 Follow your child\'s progress live — every score, streak and weak topic\n'
+    + '🎮 XP, streaks and 7 learning games, so they actually keep revising\n\n'
+    + 'No ads. No tracking. Works offline.\n\n'
+    + 'Have a look 👇';
 }
 
 // ⚠ No text argument, and that is not an omission. Facebook builds the post
