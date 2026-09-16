@@ -71,6 +71,8 @@ const MiniGames = (() => {
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'ninja', nj: _nj }));
       else if (kind === 'battle' && _bb && !_bb.over)
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'battle', bb: _bb }));
+      else if (kind === 'frninja' && _fn && !_fn.over)
+        sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'frninja', fn: _fn }));
       else if (kind === 'timetravel' && _tt && !_tt.over)
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'timetravel', tt: _tt }));
     } catch (_) {}
@@ -95,13 +97,18 @@ const MiniGames = (() => {
       && saved.nj.q && Array.isArray(saved.nj.q.options) && _allowed();
     const canBB = saved && saved.game === 'battle' && saved.bb && !saved.bb.over
       && Array.isArray(saved.bb.qs) && saved.bb.round * 2 + saved.bb.turn < saved.bb.qs.length && _allowed();
+    const canF = saved && saved.game === 'frninja' && saved.fn && !saved.fn.over
+      && Array.isArray(saved.fn.phrases) && saved.fn.idx < saved.fn.phrases.length && _allowed();
     const canT = saved && saved.game === 'timetravel' && saved.tt && !saved.tt.over
       && Array.isArray(saved.tt.rounds) && saved.tt.round < saved.tt.rounds.length && _allowed();
     if (typeof showScreen === 'function') showScreen('minigames');   // hub via the render hook
-    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT) { _clearPersist(); return; }
+    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF) { _clearPersist(); return; }
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
-    if (canB) {
+    if (canF) {
+      _fn = saved.fn; _fn.revealing = false; _fn.tapped = _fn.tapped || [];
+      _fnRender(); _fnStartTimer();
+    } else if (canB) {
       _g = saved.g; _g.locked = false; _g.wrongOnce = _g.wrongOnce ?? null; _g.hidden = _g.hidden || []; _g.cap = _g.cap || 4;
       _muted = !!(typeof DB !== 'undefined' && DB.games?.billionaire?.muted);
       _renderQ(true);
@@ -146,6 +153,13 @@ const MiniGames = (() => {
       '🔒 Reach question 5, 10 or 15 to lock in that prize - you keep it even if you slip later.',
       '🤝 Not sure? You can walk away any time and keep the money you have won.',
     ] },
+    frninja: { icon: '🗡️', title: 'French Ninja', lines: [
+      '🗡️ A French phrase appears. Some of its words have a grammar or verb mistake in them.',
+      '✅ Tap the words that are <b>wrong</b> to slice them - each one you find scores points, and the faster you spot it the more you get.',
+      '⚠️ Tapping a word that was already correct costs you points, so read before you slice!',
+      '⏱️ Each phrase only stays on screen for a few seconds. Find every mistake before it goes and you bank a bonus.',
+      '📖 After each phrase you are shown what the mistake was and why - that is the part that makes you better.',
+    ] },
     quickfire: { icon: '⚡', title: 'Quick Fire', lines: [
       '⏱️ The clock gives you 60 seconds. Answer as many questions as you can!',
       '✅ Every right answer scores points - answer fast for an extra speed bonus.',
@@ -177,12 +191,14 @@ const MiniGames = (() => {
   function _pauseTimers() {
     if (_qf && !_qf.over && _qfTimer) { _helpRemain = Math.max(0, _qfDeadline - Date.now()); clearInterval(_qfTimer); _qfTimer = null; }
     else if (_nj && !_nj.over && _njTimer) { _helpRemain = Math.max(0, _njDeadline - Date.now()); clearInterval(_njTimer); _njTimer = null; }
+    else if (_fn && !_fn.over && _fnTimer) { _helpRemain = Math.max(0, _fnDeadline - Date.now()); clearInterval(_fnTimer); _fnTimer = null; }
     else _helpRemain = 0;
   }
   function _resumeTimers() {
     if (!_helpRemain) return;
     if (_qf && !_qf.over) { _qfDeadline = Date.now() + _helpRemain; _qfTick(); _qfTimer = setInterval(_qfTick, 200); }
     else if (_nj && !_nj.over) { _njDeadline = Date.now() + _helpRemain; _njTick(); _njTimer = setInterval(_njTick, 100); }
+    else if (_fn && !_fn.over) { _fnDeadline = Date.now() + _helpRemain; _fnTick(); _fnTimer = setInterval(_fnTick, 100); }
     _helpRemain = 0;
   }
 
@@ -318,6 +334,7 @@ const MiniGames = (() => {
     // on the hub never leaves an orphaned interval ticking in the background.
     if (_qfTimer) { clearInterval(_qfTimer); _qfTimer = null; }
     if (_njTimer) { clearInterval(_njTimer); _njTimer = null; }
+    if (_fnTimer) { clearInterval(_fnTimer); _fnTimer = null; }
     _stopPoll();
     if (!_allowed()) { el.innerHTML = '<p class="mg-note">🔒 Games are switched off by your parent right now.</p>'; return; }
     _preloadGrade();
@@ -330,6 +347,7 @@ const MiniGames = (() => {
     const nj = (typeof DB !== 'undefined' && DB.games?.ninja) || {};
     const bb = (typeof DB !== 'undefined' && DB.games?.battle) || {};
     const tt = (typeof DB !== 'undefined' && DB.games?.timetravel) || {};
+    const fnb = (typeof DB !== 'undefined' && DB.games?.frninja) || {};
     el.innerHTML = `
       ${mixLine ? `<p class="mg-mix-line">🎯 ${esc(mixLine)}</p>` : ''}
       ${(typeof GameSettings !== 'undefined' && GameSettings.childGradeBar) ? GameSettings.childGradeBar() : ''}
@@ -393,6 +411,15 @@ const MiniGames = (() => {
           <b>Time Traveller</b>
           <span>Journey through Mauritius history - put famous events, explorers and heroes back in the right order before time rewinds!</span>
           ${tt.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${tt.bestScore} pts · ${tt.bestPerfect || 0}/8 perfect rounds</span>` : '<span class=\"mg-card-best\">🌟 Take your first journey!</span>'}
+        </span>
+        <span class="mg-card-go">PLAY ›</span>
+      </button>
+      <button class="mg-card mg-card-live mg-card-fn" onclick="MiniGames.startFrNinja()">
+        <span class="mg-card-art">🗡️</span>
+        <span class="mg-card-body">
+          <b>French Ninja</b>
+          <span>Slice the mistakes out of a French phrase before it vanishes - tap the wrong words, leave the right ones alone!</span>
+          ${fnb.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${fnb.bestScore} pts · ${fnb.bestSliced || 0} sliced</span>` : '<span class=\"mg-card-best\">🌟 Sharpen your first blade!</span>'}
         </span>
         <span class="mg-card-go">PLAY ›</span>
       </button>
@@ -2429,6 +2456,358 @@ const MiniGames = (() => {
     renderHub();
   }
 
+  // ══════════════════════════════════════════════
+  //  FRENCH NINJA 🗡️ - slice the mistakes out of a French phrase.
+  //
+  //  A phrase arrives with every word as a tappable chip. Some words carry a
+  //  grammar or verb error. Tap an error and you slice it (+points); tap a word
+  //  that was already correct and you lose points. Each phrase has its own
+  //  window, and when the window closes the phrase slides away and the next one
+  //  arrives - a reflex game, not a worksheet.
+  //
+  //  ⚠ THE PENALTY IS WHY THE BANK HAS TO BE RIGHT. A child LOSES points for
+  //    tapping a correct word, so any token the bank left unflagged that is in
+  //    fact wrong punishes a child for spotting a real mistake. That is the
+  //    worst failure this game can have - worse than a missing phrase - and it
+  //    is why scripts/test-french-ninja.js checks the bank's shape and why every
+  //    non-error token is the author's explicit assertion of correct French.
+  //
+  //  ⚠ Expiry costs nothing but the lost chance. Time pressure is the game;
+  //    docking a child for reading a long sentence slowly is not.
+  //
+  //  Bands follow the child's grade (1 easy → 3 NCE), never a loaded subject
+  //  pack: a game must not depend on something being fetched or entitled.
+  const FN_PHRASES = 10;        // phrases in a run
+  const FN_HIT = 12;            // per error sliced
+  const FN_MISS = 6;            // per correct word tapped
+  const FN_CLEAR = 15;          // bonus for finding every error in a phrase
+  const FN_STREAK_CAP = 5;
+
+  let _fn = null, _fnTimer = null, _fnDeadline = 0, _fnWindow = 0;
+
+  // Seconds allowed for one phrase. Scales with length so a long sentence is not
+  // harder merely for being long - the difficulty should come from the grammar.
+  function _fnWindowFor(p) { return Math.round(5 + (p.words.length * 0.8)); }
+
+  // ⚠ Weighted by grade, but never empty: if a band has no phrases the mix falls
+  //   back to the whole bank rather than dealing a short run.
+  function _fnPick() {
+    const bank = (window.MINIGAME_FRENCH || []).filter(p =>
+      p && Array.isArray(p.words) && p.words.length && Array.isArray(p.errors) && p.errors.length);
+    if (!bank.length) return [];
+    const g = _childGrade();
+    const weights = g <= 4 ? { 1: 7, 2: 3, 3: 0 }
+      : g <= 6 ? { 1: 4, 2: 4, 3: 2 }
+        : g <= 8 ? { 1: 2, 2: 5, 3: 3 }
+          : { 1: 1, 2: 4, 3: 5 };
+    const byBand = { 1: [], 2: [], 3: [] };
+    for (const p of bank) (byBand[p.band] || byBand[1]).push(p);
+    for (const b of [1, 2, 3]) byBand[b] = _shuffle(byBand[b].slice());
+
+    const out = [];
+    for (const b of [1, 2, 3]) {
+      const want = Math.round(FN_PHRASES * (weights[b] || 0) / 10);
+      out.push(...byBand[b].slice(0, want));
+    }
+    // Top up from anything left, so a thin band never shortens the run.
+    if (out.length < FN_PHRASES) {
+      const rest = _shuffle(bank.filter(p => !out.includes(p)));
+      out.push(...rest.slice(0, FN_PHRASES - out.length));
+    }
+    return _shuffle(out).slice(0, FN_PHRASES);
+  }
+
+  function startFrNinja() {
+    if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
+    const phrases = _fnPick();
+    if (!phrases.length) { toast('French Ninja is not available right now.', 3000); return; }
+    _fn = {
+      phrases, idx: 0, score: 0, sliced: 0, missed: 0, wrongTaps: 0,
+      streak: 0, bestStreak: 0, cleared: 0, tapped: [], over: false,
+    };
+    $('mg-hub')?.classList.add('hidden');
+    $('mg-game')?.classList.remove('hidden');
+    _fnRender();
+    _fnStartTimer();
+  }
+
+  function _fnCur() { return _fn && _fn.phrases[_fn.idx]; }
+  function _fnErrorIdx(p) { return (p.errors || []).map(e => e.i); }
+
+  function _fnStartTimer() {
+    clearInterval(_fnTimer);
+    const p = _fnCur();
+    if (!p) return;
+    _fnWindow = _fnWindowFor(p) * 1000;
+    _fnDeadline = Date.now() + _fnWindow;
+    _fnTick();
+    _fnTimer = setInterval(_fnTick, 100);
+  }
+
+  function _fnTick() {
+    if (!_fn || _fn.over) { clearInterval(_fnTimer); _fnTimer = null; return; }
+    const left = Math.max(0, _fnDeadline - Date.now());
+    const bar = $('fn-time-fill');
+    if (bar) { bar.style.width = (left / _fnWindow * 100) + '%'; bar.classList.toggle('low', left < 3000); }
+    const num = $('fn-time-num');
+    if (num) num.textContent = Math.ceil(left / 1000);
+    if (left <= 0) _fnExpire();
+  }
+
+  // ⚠ No score penalty on expiry - see the header note. The cost is the phrase
+  //   bonus and the streak, both of which are chances rather than punishments.
+  function _fnExpire() {
+    if (!_fn || _fn.over) return;
+    clearInterval(_fnTimer); _fnTimer = null;
+    const p = _fnCur();
+    const left = _fnErrorIdx(p).filter(i => !_fn.tapped.includes(i));
+    _fn.missed += left.length;
+    _fn.streak = 0;
+    _sfx.wrong?.();
+    _fnReveal(left, '⏰ Trop tard !');
+  }
+
+  // Shows the answer for a beat before moving on: the child has to see WHAT the
+  // mistake was, or the game teaches nothing but tapping.
+  function _fnReveal(missedIdx, headline) {
+    if (!_fn) return;
+    _fn.revealing = true;
+    _fnRender({ reveal: missedIdx, headline });
+    setTimeout(() => {
+      if (!_fn || _fn.over) return;
+      _fn.revealing = false;
+      _fn.idx++;
+      _fn.tapped = [];
+      if (_fn.idx >= _fn.phrases.length) return _fnFinish();
+      _fnRender();
+      _fnStartTimer();
+    }, missedIdx.length ? 1700 : 900);
+  }
+
+  function fnTap(i) {
+    if (!_fn || _fn.over || _fn.revealing) return;
+    if (_fn.tapped.includes(i)) return;
+    const p = _fnCur();
+    if (!p) return;
+    _fn.tapped.push(i);
+    const isError = _fnErrorIdx(p).includes(i);
+
+    if (isError) {
+      const secondsLeft = Math.max(0, Math.ceil((_fnDeadline - Date.now()) / 1000));
+      _fn.streak++;
+      if (_fn.streak > _fn.bestStreak) _fn.bestStreak = _fn.streak;
+      const gained = FN_HIT + secondsLeft + Math.min(_fn.streak, FN_STREAK_CAP) * 2;
+      _fn.score += gained;
+      _fn.sliced++;
+      _sfx.correct?.();
+      _fnRender();
+      _qfFloat('+' + gained, true);
+      // Every error found - clear the phrase early and bank the bonus.
+      if (_fnErrorIdx(p).every(ix => _fn.tapped.includes(ix))) {
+        clearInterval(_fnTimer); _fnTimer = null;
+        _fn.score += FN_CLEAR;
+        _fn.cleared++;
+        if (typeof launchConfetti === 'function') launchConfetti(18);
+        _fnReveal([], 'Parfait ! +' + FN_CLEAR);
+      }
+      return;
+    }
+
+    // A correct word was tapped. ⚠ Floored at 0: a child watching a score go
+    // negative stops playing, and the lesson is already delivered by the shake.
+    _fn.wrongTaps++;
+    _fn.streak = 0;
+    _fn.score = Math.max(0, _fn.score - FN_MISS);
+    _sfx.wrong?.();
+    _fnRender();
+    _qfFloat('−' + FN_MISS, false);
+  }
+
+  function _fnRender(opts) {
+    const game = $('mg-game');
+    if (!game || !_fn) return;
+    const o = opts || {};
+    const p = _fnCur();
+    if (!p) return;
+    const errIdx = _fnErrorIdx(p);
+    const secs = _fnWindowFor(p);
+
+    const chips = p.words.map((w, i) => {
+      const tapped = _fn.tapped.includes(i);
+      const isErr = errIdx.includes(i);
+      let cls = 'fn-word';
+      if (tapped && isErr) cls += ' sliced';
+      else if (tapped) cls += ' oops';
+      if (o.reveal && o.reveal.includes(i)) cls += ' shown';
+      return `<button class="${cls}" ${tapped || _fn.revealing ? 'disabled' : ''}
+        onclick="MiniGames.fnTap(${i})">${esc(w)}</button>`;
+    }).join('');
+
+    // The why-line only appears once a mistake is visible, so it can never be
+    // read as a hint before the child has committed.
+    const shownErrors = (p.errors || []).filter(e =>
+      _fn.tapped.includes(e.i) || (o.reveal && o.reveal.includes(e.i)));
+
+    game.innerHTML = `
+      <div class="fn-stage">
+        <div class="fn-topbar">
+          <button class="mg-quit" onclick="MiniGames.fnQuit()">✕</button>${_helpBtn('frninja')}
+          <div class="fn-progress">Phrase ${_fn.idx + 1}<span>/${_fn.phrases.length}</span></div>
+          <div class="fn-streak">${_fn.streak > 1 ? '🔥 ×' + _fn.streak : '🗡️'}</div>
+        </div>
+        <div class="fn-timerow">
+          <div class="fn-timebar"><div class="fn-timebar-fill" id="fn-time-fill"></div></div>
+          <b class="fn-time-num" id="fn-time-num">${secs}</b>
+        </div>
+        <p class="fn-instruction">Tape les mots qui ont une <b>faute</b> ${
+          errIdx.length > 1 ? `<span class="fn-count">${errIdx.length} fautes</span>` : '<span class="fn-count">1 faute</span>'}</p>
+        <div class="fn-phrase mg-pop">${chips}</div>
+        ${o.headline ? `<div class="fn-headline">${esc(o.headline)}</div>` : ''}
+        <div class="fn-why">${shownErrors.map(e =>
+          `<div><s>${esc(p.words[e.i])}</s> → <b>${esc(e.fix)}</b> · ${esc(e.why)}</div>`).join('')}</div>
+        <div class="fn-score-line"><b id="fn-score">${_fn.score}</b> pts · 🗡️ ${_fn.sliced} sliced</div>
+      </div>`;
+    _persist('frninja');
+  }
+
+  function _fnFinish() {
+    if (!_fn) return;
+    _fn.over = true;
+    clearInterval(_fnTimer); _fnTimer = null;
+    _clearPersist();
+    const total = _fn.phrases.reduce((n, p) => n + p.errors.length, 0);
+    const acc = (_fn.sliced + _fn.wrongTaps) ? Math.round(_fn.sliced / (_fn.sliced + _fn.wrongTaps) * 100) : 0;
+    _fn.total = total; _fn.acc = acc;
+    _fnSaveBest();
+    const best = (typeof DB !== 'undefined' && DB.games?.frninja) || {};
+    const isRecord = _fn.score >= (best.bestScore || 0) && _fn.score > 0;
+    if (isRecord && typeof launchConfetti === 'function') launchConfetti(90);
+    const grade = acc >= 90 ? { t: 'Ninja Maître ! 🥇', s: 'Presque rien ne t\'échappe.' }
+      : acc >= 70 ? { t: 'Bien joué ! 🥈', s: 'Ton œil est rapide.' }
+        : acc >= 45 ? { t: 'Pas mal ! 🥉', s: 'Encore un peu d\'entraînement.' }
+          : { t: 'Continue ! 💪', s: 'Relis bien les accords et les verbes.' };
+
+    $('mg-game').innerHTML = `
+      <div class="qf-end mg-pop">
+        <div class="qf-end-emoji">🗡️</div>
+        <h3>${grade.t}</h3>
+        <p>${grade.s}</p>
+        <div class="qf-scoreboard">
+          <div><b>${_fn.score}</b><span>points</span></div>
+          <div><b>${_fn.sliced}/${total}</b><span>fautes trouvées</span></div>
+          <div><b>${acc}%</b><span>précision</span></div>
+        </div>
+        ${isRecord ? '<p class="bq-best">🏅 New personal best!</p>'
+        : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
+        <div class="mg-share-row">
+          <button class="mg-btn-primary" onclick="MiniGames.fnShare()">📤 Share my score</button>
+          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
+            onclick="MiniGames.fnShareTo('fb')">📘</button>
+          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
+            onclick="MiniGames.fnShareTo('wa')">💬</button>
+          <button class="mg-share-ic" title="Copy" aria-label="Copy score"
+            onclick="MiniGames.fnShareTo('copy', this)">🔗</button>
+        </div>
+        <div class="mg-end-row">
+          <button class="mg-btn-primary" onclick="MiniGames.startFrNinja()">🔁 Encore !</button>
+          <button class="mg-btn-ghost" onclick="MiniGames.renderHub()">🎮 All games</button>
+        </div>
+      </div>`;
+  }
+
+  function _fnSaveBest() {
+    if (typeof DB === 'undefined' || !DB.stats) return;
+    DB.games = DB.games || {};
+    const g = DB.games.frninja = DB.games.frninja || { plays: 0, bestScore: 0, bestSliced: 0, bestStreak: 0 };
+    g.plays++;
+    if (_fn.score > (g.bestScore || 0)) g.bestScore = _fn.score;
+    if (_fn.sliced > (g.bestSliced || 0)) g.bestSliced = _fn.sliced;
+    if (_fn.bestStreak > (g.bestStreak || 0)) g.bestStreak = _fn.bestStreak;
+    _awardRun('frninja');
+    if (typeof save === 'function') save(DB);
+  }
+
+  // ── Sharing ────────────────────────────────────
+  // ⚠ Same rule as every other score share: a score and a challenge, never the
+  //   child's name, id or any link back to a profile.
+  // ⚠ FACEBOOK BUILDS THE CARD FROM THE OG TAGS AT THE URL, and those are static
+  //   HTML - the `quote` parameter has not been honoured for years. So score.html
+  //   carries GAME-NEUTRAL og:title/og:description on purpose; the g= param only
+  //   changes what a human sees on the page, and cannot change the card.
+  function _fnShareText() {
+    return `🗡️ I scored ${_fn.score} in French Ninja on Nou Klass - ${_fn.sliced}/${_fn.total} `
+      + `mistakes sliced, ${_fn.acc}% accuracy! Can you spot them faster? 🇫🇷`;
+  }
+  function _fnShareUrl() {
+    const qs = `g=fn&s=${_fn.score}&c=${_fn.sliced}&a=${_fn.acc}`;
+    return new URL(`score.html?${qs}`, location.href).href;
+  }
+
+  async function _fnScoreImage() {
+    try {
+      const W = 1080, H = 1080, c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const x = c.getContext('2d');
+      const g = x.createLinearGradient(0, 0, W, H);
+      g.addColorStop(0, '#0f172a'); g.addColorStop(.55, '#1e3a8a'); g.addColorStop(1, '#7e22ce');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      x.textAlign = 'center'; x.fillStyle = '#fff';
+      x.font = '600 46px system-ui,sans-serif'; x.fillText('🗡️ FRENCH NINJA', W / 2, 250);
+      x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
+      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillStyle = '#fde047'; x.font = '800 300px system-ui,sans-serif';
+      x.fillText(String(_fn.score), W / 2, 660);
+      x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
+      x.fillText('POINTS', W / 2, 730);
+      x.font = '500 44px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.92)';
+      x.fillText(`${_fn.sliced}/${_fn.total} fautes   ·   ${_fn.acc}% précision`, W / 2, 850);
+      x.font = '700 50px system-ui,sans-serif'; x.fillStyle = '#fff';
+      x.fillText('Can you beat me? 🇫🇷', W / 2, 960);
+      const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+      return blob ? new File([blob], 'french-ninja-score.png', { type: 'image/png' }) : null;
+    } catch (_) { return null; }
+  }
+
+  async function fnShare() {
+    if (!_fn) return;
+    const text = _fnShareText(), url = _fnShareUrl();
+    const file = await _fnScoreImage();
+    if (navigator.share) {
+      try {
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], text: text + '\n' + url });
+        } else {
+          await navigator.share({ title: 'French Ninja score', text, url });
+        }
+        return;
+      } catch (_) { return; }
+    }
+    fnShareTo('copy');
+  }
+
+  function fnShareTo(where, btn) {
+    if (!_fn) return;
+    const text = _fnShareText(), url = _fnShareUrl();
+    // ⚠ Facebook takes the URL only and reads the og: tags there; WhatsApp is the
+    //   mirror image and carries the text while ignoring og: on a bare link.
+    if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+    else if (where === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank', 'noopener');
+    else if (where === 'copy') {
+      const full = text + '\n' + url;
+      const done = () => { if (btn) { const o = btn.textContent; btn.textContent = '✅'; setTimeout(() => btn.textContent = o, 1600); } };
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(full).then(done).catch(() => prompt('Copy your score:', full));
+      else prompt('Copy your score:', full);
+    }
+  }
+
+  function fnQuit() {
+    if (_fn && !_fn.over && _fn.score > 0 && !confirm('Leave French Ninja? This run won\'t be saved.')) return;
+    clearInterval(_fnTimer); _fnTimer = null;
+    _clearPersist();
+    _fn = null;
+    renderHub();
+  }
+
   function open() {
     if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
     showScreen('minigames');
@@ -2443,6 +2822,7 @@ const MiniGames = (() => {
   function _wbDebug() { return _wb && { idx: _wb.idx, lives: _wb.lives, hints: _wb.hints, score: _wb.score, locked: _wb.locked, over: _wb.over, typed: _wb.typed.map(i => _wb.tiles[i].ch).join(''), word: _wb.words[_wb.idx]?.word }; }
   function _exDebug() { return _ex && { idx: _ex.idx, tries: _ex.tries, score: _ex.score, locked: _ex.locked, over: _ex.over, stamps: _ex.stamps.slice() }; }
   function _bbDebug() { return _bb && { round: _bb.round, turn: _bb.turn, phase: _bb.phase, scores: _bb.scores.slice(), locked: _bb.locked, over: _bb.over, q: _bb.phase === 'q' && _bb.qs[_bb.round * 2 + _bb.turn] ? { answer: _bb.qs[_bb.round * 2 + _bb.turn].answer, options: _bb.qs[_bb.round * 2 + _bb.turn].options.slice() } : null }; }
+  function _fnDebug() { return _fn && { idx: _fn.idx, score: _fn.score, sliced: _fn.sliced, wrongTaps: _fn.wrongTaps, missed: _fn.missed, streak: _fn.streak, cleared: _fn.cleared, over: _fn.over, revealing: !!_fn.revealing, tapped: _fn.tapped.slice(), phrase: _fnCur() && { words: _fnCur().words.slice(), errors: _fnCur().errors.map(e => e.i) } }; }
   function _ttDebug() { return _tt && { round: _tt.round, phase: _tt.phase, score: _tt.score, perfect: _tt.perfect, picked: _tt.picked.slice(), locked: _tt.locked, over: _tt.over, items: _tt.rounds[_tt.round] ? _tt.rounds[_tt.round].map(f => ({ label: f.label, year: f.year })) : null, reveal: _tt.reveal && { gained: _tt.reveal.gained, perfect: _tt.reveal.perfect } }; }
 
   return { open, renderHub, startBillionaire, answer, life, walkAway, confirmQuit, toggleMute,
@@ -2454,5 +2834,6 @@ const MiniGames = (() => {
            startExplorer, exAnswer, exQuit,
            startNinja, njAnswer, njQuit, _njDebug, _njMakeQ,
            startBattle, bbReady, bbAnswer, bbQuit, _bbDebug, _pickBattle,
-           startTimeTravel, ttPick, ttUndo, ttNext, ttQuit, _ttDebug, _pickTimeTravel };
+           startTimeTravel, ttPick, ttUndo, ttNext, ttQuit, _ttDebug, _pickTimeTravel,
+           startFrNinja, fnTap, fnQuit, fnShare, fnShareTo, _fnDebug, _fnPick };
 })();

@@ -93,6 +93,7 @@ const SHELL_FILES = [
   '/engine/minigame_words.js',
   '/engine/minigame_geo.js',
   '/engine/minigame_time.js',
+  '/engine/minigame_french.js',
   '/engine/minigame.js',
   '/engine/cloze.js',
   '/engine/errorhunt.js',

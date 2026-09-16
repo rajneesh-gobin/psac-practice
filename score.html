@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>⚡ Quick Fire score · Nou Klass</title>
+<title>🏅 High score · Nou Klass</title>
 <meta name="theme-color" content="#4f46e5">
 <!-- Social preview. The numbers are also injected into the text below from the
      query string, but these give link unfurlers something even before JS runs. -->
-<meta property="og:title" content="⚡ Quick Fire - Nou Klass">
-<meta property="og:description" content="I set a Quick Fire high score on Nou Klass. Can you beat me?">
+<meta property="og:title" content="🏅 High score - Nou Klass">
+<meta property="og:description" content="I set a high score on a Nou Klass game. Can you beat me?">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
@@ -44,18 +44,18 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="kicker">⚡ QUICK FIRE · NOU KLASS</div>
+  <div class="kicker" id="kicker">⚡ QUICK FIRE · NOU KLASS</div>
   <div class="card">
-    <div class="bolt">⚡</div>
+    <div class="bolt" id="bolt">⚡</div>
     <div class="score" id="score">-</div>
     <div class="plabel">POINTS</div>
     <div class="meta">
-      <div class="chip"><b id="correct">-</b><span>correct</span></div>
+      <div class="chip"><b id="correct">-</b><span id="clabel">correct</span></div>
       <div class="chip"><b id="acc">-</b><span>accuracy</span></div>
     </div>
     <div class="challenge">Can you beat this? 🎯</div>
   </div>
-  <a class="cta" href="/">🚀 Play Quick Fire free</a>
+  <a class="cta" href="/" id="cta">🚀 Play Quick Fire free</a>
   <p class="sub">Free exam revision for Mauritian primary students - <a href="/">Nou Klass</a></p>
 </div>
 <script>
@@ -64,7 +64,27 @@
   const s = clamp(p.get('s'), 100000), c = clamp(p.get('c'), 10000), a = clamp(p.get('a'), 100);
   const set = (id, v, suf) => { const el = document.getElementById(id); if (el) el.textContent = v === null ? '-' : v + (suf || ''); };
   set('score', s); set('correct', c); set('acc', a, '%');
-  document.title = s !== null ? `⚡ ${s} points on Quick Fire · Nou Klass` : document.title;
+  // Which game this score came from.
+  // ⚠ PRESENTATION ONLY. The og: tags above are static HTML and are what
+  //   Facebook actually renders into the shared card — the sharer takes a URL
+  //   and reads the tags there, and its `quote` parameter has not been honoured
+  //   for years. So this can never change the card; it only changes what a
+  //   human sees after they click. That is why the og: block was made
+  //   game-neutral rather than left naming one game.
+  // ⚠ An unknown or missing g= falls back to Quick Fire, which is the only game
+  //   that shared through this page before the param existed — so links already
+  //   out in the world keep reading correctly.
+  const GAMES = {
+    qf: { icon: '⚡', name: 'Quick Fire', clabel: 'correct' },
+    fn: { icon: '🗡️', name: 'French Ninja', clabel: 'sliced' },
+  };
+  const game = GAMES[(p.get('g') || '').toLowerCase()] || GAMES.qf;
+  const put = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  put('kicker', game.icon + ' ' + game.name.toUpperCase() + ' · NOU KLASS');
+  put('bolt', game.icon);
+  put('clabel', game.clabel);
+  put('cta', '🚀 Play ' + game.name + ' free');
+  document.title = s !== null ? `${game.icon} ${s} points on ${game.name} · Nou Klass` : document.title;
 </script>
 </body>
 </html>

@@ -51,6 +51,30 @@ jobs:
       - name: Co-parent settings UI
         run: node scripts/test-coparent-ui.js
 
+      # ⚠ The landing page is invisible to a crawler the moment one word comes
+      #   back: re-adding "hidden" to #screen-landing is the natural thing to do
+      #   while tidying screens, costs nothing visible in the app (Auth.init()
+      #   un-hides it a moment later) and shows up weeks later as traffic that
+      #   never arrived. Also runs the inline boot-state script for real.
+      - name: Landing page readable without JavaScript
+        run: node scripts/test-landing-no-js.js
+      # Six surfaces state the coverage range; the meta description is the one a
+      # parent reads BEFORE they ever reach the site.
+      # ⚠ The per-subject landing pages are the most PUBLIC thing here — a
+      #   stranger's first impression, cached by Google far longer than it can be
+      #   corrected. This fails if they have drifted from the packs, if one has
+      #   grown a <script src> (and stopped being renderable by a crawler), if the
+      #   prose has gone templated (Google penalises doorway pages at the DOMAIN
+      #   level), or if a held grade has been published.
+      # The bank is the risk: the game DOCKS a child for tapping a word it left
+      # unflagged, so a structural slip there punishes a child for being right.
+      - name: French Ninja
+        run: node scripts/test-french-ninja.js
+      - name: Subject landing pages
+        run: node scripts/test-subject-pages.js
+      - name: Share-copy parity
+        run: node scripts/test-share-copy-parity.js
+
       - name: Scan for committed credentials
         run: |
           fail=0

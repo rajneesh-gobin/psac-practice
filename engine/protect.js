@@ -220,7 +220,9 @@
     var _spinObs = new MutationObserver(function () {
       var op = document.body.style.opacity;
       if (op === '1' || op === FAILSAFE_OPACITY) {
-        document.documentElement.classList.remove('ps-loading');
+        // ⚠ ps-booting too, or the landing stays display:none for the rest of the
+        //   session and body keeps a 0 opacity rule underneath the inline one.
+        document.documentElement.classList.remove('ps-loading', 'ps-booting');
         _spinObs.disconnect();
         // Clear the inline transition after it completes so Tailwind's
         // transition-colors class governs dark/light mode switching again.

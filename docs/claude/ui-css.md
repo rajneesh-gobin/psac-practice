@@ -62,6 +62,25 @@
   of their buttons on every phone. The tab bar is `.tabbar-btn`.
 
 ### Screens, dialogs and layout
+- ⚠⚠ **`#screen-landing` is the ONE screen that ships WITHOUT `hidden`, and it
+  must stay that way.** `<body>` used to ship `style="opacity:0"` and the landing
+  `class="screen hidden"`, both lifted only at the END of `Auth.init()` — which
+  awaits a Supabase `getSession()`. So 49 KB of real landing markup with a proper
+  `<h1>` needed 2.51 MB of blocking JS, a runtime Tailwind pass and a network
+  round-trip before a reader could see it. Measured 2026-09-16: the domain
+  appeared in no search index at all.
+  The static HTML is now the **no-session** case; an inline `<head>` script adds
+  `ps-loading ps-booting` back only for a visitor with `mm_sb_auth` /
+  `mm_student_sess` or a query/hash, so a returning user still never sees a
+  landing frame. `html.ps-booting` carries both old gates (style.css), and
+  **`protect.js` must remove `ps-booting` at the reveal** or the landing stays
+  `display:none` for the rest of the session.
+  ⚠ The script **fails OPEN** — a `localStorage` throw (Safari private mode)
+  leaves the landing showing. Never invert that `try/catch`.
+  ⚠ **Re-adding `hidden` to that one div costs nothing visible in the app** and is
+  invisible from inside a browser, which is exactly why it needs a test:
+  `scripts/test-landing-no-js.js` (23 checks, runs the inline script for real,
+  wired into CI).
 - ⚠ **A panel that is not INSIDE a `.screen` is never hidden by anything.**
   `showScreen()` toggles `.hidden` on `.screen` elements only. Two live cases,
   both fixed: `#admin-tab-questions` had escaped `#screen-admin` by one `</div>`
