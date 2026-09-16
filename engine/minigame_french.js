@@ -30,6 +30,32 @@
 //
 // Windows scale with phrase length in minigame.js, so a long sentence is not
 // harder merely for being long.
+// ── REVIEW STATE ──────────────────────────────────────────────────────────
+// All 60 phrases were read line by line on 2026-09-16 — every flagged token
+// checked as genuinely wrong with a correct fix, AND every UNFLAGGED token
+// checked as correct in the corrected sentence, which is the half that matters
+// because the game docks a child for tapping it. No errors were found.
+//
+// ⚠ THAT REVIEW WAS BY THE SAME KIND OF AUTHOR THAT WROTE THEM — an LLM, not a
+//   native or fluent French speaker, and not against a grammar reference. It
+//   raises confidence; it is NOT a sign-off. Before this game is promoted
+//   anywhere, a Mauritian French teacher should read the 60.
+//
+// Notes from that review, for whoever reads it next:
+//   • fn3-018 (« elle en cherche » -> « les ») is the subtlest call in the bank.
+//     With a definite antecedent the pronoun is « les »; « en » would mean SOME
+//     glasses. Correct, but the first item to put in front of a human.
+//   • fn1-011 « sentent très bon » — « bon » is adverbial after « sentir » and
+//     correctly invariable, so it is correctly UNFLAGGED. A strong pupil may tap
+//     it and lose points while reasoning carefully. Legitimate, but the one
+//     distractor in band 1 that could feel unfair.
+//   • fn2-010 / fn2-011 / fn2-014 pair a wrong auxiliary with a wrong participle.
+//     Both tokens are flagged and each is wrong INDEPENDENTLY, so a child who
+//     finds only one still scores. That is the property to preserve when adding
+//     two-error phrases.
+//   • fn3-014 is the only phrase where a repeated token is flagged inconsistently:
+//     « que » at index 1 is the conjunction « Bien que » and correctly stands,
+//     while index 7 is a relative needing « qui ». Deliberate, and good teaching.
 window.MINIGAME_FRENCH = [
 
   // ── Band 1 ────────────────────────────────────────────────────────────
