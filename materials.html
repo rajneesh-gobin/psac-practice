@@ -1,7 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
+  <!-- ⚠ Same theme contract as index.html, and the same storage key. These
+       pages are same-origin, so a child who set the app to light gets light
+       here too. Dark is the DEFAULT, exactly as in the app — keying these
+       pages on prefers-color-scheme alone meant a dark-themed app opened a
+       light homework page.
+       ⚠ Runs BEFORE first paint, or the page flashes the wrong theme. -->
+  <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Class Page · Nou Klass</title>
 <meta name="theme-color" content="#4f46e5">
@@ -23,22 +30,20 @@
   /* ⚠ Every colour is defined on bare :root first. A token whose only
      definition lives inside a media query has no value in the other theme. */
   :root{
-    --bg:#f6f7fb; --card:#fff; --ink:#1e2537; --muted:#6b7280; --line:#e6e8ef;
-    --soft:#eef0f6; --brand:#4f46e5; --brand-dk:#4338ca; --brand-soft:#eef2ff;
+    --bg:#f8fafc; --card:#fff; --ink:#1e2537; --muted:#6b7280; --line:#e6e8ef;
+    --soft:#f3f4f6; --brand:#4f46e5; --brand-dk:#4338ca; --brand-soft:#eef2ff;
     --ok:#16a34a; --amber:#f59e0b; --shadow:0 1px 2px rgba(16,24,40,.05);
     /* ⚠ Flips with --brand below. A lightened brand in dark mode leaves white
        button text at about 2.6:1, which is not readable on a phone outdoors. */
     --on-brand:#fff;
     --today:#f59e0b;
   }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#11141c; --card:#181c26; --ink:#e8eaf0; --muted:#9aa3b2; --line:#262b38;
-      --soft:#212736; --brand:#8b8bf5; --brand-dk:#a5a5ff; --brand-soft:#1d2033;
-      --ok:#4ade80; --amber:#fbbf24; --shadow:0 1px 2px rgba(0,0,0,.4);
-      --on-brand:#12141d;
-      --today:#fbbf24;
-    }
+    html.dark{
+    --bg:#111827; --card:#1f2937; --ink:#f3f4f6; --muted:#9ca3af; --line:#374151;
+    --soft:#374151; --brand:#8b8bf5; --brand-dk:#a5a5ff; --brand-soft:#312e81;
+    --ok:#4ade80; --amber:#fbbf24; --shadow:0 1px 2px rgba(0,0,0,.4);
+    --on-brand:#111827;
+    --today:#fbbf24;
   }
   body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);
        color:var(--ink);line-height:1.5;-webkit-text-size-adjust:100%}
@@ -87,11 +92,11 @@
   .tag.due{background:#fef3c7;color:#92400e}
   .tag.late{background:#fee2e2;color:#991b1b}
   .tag.done{background:#dcfce7;color:#166534}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .tag.due{background:#3a2e12;color:#fbbf24}
-    :root:not([data-theme="light"]) .tag.late{background:#3a1a1a;color:#fca5a5}
-    :root:not([data-theme="light"]) .tag.done{background:#12301e;color:#86efac}
-  }
+    html.dark .tag.due{background:#3a2e12;color:#fbbf24}
+  html.dark .tag.late{background:#3a1a1a;color:#fca5a5}
+  html.dark .tag.done{background:#12301e;color:#86efac}
+  html.dark .tag.mark{background:#1e1b4b;color:#c7d2fe}
+  html.dark .tag.mark-good{background:#12301e;color:#86efac}
 
   /* ── Controls ───────────────────────────────────────────────────────── */
   .controls{margin-bottom:12px}
@@ -168,6 +173,34 @@
         margin-bottom:9px;animation:pulse 1.4s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
   .hidden{display:none !important}
+  /* ── Inline YouTube player ──────────────────────────────────────────────
+     A click-to-play facade: the thumbnail is a plain <img>, and the iframe is
+     only created when the child taps. Nothing contacts Google before that.
+     ⚠ aspect-ratio, not the padding-top hack: every browser this app supports
+       (the read-aloud work already pins the floor at Safari 16.4) has it, and
+       the hack needs an absolutely positioned child, which the swapped-in
+       iframe would have to inherit. */
+  .yt{position:relative;width:100%;aspect-ratio:16/9;margin:10px 0 8px;
+      border-radius:12px;overflow:hidden;background:#000}
+  .yt-play{display:block;width:100%;height:100%;padding:0;border:0;cursor:pointer;
+      background:#000;position:relative}
+  .yt-thumb{width:100%;height:100%;object-fit:cover;display:block;opacity:.86;
+      transition:opacity .15s}
+  .yt-play:hover .yt-thumb,.yt-play:focus-visible .yt-thumb{opacity:1}
+  /* ⚠ 68x48 is YouTube's own play-button size. Anything smaller stops being a
+     44px touch target on a phone, which is the floor this project holds to. */
+  .yt-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:68px;height:48px;border-radius:12px;background:rgba(0,0,0,.72);
+      color:#fff;font-size:22px;line-height:48px;text-align:center;
+      transition:background .15s}
+  .yt-play:hover .yt-btn,.yt-play:focus-visible .yt-btn{background:#f00}
+  .yt-frame{width:100%;height:100%;border:0;display:block}
+  /* The child own mark on a finished card.
+     ⚠ NEVER a red band. This is the child own screen and a mark is a fact,
+     not a verdict — the same reason the daily goal never breaks a streak.
+     A strong mark is celebrated; everything else is stated plainly. */
+  .tag.mark{background:var(--brand-soft,#eef2ff);color:var(--brand-dk,#3730a3);font-weight:800}
+  .tag.mark-good{background:#dcfce7;color:#166534}
 </style>
 </head>
 <body>

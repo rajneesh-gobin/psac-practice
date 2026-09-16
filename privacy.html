@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+  <!-- ⚠ Same theme contract as index.html, and the same storage key. This page
+       is same-origin, so a parent who set the app to light gets light here too.
+       Dark is the DEFAULT, exactly as in the app.
+       ⚠ Runs BEFORE first paint, or the page flashes the wrong theme. -->
+  <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy Policy · Nou Klass</title>
+<meta name="theme-color" content="#3b82f6">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<meta name="description" content="How Nou Klass handles the information of parents, teachers and children.">
+<!--
+  ⚠ REQUIRED BY GOOGLE PLAY, and scrutinised rather than rubber-stamped because
+    this is a children's app (Designed for Families). The Play listing, the Data
+    safety form and the app itself must all agree with what is written here.
+
+  ⚠ EVERY CLAIM ON THIS PAGE WAS READ OUT OF THE LIVE DATABASE, not assumed.
+    If a column is added that holds something new about a person, this page is
+    part of that change.
+
+  Standalone by design, like guest.html and materials.html: it loads no engine
+  file and no style.css, so it opens instantly for someone who is deciding
+  whether to trust the app at all.
+-->
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#f8fafc; --card:#fff; --ink:#1e2537; --muted:#6b7280; --line:#e6e8ef;
+    --brand:#4f46e5; --brand-dk:#4338ca;
+  }
+  html.dark{--bg:#111827;--card:#1f2937;--ink:#f3f4f6;--muted:#9ca3af;--line:#374151;
+            --brand:#8b8bf5;--brand-dk:#a5a5ff}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);
+       color:var(--ink);line-height:1.6;-webkit-text-size-adjust:100%}
+  .wrap{max-width:720px;margin:0 auto;padding:18px 16px 56px}
+  .top{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border-radius:16px;
+       padding:22px 20px;margin-bottom:18px}
+  .top h1{font-size:23px;font-weight:800;letter-spacing:-.01em}
+  .top p{opacity:.9;font-size:14px;margin-top:4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+        padding:18px 20px;margin-bottom:14px}
+  h2{font-size:17px;font-weight:800;margin:0 0 8px;letter-spacing:-.01em}
+  h3{font-size:14px;font-weight:700;margin:14px 0 4px}
+  p,li{font-size:14.5px;color:var(--ink)}
+  p+p{margin-top:9px}
+  ul{margin:6px 0 0 20px}
+  li{margin-bottom:5px}
+  .muted{color:var(--muted);font-size:13px}
+  a{color:var(--brand);font-weight:600}
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-weight:700;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .foot{text-align:center;margin-top:22px}
+  .foot a{font-weight:700}
+  .key{background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.25);border-radius:12px;
+       padding:12px 14px;margin-top:10px}
+  html.dark .key{background:rgba(139,139,245,.10);border-color:rgba(139,139,245,.30)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <h1>Privacy Policy</h1>
+    <p>Nou Klass — exam practice for Mauritius</p>
+  </div>
+
+  <div class="card">
+    <h2>The short version</h2>
+    <p>Nou Klass is used by children, so we collect as little as we can and we do
+       not sell anything about anyone. There is <b>no advertising</b> in the app,
+       and <b>no third-party analytics or tracking</b>.</p>
+    <div class="key">
+      <p><b>A child never gives us an email address or a phone number.</b> A parent
+         or teacher creates the account; a child signs in with a family name, a
+         username and a PIN.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>What we hold, and why</h2>
+    <table>
+      <tr><th>Who</th><th>What</th><th>Why</th></tr>
+      <tr>
+        <td><b>Parent or teacher</b></td>
+        <td>Email address, the name you type, your settings (theme, how often you
+            want emails), and sign-in times</td>
+        <td>To sign you in, to let you recover your account, and to send only the
+            emails you asked for</td>
+      </tr>
+      <tr>
+        <td><b>Child</b></td>
+        <td>The display name and username their parent or teacher chose, their
+            grade, a chosen avatar, and a PIN we store <b>hashed</b> — never in
+            readable form</td>
+        <td>So they can sign in on a shared device without an email address</td>
+      </tr>
+      <tr>
+        <td><b>Child's work</b></td>
+        <td>Which questions were answered, whether they were right, scores,
+            streaks and points</td>
+        <td>To show progress to the child and their own parent or teacher</td>
+      </tr>
+      <tr>
+        <td><b>Homework</b></td>
+        <td>The name typed on a homework link, the answers given and the mark</td>
+        <td>So the teacher who set the work can mark it</td>
+      </tr>
+      <tr>
+        <td><b>Technical</b></td>
+        <td>IP address and browser type at sign-in and on a homework submission</td>
+        <td>Security only — spotting abuse of a shared link. Not used to build a
+            profile of anyone</td>
+      </tr>
+    </table>
+    <p class="muted" style="margin-top:12px">We do not ask for a home address, a
+       date of birth, a photograph, or a child's location.</p>
+  </div>
+
+  <div class="card">
+    <h2>Who can see a child's work</h2>
+    <ul>
+      <li>The child themselves.</li>
+      <li>The parent who owns the family account.</li>
+      <li>A teacher, <b>only</b> for homework that teacher set.</li>
+      <li>An administrator of Nou Klass, for support and safety.</li>
+    </ul>
+    <p>Children cannot see each other's marks. A shared class page deliberately
+       shows a child only their own result, and only when they signed in with
+       their own PIN.</p>
+    <p>If a child chooses to share a question with a friend for help, the link
+       carries <b>the question only</b> — never their name, and never the correct
+       answer. It stops working after a few minutes.</p>
+  </div>
+
+  <div class="card">
+    <h2>Where it is stored</h2>
+    <p>Data is held by <b>Supabase</b> in the European Union (Frankfurt). The site
+       is served by <b>Cloudflare</b>. Email is sent by <b>Resend</b> (Ireland)
+       and, for sign-in and password emails, by <b>Google</b>. These providers
+       process data on our behalf and are not permitted to use it for their own
+       purposes.</p>
+  </div>
+
+  <div class="card">
+    <h2>Emails we send</h2>
+    <p>Only to parents and teachers, never to children. You choose what you get —
+       the progress report (weekly, fortnightly, monthly or never), homework
+       results, and occasional announcements. Every automatic email carries an
+       unsubscribe link, and you can change all of it under
+       <b>Account &amp; Settings → Notifications</b>.</p>
+    <p>Emails about your account itself — a password reset, or an administrator
+       activating your account — are always sent, because you need them to sign in.</p>
+  </div>
+
+  <div class="card">
+    <h2>Your rights</h2>
+    <p>You can see, correct, export or delete your family's information at any
+       time from <b>Account &amp; Settings</b>, or by writing to us. Deleting an
+       account removes the children on it and their work.</p>
+    <p>A parent may ask us to delete a child's information without closing their
+       own account. We will do it, and we will not ask why.</p>
+  </div>
+
+  <div class="card">
+    <h2>Children</h2>
+    <p>Nou Klass is intended for school children, and an account is created by a
+       parent, guardian or teacher — not by a child. We do not knowingly collect
+       information from a child except the work they do in the app, and the
+       display name their adult chose for them.</p>
+    <p>If you believe a child has given us something they should not have, write
+       to us and we will remove it.</p>
+  </div>
+
+  <div class="card">
+    <h2>Contact</h2>
+    <p>Questions, corrections or a deletion request:
+       <a href="mailto:admin@nouklass.com">admin@nouklass.com</a>.</p>
+    <p class="muted">We will reply to a privacy request within 30 days.</p>
+  </div>
+
+  <p class="muted" style="text-align:center">Last updated: 16 September 2026</p>
+  <p class="foot"><a href="/">← Back to Nou Klass</a></p>
+
+</div>
+</body>
+</html>

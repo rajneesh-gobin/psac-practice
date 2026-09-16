@@ -1,7 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
+  <!-- ⚠ Same theme contract as index.html, and the same storage key. These
+       pages are same-origin, so a child who set the app to light gets light
+       here too. Dark is the DEFAULT, exactly as in the app — keying these
+       pages on prefers-color-scheme alone meant a dark-themed app opened a
+       light homework page.
+       ⚠ Runs BEFORE first paint, or the page flashes the wrong theme. -->
+  <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Homework · Nou Klass</title>
 <meta name="theme-color" content="#4f46e5">
@@ -15,7 +22,7 @@
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --bg:#f6f7fb; --card:#fff; --ink:#1e2537; --muted:#6b7280; --line:#e6e8ef;
+    --bg:#f8fafc; --card:#fff; --ink:#1e2537; --muted:#6b7280; --line:#e6e8ef;
     --brand:#4f46e5; --brand-dk:#4338ca; --ok:#16a34a; --okbg:#ecfdf5;
     --bad:#dc2626; --badbg:#fef2f2; --amber:#f59e0b;
   }
@@ -32,7 +39,7 @@
   .brandbar .s{opacity:.9;font-size:13px;margin-top:3px}
   .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
   .chip{background:rgba(255,255,255,.18);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}
-  .chip.dark{background:#eef0f6;color:#4b5563}
+  .chip.dark{background:#f3f4f6;color:#4b5563}
   label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}
   input[type=text],input[type=tel]{width:100%;border:2px solid var(--line);border-radius:12px;
     padding:13px 14px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
@@ -42,7 +49,7 @@
        font-family:inherit;background:var(--brand);color:#fff;cursor:pointer;margin-top:16px}
   .btn:active{transform:scale(.99)}
   .btn[disabled]{opacity:.55;cursor:default}
-  .btn.sec{background:#eef0f6;color:#374151;margin-top:9px}
+  .btn.sec{background:#f3f4f6;color:#374151;margin-top:9px}
   .btn.wa{background:#25d366;color:#06281a}
   .err{background:var(--badbg);color:var(--bad);border-radius:11px;padding:11px 13px;
        font-size:14px;font-weight:600;margin-top:14px;display:none}
@@ -56,7 +63,7 @@
   .opt{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:#fff;
        border:2px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:9px;
        font-size:15px;font-family:inherit;color:var(--ink);cursor:pointer}
-  .opt .ltr{flex:0 0 27px;height:27px;border-radius:50%;background:#eef0f6;color:#4b5563;
+  .opt .ltr{flex:0 0 27px;height:27px;border-radius:50%;background:#f3f4f6;color:#4b5563;
             display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
   .opt.sel{border-color:var(--brand);background:#f2f2ff}
   .opt.ok{border-color:var(--ok);background:var(--okbg)}
@@ -115,16 +122,36 @@
                 background:var(--card);color:inherit;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
   .res-sort-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
   .res-sort-btn:active{opacity:.85}
-  @media (prefers-color-scheme:dark){
-    :root{--bg:#12141c;--card:#1b1e29;--ink:#eef0f6;--muted:#9aa1b1;--line:#2b3040;
-          --okbg:#0f2f22;--badbg:#361a1a}
-    .chip.dark{background:#2b3040;color:#c4cad8}
-    input[type=text],input[type=tel]{background:#12141c}
-    .opt{background:#1b1e29}
-    .opt.sel{background:#232544}
-    .btn.sec{background:#2b3040;color:#dfe3ec}
-    .conv{background:linear-gradient(135deg,#1e2140,#2a1e3d);border-color:#3b3566}
-  }
+    html.dark{--bg:#111827;--card:#1f2937;--ink:#f3f4f6;--muted:#9ca3af;--line:#374151;
+        --okbg:#0f2f22;--badbg:#361a1a}
+  html.dark .chip.dark{background:#374151;color:#c4cad8}
+  html.dark input[type=text],html.dark input[type=tel]{background:#111827}
+  html.dark .opt{background:#1f2937}
+  html.dark .opt.sel{background:#232544}
+  html.dark .btn.sec{background:#374151;color:#dfe3ec}
+  html.dark .conv{background:linear-gradient(135deg,#1e2140,#2a1e3d);border-color:#3b3566}
+  /* ── Inline YouTube player ──────────────────────────────────────────────
+     A click-to-play facade: the thumbnail is a plain <img>, and the iframe is
+     only created when the child taps. Nothing contacts Google before that.
+     ⚠ aspect-ratio, not the padding-top hack: every browser this app supports
+       (the read-aloud work already pins the floor at Safari 16.4) has it, and
+       the hack needs an absolutely positioned child, which the swapped-in
+       iframe would have to inherit. */
+  .yt{position:relative;width:100%;aspect-ratio:16/9;margin:10px 0 8px;
+      border-radius:12px;overflow:hidden;background:#000}
+  .yt-play{display:block;width:100%;height:100%;padding:0;border:0;cursor:pointer;
+      background:#000;position:relative}
+  .yt-thumb{width:100%;height:100%;object-fit:cover;display:block;opacity:.86;
+      transition:opacity .15s}
+  .yt-play:hover .yt-thumb,.yt-play:focus-visible .yt-thumb{opacity:1}
+  /* ⚠ 68x48 is YouTube's own play-button size. Anything smaller stops being a
+     44px touch target on a phone, which is the floor this project holds to. */
+  .yt-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:68px;height:48px;border-radius:12px;background:rgba(0,0,0,.72);
+      color:#fff;font-size:22px;line-height:48px;text-align:center;
+      transition:background .15s}
+  .yt-play:hover .yt-btn,.yt-play:focus-visible .yt-btn{background:#f00}
+  .yt-frame{width:100%;height:100%;border:0;display:block}
 </style>
 </head>
 <body>

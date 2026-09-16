@@ -51,15 +51,33 @@ const SECURITY_HEADERS = {
   'X-Frame-Options':           'DENY',
   'X-Content-Type-Options':    'nosniff',
   'Referrer-Policy':           'strict-origin-when-cross-origin',
-  'Permissions-Policy':        'camera=(), microphone=(), geolocation=()',
+  // ⚠ camera=(SELF), not camera=(). An empty allowlist denies the camera to
+  //   this origin too, which would kill the QR scanner (openQRScanner() ->
+  //   Html5Qrcode -> getUserMedia) with a permissions error no toast explains.
+  //   It never showed because this header was not reaching any page. Microphone
+  //   and geolocation stay fully denied — nothing in the app asks for either,
+  //   and read-aloud is speech OUTPUT, which needs no permission.
+  'Permissions-Policy':        'camera=(self), microphone=(), geolocation=()',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
   'Content-Security-Policy':
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline'; " +
+    // ⚠ cdn.jsdelivr.net is here for ONE thing: the html5-qrcode SCANNER, loaded
+    //   on demand by _loadScriptOnce() in app.js when a child opens the QR
+    //   reader. Tailwind and Supabase were self-hosted to drop their CDN
+    //   allowances and this one was missed — it never showed, because the CSP
+    //   was not reaching any page. The QR ENCODER is already self-hosted
+    //   (assets/vendor/qrcode.mjs); self-hosting the scanner too would let this
+    //   line go, and that is the right end state.
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
     "style-src 'self' 'unsafe-inline'; " +
     "connect-src 'self' https://*.supabase.co https://accounts.google.com; " +
     "img-src 'self' data: https:; " +
-    "frame-src https://accounts.google.com; " +
+    // ⚠ youtube-NOCOOKIE, not youtube.com. Same player, but it sets no tracking
+    //   cookie until the child actually presses play, and it is the narrower
+    //   grant — youtube.com would also permit every other youtube.com frame.
+    //   Needed for the inline player on /m/<CODE> and /a/<CODE>; without it the
+    //   iframe is blocked SILENTLY, with nothing in the UI to explain it.
+    "frame-src https://accounts.google.com https://www.youtube-nocookie.com; " +
     "frame-ancestors 'none'; " +
     "object-src 'none'",
 };

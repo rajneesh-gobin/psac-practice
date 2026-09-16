@@ -1402,10 +1402,16 @@ function shareChildLoginWhatsApp() {
 // for by name as a WhatsApp button, and wa.me works for a visitor who isn't
 // signed in yet (no referral code, no Auth dependency at all).
 function _appShareText() {
-  // ⚠ All 8 Grade 9 packs are live as of 2026-09-09. Keep this string, the
-  //   landing page and _inviteText() (auth.js) in step — a WhatsApp message
-  //   cannot be corrected once forwarded.
-  return 'Nou Klass — Exam Practice 🎓 - free, fun revision for Grades 4–6! Maths, English, French, '
+  // ⚠ Keep this string, the landing page, index.html's og:description and
+  //   _inviteText() (auth.js) in step — a WhatsApp message cannot be corrected
+  //   once forwarded.
+  // ⚠ "Grades 4–6" until 2026-09-16, when it was re-measured: grades 1-3 went
+  //   live too, so this was UNDER-promising. 46 live packs, the thinnest at 25.9
+  //   questions per chapter. Grades 7-8 are live as well and are deliberately
+  //   still not named here — the shared Facebook banner artwork says
+  //   "PSAC Grades 1–6 · NCE Grade 9", and copy that outruns the picture beside
+  //   it is the same broken promise in the other direction.
+  return 'Nou Klass — Exam Practice 🎓 - free, fun revision for Grades 1–6! Maths, English, French, '
     + 'Science and History & Geography, all aligned with the Mauritius MIE curriculum. XP, '
     + 'streaks and real-time parent tracking built in.\n\n'
     + '🆕 Full NCE Grade 9 coverage now live: Maths, ICT, Biology, Chemistry, Physics, '
@@ -5378,7 +5384,16 @@ function _renderTeacherApplyCard() {
   if (!slot || typeof Auth === 'undefined' || !Auth.getTeacherStatus) return;
 
   const status = Auth.getTeacherStatus();
-  if (Auth.isTeacher && Auth.isTeacher()) { slot.innerHTML = ''; return; }
+  // ⚠ THREE ways to already be a teacher, and the card must honour all of them.
+  //   It used to test isTeacher() alone, so an account the SERVER considers a
+  //   teacher — status 'approved' on a profile whose role had not been re-read,
+  //   or an admin — fell through to the "Are you a tutor?" pitch. The parent
+  //   then pressed Apply and was told they already had access, with the Apply
+  //   button still in front of them.
+  const alreadyTeacher = (Auth.isTeacher && Auth.isTeacher())
+    || status === 'approved'
+    || (Auth.isAdmin && Auth.isAdmin());
+  if (alreadyTeacher) { slot.innerHTML = ''; return; }
 
   const VIEW = {
     pending: {
@@ -5397,6 +5412,15 @@ function _renderTeacherApplyCard() {
       cls: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700/40',
       icon: '🚫', title: 'Teacher access suspended',
       body: 'Please contact the administrator.',
+      btn: null,
+    },
+    // ⚠ Unreachable while the guard above works, and kept deliberately: if a
+    //   future change lets an approved account reach here, it must never be
+    //   asked to apply for something it already has.
+    approved: {
+      cls: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/40',
+      icon: '👩‍🏫', title: 'You have teacher access',
+      body: 'Your teacher tools are ready - open them from the button in the header.',
       btn: null,
     },
   };

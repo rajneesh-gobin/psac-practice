@@ -2,9 +2,10 @@
 
 ## What this is
 A vanilla JS single-page app for Mauritian primary children revising for the
-**PSAC** exam (grades 1–9 registered; **4, 5, 6 are the live ones**, plus NCE
-Grade 9 Mathematics, ICT, Biology, Chemistry and Physics). Subjects: Maths, English, French, Science, History
-& Geography. Hosted on **Netlify**; backend **Supabase**
+**PSAC** exam (grades 1–9 registered; **grades 1–9 are all live** as of
+2026-09-16 — only `grade1/2/3-ict` are still `comingSoon`). Subjects: Maths, English, French, Science, History
+& Geography. Hosted on **Cloudflare Workers** (`wrangler deploy`, assets staged
+into `.deploy/` by `scripts/prepare-deploy.js`); backend **Supabase**
 (`https://xawvjwsiqhtxgpocdqgm.supabase.co`). No frameworks — HTML/CSS/JS +
 Tailwind CDN.
 
@@ -323,7 +324,8 @@ and 0 `cloze` rows**. It now loads through `netlify/lib/questions-sandbox.js`, a
 ---
 
 ## Grades, pricing, and `comingSoon`
-- **Registered: grades 1–9.** Live: **4, 5, 6** plus five Grade 9 packs
+- **Registered: grades 1–9.** ⚠ **Live: all of 1–9** since 2026-09-16 (re-measure;
+  the rest of this bullet is the 2026-09-08 state). Was: **4, 5, 6** plus five Grade 9 packs
   (**grade9-maths, grade9-ict, grade9-biology, grade9-chemistry,
   grade9-physics**). Every other pack is a `comingSoon: true` placeholder
   (one manifest + one sample question).
@@ -342,18 +344,29 @@ and 0 `cloze` rows**. It now loads through `netlify/lib/questions-sandbox.js`, a
   single definition. The 7–9 subject list is confirmed against the MIE NCF/TLS
   ([pending.md](docs/claude/pending.md) item 10) — but confirm which packs have real
   content before writing there.
-- ⚠ **Coverage copy is "Grades 4–6, plus NCE Grade 9 Mathematics, ICT,
-  Biology, Chemistry and Physics"** — that, and only that, is what a child can
-  actually practise. **20 live packs, 214 chapters, 17,612 practisable
-  questions, 194 past-paper items** (re-measured 2026-09-08 after the science
-  split, from the built bundles). ⚠ **Name the SUBJECT, never the grade**:
-  Grade 9 registers eight packs and three hold **one sample question each**
-  (English, French, Social & Modern Studies). ⚠ **Judge by CONTENT, not by the
-  `comingSoon` flag** — those three were flipped to `comingSoon: false` on
-  2026-09-08 while still empty, and `test-exam-paper-shape` failed at once with
-  *"a full exam dealt 1 of 40 questions"*. "Grade 9 is live" or "NCE is live" promises three
-  subjects that open empty. ⚠ **"Science" is now wrong too** — a parent reading
-  it looks for one subject and finds three cards.
+- ⚠ **Coverage copy is "PSAC Grades 1–6 · NCE Grade 9"** — re-measured
+  **2026-09-16**: **46 live packs, 457 chapters, 34,392 practisable questions,
+  926 past-paper items (2016–2024)**, from the built bundles. Only **three**
+  packs are still `comingSoon` (`grade1/2/3-ict`), so **every grade 1–9 now has
+  real content**. ⚠ **This line said "Grades 4–6" until 2026-09-16 and was
+  wrong** — grades 1-3 and 7-8 went live in between and nothing updated it.
+  It is the single most quoted line in this file; re-measure it, do not quote it.
+- ⚠ **Grades 7 and 8 are live too and are named on NO share surface.** That is a
+  deliberate hold, not an oversight: `assets/og-banner.jpg` has
+  "PSAC Grades 1–6 · NCE Grade 9" **drawn into the artwork**, and copy that
+  outruns the picture beside it is the same broken promise pointed the other way.
+  Widening the copy means redrawing the banner in the same change.
+  `scripts/test-share-copy-parity.js` prints a REVIEW line naming any live grade
+  the copy does not mention.
+- ⚠ **Judge by CONTENT, not by the `comingSoon` flag.** Three Grade 9 packs were
+  flipped to `comingSoon: false` on 2026-09-08 while still holding **one sample
+  question each**, and only `test-exam-paper-shape` noticed — with the message
+  *"a full exam dealt 1 of 40 questions"*, which reads as a bug in the exam
+  assembler rather than "this pack should not be live yet". Checked again
+  2026-09-16 and the depth is now real: the thinnest live pack is
+  grade9-social-modern-studies at **25.9 questions per chapter**, and every live
+  pack clears 40 — one exam. ⚠ **"Science" is still wrong as a subject name** —
+  a parent reading it looks for one subject and finds three cards.
   The landing page, `_appShareText()` (app.js) and `_inviteText()` (auth.js) name
   the live Grade 9 subjects, each with a comment saying why, and have been
   changed **all three together** three times — "and ICT", "and Science", then
@@ -560,9 +573,13 @@ staged CLI deploy, and the harness traps. Headlines:
 
 ## Current state
 
-### Content, measured 2026-09-08
-**18 live packs, 210 chapters, 16,502 practisable questions**, plus 164 past-paper
-items and the `comingSoon` placeholder packs. ⚠ **Measured by executing the
+### Content, measured 2026-09-16
+**46 live packs, 457 chapters, 34,392 practisable questions**, plus 926
+past-paper items (2016–2024) and 871 raw grade9-maths `task` rows that project
+to more. Three `comingSoon` packs remain: `grade1-ict`, `grade2-ict`,
+`grade3-ict`. ⚠ The per-pack table below is from **2026-09-08** and covers only
+the 20 packs live then — it is kept for the shape of the thing, not the numbers.
+⚠ **Measured by executing the
 manifests and counting distinct ids in the BUILT bundles**
 (`node netlify/build-questions.js`) — not by adding up numbers written here.
 Re-measure rather than carrying these forward, and count what **projects**.

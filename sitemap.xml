@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Only pages a stranger should land on. Every other URL is either a shell that
+     needs a code, or an endpoint. Extensionless on purpose: Cloudflare 307s
+     /privacy.html -> /privacy, so the .html form is not the canonical URL.
+     No <lastmod>: a hardcoded date here goes stale silently and is worse than
+     absent, and Google ignores <priority> entirely. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://nouklass.com/</loc></url>
+  <url><loc>https://nouklass.com/privacy</loc></url>
+  <url><loc>https://nouklass.com/image-credits</loc></url>
+</urlset>

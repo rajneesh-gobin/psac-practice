@@ -1,7 +1,7 @@
 // POST /api/teacher-approved-email — notifies a teacher their account was approved.
 
 import { requireAdmin, json } from '../lib/admin-auth.js';
-import { sendMail, mailConfigured } from '../lib/mailer.js';
+import { sendMail, mailConfigured, replyNoteText } from '../lib/mailer.js';
 
 function _he(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -53,7 +53,7 @@ export default async function handler(request, env) {
   </div>
 </body></html>`;
 
-  const res = await sendMail(env, { to: email, subject, html, text });
+  const res = await sendMail(env, { to: email, subject, html, text: text + String.fromCharCode(10,10) + replyNoteText(env) });
   if (!res.ok) return json(502, { ok: false, error: 'send_failed' });
   return json(200, { ok: true, sent: true });
 }

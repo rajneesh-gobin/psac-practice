@@ -2348,23 +2348,34 @@ const Auth = (() => {
         : 'Could not send your application.', 3500);
       return data;
     }
-    if (data.note === 'auto_approved') {
-      // Approved by request_teacher_access() itself (the admin's auto-approve
-      // switch). Mirror what the next sign-in would work out, so the tools
-      // appear now instead of after a reload.
+    // ⚠ BOTH approved answers land here, not just the auto-approved one.
+    //   'auto_approved' means the switch just granted it; a bare status of
+    //   'approved' means the server already considered you a teacher — an admin,
+    //   or an account approved in an earlier session. The second case used to
+    //   set _teacherStatus and NOTHING ELSE, so `_isTeacherUser` stayed false,
+    //   the card fell through to the default pitch, and the parent was told
+    //   "you already have teacher access" while still looking at an Apply
+    //   button. Reported from production. Approved is approved — mirror the
+    //   whole state either way.
+    if (data.status === 'approved') {
       _teacherStatus = 'approved';
       _isTeacherUser = true;
-      if (_parentProfile) { _parentProfile.role = 'teacher'; _parentProfile.teacher_status = 'approved'; }
+      if (_parentProfile) {
+        _parentProfile.teacher_status = 'approved';
+        // ⚠ An ADMIN is a teacher for this purpose but must not be demoted to
+        //   role 'teacher' by a UI convenience — it would hide the admin panel.
+        if (_parentProfile.role !== 'admin') _parentProfile.role = 'teacher';
+      }
       const tBtn = document.getElementById('btn-open-teacher');
       if (tBtn) { tBtn.classList.remove('hidden'); tBtn.classList.add('flex'); }
-      toast('You are approved - your teacher tools are ready. 👩‍🏫', 4000);
+      toast(data.note === 'auto_approved'
+        ? 'You are approved - your teacher tools are ready. 👩‍🏫'
+        : 'You already have teacher access. 👩‍🏫 Look for the teacher button in the header.', 4500);
       renderParentDashboard();
       return data;
     }
     _teacherStatus = data.status;
-    toast(data.status === 'approved'
-      ? 'You already have teacher access. 👩‍🏫'
-      : 'Application sent. An administrator will review it. ⏳', 4000);
+    toast('Application sent. An administrator will review it. ⏳', 4000);
     renderParentDashboard();
     return data;
   }
@@ -2433,8 +2444,10 @@ const Auth = (() => {
   }
   function _inviteText() {
     // ⚠ All 8 Grade 9 packs live as of 2026-09-09. Keep in step with
-    //   _appShareText() (app.js) and the landing page.
-    return `Join me on Nou Klass — Exam Practice - free revision for PSAC Grades 4–6, plus all 8 NCE Grade 9 subjects: Maths, ICT, Biology, Chemistry, Physics, English, French and Social & Modern Studies! 📚`;
+    //   _appShareText() (app.js), the landing page and index.html's
+    //   og:description. Widened 4–6 → 1–6 on 2026-09-16 after re-measuring:
+    //   grades 1-3 are live and populated too. See the note in _appShareText().
+    return `Join me on Nou Klass — Exam Practice - free revision for PSAC Grades 1–6, plus all 8 NCE Grade 9 subjects: Maths, ICT, Biology, Chemistry, Physics, English, French and Social & Modern Studies! 📚`;
   }
 
   async function openInviteModal() {

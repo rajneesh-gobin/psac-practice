@@ -112,32 +112,35 @@ repo root, create `.well-known/assetlinks.json` at the project root.
 > ⚠ Replace the placeholder SHA-256 with the real fingerprint from Step 1.
 > ⚠ The `package_name` must EXACTLY match what Bubblewrap uses in Step 3.
 
-### Make sure Netlify serves it correctly
+### ✅ Serving it — ALREADY DONE (2026-09-16)
 
-Add to `netlify.toml` (before the final `/* → 404` catch-all):
+> ⚠ **This section used to describe `netlify.toml`. The site moved to
+> Cloudflare Workers and Netlify serves nothing.** Both pieces are now in place
+> and need no further work:
+>
+> 1. **`.well-known/assetlinks.json` exists** at the repo root, with a
+>    placeholder fingerprint. Replace the placeholder with the real SHA-256 from
+>    Step 1 — that is the only edit this file ever needs.
+> 2. **`scripts/prepare-deploy.js` ships it.** `.well-known` was added to the
+>    `DIRS` allowlist. ⚠ It is a DOTFILE directory, invisible to a casual `ls`,
+>    and creating the file without this line would have shipped nothing — the
+>    app would then open with a browser address bar, a symptom nobody connects
+>    back to a missing file.
+>
+> Cloudflare's asset layer serves `/.well-known/assetlinks.json` directly and
+> infers `application/json` from the extension. There is no redirect rule to
+> write: the Worker only intercepts `/api/*` and the `/v/ /m/ /a/` rewrites, and
+> everything else falls through to the assets.
 
-```toml
-[[headers]]
-  for = "/.well-known/assetlinks.json"
-  [headers.values]
-    Content-Type  = "application/json"
-    Cache-Control = "public, max-age=3600"
+```powershell
+# After deploying, this must return 200 and the JSON — not the SPA shell.
+curl -s -o NUL -w "%{http_code} %{content_type}\n" https://nouklass.com/.well-known/assetlinks.json
 ```
 
-Also add a `[[redirects]]` rule so the file is NOT blocked if there is a
-blanket doc-blocker rule above it:
-
-```toml
-[[redirects]]
-  from   = "/.well-known/assetlinks.json"
-  to     = "/.well-known/assetlinks.json"
-  status = 200
-  force  = true
-```
-
-> ⚠ The `.well-known/` folder must also be included in `prepare-deploy.js`'s
-> allowlist (the ALLOWLIST array). Add the line:
-> `'.well-known/assetlinks.json'` to the file list in that script.
+⚠ **Google caches Digital Asset Links.** If you publish the file with the
+placeholder fingerprint still in it and only fix it later, verification can keep
+failing for hours against the cached copy. Put the real fingerprint in *before*
+the first Play upload.
 
 ### Verify it is live after deploying
 
@@ -288,7 +291,7 @@ Requires:
 | File | Change |
 |---|---|
 | `.well-known/assetlinks.json` | **CREATE** — new file, domain proof |
-| `netlify.toml` | **EDIT** — add Content-Type header + 200 redirect for assetlinks |
+| `scripts/prepare-deploy.js` | ✅ DONE — `.well-known` added to the DIRS allowlist |
 | `scripts/prepare-deploy.js` | **EDIT** — add `.well-known/assetlinks.json` to allowlist |
 | `nouklass-release.keystore` | **CREATE** — keep outside the repo, never commit |
 | `C:\nouklass-android\` | **CREATE** — Android project folder, outside the repo |
@@ -304,7 +307,7 @@ Requires:
 [ ] nouklass-release.keystore generated and backed up
 [ ] SHA-256 fingerprint extracted and saved
 [ ] .well-known/assetlinks.json created with real fingerprint
-[ ] netlify.toml updated (Content-Type header + 200 redirect)
+[x] .well-known shipped by prepare-deploy.js (Cloudflare needs no redirect rule)
 [ ] prepare-deploy.js allowlist updated
 [ ] Deployed → verified /.well-known/assetlinks.json returns 200 + JSON
 [ ] Digital Asset Link verified via Google's tool
@@ -322,7 +325,7 @@ Requires:
 | Symptom | Cause | Fix |
 |---|---|---|
 | Address bar still visible in app | Digital Asset Link not verified | Check SHA-256 matches; re-deploy assetlinks.json; wait ~5 min for CDN |
-| `assetlinks.json` returns 404 | Not in allowlist or netlify.toml blocking it | Add to prepare-deploy.js allowlist; add 200 redirect in netlify.toml |
+| `assetlinks.json` returns 404 | `.well-known` missing from the DIRS allowlist in prepare-deploy.js — it is a dotfile directory and easy to miss | Confirm `.deploy/.well-known/assetlinks.json` exists after staging, then redeploy |
 | Bubblewrap fails to read manifest | Live site unreachable or manifest has errors | Check `https://nouklass.com/manifest.json` in browser |
 | Play Store rejects APK | Target SDK too low | Bump targetSdkVersion to 34 in `twa-manifest.json` and rebuild |
 | Splash screen wrong colour | Bubblewrap used cached manifest | Edit `twa-manifest.json` → `themeColor` / `backgroundColor` and rebuild |

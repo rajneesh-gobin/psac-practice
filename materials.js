@@ -75,6 +75,68 @@ function esc(s) {
 // ── Material helpers (third copy — see the header) ─────────────────────────
 const YT_RE = /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
 
+// ── Inline YouTube player ───────────────────────────────────────────────
+// ⚠ A CLICK-TO-PLAY FACADE, not an iframe on load. A class page with ten
+//   videos would otherwise open ten connections to Google before the child
+//   has chosen anything - slow on a Mauritian mobile plan, and it hands
+//   YouTube a page view for every video nobody watched. The thumbnail is a
+//   plain image; the iframe is created on the first tap and not before.
+//
+// ⚠ youtube-NOCOOKIE. The player is identical, but nothing is stored until
+//   play is pressed. `rel=0` keeps the end-screen suggestions to the same
+//   channel, which is the closest YouTube allows to "do not send this child
+//   somewhere else" - it has not been possible to remove them entirely since
+//   2018, which is exactly why the fallback link and the teacher's own choice
+//   of video still matter.
+//
+// ⚠ THE FALLBACK LINK IS NOT OPTIONAL. An uploader can forbid embedding; the
+//   iframe then shows "Video unavailable" inside our page with no way out. The
+//   "Watch on YouTube ↗" link is always rendered underneath.
+function ytId(url) {
+  const m = String(url || '').match(YT_RE);
+  return m ? m[1] : null;
+}
+
+function ytBlock(id, title) {
+  // ⚠ The id is matched by YT_RE as exactly 11 chars of [A-Za-z0-9_-], so it
+  //   cannot carry a quote or an angle bracket. It is still escaped, because
+  //   the next person to widen that regex will not read this comment.
+  const vid = esc(id);
+  return '<div class="yt" data-yt="' + vid + '">'
+    + '<button type="button" class="yt-play" aria-label="Play video: ' + esc(title || 'video') + '">'
+    + '<img class="yt-thumb" loading="lazy" alt="" '
+    + 'src="https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg">'
+    + '<span class="yt-btn" aria-hidden="true">▶</span>'
+    + '</button></div>';
+}
+
+// One delegated listener for the whole list: the cards are re-rendered on
+// every search keystroke and sort change, and per-card handlers would be
+// re-bound each time.
+function bindYouTube(root) {
+  if (!root || root._ytBound) return;
+  root._ytBound = true;
+  root.addEventListener('click', function (e) {
+    const btn = e.target.closest ? e.target.closest('.yt-play') : null;
+    if (!btn) return;
+    const box = btn.parentElement;
+    const id = box && box.getAttribute('data-yt');
+    if (!id) return;
+    const frame = document.createElement('iframe');
+    frame.className = 'yt-frame';
+    frame.setAttribute('allow', 'accelerometer; encrypted-media; picture-in-picture');
+    frame.setAttribute('allowfullscreen', '');
+    frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    frame.setAttribute('title', 'Video');
+    // autoplay=1 only because the child has just pressed play — this is a
+    // response to a gesture, not an unasked-for noise.
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id)
+              + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+    box.innerHTML = '';
+    box.appendChild(frame);
+  });
+}
+
 function isLink(m) { return m && m.source_type === 'link'; }
 function isYouTube(m) { return isLink(m) && YT_RE.test(String(m.url || '')); }
 function icon(m) {
@@ -376,9 +438,16 @@ function cardHTML(m) {
   const d = dateText(m);
   if (d) tags.push('<span class="tag">📅 ' + esc(d) + '</span>');
 
+  // ⚠ A YouTube link PLAYS HERE now. Sending a nine-year-old to youtube.com
+  //   puts the video their teacher chose beside a recommendation rail,
+  //   autoplay and Shorts — one tap from something nobody set. The "Watch on
+  //   YouTube" link stays underneath, because an uploader can forbid
+  //   embedding and the iframe would then be a dead rectangle.
+  const yid = (link && safe) ? ytId(safe) : null;
   const btn = safe
-    ? '<a class="open" href="' + esc(safe) + '" target="_blank" rel="noopener noreferrer">'
-      + (link ? (isYouTube(m) ? 'Watch ↗' : 'Open link ↗') : 'Open ↗') + '</a>'
+    ? (yid ? ytBlock(yid, m.title) : '')
+      + '<a class="open" href="' + esc(safe) + '" target="_blank" rel="noopener noreferrer">'
+      + (link ? (yid ? 'Watch on YouTube ↗' : 'Open link ↗') : 'Open ↗') + '</a>'
     // ⚠ Never a dead button. A material whose file could not be signed says so
     //   in the teacher's terms rather than offering a tap that does nothing.
     : '<div class="dead">⚠ This one is not available right now — tell your teacher.</div>';
@@ -401,6 +470,10 @@ function noMatch() {
 // ── Render ────────────────────────────────────────────────────────────────
 function render() {
   const out = $('out');
+  // ⚠ Bound ONCE on the container, not per card: every view re-renders `out`
+  //   on each keystroke and sort change, so per-card handlers would be re-bound
+  //   dozens of times. bindYouTube() is idempotent and delegates.
+  bindYouTube(out);
   if (S.view === 'work') return renderWork(out);
   const rows = filtered();
   if (!rows.length) { out.innerHTML = noMatch(); return; }
@@ -432,12 +505,30 @@ function workHTML(a) {
   const due = dueText(a);
   const tags = [];
   if (a.done) tags.push('<span class="tag done">✓ Done</span>');
+  // ⚠ THE CHILD'S OWN MARK, and only ever their own. The server withholds it
+  //   entirely on a shared-PIN or open-link classroom, where the identity is a
+  //   typed name anyone in the room can type — so `a.pct` is simply absent
+  //   there and this adds nothing. Nothing to decide client-side.
+  // ⚠ NEVER RED. A mark is a fact, not a verdict: this is the child's own
+  //   screen, and the app's rule is that it does not hand out punishments
+  //   (the same reason the daily goal never breaks a streak). Good marks are
+  //   celebrated; everything else is stated plainly and left alone.
+  if (a.done && a.pct != null) {
+    const strong = Number(a.pct) >= 80;
+    const detail = (a.score != null && a.total) ? a.score + ' / ' + a.total + ' · ' : '';
+    tags.push('<span class="tag mark' + (strong ? ' mark-good' : '') + '">'
+      + (strong ? '⭐ ' : '') + esc(detail) + a.pct + '%</span>');
+  }
   else if (due.text) tags.push('<span class="tag ' + due.cls + '">' + esc(due.text) + '</span>');
   if (a.question_count) tags.push('<span class="tag">' + a.question_count + ' questions</span>');
   if (a.duration_mins)  tags.push('<span class="tag">⏱ ' + a.duration_mins + ' min</span>');
   // ⚠ A done card still shows when it was due — that is how a child checks they
   //   did the right one.
   if (a.done && due.text) tags.push('<span class="tag">' + esc(due.text) + '</span>');
+  if (a.done && a.submitted_at) {
+    const when = dateText({ shared_at: a.submitted_at });
+    if (when) tags.push('<span class="tag">✍️ ' + esc(when) + '</span>');
+  }
 
   // ⚠ The code is [A-Z0-9] from the database and encodeURIComponent'd anyway.
   const href = '/a/' + encodeURIComponent(String(a.code || ''));

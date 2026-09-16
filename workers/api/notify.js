@@ -1,7 +1,7 @@
 // POST /api/notify — assignment completion notifier. Emails the parent.
 
 import { resolveStudent } from '../lib/student-auth.js';
-import { sendMail, mailConfigured, wantsEmail, unsubscribeUrl } from '../lib/mailer.js';
+import { sendMail, mailConfigured, wantsEmail, unsubscribeUrl, replyNote } from '../lib/mailer.js';
 
 const SB_URL_DEFAULT = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 
@@ -87,7 +87,7 @@ export default async function handler(request, env) {
     to: parentEmail,
     subject: `${safeDisplayName} completed: ${safeLabel} - ${safePct}%`,
     html: html.replace('</div>\n</body></html>',
-      `</div><div style="max-width:480px;margin:0 auto 32px;text-align:center;color:#9ca3af;font-size:11px">${unsub ? `<a href="${unsub}" style="color:#9ca3af">Stop these homework emails</a>` : ''}</div>\n</body></html>`),
+      `</div><div style="max-width:480px;margin:0 auto 32px;text-align:center;color:#9ca3af;font-size:11px;line-height:1.5">${replyNote(env)}${unsub ? `<br><a href="${unsub}" style="color:#9ca3af">Stop these homework emails</a>` : ''}</div>\n</body></html>`),
     ...(unsub ? { unsubscribe: unsub } : {}),
   });
   if (!res.ok) console.error('[notify] send failed', res.error, parentEmail);

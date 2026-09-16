@@ -5881,7 +5881,38 @@ BEGIN
            'expires_at',     a.expires_at,
            'done',           EXISTS (SELECT 1 FROM public.guest_submissions g
                                       WHERE g.assignment_id = a.id AND g.name_key = v_key
-                                        AND g.submitted_at IS NOT NULL)
+                                        AND g.submitted_at IS NOT NULL),
+           -- ⚠ THE CHILD'S OWN MARK, and ONLY on a per-pupil PIN classroom.
+           --   The comment above says the score is deliberately absent because
+           --   'children comparing marks on a shared tablet is exactly what this
+           --   must not enable'. That reasoning holds ENTIRELY for a shared PIN,
+           --   where v_key is a typed name anyone in the room can type. It does
+           --   not hold for a per-pupil PIN: v_key is that pupil's row id, and
+           --   seeing it requires their own PIN.
+           --   ⚠ And it discloses NOTHING NEW: guest.js already shows this exact
+           --   percentage the moment the child submits. This is the same number,
+           --   shown again to the same child, behind a credential.
+           --   ⚠ Still NO answers, NO question_ids, and NO other pupil's mark.
+           'score',          CASE WHEN c.access_type <> 'shared' THEN (
+                               SELECT g.score FROM public.guest_submissions g
+                                WHERE g.assignment_id = a.id AND g.name_key = v_key
+                                  AND g.submitted_at IS NOT NULL
+                                ORDER BY g.submitted_at DESC LIMIT 1) END,
+           'total',          CASE WHEN c.access_type <> 'shared' THEN (
+                               SELECT g.total FROM public.guest_submissions g
+                                WHERE g.assignment_id = a.id AND g.name_key = v_key
+                                  AND g.submitted_at IS NOT NULL
+                                ORDER BY g.submitted_at DESC LIMIT 1) END,
+           'pct',            CASE WHEN c.access_type <> 'shared' THEN (
+                               SELECT g.pct FROM public.guest_submissions g
+                                WHERE g.assignment_id = a.id AND g.name_key = v_key
+                                  AND g.submitted_at IS NOT NULL
+                                ORDER BY g.submitted_at DESC LIMIT 1) END,
+           'submitted_at',   CASE WHEN c.access_type <> 'shared' THEN (
+                               SELECT g.submitted_at FROM public.guest_submissions g
+                                WHERE g.assignment_id = a.id AND g.name_key = v_key
+                                  AND g.submitted_at IS NOT NULL
+                                ORDER BY g.submitted_at DESC LIMIT 1) END
          ) ORDER BY coalesce(a.due_at, a.expires_at)), '[]'::jsonb)
     INTO v_work
     FROM public.guest_assignments a

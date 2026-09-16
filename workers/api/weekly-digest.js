@@ -11,7 +11,7 @@
 //   'monthly' cannot be expressed by the cron expression alone.
 
 import { sendMail, mailConfigured, unsubscribeUrl, siteUrl, emailPrefs, digestDue,
-         quotaTake, quotaRelease } from '../lib/mailer.js';
+         quotaTake, quotaRelease, replyNote } from '../lib/mailer.js';
 import { requireAdmin } from '../lib/admin-auth.js';
 
 const SB_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
@@ -199,7 +199,7 @@ async function run(env) {
 
       const unsub = await unsubscribeUrl(env, family.parent_id, 'digest');
       const htmlWithFooter = html.replace('</div></div></body></html>',
-        `</div><div style="padding:0 28px 22px;color:#9ca3af;font-size:11px;line-height:1.5;text-align:center">You are getting this because the progress digest is switched on for your account.${unsub ? ` <a href="${unsub}" style="color:#6b7280">Turn it off</a> ·` : ''} <a href="${siteUrl(env)}/" style="color:#6b7280">Change how often</a></div></div></body></html>`);
+        `</div><div style="padding:0 28px 22px;color:#9ca3af;font-size:11px;line-height:1.5;text-align:center">${replyNote(env)}<br>You are getting this because the progress digest is switched on for your account.${unsub ? ` <a href="${unsub}" style="color:#6b7280">Turn it off</a> ·` : ''} <a href="${siteUrl(env)}/" style="color:#6b7280">Change how often</a></div></div></body></html>`);
       const _res = await sendMail(env, {
         to: parentEmail,
         subject: `Nou Klass - Progress Report (${weekStr})`,

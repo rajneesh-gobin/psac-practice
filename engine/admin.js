@@ -21,13 +21,10 @@ const AdminPanel = (() => {
 
   // ── Entry point called by auth.js ───────────
   async function render() {
-    showTab('members');
-    _updateMemberCopyControl();
-    await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadShopSettings(),
-                       loadGuestLimits(), loadTeacherQueue()]);
-    _renderContent();
-    await loadStats();
-    // Show super-admin-only tabs
+    // ⚠ The super-admin check and the button visibility move BEFORE showTab.
+    //   They used to run at the end, which meant the panel was chosen while the
+    //   buttons still said something else — fine when the tab was always
+    //   'members', wrong the moment it is restored from storage.
     const isSA = typeof Auth !== 'undefined' && Auth.isSuperAdmin?.();
     const rolesBtn  = document.getElementById('admin-tab-roles-btn');
     const plansBtn  = document.getElementById('admin-tab-plans-btn');
@@ -35,6 +32,13 @@ const AdminPanel = (() => {
     if (rolesBtn)  rolesBtn.classList.toggle('hidden', !isSA);
     if (plansBtn)  plansBtn.classList.toggle('hidden', !isSA);
     if (createBtn) createBtn.classList.toggle('hidden', !isSA);
+
+    showTab(_restoreTab(isSA));
+    _updateMemberCopyControl();
+    await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadShopSettings(),
+                       loadGuestLimits(), loadTeacherQueue()]);
+    _renderContent();
+    await loadStats();
   }
 
   // ── Syllabus preview (read-only) ───────────────
@@ -137,7 +141,37 @@ const AdminPanel = (() => {
   })();
 
   // ── Tab switching ───────────────────────────
+  // ── Where the admin was ────────────────────────────────────────────────
+  // ⚠ render() used to open on 'members' unconditionally, so any reload — or
+  //   simply leaving the panel and coming back — threw an admin off whatever
+  //   they were doing. The Teachers tab was the one that showed it up: refresh
+  //   while reading the queue and you are back in the member list.
+  // ⚠ localStorage, matching teacher mode's psac_teacher_loc_v1. A tab is a
+  //   PLACE, not session state: an admin who closes the laptop mid-review wants
+  //   the same screen tomorrow, which sessionStorage would not give them.
+  const ADMIN_TAB_KEY = 'psac_admin_tab_v1';
+  const ADMIN_TABS = ['members', 'teachers', 'reports', 'questions', 'syllabus',
+                      'maps', 'content', 'stats', 'roles', 'plans', 'create'];
+  // ⚠ Super-admin only. A remembered tab an ordinary admin can no longer open
+  //   must not be restored — they would land on a panel whose button is hidden,
+  //   with no way back to it and no explanation.
+  const ADMIN_SA_TABS = ['roles', 'plans', 'create'];
+
+  function _rememberTab(name) {
+    if (!ADMIN_TABS.includes(name)) return;
+    try { localStorage.setItem(ADMIN_TAB_KEY, name); } catch (_) {}
+  }
+
+  function _restoreTab(isSuperAdmin) {
+    let name = null;
+    try { name = localStorage.getItem(ADMIN_TAB_KEY); } catch (_) {}
+    if (!name || !ADMIN_TABS.includes(name)) return 'members';
+    if (!isSuperAdmin && ADMIN_SA_TABS.includes(name)) return 'members';
+    return name;
+  }
+
   function showTab(name) {
+    _rememberTab(name);
     document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.add('hidden'));
     document.querySelectorAll('.admin-tab').forEach(b => {
       const on = b.dataset.tab === name;
@@ -2724,6 +2758,89 @@ const AdminPanel = (() => {
     }).join('');
     _loadMemberEmails(list.map(t => t.id));
     _renderTeacherActivityHeadline();
+  }
+
+  // ── Teacher emails: copy, and select-everyone ──────────────────────────
+  // ⚠ Deliberately the SAME machinery as the members list — _copyEmailBatch and
+  //   _memberPicks — rather than a parallel implementation. A second copy path
+  //   would be a second place for the "only the ids asked for" rule to drift.
+  // ⚠ profiles carries no email column; addresses come from the server, for the
+  //   ids the admin is already looking at, and never as a list or a search.
+  async function copyTeacherEmails() {
+    const button = document.getElementById('admin-copy-teacher-emails');
+    if (!_sb || button?.disabled) return;
+    const status = document.getElementById('admin-copy-teacher-status');
+    const output = document.getElementById('admin-copy-teacher-output');
+    if (button) button.disabled = true;
+    if (output) { output.value = ''; output.classList.add('hidden'); }
+    if (status) status.textContent = 'Collecting teacher emails…';
+    try {
+      const ids = await _allTeacherIds(status);
+      const emails = new Map();
+      let missing = 0;
+      for (let start = 0; start < ids.length; start += 20) {
+        const batch = ids.slice(start, start + 20);
+        if (status) status.textContent = `Collecting emails ${start + 1}–${start + batch.length} of ${ids.length}…`;
+        const result = await _copyEmailBatch(batch.map(r => r[0]));
+        batch.forEach(([id]) => {
+          const email = String(result.emails?.[id] || '').trim();
+          if (email) emails.set(email.toLowerCase(), email); else missing++;
+        });
+      }
+      const list = [...emails.values()].join(', ');
+      if (!list) { if (status) status.textContent = 'No teacher email addresses were available.'; return; }
+      const note = `${emails.size} address${emails.size === 1 ? '' : 'es'} copied.`
+        + (missing ? ` ${missing} had no address on file.` : '')
+        + ' Use Bcc when emailing a group.';
+      try {
+        await navigator.clipboard.writeText(list);
+        if (status) status.textContent = note;
+      } catch (_) {
+        // ⚠ The clipboard is refused outside a user gesture and on http://.
+        //   Showing the list to copy by hand beats reporting a failure.
+        if (output) { output.value = list; output.classList.remove('hidden'); output.focus(); output.select(); }
+        if (status) status.textContent = note + ' Copy them from the box below.';
+      }
+    } catch (error) {
+      if (status) status.textContent = error.message || 'Could not collect teacher emails.';
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
+
+  // Every teacher, across every page — not just the one on screen.
+  async function _allTeacherIds(status) {
+    const out = [];
+    for (let offset = 0; ; offset += 100) {
+      if (status) status.textContent = `Loading teachers ${offset + 1}…`;
+      const { data, error } = await _sb.from('profiles')
+        .select('id, full_name')
+        .eq('role', 'teacher')
+        .is('deleted_at', null)
+        .order('created_at', { ascending: false }).order('id')
+        .range(offset, offset + 99);
+      if (error) throw new Error('Could not load the teacher list. Please try again.');
+      (data || []).forEach(r => out.push([r.id, r.full_name || 'Unnamed teacher']));
+      if ((data || []).length < 100) break;
+    }
+    return out;
+  }
+
+  async function teacherAudience() {
+    const status = document.getElementById('admin-copy-teacher-status');
+    try {
+      const ids = await _allTeacherIds(status);
+      ids.forEach(([id, name]) => _memberPicks.set(id, name));
+      _paintSelectionBar();
+      _renderBroadcastRecipients();
+      if (status) status.textContent = `${ids.length} teacher${ids.length === 1 ? '' : 's'} added to the selection.`;
+      document.querySelectorAll('[id^="member-pick-"]').forEach(cb => {
+        const id = cb.id.replace('member-pick-', '');
+        if (_memberPicks.has(id)) cb.checked = true;
+      });
+    } catch (error) {
+      if (status) status.textContent = error.message || 'Could not load the teacher list.';
+    }
   }
 
   function toggleSelectAllTeachers(on) {
@@ -5526,6 +5643,7 @@ const AdminPanel = (() => {
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
     toggleMemberPick, toggleSelectAllMembers, clearMemberPicks, openBroadcast, closeBroadcast,
     toggleTeacherRow, toggleSelectAllTeachers, emailOneMember,
+    copyTeacherEmails, teacherAudience,
     broadcastPreview, sendBroadcast, broadcastAudience,
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,

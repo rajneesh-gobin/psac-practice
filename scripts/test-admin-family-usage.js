@@ -88,8 +88,47 @@ ok('there are two bars in the markup',
   (htmlSrc.match(/<div data-selection-bar/g) || []).length === 2);
 ok('the old single-id bar is gone', !/admin-member-selection/.test(htmlSrc) && !/admin-member-selection/.test(adminSrc));
 
+// ── The admin panel reopens where it was left ───────────────────────────────
+// ⚠ render() used to call showTab('members') unconditionally, so a refresh —
+//   which restores screen-admin and calls render() again — threw the admin back
+//   to the member list from wherever they were. Reported from the Teachers tab.
+ok('a tab is remembered when it is opened', /function _rememberTab/.test(adminSrc));
+ok('and restored on render', /showTab\(_restoreTab\(isSA\)\)/.test(adminSrc));
+ok('render no longer hard-codes members', !/showTab\('members'\);/.test(adminSrc));
+ok('it persists in localStorage, like teacher mode does',
+  /localStorage\.setItem\(ADMIN_TAB_KEY/.test(adminSrc));
+ok('storage access is wrapped (it throws in some privacy modes)',
+  /try \{ localStorage\.setItem\(ADMIN_TAB_KEY, name\); \} catch \(_\) \{\}/.test(adminSrc));
+
+// ⚠ A remembered super-admin tab must NOT be restored for an ordinary admin:
+//   they would land on a panel whose button is hidden, with no way back to it.
+ok('super-admin-only tabs are listed', /ADMIN_SA_TABS = \['roles', 'plans', 'create'\]/.test(adminSrc));
+ok('and are refused to a non-super-admin',
+  /if \(!isSuperAdmin && ADMIN_SA_TABS\.includes\(name\)\) return 'members';/.test(adminSrc));
+ok('an unknown or absent tab falls back to members',
+  /if \(!name \|\| !ADMIN_TABS\.includes\(name\)\) return 'members';/.test(adminSrc));
+
+// ⚠ Button visibility must be decided BEFORE the panel is chosen, or the tab is
+//   restored while the buttons still say something else.
+{
+  const render = adminSrc.slice(adminSrc.indexOf('async function render()'),
+                                adminSrc.indexOf('// ── Syllabus preview'));
+  ok('the super-admin check runs before showTab',
+    render.indexOf('const isSA') < render.indexOf('showTab(_restoreTab'));
+  ok('and so does the button toggling',
+    render.indexOf('createBtn.classList.toggle') < render.indexOf('showTab(_restoreTab'));
+}
+
+// The refresh path that exposed this.
+{
+  const authSrc = fs.readFileSync(path.join(ROOT, 'engine/auth.js'), 'utf8');
+  ok('a refresh on the admin screen really does re-enter render()',
+    /lastScreen === 'admin'[\s\S]{0,200}AdminPanel\.render\(\)/.test(authSrc));
+}
+
 // ── Every new handler is exported ───────────────────────────────────────────
-for (const fn of ['toggleTeacherRow', 'toggleSelectAllTeachers', 'emailOneMember']) {
+for (const fn of ['toggleTeacherRow', 'toggleSelectAllTeachers', 'emailOneMember',
+                  'copyTeacherEmails', 'teacherAudience']) {
   const ret = adminSrc.slice(adminSrc.lastIndexOf('return { render,'));
   ok(`${fn} is exported on AdminPanel`, ret.includes(fn));
 }

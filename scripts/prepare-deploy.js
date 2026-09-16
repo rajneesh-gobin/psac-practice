@@ -54,13 +54,26 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, '.deploy');
 
 // Directories copied whole.
-const DIRS = ['engine', 'subjects', 'assets', 'fonts', 'icons'];
+// ⚠ `.well-known` is the Digital Asset Links proof the Play Store TWA needs
+//   (docs/convert_to_app.md). It is a DOTFILE directory, so it is invisible to
+//   a casual `ls` and was never in this allowlist — creating the file alone
+//   would have shipped nothing and the app would have opened with a browser
+//   address bar, which is the symptom nobody connects back to a missing file.
+const DIRS = ['engine', 'subjects', 'assets', 'fonts', 'icons', '.well-known'];
 
 // Root files, named individually — never a glob. `*.js` at this root would pick
 // up dev-server.js and four dbg*.js scratch files.
 const FILES = [
   'index.html', 'guest.html', 'vote.html', 'score.html', 'image-credits.html',
   'materials.html',
+  // ⚠ Required by Google Play, and scrutinised rather than rubber-stamped for a
+  //   children's app. The Play listing links to it, so it must be reachable
+  //   before the listing is submitted, not after.
+  'privacy.html',
+  // ⚠ Cloudflare serves its OWN comment-only robots.txt when the zone ships
+  //   none, so a missing file here is not a missing robots.txt — it is a robots.txt
+  //   with no rules in it. Same shape of trap as .well-known above.
+  'robots.txt', 'sitemap.xml',
   'style.css', 'sw.js', 'manifest.json', 'guest.js', 'materials.js',
 ];
 
@@ -174,9 +187,80 @@ for (const f of FILES.filter(x => x.endsWith('.html'))) {
     htmlRefs.push([f, u.replace(/^\//, '').split('?')[0]]);
   }
 }
-const brokenRefs = htmlRefs.filter(([, u]) => u && !fs.existsSync(path.join(OUT, u)));
+// ⚠ A REFERENCE RESOLVES THE WAY CLOUDFLARE RESOLVES IT, not the way the
+//   filesystem does. Cloudflare's asset layer serves `/privacy` from
+//   `privacy.html` (html_handling defaults to dropping the extension) and
+//   307s `/privacy.html` back to `/privacy`. Probed on production, not assumed:
+//     /privacy       -> 200 text/html 8653B   (the real page, not the SPA shell)
+//     /privacy.html  -> 307
+//   A literal existsSync() therefore called the CORRECT extensionless link
+//   broken and blocked the deploy, which is worse than the miss it guards
+//   against — the next person's fix is to add `.html` back and take the 307.
+const resolves = (u) => ['', '.html', '/index.html'].some((suffix) =>
+  fs.existsSync(path.join(OUT, u + suffix)));
+const brokenRefs = htmlRefs.filter(([, u]) => u && !resolves(u));
 if (brokenRefs.length) fail('unresolved references: ' + brokenRefs.slice(0, 6).map(r => r[0] + ' -> ' + r[1]).join(', '));
 else ok('all ' + htmlRefs.length + ' local references in the HTML pages resolve');
+
+// ── 3b. _headers — the security headers for STATIC assets ──────────────────
+// ⚠⚠ THE WORKER NEVER RUNS FOR A STATIC ASSET. workers/index.js carefully wraps
+//    every asset response in SECURITY_HEADERS, and that code is unreachable:
+//    Cloudflare serves files from the asset layer without invoking the Worker.
+//    Measured on production 2026-09-16 — /api/questions carried the full CSP,
+//    HSTS and X-Frame-Options; `/`, `/style.css` and `/guest.js` carried NONE.
+//    So every HTML page was running with no clickjacking protection and no
+//    script-source restriction, while the code said otherwise.
+//
+// ⚠ `_headers` is the fix rather than `run_worker_first = true`, which would
+//   turn every image, font and question bundle into a Worker invocation against
+//   the 100k/day budget. The asset layer honours this file for free.
+//
+// ⚠ THE POLICY IS DERIVED FROM workers/index.js, NOT RETYPED. Two hand-written
+//   copies of a CSP drift, and the drift is invisible until something is
+//   blocked on one path and allowed on the other. If the parse fails this
+//   FAILS THE BUILD rather than shipping a directory with no headers.
+{
+const workerSrc = fs.readFileSync(path.join(ROOT, 'workers/index.js'), 'utf8');
+const block = (workerSrc.match(/const SECURITY_HEADERS = \{([\s\S]*?)\n\};/) || [])[1];
+if (!block) {
+  fail('could not read SECURITY_HEADERS from workers/index.js — _headers NOT written');
+} else {
+  const headers = [];
+  // Plain 'Name': 'value' pairs.
+  for (const m of block.matchAll(/'([A-Za-z-]+)':\s*\n?\s*'([^']*)'/g)) headers.push([m[1], m[2]]);
+  // The CSP is built by concatenating quoted fragments across several lines.
+  const cspRaw = (block.match(/'Content-Security-Policy':\s*([\s\S]*?),\n\s*\}?$/) || [])[1]
+              || (block.match(/'Content-Security-Policy':\s*([\s\S]*)$/) || [])[1] || '';
+  const csp = [...cspRaw.matchAll(/"([^"]*)"/g)].map(m => m[1]).join('').trim();
+  if (csp) headers.push(['Content-Security-Policy', csp]);
+
+  if (!headers.some(h => h[0] === 'Content-Security-Policy')) {
+    fail('parsed SECURITY_HEADERS but found no Content-Security-Policy — _headers NOT written');
+  } else {
+    const lines = [
+      '# GENERATED by scripts/prepare-deploy.js — do not edit.',
+      '# Derived from SECURITY_HEADERS in workers/index.js so the two cannot drift.',
+      '#',
+      '# The Worker applies those headers to /api/* and the share-link rewrites.',
+      '# Static assets never reach the Worker, so they are set here instead.',
+      '',
+      '/*',
+      ...headers.map(([k, v]) => '  ' + k + ': ' + v),
+      '',
+      '# Question images and the two font faces are content a FILENAME identifies,',
+      '# so they can be cached hard. Mirrors the same rule in workers/index.js.',
+      '/assets/questions/*',
+      '  Cache-Control: public, max-age=2592000',
+      '',
+      '/fonts/*',
+      '  Cache-Control: public, max-age=2592000',
+      '',
+    ];
+    fs.writeFileSync(path.join(OUT, '_headers'), lines.join('\n'), 'utf8');
+    ok('_headers written (' + headers.length + ' headers, derived from workers/index.js)');
+  }
+}
+}
 
 // 4. the saving, stated plainly
 const [srcN, srcT] = dirSize(ROOT === OUT ? OUT : ROOT);

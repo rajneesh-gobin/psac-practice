@@ -326,6 +326,37 @@ function sortMats(list, key) {
   if (key === 'title')   return rows.sort(matTitleCmp);
   return rows.sort((a, b) => matWhen(b) - matWhen(a) || matTitleCmp(a, b));
 }
+// ── Inline YouTube player ───────────────────────────────────────────────
+// ⚠ The iframe is created ON TAP, never on render: a homework page with five
+//   videos would otherwise open five connections to Google before the pupil has
+//   chosen anything — slow on a phone plan, and a page view for every video
+//   nobody watched.
+// ⚠ youtube-NOCOOKIE, and it must be in the Worker's frame-src or the frame is
+//   blocked silently with nothing on screen to explain it.
+function bindGuestYouTube(root) {
+  if (!root || root._ytBound) return;
+  root._ytBound = true;
+  root.addEventListener('click', function (e) {
+    const btn = e.target.closest ? e.target.closest('.yt-play') : null;
+    if (!btn) return;
+    const box = btn.parentElement;
+    const id = box && box.getAttribute('data-yt');
+    if (!id) return;
+    const frame = document.createElement('iframe');
+    frame.className = 'yt-frame';
+    frame.setAttribute('allow', 'accelerometer; encrypted-media; picture-in-picture');
+    frame.setAttribute('allowfullscreen', '');
+    frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    frame.setAttribute('title', 'Video');
+    // autoplay only because the pupil just pressed play - a response to a
+    // gesture, not noise nobody asked for.
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id)
+              + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+    box.innerHTML = '';
+    box.appendChild(frame);
+  });
+}
+
 function matDateText(m) {
   const t = matWhen(m);
   if (!t) return '';
@@ -360,6 +391,10 @@ async function loadMaterials(classroomId) {
 
 function renderMaterials() {
   const list = $('h-res-list');
+  // ⚠ Delegated and bound ONCE. This list is re-rendered on every sort change,
+  //   so per-card handlers would be re-attached each time; the guard makes the
+  //   call idempotent.
+  bindGuestYouTube(list);
   if (!list) return;
   // One file needs no sort control - it would only be something else to read.
   const bar = S.materials.length > 1
@@ -390,9 +425,26 @@ function renderMaterials() {
     // ⚠ http/https only. This is the third check (teacher form, database CHECK,
     //   here) and it is the one that guards the href actually written to the DOM.
     const safe = /^https?:\/\//i.test(String(m.url || '')) ? m.url : '';
+    // ⚠ A YouTube link PLAYS HERE. A pupil doing homework should not be sent
+    //   to youtube.com, where the video their teacher chose sits beside a
+    //   recommendation rail, autoplay and Shorts. The "Watch on YouTube" link
+    //   stays underneath: an uploader can forbid embedding, and the iframe
+    //   would otherwise be a dead rectangle with no way out.
+    // ⚠ A CLICK-TO-PLAY FACADE — the thumbnail is a plain image and the iframe
+    //   is built only on tap, so a page of five videos opens no connection to
+    //   Google until the pupil chooses one.
+    const vid = (isLink && safe && ytId) ? (String(m.url).match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/) || [])[1] : null;
+    const player = vid
+      ? '<div class="yt" data-yt="' + esc(vid) + '">'
+        + '<button type="button" class="yt-play" aria-label="Play video: ' + esc(m.title || 'video') + '">'
+        + '<img class="yt-thumb" loading="lazy" alt="" src="https://i.ytimg.com/vi/' + esc(vid) + '/hqdefault.jpg">'
+        + '<span class="yt-btn" aria-hidden="true">▶</span>'
+        + '</button></div>'
+      : '';
     const btn  = safe
-      ? '<a href="' + esc(safe) + '" target="_blank" rel="noopener noreferrer" class="res-open">'
-        + (isLink ? (ytId ? 'Watch ↗' : 'Open link ↗') : 'Open ↗') + '</a>'
+      ? player
+        + '<a href="' + esc(safe) + '" target="_blank" rel="noopener noreferrer" class="res-open">'
+        + (isLink ? (vid ? 'Watch on YouTube ↗' : 'Open link ↗') : 'Open ↗') + '</a>'
       : '';
     // ⚠ A CLAIM, not a mark. Nobody can grade a worksheet or a video from here,
     //   so the wording is "I have done this" and the confirmation says the

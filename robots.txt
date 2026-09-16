@@ -1,0 +1,55 @@
+# Nou Klass — https://nouklass.com
+#
+# ⚠ Cloudflare injects its own "Content Signals Policy" robots.txt when the zone
+#   serves none. Before this file existed, production answered /robots.txt with
+#   200 and 1,248 bytes of PURE COMMENT — zero directives, so everything below
+#   was allowed. Measured on production, not inferred. After deploying, re-fetch
+#   https://nouklass.com/robots.txt and check these lines actually survive
+#   alongside Cloudflare's preamble.
+#
+# ⚠ A Disallow is a request, not access control. Nothing here protects anything:
+#   /subjects/*/questions/ is publicly readable with its answers, and the fix for
+#   that is to stop deploying those files, not this line.
+
+User-agent: *
+
+# Signals, not rules. The preamble Cloudflare prepends explains them; without a
+# line like this one that preamble says nothing at all. search=yes because the
+# landing page is how a parent in Mauritius finds this at all; ai-train=no
+# reserves rights over an original question bank. Drop this line to say neither.
+Content-Signal: search=yes, ai-train=no
+
+# ── Share links ────────────────────────────────────────────────────────────
+# /a/<CODE> guest homework is OPEN-LINK by design — no PIN, and identity is a
+# typed name. /m/<CODE> is PIN-gated but the code still says WHICH class.
+# /v/<CODE> and /score carry a child's score and a challenge. None of that is
+# for a search index, and a code in Google outlives the assignment.
+Disallow: /a/
+Disallow: /m/
+Disallow: /v/
+
+# The bare shells behind those rewrites: without a code they render nothing.
+Disallow: /guest
+Disallow: /guest.html
+Disallow: /materials
+Disallow: /materials.html
+Disallow: /vote
+Disallow: /vote.html
+Disallow: /score
+Disallow: /score.html
+
+# ── The question bank ──────────────────────────────────────────────────────
+# These files carry the ANSWERS. The browser never fetches them in production
+# (questions come from /api/questions, which is where entitlement is enforced),
+# so blocking them costs nothing that renders.
+# ⚠ Do NOT extend this to /engine/ or to /subjects/_index.js: Googlebot runs the
+#   JS, and the landing markup sits inside a `.screen hidden` section that only
+#   app.js reveals. Block the engine and Google indexes a blank page.
+Disallow: /subjects/*/questions/
+Disallow: /assets/questions/
+
+# ── Endpoints ──────────────────────────────────────────────────────────────
+Disallow: /api/
+Disallow: /.netlify/
+
+Sitemap: https://nouklass.com/sitemap.xml

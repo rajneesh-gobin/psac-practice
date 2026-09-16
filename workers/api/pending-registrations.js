@@ -1,7 +1,7 @@
 // GET/POST /api/pending-registrations — admin view of unconfirmed sign-ups.
 
 import { requireAdmin, json } from '../lib/admin-auth.js';
-import { sendMail, wrap, escapeHtml, siteUrl, mailConfigured } from '../lib/mailer.js';
+import { sendMail, wrap, escapeHtml, siteUrl, mailConfigured, mailReplyTo, replyNoteText } from '../lib/mailer.js';
 
 const AUTH_PAGE_SIZE = 1000;
 const DEFAULT_PAGE_SIZE = 30;
@@ -31,14 +31,16 @@ async function emailActivated(env, { email, fullName }) {
   const text = `Hello ${first},\n\n`
     + `An administrator has activated your Nou Klass account for you, so you do not need to click the confirmation link in your sign-up email.\n\n`
     + `Sign in at ${site}/ with the email address and password you registered with, and you can finish setting up your family.\n\n`
-    + `If you did not register for Nou Klass, please reply to this email and we will remove the account.\n\nNou Klass`;
+    + `If you did not register for Nou Klass, please write to ${mailReplyTo(env)} and we will remove the account.\n\n`
+    + replyNoteText(env) + `\n\nNou Klass`;
   const html = wrap({
     title: 'Account activated',
     bodyHtml: `<p style="margin:0 0 14px">Hello ${escapeHtml(first)},</p>
       <p style="margin:0 0 14px">An <b>administrator has activated your account</b> for you, so you do not need to click the confirmation link in your sign-up email.</p>
       <p style="margin:0 0 20px">Sign in with the email address and password you registered with, and you can finish setting up your family.</p>
       <p style="margin:0 0 6px"><a href="${site}/" style="display:inline-block;background:#4f46e5;color:#ffffff;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:10px">Sign in to Nou Klass</a></p>`,
-    footerHtml: `If you did not register for Nou Klass, please reply to this email and we will remove the account.`,
+    env,
+    footerHtml: `If you did not register for Nou Klass, please tell us and we will remove the account.`,
   });
   const res = await sendMail(env, { to: email, subject, html, text });
   return res.ok ? 'sent' : (res.error || 'send_failed');

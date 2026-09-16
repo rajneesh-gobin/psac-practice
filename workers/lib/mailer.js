@@ -22,6 +22,31 @@ export function mailFrom(env) {
   return env.MAIL_FROM || 'Nou Klass <noreply@nouklass.com>';
 }
 
+// The address a human actually reads. Cloudflare Email Routing forwards
+// admin@nouklass.com (and the catch-all) to the operator's inbox.
+export function mailReplyTo(env) {
+  return env.MAIL_REPLY_TO || 'admin@nouklass.com';
+}
+
+// ⚠ SAY WHERE TO WRITE, AND MAKE REPLY WORK ANYWAY. A bare "do not reply"
+//   strands anyone who presses Reply regardless - which is most people - so the
+//   Reply-To header points at the monitored address as well as the sentence
+//   naming it. Belt and braces: the text informs, the header rescues.
+export function replyNote(env, { monitored = false } = {}) {
+  const to = mailReplyTo(env);
+  return monitored
+    ? `You can reply to this email &mdash; it reaches the Nou Klass team.`
+    : `This message was sent automatically from an address nobody reads. `
+      + `If you need to reply, please write to <a href="mailto:${to}" style="color:#4f46e5">${to}</a>.`;
+}
+
+export function replyNoteText(env, { monitored = false } = {}) {
+  const to = mailReplyTo(env);
+  return monitored
+    ? 'You can reply to this email - it reaches the Nou Klass team.'
+    : `This message was sent automatically from an address nobody reads. If you need to reply, please write to ${to}.`;
+}
+
 export function siteUrl(env) {
   return (env.SITE_URL || 'https://nouklass.com').replace(/\/+$/, '');
 }
@@ -59,7 +84,15 @@ export async function unsubscribeUrl(env, userId, scope = 'all') {
 
 // A plain, readable shell every message shares, so a parent recognises them.
 // Inline styles only - Gmail strips <style> blocks.
-export function wrap({ title, bodyHtml, footerHtml = '' }) {
+// ⚠ `env` is optional only so older call sites keep compiling; pass it. Without
+//   it the reply note is omitted and the message looks like it came from a void.
+export function wrap({ title, bodyHtml, footerHtml = '', env = null, monitored = false }) {
+  const note = env ? `<div style="margin-top:10px">${replyNote(env, { monitored })}</div>` : '';
+  footerHtml = footerHtml + note;
+  return _wrapInner({ title, bodyHtml, footerHtml });
+}
+
+function _wrapInner({ title, bodyHtml, footerHtml = '' }) {
   return `<!DOCTYPE html>
 <html><body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif">
   <div style="max-width:560px;margin:24px auto;background:#ffffff;border-radius:16px;overflow:hidden">

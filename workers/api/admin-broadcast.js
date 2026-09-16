@@ -15,7 +15,7 @@ import { requireAdmin, json } from '../lib/admin-auth.js';
 import {
   sendMail, wrap, escapeHtml, siteUrl, mailConfigured,
   wantsEmail, unsubscribeUrl, MAX_RECIPIENTS_PER_MESSAGE,
-  quotaPeek, quotaTake, quotaRelease, mailCap,
+  quotaPeek, quotaTake, quotaRelease, mailCap, replyNoteText,
 } from '../lib/mailer.js';
 
 const MAX_IDS = 500;
@@ -158,13 +158,17 @@ export default async function handler(request, env) {
 
   const site = siteUrl(env);
   const html = wrap({
+    env,
+    // ⚠ This one IS monitored: reply_to below is the sending admin's own address,
+    //   so telling a parent not to reply would be false.
+    monitored: true,
     title: essential ? 'An important message about your account' : 'A message from Nou Klass',
     bodyHtml: bodyToHtml(message),
     footerHtml: essential
       ? `You are receiving this because it concerns your Nou Klass account. <a href="${site}/" style="color:#4f46e5">Sign in</a>`
       : `You are receiving this because you have a Nou Klass account. You can turn these messages off under <b>Account &amp; Settings → Notifications</b> after <a href="${site}/" style="color:#4f46e5">signing in</a>.`,
   });
-  const text = message + '\n\n—\nNou Klass · ' + site + '/';
+  const text = message + '\n\n—\n' + replyNoteText(env, { monitored: true }) + '\nNou Klass · ' + site + '/';
 
   let sent = 0;
   const failures = [];
