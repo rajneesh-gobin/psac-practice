@@ -650,6 +650,18 @@ ALTER TABLE public.login_events ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE public.login_events ALTER COLUMN user_type SET NOT NULL;
 ALTER TABLE public.login_events ALTER COLUMN created_at SET NOT NULL;
 
+CREATE TABLE IF NOT EXISTS public.mail_quota (
+  day date NOT NULL,
+  sent integer DEFAULT 0 NOT NULL,
+  updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.mail_quota ADD COLUMN IF NOT EXISTS day date;
+ALTER TABLE public.mail_quota ADD COLUMN IF NOT EXISTS sent integer DEFAULT 0;
+ALTER TABLE public.mail_quota ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.mail_quota ALTER COLUMN day SET NOT NULL;
+ALTER TABLE public.mail_quota ALTER COLUMN sent SET NOT NULL;
+ALTER TABLE public.mail_quota ALTER COLUMN updated_at SET NOT NULL;
+
 CREATE TABLE IF NOT EXISTS public.minigame_polls (
   code text NOT NULL,
   student_id uuid NOT NULL,
@@ -1639,6 +1651,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'mail_quota_pkey'
+                    AND conrelid = 'mail_quota'::regclass) THEN
+    ALTER TABLE mail_quota ADD CONSTRAINT mail_quota_pkey PRIMARY KEY (day);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'minigame_polls_pkey'
                     AND conrelid = 'minigame_polls'::regclass) THEN
     ALTER TABLE minigame_polls ADD CONSTRAINT minigame_polls_pkey PRIMARY KEY (code);
@@ -2000,6 +2019,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'families_name_len'
+                    AND conrelid = 'families'::regclass) THEN
+    ALTER TABLE families ADD CONSTRAINT families_name_len CHECK (((family_name IS NULL) OR ((length(btrim(family_name)) >= 1) AND (length(btrim(family_name)) <= 60))));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'family_members_role_chk'
                     AND conrelid = 'family_members'::regclass) THEN
     ALTER TABLE family_members ADD CONSTRAINT family_members_role_chk CHECK ((role = ANY (ARRAY['owner'::text, 'coparent'::text])));
@@ -2161,6 +2187,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'profiles_teacher_note_len'
+                    AND conrelid = 'profiles'::regclass) THEN
+    ALTER TABLE profiles ADD CONSTRAINT profiles_teacher_note_len CHECK (((teacher_note IS NULL) OR (length(teacher_note) <= 500)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'profiles_teacher_status_chk'
                     AND conrelid = 'profiles'::regclass) THEN
     ALTER TABLE profiles ADD CONSTRAINT profiles_teacher_status_chk CHECK ((teacher_status = ANY (ARRAY['none'::text, 'pending'::text, 'approved'::text, 'rejected'::text, 'suspended'::text])));
@@ -2178,6 +2211,27 @@ DO $$ BEGIN
                   WHERE conname = 'question_report_messages_author_type_check'
                     AND conrelid = 'question_report_messages'::regclass) THEN
     ALTER TABLE question_report_messages ADD CONSTRAINT question_report_messages_author_type_check CHECK ((author_type = ANY (ARRAY['admin'::text, 'student'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'question_reports_admin_note_len'
+                    AND conrelid = 'question_reports'::regclass) THEN
+    ALTER TABLE question_reports ADD CONSTRAINT question_reports_admin_note_len CHECK (((admin_note IS NULL) OR (length(admin_note) <= 4000)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'question_reports_message_len'
+                    AND conrelid = 'question_reports'::regclass) THEN
+    ALTER TABLE question_reports ADD CONSTRAINT question_reports_message_len CHECK (((message IS NULL) OR (length(message) <= 4000)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'question_reports_qtext_len'
+                    AND conrelid = 'question_reports'::regclass) THEN
+    ALTER TABLE question_reports ADD CONSTRAINT question_reports_qtext_len CHECK (((question_text IS NULL) OR (length(question_text) <= 8000)));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2245,9 +2299,23 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'students_display_name_notblank'
+                    AND conrelid = 'students'::regclass) THEN
+    ALTER TABLE students ADD CONSTRAINT students_display_name_notblank CHECK (((display_name IS NULL) OR (length(btrim(display_name)) >= 1)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'students_username_len_ck'
                     AND conrelid = 'students'::regclass) THEN
     ALTER TABLE students ADD CONSTRAINT students_username_len_ck CHECK (((username IS NULL) OR (length(username) <= 60)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'students_username_notblank'
+                    AND conrelid = 'students'::regclass) THEN
+    ALTER TABLE students ADD CONSTRAINT students_username_notblank CHECK (((username IS NULL) OR (length(btrim(username)) >= 1)));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2808,7 +2876,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 136 functions, verbatim from pg_get_functiondef().
+-- 142 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -3165,6 +3233,61 @@ BEGIN
   RETURN jsonb_build_object('ok', true, 'blocked_until', v_until);
 END;
 $function$;
+
+-- ── admin_family_points(p_parents uuid[])
+CREATE OR REPLACE FUNCTION public.admin_family_points(p_parents uuid[])
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE v jsonb;
+BEGIN
+  IF NOT public.is_admin() THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'not_authorised');
+  END IF;
+  IF p_parents IS NULL OR array_length(p_parents, 1) IS NULL THEN
+    RETURN jsonb_build_object('ok', true, 'families', '{}'::jsonb);
+  END IF;
+  -- A page of the members list, never more.
+  IF array_length(p_parents, 1) > 200 THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'too_many');
+  END IF;
+
+  SELECT coalesce(jsonb_object_agg(x.parent_id::text, jsonb_build_object(
+           'points',    x.points,
+           'earned',    x.earned,
+           'questions', x.questions,
+           'children',  x.children,
+           'last_seen', x.last_seen
+         )), '{}'::jsonb)
+    INTO v
+    FROM (
+      SELECT f.parent_id,
+             coalesce(sum(sp.points), 0)::bigint       AS points,
+             coalesce(sum(qa.n), 0)::bigint            AS questions,
+             coalesce(sum(qa.earned), 0)::bigint       AS earned,
+             count(DISTINCT s.id)                      AS children,
+             max(sp.updated_at)                        AS last_seen
+        FROM public.families f
+        -- ⚠ LEFT JOIN throughout. A family with no children, or children who
+        --   have never answered anything, must come back as 0 — not be absent,
+        --   which the client would have to guess about.
+        LEFT JOIN public.students s
+               ON s.family_id = f.id AND s.deleted_at IS NULL
+        LEFT JOIN public.student_points sp ON sp.student_id = s.id
+        LEFT JOIN LATERAL (
+               SELECT count(*) FILTER (WHERE e.kind = 'question') AS n,
+                      coalesce(sum(e.points) FILTER (WHERE e.kind <> 'legacy'), 0) AS earned
+                 FROM public.student_point_events e
+                WHERE e.student_id = s.id
+             ) qa ON true
+       WHERE f.parent_id = ANY(p_parents)
+       GROUP BY f.parent_id
+    ) x;
+
+  RETURN jsonb_build_object('ok', true, 'families', coalesce(v, '{}'::jsonb));
+END $function$;
 
 -- ── admin_log_action(p_action text, p_target_user uuid, p_target_student uuid, p_detail jsonb)
 CREATE OR REPLACE FUNCTION public.admin_log_action(p_action text, p_target_user uuid DEFAULT NULL::uuid, p_target_student uuid DEFAULT NULL::uuid, p_detail jsonb DEFAULT '{}'::jsonb)
@@ -5239,8 +5362,35 @@ BEGIN
 END;
 $function$;
 
+-- ── help_poll_cancel(p_code text)
+CREATE OR REPLACE FUNCTION public.help_poll_cancel(p_code text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE
+  v_student uuid := public.current_student_id();
+  v_rows    integer;
+BEGIN
+  IF v_student IS NULL THEN RETURN jsonb_build_object('ok', false, 'error', 'not_signed_in'); END IF;
+
+  UPDATE public.minigame_polls
+     SET expires_at = now()
+   WHERE code = upper(btrim(p_code))
+     AND student_id = v_student
+     AND kind = 'help'
+     AND expires_at > now();
+  GET DIAGNOSTICS v_rows = ROW_COUNT;
+
+  -- ⚠ Zero rows is NOT a failure the child should see. It means the poll had
+  --   already closed on its own, or they tapped cancel twice - both of which
+  --   end in exactly the state they asked for.
+  RETURN jsonb_build_object('ok', true, 'closed', v_rows > 0);
+END $function$;
+
 -- ── help_poll_create(p_question text, p_options jsonb, p_minutes integer)
-CREATE OR REPLACE FUNCTION public.help_poll_create(p_question text, p_options jsonb, p_minutes integer DEFAULT 360)
+CREATE OR REPLACE FUNCTION public.help_poll_create(p_question text, p_options jsonb, p_minutes integer DEFAULT 5)
  RETURNS jsonb
  LANGUAGE plpgsql
  SECURITY DEFINER
@@ -5251,6 +5401,7 @@ DECLARE
   v_code    text;
   v_n       integer;
   v_minutes integer;
+  v_expires timestamptz;
 BEGIN
   IF v_student IS NULL THEN RETURN jsonb_build_object('ok', false, 'error', 'not_signed_in'); END IF;
   IF p_question IS NULL OR length(btrim(p_question)) NOT BETWEEN 1 AND 4000 THEN
@@ -5260,13 +5411,13 @@ BEGIN
     RETURN jsonb_build_object('ok', false, 'error', 'bad_options');
   END IF;
 
-  -- ⚠ The duration is CHOSEN FROM A LIST, never taken as a number. An arbitrary
-  --   integer here is a free "keep this public URL alive for a year" primitive.
-  v_minutes := CASE coalesce(p_minutes, 360)
-                 WHEN 60   THEN 60
-                 WHEN 360  THEN 360
-                 WHEN 1440 THEN 1440
-                 ELSE 360
+  -- ⚠ CHOSEN FROM A LIST, never taken as a number. An arbitrary integer here is
+  --   a free "keep this public URL alive for a year" primitive.
+  v_minutes := CASE coalesce(p_minutes, 5)
+                 WHEN 3  THEN 3
+                 WHEN 5  THEN 5
+                 WHEN 10 THEN 10
+                 ELSE 5
                END;
 
   DELETE FROM public.minigame_polls WHERE expires_at < now() - interval '1 day';
@@ -5277,14 +5428,20 @@ BEGIN
    WHERE student_id = v_student AND kind = 'help' AND created_at > now() - interval '1 hour';
   IF v_n >= 6 THEN RETURN jsonb_build_object('ok', false, 'error', 'too_many'); END IF;
 
-  v_code := upper(substr(encode(gen_random_bytes(6), 'hex'), 1, 8));
+  v_code    := upper(substr(encode(gen_random_bytes(6), 'hex'), 1, 8));
+  v_expires := now() + make_interval(mins => v_minutes);
+
   INSERT INTO public.minigame_polls(code, student_id, question, options, votes, expires_at, kind)
   VALUES (v_code, v_student, p_question, p_options,
           (SELECT jsonb_agg(0) FROM jsonb_array_elements(p_options)),
-          now() + make_interval(mins => v_minutes),
-          'help');
+          v_expires, 'help');
 
-  RETURN jsonb_build_object('ok', true, 'code', v_code, 'seconds', v_minutes * 60, 'minutes', v_minutes);
+  -- ⚠ expires_at is returned so the SHARE MESSAGE can name a real clock time.
+  --   "closes in 5 minutes" is read whenever the message is opened, which may
+  --   be four minutes later; an absolute time cannot go stale that way.
+  RETURN jsonb_build_object('ok', true, 'code', v_code,
+                            'seconds', v_minutes * 60, 'minutes', v_minutes,
+                            'expires_at', v_expires);
 END $function$;
 
 -- ── is_admin()
@@ -5468,6 +5625,100 @@ BEGIN
   );
 END;
 $function$;
+
+-- ── mail_quota_peek(p_cap integer, p_reserve integer)
+CREATE OR REPLACE FUNCTION public.mail_quota_peek(p_cap integer DEFAULT 100, p_reserve integer DEFAULT 0)
+ RETURNS jsonb
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+  SELECT jsonb_build_object(
+    'ok', true,
+    'sent_today', coalesce((SELECT sent FROM public.mail_quota WHERE day = current_date), 0),
+    'remaining',  greatest(0, greatest(0, coalesce(p_cap,100) - greatest(0, coalesce(p_reserve,0)))
+                              - coalesce((SELECT sent FROM public.mail_quota WHERE day = current_date), 0)),
+    'ceiling',    greatest(0, coalesce(p_cap,100) - greatest(0, coalesce(p_reserve,0))),
+    'cap',        coalesce(p_cap, 100));
+$function$;
+
+-- ── mail_quota_record(p_n integer)
+CREATE OR REPLACE FUNCTION public.mail_quota_record(p_n integer)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE v_sent integer;
+BEGIN
+  IF p_n IS NULL OR p_n <= 0 THEN RETURN jsonb_build_object('ok', true, 'recorded', 0); END IF;
+
+  INSERT INTO public.mail_quota(day, sent) VALUES (current_date, p_n)
+  ON CONFLICT (day) DO UPDATE
+    SET sent = public.mail_quota.sent + p_n, updated_at = now()
+  RETURNING sent INTO v_sent;
+
+  RETURN jsonb_build_object('ok', true, 'recorded', p_n, 'sent_today', v_sent);
+END $function$;
+
+-- ── mail_quota_release(p_n integer)
+CREATE OR REPLACE FUNCTION public.mail_quota_release(p_n integer)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE v_sent integer;
+BEGIN
+  IF p_n IS NULL OR p_n <= 0 THEN RETURN jsonb_build_object('ok', true, 'released', 0); END IF;
+  UPDATE public.mail_quota
+     SET sent = greatest(0, sent - p_n), updated_at = now()
+   WHERE day = current_date
+  RETURNING sent INTO v_sent;
+  RETURN jsonb_build_object('ok', true, 'released', p_n, 'sent_today', coalesce(v_sent, 0));
+END $function$;
+
+-- ── mail_quota_take(p_want integer, p_cap integer, p_reserve integer)
+CREATE OR REPLACE FUNCTION public.mail_quota_take(p_want integer, p_cap integer DEFAULT 100, p_reserve integer DEFAULT 0)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE
+  v_sent      integer;
+  v_ceiling   integer;
+  v_granted   integer;
+BEGIN
+  IF p_want IS NULL OR p_want < 0 THEN p_want := 0; END IF;
+  -- Bulk stops at (cap - reserve); transactional passes p_reserve = 0 and may
+  -- use the whole cap.
+  v_ceiling := greatest(0, coalesce(p_cap, 100) - greatest(0, coalesce(p_reserve, 0)));
+
+  INSERT INTO public.mail_quota(day, sent) VALUES (current_date, 0)
+  ON CONFLICT (day) DO NOTHING;
+
+  -- ⚠ FOR UPDATE. Without it two concurrent senders both read the same count
+  --   and both believe they have the whole remainder.
+  SELECT sent INTO v_sent FROM public.mail_quota WHERE day = current_date FOR UPDATE;
+
+  v_granted := greatest(0, least(p_want, v_ceiling - v_sent));
+
+  IF v_granted > 0 THEN
+    UPDATE public.mail_quota
+       SET sent = sent + v_granted, updated_at = now()
+     WHERE day = current_date;
+  END IF;
+
+  RETURN jsonb_build_object(
+    'ok', true,
+    'granted',   v_granted,
+    'deferred',  p_want - v_granted,
+    'sent_today', v_sent + v_granted,
+    'remaining', greatest(0, v_ceiling - v_sent - v_granted),
+    'ceiling',   v_ceiling,
+    'cap',       coalesce(p_cap, 100));
+END $function$;
 
 -- ── mark_report_seen(p_report_id uuid)
 CREATE OR REPLACE FUNCTION public.mark_report_seen(p_report_id uuid)
@@ -8345,7 +8596,7 @@ CREATE TRIGGER teacher_guest_pupils_name_log AFTER INSERT OR UPDATE OF name ON p
 -- ⚠ The forum is adults-only IN THE DATABASE (auth.uid() IS NOT NULL), not by
 --   hiding a button. A child session is anon and is excluded by construction.
 --
--- RLS is enabled on all 57 public tables.
+-- RLS is enabled on all 58 public tables.
 
 ALTER TABLE public.admin_actions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.assignment_submissions ENABLE ROW LEVEL SECURITY;
@@ -8370,6 +8621,7 @@ ALTER TABLE public.guest_pin_attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.guest_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.learning_materials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.login_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.mail_quota ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.minigame_polls ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.mm_data ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.parent_pin_attempts ENABLE ROW LEVEL SECURITY;
@@ -8495,12 +8747,27 @@ CREATE POLICY enroll_teacher ON public.enrollments
   WITH CHECK ((owns_classroom(classroom_id) OR is_admin()));
 
 -- ── families
-DROP POLICY IF EXISTS families_own ON public.families;
-CREATE POLICY families_own ON public.families
-  FOR ALL
+DROP POLICY IF EXISTS families_del ON public.families;
+CREATE POLICY families_del ON public.families
+  FOR DELETE
+  TO public
+  USING (((parent_id = auth.uid()) OR is_admin()));
+DROP POLICY IF EXISTS families_ins ON public.families;
+CREATE POLICY families_ins ON public.families
+  FOR INSERT
+  TO public
+  WITH CHECK (((parent_id = auth.uid()) OR is_admin()));
+DROP POLICY IF EXISTS families_sel ON public.families;
+CREATE POLICY families_sel ON public.families
+  FOR SELECT
+  TO public
+  USING (((parent_id = auth.uid()) OR is_family_member(id) OR is_admin()));
+DROP POLICY IF EXISTS families_upd ON public.families;
+CREATE POLICY families_upd ON public.families
+  FOR UPDATE
   TO public
   USING (((parent_id = auth.uid()) OR is_family_member(id) OR is_admin()))
-  WITH CHECK (((parent_id = auth.uid()) OR is_admin()));
+  WITH CHECK ((((parent_id = auth.uid()) AND is_family_owner(id)) OR is_admin()));
 
 -- ── forum_posts
 DROP POLICY IF EXISTS posts_delete ON public.forum_posts;
@@ -8960,6 +9227,9 @@ GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.login_events TO anon;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.login_events TO authenticated;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.login_events TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.mail_quota TO anon;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.mail_quota TO authenticated;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.mail_quota TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.minigame_polls TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.mm_data TO anon;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.mm_data TO authenticated;
@@ -9073,6 +9343,7 @@ GRANT EXECUTE ON FUNCTION public.add_friend(p_friend_code text) TO anon, authent
 GRANT EXECUTE ON FUNCTION public.add_report_message(p_report_id uuid, p_message text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.admin_adjust_credits(p_user uuid, p_delta integer, p_reason text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.admin_block_user(p_user uuid, p_minutes integer, p_reason text) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.admin_family_points(p_parents uuid[]) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.admin_log_action(p_action text, p_target_user uuid, p_target_student uuid, p_detail jsonb) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.admin_patch_student_settings(p_student uuid, p_patch jsonb, p_reason text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.admin_pending_counts() TO anon, authenticated, service_role;
@@ -9125,6 +9396,7 @@ GRANT EXECUTE ON FUNCTION public.guest_open(p_code text, p_name text, p_pin text
 GRANT EXECUTE ON FUNCTION public.guest_results(p_assignment_id uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guest_set_my_name(p_code text, p_name text, p_token text, p_new_name text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guest_submit(p_code text, p_name text, p_answers jsonb, p_score integer, p_total integer, p_token text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.help_poll_cancel(p_code text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.help_poll_create(p_question text, p_options jsonb, p_minutes integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.is_approved_teacher() TO anon, authenticated, service_role;
@@ -9135,6 +9407,10 @@ GRANT EXECUTE ON FUNCTION public.is_teacher() TO anon, authenticated, service_ro
 GRANT EXECUTE ON FUNCTION public.join_classroom(p_invite_code text, p_student_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.leaderboard_enabled() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.list_family_members() TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.mail_quota_peek(p_cap integer, p_reserve integer) TO service_role;
+GRANT EXECUTE ON FUNCTION public.mail_quota_record(p_n integer) TO service_role;
+GRANT EXECUTE ON FUNCTION public.mail_quota_release(p_n integer) TO service_role;
+GRANT EXECUTE ON FUNCTION public.mail_quota_take(p_want integer, p_cap integer, p_reserve integer) TO service_role;
 GRANT EXECUTE ON FUNCTION public.mark_report_seen(p_report_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.materials_library_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean) TO service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_create(p_question text, p_options jsonb) TO anon, authenticated, service_role;
@@ -9343,51 +9619,56 @@ END $dup$;
 
 
 
--- ── AND ONE POLICY FIX, ALSO A DECISION ──────────────────────────────────
--- ⚠ A CO-PARENT CAN CURRENTLY TAKE OVER A FAMILY. Measured against production
---   on 2026-09-06 in a rolled-back transaction, and asserted by
---   scripts/sql-tests/run-schema-tests.sh, which fails on it today.
+-- ── THE CO-PARENT TAKEOVER: CLOSED 2026-09-16 ────────────────────────────
+-- Applied, verified on production and recorded in §8 above as four policies:
+-- families_sel / families_ins / families_upd / families_del.
+-- Migration: migrations/20260916_families_own_owner_only_write.sql
 --
---   families_own (§8) reads:
+--   WAS (one FOR ALL policy):
 --     USING      (parent_id = auth.uid() OR is_family_member(id) OR is_admin())
 --     WITH CHECK (parent_id = auth.uid() OR is_admin())
+--   A co-parent passed USING as a member and WITH CHECK by naming themselves,
+--   so UPDATE families SET parent_id = auth.uid() made them the owner.
+--   Measured as authenticated with a real co-parent row: 1 row changed.
 --
---   A co-parent passes USING because they ARE a member. They then pass
---   WITH CHECK because the row they are writing names THEMSELVES as parent_id.
---   So a plain
---       UPDATE families SET parent_id = auth.uid() WHERE id = <their family>
---   succeeds, and the co-parent becomes the owner — inheriting the right to
---   invite, to remove the original parent, and to delete the family.
+-- ⚠⚠ THE ONE-LINE FIX THIS FILE USED TO RECOMMEND IS BROKEN. DO NOT USE IT.
+--   It kept ONE FOR ALL policy and narrowed WITH CHECK to
+--       (parent_id = auth.uid() AND is_family_owner(id)) OR is_admin()
+--   It was applied on 2026-09-16 and TOOK FAMILY CREATION DOWN until reverted:
+--   is_family_owner() is STABLE and LOOKS THE ROW UP, so for a family being
+--   INSERTed in that same statement it answers false — the new tuple is not in
+--   its snapshot — and every new parent got 42501. This is rule 2 above from
+--   the other direction: there a USING clause was checked on INSERT; here a
+--   WITH CHECK predicate could not see the row it was checking.
+--   ⚠ A LOOKUP-BASED PREDICATE MUST NEVER GATE AN INSERT.
 --
---   A STRANGER CANNOT do this: USING fails for a non-member, and an UPDATE
---   whose USING matches no row changes nothing and raises nothing. The
---   exposure is to an adult the owner deliberately invited — which is why this
---   is written here for a decision rather than applied silently.
+--   What works instead is splitting the policy by command, so INSERT is never
+--   subjected to an ownership lookup that cannot succeed:
+--     SELECT — unchanged (co-parent reads untouched)
+--     INSERT — WITH CHECK (parent_id = auth.uid() OR is_admin())   ← no lookup
+--     UPDATE — USING unchanged; WITH CHECK demands is_family_owner(), which is
+--              true from the committed snapshot for the real owner and false
+--              for a co-parent attempting a takeover
+--     DELETE — owner or admin only (a co-parent could previously delete the
+--              whole family under the FOR ALL USING clause)
 --
---   The fix below keeps every read path identical (USING is untouched, so
---   co-parents still see the family and rule 2 above is not re-opened) and
---   narrows only the WRITE side back to the owner and admins, which is what
---   "Owner-only membership management" already assumes everywhere else.
+-- ⚠ ACCEPTED COST: a co-parent can no longer rename the family. Production had
+--   ZERO co-parent memberships when this landed, and engine/app.js now hides
+--   the rename field from non-owners instead of offering a control that RLS
+--   refuses. If co-parent renaming is wanted, add a SECURITY DEFINER function
+--   for that ONE column — never a wider policy.
 --
---   ⚠ Check first whether any co-parent feature legitimately writes to
---     families — renaming the family, say. If one does, this makes that
---     co-parent-facing action fail, and the right fix is a SECURITY DEFINER
---     function for that one field rather than a wider policy.
+-- ⚠ 0 ROWS AND 42501 ARE NOT THE SAME EVENT when verifying this. A USING
+--   failure matches no row silently; a WITH CHECK failure raises. A test that
+--   accepts "not 1" for both cannot tell a closed hole from a broken feature.
 --
--- DROP POLICY IF EXISTS families_own ON public.families;
--- CREATE POLICY families_own ON public.families
---   FOR ALL
---   TO public
---   USING      ((parent_id = auth.uid()) OR is_family_member(id) OR is_admin())
---   WITH CHECK ((parent_id = auth.uid() AND is_family_owner(id)) OR is_admin());
---
---   Verify, as authenticated, in a rolled-back transaction — never from the
---   SQL editor as postgres, because RLS does not apply to a superuser and every
+--   Verify as authenticated, in a rolled-back transaction — never from the SQL
+--   editor as postgres, because RLS does not apply to a superuser and every
 --   check passes vacuously:
 --     SET LOCAL ROLE authenticated;
---     SET LOCAL request.jwt.claim.sub = '<the co-parent>';
+--     SELECT set_config('request.jwt.claim.sub', '<the co-parent>', true);
 --     UPDATE public.families SET parent_id = auth.uid() WHERE id = '<family>';
---   → expect 0 rows changed, and ownership unchanged.
+--   → expect 42501, and ownership unchanged.
 
 
 -- ═══ END ═════════════════════════════════════════════════════════════

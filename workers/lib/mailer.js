@@ -80,7 +80,7 @@ export function wrap({ title, bodyHtml, footerHtml = '' }) {
 // Returns { ok, id, error }. NEVER throws: a mail failure must not roll back the
 // thing the mail was announcing, and must not read to the caller as though the
 // action itself had failed.
-export async function sendMail(env, { to, bcc, subject, html, text, replyTo, unsubscribe }) {
+export async function sendMail(env, { to, bcc, subject, html, text, replyTo, unsubscribe, reserved }) {
   if (!mailConfigured(env)) return { ok: false, error: 'not_configured' };
 
   const toList  = (Array.isArray(to) ? to : to ? [to] : []).filter(Boolean);
@@ -121,6 +121,7 @@ export async function sendMail(env, { to, bcc, subject, html, text, replyTo, uns
     return { ok: false, error: 'network:' + String(e && e.message || e).slice(0, 80) };
   }
 
+  const bodyCount = toList.length + bccList.length;
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {
     // ⚠ Say WHICH failure. "domain not verified" and "bad key" are one HTTP
@@ -128,6 +129,16 @@ export async function sendMail(env, { to, bcc, subject, html, text, replyTo, uns
     //   toast; an invented friendly message makes a real fault unreportable.
     return { ok: false, error: `${res.status}:${body.name || ''} ${body.message || ''}`.trim().slice(0, 160) };
   }
+
+  // ⚠ RECORD EVERY SEND, not only the bulk ones. The counter used to track the
+  //   two bulk senders alone while the PROVIDER counted everything, so 80 bulk
+  //   plus 30 transactional read as 80 against a real 110 and the reserve was
+  //   protecting nothing measurable. Callers that pre-reserved pass
+  //   `reserved: true` so they are not counted twice.
+  // ⚠ Not awaited and never throws: the email has already gone, and failing the
+  //   send because the bookkeeping failed would invert the priority.
+  if (!reserved) quotaRecord(env, bodyCount);
+
   return { ok: true, id: body.id || null };
 }
 
@@ -180,4 +191,69 @@ export function digestDue(preferences, lastSentIso, now = new Date()) {
   // One day of slack: a cron that runs at 09:00 must not skip a fortnight
   // because the previous run was three minutes late.
   return days >= DIGEST_EVERY_DAYS[p.digest] - 1;
+}
+
+// ── Daily send budget ────────────────────────────────────────────────────
+// Resend's free tier allows 100 a day. Without a budget the 101st send simply
+// fails at the provider PART-WAY THROUGH a broadcast: some recipients got the
+// message, some did not, and the only record is a failure count.
+//
+// ⚠ RESERVE FIRST, SEND SECOND, RELEASE WHAT YOU DID NOT SPEND. The counter is
+//   incremented under a row lock by mail_quota_take() before a single message
+//   goes out, so a broadcast racing the Sunday digest cron cannot double-spend
+//   the day. Anything reserved and not sent is handed back.
+//
+// ⚠ A RESERVE IS HELD BACK FOR TRANSACTIONAL MAIL (bulk: true takes it into
+//   account, bulk: false ignores it). An account-activation email must not fail
+//   because a newsletter used the quota first — one is a courtesy, the other is
+//   somebody locked out of their account.
+//
+// ⚠ IT FAILS OPEN. If the RPC is unavailable — an un-migrated database, a
+//   transient error — mail still goes out and the caller is told the budget is
+//   unknown. Blocking every email on a bookkeeping failure would be a far worse
+//   outcome than briefly exceeding a cap the provider enforces anyway.
+
+export const mailCap     = env => Number(env.MAIL_DAILY_CAP || 100);
+export const mailReserve = env => Number(env.MAIL_BULK_RESERVE || 20);
+
+async function quotaRpc(env, fn, args) {
+  const sbUrl = env.SUPABASE_URL || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
+  const sbKey = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!sbKey) return null;
+  try {
+    const r = await fetch(`${sbUrl}/rest/v1/rpc/${fn}`, {
+      method: 'POST',
+      headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(args),
+    });
+    if (!r.ok) return null;
+    const out = await r.json();
+    return (out && out.ok) ? out : null;
+  } catch (_) { return null; }
+}
+
+export async function quotaPeek(env, { bulk = true } = {}) {
+  const out = await quotaRpc(env, 'mail_quota_peek',
+    { p_cap: mailCap(env), p_reserve: bulk ? mailReserve(env) : 0 });
+  return out || { ok: true, unknown: true, remaining: null, sent_today: null, cap: mailCap(env) };
+}
+
+export async function quotaTake(env, want, { bulk = true } = {}) {
+  const n = Math.max(0, Number(want) || 0);
+  const out = await quotaRpc(env, 'mail_quota_take',
+    { p_want: n, p_cap: mailCap(env), p_reserve: bulk ? mailReserve(env) : 0 });
+  // ⚠ Fail OPEN: grant everything asked for, and say the budget is unknown.
+  return out || { ok: true, unknown: true, granted: n, deferred: 0, remaining: null };
+}
+
+export async function quotaRelease(env, n) {
+  if (!n || n <= 0) return;
+  await quotaRpc(env, 'mail_quota_release', { p_n: Math.floor(n) });
+}
+
+// Record a send that has ALREADY happened. Never refuses, never throws: the
+// email is gone, and the only wrong answer now is failing to write it down.
+export function quotaRecord(env, n) {
+  if (!n || n <= 0) return;
+  quotaRpc(env, 'mail_quota_record', { p_n: Math.floor(n) }).catch(() => {});
 }

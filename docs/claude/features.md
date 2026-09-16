@@ -267,9 +267,34 @@ a stuck child shares **one question** and sees how people voted. Same table
 - ⚠ **Asking is not answering.** It never calls `recordAnswer()`,
   `_recordDaily()` or `gainPoints()` — a stuck child must not distort the
   mastery and daily figures their parent reads.
-- ⚠ **Duration is picked from a LIST (1 h · 6 h · 24 h, default 6), clamped in
+- ⚠ **Duration is picked from a LIST (3 · 5 · 10 MINUTES, default 5), clamped in
   SQL by a `CASE` whitelist.** An arbitrary integer is a free "keep this public
   URL alive for a year" primitive.
+  ⚠ **It was 1 / 6 / 24 HOURS for half a day and that was wrong.** Hours treat
+  this as homework a child sets down and returns to; they are mid-question, in a
+  practice run, with the question on screen. Nobody waits on that, and a link
+  outliving the session is a public URL nobody is watching. The game's own crowd
+  lifeline has always been 3 minutes — this is the same moment. A legacy `1440`
+  from an older deployed client **clamps to 5**, it does not error.
+- ⚠ **The child can CANCEL** (`help_poll_cancel`, owner-only via
+  `current_student_id()`). Without a way out the only thing to do while waiting
+  is nothing, which is the opposite of practice. It **expires** the row rather
+  than deleting it, so a late voter is told "voting has closed" instead of
+  "this link is broken". Cancelling twice returns `closed:false` and is not an
+  error. ⚠ A closed panel always says what to do next — a poll that ends with no
+  instruction leaves a child watching a screen that will never change again.
+- ⚠ **The share message names a CLOCK TIME, not just a duration.** "Closes in 5
+  minutes" is read whenever the message is opened, which may be four minutes
+  later; an absolute time cannot go stale that way. `help_poll_create` returns
+  `expires_at` for exactly this.
+- ⚠ **Facebook cannot be posted to programmatically and this is not a gap to
+  close.** `publish_actions` was withdrawn by Facebook in 2018; no app can write
+  to a user's timeline. Every route — `sharer.php`, the JS SDK's `FB.ui`, a
+  Share button — opens Facebook's own UI. On mobile, `navigator.share` hands the
+  OS share sheet (which includes the Facebook app) and is the closest thing to
+  "integrated". ⚠ And for a 3-10 minute poll Facebook is the **wrong channel**:
+  a timeline post will not gather votes in five minutes. WhatsApp is the one
+  that works here.
 - ⚠ **The button lives in the help TRAY, not the always-visible `.pr-tools`
   row** — that row is a fixed 3/4-column grid and a fifth button reflows it on
   every phone. Unlike read-aloud, a child who cannot read "Need help?" is not
@@ -277,6 +302,13 @@ a stuck child shares **one question** and sees how people voted. Same table
 - ⚠ **Only a question with 2–4 options gets the button**, re-evaluated per
   question: a numeric or open-response item has nothing to vote on, and would
   otherwise inherit the previous MCQ's button.
+- ⚠ **`current_student_id()` refuses a token shorter than 32 characters.** A
+  short probe token in a test reads as "not signed in" and is indistinguishable
+  from a broken gate.
+- ⚠ **A newly created function is not in PostgREST's schema cache.** The client
+  gets `PGRST202 could not find the function` until
+  `NOTIFY pgrst, 'reload schema'` runs — which looks exactly like a missing
+  migration.
 - ⚠ **Options are taken from the live question object** — `makeMCQ()` shuffles,
   so a poll built from the source array would letter the choices differently
   from the child's own screen.

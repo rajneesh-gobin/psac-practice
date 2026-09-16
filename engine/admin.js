@@ -321,12 +321,15 @@ const AdminPanel = (() => {
     _paintSelectionBar();
   }
 
+  // ⚠ ALL of them, not one by id. The bar exists once in the Members tab and
+  //   once in the Teachers tab, and a selection made in one is shown in both -
+  //   picking eight parents and three teachers is one send, not two.
   function _paintSelectionBar() {
-    const bar = document.getElementById('admin-member-selection');
-    const count = document.getElementById('admin-member-selection-count');
-    if (!bar) return;
-    bar.classList.toggle('hidden', _memberPicks.size === 0);
-    if (count) count.textContent = `${_memberPicks.size} selected`;
+    document.querySelectorAll('[data-selection-bar]').forEach(bar => {
+      bar.classList.toggle('hidden', _memberPicks.size === 0);
+      const count = bar.querySelector('[data-selection-count]');
+      if (count) count.textContent = `${_memberPicks.size} selected`;
+    });
   }
 
   // Everyone matching the current filters, not just this page. Reuses exactly
@@ -385,6 +388,9 @@ const AdminPanel = (() => {
     if (message) message.value = '';
     if (essential) essential.checked = false;
     if (status) status.textContent = '';
+    // The success panel is part of the state reset, like everything else here.
+    document.getElementById('admin-bc-form')?.classList.remove('hidden');
+    document.getElementById('admin-bc-done')?.classList.add('hidden');
     _broadcastBusy = false;
     _renderBroadcastRecipients();
     document.getElementById('modal-admin-broadcast')?.classList.remove('hidden');
@@ -435,7 +441,8 @@ const AdminPanel = (() => {
     //   "it failed" after 600 delivered emails is the worst possible answer.
     const ids = [..._memberPicks.keys()];
     const CHUNK = 500;
-    let sent = 0, would = 0, selected = 0;
+    let sent = 0, would = 0, selected = 0, deferred = 0, eligible = 0;
+    let budgetRemaining = null, budgetCap = null, budgetUnknown = false;
     const skipped = { opted_out: 0, no_email: 0, deleted: 0 };
     const errors = [];
     try {
@@ -455,6 +462,11 @@ const AdminPanel = (() => {
         sent += result.sent || 0;
         would += result.would_send || 0;
         selected += result.selected || batch.length;
+        deferred += result.deferred || 0;
+        eligible += result.eligible || 0;
+        if (result.budget_remaining != null) budgetRemaining = result.budget_remaining;
+        if (result.budget_cap != null) budgetCap = result.budget_cap;
+        if (result.budget_unknown) budgetUnknown = true;
         for (const k of Object.keys(skipped)) skipped[k] += result.skipped?.[k] || 0;
       }
     } catch (e) {
@@ -469,18 +481,57 @@ const AdminPanel = (() => {
       skipped.deleted ? `${skipped.deleted} deleted` : '',
     ].filter(Boolean).join(', ');
 
+    // ⚠ The DAILY BUDGET is the number the admin actually needs before pressing
+    //   Send. Resend's free tier is 100 a day; without this the 101st message
+    //   fails at the provider part-way through, with some parents served and
+    //   some not, and nothing on screen saying which.
+    const budgetNote = budgetUnknown
+      ? ' ⚠ The daily email budget could not be read, so this is not capped.'
+      : (budgetRemaining == null ? ''
+        : ` ${budgetRemaining} of today's ${budgetCap ?? 100} email budget will be left.`);
+
     if (dryRun) {
       if (status) status.textContent = errors.length
         ? `⚠ ${errors[0]}`
-        : `${would} of ${ids.length} would receive this${skipNote ? ` (skipped: ${skipNote})` : ''}. Nothing has been sent.`;
+        : (deferred
+            ? `⚠ ${eligible} can receive this, but only ${would} can go today — ${deferred} would wait for tomorrow's budget.`
+            + `${skipNote ? ` Skipped: ${skipNote}.` : ''} Nothing has been sent.`
+            : `${would} of ${ids.length} would receive this${skipNote ? ` (skipped: ${skipNote})` : ''}.`
+            + `${budgetNote} Nothing has been sent.`);
       return;
     }
     if (status) {
       status.textContent = sent
-        ? `✅ Sent to ${sent} recipient${sent === 1 ? '' : 's'}${skipNote ? ` — skipped: ${skipNote}` : ''}${errors.length ? ` — ${errors.length} batch(es) failed: ${errors[0]}` : ''}`
+        ? `✅ Sent to ${sent} recipient${sent === 1 ? '' : 's'}${deferred ? ` — ${deferred} deferred to tomorrow` : ''}${skipNote ? ` — skipped: ${skipNote}` : ''}${errors.length ? ` — ${errors.length} batch(es) failed: ${errors[0]}` : ''}`
         : `⚠ Nothing was sent. ${errors[0] || (skipNote ? `Everyone was skipped: ${skipNote}` : '')}`;
     }
     if (sent) {
+      // ⚠ Replace the form, do not just annotate it. The status line sits above
+      //   the buttons in a modal tall enough to scroll, and a toast is gone in
+      //   3.5 seconds - an admin who misses both concludes nothing happened and
+      //   presses Send again. The second press really does send it twice, so
+      //   the cure is to make the outcome unmissable and take the button away.
+      document.getElementById('admin-bc-form')?.classList.add('hidden');
+      const done = document.getElementById('admin-bc-done');
+      const doneTitle = document.getElementById('admin-bc-done-title');
+      const doneDetail = document.getElementById('admin-bc-done-detail');
+      if (doneTitle) doneTitle.textContent = `Sent to ${sent} ${sent === 1 ? 'person' : 'people'}`;
+      if (doneDetail) {
+        doneDetail.textContent = [
+          `Subject: “${subject}”`,
+          // ⚠ Deferred is NOT a failure and must not read as one — those people
+          //   were never attempted, and the admin needs to know to come back.
+          deferred ? `⏳ ${deferred} could not go today (daily email budget) — select them again tomorrow.` : '',
+          skipNote ? `Skipped: ${skipNote}.` : '',
+          errors.length ? `⚠ ${errors.length} batch(es) failed: ${errors[0]}` : '',
+          budgetNote.trim(),
+          'Everyone was Bcc\u2019d, so nobody can see anyone else\u2019s address.',
+        ].filter(Boolean).join(' · ');
+      }
+      done?.classList.remove('hidden');
+      // ⚠ Clear the selection too. Leaving it ticked is the other half of the
+      //   double-send: the modal reopens with the same people still selected.
+      clearMemberPicks();
       toast(`✉️ Sent to ${sent} recipient${sent === 1 ? '' : 's'}.`, 3500);
       // A note, not evidence - written from the admin's browser after the fact,
       // like every other admin_log_action call.
@@ -1308,12 +1359,69 @@ const AdminPanel = (() => {
         member.family_name = family?.family_name || '';
         member.child_count = family ? (counts.get(family.id) || 0) : 0;
       });
+      await _attachMemberUsage(rows);
     } catch (error) {
       // Do not lose the member list because an older schema is missing one of
       // these optional overview fields. The detail panel continues to work.
       console.warn('[AdminPanel] could not load child counts:', error.message || error);
       rows.forEach(member => { member.has_family = null; member.child_count = null; });
     }
+  }
+
+  // How much is this family actually USING the app?
+  //
+  // ⚠ student_points has NO RLS policies and is granted to service_role only -
+  //   `authenticated` cannot read one row of it, so this cannot be a query from
+  //   here however it is written. admin_family_points() is SECURITY DEFINER,
+  //   gated on is_admin(), and answers only for the ids it is handed.
+  // ⚠ Never fails the member list. A missing function on an un-migrated
+  //   database leaves usage unknown and everything else on screen.
+  async function _attachMemberUsage(rows) {
+    const ids = rows.map(m => m.id).filter(Boolean);
+    if (!ids.length) return;
+    try {
+      const { data, error } = await _sb.rpc('admin_family_points', { p_parents: ids });
+      if (error || !data?.ok) throw new Error(error?.message || data?.error || 'unavailable');
+      rows.forEach(m => { m.usage = data.families?.[m.id] || null; });
+    } catch (e) {
+      console.warn('[AdminPanel] family usage unavailable:', e.message || e);
+      rows.forEach(m => { m.usage = undefined; });
+    }
+  }
+
+  const _num = n => Number(n || 0).toLocaleString('en-GB');
+
+  // ⚠ QUESTIONS ANSWERED IS THE HEADLINE, NOT POINTS. Measured 2026-09-16: 97%
+  //   of all points on production are kind 'legacy' - a one-off carry-forward of
+  //   XP from before points were minted in the database. One family showed 530
+  //   points having answered NOTHING. Leading with a total would rank families
+  //   by history and answer the opposite of "how much is this being used".
+  function _memberUsageSummary(m) {
+    if (m.usage === undefined) return '';
+    if (!m.usage) return '';
+    const q = Number(m.usage.questions || 0);
+    const earned = Number(m.usage.earned || 0);
+    if (!q && !earned) return '<span class="text-xs text-gray-400 dark:text-gray-500">✏️ not started</span>';
+    return `<span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400" title="Questions answered correctly for the first time, across every child in this family">✏️ ${_num(q)} answered</span>`
+      + `<span class="text-xs text-gray-500 dark:text-gray-400" title="Points earned by real activity. Carried-forward legacy XP is excluded.">⭐ ${_num(earned)}</span>`;
+  }
+
+  // The full reading, for the expanded row - including the legacy total, which
+  // is the only place it is safe to show because it is labelled.
+  function _memberUsageDetail(m) {
+    if (m.usage === undefined) {
+      return '<span class="text-xs text-gray-400 dark:text-gray-500">Usage unavailable on this database.</span>';
+    }
+    if (!m.usage) return '<span class="text-xs text-gray-400 dark:text-gray-500">No family yet.</span>';
+    const u = m.usage;
+    const legacy = Number(u.points || 0) - Number(u.earned || 0);
+    const seen = u.last_seen ? new Date(u.last_seen).toLocaleDateString() : 'never';
+    return `
+      <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">📊 Usage:</span>
+      <span class="text-xs text-gray-700 dark:text-gray-200"><b>${_num(u.questions)}</b> questions answered</span>
+      <span class="text-xs text-gray-700 dark:text-gray-200">· <b>${_num(u.earned)}</b> points earned</span>
+      ${legacy > 0 ? `<span class="text-xs text-gray-400 dark:text-gray-500">· ${_num(legacy)} carried forward (legacy XP, not activity)</span>` : ''}
+      <span class="text-xs text-gray-400 dark:text-gray-500">· last active ${_esc(seen)}</span>`;
   }
 
   function _memberChildrenSummary(m) {
@@ -1460,11 +1568,11 @@ const AdminPanel = (() => {
             <p id="member-email-${m.id}" data-member-email="${m.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[m.id] || '')}</p>
             <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
           </div>
-          <span class="hidden sm:block">${_memberChildrenSummary(m)}</span>
+          <span class="hidden sm:flex flex-col gap-0.5">${_memberChildrenSummary(m)}${_memberUsageSummary(m)}</span>
           <span class="hidden sm:block">${_memberStatusBadge(m)}</span>
           <span class="hidden sm:block text-xs truncate" id="plan-label-${m.id}">${isParent ? 'loading…' : '-'}</span>
           <div class="col-span-3 sm:hidden flex flex-wrap items-center gap-1.5">
-            ${_memberChildrenSummary(m)}${_memberStatusBadge(m)}
+            ${_memberChildrenSummary(m)}${_memberUsageSummary(m)}${_memberStatusBadge(m)}
           </div>
         </div>
 
@@ -1498,6 +1606,10 @@ const AdminPanel = (() => {
               class="text-xs px-3 py-1 rounded-lg font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200">
               👶 Children
             </button>` : ''}
+          </div>
+
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+            ${_memberUsageDetail(m)}
           </div>
 
           <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
@@ -2499,6 +2611,25 @@ const AdminPanel = (() => {
     _pagerScroll('admin-teachers-count');
   }
 
+  // ⚠ Same shape as the Members list, deliberately: a summary row that expands,
+  //   a select box for the group email, and every control behind the expand.
+  //   It used to render every teacher fully expanded — name, email, id, status,
+  //   tier select, approve/suspend, disable, a rename field and the whole
+  //   activity block — so twenty teachers was a wall of controls and finding one
+  //   meant scrolling past nineteen sets of buttons for accounts nobody was
+  //   looking at.
+  // ⚠ The open set is its own, NOT _openMembers: the two lists page
+  //   independently and an id expanded in one must not silently expand in the other.
+  const _openTeachers = new Set();
+
+  function toggleTeacherRow(id) {
+    if (_openTeachers.has(id)) _openTeachers.delete(id); else _openTeachers.add(id);
+    const panel = document.getElementById(`teacher-detail-${id}`);
+    const chev  = document.getElementById(`teacher-chev-${id}`);
+    if (panel) panel.classList.toggle('hidden', !_openTeachers.has(id));
+    if (chev)  chev.textContent = _openTeachers.has(id) ? '▾' : '▸';
+  }
+
   function _renderTeachers(list) {
     const el = document.getElementById('admin-teachers-list');
     if (!el) return;
@@ -2506,26 +2637,55 @@ const AdminPanel = (() => {
       el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No teacher accounts found.</p>';
       return;
     }
-    el.innerHTML = _sortedTeachers(list).map(t => {
+    const sorted = _sortedTeachers(list);
+    const allOnPage = sorted.length > 0 && sorted.every(t => _memberPicks.has(t.id));
+    const header = `
+      <div class="hidden sm:grid adm-teacher-grid gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        <span><input type="checkbox" ${allOnPage ? 'checked' : ''} onchange="AdminPanel.toggleSelectAllTeachers(this.checked)"
+          title="Select every teacher on this page" aria-label="Select every teacher on this page" class="accent-indigo-600 cursor-pointer"></span>
+        <span></span><span>Teacher</span><span>Status</span><span>Tier</span>
+      </div>`;
+
+    _paintSelectionBar();
+    el.innerHTML = header + sorted.map(t => {
       const st     = _TSTATUS[t.teacher_status] || _TSTATUS.pending;
       const joined = t.created_at ? new Date(t.created_at).toLocaleDateString() : '-';
       const tier   = t.teacher_tier || 'free';
+      const open   = _openTeachers.has(t.id);
       return `
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
-          <div class="flex flex-wrap items-center gap-3">
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(t.full_name || 'Unnamed')}</p>
-              <p data-member-email="${t.id}" class="text-xs text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[t.id] || '')}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">${t.id}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Joined ${joined}</p>
-            </div>
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
-              ${t.disabled ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚫 Disabled</span>' : ''}
-              <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">Tier: ${_esc(tier)}</span>
-            </div>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+
+        <div role="button" tabindex="0"
+          onclick="AdminPanel.toggleTeacherRow('${t.id}')"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();AdminPanel.toggleTeacherRow('${t.id}')}"
+          class="grid adm-teacher-grid gap-2 items-center px-3 py-2.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors">
+          <span onclick="event.stopPropagation()"><input type="checkbox" id="member-pick-${t.id}"
+            ${_memberPicks.has(t.id) ? 'checked' : ''}
+            onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"
+            onchange="event.stopPropagation();AdminPanel.toggleMemberPick('${t.id}', this.checked)"
+            aria-label="Select ${_esc(t.full_name || 'this teacher')} for a group email"
+            class="accent-indigo-600 cursor-pointer"></span>
+          <span id="teacher-chev-${t.id}" class="text-gray-400 text-sm select-none">${open ? '▾' : '▸'}</span>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(t.full_name || 'Unnamed')}</p>
+            <p data-member-email="${t.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[t.id] || '')}</p>
+            <p class="text-[11px] text-gray-400 dark:text-gray-500">Joined ${joined}</p>
+            <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${t.id}</p>
           </div>
-          <div class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+          <span class="hidden sm:flex flex-wrap items-center gap-1">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
+            ${t.disabled ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚫 Disabled</span>' : ''}
+          </span>
+          <span class="hidden sm:block text-xs text-gray-500 dark:text-gray-400 truncate">${_esc(tier)}</span>
+          <div class="col-span-3 sm:hidden flex flex-wrap items-center gap-1.5">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
+            ${t.disabled ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚫 Disabled</span>' : ''}
+            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">Tier: ${_esc(tier)}</span>
+          </div>
+        </div>
+
+        <div id="teacher-detail-${t.id}" class="${open ? '' : 'hidden'} border-t border-gray-100 dark:border-gray-700 px-3 py-3 bg-gray-50/60 dark:bg-gray-900/20">
+          <div class="flex flex-wrap gap-2">
             ${t.teacher_status !== 'approved' ? `
               <button onclick="AdminPanel.teacherApprove('${t.id}')"
                 class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1 rounded-lg font-semibold hover:bg-green-200 transition-colors">✅ Approve</button>` : ''}
@@ -2533,6 +2693,7 @@ const AdminPanel = (() => {
               <button onclick="AdminPanel.teacherSuspend('${t.id}')"
                 class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg font-semibold hover:bg-red-200 transition-colors">🚫 Suspend</button>` : ''}
             <select onchange="AdminPanel.teacherChangeTier('${t.id}', this.value)"
+              aria-label="Teacher tier"
               class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
               <option value="free"    ${tier === 'free'    ? 'selected' : ''}>Free tier</option>
               <option value="premium" ${tier === 'premium' ? 'selected' : ''}>Premium tier</option>
@@ -2544,7 +2705,12 @@ const AdminPanel = (() => {
                 : 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200'}">
               ${t.disabled ? '✅ Enable' : '🚫 Disable'}
             </button>
+            <button onclick="AdminPanel.emailOneMember('${t.id}')"
+              class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-lg font-semibold hover:bg-indigo-200 transition-colors">✉️ Email</button>
+            <button onclick="AdminPanel.sendPasswordReset('${t.id}')"
+              class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-lg font-semibold hover:bg-gray-200 transition-colors">🔑 Reset password</button>
           </div>
+
           <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
             <input type="text" value="${_esc(t.full_name || '')}" placeholder="Display name…"
               onblur="AdminPanel.updateMemberName('${t.id}', this.value)"
@@ -2553,10 +2719,27 @@ const AdminPanel = (() => {
               class="flex-1 min-w-0 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
           </div>
           ${_teacherActivityHtml(t.id)}
-        </div>`;
+        </div>
+      </div>`;
     }).join('');
     _loadMemberEmails(list.map(t => t.id));
     _renderTeacherActivityHeadline();
+  }
+
+  function toggleSelectAllTeachers(on) {
+    _sortedTeachers(_teachers).forEach(t => toggleMemberPick(t.id, on));
+    document.querySelectorAll('[id^="member-pick-"]').forEach(cb => { cb.checked = on; });
+  }
+
+  // Email exactly one person, from their own row. Goes through the same Bcc
+  // broadcast path as a group send - there is no second mail route to keep in
+  // step - it just starts with one person selected.
+  function emailOneMember(id) {
+    clearMemberPicks();
+    toggleMemberPick(id, true);
+    const cb = document.getElementById(`member-pick-${id}`);
+    if (cb) cb.checked = true;
+    openBroadcast();
   }
 
   // ── Teacher activity ────────────────────────────
@@ -5342,6 +5525,7 @@ const AdminPanel = (() => {
   return { render, showTab, loadMembers, membersPage, filterMembers, copyMemberEmails, copyPendingEmail, setMemberStatusFilter, setMemberVisibilityFilters,
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
     toggleMemberPick, toggleSelectAllMembers, clearMemberPicks, openBroadcast, closeBroadcast,
+    toggleTeacherRow, toggleSelectAllTeachers, emailOneMember,
     broadcastPreview, sendBroadcast, broadcastAudience,
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,

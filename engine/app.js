@@ -1460,11 +1460,18 @@ function shareToWhatsApp(text) {
 let _helpPollCode = null;
 let _helpPollTimer = null;
 let _helpPollOptions = [];
+let _helpPollExpires = null;   // Date — when voting closes, for the share message
 
+// ⚠ MINUTES, NOT HOURS. The first version offered 1 / 6 / 24 hours, which was
+//   designed as though this were homework a child sets down and comes back to.
+//   It is not: they are mid-question, in a practice run, with the question on
+//   screen. Nobody waits on that, and a link outliving the session is a public
+//   URL nobody is watching. The game's own crowd lifeline has always been 3
+//   minutes, and this is the same moment.
 const _HELP_DURATIONS = [
-  { minutes: 60,   label: '1 hour' },
-  { minutes: 360,  label: '6 hours' },
-  { minutes: 1440, label: '24 hours' },
+  { minutes: 3,  label: '3 min' },
+  { minutes: 5,  label: '5 min' },
+  { minutes: 10, label: '10 min' },
 ];
 
 function _helpPollAllowed() {
@@ -1506,7 +1513,7 @@ function openHelpRequest() {
   const preview = document.getElementById('ask-friend-preview');
   if (preview) preview.innerHTML = _prettyMath(q.question);
   document.querySelectorAll('[data-help-duration]').forEach(b => {
-    const on = Number(b.dataset.helpDuration) === 360;
+    const on = Number(b.dataset.helpDuration) === 5;
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
     b.classList.toggle('af-dur-on', on);
   });
@@ -1528,7 +1535,23 @@ function pickHelpDuration(btn) {
 
 function _chosenHelpMinutes() {
   const on = document.querySelector('[data-help-duration][aria-pressed="true"]');
-  return Number(on?.dataset.helpDuration) || 360;
+  return Number(on?.dataset.helpDuration) || 5;
+}
+
+// ⚠ The child must be able to GIVE UP. Without this the only thing to do while
+//   waiting is nothing, which is the opposite of practice — and a poll nobody
+//   answers would hold them on the question until it timed out. Cancelling
+//   closes the poll server-side too, so anyone opening the link afterwards is
+//   told it is over rather than voting into a void.
+async function cancelHelpRequest() {
+  const code = _helpPollCode;
+  _stopHelpPoll();
+  closeHelpRequest();
+  toast('👍 Help cancelled — have a go yourself!', 2600);
+  if (!code || typeof _sb === 'undefined' || !_sb) return;
+  // Fire and forget: the child is already back on the question, and a failed
+  // close only means the poll runs out on its own a few minutes later.
+  try { await _sb.rpc('help_poll_cancel', { p_code: code }); } catch (_) {}
 }
 
 async function createHelpRequest(btn) {
@@ -1566,6 +1589,8 @@ async function createHelpRequest(btn) {
 
   _helpPollCode = data.code;
   _helpPollOptions = options;
+  _helpPollExpires = data.expires_at ? new Date(data.expires_at)
+    : new Date(Date.now() + (data.seconds || minutes * 60) * 1000);
   if (btn) { btn.disabled = false; btn.textContent = '🙋 Make my help link'; }
   document.getElementById('ask-friend-setup')?.classList.add('hidden');
   document.getElementById('ask-friend-live')?.classList.remove('hidden');
@@ -1583,8 +1608,23 @@ function helpPollUrl() {
 // ⚠ Carries the LINK and a plea for help. Never the child's name, their id, or
 //   anything that identifies them - the same rule the score share follows, and
 //   for the same reason: this message gets forwarded.
+// ⚠ It names BOTH the remaining minutes and the CLOCK TIME it closes. "Closes
+//   in 5 minutes" is read whenever the message is opened, which may be four
+//   minutes later; an absolute time cannot go stale that way. Someone who opens
+//   it too late needs to understand why voting is shut, not think it is broken.
+function _helpCloseLabel() {
+  if (!_helpPollExpires) return '';
+  return _helpPollExpires.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
 function _helpShareText() {
-  return `🙋 I'm stuck on this question! Can you vote for the answer you think is right?\n${helpPollUrl()}`;
+  const mins = _helpPollExpires
+    ? Math.max(1, Math.round((_helpPollExpires - Date.now()) / 60000))
+    : 5;
+  return `🙋 One of your friends needs help to answer this question!\n\n`
+    + `Tap the link and vote for the answer you think is right. `
+    + `It is only open for about ${mins} minute${mins === 1 ? '' : 's'} — voting closes at ${_helpCloseLabel()}.\n\n`
+    + helpPollUrl();
 }
 
 function shareHelpWhatsApp() { shareToWhatsApp(_helpShareText()); }
@@ -1643,14 +1683,22 @@ function _startHelpPoll(seconds) {
           ? `${sum} ${sum === 1 ? 'person has' : 'people have'} voted. Remember — the crowd can be wrong! You choose.`
           : 'No votes yet — send your link to someone!';
         left = data.seconds_left;
-        if (left <= 0) _stopHelpPoll();
+        // ⚠ Say what to do next. A closed poll with no instruction leaves the
+        //   child waiting on a screen that will never change again.
+        if (left <= 0) {
+          _stopHelpPoll();
+          const done = document.getElementById('ask-friend-total');
+          if (done && !sum) done.textContent = 'Voting has closed and nobody voted. Close this and have a go yourself!';
+          else if (done) done.textContent = `Voting has closed. ${sum} ${sum === 1 ? 'person' : 'people'} voted — but you choose!`;
+        }
       }
     } catch (_) {}
     if (left <= 0) _stopHelpPoll();
   };
-  // Every 8s, not every 3: this poll runs for hours rather than 3 minutes, and
-  // a 3-second beat would be 3,600 requests over a 24-hour link left open.
-  _helpPollTimer = setInterval(tick, 8000);
+  // ⚠ Back to 3 seconds now the poll lives 3-10 minutes. The 8-second beat was
+  //   there to survive a 24-hour link left open in a tab; at this length the
+  //   child is watching the bars move and a slow beat reads as nothing happening.
+  _helpPollTimer = setInterval(tick, 3000);
   tick();
 }
 
@@ -4539,19 +4587,68 @@ function _renderLeaderboard() {
 // Paints the credit balance onto the Shop button, and refreshes it from the
 // server in the background. Called from the parent dashboard render, so a
 // parent sees a number without opening anything.
+// Is there anything for a parent to buy? TWO admin switches have to agree:
+//
+//   1. Shop open  — mm_data.shop_settings.shop_enabled
+//   2. Juice on   — payment_settings().juice_enabled AND a juice_number set
+//
+// ⚠ THE TWO FAIL IN OPPOSITE DIRECTIONS, on purpose.
+//   `shop_enabled` ABSENT MEANS OPEN: Shop._cfg starts at DEFAULTS and the real
+//   row arrives asynchronously, so a truthy test would hide the tab on every
+//   dashboard open and flash it back. Only an explicit false closes it.
+//   `juice` UNKNOWN MEANS CLOSED: _juiceCfg is null until payment_settings()
+//   answers, and the payment code's own rule is that a settings lookup which
+//   has not answered must never offer a payment method that may not exist.
+//   A tab that appears a moment late is ordinary; one that vanishes after the
+//   parent has seen it reads as a fault.
+//
+// ⚠ Requiring Juice is a PRODUCT decision, not a technical one. Credits are
+//   earned by referral and spent without money changing hands, so the shop
+//   would work perfectly well with Juice off - it is gated here because a shop
+//   is not wanted while there is no way to pay at all.
+function _shopOpenForParents() {
+  if (typeof Shop === 'undefined' || Shop.settings().shop_enabled === false) return false;
+  return _juiceOn(_juiceCfg);
+}
+
+// ⚠ Closing the shop used to empty the SCREEN and leave every way in exactly
+//   where it was - the parent still saw a 🛒 Shop tab, tapped it, and got "the
+//   shop is closed". A door that opens onto a wall is worse than no door.
+// ⚠ This is PRESENTATION ONLY. purchase_chapter() / purchase_subject() read the
+//   price and the balance server-side and are what actually refuse a purchase;
+//   hiding a tab has never been an entitlement decision and must not become one.
+function _syncShopVisibility() {
+  const open = _shopOpenForParents();
+  document.getElementById('pd-tab-shop')?.classList.toggle('hidden', !open);
+  // The expired banner offers the shop as a way back in - pointless when closed.
+  document.querySelectorAll('[data-shop-entry]').forEach(el => el.classList.toggle('hidden', !open));
+  // ⚠ A parent already sitting on the Shop tab when the settings land would be
+  //   left staring at a panel whose tab has just vanished. Move them somewhere real.
+  if (!open && typeof PD !== 'undefined'
+      && !document.getElementById('pd-panel-shop')?.classList.contains('hidden')) {
+    PD.mainTab('children');
+  }
+}
+
 function _renderShopChip() {
   if (typeof Shop === 'undefined') return;
   const paint = () => {
+    const open = _shopOpenForParents();
     const n = Shop.balance();
     const chip = document.getElementById('pd-credit-chip');
     if (chip) {
       chip.textContent = n > 999 ? '999+' : String(n);
-      chip.classList.toggle('hidden', n <= 0);
+      chip.classList.toggle('hidden', n <= 0 || !open);
     }
     _renderCreditChip();
+    _syncShopVisibility();
   };
   paint();
   Shop.refresh().then(paint).catch(() => {});
+  // ⚠ Repaint when the Juice settings land too - they are the other half of
+  //   _shopOpenForParents(), and without this the shop stays hidden until some
+  //   unrelated render happens to run again.
+  if (typeof _juiceSettings === 'function') _juiceSettings().then(paint).catch(() => {});
 }
 
 // The header credit balance.
@@ -4910,7 +5007,9 @@ function _renderCreditChip() {
 
   if (!chip) return;
   const n = (typeof Shop !== 'undefined') ? Shop.balance() : 0;
-  const show = isParent && n > 0;
+  // ⚠ Also hidden when the shop is closed: the chip is a BUTTON that opens the
+  //   shop, so a balance nobody can spend is an invitation to a dead end.
+  const show = isParent && n > 0 && (typeof _shopOpenForParents !== 'function' || _shopOpenForParents());
   chip.classList.toggle('hidden', !show);
   if (show) {
     const el = document.getElementById('hdr-credits-count');
@@ -4939,7 +5038,7 @@ function _renderExpiredBanner(slotId) {
             : 'Chapters are paused. You can unlock individual ones with referral credits, or renew your plan.'}
         </p>
         <div class="flex gap-2 mt-2">
-          <button onclick="showScreen('shop')" class="text-xs font-bold bg-amber-500 hover:bg-amber-400 text-white px-3 py-1.5 rounded-lg transition-colors">🛒 Shop</button>
+          <button data-shop-entry onclick="showScreen('shop')" class="text-xs font-bold bg-amber-500 hover:bg-amber-400 text-white px-3 py-1.5 rounded-lg transition-colors${_shopOpenForParents() ? '' : ' hidden'}">🛒 Shop</button>
           <button onclick="Auth.openInviteModal()" class="text-xs font-bold text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700 px-3 py-1.5 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors">🎁 Earn credits</button>
         </div>
       </div>
@@ -5603,6 +5702,14 @@ async function renderShop() {
   if (typeof _isParentSession === 'function' && !_isParentSession()) {
     toast('Only a parent can open the shop.', 2500);
     showScreen(ACTIVE_STUDENT_ID ? 'student-home' : 'landing');
+    return;
+  }
+  // ⚠ The screen guards itself as well as being hidden. showScreen('shop') is
+  //   called from the header chip, the expired banner and the invite modal, and
+  //   a stale tab or a back button reaches it without passing any of them.
+  if (!_shopOpenForParents()) {
+    toast('The shop is closed at the moment.', 2500);
+    showScreen('parent');
     return;
   }
   // Always opens tidy. Which subjects are expanded is a browsing state, not
@@ -13720,10 +13827,17 @@ async function _renderParentProfile(container) {
     } catch(_) {}
   }
 
-  // ── Family login name (parents only) ──
+  // ── Family login name (the OWNER only) ──
   // The child-facing half of the credentials: children type this on the login
   // screen, so a parent who renames it has to know it changes what they type.
-  const familyHtml = family ? `
+  // ⚠ Owner only since 2026-09-16. `families_upd`'s WITH CHECK now demands
+  //   is_family_owner(), so a co-parent's rename is refused by RLS with 42501 —
+  //   showing them the field would offer a control that cannot work, and the
+  //   toast they would get blames their connection.
+  // ⚠ parent_id is available on BOTH paths: getMyFamily() selects it on the
+  //   owned query, and my_member_family() builds it into the co-parent object.
+  const isFamilyOwner = !!(family && family.parent_id === profile.id);
+  const familyHtml = (family && isFamilyOwner) ? `
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-3">
       <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Family Login</h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">Your children type this family name, their own username and their PIN to sign in.</p>
@@ -13734,7 +13848,13 @@ async function _renderParentProfile(container) {
           class="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
       </div>
       <p class="text-xs text-gray-500 dark:text-gray-400">Private family code: <span class="font-mono font-bold select-all">${_profEsc(family.family_code || '-')}</span></p>
-    </div>` : '';
+    </div>` : (family ? `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-2">
+        <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Family Login</h3>
+        <p class="text-sm text-gray-700 dark:text-gray-200">Your children sign in with <b>${_profEsc(family.family_name || '')}</b>, their own username and their PIN.</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Only the parent who set this family up can change its name - ask them if it needs to change.</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Private family code: <span class="font-mono font-bold select-all">${_profEsc(family.family_code || '-')}</span></p>
+      </div>` : '');
 
   // ── Parents on this account ──
   // Filled in by _renderCoparents() after the markup exists: it needs a round

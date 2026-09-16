@@ -21,7 +21,32 @@ outstanding that had been applied for weeks, and that staleness sent a whole
 debugging session down the wrong path. Everything below that touches the
 database is a **decision**, not a pending run.
 
-0. ⚠⚠ **A CO-PARENT CAN TAKE OVER A FAMILY.** `families_own` is
+0. ✅ **CLOSED 2026-09-16** — `migrations/20260916_families_own_owner_only_write.sql`,
+   applied to production, re-applied to prove idempotency, verified as
+   `authenticated` with a real co-parent row, schema regenerated. The single
+   `families_own` policy is now four: `families_sel` (unchanged reads),
+   `families_ins` (`parent_id = auth.uid()`, **no lookup**), `families_upd`
+   (USING unchanged, WITH CHECK demands `is_family_owner()`), `families_del`
+   (owner or admin — a co-parent could previously delete the whole family).
+   ⚠⚠ **THE ONE-LINE FIX THIS ITEM USED TO RECOMMEND IS BROKEN AND WAS THE
+   FIRST THING TRIED: it took family creation down on production.**
+   `is_family_owner()` is STABLE and looks the row up, so on INSERT it answers
+   false for the row being created and every new parent got 42501. Rule 2 in
+   [database.md](database.md) from the other direction — **a lookup-based
+   predicate must never gate an INSERT.** Splitting the policy by command is
+   what works, because INSERT then never faces the lookup.
+   ⚠ Accepted cost: a co-parent can no longer rename the family. There were
+   ZERO co-parent memberships when this landed, and `_renderParentProfile()`
+   now hides the rename field from non-owners rather than offering a control
+   RLS refuses. Co-parent renaming later = a SECURITY DEFINER function for that
+   one column, never a wider policy.
+   ⚠ When verifying: **0 rows and 42501 are different events.** A USING failure
+   matches no row silently; a WITH CHECK failure raises. A test that accepts
+   "not 1" for both cannot tell a closed hole from a broken feature.
+
+<details><summary>The original report, kept for context</summary>
+
+   ⚠⚠ **A CO-PARENT CAN TAKE OVER A FAMILY.** `families_own` is
    `USING (parent_id = auth.uid() OR is_family_member(id) OR is_admin())` with
    `WITH CHECK (parent_id = auth.uid() OR is_admin())`, so a co-parent passes
    USING as a member and WITH CHECK by naming themselves — `UPDATE families SET
@@ -31,13 +56,15 @@ database is a **decision**, not a pending run.
    it today**. ⚠ A stranger cannot (USING fails, and an UPDATE matching no row
    changes nothing and raises nothing) — the exposure is to an adult the owner
    deliberately invited, which is why it is a decision and not an emergency.
-   The one-line fix is written out, commented, at the end of `supabase-schema.sql`:
+   ~~The one-line fix is written out, commented, at the end of `supabase-schema.sql`~~ — **that fix is broken, see above**:
    narrow **WITH CHECK only** to
    `(parent_id = auth.uid() AND is_family_owner(id)) OR is_admin()`, leaving USING
    untouched so co-parent reads are unaffected and the USING/RETURNING rule in [database.md](database.md) is not
    re-opened. ⚠ Check first whether any co-parent feature legitimately writes to
    `families` (renaming it, say) — if one does, that field needs a SECURITY
    DEFINER function rather than a wider policy.
+
+</details>
 
 1. ⚠⚠ **THE WHOLE `netlify/` DIRECTORY IS PUBLICLY SERVED UNTIL THE NEXT DEPLOY.**
    Measured anonymous against production 2026-09-08:

@@ -1564,8 +1564,10 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
    inline style cannot carry. style.css loads after the Tailwind CDN, so this
    cannot be outranked by a generated utility. */
 .adm-member-grid { grid-template-columns: 1.5rem 1.6rem 1fr; }
+.adm-teacher-grid { grid-template-columns: 1.5rem 1.6rem 1fr; }
 @media (min-width: 640px) {
-  .adm-member-grid { grid-template-columns: 1.5rem 1.6rem 2.2fr 1fr 1fr 1.1fr; }
+  .adm-member-grid  { grid-template-columns: 1.5rem 1.6rem 2.2fr 1fr 1fr 1.1fr; }
+  .adm-teacher-grid { grid-template-columns: 1.5rem 1.6rem 2.4fr 1.4fr 0.8fr; }
 }
 
 .pr-tools {

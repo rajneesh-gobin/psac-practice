@@ -75,7 +75,8 @@
       <div class="pill" id="timer">⏳</div>
       <div class="q" id="q"></div>
       <div id="opts"></div>
-      <p class="muted center">Tap the answer you think is right - you get one vote!</p>
+      <p class="muted center" id="ask-note">Tap the answer you think is right - you get one vote!</p>
+      <p class="muted center" id="expiry-note" style="margin-top:6px;font-size:12px"></p>
     </div>
     <div id="done" class="hide">
       <div class="center pop"><div class="big" id="done-icon">🗳️</div>
@@ -210,7 +211,16 @@ async function vote(i) {
   let r;
   try { r = await rpc('minigame_poll_results', { p_code: code }); }
   catch (_) { $('status').textContent = 'No connection - check your internet and try again.'; return; }
-  if (!r.ok) { $('status').textContent = 'This poll has finished and been tidied away. Ask for a fresh link!'; return; }
+  // ⚠ "Not found" and "closed" are different answers and must read differently.
+  //   A help poll lives 3-10 minutes, so arriving late is the COMMON case, not
+  //   an error — telling someone the link is broken when their friend simply
+  //   stopped waiting is both wrong and discouraging.
+  if (!r.ok) {
+    $('status').innerHTML = r.error === 'not_found'
+      ? 'This question has closed and been tidied away.<br>Ask your friend to send a fresh link!'
+      : 'This poll is not available any more.';
+    return;
+  }
   poll = r;
 
   // ⚠ Two kinds of poll share this page and this table. The game's is a live
@@ -221,8 +231,8 @@ async function vote(i) {
   if (poll.kind === 'help') {
     document.title = 'Can you help? · Nou Klass';
     $('top-icon').textContent = '🙋';
-    $('top-title').textContent = 'Can you help with this question?';
-    $('top-sub').textContent = 'A student is stuck and asked for your vote';
+    $('top-title').textContent = 'One of your friends needs help!';
+    $('top-sub').textContent = 'They are stuck on this question and asked for your vote';
     $('done-sub').textContent = 'Here\u2019s what everyone has picked so far:';
   }
 
@@ -235,8 +245,14 @@ async function vote(i) {
     return;
   }
   if (poll.seconds_left <= 0) {
-    $('done-icon').textContent = '⏰'; $('done-title').textContent = 'Voting has closed';
-    $('done-sub').textContent = 'Final results:';
+    $('done-icon').textContent = '⏰';
+    $('done-title').textContent = 'Voting has closed';
+    // ⚠ A help poll can close because the CHILD stopped waiting and answered it
+    //   themselves, not only because time ran out. Saying "you just missed it"
+    //   would be a guess; this covers both without pretending to know which.
+    $('done-sub').textContent = poll.kind === 'help'
+      ? 'Your friend has already moved on. Here is how people voted:'
+      : 'Final results:';
     showDone();
     return;
   }
@@ -249,6 +265,11 @@ async function vote(i) {
 
   let left = poll.seconds_left;
   $('timer').textContent = '⏳ ' + fmt(left);
+  // The clock time it shuts, so a voter knows whether it is worth answering.
+  const closesAt = new Date(Date.now() + left * 1000);
+  const note = $('expiry-note');
+  if (note) note.textContent = 'Voting closes at '
+    + closesAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '.';
   // A 1-second tick is right for a 3-minute poll and pointless for a 24-hour
   // one, where the label only changes once a minute anyway.
   const step = left > 3600 ? 60 : 1;

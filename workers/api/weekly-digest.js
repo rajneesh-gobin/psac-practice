@@ -10,7 +10,8 @@
 //   runs weekly and each parent is checked against when they were LAST sent one -
 //   'monthly' cannot be expressed by the cron expression alone.
 
-import { sendMail, mailConfigured, unsubscribeUrl, siteUrl, emailPrefs, digestDue } from '../lib/mailer.js';
+import { sendMail, mailConfigured, unsubscribeUrl, siteUrl, emailPrefs, digestDue,
+         quotaTake, quotaRelease } from '../lib/mailer.js';
 import { requireAdmin } from '../lib/admin-auth.js';
 
 const SB_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
@@ -147,8 +148,17 @@ async function run(env) {
     if (users.length < 1000) break;
   }
 
+  // ⚠ The digest is BULK and reserves like everything else. A Sunday run that
+  //   quietly ate the whole day's budget would leave an activation email later
+  //   that morning failing at the provider for no visible reason.
+  const reservation = await quotaTake(env, due.length, { bulk: true });
+  const budgeted = due.slice(0, reservation.granted);
+  if (budgeted.length < due.length) {
+    console.warn(`[weekly-digest] daily budget allows ${budgeted.length} of ${due.length}; the rest are due again next run`);
+  }
+
   let sent = 0, failed = 0;
-  for (const family of due) {
+  for (const family of budgeted) {
     try {
       const students = studentsByFamily.get(family.id);
       if (!students?.length) continue;
@@ -194,6 +204,8 @@ async function run(env) {
         to: parentEmail,
         subject: `Nou Klass - Progress Report (${weekStr})`,
         html: htmlWithFooter,
+        // Already counted by quotaTake() before the loop.
+        reserved: true,
         ...(unsub ? { unsubscribe: unsub } : {}),
       });
       if (_res.ok) {
@@ -204,8 +216,15 @@ async function run(env) {
       } else { failed++; console.warn('[weekly-digest] send failed:', _res.error); }
     } catch (err) { console.error('[weekly-digest] Error for family', family.id, err.message); }
   }
-  console.log(`[weekly-digest] Sent ${sent} digest emails${failed ? `, ${failed} FAILED` : ''}`);
-  return { sent, failed };
+  // Give back what was reserved and not spent — a send failure must not burn
+  // the budget. ⚠ Safe because last_digest_at is only written on success, so a
+  // family skipped today is simply due again on the next run.
+  const unspent = budgeted.length - sent;
+  if (unspent > 0) await quotaRelease(env, unspent);
+
+  console.log(`[weekly-digest] Sent ${sent} digest emails${failed ? `, ${failed} FAILED` : ''}` +
+    (due.length > budgeted.length ? `, ${due.length - budgeted.length} deferred (daily budget)` : ''));
+  return { sent, failed, deferred: due.length - budgeted.length };
 }
 
 export default async function handler(request, env) {

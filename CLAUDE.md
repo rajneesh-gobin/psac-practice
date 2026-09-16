@@ -661,10 +661,12 @@ regenerated. Everything there that touches the database is a *decision*, not a
 pending run, and each should be re-checked against `pg_policies` / `pg_proc` /
 production before it is trusted.
 The two that are not housekeeping:
-- **0. ⚠⚠ A co-parent can take over a family.** `families_own`'s WITH CHECK lets a
-  member write themselves in as `parent_id`. The one-line fix is written out,
-  commented, at the end of `supabase-schema.sql`; `run-schema-tests.sh` fails on
-  it today. A stranger cannot — the exposure is to an adult the owner invited.
+- **0. ✅ CLOSED 2026-09-16.** The co-parent family takeover is fixed —
+  `families_own` is now four per-command policies. ⚠⚠ **The one-line fix this
+  brief used to point at is BROKEN and took family creation down on production
+  when tried:** `is_family_owner()` is STABLE and looks the row up, so it
+  answers false for a row being INSERTed in the same statement. **A lookup-based
+  predicate must never gate an INSERT** — split the policy by command instead.
 - **1. ⚠⚠ The whole `netlify/` directory is publicly served until the next
   deploy.** `/netlify/question-bundles/*.json` answered 200 with real questions and
   their answers, bypassing every entitlement check. The `netlify.toml` 404 is

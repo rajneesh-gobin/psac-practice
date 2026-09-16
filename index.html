@@ -261,7 +261,9 @@
             <div class="text-xs font-bold uppercase tracking-wide text-amber-700 dark:text-amber-300">Your credits</div>
             <div id="rw-balance" class="text-2xl font-black text-amber-700 dark:text-amber-200 leading-tight">0</div>
           </div>
-          <button onclick="Auth.closeInviteModal(); showScreen('shop')"
+          <!-- data-shop-entry: hidden by _syncShopVisibility() whenever the admin
+               closes the shop, along with the Shop tab and the credits chip. -->
+          <button data-shop-entry onclick="Auth.closeInviteModal(); showScreen('shop')"
             class="shrink-0 bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold px-3 py-2 rounded-xl transition-colors">🛒 Spend them</button>
         </div>
         <p id="rw-earn-rule" class="text-[11px] text-amber-700/90 dark:text-amber-300/90 mt-2 leading-snug"></p>
@@ -1921,17 +1923,17 @@
           <!-- Sign Up fields -->
           <div class="space-y-3 hidden" id="auth-signup-fields">
             <input id="auth-name" type="text" placeholder="Your full name" aria-label="Your full name" autocomplete="name"
-              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
+              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all" maxlength="120">
             <input id="auth-signup-email" type="email" placeholder="Email address" aria-label="Email address" autocomplete="email"
-              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
+              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all" maxlength="254">
             <div class="relative">
               <input id="auth-signup-pass" type="password" placeholder="Password (min 6 characters)" aria-label="Password, at least 6 characters" autocomplete="new-password"
-                class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
+                class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all" maxlength="72">
               <button type="button" onclick="Auth.togglePass('auth-signup-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
             <div class="relative">
               <input id="auth-signup-pass-confirm" type="password" placeholder="Confirm password" aria-label="Confirm password" autocomplete="new-password"
-                class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
+                class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all" maxlength="72">
               <button type="button" onclick="Auth.togglePass('auth-signup-pass-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
             <input id="auth-signup-referral" type="text" placeholder="Referral code (optional)" aria-label="Referral code, optional" maxlength="12"
@@ -3455,8 +3457,8 @@
         <!-- Group email. The selection bar only appears once something is
              ticked, so the ordinary members screen is unchanged for an admin
              who never uses it. -->
-        <div id="admin-member-selection" class="hidden mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/20 px-3 py-2.5">
-          <span id="admin-member-selection-count" class="text-sm font-bold text-indigo-800 dark:text-indigo-200">0 selected</span>
+        <div data-selection-bar class="hidden mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/20 px-3 py-2.5">
+          <span data-selection-count class="text-sm font-bold text-indigo-800 dark:text-indigo-200">0 selected</span>
           <button onclick="AdminPanel.openBroadcast()" class="text-xs font-bold px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">✉️ Email selected (Bcc)</button>
           <button onclick="AdminPanel.broadcastAudience()" class="text-xs font-semibold px-3 py-2 rounded-lg border border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/40">➕ Add everyone matching these filters</button>
           <button onclick="AdminPanel.clearMemberPicks()" class="text-xs font-semibold px-3 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-red-500">Clear</button>
@@ -3507,6 +3509,14 @@
              teachers have done anything in the last 30 days, and how many have
              never signed in. The per-teacher detail sits on each card. -->
         <p id="admin-teachers-activity" class="text-xs text-gray-600 dark:text-gray-300 mb-2 hidden" role="status"></p>
+        <!-- ⚠ The SAME selection as the Members tab, by design: [data-selection-bar]
+             is painted everywhere at once, so picking parents and teachers is one
+             send rather than two. Both bars show the same count. -->
+        <div data-selection-bar class="hidden mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/20 px-3 py-2.5">
+          <span data-selection-count class="text-sm font-bold text-indigo-800 dark:text-indigo-200">0 selected</span>
+          <button onclick="AdminPanel.openBroadcast()" class="text-xs font-bold px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">✉️ Email selected (Bcc)</button>
+          <button onclick="AdminPanel.clearMemberPicks()" class="text-xs font-semibold px-3 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-red-500">Clear</button>
+        </div>
         <div id="admin-teachers-list" class="space-y-2"></div>
         <nav id="admin-teachers-pager" class="hidden mt-4" aria-label="Teacher list pages">
           <div class="flex flex-wrap items-center justify-center gap-2">
@@ -4935,7 +4945,7 @@
             <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
               <div>
                 <div class="font-bold text-gray-800 dark:text-white text-sm">🙋 Ask a friend for help</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">On a practice question, your child can share that one question on WhatsApp or Facebook so friends and family vote on the answer. Your child's name is never sent, and <b>the correct answer is never shared</b> - not even with the people voting. The link stops working after 1, 6 or 24 hours, whichever your child picks.</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">On a practice question, your child can share that one question on WhatsApp or Facebook so friends and family vote on the answer. Your child's name is never sent, and <b>the correct answer is never shared</b> - not even with the people voting. The link expires after 3, 5 or 10 minutes, whichever your child picks, and they can stop it sooner and answer the question themselves.</div>
               </div>
               <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-3">
                 <input type="checkbox" id="pd-help-toggle" class="sr-only peer" onchange="Auth.toggleHelpRequestsDisabled()">
@@ -6511,6 +6521,12 @@
       <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">✉️ Email selected members</h2>
       <p id="admin-bc-recipients" class="text-xs text-gray-500 dark:text-gray-400 mb-3"></p>
 
+      <!-- ⚠ The whole form is wrapped so the SUCCESS state can replace it. A
+           one-line status inside a tall scrolling modal, plus a toast that is
+           gone in 3.5s, reads as "nothing happened" - and an admin who believes
+           that presses Send again, which really does send it twice. -->
+      <div id="admin-bc-form">
+
       <label for="admin-bc-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Subject</label>
       <input id="admin-bc-subject" type="text" maxlength="150" placeholder="e.g. Grade 6 Science is now live"
         class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
@@ -6535,6 +6551,17 @@
         <button onclick="AdminPanel.broadcastPreview()" class="text-sm font-semibold px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">Who would get this?</button>
         <button id="admin-bc-send" onclick="AdminPanel.sendBroadcast()" class="text-sm font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60">Send</button>
       </div>
+      </div>
+
+      <!-- Success state. Replaces the form entirely so the outcome cannot be
+           missed and the message cannot be sent a second time by accident. -->
+      <div id="admin-bc-done" class="hidden text-center py-6">
+        <div class="text-5xl mb-3" aria-hidden="true">✅</div>
+        <p id="admin-bc-done-title" class="text-lg font-bold text-gray-800 dark:text-white"></p>
+        <p id="admin-bc-done-detail" class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed"></p>
+        <button onclick="AdminPanel.closeBroadcast()"
+          class="mt-5 text-sm font-bold px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">Done</button>
+      </div>
     </div>
   </div>
 
@@ -6554,13 +6581,13 @@
       <div id="ask-friend-preview" class="text-sm text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/40 rounded-xl px-3 py-2.5 mb-3 max-h-32 overflow-y-auto"></div>
 
       <div id="ask-friend-setup">
-        <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">How long should people be able to vote?</p>
+        <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">How long should your friends have to vote?</p>
         <div class="flex gap-2 mb-3">
-          <button type="button" data-help-duration="60" aria-pressed="false" onclick="pickHelpDuration(this)" class="af-dur">1 hour</button>
-          <button type="button" data-help-duration="360" aria-pressed="true" onclick="pickHelpDuration(this)" class="af-dur af-dur-on">6 hours</button>
-          <button type="button" data-help-duration="1440" aria-pressed="false" onclick="pickHelpDuration(this)" class="af-dur">24 hours</button>
+          <button type="button" data-help-duration="3" aria-pressed="false" onclick="pickHelpDuration(this)" class="af-dur">3 min</button>
+          <button type="button" data-help-duration="5" aria-pressed="true" onclick="pickHelpDuration(this)" class="af-dur af-dur-on">5 min</button>
+          <button type="button" data-help-duration="10" aria-pressed="false" onclick="pickHelpDuration(this)" class="af-dur">10 min</button>
         </div>
-        <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3">🔒 Your name is never sent, and the correct answer is never shared — not even with the people voting.</p>
+        <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3">🔒 Your name is never sent, and the correct answer is never shared — not even with the people voting. You can stop waiting and answer it yourself at any time.</p>
         <button onclick="createHelpRequest(this)" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold disabled:opacity-60">🙋 Make my help link</button>
       </div>
 
@@ -6577,6 +6604,14 @@
         </div>
         <div id="ask-friend-bars" class="mb-2"></div>
         <p id="ask-friend-total" class="text-xs text-gray-500 dark:text-gray-400 text-center"></p>
+        <!-- ⚠ The way OUT. Without it the only thing to do while waiting is
+             nothing, which is the opposite of practice. It closes the poll
+             server-side too, so a late voter is told it is over rather than
+             voting into a void. -->
+        <button onclick="cancelHelpRequest()"
+          class="w-full mt-3 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          ✋ Stop waiting — I'll answer it myself
+        </button>
       </div>
 
       <p id="ask-friend-status" role="status" aria-live="polite" class="text-xs text-red-500 mt-2 min-h-[1.2em]"></p>
@@ -6633,16 +6668,21 @@
     </div>
   </div>
 
-  <!-- Auto-open auth when arriving from the old domain via ?signin=1 -->
+  <!-- Arriving from the OLD domain via ?signin=1.
+       ⚠ This ONLY RECORDS THE INTENT. It used to call showScreen('auth') after
+         a setTimeout(80) and that raced Auth.init(): boot routing is async - a
+         session lookup, the biometric gate, a profile launch - and it finishes
+         by calling showScreen('landing'), which painted straight over the auth
+         screen this had just opened. The visitor landed on the home page and
+         had to press Sign in a second time, which is exactly what was reported.
+       ⚠ The parameter is stripped immediately so it cannot be bookmarked or
+         shared, and the flag is consumed ONCE by _consumePendingSignin() in
+         auth.js at the point the no-session decision is actually made. -->
   <script>
     (function () {
       if (new URLSearchParams(location.search).get('signin') !== '1') return;
       history.replaceState(null, '', location.pathname);
-      requestAnimationFrame(function () {
-        setTimeout(function () {
-          if (typeof showScreen === 'function') showScreen('auth');
-        }, 80);
-      });
+      try { sessionStorage.setItem('psac_pending_signin', '1'); } catch (e) {}
     })();
   </script>
 </body>

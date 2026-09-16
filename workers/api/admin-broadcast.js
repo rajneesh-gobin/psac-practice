@@ -15,6 +15,7 @@ import { requireAdmin, json } from '../lib/admin-auth.js';
 import {
   sendMail, wrap, escapeHtml, siteUrl, mailConfigured,
   wantsEmail, unsubscribeUrl, MAX_RECIPIENTS_PER_MESSAGE,
+  quotaPeek, quotaTake, quotaRelease, mailCap,
 } from '../lib/mailer.js';
 
 const MAX_IDS = 500;
@@ -118,11 +119,41 @@ export default async function handler(request, env) {
     }
   }
 
+  // ⚠ The budget is reported on the DRY RUN too. "240 selected, 80 can go
+  //   today" before pressing Send is the whole point — learning it from a
+  //   failure count afterwards, with some recipients served and some not, is
+  //   the outcome this exists to prevent.
   if (dryRun) {
-    return json(200, { ok: true, dry_run: true, would_send: recipients.length, skipped });
+    const budget = await quotaPeek(env, { bulk: true });
+    const canSend = budget.remaining == null
+      ? recipients.length
+      : Math.min(recipients.length, budget.remaining);
+    return json(200, {
+      ok: true, dry_run: true,
+      would_send: canSend,
+      eligible: recipients.length,
+      deferred: recipients.length - canSend,
+      budget_remaining: budget.remaining,
+      budget_sent_today: budget.sent_today,
+      budget_cap: budget.cap ?? mailCap(env),
+      budget_unknown: !!budget.unknown,
+      skipped,
+    });
   }
   if (!recipients.length) {
     return json(409, { ok: false, error: 'Nobody in that selection can be emailed.', skipped });
+  }
+
+  // Reserve before sending a single message.
+  const reservation = await quotaTake(env, recipients.length, { bulk: true });
+  const allowed = recipients.slice(0, reservation.granted);
+  const deferred = recipients.length - allowed.length;
+  if (!allowed.length) {
+    return json(429, {
+      ok: false,
+      error: `Today's email budget is used up (${reservation.remaining === null ? 'unknown' : 0} left of ${mailCap(env)}). Nothing was sent — try again tomorrow.`,
+      deferred, skipped, budget_remaining: 0,
+    });
   }
 
   const site = siteUrl(env);
@@ -140,7 +171,7 @@ export default async function handler(request, env) {
   // One message per Bcc batch. A batch that fails is reported by size rather
   // than by address: the admin needs to know how many to retry, and the browser
   // must not learn who is on the list.
-  for (const batch of chunk(recipients, MAX_RECIPIENTS_PER_MESSAGE)) {
+  for (const batch of chunk(allowed, MAX_RECIPIENTS_PER_MESSAGE)) {
     // A single-recipient batch can carry a personal one-click unsubscribe; a
     // shared Bcc batch cannot, so it falls back to the footer link.
     const unsubscribe = (!essential && batch.length === 1)
@@ -150,17 +181,31 @@ export default async function handler(request, env) {
       bcc: batch.map(r => r.email),
       subject, html, text,
       replyTo: gate.caller.email,
+      // Already counted by quotaTake() above — do not count it twice.
+      reserved: true,
       ...(unsubscribe ? { unsubscribe } : {}),
     });
     if (res.ok) sent += batch.length;
     else failures.push({ size: batch.length, error: res.error });
   }
 
-  console.log(`[admin-broadcast] ${gate.caller.email} → ${sent}/${recipients.length} recipients, subject "${subject.slice(0, 60)}"`);
+  // ⚠ Hand back what was reserved and not spent. A provider outage would
+  //   otherwise burn the whole day's budget without delivering one email.
+  const unspent = allowed.length - sent;
+  if (unspent > 0) await quotaRelease(env, unspent);
+
+  console.log(`[admin-broadcast] ${gate.caller.email} → ${sent}/${recipients.length} recipients` +
+    (deferred ? `, ${deferred} deferred (daily budget)` : '') +
+    `, subject "${subject.slice(0, 60)}"`);
   return json(failures.length && !sent ? 502 : 200, {
     ok: sent > 0,
     sent,
     selected: ids.length,
+    eligible: recipients.length,
+    deferred,
+    budget_remaining: reservation.remaining === null ? null : reservation.remaining + unspent,
+    budget_cap: mailCap(env),
+    budget_unknown: !!reservation.unknown,
     skipped,
     failures,
     ...(sent ? {} : { error: failures[0]?.error || 'Nothing was sent.' }),

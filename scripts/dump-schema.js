@@ -528,51 +528,56 @@ END $dup$;`);
 w(`
 
 
--- ── AND ONE POLICY FIX, ALSO A DECISION ──────────────────────────────────
--- ⚠ A CO-PARENT CAN CURRENTLY TAKE OVER A FAMILY. Measured against production
---   on 2026-09-06 in a rolled-back transaction, and asserted by
---   scripts/sql-tests/run-schema-tests.sh, which fails on it today.
+-- ── THE CO-PARENT TAKEOVER: CLOSED 2026-09-16 ────────────────────────────
+-- Applied, verified on production and recorded in §8 above as four policies:
+-- families_sel / families_ins / families_upd / families_del.
+-- Migration: migrations/20260916_families_own_owner_only_write.sql
 --
---   families_own (§8) reads:
+--   WAS (one FOR ALL policy):
 --     USING      (parent_id = auth.uid() OR is_family_member(id) OR is_admin())
 --     WITH CHECK (parent_id = auth.uid() OR is_admin())
+--   A co-parent passed USING as a member and WITH CHECK by naming themselves,
+--   so UPDATE families SET parent_id = auth.uid() made them the owner.
+--   Measured as authenticated with a real co-parent row: 1 row changed.
 --
---   A co-parent passes USING because they ARE a member. They then pass
---   WITH CHECK because the row they are writing names THEMSELVES as parent_id.
---   So a plain
---       UPDATE families SET parent_id = auth.uid() WHERE id = <their family>
---   succeeds, and the co-parent becomes the owner — inheriting the right to
---   invite, to remove the original parent, and to delete the family.
+-- ⚠⚠ THE ONE-LINE FIX THIS FILE USED TO RECOMMEND IS BROKEN. DO NOT USE IT.
+--   It kept ONE FOR ALL policy and narrowed WITH CHECK to
+--       (parent_id = auth.uid() AND is_family_owner(id)) OR is_admin()
+--   It was applied on 2026-09-16 and TOOK FAMILY CREATION DOWN until reverted:
+--   is_family_owner() is STABLE and LOOKS THE ROW UP, so for a family being
+--   INSERTed in that same statement it answers false — the new tuple is not in
+--   its snapshot — and every new parent got 42501. This is rule 2 above from
+--   the other direction: there a USING clause was checked on INSERT; here a
+--   WITH CHECK predicate could not see the row it was checking.
+--   ⚠ A LOOKUP-BASED PREDICATE MUST NEVER GATE AN INSERT.
 --
---   A STRANGER CANNOT do this: USING fails for a non-member, and an UPDATE
---   whose USING matches no row changes nothing and raises nothing. The
---   exposure is to an adult the owner deliberately invited — which is why this
---   is written here for a decision rather than applied silently.
+--   What works instead is splitting the policy by command, so INSERT is never
+--   subjected to an ownership lookup that cannot succeed:
+--     SELECT — unchanged (co-parent reads untouched)
+--     INSERT — WITH CHECK (parent_id = auth.uid() OR is_admin())   ← no lookup
+--     UPDATE — USING unchanged; WITH CHECK demands is_family_owner(), which is
+--              true from the committed snapshot for the real owner and false
+--              for a co-parent attempting a takeover
+--     DELETE — owner or admin only (a co-parent could previously delete the
+--              whole family under the FOR ALL USING clause)
 --
---   The fix below keeps every read path identical (USING is untouched, so
---   co-parents still see the family and rule 2 above is not re-opened) and
---   narrows only the WRITE side back to the owner and admins, which is what
---   "Owner-only membership management" already assumes everywhere else.
+-- ⚠ ACCEPTED COST: a co-parent can no longer rename the family. Production had
+--   ZERO co-parent memberships when this landed, and engine/app.js now hides
+--   the rename field from non-owners instead of offering a control that RLS
+--   refuses. If co-parent renaming is wanted, add a SECURITY DEFINER function
+--   for that ONE column — never a wider policy.
 --
---   ⚠ Check first whether any co-parent feature legitimately writes to
---     families — renaming the family, say. If one does, this makes that
---     co-parent-facing action fail, and the right fix is a SECURITY DEFINER
---     function for that one field rather than a wider policy.
+-- ⚠ 0 ROWS AND 42501 ARE NOT THE SAME EVENT when verifying this. A USING
+--   failure matches no row silently; a WITH CHECK failure raises. A test that
+--   accepts "not 1" for both cannot tell a closed hole from a broken feature.
 --
--- DROP POLICY IF EXISTS families_own ON public.families;
--- CREATE POLICY families_own ON public.families
---   FOR ALL
---   TO public
---   USING      ((parent_id = auth.uid()) OR is_family_member(id) OR is_admin())
---   WITH CHECK ((parent_id = auth.uid() AND is_family_owner(id)) OR is_admin());
---
---   Verify, as authenticated, in a rolled-back transaction — never from the
---   SQL editor as postgres, because RLS does not apply to a superuser and every
+--   Verify as authenticated, in a rolled-back transaction — never from the SQL
+--   editor as postgres, because RLS does not apply to a superuser and every
 --   check passes vacuously:
 --     SET LOCAL ROLE authenticated;
---     SET LOCAL request.jwt.claim.sub = '<the co-parent>';
+--     SELECT set_config('request.jwt.claim.sub', '<the co-parent>', true);
 --     UPDATE public.families SET parent_id = auth.uid() WHERE id = '<family>';
---   → expect 0 rows changed, and ownership unchanged.`);
+--   → expect 42501, and ownership unchanged.`);
 
 w(`\n\n-- ═══ END ═════════════════════════════════════════════════════════════`);
 

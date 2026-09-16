@@ -691,9 +691,36 @@ const Auth = (() => {
       return;
     }
 
-    showScreen('landing');
+    // ⚠ Arriving from the OLD domain with ?signin=1 must land on the sign-in
+    //   screen, not the landing page. It used to be done with a setTimeout(80)
+    //   in index.html that raced this function and usually LOST: boot routing is
+    //   async (session lookup, biometric gate, profile launch), so showScreen
+    //   ('auth') fired first and this line then painted over it. The visitor saw
+    //   the landing page and had to press Sign in a second time.
+    //   The intent is honoured HERE instead, where the no-session decision is
+    //   actually made, so there is no timing left to get wrong.
+    if (_consumePendingSignin()) showScreen('auth');
+    else showScreen('landing');
     _bootRouting = false;
     document.body.style.opacity = '1';
+  }
+
+  // Did this visitor arrive from the old domain asking to sign in?
+  //
+  // ⚠ ONE-SHOT. Reading it clears it, so a later reload, a back button or a
+  //   sign-out does not bounce them into the sign-in screen again for a wish
+  //   they expressed once, minutes ago.
+  // ⚠ sessionStorage, not a URL parameter kept around: the parameter is
+  //   stripped immediately (it must not survive a share or a bookmark), and the
+  //   flag has to outlive the async boot that follows. It dies with the tab.
+  // ⚠ Wrapped: sessionStorage THROWS, not returns null, in some privacy modes,
+  //   and losing the sign-in screen is better than losing the whole boot.
+  function _consumePendingSignin() {
+    try {
+      if (sessionStorage.getItem('psac_pending_signin') !== '1') return false;
+      sessionStorage.removeItem('psac_pending_signin');
+      return true;
+    } catch (e) { return false; }
   }
 
   // ── Biometric lock gate ─────────────────────────
@@ -2035,9 +2062,22 @@ const Auth = (() => {
     const email = (_el('auth-signup-email')?.value || '').trim();
     const pass  = (_el('auth-signup-pass')?.value  || '').trim();
     const passConfirm = (_el('auth-signup-pass-confirm')?.value || '').trim();
+    // ⚠ Every one of these is ALSO enforced in the database (profiles_full_name
+    //   CHECK, GoTrue's own email rules) and that is what actually holds — a
+    //   direct PostgREST call never sees this function. These exist so a real
+    //   person gets a sentence instead of a 23514, not as the guard.
+    // ⚠ Tested on the TRIMMED value: "   " has length 3 and passes a naive
+    //   emptiness test while being unusable as a name.
     if (!name)                   { _showAuthError('Please enter your name.'); return; }
+    if (name.length > 120)       { _showAuthError('That name is too long - please use 120 characters or fewer.'); return; }
     if (!email)                  { _showAuthError('Please enter your email.'); return; }
+    if (email.length > 254)      { _showAuthError('That email address is too long.'); return; }
+    // A deliberately loose shape check. GoTrue is the authority on what a valid
+    // address is; this only catches the obvious typo before an email is spent
+    // from a quota that is shared across the whole project.
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { _showAuthError('That email address does not look right.'); return; }
     if (pass.length < 6)         { _showAuthError('Password must be at least 6 characters.'); return; }
+    if (pass.length > 72)        { _showAuthError('Password must be 72 characters or fewer.'); return; }
     if (pass !== passConfirm)    { _showAuthError('Passwords do not match.'); return; }
 
     // A code typed here (or already captured from a ?ref= link) has to survive
@@ -4533,5 +4573,12 @@ const Auth = (() => {
 // Start app
 Auth.init().catch(function () {
   if (document.body && document.body.style.opacity !== '1') document.body.style.opacity = '1';
-  if (typeof showScreen === 'function') showScreen('landing');
+  // Same rule on the failure path: someone who came here to sign in still gets
+  // the sign-in screen, even if boot fell over on the way to deciding.
+  var wanted = false;
+  try {
+    wanted = sessionStorage.getItem('psac_pending_signin') === '1';
+    sessionStorage.removeItem('psac_pending_signin');
+  } catch (e) {}
+  if (typeof showScreen === 'function') showScreen(wanted ? 'auth' : 'landing');
 });

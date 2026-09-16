@@ -25,6 +25,8 @@ const appSrc   = fs.readFileSync(path.join(ROOT, 'engine/app.js'), 'utf8');
 const htmlSrc  = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const voteSrc  = fs.readFileSync(path.join(ROOT, 'vote.html'), 'utf8');
 const sqlSrc   = fs.readFileSync(path.join(ROOT, 'migrations/20260916_help_polls.sql'), 'utf8');
+// The follow-up migration that moved durations to minutes and added the cancel.
+const minSrc   = fs.readFileSync(path.join(ROOT, 'migrations/20260916_help_polls_minutes.sql'), 'utf8');
 const helpersSrc = fs.readFileSync(path.join(ROOT, 'engine/helpers.js'), 'utf8');
 const authSrc  = fs.readFileSync(path.join(ROOT, 'engine/auth.js'), 'utf8');
 
@@ -89,10 +91,42 @@ ok('Auth exposes the toggle', /toggleHelpRequestsDisabled/.test(authSrc));
 ok('the toggle is wired in index.html', /Auth\.toggleHelpRequestsDisabled\(\)/.test(htmlSrc));
 
 // ── 7. Duration is chosen from a list, never taken as a number ──────────────
+// ⚠ MINUTES, not hours. 1/6/24 hours treated this as homework set down and
+//   returned to; the child is mid-question with the question on screen, and
+//   nobody waits on that. A link outliving the session is also a public URL
+//   that nobody is watching.
 ok('⚠ SQL clamps the duration to a whitelist',
-  /WHEN 60\s+THEN 60/.test(sqlSrc) && /WHEN 1440 THEN 1440/.test(sqlSrc) && /ELSE 360/.test(sqlSrc));
+  /WHEN 3\s+THEN 3/.test(minSrc) && /WHEN 10 THEN 10/.test(minSrc) && /ELSE 5/.test(minSrc));
 ok('only three durations are offered', (htmlSrc.match(/data-help-duration="/g) || []).length === 3);
-ok('6 hours is the default', /data-help-duration="360" aria-pressed="true"/.test(htmlSrc));
+ok('5 minutes is the default', /data-help-duration="5" aria-pressed="true"/.test(htmlSrc));
+ok('nothing longer than 10 minutes is offered',
+  (htmlSrc.match(/data-help-duration="(\d+)"/g) || []).every(m => Number(m.match(/\d+/)[0]) <= 10));
+
+// ── The child can give up ────────────────────────────────────────────
+// ⚠ Without a cancel the only thing to do while waiting is nothing, which is
+//   the opposite of practice.
+ok('help_poll_cancel exists', /CREATE OR REPLACE FUNCTION public\.help_poll_cancel/.test(minSrc));
+ok('⚠ it can only close the caller OWN poll', /AND student_id = v_student/.test(minSrc));
+ok('cancelling EXPIRES rather than deletes (a late voter is told it closed)',
+  /SET expires_at = now\(\)/.test(minSrc));
+ok('zero rows is not an error (already closed, or tapped twice)',
+  /'closed', v_rows > 0/.test(minSrc));
+ok('the client offers the way out', /function cancelHelpRequest/.test(appSrc));
+ok('and the button is wired in the markup', /cancelHelpRequest\(\)/.test(htmlSrc));
+ok('cancelling closes the panel and frees the child',
+  /function cancelHelpRequest[\s\S]{0,400}closeHelpRequest\(\)/.test(appSrc));
+
+// ── The share message states the deadline ────────────────────────────────
+// ⚠ Both a duration AND a clock time: "closes in 5 minutes" is read whenever
+//   the message is opened, which may be four minutes later. An absolute time
+//   cannot go stale that way.
+ok('the share text names the minutes left', /minute\$\{mins === 1/.test(appSrc));
+ok('and the clock time it closes', /_helpCloseLabel\(\)/.test(appSrc));
+ok('the message says a FRIEND needs help', /needs help to answer this question/.test(appSrc));
+ok('the vote page says the same', /needs help/i.test(voteSrc));
+ok('the vote page shows when voting closes', /Voting closes at/.test(voteSrc));
+ok('expires_at is returned so the message can be accurate', /'expires_at', v_expires/.test(minSrc));
+ok('the refresh beat is back to 3s for a short poll', /setInterval\(tick, 3000\)/.test(appSrc));
 
 // ── 8. Rate limiting is per kind ────────────────────────────────────────────
 // A busy afternoon of help requests must not exhaust the game's crowd-poll
@@ -100,6 +134,8 @@ ok('6 hours is the default', /data-help-duration="360" aria-pressed="true"/.test
 ok('the help cap counts only help polls',
   /kind = 'help' AND created_at > now\(\) - interval '1 hour'/.test(sqlSrc));
 ok('the game cap is untouched', !/minigame_poll_create/.test(sqlSrc.replace(/--[^\n]*/g, '')));
+ok('and still untouched by the minutes migration',
+  !/minigame_poll_create/.test(minSrc.replace(/--[^\n]*/g, '')));
 
 // ── 9. The voting page tells the two kinds apart ────────────────────────────
 ok('vote.html branches on kind', /poll\.kind === 'help'/.test(voteSrc));
