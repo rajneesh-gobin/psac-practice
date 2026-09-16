@@ -46,7 +46,11 @@ const GROUPS = {
   teacher: ['TeacherInsights', 'TeacherHome', 'TeacherWorkspace', 'TeacherGuestClasses',
     'TeacherMode', 'TeacherClassroomDetail'],
   // Science Labs (NCE only) - engine/labs/, docs/labs/PLAN.md.
-  labs: ['Labs'],
+  // ⚠ LabStudy is the shared study journey in the second shell file. It was
+  //   added to GROUPS.labs in registry.js but not here, so nothing checked it
+  //   actually arrives - and it is a top-level const, so it is reachable by
+  //   bare identifier only, never as window.LabStudy.
+  labs: ['Labs', 'LabStudy'],
 };
 
 let pass = 0;
@@ -85,9 +89,31 @@ const server = http.createServer((req, res) => {
   const files = Object.values((reg.match(/const GROUPS = \{([\s\S]*?)\n  \};/) || [, ''])[1].match(/'([^']+\.js)'/g) || [])
     .map(s => s.replace(/'/g, ''));
 
-  // 8 role files (admin, forum, six teacher) + the Science Labs shell (each lab
-  // then loads its own files through Labs, not through RoleModules).
-  ok(files.length === 9, 'RoleModules lists all nine files', files.length + ' found');
+  // ⚠ DERIVED, not counted. This asserted `files.length === 9` and started
+  //   failing the day a second Science Labs shell file (lab_study.js) was
+  //   added — a correct change reported as a broken test, which is how a suite
+  //   teaches people to ignore it. What matters is that nothing role-shaped is
+  //   MISSING from GROUPS, not how many entries it happens to have: a file
+  //   dropped from here goes back to being a blocking <script>, or silently
+  //   never loads at all.
+  const engineDir = fs.readdirSync(path.join(ROOT, 'engine'));
+  const mustList = ['engine/admin.js', 'engine/forum.js',
+    ...engineDir.filter(f => /^teacher.*\.js$/.test(f)).sort().map(f => 'engine/' + f)];
+  const unlisted = mustList.filter(f => !files.includes(f));
+  ok(unlisted.length === 0,
+    'every admin/forum/teacher file on disk is registered in GROUPS',
+    unlisted.join(', '));
+
+  // ⚠ The labs group is a SHARED SHELL on purpose — each lab fetches its own
+  //   data, bench and stylesheet through Labs._ensure() when that lab is
+  //   opened. A ceiling, not an equality: growing the shell is allowed, but if
+  //   it ever approaches the file count in engine/labs/ the lazy hub has turned
+  //   back into the eager bundle this whole mechanism exists to avoid.
+  const labListed = files.filter(f => f.startsWith('engine/labs/'));
+  const labOnDisk = fs.readdirSync(path.join(ROOT, 'engine', 'labs')).filter(f => f.endsWith('.js'));
+  ok(labListed.length >= 1 && labListed.length <= 4,
+    'the labs group is still a small shared shell',
+    labListed.length + ' listed of ' + labOnDisk.length + ' files in engine/labs/');
 
   const stillTagged = files.filter(f => html.includes('<script src="' + f + '"'));
   ok(stillTagged.length === 0, 'none of them is a blocking <script> in index.html', stillTagged.join(', '));

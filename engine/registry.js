@@ -219,9 +219,14 @@ const RoleModules = (() => {
       'engine/teacher.js',
       'engine/teacher_classroom_detail.js',
     ],
-    // Science Labs (NCE only): just the shared shell. It fetches each lab's own
-    // files (data, bench, stylesheet) when that lab is opened - see
-    // Labs.LABS / _ensure() in lab_core.js - so the hub costs one file.
+    // Science Labs (NCE only): just the shared shell - the hub costs these TWO
+    // files out of 48 in engine/labs/. Each lab fetches its own data, bench and
+    // stylesheet when that lab is opened - see Labs.LABS / _ensure() in
+    // lab_core.js.
+    // ⚠ Said "one file" until lab_study.js was added beside it. Both globals
+    //   are asserted by scripts/test-role-modules.js, which reads this list
+    //   rather than counting it, so adding a third shell file is fine and
+    //   dropping one fails.
     labs: [
       'engine/labs/lab_study.js',
       'engine/labs/lab_core.js',
