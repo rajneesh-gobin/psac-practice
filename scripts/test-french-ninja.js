@@ -35,12 +35,17 @@ if (!Array.isArray(BANK)) { console.log('\n  0/1 — bank unusable'); process.ex
 
 // A run is 10 phrases and the pick is weighted by band, so every band needs
 // enough stock that a run is never padded out of the wrong one.
-ok('bank holds at least 30 phrases', BANK.length >= 30, 'got ' + BANK.length);
+ok('bank holds at least 120 phrases', BANK.length >= 120, 'got ' + BANK.length);
 for (const b of [1, 2, 3]) {
   const n = BANK.filter((p) => p.band === b).length;
-  ok(`band ${b} holds at least 10 phrases`, n >= 10, 'got ' + n);
+  ok(`band ${b} holds at least 40 phrases`, n >= 40, 'got ' + n);
 }
 
+// ⚠ A run deals 10 phrases. With too small a bank a child sees repeats within
+//   a session, which is what the expansion was for — so assert the headroom
+//   rather than leaving it as a number in a commit message.
+ok('the bank supports at least 12 distinct runs', Math.floor(BANK.length / 10) >= 12,
+  Math.floor(BANK.length / 10) + ' runs');
 const ids = new Set();
 const seenPhrase = new Map();
 for (const p of BANK) {
