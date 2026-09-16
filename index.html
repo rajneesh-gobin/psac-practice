@@ -1,12 +1,65 @@
 ﻿<!DOCTYPE html>
-<html lang="en" class="dark ps-loading">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Apply saved theme before first paint so the spinner matches the app theme -->
-  <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
+  <!-- Apply saved theme before first paint so the spinner matches the app theme.
+       ⚠ AND decide the boot state here, in <head>, BEFORE <body> is parsed.
+
+       The landing page used to be unreachable without JavaScript: <body> shipped
+       style="opacity:0" and #screen-landing shipped class="screen hidden"
+       (display:none !important), and BOTH were only lifted at the END of
+       Auth.init() — which awaits a Supabase getSession() network call. So 49 KB
+       of real landing markup with a proper <h1> needed 2.5 MB of blocking JS, a
+       runtime Tailwind pass and a network round-trip before it could be seen.
+       Googlebot renders JS and could usually get there; Bing, the social
+       scrapers and the AI crawlers could not, and a render timeout indexed a
+       blank page. Measured 2026-09-16: the domain was in no index at all.
+
+       Now the static HTML is the no-session case — landing visible, no spinner —
+       and THIS script adds the boot state back for a visitor who actually has
+       somewhere else to go. It runs before <body> is parsed, so a returning user
+       never sees a frame of landing first.
+
+       ⚠ Fails OPEN on purpose. Any throw (Safari private mode denies
+         localStorage) leaves the landing showing, which is the safe half: a
+         signed-in parent sees the landing for one frame, versus every visitor
+         and every crawler seeing a blank page. Never invert this try/catch.
+       ⚠ The two keys are the real ones — mm_sb_auth is the custom storageKey in
+         engine/supabase.js (NOT the sb-<ref>-auth-token default) and
+         mm_student_sess is STUDENT_SESS in engine/store.js. A renamed key here
+         does not break the app, it just costs a returning user one landing
+         frame, so this must never become a load-bearing check.
+       ⚠ A query string or hash means a deep link (?signin=1, a profile launch,
+         an OAuth return) — boot normally rather than flash the landing. -->
+  <script>try{
+    if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');
+    var _hasSession = !!(localStorage.getItem('mm_sb_auth') || localStorage.getItem('mm_student_sess'));
+    if(_hasSession || location.search || location.hash){
+      document.documentElement.classList.add('ps-loading','ps-booting');
+    }
+  }catch(_){}</script>
   <!-- (preconnects removed — Tailwind and Supabase are now self-hosted) -->
-  <title>Nou Klass — Exam Practice</title>
+  <!-- ⚠ THE TITLE AND THE DESCRIPTION ARE THE SEARCH RESULT. The old title was
+       "Nou Klass — Exam Practice": it named neither of the two words a parent
+       actually types, PSAC and Mauritius. Measured 2026-09-16 — a search for
+       "nouklass.com PSAC exam practice Mauritius" returned Wikipedia, Scribd
+       and TikTok, and not one result from this domain.
+     ⚠ app.js rewrites document.title per screen. This one is what a crawler
+       and a cold visitor get. -->
+  <title>Nou Klass — Free PSAC &amp; NCE Exam Practice for Mauritius</title>
+  <!-- ⚠ A FIFTH COPY OF THE COVERAGE SENTENCE. og:description, twitter:description,
+       og:image:alt, the landing hero, _appShareText() and _inviteText() all state
+       the same grade range, and this one is now in the SURFACES map of
+       scripts/test-share-copy-parity.js with them. Change one, change all.
+     ⚠ 158 chars — Google truncates a snippet past ~160. -->
+  <meta name="description" content="Free PSAC and NCE exam practice for Mauritius. Grades 1–6 and Grades 7–9 — Maths, English, French, Science, History &amp; Geography, aligned with the MIE curriculum.">
+  <!-- ⚠ index.html is served at "/" and nowhere else: the Worker 404s unknown
+       paths rather than falling back to the SPA shell (probed on production, not
+       assumed), and /a/ /m/ /v/ rewrite to guest.html, materials.html and
+       vote.html. A single static canonical is therefore correct HERE and must
+       not be copied to those three pages, which vary by code. -->
+  <link rel="canonical" href="https://nouklass.com/">
   <!-- ── Open Graph / Twitter ────────────────────────────────────────────
        These are what a Facebook or WhatsApp preview is actually built from.
        ⚠ Keep og:description in step with _appShareText() (app.js) and
@@ -20,12 +73,19 @@
   <meta property="og:site_name" content="Nou Klass">
   <meta property="og:url" content="https://nouklass.com/">
   <meta property="og:title" content="Nou Klass — Exam Practice for Mauritius">
-  <meta property="og:description" content="Free PSAC revision for Grades 1–6 and NCE Grade 9 — Maths, English, French, Science and History &amp; Geography, aligned with the Mauritius MIE curriculum. XP, streaks and real-time parent tracking built in.">
+  <meta property="og:description" content="Free PSAC revision for Grades 1–6 and NCE Grades 7–9 — Maths, English, French, Science and History &amp; Geography, aligned with the Mauritius MIE curriculum. XP, streaks and real-time parent tracking built in.">
   <!-- ⚠ THE BANNER CARRIES THE SAME SENTENCE AS og:description, drawn into the
-         image ("PSAC Grades 1–6 · NCE Grade 9"). They render TOGETHER in one
-         Facebook card, so a change to either is a change to both. It said
-         "Grades 4–6" here while the artwork said 1–6 — one card contradicting
-         itself. Re-measured 2026-09-16: all 46 live packs clear 40 questions.
+         image ("PSAC Grades 1–6 · NCE Grades 7–9"). They render TOGETHER in one
+         Facebook card, so a change to either is a change to both — and it has
+         now caught this project out TWICE. First the text said "Grades 4–6"
+         while the artwork said 1–6; then the artwork was redrawn to 7–9 while
+         this line still said "Grade 9". Change the picture and the sentence in
+         the same commit, every time.
+       ⚠ The artwork is EDITED, not regenerated: the coverage line is redrawn in
+         Arial 46px over a reconstructed gradient (the original Gemini image is
+         not reproducible, and its font was a neo-grotesque Arial matches almost
+         exactly). scripts/rebuild-og-banner.ps1 is the repeatable recipe.
+         Re-measured 2026-09-16: all 46 live packs clear 40 questions.
        ⚠ 1200×630 is not decoration. Facebook crops to ~1.91:1 and Twitter's
          summary_large_image needs >=300×157; the declared width/height stop the
          card rendering at the wrong size on the FIRST scrape, which is the one
@@ -34,13 +94,13 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Nou Klass — exam practice for Mauritius. PSAC Grades 1–6 and NCE Grade 9.">
+  <meta property="og:image:alt" content="Nou Klass — exam practice for Mauritius. PSAC Grades 1–6 and NCE Grades 7–9.">
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Nou Klass — Exam Practice for Mauritius">
-  <meta name="twitter:description" content="Free PSAC revision for Grades 1–6 and NCE Grade 9, aligned with the Mauritius MIE curriculum.">
+  <meta name="twitter:description" content="Free PSAC revision for Grades 1–6 and NCE Grades 7–9, aligned with the Mauritius MIE curriculum.">
   <meta name="twitter:image" content="https://nouklass.com/assets/og-banner.jpg">
-  <meta name="twitter:image:alt" content="Nou Klass — exam practice for Mauritius. PSAC Grades 1–6 and NCE Grade 9.">
+  <meta name="twitter:image:alt" content="Nou Klass — exam practice for Mauritius. PSAC Grades 1–6 and NCE Grades 7–9.">
 
   <!-- PWA manifest -->
   <!-- Select a saved person's manifest before the browser fetches it. The URL
@@ -124,8 +184,41 @@
       });
     }
   </script>
+  <!-- Structured data. ⚠ Deliberately states no grade range and no price: both
+       already live on six other surfaces, and a seventh that nobody updates is
+       how a search result ends up promising something the app stopped doing. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Nou Klass",
+    "url": "https://nouklass.com/",
+    "logo": "https://nouklass.com/icons/icon-512.png",
+    "image": "https://nouklass.com/assets/og-banner.jpg",
+    "description": "Exam practice for Mauritian primary and lower-secondary pupils, aligned with the MIE curriculum.",
+    "inLanguage": "en-GB",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Mauritius"
+    },
+    "knowsAbout": [
+      "PSAC",
+      "Primary School Achievement Certificate",
+      "NCE",
+      "National Certificate of Education",
+      "Mathematics",
+      "English",
+      "French",
+      "Science",
+      "History and Geography"
+    ]
+  }
+  </script>
 </head>
-<body class="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300" style="opacity:0">
+<!-- ⚠ NO style="opacity:0" here any more — html.ps-booting carries it (style.css),
+     so a visitor with no session paints immediately. protect.js still watches
+     body.style.opacity for the reveal signal; Auth.init() still sets it to 1. -->
+<body class="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
 
   <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
 
@@ -557,7 +650,10 @@
   </nav>
 
   <!-- ══════════ LANDING PAGE ══════════ -->
-  <div id="screen-landing" class="screen hidden" data-hide-header="true">
+  <!-- ⚠ THE ONE SCREEN THAT SHIPS WITHOUT "hidden" — this is what a crawler and a
+       cold visitor see. html.ps-booting hides it during boot for a returning
+       user; showScreen() governs it normally from the first call onward. -->
+  <div id="screen-landing" class="screen" data-hide-header="true">
     <div class="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-950 text-white flex flex-col">
 
       <!-- Nav bar -->
@@ -701,7 +797,7 @@
         <!-- ⚠ Measured from the BUILT question bundles and the live manifests, not
              estimated. Re-measured 2026-09-16: 34,392 practisable questions and
              457 chapters across the 46 LIVE packs, 926 past-paper items
-             (2016-2024), 7 games with mg-card-live in minigame.js.
+             (2016-2024), 8 games with mg-card-live in minigame.js.
              Was 17,612 / 214 / 20 packs on 2026-09-08, and before that
              16,502 / 210 / 18, 15,974 / 194 / 17, 15,625 / 182 / 16, 13,079 / 160 / 15.
              ⚠ THE COVERAGE ITSELF CHANGED, not just the totals. Grades 1-3 and 7-8
@@ -733,7 +829,7 @@
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">real past-paper questions (2016–2024)</div>
           </div>
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
-            <div class="text-2xl sm:text-3xl font-black text-white">7</div>
+            <div class="text-2xl sm:text-3xl font-black text-white">8</div>
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">learning games</div>
           </div>
         </div>
@@ -4965,7 +5061,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-bold text-gray-800 dark:text-white text-sm">🎮 Game Zone</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Educational minigames (quiz ladder, Quick Fire, Word Builder, Island Explorer). The crowd-vote lifeline shares a question - never the answer - via a 3-minute public link.</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Educational minigames (quiz ladder, Quick Fire, Word Builder, Island Explorer, French Ninja). The crowd-vote lifeline shares a question - never the answer - via a 3-minute public link.</div>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" id="pd-games-toggle" class="sr-only peer" onchange="Auth.toggleMinigamesDisabled()">
@@ -5987,6 +6083,7 @@
   <script src="engine/minigame_words.js"></script>
   <script src="engine/minigame_geo.js"></script>
   <script src="engine/minigame_time.js"></script>
+  <script src="engine/minigame_french.js"></script>
   <script src="engine/minigame.js"></script>
   <script src="engine/cloze.js"></script>
   <script src="engine/errorhunt.js"></script>

@@ -351,11 +351,19 @@ and 0 `cloze` rows**. It now loads through `netlify/lib/questions-sandbox.js`, a
   real content**. ⚠ **This line said "Grades 4–6" until 2026-09-16 and was
   wrong** — grades 1-3 and 7-8 went live in between and nothing updated it.
   It is the single most quoted line in this file; re-measure it, do not quote it.
-- ⚠ **Grades 7 and 8 are live too and are named on NO share surface.** That is a
-  deliberate hold, not an oversight: `assets/og-banner.jpg` has
-  "PSAC Grades 1–6 · NCE Grade 9" **drawn into the artwork**, and copy that
-  outruns the picture beside it is the same broken promise pointed the other way.
-  Widening the copy means redrawing the banner in the same change.
+- ⚠ **The share banner states the coverage IN THE ARTWORK**, so the picture and
+  the sentence beside it are one promise. `assets/og-banner.jpg` now reads
+  "PSAC Grades 1–6 · NCE Grades 7–9", matching every copy surface — all nine
+  live grades are named. It has caught this project out **twice**: first the
+  text said "Grades 4–6" while the artwork said 1–6, then the artwork was
+  redrawn to 7–9 while `og:description` still said "Grade 9". **Change the
+  picture and the sentence in the same commit.**
+  ⚠ The banner is **EDITED, never regenerated** — ask Gemini again and you get
+  different artwork, not the same artwork with one line changed.
+  `scripts/rebuild-og-banner.ps1 -Line "…"` redraws just the coverage line in
+  Arial 46px over a reconstructed gradient (verified byte-reproducible, and it
+  refuses a line that would run into the illustration). It needs the **original
+  1424×752** file — the shipped 1200×630 jpg is already a downscale.
   `scripts/test-share-copy-parity.js` prints a REVIEW line naming any live grade
   the copy does not mention.
 - ⚠ **Judge by CONTENT, not by the `comingSoon` flag.** Three Grade 9 packs were
