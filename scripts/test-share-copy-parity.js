@@ -57,11 +57,47 @@ const uncomment = (s) => s.replace(/(^|\s)\/\/.*$/gm, '');
 
 const heroLine = (index.match(/Interactive revision for [^<]+/) || [''])[0];
 const shareText  = uncomment((app.match(/function _appShareText\(\)\s*\{[\s\S]*?\n\}/) || [''])[0]);
-const inviteText = uncomment((auth.match(/function _inviteText\(\)\s*\{[\s\S]*?\n\s*\}/) || [''])[0]);
+// ⚠ _inviteBody(bold) is the SHARED source for both invite renderings, so the
+//   range is read once from it. _inviteText() / _inviteTextWhatsApp() are now
+//   one-line wrappers with no copy of their own — asserted below, because the
+//   day someone inlines a second literal into one of them is the day the
+//   share-sheet and WhatsApp messages start disagreeing silently.
+const inviteText = uncomment((auth.match(/function _inviteBody\(bold\)\s*\{[\s\S]*?\n  \}/) || [''])[0]);
 
 ok('found the landing hero coverage line', !!heroLine);
 ok('found _appShareText() in app.js', !!shareText);
-ok('found _inviteText() in auth.js', !!inviteText);
+ok('found _inviteBody() in auth.js', !!inviteText);
+
+// ── WhatsApp *bold* may only reach WhatsApp ─────────────────────────────────
+// ⚠ navigator.share() hands its text to a target nobody chose in advance —
+//   mail, SMS, Notes, Telegram — and WhatsApp's *asterisk bold* is literal
+//   asterisks in all of them. So the plain renderings must carry no markup,
+//   and only the wa.me callers may take a bold one.
+const plainCallers = [
+  ['shareInvite() → navigator.share', /navigator\.share\(\{[^}]*text:\s*(\w+)\(\)/],
+];
+for (const [label, re] of plainCallers) {
+  const fn = (auth.match(re) || [])[1];
+  ok(`${label} sends the PLAIN form`, fn === '_inviteText', 'it sends: ' + fn + '()');
+}
+const waCallers = [
+  ['shareInviteWhatsApp()', auth, /function shareInviteWhatsApp\(\)[\s\S]*?\n  \}/, '_inviteTextWhatsApp'],
+  ['shareAppWhatsApp()',    app,  /function shareAppWhatsApp\(\)[\s\S]*?\n\}/,      '_appShareText'],
+];
+for (const [label, src, re, expect] of waCallers) {
+  const body = (src.match(re) || [''])[0];
+  ok(`${label} builds from ${expect}()`, body.includes(expect + '()'));
+  ok(`${label} posts to wa.me`, /wa\.me/.test(body));
+}
+
+// ⚠ The two invite renderings must stay wrappers over the one body. A literal
+//   string re-appearing in either is the drift this split exists to prevent.
+for (const name of ['_inviteText', '_inviteTextWhatsApp']) {
+  const body = (auth.match(new RegExp('function ' + name + '\\(\\)\\s*\\{[^}]*\\}')) || [''])[0];
+  ok(`${name}() is a thin wrapper over _inviteBody()`,
+    /_inviteBody\((?:true|false)\)/.test(body) && !/['"`]/.test(body),
+    'body: ' + body.replace(/\s+/g, ' ').slice(0, 80));
+}
 
 const SURFACES = {
   // ⚠ The <meta name="description"> is the SEARCH RESULT, added 2026-09-16. It

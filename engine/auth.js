@@ -2442,13 +2442,41 @@ const Auth = (() => {
       ? `${location.origin}${location.pathname}?ref=${_myReferralCode}`
       : location.origin + location.pathname;
   }
-  function _inviteText() {
-    // ⚠ All 8 Grade 9 packs live as of 2026-09-09. Keep in step with
-    //   _appShareText() (app.js), the landing page and index.html's
-    //   og:description. Widened 4–6 → 1–6 on 2026-09-16 after re-measuring:
-    //   grades 1-3 are live and populated too. See the note in _appShareText().
-    return `Join me on Nou Klass — Exam Practice - free revision for PSAC Grades 1–6, plus all 8 NCE Grade 9 subjects: Maths, ICT, Biology, Chemistry, Physics, English, French and Social & Modern Studies! 📚`;
+  // ⚠ ONE BODY, TWO RENDERINGS — and the split is not cosmetic.
+  //   _inviteText() goes to navigator.share(), whose target is UNKNOWN: mail,
+  //   SMS, Notes, Telegram. WhatsApp's *asterisk bold* renders as literal
+  //   asterisks in every one of those, so the plain form must stay plain.
+  //   shareInviteWhatsApp() is the only place the markup is safe.
+  //   ⚠ Written as one builder on purpose. Two sibling strings is exactly the
+  //   duplication this project keeps getting bitten by — someone edits the
+  //   WhatsApp copy, the share-sheet copy silently says something else, and
+  //   nothing can notice because both are "correct" on their own.
+  // ⚠ Keep in step with _appShareText() (app.js), the landing page and
+  //   index.html's og:/meta description — scripts/test-share-copy-parity.js
+  //   reads both forms and fails on drift.
+  // ⚠ The grade range is phrased as the landing hero phrases it, so the FIRST
+  //   "Grades N–M" stays 1–6: that is the range drawn into the shared banner.
+  // ⚠ NO CREDIT PROMISE, deliberately. Read out of record_referral(): only the
+  //   REFERRER is credited, never the person invited, so "we both get credits"
+  //   would be false. A sign-up alone also earns nothing — the payout needs the
+  //   invited child to actually practise, is gated on a minimum account age and
+  //   a lifetime cap, and the amount is admin-configurable (default 15). None of
+  //   that survives being flattened into a sentence a parent forwards.
+  function _inviteBody(bold) {
+    const b = (s) => (bold ? '*' + s + '*' : s);
+    return 'Join me on ' + b('Nou Klass') + ' 🎓 — free PSAC & NCE exam practice, made in Mauritius 🇲🇺\n\n'
+      + b('34,000+ practice questions') + ', aligned with the Mauritius MIE syllabus — '
+      + 'and everything is ' + b('free right now') + '.\n\n'
+      + '📚 Grades 1–6 (PSAC) and Grades 7–9 (NCE)\n'
+      + '✏️ Maths · English · French · Science · History & Geography\n'
+      + '📝 926 real past-paper questions (2016–2024)\n'
+      + '📄 Print or save a full 40-question exam paper as ' + b('PDF') + ' — with a separate answer key for you\n'
+      + '📊 Follow your child\'s progress live — every score, streak and weak topic\n\n'
+      + 'No ads. No tracking. Works offline.\n\n'
+      + 'My invite link 👇';
   }
+  function _inviteText() { return _inviteBody(false); }
+  function _inviteTextWhatsApp() { return _inviteBody(true); }
 
   async function openInviteModal() {
     const codeEl = _el('invite-code');
@@ -2532,7 +2560,8 @@ const Auth = (() => {
   }
 
   function shareInviteWhatsApp() {
-    const msg = `${_inviteText()}\n\n${_inviteLink()}`;
+    // ⚠ The ONLY caller that may take the bold form — see _inviteBody().
+    const msg = `${_inviteTextWhatsApp()}\n\n${_inviteLink()}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
   }
 
