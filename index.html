@@ -53,7 +53,7 @@
        the same grade range, and this one is now in the SURFACES map of
        scripts/test-share-copy-parity.js with them. Change one, change all.
      ⚠ 158 chars — Google truncates a snippet past ~160. -->
-  <meta name="description" content="Free PSAC and NCE exam practice for Mauritius. Grades 1–6 and Grades 7–9 — Maths, English, French, Science, History &amp; Geography, aligned with the MIE curriculum.">
+  <meta name="description" content="Free PSAC and NCE exam practice for Mauritius. Grades 1–6 and 7–9 — Maths, English, French, Science, History &amp; Geography, aligned with the MIE curriculum.">
   <!-- ⚠ index.html is served at "/" and nowhere else: the Worker 404s unknown
        paths rather than falling back to the SPA shell (probed on production, not
        assumed), and /a/ /m/ /v/ rewrite to guest.html, materials.html and
@@ -927,15 +927,59 @@
           <div class="bg-green-500/10 hover:bg-green-500/15 border border-green-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
             <div class="text-4xl mb-2">🔬</div>
             <h3 class="font-bold text-white mb-1">Science</h3>
-            <p class="text-xs text-green-300/60 mb-2">Grades 1–6 (PSAC)</p>
+            <p class="text-xs text-green-300/60 mb-2">Grades 4–6 (PSAC) · Grades 7–8 (NCE)</p>
             <p class="text-sm text-indigo-200/60">Living things, Forces, Electricity, Air, Conservation &amp; more.</p>
           </div>
 
           <div class="bg-amber-500/10 hover:bg-amber-500/15 border border-amber-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
             <div class="text-4xl mb-2">🗺️</div>
             <h3 class="font-bold text-white mb-1">History &amp; Geography</h3>
-            <p class="text-xs text-amber-300/60 mb-2">Grades 1–6 (PSAC)</p>
+            <p class="text-xs text-amber-300/60 mb-2">Grades 4–6 (PSAC)</p>
             <p class="text-sm text-indigo-200/60">Mauritius history, Physical features, Communities &amp; Map skills.</p>
+          </div>
+
+          <!-- ⚠ THESE FOUR CARDS EXIST BECAUSE THE LIST WAS WRONG, not merely short.
+               Measured from subjects/_index.js on 2026-09-16, live packs only:
+                 Maths / English / French .... grades 1-9
+                 Science ..................... grades 4-8   (NOT 1-3, NOT 9)
+                 History & Geography ......... grades 4-6   (NOT 1-3)
+                 Health Education ............ grades 1-3
+                 SSEE ........................ grade 3
+                 ICT ......................... grade 9
+                 Social & Modern Studies ..... grades 7-9
+                 Biology / Chemistry / Physics grade 9
+               Science and History & Geography both claimed "Grades 1–6", so a
+               Grade 2 parent came looking for Science and found Health Education.
+               ⚠ And 6,364 questions had no card at all — ICT alone is the single
+               biggest pack in the app. scripts/test-landing-subjects.js now
+               derives this table from the pack index and fails on drift. -->
+
+          <div class="bg-rose-500/10 hover:bg-rose-500/15 border border-rose-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
+            <div class="text-4xl mb-2">❤️</div>
+            <h3 class="font-bold text-white mb-1">Health Education &amp; SSEE</h3>
+            <p class="text-xs text-rose-300/60 mb-2">Grades 1–3 (PSAC)</p>
+            <p class="text-sm text-indigo-200/60">Hygiene, nutrition and staying safe across Grades 1–3 — plus SSEE in Grade 3: our environment, living things, water and weather.</p>
+          </div>
+
+          <div class="bg-cyan-500/10 hover:bg-cyan-500/15 border border-cyan-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
+            <div class="text-4xl mb-2">💻</div>
+            <h3 class="font-bold text-white mb-1">ICT</h3>
+            <p class="text-xs text-cyan-300/60 mb-2">Grade 9 (NCE)</p>
+            <p class="text-sm text-indigo-200/60">Hardware, software, networks, spreadsheets, databases and online safety.</p>
+          </div>
+
+          <div class="bg-teal-500/10 hover:bg-teal-500/15 border border-teal-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
+            <div class="text-4xl mb-2">🧪</div>
+            <h3 class="font-bold text-white mb-1">Biology · Chemistry · Physics</h3>
+            <p class="text-xs text-teal-300/60 mb-2">Grade 9 (NCE)</p>
+            <p class="text-sm text-indigo-200/60">Three separate subjects, exactly as the NCE sets them — not one combined science paper.</p>
+          </div>
+
+          <div class="bg-orange-500/10 hover:bg-orange-500/15 border border-orange-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
+            <div class="text-4xl mb-2">🌍</div>
+            <h3 class="font-bold text-white mb-1">Social &amp; Modern Studies</h3>
+            <p class="text-xs text-orange-300/60 mb-2">Grades 7–9 (NCE)</p>
+            <p class="text-sm text-indigo-200/60">Citizenship, governance, our region and the world around Mauritius.</p>
           </div>
 
           <div class="bg-white/[0.04] border border-dashed border-white/15 rounded-2xl p-5 text-center">
@@ -1007,7 +1051,7 @@
           <div class="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-5 transition-colors">
             <div class="text-3xl mb-3">📄</div>
             <h3 class="font-bold text-white mb-1">Real Past Papers</h3>
-            <p class="text-sm text-indigo-200/70">Browse genuine PSAC exam questions from past years (2016–2024), transcribed faithfully, with mark schemes for self-checking.</p>
+            <p class="text-sm text-indigo-200/70">Browse genuine PSAC and NCE exam questions from past years (2016–2024), transcribed faithfully, with mark schemes for self-checking.</p>
           </div>
 
         </div>
@@ -1116,7 +1160,7 @@
               <li class="flex gap-2"><span>📅</span><span><b>Study timetable</b> - auto-generate a revision plan weighted to your child's weakest topics, then print it</span></li>
               <li class="flex gap-2"><span>🔔</span><span><b>Daily reminders</b> - pick a time; your child gets a push notification to practise</span></li>
               <li class="flex gap-2"><span>👥</span><span><b>Multiple children</b> - each with their own progress, plus a friendly family leaderboard</span></li>
-              <li class="flex gap-2"><span>📧</span><span><b>Weekly email digest</b> - a Sunday summary of how everyone did</span></li>
+              <li class="flex gap-2"><span>📧</span><span><b>Email digest</b> - a Sunday summary of how everyone did, weekly, fortnightly or monthly - or off entirely</span></li>
               <li class="flex gap-2"><span>🛡️</span><span><b>One device at a time</b> - a new login signs the old device out, so accounts aren't shared around</span></li>
             </ul>
           </div>
@@ -1539,7 +1583,7 @@
         <section id="info-papers" class="info-section">
           <div class="info-copy">
             <div class="info-kicker">📄 Past papers</div>
-            <h2>Real PSAC questions, 2016–2024</h2>
+            <h2>Real PSAC and NCE questions, 2016–2024</h2>
             <p>
               Actual questions from past national papers, grouped by subject and
               year. These are written, drawn and matched answers carrying a mark
