@@ -1413,9 +1413,256 @@ function _appShareText() {
     + 'just as the exam sets them.\n\nWorth a look:';
 }
 
+// ⚠ No text argument, and that is not an omission. Facebook builds the post
+//   from the og: tags on the URL, so the message lives in index.html's <head>.
+function shareAppFacebook() {
+  shareToFacebook(`${location.origin}${location.pathname}`);
+}
+
 function shareAppWhatsApp() {
   const msg = `${_appShareText()}\n\n${location.origin}${location.pathname}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+}
+
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Sharing targets · "Ask a friend" help requests
+// ══════════════════════════════════════════════════════════════════════════
+
+// ⚠ FACEBOOK CARRIES NO TEXT. The sharer dialog takes a URL and builds the post
+//   from the Open Graph tags it finds there - the `quote` parameter has not been
+//   honoured for years. So anything shared to Facebook must have its message in
+//   the og: tags of the page being linked, not in a query string. WhatsApp is
+//   the opposite: it carries text and ignores og: on a bare link.
+//   This is why the two helpers do not share a signature.
+function shareToFacebook(url) {
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url),
+    '_blank', 'noopener,width=600,height=520');
+}
+
+function shareToWhatsApp(text) {
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+}
+
+// ── Ask a friend ──────────────────────────────────────────────────────────
+// The Peak Quest "Ask the Crowd" lifeline, brought to ordinary practice: the
+// child shares ONE question, people vote, and the child sees the split.
+//
+// ⚠ IT NEVER SHARES THE ANSWER, and the database cannot leak it either - the
+//   poll row holds the question text and the options only (see the migration).
+//   The vote page therefore cannot mark anyone right, and this is not cheating
+//   help so much as a way to ask for it.
+// ⚠ The votes are NOT an answer and the copy must never suggest they are. The
+//   child still has to choose, and the wording says so - a crowd is wrong often
+//   enough that "62% said B" has to read as a hint, not a result.
+// ⚠ It never calls recordAnswer() or _recordDaily(): asking for help is not
+//   answering, and must not move mastery, mistakes or the daily count.
+let _helpPollCode = null;
+let _helpPollTimer = null;
+let _helpPollOptions = [];
+
+const _HELP_DURATIONS = [
+  { minutes: 60,   label: '1 hour' },
+  { minutes: 360,  label: '6 hours' },
+  { minutes: 1440, label: '24 hours' },
+];
+
+function _helpPollAllowed() {
+  // Parent switch, same shape as the Game Zone's. Default ON: absent means the
+  // parent has never been asked, and the feature is on by default.
+  if (DB?.restrictions?.helpRequestsDisabled) return false;
+  // A parent previewing a child holds no student token, so the RPC would answer
+  // not_signed_in - hide the button rather than offer a guaranteed failure.
+  if (typeof Auth !== 'undefined' && Auth.getParentProfile && Auth.getParentProfile()) return false;
+  return true;
+}
+
+// Only a question with 2-4 real options can become a poll: the RPC takes an
+// options array, and a numeric or open-response question has nothing to vote on.
+function _helpPollable(q) {
+  return !!q && Array.isArray(q.options) && q.options.length >= 2 && q.options.length <= 4;
+}
+
+function _syncHelpRequestBtn() {
+  const btn = document.getElementById('practice-ask-btn');
+  if (!btn) return;
+  const q = S.practice.qs[S.practice.idx];
+  btn.classList.toggle('hidden', !_helpPollAllowed() || !_helpPollable(q));
+}
+
+function openHelpRequest() {
+  const q = S.practice.qs[S.practice.idx];
+  if (!_helpPollable(q)) { toast('This question cannot be shared for a vote.', 2500); return; }
+  _stopHelpPoll();
+  _helpPollCode = null;
+  // ⚠ Reset in the OPEN, not the close - Escape and the backdrop never run a
+  //   closer, and the next question would inherit the last question's results.
+  const modal = document.getElementById('modal-ask-friend');
+  if (!modal) return;
+  document.getElementById('ask-friend-setup')?.classList.remove('hidden');
+  document.getElementById('ask-friend-live')?.classList.add('hidden');
+  const status = document.getElementById('ask-friend-status');
+  if (status) status.textContent = '';
+  const preview = document.getElementById('ask-friend-preview');
+  if (preview) preview.innerHTML = _prettyMath(q.question);
+  document.querySelectorAll('[data-help-duration]').forEach(b => {
+    const on = Number(b.dataset.helpDuration) === 360;
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.classList.toggle('af-dur-on', on);
+  });
+  modal.classList.remove('hidden');
+}
+
+function closeHelpRequest() {
+  _stopHelpPoll();
+  document.getElementById('modal-ask-friend')?.classList.add('hidden');
+}
+
+function pickHelpDuration(btn) {
+  document.querySelectorAll('[data-help-duration]').forEach(b => {
+    const on = b === btn;
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.classList.toggle('af-dur-on', on);
+  });
+}
+
+function _chosenHelpMinutes() {
+  const on = document.querySelector('[data-help-duration][aria-pressed="true"]');
+  return Number(on?.dataset.helpDuration) || 360;
+}
+
+async function createHelpRequest(btn) {
+  const q = S.practice.qs[S.practice.idx];
+  if (!_helpPollable(q)) return;
+  const status = document.getElementById('ask-friend-status');
+  if (typeof _sb === 'undefined' || !_sb) {
+    if (status) status.textContent = '📣 Asking a friend needs an internet connection.';
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Making your link…'; }
+  if (status) status.textContent = '';
+
+  const minutes = _chosenHelpMinutes();
+  // ⚠ Send the options as they are ON SCREEN. makeMCQ() shuffles, so the order
+  //   in the question object is not the order the child is looking at, and a
+  //   poll whose "B" is the child's "D" is worse than no poll.
+  const options = q.options.slice();
+  let data, error;
+  try {
+    ({ data, error } = await _sb.rpc('help_poll_create', {
+      p_question: q.question, p_options: options, p_minutes: minutes,
+    }));
+  } catch (e) { error = e; }
+
+  if (error || !data || data.ok !== true) {
+    const why = (data && data.error) || error?.message || '';
+    if (status) status.textContent =
+      why === 'not_signed_in' ? '📣 Only a signed-in pupil can ask for help on a question.'
+      : why === 'too_many'    ? '📣 You have asked for a lot of help this hour. Try again a little later.'
+      : '📣 Could not make the link — check your connection and try again.';
+    if (btn) { btn.disabled = false; btn.textContent = '🙋 Make my help link'; }
+    return;
+  }
+
+  _helpPollCode = data.code;
+  _helpPollOptions = options;
+  if (btn) { btn.disabled = false; btn.textContent = '🙋 Make my help link'; }
+  document.getElementById('ask-friend-setup')?.classList.add('hidden');
+  document.getElementById('ask-friend-live')?.classList.remove('hidden');
+  _renderHelpPollPanel(options, data.seconds || minutes * 60);
+}
+
+function helpPollUrl() {
+  // /v/<CODE> needs the server rewrite; a file:// or local dev session gets the
+  // query-string form vote.html understands everywhere.
+  return /^https?:$/.test(location.protocol) && !/localhost|127\./.test(location.hostname)
+    ? `${location.origin}/v/${_helpPollCode}`
+    : new URL(`vote.html?code=${_helpPollCode}`, location.href).href;
+}
+
+// ⚠ Carries the LINK and a plea for help. Never the child's name, their id, or
+//   anything that identifies them - the same rule the score share follows, and
+//   for the same reason: this message gets forwarded.
+function _helpShareText() {
+  return `🙋 I'm stuck on this question! Can you vote for the answer you think is right?\n${helpPollUrl()}`;
+}
+
+function shareHelpWhatsApp() { shareToWhatsApp(_helpShareText()); }
+function shareHelpFacebook() { shareToFacebook(helpPollUrl()); }
+
+async function shareHelpMore() {
+  const url = helpPollUrl();
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Help me answer this question', text: _helpShareText(), url }); return; } catch (_) { return; }
+  }
+  copyHelpLink(document.getElementById('ask-friend-copy'));
+}
+
+function copyHelpLink(btn) {
+  const url = helpPollUrl();
+  const done = () => { if (btn) { const t = btn.textContent; btn.textContent = '✅ Copied!'; setTimeout(() => { btn.textContent = t; }, 2000); } };
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url).then(done).catch(() => prompt('Copy this link:', url));
+  else prompt('Copy this link:', url);
+}
+
+function _renderHelpPollPanel(options, seconds) {
+  const bars = document.getElementById('ask-friend-bars');
+  if (!bars) return;
+  bars.innerHTML = options.map((o, i) => `
+    <div class="af-bar-row">
+      <div class="af-bar-head"><span>${String.fromCharCode(65 + i)}. ${_attr(o)}</span><span id="af-pct-${i}">0%</span></div>
+      <div class="af-bar-track"><div class="af-bar-fill" id="af-bar-${i}" style="width:0%"></div></div>
+    </div>`).join('');
+  const total = document.getElementById('ask-friend-total');
+  if (total) total.textContent = 'No votes yet — send your link to someone!';
+  _startHelpPoll(seconds);
+}
+
+function _startHelpPoll(seconds) {
+  _stopHelpPoll();
+  let left = seconds;
+  const tick = async () => {
+    const clock = document.getElementById('ask-friend-clock');
+    if (clock) clock.textContent = left > 0 ? `Open for ${_fmtHelpLeft(left)}` : 'Voting has closed';
+    try {
+      const { data } = await _sb.rpc('minigame_poll_results', { p_code: _helpPollCode });
+      if (data?.ok) {
+        const votes = data.votes || [];
+        const sum = votes.reduce((a, b) => a + (b || 0), 0);
+        votes.forEach((n, i) => {
+          // ⚠ Percentages of ZERO votes are 0%, not NaN and not an even split.
+          //   "25% each" with nobody having voted is a lie a child would act on.
+          const pct = sum ? Math.round(n / sum * 100) : 0;
+          const bar = document.getElementById('af-bar-' + i);
+          const lbl = document.getElementById('af-pct-' + i);
+          if (bar) bar.style.width = pct + '%';
+          if (lbl) lbl.textContent = sum ? `${pct}% (${n})` : '0%';
+        });
+        const total = document.getElementById('ask-friend-total');
+        if (total) total.textContent = sum
+          ? `${sum} ${sum === 1 ? 'person has' : 'people have'} voted. Remember — the crowd can be wrong! You choose.`
+          : 'No votes yet — send your link to someone!';
+        left = data.seconds_left;
+        if (left <= 0) _stopHelpPoll();
+      }
+    } catch (_) {}
+    if (left <= 0) _stopHelpPoll();
+  };
+  // Every 8s, not every 3: this poll runs for hours rather than 3 minutes, and
+  // a 3-second beat would be 3,600 requests over a 24-hour link left open.
+  _helpPollTimer = setInterval(tick, 8000);
+  tick();
+}
+
+function _stopHelpPoll() {
+  if (_helpPollTimer) { clearInterval(_helpPollTimer); _helpPollTimer = null; }
+}
+
+function _fmtHelpLeft(seconds) {
+  const h = Math.floor(seconds / 3600), m = Math.floor((seconds % 3600) / 60);
+  if (h >= 1) return `${h}h ${m}m`;
+  if (m >= 1) return `${m} min`;
+  return `${Math.max(0, seconds)}s`;
 }
 
 // ── CONTACT THE ADMINS (open to anyone, signed in or not) ──────────────────
@@ -2586,7 +2833,12 @@ function showScreen(id) {
   if (id === 'syllabus')        renderSyllabus();
   if (id === 'interactive-map') renderInteractiveMap();
   if (id === 'past-papers')     renderPastPapers();
-  if (id === 'parent')          renderParentDashboard();
+  // Parent cards begin as skeletons, then the family progress query fills
+  // them in. On a slower connection that replacement used to look like the
+  // page had frozen and then jumped. The shared route veil appears only after
+  // a short delay, so a cached family still feels instant while a real wait is
+  // explained and the existing skeleton stays stable underneath.
+  if (id === 'parent')          _withRouteBusy('Opening parent view', 'Loading your family dashboard', () => renderParentDashboard());
   if (id === 'parent-messages') renderParentMessages();
   if (id === 'shop')            renderShop();
   if (id === 'subject-select')  renderSubjectSelect();
@@ -6891,6 +7143,8 @@ function _renderParentControls(acct) {
   if (hintsToggle) hintsToggle.checked = !(DB.restrictions?.hintsDisabled ?? false);
   const gamesToggle = _el('pd-games-toggle');
   if (gamesToggle) gamesToggle.checked = !(DB.restrictions?.minigamesDisabled ?? false);
+  const helpToggle = _el('pd-help-toggle');
+  if (helpToggle) helpToggle.checked = !(DB.restrictions?.helpRequestsDisabled ?? false);
   if (typeof GameSettings !== 'undefined') GameSettings.renderParentCard(acct);
 
   const chLocks = _el('pd-chapter-locks');
@@ -7298,6 +7552,14 @@ function shareFriendLinkWhatsApp() {
   if (!_friendCode) { toast('Loading your code…', 1500); return; }
   const msg = `${_friendInviteText()}\n\n${_friendInviteLink()}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+}
+
+// ⚠ The LINK only. Facebook ignores any text passed to the sharer, and the
+//   referral link's own page carries the og: tags that render the card - so
+//   there is nothing to pass and nothing lost by not passing it.
+function shareFriendLinkFacebook() {
+  if (!_friendCode) { toast('Loading your code…', 1500); return; }
+  shareToFacebook(_friendInviteLink());
 }
 
 async function shareFriendLink() {
@@ -10708,6 +10970,13 @@ function loadPracticeQuestion() {
   }
   const _hintBadge = document.getElementById('hint-count-badge');
   if (_hintBadge) _hintBadge.textContent = String(_hintCap());
+  // ⚠ Re-evaluated PER QUESTION, not once per session: whether a question can
+  //   become a poll depends on the question (it needs 2-4 options), so a numeric
+  //   item must not inherit the previous MCQ's button. The open panel is closed
+  //   too - a poll belongs to the question that made it.
+  _stopHelpPoll();
+  document.getElementById('modal-ask-friend')?.classList.add('hidden');
+  _syncHelpRequestBtn();
   document.getElementById('practice-q-counter').textContent =
     `Question ${S.practice.idx + 1} of ${S.practice.qs.length}`;
   const _prevBtn = document.getElementById('practice-prev-btn');
@@ -13499,20 +13768,59 @@ async function _renderParentProfile(container) {
     </div>`;
 
   // ── Notifications ──
-  const digestOn = _parentPrefs.weekly_digest !== false;
+  // ⚠ The master switch is drawn FIRST and everything under it is disabled when
+  //   it is off. A parent who has said "no email" must not have to reason about
+  //   three sub-toggles to believe it, and the server agrees with the screen -
+  //   `enabled:false` short-circuits every kind in mailer.js `wantsEmail()`.
+  const mail = _emailPrefs();
+  const mailOn = mail.enabled !== false;
+  const freqOpt = (v, label) =>
+    `<option value="${v}"${mail.digest === v ? ' selected' : ''}>${label}</option>`;
+  const subToggle = (id, on, handler, icon, title, note) => `
+      <div class="flex items-center justify-between gap-3 ${mailOn ? '' : 'opacity-50'}">
+        <div>
+          <div class="font-bold text-gray-800 dark:text-white text-sm">${icon} ${title}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${note}</div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer shrink-0">
+          <input type="checkbox" id="${id}" class="sr-only peer" ${on ? 'checked' : ''} ${mailOn ? '' : 'disabled'} onchange="${handler}(this)">
+          <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-checked:bg-blue-500 rounded-full peer transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+        </label>
+      </div>`;
   const notifyHtml = family ? `
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
-      <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Notifications</h3>
+      <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Email &amp; notifications</h3>
 
       <div class="flex items-center justify-between gap-3">
         <div>
-          <div class="font-bold text-gray-800 dark:text-white text-sm">📧 Weekly progress email</div>
-          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">A Sunday summary of each child's week, sent to ${_profEsc(email) || 'your email'}</div>
+          <div class="font-bold text-gray-800 dark:text-white text-sm">✉️ Emails from Nou Klass</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${mailOn
+            ? `Sent to ${_profEsc(email) || 'your email'}. Turn this off and we send you nothing automatic at all.`
+            : 'Off — no automatic emails are sent to you. Messages about your account may still reach you.'}</div>
         </div>
         <label class="relative inline-flex items-center cursor-pointer shrink-0">
-          <input type="checkbox" id="set-digest-toggle" class="sr-only peer" ${digestOn ? 'checked' : ''} onchange="_toggleWeeklyDigest(this)">
+          <input type="checkbox" id="set-email-enabled" class="sr-only peer" ${mailOn ? 'checked' : ''} onchange="_toggleEmailEnabled(this)">
           <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-checked:bg-blue-500 rounded-full peer transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
         </label>
+      </div>
+
+      <div class="border-t border-gray-100 dark:border-gray-700 pt-4 space-y-4">
+        <div class="flex items-center justify-between gap-3 flex-wrap ${mailOn ? '' : 'opacity-50'}">
+          <div class="min-w-0">
+            <div class="font-bold text-gray-800 dark:text-white text-sm">📈 Progress report</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">How each child is getting on. Pick how often you want it.</div>
+          </div>
+          <select id="set-digest-freq" ${mailOn ? '' : 'disabled'} onchange="_setDigestFrequency(this)"
+            aria-label="How often to send the progress report"
+            class="text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            ${freqOpt('weekly', 'Every week')}${freqOpt('fortnightly', 'Every 2 weeks')}${freqOpt('monthly', 'Every month')}${freqOpt('off', 'Never')}
+          </select>
+        </div>
+        ${subToggle('set-email-homework', mail.homework !== false, '_toggleHomeworkEmail', '📝', 'Homework results',
+          'An email when a child finishes a piece of homework a teacher set.')}
+        ${subToggle('set-email-announcements', mail.announcements !== false, '_toggleAnnouncementEmail', '📣', 'News and announcements',
+          'Occasional messages about new subjects and features. Never more than a few a term.')}
+        <p class="text-[11px] text-gray-400 dark:text-gray-500 leading-relaxed">Emails about your account itself — a password reset, or an administrator activating your account — are always sent, because you need them to sign in.</p>
       </div>
 
       ${children.length ? `
@@ -13926,15 +14234,73 @@ function _setParentTheme(pref) {
   _savePrefs({ theme: pref });
 }
 
-async function _toggleWeeklyDigest(el) {
+// ⚠ Mirrors `emailPrefs()` in workers/lib/mailer.js — the server is what decides
+//   whether a message is sent; this decides only what the parent is shown. Keep
+//   the two defaults and the legacy `weekly_digest` fallback in step, or a
+//   parent reads one answer on screen and receives the other.
+const _EMAIL_PREF_DEFAULTS = { enabled: true, digest: 'weekly', announcements: true, homework: true };
+function _emailPrefs() {
+  const e = (_parentPrefs.email && typeof _parentPrefs.email === 'object') ? _parentPrefs.email : {};
+  const out = Object.assign({}, _EMAIL_PREF_DEFAULTS, e);
+  if (_parentPrefs.weekly_digest === false && e.digest === undefined) out.digest = 'off';
+  if (!['weekly', 'fortnightly', 'monthly', 'off'].includes(out.digest)) out.digest = 'off';
+  return out;
+}
+
+// Merge, never replace: `preferences` also carries theme, reminder_time and the
+// parent's child defaults, and `email` is one key inside it.
+async function _saveEmailPrefs(patch) {
+  const next = Object.assign({}, _emailPrefs(), patch);
+  return _savePrefs({ email: next });
+}
+
+async function _toggleEmailEnabled(el) {
   const on = !!el.checked;
-  const res = await _savePrefs({ weekly_digest: on });
-  if (!res.ok) {
-    el.checked = !on;
-    toast('Could not save - check your connection.', 2500);
-    return;
-  }
-  toast(on ? '📧 Weekly email on.' : '📧 Weekly email off.', 1800);
+  const res = await _saveEmailPrefs({ enabled: on });
+  if (!res.ok) { el.checked = !on; toast('Could not save - check your connection.', 2500); return; }
+  toast(on ? '✉️ Emails back on.' : '✉️ Automatic emails are off.', 2200);
+  _paintEmailSubControls(on);
+}
+
+// ⚠ Patched in place rather than re-rendered. The card is drawn into two
+//   different containers (#profile-content, and the parent dashboard's Settings
+//   tab), so "just re-render" has no single right answer here - and a re-render
+//   would throw the parent back to the top of a long screen mid-toggle.
+function _paintEmailSubControls(on) {
+  ['set-digest-freq', 'set-email-homework', 'set-email-announcements'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.disabled = !on;
+    const row = el.closest('.flex');
+    if (row) row.classList.toggle('opacity-50', !on);
+  });
+}
+
+async function _setDigestFrequency(el) {
+  const value = el.value;
+  const previous = _emailPrefs().digest;
+  // ⚠ The legacy boolean is written in step. Older deployed clients and the
+  //   digest's own fallback still read `weekly_digest`, so leaving it behind
+  //   would have a parent who chose "Never" still receiving one.
+  const res = await _saveEmailPrefs({ digest: value });
+  if (res.ok) await _savePrefs({ weekly_digest: value !== 'off' });
+  if (!res.ok) { el.value = previous; toast('Could not save - check your connection.', 2500); return; }
+  const label = { weekly: 'every week', fortnightly: 'every 2 weeks', monthly: 'every month', off: 'never' }[value];
+  toast(`📈 Progress report: ${label}.`, 2200);
+}
+
+async function _toggleHomeworkEmail(el) {
+  const on = !!el.checked;
+  const res = await _saveEmailPrefs({ homework: on });
+  if (!res.ok) { el.checked = !on; toast('Could not save - check your connection.', 2500); return; }
+  toast(on ? '📝 Homework emails on.' : '📝 Homework emails off.', 1800);
+}
+
+async function _toggleAnnouncementEmail(el) {
+  const on = !!el.checked;
+  const res = await _saveEmailPrefs({ announcements: on });
+  if (!res.ok) { el.checked = !on; toast('Could not save - check your connection.', 2500); return; }
+  toast(on ? '📣 Announcements on.' : '📣 Announcements off.', 1800);
 }
 
 async function _saveFamilyName(btn) {

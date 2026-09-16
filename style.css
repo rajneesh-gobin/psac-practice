@@ -1513,6 +1513,61 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
 }
 
 /* ── Tool row ── */
+/* ── Ask a friend (help request poll) ──────────────────────────────────────
+   Real classes rather than Tailwind utilities: this markup is written by
+   app.js via innerHTML (the bars) and read at 360px on a phone, and both
+   themes have to be explicit because the modal body is white in light and
+   gray-800 in dark. */
+.af-dur {
+  flex: 1 1 0; padding: 0.55rem 0.4rem; border-radius: 0.75rem;
+  border: 2px solid #e5e7eb; background: #f9fafb; color: #374151;
+  font-size: 0.8125rem; font-weight: 700; cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.af-dur:hover { border-color: #a5b4fc; }
+.af-dur-on { border-color: #4f46e5; background: #eef2ff; color: #3730a3; }
+.dark .af-dur { border-color: #4b5563; background: #374151; color: #e5e7eb; }
+.dark .af-dur-on { border-color: #818cf8; background: rgba(79,70,229,.25); color: #c7d2fe; }
+
+.af-share {
+  padding: 0.6rem 0.5rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;
+  background: #f9fafb; color: #374151; font-size: 0.8125rem; font-weight: 700;
+  cursor: pointer; min-height: 2.75rem;
+}
+.af-share:hover { background: #f3f4f6; }
+.af-share-wa { background: #25d366; border-color: #25d366; color: #fff; }
+.af-share-wa:hover { background: #1fb959; }
+.af-share-fb { background: #1877f2; border-color: #1877f2; color: #fff; }
+.af-share-fb:hover { background: #1464d4; }
+.dark .af-share { border-color: #4b5563; background: #374151; color: #e5e7eb; }
+.dark .af-share:hover { background: #4b5563; }
+.dark .af-share-wa { background: #25d366; border-color: #25d366; color: #062813; }
+.dark .af-share-fb { background: #1877f2; border-color: #1877f2; color: #fff; }
+
+.af-bar-row { margin-bottom: 0.5rem; }
+.af-bar-head {
+  display: flex; justify-content: space-between; gap: 0.5rem;
+  font-size: 0.75rem; font-weight: 700; color: #374151; margin-bottom: 0.2rem;
+}
+.af-bar-head span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dark .af-bar-head { color: #e5e7eb; }
+.af-bar-track { background: #eef1f6; border-radius: 99px; height: 0.75rem; overflow: hidden; }
+.dark .af-bar-track { background: #4b5563; }
+.af-bar-fill {
+  height: 0.75rem; border-radius: 99px;
+  background: linear-gradient(90deg, #818cf8, #4f46e5);
+  width: 0%; transition: width .5s ease;
+}
+
+/* Admin › Members grid. Lives here rather than as an arbitrary Tailwind class
+   because the row is injected by innerHTML and needs a media query, which an
+   inline style cannot carry. style.css loads after the Tailwind CDN, so this
+   cannot be outranked by a generated utility. */
+.adm-member-grid { grid-template-columns: 1.5rem 1.6rem 1fr; }
+@media (min-width: 640px) {
+  .adm-member-grid { grid-template-columns: 1.5rem 1.6rem 2.2fr 1fr 1fr 1.1fr; }
+}
+
 .pr-tools {
   display: grid; gap: 0.4rem; grid-template-columns: 1.25fr 1fr 1fr;
 }
@@ -6444,6 +6499,7 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
     linear-gradient(135deg, #111 0%, #0c0c0c 100%);
 }
 .tc-cd-overlay.hidden { display: none; animation: none; }
+.tc-cd-overlay.tc-cd-is-loading .tc-cd-body { opacity: .82; }
 
 /* ── Header (chalkboard green - already matches home tab) ─────────── */
 .tc-cd-header {
@@ -6498,6 +6554,28 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
   box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
   font-size: 1.35rem;
 }
+.tc-cd-loading-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-left: .25rem;
+  color: rgba(240,236,220,.72);
+  font-family: system-ui, sans-serif;
+  font-size: .67rem;
+  font-weight: 650;
+}
+.tc-cd-loading-indicator i,
+.tc-inline-spinner {
+  display: inline-block;
+  width: .85rem;
+  height: .85rem;
+  flex: 0 0 .85rem;
+  border: 2px solid rgba(252,211,77,.28);
+  border-top-color: #fcd34d;
+  border-radius: 50%;
+  animation: tc-spin .72s linear infinite;
+}
+@keyframes tc-spin { to { transform: rotate(360deg); } }
 .tc-cd-share-btn {
   font-size: .88rem;
   font-weight: 600;
@@ -6601,7 +6679,12 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
 }
 
 /* ── Section titles & headers ────────────────────────────────────── */
-.tc-cd-section { padding-bottom: 2rem; }
+.tc-cd-section { min-height: 240px; padding-bottom: 2rem; }
+@keyframes tc-cd-content-in {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.tc-cd-section-enter { animation: tc-cd-content-in .18s ease-out both; }
 .tc-cd-section-header {
   display: flex;
   align-items: center;
@@ -6639,6 +6722,28 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
 .tc-today-hero h3 { margin: .12rem 0 0; color: #fff; font-size: 1.55rem; font-weight: 850; }
 .tc-today-hero p { margin: .1rem 0 0; color: rgba(240,236,220,.68); font-size: .82rem; }
 .tc-today-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .45rem; }
+.tc-cd-content .tc-class-access {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  width: 100%;
+  margin: 0 0 1rem;
+  padding: .75rem .85rem;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 13px;
+  color: #f0ece0;
+  background: rgba(7,24,12,.28);
+  text-align: left;
+  cursor: pointer;
+}
+.tc-cd-content .tc-class-access > :first-child { font-size: 1.2rem; }
+.tc-cd-content .tc-class-access > span:nth-child(2) { flex: 1; min-width: 0; }
+.tc-cd-content .tc-class-access strong,
+.tc-cd-content .tc-class-access small { display: block; }
+.tc-cd-content .tc-class-access strong { color: #fff; font-size: .77rem; }
+.tc-cd-content .tc-class-access small { margin-top: 2px; color: rgba(240,236,220,.62); font-size: .68rem; font-weight: 500; }
+.tc-cd-content .tc-class-access b { flex: 0 0 auto; color: #fde68a; font-size: .7rem; }
+.tc-cd-content .tc-class-access:hover { border-color: rgba(252,211,77,.58); background: rgba(252,211,77,.1); }
 .tc-setup-help,
 .tc-setup-skip {
   min-height: 44px;
@@ -6782,6 +6887,8 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
 .tc-work-empty strong { color: #fff; }
 .tc-work-empty p { margin: .2rem 0 .7rem; color: rgba(240,236,220,.58); font-size: .75rem; }
 .tc-work-empty button { border: 0; border-radius: 9px; padding: .55rem .75rem; color: #2d1f04; background: #f4ce52; font-weight: 800; font-size: .75rem; }
+.tc-work-resource-link { margin: .9rem 0 0; padding: .75rem .85rem; border-left: 3px solid rgba(147,197,253,.8); border-radius: 0 10px 10px 0; color: rgba(240,236,220,.76); background: rgba(59,130,246,.09); font-size: .73rem; }
+.tc-work-resource-link button { margin-left: .2rem; color: #bfdbfe; font-weight: 800; }
 .tc-cd-content .ta-copybook-wrap { display: grid; grid-template-columns: repeat(auto-fill,minmax(205px,1fr)); gap: .8rem; }
 .tc-cd-content .ta-copybook { width: auto; min-height: 230px; }
 .tc-work-progress { overflow: hidden; height: 6px; margin-top: 8px; border-radius: 999px; background: #e2e8f0; }
@@ -6845,7 +6952,7 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
 .tc-cd-action-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #8a6a10; }
 
 /* ── Status / empty / error ─────────────────────────────────────── */
-.tc-cd-loading { color: rgba(240,236,220,.55); font-size: 1rem; }
+.tc-cd-loading { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 120px; color: rgba(240,236,220,.7); font-size: .85rem; }
 .tc-cd-err     { color: #fca5a5; font-size: 1rem; }
 .tc-cd-empty   { color: rgba(240,236,220,.45); font-size: 1rem; margin: .5rem 0 1rem; }
 
@@ -7570,6 +7677,7 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
   .tc-cd-back, .tc-cd-share-btn { padding: .32rem .5rem; font-size: .78rem; }
   .tc-cd-title { gap: .35rem; font-size: 1.08rem; }
   .tc-cd-title #tc-cd-emoji { width: 32px; height: 32px; flex-basis: 32px; border-radius: 9px; font-size: 1rem; }
+  .tc-cd-loading-indicator span { display: none; }
   .tc-cd-stats { gap: .3rem; padding: .45rem .55rem; }
   .tc-cd-stat { padding: .45rem .25rem; }
   .tc-cd-stat strong { font-size: 1.1rem; }
@@ -7588,6 +7696,12 @@ html:not(.dark) #screen-subject-select { background:linear-gradient(145deg,#e4ef
   .tc-cd-nav-btn span { font-size: .8rem; }
   .tc-cd-content { padding: .8rem; }
   .tc-cd-grade-header, .tc-cd-grade-row { grid-template-columns: 2fr 1fr 1fr 1.5fr; font-size: .85rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tc-cd-overlay,
+  .tc-cd-section-enter,
+  .tc-cd-loading-indicator i,
+  .tc-inline-spinner { animation: none; }
 }
 /* ── Personal student / teacher installation ─────────────────────────────── */
 .profile-launch-dialog,

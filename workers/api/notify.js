@@ -1,6 +1,7 @@
-// POST /api/notify — assignment completion notifier. Sends email to parent via Mailchannels.
+// POST /api/notify — assignment completion notifier. Emails the parent.
 
 import { resolveStudent } from '../lib/student-auth.js';
+import { sendMail, mailConfigured, wantsEmail, unsubscribeUrl } from '../lib/mailer.js';
 
 const SB_URL_DEFAULT = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 
@@ -8,28 +9,12 @@ function _he(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-async function sendEmail({ to, subject, html }) {
-  const r = await fetch('https://api.mailchannels.net/tx/v1/send', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }] }],
-      from: { email: 'noreply@psac-practice.com', name: 'Nou Klass' },
-      subject,
-      content: [{ type: 'text/html', value: html }],
-    }),
-  });
-  return { ok: r.ok, status: r.status };
-}
-
 export default async function handler(request, env) {
   if (request.method !== 'POST') return new Response('', { status: 405 });
 
   const sbUrl = env.SUPABASE_URL || SB_URL_DEFAULT;
   const sbKey = env.SUPABASE_SERVICE_ROLE_KEY;
-  const mailEnabled = !!env.MAILCHANNELS_ENABLED;
-
-  if (!mailEnabled || !sbKey) return new Response('not_configured', { status: 200 });
+  if (!mailConfigured(env) || !sbKey) return new Response('not_configured', { status: 200 });
 
   let body;
   try { body = await request.json(); } catch { return new Response('', { status: 400 }); }
@@ -51,6 +36,13 @@ export default async function handler(request, env) {
   const families = familiesRes.ok ? await familiesRes.json() : [];
   const family = families[0];
   if (!family) return new Response('', { status: 200 });
+
+  // ⚠ The parent's own preference decides, and it is read HERE rather than in
+  //   the child's browser: the caller is a student token, and a child must not be
+  //   able to turn their parent's notifications off by editing a request.
+  const profileRes = await fetch(`${sbUrl}/rest/v1/profiles?id=eq.${family.parent_id}&select=preferences&limit=1`, { headers: sbH });
+  const profile = profileRes.ok ? (await profileRes.json())[0] : null;
+  if (!wantsEmail(profile?.preferences, 'homework')) return new Response('opted_out', { status: 200 });
 
   const authUserRes = await fetch(`${sbUrl}/auth/v1/admin/users/${family.parent_id}`, { headers: sbH });
   const authUser = authUserRes.ok ? await authUserRes.json() : null;
@@ -90,7 +82,14 @@ export default async function handler(request, env) {
   </div>
 </body></html>`;
 
-  const res = await sendEmail({ to: parentEmail, subject: `${safeDisplayName} completed: ${safeLabel} - ${safePct}%`, html });
-  if (!res.ok) console.error('[notify] send failed', res.status, parentEmail);
+  const unsub = await unsubscribeUrl(env, family.parent_id, 'homework');
+  const res = await sendMail(env, {
+    to: parentEmail,
+    subject: `${safeDisplayName} completed: ${safeLabel} - ${safePct}%`,
+    html: html.replace('</div>\n</body></html>',
+      `</div><div style="max-width:480px;margin:0 auto 32px;text-align:center;color:#9ca3af;font-size:11px">${unsub ? `<a href="${unsub}" style="color:#9ca3af">Stop these homework emails</a>` : ''}</div>\n</body></html>`),
+    ...(unsub ? { unsubscribe: unsub } : {}),
+  });
+  if (!res.ok) console.error('[notify] send failed', res.error, parentEmail);
   return new Response('', { status: res.ok ? 200 : 502 });
 }

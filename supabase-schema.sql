@@ -1,7 +1,7 @@
 -- ══════════════════════════════════════════════════════════════════════════
 --  PSAC Exam Practice — CONSOLIDATED DATABASE SCHEMA
 --
---  GENERATED FROM THE LIVE DATABASE on 2026-09-12
+--  GENERATED FROM THE LIVE DATABASE on 2026-09-16
 --  (project xawvjwsiqhtxgpocdqgm, PostgreSQL 17.6).
 --
 --  This one file replaces 31 incremental migrations — every supabase-*.sql,
@@ -16,7 +16,7 @@
 --  • Answering "what is really deployed?": read this, not a migration file.
 --  • Re-running it against production: every statement is idempotent, so it is
 --    safe — but it is a SNAPSHOT, not a diff. It drops nothing, so an object
---    added to production since 2026-09-12 survives; and it overwrites function,
+--    added to production since 2026-09-16 survives; and it overwrites function,
 --    policy and trigger definitions with the ones recorded here, so regenerate
 --    before you re-run or you will roll a later fix backwards.
 --
@@ -657,7 +657,8 @@ CREATE TABLE IF NOT EXISTS public.minigame_polls (
   options jsonb NOT NULL,
   votes jsonb DEFAULT '[0, 0, 0, 0]'::jsonb NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
-  expires_at timestamp with time zone NOT NULL
+  expires_at timestamp with time zone NOT NULL,
+  kind text DEFAULT 'game'::text NOT NULL
 );
 ALTER TABLE public.minigame_polls ADD COLUMN IF NOT EXISTS code text;
 ALTER TABLE public.minigame_polls ADD COLUMN IF NOT EXISTS student_id uuid;
@@ -666,6 +667,7 @@ ALTER TABLE public.minigame_polls ADD COLUMN IF NOT EXISTS options jsonb;
 ALTER TABLE public.minigame_polls ADD COLUMN IF NOT EXISTS votes jsonb DEFAULT '[0, 0, 0, 0]'::jsonb;
 ALTER TABLE public.minigame_polls ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
 ALTER TABLE public.minigame_polls ADD COLUMN IF NOT EXISTS expires_at timestamp with time zone;
+ALTER TABLE public.minigame_polls ADD COLUMN IF NOT EXISTS kind text DEFAULT 'game'::text;
 ALTER TABLE public.minigame_polls ALTER COLUMN code SET NOT NULL;
 ALTER TABLE public.minigame_polls ALTER COLUMN student_id SET NOT NULL;
 ALTER TABLE public.minigame_polls ALTER COLUMN question SET NOT NULL;
@@ -673,6 +675,7 @@ ALTER TABLE public.minigame_polls ALTER COLUMN options SET NOT NULL;
 ALTER TABLE public.minigame_polls ALTER COLUMN votes SET NOT NULL;
 ALTER TABLE public.minigame_polls ALTER COLUMN created_at SET NOT NULL;
 ALTER TABLE public.minigame_polls ALTER COLUMN expires_at SET NOT NULL;
+ALTER TABLE public.minigame_polls ALTER COLUMN kind SET NOT NULL;
 
 CREATE TABLE IF NOT EXISTS public.mm_data (
   key text NOT NULL,
@@ -2116,6 +2119,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'minigame_polls_kind_check'
+                    AND conrelid = 'minigame_polls'::regclass) THEN
+    ALTER TABLE minigame_polls ADD CONSTRAINT minigame_polls_kind_check CHECK ((kind = ANY (ARRAY['game'::text, 'help'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'payments_status_check'
                     AND conrelid = 'payments'::regclass) THEN
     ALTER TABLE payments ADD CONSTRAINT payments_status_check CHECK ((status = ANY (ARRAY['pending'::text, 'sent'::text, 'confirmed'::text, 'rejected'::text, 'failed'::text, 'completed'::text])));
@@ -2798,7 +2808,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 135 functions, verbatim from pg_get_functiondef().
+-- 136 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -3207,7 +3217,7 @@ BEGIN
   -- a typo, or an attempt to smuggle a key the app might one day trust - is
   -- refused whole, before anything is written.
   FOR k, v IN SELECT * FROM jsonb_each(p_patch) LOOP
-    IF k IN ('examDisabled', 'hintsDisabled', 'minigamesDisabled', 'crossGradeSearch', 'crossGradePractice') THEN
+    IF k IN ('examDisabled', 'hintsDisabled', 'minigamesDisabled', 'helpRequestsDisabled', 'crossGradeSearch', 'crossGradePractice') THEN
       IF jsonb_typeof(v) NOT IN ('boolean', 'null') THEN
         RETURN jsonb_build_object('ok', false, 'error', 'bad_value', 'key', k);
       END IF;
@@ -4277,7 +4287,6 @@ CREATE OR REPLACE FUNCTION public.get_grade_questions_for_client(p_grade integer
  RETURNS jsonb
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
 AS $function$
   select coalesce(
     jsonb_object_agg(subject_id, qs),
@@ -4286,12 +4295,7 @@ AS $function$
   from (
     select
       subject_id,
-      jsonb_agg(
-        case
-          when data->>'type' in ('symmetry-line', 'expr', 'slots') then data
-          else data - 'answer' - 'hint' - 'explanation'
-        end
-      ) as qs
+      jsonb_agg(data) as qs
     from questions
     where grade = p_grade
       and is_past_paper = false
@@ -4449,15 +4453,9 @@ CREATE OR REPLACE FUNCTION public.get_questions_for_client(p_subject_id text, p_
  RETURNS jsonb
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
 AS $function$
   select coalesce(
-    jsonb_agg(
-      case
-        when data->>'type' in ('symmetry-line', 'expr', 'slots') then data
-        else data - 'answer' - 'hint' - 'explanation'
-      end
-    ),
+    jsonb_agg(data),
     '[]'::jsonb
   )
   from questions
@@ -5241,6 +5239,54 @@ BEGIN
 END;
 $function$;
 
+-- ── help_poll_create(p_question text, p_options jsonb, p_minutes integer)
+CREATE OR REPLACE FUNCTION public.help_poll_create(p_question text, p_options jsonb, p_minutes integer DEFAULT 360)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE
+  v_student uuid := public.current_student_id();
+  v_code    text;
+  v_n       integer;
+  v_minutes integer;
+BEGIN
+  IF v_student IS NULL THEN RETURN jsonb_build_object('ok', false, 'error', 'not_signed_in'); END IF;
+  IF p_question IS NULL OR length(btrim(p_question)) NOT BETWEEN 1 AND 4000 THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'bad_question');
+  END IF;
+  IF jsonb_typeof(p_options) <> 'array' OR jsonb_array_length(p_options) NOT BETWEEN 2 AND 4 THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'bad_options');
+  END IF;
+
+  -- ⚠ The duration is CHOSEN FROM A LIST, never taken as a number. An arbitrary
+  --   integer here is a free "keep this public URL alive for a year" primitive.
+  v_minutes := CASE coalesce(p_minutes, 360)
+                 WHEN 60   THEN 60
+                 WHEN 360  THEN 360
+                 WHEN 1440 THEN 1440
+                 ELSE 360
+               END;
+
+  DELETE FROM public.minigame_polls WHERE expires_at < now() - interval '1 day';
+
+  -- A stuck child asks a few times an afternoon. Six an hour is generous for
+  -- that and useless as bulk storage.
+  SELECT count(*) INTO v_n FROM public.minigame_polls
+   WHERE student_id = v_student AND kind = 'help' AND created_at > now() - interval '1 hour';
+  IF v_n >= 6 THEN RETURN jsonb_build_object('ok', false, 'error', 'too_many'); END IF;
+
+  v_code := upper(substr(encode(gen_random_bytes(6), 'hex'), 1, 8));
+  INSERT INTO public.minigame_polls(code, student_id, question, options, votes, expires_at, kind)
+  VALUES (v_code, v_student, p_question, p_options,
+          (SELECT jsonb_agg(0) FROM jsonb_array_elements(p_options)),
+          now() + make_interval(mins => v_minutes),
+          'help');
+
+  RETURN jsonb_build_object('ok', true, 'code', v_code, 'seconds', v_minutes * 60, 'minutes', v_minutes);
+END $function$;
+
 -- ── is_admin()
 CREATE OR REPLACE FUNCTION public.is_admin()
  RETURNS boolean
@@ -5656,6 +5702,7 @@ BEGIN
   IF NOT FOUND THEN RETURN jsonb_build_object('ok', false, 'error', 'not_found'); END IF;
   RETURN jsonb_build_object('ok', true,
     'question', p.question, 'options', p.options, 'votes', p.votes,
+    'kind', coalesce(p.kind, 'game'),
     'seconds_left', greatest(0, floor(extract(epoch from (p.expires_at - now()))))::integer);
 END $function$;
 
@@ -8153,7 +8200,7 @@ ALTER TABLE public.forum_replies ALTER COLUMN author_student_id SET DEFAULT curr
 
 -- ═══ 6 · INDEXES ══════════════════════════════════════════════════════════════
 -- Indexes that back a constraint are omitted — §3 creates those with the
--- constraint itself. 76 standalone indexes.
+-- constraint itself. 77 standalone indexes.
 CREATE INDEX IF NOT EXISTS admin_actions_student_idx ON public.admin_actions USING btree (target_student, created_at DESC);
 CREATE INDEX IF NOT EXISTS admin_actions_user_idx ON public.admin_actions USING btree (target_user, created_at DESC);
 CREATE INDEX IF NOT EXISTS submissions_assignment_idx ON public.assignment_submissions USING btree (assignment_id);
@@ -8184,6 +8231,7 @@ CREATE INDEX IF NOT EXISTS guest_submissions_assignment_idx ON public.guest_subm
 CREATE INDEX IF NOT EXISTS guest_submissions_device_idx ON public.guest_submissions USING btree (assignment_id, device_code) WHERE (device_code IS NOT NULL);
 CREATE INDEX IF NOT EXISTS learning_materials_teacher_created_idx ON public.learning_materials USING btree (teacher_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS login_events_user_idx ON public.login_events USING btree (user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS minigame_polls_student_kind_created_idx ON public.minigame_polls USING btree (student_id, kind, created_at DESC);
 CREATE INDEX IF NOT EXISTS payments_plan_idx ON public.payments USING btree (plan_id);
 CREATE UNIQUE INDEX IF NOT EXISTS payments_provider_ref_uq ON public.payments USING btree (provider, provider_ref) WHERE (provider_ref IS NOT NULL);
 CREATE UNIQUE INDEX IF NOT EXISTS payments_reference_uq ON public.payments USING btree (reference) WHERE (reference IS NOT NULL);
@@ -9053,13 +9101,13 @@ GRANT EXECUTE ON FUNCTION public.forum_set_author() TO anon, authenticated, serv
 GRANT EXECUTE ON FUNCTION public.gen_guest_code() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.gen_invite_code() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_classroom_feed(p_slug text, p_token uuid) TO anon, authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.get_grade_questions_for_client(p_grade integer, p_allowed_chapters text[], p_blocked_chapters text[], p_blocked_subjects text[]) TO service_role;
+GRANT EXECUTE ON FUNCTION public.get_grade_questions_for_client(p_grade integer, p_allowed_chapters text[], p_blocked_chapters text[], p_blocked_subjects text[]) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_friend_code() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_friends() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_points() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_my_points_rank(p_grade integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_points_leaderboard(p_grade integer, p_limit integer) TO anon, authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.get_questions_for_client(p_subject_id text, p_chapter_id text, p_difficulty integer, p_allowed_chapters text[], p_blocked_chapters text[]) TO service_role;
+GRANT EXECUTE ON FUNCTION public.get_questions_for_client(p_subject_id text, p_chapter_id text, p_difficulty integer, p_allowed_chapters text[], p_blocked_chapters text[]) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_student_reports(p_student_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_profiles_privileged() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_students_privileged() TO anon, authenticated, service_role;
@@ -9077,6 +9125,7 @@ GRANT EXECUTE ON FUNCTION public.guest_open(p_code text, p_name text, p_pin text
 GRANT EXECUTE ON FUNCTION public.guest_results(p_assignment_id uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guest_set_my_name(p_code text, p_name text, p_token text, p_new_name text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guest_submit(p_code text, p_name text, p_answers jsonb, p_score integer, p_total integer, p_token text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.help_poll_create(p_question text, p_options jsonb, p_minutes integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.is_approved_teacher() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.is_family_member(p_family uuid) TO anon, authenticated, service_role;

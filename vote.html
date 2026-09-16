@@ -56,14 +56,17 @@
   .foot a{color:#fff;font-weight:700}
   @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
   .pop{animation:pop .45s ease}
+  .share-btn{flex:1;border:0;border-radius:12px;padding:11px 8px;color:#fff;font-size:13px;
+       font-weight:800;cursor:pointer;min-height:44px}
+  .share-btn:active{transform:scale(.98)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="peak">🏔️</div>
-    <h1>Help me climb the peak!</h1>
-    <p>A student needs your vote on this question</p>
+    <div class="peak" id="top-icon">🏔️</div>
+    <h1 id="top-title">Help me climb the peak!</h1>
+    <p id="top-sub">A student needs your vote on this question</p>
   </div>
 
   <div class="card" id="card">
@@ -80,6 +83,12 @@
         <p class="muted" id="done-sub">Here's what the crowd thinks so far:</p></div>
       <div id="bars" style="margin-top:14px"></div>
       <p class="muted center" id="done-timer"></p>
+      <!-- Passing the link on is the single most useful thing a voter can do -
+           one vote is not a crowd. Shown only while the poll is still open. -->
+      <div id="pass-on" class="hide" style="margin-top:14px;display:flex;gap:8px">
+        <button class="share-btn" style="background:#25d366" onclick="passOnWhatsApp()">💬 Ask someone else</button>
+        <button class="share-btn" style="background:#1877f2" onclick="passOnFacebook()">📘 Facebook</button>
+      </div>
     </div>
   </div>
 
@@ -109,7 +118,34 @@ async function rpc(fn, body) {
 
 let poll = null, myVote = null, ticking = null;
 
-function fmt(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+// ⚠ A help request runs for up to 24 hours, so M:SS is not enough - 86400
+//   seconds rendered as "1440:00", which reads as nothing at all. Hours first
+//   when there are any, and the seconds are dropped there: nobody counts down
+//   the last second of a six-hour window.
+function fmt(s) {
+  s = Math.max(0, Math.floor(s));
+  const h = Math.floor(s / 3600);
+  if (h >= 1) return h + 'h ' + Math.floor((s % 3600) / 60) + 'm';
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+
+// ⚠ The game's poll lives for 3 minutes and a 3-second refresh is right for it.
+//   A 24-hour help link left open in a tab would be 28,800 requests at that
+//   rate, so the beat scales with what is left.
+function refreshMs(secondsLeft) {
+  if (secondsLeft > 3600) return 60000;
+  if (secondsLeft > 600)  return 15000;
+  return 3000;
+}
+
+function passOnWhatsApp() {
+  window.open('https://wa.me/?text=' + encodeURIComponent(
+    'Can you help answer this? A student is stuck:\n' + location.href), '_blank', 'noopener');
+}
+function passOnFacebook() {
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href),
+    '_blank', 'noopener,width=600,height=520');
+}
 
 function drawBars() {
   const total = poll.votes.reduce((a, b) => a + b, 0);
@@ -124,6 +160,7 @@ function drawBars() {
   $('done-timer').textContent = poll.seconds_left > 0
     ? 'Live - updates as more people vote. ' + fmt(poll.seconds_left) + ' left.'
     : 'Voting has closed. Thanks for helping!';
+  $('pass-on').classList.toggle('hide', !(poll.seconds_left > 0));
 }
 
 function showDone() {
@@ -140,7 +177,7 @@ function showDone() {
       if (r.ok) { poll = r; drawBars(); }
       if (!r.ok || r.seconds_left <= 0) clearInterval(ticking);
     } catch (_) {}
-  }, 3000);
+  }, refreshMs(poll.seconds_left));
 }
 
 async function vote(i) {
@@ -176,6 +213,19 @@ async function vote(i) {
   if (!r.ok) { $('status').textContent = 'This poll has finished and been tidied away. Ask for a fresh link!'; return; }
   poll = r;
 
+  // ⚠ Two kinds of poll share this page and this table. The game's is a live
+  //   3-minute lifeline; a help request is a child stuck on homework. Same
+  //   mechanics, and the wrong words on either one make no sense to whoever
+  //   opened the link. `kind` is absent on rows written before this existed,
+  //   so the fallback is the game - which is what those rows are.
+  if (poll.kind === 'help') {
+    document.title = 'Can you help? · Nou Klass';
+    $('top-icon').textContent = '🙋';
+    $('top-title').textContent = 'Can you help with this question?';
+    $('top-sub').textContent = 'A student is stuck and asked for your vote';
+    $('done-sub').textContent = 'Here\u2019s what everyone has picked so far:';
+  }
+
   const prior = (() => { try { return localStorage.getItem(votedKey); } catch (_) { return null; } })();
   if (prior !== null) {
     myVote = parseInt(prior, 10);
@@ -199,8 +249,11 @@ async function vote(i) {
 
   let left = poll.seconds_left;
   $('timer').textContent = '⏳ ' + fmt(left);
+  // A 1-second tick is right for a 3-minute poll and pointless for a 24-hour
+  // one, where the label only changes once a minute anyway.
+  const step = left > 3600 ? 60 : 1;
   ticking = setInterval(() => {
-    left--;
+    left -= step;
     if (left <= 0) {
       clearInterval(ticking);
       $('done-icon').textContent = '⏰'; $('done-title').textContent = 'Voting has closed';
@@ -209,7 +262,7 @@ async function vote(i) {
       return;
     }
     $('timer').textContent = '⏳ ' + fmt(left);
-  }, 1000);
+  }, step * 1000);
 })();
 </script>
 </body>

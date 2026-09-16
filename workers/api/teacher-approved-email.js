@@ -1,23 +1,7 @@
 // POST /api/teacher-approved-email — notifies a teacher their account was approved.
 
 import { requireAdmin, json } from '../lib/admin-auth.js';
-
-async function sendEmail({ to, subject, html, text }) {
-  const r = await fetch('https://api.mailchannels.net/tx/v1/send', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }] }],
-      from: { email: 'noreply@psac-practice.com', name: 'Nou Klass' },
-      subject,
-      content: [
-        ...(html ? [{ type: 'text/html', value: html }] : []),
-        ...(text ? [{ type: 'text/plain', value: text }] : []),
-      ],
-    }),
-  });
-  return { ok: r.ok, error: r.ok ? null : 'send_failed' };
-}
+import { sendMail, mailConfigured } from '../lib/mailer.js';
 
 function _he(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -31,7 +15,7 @@ export default async function handler(request, env) {
   const { sbUrl, sbKey } = gate;
   const sbH = { apikey: sbKey, Authorization: `Bearer ${sbKey}` };
 
-  if (!env.MAILCHANNELS_ENABLED) return json(503, { ok: false, error: 'not_configured' });
+  if (!mailConfigured(env)) return json(503, { ok: false, error: 'not_configured' });
 
   let body;
   try { body = await request.json(); } catch { return json(400, { ok: false, error: 'Invalid request.' }); }
@@ -69,7 +53,7 @@ export default async function handler(request, env) {
   </div>
 </body></html>`;
 
-  const res = await sendEmail({ to: email, subject, html, text });
+  const res = await sendMail(env, { to: email, subject, html, text });
   if (!res.ok) return json(502, { ok: false, error: 'send_failed' });
   return json(200, { ok: true, sent: true });
 }

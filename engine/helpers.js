@@ -164,7 +164,8 @@ const GradeAccess = (() => {
 //   refresh - dropping it would reset device state no parent ever set.
 const SupportSettings = (() => {
   const PARENT_KEYS = ['lockedChapters', 'maxDifficulty', 'examDisabled', 'hintsDisabled',
-    'minigamesDisabled', 'allowedGrades', 'crossGradeSearch', 'crossGradePractice', 'games'];
+    'minigamesDisabled', 'helpRequestsDisabled', 'allowedGrades', 'crossGradeSearch',
+    'crossGradePractice', 'games'];
   const LEVELS = { 1: 'Basic', 2: 'Medium', 3: 'Hard', 4: 'Word problems' };
 
   const _obj = x => (x && typeof x === 'object' && !Array.isArray(x)) ? x : {};
@@ -194,6 +195,7 @@ const SupportSettings = (() => {
     if (s.examDisabled) out.push('Exam mode is switched off');
     if (s.hintsDisabled) out.push('Hints are switched off');
     if (s.minigamesDisabled) out.push('The Game Zone is switched off');
+    if (s.helpRequestsDisabled) out.push('Asking a friend for help is switched off');
     const lvl = Number(s.maxDifficulty);
     if (lvl >= 1 && lvl < 4) out.push(`Questions stop at Level ${lvl} (${LEVELS[lvl]})`);
     const locked = Array.isArray(s.lockedChapters) ? s.lockedChapters.length : 0;

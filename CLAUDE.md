@@ -303,6 +303,8 @@ bitten this project at least once:
 | `REWARD_SLOTS` | app.js ↔ functions/questions.js |
 | Kid vibe list | `KID_VIBES` (app.js) ↔ `:root[data-kid-vibe=…]` (style.css) |
 | Materials sort comparator | `engine/helpers.js` ↔ `guest.js` (that page loads no engine file, by design) |
+| **Email preference rules** (defaults, the legacy `weekly_digest` fallback, unknown-frequency → off) | `emailPrefs()`/`wantsEmail()` in `workers/lib/mailer.js` (decides what is SENT) ↔ `_emailPrefs()` in `engine/app.js` (decides what the parent is SHOWN). ⚠ A parent reading one answer and receiving the other is worse than either being wrong alone. `scripts/test-email-preferences.js` runs both on the same inputs. |
+| Share copy — now **four** surfaces | `_appShareText()` (app.js) ↔ `_inviteText()` (auth.js) ↔ the landing page ↔ the `og:` block in `index.html` head. ⚠ Facebook caches a scrape far longer than a WhatsApp message survives. |
 
 ⚠ **Reading the code is not a sufficient check for the factory copies. Grep the
 BUILT bundle for the field.** A new factory must be added to the three server
@@ -426,6 +428,8 @@ Never move an entitlement decision into the browser.
 | Expired account | `questions.js` | `Auth.isAccessExpired()` — picks wording only |
 | Forum identity (`author_name`/`author_type`) | `forum_set_author` BEFORE INSERT trigger | the browser (it no longer sends them) |
 | Parent PIN, when it mints a session | `netlify/functions/parent-pin-signin.js` + `parent_pin_attempts` (service role) | `_pinMatches()` — a local convenience check |
+| Whether an automatic email is sent | `wantsEmail()` / `digestDue()` in `workers/lib/mailer.js`, reading `profiles.preferences` with the service role | the Settings toggles, and anything in the request body — `notify.js` is called by a CHILD's token and must not let them silence their parent |
+| Who an admin broadcast reaches | `workers/api/admin-broadcast.js` (service role resolves ids → addresses, always Bcc) | the browser, which only ever sends ids and never sees an address |
 | Parent's own `lockedChapters` | client only — **deliberate**: the parent is not the adversary, and per-child server filtering would make the question cache per-child |
 | Which GRADES a child may use (`restrictions.allowedGrades`) | client only, same category as `lockedChapters` — `GradeAccess` in `engine/helpers.js` | `questions.js`, which still decides what the family's plan covers |
 
@@ -485,7 +489,10 @@ Two credentials, two worlds. **Adults** carry a Supabase JWT (`auth.uid()`);
 - ⚠ **A parent previewing a child is NOT a student login** — that path has no token
   and must not persist a session or claim the device.
 - ⚠ **Email is one shared ~500/day Gmail quota**; every sign-up, resend and reset
-  spends one.
+  spends one. ⚠ **That is AUTH mail only.** Since 2026-09-16 everything else —
+  the digest, homework notices, admin broadcasts, the activation email — goes
+  through **Resend** from `workers/lib/mailer.js` on its own quota. Two senders,
+  two limits, and only one of them is Gmail. See [`features.md`](docs/claude/features.md).
 
 ## Database → [`database.md`](docs/claude/database.md)
 **One generated file, `supabase-schema.sql`** — apply the change to the database,

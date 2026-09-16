@@ -29,6 +29,8 @@ import adminAccountRecoveryHandler from './api/admin-account-recovery.js';
 import adminDeleteAccountHandler   from './api/admin-delete-account.js';
 import adminMemberEmailsHandler    from './api/admin-member-emails.js';
 import adminTeacherActivityHandler from './api/admin-teacher-activity.js';
+import adminBroadcastHandler       from './api/admin-broadcast.js';
+import emailPrefsHandler           from './api/email-prefs.js';
 
 import { scheduled as cleanupScheduled } from './api/assignment-cleanup.js';
 import { scheduled as purgeScheduled    } from './api/classroom-purge.js';
@@ -110,7 +112,16 @@ const ROUTES = makeRoutes({
   '/api/admin-delete-account':    adminDeleteAccountHandler,
   '/api/admin-member-emails':     adminMemberEmailsHandler,
   '/api/admin-teacher-activity':  adminTeacherActivityHandler,
+  '/api/admin-broadcast':         adminBroadcastHandler,
+  '/api/email-prefs':             emailPrefsHandler,
 });
+
+// path prefix → the standalone page that serves it
+const SHARE_ROUTES = {
+  '/a/': '/guest.html',
+  '/m/': '/materials.html',
+  '/v/': '/vote.html',
+};
 
 export default {
   async fetch(request, env, ctx) {
@@ -123,6 +134,23 @@ export default {
 
     const handler = ROUTES[url.pathname];
     if (handler) return addSecurityHeaders(await handler(request, env, ctx));
+
+    // ⚠ The three share-link REWRITES from netlify.toml. They were not ported
+    //   with the functions, so /v/<CODE>, /m/<CODE> and /a/<CODE> answered 404
+    //   on Cloudflare - every Ask-the-Crowd link, class hub link and guest
+    //   homework link already in circulation was dead. Measured on production,
+    //   not inferred.
+    //   status 200 rewrite, NOT a redirect: the URL the child was sent on
+    //   WhatsApp must stay in the address bar, because each page reads its own
+    //   code out of location.pathname.
+    const rewrite = SHARE_ROUTES[url.pathname.slice(0, 3)];
+    if (rewrite && url.pathname.length > 3) {
+      const asset = await env.ASSETS.fetch(new URL(rewrite, url.origin));
+      const r = new Response(asset.body, asset);
+      for (const [k, v] of Object.entries(SECURITY_HEADERS)) r.headers.set(k, v);
+      r.headers.set('Cache-Control', 'no-store');
+      return r;
+    }
 
     if (url.pathname.startsWith('/api/')) {
       return addSecurityHeaders(new Response(JSON.stringify({ error: 'Not found' }), {
@@ -143,11 +171,13 @@ export default {
 
   // Cloudflare Cron Triggers — add to wrangler.toml:
   //   [triggers]
-  //   crons = ["17 2 * * *", "0 3 * * *", "0 9 * * 0"]
+  //   crons = ["17 2 * * *", "0 3 * * *", "0 9 * * SUN"]
   async scheduled(event, env, ctx) {
     const cron = event.cron;
     if (cron === '17 2 * * *') await cleanupScheduled(event, env, ctx);
     else if (cron === '0 3 * * *') await purgeScheduled(event, env, ctx);
-    else if (cron === '0 9 * * 0') await digestScheduled(event, env, ctx);
+    // ⚠ Must match wrangler.toml EXACTLY - dispatch is a string compare, and
+    //   Cloudflare will not accept '0 9 * * 0' for Sunday (it wants SUN or 7).
+    else if (cron === '0 9 * * SUN') await digestScheduled(event, env, ctx);
   },
 };

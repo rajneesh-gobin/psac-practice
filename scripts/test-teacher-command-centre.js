@@ -88,7 +88,7 @@ const overlay = html.slice(html.indexOf('<div id="tc-classroom-detail"'), html.i
 const cdNav = [...overlay.matchAll(/class="tc-cd-nav-btn" role="tab" data-sec="([a-z]+)"/g)].map(m => m[1]);
 assert.deepEqual(cdNav, ['overview', 'work', 'pupils', 'materials'], 'classroom overlay has four primary sections, materials among them'); checks++;
 const cdMore = [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map(m => m[1]);
-assert.deepEqual(cdMore, ['results', 'settings'], 'classroom More holds only results and settings'); checks++;
+assert.deepEqual(cdMore, ['settings'], 'classroom More holds classroom-wide settings only; results live with each activity'); checks++;
 for (const s of ['overview', 'work', 'pupils', 'materials', 'results', 'settings']) ok(overlay.includes(`id="tc-cd-${s}"`), `classroom section ${s} exists`);
 ok(/id="ta-share-class"/.test(html) && /id="ta-share-due"/.test(html) && /id="ta-share-qr"/.test(html) && /id="ta-share-view"/.test(html) && /TeacherMode\.shareCopyLink\(\)/.test(html), 'success screen shows classroom, due date, copy, QR and View');
 // ⚠ NOT <script> TAGS AND NOT IN SHELL_FILES ANY MORE. The eight role

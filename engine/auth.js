@@ -2470,6 +2470,14 @@ const Auth = (() => {
     await copyInviteLink();
   }
 
+  // ⚠ Facebook takes the URL and nothing else - it builds the post from the
+  //   og: tags on the landing page. _inviteText() is deliberately NOT passed:
+  //   the sharer would drop it silently, and the referral code is in the link.
+  function shareInviteFacebook() {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_inviteLink()),
+      '_blank', 'noopener,width=600,height=520');
+  }
+
   function shareInviteWhatsApp() {
     const msg = `${_inviteText()}\n\n${_inviteLink()}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
@@ -4336,6 +4344,19 @@ const Auth = (() => {
     return _saveRestrictions(prev, '🎮 Game settings saved.');
   }
 
+  // ⚠ ON by default: an ABSENT key means the parent has never been asked, and
+  //   the feature ships on. Storing the negative (`helpRequestsDisabled`) is
+  //   what makes that true without a migration, exactly as minigamesDisabled
+  //   and examDisabled do - every existing child gets the default for free.
+  async function toggleHelpRequestsDisabled() {
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.helpRequestsDisabled = !r.helpRequestsDisabled;
+    return _saveRestrictions(prev, r.helpRequestsDisabled
+      ? '🙋 Asking a friend is switched off.'
+      : '🙋 Asking a friend is switched on.');
+  }
+
   async function toggleHintsDisabled() {
     const r    = _ensureRestrictions();
     const prev = JSON.stringify(r);
@@ -4460,7 +4481,7 @@ const Auth = (() => {
     isTeacher: () => _isTeacherUser,
     openPasswordModal, closePasswordModal, changePassword, isPinOnlySession,
     pinOnlyPasswordMessage: () => _PIN_ONLY_PASSWORD_MSG,
-    openInviteModal, closeInviteModal, copyInviteLink, shareInvite, shareInviteWhatsApp,
+    openInviteModal, closeInviteModal, copyInviteLink, shareInvite, shareInviteWhatsApp, shareInviteFacebook,
     confirmResetStudentProgress,
     studentSignIn, onPinInput, checkStudentReady,
     // Family setup
@@ -4501,7 +4522,7 @@ const Auth = (() => {
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
     toggleGradeAccess, toggleHintsDisabled,
-    toggleMinigamesDisabled, saveGameSettings,
+    toggleMinigamesDisabled, saveGameSettings, toggleHelpRequestsDisabled,
     // Biometric lock
     attemptBiometricUnlock: _attemptBiometricUnlock, biometricUsePassword,
     enableBiometricLogin, disableBiometricLogin,

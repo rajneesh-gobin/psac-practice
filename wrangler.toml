@@ -5,3 +5,18 @@ compatibility_date = "2026-09-12"
 [assets]
 directory = ".deploy"
 binding = "ASSETS"
+
+# ⚠ There were NO cron triggers on the deployed Worker, so assignment-cleanup,
+#   classroom-purge and weekly-digest had never run once since the migration off
+#   Netlify - workers/index.js has always had the scheduled() handler and the
+#   dispatch table, but nothing was ever scheduled to call it. Measured against
+#   the live Worker, not inferred.
+# ⚠ The strings must match workers/index.js `scheduled()` EXACTLY - it dispatches
+#   by comparing event.cron, so one changed space silently runs nothing.
+[triggers]
+# ⚠ SUNDAY IS "SUN" OR "7", NEVER "0". Cloudflare's cron parser rejects a 0
+#   day-of-week outright - `invalid cron string: 0 9 * * 0`, API code 10100 -
+#   even though 0 is Sunday in ordinary crontab. Measured against the real API,
+#   and the whole schedules PUT is atomic: one bad string left the Worker with
+#   NO triggers at all rather than the two valid ones.
+crons = ["17 2 * * *", "0 3 * * *", "0 9 * * SUN"]

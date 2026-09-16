@@ -158,6 +158,149 @@ one round, whose order would be unknowable).
 - Tests: `test-minigame-arcade.js`, `test-number-ninja.js`, `test-brain-battle.js`,
   `test-time-traveller.js`.
 
+## Email — one transport, one preference model
+Built 2026-09-16. ⚠ **Before it, the app could not send a single email.** The
+three handlers that tried (`notify.js`, `weekly-digest.js`,
+`teacher-approved-email.js`) each called **MailChannels**, whose free Cloudflare
+Workers relay shut in 2024, and the deployed Worker carried **no mail credential
+at all** — measured on the live Worker's bindings, which held exactly one secret
+(`SUPABASE_SERVICE_ROLE_KEY`). Each failed differently and silently.
+- **`workers/lib/mailer.js` is the only place mail is sent from.** Transport is
+  **Resend** over HTTPS — Workers cannot open a raw socket, so SMTP is not an
+  option here. Secrets: `RESEND_API_KEY`, `MAIL_FROM`, `SITE_URL`, `CRON_SECRET`.
+- ⚠ **This is a SECOND sender and does not touch the Gmail quota.** Supabase Auth
+  mail (sign-up, reset) still goes through `smtp.gmail.com` and still spends that
+  shared ~500/day ceiling. Two senders, two limits — see
+  [auth-sessions.md](auth-sessions.md).
+- ⚠ **A mail failure never fails the thing the mail announced.** `sendMail()`
+  never throws and returns the REAL reason — "domain not verified" and "bad key"
+  are one HTTP status apart and need completely different fixes. An invented
+  friendly message is how a real fault becomes unreportable.
+- **Preferences live in `profiles.preferences.email`** — `{ enabled, digest:
+  weekly|fortnightly|monthly|off, announcements, homework, last_digest_at }`.
+  ⚠ **`enabled:false` is the master switch and beats every per-kind flag.**
+  ⚠ **An unknown frequency reads as `off`** — a typo or a value from a future
+  version must never be treated as "send".
+  ⚠ **The legacy `weekly_digest` boolean still counts**: an explicit `false`
+  there is a parent who has ALREADY opted out, and the new shape must not
+  quietly re-subscribe them. The Settings screen writes both.
+- ⚠ **Frequency is enforced by `last_digest_at`, not by the cron expression.**
+  The cron runs weekly; fortnightly and monthly exist only because `digestDue()`
+  says no on the weeks between. It carries **one day of slack**, or a cron three
+  minutes late pushes a fortnightly parent out by another fortnight, then
+  another. `last_digest_at` is written **only after a successful send**.
+- ⚠ **`/api/weekly-digest` used to be an open POST that mailed every parent.**
+  Harmless while the transport was dead; the moment one works it is a mailing
+  gun pointed at the whole user base. It now needs `x-cron-secret` or an admin
+  JWT. The Cloudflare `scheduled()` entry point needs neither.
+- ⚠ **There were NO cron triggers on the deployed Worker**, so
+  `assignment-cleanup`, `classroom-purge` and `weekly-digest` had never run once
+  since the Netlify migration — `workers/index.js` had the handler and the
+  dispatch table and nothing ever called it. `wrangler.toml` now declares them,
+  and the strings must match `scheduled()` **exactly**: it dispatches by
+  comparing `event.cron`.
+- **Unsubscribe** is `/api/email-prefs`, an HMAC of (user id + scope) under the
+  service-role key. ⚠ **No sign-in, deliberately** — a parent must be able to
+  stop mail from the phone in their hand. It can only turn a preference **off**,
+  never on, and reads nothing back. ⚠ **A GET only shows the page**, because
+  Gmail and Outlook prefetch links in mail; the POST makes the change.
+- Tests: `scripts/test-email-preferences.js` (93 checks, including the
+  client/server agreement below).
+
+## Admin › group email (Bcc)
+Members tab: tick accounts (selection survives paging and filtering), or *Add
+everyone matching these filters*, then **✉️ Email selected**.
+- ⚠ **Bcc is the only mode, and the addresses never reach the browser.** The
+  admin selects **ids**; `workers/api/admin-broadcast.js` resolves them with the
+  service role. A To: list of 200 parent addresses is a data breach dressed as a
+  newsletter and is one wrong click away in any mail client.
+- ⚠ **It skips anyone who has switched announcements off**, unless the admin
+  ticks **Essential notice** — account, billing or safety only, the one category
+  a recipient cannot opt out of.
+- **Who would get this?** runs the whole thing as a dry run and reports the split
+  (would send / opted out / no address / deleted) without sending anything.
+- ⚠ **Chunked at 500 ids per request and 50 recipients per message** (Resend's
+  cap), and a partial failure reports what DID go out. "It failed" after 600
+  delivered emails is the worst possible answer.
+- The body is plain text, escaped before it reaches the template; `reply_to` is
+  the sending admin, so replies go to a human.
+
+## Sharing to Facebook
+⚠ **The Facebook sharer carries NO text.** It takes a URL and builds the post
+from the Open Graph tags it finds there — the `quote` parameter has not been
+honoured for years. So `index.html`'s `og:` block **is part of the feature**, not
+decoration: without it a shared link renders as a bare URL.
+- ⚠ **`og:description` is now a FOURTH surface** that must stay in step with
+  `_appShareText()` (app.js), `_inviteText()` (auth.js) and the landing page —
+  and it is the worst one to get wrong, because **Facebook caches a scrape for
+  far longer than a WhatsApp message survives**.
+- ⚠ **`og:image` must be absolute** — Facebook does not resolve a relative path,
+  and an unreachable one renders a blank card.
+- WhatsApp is the mirror image: it carries text and ignores `og:` on a bare
+  link. That is why `shareToFacebook(url)` and `shareToWhatsApp(text)` do not
+  share a signature.
+- Live on: the landing-page share button, the referral invite, the friend
+  challenge, and the Ask-a-friend panel (plus *pass it on* inside `vote.html`).
+
+## Ask a friend — a help poll on a practice question
+Built 2026-09-16. The Peak Quest crowd lifeline, brought to ordinary practice:
+a stuck child shares **one question** and sees how people voted. Same table
+(`minigame_polls`), same voting page (`vote.html` behind `/v/<CODE>`), new
+`kind` column telling the two apart.
+- **`help_poll_create(question, options, minutes)`** — a NEW function, not a
+  wider `minigame_poll_create`. ⚠ `CREATE OR REPLACE` cannot change an arity and
+  two overloads a named PostgREST call can both satisfy is an **ambiguity error,
+  not a fallback** — so the game's own function was left untouched.
+  `minigame_poll_results` gained `kind` in its returned object (same signature,
+  so every deployed caller keeps working); `minigame_poll_vote` is unchanged and
+  serves both kinds. Applied to production 2026-09-16, re-applied to prove
+  idempotency, `proacl` read afterwards (**anon + authenticated + service_role** —
+  anon is REQUIRED, a child session is anon plus a token header).
+- ⚠ **THE CORRECT ANSWER IS NEVER STORED OR SENT.** The row holds the question
+  text and the options only; the results RPC returns no answer; `vote.html`
+  cannot mark anyone right. Verified on the wire, not inferred — a real poll was
+  inserted on production, voted on as `anon`, and the response inspected.
+  This is the whole reason the link is safe to put on WhatsApp.
+- ⚠ **The share message carries a link and a plea — never the child's name or
+  id.** Same rule as the score share, same reason: a forwarded WhatsApp message
+  cannot be recalled.
+- ⚠ **Asking is not answering.** It never calls `recordAnswer()`,
+  `_recordDaily()` or `gainPoints()` — a stuck child must not distort the
+  mastery and daily figures their parent reads.
+- ⚠ **Duration is picked from a LIST (1 h · 6 h · 24 h, default 6), clamped in
+  SQL by a `CASE` whitelist.** An arbitrary integer is a free "keep this public
+  URL alive for a year" primitive.
+- ⚠ **The button lives in the help TRAY, not the always-visible `.pr-tools`
+  row** — that row is a fixed 3/4-column grid and a fifth button reflows it on
+  every phone. Unlike read-aloud, a child who cannot read "Need help?" is not
+  this feature's audience.
+- ⚠ **Only a question with 2–4 options gets the button**, re-evaluated per
+  question: a numeric or open-response item has nothing to vote on, and would
+  otherwise inherit the previous MCQ's button.
+- ⚠ **Options are taken from the live question object** — `makeMCQ()` shuffles,
+  so a poll built from the source array would letter the choices differently
+  from the child's own screen.
+- ⚠ **Zero votes renders 0%, never an even split.** "25% each" with nobody
+  having voted is a lie a child would act on. The copy says the crowd can be
+  wrong, and the child still chooses.
+- ⚠ **The refresh beat scales with the poll's life** (60 s over an hour left,
+  15 s over ten minutes, else 3 s) in BOTH the app panel and `vote.html`. The
+  game's 3-second beat over a 24-hour link is 28,800 requests from one open tab.
+- **Parent switch**: `DB.restrictions.helpRequestsDisabled`, beside the Game
+  Zone toggle. ⚠ **Stored as the NEGATIVE so an absent key means ON** — every
+  existing child gets the default with no migration, exactly as
+  `minigamesDisabled` does. Added to `SupportSettings.PARENT_KEYS` **and** to
+  `admin_patch_student_settings()`'s accepted key list (a tenth key; the SQL
+  refuses anything not on that list). A parent previewing a child is excluded —
+  that path holds no student token, so the RPC would answer `not_signed_in`.
+- ⚠ **`/v/<CODE>`, `/m/<CODE>` and `/a/<CODE>` all answered 404 in production**
+  until this change — the three `netlify.toml` rewrites were never ported to the
+  Cloudflare Worker, so every Ask-the-Crowd, class-hub and guest-homework link
+  already in circulation was dead. Measured against nouklass.com, not inferred.
+  They are **rewrites, not redirects**: each page reads its own code out of
+  `location.pathname`.
+- Tests: `scripts/test-help-requests.js` (37 checks).
+
 ## Parent-controlled Game Settings
 `engine/game_settings.js` (`GameSettings`, loaded **before** `minigame.js`). Per
 child, in `DB.restrictions.games` → `students.settings`, parent-written through

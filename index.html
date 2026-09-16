@@ -7,6 +7,27 @@
   <script>try{if(localStorage.getItem('mm_global_theme')==='light')document.documentElement.classList.remove('dark');}catch(_){}</script>
   <!-- (preconnects removed — Tailwind and Supabase are now self-hosted) -->
   <title>Nou Klass — Exam Practice</title>
+  <!-- ── Open Graph / Twitter ────────────────────────────────────────────
+       These are what a Facebook or WhatsApp preview is actually built from.
+       ⚠ Keep og:description in step with _appShareText() (app.js) and
+         _inviteText() (auth.js) - the same three-way rule the share copy has
+         always had, now with a fourth surface. A preview that promises a
+         subject the app does not have is the same broken promise as a WhatsApp
+         message that does, and it is cached by Facebook for far longer.
+       ⚠ og:image must be an ABSOLUTE url - Facebook does not resolve a
+         relative path - and must stay reachable, or the card renders blank. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Nou Klass">
+  <meta property="og:url" content="https://nouklass.com/">
+  <meta property="og:title" content="Nou Klass — Exam Practice for Mauritius">
+  <meta property="og:description" content="Free PSAC revision for Grades 4–6 and NCE Grade 9 — Maths, English, French, Science and History &amp; Geography, aligned with the Mauritius MIE curriculum. XP, streaks and real-time parent tracking built in.">
+  <meta property="og:image" content="https://nouklass.com/icons/icon-512.png">
+  <meta property="og:image:alt" content="Nou Klass — exam practice for Mauritian primary and lower-secondary pupils">
+  <meta property="og:locale" content="en_GB">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nou Klass — Exam Practice for Mauritius">
+  <meta name="twitter:description" content="Free PSAC revision for Grades 4–6 and NCE Grade 9, aligned with the Mauritius MIE curriculum.">
+  <meta name="twitter:image" content="https://nouklass.com/icons/icon-512.png">
 
   <!-- PWA manifest -->
   <!-- Select a saved person's manifest before the browser fetches it. The URL
@@ -261,6 +282,11 @@
           <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.8 13.5 3.8 12c0-4.5 3.7-8.2 8.2-8.2s8.2 3.7 8.2 8.2-3.7 8.2-8.2 8.2z"/></svg>
           WhatsApp
         </button>
+        <button onclick="Auth.shareInviteFacebook()"
+          class="flex items-center justify-center gap-2 py-2.5 text-white font-semibold rounded-xl text-sm transition-colors" style="background:#1877f2">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.13 8.44 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.19 2.24.19v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99C18.34 21.13 22 16.99 22 12z"/></svg>
+          Facebook
+        </button>
         <button onclick="Auth.shareInvite()"
           class="flex items-center justify-center gap-2 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl text-sm transition-colors">
           📤 Share
@@ -412,7 +438,7 @@
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
         <div class="min-w-0 flex-1">
           <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">Nou Klass — Exam Practice</h1>
-          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; all 8 NCE Grade 9 subjects</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 1–6 (PSAC) · Grades 7–9 (NCE)</p>
         </div>
         <!-- Stats ride with the branding, not with the actions: they are
              information, not buttons, and keeping them out of the action row is
@@ -567,6 +593,15 @@
             class="w-11 h-11 flex items-center justify-center bg-green-600 hover:bg-green-500 active:scale-95 text-white rounded-full transition-all shadow-sm shrink-0">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.8 13.5 3.8 12c0-4.5 3.7-8.2 8.2-8.2s8.2 3.7 8.2 8.2-3.7 8.2-8.2 8.2z"/></svg>
           </button>
+          <!-- ⚠ Facebook carries NO text - the sharer dialog builds the post from
+               the og: tags on the linked page, and the `quote` parameter has not
+               been honoured for years. That is why the og: block in <head> is
+               part of this feature rather than decoration: without it a shared
+               link shows a bare URL. -->
+          <button onclick="shareAppFacebook()" title="Share on Facebook" aria-label="Share on Facebook"
+            class="w-11 h-11 flex items-center justify-center bg-[#1877f2] hover:bg-[#1464d4] active:scale-95 text-white rounded-full transition-all shadow-sm shrink-0">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.13 8.44 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.19 2.24.19v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99C18.34 21.13 22 16.99 22 12z"/></svg>
+          </button>
           </div>
           <!-- The two ways in, as equal halves of the width. They used to be a
                wide gradient pill beside a narrow outlined one, centred, which
@@ -606,10 +641,10 @@
       <section class="flex-1 flex flex-col items-center justify-center text-center px-4 py-8">
         <div class="text-8xl mb-6 select-none animate-bounce" style="animation-duration:3s">🎓</div>
         <h1 class="text-3xl sm:text-5xl font-black leading-tight mb-4 max-w-2xl">
-          Ace the <span class="text-indigo-300">PSAC Exam</span><br>Practice Made Fun
+          Ace your <span class="text-indigo-300">PSAC &amp; NCE Exams</span><br>Practice Made Fun
         </h1>
         <p class="text-indigo-200 text-base sm:text-lg mb-5 max-w-xl font-medium">
-          Interactive revision across five core PSAC subjects - Maths, Science, History &amp; Geography, English and French - aligned with the Mauritius MIE curriculum.
+          Interactive revision for Grades 1–6 (PSAC) and Grades 7–9 (NCE), aligned with the Mauritius MIE curriculum.
         </p>
 
         <!-- Subject pills -->
@@ -619,6 +654,7 @@
           <span class="flex items-center gap-1.5 bg-violet-500/20 border border-violet-400/30 text-violet-200 text-sm font-semibold px-4 py-1.5 rounded-full">📕 French</span>
           <span class="flex items-center gap-1.5 bg-green-500/20 border border-green-400/30 text-green-200 text-sm font-semibold px-4 py-1.5 rounded-full">🔬 Science</span>
           <span class="flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/30 text-amber-200 text-sm font-semibold px-4 py-1.5 rounded-full">🗺️ History &amp; Geo</span>
+          <span class="flex items-center gap-1.5 bg-cyan-500/20 border border-cyan-400/30 text-cyan-200 text-sm font-semibold px-4 py-1.5 rounded-full">🎓 8 NCE subjects</span>
         </div>
 
         <p class="text-indigo-200/80 text-sm sm:text-base mb-10 max-w-lg">
@@ -637,7 +673,7 @@
         </div>
         <!-- Flag badge -->
         <div class="mt-8 flex items-center gap-2 text-xs text-indigo-200/85 bg-white/5 border border-white/10 px-4 py-2 rounded-full">
-          <span>🏝</span> Built for Mauritian students · Primary School Achievement Certificate
+          <span>🏝</span> Built for Mauritian students · PSAC &amp; NCE
         </div>
         <button onclick="showScreen('auth'); setTimeout(()=>Auth.setRole('student'),60)"
           class="mt-4 text-sm text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">
@@ -722,15 +758,15 @@
           <div class="bg-white/[0.06] border border-white/10 rounded-2xl p-6">
             <div class="text-3xl mb-3 select-none">📄</div>
             <h3 class="font-bold text-white mb-2">Then the real thing</h3>
-            <p class="text-sm text-indigo-100/75 leading-relaxed">Once the syllabus is understood, 162 genuine PSAC questions from 2016–2024 show a child exactly what the paper looks like - with mark schemes so they can check their own work.</p>
+            <p class="text-sm text-indigo-100/75 leading-relaxed">Once the syllabus is understood, 194 genuine past-paper questions from 2016–2024 show a child exactly what the paper looks like - with mark schemes so they can check their own work.</p>
           </div>
         </div>
       </section>
 
       <!-- Subjects showcase -->
       <section class="px-4 pb-12 max-w-5xl mx-auto w-full">
-        <h2 class="text-center text-xl font-bold mb-2 text-white/80">Five core PSAC subjects - fully covered</h2>
-        <p class="text-center text-indigo-300/85 text-sm mb-3">Aligned with the Mauritius MIE curriculum · Grades 1–9<br><span class="text-xs">Content for Grades 1–3 and 7–8 is actively being added. Asian languages and Kreol Morisien are not covered yet.</span></p>
+        <h2 class="text-center text-xl font-bold mb-2 text-white/80">Subjects for PSAC and NCE</h2>
+        <p class="text-center text-indigo-300/85 text-sm mb-3">Aligned with the Mauritius MIE curriculum · Grades 1–6 (PSAC) · Grades 7–9 (NCE)<br><span class="text-xs">Content for Grades 1–3 and 7–8 is actively being added. Asian languages and Kreol Morisien are not covered yet.</span></p>
 
         <!-- ⚠ NCE is a SEPARATE stage from PSAC (Grades 7-9 vs 1-6), so it gets its
              own line rather than being folded into "Five core PSAC subjects".
@@ -753,37 +789,35 @@
           <div class="bg-blue-500/10 hover:bg-blue-500/15 border border-blue-400/25 rounded-2xl p-5 transition-colors text-center">
             <div class="text-4xl mb-2">📐</div>
             <h3 class="font-bold text-white mb-1">Mathematics</h3>
-            <p class="text-xs text-blue-300/85 mb-2">Grades 1–6 (PSAC) · Grade 9 (NCE)
-              <span class="ml-1 whitespace-nowrap rounded bg-emerald-400/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-200">+ NCE Grade 9</span>
-            </p>
+            <p class="text-xs text-blue-300/85 mb-2">Grades 1–6 (PSAC) · Grades 7–9 (NCE)</p>
             <p class="text-sm text-indigo-200/60">Numbers, Fractions, Geometry, Algebra, Statistics &amp; more.</p>
           </div>
 
           <div class="bg-rose-500/10 hover:bg-rose-500/15 border border-rose-400/25 rounded-2xl p-5 transition-colors text-center">
             <div class="text-4xl mb-2">📖</div>
             <h3 class="font-bold text-white mb-1">English</h3>
-            <p class="text-xs text-rose-300/85 mb-2">Grades 1–6 (PSAC) · Grade 9 (NCE)</p>
+            <p class="text-xs text-rose-300/85 mb-2">Grades 1–6 (PSAC) · Grades 7–9 (NCE)</p>
             <p class="text-sm text-indigo-200/60">Nouns, Verbs, Adjectives, Sentences, Comprehension &amp; Vocabulary.</p>
           </div>
 
           <div class="bg-violet-500/10 hover:bg-violet-500/15 border border-violet-400/25 rounded-2xl p-5 transition-colors text-center">
             <div class="text-4xl mb-2">📕</div>
             <h3 class="font-bold text-white mb-1">French</h3>
-            <p class="text-xs text-violet-300/85 mb-2">Grades 1–6 (PSAC) · Grade 9 (NCE)</p>
+            <p class="text-xs text-violet-300/85 mb-2">Grades 1–6 (PSAC) · Grades 7–9 (NCE)</p>
             <p class="text-sm text-indigo-200/60">Vocabulaire, Noms, Verbes, Adjectifs, Lecture &amp; Grammaire.</p>
           </div>
 
           <div class="bg-green-500/10 hover:bg-green-500/15 border border-green-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
             <div class="text-4xl mb-2">🔬</div>
             <h3 class="font-bold text-white mb-1">Science</h3>
-            <p class="text-xs text-green-300/60 mb-2">Grade 4 · Grade 5 · Grade 6</p>
+            <p class="text-xs text-green-300/60 mb-2">Grades 1–6 (PSAC)</p>
             <p class="text-sm text-indigo-200/60">Living things, Forces, Electricity, Air, Conservation &amp; more.</p>
           </div>
 
           <div class="bg-amber-500/10 hover:bg-amber-500/15 border border-amber-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
             <div class="text-4xl mb-2">🗺️</div>
             <h3 class="font-bold text-white mb-1">History &amp; Geography</h3>
-            <p class="text-xs text-amber-300/60 mb-2">Grade 4 · Grade 5 · Grade 6</p>
+            <p class="text-xs text-amber-300/60 mb-2">Grades 1–6 (PSAC)</p>
             <p class="text-sm text-indigo-200/60">Mauritius history, Physical features, Communities &amp; Map skills.</p>
           </div>
 
@@ -1076,7 +1110,7 @@
 
       <!-- Footer -->
       <footer class="text-center pb-10 text-indigo-200/75 text-xs px-4">
-        <p>Nou Klass — Exam Practice · Mauritius · Grades 4–6 (Grades 1–3 &amp; 7–9 coming) · Maths · English · French · Science · History &amp; Geography</p>
+        <p>Nou Klass — Exam Practice · Mauritius · Grades 1–6 (PSAC) · Grades 7–9 (NCE) · Maths · English · French · Science · History &amp; Geography</p>
         <p class="mt-1">Progress saved securely in the cloud · Installable app · Aligned to the MIE curriculum</p>
         <button onclick="showScreen('contact')" class="mt-2 text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">Contact the admins</button>
         <span class="mt-2 mx-2 text-indigo-200/40" aria-hidden="true">·</span>
@@ -1194,9 +1228,8 @@
         <header class="py-8 sm:py-12 text-center">
           <h1 class="text-3xl sm:text-4xl font-black mb-3">Everything the app can do</h1>
           <p class="text-indigo-200/70 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Built for the Mauritius PSAC exam - Grades 4, 5 and 6, across Maths,
-            English, French, Science and History &amp; Geography. Grades 1–3 and
-            7–9 are on the way. Here is each part of it, with a picture of what
+            Built for Mauritius learners in Grades 1–6 (PSAC) and Grades 7–9 (NCE),
+            across Maths, English, French, Science, History &amp; Geography and more. Here is each part of it, with a picture of what
             your child actually sees.
           </p>
         </header>
@@ -1784,7 +1817,7 @@
       <div class="auth-brand text-center mb-6 select-none">
         <div class="auth-logo mb-2 drop-shadow-xl">🎓</div>
         <h1 class="auth-title font-black text-white tracking-tight">Nou Klass — Exam Practice</h1>
-        <p class="auth-sub text-indigo-300 text-sm mt-1">PSAC Prep · Grades 4–6 · Mauritius</p>
+        <p class="auth-sub text-indigo-300 text-sm mt-1">Grades 1–6 (PSAC) · Grades 7–9 (NCE) · Mauritius</p>
       </div>
 
       <!-- Card. The blur sits on a separate, pointer-events-none decorative
@@ -3124,6 +3157,14 @@
           <button id="sound-toggle-btn" type="button" onclick="toggleSound()" class="pr-tool" title="Sound effects">
             <span class="pr-tool-ico">🔔</span><span class="pr-tool-lbl">Sound on</span>
           </button>
+          <!-- ⚠ In the TRAY, not the always-visible .pr-tools row. That row is a
+               fixed grid (3 columns, 4 for maths) and a fifth button would
+               reflow it on every phone; and unlike read-aloud, a child who
+               cannot read "Need help?" is not the audience for this one.
+               Hidden until the question is pollable - see _syncHelpRequestBtn(). -->
+          <button id="practice-ask-btn" type="button" onclick="openHelpRequest()" class="pr-tool hidden" title="Share this question so friends can vote on the answer">
+            <span class="pr-tool-ico">🙋</span><span class="pr-tool-lbl">Ask a friend</span>
+          </button>
         </div>
 
         <p id="practice-error-note" class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1 px-2">⚙️ The site is being updated, so some questions may still contain small errors. If one looks wrong, please tap <b>🚩 Report question</b> above so an admin can fix it. 🙏</p>
@@ -3395,8 +3436,8 @@
           <select id="admin-member-status-filter" onchange="AdminPanel.setMemberStatusFilter(this.value)"
             aria-label="Member confirmation status"
             class="w-44 shrink-0 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
-            <option value="active">Activated only</option>
-            <option value="pending">Awaiting email confirmation</option>
+            <option value="active">Activated accounts</option>
+            <option value="pending">Needs activation — email not confirmed</option>
             <option value="all">All accounts</option>
           </select>
           <input id="admin-member-search" type="text" placeholder="Search by name or email…"
@@ -3411,9 +3452,18 @@
         <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1 leading-relaxed">
           Activated accounts show <b>parents and administrators</b>; teachers remain in the separate <b>👩‍🏫 Teachers</b> tab. Awaiting confirmation shows new sign-ups that have not created a profile yet. Expand a row to manage its account type and family.
         </p>
+        <!-- Group email. The selection bar only appears once something is
+             ticked, so the ordinary members screen is unchanged for an admin
+             who never uses it. -->
+        <div id="admin-member-selection" class="hidden mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/20 px-3 py-2.5">
+          <span id="admin-member-selection-count" class="text-sm font-bold text-indigo-800 dark:text-indigo-200">0 selected</span>
+          <button onclick="AdminPanel.openBroadcast()" class="text-xs font-bold px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">✉️ Email selected (Bcc)</button>
+          <button onclick="AdminPanel.broadcastAudience()" class="text-xs font-semibold px-3 py-2 rounded-lg border border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/40">➕ Add everyone matching these filters</button>
+          <button onclick="AdminPanel.clearMemberPicks()" class="text-xs font-semibold px-3 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-red-500">Clear</button>
+        </div>
         <div class="mb-3">
-          <button id="admin-copy-emails" onclick="AdminPanel.copyMemberEmails()" class="rounded-lg px-3 py-2 text-sm font-semibold bg-indigo-600 text-white disabled:opacity-50">📋 Copy emails</button>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Copies all accounts matching these filters, including unloaded pages. Use Bcc when emailing a group.</p>
+          <button id="admin-copy-emails" onclick="AdminPanel.copyMemberEmails()" class="rounded-lg px-3 py-2 text-sm font-semibold bg-indigo-600 text-white disabled:opacity-50">📋 Copy activated emails</button>
+          <p id="admin-copy-emails-help" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Copies all accounts matching these filters, including unloaded pages. Use Bcc when emailing a group.</p>
           <p id="admin-copy-emails-status" role="status" class="text-xs text-gray-600 dark:text-gray-300 mt-1"></p>
           <textarea id="admin-copy-emails-output" readonly aria-label="Matching email addresses, separated by commas" class="hidden w-full mt-2 p-2 rounded-lg border bg-white dark:bg-gray-700 dark:text-white" rows="3"></textarea>
         </div>
@@ -4460,8 +4510,9 @@
         <div class="tc-cd-title">
           <span id="tc-cd-emoji">🏫</span>
           <span id="tc-cd-name">Classroom</span>
+          <span id="tc-cd-loading-indicator" class="tc-cd-loading-indicator hidden" role="status"><i aria-hidden="true"></i><span>Loading classroom</span></span>
         </div>
-        <button class="tc-cd-share-btn" onclick="TeacherClassroomDetail.createWork()" title="Set work for this classroom">✏️ Set work</button>
+        <button class="tc-cd-share-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()" title="Create an activity for this classroom">＋ Create activity</button>
       </div>
       <!-- ⚠ The ONE place this classroom's numbers are counted. There used to
            be a second grid on the Today screen counting three of the same
@@ -4469,20 +4520,19 @@
            number is now the button that takes you to what it counts. -->
       <div class="tc-cd-stats" aria-label="Classroom at a glance">
         <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('pupils')"><strong id="tc-cd-stat-pupils">-</strong><span>pupils</span></button>
-        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('work')"><strong id="tc-cd-stat-assignments">-</strong><span>work running</span></button>
-        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('materials')"><strong id="tc-cd-stat-materials">-</strong><span>files</span></button>
-        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('work')"><strong id="tc-cd-stat-results">-</strong><span>handed in</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('work')"><strong id="tc-cd-stat-assignments">-</strong><span>activities running</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('materials')"><strong id="tc-cd-stat-materials">-</strong><span>resources</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('results')"><strong id="tc-cd-stat-results">-</strong><span>completed</span></button>
       </div>
       <div class="tc-cd-body">
         <nav class="tc-cd-nav" role="tablist" aria-label="Classroom sections">
-          <button class="tc-cd-nav-btn" role="tab" data-sec="overview" onclick="TeacherClassroomDetail.showSection('overview')">🔔<span>Today</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="work"     onclick="TeacherClassroomDetail.showSection('work')">📋<span>Work</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="overview" onclick="TeacherClassroomDetail.showSection('overview')">🏠<span>Dashboard</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="work"     onclick="TeacherClassroomDetail.showSection('work')">📋<span>Activities</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="pupils"   onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Files</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Resources</span></button>
           <div class="tc-cd-nav-more">
             <button class="tc-cd-nav-btn" id="tc-cd-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="tc-cd-more-menu" onclick="TeacherClassroomDetail.toggleMore()">⋯<span>More</span></button>
             <div id="tc-cd-more-menu" class="tc-cd-more-menu hidden" role="menu" aria-label="More classroom tools">
-              <button type="button" role="menuitem" data-sec="results"   onclick="TeacherClassroomDetail.showSection('results')">📊 All marks</button>
               <button type="button" role="menuitem" data-sec="settings"  onclick="TeacherClassroomDetail.showSection('settings')">⚙️ Settings</button>
             </div>
           </div>
@@ -4879,6 +4929,16 @@
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" id="pd-games-toggle" class="sr-only peer" onchange="Auth.toggleMinigamesDisabled()">
+                <div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-500 rounded-full peer transition-colors peer-focus:ring-2 peer-focus:ring-blue-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+              </label>
+            </div>
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+              <div>
+                <div class="font-bold text-gray-800 dark:text-white text-sm">🙋 Ask a friend for help</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">On a practice question, your child can share that one question on WhatsApp or Facebook so friends and family vote on the answer. Your child's name is never sent, and <b>the correct answer is never shared</b> - not even with the people voting. The link stops working after 1, 6 or 24 hours, whichever your child picks.</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-3">
+                <input type="checkbox" id="pd-help-toggle" class="sr-only peer" onchange="Auth.toggleHelpRequestsDisabled()">
                 <div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-500 rounded-full peer transition-colors peer-focus:ring-2 peer-focus:ring-blue-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
               </label>
             </div>
@@ -6257,6 +6317,11 @@
           style="background:#25D366">
           <span class="text-lg">💬</span> Send via WhatsApp
         </button>
+        <button onclick="shareFriendLinkFacebook()"
+          class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-bold text-sm text-white transition-colors"
+          style="background:#1877f2">
+          <span class="text-lg">📘</span> Share on Facebook
+        </button>
         <button onclick="shareFriendLink()"
           class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors">
           <span class="text-lg">🔗</span> Copy / Share Link
@@ -6431,6 +6496,92 @@
     </div>
   </div>
 
+
+  <!-- ── ADMIN GROUP EMAIL (Bcc) ──────────────────────────────
+       ⚠ Bcc is not a choice offered here, it is the only mode. A To: list of
+         parent addresses is a data breach dressed as a newsletter, and the
+         addresses never reach this page at all - admin.js sends ids and
+         workers/api/admin-broadcast.js resolves them with the service role.
+       The modal- id prefix and fixed inset-0 wrapper are what _Dialogs keys
+       on for the focus trap, Escape handling and aria wiring. -->
+  <div id="modal-admin-broadcast" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-lg p-5 my-auto relative">
+      <button onclick="AdminPanel.closeBroadcast()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">✉️ Email selected members</h2>
+      <p id="admin-bc-recipients" class="text-xs text-gray-500 dark:text-gray-400 mb-3"></p>
+
+      <label for="admin-bc-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Subject</label>
+      <input id="admin-bc-subject" type="text" maxlength="150" placeholder="e.g. Grade 6 Science is now live"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+      <label for="admin-bc-message" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Message</label>
+      <textarea id="admin-bc-message" rows="8" maxlength="8000" placeholder="Write in plain text. A blank line starts a new paragraph."
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only — it is escaped before sending, so pasted formatting will not carry through. Replies come back to your own address.</p>
+
+      <label class="flex items-start gap-2 mb-3 cursor-pointer">
+        <input id="admin-bc-essential" type="checkbox" class="accent-indigo-600 mt-0.5">
+        <span class="text-xs text-gray-600 dark:text-gray-300">
+          <b>Essential notice</b> — send even to people who have switched announcements off.
+          <span class="block text-[11px] text-gray-400 dark:text-gray-500">Only for account, billing or safety messages. Anything else must respect the opt-out.</span>
+        </span>
+      </label>
+
+      <p id="admin-bc-status" role="status" aria-live="polite" class="text-xs text-gray-600 dark:text-gray-300 mb-3 min-h-[1.2em]"></p>
+
+      <div class="flex flex-wrap gap-2 justify-end">
+        <button onclick="AdminPanel.closeBroadcast()" class="text-sm font-semibold px-4 py-2 rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">Cancel</button>
+        <button onclick="AdminPanel.broadcastPreview()" class="text-sm font-semibold px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">Who would get this?</button>
+        <button id="admin-bc-send" onclick="AdminPanel.sendBroadcast()" class="text-sm font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ASK A FRIEND (help request poll) ──────────────────────
+       ⚠ The correct answer is NEVER sent anywhere. The poll row holds the
+         question and the options only, which is what makes this link safe to
+         put on WhatsApp, and the vote page cannot mark anybody right.
+       ⚠ The result is worded as a HINT, never as an answer. A crowd is wrong
+         often enough that "62% said B" must not read as a verdict. -->
+  <div id="modal-ask-friend" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md p-5 my-auto relative">
+      <button onclick="closeHelpRequest()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">🙋 Ask a friend</h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Send this question to people you know. They vote, you see what they picked — then <b>you</b> choose.</p>
+
+      <div id="ask-friend-preview" class="text-sm text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/40 rounded-xl px-3 py-2.5 mb-3 max-h-32 overflow-y-auto"></div>
+
+      <div id="ask-friend-setup">
+        <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">How long should people be able to vote?</p>
+        <div class="flex gap-2 mb-3">
+          <button type="button" data-help-duration="60" aria-pressed="false" onclick="pickHelpDuration(this)" class="af-dur">1 hour</button>
+          <button type="button" data-help-duration="360" aria-pressed="true" onclick="pickHelpDuration(this)" class="af-dur af-dur-on">6 hours</button>
+          <button type="button" data-help-duration="1440" aria-pressed="false" onclick="pickHelpDuration(this)" class="af-dur">24 hours</button>
+        </div>
+        <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3">🔒 Your name is never sent, and the correct answer is never shared — not even with the people voting.</p>
+        <button onclick="createHelpRequest(this)" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold disabled:opacity-60">🙋 Make my help link</button>
+      </div>
+
+      <div id="ask-friend-live" class="hidden">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <span class="text-xs font-bold text-indigo-600 dark:text-indigo-300">📣 Your link is live!</span>
+          <span id="ask-friend-clock" class="text-xs text-gray-500 dark:text-gray-400"></span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <button onclick="shareHelpWhatsApp()" class="af-share af-share-wa">💬 WhatsApp</button>
+          <button onclick="shareHelpFacebook()" class="af-share af-share-fb">📘 Facebook</button>
+          <button id="ask-friend-copy" onclick="copyHelpLink(this)" class="af-share">🔗 Copy link</button>
+          <button onclick="shareHelpMore()" class="af-share">📤 Share…</button>
+        </div>
+        <div id="ask-friend-bars" class="mb-2"></div>
+        <p id="ask-friend-total" class="text-xs text-gray-500 dark:text-gray-400 text-center"></p>
+      </div>
+
+      <p id="ask-friend-status" role="status" aria-live="polite" class="text-xs text-red-500 mt-2 min-h-[1.2em]"></p>
+    </div>
+  </div>
 
   <!-- ── QR SCANNER OVERLAY ──────────────────────────────────── -->
   <div id="modal-qr-scanner" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center p-4"

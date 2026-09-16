@@ -22,6 +22,7 @@ const AdminPanel = (() => {
   // ── Entry point called by auth.js ───────────
   async function render() {
     showTab('members');
+    _updateMemberCopyControl();
     await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadShopSettings(),
                        loadGuestLimits(), loadTeacherQueue()]);
     _renderContent();
@@ -290,6 +291,208 @@ const AdminPanel = (() => {
     }
   }
 
+
+  // ── Group email (Bcc) ──────────────────────────────────────────────────
+  // Replaces "copy the addresses, open Gmail, paste into Bcc, hope". The admin
+  // picks accounts here; the ADDRESSES never reach this browser and the send is
+  // always Bcc - see workers/api/admin-broadcast.js.
+  // ⚠ Selection survives paging and filtering on purpose: picking eight parents
+  //   across four pages is the case this exists for. It is cleared explicitly,
+  //   and the bar always says how many are held so it can never be a surprise.
+  const _memberPicks = new Map();   // id → display name, for the selection bar
+  let _broadcastBusy = false;
+
+  function toggleMemberPick(id, on) {
+    if (on) _memberPicks.set(id, _members.find(m => m.id === id)?.full_name
+      || _pendingRegistrations.find(r => r.id === id)?.email || 'Unnamed');
+    else _memberPicks.delete(id);
+    _paintSelectionBar();
+  }
+
+  function toggleSelectAllMembers(on) {
+    (_memberStatusFilter === 'pending' ? _pendingRegistrations : _members)
+      .forEach(m => toggleMemberPick(m.id, on));
+    document.querySelectorAll('[id^="member-pick-"]').forEach(cb => { cb.checked = on; });
+  }
+
+  function clearMemberPicks() {
+    _memberPicks.clear();
+    document.querySelectorAll('[id^="member-pick-"]').forEach(cb => { cb.checked = false; });
+    _paintSelectionBar();
+  }
+
+  function _paintSelectionBar() {
+    const bar = document.getElementById('admin-member-selection');
+    const count = document.getElementById('admin-member-selection-count');
+    if (!bar) return;
+    bar.classList.toggle('hidden', _memberPicks.size === 0);
+    if (count) count.textContent = `${_memberPicks.size} selected`;
+  }
+
+  // Everyone matching the current filters, not just this page. Reuses exactly
+  // the collection the copy button already does, so the two can never disagree
+  // about who "all matching" means.
+  async function broadcastAudience() {
+    const status = document.getElementById('admin-bc-status');
+    if (status) status.textContent = 'Collecting everyone who matches the current filters…';
+    const visibility = _memberVisibility();
+    const search = (document.getElementById('admin-member-search')?.value || '').trim();
+    const now = new Date().toISOString();
+    const ids = [];
+    if (_memberStatusFilter !== 'pending') {
+      for (let offset = 0; ; offset += 100) {
+        let query = _sb.from('profiles').select('id, full_name')
+          .in('role', visibility.admins ? ['parent', 'admin'] : ['parent'])
+          .is('deleted_at', null)
+          .order('created_at', { ascending: false }).order('id')
+          .range(offset, offset + 99);
+        if (!visibility.expired) query = query.or(`expires_at.is.null,expires_at.gte.${now}`);
+        if (!visibility.disabled) query = query.eq('disabled', false);
+        if (search) query = query.ilike('full_name', `%${search}%`);
+        const { data, error } = await query;
+        if (error) { if (status) status.textContent = 'Could not load the full list. Try again.'; return; }
+        (data || []).forEach(r => ids.push([r.id, r.full_name || 'Unnamed']));
+        if ((data || []).length < 100) break;
+      }
+    }
+    if (_memberStatusFilter !== 'active') {
+      let cursor = null;
+      do {
+        const result = await _pendingRegistrationRequest('GET', null,
+          `?limit=100&search=${encodeURIComponent(search)}${cursor ? '&cursor=' + encodeURIComponent(cursor) : ''}`);
+        (result.registrations || []).forEach(r => ids.push([r.id, r.email]));
+        const next = result.next_cursor || null;
+        if (next && next === cursor) break;
+        cursor = next;
+      } while (cursor);
+    }
+    ids.forEach(([id, name]) => _memberPicks.set(id, name));
+    _paintSelectionBar();
+    _renderBroadcastRecipients();
+    if (status) status.textContent = '';
+  }
+
+  function openBroadcast() {
+    if (!_memberPicks.size) { toast('Tick at least one account first.', 2500); return; }
+    // ⚠ Reset in the OPEN, not in the close: a modal that is dismissed by
+    //   Escape, by the backdrop, or by a failed send never runs its own closer,
+    //   and the next admin to open it would inherit the last message.
+    const subject = document.getElementById('admin-bc-subject');
+    const message = document.getElementById('admin-bc-message');
+    const essential = document.getElementById('admin-bc-essential');
+    const status = document.getElementById('admin-bc-status');
+    if (subject) subject.value = '';
+    if (message) message.value = '';
+    if (essential) essential.checked = false;
+    if (status) status.textContent = '';
+    _broadcastBusy = false;
+    _renderBroadcastRecipients();
+    document.getElementById('modal-admin-broadcast')?.classList.remove('hidden');
+    subject?.focus();
+  }
+
+  function closeBroadcast() {
+    if (_broadcastBusy) return;
+    document.getElementById('modal-admin-broadcast')?.classList.add('hidden');
+  }
+
+  function _renderBroadcastRecipients() {
+    const box = document.getElementById('admin-bc-recipients');
+    if (!box) return;
+    const names = [..._memberPicks.values()];
+    const shown = names.slice(0, 12).map(n => _esc(n)).join(' · ');
+    box.innerHTML = `<b>${names.length}</b> recipient${names.length === 1 ? '' : 's'}`
+      + (names.length ? `<span class="text-gray-400 dark:text-gray-500"> — ${shown}${names.length > 12 ? ` and ${names.length - 12} more` : ''}</span>` : '');
+  }
+
+  async function broadcastPreview() {
+    await _sendBroadcast(true);
+  }
+
+  async function sendBroadcast() {
+    const n = _memberPicks.size;
+    if (!confirm(`Send this message to ${n} recipient${n === 1 ? '' : 's'}? Everyone is Bcc'd, so nobody sees anyone else's address.`)) return;
+    await _sendBroadcast(false);
+  }
+
+  async function _sendBroadcast(dryRun) {
+    if (_broadcastBusy) return;
+    const subject = (document.getElementById('admin-bc-subject')?.value || '').trim();
+    const message = (document.getElementById('admin-bc-message')?.value || '').trim();
+    const essential = !!document.getElementById('admin-bc-essential')?.checked;
+    const status = document.getElementById('admin-bc-status');
+    const sendBtn = document.getElementById('admin-bc-send');
+    if (!subject || !message) {
+      if (status) status.textContent = '⚠ A subject and a message are both required.';
+      return;
+    }
+    _broadcastBusy = true;
+    if (sendBtn) sendBtn.disabled = true;
+    if (status) status.textContent = dryRun ? 'Checking who would receive this…' : 'Sending…';
+
+    // ⚠ Chunked to the server's own per-request cap. A 900-parent send is many
+    //   requests, and a failure partway through must report what DID go out -
+    //   "it failed" after 600 delivered emails is the worst possible answer.
+    const ids = [..._memberPicks.keys()];
+    const CHUNK = 500;
+    let sent = 0, would = 0, selected = 0;
+    const skipped = { opted_out: 0, no_email: 0, deleted: 0 };
+    const errors = [];
+    try {
+      const { data: sessionData } = await _sb.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Your sign-in session has expired. Refresh and sign in again.');
+      for (let i = 0; i < ids.length; i += CHUNK) {
+        const batch = ids.slice(i, i + CHUNK);
+        if (status) status.textContent = `${dryRun ? 'Checking' : 'Sending'} ${i + 1}–${i + batch.length} of ${ids.length}…`;
+        const response = await _serverFetch('/api/admin-broadcast', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_ids: batch, subject, message, essential, dry_run: dryRun }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) { errors.push(result.error || result.message || `HTTP ${response.status}`); continue; }
+        sent += result.sent || 0;
+        would += result.would_send || 0;
+        selected += result.selected || batch.length;
+        for (const k of Object.keys(skipped)) skipped[k] += result.skipped?.[k] || 0;
+      }
+    } catch (e) {
+      errors.push(e.message || String(e));
+    }
+    _broadcastBusy = false;
+    if (sendBtn) sendBtn.disabled = false;
+
+    const skipNote = [
+      skipped.opted_out ? `${skipped.opted_out} have switched announcements off` : '',
+      skipped.no_email ? `${skipped.no_email} have no address` : '',
+      skipped.deleted ? `${skipped.deleted} deleted` : '',
+    ].filter(Boolean).join(', ');
+
+    if (dryRun) {
+      if (status) status.textContent = errors.length
+        ? `⚠ ${errors[0]}`
+        : `${would} of ${ids.length} would receive this${skipNote ? ` (skipped: ${skipNote})` : ''}. Nothing has been sent.`;
+      return;
+    }
+    if (status) {
+      status.textContent = sent
+        ? `✅ Sent to ${sent} recipient${sent === 1 ? '' : 's'}${skipNote ? ` — skipped: ${skipNote}` : ''}${errors.length ? ` — ${errors.length} batch(es) failed: ${errors[0]}` : ''}`
+        : `⚠ Nothing was sent. ${errors[0] || (skipNote ? `Everyone was skipped: ${skipNote}` : '')}`;
+    }
+    if (sent) {
+      toast(`✉️ Sent to ${sent} recipient${sent === 1 ? '' : 's'}.`, 3500);
+      // A note, not evidence - written from the admin's browser after the fact,
+      // like every other admin_log_action call.
+      try {
+        await _sb.rpc('admin_log_action', {
+          p_action: 'admin:broadcast', p_target_user: null, p_target_student: null,
+          p_detail: { recipients: sent, subject: subject.slice(0, 120), essential },
+        });
+      } catch (_) {}
+    }
+  }
+
   // ── Members ────────────────────────────────
   // Populated by loadMembers() before _renderMembers() runs, so the per-member
   // "Assign a plan" <select> always lists whatever is actually in the plans
@@ -313,6 +516,18 @@ const AdminPanel = (() => {
   let _memberStatusFilter = 'active'; // active | pending | all
   let _pendingRegistrations = [];
   let _pendingCursor = null;
+
+  function _updateMemberCopyControl() {
+    const button = document.getElementById('admin-copy-emails');
+    const help = document.getElementById('admin-copy-emails-help');
+    const pending = _memberStatusFilter === 'pending';
+    const all = _memberStatusFilter === 'all';
+    if (button) button.textContent = pending ? '📋 Copy unactivated emails'
+      : all ? '📋 Copy all matching emails' : '📋 Copy activated emails';
+    if (help) help.textContent = pending
+      ? 'Copies everyone who has registered but has not confirmed their email yet, including unloaded pages. Use Bcc when emailing a group.'
+      : 'Copies all accounts matching these filters, including unloaded pages. Use Bcc when emailing a group.';
+  }
 
   function _memberVisibility() {
     return {
@@ -349,19 +564,28 @@ const AdminPanel = (() => {
       ? '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5">No registrations are waiting for email confirmation.</p>'
       : `<div class="space-y-2">${rows.map(r => `
         <div class="flex flex-wrap items-center gap-2 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/15 px-3 py-2.5">
+          <input type="checkbox" id="member-pick-${_esc(r.id)}" ${_memberPicks.has(r.id) ? 'checked' : ''}
+            onchange="AdminPanel.toggleMemberPick('${r.id}', this.checked)"
+            aria-label="Select ${_esc(r.email)} for a group email"
+            class="accent-indigo-600 cursor-pointer shrink-0">
           <div class="min-w-0 flex-1">
             <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(r.full_name || 'Name not provided')}</p>
             <p class="text-xs text-gray-600 dark:text-gray-300 truncate">${_esc(r.email)}</p>
             <p class="text-[11px] text-amber-700 dark:text-amber-300">Registered ${r.created_at ? _fmtJoined(r.created_at) : 'recently'} · awaiting email confirmation</p>
           </div>
-          <button onclick="AdminPanel.activatePendingRegistration('${r.id}')"
-            class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white">
+          <button type="button" onclick="AdminPanel.copyPendingEmail('${r.id}')"
+            class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30">
+            📋 Copy email
+          </button>
+          <button id="pending-act-${_esc(r.id)}" onclick="AdminPanel.activatePendingRegistration('${r.id}')"
+            class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white disabled:opacity-60">
             ✅ Activate manually
           </button>
         </div>`).join('')}</div>`;
     const more = _pendingCursor
       ? `<div class="text-center mt-3"><button onclick="AdminPanel.loadMorePendingRegistrations()" class="border border-amber-300 dark:border-amber-700 rounded-lg px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300">Load more pending registrations</button></div>`
       : '';
+    _paintSelectionBar();
     target.innerHTML = (inMainList
       ? `<p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2">These people registered but have not clicked their email confirmation link. Manually activating lets them sign in and finish family setup.</p>${body}${more}`
       : `<div class="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/70 dark:bg-amber-900/10 p-3"><div class="flex items-center justify-between gap-2 mb-2"><p class="text-sm font-bold text-amber-800 dark:text-amber-200">✉️ Awaiting email confirmation (${rows.length}${_pendingCursor ? '+' : ''})</p><span class="text-[11px] text-amber-700 dark:text-amber-300">Shown alongside activated accounts</span></div>${body}${more}</div>`);
@@ -399,6 +623,7 @@ const AdminPanel = (() => {
     _members = [];
     _pendingRegistrations = [];
     _pendingCursor = null;
+    _updateMemberCopyControl();
     loadMembers(1);
   }
 
@@ -411,15 +636,67 @@ const AdminPanel = (() => {
     loadMembers(1);
   }
 
+  // ⚠ A failure here used to be indistinguishable from nothing happening: the
+  //   button never changed, the only report was a toast that shares the screen
+  //   with every other toast, and the row stayed put either way. Three things
+  //   now make the outcome legible - the button says what it is doing, the
+  //   server VERIFIES the flag moved before answering ok (read-after-write in
+  //   pending-registrations.js), and a failure is written into the row itself
+  //   so it survives the toast and can be read back over the phone.
   async function activatePendingRegistration(userId) {
-    const email = _pendingRegistrations.find(r => r.id === userId)?.email || 'this account';
-    if (!confirm(`Activate ${email} without email confirmation? They will be able to sign in with their existing password and complete family setup.`)) return;
+    const row = _pendingRegistrations.find(r => r.id === userId);
+    const email = row?.email || 'this account';
+    if (!confirm(`Activate ${email} without email confirmation? They will be able to sign in with their existing password and complete family setup, and will be emailed to say an administrator activated it.`)) return;
+    const btn = document.getElementById(`pending-act-${userId}`);
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Activating…'; }
     try {
-      await _pendingRegistrationRequest('POST', { action: 'activate', user_id: userId });
-      toast(`${email} has been activated.`, 2500);
+      const result = await _pendingRegistrationRequest('POST', { action: 'activate', user_id: userId });
+      toast(`${email} is now active — ${_activationMailNote(result.emailed)}`, 4500);
       await loadPendingRegistrations(true, _memberStatusFilter === 'pending');
     } catch (error) {
-      toast(error.message || 'Could not activate this account.', 3500);
+      const why = error.message || 'Could not activate this account.';
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '✅ Activate manually';
+        const note = document.createElement('p');
+        note.className = 'w-full text-xs font-semibold text-red-600 dark:text-red-400 mt-1';
+        note.textContent = '⚠ ' + why;
+        btn.parentElement?.appendChild(note);
+      }
+      toast(why, 5000);
+    }
+  }
+
+  // The account is active either way by the time this is read - the email is a
+  // courtesy on top, so it is reported separately and never as a failure of the
+  // activation itself.
+  function _activationMailNote(emailed) {
+    if (emailed === 'sent') return 'they have been emailed.';
+    if (emailed === 'not_configured') return 'no email sent: mail is not set up on the server (RESEND_API_KEY).';
+    if (!emailed) return 'no email was sent.';
+    return 'no email sent: ' + String(emailed).slice(0, 90);
+  }
+
+  // Pending registrations arrive from the secure admin endpoint WITH their
+  // email address. Copy it directly from that already-visible row: it is
+  // instant, works even if the bulk-email endpoint is temporarily unavailable,
+  // and avoids asking an admin to open a separate detail screen just to reply.
+  async function copyPendingEmail(userId) {
+    const email = String(_pendingRegistrations.find(r => r.id === userId)?.email || '').trim();
+    if (!email) { toast('That email address is not available. Refresh and try again.', 3000); return; }
+    const status = document.getElementById('admin-copy-emails-status');
+    const output = document.getElementById('admin-copy-emails-output');
+    try {
+      await navigator.clipboard.writeText(email);
+      if (status) status.textContent = `Copied ${email}.`;
+    } catch (_) {
+      if (output) {
+        output.value = email;
+        output.classList.remove('hidden');
+        output.focus();
+        output.select();
+      }
+      if (status) status.textContent = 'Select and copy the email address below.';
     }
   }
 
@@ -1128,12 +1405,21 @@ const AdminPanel = (() => {
     // A CSS grid, not a <table>: the columns collapse to a stacked two-line row
     // under 640px, which a real table cannot do without horizontal scrolling.
     // The header row is hidden on mobile for the same reason.
-    const COLS = 'grid-cols-[1.6rem_1fr] sm:grid-cols-[1.6rem_2.2fr_1fr_1fr_1.1fr]';
+    // ⚠ The track list moved to a REAL class in style.css (`.adm-member-grid`)
+    //   when the select column was added. It needs a media query, so an inline
+    //   style cannot express it, and an arbitrary Tailwind class injected by
+    //   innerHTML depends on the Play CDN having seen the value at its first
+    //   scan. style.css loads after the CDN and cannot lose.
+    const COLS = 'adm-member-grid';
+    const allOnPage = list.length > 0 && list.every(m => _memberPicks.has(m.id));
     const header = `
-      <div class="hidden sm:grid grid-cols-[1.6rem_2.2fr_1fr_1fr_1.1fr] gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+      <div class="hidden sm:grid adm-member-grid gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        <span><input type="checkbox" ${allOnPage ? 'checked' : ''} onchange="AdminPanel.toggleSelectAllMembers(this.checked)"
+          title="Select every account on this page" aria-label="Select every account on this page" class="accent-indigo-600 cursor-pointer"></span>
         <span></span><span>Parent</span><span>Children</span><span>Status</span><span>Plan</span>
       </div>`;
 
+    _paintSelectionBar();
     el.innerHTML = header + list.map(m => {
       const isParent = m.role === 'parent' || m.role === 'admin';
       const open     = _openMembers.has(m.id);
@@ -1158,6 +1444,12 @@ const AdminPanel = (() => {
           onclick="AdminPanel.toggleMemberRow('${m.id}')"
           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();AdminPanel.toggleMemberRow('${m.id}')}"
           class="grid ${COLS} gap-2 items-center px-3 py-2.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors">
+          <span onclick="event.stopPropagation()"><input type="checkbox" id="member-pick-${m.id}"
+            ${_memberPicks.has(m.id) ? 'checked' : ''}
+            onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"
+            onchange="event.stopPropagation();AdminPanel.toggleMemberPick('${m.id}', this.checked)"
+            aria-label="Select ${_esc(m.full_name || 'this account')} for a group email"
+            class="accent-indigo-600 cursor-pointer"></span>
           <span id="member-chev-${m.id}" class="text-gray-400 text-sm select-none">${open ? '▾' : '▸'}</span>
           <div class="min-w-0">
             <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(m.full_name || 'Unnamed')}</p>
@@ -1171,7 +1463,7 @@ const AdminPanel = (() => {
           <span class="hidden sm:block">${_memberChildrenSummary(m)}</span>
           <span class="hidden sm:block">${_memberStatusBadge(m)}</span>
           <span class="hidden sm:block text-xs truncate" id="plan-label-${m.id}">${isParent ? 'loading…' : '-'}</span>
-          <div class="col-span-2 sm:hidden flex flex-wrap items-center gap-1.5">
+          <div class="col-span-3 sm:hidden flex flex-wrap items-center gap-1.5">
             ${_memberChildrenSummary(m)}${_memberStatusBadge(m)}
           </div>
         </div>
@@ -5047,8 +5339,10 @@ const AdminPanel = (() => {
     loadSecurityEvents();
   }
 
-  return { render, showTab, loadMembers, membersPage, filterMembers, copyMemberEmails, setMemberStatusFilter, setMemberVisibilityFilters,
+  return { render, showTab, loadMembers, membersPage, filterMembers, copyMemberEmails, copyPendingEmail, setMemberStatusFilter, setMemberVisibilityFilters,
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
+    toggleMemberPick, toggleSelectAllMembers, clearMemberPicks, openBroadcast, closeBroadcast,
+    broadcastPreview, sendBroadcast, broadcastAudience,
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
     loadGuestLimits, saveGuestLimits, previewGuestLimits,

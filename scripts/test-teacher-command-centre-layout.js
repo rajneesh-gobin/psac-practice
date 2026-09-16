@@ -314,7 +314,7 @@ let chrome, ws; const pageErrorsRef = [];
     const ov = await evaluate(`({ open: !document.getElementById('tc-classroom-detail').classList.contains('hidden'), nav: [...document.querySelectorAll('.tc-cd-nav > .tc-cd-nav-btn')].map(b => b.dataset.sec), more: [...document.querySelectorAll('#tc-cd-more-menu [data-sec]')].map(b => b.dataset.sec), stats: [...document.querySelectorAll('.tc-today-stats')].length, headStrip: [...document.querySelectorAll('.tc-cd-stat strong')].map(e => e.textContent), todos: [...document.querySelectorAll('.tc-todo')].map(r => r.textContent.replace(/\\s+/g, ' ').trim()), foot: document.querySelectorAll('.tc-today-footnote').length, strip: document.querySelectorAll('button.tc-cd-stat').length })`);
     assert(ov.open, 'classroom overlay opens from Home data');
     assert.deepEqual(ov.nav, ['overview', 'work', 'pupils', 'materials'], 'four primary classroom sections');
-    assert.deepEqual(ov.more, ['results', 'settings']);
+    assert.deepEqual(ov.more, ['settings'], 'Results are opened from the relevant activity, not a second navigation destination');
     // ⚠ There used to be TWO stat rows on this one screen, disagreeing:
     // "5 submitted" in the header strip beside "2 Submissions" below it,
     // because one counted every piece of work and the other only the active.

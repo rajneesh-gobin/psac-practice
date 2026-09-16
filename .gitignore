@@ -31,3 +31,4 @@ node_modules/
 # OUTPUT is kept in docs/book-syllabus-audit/. Keep local copies outside the
 # repo if you need to re-run it.
 books/
+.secrets.local.md

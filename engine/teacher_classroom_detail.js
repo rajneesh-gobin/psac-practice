@@ -7,7 +7,9 @@ const TeacherClassroomDetail = (() => {
   // Materials is a PRIMARY section, not a More entry: "where do I put a file for
   // this class" was the one question the ⋯ menu could not answer, because a
   // teacher looking for it has no reason to open a menu labelled More.
-  const MORE_SECTIONS = ['results', 'settings'];
+  // Results belong to an activity. Settings are the only classroom-wide
+  // controls that need to live behind More.
+  const MORE_SECTIONS = ['settings'];
 
   let _classId = null;
   let _className = '';
@@ -83,6 +85,14 @@ const TeacherClassroomDetail = (() => {
 
   function isOpen() { return !!_classId && !el('tc-classroom-detail')?.classList.contains('hidden'); }
 
+  function _setClassroomLoading(loading) {
+    const overlay = el('tc-classroom-detail');
+    const indicator = el('tc-cd-loading-indicator');
+    overlay?.classList.toggle('tc-cd-is-loading', loading);
+    overlay?.setAttribute('aria-busy', String(loading));
+    indicator?.classList.toggle('hidden', !loading);
+  }
+
   async function open(classId, className, opts = {}) {
     const same = _classId === classId && isOpen();
     _classId = classId;
@@ -110,6 +120,7 @@ const TeacherClassroomDetail = (() => {
     _signalEpoch++;
 
     el('tc-classroom-detail').classList.remove('hidden');
+    _setClassroomLoading(true);
     document.body.style.overflow = 'hidden';
 
     el('tc-cd-name').textContent = className;
@@ -123,14 +134,16 @@ const TeacherClassroomDetail = (() => {
     showSection(SECTIONS.includes(opts.section) ? opts.section : 'overview');
     if (!same && typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(classId, className, _activeSection);
     await Promise.all([_loadWork(), _loadPupils(), _loadMaterials()]);
+    if (_classId === classId) _setClassroomLoading(false);
   }
 
   function _skeleton() {
-    return '<div class="tc-skeleton" aria-hidden="true"><div class="th-sk-line th-sk-wide"></div><div class="th-sk-line"></div><div class="th-sk-cards"><div></div><div></div></div></div>';
+    return '<div class="tc-skeleton" role="status"><span class="tc-inline-spinner" aria-hidden="true"></span><span class="sr-only">Loading classroom information…</span><div class="th-sk-line th-sk-wide"></div><div class="th-sk-line"></div><div class="th-sk-cards"><div></div><div></div></div></div>';
   }
 
   function close() {
     _signalEpoch++;
+    _setClassroomLoading(false);
     el('tc-classroom-detail').classList.add('hidden');
     document.body.style.overflow = '';
     _classId = null;
@@ -140,6 +153,7 @@ const TeacherClassroomDetail = (() => {
 
   function showSection(sec) {
     if (!SECTIONS.includes(sec)) sec = 'overview';
+    const changed = _activeSection !== sec;
     _activeSection = sec;
     toggleMore(false);
     document.querySelectorAll('.tc-cd-nav-btn').forEach(b => {
@@ -151,7 +165,15 @@ const TeacherClassroomDetail = (() => {
     // The overview already carries the one prominent Set work button.
     document.querySelector('.tc-cd-header .tc-cd-share-btn')?.classList.toggle('hidden', sec === 'overview');
     document.querySelectorAll('.tc-cd-section').forEach(s => s.classList.add('hidden'));
-    el('tc-cd-' + sec)?.classList.remove('hidden');
+    const panel = el('tc-cd-' + sec);
+    panel?.classList.remove('hidden');
+    if (changed && panel) {
+      panel.classList.remove('tc-cd-section-enter');
+      // Restart the short entrance animation when changing destination, while
+      // keeping the surrounding classroom shell in place.
+      void panel.offsetWidth;
+      panel.classList.add('tc-cd-section-enter');
+    }
     if (sec === 'overview') _renderOverview();
     if (sec === 'work')     _renderWork();
     if (sec === 'pupils')   _renderPupils();
@@ -289,20 +311,33 @@ const TeacherClassroomDetail = (() => {
     // quiet line at the bottom, and the header strip is their only other home.
     const shown = _todos.slice(0, 8);
     const jobs = _todos.filter(t => t.priority > 1).length;
+    const shared = _accessType === 'shared';
+    const placeholders = activePupils.filter(p => /^Student\s+\d+$/i.test(String(p.name || '').trim())).length;
+    const next = (!activePupils.length || placeholders) && !shared
+      ? { title: placeholders ? 'Name your pupils' : 'Add your pupils', text: placeholders ? `Replace the ${placeholders} numbered pupil name${placeholders === 1 ? '' : 's'} before sharing their PINs.` : 'Give each pupil a name and their own four-digit PIN.', action: "TeacherClassroomDetail.showSection('pupils')", label: placeholders ? 'Name pupils' : 'Add pupils' }
+      : !hasWork
+        ? { title: 'Create your first activity', text: 'Choose an online quiz, a worksheet, or a resource for this class.', action: 'TeacherClassroomDetail.showHomeworkChoice()', label: 'Create activity' }
+        : !allSubmitted
+          ? { title: 'Share your active activity', text: 'Open Activities, then choose Share to send the link to pupils.', action: "TeacherClassroomDetail.showSection('work')", label: 'Open activities' }
+          : { title: 'Review pupil progress', text: 'See who has finished and who may need help.', action: "TeacherClassroomDetail.showSection('work')", label: 'View progress' };
     box.innerHTML = `
       <div class="tc-today-hero">
         <div>
-          <span class="tc-today-kicker">${esc(new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>
-          <h3>What needs you today</h3>
+          <span class="tc-today-kicker">CLASS DASHBOARD · ${esc(new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>
+          <h3>${esc(next.title)}</h3>
           <p>${_signals.loading ? 'Checking what has come back…'
             : jobs ? `${jobs} thing${jobs === 1 ? '' : 's'} to look at.`
-            : 'Nothing urgent. Here is where this class stands.'}</p>
+            : esc(next.text)}</p>
         </div>
         <div class="tc-today-actions">
-          <button type="button" class="tc-setup-help" onclick="TeacherClassroomDetail.showSetupGuide()">❓ How classrooms work</button>
-          <button class="tc-cd-action-btn tc-cd-action-big" onclick="TeacherClassroomDetail.showHomeworkChoice()">✏️ Set work</button>
+          <button class="tc-cd-action-btn tc-cd-action-big" onclick="${next.action}">${esc(next.label)}</button>
         </div>
       </div>
+      <button type="button" class="tc-class-access" onclick="TeacherClassroomDetail.showSection('pupils')">
+        <span aria-hidden="true">${shared ? '🔑' : '👤'}</span>
+        <span><strong>How pupils join: ${shared ? 'one shared class PIN' : 'individual pupil PINs'}</strong><small>${shared ? 'Pupils use the class PIN, then type their name.' : 'Each named pupil uses their own private four-digit PIN.'}</small></span>
+        <b>View pupils →</b>
+      </button>
       ${_workError ? `<div class="tc-cd-inline-error"><p>${esc(_workError)}</p><button type="button" onclick="TeacherClassroomDetail.retryWork()">Try again</button></div>` : ''}
       <section class="tc-todo-list" aria-label="What needs you today">
         ${_signals.loading ? '<p class="tc-today-loading">Looking at what your pupils have done…</p>'
@@ -386,17 +421,17 @@ const TeacherClassroomDetail = (() => {
     const hasAnything = _assignments.length || _physicalHomework.length || _materials.length;
     box.innerHTML = `
       <div class="tc-cd-section-header tc-work-heading">
-        <div><h3 class="tc-cd-section-title">Work</h3><p>Homework, tests, worksheets and files for ${esc(_className)}.</p></div>
-        <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()">＋ Set work</button>
+        <div><h3 class="tc-cd-section-title">Activities</h3><p>Online quizzes and worksheets for ${esc(_className)}.</p></div>
+        <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()">＋ Create activity</button>
       </div>
       ${_workError ? `<div class="tc-cd-inline-error"><p>${esc(_workError)}</p><button type="button" onclick="TeacherClassroomDetail.retryWork()">Try again</button></div>` : ''}
       <div class="tc-work-filters" role="tablist" aria-label="Filter work">
         ${[['active', 'Active'], ['closed', 'Closed'], ['archived', 'Archived']].map(([k, label]) => `<button type="button" role="tab" aria-selected="${_workFilter === k}" class="tc-work-filter ${_workFilter === k ? 'on' : ''}" onclick="TeacherClassroomDetail.setWorkFilter('${k}')">${label} <span>${counts[k] + (k === 'active' ? _physicalHomework.filter(h => !expired(h)).length : k === 'closed' ? _physicalHomework.filter(expired).length : 0)}</span></button>`).join('')}
       </div>
-      ${!hasAnything && !_workError ? '<div class="tc-work-empty"><span>📚</span><strong>No classwork yet</strong><p>Set your first homework and pupil progress will appear here automatically.</p><button type="button" onclick="TeacherClassroomDetail.showHomeworkChoice()">Set the first piece of work →</button></div>' : ''}
+      ${!hasAnything && !_workError ? '<div class="tc-work-empty"><span>📚</span><strong>No activities yet</strong><p>Create an online quiz or assign a worksheet. Pupil progress will appear here automatically.</p><button type="button" onclick="TeacherClassroomDetail.showHomeworkChoice()">Create first activity →</button></div>' : ''}
       <div id="tc-cd-work-cards"></div>
       ${sheets.length ? '<h4 class="tc-work-subhead">📄 Worksheets</h4><div id="tc-cd-phw-list"></div>' : ''}
-      ${_workFilter === 'active' ? `<h4 class="tc-work-subhead">📁 Files shared with this class <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">${_materials.length ? 'Manage' : 'Upload one'}</button></h4>${_materials.length ? `<div class="tc-work-files">${sortMaterials(_materials, 'recent').slice(0, 6).map(f => `<button type="button" class="tc-work-file" onclick="TeacherClassroomDetail.openFile('${esc(f.id)}')"><span>${materialIcon(f)}</span><strong>${esc(f.title)}</strong><small>${f.subject ? esc(f.subject) + ' · ' : ''}${_fmtDate(f.shared_at || f.created_at)}</small></button>`).join('')}</div>` : `<p class="tc-cd-empty">No files yet - share a worksheet, a past paper, a YouTube lesson or a photo of the board, and every pupil in ${esc(_className)} can open it from their own device.</p>`}` : ''}
+      ${_workFilter === 'active' ? `<p class="tc-work-resource-link">Need to share a file, link, video or past paper? <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">Open Resources →</button></p>` : ''}
     `;
     const cards = el('tc-cd-work-cards');
     if (hasAnything && cards) {
@@ -483,9 +518,9 @@ const TeacherClassroomDetail = (() => {
     overlay.id = 'tc-hw-choice';
     overlay.className = 'tc-hw-overlay';
     overlay.innerHTML = `
-      <div class="tc-hw-choice-panel" role="dialog" aria-modal="true" aria-label="Set work">
+      <div class="tc-hw-choice-panel" role="dialog" aria-modal="true" aria-label="Create activity">
         <div class="tc-hw-choice-header">
-          <span>What kind of work?</span>
+          <span>Create an activity</span>
           <button onclick="document.getElementById('tc-hw-choice').remove()" class="tc-hw-close" aria-label="Close">&#x2715;</button>
         </div>
         <div class="tc-hw-choice-cards">
@@ -496,8 +531,13 @@ const TeacherClassroomDetail = (() => {
           </button>
           <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._chooseWorksheet()">
             <span class="tc-hw-card-icon">📄</span>
-            <strong>Worksheet to print</strong>
+            <strong>Worksheet or paper homework</strong>
             <small>PDF or photo - pupils work on paper and hand it in</small>
+          </button>
+          <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._chooseResource()">
+            <span class="tc-hw-card-icon">📁</span>
+            <strong>Resource for pupils</strong>
+            <small>Share a file, video, website or past paper without creating a marked activity</small>
           </button>
         </div>
       </div>`;
@@ -513,6 +553,11 @@ const TeacherClassroomDetail = (() => {
   function _chooseWorksheet() {
     document.getElementById('tc-hw-choice')?.remove();
     _openPhysicalForm();
+  }
+
+  function _chooseResource() {
+    document.getElementById('tc-hw-choice')?.remove();
+    showSection('materials');
   }
 
   function _openPhysicalForm() {
@@ -1790,7 +1835,7 @@ const TeacherClassroomDetail = (() => {
     if (sel && assignId) sel.value = assignId;
     const box = el('tc-cd-results-body');
     if (!box || !assignId) { if (box) box.innerHTML = ''; return; }
-    box.innerHTML = '<p class="tc-cd-loading">Loading results…</p>';
+    box.innerHTML = '<p class="tc-cd-loading" role="status"><span class="tc-inline-spinner" aria-hidden="true"></span> Loading results…</p>';
     try {
       const rows = typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.fetchResults
         ? await TeacherWorkspace.fetchResults(assignId, { force: true })
@@ -2089,7 +2134,7 @@ const TeacherClassroomDetail = (() => {
 
   return {
     open, close, showSection, isOpen, toggleMore, setWorkFilter, retryWork, retryPupils, retrySignals, doTodo, showSetupGuide, dismissSetupGuide, openPupil, closePupil,
-    showHomeworkChoice, _chooseDigital, _chooseWorksheet,
+    showHomeworkChoice, _chooseDigital, _chooseWorksheet, _chooseResource,
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,
     uploadMaterial, _onMatFileChosen, setMaterialSort, setMatSource, shareMaterial, copyFileLink, openFile, deleteFile,

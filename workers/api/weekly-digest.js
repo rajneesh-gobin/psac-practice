@@ -1,5 +1,17 @@
 // POST /api/weekly-digest (or Cloudflare Cron: every Sunday at 09:00 UTC)
-// Sends weekly progress digests to parents via Mailchannels.
+// Sends progress digests to parents.
+//
+// ⚠ The POST route is PRIVILEGED and was open to the internet. While the mail
+//   transport was dead that cost nothing; the moment one works, an unauthenticated
+//   POST mails every parent in the database, as often as someone cares to send it.
+//   It now needs the cron secret or an admin JWT. The `scheduled()` entry point is
+//   Cloudflare's own and needs neither.
+// ⚠ Frequency is per parent (weekly / fortnightly / monthly / off), so the cron
+//   runs weekly and each parent is checked against when they were LAST sent one -
+//   'monthly' cannot be expressed by the cron expression alone.
+
+import { sendMail, mailConfigured, unsubscribeUrl, siteUrl, emailPrefs, digestDue } from '../lib/mailer.js';
+import { requireAdmin } from '../lib/admin-auth.js';
 
 const SB_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 
@@ -46,31 +58,43 @@ async function sbGet(path, sbKey) {
   return res.ok ? res.json() : null;
 }
 
-async function sendEmail(to, subject, html, { ok: mailOk } = { ok: true }) {
-  if (!mailOk) return { ok: false };
-  const r = await fetch('https://api.mailchannels.net/tx/v1/send', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }] }],
-      from: { email: 'noreply@psac-practice.com', name: 'Nou Klass' },
-      subject, content: [{ type: 'text/html', value: html }],
-    }),
+async function sbPatch(path, sbKey, body) {
+  const res = await fetch(`${SB_URL}${path}`, {
+    method: 'PATCH',
+    headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify(body),
   });
-  return { ok: r.ok };
+  return res.ok;
+}
+
+// ⚠ Merge, never replace. `preferences` also carries theme, reminder_time and
+//   the parent's child defaults, and this writes one field inside one sub-object.
+async function markDigestSent(parentId, preferences, sbKey) {
+  const base = (preferences && typeof preferences === 'object') ? preferences : {};
+  const email = (base.email && typeof base.email === 'object') ? base.email : {};
+  return sbPatch(`/rest/v1/profiles?id=eq.${parentId}`, sbKey, {
+    preferences: { ...base, email: { ...email, last_digest_at: new Date().toISOString() } },
+  });
 }
 
 async function run(env) {
   const sbKey = env.SUPABASE_SERVICE_ROLE_KEY;
-  const mailEnabled = !!env.MAILCHANNELS_ENABLED;
-  if (!mailEnabled || !sbKey) { console.log('[weekly-digest] Skipped - email not configured'); return; }
+  if (!mailConfigured(env) || !sbKey) { console.log('[weekly-digest] Skipped - email not configured'); return { sent: 0, skipped: 0, error: 'not_configured' }; }
 
   const families = await sbGet('/rest/v1/families?select=id,parent_id', sbKey);
-  if (!families?.length) return;
+  if (!families?.length) return { sent: 0, skipped: 0 };
 
+  // Who is due one, by their OWN chosen frequency. `optedOut` now means
+  // "switched off entirely, or not due yet" - a fortnightly parent is skipped on
+  // the odd weeks and that is not an opt-out.
   const optedOut = new Set();
+  const prefsById = new Map();
   const profiles = await sbGet('/rest/v1/profiles?select=id,preferences', sbKey);
-  for (const p of profiles || []) { if (p?.preferences?.weekly_digest === false) optedOut.add(p.id); }
+  for (const p of profiles || []) {
+    prefsById.set(p.id, p.preferences || {});
+    const pref = emailPrefs(p.preferences);
+    if (!digestDue(p.preferences, pref.last_digest_at)) optedOut.add(p.id);
+  }
 
   const notIncluded = new Set();
   try {
@@ -92,19 +116,45 @@ async function run(env) {
     }
   } catch (e) { console.warn('[weekly-digest] plan gate skipped:', e.message); }
 
+  // ⚠ CLOUDFLARE CAPS SUBREQUESTS PER REQUEST (50 on the free plan), and the
+  //   cron run is ONE request. Reading students, the parent's address and the
+  //   progress blob per family is 3 subrequests each - it would have died at
+  //   about nine families, silently, part-way through the mailing list, and
+  //   they are near that now. All three reads are hoisted out of the loop, so
+  //   the per-family cost is the send plus the last_digest_at write.
+  const due = families.filter(f => !optedOut.has(f.parent_id) && !notIncluded.has(f.parent_id));
+  if (!due.length) { console.log('[weekly-digest] nobody due'); return { sent: 0, failed: 0 }; }
+
+  const allStudents = await sbGet(`/rest/v1/students?family_id=in.(${due.map(f => f.id).join(',')})&deleted_at=is.null&select=id,display_name,grade,avatar,family_id`, sbKey) || [];
+  const studentsByFamily = new Map();
+  for (const s of allStudents) {
+    if (!studentsByFamily.has(s.family_id)) studentsByFamily.set(s.family_id, []);
+    studentsByFamily.get(s.family_id).push(s);
+  }
+
+  const progById = new Map();
+  if (allStudents.length) {
+    const progRows = await sbGet(`/rest/v1/student_progress?student_id=in.(${allStudents.map(s => s.id).join(',')})&select=student_id,data`, sbKey);
+    for (const r of progRows || []) progById.set(r.student_id, r.data || {});
+  }
+
+  // One page of the address book instead of one lookup per parent.
+  const emailByUser = new Map();
+  for (let page = 1; ; page++) {
+    const res = await sbGet(`/auth/v1/admin/users?page=${page}&per_page=1000`, sbKey);
+    const users = res?.users || [];
+    for (const u of users) if (u?.email) emailByUser.set(u.id, u.email);
+    if (users.length < 1000) break;
+  }
+
   let sent = 0, failed = 0;
-  for (const family of families) {
-    if (optedOut.has(family.parent_id) || notIncluded.has(family.parent_id)) continue;
+  for (const family of due) {
     try {
-      const students = await sbGet(`/rest/v1/students?family_id=eq.${family.id}&deleted_at=is.null&select=id,display_name,grade,avatar`, sbKey);
+      const students = studentsByFamily.get(family.id);
       if (!students?.length) continue;
 
-      const authUser = await sbGet(`/auth/v1/admin/users/${family.parent_id}`, sbKey);
-      const parentEmail = authUser?.email;
+      const parentEmail = emailByUser.get(family.parent_id);
       if (!parentEmail) continue;
-
-      const progRows = await sbGet(`/rest/v1/student_progress?student_id=in.(${students.map(s => s.id).join(',')})&select=student_id,data`, sbKey);
-      const progById = new Map((progRows || []).map(r => [r.student_id, r.data || {}]));
 
       const kids = students.map(s => {
         const data = progById.get(s.id) || {};
@@ -137,16 +187,42 @@ async function run(env) {
 
       const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f8fafc;font-family:sans-serif"><div style="max-width:600px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)"><div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:24px 28px;color:#fff"><div style="font-size:22px;font-weight:bold">📈 Weekly Progress Report</div><div style="opacity:.85;margin-top:4px;font-size:14px">${rangeStr}</div></div><div style="padding:24px 28px"><p style="margin:0 0 16px;color:#374151;font-size:15px">Here's what your ${students.length===1?'child':'children'} did on Nou Klass over the last seven days.</p>${summary}${alert}<table style="width:100%;border-collapse:collapse;font-size:14px;color:#374151"><thead><tr style="background:#f8fafc;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em"><th style="padding:8px 12px;text-align:left">Student</th><th style="padding:8px 12px;text-align:center">Questions</th><th style="padding:8px 12px;text-align:left">Accuracy</th><th style="padding:8px 12px;text-align:center">Days</th><th style="padding:8px 12px;text-align:center">Streak</th></tr></thead><tbody>${rows.join('')}</tbody></table><div style="margin-top:24px;text-align:center"><a href="https://nouklass.com/" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:600;font-size:15px">Open Parent Dashboard →</a></div></div></div></body></html>`;
 
-      const _res = await sendEmail(parentEmail, `Nou Klass - Weekly Report (${weekStr})`, html, { ok: true });
-      if (_res.ok) sent++; else failed++;
+      const unsub = await unsubscribeUrl(env, family.parent_id, 'digest');
+      const htmlWithFooter = html.replace('</div></div></body></html>',
+        `</div><div style="padding:0 28px 22px;color:#9ca3af;font-size:11px;line-height:1.5;text-align:center">You are getting this because the progress digest is switched on for your account.${unsub ? ` <a href="${unsub}" style="color:#6b7280">Turn it off</a> ·` : ''} <a href="${siteUrl(env)}/" style="color:#6b7280">Change how often</a></div></div></body></html>`);
+      const _res = await sendMail(env, {
+        to: parentEmail,
+        subject: `Nou Klass - Progress Report (${weekStr})`,
+        html: htmlWithFooter,
+        ...(unsub ? { unsubscribe: unsub } : {}),
+      });
+      if (_res.ok) {
+        sent++;
+        // ⚠ Recorded only AFTER a successful send, or a transport outage would
+        //   silently push a monthly parent out by another month.
+        await markDigestSent(family.parent_id, prefsById.get(family.parent_id), sbKey);
+      } else { failed++; console.warn('[weekly-digest] send failed:', _res.error); }
     } catch (err) { console.error('[weekly-digest] Error for family', family.id, err.message); }
   }
   console.log(`[weekly-digest] Sent ${sent} digest emails${failed ? `, ${failed} FAILED` : ''}`);
+  return { sent, failed };
 }
 
 export default async function handler(request, env) {
-  await run(env);
-  return new Response('ok', { status: 200 });
+  // Either the cron secret (a scheduler outside Cloudflare, or a manual run) or
+  // a signed-in administrator. Never open.
+  const secret = env.CRON_SECRET;
+  const offered = request.headers.get('x-cron-secret') || '';
+  const bySecret = !!secret && offered.length === secret.length &&
+    [...offered].reduce((a, c, i) => a & (c === secret[i] ? 1 : 0), 1) === 1;
+  if (!bySecret) {
+    const gate = await requireAdmin(request, env);
+    if (gate.error) return gate.error;
+  }
+  const result = await run(env);
+  return new Response(JSON.stringify({ ok: true, ...result }), {
+    status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+  });
 }
 
 export async function scheduled(event, env, ctx) {
