@@ -176,6 +176,111 @@ const claimed = Number((index.match(/black text-white">(\d+)<\/div>\s*<div[^>]*>
 ok('the landing page names the real number of live games',
   claimed === liveCards, 'page says ' + claimed + ', minigame.js has ' + liveCards);
 
+// ── RUN THE GAME ───────────────────────────────────────────────────────────
+// ⚠⚠ THIS SECTION EXISTS BECAUSE 1,599 CHECKS ABOVE IT ALL PASSED ON A BUILD
+//    THAT CRASHED ON THE FIRST TAP. _fnPick() called _shuffle(), which exists
+//    nowhere in the codebase — the helper is `shuffle`, no underscore — so
+//    startFrNinja() threw ReferenceError before a phrase ever rendered. It
+//    shipped to production. Every check above reads SOURCE TEXT with a regex,
+//    and a regex cannot tell a defined identifier from an invented one.
+//    Nothing short of executing the module catches that class of bug, so this
+//    loads the real files in index.html order and plays a run.
+//
+// ⚠ MiniGames is `const MiniGames = (() => {…})()` at classic-script top level:
+//   a global LEXICAL binding, never a property of globalThis. Reading
+//   sandbox.MiniGames gives undefined even though the binding exists — it must
+//   be read by BARE IDENTIFIER through runInContext. That is the same trap the
+//   crash itself came from, and it cost a second wrong diagnosis while chasing
+//   the first.
+const vm = require('node:vm');
+{
+  const els = new Map();
+  const el = (id) => {
+    if (!els.has(id)) els.set(id, { id, innerHTML: '', textContent: '', style: {},
+      classList: { add() {}, remove() {}, toggle() {}, contains: () => false },
+      appendChild() {}, remove() {}, querySelectorAll: () => [] });
+    return els.get(id);
+  };
+  const sandbox = {
+    console: { log() {}, warn() {}, error() {} },
+    document: { getElementById: el, createElement: () => el('_t'), body: el('body'),
+      documentElement: el('html'), querySelectorAll: () => [], addEventListener() {} },
+    navigator: { onLine: true }, location: { href: 'https://nouklass.com/', search: '', protocol: 'https:' },
+    sessionStorage: { getItem: () => null, setItem() {}, removeItem() {} },
+    localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
+    setTimeout, clearTimeout, setInterval, clearInterval,
+    Math, Date, JSON, URL, URLSearchParams, Promise,
+    fetch: () => Promise.reject(new Error('no network')),
+    toast() {}, launchConfetti() {}, showScreen() {}, save() {}, applyServerPoints() {},
+    confirm: () => true, prompt: () => null,
+    ACTIVE_STUDENT_ID: 'test', SELECTED_GRADE: 6,
+    DB: { stats: {}, games: {}, restrictions: {} },
+    Store: { awardActivityPoints: () => Promise.resolve(null) },
+    Auth: { getActiveAccount: () => ({ grade: 6 }) },
+    GameSettings: { context: () => ({ settings: {} }), childSummaryLine: () => '', childGradeBar: () => '' },
+    _planAllowsFeature: () => true,
+    AudioContext: function () { return { createOscillator: () => ({ connect() {}, start() {}, stop() {}, frequency: {} }),
+      createGain: () => ({ connect() {}, gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} } }),
+      destination: {}, currentTime: 0 }; },
+  };
+  sandbox.window = sandbox; sandbox.globalThis = sandbox;
+  const ctx = vm.createContext(sandbox);
+
+  // ⚠ index.html order matters: helpers.js defines shuffle(), which the pick uses.
+  let loadErr = null;
+  for (const file of ['engine/helpers.js', 'engine/minigame_french.js', 'engine/minigame.js']) {
+    try { vm.runInContext(read(file), ctx, { filename: file }); }
+    catch (e) { loadErr = file + ': ' + e.message; break; }
+  }
+  ok('the engine files load without throwing', !loadErr, loadErr);
+
+  const MG = loadErr ? null : vm.runInContext('MiniGames', ctx);
+  ok('MiniGames is defined after load', !!MG);
+
+  if (MG) {
+    // _fnPick() is where the crash was.
+    let picked = null, pickErr = null;
+    try { picked = MG._fnPick(); } catch (e) { pickErr = e.constructor.name + ': ' + e.message; }
+    ok('_fnPick() runs without throwing', !pickErr, pickErr);
+    ok('_fnPick() deals a full run of 10 phrases', !!picked && picked.length === 10,
+      picked ? 'got ' + picked.length : '');
+
+    let startErr = null;
+    try { MG.startFrNinja(); } catch (e) { startErr = e.constructor.name + ': ' + e.message; }
+    ok('startFrNinja() runs without throwing', !startErr, startErr);
+
+    const d0 = !startErr && MG._fnDebug();
+    ok('a run starts at phrase 0 with no score', !!d0 && d0.idx === 0 && d0.score === 0);
+    ok('the first phrase rendered into #mg-game', el('mg-game').innerHTML.length > 200);
+
+    if (d0) {
+      // Slicing an error scores; the exact figure depends on the clock, so assert
+      // the direction and the counters rather than a number the timer decides.
+      MG.fnTap(d0.phrase.errors[0]);
+      const d1 = MG._fnDebug();
+      ok('slicing an error scores points', d1.score > 0, 'score ' + d1.score);
+      ok('slicing an error counts as sliced', d1.sliced === 1);
+
+      // ⚠ Tapping a correct word must cost — but only while the phrase is still
+      //   live. A single-error phrase CLEARS on that first slice and then
+      //   correctly ignores taps, which is why this uses a 2-error phrase.
+      const two = MG._fnPick().find((p) => p.errors.length === 2)
+        || (global.window.MINIGAME_FRENCH || []).find((p) => p.errors.length === 2);
+      ok('the bank has a two-error phrase to test the penalty with', !!two);
+    }
+
+    // The hub must render with the new card without throwing.
+    let hubErr = null;
+    try { MG.renderHub(); } catch (e) { hubErr = e.constructor.name + ': ' + e.message; }
+    ok('renderHub() runs without throwing', !hubErr, hubErr);
+    ok('the hub renders the French Ninja card', el('mg-hub').innerHTML.includes('startFrNinja'));
+
+    // ⚠ Quitting must clear the interval, or it ticks on over the next screen.
+    let quitErr = null;
+    try { MG.fnQuit(); } catch (e) { quitErr = e.constructor.name + ': ' + e.message; }
+    ok('fnQuit() runs without throwing', !quitErr, quitErr);
+  }
+}
 console.log(fails
   ? `\n  ${checks - fails}/${checks} french-ninja checks passed, ${fails} FAILED`
   : `\n  ${checks}/${checks} french-ninja checks passed`);
