@@ -610,12 +610,27 @@ this same working tree and eight of those fifteen packs grew on 2026-09-08
 (grade5-english 645 -> 705, grade4-french 2,121 -> 2,141 among them). Re-count
 from the built bundles; do not add to these numbers.
 
-The live `questions` table held **14,893 rows** at the 2026-09-08 import (14,729
-practice + 164 past papers): `mcq 12,322 · numeric 2,024 · text 305 · cloze 60 ·
-multi 12 · symmetry 6`, 0 protected, verified by read-after-write on every row.
-⚠ **3 rows are in the database but not the corpus** and are not errors:
-`g{7,8,9}h-samp-001`, left by the retired history placeholder packs — **the
-importer never deletes**. ⚠ **No migration was needed and none was made**:
+The live `questions` table holds **35,529 rows** as of the 2026-09-17 import
+(35,335 practice + 194 past papers): `mcq 29,140 · numeric 3,729 · text 1,021 ·
+task 871 · expr 236 · cloze 129 · slots 107 · errorhunt 60 · symmetry-line 24 ·
+multi 12 · symmetry 6`, 0 protected conflicts, 0 failed — every one of the 616
+writes read back and verified. That run was **69 new** (the English and French
+cloze passages) and **547 updated**.
+⚠ **A clean re-import is "0 new, ~550 updated", NOT zero writes** — rows are
+re-serialised each pass, so a few hundred "updated" is the floor, not churn to
+chase.
+⚠ **THE DATABASE NOW MATCHES THE CORPUS EXACTLY — 35,529 both sides, zero
+orphans**, and that is new. It used to hold rows the corpus did not, because
+**the importer never deletes**: this file recorded 3 such rows for months while
+the real number had grown to **9** (`g{1,2,3}{h,s}-samp-001` and
+`g{7,8,9}h-samp-001`, the sample questions of retired placeholder packs). They
+were deleted 2026-09-17 after checking they were referenced by nothing —
+`student_question_progress` and `question_reports` both returned 0 — and the
+delete was verified by return=representation plus a read-back.
+⚠ **So a difference between the two counts is now MEANINGFUL and was not
+before.** If they diverge again, something was removed from source without
+being removed from the database; do not assume it is the old known orphans.
+⚠ **No migration was needed and none was made**:
 `questions.data` is `jsonb NOT NULL` with no type column and no CHECK constraint
 (live schema read, not taken from the dump).
 
