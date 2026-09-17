@@ -269,3 +269,33 @@ database is a **decision**, not a pending run.
     for a family (both refuse admins today — `remove_family_member` has no admin
     branch, `push-subscribe.js` `_callerOwns` has none), purchased-chapter grants,
     and a teacher-account panel.
+
+18. ⚠ **Google Play: groundwork is DONE and DELIBERATELY PARKED (owner decision,
+    2026-09-17 — "yes I still want it on Play Store but later, not now").**
+    Nothing here is blocked or broken, and nothing about it affects the live
+    site. What already exists: `.well-known/assetlinks.json` (shipped —
+    `.well-known` is in prepare-deploy's `DIRS`), `privacy.html` (Play requires
+    a public policy URL; every claim in it was read out of the live database),
+    `robots.txt`, `sitemap.xml`, and the full build recipe in
+    [`docs/convert_to_app.md`](../convert_to_app.md).
+    **The one outstanding value is the SHA-256 in `assetlinks.json`**, which is
+    still a placeholder — and it CANNOT be filled in from this repo: no keystore
+    exists and the fingerprint has to come from a signing key that has not been
+    created, or from the Play Console after a first upload.
+    ⚠⚠ **It is almost certainly GOOGLE'S app signing key, not your upload key.**
+    With Play App Signing (the default since 2021) Google re-signs the app, so
+    the fingerprint Android checks is theirs. An upload-key fingerprint here is
+    well-formed, plausible and wrong, and the ONLY symptom is the app opening
+    with a browser address bar — which points at nothing. Read it from Play
+    Console → Setup → App integrity → App signing. Listing BOTH keys is safest
+    while testing, because a locally installed APK is signed with the upload key
+    and the same build from Play is not. ⚠ Google CACHES the file, so a wrong
+    value costs hours after it is corrected.
+    `scripts/test-assetlinks.js` prints a REVIEW while the placeholder stands
+    (deliberately not a failure — a permanently red test is one people learn to
+    ignore) and FAILS the moment it is replaced by anything that is not 32
+    colon-separated uppercase hex pairs. It is standalone on purpose: not in
+    preflight, not in CI, so parking this costs no daily noise.
+    Order when it is picked up: Bubblewrap build → upload to internal testing →
+    read the fingerprint → paste it here → deploy the site → THEN install and
+    check there is no address bar.
