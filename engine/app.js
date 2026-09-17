@@ -9639,6 +9639,28 @@ function generatePrintablePaper() {
   const _allSubjectQs = STATIC_QUESTIONS.filter(q =>
     isPoolQuestion(q) && _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
 
+  // ── Texte à Trous / Cloze passage ──────────────────────────────────────────
+  // ⚠⚠ THIS IS THE ONE SURFACE WHERE CLOZE WORKS, and isPoolQuestion() must
+  //    KEEP excluding it everywhere else. The exclusion was never about the
+  //    content being unsuitable — it is that the ONLINE renderer has no way to
+  //    show a passage with ten gaps and no single answer, so an exam dealt one
+  //    "draws a number pad under a French passage". On PAPER that problem does
+  //    not exist: a cloze passage is printed with numbered blanks and a word
+  //    bank, which is exactly how the real PSAC prints French Q6.
+  //    ⚠ So this pool is built DELIBERATELY OUTSIDE isPoolQuestion(), and that
+  //    is the only place in the codebase allowed to do it. Do not "fix" the
+  //    inconsistency by letting cloze into isPoolQuestion() — that breaks the
+  //    on-screen exam, which has no renderer for it.
+  // ⚠ Same locks and difficulty cap as everything else on the sheet.
+  const _clozePool = STATIC_QUESTIONS.filter(q =>
+    q && q.type === 'cloze' && _activeChs.has(q.chapterId) && q.difficulty <= maxDiff
+    && typeof q.text === 'string' && Array.isArray(q.gapAnswers) && q.gapAnswers.length
+    && Array.isArray(q.bank) && q.bank.length);
+  // One passage per paper, and only when the subject actually has one — a
+  // maths paper must not grow an empty section.
+  const clozeItem = _clozePool.length ? shuffle(_clozePool)[0] : null;
+  const clozeMarks = clozeItem ? (clozeItem.gapAnswers.length || 0) : 0;
+
   // Pick ONE passage for this paper, and take up to 5 questions from it. The
   // rest of the passage questions are removed from the pools below, so no
   // passage prose can reach Section A or B.
@@ -9821,6 +9843,50 @@ function generatePrintablePaper() {
       </tr>`;
   }
 
+  // The cloze passage, printed the way a real paper prints it: the text with
+  // numbered ruled gaps, and the word bank underneath.
+  // ⚠ The bank is printed IN ITS AUTHORED ORDER, never sorted or shuffled here.
+  //   It already carries one more word than there are gaps (the item's own
+  //   explanation says so), and re-ordering it on the sheet would make the
+  //   printed paper disagree with the answer key's numbering.
+  // ⚠⚠ THERE ARE TWO SHAPES OF CLOZE ITEM AND BOTH MUST PRINT. Measured across
+  //    the 60 authored items:
+  //      · Grades 4-5 — one text, {1}..{10}, one word bank with ONE SPARE word.
+  //      · Grade 6    — `twoPart: true`. Part A is `text` with {1}..{5} and the
+  //        bank; Part B is `textB` with {6}..{10} and NO BANK AT ALL — the
+  //        child supplies the function words (que, dont, à, en) themselves,
+  //        which is how the real Grade 6 paper sets it.
+  //    Rendering only `text` prints five gaps and claims ten marks, and the
+  //    bank underneath would belong to the half that is missing. Checked, not
+  //    assumed: every grade6 item has gapsA 5 / gapsB 5 and no `bankB`.
+  const _clozeGaps = s => String(s).replace(/\{(\d+)\}/g, (_m, n) =>
+    `<span class="cloze-gap"><sup>${n}</sup><span class="cloze-rule"></span></span>`);
+
+  function _printClozeBlock(cz, startNum) {
+    const gaps = cz.gapAnswers.length;
+    const twoPart = !!cz.twoPart && typeof cz.textB === 'string' && cz.textB.trim();
+    const bank = (cz.bank || []).map(w => `<span class="cloze-word">${_prettyMath(w)}</span>`).join('');
+    // ⚠ The spare-word sentence is only true when there IS a spare word. Say it
+    //   from the data rather than asserting it: a bank equal to the gap count
+    //   makes every word forced, and telling a child otherwise wastes their time.
+    const spare = (cz.bank || []).length - (twoPart ? (cz.gapsA || 0) : gaps);
+    const bankNote = spare > 0
+      ? ` There ${spare === 1 ? 'is <b>one word more</b>' : `are <b>${spare} words more</b>`} than you need.`
+      : '';
+    const partA = `
+        <div class="comp-intro">${cz.title ? _prettyMath(cz.title) + ' - ' : ''}${twoPart ? 'Part A: fill' : 'Fill'} each gap with one word from the box.${bankNote}</div>
+        <div class="cloze-text">${_clozeGaps(cz.text)}</div>
+        <div class="cloze-bank">${bank}</div>`;
+    const partB = twoPart ? `
+        <div class="comp-intro cloze-partb">Part B: ${_prettyMath(cz.introB || 'write ONE suitable word in each gap. There is no box for this part.')}</div>
+        <div class="cloze-text">${_clozeGaps(cz.textB)}</div>` : '';
+    return `
+      <tr class="comp-block"><td colspan="3" style="padding:4px 0 2px">
+        ${partA}${partB}
+        <div class="cloze-foot">Question ${startNum} &nbsp;·&nbsp; ${gaps} gaps &nbsp;·&nbsp; ${gaps} marks</div>
+      </td></tr>`;
+  }
+
   // Passage once, then its questions. colspan spans the number and marks
   // columns so the prose gets the full width of the sheet.
   const compRows = comp.length ? `
@@ -9848,10 +9914,30 @@ function generatePrintablePaper() {
         ? _symLineStaticSvg(q, true, 'symline-print symline-key')
         : _prettyMath(String(q.answer))}</div>
       <div class="answer-working"><b>Working / explanation:</b> ${_prettyMath(q.explanation || 'No worked explanation is available for this question.')}</div>
-    </article>`).join('');
+    </article>`).join('')
+    // ⚠ The cloze key is per GAP, not one line of ten words. A marker checking
+    //   "chose · si · croire · …" against a child's sheet has to count along in
+    //   their head and will mis-align the moment one gap is blank. The item
+    //   already carries a `notes` entry per gap explaining WHY that word fits,
+    //   which is the thing a parent actually needs when the child asks.
+    + (clozeItem ? `
+    <article class="answer">
+      <div class="answer-head"><b>Question ${sectionACount + sectionBCount + 1}</b> · ${chName(clozeItem.chapterId)} · ${clozeMarks} marks · one mark per gap</div>
+      <div class="answer-question">${_prettyMath(clozeItem.title || 'Texte à trous')}</div>
+      <ol class="answer-gaps">
+        ${clozeItem.gapAnswers.map((a, i) => {
+    const alts = Array.isArray(clozeItem.gapAlts && clozeItem.gapAlts[i]) ? clozeItem.gapAlts[i] : [];
+    // Only show alternatives that are genuinely different from the answer.
+    const extra = alts.filter(x => x && x !== a);
+    const note = (clozeItem.notes || [])[i];
+    return `<li><b>${_prettyMath(String(a))}</b>${extra.length ? ` <span class="answer-alt">(also accept: ${extra.map(x => _prettyMath(String(x))).join(', ')})</span>` : ''}${note ? `<br><span class="answer-note">${_prettyMath(String(note))}</span>` : ''}</li>`;
+  }).join('')}
+      </ol>
+      <div class="answer-working"><b>Note for the marker:</b> ${_prettyMath(clozeItem.explanation || 'There is one more word in the box than there are gaps.')} Mark each gap independently - a wrong word in gap 3 does not affect gap 4.</div>
+    </article>` : '');
   const answerKeyHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
     <title>Answer Key - Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
-    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}.q-table,.picto-table{border-collapse:collapse;margin:6px 0;font-size:10pt}.q-table th,.picto-table th{background:#f1f5f9;font-weight:700;text-align:left;padding:4px 10px;border:1px solid #94a3b8}.q-table td,.picto-table td{padding:4px 10px;border:1px solid #cbd5e1}@media print{body{margin:10px}.no-print{display:none}}${_paperWatermarkCSS('ANSWER KEY', { color: '#7f1d1d', opacity: 0.055 })}</style>
+    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.answer-gaps{margin:6px 0 0 18px;padding:0}.answer-gaps li{margin-bottom:5px;font-size:10.5pt}.answer-alt{color:#166534;font-size:9pt;font-weight:600}.answer-note{color:#475569;font-size:9pt}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}.q-table,.picto-table{border-collapse:collapse;margin:6px 0;font-size:10pt}.q-table th,.picto-table th{background:#f1f5f9;font-weight:700;text-align:left;padding:4px 10px;border:1px solid #94a3b8}.q-table td,.picto-table td{padding:4px 10px;border:1px solid #cbd5e1}@media print{body{margin:10px}.no-print{display:none}}${_paperWatermarkCSS('ANSWER KEY', { color: '#7f1d1d', opacity: 0.055 })}</style>
     </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p><p>Most questions are printed on the paper <b>without</b> multiple-choice options, so the child writes their own answer. Accept any answer that means the same as the one shown here - the wording below is the model answer, not the only one.</p></div>${answerRows}</body></html>`;
 
   const html = `<!DOCTYPE html>
@@ -9928,6 +10014,24 @@ function generatePrintablePaper() {
      passage stranded alone at the foot of page 1 is unusable. */
   .comp-block { break-inside: avoid; page-break-inside: avoid; }
 
+  /* Texte à trous. ⚠ line-height is 2.1, not the body's 1.45: a child writes
+     INTO these lines with a pen, and at normal leading the answer collides
+     with the row above. The gap rule is 78px, which fits the longest word in
+     the banks measured (11 characters) in an ordinary child's hand. */
+  .cloze-text { font-size:11pt; line-height:2.1; text-align:justify; margin:6px 0 10px; }
+  .cloze-gap { display:inline-block; white-space:nowrap; margin:0 2px; }
+  .cloze-gap sup { font-size:7.5pt; font-weight:bold; color:#1e3a5f; vertical-align:super; margin-right:1px; }
+  .cloze-rule { display:inline-block; width:78px; border-bottom:1px solid #333; }
+  /* The word bank. A visible box, because on a real paper it is a box - and a
+     child who cannot see where the list ends starts inventing words. */
+  .cloze-bank { border:1.4px solid #333; border-radius:4px; padding:8px 10px;
+    display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:center; margin-bottom:6px; }
+  .cloze-word { font-size:10.5pt; font-weight:bold; color:#111; }
+  .cloze-foot { font-size:8.5pt; color:#666; text-align:right; }
+  /* Part B has no bank, so it needs its own visible heading or it reads as a
+     continuation of Part A and the child hunts for words in the box above. */
+  .cloze-partb { margin-top:10px; padding-top:8px; border-top:1px dashed #999; }
+
   .total-row td { border-top: 2px solid #333; padding: 6px 4px; font-weight:bold; font-size:10.5pt; }
   .footer { margin-top: 20px; border-top: 1px solid #bbb; padding-top: 8px; font-size: 8.5pt; color: #777; text-align:center; }
 
@@ -9992,10 +10096,20 @@ function generatePrintablePaper() {
     <tr class="total-row"><td colspan="2" style="text-align:right;padding-right:8px;">Section B Total</td><td style="text-align:center;">/ ${sectionBMarks}</td></tr>
   </table>
 
+  ${clozeItem ? `
+  <!-- SECTION C - the cloze passage. Only rendered when the subject has one. -->
+  <div class="section-head">SECTION C &nbsp;-&nbsp; ${clozeMarks} Marks &nbsp;(Question ${sectionACount + sectionBCount + 1})</div>
+  <div class="section-sub">Read the whole passage once before you begin. Write <b>one word</b> in each numbered gap, choosing from the box below. Each word may be used <b>once only</b>.</div>
+  <table>
+    <tr><td></td><td></td><td class="marks-header">Marks</td></tr>
+    ${_printClozeBlock(clozeItem, sectionACount + sectionBCount + 1)}
+    <tr class="total-row"><td colspan="2" style="text-align:right;padding-right:8px;">Section C Total</td><td style="text-align:center;">/ ${clozeMarks}</td></tr>
+  </table>` : ''}
+
   <table style="margin-top:14px;">
     <tr class="total-row">
       <td style="text-align:right;padding-right:8px;border-top:2px solid #333;">GRAND TOTAL</td>
-      <td style="text-align:center;border-top:2px solid #333;border-left:1px solid #bbb;width:38px;">/ 100</td>
+      <td style="text-align:center;border-top:2px solid #333;border-left:1px solid #bbb;width:38px;">/ ${100 + clozeMarks}</td>
     </tr>
   </table>
 
