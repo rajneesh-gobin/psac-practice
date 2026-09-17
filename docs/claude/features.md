@@ -240,6 +240,16 @@ everyone matching these filters*, then **✉️ Email selected**.
   a recipient cannot opt out of.
 - **Who would get this?** runs the whole thing as a dry run and reports the split
   (would send / opted out / no address / deleted) without sending anything.
+- ⚠ **The body is NORMALISED before either part is built** (`normaliseBody()`).
+  An admin composes elsewhere and pastes, so what arrives carries the SENDER'S
+  layout — indents, a trailing space per line, stray blank lines — and
+  `bodyToHtml()` turns every newline into a `<br>`, delivering all of it
+  verbatim. Worse, `
+` was never normalised, so `/
+{2,}/` never matched a
+  WINDOWS paste and **every paragraph break was lost**: the whole message
+  arrived as one blob of `<br>`s. Line breaks the admin meant are kept — a
+  signature block survives — and runs of blank lines collapse to one paragraph.
 - ⚠ **Chunked at 500 ids per request and 50 recipients per message** (Resend's
   cap), and a partial failure reports what DID go out. "It failed" after 600
   delivered emails is the worst possible answer.
@@ -278,6 +288,33 @@ everyone matching these filters*, then **✉️ Email selected**.
 - The modal lists every recipient as a chip with its own ✕ (`dropRecipient`).
   It is the first screen showing the WHOLE selection, so a name that arrived
   from another tab has to be removable without closing and starting again.
+
+## The QR encoder is VENDORED — and vendoring is not copying one file
+`assets/vendor/qrcode.mjs`, loaded by `_loadLocalQRCode()` (app.js) for the
+friend-invite QR and by `engine/teacher.js` for a class link. It ships with the
+app on purpose: a phone, a school network or an offline session can block a CDN.
+- ⚠⚠ **IT HAD NEVER WORKED ONCE IN PRODUCTION.** The file was jsDelivr's
+  `+esm` build, which does **not** bundle dependencies — it externalises them
+  as ABSOLUTE jsDelivr paths (`import … from "/npm/encode-utf8@1.0.3/+esm"`,
+  same for `dijkstrajs`). Served from our own domain those resolve against
+  **nouklass.com**, so the browser fetched `https://nouklass.com/npm/…`, got a
+  404 (verified live), and the whole module graph failed. The dynamic import
+  rejected, the loader returned null, and every caller showed its fallback:
+  *"QR code unavailable right now"*. On every device, every network, always.
+- ⚠ **Everything anyone checked looked right**: present on disk, committed,
+  staged by `prepare-deploy`, served 200 as `text/javascript`. The fault was
+  one level deeper, in an import inside the file — and the feature's own
+  fallback wording ("right now") made it read as a passing network problem
+  rather than as something that had never worked.
+- Fixed by vendoring `encode-utf8.mjs` and `dijkstrajs.mjs` beside it (both
+  leaf modules, ~2.7 KB together) and rewriting the two specifiers to `./`.
+- ⚠ **`scripts/test-vendored-modules.js` imports every vendored module through
+  Node's own resolver** rather than grepping for import statements — the first
+  version regexed the minified source and reported a specifier of `",r,"` that
+  came from inside a string literal (*"Could not find a path from "*). A test
+  that invents findings gets the next real one ignored with it. It also runs
+  `create()` on a real friend link, which exercises BOTH dependencies instead
+  of only proving the file parsed.
 
 ## Sharing to Facebook
 ⚠ **The Facebook sharer carries NO text.** It takes a URL and builds the post
@@ -949,6 +986,40 @@ red, so a key left on a desk announces itself), and the NCE paper
   `lockedChapters` is per-child and must survive the write.
 
 ---
+
+## Teacher tier — a trust level, not a plan
+`profiles.teacher_tier` holds **`unverified` | `verified`** and gates ONE thing:
+how many guest classes a teacher may create (`guest_assignment_limits(tier)`,
+read by `create_guest_assignment` as
+`CASE WHEN v_tier = 'verified' OR v_role = 'admin' THEN 'verified' ELSE 'unverified' END`).
+It does not touch real classrooms, pupil PINs, materials or results.
+- ⚠ **Every teacher starts `unverified`** — `setTeacherStatus(id,'approved','unverified')`
+  hard-codes it on approval, and the auto-approve path lands there too. A card
+  reading "✅ Approved · unverified" is **not** an unconfirmed email: an account
+  whose email is unconfirmed has no profile row in that list at all and appears
+  under **pending registrations** instead (`!email_confirmed_at && !confirmed_at`).
+- ⚠⚠ **TWO DIFFERENT THINGS ARE CALLED "TIER"**, and the Teachers tab select was
+  built from the wrong one. It offered **Free / Premium / School** — the
+  SUBSCRIPTION plan — while writing `teacher_tier`. So `verified` was
+  unreachable (the one thing the control exists for), and every option it did
+  offer wrote a word nothing recognises: `admin_set_teacher_status()` answers
+  `bad_tier` for them, but the select bypassed it with a raw
+  `.update({teacher_tier})`, and the SQL above folds anything that is not
+  `'verified'` into `unverified` — **silently, with no error anywhere**.
+  Found 2026-09-17 by an admin who went looking for "Make verified"; production
+  held zero corrupted rows, so nobody had used it.
+- ⚠ The change goes through `admin_set_teacher_status`, **not** through
+  `setTeacherStatus()`: that helper emails a teacher it believes is newly
+  approved, and decides "newly" from `_teacherQueueStatus`, which is empty
+  until the Members tab has loaded the queue. A tier change routed through it
+  re-sends "you have been approved" to a teacher approved weeks ago.
+- The other control — **⭐ Make verified** in the teacher queue at the top of
+  the **Members** tab — still exists, but for an already-approved teacher it is
+  collapsed behind a `<details>` reading "N existing teachers", which is why it
+  reads as missing. The Teachers tab row is where an ongoing setting belongs.
+- `scripts/test-teacher-tier.js` reads the two allowed words **out of
+  `supabase-schema.sql`** and checks the select, the writer and
+  `GUEST_LIMIT_DEFAULTS` against them, so this cannot drift in one place again.
 
 ## Admin › Members — a family's settings, fixed without signing in as them
 Built 2026-09-11 for support calls ("my child cannot see Science"). In a

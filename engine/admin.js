@@ -2752,7 +2752,10 @@ const AdminPanel = (() => {
     el.innerHTML = header + sorted.map(t => {
       const st     = _TSTATUS[t.teacher_status] || _TSTATUS.pending;
       const joined = t.created_at ? new Date(t.created_at).toLocaleDateString() : '-';
-      const tier   = t.teacher_tier || 'free';
+      // ⚠ teacher_tier holds 'unverified' | 'verified' - a TRUST level that
+      //   gates guest classes. It is not the subscription plan, which is a
+      //   different column and a different word that also reads "tier".
+      const tier   = t.teacher_tier || 'unverified';
       const open   = _openTeachers.has(t.id);
       return `
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
@@ -2795,11 +2798,11 @@ const AdminPanel = (() => {
               <button onclick="AdminPanel.teacherSuspend('${t.id}')"
                 class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg font-semibold hover:bg-red-200 transition-colors">🚫 Suspend</button>` : ''}
             <select onchange="AdminPanel.teacherChangeTier('${t.id}', this.value)"
-              aria-label="Teacher tier"
+              aria-label="Teacher trust level"
+              title="Verified lifts the cap on guest classes. It is not the subscription plan."
               class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-              <option value="free"    ${tier === 'free'    ? 'selected' : ''}>Free tier</option>
-              <option value="premium" ${tier === 'premium' ? 'selected' : ''}>Premium tier</option>
-              <option value="school"  ${tier === 'school'  ? 'selected' : ''}>School tier</option>
+              <option value="unverified" ${tier === 'unverified' ? 'selected' : ''}>Unverified teacher</option>
+              <option value="verified"   ${tier === 'verified'   ? 'selected' : ''}>⭐ Verified teacher</option>
             </select>
             <button onclick="AdminPanel.toggleDisable('${t.id}', ${!t.disabled})"
               class="text-xs px-3 py-1 rounded-lg font-semibold transition-colors ${t.disabled
@@ -3082,13 +3085,39 @@ const AdminPanel = (() => {
     if (t) { t.teacher_status = 'suspended'; _renderTeachers(_teachers); }
   }
 
+  // ⚠ THROUGH THE RPC, NOT A RAW UPDATE. This used to write whatever the select
+  //   handed it straight into profiles.teacher_tier, and the select offered the
+  //   SUBSCRIPTION vocabulary - Free / Premium / School. None of those is a
+  //   teacher tier: admin_set_teacher_status() answers `bad_tier` for them, and
+  //   guest_assignment_limits() reads `CASE WHEN v_tier = 'verified' … ELSE
+  //   'unverified'`, so all three silently meant UNVERIFIED with no error
+  //   anywhere. 'verified' itself was not on the list at all, so the one thing
+  //   this control exists to do could not be done from it.
+  // ⚠ NOT via setTeacherStatus(): that helper emails a teacher when it sees a
+  //   status it believes is newly approved, and it decides "newly" from
+  //   _teacherQueueStatus, which is empty until the Members tab has loaded the
+  //   queue. Changing a tier from the Teachers tab would then send an already
+  //   approved teacher a second "you have been approved" email.
   async function teacherChangeTier(userId, tier) {
     if (!_sb || !tier) return;
-    const { error } = await _sb.from('profiles').update({ teacher_tier: tier }).eq('id', userId);
-    if (error) { toast('Error: ' + error.message, 3000); return; }
-    toast(`Tier set to ${tier}`, 2000);
+    if (!['unverified', 'verified'].includes(tier)) return;
     const t = _teachers.find(x => x.id === userId);
+    // The RPC takes the status too; pass back the one they already have so this
+    // changes the trust level and nothing else.
+    const status = t?.teacher_status || _teacherQueueStatus[userId];
+    if (!status) { toast('Could not read this teacher’s status - refresh and try again.', 3000); return; }
+    const { data, error } = await _sb.rpc('admin_set_teacher_status',
+      { p_user_id: userId, p_status: status, p_tier: tier });
+    if (error || !data?.ok) {
+      const why = error?.message || data?.error || 'unknown';
+      console.error('[AdminPanel.teacherChangeTier]', why);
+      toast('Could not change that: ' + why, 3500);
+      return;
+    }
     if (t) t.teacher_tier = tier;
+    toast(tier === 'verified'
+      ? '⭐ Verified - their guest-class limit is lifted.'
+      : 'Set back to unverified - the lower guest-class limit applies.', 3000);
   }
 
   function _esc(str) {

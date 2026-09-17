@@ -134,6 +134,36 @@ function request(body) {
     mail2.from === 'Nou Klass <admin@nouklass.com>' && mail2.reply_to === 'admin@nouklass.com');
   ok("and still carries no personal address", !JSON.stringify(mail2).includes(ADMIN_PERSONAL));
 
+  // ── A pasted message must not carry the sender's layout ──────────────────
+  // ⚠ REPORTED FROM THE REAL FORM. Copying a draft out of a terminal brings
+  //   two-space indents and a trailing space on every line; bodyToHtml() turns
+  //   every newline into <br>, so the reader received the paste exactly as it
+  //   looked in the admin's window — wrapped at 76 columns, indented, with
+  //   whatever blank lines happened to be in between.
+  sentPayloads.length = 0;
+  const messy = '  Hello,   \r\n\r\n\r\n   Thank you for creating your account.   \r\n'
+              + '  We can see your child has not started yet,   \r\n  so we would like to help.  \r\n\r\n'
+              + '  Just hit reply.  \r\n\r\n\r\n\r\n';
+  await handler(request({ user_ids: [ids[0]], subject: 'Pasted', message: messy }), env);
+  const m3 = sentPayloads[0] || {};
+
+  ok('no line keeps its leading or trailing spaces',
+    !/(<p[^>]*>|<br>)\s/.test(m3.html) && !/\s(<\/p>|<br>)/.test(m3.html), m3.html);
+  ok('runs of blank lines collapse to ONE paragraph break',
+    (m3.html.match(/<p /g) || []).length === 3, (m3.html.match(/<p /g) || []).length);
+  // ⚠ A single newline is still a line break the admin typed on purpose —
+  //   a signature block or a short list must survive.
+  // The middle paragraph is three lines, so it keeps the two breaks between them.
+  ok('deliberate single line breaks survive as <br>',
+    (m3.html.match(/<br>/g) || []).length === 2, (m3.html.match(/<br>/g) || []).length);
+  ok('the plain-text part is normalised the same way, not left raw',
+    !/  Hello/.test(m3.text) && !/ \n/.test(m3.text), JSON.stringify(m3.text || '').slice(0, 200));
+  ok('the words themselves are untouched',
+    m3.html.includes('Thank you for creating your account.')
+    && m3.html.includes('Just hit reply.'));
+  ok('no empty paragraph is emitted for the trailing blank lines',
+    !/<p[^>]*><\/p>/.test(m3.html));
+
   console.log(`\n${checks - fails}/${checks} envelope checks passed.`);
   process.exit(fails ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });

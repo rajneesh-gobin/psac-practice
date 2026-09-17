@@ -45,6 +45,24 @@ async function emailsById(sbUrl, sbH, wanted) {
 // escaped first — an admin is trusted, but a pasted message is not, and HTML
 // from a compose box is how a mail template starts rendering someone else's
 // markup.
+// ⚠ NORMALISE ONCE, FOR BOTH BODIES. An admin composes somewhere else — a
+//   terminal, a document, a chat window — and pastes. What arrives carries the
+//   SENDER'S layout: two-space indents, a trailing space on every line, three
+//   or four blank lines between paragraphs. bodyToHtml() turns every newline
+//   into a <br>, so all of that reaches the reader verbatim: text hard-wrapped
+//   at 76 columns breaks at 76 columns on a phone too, halfway across the
+//   screen, and reads as a fault in the email rather than in the paste.
+// ⚠ Line breaks the admin MEANT are kept — a signature block, an address, a
+//   short list. Only the whitespace nobody typed on purpose is removed, and
+//   runs of blank lines collapse to the one paragraph break they mean.
+function normaliseBody(text) {
+  return String(text)
+    .replace(/\r\n?/g, '\n')
+    .split('\n').map(line => line.trim()).join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 function bodyToHtml(text) {
   return String(text).split(/\n{2,}/).map(block =>
     `<p style="margin:0 0 14px">${escapeHtml(block).replace(/\n/g, '<br>')}</p>`
@@ -75,7 +93,10 @@ export default async function handler(request, env) {
   const ids = [...new Set((Array.isArray(body.user_ids) ? body.user_ids : [])
     .map(String).filter(id => /^[0-9a-f-]{36}$/i.test(id)))];
   const subject = String(body.subject || '').trim().slice(0, MAX_SUBJECT);
-  const message = String(body.message || '').trim().slice(0, MAX_BODY);
+  // ⚠ Normalised HERE, not at either body: the HTML mail and the plain-text
+  //   alternative are built from this one string, and a message that reads
+  //   differently in the two parts is the same fault as two senders disagreeing.
+  const message = normaliseBody(String(body.message || '')).slice(0, MAX_BODY);
   const essential = body.essential === true;
   const dryRun = body.dry_run === true;
 
