@@ -78,7 +78,7 @@ keytool -genkey -v `
 # Confirm with 'yes'
 ```
 
-Then extract the SHA-256 fingerprint — you need this for Step 2:
+Then extract the SHA-256 fingerprint:
 
 ```powershell
 keytool -list -v -keystore nouklass-release.keystore -alias psac
@@ -86,6 +86,39 @@ keytool -list -v -keystore nouklass-release.keystore -alias psac
 # Look for the line:  SHA256: AA:BB:CC:DD:...
 # Copy the full colon-separated hex string — 32 pairs of hex digits
 ```
+
+### ⚠⚠ STOP — this is probably NOT the fingerprint that goes in assetlinks.json
+
+This is the single most common way a TWA ships broken, and the symptom gives no
+hint of the cause: **the app opens with a browser address bar across the top**,
+looking like an ordinary web page in a frame.
+
+**If the app uses Play App Signing — the default for every new app since 2021 —
+Google strips your signature and RE-SIGNS the app with their own key before it
+reaches a phone.** The fingerprint Android checks is therefore *Google's app
+signing key*, not the upload key you just generated above. An upload-key
+fingerprint in `assetlinks.json` is well-formed, plausible and completely wrong.
+
+| Which key | Where to read it | Goes in assetlinks.json? |
+|---|---|---|
+| **Upload key** (the keystore above) | `keytool -list -v …` | ❌ only if you opted OUT of Play App Signing |
+| **App signing key** (Google's) | Play Console → your app → **Setup → App integrity → App signing** | ✅ almost always this one |
+
+The Play Console shows it as `SHA-256 certificate fingerprint` and offers a copy
+button. You can only read it **after** creating the app entry and uploading a
+first build, which means the honest order is: build → upload to internal
+testing → read the fingerprint → put it here → deploy the site → *then* test the
+installed app.
+
+⚠ **Google caches this file.** Publishing a wrong fingerprint and correcting it
+later leaves verification failing for hours against the cached copy. Get it
+right before the first public release rather than after.
+
+⚠ You may list **both** fingerprints in the array — upload key and app signing
+key — and that is the safest thing to do while testing, because a build you
+install directly from a local APK is signed with the upload key while the same
+build from Play is signed with Google's. `scripts/test-assetlinks.js` accepts
+any number of entries and checks each one is well formed.
 
 ---
 

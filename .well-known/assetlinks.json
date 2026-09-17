@@ -5,7 +5,7 @@
       "namespace": "android_app",
       "package_name": "com.nouklass.app",
       "sha256_cert_fingerprints": [
-        "REPLACE_WITH_SHA256_FROM_keytool -list -v -keystore nouklass-release.keystore -alias psac"
+        "REPLACE_WITH_APP_SIGNING_SHA256 — Play Console > Setup > App integrity > App signing. NOT the upload key. See docs/convert_to_app.md"
       ]
     }
   }
