@@ -475,6 +475,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-maths/questions/symmetry_line_drawing.js',
     ],
     'grade5-french': [
+      'subjects/grade5-french/questions/ch14b_textes_trous.js',
       'subjects/grade5-french/questions/depth_hard.js',
       'subjects/grade5-french/questions/ch01_vocabulaire.js',
       'subjects/grade5-french/questions/exam_depth.js',
@@ -499,6 +500,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/coverage_g5_balance.js',
       'subjects/grade5-french/questions/rcp_textes.js'],
     'grade5-english': [
+      'subjects/grade5-english/questions/ch11_cloze.js',
       'subjects/grade5-english/questions/depth_hard.js',
       'subjects/grade5-english/questions/coverage_core_grammar.js',
       'subjects/grade5-english/questions/exam_depth.js',
@@ -659,6 +661,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/symmetry_line_drawing.js',
     ],
     'grade6-english': [
+      'subjects/grade6-english/questions/ch11_cloze.js',
       'subjects/grade6-english/questions/depth_hard.js',
       // comprehension on passages - the measured gap in this pack
       'subjects/grade6-english/questions/comprehension_passages.js',
@@ -696,6 +699,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-english/questions/enrichment_joining_sentences.js',
       'subjects/grade6-english/questions/rcp_passages.js'],
     'grade6-french': [
+      'subjects/grade6-french/questions/ch12b_textes_trous.js',
       'subjects/grade6-french/questions/depth_hard.js',
       // compréhension sur textes - the measured gap in this pack
       'subjects/grade6-french/questions/comprehension_textes.js',
@@ -741,6 +745,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-maths/questions/extended_reasoning_bank.js',
     ],
     'grade4-english': [
+      'subjects/grade4-english/questions/ch09_cloze.js',
       'subjects/grade4-english/questions/depth_hard.js',
       'subjects/grade4-english/questions/ch01_g4_nouns.js',
       'subjects/grade4-english/questions/ch02_g4_verbs.js',
@@ -778,6 +783,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-science/questions/topup_g4_science.js',
     ],
     'grade4-french': [
+      'subjects/grade4-french/questions/ch12b_textes_trous.js',
       'subjects/grade4-french/questions/depth_hard.js',
       'subjects/grade4-french/questions/ch01_g4_vocabulaire.js',
       'subjects/grade4-french/questions/ch02_g4_noms.js',
@@ -902,7 +908,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 136;
+  const _CACHE_VERSION = 137;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

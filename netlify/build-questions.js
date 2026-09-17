@@ -192,7 +192,7 @@ function _buildContext(buf) {
 
   function makeCloze({ id, chapterId, difficulty, subsection, title, intro, text, bank, answers, notes,
 
-                       textB, introB, answersB, notesB, hint, explanation }) {
+                       textB, introB, answersB, notesB, hint, explanation, lang }) {
 
     const countGaps = s => (String(s || '').match(/\{\d+\}/g) || []).length;
 
@@ -236,19 +236,45 @@ function _buildContext(buf) {
 
       notes: (Array.isArray(notes) ? notes.slice() : []).concat(Array.isArray(notesB) ? notesB.slice() : []),
 
-      question: `${title} - texte à trous : ${gaps} mots à trouver.`,
+      // ⚠ The defaults are FRENCH because this exercise began as PSAC French Q6.
+
+      //   `lang: 'en'` switches all three strings. Without it an English cloze
+
+      //   passage carries "texte à trous : 10 mots à trouver" as its question
+
+      //   text, which is what search, the admin question manager and any
+
+      //   listing show - the answer key is not the only place this string goes.
+
+      question: lang === 'en'
+
+        ? `${title} - cloze passage: ${gaps} words to find.`
+
+        : `${title} - texte à trous : ${gaps} mots à trouver.`,
 
       answer: gapAnswers.join(' · '),
 
       acceptableAnswers: [gapAnswers.join(' · ')],
 
-      hint: hint || 'Lis tout le texte une fois avant de commencer. Remplis en premier les trous dont tu es sûr : chaque mot trouvé réduit le choix pour les autres.',
+      hint: hint || (lang === 'en'
 
-      explanation: explanation || (gapsB
+        ? 'Read the whole passage once before you start. Fill in the gaps you are sure of first: every word you place narrows the choice for the rest.'
 
-        ? `Partie A : ${words.length} mots proposés pour ${gapsA} trous, ${spare} en trop. Partie B : ${gapsB} mots à écrire toi-même.`
+        : 'Lis tout le texte une fois avant de commencer. Remplis en premier les trous dont tu es sûr : chaque mot trouvé réduit le choix pour les autres.'),
 
-        : `Il y a ${words.length} mots pour ${gapsA} trous : ${spare} mot${spare === 1 ? '' : 's'} en trop.`),
+      explanation: explanation || (lang === 'en'
+
+        ? (gapsB
+
+          ? `Part A: ${words.length} words offered for ${gapsA} gaps, ${spare} to spare. Part B: ${gapsB} words to write yourself.`
+
+          : `There are ${words.length} words for ${gapsA} gaps: ${spare} word${spare === 1 ? '' : 's'} to spare.`)
+
+        : (gapsB
+
+          ? `Partie A : ${words.length} mots proposés pour ${gapsA} trous, ${spare} en trop. Partie B : ${gapsB} mots à écrire toi-même.`
+
+          : `Il y a ${words.length} mots pour ${gapsA} trous : ${spare} mot${spare === 1 ? '' : 's'} en trop.`)),
 
     };
 

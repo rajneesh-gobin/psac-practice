@@ -50,14 +50,26 @@ const app = fs.readFileSync(path.join(ROOT, 'engine/app.js'), 'utf8');
 //   a bug.
 const clozePools = (app.match(/type === 'cloze'/g) || []).length;
 check(clozePools === 1, 'only one place in app.js pools cloze directly', String(clozePools));
-const paper = app.slice(app.indexOf('function generatePrintablePaper()'));
+// ⚠ Anchor WITHOUT the argument list. It was 'generatePrintablePaper()' and the
+//   function grew an  parameter in another session, so indexOf returned -1,
+//   slice(-1) handed back one character, and SEVEN checks failed on code that had
+//   not changed. Match the name, never the signature.
+const paperAt = app.indexOf('function generatePrintablePaper');
+if (paperAt < 0) { console.log('generatePrintablePaper not found'); process.exit(1); }
+const paper = app.slice(paperAt);
 check(/const _clozePool = STATIC_QUESTIONS\.filter/.test(paper),
   'the printable paper builds its own cloze pool');
 // ⚠ The same locks and cap as the rest of the sheet — a locked chapter must
 //   not leak in through the one pool that skips the usual filter.
 const poolSrc = (paper.match(/const _clozePool = STATIC_QUESTIONS\.filter\([\s\S]*?\);/) || [''])[0];
 check(/_activeChs\.has\(q\.chapterId\)/.test(poolSrc), 'the cloze pool honours locked chapters');
-check(/q\.difficulty <= maxDiff/.test(poolSrc), 'the cloze pool honours the difficulty cap');
+// ⚠ Accept EITHER spelling of the cap. This asserted the literal
+//   `q.difficulty <= maxDiff` and broke when another session refactored the
+//   same rule into a _diffOk() helper and applied it here too — the behaviour
+//   was unchanged and the test still failed. Assert that a difficulty filter is
+//   applied, not which words express it.
+check(/q\.difficulty <= maxDiff|_diffOk\(q\.difficulty\)/.test(poolSrc),
+  'the cloze pool honours the difficulty cap', poolSrc.replace(/\s+/g, ' ').slice(0, 120));
 
 // ⚠ A maths paper must not grow an empty Section C.
 check(/\$\{clozeItem \? `/.test(paper), 'Section C is rendered only when a cloze item was found');
@@ -129,6 +141,54 @@ for (const cz of items) {
     check(cz.notes.length === ga.length, `${at} — one marker note per gap`,
       `${cz.notes.length} notes vs ${ga.length} gaps`);
   }
+
+  // ⚠ PART A ANSWERS MUST BE UNIQUE. Each banked word is PLACED, so a word
+  //   answering two gaps makes one of them unfillable and the child loses a
+  //   mark they cannot win. (Part B is TYPED, so a repeat there is fine — the
+  //   real Grade 6 items repeat "plus".)
+  const aAnswers = ga.slice(0, aCount);
+  check(new Set(aAnswers).size === aAnswers.length,
+    `${at} — no Part A word answers two gaps`,
+    aAnswers.filter((w, i) => aAnswers.indexOf(w) !== i).join(', '));
+
+  // ⚠ THE SPARE WORD MUST BE A REAL DISTRACTOR. A "spare" that is actually one
+  //   of the answers means the bank has no spare at all, and the printed
+  //   paper's "one word more than you need" is then a lie the child works from.
+  const spares = bank.filter(w => !aAnswers.includes(w));
+  check(spares.length === bank.length - aAnswers.length,
+    `${at} — the bank's spare words are genuinely unused`, spares.join(', '));
+
+  // ⚠ A gap with no marker note leaves the parent with a word and no reason.
+  check(Array.isArray(cz.notes) && cz.notes.length === ga.length,
+    `${at} — every gap carries a marker note`);
+
+  // ── language ──
+  // ⚠ makeCloze defaults its question/hint/explanation to FRENCH. An English
+  //   passage without lang:'en' is listed everywhere as "texte à trous", and
+  //   the only place that shows is search and the admin question manager —
+  //   neither of which anyone checks after adding content.
+  const isEnglishPack = /-english$/.test(cz._pack);
+  if (isEnglishPack) {
+    check(/cloze passage/i.test(String(cz.question)),
+      `${at} — English pack item reads in English`, String(cz.question).slice(0, 60));
+    check(!/texte à trous|mots à trouver/i.test(String(cz.question) + cz.hint + cz.explanation),
+      `${at} — no French default leaked into an English item`);
+  } else {
+    check(/texte à trous/i.test(String(cz.question)),
+      `${at} — French pack item reads in French`, String(cz.question).slice(0, 60));
+  }
+
+  // ⚠ DENSITY, not length. The first version of this check was a flat 90-word
+  //   floor and it failed NINE existing passages, seven of them transcribed
+  //   from real PSAC papers at 82-89 words. Total length is the wrong measure:
+  //   what makes a cloze unreadable is gaps packed too close together, so the
+  //   ratio is what matters. The authored corpus sits at 8.2 words per gap and
+  //   above; below about 7 the sentences stop carrying enough context to fix
+  //   an answer and the child is guessing from the bank alone.
+  const words = (String(cz.text || '') + ' ' + String(cz.textB || '')).split(/\s+/).filter(Boolean).length;
+  const perGap = words / Math.max(1, ga.length);
+  check(perGap >= 7, `${at} — gaps are not packed too tightly`,
+    `${words} words / ${ga.length} gaps = ${perGap.toFixed(1)} per gap`);
 }
 
 // ── 4: coverage, so the request can be answered honestly ────────────────────

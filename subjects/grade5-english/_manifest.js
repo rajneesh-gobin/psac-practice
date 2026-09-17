@@ -78,6 +78,9 @@ const G5ENG_SYLLABUS = {
     { id:'time',            name:'Time' },  // 10
     { id:'purpose_result',  name:'Purpose & result' },  // 10
   ]},
+  'g5eng-cloze': { subsections: [
+    { id:'cloze_passage',   name:'Cloze passages' },
+  ]},
 };
 
 
@@ -238,6 +241,15 @@ registerSubject({
       id: 'eng-enr-joining', name: 'Joining Sentences', icon: '🔗',
       enrichment: true, examWeight: 1,
       enrichmentNote: 'The PSAC task "Join the two sentences using the word given". Adds "whose" and "that", although / while / since, "so that" versus "to + verb", and the comma after a fronted clause.',
+    },
+      // @enrichment - the cloze passage. ⚠ examWeight 0 and it MUST stay 0:
+    //   every item is type 'cloze', which isPoolQuestion() excludes from every
+    //   pool, so a weighted slot here would be reconciled away from a chapter
+    //   that can actually fill it. The printed paper reaches these directly.
+    {
+      id: 'g5eng-cloze', name: 'Cloze Passages', icon: '🧩',
+      enrichment: true, examWeight: 0,
+      enrichmentNote: 'A whole passage with gaps and a word bank - the comprehension skill the PSAC French paper sets as Q6, practised in English.',
     },
   ],
 });

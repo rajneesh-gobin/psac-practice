@@ -67,6 +67,9 @@ const G6ENG_SYLLABUS = {
     { id:'time',            name:'Time' },  // 10
     { id:'purpose_result',  name:'Purpose & result' },  // 10
   ]},
+  'g6eng-cloze': { subsections: [
+    { id:'cloze_passage',   name:'Cloze passages' },
+  ]},
 };
 
 
@@ -209,6 +212,15 @@ registerSubject({
       id: 'g6eng-enr-joining', name: 'Joining Sentences', icon: '🔗',
       enrichment: true, examWeight: 4,
       enrichmentNote: 'The PSAC task "Join the two sentences using the word given", at its hardest: non-defining clauses and their commas, "whom" after a preposition, participle joining, whereas / despite, and the semicolon that "however" needs.',
+    },
+      // @enrichment - the cloze passage. ⚠ examWeight 0 and it MUST stay 0:
+    //   every item is type 'cloze', which isPoolQuestion() excludes from every
+    //   pool, so a weighted slot here would be reconciled away from a chapter
+    //   that can actually fill it. The printed paper reaches these directly.
+    {
+      id: 'g6eng-cloze', name: 'Cloze Passages', icon: '🧩',
+      enrichment: true, examWeight: 0,
+      enrichmentNote: 'A whole passage with gaps and a word bank - the comprehension skill the PSAC French paper sets as Q6, practised in English.',
     },
   ],
 });

@@ -60,6 +60,9 @@ const G4ENG_SYLLABUS = {
     { id:'story',           name:'Stories & Legends' },  // 18
     { id:'instructions',    name:'Instructions & Recipes' },  // 4
   ]},
+  'g4eng-cloze': { subsections: [
+    { id:'cloze_passage',   name:'Cloze passages' },  // 8
+  ]},
   'g4eng-enr-joining': { subsections: [
     { id:'relative',        name:'Relative pronouns' },  // 10
     { id:'cause',           name:'Cause & reason' },  // 10
@@ -172,6 +175,15 @@ registerSubject({
       id: 'g4eng-enr-joining', name: 'Joining Sentences', icon: '🔗',
       enrichment: true, examWeight: 2,
       enrichmentNote: 'The PSAC task "Join the two sentences using the word given". Here you pick the correctly joined sentence: who / which / where, and the everyday conjunctions.',
+    },
+    // @enrichment - the cloze passage. ⚠ examWeight 0 and it MUST stay 0:
+    //   every item is type 'cloze', which isPoolQuestion() excludes from every
+    //   pool, so a weighted slot here would be reconciled away from a chapter
+    //   that can actually fill it. The printed paper reaches these directly.
+    {
+      id: 'g4eng-cloze', name: 'Cloze Passages', icon: '🧩',
+      enrichment: true, examWeight: 0,
+      enrichmentNote: 'A whole passage with ten gaps and a word bank - the comprehension skill the PSAC French paper sets as Q6, practised in English.',
     },
   ],
 });
