@@ -9642,11 +9642,48 @@ function _rememberPrintablePaper(questions) {
 function generatePrintablePaper(opts) {
   const o = opts || {};
   const year = new Date().getFullYear();
-  // The pack the paper is FOR, which is not necessarily the one on screen.
-  const _paperPack = o.packId
-    ? ((typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === o.packId) || null)
-    : (typeof ACTIVE_PACK !== 'undefined' ? ACTIVE_PACK : null);
-  const isMathsPaper = (_paperPack?.subject === 'Maths');
+  // The pack(s) the paper is FOR, which are not necessarily the one on screen.
+  // ⚠ packIds (plural) builds a MIXED-SUBJECT paper. The adult surfaces warn that
+  //   this is not recommended — a real exam paper is one subject with one mark
+  //   scheme — but a teacher making an end-of-term revision sheet has a genuine
+  //   use for it, so it is supported rather than blocked.
+  const _allPacks = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []);
+  const _wantIds = Array.isArray(o.packIds) && o.packIds.length
+    ? o.packIds
+    : (o.packId ? [o.packId] : null);
+  const _paperPacks = _wantIds
+    ? _wantIds.map(id => _allPacks.find(p => p.id === id)).filter(Boolean)
+    : [(typeof ACTIVE_PACK !== 'undefined' ? ACTIVE_PACK : null)].filter(Boolean);
+  const _paperPack = _paperPacks[0] || null;
+  const _isMixed = _paperPacks.length > 1;
+  // ⚠ The maths format (20 short + 15 applied) only applies when EVERY subject on
+  //   the sheet is maths. A mixed paper takes the standard 30 + 10, because half a
+  //   maths paper stapled to half an English one is neither.
+  const isMathsPaper = _paperPacks.length > 0 && _paperPacks.every(p => p?.subject === 'Maths');
+
+  // ⚠ The LABEL ON THE PRINTED SHEET. _label answers for whichever
+  //   pack is open on screen, which is right for the child printing their own
+  //   paper and wrong for every adult-built one: a Grade 4 English paper came out
+  //   headed "Grade 6 Mathematics" because that was the child loaded at the time.
+  //   A paper whose heading names a different exam is worse than no heading.
+  const _label = (() => {
+    // ⚠ CALLS _activeSubjectLabel(), NOT _label. A blanket rename of the eight call
+    //   sites inside this function rewrote this one too, so _label referenced itself
+    //   before initialisation and every paper threw "Cannot access '_label' before
+    //   initialization" — including the child's. Caught by the two print tests,
+    //   which build a real paper; the builder's own tests stub the generator and
+    //   could not have seen it.
+    if (!_wantIds) return (typeof _activeSubjectLabel === 'function')
+      ? _activeSubjectLabel() : { grade: '', name: 'your subject' };
+    if (_isMixed) {
+      const grades = [...new Set(_paperPacks.map(p => p.grade))];
+      return {
+        grade: grades.length === 1 ? grades[0] : grades.join(' & '),
+        name: _paperPacks.map(p => p.name).join(' · '),
+      };
+    }
+    return { grade: _paperPack?.grade ?? '', name: _paperPack?.name || 'your subject' };
+  })();
   // Maths benefits from a longer applied-reasoning section. Other subjects keep
   // their established 30 short + 10 extended format.
   // ⚠ Clamped, not trusted. These come from a form on the adult surfaces, and a
@@ -9685,8 +9722,8 @@ function generatePrintablePaper(opts) {
   // ⚠ CHAPTERS holds the ACTIVE pack only, so an adult paper for another pack
   //   must read that pack's own chapter list — reading the global here is
   //   exactly why teacher mode once showed Mathematics and nothing else.
-  const _paperChapters = o.packId
-    ? ((_paperPack && (_paperPack._chapters || _paperPack.chapters)) || [])
+  const _paperChapters = _wantIds
+    ? _paperPacks.flatMap(p => (p._chapters || p.chapters) || [])
     : (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []);
   const _wanted = Array.isArray(o.chapterIds) && o.chapterIds.length ? new Set(o.chapterIds) : null;
   const _activeChs = new Set(_paperChapters
@@ -10005,15 +10042,15 @@ function generatePrintablePaper(opts) {
       <div class="answer-working"><b>Note for the marker:</b> ${_prettyMath(clozeItem.explanation || 'There is one more word in the box than there are gaps.')} Mark each gap independently - a wrong word in gap 3 does not affect gap 4.</div>
     </article>` : '');
   const answerKeyHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-    <title>Answer Key - Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
+    <title>Answer Key - Grade ${_label.grade} ${_label.name} Practice Paper ${year}</title>
     <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.answer-gaps{margin:6px 0 0 18px;padding:0}.answer-gaps li{margin-bottom:5px;font-size:10.5pt}.answer-alt{color:#166534;font-size:9pt;font-weight:600}.answer-note{color:#475569;font-size:9pt}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}.q-table,.picto-table{border-collapse:collapse;margin:6px 0;font-size:10pt}.q-table th,.picto-table th{background:#f1f5f9;font-weight:700;text-align:left;padding:4px 10px;border:1px solid #94a3b8}.q-table td,.picto-table td{padding:4px 10px;border:1px solid #cbd5e1}@media print{body{margin:10px}.no-print{display:none}}${_paperWatermarkCSS('ANSWER KEY', { color: '#7f1d1d', opacity: 0.055 })}</style>
-    </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p><p>Most questions are printed on the paper <b>without</b> multiple-choice options, so the child writes their own answer. Accept any answer that means the same as the one shown here - the wording below is the model answer, not the only one.</p></div>${answerRows}</body></html>`;
+    </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_label.grade} · ${_label.name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p><p>Most questions are printed on the paper <b>without</b> multiple-choice options, so the child writes their own answer. Accept any answer that means the same as the one shown here - the wording below is the model answer, not the only one.</p></div>${answerRows}</body></html>`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} - Practice Paper ${year}</title>
+<title>Grade ${_label.grade} ${_label.name} - Practice Paper ${year}</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #111; padding: 20px; background: #fff; }
@@ -10125,7 +10162,7 @@ function generatePrintablePaper(opts) {
   <div class="header-box">
     <div class="ministry">Nou Klass — practice paper</div>
     <div class="title">Exam-Style Practice Paper ${year}</div>
-    <div class="subtitle">${_activeSubjectLabel().name} &nbsp;|&nbsp; Grade ${_activeSubjectLabel().grade}</div>
+    <div class="subtitle">${_label.name} &nbsp;|&nbsp; Grade ${_label.grade}</div>
     <div class="meta">
       <span><b>Duration:</b> 1 hour 30 minutes</span>
       <span><b>Total Marks:</b> 100</span>

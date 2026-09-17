@@ -5678,6 +5678,21 @@ html.dark .pb-check:hover { background:#4b5563; }
 .pb-status.pb-ok { color:#047857; font-weight:600; }
 html.dark .pb-status.pb-err { color:#fca5a5; }
 html.dark .pb-status.pb-ok { color:#6ee7b7; }
+/* ⚠ The mixed-subject block is tinted amber and the warning sits INSIDE it, right
+   under the checkbox, because the whole point is that the caution is unmissable at
+   the moment of ticking — not in a tooltip or a paragraph further down. */
+.pb-block-warn { background:#fffbeb; border-color:#fcd34d; }
+html.dark .pb-block-warn { background:rgba(120,53,15,.28); border-color:#b45309; }
+.pb-check-mix b { color:#92400e; }
+html.dark .pb-check-mix b { color:#fcd34d; }
+.pb-warn { font-size:.78rem; line-height:1.5; color:#92400e; margin:.4rem 0 .2rem; }
+html.dark .pb-warn { color:#fde68a; }
+.pb-warn b { font-weight:800; }
+/* Which subject a chapter belongs to, shown only while mixing — two packs can both
+   have a chapter called "Reading". */
+.pb-inpack { font-style:normal; font-size:.65rem; font-weight:700; text-transform:uppercase;
+  color:#3730a3; background:#e0e7ff; border-radius:99px; padding:.05rem .4rem; margin-left:.25rem; }
+html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
 .pb-foot { font-size:.72rem; color:#6b7280; margin:0; }
 /* ===== FRENCH NINJA 🗡️ ===== */
 /* Words are BUTTONS, not spans: the child taps them, so they need a real hit

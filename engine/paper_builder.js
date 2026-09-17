@@ -30,10 +30,16 @@
 //                                       which reads as a filter problem rather
 //                                       than an empty pool.
 //
-// ⚠ A paper is ONE subject. Grade and subject are single-choice on purpose: the
-//   format the generator prints is a 100-mark Section A / Section B paper for
-//   one subject, and a mixed-subject sheet is a different document with a
-//   different mark scheme. Chapters and difficulty are the multi-select axes.
+// ⚠ A paper is ONE subject by default, and the format is why: the generator
+//   prints a 100-mark Section A / Section B paper, and a real exam paper covers
+//   one subject with one mark scheme.
+// ⚠ MIXED SUBJECTS ARE SUPPORTED BUT WARNED ABOUT, at the request of the owner.
+//   A teacher building an end-of-term revision sheet has a genuine use for one.
+//   What the warning beside the checkbox says is true and worth keeping true:
+//   the marks no longer map to any real paper, the maths format is dropped (a
+//   maths paper is 20 short + 15 applied and that shape is meaningless once
+//   English is on the sheet), and the sections interleave subjects, so a pupil
+//   switches language mid-paper. It is a revision sheet, not a mock exam.
 const PaperBuilder = (() => {
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g,
@@ -56,7 +62,7 @@ const PaperBuilder = (() => {
  //   set and the next render helpfully ticked everything back — the button looked
  //   broken and the only clue was that it worked once per pack change.
   const _state = { grade: null, packId: null, chapters: new Set(), diffs: new Set([1, 2, 3, 4]),
-    secA: null, secB: null, freshPack: true };
+    secA: null, secB: null, freshPack: true, mixed: false, packIds: new Set() };
 
   // Adults see every LIVE pack. ⚠ comingSoon is filtered because this list is
   // parent- and teacher-facing: the comingSoon rule is that anything a parent or
@@ -72,7 +78,19 @@ const PaperBuilder = (() => {
       .sort((a, b) => String(a.name).localeCompare(String(b.name)));
   }
   function _pack() { return _packs().find((p) => p.id === _state.packId) || null; }
+  // Every pack the paper will draw from: one, or all the ticked ones when mixing.
+  function _activePacks() {
+    if (!_state.mixed) { const p = _pack(); return p ? [p] : []; }
+    return _packs().filter((p) => _state.packIds.has(p.id));
+  }
   function _chaptersOf(pack) { return (pack && (pack._chapters || pack.chapters)) || []; }
+  // ⚠ Chapter ids are unique across packs, so a flat union is safe — but the
+  //   LABEL must name the subject when mixing, or a teacher sees two chapters
+  //   called "Reading" and cannot tell which subject each belongs to.
+  function _allChapters() {
+    return _activePacks().flatMap((p) => _chaptersOf(p)
+      .map((c) => ({ ...c, _pack: p.name, _packId: p.id })));
+  }
 
   // ── render ───────────────────────────────────────────────────────────────
   function render(hostId, surface) {
@@ -102,12 +120,35 @@ const PaperBuilder = (() => {
               ${grades.map((g) => `<option value="${g}" ${Number(g) === Number(_state.grade) ? 'selected' : ''}>Grade ${g}</option>`).join('')}
             </select>
           </label>
+          ${_state.mixed ? '' : `
           <label class="pb-field">
             <span>Subject</span>
             <select id="pb-subject" onchange="PaperBuilder.setPack(this.value)">
               ${packs.map((p) => `<option value="${esc(p.id)}" ${p.id === _state.packId ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}
             </select>
+          </label>`}
+        </div>
+
+        <div class="pb-block pb-block-warn">
+          <label class="pb-check pb-check-mix">
+            <input type="checkbox" id="pb-mixed" ${_state.mixed ? 'checked' : ''}
+              onchange="PaperBuilder.setMixed(this.checked)">
+            <span><b>Mix several subjects on one paper</b></span>
           </label>
+          <p class="pb-warn">⚠ <b>Not recommended.</b> A real exam paper covers one
+            subject with one mark scheme. A mixed sheet has marks that match no real
+            paper, loses the maths layout, and asks a pupil to switch subject partway
+            through. Useful as an end-of-term revision sheet — not as a mock exam.</p>
+          ${_state.mixed ? `
+          <div class="pb-checks" id="pb-subjects">
+            ${packs.map((p) => `
+              <label class="pb-check">
+                <input type="checkbox" value="${esc(p.id)}" ${_state.packIds.has(p.id) ? 'checked' : ''}
+                  onchange="PaperBuilder.togglePack(\'${esc(p.id)}\', this.checked)">
+                <span>${esc(p.name)}</span>
+              </label>`).join('')}
+          </div>
+          <p class="pb-hint">Tick two or more subjects in Grade ${esc(String(_state.grade))}.</p>` : ''}
         </div>
 
         <div class="pb-block">
@@ -165,8 +206,7 @@ const PaperBuilder = (() => {
   function _renderChapters() {
     const box = $('pb-chapters');
     if (!box) return;
-    const pack = _pack();
-    const chs = _chaptersOf(pack);
+    const chs = _allChapters();
     if (_state.freshPack && chs.length) {
       _state.freshPack = false;
       chs.forEach((c) => _state.chapters.add(c.id));
@@ -184,7 +224,7 @@ const PaperBuilder = (() => {
       <label class="pb-check">
         <input type="checkbox" value="${esc(c.id)}" ${_state.chapters.has(c.id) ? 'checked' : ''}
           onchange="PaperBuilder.toggleChapter('${esc(c.id)}', this.checked)">
-        <span>${c.icon ? esc(c.icon) + ' ' : ''}${esc(c.name)}${c.enrichment ? ' <i class="pb-bonus">bonus</i>' : ''}</span>
+        <span>${c.icon ? esc(c.icon) + ' ' : ''}${esc(c.name)}${_state.mixed ? ` <i class="pb-inpack">${esc(c._pack)}</i>` : ''}${c.enrichment ? ' <i class="pb-bonus">bonus</i>' : ''}</span>
       </label>`).join('');
     _syncCount();
   }
@@ -192,7 +232,7 @@ const PaperBuilder = (() => {
   function _syncCount() {
     const el = $('pb-ch-count');
     if (!el) return;
-    const total = _chaptersOf(_pack()).length;
+    const total = _allChapters().length;
     el.textContent = total ? `${_state.chapters.size} of ${total} selected` : '';
   }
 
@@ -224,8 +264,33 @@ const PaperBuilder = (() => {
   function allChapters(on) {
     // ⚠ An explicit Clear is a CHOICE, so the pack is no longer "fresh".
     _state.freshPack = false;
-    _state.chapters = on ? new Set(_chaptersOf(_pack()).map((c) => c.id)) : new Set();
+    _state.chapters = on ? new Set(_allChapters().map((c) => c.id)) : new Set();
     _renderChapters();
+    _status('');
+  }
+  function setMixed(on) {
+    _state.mixed = !!on;
+    // Seed the tick list from whatever single subject was chosen, so turning the
+    // option on does not empty the form the adult had already filled in.
+    if (_state.mixed) {
+      _state.packIds = new Set(_state.packId ? [_state.packId] : []);
+    } else {
+      _state.packId = [..._state.packIds][0] || _state.packId;
+      _state.packIds = new Set();
+    }
+    _state.chapters = new Set();
+    _state.freshPack = true;
+    render();
+  }
+  function togglePack(id, on) {
+    if (on) _state.packIds.add(id); else _state.packIds.delete(id);
+    // ⚠ The chapter list changes shape with the subject list, so it is rebuilt and
+    //   re-seeded. Keeping stale ticks would put a chapter on the paper from a
+    //   subject the adult has just removed.
+    _state.chapters = new Set();
+    _state.freshPack = true;
+    _renderChapters();
+    _syncCount();
     _status('');
   }
   function toggleDiff(n, on) {
@@ -239,8 +304,12 @@ const PaperBuilder = (() => {
   // ── generate ─────────────────────────────────────────────────────────────
   async function generate() {
     const btn = $('pb-go');
-    const pack = _pack();
+    const packs = _activePacks();
+    const pack = packs[0] || null;
     if (!pack) return _status('Choose a subject first.', 'err');
+    // ⚠ One ticked subject in mixed mode is not an error worth blocking — it is
+    //   simply an ordinary single-subject paper, so let it through rather than
+    //   making the adult untick the option to proceed.
     if (!_state.chapters.size) return _status('Tick at least one chapter.', 'err');
     if (!_state.diffs.size) return _status('Tick at least one difficulty level.', 'err');
 
@@ -254,13 +323,18 @@ const PaperBuilder = (() => {
     }
 
     if (btn) btn.disabled = true;
-    _status('Loading ' + pack.name + '…');
+    _status('Loading ' + packs.map((p) => p.name).join(', ') + '…');
     try {
       // ⚠ Both awaits matter — see the header. ensure() brings the real manifest,
       //   loadSubject() brings the questions into STATIC_QUESTIONS.
-      if (typeof PackLoader !== 'undefined' && PackLoader.ensure) await PackLoader.ensure(pack.id);
-      if (typeof QuestionLoader !== 'undefined' && QuestionLoader.loadSubject) {
-        await QuestionLoader.loadSubject(pack.id);
+      // ⚠ EVERY chosen pack, not just the first. A mixed paper whose second
+      //   subject was never fetched prints as a single-subject paper and nothing
+      //   says so — STATIC_QUESTIONS only holds what the app has loaded.
+      for (const p of packs) {
+        if (typeof PackLoader !== 'undefined' && PackLoader.ensure) await PackLoader.ensure(p.id);
+        if (typeof QuestionLoader !== 'undefined' && QuestionLoader.loadSubject) {
+          await QuestionLoader.loadSubject(p.id);
+        }
       }
 
       // ⚠ Count the pool the way the generator will, BEFORE opening a window. A
@@ -268,8 +342,14 @@ const PaperBuilder = (() => {
       //   is worse than being told the filters are too narrow, and the adult has
       //   no way to tell the difference from the printed sheet.
       const avail = _poolSize(pack);
-      const wantA = _state.secA ?? (pack.subject === 'Maths' ? 20 : 30);
-      const wantB = _state.secB ?? (pack.subject === 'Maths' ? 15 : 10);
+      // ⚠ Mirrors the generator: the maths layout (20 short + 15 applied) applies only
+      //   when EVERY subject on the sheet is maths, so a mixed paper is sized as the
+      //   standard 30 + 10. If this and the generator disagree, the warning fires on
+      //   the wrong threshold and either blocks a paper that would have built or
+      //   passes one that prints short.
+      const _allMaths = packs.every((p) => p.subject === 'Maths');
+      const wantA = _state.secA ?? (_allMaths ? 20 : 30);
+      const wantB = _state.secB ?? (_allMaths ? 15 : 10);
       if (avail < wantA + wantB) {
         _status(`Only ${avail} question${avail === 1 ? '' : 's'} match — that is not enough for a `
           + `${wantA + wantB}-question paper. Tick more chapters or levels, or shorten the paper.`, 'err');
@@ -280,7 +360,7 @@ const PaperBuilder = (() => {
       //   and a paper an adult builds is not bound by one pupil's parental locks.
       //   It does NOT bypass the plan gate above.
       generatePrintablePaper({
-        packId: pack.id,
+        packIds: packs.map((p) => p.id),
         chapterIds: [..._state.chapters],
         difficulties: [..._state.diffs],
         sectionACount: _state.secA ?? undefined,
@@ -309,10 +389,11 @@ const PaperBuilder = (() => {
   // Test-harness introspection; the state is otherwise closure-private.
   function _debug() {
     return { surface: _surface, grade: _state.grade, packId: _state.packId,
+      mixed: _state.mixed, packIds: [..._state.packIds],
       chapters: [..._state.chapters], diffs: [..._state.diffs], secA: _state.secA, secB: _state.secB };
   }
   function _set(patch) { Object.assign(_state, patch); }
 
-  return { render, setGrade, setPack, toggleChapter, allChapters, toggleDiff, setLen,
-           generate, _debug, _set, _poolSize };
+  return { render, setGrade, setPack, setMixed, togglePack, toggleChapter, allChapters,
+           toggleDiff, setLen, generate, _debug, _set, _poolSize };
 })();

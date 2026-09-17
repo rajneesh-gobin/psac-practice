@@ -238,20 +238,168 @@ async function runIt() {
     await PB.generate();
     ok('generate builds the paper when the pool is sufficient', generateCalls === 1,
       'status: ' + el('pb-status').textContent);
-    ok('it passes the chosen pack', lastOpts && lastOpts.packId === 'grade6-maths');
+    // ⚠ packIds for BOTH modes, holding one id in single-subject mode. The builder
+    //   stopped sending a bare packId when mixed papers arrived; the generator still
+    //   accepts packId for any other caller.
+    ok('it passes the chosen pack', lastOpts && lastOpts.packIds.join() === 'grade6-maths',
+      JSON.stringify(lastOpts && lastOpts.packIds));
     ok('it passes the chosen chapters', lastOpts && lastOpts.chapterIds.join() === 'g6m-a');
     ok('it passes the chosen difficulties', lastOpts && lastOpts.difficulties.length === 4);
     // ⚠ An adult paper is not bound by one pupil's parental locks — but this must
     //   never be the default, which the generator-side check above covers.
     ok('it passes ignoreChildLocks', lastOpts && lastOpts.ignoreChildLocks === true);
 
-    // The plan gate must hold even though the button is drawn.
+      // ── mixed-subject mode ────────────────────────────────────────────────
+    // ⚠ Supported but warned about. The warning is the feature as much as the
+    //   capability is, so its presence is asserted — and asserted while the option
+    //   is still OFF, because a caution that only appears after you opt in is
+    //   advice that arrives too late to act on.
+    sandbox._planAllowsFeature = () => true;
+    PB.setMixed(false);
+    PB.render('host', 'parent');
+    const offHtml = el('host').innerHTML;
+    ok('the mix-subjects checkbox is offered', offHtml.includes('PaperBuilder.setMixed('));
+    ok('the not-recommended warning shows BEFORE opting in', /Not recommended/.test(offHtml));
+    ok('the warning says a real paper is one subject',
+      /one\s+subject with one mark scheme/.test(offHtml));
+    ok('single mode offers a subject dropdown', offHtml.includes('id="pb-subject"'));
+
+    PB.setMixed(true);
+    const onHtml = el('host').innerHTML;
+    ok('mixed mode replaces the dropdown with checkboxes',
+      !onHtml.includes('id="pb-subject"') && /togglePack\(/.test(onHtml));
+    ok('turning it on keeps the subject already chosen', PB._debug().packIds.length === 1);
+
+    PB.togglePack('grade6-english', true);
+    const dm = PB._debug();
+    ok('two subjects can be ticked', dm.packIds.length === 2, JSON.stringify(dm.packIds));
+    // ⚠ Chapter ids are unique across packs, so the union is safe — but the label
+    //   must name the subject or two chapters called "Reading" are indistinguishable.
+    ok('chapters span every ticked subject', dm.chapters.length === 5, dm.chapters.length + ' chapters');
+    ok('each chapter says which subject it is from',
+      (el('pb-chapters').innerHTML.match(/pb-inpack/g) || []).length === 5);
+
+    generateCalls = 0;
+    PB._set({ chapters: new Set(['g6m-a', 'g6e-a']), diffs: new Set([1, 2, 3, 4]), secA: 5, secB: 0 });
+    await PB.generate();
+    ok('a mixed paper generates', generateCalls === 1, el('pb-status').textContent);
+    ok('it sends every chosen pack as packIds',
+      lastOpts && lastOpts.packIds.length === 2, JSON.stringify(lastOpts && lastOpts.packIds));
+    ok('it sends no single packId', lastOpts && lastOpts.packId === undefined);
+
+    PB.setMixed(false);
+    ok('turning it off falls back to a single subject', PB._debug().packIds.length === 0);
+
+  // The plan gate must hold even though the button is drawn.
     sandbox._planAllowsFeature = () => false;
     generateCalls = 0;
     await PB.generate();
     ok('the plan gate blocks generation', generateCalls === 0);
   }
 
+}
+
+
+// ── 6. END TO END: the printed sheet must name the pack it is FOR ──────────
+// ⚠⚠ THE DEFECT THIS EXISTS FOR. The paper's heading comes from
+//    _activeSubjectLabel(), which answers for whichever pack is open on screen. A
+//    parent building a Grade 4 English paper while their child was loaded on Grade
+//    6 Maths got the right questions under a heading reading "Grade 6 Mathematics".
+//    A sheet whose title names a different exam is worse than one with no title.
+// ⚠ This slices the REAL generator into a vm, the way test-printable-open-ended.js
+//   does, because the section above stubs generatePrintablePaper() and a stub
+//   cannot see anything the generator itself gets wrong. That is exactly how a TDZ
+//   self-reference in the label shipped past 80 passing checks here and was caught
+//   only by the two print tests.
+{
+  // ⚠ A REGION, not just the function. The generator leans on siblings declared
+  //   around it — _printNeedsOptions, _printClozeBlock, _PRINT_MCQ_KEEP — so slicing
+  //   from `function generatePrintablePaper` to the next top-level `function` both
+  //   cuts the body at the first nested declaration ("Unexpected end of input") and
+  //   omits the helpers. These are the same boundaries
+  //   test-printable-open-ended.js uses, for the same reason.
+  const slice = (() => {
+    const a = app.indexOf('// ── Comprehension passages on a printed paper');
+    const b = app.indexOf('function startExamTimer()');
+    return (a >= 0 && b > a) ? app.slice(a, b) : '';
+  })();
+  ok('the generator region was located in app.js', slice.includes('function generatePrintablePaper(opts)'));
+
+  const mkBank = (chapterId, n) => Array.from({ length: n }, (_, i) => ({
+    id: chapterId + '-q' + i, chapterId, difficulty: (i % 4) + 1, type: 'numeric',
+    question: 'What is ' + i + ' + 1?', answer: String(i + 1),
+  }));
+
+  let opened = '';
+  const ctx = vm.createContext({
+    console: { log() {}, warn() {} },
+    CHAPTERS: [{ id: 'g6m-a', name: 'Fractions' }],
+    STATIC_QUESTIONS: [...mkBank('g4e-a', 80), ...mkBank('g6m-a', 80)],
+    // The child on screen is Grade 6 Maths…
+    ACTIVE_PACK: { id: 'grade6-maths', subject: 'Maths', grade: 6, name: 'Mathematics' },
+    ACTIVE_STUDENT_ID: 'test-child',
+    DB: { restrictions: {} },
+    SUBJECT_PACKS: [
+      { id: 'grade6-maths', subject: 'Maths', grade: 6, name: 'Mathematics', chapters: [{ id: 'g6m-a', name: 'Fractions' }] },
+      { id: 'grade4-english', subject: 'English', grade: 4, name: 'English', chapters: [{ id: 'g4e-a', name: 'Reading' }] },
+    ],
+    isPoolQuestion: (q) => q && q.type !== 'cloze' && q.type !== 'errorhunt' && q.type !== 'task',
+    shuffle: (a) => [...a],
+    _prettyMath: (s) => String(s == null ? '' : s),
+    _symLineStaticSvg: () => '<svg></svg>',
+    // …and this is what the OLD code used for the heading, whatever was asked for.
+    _activeSubjectLabel: () => ({ grade: 6, name: 'Mathematics' }),
+    _paperWatermarkCSS: require(path.join(ROOT, 'engine', 'helpers.js'))._paperWatermarkCSS,
+    toast: () => {},
+    localStorage: { getItem: () => null, setItem() {} },
+    window: { open: () => ({ document: { write: (h) => { opened += h; }, close() {} } }) },
+  });
+  let sliceErr = null;
+  try { vm.runInContext(slice, ctx); } catch (e) { sliceErr = e.message; }
+  ok('the generator slice loads into a vm', !sliceErr, sliceErr);
+
+  const titleOf = (h) => (h.match(/<title>[^<]*<\/title>/) || [''])[0];
+
+  if (!sliceErr) {
+    // ── the child's path: heading follows the active pack, unchanged ──
+    opened = '';
+    let childErr = null;
+    try { ctx.generatePrintablePaper(); } catch (e) { childErr = e.constructor.name + ': ' + e.message; }
+    ok("the child's paper builds with no arguments", !childErr, childErr);
+    ok("the child's paper is headed by the active pack", /Grade 6 Mathematics/.test(opened), titleOf(opened));
+
+    // ── an adult building a DIFFERENT pack ──
+    opened = '';
+    let adultErr = null;
+    try {
+      ctx.generatePrintablePaper({
+        packIds: ['grade4-english'], chapterIds: ['g4e-a'],
+        difficulties: [1, 2, 3, 4], sectionACount: 10, sectionBCount: 5, ignoreChildLocks: true,
+      });
+    } catch (e) { adultErr = e.constructor.name + ': ' + e.message; }
+    ok('an adult paper for another pack builds', !adultErr, adultErr);
+    ok('the adult paper is headed by the CHOSEN pack, not the active one',
+      /Grade 4 English/.test(opened) && !/Grade 6 Mathematics/.test(opened), titleOf(opened));
+
+    // ── a mixed paper names both subjects ──
+    opened = '';
+    let mixErr = null;
+    try {
+      ctx.generatePrintablePaper({
+        packIds: ['grade4-english', 'grade6-maths'],
+        chapterIds: ['g4e-a', 'g6m-a'], difficulties: [1, 2, 3, 4],
+        sectionACount: 10, sectionBCount: 5, ignoreChildLocks: true,
+      });
+    } catch (e) { mixErr = e.constructor.name + ': ' + e.message; }
+    ok('a mixed-subject paper builds', !mixErr, mixErr);
+    ok('a mixed paper names both subjects in its heading',
+      /English/.test(opened) && /Mathematics/.test(opened), titleOf(opened));
+    // ⚠ Every guarantee of the single-subject sheet must survive a mixed one — the
+    //   disclaimer especially, since a mixed sheet resembles a real paper even less
+    //   and must still not be able to pass for one.
+    ok('a mixed paper still carries the footer disclaimer', /not\s+an MIE or Ministry/.test(opened));
+    ok('a mixed paper still carries its answer key', /ANSWER_KEY_HTML/.test(opened));
+  }
 }
 
 runIt().then(() => {
