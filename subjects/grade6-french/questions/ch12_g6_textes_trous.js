@@ -371,7 +371,7 @@
      'Après « fit signe d\' », il faut un infinitif.',
      '« quelqu\'un ___ sait attendre » : c\'est cette personne qui sait attendre.'],
     'Tania emporta la boîte chez elle. Elle l\'ouvrit, la referma, la secoua : rien. Son oncle, {6} répare les montres, l\'ouvrit avec un tournevis minuscule. À l\'intérieur, un ressort {7} cassé. Il le remplaça en une heure. Quand la boîte s\'est remise {8} jouer, Tania a reconnu l\'air : c\'était celui que sa mère lui chantait {9} elle était petite. Elle n\'{10} avait jamais parlé à personne.',
-    [['qui'], ['était'], ['à'], ['quand', 'lorsque'], ['en']],
+    [['qui'], ['était'], ['à'], ['quand', 'lorsqu\''], ['en']],
     ['« Son oncle, ___ répare les montres » : c\'est l\'oncle qui répare.',
      '« un ressort ___ cassé » : imparfait du verbe être, singulier.',
      '« s\'est remise ___ jouer » : le petit mot placé devant l\'infinitif.',
