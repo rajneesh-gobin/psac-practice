@@ -182,7 +182,10 @@ check(sw.includes("'/engine/minigame_lab.js'"), 'the data file is pre-cached in 
 check(html.indexOf('engine/minigame_lab.js') < html.indexOf('engine/minigame.js'),
   'the data file loads BEFORE minigame.js');
 check(/mg-card-live mg-card-lb/.test(mg), 'the hub card is live, not a teaser');
-check(!/mg-card-soon[\s\S]{0,200}Potion Lab/.test(mg), 'no COMING SOON teaser is left behind');
+// ⚠ Assert on the CARD MARKUP, not on the words — see the note in
+//   test-memory-reef.js. The design-intent comment names every built game.
+check((mg.match(/class="mg-card mg-card-soon"/g) || []).length === 0,
+  'no COMING SOON teaser card is left in the hub');
 check(/\.mg-card-lb /.test(css) && /\.lb-cauldrons /.test(css), 'the bench is styled');
 // ⚠ 2 and 3 cauldron rounds both exist, so both layouts must be styled.
 check(/\.lb-cols-2 /.test(css) && /\.lb-cols-3 /.test(css), 'both cauldron layouts are styled');

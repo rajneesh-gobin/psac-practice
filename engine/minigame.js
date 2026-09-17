@@ -91,6 +91,12 @@ const MiniGames = (() => {
       //   play it again, which is also what keeps the next speak() inside a tap.
       else if (kind === 'ecoute' && _ec && !_ec.over)
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'ecoute', ec: _ec }));
+      // ⚠ Saved between phases only. The sprint deadline is wall-clock, so a
+      //   stash taken mid-quiz would resume already expired; resume drops the
+      //   child back to the READING screen for the current passage instead,
+      //   which is the one place restarting the clock is fair.
+      else if (kind === 'story' && _st && !_st.over)
+        sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'story', st: _st }));
     } catch (_) {}
   }
   function _clearPersist() { try { sessionStorage.removeItem(_stateKey()); } catch (_) {} }
@@ -134,11 +140,20 @@ const MiniGames = (() => {
     //   utterance inside a gesture.
     const canEc = saved && saved.game === 'ecoute' && saved.ec && !saved.ec.over
       && Array.isArray(saved.ec.items) && saved.ec.idx < saved.ec.items.length && _allowed();
+    // ⚠ Resumes to the READING screen for the current passage, whatever phase
+    //   it was saved in — the only place restarting the clock is fair.
+    const canSt = saved && saved.game === 'story' && saved.st && !saved.st.over
+      && Array.isArray(saved.st.passageIds) && saved.st.pi < saved.st.passageIds.length
+      && saved.st.passageIds.every(id => (window.MINIGAME_STORY || []).some(p => p.id === id)) && _allowed();
     if (typeof showScreen === 'function') showScreen('minigames');   // hub via the render hook
-    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF && !canR && !canL && !canEc) { _clearPersist(); return; }
+    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF && !canR && !canL && !canEc && !canSt) { _clearPersist(); return; }
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
-    if (canEc) {
+    if (canSt) {
+      _st = saved.st; _st.phase = 'read'; _st.qi = 0;
+      _st.locked = false; _st.picked = null; _st.passageCorrect = 0;
+      _stRender();
+    } else if (canEc) {
       _ec = saved.ec; _ec.locked = false; _ec.picked = null;
       _ec.heard = false; _ec.showing = false;
       _ec.replaysLeft = EC_REPLAYS; _ec.replaysUsed = 0;
@@ -287,9 +302,25 @@ const MiniGames = (() => {
     }
   }
 
-  // ── COMING SOON - design intents ───────────────
-  // The mg-card-soon teasers below are commitments; when building one, this is
-  // the intent. Rules every new game inherits: answers NEVER touch
+  // ── DESIGN INTENTS - ALL FOUR NOW BUILT ────────
+  // ⚠ These were mg-card-soon teasers. All four shipped 2026-09-16/17 and
+  //   there are no teasers left in the hub:
+  //     🐠 Memory Reef  — minigame_pairs.js
+  //     🧪 Potion Lab   — minigame_lab.js
+  //     🦜 Écoute !     — minigame_ecoute.js
+  //     📖 Story Sprint — minigame_story.js
+  //   ⚠ Each game's code sits under its own banner further down. Do NOT repeat
+  //     a banner string here: the per-game tests slice the file between
+  //     banners, and a second copy of one made a test match this comment
+  //     instead and read 123 KB of unrelated code as "the Story Sprint block".
+  //   The intents are KEPT rather than deleted: each records why the game is
+  //   shaped the way it is, and two of them were departed from for reasons
+  //   worth finding before someone "fixes" the difference. Écoute does NOT
+  //   curate vin/vingt (they are the same sound — see minigame_ecoute.js) and
+  //   Potion Lab allows two cauldrons as well as three (some science has two
+  //   sides). Anything new here is a fresh commitment, and the rules below
+  //   still apply to it.
+  // Rules every new game inherits: answers NEVER touch
   // recordAnswer()/_recordDaily(); bests self-seed under DB.games.<key> (no
   // schema change); in-progress state goes through _persist()/resumeOrHub();
   // a new curated data file must be added to the index.html script tags AND
@@ -384,6 +415,7 @@ const MiniGames = (() => {
     if (_rfTimer) { clearTimeout(_rfTimer); _rfTimer = null; }
     if (_lbTimer) { clearInterval(_lbTimer); _lbTimer = null; }
     if (_ecTimer) { clearTimeout(_ecTimer); _ecTimer = null; }
+    if (_stTimer) { clearInterval(_stTimer); _stTimer = null; }
     _stopPoll();
     if (!_allowed()) { el.innerHTML = '<p class="mg-note">🔒 Games are switched off by your parent right now.</p>'; return; }
     _preloadGrade();
@@ -400,6 +432,7 @@ const MiniGames = (() => {
     const rf = (typeof DB !== 'undefined' && DB.games?.reef) || {};
     const lb = (typeof DB !== 'undefined' && DB.games?.lab) || {};
     const ec = (typeof DB !== 'undefined' && DB.games?.ecoute) || {};
+    const st = (typeof DB !== 'undefined' && DB.games?.story) || {};
     el.innerHTML = `
       ${mixLine ? `<p class="mg-mix-line">🎯 ${esc(mixLine)}</p>` : ''}
       ${(typeof GameSettings !== 'undefined' && GameSettings.childGradeBar) ? GameSettings.childGradeBar() : ''}
@@ -502,14 +535,15 @@ const MiniGames = (() => {
         </span>
         <span class="mg-card-go">PLAY ›</span>
       </button>
-      <div class="mg-card mg-card-soon">
+      <button class="mg-card mg-card-live mg-card-st" onclick="MiniGames.startStory()">
         <span class="mg-card-art">📖</span>
         <span class="mg-card-body">
           <b>Story Sprint</b>
           <span>Read a short story at your own pace, then race the clock on three questions - the timer waits until you're ready!</span>
+          ${st.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${st.bestScore} pts · ${st.bestAccuracy || 0}% accuracy</span>` : '<span class=\"mg-card-best\">🌟 Open your first story!</span>'}
         </span>
-        <span class="mg-card-lock">COMING SOON</span>
-      </div>
+        <span class="mg-card-go">PLAY ›</span>
+      </button>
       <p class="mg-fineprint">⚙️ The site is being updated, so some game questions may contain small errors. If one looks wrong, please report it from Practice with 🚩 Report question so an admin can fix it. 🙏</p>`;
     $('mg-game')?.classList.add('hidden');
     el.classList.remove('hidden');
@@ -3852,6 +3886,405 @@ const MiniGames = (() => {
     };
   }
 
+  // ══ STORY SPRINT ══════════════════════════════
+  // Design intent is in the COMING SOON block near the top of this file.
+  //
+  // ⚠⚠ THE TIMER NEVER RUNS WHILE THE CHILD IS READING. It starts on the tap
+  //    of "I've finished reading" and not one moment earlier. The design note
+  //    says why in its own parenthesis — never punish slow readers for reading
+  //    — and it is the single rule this game exists around. A slow reader and a
+  //    fast reader get the same sprint; what differs is only how well they used
+  //    the time they chose to take.
+  //
+  // ⚠ The passage is HIDDEN once the questions start, and the reading screen
+  //   says so before the child commits. That is what makes it a sprint rather
+  //   than a skim: the unlimited reading time IS the accommodation, so the
+  //   questions can fairly test what was understood rather than how fast
+  //   someone can scan back through a paragraph.
+  //
+  // ⚠ ONE timer for all three questions, not one each. A child who answers the
+  //   first two quickly banks that time for the third, which is the right way
+  //   round — the hard question is usually the last one.
+  const ST_PASSAGES = 5;      // passages per run
+  const ST_HIT = 10;          // points per correct answer
+  const ST_PERFECT = 15;      // bonus for 3/3 on a passage
+  const ST_TIME_BONUS = 2;    // points per whole second left at the end of a passage
+
+  let _st = null, _stTimer = null, _stDeadline = 0, _stWindow = 0;
+
+  // Longer passages get longer sprints. Three questions each, so this is the
+  // whole-passage budget.
+  function _stSprintMs(band) {
+    return 3 * (band === 1 ? 18000 : band === 2 ? 21000 : 25000);
+  }
+
+  // ⚠ A reading game must not deal a child a language their parent switched
+  //   off. If BOTH are off it falls back to both rather than dead-ending —
+  //   these toggles are built for the question-bank games, and refusing to
+  //   start would be an odd way to honour a setting that was never aimed here.
+  function _stLangs() {
+    try {
+      if (typeof GameSettings === 'undefined') return ['en', 'fr'];
+      const s = GameSettings.context('story').settings || {};
+      const subs = Array.isArray(s.subjects) ? s.subjects : null;
+      if (!subs) return ['en', 'fr'];
+      const out = [];
+      if (subs.includes('english')) out.push('en');
+      if (subs.includes('french')) out.push('fr');
+      return out.length ? out : ['en', 'fr'];
+    } catch (_) { return ['en', 'fr']; }
+  }
+
+  function _stPick(band, langs) {
+    const bank = (window.MINIGAME_STORY || []).filter(p => p && p.text
+      && Array.isArray(p.questions) && p.questions.length === 3
+      && langs.includes(p.lang));
+    if (!bank.length) return [];
+    const order = [band, band - 1, band + 1, band - 2, band + 2].filter(b => b >= 1 && b <= 3);
+    const out = [], used = new Set();
+    for (const b of order) {
+      for (const p of shuffle(bank.filter(x => x.band === b))) {
+        if (out.length >= ST_PASSAGES) break;
+        if (used.has(p.id)) continue;
+        out.push(p); used.add(p.id);
+      }
+      if (out.length >= ST_PASSAGES) break;
+    }
+    return out;
+  }
+
+  function startStory() {
+    if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
+    clearInterval(_stTimer); _stTimer = null;
+    const band = _reefBand();
+    const passages = _stPick(band, _stLangs());
+    if (!passages.length) { toast('Story Sprint is not available right now.', 3000); return; }
+    _st = {
+      passageIds: passages.map(p => p.id), pi: 0,
+      phase: 'read',          // 'read' | 'quiz' | 'passage-end'
+      qi: 0, order: [0, 1, 2],
+      score: 0, correct: 0, wrong: 0, missed: 0,
+      passageCorrect: 0, perfects: 0,
+      picked: null, locked: false, over: false, lastGain: 0,
+    };
+    $('mg-hub')?.classList.add('hidden');
+    $('mg-game')?.classList.remove('hidden');
+    _stRender();
+    _persist('story');
+  }
+
+  function _stPassage() {
+    const bank = (window.MINIGAME_STORY || []);
+    return _st && bank.find(p => p.id === _st.passageIds[_st.pi]);
+  }
+  function _stQuestion() {
+    const p = _stPassage();
+    return p && p.questions[_st.order[_st.qi]];
+  }
+
+  // ⚠ THE ONLY PLACE THE CLOCK STARTS. Called from the "finished reading" tap.
+  function stBeginQuiz() {
+    if (!_st || _st.over || _st.phase !== 'read') return;
+    const p = _stPassage();
+    if (!p) return;
+    _st.phase = 'quiz';
+    _st.qi = 0;
+    _st.order = shuffle([0, 1, 2]);
+    _st.passageCorrect = 0;
+    _st.picked = null; _st.locked = false;
+    _stWindow = _stSprintMs(p.band);
+    _stDeadline = Date.now() + _stWindow;
+    clearInterval(_stTimer);
+    _stTimer = setInterval(_stTick, 100);
+    _stRender();
+    _persist('story');
+  }
+
+  function _stTick() {
+    if (!_st || _st.over || _st.phase !== 'quiz') return;
+    const left = _stDeadline - Date.now();
+    const bar = $('st-timebar-fill');
+    if (bar) {
+      const pct = Math.max(0, Math.min(100, left / _stWindow * 100));
+      bar.style.width = pct + '%';
+      bar.classList.toggle('low', pct < 25);
+    }
+    const num = $('st-time-num');
+    if (num) num.textContent = Math.max(0, Math.ceil(left / 1000));
+    if (left <= 0) _stTimeUp();
+  }
+
+  // ⚠ Time out ends the PASSAGE, not the run. Whatever is unanswered is
+  //   counted missed and the child moves on — a run that ends on one slow
+  //   paragraph would make the whole game feel like a trap.
+  function _stTimeUp() {
+    if (!_st || _st.phase !== 'quiz') return;
+    clearInterval(_stTimer); _stTimer = null;
+    const remaining = 3 - _st.qi - (_st.locked ? 1 : 0);
+    _st.missed += Math.max(0, remaining);
+    _stEndPassage(true);
+  }
+
+  function stAnswer(choice) {
+    if (!_st || _st.over || _st.locked || _st.phase !== 'quiz') return;
+    const q = _stQuestion();
+    if (!q) return;
+    _st.locked = true;
+    _st.picked = choice;
+    if (choice === q.answer) {
+      _st.correct++; _st.passageCorrect++;
+      _st.score += ST_HIT;
+    } else {
+      _st.wrong++;
+    }
+    _stRender();
+  }
+
+  function stNext() {
+    if (!_st || _st.over || !_st.locked || _st.phase !== 'quiz') return;
+    _st.qi++;
+    _st.locked = false; _st.picked = null;
+    if (_st.qi >= 3) { _stEndPassage(false); return; }
+    _stRender();
+    _persist('story');
+  }
+
+  function _stEndPassage(timedOut) {
+    clearInterval(_stTimer); _stTimer = null;
+    const left = Math.max(0, Math.floor((_stDeadline - Date.now()) / 1000));
+    let gain = 0;
+    if (!timedOut) gain += left * ST_TIME_BONUS;
+    if (_st.passageCorrect === 3) { gain += ST_PERFECT; _st.perfects++; }
+    _st.score += gain;
+    _st.lastGain = gain;
+    _st.timedOut = !!timedOut;
+    _st.secondsLeft = timedOut ? 0 : left;
+    _st.phase = 'passage-end';
+    _st.locked = false; _st.picked = null;
+    _stRender();
+    _persist('story');
+  }
+
+  function stNextPassage() {
+    if (!_st || _st.over || _st.phase !== 'passage-end') return;
+    _st.pi++;
+    if (_st.pi >= _st.passageIds.length) { _stFinish(); return; }
+    _st.phase = 'read';
+    _st.qi = 0; _st.picked = null; _st.locked = false;
+    _stRender();
+    _persist('story');
+  }
+
+  function _stRender() {
+    if (!_st) return;
+    const el = $('mg-game');
+    const p = _stPassage();
+    if (!el || !p) return;
+    const head = `
+      <div class="st-topbar">
+        <span class="st-progress">Passage ${_st.pi + 1}/${_st.passageIds.length}</span>
+        <span class="st-score">${_st.score} pts</span>
+        <button class="mg-btn-ghost st-quit" onclick="MiniGames.stQuit()">✕</button>
+      </div>`;
+
+    if (_st.phase === 'read') {
+      // ⚠ No timer element at all on this screen, not even a stopped one. A
+      //   visible clock while reading is the same pressure the rule forbids.
+      el.innerHTML = `
+        <div class="st-stage">
+          ${head}
+          <div class="st-readcard">
+            <span class="st-lang">${p.lang === 'fr' ? '🇫🇷 Français' : '🇬🇧 English'}</span>
+            <h3 class="st-title">${_rfEsc(p.title)}</h3>
+            <p class="st-text">${_rfEsc(p.text)}</p>
+          </div>
+          <p class="st-warn">⏱️ ${p.lang === 'fr'
+    ? 'Prends ton temps — le chrono ne démarre qu’après. Le texte disparaîtra ensuite.'
+    : 'Take all the time you need — the clock starts after this. The passage is hidden once you begin.'}</p>
+          <button class="mg-btn-primary st-begin" onclick="MiniGames.stBeginQuiz()">${p.lang === 'fr' ? 'J’ai fini de lire ▶' : 'I’ve finished reading ▶'}</button>
+        </div>`;
+      return;
+    }
+
+    if (_st.phase === 'passage-end') {
+      el.innerHTML = `
+        <div class="st-stage">
+          ${head}
+          <div class="st-passend mg-pop">
+            <div class="st-passend-emoji">${_st.passageCorrect === 3 ? '🌟' : _st.timedOut ? '⏰' : '📖'}</div>
+            <h3>${_st.passageCorrect}/3 ${p.lang === 'fr' ? 'bonnes réponses' : 'correct'}</h3>
+            ${_st.timedOut ? `<p class="st-passend-note">${p.lang === 'fr' ? 'Le temps est écoulé.' : 'Time ran out.'}</p>`
+    : `<p class="st-passend-note">${_st.secondsLeft}s ${p.lang === 'fr' ? 'restantes' : 'left'}${_st.lastGain ? ` · +${_st.lastGain} bonus` : ''}</p>`}
+            <button class="mg-btn-primary" onclick="MiniGames.stNextPassage()">${_st.pi + 1 >= _st.passageIds.length ? (p.lang === 'fr' ? 'Résultats ▶' : 'Results ▶') : (p.lang === 'fr' ? 'Texte suivant ▶' : 'Next passage ▶')}</button>
+          </div>
+        </div>`;
+      return;
+    }
+
+    const q = _stQuestion();
+    if (!q) return;
+    const opts = q.options.map(o => {
+      const state = !_st.locked ? ''
+        : o === q.answer ? ' st-right'
+          : (o === _st.picked ? ' st-wrong' : '');
+      return `<button class="st-opt${state}" ${_st.locked ? 'disabled' : ''}
+          onclick="MiniGames.stAnswer('${_rfEsc(o).replace(/'/g, '&#39;')}')">${_rfEsc(o)}</button>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="st-stage">
+        ${head}
+        <div class="st-timerow">
+          <div class="st-timebar"><div class="st-timebar-fill" id="st-timebar-fill"></div></div>
+          <span class="st-time-num" id="st-time-num">${Math.ceil(_stWindow / 1000)}</span>
+        </div>
+        <p class="st-qcount">${p.lang === 'fr' ? 'Question' : 'Question'} ${_st.qi + 1}/3</p>
+        <p class="st-question">${_rfEsc(q.q)}</p>
+        <div class="st-opts">${opts}</div>
+        ${_st.locked ? `<button class="mg-btn-primary st-next" onclick="MiniGames.stNext()">${p.lang === 'fr' ? 'Suivant ▶' : 'Next ▶'}</button>` : ''}
+      </div>`;
+  }
+
+  function _stFinish() {
+    if (!_st) return;
+    _st.over = true;
+    clearInterval(_stTimer); _stTimer = null;
+    _clearPersist();
+    const asked = _st.correct + _st.wrong + _st.missed;
+    _st.acc = asked ? Math.round(_st.correct / asked * 100) : 0;
+    _stSaveBest();
+    const best = (typeof DB !== 'undefined' && DB.games?.story) || {};
+    const isRecord = _st.score >= (best.bestScore || 0) && _st.score > 0;
+    if (isRecord && typeof launchConfetti === 'function') launchConfetti(90);
+    const grade = _st.acc >= 90 ? { t: 'Sharp reader! 🥇', s: 'You held on to almost every detail.' }
+      : _st.acc >= 70 ? { t: 'Well read! 🥈', s: 'Your reading is doing the work.' }
+        : _st.acc >= 45 ? { t: 'Good effort! 🥉', s: 'Try reading the last line twice before you start.' }
+          : { t: 'Keep reading! 💪', s: 'Slow down on the first read — the clock waits for you.' };
+
+    $('mg-game').innerHTML = `
+      <div class="qf-end mg-pop">
+        <div class="qf-end-emoji">📖</div>
+        <h3>${grade.t}</h3>
+        <p>${grade.s}</p>
+        <div class="qf-scoreboard">
+          <div><b>${_st.score}</b><span>points</span></div>
+          <div><b>${_st.correct}/${asked}</b><span>questions right</span></div>
+          <div><b>${_st.perfects}</b><span>perfect passages</span></div>
+        </div>
+        ${isRecord ? '<p class="bq-best">🏅 New personal best!</p>'
+        : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
+        <div class="mg-share-row">
+          <button class="mg-btn-primary" onclick="MiniGames.stShare()">📤 Share my score</button>
+          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
+            onclick="MiniGames.stShareTo('fb')">📘</button>
+          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
+            onclick="MiniGames.stShareTo('wa')">💬</button>
+          <button class="mg-share-ic" title="Copy" aria-label="Copy score"
+            onclick="MiniGames.stShareTo('copy', this)">🔗</button>
+        </div>
+        <div class="mg-end-row">
+          <button class="mg-btn-primary" onclick="MiniGames.startStory()">🔁 Read again</button>
+          <button class="mg-btn-ghost" onclick="MiniGames.renderHub()">🎮 All games</button>
+        </div>
+      </div>`;
+  }
+
+  function _stSaveBest() {
+    if (typeof DB === 'undefined' || !DB.stats) return;
+    DB.games = DB.games || {};
+    const g = DB.games.story = DB.games.story || { plays: 0, bestScore: 0, bestAccuracy: 0 };
+    g.plays++;
+    if (_st.score > (g.bestScore || 0)) g.bestScore = _st.score;
+    if (_st.acc > (g.bestAccuracy || 0)) g.bestAccuracy = _st.acc;
+    _awardRun('story');
+    if (typeof save === 'function') save(DB);
+  }
+
+  function _stShareText() {
+    return `📖 I scored ${_st.score} in Story Sprint on Nou Klass - ${_st.correct} questions right `
+      + `and ${_st.perfects} perfect passages, ${_st.acc}% accuracy! Read faster than me? 🏃`;
+  }
+  function _stShareUrl() {
+    const qs = `g=st&s=${_st.score}&c=${_st.correct}&a=${_st.acc}`;
+    return new URL(`score.html?${qs}`, location.href).href;
+  }
+
+  async function _stScoreImage() {
+    try {
+      const W = 1080, H = 1080, c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const x = c.getContext('2d');
+      const g = x.createLinearGradient(0, 0, W, H);
+      g.addColorStop(0, '#1c1917'); g.addColorStop(.55, '#7c2d12'); g.addColorStop(1, '#b45309');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      x.textAlign = 'center'; x.fillStyle = '#fff';
+      x.font = '600 46px system-ui,sans-serif'; x.fillText('📖 STORY SPRINT', W / 2, 250);
+      x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
+      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillStyle = '#fed7aa'; x.font = '800 300px system-ui,sans-serif';
+      x.fillText(String(_st.score), W / 2, 660);
+      x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
+      x.fillText('POINTS', W / 2, 730);
+      x.font = '500 44px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.92)';
+      x.fillText(`${_st.correct} right   ·   ${_st.perfects} perfect   ·   ${_st.acc}%`, W / 2, 850);
+      x.font = '700 50px system-ui,sans-serif'; x.fillStyle = '#fff';
+      x.fillText('Can you read faster? 🏃', W / 2, 960);
+      const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+      return blob ? new File([blob], 'story-sprint-score.png', { type: 'image/png' }) : null;
+    } catch (_) { return null; }
+  }
+
+  async function stShare() {
+    if (!_st) return;
+    const text = _stShareText(), url = _stShareUrl();
+    const file = await _stScoreImage();
+    if (navigator.share) {
+      try {
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], text: text + '\n' + url });
+        } else {
+          await navigator.share({ title: 'Story Sprint score', text, url });
+        }
+        return;
+      } catch (_) { return; }
+    }
+    stShareTo('copy');
+  }
+
+  function stShareTo(where, btn) {
+    if (!_st) return;
+    const text = _stShareText(), url = _stShareUrl();
+    if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+    else if (where === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank', 'noopener');
+    else if (where === 'copy') {
+      const full = text + '\n' + url;
+      const done = () => { if (btn) { const o = btn.textContent; btn.textContent = '✅'; setTimeout(() => btn.textContent = o, 1600); } };
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(full).then(done).catch(() => prompt('Copy your score:', full));
+      else prompt('Copy your score:', full);
+    }
+  }
+
+  function stQuit() {
+    if (_st && !_st.over && _st.score > 0 && !confirm('Leave Story Sprint? This run won\'t be saved.')) return;
+    clearInterval(_stTimer); _stTimer = null;
+    _clearPersist();
+    _st = null;
+    renderHub();
+  }
+
+  function _stDebug() {
+    const p = _stPassage(), q = _stQuestion();
+    return _st && {
+      pi: _st.pi, total: _st.passageIds.length, phase: _st.phase, qi: _st.qi,
+      score: _st.score, correct: _st.correct, wrong: _st.wrong, missed: _st.missed,
+      passageCorrect: _st.passageCorrect, perfects: _st.perfects,
+      locked: _st.locked, over: _st.over, timedOut: !!_st.timedOut,
+      timerRunning: _stTimer !== null,
+      passage: p && { id: p.id, lang: p.lang, band: p.band },
+      question: q && { q: q.q, answer: q.answer, options: q.options.slice() },
+    };
+  }
+
   function open() {
     if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
     showScreen('minigames');
@@ -3882,5 +4315,6 @@ const MiniGames = (() => {
            startFrNinja, fnTap, fnQuit, fnShare, fnShareTo, _fnDebug, _fnPick,
            startReef, rfTap, rfQuit, rfShare, rfShareTo, _rfDebug, _reefPick,
            startLab, lbTap, lbQuit, lbShare, lbShareTo, _lbDebug, _labPickRounds, _labPickItems,
-           startEcoute, ecListen, ecAnswer, ecNext, ecQuit, ecShare, ecShareTo, _ecDebug, _ecPick, _ecMode };
+           startEcoute, ecListen, ecAnswer, ecNext, ecQuit, ecShare, ecShareTo, _ecDebug, _ecPick, _ecMode,
+           startStory, stBeginQuiz, stAnswer, stNext, stNextPassage, stQuit, stShare, stShareTo, _stDebug, _stPick, _stLangs };
 })();

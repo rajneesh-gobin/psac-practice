@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v361';
+const SHELL_VERSION = 'shell-v362';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -97,6 +97,7 @@ const SHELL_FILES = [
   '/engine/minigame_pairs.js',
   '/engine/minigame_lab.js',
   '/engine/minigame_ecoute.js',
+  '/engine/minigame_story.js',
   '/engine/minigame.js',
   '/engine/cloze.js',
   '/engine/errorhunt.js',

@@ -244,7 +244,10 @@ check(sw.includes("'/engine/minigame_ecoute.js'"), 'the data file is pre-cached 
 check(html.indexOf('engine/minigame_ecoute.js') < html.indexOf('engine/minigame.js'),
   'the data file loads BEFORE minigame.js');
 check(/mg-card-live mg-card-ec/.test(mg), 'the hub card is live, not a teaser');
-check(!/mg-card-soon[\s\S]{0,200}Écoute/.test(mg), 'no COMING SOON teaser is left behind');
+// ⚠ Assert on the CARD MARKUP, not on the words — see the note in
+//   test-memory-reef.js. The design-intent comment names every built game.
+check((mg.match(/class="mg-card mg-card-soon"/g) || []).length === 0,
+  'no COMING SOON teaser card is left in the hub');
 check(/\.mg-card-ec /.test(css) && /\.ec-opts /.test(css), 'the game is styled');
 check(/saved\.game === 'ecoute'/.test(mg), 'a refresh can resume a run');
 

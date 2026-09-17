@@ -10174,3 +10174,65 @@ button.tc-cd-stat:focus-visible { outline: 3px solid #f4ce52; outline-offset: 2p
   .ec-opt { font-size:.85rem; padding:10px 12px; }
   .ec-parrot { font-size:2.5rem; }
 }
+
+/* ══ Story Sprint ══════════════════════════════════════════════════════════
+   ⚠ THE READING SCREEN CARRIES NO TIMER ELEMENT AT ALL — not a paused one,
+     not a greyed one. A visible clock while a child reads is the same pressure
+     the game's one rule forbids, and a stopped clock still looks like a clock. */
+.st-stage { max-width:600px; margin:0 auto; border-radius:20px; padding:14px 12px 16px;
+  display:flex; flex-direction:column; gap:10px;
+  background:radial-gradient(120% 90% at 50% 0%, #1c1917 0%, #451a03 55%, #0b1120 100%);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.5); }
+.st-topbar { display:flex; align-items:center; gap:8px; }
+.st-progress { flex:1; font-weight:800; font-size:.85rem; color:#fed7aa; }
+.st-score { flex:0 0 auto; font-weight:800; font-size:.85rem; color:#fde047; }
+.st-quit { flex:0 0 auto; padding:4px 10px; }
+
+/* The passage itself. Wider measure and looser leading than the rest of the
+   app: this is the one screen in the Game Zone a child actually READS. */
+.st-readcard { background:rgba(255,255,255,.96); color:#1c1917; border-radius:16px;
+  padding:16px 18px; }
+.st-lang { display:inline-block; font-size:.72rem; font-weight:800; color:#92400e;
+  background:#fef3c7; border-radius:99px; padding:2px 10px; margin-bottom:8px; }
+.st-title { font-size:1.05rem; font-weight:800; margin:0 0 8px; }
+/* ⚠ 1.7 line-height and a 17px body are deliberate — this is a reading test,
+     so the typography must not be part of the difficulty. */
+.st-text { font-size:1.06rem; line-height:1.7; margin:0; }
+.st-warn { text-align:center; font-size:.8rem; color:#fdba74; margin:0; }
+.st-begin { align-self:center; }
+
+.st-timerow { display:flex; align-items:center; gap:8px; }
+.st-timebar { flex:1; height:10px; border-radius:99px; background:rgba(255,255,255,.12); overflow:hidden; }
+.st-timebar-fill { height:100%; border-radius:99px; width:100%;
+  background:linear-gradient(90deg,#fbbf24,#f97316); transition:width .1s linear; }
+.st-timebar-fill.low { background:#ef4444; animation:qf-pulse-bar .5s ease infinite; }
+.st-time-num { flex:0 0 auto; min-width:1.4em; text-align:center; color:#fed7aa; font-weight:800; font-size:.85rem; }
+
+.st-qcount { text-align:center; font-size:.75rem; font-weight:800; color:#fdba74;
+  text-transform:uppercase; letter-spacing:.06em; margin:2px 0 0; }
+.st-question { text-align:center; font-size:1rem; font-weight:700; color:#fff7ed; margin:0; line-height:1.4; }
+.st-opts { display:flex; flex-direction:column; gap:7px; }
+/* ⚠ Full-width rows that wrap: options here are whole clauses ("Deep knowledge
+     of one area is worth more than a bigger boat"), and a chip grid truncates
+     exactly the qualifier the answer turns on. */
+.st-opt { width:100%; text-align:left; padding:12px 14px; border-radius:14px;
+  border:1px solid rgba(255,255,255,.14); cursor:pointer;
+  background:rgba(255,255,255,.07); color:#f5f5f4;
+  font-size:.93rem; font-weight:600; line-height:1.35;
+  transition:transform .12s ease, background .18s ease; }
+.st-opt:active { transform:scale(.98); }
+.st-opt[disabled] { cursor:default; }
+.st-right { background:linear-gradient(160deg,#16a34a,#22c55e); color:#fff; }
+.st-wrong { background:linear-gradient(160deg,#b91c1c,#ef4444); color:#fff; }
+.st-next { align-self:center; }
+
+.st-passend { text-align:center; padding:14px 10px; }
+.st-passend-emoji { font-size:2.6rem; line-height:1; }
+.st-passend h3 { font-size:1.15rem; font-weight:800; color:#fff7ed; margin:6px 0 2px; }
+.st-passend-note { font-size:.85rem; color:#fdba74; margin:0 0 12px; }
+.mg-card-st .mg-card-art { background:linear-gradient(135deg,#7c2d12,#b45309); }
+
+@media (max-width:380px) {
+  .st-text { font-size:1rem; line-height:1.65; }
+  .st-opt { font-size:.85rem; padding:10px 12px; }
+}

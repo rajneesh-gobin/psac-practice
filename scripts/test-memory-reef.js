@@ -156,7 +156,11 @@ check(sw.includes("'/engine/minigame_pairs.js'"), 'the data file is pre-cached i
 check(html.indexOf('engine/minigame_pairs.js') < html.indexOf('engine/minigame.js'),
   'the data file loads BEFORE minigame.js');
 check(/mg-card-live mg-card-rf/.test(mg), 'the hub card is live, not a teaser');
-check(!/mg-card-soon[\s\S]{0,200}Memory Reef/.test(mg), 'no COMING SOON teaser is left behind');
+// ⚠ Assert on the CARD MARKUP, not on the words. The design-intent comment near
+//   the top of minigame.js names every built game a few lines after the string
+//   "mg-card-soon", so a prose match reported a teaser that does not exist.
+check((mg.match(/class="mg-card mg-card-soon"/g) || []).length === 0,
+  'no COMING SOON teaser card is left in the hub');
 check(/\.mg-card-rf /.test(css) && /\.rf-board /.test(css), 'the board is styled');
 // ⚠ --rf-cols, not a hard-coded 4: the 5x4 board would otherwise be dealt as
 //   five rows of four, a different and much harder game.
