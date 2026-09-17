@@ -86,6 +86,11 @@ const MiniGames = (() => {
       //   window that has already expired and eat a beaker the child never lost.
       else if (kind === 'lab' && _lb && !_lb.over)
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'lab', lb: _lb }));
+      // ⚠ The run is pure data - no deadline, no audio state - so it restores
+      //   cleanly. heard/showing are dropped on resume: the child must tap to
+      //   play it again, which is also what keeps the next speak() inside a tap.
+      else if (kind === 'ecoute' && _ec && !_ec.over)
+        sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'ecoute', ec: _ec }));
     } catch (_) {}
   }
   function _clearPersist() { try { sessionStorage.removeItem(_stateKey()); } catch (_) {} }
@@ -124,11 +129,21 @@ const MiniGames = (() => {
       && Array.isArray(saved.lb.roundIds) && saved.lb.lives > 0
       && saved.lb.roundIds.every(id => (window.MINIGAME_LAB || []).some(r => r.id === id))
       && saved.lb.ri < saved.lb.roundIds.length && _allowed();
+    // ⚠ No deadline and no audio state to restore - but heard/showing are
+    //   reset below so the child taps to play it, which is what keeps the
+    //   utterance inside a gesture.
+    const canEc = saved && saved.game === 'ecoute' && saved.ec && !saved.ec.over
+      && Array.isArray(saved.ec.items) && saved.ec.idx < saved.ec.items.length && _allowed();
     if (typeof showScreen === 'function') showScreen('minigames');   // hub via the render hook
-    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF && !canR && !canL) { _clearPersist(); return; }
+    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF && !canR && !canL && !canEc) { _clearPersist(); return; }
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
-    if (canL) {
+    if (canEc) {
+      _ec = saved.ec; _ec.locked = false; _ec.picked = null;
+      _ec.heard = false; _ec.showing = false;
+      _ec.replaysLeft = EC_REPLAYS; _ec.replaysUsed = 0;
+      _ecRender();
+    } else if (canL) {
       // ⚠ A fresh window, never the saved deadline — see _persist().
       _lb = saved.lb; _lb.locked = false; _lb.flash = null;
       _labRender(); _labStartTimer();
@@ -368,6 +383,7 @@ const MiniGames = (() => {
     if (_fnTimer) { clearInterval(_fnTimer); _fnTimer = null; }
     if (_rfTimer) { clearTimeout(_rfTimer); _rfTimer = null; }
     if (_lbTimer) { clearInterval(_lbTimer); _lbTimer = null; }
+    if (_ecTimer) { clearTimeout(_ecTimer); _ecTimer = null; }
     _stopPoll();
     if (!_allowed()) { el.innerHTML = '<p class="mg-note">🔒 Games are switched off by your parent right now.</p>'; return; }
     _preloadGrade();
@@ -383,6 +399,7 @@ const MiniGames = (() => {
     const fnb = (typeof DB !== 'undefined' && DB.games?.frninja) || {};
     const rf = (typeof DB !== 'undefined' && DB.games?.reef) || {};
     const lb = (typeof DB !== 'undefined' && DB.games?.lab) || {};
+    const ec = (typeof DB !== 'undefined' && DB.games?.ecoute) || {};
     el.innerHTML = `
       ${mixLine ? `<p class="mg-mix-line">🎯 ${esc(mixLine)}</p>` : ''}
       ${(typeof GameSettings !== 'undefined' && GameSettings.childGradeBar) ? GameSettings.childGradeBar() : ''}
@@ -476,14 +493,15 @@ const MiniGames = (() => {
         </span>
         <span class="mg-card-go">PLAY ›</span>
       </button>
-      <div class="mg-card mg-card-soon">
+      <button class="mg-card mg-card-live mg-card-ec" onclick="MiniGames.startEcoute()">
         <span class="mg-card-art">🦜</span>
         <span class="mg-card-body">
           <b>Écoute !</b>
           <span>The parrot speaks French - listen carefully and pick exactly what it said. Watch out for tricky sound-alikes!</span>
+          ${ec.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${ec.bestScore} pts · streak ${ec.bestStreak || 0}</span>` : '<span class=\"mg-card-best\">🌟 Tends l’oreille !</span>'}
         </span>
-        <span class="mg-card-lock">COMING SOON</span>
-      </div>
+        <span class="mg-card-go">PLAY ›</span>
+      </button>
       <div class="mg-card mg-card-soon">
         <span class="mg-card-art">📖</span>
         <span class="mg-card-body">
@@ -3474,6 +3492,366 @@ const MiniGames = (() => {
     };
   }
 
+  // ══ ECOUTE ════════════════════════════════════
+  // Design intent is in the COMING SOON block near the top of this file.
+  //
+  // ⚠⚠ THE iOS GESTURE RULE SHAPES THE WHOLE INTERACTION. speak() only plays
+  //    when it is called SYNCHRONOUSLY inside a user gesture; chained from a
+  //    timeout or a promise iOS drops it silently — the same rule read-aloud
+  //    follows in app.js. So this game never auto-plays and never speaks on a
+  //    delay. Every utterance comes from a tap the child just made:
+  //      · the first listen is a tap on the big Écoute button
+  //      · a replay is a tap on the replay button
+  //      · the NEXT question is a tap on "Suivant", never an auto-advance
+  //    That last one is why there is a Suivant button at all. Auto-advancing
+  //    after a reveal would be smoother and completely silent on an iPhone.
+  //
+  // ⚠ NO MUTE, deliberately: the audio IS the question. The design note says
+  //   so, and a muted run would be four unanswerable options.
+  // ⚠ AND IT MUST NOT DEAD-END with no French voice installed — which is the
+  //   normal state of a cheap Android handset. _ecMode() falls back to
+  //   flash-card: the word is SHOWN for a beat, then hidden, then asked. The
+  //   skill changes from listening to recall, but the child can still play.
+  const EC_ITEMS = 10;       // questions per run
+  const EC_REPLAYS = 2;      // the design note's cap
+  const EC_BASE = 12;        // points for a correct answer
+  const EC_REPLAY_COST = 2;  // each replay used shaves this off
+  const EC_STREAK_CAP = 5;
+  const EC_FLASH_MS = 2000;  // how long the word shows in flash-card mode
+
+  let _ec = null, _ecTimer = null;
+
+  // ⚠ typeof-guarded: app.js owns _pickVoice and loads first, but a game must
+  //   not throw because another file failed. No voice at all is a supported
+  //   state, not an error.
+  function _ecVoice() {
+    try {
+      if (typeof _pickVoice !== 'function') return null;
+      return _pickVoice('fr-FR');
+    } catch (_) { return null; }
+  }
+
+  // 'speak' when a French voice can actually say it, otherwise 'flash'.
+  function _ecMode() {
+    try {
+      if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') return 'flash';
+      return _ecVoice() ? 'speak' : 'flash';
+    } catch (_) { return 'flash'; }
+  }
+
+  function _ecPick(band) {
+    const bank = (window.MINIGAME_ECOUTE || []).filter(i => i && i.say
+      && Array.isArray(i.options) && i.options.length === 4 && i.options.includes(i.answer));
+    if (!bank.length) return [];
+    const order = [band, band - 1, band + 1, band - 2, band + 2].filter(b => b >= 1 && b <= 3);
+    const out = [], usedSay = new Set();
+    for (const b of order) {
+      for (const it of shuffle(bank.filter(x => x.band === b))) {
+        if (out.length >= EC_ITEMS) break;
+        // ⚠ Never the same spoken word twice in a run: the second time it is a
+        //   memory question, and the child has already been told the answer.
+        if (usedSay.has(it.say)) continue;
+        out.push(it); usedSay.add(it.say);
+      }
+      if (out.length >= EC_ITEMS) break;
+    }
+    return out;
+  }
+
+  function startEcoute() {
+    if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
+    clearTimeout(_ecTimer); _ecTimer = null;
+    const band = _reefBand();
+    const items = _ecPick(band);
+    if (items.length < 4) { toast('Écoute ! is not available right now.', 3000); return; }
+    _ec = {
+      items, idx: 0, mode: _ecMode(),
+      score: 0, correct: 0, wrong: 0, streak: 0, bestStreak: 0,
+      replaysLeft: EC_REPLAYS, replaysUsed: 0, heard: false, showing: false,
+      picked: null, locked: false, over: false,
+    };
+    $('mg-hub')?.classList.add('hidden');
+    $('mg-game')?.classList.remove('hidden');
+    _ecRender();
+    _persist('ecoute');
+  }
+
+  function _ecCur() { return _ec && _ec.items[_ec.idx]; }
+
+  // ⚠ Called ONLY from a tap handler. See the gesture rule at the top.
+  function _ecSpeak(text) {
+    try {
+      if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') return false;
+      // ⚠ cancel() only when something is actually speaking — cancel-then-speak
+      //   on an idle queue is a Chrome stall, measured in app.js.
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'fr-FR';
+      const v = _ecVoice();
+      if (v) u.voice = v;
+      // ⚠ Slower than read-aloud: the whole point is a contrast the child has
+      //   to catch, and a native-speed minimal pair is a coin toss.
+      u.rate = 0.85;
+      speechSynthesis.speak(u);
+      return true;
+    } catch (_) { return false; }
+  }
+
+  // The one entry point for "play the question", first listen and replay alike.
+  function ecListen() {
+    if (!_ec || _ec.over || _ec.locked) return;
+    const item = _ecCur();
+    if (!item) return;
+    if (_ec.heard && _ec.replaysLeft <= 0) return;
+    if (_ec.heard) { _ec.replaysLeft--; _ec.replaysUsed++; }
+
+    if (_ec.mode === 'flash') {
+      // Show it, then hide it. The timeout only HIDES — nothing is spoken from
+      // inside it, so the gesture rule is not involved.
+      _ec.showing = true;
+      _ec.heard = true;
+      _ecRender();
+      clearTimeout(_ecTimer);
+      _ecTimer = setTimeout(() => {
+        if (!_ec || _ec.over) return;
+        _ec.showing = false;
+        _ecRender();
+      }, EC_FLASH_MS);
+      return;
+    }
+
+    _ec.heard = true;
+    _ecSpeak(item.say);
+    _ecRender();
+  }
+
+  function ecAnswer(choice) {
+    if (!_ec || _ec.over || _ec.locked) return;
+    const item = _ecCur();
+    if (!item || !_ec.heard) return;   // options stay locked until it is played
+    _ec.locked = true;
+    _ec.picked = choice;
+    const hit = choice === item.answer;
+    if (hit) {
+      _ec.correct++;
+      _ec.streak++;
+      if (_ec.streak > _ec.bestStreak) _ec.bestStreak = _ec.streak;
+      const earned = Math.max(4, EC_BASE - _ec.replaysUsed * EC_REPLAY_COST)
+        + Math.min(_ec.streak, EC_STREAK_CAP);
+      _ec.score += earned;
+    } else {
+      _ec.wrong++;
+      _ec.streak = 0;
+    }
+    _ecRender();
+  }
+
+  // ⚠ A TAP, not a timer. The next question speaks from inside this handler.
+  function ecNext() {
+    if (!_ec || _ec.over) return;
+    if (!_ec.locked) return;            // only after an answer
+    _ec.idx++;
+    if (_ec.idx >= _ec.items.length) { _ecFinish(); return; }
+    _ec.locked = false; _ec.picked = null; _ec.heard = false;
+    _ec.showing = false;
+    _ec.replaysLeft = EC_REPLAYS; _ec.replaysUsed = 0;
+    _ecRender();
+    _persist('ecoute');
+    // ⚠ Speak straight away, INSIDE this tap — the child asked for the next
+    //   question, so this is still a gesture. Anything later is silent on iOS.
+    if (_ec.mode === 'speak') { _ec.heard = true; _ecSpeak(_ecCur().say); _ecRender(); }
+  }
+
+  function _ecRender() {
+    if (!_ec) return;
+    const el = $('mg-game');
+    const item = _ecCur();
+    if (!el || !item) return;
+    const flash = _ec.mode === 'flash';
+
+    const opts = item.options.map(o => {
+      const state = !_ec.locked ? ''
+        : o === item.answer ? ' ec-right'
+          : (o === _ec.picked ? ' ec-wrong' : '');
+      return `<button class="ec-opt${state}" ${(!_ec.heard || _ec.locked) ? 'disabled' : ''}
+          onclick="MiniGames.ecAnswer('${_rfEsc(o).replace(/'/g, '&#39;')}')">${_rfEsc(o)}</button>`;
+    }).join('');
+
+    const listenLabel = !_ec.heard
+      ? (flash ? '👀 Regarde !' : '🔊 Écoute !')
+      : _ec.replaysLeft > 0
+        ? `🔁 Encore (${_ec.replaysLeft})`
+        : '🔇 Plus de replays';
+
+    const verdict = !_ec.locked ? ''
+      : _ec.picked === item.answer
+        ? '<p class="ec-verdict ec-verdict-good">✅ Bravo !</p>'
+        : `<p class="ec-verdict ec-verdict-bad">❌ C’était « <b>${_rfEsc(item.answer)}</b> »</p>`;
+
+    el.innerHTML = `
+      <div class="ec-stage">
+        <div class="ec-topbar">
+          <span class="ec-progress">${_ec.idx + 1}/${_ec.items.length}</span>
+          <span class="ec-score">${_ec.score} pts</span>
+          ${_ec.streak > 1 ? `<span class="ec-streak">🔥 ${_ec.streak}</span>` : ''}
+          <button class="mg-btn-ghost ec-quit" onclick="MiniGames.ecQuit()">✕</button>
+        </div>
+        <div class="ec-parrot">🦜</div>
+        ${flash ? '<p class="ec-mode-note">Pas de voix française sur cet appareil — regarde bien, le mot va disparaître !</p>' : ''}
+        <div class="ec-flashbox">${_ec.showing ? `<span class="ec-flashword">${_rfEsc(item.say)}</span>` : (_ec.heard ? '<span class="ec-flashdots">• • •</span>' : '')}</div>
+        <button class="ec-listen" ${(_ec.heard && _ec.replaysLeft <= 0) || _ec.locked ? 'disabled' : ''}
+          onclick="MiniGames.ecListen()">${listenLabel}</button>
+        <p class="ec-instruction">${_ec.heard ? 'Qu’est-ce que tu as entendu ?' : (flash ? 'Appuie pour voir le mot.' : 'Appuie pour écouter.')}</p>
+        <div class="ec-opts">${opts}</div>
+        ${verdict}
+        ${_ec.locked ? `<button class="mg-btn-primary ec-next" onclick="MiniGames.ecNext()">Suivant ▶</button>` : ''}
+      </div>`;
+  }
+
+  function _ecFinish() {
+    if (!_ec) return;
+    _ec.over = true;
+    clearTimeout(_ecTimer); _ecTimer = null;
+    // ⚠ Speech outlives the DOM that started it — stop it before the screen
+    //   changes, or the parrot keeps talking over the score card.
+    if (typeof _ttsStop === 'function') { try { _ttsStop(); } catch (_) {} }
+    else { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (_) {} }
+    _clearPersist();
+    const asked = _ec.correct + _ec.wrong;
+    _ec.acc = asked ? Math.round(_ec.correct / asked * 100) : 0;
+    _ecSaveBest();
+    const best = (typeof DB !== 'undefined' && DB.games?.ecoute) || {};
+    const isRecord = _ec.score >= (best.bestScore || 0) && _ec.score > 0;
+    if (isRecord && typeof launchConfetti === 'function') launchConfetti(90);
+    const grade = _ec.acc >= 90 ? { t: 'Oreille d’or ! 🥇', s: 'Tu entends tout.' }
+      : _ec.acc >= 70 ? { t: 'Bien écouté ! 🥈', s: 'Ton oreille s’affûte.' }
+        : _ec.acc >= 45 ? { t: 'Pas mal ! 🥉', s: 'Écoute bien la fin des mots.' }
+          : { t: 'Continue ! 💪', s: 'Répète chaque mot à voix haute après le perroquet.' };
+
+    $('mg-game').innerHTML = `
+      <div class="qf-end mg-pop">
+        <div class="qf-end-emoji">🦜</div>
+        <h3>${grade.t}</h3>
+        <p>${grade.s}</p>
+        <div class="qf-scoreboard">
+          <div><b>${_ec.score}</b><span>points</span></div>
+          <div><b>${_ec.correct}/${asked}</b><span>bien entendus</span></div>
+          <div><b>${_ec.acc}%</b><span>précision</span></div>
+        </div>
+        ${isRecord ? '<p class="bq-best">🏅 New personal best!</p>'
+        : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
+        <div class="mg-share-row">
+          <button class="mg-btn-primary" onclick="MiniGames.ecShare()">📤 Share my score</button>
+          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
+            onclick="MiniGames.ecShareTo('fb')">📘</button>
+          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
+            onclick="MiniGames.ecShareTo('wa')">💬</button>
+          <button class="mg-share-ic" title="Copy" aria-label="Copy score"
+            onclick="MiniGames.ecShareTo('copy', this)">🔗</button>
+        </div>
+        <div class="mg-end-row">
+          <button class="mg-btn-primary" onclick="MiniGames.startEcoute()">🔁 Encore !</button>
+          <button class="mg-btn-ghost" onclick="MiniGames.renderHub()">🎮 All games</button>
+        </div>
+      </div>`;
+  }
+
+  function _ecSaveBest() {
+    if (typeof DB === 'undefined' || !DB.stats) return;
+    DB.games = DB.games || {};
+    const g = DB.games.ecoute = DB.games.ecoute || { plays: 0, bestScore: 0, bestStreak: 0 };
+    g.plays++;
+    if (_ec.score > (g.bestScore || 0)) g.bestScore = _ec.score;
+    if (_ec.bestStreak > (g.bestStreak || 0)) g.bestStreak = _ec.bestStreak;
+    _awardRun('ecoute');
+    if (typeof save === 'function') save(DB);
+  }
+
+  function _ecShareText() {
+    return `🦜 I scored ${_ec.score} in Écoute ! on Nou Klass - ${_ec.correct}/${_ec.correct + _ec.wrong} `
+      + `French words heard right, ${_ec.acc}% accuracy! Can your ear beat mine? 🇫🇷`;
+  }
+  function _ecShareUrl() {
+    const qs = `g=ec&s=${_ec.score}&c=${_ec.correct}&a=${_ec.acc}`;
+    return new URL(`score.html?${qs}`, location.href).href;
+  }
+
+  async function _ecScoreImage() {
+    try {
+      const W = 1080, H = 1080, c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const x = c.getContext('2d');
+      const g = x.createLinearGradient(0, 0, W, H);
+      g.addColorStop(0, '#1e1b4b'); g.addColorStop(.55, '#0f766e'); g.addColorStop(1, '#ca8a04');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      x.textAlign = 'center'; x.fillStyle = '#fff';
+      x.font = '600 46px system-ui,sans-serif'; x.fillText('🦜 ÉCOUTE !', W / 2, 250);
+      x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
+      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillStyle = '#fde047'; x.font = '800 300px system-ui,sans-serif';
+      x.fillText(String(_ec.score), W / 2, 660);
+      x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
+      x.fillText('POINTS', W / 2, 730);
+      x.font = '500 44px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.92)';
+      x.fillText(`${_ec.correct}/${_ec.correct + _ec.wrong} mots   ·   ${_ec.acc}% précision`, W / 2, 850);
+      x.font = '700 50px system-ui,sans-serif'; x.fillStyle = '#fff';
+      x.fillText('Ton oreille est-elle meilleure ? 🇫🇷', W / 2, 960);
+      const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+      return blob ? new File([blob], 'ecoute-score.png', { type: 'image/png' }) : null;
+    } catch (_) { return null; }
+  }
+
+  async function ecShare() {
+    if (!_ec) return;
+    const text = _ecShareText(), url = _ecShareUrl();
+    const file = await _ecScoreImage();
+    if (navigator.share) {
+      try {
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], text: text + '\n' + url });
+        } else {
+          await navigator.share({ title: 'Écoute ! score', text, url });
+        }
+        return;
+      } catch (_) { return; }
+    }
+    ecShareTo('copy');
+  }
+
+  function ecShareTo(where, btn) {
+    if (!_ec) return;
+    const text = _ecShareText(), url = _ecShareUrl();
+    if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+    else if (where === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank', 'noopener');
+    else if (where === 'copy') {
+      const full = text + '\n' + url;
+      const done = () => { if (btn) { const o = btn.textContent; btn.textContent = '✅'; setTimeout(() => btn.textContent = o, 1600); } };
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(full).then(done).catch(() => prompt('Copy your score:', full));
+      else prompt('Copy your score:', full);
+    }
+  }
+
+  function ecQuit() {
+    if (_ec && !_ec.over && _ec.score > 0 && !confirm('Leave Écoute !? This run won\'t be saved.')) return;
+    clearTimeout(_ecTimer); _ecTimer = null;
+    if (typeof _ttsStop === 'function') { try { _ttsStop(); } catch (_) {} }
+    else { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (_) {} }
+    _clearPersist();
+    _ec = null;
+    renderHub();
+  }
+
+  function _ecDebug() {
+    const it = _ecCur();
+    return _ec && {
+      idx: _ec.idx, total: _ec.items.length, mode: _ec.mode, score: _ec.score,
+      correct: _ec.correct, wrong: _ec.wrong, streak: _ec.streak,
+      heard: _ec.heard, showing: _ec.showing, replaysLeft: _ec.replaysLeft,
+      replaysUsed: _ec.replaysUsed, locked: _ec.locked, picked: _ec.picked, over: _ec.over,
+      item: it && { say: it.say, answer: it.answer, options: it.options.slice() },
+    };
+  }
+
   function open() {
     if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
     showScreen('minigames');
@@ -3503,5 +3881,6 @@ const MiniGames = (() => {
            startTimeTravel, ttPick, ttUndo, ttNext, ttQuit, _ttDebug, _pickTimeTravel,
            startFrNinja, fnTap, fnQuit, fnShare, fnShareTo, _fnDebug, _fnPick,
            startReef, rfTap, rfQuit, rfShare, rfShareTo, _rfDebug, _reefPick,
-           startLab, lbTap, lbQuit, lbShare, lbShareTo, _lbDebug, _labPickRounds, _labPickItems };
+           startLab, lbTap, lbQuit, lbShare, lbShareTo, _lbDebug, _labPickRounds, _labPickItems,
+           startEcoute, ecListen, ecAnswer, ecNext, ecQuit, ecShare, ecShareTo, _ecDebug, _ecPick, _ecMode };
 })();
