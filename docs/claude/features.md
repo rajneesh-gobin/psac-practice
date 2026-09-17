@@ -168,6 +168,18 @@ at all** — measured on the live Worker's bindings, which held exactly one secr
 - **`workers/lib/mailer.js` is the only place mail is sent from.** Transport is
   **Resend** over HTTPS — Workers cannot open a raw socket, so SMTP is not an
   option here. Secrets: `RESEND_API_KEY`, `MAIL_FROM`, `SITE_URL`, `CRON_SECRET`.
+- ⚠ **TWO From addresses, and which one is not cosmetic.** `mailFrom()` —
+  `noreply@nouklass.com` — is for mail a MACHINE sent: a digest, a homework
+  notice, an activation. `mailFromHuman()` — `admin@nouklass.com`, overridable
+  with `MAIL_FROM_HUMAN` — is for mail a PERSON wrote, which today is the admin
+  broadcast alone. A message inviting a reply must not arrive from an address
+  named "noreply", and `admin@` is routed to a real inbox, so it also rescues a
+  reply from a client that ignores `Reply-To`. Both are at the same verified
+  Resend domain, so neither needs a DNS change; an unverified one is refused
+  outright with "domain is not verified".
+- ⚠ **`sendMail()`'s stand-in `To:` must be the From that was ACTUALLY used.**
+  A pure-Bcc message needs a To header, and printing `noreply@` in the To of a
+  message sent from `admin@` is precisely the mismatch a spam filter scores on.
 - ⚠ **This is a SECOND sender and does not touch the Gmail quota.** Supabase Auth
   mail (sign-up, reset) still goes through `smtp.gmail.com` and still spends that
   shared ~500/day ceiling. Two senders, two limits — see
@@ -178,6 +190,15 @@ at all** — measured on the live Worker's bindings, which held exactly one secr
   friendly message is how a real fault becomes unreportable.
 - **Preferences live in `profiles.preferences.email`** — `{ enabled, digest:
   weekly|fortnightly|monthly|off, announcements, homework, last_digest_at }`.
+- ⚠ **The card that sets them is shown to EVERY signed-in adult**, not only a
+  parent with a family. It was `family ? … : ''`, so a teacher — who has no
+  family row — had no email settings at all, while the admin broadcast selects
+  teachers from its own Teachers tab and that message's footer tells the reader
+  to switch these off under Account & Settings → Notifications. **A screen that
+  does not exist is not an opt-out**, and `announcements` defaults to ON. The
+  rows that are ABOUT CHILDREN (progress report, homework results, the study
+  reminder) stay behind `family`/`children`: a teacher has none to report on.
+  Guarded by `scripts/test-email-preferences.js`.
   ⚠ **`enabled:false` is the master switch and beats every per-kind flag.**
   ⚠ **An unknown frequency reads as `off`** — a typo or a value from a future
   version must never be treated as "send".
@@ -222,8 +243,41 @@ everyone matching these filters*, then **✉️ Email selected**.
 - ⚠ **Chunked at 500 ids per request and 50 recipients per message** (Resend's
   cap), and a partial failure reports what DID go out. "It failed" after 600
   delivered emails is the worst possible answer.
-- The body is plain text, escaped before it reaches the template; `reply_to` is
-  the sending admin, so replies go to a human.
+- The body is plain text, escaped before it reaches the template. **From and
+  Reply-To are both `admin@nouklass.com`** — `mailFromHuman()` / `mailReplyTo()`,
+  not the `noreply@` every automated message uses. Cloudflare Email Routing
+  forwards that address to a real inbox, so a reply arrives whether the client
+  honours Reply-To or answers the From.
+- ⚠ **The sending admin's own address is never put on the message.** It was the
+  `reply_to` until 2026-09-17 (`gate.caller.email`), which handed every parent
+  the personal address of whoever pressed Send and made where a reply landed
+  depend on which admin account was signed in. Who sent it is recorded in the
+  Worker's console line and `admin_log_action` — an audit trail, not a header.
+  `scripts/test-broadcast-envelope.js` runs the real handler with Resend stubbed
+  and asserts the whole payload, not just the two header fields: the address
+  must not ride along in the body or the stand-in `To` either.
+- ⚠ **The budget line is reported in the right TENSE.** A dry run reads the
+  budget as it stands *before* the send, so the preview says what this send
+  *would* leave; the figure after a real send is already post-send. "80 will be
+  left" on a preview of 9, when the answer was 71, is the sort of number an
+  admin plans a second batch around. It also names the transactional reserve
+  (`budget_reserve`), or "80 of today's 100" reads as "20 already sent".
+- ⚠ **One selection, `_memberPicks`, is shared by the Members tab, the Teachers
+  tab and the pending-registration rows — and BOTH lists are in the DOM at
+  once.** So every `member-pick-*` checkbox is written **from** the map
+  (`_syncPickCheckboxes()`), never alongside it, and each select-all is scoped
+  to its own container. The blanket `cb.checked = on` this replaced unticked
+  held teacher rows and then removed only the members: an admin ticked three
+  parents and was told **"9 recipients"**, six of them invisible.
+  `scripts/test-admin-broadcast.js` runs the real `admin.js` against a stub DOM
+  and fails on that behaviour.
+- ⚠ **The name comes from THREE lists** (`_members`, `_teachers`,
+  `_pendingRegistrations`) — `_pickName()`. Looking in `_members` alone made
+  every selected teacher read **"Unnamed"** in the one modal where an admin
+  checks who they are about to email.
+- The modal lists every recipient as a chip with its own ✕ (`dropRecipient`).
+  It is the first screen showing the WHOLE selection, so a name that arrived
+  from another tab has to be removable without closing and starting again.
 
 ## Sharing to Facebook
 ⚠ **The Facebook sharer carries NO text.** It takes a URL and builds the post
@@ -697,6 +751,77 @@ sends a Juice transfer quoting a reference, and an admin confirms it.
   one integration covers cards, MCB Juice, MauCAS QR, blink and Apple Pay, all
   in MUR. ⚠ Juice, MauCAS and blink **cannot be refunded** through it; only
   cards can.
+
+## Chapter Preview — an adult opening the child's own screen
+`engine/chapter_preview.js` (the picker) + `startChapterPreview()` /
+`exitChapterPreview()` (app.js). A parent or a teacher picks grade → subject →
+chapter and the CHILD'S OWN practice screen opens on the same 20 questions
+`getQuestionsForChapter()` would deal a child — same hints, same explanations,
+same server marking through `/api/check-answer` (which already accepts an adult
+JWT).
+- ⚠⚠ **IT WRITES NOTHING, AND THAT GUARANTEE IS NOT IN THE LAUNCHER.** A parent
+  reaches it from the dashboard, where `pdSwitchStudent` has already put a
+  CHILD in `ACTIVE_STUDENT_ID` and filled `DB` with her progress blob — so every
+  write funnel in practice writes to **her**. `_isPreviewRun()` guards
+  `recordAnswer`, `_recordMistake`, `_retireMistake`, `_saveResume`,
+  `_usageBump`, `gainPoints`, `Shop.reportPracticeActivity()` and the direct
+  best-score writes in `cloze.js`/`errorhunt.js` (which bypass `recordAnswer`).
+  Ten questions tried by a parent would otherwise be ten attempts under her
+  name, the wrong ones her mistakes, against her daily goal and her streak.
+  **Same rule, same reason, as "game answers never call `recordAnswer()`".**
+- ⚠ **The flag lives on `S.practice` and is cleared in `_setAssignmentContext()`**
+  — the one function every practice entry point already calls to declare what
+  kind of run it is. A flag cleared only by the preview's own exit would survive
+  a crash, a back button or a deep link and then silently stop recording a REAL
+  child's practice: it must fail towards recording, never away from it.
+  ⚠ `_roundCompleteNext()` calls that same reset, so it carries the flag across
+  explicitly — without that, the adult's SECOND round records.
+- ⚠ **It does NOT go through `startChapterDirect()`**, which applies
+  `lockedChapters` and `_planAllowsChapter()` read from `DB` — i.e. from
+  whichever child was last loaded. A parent who locked a chapter for one child
+  would be refused a preview of it and told it was "locked by your parent".
+- ⚠ **`showScreen()` has ONE named exception to `_KID_ONLY_SCREENS`** for this
+  (`practice`, `cloze-play`, `cloze-list`, and only while a preview is running).
+  A parent must not WANDER into a kid screen; choosing to look at one is a
+  different thing.
+- ⚠ **`renderParentDashboard()` reset the panels from a HARD-CODED list** —
+  `['calendar','shop','messages','settings']` — while `_PD_PANELS` is the real
+  one. It had already drifted before this feature existed (`papers` was
+  missing); `preview` made it visible, so leaving a preview showed the children
+  page with the chapter picker still open **underneath** it. It now calls
+  `PD.showChildrenPanel()`, derived from `_PD_PANELS` in the module that owns
+  it. **A list of panels written out twice is a list that drifts, and nothing
+  fails when it does.**
+- ⚠ **Leaving returns to the TAB, not the screen.** `showScreen('parent')` runs
+  `renderParentDashboard()`, which resets to My Children — so an adult who
+  opened a chapter from the preview tab was returned to a different page than
+  the one they left. `exitChapterPreview()` calls `PD.mainTab('preview')` /
+  `TeacherMode.switchTab('preview')` **after** the screen is shown.
+- ⚠ **A preview has more exits than its own ← button** — ⏸️ Continue later,
+  Back to chapters, `SubjectHub.back()`, a help link — and each aims at a kid
+  screen. Measured in TEACHER mode: Continue later called `_saveResume()` (a
+  no-op here, so its "Saved — tap this chapter again" toast was a lie), landed
+  on `chapter-select`, was bounced to `_returnToParentDashboard()`, and the
+  parent dashboard rendered **"could not be loaded"** because a teacher has no
+  children. That branch now ends the preview instead, returning to the surface
+  it was opened from, and the preview chrome hides the pause button outright.
+- ⚠ **"Mixed" is not `difficulty: null`.** `getStaticQs()` matches the level
+  EXACTLY and no question carries a null one, so
+  `getQuestionsForChapter(id, null, 20)` returns an EMPTY ARRAY. The first build
+  called it that way and **every chapter** answered "there are no questions in
+  this chapter yet", which reads as missing content rather than a selector bug.
+  A mixed round calls `getMixedQuestions()` — as the child's own always has.
+  `maxDiff` is 4, not `DB.restrictions.maxDifficulty`: that is the loaded
+  CHILD's cap, and the preview is not about that child.
+- ⚠ **Nothing is kept, deliberately** — no adult score history anywhere. The
+  round's own tally is `S.practice.session`, in memory, shown by the existing
+  round-complete modal and gone when they leave. Storing it would mean a second
+  reporting surface, new columns and new RLS, to answer a question nobody asked:
+  how a parent did on their child's homework.
+- One module, two surfaces (`pd-preview-host` / `tc-preview-host`), the same
+  rule as PaperBuilder. `scripts/test-chapter-preview.js` — 46 checks, and it
+  fails if any guard is removed.
+
 
 ## The printable practice paper (`generatePrintablePaper()`, app.js)
 A pop-up window holding a 100-mark paper — Section A (30 × 2, or 20 × 2 for

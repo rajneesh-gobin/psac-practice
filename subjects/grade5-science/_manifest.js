@@ -4,6 +4,11 @@
 // `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Trailing comments are the count at generation time.
 const G5SC_SYLLABUS = {
+  'g5sc-label': { subsections: [
+    { id:'flower', name:'Parts of a Flower' },
+    { id:'water',  name:'The Water Cycle' },
+    { id:'circuit', name:'A Simple Circuit' },
+  ]},
   'plants': { subsections: [
     { id:'diagrams',        name:'Diagrams to Label' },  // 5
     { id:'photosynthesis',  name:'Photosynthesis' },  // 1
@@ -110,5 +115,12 @@ registerSubject({
       enrichmentNote: 'Rare and endemic Mauritian animals and plants - identified from photographs, plus habitats, adaptation and the conservation work that protects them - derived from the Animals & Habitats and Conservation chapters.' },
     { id: 'g5sci-enr-energy',  name: 'Energy Sources & Transformations', icon: '⚡', enrichment: true, examWeight: 1,
       enrichmentNote: 'Renewable and non-renewable energy sources, identified from photographs and named from description, plus the energy transformations behind them - derived from the Energy Sources chapter.' },
+    // ⚠ examWeight 1: an explicit 0 keeps a chapter OUT of exams entirely, and
+    //   labelling a diagram is an examined format. Recorded in
+    //   scripts/exam-mark-maps.json under "floor" — grade5-science is weighted
+    //   from the real 2024 and 2025 papers, so an unmapped chapter fails the
+    //   exam-shape test rather than silently skewing the paper.
+    { id: 'g5sc-label',        name: 'Label the Diagram',               icon: '🏷️', enrichment: true, examWeight: 1,
+      enrichmentNote: 'Name the numbered parts of a real scientific drawing. Derived from the Plants chapter, whose syllabus already asks pupils to identify the parts of a flower.' },
   ],
 });

@@ -18,7 +18,7 @@ const TeacherMode = (() => {
   // class they belong to, and leave by the Back button they now carry.
   const MAIN_TABS = ['home'];
   const DETAIL_TABS = ['create', 'results'];
-  const MORE_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'papers', 'settings'];
+  const MORE_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'papers', 'preview', 'settings'];
   const ALL_TABS = MAIN_TABS.concat(DETAIL_TABS, MORE_TABS);
 
   function _getData() {
@@ -777,6 +777,10 @@ const TeacherMode = (() => {
     //   list at whatever was loaded the first time the tab opened.
     if (tab === 'papers' && typeof PaperBuilder !== 'undefined') {
       PaperBuilder.render('tc-papers-host', 'teacher');
+    }
+    // ⚠ Same module, same reason it is re-rendered every time - see 'papers'.
+    if (tab === 'preview' && typeof ChapterPreview !== 'undefined') {
+      ChapterPreview.render('tc-preview-host', 'teacher');
     }
     if (tab === 'messages')  _renderTeacherMessages();
     const inMore = MORE_TABS.includes(tab);

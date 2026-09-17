@@ -336,22 +336,55 @@ const AdminPanel = (() => {
   const _memberPicks = new Map();   // id → display name, for the selection bar
   let _broadcastBusy = false;
 
+  // ⚠ THREE lists feed one selection - members, teachers and pending
+  //   registrations - so all three have to be searched for the name. Looking in
+  //   _members alone made every teacher in the selection read "Unnamed" in the
+  //   broadcast modal, which is the one screen where the admin checks who they
+  //   are about to email.
+  function _pickName(id) {
+    const profile = _members.find(m => m.id === id) || _teachers.find(t => t.id === id);
+    if (profile) return profile.full_name || 'Unnamed';
+    const pending = _pendingRegistrations.find(r => r.id === id);
+    return pending?.email || pending?.full_name || 'Unnamed';
+  }
+
   function toggleMemberPick(id, on) {
-    if (on) _memberPicks.set(id, _members.find(m => m.id === id)?.full_name
-      || _pendingRegistrations.find(r => r.id === id)?.email || 'Unnamed');
+    if (on) _memberPicks.set(id, _pickName(id));
     else _memberPicks.delete(id);
     _paintSelectionBar();
   }
 
+  // ⚠ Every checkbox is driven FROM the map, never set alongside it. The
+  //   Members and Teachers lists are both in the DOM at once and share the
+  //   `member-pick-` prefix, so the blanket `cb.checked = on` this replaces
+  //   unticked teacher rows that were still HELD in the selection: three ticked
+  //   parents then opened a modal addressed to nine people, six of them with no
+  //   ticked box anywhere on screen to explain them.
+  function _syncPickCheckboxes() {
+    document.querySelectorAll('[id^="member-pick-"]').forEach(cb => {
+      cb.checked = _memberPicks.has(cb.id.slice('member-pick-'.length));
+    });
+    document.querySelectorAll('[data-select-all]').forEach(cb => {
+      const rows = document.querySelectorAll(`#${cb.dataset.selectAll} [id^="member-pick-"]`);
+      cb.checked = rows.length > 0 && [...rows].every(r => r.checked);
+    });
+  }
+
+  // "Every account on this page" means exactly the rows rendered in that list -
+  // asked of the DOM, not rebuilt from a cache that may hold a different page.
+  function _toggleAllIn(containerId, on) {
+    document.querySelectorAll(`#${containerId} [id^="member-pick-"]`)
+      .forEach(cb => toggleMemberPick(cb.id.slice('member-pick-'.length), on));
+    _syncPickCheckboxes();
+  }
+
   function toggleSelectAllMembers(on) {
-    (_memberStatusFilter === 'pending' ? _pendingRegistrations : _members)
-      .forEach(m => toggleMemberPick(m.id, on));
-    document.querySelectorAll('[id^="member-pick-"]').forEach(cb => { cb.checked = on; });
+    _toggleAllIn('admin-members-list', on);
   }
 
   function clearMemberPicks() {
     _memberPicks.clear();
-    document.querySelectorAll('[id^="member-pick-"]').forEach(cb => { cb.checked = false; });
+    _syncPickCheckboxes();
     _paintSelectionBar();
   }
 
@@ -405,6 +438,7 @@ const AdminPanel = (() => {
     }
     ids.forEach(([id, name]) => _memberPicks.set(id, name));
     _paintSelectionBar();
+    _syncPickCheckboxes();
     _renderBroadcastRecipients();
     if (status) status.textContent = '';
   }
@@ -436,13 +470,30 @@ const AdminPanel = (() => {
     document.getElementById('modal-admin-broadcast')?.classList.add('hidden');
   }
 
+  // ⚠ One chip per recipient, each with its own ✕. A selection survives paging,
+  //   filtering and the tab switch on purpose, so this modal is the FIRST place
+  //   the admin sees the whole list - and a name they did not expect there has
+  //   to be removable from here. Reading "9 recipients" after ticking three
+  //   boxes, with no way to drop the other six without closing and starting
+  //   again, is how a message goes to people it was not meant for.
   function _renderBroadcastRecipients() {
     const box = document.getElementById('admin-bc-recipients');
     if (!box) return;
-    const names = [..._memberPicks.values()];
-    const shown = names.slice(0, 12).map(n => _esc(n)).join(' · ');
-    box.innerHTML = `<b>${names.length}</b> recipient${names.length === 1 ? '' : 's'}`
-      + (names.length ? `<span class="text-gray-400 dark:text-gray-500"> — ${shown}${names.length > 12 ? ` and ${names.length - 12} more` : ''}</span>` : '');
+    const picks = [..._memberPicks.entries()];
+    const chips = picks.map(([id, name]) => `<span
+      class="inline-flex items-center gap-1 rounded-full bg-gray-100 dark:bg-gray-700 px-2 py-0.5 max-w-full">
+      <span class="truncate">${_esc(name)}</span>
+      <button type="button" onclick="AdminPanel.dropRecipient('${id}')"
+        aria-label="Remove ${_esc(name)} from this email"
+        class="text-gray-400 hover:text-red-500 font-bold leading-none">✕</button></span>`).join(' ');
+    box.innerHTML = `<b>${picks.length}</b> recipient${picks.length === 1 ? '' : 's'}`
+      + (picks.length ? `<span class="block mt-1.5 max-h-28 overflow-y-auto flex flex-wrap gap-1">${chips}</span>` : '');
+  }
+
+  function dropRecipient(id) {
+    toggleMemberPick(id, false);
+    _syncPickCheckboxes();
+    _renderBroadcastRecipients();
   }
 
   async function broadcastPreview() {
@@ -462,6 +513,10 @@ const AdminPanel = (() => {
     const essential = !!document.getElementById('admin-bc-essential')?.checked;
     const status = document.getElementById('admin-bc-status');
     const sendBtn = document.getElementById('admin-bc-send');
+    if (!_memberPicks.size) {
+      if (status) status.textContent = '⚠ Nobody is selected any more. Close this and tick at least one account.';
+      return;
+    }
     if (!subject || !message) {
       if (status) status.textContent = '⚠ A subject and a message are both required.';
       return;
@@ -476,7 +531,7 @@ const AdminPanel = (() => {
     const ids = [..._memberPicks.keys()];
     const CHUNK = 500;
     let sent = 0, would = 0, selected = 0, deferred = 0, eligible = 0;
-    let budgetRemaining = null, budgetCap = null, budgetUnknown = false;
+    let budgetRemaining = null, budgetCap = null, budgetReserve = null, budgetUnknown = false;
     const skipped = { opted_out: 0, no_email: 0, deleted: 0 };
     const errors = [];
     try {
@@ -500,6 +555,7 @@ const AdminPanel = (() => {
         eligible += result.eligible || 0;
         if (result.budget_remaining != null) budgetRemaining = result.budget_remaining;
         if (result.budget_cap != null) budgetCap = result.budget_cap;
+        if (result.budget_reserve != null) budgetReserve = result.budget_reserve;
         if (result.budget_unknown) budgetUnknown = true;
         for (const k of Object.keys(skipped)) skipped[k] += result.skipped?.[k] || 0;
       }
@@ -519,17 +575,29 @@ const AdminPanel = (() => {
     //   Send. Resend's free tier is 100 a day; without this the 101st message
     //   fails at the provider part-way through, with some parents served and
     //   some not, and nothing on screen saying which.
+    // ⚠ TENSE. On a DRY RUN the server reports the budget as it stands NOW,
+    //   before anything is sent, so "will be left" overstated it by the whole
+    //   size of the send - a preview of 9 read "80 will be left" when the true
+    //   answer afterwards was 71. On a real send the figure is already
+    //   post-send, so that one is simply the present tense.
+    // ⚠ `budgetRemaining` is what a BROADCAST may still use: the transactional
+    //   reserve is already subtracted server-side. Name it, or "80 of today's
+    //   100" reads as though 20 had been sent today.
+    const reserveNote = budgetReserve ? `, ${budgetReserve} of it held back for account emails` : '';
     const budgetNote = budgetUnknown
       ? ' ⚠ The daily email budget could not be read, so this is not capped.'
       : (budgetRemaining == null ? ''
-        : ` ${budgetRemaining} of today's ${budgetCap ?? 100} email budget will be left.`);
+        : dryRun
+          ? ` Budget: ${budgetRemaining} of today's ${budgetCap ?? 100} is still available for a broadcast${reserveNote}`
+            + `, so sending these ${would} would leave ${budgetRemaining - would}.`
+          : ` ${budgetRemaining} of today's ${budgetCap ?? 100} email budget is left${reserveNote}.`);
 
     if (dryRun) {
       if (status) status.textContent = errors.length
         ? `⚠ ${errors[0]}`
         : (deferred
             ? `⚠ ${eligible} can receive this, but only ${would} can go today — ${deferred} would wait for tomorrow's budget.`
-            + `${skipNote ? ` Skipped: ${skipNote}.` : ''} Nothing has been sent.`
+            + `${skipNote ? ` Skipped: ${skipNote}.` : ''}${budgetNote} Nothing has been sent.`
             : `${would} of ${ids.length} would receive this${skipNote ? ` (skipped: ${skipNote})` : ''}.`
             + `${budgetNote} Nothing has been sent.`);
       return;
@@ -1556,7 +1624,7 @@ const AdminPanel = (() => {
     const allOnPage = list.length > 0 && list.every(m => _memberPicks.has(m.id));
     const header = `
       <div class="hidden sm:grid adm-member-grid gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
-        <span><input type="checkbox" ${allOnPage ? 'checked' : ''} onchange="AdminPanel.toggleSelectAllMembers(this.checked)"
+        <span><input type="checkbox" data-select-all="admin-members-list" ${allOnPage ? 'checked' : ''} onchange="AdminPanel.toggleSelectAllMembers(this.checked)"
           title="Select every account on this page" aria-label="Select every account on this page" class="accent-indigo-600 cursor-pointer"></span>
         <span></span><span>Parent</span><span>Children</span><span>Status</span><span>Plan</span>
       </div>`;
@@ -2675,7 +2743,7 @@ const AdminPanel = (() => {
     const allOnPage = sorted.length > 0 && sorted.every(t => _memberPicks.has(t.id));
     const header = `
       <div class="hidden sm:grid adm-teacher-grid gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
-        <span><input type="checkbox" ${allOnPage ? 'checked' : ''} onchange="AdminPanel.toggleSelectAllTeachers(this.checked)"
+        <span><input type="checkbox" data-select-all="admin-teachers-list" ${allOnPage ? 'checked' : ''} onchange="AdminPanel.toggleSelectAllTeachers(this.checked)"
           title="Select every teacher on this page" aria-label="Select every teacher on this page" class="accent-indigo-600 cursor-pointer"></span>
         <span></span><span>Teacher</span><span>Status</span><span>Tier</span>
       </div>`;
@@ -2834,18 +2902,14 @@ const AdminPanel = (() => {
       _paintSelectionBar();
       _renderBroadcastRecipients();
       if (status) status.textContent = `${ids.length} teacher${ids.length === 1 ? '' : 's'} added to the selection.`;
-      document.querySelectorAll('[id^="member-pick-"]').forEach(cb => {
-        const id = cb.id.replace('member-pick-', '');
-        if (_memberPicks.has(id)) cb.checked = true;
-      });
+      _syncPickCheckboxes();
     } catch (error) {
       if (status) status.textContent = error.message || 'Could not load the teacher list.';
     }
   }
 
   function toggleSelectAllTeachers(on) {
-    _sortedTeachers(_teachers).forEach(t => toggleMemberPick(t.id, on));
-    document.querySelectorAll('[id^="member-pick-"]').forEach(cb => { cb.checked = on; });
+    _toggleAllIn('admin-teachers-list', on);
   }
 
   // Email exactly one person, from their own row. Goes through the same Bcc
@@ -2854,8 +2918,7 @@ const AdminPanel = (() => {
   function emailOneMember(id) {
     clearMemberPicks();
     toggleMemberPick(id, true);
-    const cb = document.getElementById(`member-pick-${id}`);
-    if (cb) cb.checked = true;
+    _syncPickCheckboxes();
     openBroadcast();
   }
 
@@ -5644,7 +5707,7 @@ const AdminPanel = (() => {
     toggleMemberPick, toggleSelectAllMembers, clearMemberPicks, openBroadcast, closeBroadcast,
     toggleTeacherRow, toggleSelectAllTeachers, emailOneMember,
     copyTeacherEmails, teacherAudience,
-    broadcastPreview, sendBroadcast, broadcastAudience,
+    broadcastPreview, sendBroadcast, broadcastAudience, dropRecipient,
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
     loadGuestLimits, saveGuestLimits, previewGuestLimits,

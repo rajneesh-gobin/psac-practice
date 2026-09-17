@@ -173,6 +173,30 @@ function eq(label, got, want) {
   ok('every documented frequency has a day count',
     ['weekly', 'fortnightly', 'monthly'].every(k => typeof DIGEST_EVERY_DAYS[k] === 'number'));
 
+  // ── The opt-out has to be REACHABLE by everyone who can be emailed ───────
+  // ⚠ The card used to be `family ? … : ''`. A teacher has no family row, so a
+  //   teacher had no email settings at all — while the admin broadcast selects
+  //   teachers from its own Teachers tab and the footer of that message tells
+  //   the reader to switch these off under Account & Settings → Notifications.
+  //   A screen that does not exist is not an opt-out.
+  const uiSrc = fs.readFileSync(path.join(ROOT, 'engine/app.js'), 'utf8');
+  const cardAt = uiSrc.indexOf('const notifyHtml =');
+  ok('the Email & notifications card exists', cardAt > 0);
+  ok('it is NOT gated on the account having a family',
+    !/const notifyHtml = family \?/.test(uiSrc));
+  // The child-specific rows must stay gated: a teacher has no children to report on.
+  const card = uiSrc.slice(cardAt, uiSrc.indexOf('// ── Defaults applied to every child', cardAt));
+  ok('the progress-report row is still shown only to a family',
+    /\$\{family \? `[\s\S]*set-digest-freq/.test(card));
+  ok('the homework row is inside that same family block',
+    card.indexOf('set-email-homework') < card.indexOf("` : ''}"));
+  ok('the master switch is shown to everyone',
+    card.indexOf('set-email-enabled') < card.indexOf('${family ?'));
+  ok('announcements — the one kind an admin broadcast sends — is shown to everyone',
+    card.indexOf('set-email-announcements') > card.indexOf("` : ''}"));
+  ok('every scope the unsubscribe link offers has a control on the card',
+    ['enabled', 'digest', 'announcements', 'homework'].every(s => new RegExp(`\\b${s}\\b`).test(card)));
+
   console.log(`${checks - fails}/${checks} email-preference checks passed`);
   process.exit(fails ? 1 : 0);
 })();

@@ -15,7 +15,7 @@ import { requireAdmin, json } from '../lib/admin-auth.js';
 import {
   sendMail, wrap, escapeHtml, siteUrl, mailConfigured,
   wantsEmail, unsubscribeUrl, MAX_RECIPIENTS_PER_MESSAGE,
-  quotaPeek, quotaTake, quotaRelease, mailCap, replyNoteText,
+  quotaPeek, quotaTake, quotaRelease, mailCap, mailReserve, mailFromHuman, mailReplyTo, replyNoteText,
 } from '../lib/mailer.js';
 
 const MAX_IDS = 500;
@@ -136,6 +136,10 @@ export default async function handler(request, env) {
       budget_remaining: budget.remaining,
       budget_sent_today: budget.sent_today,
       budget_cap: budget.cap ?? mailCap(env),
+      // ⚠ budget_remaining is what a BROADCAST may still use - the transactional
+      //   reserve is already subtracted. Without naming the reserve, "80 of
+      //   today's 100" reads as though 20 had been sent today.
+      budget_reserve: mailReserve(env),
       budget_unknown: !!budget.unknown,
       skipped,
     });
@@ -159,8 +163,9 @@ export default async function handler(request, env) {
   const site = siteUrl(env);
   const html = wrap({
     env,
-    // ⚠ This one IS monitored: reply_to below is the sending admin's own address,
-    //   so telling a parent not to reply would be false.
+    // ⚠ This one IS monitored: From and Reply-To are both the shared admin
+    //   address, which a human reads, so telling a parent not to reply would be
+    //   false. If that ever stops being true, this flag changes with it.
     monitored: true,
     title: essential ? 'An important message about your account' : 'A message from Nou Klass',
     bodyHtml: bodyToHtml(message),
@@ -184,7 +189,18 @@ export default async function handler(request, env) {
     const res = await sendMail(env, {
       bcc: batch.map(r => r.email),
       subject, html, text,
-      replyTo: gate.caller.email,
+      // ⚠ A PERSON wrote this one, so it comes from the monitored address, not
+      //   noreply@ - see mailFromHuman().
+      // ⚠ THE SENDING ADMIN'S OWN ADDRESS IS NEVER PUT ON THE MESSAGE. It used
+      //   to be the Reply-To, which handed every parent the personal address of
+      //   whoever happened to press Send - and made where a reply landed depend
+      //   on which admin account was signed in at the time. Both headers are
+      //   now the shared monitored address, so a reply goes to one inbox the
+      //   team reads whether the client honours Reply-To or answers the From.
+      //   Who sent it is recorded in the console line and admin_log_action,
+      //   which is where an audit trail belongs.
+      from: mailFromHuman(env),
+      replyTo: mailReplyTo(env),
       // Already counted by quotaTake() above — do not count it twice.
       reserved: true,
       ...(unsubscribe ? { unsubscribe } : {}),
@@ -209,6 +225,7 @@ export default async function handler(request, env) {
     deferred,
     budget_remaining: reservation.remaining === null ? null : reservation.remaining + unspent,
     budget_cap: mailCap(env),
+    budget_reserve: mailReserve(env),
     budget_unknown: !!reservation.unknown,
     skipped,
     failures,

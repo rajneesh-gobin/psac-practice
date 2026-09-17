@@ -459,6 +459,12 @@ const ClozeText = (function () {
       for (let i = 0; i < _result.length; i++) recordAnswer(_q.chapterId, _result[i], 'cloze', _q.id);
     }
 
+    // ⚠ The per-text best score is a DIRECT write to the progress blob, not a
+    //   recordAnswer() the preview guard already covers. An adult trying this
+    //   passage in Chapter Preview would otherwise leave a score on whichever
+    //   child the dashboard has loaded.
+    if (typeof _isPreviewRun === 'function' && _isPreviewRun()) { renderPlayer(); return; }
+
     const store = _store();
     const prev = store[_q.id];
     store[_q.id] = {

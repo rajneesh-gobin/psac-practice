@@ -1,27 +1,28 @@
 #!/usr/bin/env node
 'use strict';
 // ══════════════════════════════════════════════════════════════════════════
-//  The content preflight — the five commands that must pass after any
+//  The content preflight — the local commands that must pass after any
 //  content or chapter change, in the one order that works:
 //
 //    1 build-subject-index       regenerates subjects/_index.js
 //    2 test-subsection-invariant declared vs tagged subsection ids
 //    3 build-questions           rebuilds netlify/question-bundles/
 //    4 test-live-pack-content    a live pack must actually hold questions
-//    5 check                     static checks, incl. index drift from (1)
+//    5 test-syllabus-facts       the pack asks what its source document teaches
+//    6 check                     static checks, incl. index drift from (1)
 //
-//  Order is load-bearing: (5) fails on the index drift that (1) fixes, and
+//  Order is load-bearing: the LAST step fails on the index drift that (1) fixes, and
 //  (3) must see the manifests (1) has just rewritten. Each step runs as its
 //  OWN node process — the builders and the tests each define STATIC_QUESTIONS
 //  and the question factories at global scope, so one process would collide.
 //
 //  And, only when asked for by name:
 //
-//    6 import-questions          upsert the verified corpus into Supabase
+//    last: import-questions     upsert the verified corpus into Supabase
 //
-//  ⚠ STEPS 1-5 ARE LOCAL. They write files in this repo and read nothing over
+//  ⚠ EVERY STEP BUT THE IMPORT IS LOCAL. They write files in this repo and read nothing over
 //  the network, which is what makes this command safe to run on a whim - and
-//  running it on a whim is the point. Step 6 writes to the PRODUCTION database.
+//  running it on a whim is the point. The import writes to the PRODUCTION database.
 //  It therefore exists only when --import (or --import-dry-run) asks for it,
 //  never by default, and it never runs after a failed step - not even under
 //  --keep-going, whose whole job is to carry on past failures.
@@ -30,8 +31,8 @@
 //  fail-closed preflight, but that one checks a QUESTION (unique id, known
 //  type, required fields, difficulty 1-4, chapterId present). It does not check
 //  the subsection invariant, whether a live pack holds real content, or index
-//  drift. Steps 2, 4 and 5 do, and nothing used to stop you importing a corpus
-//  that failed all three.
+//  drift, or whether the syllabus is actually asked. The local steps do, and
+//  nothing used to stop you importing a corpus that failed all of them.
 //
 //  Run:  node scripts/preflight.js [--keep-going] [--only=1,3] [--quiet]
 //        node scripts/preflight.js --import-dry-run   # reads the DB, writes nothing
@@ -95,11 +96,23 @@ const SUMMARY = {
 const STEPS = [
   { script: 'scripts/build-subject-index.js',       label: 'regenerate subjects/_index.js',
     summary: SUMMARY.index, watch: 'subjects/_index.js' },
-  { script: 'scripts/test-subsection-invariant.js', label: 'declared subsections == tagged subsections',
-    summary: SUMMARY.tests },
+  // ⚠ THE BUNDLE BUILD RUNS BEFORE THE INVARIANT, and the order is not cosmetic.
+  //   test-subsection-invariant.js reads netlify/question-bundles/*.json — the
+  //   files this step writes. With the invariant first it tested the PREVIOUS
+  //   build, so on the one run that matters, the run that changed the content,
+  //   it validated stale data. Found 2026-09-17 by adding a new chapter: the
+  //   invariant failed it as "declared but EMPTY" while the questions existed
+  //   and the very next step was about to build them.
   { script: 'netlify/build-questions.js',           label: 'rebuild the question bundles',
     summary: SUMMARY.bundles },
+  { script: 'scripts/test-subsection-invariant.js', label: 'declared subsections == tagged subsections',
+    summary: SUMMARY.tests },
   { script: 'scripts/test-live-pack-content.js',    label: 'live packs hold real content',
+    summary: SUMMARY.tests },
+  // ⚠ Reads SOURCE, like the step above it, and must run after the bundles only
+  //   because everything local does. It is the one step that knows what the
+  //   syllabus TEACHES; the other four can only count what happens to be there.
+  { script: 'scripts/test-syllabus-facts.js',       label: 'packs ask what their source teaches',
     summary: SUMMARY.tests },
   { script: 'scripts/check.js',                     label: 'static checks (index drift, sw shell, LOCAL_FILES)',
     summary: SUMMARY.checks },
@@ -125,15 +138,15 @@ const USAGE = [
   'Usage: node scripts/preflight.js [--keep-going] [--only=1,3] [--quiet] [--list]',
   '                                 [--import | --import-dry-run]',
   '',
-  '  (no flag)          Steps 1-5. Local only: writes files in this repo,',
+  '  (no flag)          Every local step. Writes files in this repo,',
   '                     touches no network and no database.',
-  '  --import           Also run step 6 — upsert the corpus into Supabase.',
+  '  --import           Also run the import step — upsert the corpus into Supabase.',
   '                     Skipped if any earlier step failed.',
-  '  --import-dry-run   Step 6 as a dry run: reads the database, reports what',
+  '  --import-dry-run   The import as a dry run: reads the database, reports what',
   '                     would change, writes nothing.',
-  '  --keep-going       Carry on past a failed step (never into step 6).',
+  '  --keep-going       Carry on past a failed step (never into the import).',
   '  --only=1,3         Run just these steps.',
-  '  --quiet            Suppress the output of steps that pass (never step 6).',
+  '  --quiet            Suppress the output of steps that pass (never the import).',
   '  --list             Print the steps and exit.',
   '',
   '  --import and --import-dry-run both need SUPABASE_SERVICE_ROLE_KEY.',
@@ -176,7 +189,7 @@ if (importMode) {
       ? 'read the database and report what WOULD change'
       : 'upsert the verified corpus into Supabase',
     summary: SUMMARY.imported,
-    // Both are gated behind the five checks; only one of them writes.
+    // Both are gated behind every local check; only one of them writes.
     isImport: true,
     writes: importMode === 'live',
   });
@@ -185,7 +198,9 @@ if (importMode) {
 if (args.includes('--list') || args.includes('-h') || args.includes('--help')) {
   console.log('Steps, in the order they must run:\n');
   STEPS.forEach((s, i) => console.log(`  ${i + 1}. node ${s.script}  — ${s.label}`));
-  if (!importMode) console.log('\n  6. node netlify/import-questions.js  — only with --import or --import-dry-run');
+  // ⚠ Derived from STEPS.length, never a literal: this line printed "6." while
+  //   the import had become step 7, the moment a local step was added.
+  if (!importMode) console.log('\n  ' + (STEPS.length + 1) + '. node netlify/import-questions.js  — only with --import or --import-dry-run');
   console.log('\n' + USAGE);
   process.exit(0);
 }

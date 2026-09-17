@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v363';
+const SHELL_VERSION = 'shell-v364';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -74,6 +74,7 @@ const SHELL_FILES = [
   '/engine/auth.js',
   '/engine/app.js',
   '/engine/paper_builder.js',
+  '/engine/chapter_preview.js',
   '/engine/biometric.js',
   // ⚠ Must match the <script src="engine/…"> tags in index.html. This list is
   //   all-or-nothing — cache.addAll rejects wholesale on a single 404 — so a

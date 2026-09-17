@@ -79,6 +79,10 @@ const G9BIO_SYLLABUS = {
     { id: 'interpreting_results', name: 'Processing, interpreting and evaluating results' },
     { id: 'reporting_findings', name: 'Communicating steps and results in reports and presentations' },
   ] },
+  'g9enr-label': { subsections: [
+    { id:'body',  name:'Body System Diagrams' },
+    { id:'plant', name:'Plant Structure Diagrams' },
+  ]},
   'g9s-sts': { subsections: [
     { id: 'christiaan_barnard', name: 'Heart transplant and the work of Christiaan Barnard' },
     { id: 'evaluating_information', name: 'Evaluating information from searches and investigations critically' },
@@ -105,5 +109,12 @@ registerSubject({
       syllabus: 'Develop a simple hypothesis and test it. Conduct investigations safely in cooperation with others. Record data using appropriate tables, diagrams, charts and graphs. Process, interpret and evaluate the results of an investigation. Communicate findings in written reports and oral presentations.' },
     { id: 'g9s-sts', name: 'Science, Technology & Society', icon: '🌍', examWeight: 2,
       syllabus: 'Evaluate critically the information obtained through searches and investigations. Express and justify views that are consistent with scientific evidence. Identify ethical issues associated with science and technology. Describe applications such as optical fibres in medicine and communications.' },
+    // ── ENRICHMENT ──────────────────────────────────────────────────────────
+    // @enrichment - DERIVED from the syllabus, NOT a direct NCE chapter.
+    // ⚠ examWeight 1: an explicit 0 would keep it OUT of exams entirely, and
+    //   labelling a diagram is an examined NCE format — g9s-pp24b-016 is
+    //   transcribed from a real paper that sets it.
+    { id: 'g9enr-label', name: 'Label the Diagram', icon: '🏷️', enrichment: true, examWeight: 1,
+      enrichmentNote: 'Name the numbered structures on a real anatomical diagram. Derived from the Circulatory System chapter.' },
   ],
 });

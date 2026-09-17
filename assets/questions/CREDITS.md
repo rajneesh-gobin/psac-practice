@@ -42,3 +42,33 @@ Every other illustration in the app is an inline SVG drawn for this project.
 
 *Imported 2026-09-08. Do not rename these files without updating this table — the
 filename is how a reader gets from an image back to its author.*
+
+---
+
+## Label-the-diagram figures
+
+Diagrams in `assets/questions/labels/`, used by the **Label the Diagram** bonus
+chapters. All come from [Wikimedia Commons](https://commons.wikimedia.org/) and are
+reproduced under the licence named against each one; **CC BY** and **CC BY-SA**
+require this attribution, and **CC BY-SA** additionally requires that derivative
+versions carry the same licence. Each is the illustrator's own numbered or
+unlabelled variant, rendered by Commons at 900px and otherwise unmodified.
+
+| Image | Source | Licence | Author |
+|---|---|---|---|
+| `labels/animal-cell-numbers.png` | [Simple diagram of animal cell (numbers).svg](https://commons.wikimedia.org/wiki/File:Simple_diagram_of_animal_cell_(numbers).svg) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) | domdomegg |
+| `labels/atoll-forming-numbers.png` | [Atoll forming-i18.png](https://commons.wikimedia.org/wiki/File:Atoll_forming-i18.png) | Public domain | Susan Mayfield and Sara Boore, modified by Eurico Zimbres |
+| `labels/cells-compared-numbers.png` | [Differences between simple animal and plant cells (numbers).svg](https://commons.wikimedia.org/wiki/File:Differences_between_simple_animal_and_plant_cells_(numbers).svg) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) | domdomegg |
+| `labels/earth-layers-numbers.png` | [Earth-cutaway-schematic-numbered.svg](https://commons.wikimedia.org/wiki/File:Earth-cutaway-schematic-numbered.svg) | Public domain | Original: USGS Vector: Anasofiapaixao |
+| `labels/earthquake-numbers.png` | [Epicenter Hypocenter.png](https://commons.wikimedia.org/wiki/File:Epicenter_Hypocenter.png) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) | Eurico Zimbres |
+| `labels/flower-parts-crop.png` | [Flower (PSF).png](https://commons.wikimedia.org/wiki/File:Flower_(PSF).png) | Public domain | Pearson Scott Foresman |
+| `labels/heart-numbers.png` | [Heart numlabels.svg](https://commons.wikimedia.org/wiki/File:Heart_numlabels.svg) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) | Wapcaplet . |
+| `labels/leaf-section-numbers.png` | [Blattquerschnitt mit Blattader zum beschriften.svg](https://commons.wikimedia.org/wiki/File:Blattquerschnitt_mit_Blattader_zum_beschriften.svg) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) | A.Spielhoff |
+| `labels/plant-cell-numbers.png` | [Simple diagram of plant cell (numbers).svg](https://commons.wikimedia.org/wiki/File:Simple_diagram_of_plant_cell_(numbers).svg) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) | domdomegg |
+| `labels/river-course-numbers.png` | [River scheme.svg](https://commons.wikimedia.org/wiki/File:River_scheme.svg) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) | Distorted |
+| `labels/volcano-eruption-numbers.png` | [Hawaiian Eruption-numbers.svg](https://commons.wikimedia.org/wiki/File:Hawaiian_Eruption-numbers.svg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | Sémhur |
+| `labels/water-cycle-blank.png` | [Water cycle blank.svg](https://commons.wikimedia.org/wiki/File:Water_cycle_blank.svg) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) | Ingwik |
+
+*Generated from `docs/label-diagrams/provenance.json`, which
+`scripts/fetch-commons-image.js` fills in at download time — the provenance is
+never reconstructed afterwards. Do not rename these files without updating both.*

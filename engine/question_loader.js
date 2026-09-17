@@ -224,7 +224,9 @@ const QuestionLoader = (() => {
                        'subjects/grade7-science/questions/batch2_g7s-matter.js',
                        'subjects/grade7-science/questions/batch2_g7s-measurement.js',
                        'subjects/grade7-science/questions/batch2_g7s-solar-system.js',
-                       'subjects/grade7-science/questions/batch2_g7s-sts.js'],
+                       'subjects/grade7-science/questions/batch2_g7s-sts.js',
+                       // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
+                       'subjects/grade7-science/questions/label_diagram.js'],
     'grade7-social-modern-studies': ['subjects/grade7-social-modern-studies/questions/depth_hard.js',
                                     'subjects/grade7-social-modern-studies/questions/ch01_core.js',
                                      'subjects/grade7-social-modern-studies/questions/ch02_expanded.js',
@@ -401,7 +403,9 @@ const QuestionLoader = (() => {
                        'subjects/grade9-biology/questions/bio_diagram_patch.js',
                        'subjects/grade9-biology/questions/bio_diagram_multi.js',
                        'subjects/grade9-biology/questions/family_expansion.js',
-                       'subjects/grade9-biology/questions/b4_mineral_nutrition.js'],
+                       'subjects/grade9-biology/questions/b4_mineral_nutrition.js',
+                       // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
+                       'subjects/grade9-biology/questions/label_diagram.js'],
     'grade9-chemistry': ['subjects/grade9-chemistry/questions/c1_atmosphere.js',
                          'subjects/grade9-chemistry/questions/c2_mixtures.js',
                          'subjects/grade9-chemistry/questions/c3_language.js',
@@ -555,7 +559,9 @@ const QuestionLoader = (() => {
       // top-up
       'subjects/grade5-science/questions/topup_g5_science.js',
       'subjects/grade5-science/questions/coverage_min5.js',
-      'subjects/grade5-science/questions/batch2_g5sci-enr-energy.js'],
+      'subjects/grade5-science/questions/batch2_g5sci-enr-energy.js',
+      // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
+      'subjects/grade5-science/questions/label_diagram.js'],
     'grade5-history': [
       'subjects/grade5-history/questions/depth_hard.js',
       'subjects/grade5-history/questions/ch01_discovery.js',
@@ -580,6 +586,14 @@ const QuestionLoader = (() => {
       'subjects/grade5-history/questions/past_paper_2020.js',
       // top-up
       'subjects/grade5-history/questions/topup_g5_history.js',
+      // revision-notes gap fill, one file per unit of the Grade 5 notes
+      // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
+      'subjects/grade5-history/questions/label_diagram.js',
+      'subjects/grade5-history/questions/notes_u1_environment.js',
+      'subjects/grade5-history/questions/notes_u2_discovery.js',
+      'subjects/grade5-history/questions/notes_u3_settlement.js',
+      'subjects/grade5-history/questions/notes_u4_climate.js',
+      'subjects/grade5-history/questions/notes_u5_port_louis.js',
       'subjects/grade5-history/questions/coverage_discovery_portlouis.js',
       'subjects/grade5-history/questions/coverage_settlement.js',
       'subjects/grade5-history/questions/coverage_min5.js',
@@ -632,6 +646,10 @@ const QuestionLoader = (() => {
       'subjects/grade6-history/questions/past_paper_2019.js',
       // top-up
       'subjects/grade6-history/questions/topup_g6_history.js',
+      // the three bands Grade 6 genuinely shares with Grade 5
+      'subjects/grade6-history/questions/shared_bands.js',
+      // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
+      'subjects/grade6-history/questions/label_diagram.js',
     ],
     'grade6-maths': [
       // stimulus-reading items on the cropped past-paper artwork
@@ -908,7 +926,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 140;
+  const _CACHE_VERSION = 148;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

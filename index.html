@@ -3267,6 +3267,13 @@
         </div>
       </div>
 
+      <!-- Chapter preview (parent / teacher). Shown for the whole run, never
+           toasted once: an adult who forgets they are previewing reads the
+           score as their child’s. Nothing here is recorded — see
+           _isPreviewRun() in engine/app.js. -->
+      <div id="practice-preview-note" class="hidden mx-auto max-w-3xl mb-2 px-4 py-2 rounded-xl text-sm font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700" role="status">
+        👀 Chapter preview — this is exactly what a child sees. Nothing you answer here is saved or counted.
+      </div>
       <div class="pr-wrap">
         <!-- Status: chapter, position, progress, level, session -->
         <div class="pr-head">
@@ -4339,6 +4346,7 @@
             <button type="button" role="menuitem" data-more="assignments" onclick="TeacherMode.switchTab('assignments')"><span class="ta-more-ico">📦</span><span><strong>Past work</strong><small>Work that has closed or been put away</small></span></button>
             <button type="button" role="menuitem" data-more="messages" onclick="TeacherMode.switchTab('messages')"><span class="ta-more-ico">💬</span><span><strong>Messages</strong><small>Ask a question or report a problem</small></span></button>
             <button type="button" role="menuitem" data-more="papers" onclick="TeacherMode.switchTab('papers')"><span class="ta-more-ico">📝</span><span><strong>Test papers</strong><small>Build a printable paper with its answer sheet</small></span></button>
+            <button type="button" role="menuitem" data-more="preview" onclick="TeacherMode.switchTab('preview')"><span class="ta-more-ico">👀</span><span><strong>Chapter preview</strong><small>See a chapter as a pupil sees it</small></span></button>
             <button type="button" role="menuitem" data-more="settings" onclick="TeacherMode.switchTab('settings')"><span class="ta-more-ico">⚙️</span><span><strong>Teacher settings</strong><small>Install, invite, account</small></span></button>
           </div>
         </div>
@@ -4708,12 +4716,20 @@
       </div>
 
       <!-- ── TAB: TEACHER SETTINGS (via More) ── -->
+      <!-- ⚠ The SAME ChapterPreview the parent dashboard renders. One picker,
+           two surfaces, so they cannot drift apart. -->
+      <div class="ta-tab-content hidden" data-tab="preview">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-1">👀 Chapter preview</h3>
+        <p class="teacher-intro mb-3">Open any chapter exactly as a pupil sees it. Nothing you answer is saved.</p>
+        <div id="tc-preview-host"></div>
+      </div>
+
       <div class="ta-tab-content hidden" data-tab="settings">
         <h3 class="font-bold text-lg mb-1">⚙️ Teacher settings</h3>
         <p class="teacher-intro mb-4">Your account, this device, and how pupils get in.</p>
         <div class="ta-settings-grid">
           <button type="button" class="ta-settings-card" onclick="ProfileInstall.installTeacher()"><span>📲</span><strong>Install on this device</strong><small>Adds a teacher shortcut to your phone or computer.</small></button>
-          <button type="button" class="ta-settings-card" onclick="showProfile()"><span>👤</span><strong>Account &amp; settings</strong><small>Your name, password and appearance.</small></button>
+          <button type="button" class="ta-settings-card" onclick="showProfile()"><span>👤</span><strong>Account &amp; settings</strong><small>Your name, password, email preferences and appearance.</small></button>
           <button type="button" class="ta-settings-card" onclick="Auth.openInviteModal()"><span>🎁</span><strong>Invite friends</strong><small>Share Nou Klass with other teachers and parents.</small></button>
           <button type="button" class="ta-settings-card" onclick="Auth.switchToStudentSelect()"><span>🎒</span><strong>Switch to student mode</strong><small>Hand this device to a pupil.</small></button>
         </div>
@@ -4864,6 +4880,7 @@
         <button id="pd-tab-calendar" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('calendar')"><strong>📅 Timetable</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" onclick="Auth.openInviteModal()"><strong>🎁 Invite</strong></button>
         <button id="pd-tab-papers" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('papers')"><strong>📝 Test Papers</strong></button>
+        <button id="pd-tab-preview" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('preview')"><strong>👀 Chapter Preview</strong></button>
         <button id="pd-tab-shop" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('shop')"><strong>🛒 Shop</strong><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
         <button id="pd-tab-messages" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('messages')"><strong>💬 Messages</strong><span id="pd-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
         <button id="pd-tab-settings" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('settings')"><strong>⚙️ Settings</strong></button>
@@ -5204,6 +5221,13 @@
            teacher screen so the two pickers cannot drift. -->
       <div id="pd-panel-papers" class="hidden">
         <div id="pd-papers-host"></div>
+      </div>
+
+      <!-- Chapter preview: the child’s own practice screen, run by the parent.
+           The SAME module the teacher screen renders (engine/chapter_preview.js).
+           Nothing answered in it is recorded — see _isPreviewRun() in app.js. -->
+      <div id="pd-panel-preview" class="hidden">
+        <div id="pd-preview-host"></div>
       </div>
 
       <div id="pd-panel-shop" class="hidden"></div>
@@ -6152,6 +6176,7 @@
   <!-- App + Auth (auth loads after app so DB/save are available) -->
   <script src="engine/app.js"></script>
   <script src="engine/paper_builder.js"></script>
+  <script src="engine/chapter_preview.js"></script>
   <script src="engine/biometric.js"></script>
   <script src="engine/auth.js"></script>
   <!-- ⚠ THE EIGHT ROLE MODULES ARE NOT LOADED HERE. admin.js, forum.js and
@@ -6758,7 +6783,7 @@
       <label for="admin-bc-message" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Message</label>
       <textarea id="admin-bc-message" rows="8" maxlength="8000" placeholder="Write in plain text. A blank line starts a new paragraph."
         class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
-      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only — it is escaped before sending, so pasted formatting will not carry through. Replies come back to your own address.</p>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only — it is escaped before sending, so pasted formatting will not carry through. It is sent from the Nou Klass admin address, and replies come back there — not to your personal inbox, which is never put on the message.</p>
 
       <label class="flex items-start gap-2 mb-3 cursor-pointer">
         <input id="admin-bc-essential" type="checkbox" class="accent-indigo-600 mt-0.5">

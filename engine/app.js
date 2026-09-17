@@ -140,6 +140,7 @@ function _capReached(kind) {
   return (_usage()[kind] || 0) >= cap;
 }
 function _usageBump(kind) {
+  if (_isPreviewRun()) return;
   if (!window.PLAN_ENFORCEMENT) return;   // do not accumulate while dark
   const u = _usage();
   u[kind] = (u[kind] || 0) + 1;
@@ -452,8 +453,27 @@ let _assignmentActive = false;
 // the session. It used to be cleared only by showAssignmentComplete(), which
 // belongs to the guest/teacher ASSIGNMENT_MODE flow; a PARENT-assigned round
 // finishes through the round-complete modal instead and never reached it.
+// ── CHAPTER PREVIEW (adult) ────────────────────────────────────────────────
+// ⚠⚠ AN ADULT ANSWERING A QUESTION MUST WRITE NOTHING, ANYWHERE. Chapter
+//    Preview runs the child's own practice screen for a parent or a teacher,
+//    and a parent reaches it while a CHILD is loaded - pdSwitchStudent sets
+//    ACTIVE_STUDENT_ID and fills DB with that child's blob so the dashboard can
+//    read it. Without this flag, a parent trying ten questions to see what
+//    their daughter sees would file ten attempts, any wrong ones as HER
+//    mistakes, against HER daily goal and streak. Same rule, and the same
+//    reason, as "game answers never call recordAnswer()": the mastery, mistake
+//    and daily numbers are a description of a child, and an adult in them is
+//    not a small inaccuracy, it is the wrong person.
+// ⚠ It lives on S.practice and is cleared HERE, in the one function every
+//   practice entry point already calls to declare what kind of run it is. A
+//   flag set true and cleared by the preview's own exit would survive a
+//   crash, a back button or a deep link, and silently stop recording a real
+//   child's practice for the rest of the session - failing the wrong way.
+function _isPreviewRun() { return !!(S.practice && S.practice.preview); }
+
 function _setAssignmentContext(on) {
   S.practice.coachMission = null;
+  S.practice.preview = false;
   _assignmentActive = !!on;
   document.getElementById('practice-pause-btn')?.classList.toggle('hidden', _assignmentActive);
   // Leaving an assignment also has to hand back the two things an assignment is
@@ -719,6 +739,7 @@ const _FIX_TO_RETIRE  = 2;
 const _FIX_ROUND_MAX  = 10;
 
 function _saveResume() {
+  if (_isPreviewRun()) return;
   if (S.practice?.coachMission) return;
   if (!ACTIVE_STUDENT_ID) return;
   const store = _pruneResumeStore(_readResumeStore());
@@ -2735,7 +2756,19 @@ function showScreen(id) {
   // Speech outlives the screen that started it - leaving a chapter mid-reading
   // carried the options into whatever came next.
   if (typeof _ttsStop === 'function') _ttsStop();
-  if (_KID_ONLY_SCREENS.has(id) && _isParentContext()) {
+  // ⚠ ONE exception, and it is deliberate: Chapter Preview is an adult opening
+  //   the child’s own screen ON PURPOSE, writing nothing (see _isPreviewRun).
+  //   Everything else on this list still bounces a parent session back to the
+  //   dashboard - a parent must not WANDER into a kid screen, which is a
+  //   different thing from choosing to look at one.
+  const _previewScreen = _isPreviewRun() && (id === 'practice' || id === 'cloze-play' || id === 'cloze-list');
+  if (_KID_ONLY_SCREENS.has(id) && _isParentContext() && !_previewScreen) {
+    // ⚠ A preview has more exits than its own ← button: Continue later, Back
+    //   to chapters, SubjectHub.back(), a help link. Each of those aims at a
+    //   kid screen, and _returnToParentDashboard() below then lands a TEACHER
+    //   in the PARENT dashboard - which, for an account with no children,
+    //   renders "could not be loaded". Leave by the door we came in through.
+    if (_isPreviewRun()) { exitChapterPreview(); return; }
     _returnToParentDashboard();
     return;
   }
@@ -3314,6 +3347,7 @@ function _recordDaily(correct, chapterId, source) {
 
 // q may be absent (exam replay passes one, some callers do not).
 function _recordMistake(q, userAnswer, chapterId, source) {
+  if (_isPreviewRun()) return;
   if (!q) return;
   if (!Array.isArray(DB.mistakes)) DB.mistakes = [];
   const chId = chapterId || q.chapterId || '';
@@ -3360,6 +3394,7 @@ function _recordMistake(q, userAnswer, chapterId, source) {
 // fixed anywhere counts, and the list empties by being learned rather than by
 // ageing out. Returns true only on the answer that actually retires the row.
 function _retireMistake(questionId) {
+  if (_isPreviewRun()) return false;
   if (!questionId || !Array.isArray(DB.mistakes)) return false;
   const i = DB.mistakes.findIndex(m => m && m.id === questionId);
   if (i < 0) return false;
@@ -3387,6 +3422,9 @@ function _plainText(html) {
 }
 
 function recordAnswer(chapterId, correct, source, questionId) {
+  // ⚠ The one funnel: the daily bucket, mastery, QuestionProgress, the
+  //   coach, streak, badges, points and save(DB) all hang off this call.
+  if (_isPreviewRun()) return;
   _recordDaily(correct, chapterId, source);
   if (ASSIGNMENT_MODE) {
     ASSIGNMENT_SCORE.attempted++;
@@ -3626,6 +3664,32 @@ function checkAnswer(q, userAnswer) {
   const accepted = [q.answer, ...(q.acceptableAnswers || [])];
   return accepted.some(a => normalise(a) === ua || _sameNumber(a, userAnswer));
 }
+
+// ── LABEL THE DIAGRAM: tap-to-place ───────────
+// ⚠ These only ever set the VALUE of a .slot-input. Everything downstream —
+//   the collector in getAnswerFor(), markSlots(), the server marker — is
+//   untouched, which is why labelling needed no new question type.
+window.lblPlace = function(chip, containerId) {
+  if (chip.classList.contains('is-used')) return;
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  const box = [...cont.querySelectorAll('.slot-input.is-target')].find(b => !b.value);
+  if (!box) return;                        // every marker is already named
+  box.value = chip.textContent;
+  box.dataset.bi = chip.dataset.bi;         // remember WHICH chip, so duplicates behave
+  chip.classList.add('is-used');
+  box.classList.add('is-filled');
+};
+
+window.lblTake = function(box) {
+  if (!box.value) return;
+  const cont = box.closest('.pr-answers, #exam-answer-area, [id]');
+  const chip = cont && cont.querySelector(`.lbl-chip[data-bi="${box.dataset.bi}"]`);
+  if (chip) chip.classList.remove('is-used');
+  box.value = '';
+  delete box.dataset.bi;
+  box.classList.remove('is-filled');
+};
 
 // ── SYMMETRY GRID ─────────────────────────────
 window.toggleSymCell = function(el, containerId) {
@@ -4063,12 +4127,41 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
     const labels = r.labels || [];
     const n = (r.answer || []).length;
     const enter = containerId === 'exam-answer-area' ? 'saveCurrentExamAnswer()' : 'practiceSubmit()';
-    let html = '<div class="slot-row">';
+    // ── Label-the-diagram: a word bank, in PRACTICE only ───────────────────
+    // ⚠ The bank is dropped in the exam ON PURPOSE. A labelling question with
+    //   its bank showing is a matching exercise; the paper prints the figure
+    //   and nothing else, and a timed paper must not hand a child what the
+    //   paper does not. Same rule the read-aloud follows: practice speaks the
+    //   options, the exam speaks only the question.
+    // ⚠ TAP-TO-PLACE, NOT DRAG. HTML5 drag never fires on touch, and this is a
+    //   phone-first app for primary children — engine/cloze.js learned this on
+    //   the French gaps and this is the same interaction: tap a word to fill
+    //   the next empty box, tap a filled box to send the word back.
+    const bank = Array.isArray(r.bank) ? r.bank : null;
+    const useBank = !!bank && containerId !== 'exam-answer-area' && !disabled;
+    let html = '';
+    if (useBank) {
+      // ⚠ The bank is rendered in the authored order, which must already be
+      //   shuffled by the author — shuffling here would reshuffle on every
+      //   re-render (a hint reveal, a mark) and move a word under the finger.
+      html += '<div class="lbl-bank" role="group" aria-label="Words to place">';
+      bank.forEach((w, bi) => {
+        const used = vals.includes(w) ? ' is-used' : '';
+        html += `<button type="button" class="lbl-chip${used}" data-bi="${bi}"
+          onclick="lblPlace(this,'${containerId}')">${_attr(w)}</button>`;
+      });
+      html += '</div>';
+    }
+    html += '<div class="slot-row">';
     for (let i = 0; i < n; i++) {
       const lab = labels[i] ? `<span class="slot-label"><i>${_attr(labels[i])}</i> =</span>` : '';
-      html += `${lab}<input type="text" class="slot-input" value="${_attr(vals[i] || '')}"
+      // ⚠ readonly, not disabled, when the bank is in play: a disabled input is
+      //   skipped by the collector's .value read on some engines and cannot be
+      //   tapped to take its word back. readonly keeps both.
+      const ro = useBank ? 'readonly onclick="lblTake(this)"' : '';
+      html += `${lab}<input type="text" class="slot-input${useBank ? ' is-target' : ''}" value="${_attr(vals[i] || '')}"
         inputmode="text" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off"
-        aria-label="Answer box ${i + 1} of ${n}" ${disabled ? 'disabled' : ''}
+        aria-label="Answer box ${i + 1} of ${n}" ${disabled ? 'disabled' : ''} ${ro}
         onkeydown="if(event.key==='Enter'){${enter}}">`;
     }
     html += '</div>';
@@ -4393,6 +4486,7 @@ function getLevel(points) {
 // with the same amount - a float that says +4 followed by a total that moved by
 // 1 is worse than no float at all.
 function gainPoints(amount) {
+  if (_isPreviewRun()) return;
   const n = Math.max(0, Math.round(Number(amount) || 0));
   if (!n) return 0;
   DB.xp = (DB.xp || 0) + n;
@@ -5071,13 +5165,10 @@ function _renderExpiredBanner(slotId) {
 
 async function renderParentDashboard() {
   const _el = id => document.getElementById(id);
-  // Reset to the My Children panel on every open
-  ['calendar','shop','messages','settings'].forEach(p =>
-    _el(`pd-panel-${p}`)?.classList.add('hidden'));
-  _el('pd-panel-children')?.classList.remove('hidden');
-  const _nav = document.querySelector('#screen-parent .teacher-navigation');
-  if (_nav) _nav.querySelectorAll('.ta-tab').forEach(btn =>
-    btn.setAttribute('aria-selected', btn.id === 'pd-tab-children' ? 'true' : 'false'));
+  // Reset to the My Children panel on every open.
+  // ⚠ Through PD, so the list of panels is derived from _PD_PANELS and cannot
+  //   go stale - see PD.showChildrenPanel().
+  PD.showChildrenPanel();
   _renderShopChip();
   _renderExpiredBanner('pd-expired-slot');
   _refreshParentMessageBadge();
@@ -6617,7 +6708,7 @@ const PD = (() => {
 
   // Load reminder when detail panel opens
   const _mounted = {};
-  const _PD_PANELS = ['children', 'calendar', 'papers', 'shop', 'messages', 'settings'];
+  const _PD_PANELS = ['children', 'calendar', 'papers', 'preview', 'shop', 'messages', 'settings'];
 
   function _mountPanel(name, srcId) {
     if (_mounted[name]) return;
@@ -6639,6 +6730,11 @@ const PD = (() => {
         //   register and the form must reflect the current one — the same
         //   one-shot-guard mistake that froze teacher mode's subject list.
         if (typeof PaperBuilder !== 'undefined') PaperBuilder.render('pd-papers-host', 'parent');
+        break;
+      case 'preview':
+        // Same one-shot-guard reasoning as 'papers' above: the pack list grows
+        // as packs register, so this renders on every activation.
+        if (typeof ChapterPreview !== 'undefined') ChapterPreview.render('pd-preview-host', 'parent');
         break;
       case 'shop':
         _mountPanel('shop', 'screen-shop');
@@ -6662,6 +6758,21 @@ const PD = (() => {
       default:
         renderParentDashboard();
     }
+  }
+
+  // ⚠ ONE list of panels, DERIVED from _PD_PANELS. renderParentDashboard()
+  //   used to hide a hard-coded ['calendar','shop','messages','settings'] and
+  //   show children - which left `papers` and `preview` OPEN, so a test-paper
+  //   form or a chapter picker rendered UNDERNEATH “Your children · today at a
+  //   glance”. A list of panels written out a second time is a list that
+  //   drifts the moment a panel is added, and nothing fails when it does.
+  function showChildrenPanel() {
+    _PD_PANELS.forEach(p => {
+      document.getElementById(`pd-panel-${p}`)?.classList.toggle('hidden', p !== 'children');
+    });
+    const nav = document.querySelector('#screen-parent .teacher-navigation');
+    if (nav) nav.querySelectorAll('.ta-tab').forEach(btn =>
+      btn.setAttribute('aria-selected', btn.id === 'pd-tab-children' ? 'true' : 'false'));
   }
 
   function mainTab(name, scrollTo) {
@@ -6693,7 +6804,7 @@ const PD = (() => {
   }
 
   return { selectChild: selectChildWithReminder, closeDetail, pdTab, renderDetail,
-           saveReminder, clearReminder, refreshControls, mainTab,
+           saveReminder, clearReminder, refreshControls, mainTab, showChildrenPanel,
            renderLoginTab, openPinSetter, suggestLoginPin, saveLoginPin, copyLoginField,
            activeId: () => _activeId };
 })();
@@ -8794,6 +8905,139 @@ function startSearchPractice(questions, label, coachMission = null) {
   }
   _updateDiffBadge(S.practice.qs[0]);
   loadPracticeQuestion();
+}
+
+// ── CHAPTER PREVIEW LAUNCH (parent / teacher) ─────────────────────────────
+// The child's own practice screen, run by an adult, writing nothing anywhere.
+// See _isPreviewRun() for why that guarantee lives on S.practice rather than in
+// this function's own exit path.
+//
+// ⚠ It deliberately does NOT go through startChapterDirect(). That path applies
+//   the restrictions in DB - lockedChapters and _planAllowsChapter() - and DB
+//   holds whichever CHILD the dashboard last loaded. A parent who locked a
+//   chapter for one child would be refused a preview of it, and told it was
+//   "locked by your parent", which is both wrong and insulting.
+// ⚠ The set comes from getQuestionsForChapter() at the same count the child's
+//   own round uses, so this is the same selection a child is dealt, not a
+//   sample of it. That is the entire point of the screen.
+async function startChapterPreview(packId, chapterId, forceDiff, backTo) {
+  const back = backTo === 'teacher' ? 'teacher' : 'parent';
+  const ready = await _withRouteBusy('Opening the preview…', 'Getting the questions ready', async () => {
+    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(packId).catch(() => {});
+    const p = activateSubjectPack(packId);
+    if (!p) return false;
+    if (typeof QuestionLoader !== 'undefined') await QuestionLoader.loadSubject(p.id);
+    return true;
+  });
+  if (!ready) { toast('That subject could not be opened.', 2500); return; }
+
+  // ⚠ ORDER. _setAssignmentContext() clears the preview flag by design, so the
+  //   flag is claimed AFTER it - and BEFORE the two redirects below, because
+  //   showScreen() only lets an adult onto a child screen while it is set, and
+  //   cloze/errorhunt write a best score of their own that the flag suppresses.
+  _setAssignmentContext(false);
+  S.practice.preview     = true;
+  S.practice.previewBack = back;
+
+  // Textes à Trous and Chasse aux Erreurs have their OWN screens for a child and
+  // must here too: isPoolQuestion() excludes both types from every pool, so a
+  // preview through the practice screen would be empty rather than wrong.
+  if (typeof ClozeText !== 'undefined' && ClozeText.isClozeChapter(chapterId) && ClozeText.open(chapterId)) return;
+  if (typeof ErrorHunt !== 'undefined' && ErrorHunt.isHuntChapter(chapterId) && ErrorHunt.open(chapterId)) return;
+
+  // ⚠ MIXED IS NOT `difficulty: null`. getStaticQs() matches q.difficulty
+  //   EXACTLY, so getQuestionsForChapter(id, null, 20) matches nothing at all -
+  //   no question carries a null level. The child's own mixed round calls
+  //   getMixedQuestions(), and so must this: the first build did not, and every
+  //   chapter answered "there are no questions in this chapter yet".
+  // ⚠ maxDiff is 4 here, NOT DB.restrictions.maxDifficulty. DB holds whichever
+  //   child the dashboard last loaded, and this preview is not about that
+  //   child - a teacher has no child at all. An adult asking to see a chapter
+  //   sees the chapter.
+  let qs = forceDiff
+    ? getQuestionsForChapter(chapterId, forceDiff, 20)
+    : getMixedQuestions(chapterId, 4, 20);
+
+  // Same fallback the child gets, and for the same reason: six live packs hold
+  // zero L4 items, and "this level is empty" is not the same answer as "this
+  // chapter is empty".
+  if (!qs.length && forceDiff) {
+    qs = getMixedQuestions(chapterId, 4, 20);
+    if (qs.length) {
+      forceDiff = null;
+      toast('No questions at that level in this chapter — showing all levels instead.', 3500);
+    }
+  }
+  if (!qs.length) {
+    _setAssignmentContext(false);   // hand the flag back - nothing was opened
+    // ⚠ Say WHICH answer this is. "Empty chapter" and "the questions never
+    //   arrived" need completely different things from the reader, and they
+    //   used to share one sentence.
+    const _loaded = STATIC_QUESTIONS.some(q => q && q.chapterId === chapterId);
+    toast(_loaded
+      ? 'This chapter has no questions that can be practised yet.'
+      : 'Those questions could not be loaded. Check your connection and try again.', 3800);
+    return;
+  }
+
+  S.practice.chapterId   = chapterId;
+  S.practice.difficulty  = forceDiff || null;
+  S.practice.qs          = qs;
+  S.practice.idx         = 0;
+  S.practice.answers     = {};
+  S.practice.hintShown   = false;
+  S.practice.session     = { attempted: 0, correct: 0, points: 0 };
+  S.practice.showAnswers = true;
+  S.practice.showHints   = true;
+  _blankQuestions.clear();
+  _ttsAutoRead = false;
+
+  showScreen('practice');
+  const ch = CHAPTERS.find(c => c.id === chapterId);
+  const nameEl = document.getElementById('practice-ch-name');
+  if (nameEl) nameEl.textContent = ch ? `${ch.icon} ${ch.name}` : chapterId;
+  _setPreviewBanner(true);
+  const backBtn = document.getElementById('practice-back-btn');
+  if (backBtn) {
+    backBtn.classList.remove('hidden');
+    backBtn.textContent = back === 'teacher' ? '← Back to teaching' : '← Back to dashboard';
+    backBtn.setAttribute('aria-label', 'Leave the preview');
+    backBtn.onclick = () => exitChapterPreview();
+  }
+  _updateDiffBadge(qs[0]);
+  loadPracticeQuestion();
+  setTimeout(() => { initScratchpad('scratchpad-practice'); }, 100);
+}
+
+function exitChapterPreview() {
+  const back = S.practice.previewBack === 'teacher' ? 'teacher' : 'parent';
+  if (typeof _ttsStop === 'function') _ttsStop();
+  document.getElementById('modal-round-complete')?.classList.add('hidden');
+  _setAssignmentContext(false);
+  S.practice.previewBack = null;
+  S.practice.qs = [];
+  _setPreviewBanner(false);
+  // ⚠ Back to the TAB, not just the screen. showScreen('parent') alone runs
+  //   renderParentDashboard(), which resets to My Children - so an adult who
+  //   opened a chapter from the preview tab was returned to a different page
+  //   than the one they left. mainTab() also hides every sibling panel, which
+  //   is what stops the picker rendering under the children page.
+  showScreen(back);
+  if (back === 'teacher') {
+    if (typeof TeacherMode !== 'undefined') TeacherMode.switchTab('preview');
+  } else if (typeof PD !== 'undefined') {
+    PD.mainTab('preview');
+  }
+}
+
+// ⚠ Shown for the whole run, not toasted once. An adult who forgets they are in
+//   a preview reads the score as their child's, and a wrong answer here looks
+//   like the child got it wrong.
+function _setPreviewBanner(on) {
+  // ⚠ ⏸️ Continue later goes with it: a preview saves nothing, so a button
+  //   promising to bring you back to this question has nothing to offer.
+  document.getElementById('practice-pause-btn')?.classList.toggle('hidden', !!on);
+  document.getElementById('practice-preview-note')?.classList.toggle('hidden', !on);
 }
 
 // ── ASSIGNMENT DIRECT LAUNCH ──────────────────
@@ -11557,6 +11801,10 @@ document.getElementById('practice-prev-btn').addEventListener('click', () => {
 // button uses, minus the _clearPracticeResume() that button calls: the whole
 // point here is that the resume slot survives.
 function pausePracticeForLater() {
+  // ⚠ _saveResume() is a no-op in a preview, so the "Saved - tap this chapter
+  //   again" toast below would be a plain lie. The button is hidden for a
+  //   preview (see _setPreviewBanner); this is the belt to that braces.
+  if (_isPreviewRun()) { exitChapterPreview(); return; }
   const backToChapters = () => {
     if (S.practice.chapterId === _FIX_CHAPTER_ID) { _fixBackToHome(); return; }
     if (typeof SubjectHub !== 'undefined' && ACTIVE_PACK) SubjectHub.back();
@@ -11627,7 +11875,9 @@ async function practiceSubmit() {
   // the RPC takes no arguments, works out who is calling from the session token,
   // and short-circuits after the first success. It must never delay or block the
   // answer the child just gave.
-  if (typeof Shop !== 'undefined') Shop.reportPracticeActivity();
+  // ⚠ Not in a preview: this is the event that turns a referral into credits,
+  //   and an adult trying questions is not a child practising.
+  if (typeof Shop !== 'undefined' && !_isPreviewRun()) Shop.reportPracticeActivity();
 
   // ── TEST MODE: record silently, advance immediately ──────────────
   if (ASSIGNMENT_IS_TEST) {
@@ -12014,10 +12264,15 @@ function _toggleRoundReview() {
 }
 
 function _roundCompleteNext() {
+  // ⚠ _setAssignmentContext(false) below CLEARS the preview flag - that is its
+  //   job. Carry it across, or the adult's second round starts recording
+  //   against whichever child the dashboard has loaded.
+  const _wasPreview = _isPreviewRun();
   document.getElementById('modal-round-complete')?.classList.add('hidden');
   // The assignment, if this was one, is over - the next round is ordinary
   // practice and must count against the daily cap like any other.
   _setAssignmentContext(false);
+  if (_wasPreview) S.practice.preview = true;
   S.practice.session = { attempted: 0, correct: 0, points: 0 };
   // A drill is rebuilt from DB.mistakes, never re-dealt from a chapter:
   // getMixedQuestions('fix-mistakes') matches nothing, so "Practice Again"
@@ -12036,6 +12291,8 @@ function _roundCompleteNext() {
 }
 
 function _roundCompleteBack() {
+  // An adult goes back to where they came from, never to a child's home screen.
+  if (_isPreviewRun()) { exitChapterPreview(); return; }
   document.getElementById('modal-round-complete')?.classList.add('hidden');
   _setAssignmentContext(false);
   // The round just finished (this modal only shows once all 20 are answered),
@@ -14169,7 +14426,16 @@ async function _renderParentProfile(container) {
           <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-checked:bg-blue-500 rounded-full peer transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
         </label>
       </div>`;
-  const notifyHtml = family ? `
+  // ⚠ EVERY signed-in adult gets this card, not only one with a family. A
+  //   teacher has no family row, so this rendered NOTHING for them - while the
+  //   admin broadcast selects teachers from its own Teachers tab, and the foot
+  //   of that email tells the reader to switch these off under Account &
+  //   Settings → Notifications. A screen that does not exist is not an opt-out,
+  //   and "announcements: true" is the default every account starts on.
+  // ⚠ The rows ABOUT CHILDREN stay behind `family` / `children`: offering a
+  //   teacher a progress report on children they do not have is worse than not
+  //   offering it, and the server already sends them neither.
+  const notifyHtml = `
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
       <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Email &amp; notifications</h3>
 
@@ -14187,6 +14453,7 @@ async function _renderParentProfile(container) {
       </div>
 
       <div class="border-t border-gray-100 dark:border-gray-700 pt-4 space-y-4">
+        ${family ? `
         <div class="flex items-center justify-between gap-3 flex-wrap ${mailOn ? '' : 'opacity-50'}">
           <div class="min-w-0">
             <div class="font-bold text-gray-800 dark:text-white text-sm">📈 Progress report</div>
@@ -14199,7 +14466,7 @@ async function _renderParentProfile(container) {
           </select>
         </div>
         ${subToggle('set-email-homework', mail.homework !== false, '_toggleHomeworkEmail', '📝', 'Homework results',
-          'An email when a child finishes a piece of homework a teacher set.')}
+          'An email when a child finishes a piece of homework a teacher set.')}` : ''}
         ${subToggle('set-email-announcements', mail.announcements !== false, '_toggleAnnouncementEmail', '📣', 'News and announcements',
           'Occasional messages about new subjects and features. Never more than a few a term.')}
         <p class="text-[11px] text-gray-400 dark:text-gray-500 leading-relaxed">Emails about your account itself — a password reset, or an administrator activating your account — are always sent, because you need them to sign in.</p>
@@ -14218,7 +14485,7 @@ async function _renderParentProfile(container) {
         </div>
         <div id="set-reminder-status" class="text-xs text-gray-500 dark:text-gray-400 mt-2"></div>
       </div>` : ''}
-    </div>` : '';
+    </div>`;
 
   // ── Defaults applied to every child at once ──
   // Chapter locks are deliberately NOT here: they are per-grade and per-child,

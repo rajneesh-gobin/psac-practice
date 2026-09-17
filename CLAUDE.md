@@ -72,6 +72,7 @@ subjects/
 | Question fetching + 7-day localStorage cache | `engine/question_loader.js` |
 | Pack registry, `CHAPTERS`, `PackLoader`, `RoleModules` | `engine/registry.js` |
 | Timetable, calendar, activity layer | `engine/calendar.js` |
+| Chapter Preview (adult opens the child's practice screen, recording nothing) | `engine/chapter_preview.js` · `startChapterPreview()`/`_isPreviewRun()` in `app.js` |
 | Interactive map — the child's map AND the admin editor | `engine/interactive_map.js` |
 | Textes à Trous (French Q6) · Chasse aux Erreurs (French Q7) | `engine/cloze.js` · `engine/errorhunt.js` |
 | Minigames · their data · parent game settings | `engine/minigame.js` · `minigame_{gk,words,geo,time}.js` · `game_settings.js` |
@@ -278,12 +279,17 @@ papers · the importer's flags and fail-closed preflight. Headlines:
 6. ⚠ If you added/removed/renamed/reordered a **chapter** — or added a pack —
    re-run `node scripts/build-subject-index.js`. `scripts/check.js` fails on
    drift, so this cannot ship stale, but it will stop the build until you do.
-7. **`node scripts/preflight.js`** runs the five local steps that must pass after
+7. **`node scripts/preflight.js`** runs the six local steps that must pass after
    any content or chapter change — rebuild the index, subsection invariant,
-   rebuild the bundles, live-pack content, `check.js` — in the one order that
-   works. ⚠ It writes NOTHING to the database. Add `--import-dry-run` to see
-   what would change, `--import` to actually upsert; step 6 is opt-in and is
-   skipped if any earlier step failed, `--keep-going` included.
+   rebuild the bundles, live-pack content, **syllabus facts**, `check.js` — in
+   the one order that works. ⚠ Read the step list from `--list`, not from here.
+   ⚠ It writes NOTHING to the database. Add `--import-dry-run` to see
+   what would change, `--import` to actually upsert; the import step is opt-in
+   and is skipped if any earlier step failed, `--keep-going` included.
+   ⚠ **Step 5 is the only one that knows what the syllabus TEACHES** — the others
+   count what happens to be there. It needs a ledger per pack
+   (`scripts/fact-ledgers/<pack>.json`); 48 of 49 live packs still have none, and
+   it says so on every run. See [content-authoring.md](docs/claude/content-authoring.md).
    After a large content addition also run `node scripts/test-question-cache-budget.js`.
 
 ## ⚠ Code that is duplicated on purpose — change every copy together

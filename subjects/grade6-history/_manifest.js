@@ -61,6 +61,9 @@ const G6HG_SYLLABUS = {
     { id:'unesco',          name:'UNESCO World Heritage' },  // 5
     { id:'national',        name:'National Symbols' },  // 9
   ]},
+  'g6enr-label': { subsections: [
+    { id:'earth', name:'Earth & Ocean Diagrams' },
+  ]},
   'g6enr-world': { subsections: [
     { id:'migration',       name:'Migration & Origins' },  // 14
     { id:'hazards',         name:'Natural Hazards' },  // 4
@@ -132,6 +135,14 @@ registerSubject({
       enrichmentNote: 'National flag colours, coat of arms, national flower, UNESCO sites (Aapravasi Ghat, Le Morne), national motto - derived from Independence and Cultural Heritage chapters.' },
     { id: 'g6enr-world',         name: 'Global Connections',               icon: '🌐', enrichment: true, examWeight: 1,
       enrichmentNote: 'How Mauritius connects to India, Africa and China through immigration and trade; natural hazards around the world - derived from Settlers/Immigrants and Natural Hazards chapters.' },
+    // ⚠ examWeight 1: an explicit 0 keeps a chapter OUT of exams entirely, and
+    //   labelling is an examined format — g6sc-pp24-002 and g6sc-pp24-007 are
+    //   transcribed from real papers that set it. Recorded in
+    //   scripts/exam-mark-maps.json under "floor", like the other bonus chapters.
+    // ⚠ In the exam the word bank is NOT shown: renderAnswerArea() drops it
+    //   outside practice, so the child types, as the paper requires.
+    { id: 'g6enr-label',         name: 'Label the Diagram',                icon: '🏷️', enrichment: true, examWeight: 1,
+      enrichmentNote: 'Name the marked parts of a real diagram - inside the Earth, an earthquake, and how a coral reef forms around a volcanic island. Derived from the Natural Hazards and Map Skills chapters.' },
   ],
 });
 

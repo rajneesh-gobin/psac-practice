@@ -65,6 +65,9 @@ const G5HG_SYLLABUS = {
     { id:'buildings',       name:'Buildings & Landmarks' },  // 23
     { id:'nature',          name:'Gardens & Natural Sites' },  // 5
   ]},
+  'g5enr-label': { subsections: [
+    { id:'earth', name:'Earth & Weather Diagrams' },
+  ]},
   'g5enr-world': { subsections: [
     { id:'volcanoes',       name:'Volcanoes' },  // 5
     { id:'indian_ocean',    name:'Around the Indian Ocean' },  // 15
@@ -108,6 +111,7 @@ registerSubject({
   //   trade-agri                1 marks    1.0%  ->  weight 1
   //
   //   g5enr-landmarks       not scored           ->  weight 1
+  //   g5enr-label           not scored           ->  weight 1
   //
   // ⚠ g5ge-weather is the second-largest topic in the paper (14%) and was
   // weighted 3. Rainfall type, season and rainfall graphs are asked every year.
@@ -124,7 +128,11 @@ registerSubject({
     { id: 'trade-agri',   name: 'Trade, Agriculture & Key Personalities',   icon: '🌾', examWeight: 1,
       syllabus: 'Crops cultivated by settlers (sugar cane, spices, ebony). Trade goods. Infrastructure: roads, port development. Key personalities: Mahé de Labourdonnais (harbour, capital), Pierre Poivre (spices, Pamplemousses Gardens), Charles Decaen (French governor), Sir Robert Farquhar (British governor). Battle of Grand Port.' },
     { id: 'port-louis',   name: 'Port Louis: Capital of Mauritius',         icon: '🏛️', examWeight: 3,
-      syllabus: 'History of Port Louis. French governor who made Port Louis the capital. Key historical buildings: Citadel (Fort Adelaide), Government House, Aapravasi Ghat, Blue Penny Museum, Natural History Museum, Theatre. Harbour development by Labourdonnais. Port Louis as trading and commercial centre, past and present.' },
+      // ⚠ Port Mathurin is deliberately in scope here. The Grade 5 unit pairs the
+      // two capitals — how a harbour becomes a capital — and the pack had no
+      // question about the capital of Rodrigues anywhere. Named in the prose so
+      // the next author does not read those items as off-syllabus and delete them.
+      syllabus: 'History of Port Louis. French governor who made Port Louis the capital. The two early harbours (Warwyck Bay, Noord Wester Haven) and why Port Louis replaced Grand Port. Key historical buildings: Citadel (Fort Adelaide), Government House, Aapravasi Ghat, Blue Penny Museum, Natural History Museum, Theatre, Champ de Mars, Company Garden. Harbour development by Labourdonnais: workers, quays, shipyard, aqueduct, roads. Port Louis as trading centre, naval base and commercial centre, past and present. Port Mathurin, capital of Rodrigues: its settlement, name and growth.' },
     // ── GEOGRAPHY ──────────────────────────────────────────────────────────────
     { id: 'natural-env',  name: 'Natural Environment of Mauritius',         icon: '🏔️', examWeight: 3,
       syllabus: 'Natural features vs man-made features. Relief features: mountain ranges (Black River Gorges, Moka Range), peaks (Piton de la Petite Rivière Noire - highest), central plateau, plains, river valleys, gorges. Rodrigues: central ridge, sloping lands. Coastal features: beaches, lagoons, coral reefs, cliffs.' },
@@ -135,7 +143,15 @@ registerSubject({
     { id: 'map-skills',   name: 'Map Skills & Coordinates',                 icon: '🗺️', examWeight: 4,
       syllabus: 'Reading a map: title, key/legend, scale, compass/direction. Latitude and longitude (lines on a globe). Equator (0° latitude). Greenwich Meridian (0° longitude). Locating places on a map using grid references. Mascarene Islands on a world map. Indian Ocean.' },
     { id: 'g5ge-weather', name: 'Weather (Grade 5)',                        icon: '🌦️', examWeight: 5,
-      syllabus: 'Revision of seasons and weather instruments. How weather affects farming, tourism and fishing. Cyclone warning signals in Mauritius (Class 1-4) and precautions. Difference between weather and climate. Climate of Rodrigues.' },
+      // ⚠ This prose used to stop at "Climate of Rodrigues" and named none of the
+      // rainfall or climate-change content — while the REAL papers were already
+      // asking it (g5h-pp22-017 relief rainfall, g5h-pp24-016 convectional,
+      // g5h-pp21-018 Curepipe vs Medine, g5h-pp22-009/pp23-017 altitude). The
+      // pack's own statement of scope disagreed with the exam for as long as it
+      // existed, which is how the whole of rainfall formation and climate change
+      // came to have no questions behind them. Extended 2026-09-17 to match both
+      // the papers and the Grade 5 notes.
+      syllabus: 'Revision of seasons and weather instruments. How weather affects farming, tourism and fishing. Cyclone warning signals in Mauritius (Class 1-4) and precautions. Difference between weather and climate. Climate of Rodrigues. Temperature: thermometer, degrees Celsius, minimum/maximum, daily change, world pattern, altitude. Weather stations (Vacoas; Pointe Canon in Rodrigues). Isotherms and isohyets. Temperature and climate graphs. How rain forms: the water cycle, condensation. Types of rainfall: convectional, relief, cyclonic. Windward and leeward sides; the South East Trade Winds. Rainfall distribution in Mauritius and Rodrigues. Climate change: causes, fossil fuels, renewable energy, what pupils can do.' },
 
     // ── ENRICHMENT ────────────────────────────────────────────────────────────────
     // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
@@ -147,5 +163,10 @@ registerSubject({
       enrichmentNote: 'Port Louis buildings, volcanic features, Trou aux Cerfs, Grand Bassin, Pamplemousses Botanical Garden - derived from Port Louis and Volcanism chapters.' },
     { id: 'g5enr-world',         name: 'Indian Ocean & Volcanoes',       icon: '🌋', enrichment: true, examWeight: 3,
       enrichmentNote: 'Mascarene Islands, active volcanoes in the region (Karthala, La Fournaise), Indian Ocean world map - derived from Volcanism and Map Skills chapters.' },
+    // ⚠ examWeight 1: an explicit 0 keeps a chapter OUT of exams entirely, and
+    //   labelling a diagram is an examined format. In the exam the word bank is
+    //   NOT shown - renderAnswerArea() drops it outside practice.
+    { id: 'g5enr-label',         name: 'Label the Diagram',            icon: '🏷️', enrichment: true, examWeight: 1,
+      enrichmentNote: 'Name the marked parts of a real diagram - the volcano and the water cycle. Derived from the Volcanism and Weather chapters.' },
   ],
 });

@@ -9474,6 +9474,34 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
 .slot-score { margin: 8px 2px 0; font-weight: 600; color: #334155; }
 .dark .slot-score { color: #e2e8f0; }
 
+/* ── Label the diagram: the word bank ─────────────────────────────────────
+   ⚠ 44px minimum tap target, and it is NOT bent here the way the Chasse aux
+   Erreurs words are. A hunt passage is 110 words and 44px turns it into six
+   phone screens; a label bank is five or six chips and has no such problem. */
+.lbl-bank {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 0 0 14px; padding: 10px;
+  border: 1px dashed var(--border, #cbd5e1); border-radius: 10px;
+}
+.lbl-chip {
+  min-height: 44px; padding: 8px 14px; font-size: 15px; font-weight: 600;
+  border: 2px solid var(--border, #cbd5e1); border-radius: 999px;
+  background: var(--card, #fff); color: inherit; cursor: pointer;
+}
+.lbl-chip:hover { border-color: #6366f1; }
+.lbl-chip:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+/* ⚠ visibility:hidden, not display:none — a used chip keeps its space so the
+   bank does not reflow under the finger mid-tap and move the next word. */
+.lbl-chip.is-used { visibility: hidden; }
+.slot-input.is-target { cursor: pointer; }
+.slot-input.is-filled { border-color: #6366f1; font-weight: 600; }
+/* The practice board is dark; the same override the slot label already uses. */
+#screen-practice .lbl-bank, #qm-preview-board .lbl-bank { border-color: rgba(240,236,220,.35); }
+#screen-practice .lbl-chip, #qm-preview-board .lbl-chip {
+  background: rgba(255,255,255,.10); border-color: rgba(240,236,220,.45); color: #f5f1e4;
+}
+.dark .lbl-chip { background: var(--card, #1e293b); }
+
 /* A pupil SAYS they have done a worksheet or watched a video. Green because it
    is good news, but the words carry the meaning — nothing here was marked. */
 .tc-cd-done-chip { margin: .15rem 0 0; font-size: .72rem; font-weight: 700; color: #15803d; }

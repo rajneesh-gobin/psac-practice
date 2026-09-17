@@ -1,0 +1,315 @@
+'use strict';
+// Grade 5 History & Geography - Unit 4: Temperature, rainfall and climate change
+// Written from the Grade 5 revision notes (notes/Historyetgeography.pdf). A
+// coverage check found relief and convectional rain already asked, but nothing
+// at all on the water cycle, cyclonic rain, the leeward side, the prevailing
+// winds, the weather stations, temperature and climate graphs, or climate
+// change - the whole last third of the unit.
+// ⚠ Climate change is tagged `impact` on purpose: the subsection is what weather
+// and climate do to our lives and work, and no new one-topic subsection was
+// declared for it (see the subsection invariant in CLAUDE.md).
+// IDs: g5hg-u4-NNN
+
+STATIC_QUESTIONS.push(
+
+  // ── Temperature ────────────────────────────────────────────────────────────
+  makeMCQ({ id:'g5hg-u4-001', chapterId:'g5ge-weather', subsection:'elements', difficulty:1,
+    question:'What is the <b>minimum</b> temperature recorded in a day?',
+    options:['The lowest temperature of the day','The highest temperature of the day',
+             'The temperature at exactly midday','The average of all the readings'],
+    answer:'The lowest temperature of the day',
+    hint:'"Minimum" means the smallest.',
+    explanation:'The <b>minimum</b> temperature is the <b>lowest</b> recorded and the <b>maximum</b> is the <b>highest</b>. Both are measured with a thermometer, in degrees Celsius (&deg;C).' }),
+
+  makeMCQ({ id:'g5hg-u4-002', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'Why is the temperature normally lower at night and in the early morning?',
+    options:['The Sun is not heating the ground and the air','Clouds always cover the sky at night',
+             'The wind blows more strongly after dark','Rain falls mostly during the night'],
+    answer:'The Sun is not heating the ground and the air',
+    hint:'What is missing at night that is present at midday?',
+    explanation:'Temperature is normally <b>lower at night and in the early morning and higher during the day</b>, because the <b>Sun heats the ground and the air</b>. Without that heating, the land cools.' }),
+
+  makeMCQ({ id:'g5hg-u4-003', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'Across the world, where are temperatures generally the hottest?',
+    options:['Near the Equator','Near the North Pole','Near the South Pole','On the high mountains'],
+    answer:'Near the Equator',
+    hint:'Think where the Sun is most directly overhead.',
+    explanation:'Places <b>near the Equator</b> are generally hottest, and temperatures <b>decrease towards the North and South Poles</b>. Mauritius and Rodrigues lie near the Tropic of Capricorn and have a tropical climate.' }),
+
+  makeMCQ({ id:'g5hg-u4-004', chapterId:'g5ge-weather', subsection:'instruments', difficulty:2,
+    question:'Where is the Meteorological Station of Mauritius?',
+    options:['Vacoas','Curepipe','Port Louis','Mahebourg'],
+    answer:'Vacoas',
+    hint:'It is a town on the central plateau.',
+    explanation:'Temperature and rainfall are recorded daily and Mauritius sends its readings to the <b>Meteorological Station at Vacoas</b>. Rodrigues has its own station at <b>Pointe Canon</b>, near Port Mathurin.' }),
+
+  makeMCQ({ id:'g5hg-u4-005', chapterId:'g5ge-weather', subsection:'instruments', difficulty:3,
+    question:'Where is the weather station of Rodrigues?',
+    options:['Pointe Canon','Plaine Corail','Mont Limon','Baie aux Hu&icirc;tres'],
+    answer:'Pointe Canon',
+    hint:'It is near the capital, Port Mathurin.',
+    explanation:'Rodrigues records its own weather at <b>Pointe Canon</b>, near <b>Port Mathurin</b>. Two islands 560 km apart do not share one set of readings.' }),
+
+  makeMCQ({ id:'g5hg-u4-006', chapterId:'g5ge-weather', subsection:'elements', difficulty:3,
+    question:'What is an <b>isotherm</b> map used for?',
+    options:['Comparing the temperature of different areas','Showing the rainfall of each month',
+             'Marking the height of the land above the sea','Showing which way the wind blows'],
+    answer:'Comparing the temperature of different areas',
+    hint:'An isotherm joins places with the same temperature.',
+    explanation:'An <b>isotherm</b> joins places having the <b>same temperature</b>, so an isotherm map lets you <b>compare the temperature of different areas</b> at a glance. An <b>isohyet</b> does the same job for rainfall, in millimetres.' }),
+
+  makeMCQ({ id:'g5hg-u4-007', chapterId:'g5ge-weather', subsection:'elements', difficulty:4,
+    question:'Very high mountain summits can have snow <b>even near the Equator</b>. Why?',
+    options:['Temperature decreases as height above sea level increases',
+             'The Equator is the coldest line on the Earth',
+             'Snow is blown there by the trade winds',
+             'Mountains block the Sun from reaching the ground'],
+    answer:'Temperature decreases as height above sea level increases',
+    hint:'It is the same rule that makes Curepipe cooler than Port Louis.',
+    explanation:'<b>Temperature decreases as altitude increases.</b> That is why low coastal Port Louis is warmer than Curepipe or Mare aux Vacoas — and why a mountain tall enough can hold snow at its summit even on the Equator.' }),
+
+  // ── Seasons and graphs ─────────────────────────────────────────────────────
+  makeMCQ({ id:'g5hg-u4-008', chapterId:'g5ge-weather', subsection:'seasons', difficulty:1,
+    question:'Which three months are summer months in Mauritius?',
+    options:['December, January and February','June, July and August',
+             'March, April and May','September, October and November'],
+    answer:'December, January and February',
+    hint:'They fall around the end and start of the year.',
+    explanation:'<b>December, January and February</b> are summer months in Mauritius; <b>June, July and August</b> are winter months. Mauritius has two main seasons: a warmer summer and a cooler winter.' }),
+
+  makeMCQ({ id:'g5hg-u4-009', chapterId:'g5ge-weather', subsection:'seasons', difficulty:2,
+    question:'Many countries far from the tropics have how many seasons?',
+    options:['Four','Two','Three','One'],
+    answer:'Four',
+    hint:'Summer, autumn, winter and one more.',
+    explanation:'Countries far from the tropics have <b>four seasons</b>: summer, autumn, winter and spring. Mauritius, being tropical, has only <b>two</b>.' }),
+
+  makeMCQ({ id:'g5hg-u4-010', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'A <b>temperature graph</b> of a place is usually drawn as which kind of graph?',
+    options:['A line graph','A pie chart','A picture graph','A scatter of dots'],
+    answer:'A line graph',
+    hint:'The months run along the bottom and the line rises and falls.',
+    explanation:'A <b>temperature graph</b> is a <b>line graph</b> showing the average temperature for each month. Read the place and the axes first, then find the hottest and coolest months.' }),
+
+  makeMCQ({ id:'g5hg-u4-011', chapterId:'g5ge-weather', subsection:'elements', difficulty:3,
+    question:'What does a <b>climate graph</b> combine?',
+    options:['Monthly temperature and monthly rainfall','Monthly rainfall and yearly population',
+             'Wind speed and wind direction','Height of the land and distance from the sea'],
+    answer:'Monthly temperature and monthly rainfall',
+    hint:'It answers two questions at once: how hot, and how wet.',
+    explanation:'A <b>climate graph</b> combines <b>monthly temperature and rainfall</b>. Use it to identify the hot and cool months, the wet and dry months, and the differences between two places.' }),
+
+  // ── How rain forms ─────────────────────────────────────────────────────────
+  makeMCQ({ id:'g5hg-u4-012', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'In the water cycle, what happens <b>first</b>?',
+    options:['Water evaporates from the seas and oceans','Droplets join together and fall as rain',
+             'Water vapour cools and condenses into droplets','Water flows back to the sea through rivers'],
+    answer:'Water evaporates from the seas and oceans',
+    hint:'The Sun has to lift the water before anything else can happen.',
+    explanation:'The cycle runs: water <b>evaporates</b> from seas and oceans; the vapour rises, cools and <b>condenses</b> into tiny droplets; droplets form clouds and join until they are heavy enough to fall as <b>rain</b>; the water then <b>flows back through rivers to the sea</b>.' }),
+
+  makeMCQ({ id:'g5hg-u4-013', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'What is water vapour called when it cools and turns back into tiny droplets?',
+    options:['Condensation','Evaporation','Precipitation','Irrigation'],
+    answer:'Condensation',
+    hint:'It is what you see on a cold bottle taken out of the fridge.',
+    explanation:'When water vapour cools it <b>condenses</b> into tiny droplets, and those droplets form the clouds. Evaporation is the opposite change, from liquid water into vapour.' }),
+
+  makeMCQ({ id:'g5hg-u4-014', chapterId:'g5ge-weather', subsection:'elements', difficulty:3,
+    question:'What must air containing water vapour do before rain can fall?',
+    options:['Rise, cool and condense','Sink, warm and spread out',
+             'Blow steadily across the sea','Stay completely still all day'],
+    answer:'Rise, cool and condense',
+    hint:'Three steps, in that order.',
+    explanation:'The condition for rain is that air containing water vapour must <b>rise, cool and condense</b>. Every type of rainfall — convectional, relief and cyclonic — is a different way of making the air rise.' }),
+
+  // ── Types of rainfall ──────────────────────────────────────────────────────
+  makeMCQ({ id:'g5hg-u4-015', chapterId:'g5ge-weather', subsection:'elements', difficulty:3,
+    question:'Convectional rain in Mauritius is usually...',
+    options:['heavy but short, often with thunder and lightning',
+             'light but steady, lasting for several days',
+             'only found on the leeward side of the island',
+             'the kind of rain that falls in the early morning'],
+    answer:'heavy but short, often with thunder and lightning',
+    hint:'Think of a summer afternoon downpour that stops as suddenly as it started.',
+    explanation:'<b>Convectional rain</b> is common in summer. The Sun heats the ground, warm air rises, cools and condenses, and thick dark clouds form by early afternoon. The rain is usually <b>heavy but short</b>, lasting an hour or two, and may bring thunder and lightning.' }),
+
+  makeMCQ({ id:'g5hg-u4-016', chapterId:'g5ge-weather', subsection:'elements', difficulty:3,
+    question:'Compared with convectional rain, relief rain is usually...',
+    options:['lighter and lasts longer','heavier and much shorter',
+             'warmer and falls only at night','found only on the leeward side'],
+    answer:'lighter and lasts longer',
+    hint:'One is a downpour; the other is a long drizzle on the hills.',
+    explanation:'<b>Relief rain</b> falls when the South East Trade Winds are forced to rise over high land. It is often <b>lighter, lasts longer</b> and may occur at any time, especially in <b>winter</b> — unlike the short, heavy convectional downpours of summer.' }),
+
+  makeMCQ({ id:'g5hg-u4-017', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'What is the <b>leeward</b> side of a mountain?',
+    options:['The sheltered side, where air descends and less rain falls',
+             'The side facing the wind, where air rises and more rain falls',
+             'The side that faces towards the sea',
+             'The side where the rivers begin their course'],
+    answer:'The sheltered side, where air descends and less rain falls',
+    hint:'It is the opposite of the windward side.',
+    explanation:'The <b>windward</b> side faces the prevailing wind: air rises there and more rain falls. The <b>leeward</b> side is <b>sheltered</b>: the air descends, so fewer clouds form and less rain falls.' }),
+
+  makeMCQ({ id:'g5hg-u4-018', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'What are the <b>prevailing winds</b> of Mauritius?',
+    options:['The South East Trade Winds','The North West Monsoon Winds',
+             'The Westerlies from the Atlantic','The Polar Winds from the south'],
+    answer:'The South East Trade Winds',
+    hint:'They explain why the east coast is the wetter one.',
+    explanation:'<b>Prevailing winds</b> blow almost throughout the year. In Mauritius they are the <b>South East Trade Winds</b>, which is why the east and south-east are the windward, wetter side of the island.' }),
+
+  makeMCQ({ id:'g5hg-u4-019', chapterId:'g5ge-weather', subsection:'cyclones', difficulty:3,
+    question:'Where do the tropical cyclones that bring rain to Mauritius form?',
+    options:['Over warm ocean water','Over the central plateau',
+             'Over the cold Southern Ocean','Over the mountains of Madagascar'],
+    answer:'Over warm ocean water',
+    hint:'They need heat and moisture, and only one of these places has both.',
+    explanation:'<b>Tropical cyclones form over warm ocean water</b> and carry massive clouds. When they pass near or over Mauritius or Rodrigues they may produce heavy <b>torrential rain</b>, rivers can overflow and floods may occur.' }),
+
+  makeMCQ({ id:'g5hg-u4-020', chapterId:'g5ge-weather', subsection:'cyclones', difficulty:3,
+    question:'Which type of rainfall can make rivers overflow and cause floods?',
+    options:['Cyclonic rain','Relief rain','Convectional rain','Mountain dew'],
+    answer:'Cyclonic rain',
+    hint:'Torrential means falling in enormous quantities.',
+    explanation:'<b>Cyclonic rain</b> is torrential and can fall for many hours over the whole island at once. Rivers overflow and floods may occur — which is why a slow-moving cyclone can be more dangerous than a fast one.' }),
+
+  // ── Rainfall distribution ──────────────────────────────────────────────────
+  makeMCQ({ id:'g5hg-u4-021', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
+    question:'Isohyet values on a rainfall map are usually shown in which unit?',
+    options:['Millimetres','Degrees Celsius','Kilometres','Kilograms'],
+    answer:'Millimetres',
+    hint:'It is a measure of depth, not of heat or distance.',
+    explanation:'An <b>isohyet</b> joins places receiving the same amount of rainfall, and the values are commonly shown in <b>millimetres (mm)</b>.' }),
+
+  makeMCQ({ id:'g5hg-u4-022', chapterId:'g5ge-weather', subsection:'elements', difficulty:3,
+    question:'Rainfall in Mauritius is controlled mainly by which two things?',
+    options:['Altitude, and the windward or leeward position','Distance from Port Louis, and the time of day',
+             'The size of the district, and its population','The type of rock, and the depth of the soil'],
+    answer:'Altitude, and the windward or leeward position',
+    hint:'How high is it, and which way does it face?',
+    explanation:'Rainfall varies mainly with <b>altitude</b> and with <b>position on the windward or leeward side</b>. Rainfall generally increases with height, so the Central Plateau and the windward east and south-east receive more, while the lower, leeward west receives less.' }),
+
+  makeMCQ({ id:'g5hg-u4-023', chapterId:'g5ge-weather', subsection:'elements', difficulty:4,
+    question:'Why is the relief effect on rainfall <b>weaker</b> in Rodrigues than in Mauritius?',
+    options:['Rodrigues is lower, so the air is not lifted as high',
+             'Rodrigues is farther from the Equator than Mauritius',
+             'Rodrigues has no prevailing winds at all',
+             'Rodrigues is made of limestone instead of basalt'],
+    answer:'Rodrigues is lower, so the air is not lifted as high',
+    hint:'Compare 828 m with 398 m.',
+    explanation:'In Rodrigues the higher central ridge and the windward areas do receive more rain than the lower, leeward places. But <b>Rodrigues is lower than Mauritius</b>, so the air is lifted less and the <b>relief effect is generally weaker</b>.' }),
+
+  makeMCQ({ id:'g5hg-u4-024', chapterId:'g5ge-weather', subsection:'elements', difficulty:4,
+    question:'You are given a rainfall map. What is the correct order for reading it?',
+    options:['Read the title and key, find the values, then locate the station',
+             'Locate the station, guess a value, then look for the title',
+             'Explain the pattern first, then check whether the key agrees',
+             'Count the isohyets, then read the title and stop there'],
+    answer:'Read the title and key, find the values, then locate the station',
+    hint:'You cannot read a value until you know what the lines mean.',
+    explanation:'The map-reading method is: <b>read the title and key</b>, identify the isotherm or isohyet <b>values</b>, <b>locate the station</b>, estimate its value, then <b>explain the pattern</b> using altitude and windward or leeward position.' }),
+
+  // ── Climate change ─────────────────────────────────────────────────────────
+  makeMCQ({ id:'g5hg-u4-025', chapterId:'g5ge-weather', subsection:'impact', difficulty:2,
+    question:'What does <b>climate change</b> mean?',
+    options:['Long-term changes in temperature, rainfall and weather',
+             'The change from day to night in one place',
+             'The change from summer to winter each year',
+             'The change in the weather from one hour to the next'],
+    answer:'Long-term changes in temperature, rainfall and weather',
+    hint:'The key word is long-term, not day to day.',
+    explanation:'<b>Climate change</b> means <b>long-term changes</b> in temperature, rainfall and weather conditions around the world. The change from summer to winter is an ordinary seasonal change, not climate change.' }),
+
+  makeMCQ({ id:'g5hg-u4-026', chapterId:'g5ge-weather', subsection:'impact', difficulty:3,
+    question:'Which of these has been observed as part of climate change?',
+    options:['Global temperature is rising and weather is more extreme',
+             'Every country is receiving exactly the same rainfall',
+             'Cyclones have stopped forming in the Indian Ocean',
+             'The seasons have swapped places in both hemispheres'],
+    answer:'Global temperature is rising and weather is more extreme',
+    hint:'The changes are uneven: wetter in some places, drier in others.',
+    explanation:'Observed changes include <b>rising global temperature</b>, <b>changing rainfall patterns</b> — heavier rain in some places and more severe drought in others — and <b>unusual and extreme weather occurring more often</b>.' }),
+
+  makeMCQ({ id:'g5hg-u4-027', chapterId:'g5ge-weather', subsection:'impact', difficulty:3,
+    question:'What is the main cause of climate change discussed in this unit?',
+    options:['Pollution from burning fossil fuels such as coal and oil',
+             'Volcanoes erupting on the floor of the ocean',
+             'The Earth moving closer to the Sun each year',
+             'Too many trees being planted in the towns and villages'],
+    answer:'Pollution from burning fossil fuels such as coal and oil',
+    hint:'Think about coal, oil, vehicles and factories.',
+    explanation:'The main cause is <b>pollution from human activities</b>. Burning <b>fossil fuels</b> such as coal and oil, and fumes from vehicles and factories, release <b>carbon dioxide</b>, which warms the Earth.' }),
+
+  makeMCQ({ id:'g5hg-u4-028', chapterId:'g5ge-weather', subsection:'impact', difficulty:2,
+    question:'Which gas released by burning coal and oil warms the Earth?',
+    options:['Carbon dioxide','Oxygen','Nitrogen','Water vapour'],
+    answer:'Carbon dioxide',
+    hint:'It is the gas we breathe out, and factories release a great deal of it.',
+    explanation:'Burning fossil fuels releases <b>carbon dioxide</b>, which warms the Earth. Reducing how much we burn is therefore the way to slow the warming.' }),
+
+  makeMCQ({ id:'g5hg-u4-029', chapterId:'g5ge-weather', subsection:'impact', difficulty:2,
+    question:'Which of these is a source of <b>renewable</b> energy?',
+    options:['The wind','Coal','Oil','Petrol'],
+    answer:'The wind',
+    hint:'Three of them run out and cannot be replaced.',
+    explanation:'Energy from the <b>Sun, wind and water</b> is <b>renewable</b> and can reduce the use of fossil fuels. Coal, oil and petrol are fossil fuels: once burnt, they are gone.' }),
+
+  makeMCQ({ id:'g5hg-u4-030', chapterId:'g5ge-weather', subsection:'impact', difficulty:2,
+    question:'Which action by a pupil and their family helps to fight climate change?',
+    options:['Switching off lights and appliances when not in use',
+             'Leaving the tap running while brushing teeth',
+             'Throwing food waste into the river',
+             'Cutting down trees around the house'],
+    answer:'Switching off lights and appliances when not in use',
+    hint:'Less electricity used means less fuel burnt.',
+    explanation:'Pupils and families can <b>switch off lights and appliances when not in use</b>, <b>save water</b>, <b>avoid waste</b> and <b>plant trees</b>. Each action is small, but the electricity not used is fuel not burnt.' }),
+
+  makeMCQ({ id:'g5hg-u4-031', chapterId:'g5ge-weather', subsection:'impact', difficulty:4,
+    question:'Why does planting trees help, when the problem is a gas released by burning fuel?',
+    options:['Trees take in carbon dioxide as they grow','Trees block the Sun from heating the ground',
+             'Trees stop cyclones from reaching the island','Trees turn fossil fuels back into coal'],
+    answer:'Trees take in carbon dioxide as they grow',
+    hint:'Think about what a plant uses to make its own food.',
+    explanation:'Trees <b>take in carbon dioxide</b> as they grow, so planting them removes some of the gas that warms the Earth. Trees also hold the soil and reduce erosion — one action solving two problems.' }),
+
+  makeMCQ({ id:'g5hg-u4-032', chapterId:'g5ge-weather', subsection:'elements', difficulty:4,
+    question:'Two villages are the same height above sea level, but one is far wetter. What is the most likely reason?',
+    options:['One is on the windward side and the other on the leeward side',
+             'One is closer to the Equator than the other',
+             'One has more people living in it',
+             'One was measured in summer and the other in winter'],
+    answer:'One is on the windward side and the other on the leeward side',
+    hint:'Altitude has been ruled out, so what is the other control?',
+    explanation:'Rainfall is controlled mainly by <b>altitude</b> and <b>windward or leeward position</b>. If the altitude is the same, the difference must come from the other control: the <b>windward</b> village receives the rising, cooling air and the <b>leeward</b> one is sheltered.' }),
+
+  // ── Consolidation pass: the remaining facts of Unit 4 ──────────────────────
+
+  makeMCQ({ id:'g5hg-u4-033', chapterId:'g5ge-weather', subsection:'instruments', difficulty:1,
+    question:'Temperature is measured in which unit?',
+    options:['Degrees Celsius','Millimetres','Kilometres per hour','Metres above sea level'],
+    answer:'Degrees Celsius',
+    hint:'It is written with a small circle and a capital C.',
+    explanation:'Temperature — how hot or cold the air is — is measured with a thermometer in <b>degrees Celsius (&deg;C)</b>. Rainfall is measured in millimetres and wind speed in kilometres per hour.' }),
+
+  makeMCQ({ id:'g5hg-u4-034', chapterId:'g5ge-weather', subsection:'elements', difficulty:3,
+    question:'Why is Curepipe wetter than Medine?',
+    options:['It is higher and more exposed to moist winds','It is closer to the sea than Medine is',
+             'It lies on the leeward side of the island','It is further south than Medine is'],
+    answer:'It is higher and more exposed to moist winds',
+    hint:'Rainfall increases with height and with facing the wind.',
+    explanation:'Rainfall in Mauritius increases with height. The Central Plateau and the windward east and south-east receive more rain; the lower, leeward west receives less. <b>Curepipe is wetter than Medine because it is higher and more exposed to the moist winds.</b>' }),
+
+  // ⚠ Found by scripts/test-syllabus-facts.js: the summer months were asked, the
+  // winter months only explained.
+
+  makeMCQ({ id:'g5hg-u4-035', chapterId:'g5ge-weather', subsection:'seasons', difficulty:1,
+    question:'Which three months are <b>winter</b> months in Mauritius?',
+    options:['June, July and August','December, January and February',
+             'March, April and May','September, October and November'],
+    answer:'June, July and August',
+    hint:'They fall in the middle of the year.',
+    explanation:'<b>June, July and August</b> are the winter months in Mauritius, and December, January and February are the summer months. Being south of the Equator, our seasons are the reverse of Europe’s.' })
+
+);

@@ -99,6 +99,9 @@ const G7SC_SYLLABUS = {
     { id:'discoveries',        name:'Key Discoveries' },
     { id:'sustainability',     name:'Sustainability' },
   ]},
+  'g7enr-label': { subsections: [
+    { id:'cells', name:'Cells Under the Microscope' },
+  ]},
 };
 
 registerSubject({
@@ -144,5 +147,17 @@ registerSubject({
       syllabus: 'Define energy and list its different forms. Understand that energy is transformed rather than created or destroyed. State the law of conservation of energy. Classify energy sources as renewable or non-renewable. Discuss sustainable energy production.' },
     { id: 'g7s-sts',                    name: 'Science, Technology & Society',    icon: '🌍', examWeight: 2,
       syllabus: 'Appreciate the discovery of the cell and the microscope. Discuss the uses and conservation of common metals. Recognise astronomy as a science. Appreciate the role of satellites in modern weather forecasting.' },
+
+    // ── ENRICHMENT ──────────────────────────────────────────────────────────
+    // @enrichment - DERIVED from syllabus topics, NOT a direct MIE chapter.
+    // DO NOT remove during syllabus alignment audits.
+    // ⚠ examWeight 1, deliberately: an explicit 0 keeps a chapter OUT of exams
+    //   entirely (changed 2026-09-09), and labelling a diagram is an examined
+    //   format — g6sc-pp24-002, g6sc-pp24-007 and g9s-pp24b-016 are transcribed
+    //   from real papers that set it. The chapter must reach the paper.
+    // ⚠ In the exam the word bank is NOT shown: renderAnswerArea() drops it
+    //   outside practice, so the child types, as the paper requires.
+    { id: 'g7enr-label',                name: 'Label the Diagram',                icon: '🏷️', enrichment: true, examWeight: 1,
+      enrichmentNote: 'Name the numbered parts of a real scientific diagram. Derived from the Cells chapter, which asks pupils to identify the parts of animal and plant cells.' },
   ],
 });

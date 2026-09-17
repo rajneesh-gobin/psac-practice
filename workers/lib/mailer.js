@@ -22,6 +22,18 @@ export function mailFrom(env) {
   return env.MAIL_FROM || 'Nou Klass <noreply@nouklass.com>';
 }
 
+// ⚠ A MESSAGE A HUMAN WROTE MUST NOT COME FROM noreply@. An admin broadcast is
+//   a person writing to a parent, and the From is the part a recipient reads,
+//   quotes back and adds to their contacts - "noreply" tells them not to
+//   answer while the body invites them to. Automated mail keeps mailFrom():
+//   nobody should reply to a digest.
+// ⚠ Both are addresses at the SAME verified Resend domain, so this needs no DNS
+//   change; a from-address on an unverified domain is refused by the provider
+//   with "domain is not verified", not silently dropped.
+export function mailFromHuman(env) {
+  return env.MAIL_FROM_HUMAN || 'Nou Klass <admin@nouklass.com>';
+}
+
 // The address a human actually reads. Cloudflare Email Routing forwards
 // admin@nouklass.com (and the catch-all) to the operator's inbox.
 export function mailReplyTo(env) {
@@ -113,7 +125,7 @@ function _wrapInner({ title, bodyHtml, footerHtml = '' }) {
 // Returns { ok, id, error }. NEVER throws: a mail failure must not roll back the
 // thing the mail was announcing, and must not read to the caller as though the
 // action itself had failed.
-export async function sendMail(env, { to, bcc, subject, html, text, replyTo, unsubscribe, reserved }) {
+export async function sendMail(env, { to, bcc, subject, html, text, replyTo, unsubscribe, reserved, from }) {
   if (!mailConfigured(env)) return { ok: false, error: 'not_configured' };
 
   const toList  = (Array.isArray(to) ? to : to ? [to] : []).filter(Boolean);
@@ -129,12 +141,16 @@ export async function sendMail(env, { to, bcc, subject, html, text, replyTo, uns
     headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
   }
 
+  const fromLine = from || mailFrom(env);
   const payload = {
-    from: mailFrom(env),
+    from: fromLine,
     // ⚠ A pure-Bcc message still needs a To, or Gmail files it as suspicious and
     //   some clients show "undisclosed recipients" as a broken header. The From
     //   address stands in, which is also what a human would do.
-    to: toList.length ? toList : [mailFrom(env).replace(/^.*<|>$/g, '')],
+    // ⚠ THE SAME From that was actually used - reading it back from mailFrom()
+    //   would print noreply@ in the To of a message sent from admin@, which is
+    //   exactly the mismatch a spam filter scores on.
+    to: toList.length ? toList : [fromLine.replace(/^.*<|>$/g, '')],
     ...(bccList.length ? { bcc: bccList } : {}),
     subject,
     ...(html ? { html } : {}),
