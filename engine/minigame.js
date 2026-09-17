@@ -81,6 +81,11 @@ const MiniGames = (() => {
       //   would sit there permanently locked.
       else if (kind === 'reef' && _rf && !_rf.over)
         sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'reef', rf: _rf }));
+      // ⚠ Saved BETWEEN items only (_labAdvance), never mid-item: the conveyor
+      //   deadline is wall-clock, so a stash taken mid-item would resume with a
+      //   window that has already expired and eat a beaker the child never lost.
+      else if (kind === 'lab' && _lb && !_lb.over)
+        sessionStorage.setItem(_stateKey(), JSON.stringify({ game: 'lab', lb: _lb }));
     } catch (_) {}
   }
   function _clearPersist() { try { sessionStorage.removeItem(_stateKey()); } catch (_) {} }
@@ -112,11 +117,22 @@ const MiniGames = (() => {
     const canR = saved && saved.game === 'reef' && saved.rf && !saved.rf.over
       && Array.isArray(saved.rf.cards) && saved.rf.cards.length === saved.rf.pairs * 2
       && Array.isArray(saved.rf.matched) && saved.rf.matched.length < saved.rf.pairs && _allowed();
+    // ⚠ The round ids must still resolve: the bank is a shipped file, so a
+    //   deploy that renames or drops a round would otherwise resume into a
+    //   game with no theme and no cauldrons.
+    const canL = saved && saved.game === 'lab' && saved.lb && !saved.lb.over
+      && Array.isArray(saved.lb.roundIds) && saved.lb.lives > 0
+      && saved.lb.roundIds.every(id => (window.MINIGAME_LAB || []).some(r => r.id === id))
+      && saved.lb.ri < saved.lb.roundIds.length && _allowed();
     if (typeof showScreen === 'function') showScreen('minigames');   // hub via the render hook
-    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF && !canR) { _clearPersist(); return; }
+    if (!canB && !canQ && !canW && !canE && !canN && !canBB && !canT && !canF && !canR && !canL) { _clearPersist(); return; }
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
-    if (canR) {
+    if (canL) {
+      // ⚠ A fresh window, never the saved deadline — see _persist().
+      _lb = saved.lb; _lb.locked = false; _lb.flash = null;
+      _labRender(); _labStartTimer();
+    } else if (canR) {
       // ⚠ Drop the in-flight turn, never restore it — see _persist().
       _rf = saved.rf; _rf.flipped = []; _rf.locked = false;
       _reefRender();
@@ -351,6 +367,7 @@ const MiniGames = (() => {
     if (_njTimer) { clearInterval(_njTimer); _njTimer = null; }
     if (_fnTimer) { clearInterval(_fnTimer); _fnTimer = null; }
     if (_rfTimer) { clearTimeout(_rfTimer); _rfTimer = null; }
+    if (_lbTimer) { clearInterval(_lbTimer); _lbTimer = null; }
     _stopPoll();
     if (!_allowed()) { el.innerHTML = '<p class="mg-note">🔒 Games are switched off by your parent right now.</p>'; return; }
     _preloadGrade();
@@ -365,6 +382,7 @@ const MiniGames = (() => {
     const tt = (typeof DB !== 'undefined' && DB.games?.timetravel) || {};
     const fnb = (typeof DB !== 'undefined' && DB.games?.frninja) || {};
     const rf = (typeof DB !== 'undefined' && DB.games?.reef) || {};
+    const lb = (typeof DB !== 'undefined' && DB.games?.lab) || {};
     el.innerHTML = `
       ${mixLine ? `<p class="mg-mix-line">🎯 ${esc(mixLine)}</p>` : ''}
       ${(typeof GameSettings !== 'undefined' && GameSettings.childGradeBar) ? GameSettings.childGradeBar() : ''}
@@ -449,14 +467,15 @@ const MiniGames = (() => {
         </span>
         <span class="mg-card-go">PLAY ›</span>
       </button>
-      <div class="mg-card mg-card-soon">
+      <button class="mg-card mg-card-live mg-card-lb" onclick="MiniGames.startLab()">
         <span class="mg-card-art">🧪</span>
         <span class="mg-card-body">
           <b>Potion Lab</b>
           <span>Sort living things, materials and energy into the right cauldrons before they slide off the lab bench!</span>
+          ${lb.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${lb.bestScore} pts · ${lb.bestRound || 0} rounds</span>` : '<span class=\"mg-card-best\">🌟 Fire up the bench!</span>'}
         </span>
-        <span class="mg-card-lock">COMING SOON</span>
-      </div>
+        <span class="mg-card-go">PLAY ›</span>
+      </button>
       <div class="mg-card mg-card-soon">
         <span class="mg-card-art">🦜</span>
         <span class="mg-card-body">
@@ -3121,6 +3140,340 @@ const MiniGames = (() => {
     };
   }
 
+  // ══ POTION LAB ════════════════════════════════
+  // Design intent is in the COMING SOON block near the top of this file.
+  //
+  // ⚠ A TIMER IS THE MECHANIC HERE, unlike Memory Reef — the design intent asks
+  //   for a conveyor, and classification is recall the child either has or does
+  //   not. But it only ever costs a beaker, never the run: three beakers means
+  //   two mistakes are survivable and a child who freezes once still finishes
+  //   the round.
+  // ⚠ The window WIDENS for younger children and narrows as rounds progress,
+  //   never below LAB_FLOOR_MS. A fixed window tuned for Grade 6 is unplayable
+  //   for Grade 2 and trivial for Grade 9.
+  const LAB_ITEMS = 8;        // items dealt per round
+  const LAB_LIVES = 3;        // beakers
+  const LAB_HIT = 10;         // points per correct cauldron
+  const LAB_STREAK_CAP = 5;   // streak bonus stops growing here
+  const LAB_ROUND_BONUS = 25; // for clearing a round with a beaker left
+  const LAB_FLOOR_MS = 1900;  // the fastest the conveyor ever runs
+
+  let _lb = null, _lbTimer = null, _lbDeadline = 0, _lbWindow = 0;
+
+  function _labWindowFor(roundIdx) {
+    // Grade 1-4 get a second longer; the conveyor speeds up each round.
+    const base = _childGrade() <= 4 ? 5000 : 4200;
+    return Math.max(LAB_FLOOR_MS, base - roundIdx * 400);
+  }
+
+  // ⚠ EVERY CAULDRON MUST GET AT LEAST ONE ITEM. Dealt purely at random, a
+  //   three-cauldron round can finish without the child ever using one of them,
+  //   which teaches nothing about that category and reads as a broken label.
+  function _labPickItems(round, n) {
+    const byCat = {};
+    for (const c of round.categories) byCat[c.key] = shuffle(round.items.filter(i => i.category === c.key));
+    const out = [];
+    for (const c of round.categories) if (byCat[c.key].length) out.push(byCat[c.key].shift());
+    const rest = shuffle(round.categories.flatMap(c => byCat[c.key] || []));
+    while (out.length < n && rest.length) out.push(rest.shift());
+    return shuffle(out).slice(0, n);
+  }
+
+  // ⚠ Ordered by band, shuffled WITHIN a band: the run has to get harder, but
+  //   two children in the same class should not meet the rounds in one order.
+  function _labPickRounds() {
+    const bank = (window.MINIGAME_LAB || []).filter(r => r && Array.isArray(r.items) && r.items.length
+      && Array.isArray(r.categories) && r.categories.length >= 2);
+    return [1, 2, 3].flatMap(b => shuffle(bank.filter(r => r.band === b)));
+  }
+
+  function startLab() {
+    if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
+    clearInterval(_lbTimer); _lbTimer = null;
+    const rounds = _labPickRounds();
+    if (!rounds.length) { toast('Potion Lab is not available right now.', 3000); return; }
+    _lb = {
+      roundIds: rounds.map(r => r.id), ri: 0,
+      items: _labPickItems(rounds[0], LAB_ITEMS), ii: 0,
+      score: 0, lives: LAB_LIVES, streak: 0, bestStreak: 0,
+      correct: 0, wrong: 0, missed: 0, roundsDone: 0,
+      locked: false, over: false, flash: null,
+    };
+    $('mg-hub')?.classList.add('hidden');
+    $('mg-game')?.classList.remove('hidden');
+    _labRender();
+    _labStartTimer();
+    _persist('lab');
+  }
+
+  function _labRound() {
+    const bank = (window.MINIGAME_LAB || []);
+    return _lb && bank.find(r => r.id === _lb.roundIds[_lb.ri]);
+  }
+  function _labItem() { return _lb && _lb.items[_lb.ii]; }
+
+  function _labStartTimer() {
+    clearInterval(_lbTimer);
+    _lbWindow = _labWindowFor(_lb.ri);
+    _lbDeadline = Date.now() + _lbWindow;
+    _lbTimer = setInterval(_labTick, 100);
+  }
+
+  function _labTick() {
+    if (!_lb || _lb.over || _lb.locked) return;
+    const left = _lbDeadline - Date.now();
+    const bar = $('lb-timebar-fill');
+    if (bar) {
+      const pct = Math.max(0, Math.min(100, left / _lbWindow * 100));
+      bar.style.width = pct + '%';
+      bar.classList.toggle('low', pct < 25);
+    }
+    const num = $('lb-time-num');
+    if (num) num.textContent = Math.max(0, Math.ceil(left / 1000));
+    if (left <= 0) _labResolve(null);
+  }
+
+  // `picked` is a category key, or null when the conveyor ran out.
+  function _labResolve(picked) {
+    if (!_lb || _lb.over || _lb.locked) return;
+    const item = _labItem();
+    if (!item) return;
+    clearInterval(_lbTimer); _lbTimer = null;
+    _lb.locked = true;
+    const hit = picked === item.category;
+    if (hit) {
+      _lb.correct++;
+      _lb.streak++;
+      if (_lb.streak > _lb.bestStreak) _lb.bestStreak = _lb.streak;
+      _lb.score += LAB_HIT + Math.min(_lb.streak, LAB_STREAK_CAP) * 2;
+    } else {
+      if (picked === null) _lb.missed++; else _lb.wrong++;
+      _lb.streak = 0;
+      _lb.lives--;
+    }
+    // ⚠ The right answer is always shown, hit or miss. A classification game
+    //   that only says "wrong" teaches the child nothing they did not know.
+    _lb.flash = { hit, picked, correct: item.category, timeout: picked === null };
+    _labRender();
+    setTimeout(_labAdvance, hit ? 550 : 1250);
+  }
+
+  function _labAdvance() {
+    if (!_lb || _lb.over) return;
+    _lb.flash = null;
+    _lb.locked = false;
+    if (_lb.lives <= 0) { _labFinish(); return; }
+    _lb.ii++;
+    if (_lb.ii >= _lb.items.length) {
+      _lb.roundsDone++;
+      _lb.score += LAB_ROUND_BONUS;
+      _lb.ri++;
+      if (_lb.ri >= _lb.roundIds.length) { _labFinish(); return; }
+      const next = _labRound();
+      if (!next) { _labFinish(); return; }
+      _lb.items = _labPickItems(next, LAB_ITEMS);
+      _lb.ii = 0;
+    }
+    _labRender();
+    _labStartTimer();
+    _persist('lab');
+  }
+
+  function lbTap(catKey) {
+    if (!_lb || _lb.over || _lb.locked) return;
+    _labResolve(catKey);
+  }
+
+  function _labRender() {
+    if (!_lb) return;
+    const el = $('mg-game');
+    const round = _labRound();
+    const item = _labItem();
+    if (!el || !round || !item) return;
+    const f = _lb.flash;
+    const beakers = '🧪'.repeat(Math.max(0, _lb.lives)) + '🩶'.repeat(Math.max(0, LAB_LIVES - _lb.lives));
+
+    const cauldrons = round.categories.map(c => {
+      const state = !f ? ''
+        : c.key === f.correct ? ' lb-right'
+          : (c.key === f.picked ? ' lb-wrong' : '');
+      return `<button class="lb-cauldron${state}" ${_lb.locked ? 'disabled' : ''}
+          onclick="MiniGames.lbTap('${_rfEsc(c.key)}')" aria-label="${_rfEsc(c.label)}">
+          <span class="lb-cauldron-emoji">${c.emoji}</span>
+          <span class="lb-cauldron-label">${_rfEsc(c.label)}</span>
+        </button>`;
+    }).join('');
+
+    const verdict = !f ? ''
+      : f.hit ? '<p class="lb-verdict lb-verdict-good">✅ Correct!</p>'
+        : `<p class="lb-verdict lb-verdict-bad">${f.timeout ? '⏰ Too slow' : '❌ Not quite'} — that one goes in <b>${_rfEsc((round.categories.find(c => c.key === f.correct) || {}).label || '')}</b></p>`;
+
+    el.innerHTML = `
+      <div class="lb-stage">
+        <div class="lb-topbar">
+          <span class="lb-lives">${beakers}</span>
+          <span class="lb-progress">Round ${_lb.ri + 1}/${_lb.roundIds.length} · ${_lb.ii + 1}/${_lb.items.length}</span>
+          <span class="lb-score">${_lb.score} pts</span>
+          <button class="mg-btn-ghost lb-quit" onclick="MiniGames.lbQuit()">✕</button>
+        </div>
+        <p class="lb-theme">${_rfEsc(round.theme)}</p>
+        <div class="lb-timerow">
+          <div class="lb-timebar"><div class="lb-timebar-fill" id="lb-timebar-fill"></div></div>
+          <span class="lb-time-num" id="lb-time-num">${Math.ceil(_lbWindow / 1000)}</span>
+        </div>
+        <div class="lb-belt">
+          <div class="lb-item${f ? (f.hit ? ' lb-item-good' : ' lb-item-bad') : ''}">
+            <span class="lb-item-emoji">${item.emoji}</span>
+            <span class="lb-item-label">${_rfEsc(item.label)}</span>
+          </div>
+        </div>
+        ${verdict}
+        <div class="lb-cauldrons lb-cols-${round.categories.length}">${cauldrons}</div>
+        ${_lb.streak > 1 ? `<p class="lb-streak">🔥 ${_lb.streak} in a row</p>` : ''}
+      </div>`;
+  }
+
+  function _labFinish() {
+    if (!_lb) return;
+    _lb.over = true;
+    clearInterval(_lbTimer); _lbTimer = null;
+    _clearPersist();
+    const asked = _lb.correct + _lb.wrong + _lb.missed;
+    _lb.acc = asked ? Math.round(_lb.correct / asked * 100) : 0;
+    _labSaveBest();
+    const best = (typeof DB !== 'undefined' && DB.games?.lab) || {};
+    const isRecord = _lb.score >= (best.bestScore || 0) && _lb.score > 0;
+    if (isRecord && typeof launchConfetti === 'function') launchConfetti(90);
+    const grade = _lb.acc >= 90 ? { t: 'Master chemist! 🥇', s: 'Almost nothing went in the wrong cauldron.' }
+      : _lb.acc >= 70 ? { t: 'Sharp sorting! 🥈', s: 'You know your groups.' }
+        : _lb.acc >= 45 ? { t: 'Good lab work! 🥉', s: 'Read the cauldron labels before you tap.' }
+          : { t: 'Keep experimenting! 💪', s: 'Say the group out loud as you sort — it sticks.' };
+
+    $('mg-game').innerHTML = `
+      <div class="qf-end mg-pop">
+        <div class="qf-end-emoji">🧪</div>
+        <h3>${grade.t}</h3>
+        <p>${grade.s}</p>
+        <div class="qf-scoreboard">
+          <div><b>${_lb.score}</b><span>points</span></div>
+          <div><b>${_lb.roundsDone}/${_lb.roundIds.length}</b><span>rounds cleared</span></div>
+          <div><b>${_lb.acc}%</b><span>accuracy</span></div>
+        </div>
+        ${isRecord ? '<p class="bq-best">🏅 New personal best!</p>'
+        : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
+        <div class="mg-share-row">
+          <button class="mg-btn-primary" onclick="MiniGames.lbShare()">📤 Share my score</button>
+          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
+            onclick="MiniGames.lbShareTo('fb')">📘</button>
+          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
+            onclick="MiniGames.lbShareTo('wa')">💬</button>
+          <button class="mg-share-ic" title="Copy" aria-label="Copy score"
+            onclick="MiniGames.lbShareTo('copy', this)">🔗</button>
+        </div>
+        <div class="mg-end-row">
+          <button class="mg-btn-primary" onclick="MiniGames.startLab()">🔁 Back to the bench</button>
+          <button class="mg-btn-ghost" onclick="MiniGames.renderHub()">🎮 All games</button>
+        </div>
+      </div>`;
+  }
+
+  function _labSaveBest() {
+    if (typeof DB === 'undefined' || !DB.stats) return;
+    DB.games = DB.games || {};
+    const g = DB.games.lab = DB.games.lab || { plays: 0, bestScore: 0, bestRound: 0, bestStreak: 0 };
+    g.plays++;
+    if (_lb.score > (g.bestScore || 0)) g.bestScore = _lb.score;
+    if (_lb.roundsDone > (g.bestRound || 0)) g.bestRound = _lb.roundsDone;
+    if (_lb.bestStreak > (g.bestStreak || 0)) g.bestStreak = _lb.bestStreak;
+    _awardRun('lab');
+    if (typeof save === 'function') save(DB);
+  }
+
+  function _lbShareText() {
+    return `🧪 I scored ${_lb.score} in Potion Lab on Nou Klass - ${_lb.roundsDone} rounds cleared, `
+      + `${_lb.acc}% sorted right! Think you can keep up with the conveyor? ⚗️`;
+  }
+  function _lbShareUrl() {
+    const qs = `g=lb&s=${_lb.score}&c=${_lb.roundsDone}&a=${_lb.acc}`;
+    return new URL(`score.html?${qs}`, location.href).href;
+  }
+
+  async function _lbScoreImage() {
+    try {
+      const W = 1080, H = 1080, c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const x = c.getContext('2d');
+      const g = x.createLinearGradient(0, 0, W, H);
+      g.addColorStop(0, '#052e16'); g.addColorStop(.55, '#166534'); g.addColorStop(1, '#0e7490');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      x.textAlign = 'center'; x.fillStyle = '#fff';
+      x.font = '600 46px system-ui,sans-serif'; x.fillText('🧪 POTION LAB', W / 2, 250);
+      x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
+      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillStyle = '#86efac'; x.font = '800 300px system-ui,sans-serif';
+      x.fillText(String(_lb.score), W / 2, 660);
+      x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
+      x.fillText('POINTS', W / 2, 730);
+      x.font = '500 44px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.92)';
+      x.fillText(`${_lb.roundsDone} rounds   ·   ${_lb.acc}% accuracy`, W / 2, 850);
+      x.font = '700 50px system-ui,sans-serif'; x.fillStyle = '#fff';
+      x.fillText('Can you sort faster? ⚗️', W / 2, 960);
+      const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+      return blob ? new File([blob], 'potion-lab-score.png', { type: 'image/png' }) : null;
+    } catch (_) { return null; }
+  }
+
+  async function lbShare() {
+    if (!_lb) return;
+    const text = _lbShareText(), url = _lbShareUrl();
+    const file = await _lbScoreImage();
+    if (navigator.share) {
+      try {
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], text: text + '\n' + url });
+        } else {
+          await navigator.share({ title: 'Potion Lab score', text, url });
+        }
+        return;
+      } catch (_) { return; }
+    }
+    lbShareTo('copy');
+  }
+
+  function lbShareTo(where, btn) {
+    if (!_lb) return;
+    const text = _lbShareText(), url = _lbShareUrl();
+    if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+    else if (where === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank', 'noopener');
+    else if (where === 'copy') {
+      const full = text + '\n' + url;
+      const done = () => { if (btn) { const o = btn.textContent; btn.textContent = '✅'; setTimeout(() => btn.textContent = o, 1600); } };
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(full).then(done).catch(() => prompt('Copy your score:', full));
+      else prompt('Copy your score:', full);
+    }
+  }
+
+  function lbQuit() {
+    if (_lb && !_lb.over && _lb.score > 0 && !confirm('Leave Potion Lab? This run won\'t be saved.')) return;
+    clearInterval(_lbTimer); _lbTimer = null;
+    _clearPersist();
+    _lb = null;
+    renderHub();
+  }
+
+  function _lbDebug() {
+    const r = _labRound(), it = _labItem();
+    return _lb && {
+      ri: _lb.ri, ii: _lb.ii, score: _lb.score, lives: _lb.lives,
+      correct: _lb.correct, wrong: _lb.wrong, missed: _lb.missed,
+      roundsDone: _lb.roundsDone, streak: _lb.streak, locked: _lb.locked, over: _lb.over,
+      rounds: _lb.roundIds.slice(),
+      theme: r && r.theme, categories: r ? r.categories.map(c => c.key) : null,
+      item: it && { label: it.label, category: it.category },
+      flash: _lb.flash && { hit: _lb.flash.hit, correct: _lb.flash.correct, timeout: _lb.flash.timeout },
+    };
+  }
+
   function open() {
     if (!_allowed()) { toast('🔒 Games are switched off by your parent right now.', 3000); return; }
     showScreen('minigames');
@@ -3149,5 +3502,6 @@ const MiniGames = (() => {
            startBattle, bbReady, bbAnswer, bbQuit, _bbDebug, _pickBattle,
            startTimeTravel, ttPick, ttUndo, ttNext, ttQuit, _ttDebug, _pickTimeTravel,
            startFrNinja, fnTap, fnQuit, fnShare, fnShareTo, _fnDebug, _fnPick,
-           startReef, rfTap, rfQuit, rfShare, rfShareTo, _rfDebug, _reefPick };
+           startReef, rfTap, rfQuit, rfShare, rfShareTo, _rfDebug, _reefPick,
+           startLab, lbTap, lbQuit, lbShare, lbShareTo, _lbDebug, _labPickRounds, _labPickItems };
 })();

@@ -10055,3 +10055,68 @@ button.tc-cd-stat:focus-visible { outline: 3px solid #f4ce52; outline-offset: 2p
   .rf-face { font-size:1.4rem; }
   .rf-up .rf-face { font-size:.68rem; }
 }
+
+/* ══ Potion Lab ════════════════════════════════════════════════════════════
+   ⚠ Cauldron count varies per round (2 or 3), so the row reads its column
+     count from a class rather than a fixed grid — a 2-cauldron round laid out
+     in 3 columns leaves a hole the child tries to tap. */
+.lb-stage { max-width:560px; margin:0 auto; border-radius:20px; padding:14px 12px 16px;
+  display:flex; flex-direction:column; gap:10px;
+  background:radial-gradient(120% 90% at 50% 0%, #052e16 0%, #064e3b 55%, #071528 100%);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.5); }
+.lb-topbar { display:flex; align-items:center; gap:8px; }
+.lb-lives { flex:0 0 auto; font-size:.95rem; letter-spacing:1px; }
+.lb-progress { flex:1; text-align:center; font-weight:800; font-size:.8rem; color:#a7f3d0; }
+.lb-score { flex:0 0 auto; font-weight:800; font-size:.85rem; color:#fde047; }
+.lb-quit { flex:0 0 auto; padding:4px 10px; }
+.lb-theme { text-align:center; font-size:1rem; font-weight:800; color:#ecfdf5; margin:2px 0 0; }
+
+.lb-timerow { display:flex; align-items:center; gap:8px; }
+.lb-timebar { flex:1; height:10px; border-radius:99px; background:rgba(255,255,255,.12); overflow:hidden; }
+.lb-timebar-fill { height:100%; border-radius:99px; width:100%;
+  background:linear-gradient(90deg,#34d399,#22d3ee); transition:width .1s linear; }
+.lb-timebar-fill.low { background:#ef4444; animation:qf-pulse-bar .5s ease infinite; }
+.lb-time-num { flex:0 0 auto; min-width:1.4em; text-align:center; color:#a7f3d0; font-weight:800; font-size:.85rem; }
+
+/* The conveyor. The slide is decoration — the timer bar above is the mechanic,
+   so a child on reduced-motion loses nothing by it not running. */
+.lb-belt { display:flex; justify-content:center; padding:6px 0 2px; }
+.lb-item { display:flex; flex-direction:column; align-items:center; gap:6px;
+  min-width:150px; padding:14px 18px; border-radius:18px;
+  background:linear-gradient(160deg,#f8fafc,#e2e8f0); color:#0f172a;
+  box-shadow:0 4px 0 rgba(0,0,0,.35); animation:lb-slide .35s ease both; }
+.lb-item-emoji { font-size:2.6rem; line-height:1; }
+.lb-item-label { font-size:.95rem; font-weight:800; text-align:center; }
+.lb-item-good { background:linear-gradient(160deg,#bbf7d0,#86efac); }
+.lb-item-bad { background:linear-gradient(160deg,#fecaca,#fca5a5); }
+@keyframes lb-slide { from { opacity:0; transform:translateX(38px); } to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce) { .lb-item { animation:none; } }
+
+.lb-verdict { text-align:center; font-size:.85rem; font-weight:700; margin:0; }
+.lb-verdict-good { color:#86efac; }
+.lb-verdict-bad { color:#fca5a5; }
+
+.lb-cauldrons { display:grid; gap:8px; }
+.lb-cols-2 { grid-template-columns:repeat(2,1fr); }
+.lb-cols-3 { grid-template-columns:repeat(3,1fr); }
+.lb-cauldron { display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:12px 6px; border-radius:16px; cursor:pointer;
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(160deg,#065f46,#134e4a); color:#ecfdf5;
+  /* ⚠ 44px is the minimum comfortable tap target, and this is a timed game —
+     a missed tap costs a beaker, so the target must never be the reason. */
+  min-height:64px; transition:transform .12s ease, background .18s ease; }
+.lb-cauldron:active { transform:scale(.95); }
+.lb-cauldron[disabled] { cursor:default; }
+.lb-cauldron-emoji { font-size:1.6rem; line-height:1; }
+.lb-cauldron-label { font-size:.78rem; font-weight:800; text-align:center; line-height:1.15; }
+.lb-right { background:linear-gradient(160deg,#16a34a,#22c55e); }
+.lb-wrong { background:linear-gradient(160deg,#b91c1c,#ef4444); }
+.lb-streak { text-align:center; font-size:.85rem; font-weight:800; color:#fbbf24; margin:0; }
+.mg-card-lb .mg-card-art { background:linear-gradient(135deg,#065f46,#0e7490); }
+
+@media (max-width:380px) {
+  .lb-cauldron-label { font-size:.68rem; }
+  .lb-item-emoji { font-size:2.2rem; }
+  .lb-item { min-width:130px; }
+}
