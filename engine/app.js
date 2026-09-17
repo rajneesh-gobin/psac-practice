@@ -6617,7 +6617,7 @@ const PD = (() => {
 
   // Load reminder when detail panel opens
   const _mounted = {};
-  const _PD_PANELS = ['children', 'calendar', 'shop', 'messages', 'settings'];
+  const _PD_PANELS = ['children', 'calendar', 'papers', 'shop', 'messages', 'settings'];
 
   function _mountPanel(name, srcId) {
     if (_mounted[name]) return;
@@ -6633,6 +6633,12 @@ const PD = (() => {
       case 'calendar':
         _mountPanel('calendar', 'screen-calendar');
         if (typeof Calendar !== 'undefined') Calendar.render();
+        break;
+      case 'papers':
+        // ⚠ Rendered on every activation, not once. The pack list grows as packs
+        //   register and the form must reflect the current one — the same
+        //   one-shot-guard mistake that froze teacher mode's subject list.
+        if (typeof PaperBuilder !== 'undefined') PaperBuilder.render('pd-papers-host', 'parent');
         break;
       case 'shop':
         _mountPanel('shop', 'screen-shop');
@@ -9606,24 +9612,86 @@ function _rememberPrintablePaper(questions) {
   } catch (_) {}
 }
 
-function generatePrintablePaper() {
+// ⚠⚠ PARAMETERISED, NOT DUPLICATED. This function carries about a dozen rules
+//    that were each measured rather than reasoned about — isPoolQuestion() on
+//    the pool, cloze admitted HERE and nowhere else, _printNeedsOptions(), the
+//    Section A rota, the watermark, the footer disclaimers. A second copy for
+//    the adult paper builder would rot against this one, and the failure would
+//    be a printed sheet a child cannot answer. So the adult surfaces call THIS,
+//    with `opts`.
+//
+// ⚠ CALLED WITH NO ARGUMENTS FROM THE CHILD'S EXAM SCREEN, and that path must
+//   not change: every default below reproduces the previous behaviour exactly —
+//   the active pack, the child's own locked chapters and difficulty cap.
+//
+// opts (all optional):
+//   packId        build for this pack instead of the active one. ⚠ The CALLER
+//                 must have awaited PackLoader.ensure(packId) AND
+//                 QuestionLoader.loadSubject(packId) first — STATIC_QUESTIONS
+//                 only ever holds what the app has actually fetched, which is
+//                 the same trap teacher Set Work hit ("No questions found").
+//   chapterIds    restrict to these chapters (already filtered for locks)
+//   maxDifficulty cap, 1-4
+//   minDifficulty floor, 1-4
+//   sectionACount / sectionBCount  paper length
+//   ignoreChildLocks  true on an adult surface: DB.restrictions belongs to
+//                 whichever child is loaded, and a teacher building a paper for
+//                 a class is not bound by one pupil's parental locks. ⚠ It does
+//                 NOT bypass the plan gate — the caller still checks that.
+//   title         paper heading override
+function generatePrintablePaper(opts) {
+  const o = opts || {};
   const year = new Date().getFullYear();
-  const isMathsPaper = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.subject === 'Maths');
+  // The pack the paper is FOR, which is not necessarily the one on screen.
+  const _paperPack = o.packId
+    ? ((typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === o.packId) || null)
+    : (typeof ACTIVE_PACK !== 'undefined' ? ACTIVE_PACK : null);
+  const isMathsPaper = (_paperPack?.subject === 'Maths');
   // Maths benefits from a longer applied-reasoning section. Other subjects keep
   // their established 30 short + 10 extended format.
-  const sectionACount = isMathsPaper ? 20 : 30;
-  const sectionBCount = isMathsPaper ? 15 : 10;
+  // ⚠ Clamped, not trusted. These come from a form on the adult surfaces, and a
+  //   zero-length section renders a heading with nothing under it while a huge
+  //   one silently exhausts the pool and prints half a paper.
+  const _clamp = (v, lo, hi, dflt) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.min(hi, Math.max(lo, Math.round(n))) : dflt;
+  };
+  const sectionACount = _clamp(o.sectionACount, 5, 40, isMathsPaper ? 20 : 30);
+  const sectionBCount = _clamp(o.sectionBCount, 0, 20, isMathsPaper ? 15 : 10);
   const sectionAMarks = sectionACount * 2;
   const sectionBMarks = sectionBCount * 4;
 
   // Same restrictions startChapterDirect()/assembleExamPaper() enforce - a
   // locked chapter or a difficulty cap must hold for the printable paper too.
-  const lockedChs = new Set(DB.restrictions?.lockedChapters || []);
-  const maxDiff   = Math.min(4, Math.max(1, DB.restrictions?.maxDifficulty ?? 4));
+  // ⚠ A child printing their own paper stays bound by their parent's locks and
+  //   cap, exactly as assembleExamPaper() is. An ADULT surface passes
+  //   ignoreChildLocks, because DB.restrictions describes whichever child is
+  //   currently loaded and has nothing to do with a paper for a class.
+  const lockedChs = o.ignoreChildLocks ? new Set() : new Set(DB.restrictions?.lockedChapters || []);
+  const maxDiff   = o.maxDifficulty != null
+    ? _clamp(o.maxDifficulty, 1, 4, 4)
+    : (o.ignoreChildLocks ? 4 : Math.min(4, Math.max(1, DB.restrictions?.maxDifficulty ?? 4)));
+  const minDiff   = _clamp(o.minDifficulty, 1, maxDiff, 1);
+  // ⚠ A SET, not a range. The adult picker is checkboxes, so {1,3} is a thing a
+  //   teacher can ask for and a min/max pair cannot express. When absent the
+  //   min/max pair above still governs, which is what the child's path uses.
+  const _diffSet = Array.isArray(o.difficulties) && o.difficulties.length
+    ? new Set(o.difficulties.map(Number).filter(d => d >= 1 && d <= 4))
+    : null;
+  const _diffOk = (d) => (_diffSet ? _diffSet.has(Number(d)) : (d <= maxDiff && d >= minDiff));
 
   // Build pools: Section A is short/mixed; Section B is extended reasoning.
   // Filter by the active subject's chapters so Science exam doesn't pull maths questions
-  const _activeChs = new Set(CHAPTERS.filter(c => !lockedChs.has(c.id)).map(c => c.id));
+  // ⚠ CHAPTERS holds the ACTIVE pack only, so an adult paper for another pack
+  //   must read that pack's own chapter list — reading the global here is
+  //   exactly why teacher mode once showed Mathematics and nothing else.
+  const _paperChapters = o.packId
+    ? ((_paperPack && (_paperPack._chapters || _paperPack.chapters)) || [])
+    : (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []);
+  const _wanted = Array.isArray(o.chapterIds) && o.chapterIds.length ? new Set(o.chapterIds) : null;
+  const _activeChs = new Set(_paperChapters
+    .filter(c => !lockedChs.has(c.id) && (!_wanted || _wanted.has(c.id)))
+    .map(c => c.id));
   // ⚠⚠ isPoolQuestion() IS LOAD-BEARING HERE AND WAS MISSING. Every other pool
   //   in questions_engine.js filters through it; this one filtered on chapter
   //   and difficulty only, so it admitted the types that have no question
@@ -9637,7 +9705,7 @@ function generatePrintablePaper() {
   //   excluding the parent - it is the same rule the on-screen exam already
   //   applies (_POOL_TYPES_EXCLUDED).
   const _allSubjectQs = STATIC_QUESTIONS.filter(q =>
-    isPoolQuestion(q) && _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
+    isPoolQuestion(q) && _activeChs.has(q.chapterId) && _diffOk(q.difficulty));
 
   // ── Texte à Trous / Cloze passage ──────────────────────────────────────────
   // ⚠⚠ THIS IS THE ONE SURFACE WHERE CLOZE WORKS, and isPoolQuestion() must
@@ -9653,7 +9721,8 @@ function generatePrintablePaper() {
   //    on-screen exam, which has no renderer for it.
   // ⚠ Same locks and difficulty cap as everything else on the sheet.
   const _clozePool = STATIC_QUESTIONS.filter(q =>
-    q && q.type === 'cloze' && _activeChs.has(q.chapterId) && q.difficulty <= maxDiff
+    q && q.type === 'cloze' && _activeChs.has(q.chapterId)
+    && _diffOk(q.difficulty)
     && typeof q.text === 'string' && Array.isArray(q.gapAnswers) && q.gapAnswers.length
     && Array.isArray(q.bank) && q.bank.length);
   // One passage per paper, and only when the subject actually has one — a
@@ -9727,7 +9796,7 @@ function generatePrintablePaper() {
   const usedIds = new Set();
   const chapters = [...new Set(_subjectQs.map(q => q.chapterId))];
   const _chWeight = id => {
-    const ch = (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []).find(c => c.id === id);
+    const ch = _paperChapters.find(c => c.id === id);
     const w = ch && Number.isFinite(ch.examWeight) ? ch.examWeight : 1;
     return Math.max(1, w);   // 0 means "not in exams", and such a chapter is not in the pool anyway
   };
@@ -9809,7 +9878,7 @@ function generatePrintablePaper() {
   for (const q of _secBFinal) if (_keepsOptions(q)) withOptions.add(q.id);
 
   const diffLabel = d => ['','⭐ Basic','⭐⭐ Medium','⭐⭐⭐ Hard','🏆 Challenge'][d] || '';
-  const chName = id => (CHAPTERS.find(c => c.id === id) || {}).name || id;
+  const chName = id => (_paperChapters.find(c => c.id === id) || {}).name || id;
 
   // overrideHtml: the question WITHOUT its passage, for the comprehension block
   // where the passage is printed once above the questions instead of inside

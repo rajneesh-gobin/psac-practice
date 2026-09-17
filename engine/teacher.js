@@ -18,7 +18,7 @@ const TeacherMode = (() => {
   // class they belong to, and leave by the Back button they now carry.
   const MAIN_TABS = ['home'];
   const DETAIL_TABS = ['create', 'results'];
-  const MORE_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'settings'];
+  const MORE_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'papers', 'settings'];
   const ALL_TABS = MAIN_TABS.concat(DETAIL_TABS, MORE_TABS);
 
   function _getData() {
@@ -772,6 +772,12 @@ const TeacherMode = (() => {
     if (tab === 'results' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showResults(_readLoc().resultsId || '');
     if (tab === 'assignments' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showList(opts.filter || _readLoc().listFilter || 'archived');
     if (tab === 'gradebook') _renderGradebook();
+    // ⚠ Re-rendered on every activation: the pack list grows as packs register,
+    //   and a one-shot guard here is exactly what froze this screen's subject
+    //   list at whatever was loaded the first time the tab opened.
+    if (tab === 'papers' && typeof PaperBuilder !== 'undefined') {
+      PaperBuilder.render('tc-papers-host', 'teacher');
+    }
     if (tab === 'messages')  _renderTeacherMessages();
     const inMore = MORE_TABS.includes(tab);
     const _scope = document.getElementById('screen-teacher') || document;

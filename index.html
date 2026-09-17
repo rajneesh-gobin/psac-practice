@@ -4338,6 +4338,7 @@
             <button type="button" role="menuitem" data-more="materials" onclick="TeacherMode.switchTab('materials')"><span class="ta-more-ico">📂</span><span><strong>All my files</strong><small>Every worksheet and note you have uploaded</small></span></button>
             <button type="button" role="menuitem" data-more="assignments" onclick="TeacherMode.switchTab('assignments')"><span class="ta-more-ico">📦</span><span><strong>Past work</strong><small>Work that has closed or been put away</small></span></button>
             <button type="button" role="menuitem" data-more="messages" onclick="TeacherMode.switchTab('messages')"><span class="ta-more-ico">💬</span><span><strong>Messages</strong><small>Ask a question or report a problem</small></span></button>
+            <button type="button" role="menuitem" data-more="papers" onclick="TeacherMode.switchTab('papers')"><span class="ta-more-ico">📝</span><span><strong>Test papers</strong><small>Build a printable paper with its answer sheet</small></span></button>
             <button type="button" role="menuitem" data-more="settings" onclick="TeacherMode.switchTab('settings')"><span class="ta-more-ico">⚙️</span><span><strong>Teacher settings</strong><small>Install, invite, account</small></span></button>
           </div>
         </div>
@@ -4586,6 +4587,14 @@
       </div>
 
       <!-- ── TAB: GRADEBOOK (via More) ── -->
+      <!-- ⚠ Adult-facing test-paper generator, the same PaperBuilder the parent
+           dashboard renders (engine/paper_builder.js). One picker, two surfaces, so
+           they cannot drift apart. -->
+      <div class="ta-tab-content hidden" data-tab="papers">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-1">📝 Test papers</h3>
+        <p class="teacher-intro mb-3">Pick a grade, a subject, the chapters and the levels, then print or save as PDF.</p>
+        <div id="tc-papers-host"></div>
+      </div>
       <div class="ta-tab-content hidden" data-tab="gradebook">
         <h3 class="font-bold text-lg mb-1">📋 Gradebook</h3>
         <p class="teacher-intro mb-4">Cross-assignment scores for each classroom. Select a classroom to view.</p>
@@ -4854,6 +4863,7 @@
         <button id="pd-tab-children" role="tab" aria-selected="true"  class="ta-tab" onclick="PD.mainTab('children')"><strong>👨‍👩‍👧 My Children</strong></button>
         <button id="pd-tab-calendar" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('calendar')"><strong>📅 Timetable</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" onclick="Auth.openInviteModal()"><strong>🎁 Invite</strong></button>
+        <button id="pd-tab-papers" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('papers')"><strong>📝 Test Papers</strong></button>
         <button id="pd-tab-shop" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('shop')"><strong>🛒 Shop</strong><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
         <button id="pd-tab-messages" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('messages')"><strong>💬 Messages</strong><span id="pd-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
         <button id="pd-tab-settings" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('settings')"><strong>⚙️ Settings</strong></button>
@@ -5189,7 +5199,13 @@
       <!-- ── Calendar panel (shown when Calendar tab is active) ── -->
       <div id="pd-panel-calendar" class="hidden"></div>
 
-      <!-- ── Shop panel ── -->
+      <!-- ── Shop panel ── -->      <!-- ⚠ Adult-facing test-paper generator. Renders through
+           PaperBuilder.render() (engine/paper_builder.js), which is shared with the
+           teacher screen so the two pickers cannot drift. -->
+      <div id="pd-panel-papers" class="hidden">
+        <div id="pd-papers-host"></div>
+      </div>
+
       <div id="pd-panel-shop" class="hidden"></div>
 
       <!-- ── Messages panel ── -->
@@ -6135,6 +6151,7 @@
   <script src="engine/interactive_map.js"></script>
   <!-- App + Auth (auth loads after app so DB/save are available) -->
   <script src="engine/app.js"></script>
+  <script src="engine/paper_builder.js"></script>
   <script src="engine/biometric.js"></script>
   <script src="engine/auth.js"></script>
   <!-- ⚠ THE EIGHT ROLE MODULES ARE NOT LOADED HERE. admin.js, forum.js and
