@@ -16,7 +16,8 @@ against production — re-measure rather than quoting this file.
 
 ## The one-line status
 
-> **Web: ready. Payments: compliant. App: not submittable yet.**
+> **Web: ready. Payments: compliant. Policy blockers: cleared.**
+> **App: two code items left (B1, B2) plus the assetlinks fingerprint.**
 
 ---
 
@@ -115,29 +116,63 @@ preflight, not in CI, so parking this costs no daily noise, same as
 
 ---
 
+### Families policy, stale icons, and the dead install panel (2026-09-18)
+
+**A2 — social share-out.** The six end-of-game screens (`qfShareTo`, `fnShareTo`,
+`rfShareTo`, `lbShareTo`, `ecShareTo`, `stShareTo`) drew direct wa.me /
+facebook.com/sharer / twitter.com/intent buttons. In the app they are no longer
+drawn, and each handler refuses a social target as well.
+- ⚠ **What stays, deliberately:** the 📤 Share button (`navigator.share`) and
+  🔗 Copy. Those are the platform’s own share sheet and the clipboard —
+  user-initiated, naming no third-party destination inside the app. A child who
+  picks WhatsApp from the OS sheet is the OS’s doing, not a link we shipped.
+  That is the line Play draws, and it keeps the feature working.
+- The five identical two-button blocks became one `_socialShareBtns(fn)` helper,
+  so the next policy change lands in one place instead of five.
+- `app.js:5818` no longer tells a child *“they earn credits by inviting other
+  families”* in the app. The web keeps it — whether it should say that to a
+  nine-year-old anywhere is a product call, not a technical one.
+
+**A3 — targetSdk.** `convert_to_app.md` now says **35** (and minSdk 21), with a
+note that Android 15 forces edge-to-edge at that level — which is what makes B1
+a real defect rather than a dormant one.
+
+**B4 — install UI.** Narrower than the audit assumed. The iOS tip banner already
+gates on `isIOS`, and `#pwa-install-btn` only unhides on `beforeinstallprompt`,
+which never fires in a TWA. Only `showInstallPanel()` needed gating — it fell
+through to *“use your browser menu and choose Install app”*, a menu a full-screen
+app does not have. It clears `?installProfile=` on the way out, or the param
+survives into the next `replaceState` and reopens the panel on the next load.
+- ⚠ `openLauncher()` is deliberately **not** gated. `renderLauncher()` only lists
+  saved profiles with Open and Forget, and that is exactly the child switcher the
+  app needs in place of per-child home-screen icons (B6).
+
+**B9 — icons.** ⚠⚠ **The PNGs were two days older than the artwork.**
+`icon.svg` was redesigned 2026-08-27 (commit 9654a4d) specifically to be
+maskable-safe; `icon-192.png` and `icon-512.png` are from 2026-08-25 and were
+never regenerated. So the favicon showed a graduation cap and a star while the
+Android launcher showed a different conical-hat logo with coloured bars along the
+bottom edge — two logos for one app, and the PNG is the one Android and
+Bubblewrap actually use.
+- `scripts/build-icons.js` rebuilds all four from `icon.svg` using headless Edge
+  (no image library, no network), checks every shape against the 80% safe circle,
+  and fails if `icons/generate-icons.html` — which embeds a **second copy** of the
+  artwork — has drifted from it.
+- ⚠ Two purposes, two files. `purpose:"any"` keeps the rx=115 rounded corners;
+  `purpose:"maskable"` squares the background off, because the OS crops a maskable
+  icon and fills nothing in — ship the rounded one and a square-mask launcher
+  shows four transparent corner wedges.
+- ⚠ The test now fails if any PNG is older than `icon.svg`, so this cannot rot
+  the same way twice.
+
+`scripts/test-android-app-gates.js` is now **42 assertions** covering all of the
+above plus the payment gates.
+
+---
+
 ## ❌ Tier 1 — blocks a submission
 
-### A2 · Families policy: social share-out from children's screens
-`engine/minigame.js` — six identical functions (`ecShareTo`, `fnShareTo`,
-`lbShareTo`, `qfShareTo`, `rfShareTo`, `stShareTo`, 26 markup sites) open
-Facebook, X and WhatsApp from **child-facing** game screens. Links out to social
-networks from a children's app are exactly what Families review flags.
-
-**Fix:** one shared helper, keep Copy (stays in the app), drop the three
-networks when `_isAndroidApp()`. Web keeps all four.
-
-⚠ Also `app.js:5818` tells a **child** *"They earn credits by inviting other
-families."* Incentivising children to recruit is the same policy. Parents keep
-the referral copy at `5904`.
-
-Already fine: the forum is adult-only (`_ADULT_ONLY_SCREENS`), the global
-leaderboard is off by default, avatars are emoji, no child photo upload, no DOB
-collected, no ads.
-
-### A3 · targetSdk
-`convert_to_app.md` Step 3 and its troubleshooting table both say **34**. New
-Play apps have needed **35** since Aug 2025. This is not cosmetic: SDK 35 forces
-edge-to-edge on Android 15, which is what makes B1 a real defect.
+> ✅ **A2 and A3 are done** — see the Done section above. Two items remain.
 
 ### B1 · `index.html` is missing `viewport-fit=cover`
 The repo contradicts itself — `guest`, `materials`, `privacy`, `score` and
@@ -179,9 +214,7 @@ check there is no address bar. See `convert_to_app.md`.
 
 | item | where | fix |
 |---|---|---|
-| **B4** install UI is dead and misleading | `profile_install.js`, `app.js:2383` | `beforeinstallprompt` never fires in a TWA; the fallback tells users to open a browser menu that does not exist. Early-return on `_isAndroidApp()`. |
 | **B6** per-child home-screen icons | `profile_install.js` | One Play listing = one icon. A 3-child family loses 3 launchers. Needs a good in-app child switcher, or stays web-only and is said so. |
-| **B9** icon declared maskable but isn't | `manifest.json`, `icons/icon-512.png` | Full-bleed badge with its own corner radius; the bottom book bars sit outside the 80% safe zone and crop in the launcher and splash. Add a padded `purpose:"maskable"` variant and split it from `purpose:"any"`. |
 | **B3** printable paper | `app.js:10475, 10483` | `window.open('','_blank')` + `document.write` — a TWA hands that to a Custom Tab. ⚠ The existing failure message, *"Please allow pop-ups"*, is unfollowable in an app. **Reuse the pattern already in `calendar.js:1388`**: render a print-only div, then `window.print()`. |
 | **B7** keyboard covers the answer bar | no `visualViewport` anywhere | Measure on a device first — Bubblewrap's `adjustResize` may handle it. |
 | **B10** offline first launch | inherent to TWA | No service worker exists before the first successful load, and asset-links verification needs network. **Not fixable in code** — handle it in the listing copy. |
@@ -256,12 +289,16 @@ check there is no address bar. See `convert_to_app.md`.
 
 ## Order of work
 
-1. **Deploy what is done** — closes the content leak. Web unaffected
-   (`_isAndroidApp()` is false in every browser). ⚠ `SHELL_VERSION` was bumped,
-   so every returning user re-downloads the shell once.
-2. **A3 + B1 + B4 + B9** — a morning; small, independent, low risk.
-3. **A2** — an hour, and it is a policy blocker.
-4. **B2** — the only real piece of work. Own branch, own test.
+1. ✅ **Deployed 2026-09-18.** The content leak is closed and the payment gates
+   are live. Verified on production: the question files now 404, `_index.js` and
+   all 49 manifests still 200, `/api/questions` still 401.
+   ⚠ Each `SHELL_VERSION` bump re-downloads the whole shell for every returning
+   user, so batch deploys rather than shipping one fix at a time.
+2. ✅ **A2 + A3 + B4 + B9 — done 2026-09-18.** Both policy blockers cleared.
+3. **B1** — one attribute, then measure at 360px and 320px. ⚠ Needs Chrome for
+   Testing: the installed Chrome cannot be driven headless, it joins the live
+   browser session.
+4. **B2** — the only real piece of work left. Own branch, own test.
 5. Build the TWA → internal testing → fingerprint → deploy → verify no address bar.
 6. Tier 2 remainder, then Tier 3.
 

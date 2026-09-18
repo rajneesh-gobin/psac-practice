@@ -194,6 +194,18 @@ const ProfileInstall = (() => {
   function closeLauncher() { document.getElementById('profile-launcher-modal')?.classList.add('hidden'); }
 
   function showInstallPanel() {
+    // ⚠ Dead inside the Google Play app, and worse than dead: beforeinstallprompt
+    //   never fires in a TWA, so this modal fell through to its 2.5s fallback and
+    //   told the user to "use your browser menu and choose Install app" - a menu
+    //   that does not exist in a full-screen app. One Play listing is also one
+    //   launcher icon, so there is nothing here for it to install.
+    // ⚠ Clear the ?installProfile= param on the way out rather than just
+    //   returning: left in the URL it survives into every later replaceState and
+    //   would re-open this panel on the next DOMContentLoaded.
+    // ⚠ ProfileInstall.openLauncher() is deliberately NOT gated - renderLauncher()
+    //   only lists saved profiles with Open and Forget, which is exactly the child
+    //   switcher the app needs in place of per-child home-screen icons.
+    if (typeof _isAndroidApp === 'function' && _isAndroidApp()) { finishInstallFlow(); return; }
     const binding = getLaunchBinding();
     if (!binding || !new URLSearchParams(location.search).has('installProfile')) return;
     const modal = document.getElementById('profile-install-modal');

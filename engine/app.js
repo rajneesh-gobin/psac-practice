@@ -5834,7 +5834,12 @@ function _showChapterLockedModal(chapterId) {
 
   const msg = expired
     ? `${name} is paused because your access has expired.\n\nChapters your parent unlocked with credits still work until they run out.`
-    : `${name} is not unlocked yet.\n\nYour parent can open it for ${price} credits - that keeps it open for ${days} days. They earn credits by inviting other families.`;
+    // ⚠ Google Play Families: the recruitment sentence ("they earn credits by
+    //   inviting other families") is dropped INSIDE the Play app - incentivising
+    //   a child to recruit is the same policy that takes the social share
+    //   buttons off the game screens. The web keeps it; whether it should say
+    //   this to a nine-year-old anywhere is a product call, not a technical one.
+    : `${name} is not unlocked yet.\n\nYour parent can open it for ${price} credits - that keeps it open for ${days} days.${_isAndroidApp() ? '' : ' They earn credits by inviting other families.'}`;
 
   _confirmModal(msg, () => {}, { icon: '🔒', okLabel: 'OK', cancelLabel: '' });
 }

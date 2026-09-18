@@ -1303,9 +1303,7 @@ const MiniGames = (() => {
         <p class="qf-share-label">📣 Share your score</p>
         <div class="qf-share-row">
           <button class="qf-sbtn qf-native" onclick="MiniGames.qfShare()">📤 Share</button>
-          <button class="qf-sbtn qf-wa" onclick="MiniGames.qfShareTo('wa')">💬</button>
-          <button class="qf-sbtn qf-fb" onclick="MiniGames.qfShareTo('fb')">📘</button>
-          <button class="qf-sbtn qf-x" onclick="MiniGames.qfShareTo('x')">✖️</button>
+          ${_qfSocialBtns()}
           <button class="qf-sbtn qf-copy" onclick="MiniGames.qfShareTo('copy', this)">🔗</button>
         </div>
         <div class="mg-end-row">
@@ -1397,7 +1395,43 @@ const MiniGames = (() => {
     qfShareTo('copy');
   }
 
+  // ⚠⚠ Google Play FAMILIES POLICY: a child-directed app must not carry links
+  //   OUT to third-party social networks, and every one of these six end-of-game
+  //   screens is child-facing. So inside the Play app the direct wa.me /
+  //   facebook.com/sharer / twitter.com/intent buttons are not drawn.
+  // ⚠ What STAYS, deliberately: the 📤 Share button (navigator.share) and 🔗
+  //   Copy. Those are the platform's own share sheet and the clipboard - user
+  //   initiated, with no third-party destination named inside the app. A child
+  //   who picks WhatsApp from the OS sheet is the OS's doing, not a link we
+  //   shipped. That is the line Play draws, and it keeps the feature working.
+  // ⚠ The WEB keeps all four. This is a Play listing rule, not a product one.
+  // ⚠ Guarded with typeof: helpers.js declares _isAndroidApp() at classic-script
+  //   top level so it IS global, but a load-order change must degrade to
+  //   "show them" on the web rather than throwing inside a render.
+  function _socialOK() {
+    return typeof _isAndroidApp !== 'function' || !_isAndroidApp();
+  }
+
+  // The five games below rendered this identical pair five times over. One
+  // helper now, so a policy change lands in one place instead of five.
+  function _socialShareBtns(fn) {
+    if (!_socialOK()) return '';
+    return `
+          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
+            onclick="MiniGames.${fn}('fb')">📘</button>
+          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
+            onclick="MiniGames.${fn}('wa')">💬</button>`;
+  }
+
+  // Quick Fire carries its own button classes and a third network.
+  function _qfSocialBtns() {
+    if (!_socialOK()) return '';
+    return `<button class="qf-sbtn qf-wa" onclick="MiniGames.qfShareTo('wa')">💬</button>
+          <button class="qf-sbtn qf-fb" onclick="MiniGames.qfShareTo('fb')">📘</button>
+          <button class="qf-sbtn qf-x" onclick="MiniGames.qfShareTo('x')">✖️</button>`;
+  }
   function qfShareTo(where, btn) {
+    if (where !== 'copy' && !_socialOK()) return;   // the buttons are not drawn, but this is on MiniGames.*
     const text = _qfShareText(), url = _qfShareUrl();
     if (where === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank', 'noopener');
     else if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(text), '_blank', 'noopener');
@@ -2790,10 +2824,7 @@ const MiniGames = (() => {
         : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
         <div class="mg-share-row">
           <button class="mg-btn-primary" onclick="MiniGames.fnShare()">📤 Share my score</button>
-          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
-            onclick="MiniGames.fnShareTo('fb')">📘</button>
-          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
-            onclick="MiniGames.fnShareTo('wa')">💬</button>
+${_socialShareBtns('fnShareTo')}
           <button class="mg-share-ic" title="Copy" aria-label="Copy score"
             onclick="MiniGames.fnShareTo('copy', this)">🔗</button>
         </div>
@@ -2875,6 +2906,7 @@ const MiniGames = (() => {
   }
 
   function fnShareTo(where, btn) {
+    if (where !== 'copy' && !_socialOK()) return;   // the buttons are not drawn, but this is on MiniGames.*
     if (!_fn) return;
     const text = _fnShareText(), url = _fnShareUrl();
     // ⚠ Facebook takes the URL only and reads the og: tags there; WhatsApp is the
@@ -3076,10 +3108,7 @@ const MiniGames = (() => {
         : best.bestScore ? `<p class="bq-best">🏅 Your best on ${_rf.size}: ${best.bestScore} pts</p>` : ''}
         <div class="mg-share-row">
           <button class="mg-btn-primary" onclick="MiniGames.rfShare()">📤 Share my score</button>
-          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
-            onclick="MiniGames.rfShareTo('fb')">📘</button>
-          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
-            onclick="MiniGames.rfShareTo('wa')">💬</button>
+${_socialShareBtns('rfShareTo')}
           <button class="mg-share-ic" title="Copy" aria-label="Copy score"
             onclick="MiniGames.rfShareTo('copy', this)">🔗</button>
         </div>
@@ -3162,6 +3191,7 @@ const MiniGames = (() => {
   }
 
   function rfShareTo(where, btn) {
+    if (where !== 'copy' && !_socialOK()) return;   // the buttons are not drawn, but this is on MiniGames.*
     if (!_rf) return;
     const text = _rfShareText(), url = _rfShareUrl();
     if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
@@ -3415,10 +3445,7 @@ const MiniGames = (() => {
         : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
         <div class="mg-share-row">
           <button class="mg-btn-primary" onclick="MiniGames.lbShare()">📤 Share my score</button>
-          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
-            onclick="MiniGames.lbShareTo('fb')">📘</button>
-          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
-            onclick="MiniGames.lbShareTo('wa')">💬</button>
+${_socialShareBtns('lbShareTo')}
           <button class="mg-share-ic" title="Copy" aria-label="Copy score"
             onclick="MiniGames.lbShareTo('copy', this)">🔗</button>
         </div>
@@ -3493,6 +3520,7 @@ const MiniGames = (() => {
   }
 
   function lbShareTo(where, btn) {
+    if (where !== 'copy' && !_socialOK()) return;   // the buttons are not drawn, but this is on MiniGames.*
     if (!_lb) return;
     const text = _lbShareText(), url = _lbShareUrl();
     if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
@@ -3776,10 +3804,7 @@ const MiniGames = (() => {
         : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
         <div class="mg-share-row">
           <button class="mg-btn-primary" onclick="MiniGames.ecShare()">📤 Share my score</button>
-          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
-            onclick="MiniGames.ecShareTo('fb')">📘</button>
-          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
-            onclick="MiniGames.ecShareTo('wa')">💬</button>
+${_socialShareBtns('ecShareTo')}
           <button class="mg-share-ic" title="Copy" aria-label="Copy score"
             onclick="MiniGames.ecShareTo('copy', this)">🔗</button>
         </div>
@@ -3853,6 +3878,7 @@ const MiniGames = (() => {
   }
 
   function ecShareTo(where, btn) {
+    if (where !== 'copy' && !_socialOK()) return;   // the buttons are not drawn, but this is on MiniGames.*
     if (!_ec) return;
     const text = _ecShareText(), url = _ecShareUrl();
     if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
@@ -4175,10 +4201,7 @@ const MiniGames = (() => {
         : best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestScore} pts</p>` : ''}
         <div class="mg-share-row">
           <button class="mg-btn-primary" onclick="MiniGames.stShare()">📤 Share my score</button>
-          <button class="mg-share-ic" title="Share on Facebook" aria-label="Share on Facebook"
-            onclick="MiniGames.stShareTo('fb')">📘</button>
-          <button class="mg-share-ic" title="Share on WhatsApp" aria-label="Share on WhatsApp"
-            onclick="MiniGames.stShareTo('wa')">💬</button>
+${_socialShareBtns('stShareTo')}
           <button class="mg-share-ic" title="Copy" aria-label="Copy score"
             onclick="MiniGames.stShareTo('copy', this)">🔗</button>
         </div>
@@ -4252,6 +4275,7 @@ const MiniGames = (() => {
   }
 
   function stShareTo(where, btn) {
+    if (where !== 'copy' && !_socialOK()) return;   // the buttons are not drawn, but this is on MiniGames.*
     if (!_st) return;
     const text = _stShareText(), url = _stShareUrl();
     if (where === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');

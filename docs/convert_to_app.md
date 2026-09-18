@@ -210,10 +210,16 @@ When Bubblewrap prompts, use these values:
 | Key alias | `psac` |
 | Keystore password | (the one you set in Step 1) |
 | Key password | (the one you set in Step 1) |
-| Min SDK version | `19` (Android 4.4+) |
-| Target SDK version | `34` (Android 14) |
+| Min SDK version | `21` (Android 5.0+) |
+| Target SDK version | `35` (Android 15) |
 | Orientation | `portrait` |
 | Display | `standalone` |
+
+> ⚠⚠ **targetSdk 35 is mandatory for new Play apps** (since Aug 2025) and is
+> not a cosmetic bump: Android 15 forces EDGE-TO-EDGE at that level, so the web
+> content draws under the status bar and the gesture navigation bar. That is
+> what makes the missing `viewport-fit=cover` in index.html a real defect rather
+> than a dormant one - see [android-readiness.md](android-readiness.md).
 
 > ⚠ Bubblewrap may download Android SDK components. Accept all license prompts.
 
@@ -360,6 +366,6 @@ Requires:
 | Address bar still visible in app | Digital Asset Link not verified | Check SHA-256 matches; re-deploy assetlinks.json; wait ~5 min for CDN |
 | `assetlinks.json` returns 404 | `.well-known` missing from the DIRS allowlist in prepare-deploy.js — it is a dotfile directory and easy to miss | Confirm `.deploy/.well-known/assetlinks.json` exists after staging, then redeploy |
 | Bubblewrap fails to read manifest | Live site unreachable or manifest has errors | Check `https://nouklass.com/manifest.json` in browser |
-| Play Store rejects APK | Target SDK too low | Bump targetSdkVersion to 34 in `twa-manifest.json` and rebuild |
+| Play Store rejects APK | Target SDK too low | Bump targetSdkVersion to 35 in `twa-manifest.json` and rebuild |
 | Splash screen wrong colour | Bubblewrap used cached manifest | Edit `twa-manifest.json` → `themeColor` / `backgroundColor` and rebuild |
 | iOS PWA missing push notifications | iOS < 16.4 | Nothing to do — older iOS does not support web push |
