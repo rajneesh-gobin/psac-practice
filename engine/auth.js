@@ -4539,16 +4539,33 @@ const Auth = (() => {
   }
 
   // Enter key on login
+  // ⚠⚠ ASK THE DOM WHICH PANEL IS OPEN, never _currentRole. The module
+  //   starts at _currentRole = 'student' (top of this file) while the MARKUP
+  //   opens on the PARENT panel: #auth-email-panel carries no `hidden`,
+  //   #auth-student-panel does, and the Parent tab ships the selected styling.
+  //   _currentRole only moves when a role button is CLICKED, so every route in
+  //   that does not call setRole() - the header "Sign in" button among them -
+  //   showed a parent form whose Enter key ran studentSignIn(). A parent typed
+  //   an email and a password, pressed Enter, and was asked for a family name.
+  //   ⚠ The Sign In BUTTON was correct throughout, which is exactly what made
+  //   this read as an Enter-key bug rather than the state drift it is.
+  // ⚠ Route on the panel that is actually OPEN. Enter on Forgot Password used
+  //   to reach emailSignIn() and answer "Please enter your email and password"
+  //   on a form that has neither field.
+  // ⚠ `=== false` throughout, not `!&contains()`. A MISSING element makes the
+  //   optional chain undefined, and `!undefined` is true - so the old test
+  //   treated an absent #auth-signup-fields as "the signup form is open" and
+  //   an absent #screen-auth as "the auth screen is showing". This way an
+  //   element that is not there is simply not open, and Enter does nothing.
   document.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
-    const authVisible = !_el('screen-auth')?.classList.contains('hidden');
-    if (!authVisible) return;
-    if (_currentRole === 'student') {
-      studentSignIn();
-    } else {
-      if (!_el('auth-signup-fields')?.classList.contains('hidden')) emailSignUp();
-      else emailSignIn();
-    }
+    const open = (id) => _el(id)?.classList.contains('hidden') === false;
+    if (!open('screen-auth')) return;
+    if (open('auth-student-panel')) { studentSignIn(); return; }
+    if (open('auth-magic-panel'))   return;            // link already sent - nothing to submit
+    if (open('auth-forgot-panel'))  { forgotPassword(); return; }
+    if (open('auth-signup-fields')) { emailSignUp(); return; }
+    if (open('auth-signin-fields')) { emailSignIn(); return; }
   });
 
   return {
