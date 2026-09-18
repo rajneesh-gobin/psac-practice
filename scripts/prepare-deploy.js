@@ -98,6 +98,23 @@ const FORBIDDEN = [
   //   CREDITS.md beside it is PUBLIC ATTRIBUTION and must keep shipping.
   /^assets\/questions\/PROVENANCE-TODO\.md$/,
   /(^|\/)\.env$/, /(^|\/)\.git($|\/)/, /(^|\/)node_modules($|\/)/,
+  // ⚠⚠ THE QUESTION BANK ITSELF. `subjects/` is copied whole above, which shipped
+  //   every question file - with its `answer`, `hint` and `explanation` - as a
+  //   public static asset. Measured on production 2026-09-18:
+  //     /subjects/grade6-english/questions/ch03_clauses.js -> 200 text/javascript 15142B
+  //   That is the whole 35k-question corpus readable with no login, bypassing
+  //   questions.js and every entitlement, expiry and kill-switch check in it.
+  //   Same shape of hole as the netlify/ question bundles, one directory over.
+  // ⚠ NOTHING IN PRODUCTION ASKS FOR THEM. They are injected only by
+  //   QuestionLoader._loadLocal(), whose two call sites both sit behind
+  //   `if (_isFileProtocol)` - file:// dev only. Over https the browser gets
+  //   questions from /api/questions, which is what does the filtering.
+  // ⚠ ANCHORED AT THE PACK LEVEL ON PURPOSE. `subjects/_index.js` and every
+  //   `subjects/<pack>/_manifest.js` MUST KEEP SHIPPING - _index.js is in
+  //   SHELL_FILES and PackLoader.ensure() fetches the manifests at runtime. A
+  //   bare /questions/ rule would also be wrong the day a pack grows a
+  //   differently-named directory; this one names the shape it means.
+  /^subjects\/[^/]+\/questions($|\/)/,
   /^past-papers($|\/)/, /^exam_papers($|\/)/,
   /^\.netlify($|\/)/, /^netlify($|\/)/, /^\.import-conflicts($|\/)/,
   /\.pdf$/i, /\.sql$/i,
