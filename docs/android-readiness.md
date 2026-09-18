@@ -17,7 +17,8 @@ against production — re-measure rather than quoting this file.
 ## The one-line status
 
 > **Web: ready. Payments: compliant. Policy blockers: cleared.**
-> **App: one code item left (B1) plus the assetlinks fingerprint.**
+> **Code: done. The only thing left before a submission is the assetlinks**
+> **SHA-256, which needs a build to exist first.**
 
 ---
 
@@ -220,20 +221,44 @@ screen (which should exit).
 
 ---
 
+### B1 — `viewport-fit=cover` (2026-09-18)
+
+`index.html:5` was the only HTML file in the repo without it, so all 9
+`env(safe-area-inset-*)` rules in `style.css` resolved to **0px** — the bottom
+nav, the practice action bar, the exam nav row, the toast, the auth shell. With
+targetSdk 35 forcing edge-to-edge on Android 15, that means content under the
+gesture bar.
+
+**Measured with Chrome for Testing 153** (installed at
+`~/.cache/psac-chrome`, outside the repo — an earlier `npx` browser install put
+500 MB *inside* it because Git Bash’s `$TMPDIR` is empty):
+
+- `scripts/audit-mobile-screens.js` at **360px and 320px**, before and after:
+  identical. One "protruding element" in both runs, and it is `div.contact-hp`
+  — the contact form’s spam honeypot, deliberately parked at `left:-9982px`.
+  No horizontal regression.
+- `scripts/audit-safe-area.js` (new) drives insets through CDP and measures the
+  response: with `top=47 bottom=34`, `main` under the tab bar computes to
+  **106px = 60 (tabbar) + 34 (inset) + 12**. The rule consumes the inset, so
+  content clears the gesture bar.
+
+⚠⚠ **What that script CANNOT prove, and the first version of it got wrong.**
+`Emulation.setSafeAreaInsetsOverride` injects the env() values directly and
+**bypasses the viewport-fit gate**: serving `index.html` with the attribute
+stripped still reported `top=47 bottom=34`. The strip worked — the probe prints
+the meta it parsed — Chrome simply does not apply the spec rule under the
+override. So an A/B of "with and without the meta" is not possible this way,
+and the script’s first run reported a FAIL that was its own artefact rather
+than a defect in the page. The dead-rules claim rests on the spec instead: under
+the default `viewport-fit=auto` the viewport is already inset past the unsafe
+areas, so there is nothing left for `env()` to return. **Confirm on a real
+notched device** — that is the on-device step, not this one.
+
+---
+
 ## ❌ Tier 1 — blocks a submission
 
 > ✅ **A2 and A3 are done** — see the Done section above. Two items remain.
-
-### B1 · `index.html` is missing `viewport-fit=cover`
-The repo contradicts itself — `guest`, `materials`, `privacy`, `score` and
-`vote` all have it; `index.html:5` does not. So **all 9
-`env(safe-area-inset-*)` rules in `style.css` evaluate to 0px**: the bottom nav
-(`2624`), `.pr-actions` (`1794`), `#exam-nav-row` (`1911`), `#toast` (`1138`),
-the auth shell (`1330`), `.ta-wiz-nav` (`10102`).
-
-⚠ **Measure after adding it** — it wakes those rules on notched iPhones on the
-**web** too: `node scripts/audit-mobile-screens.js 360` and `320`. Expect to add
-`safe-area-inset-top` to the sticky app header, which has none.
 
 ### assetlinks SHA-256 is still a placeholder
 Order is fixed and cannot be shortcut: build → upload to internal testing → read
@@ -328,9 +353,7 @@ check there is no address bar. See `convert_to_app.md`.
    ⚠ Each `SHELL_VERSION` bump re-downloads the whole shell for every returning
    user, so batch deploys rather than shipping one fix at a time.
 2. ✅ **A2 + A3 + B4 + B9 — done 2026-09-18.** Both policy blockers cleared.
-3. **B1** — one attribute, then measure at 360px and 320px. ⚠ Needs Chrome for
-   Testing: the installed Chrome cannot be driven headless, it joins the live
-   browser session.
+3. ✅ **B1 — done 2026-09-18**, measured at 360px and 320px with Chrome for Testing.
 4. ✅ **B2 — done 2026-09-18.** Still needs on-device confirmation.
 5. Build the TWA → internal testing → fingerprint → deploy → verify no address bar.
 6. Tier 2 remainder, then Tier 3.
