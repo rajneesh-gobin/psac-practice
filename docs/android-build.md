@@ -18,7 +18,9 @@
 | **Node** | v24 |
 | **Chrome for Testing** | 153 at `~/.cache/psac-chrome` (used by the layout audits) |
 | **Bubblewrap** | 1.25.0, installed globally (`npm i -g @bubblewrap/cli`) |
-| **Project folder** | `C:\nouklass-android` — created, **outside the repo, deliberately** |
+| **Project folder** | `D:\git-repo\nouklass-android` — a **sibling** of the repo, not inside it |
+| **Shell** | Git Bash (MINGW64). ⚠ The PowerShell forms below need translating — see step 1 |
+| **Keystore** | ✅ created 2026-09-18 at `C:\Users\<you>\keys\nouklass-release.keystore` (PKCS12, 2740 bytes) |
 
 ✅ `~/.bubblewrap/config.json` already points `androidSdkPath` at
 `%LOCALAPPDATA%\Android\Sdk`, so Bubblewrap will not ask for it.
@@ -37,7 +39,7 @@ In Claude Code, prefix with `!` to run one in the session.
 
 ---
 
-## 1. The keystore — ⚠ YOU generate this, not an agent
+## 1. The keystore — ✅ DONE 2026-09-18
 
 **This is the one file in the whole project that cannot be regenerated.** Lose it
 and you can never ship an update to the same Play listing — new listing, zero
@@ -47,10 +49,20 @@ yours.
 ⚠ **The password must not pass through a chat transcript, a script, or shell
 history.** Run this yourself, and let `keytool` prompt you:
 
+⚠⚠ **In Git Bash, put it on ONE line.** A `\` continuation breaks if there is
+any trailing whitespace after it: bash then reads `\ ` as an escaped space, passes
+keytool an empty argument (`Illegal option:`) and tries to run `-keystore` as a
+command. And `$env:USERPROFILE` is PowerShell; bash has `$USERPROFILE`, but that
+expands with **backslashes** and mangles. A literal forward-slash path avoids both.
+
+```bash
+"/c/Program Files/Java/jdk-26.0.2/bin/keytool.exe" -genkeypair -v -keystore "C:/Users/<you>/keys/nouklass-release.keystore" -alias psac -keyalg RSA -keysize 2048 -validity 10000
+```
+
+PowerShell equivalent, also one line:
+
 ```powershell
-& "C:\Program Files\Java\jdk-26.0.2\bin\keytool.exe" -genkeypair -v `
-  -keystore "$env:USERPROFILE\keys\nouklass-release.keystore" `
-  -alias psac -keyalg RSA -keysize 2048 -validity 10000
+& "C:\Program Files\Java\jdk-26.0.2\bin\keytool.exe" -genkeypair -v -keystore "$env:USERPROFILE\keys\nouklass-release.keystore" -alias psac -keyalg RSA -keysize 2048 -validity 10000
 ```
 
 Create `%USERPROFILE%\keys` first. **Not inside the repo** — though if anyone ever
@@ -76,24 +88,28 @@ dies with the laptop.
 Then read its fingerprint (you will need it later, and it is **not** the one that
 goes in `assetlinks.json` — see step 4):
 
-```powershell
-& "C:\Program Files\Java\jdk-26.0.2\bin\keytool.exe" -list -v `
-  -keystore "$env:USERPROFILE\keys\nouklass-release.keystore" -alias psac
+```bash
+"/c/Program Files/Java/jdk-26.0.2/bin/keytool.exe" -list -v -keystore "C:/Users/<you>/keys/nouklass-release.keystore" -alias psac
 ```
 
 ---
 
 ## 2. `twa-manifest.json`
 
-```powershell
-cd C:\nouklass-android
-bubblewrap init --manifest https://nouklass.com/manifest.json   # interactive
+```bash
+cd /d/git-repo/nouklass-android
+bubblewrap init --manifest https://nouklass.com/manifest.json
+#  ⚠ if the prompts do not render or it hangs, Git Bash needs a pty:
+#      winpty bubblewrap init --manifest https://nouklass.com/manifest.json
+#    and if that still misbehaves, run it in PowerShell instead.
 
-# then, from the repo:
-node scripts\check-twa-manifest.js C:\nouklass-android          # report
-node scripts\check-twa-manifest.js C:\nouklass-android --fix    # apply
-cd C:\nouklass-android; bubblewrap update                       # pick up the changes
+# check and fix (cwd-independent):
+node /d/git-repo/psac-practice/scripts/check-twa-manifest.js /d/git-repo/nouklass-android --fix
+cd /d/git-repo/nouklass-android && bubblewrap update
 ```
+
+Answer `init` with: signing key `C:/Users/<you>/keys/nouklass-release.keystore`,
+alias `psac`, and let it download its own JDK 17 when offered.
 
 ⚠ `--fix` cannot repair everything: the icon URLs and the keystore path have to
 be answered correctly during `init`, because guessing them would be worse than
@@ -120,10 +136,95 @@ The values that are **not** defaults and matter:
 
 ---
 
-## 3. Build and install
+## ⚠⚠ Two Bubblewrap bugs on Windows — both fixed here 2026-09-18
+
+Neither error message names its real cause. Both cost an evening.
+
+### a) "The provided androidSdk isn’t correct."
+
+Bubblewrap validates the SDK by looking for `<sdk>/bin` **or** `<sdk>/tools` at
+the root (`AndroidSdkTools.validatePath`). Android Studio installs the
+command-line tools at `<sdk>/cmdline-tools/latest/bin` instead, so a perfectly
+good SDK fails the check.
+
+⚠ Junction **both** `bin` and `lib`, not just `bin`: `sdkmanager.bat` computes
+`APP_HOME=%~dp0\..` and loads `%APP_HOME%\lib\sdkmanager-classpath.jar`, so a
+`bin`-only link finds the launcher and then cannot find its own classes.
 
 ```powershell
-cd C:\nouklass-android
+$sdk = "$env:LOCALAPPDATA\Android\Sdk"
+New-Item -ItemType Junction -Path "$sdk\bin" -Target "$sdk\cmdline-tools\latest\bin"
+New-Item -ItemType Junction -Path "$sdk\lib" -Target "$sdk\cmdline-tools\latest\lib"
+```
+
+Junctions, not copies — nothing is duplicated and deleting the two links reverts
+it. No admin rights needed.
+
+⚠ `sdkmanager` run by hand through the junction cannot infer the SDK root and
+needs `--sdk_root="$env:LOCALAPPDATA\Android\Sdk"`. Bubblewrap always passes it
+explicitly, so its own calls are fine.
+
+⚠ Bubblewrap pins **build-tools 36.1.0** exactly (`BUILD_TOOLS_VERSION` in
+`AndroidSdkTools.js`). Android Studio had 36.0.0, so it installs the extra one on
+first build; pre-installing it avoids the stall:
+
+```powershell
+& "$sdk\bin\sdkmanager.bat" --sdk_root="$sdk" --install "build-tools;36.1.0"
+```
+
+### b) "Could not reserve enough space for 1572864KB object heap"
+
+⚠⚠ **This is not a memory problem.** It appeared on a machine with 31.7 GB RAM,
+7.5 GB free and 21 GB of commit available — checking that first is what ruled out
+the obvious reading and pointed at the real one.
+
+`JdkInstaller.js` hardcodes the **32-bit** JDK on Windows while every other
+platform gets 64-bit:
+
+```
+OpenJDK17U-jdk_x64_linux_hotspot_...       <- 64-bit
+OpenJDK17U-jdk_x64_mac_hotspot_...         <- 64-bit
+OpenJDK17U-jdk_aarch64_mac_hotspot_...     <- 64-bit
+OpenJDK17U-jdk_x86-32_windows_hotspot_...  <- 32-bit  ⚠
+```
+
+A 32-bit JVM cannot reserve a contiguous 1536 MB heap however much RAM exists, so
+the Gradle daemon dies before the build starts.
+
+Fix: replace it with the **same version** in x64, so Bubblewrap’s
+`JAVA_VERSION="17.0` check (`JdkHelper.validatePath`) still passes. The zip uses
+the same folder name, so it replaces in place and `config.json` needs no edit:
+
+```powershell
+$dest = "$env:USERPROFILE\.bubblewrap\jdk"
+$url  = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.11%2B9/OpenJDK17U-jdk_x64_windows_hotspot_17.0.11_9.zip"
+Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\jdk17x64.zip" -UseBasicParsing
+Expand-Archive -Path "$env:TEMP\jdk17x64.zip" -DestinationPath $dest -Force
+```
+
+Verify before rebuilding — all three must hold:
+
+```bash
+D="$HOME/.bubblewrap/jdk/jdk-17.0.11+9"
+grep -E "^JAVA_VERSION=|^OS_ARCH=" "$D/release"   # 17.0.11 / x86_64
+"$D/bin/java.exe" -version                        # "64-Bit Server VM"
+"$D/bin/java.exe" -Xmx1536m -version              # must not error
+```
+
+⚠ Do not "fix" this by lowering the heap in `gradle.properties`. It builds, but
+R8/dex are memory-hungry and a 32-bit VM will fail again later, further from the
+cause.
+
+⚠ Bubblewrap also downloads the JDK **source** tarball
+(`jdk17u-jdk-17.0.11-9/`) beside the runtime. It has no `bin/java.exe` and is not
+a usable JDK — do not point `jdkPath` at it.
+
+---
+
+## 3. Build and install
+
+```bash
+cd /d/git-repo/nouklass-android
 bubblewrap build
 adb install app-release-signed.apk
 ```
@@ -192,7 +293,8 @@ Also worth confirming on the device:
 
 ## Still outstanding
 
-- [ ] Keystore generated and **backed up off this machine**
+- [x] Keystore generated (PKCS12, verified outside the repo)
+- [ ] ⚠ Keystore **backed up off this machine** — file *and* password
 - [x] Bubblewrap 1.25.0 installed; `androidSdkPath` configured
 - [x] `.gitignore` + `prepare-deploy.js` refuse keystores (proved end-to-end)
 - [x] `scripts/check-twa-manifest.js` written, with `--fix`

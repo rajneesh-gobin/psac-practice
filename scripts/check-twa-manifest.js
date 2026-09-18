@@ -66,7 +66,13 @@ const WANT = [
 console.log('\ntwa-manifest.json  ' + mfPath + '\n');
 for (const [key, want, why, fixable] of WANT) {
   const got = mf[key];
-  if (got === want) { ok(`${key} = ${JSON.stringify(want)}`); continue; }
+  // ⚠ Hex colours are CASE-INSENSITIVE. Bubblewrap writes #3B82F6 where
+  //   manifest.json says #3b82f6; a strict === called that a mismatch and
+  //   rewrote the file on every run, which then demanded a `bubblewrap update`
+  //   for a change that altered nothing.
+  const same = (a, b) => (typeof a === 'string' && typeof b === 'string' && /^#[0-9a-f]{3,8}$/i.test(b))
+    ? a.toLowerCase() === b.toLowerCase() : a === b;
+  if (same(got, want)) { ok(`${key} = ${JSON.stringify(got)}`); continue; }
   if (FIX && fixable) { mf[key] = want; fixed++; console.log(`  FIXED  ${key}: ${JSON.stringify(got)} -> ${JSON.stringify(want)}`); continue; }
   bad(`${key} is ${JSON.stringify(got)}, want ${JSON.stringify(want)}\n         ${why}`);
 }
