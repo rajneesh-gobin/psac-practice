@@ -119,17 +119,17 @@
 
   // ══ raconter - construire l'histoire des images (20) ════════════════════
   q('raconter', 1, 'Quel connecteur commence une histoire en images ?',
-    ['D\'abord', 'Enfin', 'Ensuite', 'Finalement'],
+    ['D\'abord', 'Enfin', 'Ensuite', 'Pourtant'],
     'C\'est la toute première étape.',
-    'On commence par <b>D\'abord</b>, puis on emploie « Ensuite », « Puis » et « Enfin ».');
+    'On commence par <b>D\'abord</b>, puis on emploie « Ensuite », « Puis » et « Enfin ». « Pourtant » n\'ordonne rien : il oppose deux idées.');
   q('raconter', 1, 'Quel connecteur termine une histoire ?',
-    ['Enfin', 'D\'abord', 'Ensuite', 'Puis'],
+    ['Enfin', 'D\'abord', 'Ensuite', 'Soudain'],
     'C\'est la dernière image.',
-    'On termine par <b>Enfin</b> ou « Finalement », qui annoncent la fin de l\'histoire.');
+    'On termine par <b>Enfin</b> ou « Finalement », qui annoncent la fin de l\'histoire. « Soudain » annonce une surprise au milieu du récit, jamais sa fin.');
   q('raconter', 1, 'Quel connecteur relie la deuxième image à la première ?',
-    ['Ensuite', 'D\'abord', 'Enfin', 'Au début'],
+    ['Ensuite', 'D\'abord', 'Enfin', 'Car'],
     'C\'est l\'étape du milieu.',
-    '<b>Ensuite</b>, ou « Puis », relie une image à la suivante.');
+    '<b>Ensuite</b>, ou « Puis », relie une image à la suivante. « Car » ne dit pas l\'ordre des images : il introduit une explication.');
   q('raconter', 2, 'Mets dans l\'ordre : « Enfin, ils rentrent. » / « D\'abord, ils partent. » / « Ensuite, ils jouent. »',
     ['partent, jouent, rentrent', 'jouent, partent, rentrent', 'rentrent, jouent, partent', 'jouent, rentrent, partent'],
     'Suis les connecteurs.',
@@ -154,14 +154,17 @@
     ['Le ballon a cassé la vitre.', 'Le ciel était tout bleu.', 'La maison est blanche.', 'Il faisait très chaud.'],
     'Cherche ce qui se passe, pas ce qui est.',
     '<b>Le ballon a cassé la vitre</b> raconte une action. Les autres décrivent le décor.');
-  q('raconter', 2, 'Quel mot indique la cause dans une histoire ?',
-    ['parce que', 'ensuite', 'd\'abord', 'enfin'],
-    'Il répond à la question « pourquoi ? ».',
-    '<b>Parce que</b> introduit la cause : « il a pleuré parce qu\'il avait peur ».');
-  q('raconter', 2, 'Quel mot indique la conséquence dans une histoire ?',
-    ['donc', 'parce que', 'pendant', 'malgré'],
-    'Il annonce le résultat.',
-    '<b>Donc</b> introduit la conséquence : « la vitre était cassée, donc la voisine s\'est fâchée ».');
+  q('raconter', 2, 'Image 1 : il pleut très fort. Image 2 : les enfants rentrent. Quelle phrase raconte bien ces deux images ?',
+    ['Les enfants rentrent parce qu\'il pleut très fort.',
+     'Il pleut très fort parce que les enfants rentrent.',
+     'Les enfants rentrent, mais il pleut très fort.',
+     'Les enfants rentrent avant qu\'il pleuve très fort.'],
+    'Cherche ce qui explique POURQUOI les enfants rentrent.',
+    'La pluie est la cause, le retour des enfants le résultat : <b>les enfants rentrent parce qu\'il pleut très fort</b>. La deuxième phrase inverse les deux, et les images montrent la pluie AVANT le retour.');
+  q('raconter', 2, 'Image 2 : le ballon casse la vitre. Image 3 : la voisine se fâche. Quel mot relie l\'image 2 à l\'image 3 ?',
+    ['donc', 'parce que', 'pendant que', 'avant que'],
+    'L\'image 3 montre le RÉSULTAT de l\'image 2.',
+    'La colère vient APRÈS l\'accident : « la vitre s\'est cassée, <b>donc</b> la voisine s\'est fâchée ». Avec « parce que » on dirait l\'inverse : que la vitre s\'est cassée à cause de sa colère.');
   q('raconter', 3, 'Une histoire en images doit avoir ...',
     ['un début, un milieu et une fin', 'seulement une fin', 'seulement un début', 'trois fins différentes'],
     'Pense aux trois images.',

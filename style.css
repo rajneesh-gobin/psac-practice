@@ -103,6 +103,19 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 /* ===== TOGGLE SWITCH ===== */
 .toggle-bg  { transition: background-color 0.2s ease; }
 .toggle-dot { transition: transform 0.2s ease; }
+/* ⚠ THE ON COLOUR IS NOT HERE — _styleToggle() in admin.js sets it inline, and
+   the reason is a cascade one worth knowing before "tidying" it into this file.
+   The switch carries Tailwind's `dark:bg-gray-600`, which the Play CDN emits as
+   `.dark\:bg-gray-600:is(.dark *)` — specificity 0-2-0. admin.js used to turn
+   the switch on by adding `bg-indigo-500`, which is 0-1-0 and therefore lost
+   outright, class ORDER never entering into it. `<html>` ships class="dark" and
+   only a stored 'light' preference removes it, so in the theme an admin actually
+   looks at, all four switches in Content read as OFF however they were set.
+   ⚠ A rule `input:checked ~ .toggle-bg { background: #6366f1 }` here IS specific
+   enough (0-2-1) and was measured working in both themes — this is what
+   .gs-toggle below does. It is not used only because admin.js already owns the
+   state and one mechanism beats two. Either is correct; a Tailwind colour CLASS
+   is the one thing that is not. */
 
 /* ===== PARENT DASHBOARD TABS ===== */
 .pd-tab { transition: background 0.15s, color 0.15s, box-shadow 0.15s; }

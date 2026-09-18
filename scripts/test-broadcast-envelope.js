@@ -18,6 +18,10 @@
 //   3. The sending admin's OWN address appears nowhere on the message. It was
 //      the Reply-To until 2026-09-17, which handed every parent the personal
 //      address of whoever pressed Send.
+//   4. An admin_actions row is written, naming who sent it, who received it and
+//      the provider's message ids. Every recipient is in Bcc, so the message
+//      itself cannot answer "did it reach them?" afterwards — this row is the
+//      only thing that can.
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 
@@ -44,6 +48,7 @@ const ok = (label, cond, detail) => {
 };
 
 const sentPayloads = [];
+const auditRows = [];
 
 function reply(body, status = 200) {
   return Promise.resolve(new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } }));
@@ -72,7 +77,10 @@ global.fetch = (url, options = {}) => {
     return reply({ ok: true, granted: want, deferred: 0, remaining: 80 - want });
   }
   if (u.includes('/rpc/mail_quota')) return reply({ ok: true });
-  if (u.endsWith('/rpc/admin_log_action')) return reply({});
+  // ⚠ NOT /rpc/admin_log_action. That RPC takes the admin id from auth.uid(),
+  //   which is NULL under the service role this handler holds, so it would
+  //   refuse the write and answer 200 while recording nothing.
+  if (u === `${SB}/rest/v1/admin_actions`) { auditRows.push(JSON.parse(options.body)); return reply({}, 201); }
   return reply({ error: 'unstubbed: ' + u }, 500);
 };
 
@@ -121,6 +129,32 @@ function request(body) {
   ok('nobody who opted out was sent to',
     !JSON.stringify(mail).includes('parent.three@example.com') && out.skipped.opted_out === 1, out.skipped);
 
+  // ── The audit row ────────────────────────────────────────────────────────
+  const row = auditRows[0] || {};
+  ok('one admin_actions row is written for the send', auditRows.length === 1, auditRows.length);
+  ok('the action name is one admin_log_action() would also accept',
+    /^[a-z][a-z_]{2,39}$/.test(row.action || ''), row.action);
+  ok('it records WHICH admin pressed Send', row.admin_id === 'admin-uuid', row.admin_id);
+  ok('it records who actually received it, and not the opted-out account',
+    JSON.stringify(row.detail?.recipients) === JSON.stringify([ids[0], ids[1]]), row.detail?.recipients);
+  // ⚠ The one field a delivery question is answered with: every recipient is in
+  //   Bcc, so nothing in the message names them afterwards.
+  ok("it records the provider's message id",
+    JSON.stringify(row.detail?.message_ids) === JSON.stringify(['msg_1']), row.detail?.message_ids);
+  ok('it records the subject and the counts',
+    row.detail?.subject === 'Grade 6 Science is live' && row.detail?.sent === 2
+    && row.detail?.selected === 3 && row.detail?.eligible === 2, row.detail);
+  ok('the audit row carries ids, never an email address',
+    !/@/.test(JSON.stringify(row).replace(/"subject":"[^"]*"/, '')), row.detail);
+  ok('a send filed against one person is filed against nobody when it is many',
+    row.target_user === null, row.target_user);
+
+  // A dry run must not leave an audit row: nothing was sent.
+  auditRows.length = 0;
+  await handler(request({ user_ids: ids, subject: 'Checking', message: 'Hello.', dry_run: true }), env);
+  ok('a dry run records nothing', auditRows.length === 0, auditRows.length);
+  auditRows.length = 0;
+
   // ── Essential notice reaches the opted-out account, and nothing else changes
   sentPayloads.length = 0;
   const res2 = await handler(request({
@@ -130,6 +164,9 @@ function request(body) {
   const mail2 = sentPayloads[0] || {};
   ok('an essential notice also reaches the opted-out account',
     out2.sent === 3 && (mail2.bcc || []).includes('parent.three@example.com'), out2);
+  ok('and it is logged as essential, with all three recipients',
+    auditRows[0]?.detail?.essential === true && auditRows[0]?.detail?.recipients?.length === 3,
+    auditRows[0]?.detail);
   ok('and it still comes from the monitored address',
     mail2.from === 'Nou Klass <admin@nouklass.com>' && mail2.reply_to === 'admin@nouklass.com');
   ok("and still carries no personal address", !JSON.stringify(mail2).includes(ADMIN_PERSONAL));
@@ -163,6 +200,12 @@ function request(body) {
     && m3.html.includes('Just hit reply.'));
   ok('no empty paragraph is emitted for the trailing blank lines',
     !/<p[^>]*><\/p>/.test(m3.html));
+
+  // ⚠ A single recipient IS filed against that member, so the send shows up in
+  //   their own history rather than only in a list of everything ever sent.
+  ok('a one-person send is filed against that member',
+    auditRows[auditRows.length - 1]?.target_user === ids[0],
+    auditRows[auditRows.length - 1]?.target_user);
 
   console.log(`\n${checks - fails}/${checks} envelope checks passed.`);
   process.exit(fails ? 1 : 0);

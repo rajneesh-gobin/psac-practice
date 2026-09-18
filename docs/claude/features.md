@@ -262,10 +262,298 @@ everyone matching these filters*, then **✉️ Email selected**.
   `reply_to` until 2026-09-17 (`gate.caller.email`), which handed every parent
   the personal address of whoever pressed Send and made where a reply landed
   depend on which admin account was signed in. Who sent it is recorded in the
-  Worker's console line and `admin_log_action` — an audit trail, not a header.
+  Worker's console line and in the `admin_actions` row below — an audit trail,
+  not a header.
   `scripts/test-broadcast-envelope.js` runs the real handler with Resend stubbed
   and asserts the whole payload, not just the two header fields: the address
   must not ride along in the body or the stand-in `To` either.
+- ⚠ **The audit row is written by the SERVER — and until 2026-09-18 it was
+  written by nobody.** `engine/admin.js` logged each send itself with
+  `p_action: 'admin:broadcast'`, a name `admin_log_action()` refuses as
+  `bad_action` because it must match `^[a-z][a-z_]{2,39}# Feature areas — landing page, games, teacher mode, timetable, materials, contact, sharing
+
+## Points, levels and the leaderboard
+Points are **minted in the database**, never in the browser
+(`migrations/20260909_points_and_leaderboard.sql`). `DB.xp` still exists and is
+still drawn in the header chip, but it is now a **cache** of `student_points`, not
+the score. The whole design follows from one fact: a friends leaderboard among 20
+children a child chose tolerates a client-written number; a **global** one does
+not, and `get_my_friends()` was reading `data->>'xp'` — a value any child can set
+from devtools in five seconds.
+
+| Earns | Worth | Paid once per | Cap |
+|---|---|---|---|
+| a question answered correctly | its `questions.difficulty`, 1–4 | question, **ever** | — |
+| a finished game run | 5 | run | 3 a day, **across all games** |
+| a planned timetable session done | 10 | `schedule_entries.id` | 3 a day |
+| a new friend | 25, **both children** | pair, **ever** | 10 pairs, lifetime |
+| old XP carried forward | as it stood | `kind='legacy', ref='v1'` | once |
+
+- ⚠ **The ledger `student_point_events` IS the anti-abuse mechanism**, not a log.
+  `UNIQUE (student_id, kind, ref)` is the only thing making any "once" true.
+- ⚠ **A friendship's points survive unfriending.** `remove_friend()` deletes the
+  `student_friends` row and deliberately **not** the ledger row, so delete-and-
+  re-invite pays 0. Two more guards, because "once per pair" alone still allows 20
+  accounts made this afternoon: the other account must be **24h old**, and only
+  **10 pairs** ever pay against a 20-friend ceiling.
+- ⚠ **The client never sends an amount.** `award_activity_points(kind, ref)` looks
+  the value up server-side, so there is no number to inflate, and `'question'` /
+  `'friend'` / `'legacy'` are refused from it as `unknown_kind`.
+- ⚠ **Difficulty comes from the `questions.difficulty` COLUMN**, not from the
+  question the client just answered. An id the server does not know pays the
+  **floor of 1**, never the maximum — generators and projected `task` items produce
+  ids that were never imported, and paying an unknown id well is what would make
+  "invent an id" a strategy. (Measured: 194 of 33,832 bundle rows carry no
+  difficulty, and all 194 are past papers, which are never gradable.)
+- ⚠ **Paying on first CORRECT, not on first ATTEMPT** — a child who gets it wrong,
+  learns it and comes back is paid in full. That is the app.
+- ⚠ **Game answers still never reach `recordAnswer()` / `_recordDaily()`.** The
+  award is a lump in `_awardRun()` at the end of a run, so a replay still cannot
+  distort the mastery reporting parents rely on.
+- ⚠ **The timetable award fires on RENDER, because there is no completion event** —
+  a session reads as done when its chapter was practised today. Safe only because
+  the ledger makes every repeat free.
+- ⚠ **The leaderboard carries a name, an avatar, a grade and a score, and nothing
+  else** — no id, no `friend_code`. It is a public surface showing children who
+  have never met. It also filters to **one grade** by default and hides anyone on
+  0 points.
+- ⚠ **The level curve is written TWICE** — `POINTS_THRESHOLDS` in `engine/app.js`
+  and `points_level()` in SQL. `scripts/test-points-levels.js` fails on a
+  one-point drift. Twelve levels, top at 13,000; a full grade answered once is
+  ~9,600 points, so Level 10 is "finished your grade".
+- Tests: `scripts/sql-tests/run-points-tests.sh` (51 assertions against a real
+  postgres, run as `anon` with a genuine `x-student-token`) and
+  `scripts/test-points-levels.js`.
+
+### The global leaderboard screen (`screen-leaderboard`)
+⚠ **OFF BY DEFAULT, and the switch is in the database.** `leaderboard_enabled()`
+reads `global_settings.leaderboard_enabled`, which **coalesces to `false`** — an
+older blob with no such key reads as off, and so does a failed read on the client
+(`Store.leaderboardEnabled()` returns `false`, never `true`, on error).
+- **Admin › Content → 🌍 Global Leaderboard** is the only way to turn it on, and
+  turning it *on* asks for confirmation naming exactly what becomes visible. This
+  is a safeguarding decision, not a feature flag: it makes every child's display
+  name and score visible to every other child in the app.
+- ⚠ **Hiding `#dash-global-lb` is presentation; the enforcement is that
+  `get_points_leaderboard()` returns no rows to anybody while the switch is off**,
+  and `get_my_points_rank()` answers `leaderboard_disabled` — a *distinct* error
+  from "you are last", because the client has to tell those apart.
+- ⚠ **This is the only screen that renders text written by another family.**
+  Every name and avatar goes through `_attr()`. `scripts/test-global-leaderboard.js`
+  drives a `<img src=x onerror=…>` display name through the real renderer in real
+  Chrome and fails if it executes — verified to fail when `_attr()` is removed.
+- The RPC returns name · avatar · grade · level · points and **no id, no
+  `friend_code`**, so nothing on the board lets one child reach another.
+- Defaults to **the child's own grade**, with an "All grades" tab. A Grade 4 child
+  ranked against Grade 9 is not a competition.
+- `null` from the fetch is a **failed read** and says so; `[]` is a real empty
+  board. Conflating them would draw "be the first!" over a network blip.
+
+
+
+> Part of the PSAC brief. Start at [`CLAUDE.md`](../../CLAUDE.md) — it carries the
+> architecture, the rules that apply anywhere, and the index to these files.
+> Read the relevant part before changing one of these surfaces.
+> Long-form history and how each rule was found: grep `ENGINEERING-NOTES.md`.
+
+⚠ Nothing in any `.md` outranks the code or the live database. Measure, then edit.
+
+---
+## The landing page (`#screen-landing`, index.html)
+The public front door, and the only screen most visitors ever see. Order: nav →
+under-construction banner → hero → measured stats strip → **How we teach** →
+subjects → what we offer → Game Zone → three ways in → free-while-we-build panel
+→ 3 steps → tutors → footer.
+- ⚠ **PRICING IS HIDDEN, NOT DELETED.** The three priced tiers at `#plans` were
+  replaced by an "everything is free right now" panel; the nav Pricing link and
+  `#pd-upgrade-btn` are gone/hidden. `modal-plans`, `Store.listPlans()`,
+  `purchase_*()` and the admin Plans tab all still work — restoring it is markup.
+  `#plans` is kept as the section id so old anchors still land somewhere sensible.
+- ⚠ **"How we teach" is the product's actual claim**, not decoration: many simple
+  questions covering the WHOLE syllabus beat a handful of very hard ones;
+  difficulty rises Basic → Medium → Hard → Word Problems where harder means
+  *applied*, never obscure. It is why the subsection split and the 4-level scale
+  exist at all.
+- ⚠ **Every number on this page is measured and goes stale silently.** The stats
+  strip carries a comment saying how to re-count. (The page claimed "five learning
+  games" in three places for two days after the seventh shipped.)
+- ⚠ Under 640px every `[data-carousel]` grid becomes a horizontal scroll-snap
+  track with dots — **an overflow detector that does not stop at a scrolling
+  ancestor reports every card as protruding**; they are off-screen by design.
+- ⚠ Contrast here was the worst in the app (footer disclaimer at 1.65:1). The
+  colour is usually on an **ANCESTOR** (the `<footer>`, not the `<p>`), and every
+  card is translucent white over a gradient with no opaque background anywhere —
+  a naive probe reads `rgba(255,255,255,.05)` as the ground and reports 1:1.
+  Composite the layers over each gradient stop and take the worst.
+- Carousel dots are 16×44px via `padding` + `background-clip: content-box` (+
+  explicit `box-sizing: content-box`, or Tailwind preflight eats the padding).
+
+---
+
+## The Game Zone (minigames)
+`engine/minigame.js`, reached from `#dash-games-tile` / `#screen-minigames`. Seven
+live games: **Who Wants to Be a Billionaire?** 💰 (20-rung prize ladder; Q1–10 the
+child's grade easy→medium, Q11–15 hardest textbook, **Q16–20 general knowledge**
+from `minigame_gk.js`; 4 lifelines, safe havens at 5/10/15; synthesised WebAudio —
+**no audio files, no copyright** — and a distinct name and look on purpose, no show
+logo/music/wording) · **Quick Fire** ⚡ (60s blitz, combo ×1–5) · **Word Builder**
+🧩 (`minigame_words.js`; ⚠ a clue must never contain its own word, and words are
+A–Z only because the tiles are letters) · **Island Explorer** 🗺️
+(`minigame_geo.js`; ⚠ every fact real and verifiable; two wrongs and the tour
+**continues** — a child always finishes the trip) · **Number Ninja** 🥷 (7 belts ×
+5 sums, **GENERATED** per belt, never drawn from the bank) · **Brain Battle** ⚔️
+(pass-the-phone; both players drawn from the **same difficulty band** but never the
+same question — the second would inherit the answer — and a resume always lands on
+the handover, never mid-question) · **Time Traveller** 🕰️ (`minigame_time.js`;
+⚠ a label must never contain a 3+ digit number, and never two same-year events in
+one round, whose order would be unknowable).
+- ⚠ **Game answers NEVER call `recordAnswer()` / `_recordDaily()`.** A replay must
+  not distort the mastery, mistake and daily reporting parents rely on. Bests live
+  in `DB.games.*` (seeded in `Store._defaultStudent`, so existing children backfill
+  for free). In-progress games persist to sessionStorage per student.
+- The hub's four `mg-card-soon` teasers each have a **full design-intent comment
+  block above `renderHub()`** — read it before building one.
+- ⚠ **Confetti is `launchConfetti(count)` (app.js), NOT the canvas-confetti
+  `confetti({...})` API** — that library is not loaded, and a `typeof` guard made
+  every burst silently no-op.
+- **Ask the Crowd** — `minigame_polls` + three RPCs (granted `anon, authenticated`);
+  the child shares `/v/<CODE>` (`vote.html`, standalone like `guest.html`).
+  ⚠ **The CORRECT ANSWER IS NEVER STORED** — the row holds question + options only.
+  The table FKs `students(id) ON DELETE CASCADE`.
+- **Score sharing** — `navigator.share`, preferring a canvas-rendered 1080×1080 PNG
+  where `navigator.canShare({files})` allows, else intent links or clipboard;
+  `score.html?s=&c=&a=`. ⚠ **A share carries a score and a challenge — never the
+  child's name, id, or any profile link.**
+- **Gates**: `DB.restrictions.minigamesDisabled` (parent toggle;
+  `MiniGames.syncTile()` hides the tile live) and `_PLAN_GATED_SCREENS.minigames`.
+  An excluded games tile **hides rather than teasing** the child.
+- Tests: `test-minigame-arcade.js`, `test-number-ninja.js`, `test-brain-battle.js`,
+  `test-time-traveller.js`.
+
+## Email — one transport, one preference model
+Built 2026-09-16. ⚠ **Before it, the app could not send a single email.** The
+three handlers that tried (`notify.js`, `weekly-digest.js`,
+`teacher-approved-email.js`) each called **MailChannels**, whose free Cloudflare
+Workers relay shut in 2024, and the deployed Worker carried **no mail credential
+at all** — measured on the live Worker's bindings, which held exactly one secret
+(`SUPABASE_SERVICE_ROLE_KEY`). Each failed differently and silently.
+- **`workers/lib/mailer.js` is the only place mail is sent from.** Transport is
+  **Resend** over HTTPS — Workers cannot open a raw socket, so SMTP is not an
+  option here. Secrets: `RESEND_API_KEY`, `MAIL_FROM`, `SITE_URL`, `CRON_SECRET`.
+- ⚠ **TWO From addresses, and which one is not cosmetic.** `mailFrom()` —
+  `noreply@nouklass.com` — is for mail a MACHINE sent: a digest, a homework
+  notice, an activation. `mailFromHuman()` — `admin@nouklass.com`, overridable
+  with `MAIL_FROM_HUMAN` — is for mail a PERSON wrote, which today is the admin
+  broadcast alone. A message inviting a reply must not arrive from an address
+  named "noreply", and `admin@` is routed to a real inbox, so it also rescues a
+  reply from a client that ignores `Reply-To`. Both are at the same verified
+  Resend domain, so neither needs a DNS change; an unverified one is refused
+  outright with "domain is not verified".
+- ⚠ **`sendMail()`'s stand-in `To:` must be the From that was ACTUALLY used.**
+  A pure-Bcc message needs a To header, and printing `noreply@` in the To of a
+  message sent from `admin@` is precisely the mismatch a spam filter scores on.
+- ⚠ **This is a SECOND sender and does not touch the Gmail quota.** Supabase Auth
+  mail (sign-up, reset) still goes through `smtp.gmail.com` and still spends that
+  shared ~500/day ceiling. Two senders, two limits — see
+  [auth-sessions.md](auth-sessions.md).
+- ⚠ **A mail failure never fails the thing the mail announced.** `sendMail()`
+  never throws and returns the REAL reason — "domain not verified" and "bad key"
+  are one HTTP status apart and need completely different fixes. An invented
+  friendly message is how a real fault becomes unreportable.
+- **Preferences live in `profiles.preferences.email`** — `{ enabled, digest:
+  weekly|fortnightly|monthly|off, announcements, homework, last_digest_at }`.
+- ⚠ **The card that sets them is shown to EVERY signed-in adult**, not only a
+  parent with a family. It was `family ? … : ''`, so a teacher — who has no
+  family row — had no email settings at all, while the admin broadcast selects
+  teachers from its own Teachers tab and that message's footer tells the reader
+  to switch these off under Account & Settings → Notifications. **A screen that
+  does not exist is not an opt-out**, and `announcements` defaults to ON. The
+  rows that are ABOUT CHILDREN (progress report, homework results, the study
+  reminder) stay behind `family`/`children`: a teacher has none to report on.
+  Guarded by `scripts/test-email-preferences.js`.
+  ⚠ **`enabled:false` is the master switch and beats every per-kind flag.**
+  ⚠ **An unknown frequency reads as `off`** — a typo or a value from a future
+  version must never be treated as "send".
+  ⚠ **The legacy `weekly_digest` boolean still counts**: an explicit `false`
+  there is a parent who has ALREADY opted out, and the new shape must not
+  quietly re-subscribe them. The Settings screen writes both.
+- ⚠ **Frequency is enforced by `last_digest_at`, not by the cron expression.**
+  The cron runs weekly; fortnightly and monthly exist only because `digestDue()`
+  says no on the weeks between. It carries **one day of slack**, or a cron three
+  minutes late pushes a fortnightly parent out by another fortnight, then
+  another. `last_digest_at` is written **only after a successful send**.
+- ⚠ **`/api/weekly-digest` used to be an open POST that mailed every parent.**
+  Harmless while the transport was dead; the moment one works it is a mailing
+  gun pointed at the whole user base. It now needs `x-cron-secret` or an admin
+  JWT. The Cloudflare `scheduled()` entry point needs neither.
+- ⚠ **There were NO cron triggers on the deployed Worker**, so
+  `assignment-cleanup`, `classroom-purge` and `weekly-digest` had never run once
+  since the Netlify migration — `workers/index.js` had the handler and the
+  dispatch table and nothing ever called it. `wrangler.toml` now declares them,
+  and the strings must match `scheduled()` **exactly**: it dispatches by
+  comparing `event.cron`.
+- **Unsubscribe** is `/api/email-prefs`, an HMAC of (user id + scope) under the
+  service-role key. ⚠ **No sign-in, deliberately** — a parent must be able to
+  stop mail from the phone in their hand. It can only turn a preference **off**,
+  never on, and reads nothing back. ⚠ **A GET only shows the page**, because
+  Gmail and Outlook prefetch links in mail; the POST makes the change.
+- Tests: `scripts/test-email-preferences.js` (93 checks, including the
+  client/server agreement below).
+
+## Admin › group email (Bcc)
+Members tab: tick accounts (selection survives paging and filtering), or *Add
+everyone matching these filters*, then **✉️ Email selected**.
+- ⚠ **Bcc is the only mode, and the addresses never reach the browser.** The
+  admin selects **ids**; `workers/api/admin-broadcast.js` resolves them with the
+  service role. A To: list of 200 parent addresses is a data breach dressed as a
+  newsletter and is one wrong click away in any mail client.
+- ⚠ **It skips anyone who has switched announcements off**, unless the admin
+  ticks **Essential notice** — account, billing or safety only, the one category
+  a recipient cannot opt out of.
+- **Who would get this?** runs the whole thing as a dry run and reports the split
+  (would send / opted out / no address / deleted) without sending anything.
+- ⚠ **The body is NORMALISED before either part is built** (`normaliseBody()`).
+  An admin composes elsewhere and pastes, so what arrives carries the SENDER'S
+  layout — indents, a trailing space per line, stray blank lines — and
+  `bodyToHtml()` turns every newline into a `<br>`, delivering all of it
+  verbatim. Worse, `
+` was never normalised, so `/
+{2,}/` never matched a
+  WINDOWS paste and **every paragraph break was lost**: the whole message
+  arrived as one blob of `<br>`s. Line breaks the admin meant are kept — a
+  signature block survives — and runs of blank lines collapse to one paragraph.
+- ⚠ **Chunked at 500 ids per request and 50 recipients per message** (Resend's
+  cap), and a partial failure reports what DID go out. "It failed" after 600
+  delivered emails is the worst possible answer.
+- The body is plain text, escaped before it reaches the template. **From and
+  Reply-To are both `admin@nouklass.com`** — `mailFromHuman()` / `mailReplyTo()`,
+  not the `noreply@` every automated message uses. Cloudflare Email Routing
+  forwards that address to a real inbox, so a reply arrives whether the client
+  honours Reply-To or answers the From.
+- ⚠ **The sending admin's own address is never put on the message.** It was the
+  `reply_to` until 2026-09-17 (`gate.caller.email`), which handed every parent
+  the personal address of whoever pressed Send and made where a reply landed
+ and a colon does not,
+  in a call whose result was discarded. Measured on production the day it was
+  found: `admin_actions` held **0 rows, ever**. The Worker now writes it through
+  `logAdminAction()` (`workers/lib/admin-auth.js`) once Resend has answered —
+  who sent it, the subject, the counts, the recipient **ids** and the provider's
+  **message ids**.
+  ⚠ **The message ids are the only way to answer "did it reach them?"** Every
+  recipient is in Bcc, so the message names nobody afterwards, and the `To:` on
+  the sender's own copy is the From address standing in for an empty To
+  (`sendMail()`, or Gmail files a pure-Bcc message as suspicious). Paste a
+  message id into the Resend log for delivered/bounced. ⚠ The shipped
+  `RESEND_API_KEY` is **send-only** and cannot read that log — the dashboard can.
+  ⚠ **It does NOT call the `admin_log_action()` RPC**, which is right from the
+  browser and useless in a Worker: the function takes `admin_id` from
+  `auth.uid()` and gates on `is_admin()`, and under the service role
+  `auth.uid()` is NULL. Probed against production — it answers
+  `{"ok": false, "error": "not_authorised"}` with **HTTP 200**, writing nothing
+  while reporting success. `requireAdmin()` has already established the caller,
+  so the id is passed explicitly and service_role's own INSERT grant writes it.
+  ⚠ **IDs, never addresses**, and a dry run logs nothing: an audit trail that
+  records intentions is unreadable.
 - ⚠ **The budget line is reported in the right TENSE.** A dry run reads the
   budget as it stands *before* the send, so the preview says what this send
   *would* leave; the figure after a real send is already post-send. "80 will be
@@ -306,8 +594,21 @@ app on purpose: a phone, a school network or an offline session can block a CDN.
   one level deeper, in an import inside the file — and the feature's own
   fallback wording ("right now") made it read as a passing network problem
   rather than as something that had never worked.
-- Fixed by vendoring `encode-utf8.mjs` and `dijkstrajs.mjs` beside it (both
-  leaf modules, ~2.7 KB together) and rewriting the two specifiers to `./`.
+- Fixed by vendoring the two dependencies beside it (both leaf modules, ~2.7 KB
+  together) and rewriting the specifiers to `./`.
+- ⚠⚠ **AND THE FILENAMES CARRY THEIR VERSIONS** — `qrcode-1.5.3.mjs`,
+  `encode-utf8-1.0.3.mjs`, `dijkstrajs-1.0.3.mjs`. This is not tidiness.
+  `sw.js` serves `/assets/` **cache-first from `ASSET_CACHE`**, a cache with no
+  version in its name, explicitly kept across every `SHELL_VERSION` bump, whose
+  `cacheFirstWithNetwork()` returns a hit and **never revalidates**. So a
+  browser that once fetched the broken file keeps it FOREVER: no deploy, no
+  reload, no shell bump replaces it. **Measured** — the `/npm/` fix went live
+  and the console still read `/npm/encode-utf8@1.0.3/+esm 404` from the cached
+  copy, on a site already serving the corrected file. The URL is the only cache
+  key that exists there, so a fix has to change it, and every user who had
+  already opened the invite modal was otherwise stuck for good.
+  ⚠ The `import()` in `app.js` moves with it, which means the SHELL version
+  must be bumped too or browsers keep asking for the old URL.
 - ⚠ **`scripts/test-vendored-modules.js` imports every vendored module through
   Node's own resolver** rather than grepping for import statements — the first
   version regexed the minified source and reported a specifier of `",r,"` that

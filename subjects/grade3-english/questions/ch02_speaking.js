@@ -250,7 +250,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-spk-035', chapterId:'g3eng-speaking', difficulty:1, subsection:'describing_retelling',
     question:'In a retelling, which word would you use to start the FINAL event?',
-    options:['Finally','First','Then','Next'],
+    options:['Finally','First','Suddenly','Next'],
     answer:'Finally',
     hint:'Only one of these words signals the very last event.',
     explanation:'<b>Finally</b> is the connective word used to introduce the last event in a retelling or sequence.' }),

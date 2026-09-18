@@ -18,7 +18,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-writ-002', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,
     question:'Which transition word signals CONTRAST?',
-    options:['Furthermore','In addition','However','Therefore'],
+    options:['For example','In addition','However','Therefore'],
     answer:'However',
     hint:'This word introduces an idea that contradicts or limits the previous one.',
     explanation:'"<b>However</b>" signals contrast: "The plan seemed good. <b>However</b>, it had one major flaw." Other contrast transitions: Nevertheless, On the other hand, In contrast, Yet, Despite this. "Furthermore/In addition" = adding ideas. "Therefore" = consequence.' }),
@@ -62,7 +62,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-writ-007', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,
     question:'Which transition word signals a CONCLUSION or summary?',
-    options:['Furthermore','In contrast','In conclusion','However'],
+    options:['Furthermore','For example','In conclusion','However'],
     answer:'In conclusion',
     hint:'This phrase signals you are wrapping up all the ideas in your essay.',
     explanation:'"<b>In conclusion</b>" signals the final paragraph. Other concluding phrases: To summarise, In summary, To conclude, Therefore, Ultimately, To sum up. A conclusion should restate the thesis and leave the reader with a final thought - not introduce new information.' }),
@@ -152,7 +152,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-writ-016', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,
     question:'Which LINKING WORD correctly shows that the second idea contrasts with the first?',
-    options:['Furthermore','Therefore','Nevertheless','In addition'],
+    options:['For example','Therefore','Nevertheless','In addition'],
     answer:'Nevertheless',
     hint:'Three of these add to the previous idea or draw a conclusion from it. Only one pushes against it.',
     explanation:'"<b>Nevertheless</b>" shows contrast or concession: "The weather was terrible. <b>Nevertheless</b>, we enjoyed the trip." Linking words by function: <b>Adding</b>: Furthermore, In addition, Moreover, Also. <b>Contrast</b>: However, Nevertheless, On the other hand, Yet, Despite this. <b>Consequence</b>: Therefore, As a result, Consequently. <b>Conclusion</b>: In conclusion, To summarise.' }),

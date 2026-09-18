@@ -10,7 +10,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-spk-001', chapterId:'g2eng-speaking', difficulty:1, subsection:'retelling',
     question:'When retelling a story, which word helps you say what happened at the START?',
-    options:['First','Then','Last','Next'],
+    options:['First','Then','Last','Suddenly'],
     answer:'First',
     hint:'Retelling uses order words. What word goes at the very beginning?',
     explanation:'We use <b>First</b> to say what happened at the start of a story. The order words are: First → Next → Then → Last.' }),
@@ -59,7 +59,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-spk-008', chapterId:'g2eng-speaking', difficulty:1, subsection:'retelling',
     question:'Which order word means the FINAL thing that happened?',
-    options:['Last','First','Next','Then'],
+    options:['Last','First','Next','Suddenly'],
     answer:'Last',
     hint:'Think about the order: First → Next → Then → ___.',
     explanation:'<b>Last</b> tells us the final event in the story. The order is: First (1st) → Next (2nd) → Then (3rd) → Last (final).' }),

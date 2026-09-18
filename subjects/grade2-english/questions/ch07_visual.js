@@ -431,7 +431,7 @@ STATIC_QUESTIONS.push(
         CARD(120, 24, 76, 50, '2', 20) + ARROW(213, 49, 'right', '#9CA3AF') +
         CARD(230, 24, 76, 50, '3', 20)) +
       'You are retelling a story in order. Which word do you say at the <b>beginning</b>?',
-    options:['First','Then','Next','Last'], answer:'First',
+    options:['First','Then','Suddenly','Last'], answer:'First',
     hint:'Which word means “before everything else”?',
     explanation:'We start a retelling with <b>First</b>. Then and Next join the middle, and Last ends it.' }),
 

@@ -30,17 +30,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-pi-004', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Complète : « Shaivi n\'a pu aller au parc .......... il pleuvait. »',
-    options:['car','mais','donc','cependant'],
+    options:['car','mais','donc','pendant que'],
     answer:'car',
     hint:'On cherche un connecteur de cause qui justifie l\'impossibilité d\'aller au parc.',
-    explanation:'<b>Car</b> introduit une cause explicative : <i>elle n\'a pu y aller <b>car</b> il pleuvait</i>. « Mais » marque l\'opposition, « donc » la conséquence, « cependant » la concession.' }),
+    explanation:'<b>Car</b> introduit une cause explicative : <i>elle n\'a pu y aller <b>car</b> il pleuvait</i>. « Mais » marque l\'opposition, « donc » la conséquence, « pendant que » la simultanéité.' }),
 
   makeMCQ({ id:'g9fr-pi-005', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Complète : « Il a beaucoup travaillé ; .......... , il a réussi son examen. »',
-    options:['par conséquent','pourtant','néanmoins','or'],
+    options:['par conséquent','pourtant','tout à coup','or'],
     answer:'par conséquent',
     hint:'Le résultat découle logiquement de l\'effort.',
-    explanation:'<b>Par conséquent</b> exprime la conséquence logique : l\'effort entraîne la réussite. « Pourtant » et « néanmoins » marqueraient une opposition inattendue.' }),
+    explanation:'<b>Par conséquent</b> exprime la conséquence logique : l\'effort entraîne la réussite. « Pourtant » marquerait une opposition inattendue, « or » une transition et « tout à coup » une rupture.' }),
 
   // ── g9fr-grammaire : accords (2) ─────────────────────────────────────────
 
@@ -607,10 +607,10 @@ Quel est le montant total de la commande ?`,
 
   makeMCQ({ id:'g9fr-pi-074', chapterId:'g9fr-textes-trous', subsection:'conjonctions', difficulty:2,
     question:'Complète avec la bonne conjonction :\n« Il a réussi .......... il n\'avait pas beaucoup révisé. »',
-    options:['bien que','parce que','puisque','afin que'],
+    options:['bien que','parce que','dès que','afin que'],
     answer:'bien que',
     hint:'On note un contraste entre le succès et le peu de révision.',
-    explanation:'<b>Bien que</b> (+ subjonctif) exprime la concession — un résultat inattendu par rapport aux circonstances. « Parce que » et « puisque » exprimeraient une cause, pas un contraste.' }),
+    explanation:'<b>Bien que</b> (+ subjonctif) exprime la concession — un résultat inattendu par rapport aux circonstances. « Parce que » exprimerait une cause, « dès que » le moment et « afin que » le but, pas un contraste.' }),
 
   makeMCQ({ id:'g9fr-pi-075', chapterId:'g9fr-textes-trous', subsection:'adverbes_negation', difficulty:2,
     question:'Complète avec la négation correcte :\n« Je n\'ai .......... mangé aussi bien de ma vie ! »',

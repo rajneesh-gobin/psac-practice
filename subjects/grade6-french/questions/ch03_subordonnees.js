@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-sub-008', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
     question:'Complétez : "Il a réussi ___ il a beaucoup travaillé."',
-    options:['bien que','cependant','car','pourtant'],
+    options:['bien que','donc','car','pourtant'],
     answer:'car',
     hint:'La seconde partie de la phrase explique POURQUOI il a réussi. Cherche donc un connecteur de cause.',
     explanation:'"Il a réussi <b>car</b> il a beaucoup travaillé." - <b>car</b> exprime la cause (= parce que). Différence : "parce que" peut commencer une phrase, "car" ne peut pas commencer une phrase et ne s\'utilise pas après une virgule en début de réponse.' }),
@@ -200,7 +200,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-sub-026', chapterId:'g6fr-subordonnees', subsection:'conjonctions', difficulty:2,
     question:'Quelle conjonction causale utilise-t-on pour une cause NÉGATIVE (blame/raison fâcheuse) ?',
-    options:['grâce à','à cause de','puisque','car'],
+    options:['grâce à','à cause de','malgré','car'],
     answer:'à cause de',
     hint:'"Grâce à" = cause positive ; "à cause de" = cause négative.',
     explanation:'"<b>À cause de</b>" exprime une cause à <b>connotation négative</b> : "Il a raté son bus <b>à cause de</b> la pluie." Comparer avec "<b>grâce à</b>" = cause positive : "Il a réussi <b>grâce à</b> son travail." Astuce : <b>grâce à</b> = merci à ; <b>à cause de</b> = à blâmer.' }),

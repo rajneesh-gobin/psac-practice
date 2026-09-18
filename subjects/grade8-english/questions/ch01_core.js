@@ -91,10 +91,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8eng-speaking-005', chapterId:'g8eng-speaking', difficulty:3,
     subsection:'structured_discussion',
     question:'At the end of a formal debate, the speaker summarises the argument. Which word signals a CONCLUSION?',
-    options:['Furthermore','However','Therefore','Nevertheless'],
+    options:['Furthermore','However','Therefore','For example'],
     answer:'Therefore',
     hint:'"Therefore" signals a conclusion drawn from previous reasoning.',
-    explanation:'"<b>Therefore</b>" signals a conclusion — "We have shown X and Y; therefore, we should Z." "Furthermore" adds more points; "however" introduces contrast; "nevertheless" acknowledges a difficulty before going on.' }),
+    explanation:'"<b>Therefore</b>" signals a conclusion — "We have shown X and Y; therefore, we should Z." "Furthermore" adds more points; "however" introduces contrast; "for example" introduces an illustration.' }),
 
   makeMCQ({ id:'g8eng-speaking-006', chapterId:'g8eng-speaking', difficulty:4,
     subsection:'register_adaptation',

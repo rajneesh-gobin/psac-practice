@@ -635,14 +635,14 @@ const AdminPanel = (() => {
       //   double-send: the modal reopens with the same people still selected.
       clearMemberPicks();
       toast(`✉️ Sent to ${sent} recipient${sent === 1 ? '' : 's'}.`, 3500);
-      // A note, not evidence - written from the admin's browser after the fact,
-      // like every other admin_log_action call.
-      try {
-        await _sb.rpc('admin_log_action', {
-          p_action: 'admin:broadcast', p_target_user: null, p_target_student: null,
-          p_detail: { recipients: sent, subject: subject.slice(0, 120), essential },
-        });
-      } catch (_) {}
+      // ⚠ NOTHING IS LOGGED FROM HERE, DELIBERATELY. This used to write its own
+      //   audit row with p_action 'admin:broadcast' — a name admin_log_action()
+      //   rejects as bad_action, because it must match ^[a-z][a-z_]{2,39}$ and a
+      //   colon does not — in a call whose result was thrown away. Every
+      //   broadcast recorded nothing for as long as the feature existed.
+      //   /api/admin-broadcast now writes the row server-side once the provider
+      //   has answered, which is also the only side that knows the message ids
+      //   a delivery question is actually answered with.
     }
   }
 
@@ -2535,11 +2535,27 @@ const AdminPanel = (() => {
     _styleToggle(enfToggle);
   }
 
+  // ⚠ THE ON COLOUR IS AN INLINE STYLE, NOT A TAILWIND CLASS. This used to add
+  //   `bg-indigo-500` — specificity 0-1-0 — to an element already carrying
+  //   `dark:bg-gray-600`, which the Play CDN emits as
+  //   `.dark\:bg-gray-600:is(.dark *)`, specificity 0-2-0. The grey won
+  //   outright and class ORDER never entered into it. `<html>` ships
+  //   class="dark" and only a stored 'light' preference removes it, so in the
+  //   theme an admin actually looks at, all four switches in Content read as OFF
+  //   however they were set. Reported from the live panel, not by a harness:
+  //   "whether the button are on or off they all seem gray".
+  //   ⚠ Measured in headless Chrome against the real style.css and the real CDN
+  //   output: an inline style gives rgb(99,102,241) in BOTH themes, on and off.
+  //   A style.css rule `input:checked ~ .toggle-bg` (0-2-1) measures correct
+  //   too — see the note there — so either would do; the class would not.
+  //   ⚠ `.toggle-bg` carries a 200ms transition, so anything measuring this has
+  //   to let it finish. Sampling two frames after the change reads a colour
+  //   part-way between the two and looks like a failure.
   function _styleToggle(cb) {
     if (!cb) return;
     const bg  = cb.parentElement.querySelector('.toggle-bg');
     const dot = cb.parentElement.querySelector('.toggle-dot');
-    if (bg)  bg.classList.toggle('bg-indigo-500', cb.checked);
+    if (bg)  bg.style.backgroundColor = cb.checked ? '#6366f1' : '';
     if (dot) dot.style.transform = cb.checked ? 'translateX(20px)' : '';
   }
 

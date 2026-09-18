@@ -25,13 +25,13 @@
   ], ['ais', 'ait', 'ions', 'iez', 'aient'], 'Les terminaisons de l\'imparfait sont -ais, -ais, -ait, -ions, -iez, -aient.', a => `Ici, la terminaison est <b>-${a}</b>.`);
 
   [
-    ['Quel indice indique souvent l\'imparfait ?', 'Chaque jour', ['Soudain', 'Tout à coup', 'Un jour']],
-    ['Quel indice indique souvent l\'imparfait ?', 'Souvent', ['Soudain', 'Hier à midi', 'Tout à coup']],
-    ['Quel indice indique souvent l\'imparfait ?', 'Quand j\'étais petit', ['Tout à coup', 'Un jour', 'Soudain']],
+    ['Quel indice indique souvent l\'imparfait ?', 'Chaque jour', ['Soudain', 'Hier à midi', 'Un jour']],
+    ['Quel indice indique souvent l\'imparfait ?', 'Souvent', ['Soudain', 'Hier à midi', 'Un jour']],
+    ['Quel indice indique souvent l\'imparfait ?', 'Quand j\'étais petit', ['Tout à coup', 'Un jour', 'Hier à midi']],
     ['L\'imparfait sert surtout à décrire…', 'une habitude dans le passé', ['une action soudaine', 'un ordre', 'un projet futur']],
     ['L\'imparfait peut décrire…', 'le temps qu\'il faisait', ['un ordre', 'un projet futur', 'une action soudaine']],
     ['Dans « Je lisais quand il est entré », « lisais » exprime…', 'une action en cours', ['une action soudaine', 'un ordre', 'une action future']],
-    ['Quel groupe convient avec l\'imparfait ?', 'Tous les soirs', ['Soudain', 'Tout à coup', 'Hier à midi']],
+    ['Quel groupe convient avec l\'imparfait ?', 'Tous les soirs', ['Soudain', 'Un jour', 'Hier à midi']],
     ['Dans « La mer était calme », l\'imparfait décrit…', 'une situation', ['un ordre', 'une action soudaine', 'un projet futur']],
     ['Dans « Nous jouions souvent », l\'imparfait exprime…', 'une habitude', ['un ordre', 'une action soudaine', 'une action future']],
     ['Quel mot n\'indique pas forcément l\'imparfait ?', 'Soudain', ['Chaque jour', 'Souvent', 'Tous les soirs']],

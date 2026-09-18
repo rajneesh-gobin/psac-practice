@@ -78,7 +78,7 @@
     'Il annonce une objection.',
     '<b>Cependant</b>, comme « pourtant » ou « en revanche », introduit une idée qui s\'oppose à la précédente.');
   q('g6fr-argumentation', 'connecteurs', 2, 'Quel connecteur ajoute un argument dans le même sens ?',
-    ['De plus', 'Cependant', 'Pourtant', 'En revanche'],
+    ['De plus', 'Cependant', 'Par conséquent', 'Par exemple'],
     'Il renforce ce qui vient d\'être dit.',
     '<b>De plus</b>, comme « en outre » ou « par ailleurs », ajoute un argument qui va dans le même sens.');
   q('g6fr-argumentation', 'structure', 3, 'Un texte argumentatif se termine par ...',

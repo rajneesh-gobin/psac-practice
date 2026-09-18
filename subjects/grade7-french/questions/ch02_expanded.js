@@ -144,10 +144,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-eo-021', chapterId:'g7fr-eo', difficulty:3, subsection:'lexique_approprie',
     question:'Quel connecteur oral convient pour introduire un exemple ?',
-    options:['Par exemple','Cependant','En conclusion','Pourtant'],
+    options:['Par exemple','Cependant','En conclusion','De plus'],
     answer:'Par exemple',
     hint:'"Par exemple" annonce une illustration de l\'idée qu\'on vient d\'énoncer.',
-    explanation:'"<b>Par exemple</b>", "notamment", "c\'est le cas de" sont des connecteurs qui introduisent un exemple illustrant une idée. "Cependant" et "pourtant" expriment une opposition.' }),
+    explanation:'"<b>Par exemple</b>", "notamment", "c\'est le cas de" sont des connecteurs qui introduisent un exemple illustrant une idée. "Cependant" exprime une opposition, "de plus" une addition et "en conclusion" annonce la fin.' }),
 
   // ── Compréhension écrite — idee_principale ───────────────────────────────
 
@@ -252,10 +252,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-ee-017', chapterId:'g7fr-ee', difficulty:1, subsection:'organisation_paragraphes',
     question:'Quel connecteur logique utilise-t-on pour indiquer l\'ordre chronologique d\'abord ?',
-    options:['D\'abord','Cependant','En conclusion','Pourtant'],
+    options:['D\'abord','Par exemple','En conclusion','Pourtant'],
     answer:'D\'abord',
     hint:'Ce connecteur introduit la première idée dans une liste ordonnée.',
-    explanation:'"<b>Premièrement</b>" et "<b>d\'abord</b>" indiquent le début d\'une énumération ou d\'une séquence chronologique. Ils s\'utilisent avec "deuxièmement", "ensuite", "enfin". <b>Cependant</b> et <b>pourtant</b>, eux, marquent une opposition et non un ordre.' }),
+    explanation:'"<b>Premièrement</b>" et "<b>d\'abord</b>" indiquent le début d\'une énumération ou d\'une séquence chronologique. Ils s\'utilisent avec "deuxièmement", "ensuite", "enfin". <b>Pourtant</b> marque une opposition, « par exemple » introduit une illustration et « en conclusion » ferme le propos : aucun des trois n\'indique un ordre.' }),
 
   makeMCQ({ id:'g7fr-ee-018', chapterId:'g7fr-ee', difficulty:2, subsection:'organisation_paragraphes',
     question:'Qu\'est-ce qu\'un alinéa ?',

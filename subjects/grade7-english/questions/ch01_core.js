@@ -191,10 +191,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g7eng-writing-005', chapterId:'g7eng-writing', difficulty:3,
     subsection:'organising_ideas',
     question:'Which of the following LINKING WORDS shows CONTRAST between two ideas?',
-    options:['furthermore','therefore','however','in addition'],
+    options:['furthermore','therefore','however','for example'],
     answer:'however',
     hint:'You need a word that introduces an idea that is different from or opposite to the previous one.',
-    explanation:'"<b>However</b>" signals contrast — the opposite of what was just said. "Furthermore" and "in addition" add more similar information. "Therefore" shows result. Linking words guide the reader through your ideas and show how they connect.' }),
+    explanation:'"<b>However</b>" signals contrast — the opposite of what was just said. "Furthermore" adds more similar information and "for example" introduces an illustration. "Therefore" shows result. Linking words guide the reader through your ideas and show how they connect.' }),
 
   makeMCQ({ id:'g7eng-writing-006', chapterId:'g7eng-writing', difficulty:4,
     subsection:'organising_ideas',

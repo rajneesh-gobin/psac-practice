@@ -87,6 +87,8 @@ const SUMMARY = {
     return `${grades} grades, ${num(qs)} questions + ${num(past)} past-paper items`;
   },
 
+  synonyms: out => grab(out, /^([\d,]+ checked, .+)$/m),
+
   checks: out => {
     const n = lines(out).filter(l => /^\s{2}ok\s{2}/.test(l)).length;
     return n ? `${n} checks passed` : '';
@@ -114,6 +116,13 @@ const STEPS = [
   //   syllabus TEACHES; the other four can only count what happens to be there.
   { script: 'scripts/test-syllabus-facts.js',       label: 'packs ask what their source teaches',
     summary: SUMMARY.tests },
+  // ⚠ Reads the BUILT bundles, so it belongs after the build like the invariant
+  //   above. It is the only step that looks at what an option MEANS: a child who
+  //   spots that two options are the same word twice can eliminate both without
+  //   knowing the subject, and test-option-parity.js cannot see that because it
+  //   measures characters. 46 items across twelve packs, found 2026-09-18.
+  { script: 'scripts/test-option-synonyms.js',      label: 'no two options mean the same thing',
+    summary: SUMMARY.synonyms },
   { script: 'scripts/check.js',                     label: 'static checks (index drift, sw shell, LOCAL_FILES)',
     summary: SUMMARY.checks },
 ];

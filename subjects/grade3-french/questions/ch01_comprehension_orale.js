@@ -315,14 +315,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-co-044', chapterId:CH, difficulty:1, subsection:'idee_globale',
     question:'Dans un texte, quel mot indique ce qui arrive en DERNIER ?',
-    options:['Enfin','D\'abord','Puis','Ensuite'],
+    options:['Enfin','D\'abord','Parce que','Ensuite'],
     answer:'Enfin',
     hint:'Les mots de séquence sont : d\'abord, puis/ensuite, enfin.',
     explanation:'Le mot <b>enfin</b> (ou "pour finir", "finalement") indique le dernier événement de la séquence.' }),
 
   makeMCQ({ id:'g3fr-co-045', chapterId:CH, difficulty:1, subsection:'idee_globale',
     question:'Dans un texte, quel mot indique ce qui arrive en PREMIER ?',
-    options:['D\'abord','Ensuite','Enfin','Puis'],
+    options:['D\'abord','Ensuite','Enfin','Parce que'],
     answer:'D\'abord',
     hint:'Il y a un ordre : d\'abord → ensuite/puis → enfin.',
     explanation:'Le mot <b>d\'abord</b> (ou "premièrement", "pour commencer") indique le premier événement.' }),

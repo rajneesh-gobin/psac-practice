@@ -192,6 +192,33 @@ authored distractor is **silently discarded**, and the answer is appended.
   were re-fixed by using the SHORT wording for both; two leak either way because
   their distractors are far shorter than any correct answer, which the duplicate
   had been masking. **Check option parity after fixing an answer/option mismatch.**
+- ⚠ **TWO OPTIONS MUST NEVER MEAN THE SAME THING**, and until 2026-09-18 nothing
+  measured that. `test-option-synonyms.js` (preflight step 6) fails the build
+  when one option list holds two interchangeable connectors — *Ensuite/Puis*,
+  *Enfin/Finalement*, *however/nevertheless*, *cependant/pourtant*. Neither can
+  be the answer, because two right answers is not a question, so a child who
+  spots the pair eliminates both **without knowing the subject**; where three
+  were interchangeable the answer was simply the odd one out.
+  ⚠ Reported by a parent from a live Grade 5 French screen, not by a harness:
+  *« Quel connecteur relie la deuxième image à la première ? »* offered
+  **Au début** and **D'abord** side by side. Measured afterwards: **46 items in
+  twelve packs**, Grade 2 English order words through Grade 9 French connectors.
+  `test-option-parity.js` could not see any of them — it measures CHARACTERS, and
+  these options are all short and all the same shape.
+  ⚠ **Fix by changing the FUNCTION, not the word**: put an opposition among order
+  words, a cause among consequences. Replacing a twin with another twin is the
+  same question again.
+  ⚠ Its `GROUPS` list is the measurement. Widening it by four words — *néanmoins,
+  en revanche, nevertheless, in contrast* — found **nine more** that a narrower
+  first pass had called clean.
+  ⚠ Some pairings are the POINT (« Distingue parce que, car, puisque… »), and one
+  is a real past paper whose options are the MES's, not ours. Those live in
+  `ACCEPTED` **with a reason each**, never as a quietly-lowered threshold.
+  ⚠ **An explanation that walks the choices goes stale with them.** Nine items
+  said things like *« Parce que » et « puisque » exprimeraient une cause* about
+  an option no longer on screen. Prose that teaches the word FAMILY
+  (*« Enfin (ou "pour finir", "finalement") »*, the FANBOYS list) is doing its job
+  and stays.
 
 ## ⚠ The admin editor MERGES onto the row — it must never rebuild it
 The second way a question gets written is Admin → Question bank, and `qmSave()`

@@ -189,14 +189,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-026', chapterId:CH, difficulty:1, subsection:'recit_oral',
     question:'Quel mot indique ce qui arrive EN PREMIER dans un récit ?',
-    options:['D\'abord','Ensuite','Enfin','Puis'],
+    options:['D\'abord','Ensuite','Enfin','Parce que'],
     answer:'D\'abord',
     hint:'Il y a un ordre pour raconter : premier, deuxième, dernier.',
     explanation:'<b>D\'abord</b> (ou "premièrement", "pour commencer") indique le premier événement d\'un récit.' }),
 
   makeMCQ({ id:'g3fr-eo-027', chapterId:CH, difficulty:1, subsection:'recit_oral',
     question:'Quel mot indique ce qui arrive EN DERNIER dans un récit ?',
-    options:['Enfin','D\'abord','Puis','Ensuite'],
+    options:['Enfin','D\'abord','Parce que','Ensuite'],
     answer:'Enfin',
     hint:'La séquence est : d\'abord → ensuite/puis → enfin.',
     explanation:'<b>Enfin</b> (ou "pour finir", "finalement") indique le dernier événement d\'un récit.' }),
@@ -266,7 +266,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-037', chapterId:CH, difficulty:1, subsection:'recit_oral',
     question:'Quel mot est le mieux pour COMMENCER un récit ?',
-    options:['Un jour','Enfin','Puis','Ensuite'],
+    options:['Un jour','Enfin','Parce que','Ensuite'],
     answer:'Un jour',
     hint:'"Un jour" introduit l\'événement de départ d\'une histoire.',
     explanation:'"<b>Un jour</b>" est une expression classique pour commencer un récit et situer l\'action dans le temps.' }),

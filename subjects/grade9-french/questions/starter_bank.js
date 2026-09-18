@@ -445,7 +445,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-sb-062', chapterId:'g9fr-redaction', subsection:'recit', difficulty:2,
     question:'Quel connecteur convient pour ordonner un récit ?',
-    options:['Ensuite','Cependant','Néanmoins','Toutefois'], answer:'Ensuite',
+    options:['Ensuite','Par exemple','Néanmoins','En effet'], answer:'Ensuite',
     hint:'Cherche celui qui marque la succession dans le temps.',
     explanation:'<b>Ensuite</b> marque l\'ordre chronologique. Les trois autres expriment une opposition, utile dans un texte d\'opinion.' }),
 

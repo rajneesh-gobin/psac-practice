@@ -159,10 +159,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g7eng-writing-007', chapterId:'g7eng-writing', difficulty:1,
     subsection:'organising_ideas',
     question:'Which linking word shows that the NEXT idea is an ADDITIONAL point (not a contrast)?',
-    options:['although','but','furthermore','yet'],
+    options:['for example','but','furthermore','therefore'],
     answer:'furthermore',
     hint:'"Furthermore" means "in addition to what was just said".',
-    explanation:'"<b>Furthermore</b>" adds another point in the same direction (like "also", "in addition", "moreover"). "Although", "but" and "yet" introduce contrast or contradiction. Choose linking words carefully to show the right relationship between ideas.' }),
+    explanation:'"<b>Furthermore</b>" adds another point in the same direction (like "also", "in addition", "moreover"). "But" introduces a contrast, "therefore" a result, and "for example" an illustration. Choose linking words carefully to show the right relationship between ideas.' }),
 
   makeMCQ({ id:'g7eng-writing-008', chapterId:'g7eng-writing', difficulty:2,
     subsection:'vocabulary_register',

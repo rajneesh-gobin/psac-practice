@@ -11,7 +11,7 @@
 //   admin marks the message ESSENTIAL (account, billing or safety), which is the
 //   only category a recipient cannot opt out of.
 
-import { requireAdmin, json } from '../lib/admin-auth.js';
+import { requireAdmin, json, logAdminAction } from '../lib/admin-auth.js';
 import {
   sendMail, wrap, escapeHtml, siteUrl, mailConfigured,
   wantsEmail, unsubscribeUrl, MAX_RECIPIENTS_PER_MESSAGE,
@@ -22,6 +22,10 @@ const MAX_IDS = 500;
 const MAX_SUBJECT = 150;
 const MAX_BODY = 8000;
 const AUTH_PAGE_SIZE = 1000;
+// How many recipient ids one audit row carries. A 500-address newsletter is
+// answered by the count; a send to three people is answered by the three ids,
+// and that is the send somebody actually comes back to ask about.
+const AUDIT_ID_CAP = 200;
 
 // ⚠ CLOUDFLARE CAPS SUBREQUESTS PER REQUEST (50 on the free plan). One
 //   /auth/v1/admin/users/<id> lookup per recipient is the obvious way to write
@@ -198,6 +202,8 @@ export default async function handler(request, env) {
 
   let sent = 0;
   const failures = [];
+  const messageIds = [];
+  const deliveredIds = [];
   // One message per Bcc batch. A batch that fails is reported by size rather
   // than by address: the admin needs to know how many to retry, and the browser
   // must not learn who is on the list.
@@ -218,16 +224,27 @@ export default async function handler(request, env) {
       //   on which admin account was signed in at the time. Both headers are
       //   now the shared monitored address, so a reply goes to one inbox the
       //   team reads whether the client honours Reply-To or answers the From.
-      //   Who sent it is recorded in the console line and admin_log_action,
-      //   which is where an audit trail belongs.
+      //   Who sent it is recorded in the console line and in the
+      //   admin_actions row written at the end of this handler, which is where
+      //   an audit trail belongs.
       from: mailFromHuman(env),
       replyTo: mailReplyTo(env),
       // Already counted by quotaTake() above — do not count it twice.
       reserved: true,
       ...(unsubscribe ? { unsubscribe } : {}),
     });
-    if (res.ok) sent += batch.length;
-    else failures.push({ size: batch.length, error: res.error });
+    if (res.ok) {
+      sent += batch.length;
+      // ⚠ THE PROVIDER'S MESSAGE ID IS THE ONLY THING THAT MAKES A PAST SEND
+      //   CHECKABLE. Everything else recorded here is what this server intended
+      //   to do; this is what the provider acknowledged, and it is what you
+      //   paste into the Resend log to learn whether it was delivered, bounced
+      //   or refused. Without it, "did it reach them?" has no answer at all
+      //   once the message has left — the headers cannot say, because every
+      //   recipient is in Bcc.
+      if (res.id) messageIds.push(res.id);
+      for (const r of batch) deliveredIds.push(r.id);
+    } else failures.push({ size: batch.length, error: res.error });
   }
 
   // ⚠ Hand back what was reserved and not spent. A provider outage would
@@ -238,6 +255,37 @@ export default async function handler(request, env) {
   console.log(`[admin-broadcast] ${gate.caller.email} → ${sent}/${recipients.length} recipients` +
     (deferred ? `, ${deferred} deferred (daily budget)` : '') +
     `, subject "${subject.slice(0, 60)}"`);
+
+  // ⚠ WRITTEN HERE, AFTER THE PROVIDER ANSWERED — not from the browser, which
+  //   used to do it with p_action 'admin:broadcast'. admin_log_action() refuses
+  //   that name as bad_action (no colon is allowed) and the caller discarded
+  //   the result, so every broadcast this app has ever sent recorded nothing.
+  //   The server is also the only side that ever sees the provider's message
+  //   ids, and the console line it used to point at survives only as long as a
+  //   `wrangler tail` is open.
+  // ⚠ A DRY RUN RETURNS LONG BEFORE THIS. Nothing was sent, so nothing is
+  //   logged; an audit trail that records intentions is unreadable.
+  // ⚠ Logged even when every batch failed: "we tried to mail 40 people and
+  //   none of it went" is the row you most want to find afterwards.
+  await logAdminAction(gate, {
+    action: 'broadcast_sent',
+    // A one-person send belongs in that member's own history. A newsletter
+    // belongs to nobody in particular, so it is filed against no one.
+    targetUser: deliveredIds.length === 1 ? deliveredIds[0] : null,
+    detail: {
+      subject,
+      essential,
+      selected: ids.length,
+      eligible: recipients.length,
+      sent,
+      deferred,
+      skipped,
+      message_ids: messageIds.slice(0, AUDIT_ID_CAP),
+      recipients: deliveredIds.slice(0, AUDIT_ID_CAP),
+      ...(deliveredIds.length > AUDIT_ID_CAP ? { recipients_total: deliveredIds.length } : {}),
+      ...(failures.length ? { failures } : {}),
+    },
+  });
   return json(failures.length && !sent ? 502 : 200, {
     ok: sent > 0,
     sent,

@@ -73,6 +73,18 @@ for (const f of files) {
     (src.match(/["']\/npm\/[^"']*/) || [])[0]);
   ok(`${f} does not import from a CDN`, !/from\s*["']https?:\/\//.test(src),
     (src.match(/from\s*["']https?:\/\/[^"']*/) || [])[0]);
+
+  // ⚠⚠ THE FILENAME MUST CARRY A VERSION, and this is not tidiness. sw.js
+  //    serves /assets/ cache-first from ASSET_CACHE — a cache with NO version
+  //    in its name, explicitly kept across every SHELL_VERSION bump, whose
+  //    cacheFirstWithNetwork() returns a hit without ever revalidating. So a
+  //    browser that once fetched a broken vendored file keeps it FOREVER: no
+  //    deploy, no reload and no shell bump replaces it. Measured — the /npm/
+  //    fix above went live and the console still read
+  //    "/npm/encode-utf8@1.0.3/+esm 404" from the cached copy.
+  //    The URL is the only cache key there is, so a fix has to change it.
+  ok(`${f} has a version in its filename, so a fix can reach a cached browser`,
+    /\d+\.\d+\.\d+/.test(f), f);
 }
 
 // ── The QR encoder specifically: the app calls exactly these ───────────────

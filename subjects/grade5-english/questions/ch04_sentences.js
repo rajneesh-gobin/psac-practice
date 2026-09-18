@@ -67,10 +67,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-sent-007', chapterId:'eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Which word correctly joins these two sentences? "It was raining. We stayed indoors."',
-    options:['but','so','or','yet'],
+    options:['but','so','or','for'],
     answer:'so',
     hint:'"So" shows result or consequence - the rain caused us to stay indoors.',
-    explanation:'"<b>So</b>" shows cause and effect: "It was raining, <b>so</b> we stayed indoors." - the rain is the reason we stayed in. "But/yet" show contrast. "Or" shows alternatives. FANBOYS (For, And, Nor, But, Or, Yet, So) are coordinating conjunctions.' }),
+    explanation:'"<b>So</b>" shows cause and effect: "It was raining, <b>so</b> we stayed indoors." - the rain is the reason we stayed in. "But" shows contrast, "or" shows alternatives, and "for" gives the reason the other way round. FANBOYS (For, And, Nor, But, Or, Yet, So) are coordinating conjunctions.' }),
 
   makeMCQ({ id:'g5eng-sent-008', chapterId:'eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Where should the apostrophe go in: "the boys shoes"? (shoes belonging to one boy)',

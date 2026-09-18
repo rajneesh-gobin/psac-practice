@@ -179,10 +179,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g7fr-eo-012', chapterId:'g7fr-eo', difficulty:3, subsection:'lexique_approprie',
     question:'Dans un exposé oral, quel connecteur utilise-t-on pour ajouter une idée ?',
-    options:['De plus','Cependant','Donc','Pourtant'],
+    options:['De plus','Cependant','Donc','Par exemple'],
     answer:'De plus',
     hint:'Ce connecteur indique une addition, pas une opposition.',
-    explanation:'Le connecteur <b>"de plus"</b> (ou "en outre", "aussi") s\'utilise pour ajouter une idée supplémentaire. "Cependant" et "pourtant" expriment une opposition.' }),
+    explanation:'Le connecteur <b>"de plus"</b> (ou "en outre", "aussi") s\'utilise pour ajouter une idée supplémentaire. "Cependant" exprime une opposition, "donc" une conséquence et "par exemple" une illustration.' }),
 
   // ── Compréhension écrite — idee_principale ───────────────────────────────
 

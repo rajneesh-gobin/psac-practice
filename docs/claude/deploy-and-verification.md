@@ -154,6 +154,25 @@ This project's fixes are **measured, not eyeballed**.
 - ⚠ **Give every CDP call its own timeout.** An infinite loop in page JS blocks the
   renderer's message loop so CDP never answers; without a timeout you cannot tell
   "page wedged" from "harness bug".
+- ⚠⚠ **`getComputedStyle` right after a JS DOM change reads a STALE value** in a
+  headless CDP session, and it lies quietly rather than erroring. Measured
+  2026-09-18 chasing the admin toggles: an inline `background-color` read back
+  from `el.style.cssText` as set, while `getComputedStyle(el)` still reported the
+  old colour — which is impossible, an inline style outranks every stylesheet
+  rule. Two conclusions were drawn from that stale read and both were **wrong**,
+  including a "Chrome does not restyle `~` siblings when `.checked` is set as a
+  property" that got written into a source comment before it was retested.
+  **Settle the frame before reading**: `await new Promise(r => setTimeout(r, 400))`
+  after each mutation, and use `Runtime.evaluate` with `awaitPromise: true`.
+- ⚠ **Two `requestAnimationFrame`s is not enough when the thing you measure has a
+  `transition`.** `.toggle-bg` transitions `background-color` over 200ms, so a
+  probe sampling ~32ms in reads a colour part-way between the two — `rgb(80,89,130)`
+  between grey and indigo — which looks exactly like a broken fix. Wait longer
+  than the transition, or read it after setting `transition: none`.
+- ⚠ **Compare like with like.** The same run gave one candidate the real
+  `.toggle-bg` class and the other a typo'd one, so only one carried the
+  transition: the untransitioned one read "correct" instantly and the real one
+  read "broken", and the conclusion was backwards.
 - ⚠ **`checkVisibility()` answers false for everything in headless Chrome 152** — a
   probe built on it measures nothing and passes. Assert collapse by geometry, and
   filter closed `<details>` by ancestry.

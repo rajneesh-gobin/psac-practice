@@ -255,7 +255,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4fr-comp-030', chapterId:'g4fr-lecture', subsection:'connecteurs', difficulty:3,
     question:'Lis : "Il fait beau. Marie décide donc d\'aller au parc." Quel connecteur pourrait remplacer "donc" ici ?',
-    options:['parce que','d\'abord','mais','cependant'],
+    options:['parce que','d\'abord','mais','pendant que'],
     answer:'parce que',
     hint:'La belle météo est la raison d\'aller au parc.',
     explanation:'On pourrait restructurer : "Marie décide d\'aller au parc <b>parce qu\'</b>il fait beau." - <b>donc</b> (conséquence) et <b>parce que</b> (cause) expriment la même relation logique mais dans des structures différentes : Cause + donc + Résultat ↔ Résultat + parce que + Cause.' }),

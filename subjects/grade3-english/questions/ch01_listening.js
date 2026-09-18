@@ -236,7 +236,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3eng-lis-033', chapterId:'g3eng-listening', difficulty:1, subsection:'sequence_events',
     question:'Which word tells you what happened LAST in a story?',
-    options:['Finally','First','Then','Next'],
+    options:['Finally','First','Then','Suddenly'],
     answer:'Finally',
     hint:'This word signals the end of a sequence.',
     explanation:'<b>Finally</b> is the sequence word that shows the last event. "First" starts, "then/next" continue, and "finally" ends.' }),

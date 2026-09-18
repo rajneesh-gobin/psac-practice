@@ -13,9 +13,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-arg-002', chapterId:'g6fr-argumentation', subsection:'connecteurs', difficulty:2,
     question:'Quel connecteur AJOUTE une idée à la précédente ?',
-    options:['Cependant','Pourtant','De plus','En revanche'],
+    options:['Par exemple','Par conséquent','De plus','En revanche'],
     answer:'De plus',
-    hint:'Trois de ces connecteurs marquent une opposition. Un seul ajoute une idée.',
+    hint:'Les autres marquent une opposition, une conséquence ou un exemple. Un seul ajoute une idée.',
     explanation:'"<b>De plus</b>" = pour ajouter une idée. Autres connecteurs d\'ajout : En outre, Par ailleurs, Non seulement… mais aussi, Également. "Cependant / Pourtant / En revanche" = opposition.' }),
 
   makeMCQ({ id:'g6fr-arg-003', chapterId:'g6fr-argumentation', subsection:'opinion', difficulty:2,

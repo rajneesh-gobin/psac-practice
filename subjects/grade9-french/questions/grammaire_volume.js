@@ -142,10 +142,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-grv-020', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Choisis le connecteur logique : « Elle a beaucoup travaillé ; .......... , elle a obtenu une excellente note. »',
-    options:['par conséquent','pourtant','en revanche','bien que'],
+    options:['par conséquent','pourtant','par exemple','bien que'],
     answer:'par conséquent',
     hint:'La deuxième proposition est-elle une cause, une conséquence ou une opposition ?',
-    explanation:'La bonne note est la <b>conséquence</b> du travail, d\'où <b>par conséquent</b>. « Pourtant » et « en revanche » marqueraient une opposition.' }),
+    explanation:'La bonne note est la <b>conséquence</b> du travail, d\'où <b>par conséquent</b>. « Pourtant » marquerait une opposition, « bien que » une concession et « par exemple » une illustration.' }),
 
   makeMCQ({ id:'g9fr-grv-021', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Choisis le connecteur : « Il pleuvait .......... , nous avons décidé de sortir quand même. »',
@@ -156,14 +156,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-grv-022', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Choisis le connecteur : « Ce film est intéressant. .......... , les effets spéciaux sont remarquables. »',
-    options:['De plus','Cependant','Or','Pourtant'],
+    options:['De plus','Donc','Or','Pourtant'],
     answer:'De plus',
     hint:'Le second énoncé ajoute une qualité supplémentaire.',
     explanation:'<b>De plus</b> (en outre, par ailleurs) introduit une <b>addition</b> : on ajoute un avantage supplémentaire au film.' }),
 
   makeMCQ({ id:'g9fr-grv-023', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:3,
     question:'Choisis le connecteur : « .......... il soit malade, Ravi refuse d\'annuler le match. »',
-    options:['Bien que','Parce que','Puisque','Car'],
+    options:['Bien que','Parce que','Dès que','Afin que'],
     answer:'Bien que',
     hint:'La subordonnée exprime une concession et le verbe est au subjonctif.',
     explanation:'<b>Bien que</b> introduit une <b>concession</b> au subjonctif : malgré la maladie, Ravi maintient le match.' }),
@@ -177,7 +177,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-grv-025', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Choisis le connecteur : « .......... , il faut choisir un sujet ; ensuite, il faut faire un plan. »',
-    options:['D\'abord','Cependant','En revanche','Autrement'],
+    options:['D\'abord','Par conséquent','En revanche','Autrement'],
     answer:'D\'abord',
     hint:'On ordonne les étapes d\'une démarche.',
     explanation:'<b>D\'abord … ensuite … enfin</b> organisent une <b>séquence chronologique</b>. Ici la première étape est introduite par <b>d\'abord</b>.' }),
@@ -205,7 +205,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-grv-029', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Choisis le connecteur : « Elle parle plusieurs langues, .......... le français, l\'anglais et le créole. »',
-    options:['notamment','cependant','donc','pourtant'],
+    options:['notamment','car','donc','pourtant'],
     answer:'notamment',
     hint:'On donne des exemples particuliers d\'une assertion générale.',
     explanation:'<b>Notamment</b> (par exemple, en particulier) introduit une <b>illustration</b> ou des exemples concrets d\'une idée générale.' }),
@@ -219,7 +219,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-grv-031', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Choisis le connecteur : « Elle a raté son vol .......... elle n\'avait pas vérifié l\'heure. »',
-    options:['car','donc','cependant','néanmoins'],
+    options:['car','donc','cependant','d\'abord'],
     answer:'car',
     hint:'La deuxième proposition donne la raison du fait énoncé.',
     explanation:'<b>Car</b> (parce que, puisque) introduit la <b>cause</b> du fait énoncé dans la première proposition.' }),
@@ -254,7 +254,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-grv-036', chapterId:'g9fr-grammaire', subsection:'connecteurs', difficulty:2,
     question:'Choisis le connecteur : « Il lit beaucoup ; .......... , son vocabulaire est très riche. »',
-    options:['en effet','cependant','pourtant','néanmoins'],
+    options:['en effet','cependant','par exemple','d\'abord'],
     answer:'en effet',
     hint:'La deuxième proposition confirme ou explique la première.',
     explanation:'<b>En effet</b> introduit une <b>explication ou confirmation</b> de l\'affirmation précédente : lire beaucoup explique le riche vocabulaire.' }),
