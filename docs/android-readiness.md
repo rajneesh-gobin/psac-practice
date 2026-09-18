@@ -134,9 +134,13 @@ drawn, and each handler refuses a social target as well.
   families”* in the app. The web keeps it — whether it should say that to a
   nine-year-old anywhere is a product call, not a technical one.
 
-**A3 — targetSdk.** `convert_to_app.md` now says **35** (and minSdk 21), with a
-note that Android 15 forces edge-to-edge at that level — which is what makes B1
-a real defect rather than a dormant one.
+**A3 — targetSdk.** ⚠ **Corrected 2026-09-18 after reading Bubblewrap itself:**
+`targetSdkVersion` is **not** a `twa-manifest.json` field — it lives in
+`app/build.gradle` — and Bubblewrap 1.25.0’s template already ships
+`compileSdkVersion 36 / targetSdkVersion 36`, above the 35 Play has required
+since Aug 2025. So there is nothing to bump, only something to verify;
+`scripts/check-twa-manifest.js` reads the Gradle file and fails under 35.
+Android 15 forcing edge-to-edge at that level is still what makes B1 real.
 
 **B4 — install UI.** Narrower than the audit assumed. The iOS tip banner already
 gates on `isIOS`, and `#pwa-install-btn` only unhides on `beforeinstallprompt`,

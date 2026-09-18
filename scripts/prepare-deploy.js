@@ -117,6 +117,12 @@ const FORBIDDEN = [
   /^subjects\/[^/]+\/questions($|\/)/,
   /^past-papers($|\/)/, /^exam_papers($|\/)/,
   /^\.netlify($|\/)/, /^netlify($|\/)/, /^\.import-conflicts($|\/)/,
+  // ⚠⚠ THE ANDROID SIGNING KEY, and anything shaped like one. It belongs
+  //   outside the repo, so this should never fire - which is exactly what was
+  //   said about .env before .env reached the public site. A CLI deploy uploads
+  //   from local disk, so .gitignore protects nothing here; only this list does.
+  /\.(keystore|jks|p12)$/i, /(^|\/)keystore\.properties$/i,
+  /(^|\/)twa-manifest\.json$/i, /^nouklass-android($|\/)/,
   /\.pdf$/i, /\.sql$/i,
 ];
 

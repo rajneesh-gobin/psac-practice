@@ -33,6 +33,7 @@ you know it exists. The area file carries the rule, its bound and its test.
 | `sw.js`, `netlify.toml`, a deploy, or a headless-Chrome harness | [`deploy-and-verification.md`](docs/claude/deploy-and-verification.md) |
 | minigames, teacher mode, the landing page, timetable, materials, contact form, sharing | [`features.md`](docs/claude/features.md) |
 | what to do next, or anything reported as outstanding | [`pending.md`](docs/claude/pending.md) |
+| **building the Android app** — keystore, Bubblewrap, assetlinks | [`docs/android-build.md`](docs/android-build.md) |
 | **the Android app / Google Play** — what must change in the web app first | [`docs/android-readiness.md`](docs/android-readiness.md) |
 | **Science Labs** (`engine/labs/` — per grade: Grades 4-9, Grade 5 borrows 4 and 6; build contract in `docs/labs/LAB_SPEC.md`) | [`docs/labs/PLAN.md`](docs/labs/PLAN.md) |
 

@@ -32,3 +32,21 @@ node_modules/
 # repo if you need to re-run it.
 books/
 .secrets.local.md
+
+# ⚠⚠ THE ANDROID SIGNING KEY. This is the one file in the whole project that
+# cannot be regenerated: lose it and you cannot ship an update to the same Play
+# listing ever again - new listing, zero reviews, zero installs. Publish it and
+# anyone can sign an app that Android will accept as yours.
+# ⚠ It is supposed to live OUTSIDE this repo entirely (see docs/convert_to_app.md).
+#   These lines are the second gate, for the day someone copies it in "just to
+#   build quickly" - the same mistake that once shipped .env to the public site.
+*.keystore
+*.jks
+*.p12
+*.keystore.*
+keystore.properties
+
+# The Bubblewrap/TWA project, if anyone ever generates it inside the repo.
+# It carries signing config and a full Gradle build - neither belongs here.
+nouklass-android/
+twa-manifest.json
