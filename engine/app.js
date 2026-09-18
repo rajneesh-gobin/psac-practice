@@ -2598,6 +2598,117 @@ function _closeConfirmModal(confirmed) {
 const _SCREEN_ORDER = ['dashboard','subject-select','chapter-select','practice','exam'];
 let _prevScreen = null;
 
+// ── ANDROID / BROWSER BACK ────────────────────────────────────────────────
+// ⚠⚠ Before this, the app had NO pushState anywhere: navigation was
+//   showScreen(id) and nothing else, so the history stack held exactly one
+//   entry. In a browser that meant Back left the site from any screen; in the
+//   Play app (a TWA maps the hardware/gesture Back to history.back()) it FINISHED
+//   THE ACTIVITY - back out of question 30 of an exam and the app closed. On
+//   Android that reads as a crash, and it is the loudest complaint this app
+//   could ship with.
+//
+// ⚠ The entry is pushed INSIDE showScreen(), not at the ~171 call sites across
+//   10 files. Every caller inherits it, and a new one cannot forget.
+// ⚠ pushState is SYNCHRONOUS, so showScreen() stays synchronous - dozens of
+//   callers read the DOM or focus a field on the line after it.
+// ⚠ The URL never changes (location.href is passed back unchanged). This app
+//   has no routes; the screen lives in history.state alone. Writing a path
+//   would make every entry a reload target that the SPA cannot serve.
+// ⚠ history.state is MERGED, never replaced - Supabase auth redirects and
+//   profile_install both call replaceState on the same entry, and they now
+//   carry the screen through rather than nulling it.
+const _NO_HISTORY_SCREENS = new Set([
+  'landing', 'auth', 'verify-email', 'reset-password', 'biometric-lock',
+]);
+
+// ⚠ Deliberately the SAME set that psac-last-screen uses. Entry and lock
+//   screens are excluded both ways: a signed-in child pressing Back must not
+//   land on the sign-in screen, and Back on the home screen SHOULD leave the
+//   app, which is what Android expects.
+
+let _navPopping = false;   // true only while we are replaying history
+
+function _histScreen() {
+  try { return (history.state && history.state.screen) || null; } catch (_) { return null; }
+}
+
+function _recordScreen(id) {
+  if (_navPopping) return;                 // replaying history, not making it
+  if (_NO_HISTORY_SCREENS.has(id)) return;
+  try {
+    if (_histScreen() === id) return;       // already the current entry
+    const st = Object.assign({}, history.state || {}, { screen: id });
+    // ⚠ The FIRST screen replaces rather than pushes. Pushing would leave a
+    //   stateless entry underneath it, so leaving the app would take two Backs
+    //   from the home screen and the first would appear to do nothing.
+    if (_histScreen() === null) history.replaceState(st, '', location.href);
+    else history.pushState(st, '', location.href);
+  } catch (_) {}
+}
+
+// Spend the Back press without moving: popstate has already popped the entry,
+// so push an equivalent one back on.
+function _keepScreenEntry(id) {
+  try { history.pushState(Object.assign({}, history.state || {}, { screen: id }), '', location.href); } catch (_) {}
+}
+
+// ⚠ Close through the modal’s OWN control, never by hiding the wrapper - that
+//   is the contract _Dialogs already documents for Escape, and it is what runs
+//   the cleanup (removing a document keydown listener, restoring focus).
+//   Reusing its stack means Back and Escape can never disagree about which
+//   modal is on top.
+function _backClosesDialog() {
+  try {
+    const stack = (typeof _Dialogs !== 'undefined' && _Dialogs._stack) || [];
+    const top = stack.length ? stack[stack.length - 1] : null;
+    if (!top || !top.el || top.el.classList.contains('hidden')) return false;
+    const c = _Dialogs._closeControl(top.el);
+    if (c) c.click();
+    else if (typeof top.el.onclick === 'function') top.el.click();
+    else top.el.classList.add('hidden');
+    return true;
+  } catch (_) { return false; }
+}
+
+window.addEventListener('popstate', (e) => {
+  // 1. A dialog is open: Back dismisses it and the press is spent.
+  if (_backClosesDialog()) { _keepScreenEntry(S && S.currentScreen); return; }
+
+  // 2. Mid-exam, Back must not silently bin the paper. Reuse the Exit button’s
+  //    own confirm so the wording and the cleanup are the one implementation
+  //    (_clearExamResume, the timer, the answers) rather than a second copy.
+  try {
+    if (S && S.currentScreen === 'exam' && S.exam && S.exam.qs && S.exam.qs.length) {
+      _keepScreenEntry('exam');
+      document.getElementById('exit-exam-btn')?.click();
+      return;
+    }
+  } catch (_) {}
+
+  // 3. No state left underneath us: we are at the bottom of our own stack, so
+  //    let the browser leave the site / the Play app close. That is correct
+  //    Android behaviour and the reason step 1 above seeds with replaceState.
+  const target = (e.state && e.state.screen) || null;
+  if (!target) return;
+
+  _navPopping = true;
+  try { showScreen(target); } finally { _navPopping = false; }
+
+  // ⚠ showScreen() may REFUSE the target and redirect: a kid-only screen in a
+  //   parent session bounces to the parent dashboard, an adult-only screen in a
+  //   child session bounces home, and a plan-gated screen opens a modal instead.
+  //   Those redirects run with _navPopping still true, so they record nothing -
+  //   which would leave history pointing at a screen we are not showing, and the
+  //   next Back would skip a step. Correct the entry to wherever we actually
+  //   landed. replaceState, not push: the user pressed Back once and must not
+  //   have to press it twice to get past a screen they never saw.
+  try {
+    if (S && S.currentScreen && S.currentScreen !== target) {
+      history.replaceState(Object.assign({}, history.state || {}, { screen: S.currentScreen }), '', location.href);
+    }
+  } catch (_) {}
+});
+
 // ⚠ 'practice' is deliberately absent. With the tab bar AND the fixed
 // Check/Next bar both on screen, the bottom 155px of a 740px phone was chrome:
 // two of four options were hidden on first paint and the explanation landed
@@ -2864,7 +2975,7 @@ function showScreen(id) {
     // user's last real workspace so that flow can return them there afterwards.
     // Entry/lock screens are deliberately excluded: restoring one of those can
     // bypass a sign-in or leave a valid session looking logged out.
-    if (!['landing', 'auth', 'verify-email', 'reset-password', 'biometric-lock'].includes(id)) {
+    if (!_NO_HISTORY_SCREENS.has(id)) {
       try {
         sessionStorage.setItem('psac-last-screen', id);
         // ⚠ WHOSE screen it was. This key is per device, and a phone is shared
@@ -2881,6 +2992,11 @@ function showScreen(id) {
   }
   const _screenChanged = _prevScreen !== id;
   _prevScreen = id;
+  // ⚠ Only on a real change, and AFTER the early-return guards above: a parent
+  //   bounced off a kid screen, an adult-only refusal and a plan-gated modal all
+  //   return before this line, so none of them leaves a history entry pointing
+  //   at a screen the user was never shown.
+  if (_screenChanged) _recordScreen(id);
   _updateBottomNav(id);
   if (_currentHintTarget && _currentHintTarget.screen !== id) _hideHint();
   if (sc && _screenChanged) _focusScreen(sc);

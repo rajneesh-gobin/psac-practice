@@ -168,7 +168,7 @@ const Auth = (() => {
         localStorage.setItem(REF_STORAGE_KEY, ref.toUpperCase());
         params.delete('ref');
         const rest = params.toString();
-        history.replaceState(null, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
+        history.replaceState(history.state, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
       }
     } catch(_) {}
   }
@@ -190,7 +190,7 @@ const Auth = (() => {
       localStorage.setItem(_PENDING_COPARENT_KEY, tok);
       params.delete('coparent');
       const rest = params.toString();
-      history.replaceState(null, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
+      history.replaceState(history.state, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
     } catch (_) {}
   }
 
@@ -238,7 +238,7 @@ const Auth = (() => {
       localStorage.setItem(_PENDING_FRIEND_KEY, code.toUpperCase());
       const url = new URL(location.href);
       url.searchParams.delete('friend');
-      history.replaceState({}, '', url.toString());
+      history.replaceState(history.state, '', url.toString());
     } catch(_) {}
   }
 
@@ -280,7 +280,7 @@ const Auth = (() => {
       if (!token) return false;
       params.delete('join');
       const rest = params.toString();
-      history.replaceState(null, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
+      history.replaceState(history.state, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
     } catch(_) { return false; }
 
     const res = await Store.redeemStudentInvite(token);

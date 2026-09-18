@@ -248,7 +248,7 @@ const ProfileInstall = (() => {
     try {
       const params = new URLSearchParams(location.search);
       params.delete('installProfile');
-      history.replaceState(null, '', `${location.pathname}?${params}${location.hash}`);
+      history.replaceState(history.state, '', `${location.pathname}?${params}${location.hash}`);
     } catch (_) {}
   }
 

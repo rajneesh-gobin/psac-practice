@@ -17,7 +17,7 @@ against production — re-measure rather than quoting this file.
 ## The one-line status
 
 > **Web: ready. Payments: compliant. Policy blockers: cleared.**
-> **App: two code items left (B1, B2) plus the assetlinks fingerprint.**
+> **App: one code item left (B1) plus the assetlinks fingerprint.**
 
 ---
 
@@ -170,6 +170,56 @@ above plus the payment gates.
 
 ---
 
+### B2 — the Android back button (2026-09-18)
+
+`engine/app.js` had **no `pushState` anywhere**: navigation was `showScreen(id)`
+and nothing else, so history held exactly one entry. A TWA maps Android’s
+hardware/gesture Back to `history.back()`, so Back from any screen **finished the
+activity** — back out of question 30 of an exam and the app closed.
+
+The entry is pushed **inside `showScreen()`**, not at the ~171 call sites across
+10 files, so every caller inherits it and a new one cannot forget.
+
+- ⚠ `pushState` is synchronous, so **`showScreen()` stays synchronous** — dozens
+  of callers read the DOM or focus a field on the line after it.
+- ⚠ **The URL never changes.** This app has no routes; the screen lives in
+  `history.state` alone. Writing a path would make every entry a reload target
+  the SPA cannot serve.
+- ⚠ **The first screen replaces rather than pushes.** Pushing would leave a
+  stateless entry underneath, so leaving the app would take two Backs from the
+  home screen and the first would appear to do nothing.
+- ⚠ **Entry screens are excluded** (`landing`, `auth`, `verify-email`,
+  `reset-password`, `biometric-lock`) — the same set `psac-last-screen` uses, now
+  defined **once** and shared. A signed-in child pressing Back must not land on
+  the sign-in screen, and Back on the home screen *should* leave the app.
+- ⚠ **Five `replaceState` callers passed `null` or `{}`** and would have wiped
+  `.screen` off the current entry (`auth.js` ×4, `profile_install.js` ×1), after
+  which Back read no target and left the app — and only on the paths that clean a
+  URL, so it would have looked random. They now carry `history.state` through.
+- ⚠ **A modal swallows the Back press**, closed through its **own** control via
+  `_Dialogs._closeControl` — never by hiding the wrapper, so its cleanup (a
+  document keydown listener, focus restore) still runs. Reusing `_Dialogs._stack`
+  means Back and Escape can never disagree about which modal is on top.
+- ⚠ **Mid-exam Back reuses `#exit-exam-btn`**, so the wording and the cleanup
+  (`_clearExamResume`, the timer, the answers) stay one implementation.
+- ⚠ **A guard may refuse the replayed screen** — a kid-only screen in a parent
+  session bounces to the dashboard. Those redirects run with `_navPopping` still
+  true and record nothing, so history is reconciled to where we actually landed,
+  by `replaceState`: one Back press, one step.
+
+`scripts/test-back-button.js` — **27 assertions**. It extracts the shipped block
+out of `app.js` and runs it against a real history stack, so it exercises the
+code rather than a paraphrase of it.
+
+⚠ **Not verified in a real browser.** A headless-Edge probe would not run here
+(`--dump-dom` returns nothing in Edge 153, and screenshots of a local page
+failed), so `pushState`/`popstate` wiring and the interaction with the fully
+booted app are still unproven. Both belong to the on-device internal-testing
+step regardless — check Back from: an exam, a modal, a deep chapter, and the home
+screen (which should exit).
+
+---
+
 ## ❌ Tier 1 — blocks a submission
 
 > ✅ **A2 and A3 are done** — see the Done section above. Two items remain.
@@ -184,23 +234,6 @@ the auth shell (`1330`), `.ta-wiz-nav` (`10102`).
 ⚠ **Measure after adding it** — it wakes those rules on notched iPhones on the
 **web** too: `node scripts/audit-mobile-screens.js 360` and `320`. Expect to add
 `safe-area-inset-top` to the sticky app header, which has none.
-
-### B2 · The Android back button closes the app from any screen
-**Zero `pushState`/`popstate` in the codebase** (only 5 `replaceState`, all URL
-cleanup). Navigation is `showScreen(id)` with no history entries, so back from
-mid-exam finishes the activity. On Android this reads as a crash.
-
-**~171 `showScreen()` call sites across 10 files**, so the fix goes *inside*
-`showScreen()`; every caller inherits it. `pushState` is synchronous, so
-**`showScreen()` stays synchronous** — dozens of callers read the DOM straight
-after it.
-
-⚠ **The trap:** `auth.js:171, 193, 241, 283` and `profile_install.js:239` pass
-`null`/`{}` as state and would wipe the screen. Each must pass `history.state`
-through.
-
-Also decide: back on the first screen should exit (correct Android behaviour),
-and modals should close on back rather than navigate.
 
 ### assetlinks SHA-256 is still a placeholder
 Order is fixed and cannot be shortcut: build → upload to internal testing → read
@@ -298,7 +331,7 @@ check there is no address bar. See `convert_to_app.md`.
 3. **B1** — one attribute, then measure at 360px and 320px. ⚠ Needs Chrome for
    Testing: the installed Chrome cannot be driven headless, it joins the live
    browser session.
-4. **B2** — the only real piece of work left. Own branch, own test.
+4. ✅ **B2 — done 2026-09-18.** Still needs on-device confirmation.
 5. Build the TWA → internal testing → fingerprint → deploy → verify no address bar.
 6. Tier 2 remainder, then Tier 3.
 
