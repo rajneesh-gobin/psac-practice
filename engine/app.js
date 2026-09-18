@@ -189,7 +189,17 @@ const _FEATURE_COPY = {
   weak_area_drill:     'Weak-area drills are part of a paid plan.\n\nThey pick the topics you find hardest. Ask a parent about upgrading.',
 };
 
+// ⚠ Google Play: a paywall NOTICE is fine - "this is part of a paid plan" is
+//   what every subscription app shows. A route to a PRICE is not. Inside the
+//   Android app the explanatory copy stays and the "See plans" button goes, so a
+//   child is still told why the feature is locked and no purchase is reachable.
+const _PLAN_NOTICE_OPTS = { icon: '🔒', okLabel: 'OK', danger: false, cancelLabel: '' };
+
 function _showFeatureModal(key) {
+  if (_isAndroidApp()) {
+    _confirmModal(_FEATURE_COPY[key] || 'That feature is part of a paid plan.', null, _PLAN_NOTICE_OPTS);
+    return;
+  }
   _confirmModal(_FEATURE_COPY[key] || 'That feature is part of a paid plan.',
     () => { if (typeof openPlansModal === 'function') openPlansModal(); },
     { icon: '🔒', okLabel: 'See plans', danger: false, cancelLabel: 'OK' });
@@ -239,6 +249,7 @@ function _showCapModal(kind) {
   // enforced, which is clamped to the 3 hints _buildHints can produce.
   const cap = kind === 'hints' ? _hintCap() : _planCap(_CAP_KEY[kind]);
   const msg = (_CAP_COPY[kind] || (() => 'Limit reached.'))(cap ?? 0);
+  if (_isAndroidApp()) { _confirmModal(msg, null, _PLAN_NOTICE_OPTS); return; }
   _confirmModal(msg, () => { if (typeof openPlansModal === 'function') openPlansModal(); },
     { icon: '🔒', okLabel: 'See plans', danger: false, cancelLabel: 'OK' });
 }
@@ -4725,6 +4736,10 @@ function _renderLeaderboard() {
 //   would work perfectly well with Juice off - it is gated here because a shop
 //   is not wanted while there is no way to pay at all.
 function _shopOpenForParents() {
+  // ⚠ Google Play forbids selling digital content inside the app. This one
+  //   return closes the Shop tab, the credit chip, every [data-shop-entry]
+  //   button and the expired banner's way back in - see _syncShopVisibility().
+  if (_isAndroidApp()) return false;
   if (typeof Shop === 'undefined' || Shop.settings().shop_enabled === false) return false;
   return _juiceOn(_juiceCfg);
 }
@@ -5612,6 +5627,10 @@ function _planSaveLabel(p) {
 // if Supabase is unreachable or the plan row is missing, the markup's own
 // hardcoded price stays on screen rather than blanking.
 async function hydrateLandingPrices() {
+  // ⚠ The landing screen renders INSIDE the Android app too. The three priced
+  //   tiers are commented out of index.html today, so this function is dead - and
+  //   would come back to life, on Play, the day anyone restores them.
+  if (_isAndroidApp()) return;
   if (!document.querySelector('[data-plan-price]')) return;
   let plans = [];
   try { plans = await Store.listPlans(); } catch (e) {
@@ -5828,6 +5847,11 @@ function _showChapterLockedModal(chapterId) {
 let _shopTab = 'subjects';
 
 async function renderShop() {
+  // ⚠ Belt and braces. Credits can only be EARNED (referrals, admin
+  //   adjustment) and never bought, so the credit shop is not itself a Play
+  //   Billing problem - but a screen called "Shop" full of prices is a
+  //   judgement call not worth losing at review.
+  if (_isAndroidApp()) { showScreen(ACTIVE_STUDENT_ID ? 'student-home' : 'parent'); return; }
   // A child has no balance of their own and must never be shown prices to go
   // and ask a parent about. The Shop is reached from the parent dashboard, but
   // showScreen() is called from a dozen places and one of them will eventually
@@ -6191,6 +6215,11 @@ function renderInviteCredits() {
 window.renderInviteCredits = renderInviteCredits;
 
 async function openPlansModal() {
+  // ⚠⚠ THE ONE DOOR into the MCB Juice flow: startJuicePayment,
+  //   _renderJuiceInstructions and markJuiceSent all hang off this function or
+  //   its descendants, so closing it here closes the whole graph. The plans list
+  //   also renders Rs prices, which on Play is a violation on its own.
+  if (_isAndroidApp()) return;
   const m = document.getElementById('modal-plans');
   if (!m) return;
   m.classList.remove('hidden');
@@ -6300,6 +6329,9 @@ async function _juiceOpenPayment() {
 }
 
 async function startJuicePayment(planId, months) {
+  // ⚠ Defence in depth: this is exported to window (below), so a future
+  //   caller could reach it without passing through openPlansModal().
+  if (_isAndroidApp()) return;
   const box = document.getElementById('juice-pay');
   if (box) box.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-3 text-center animate-pulse">Getting your reference…</p>';
   let res = null;
@@ -7720,7 +7752,7 @@ const _CDN_QR_SCANNER  = 'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-
 // offline service-worker session. Dynamic import keeps this code out of the
 // normal startup path; it is only fetched when the share dialog is opened.
 function _loadLocalQRCode() {
-  _loadLocalQRCode._promise = _loadLocalQRCode._promise || import('../assets/vendor/qrcode.mjs')
+  _loadLocalQRCode._promise = _loadLocalQRCode._promise || import('../assets/vendor/qrcode-1.5.3.mjs')
     .then(module => module.default || module)
     .catch(error => {
       console.warn('[QR] Could not load local encoder:', error);

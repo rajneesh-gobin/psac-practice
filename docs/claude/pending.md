@@ -296,6 +296,13 @@ database is a **decision**, not a pending run.
     ignore) and FAILS the moment it is replaced by anything that is not 32
     colon-separated uppercase hex pairs. It is standalone on purpose: not in
     preflight, not in CI, so parking this costs no daily noise.
+    ⚠ **The web-app side is now audited and partly done — see
+    [`docs/android-readiness.md`](../android-readiness.md).** It corrects
+    `convert_to_app.md`'s "zero code changes" claim. Payments are already
+    compliant (7 gates + `_isAndroidApp()`, `scripts/test-android-app-gates.js`)
+    and the question-bank leak is closed; Families policy, targetSdk 35,
+    `viewport-fit=cover` and the Android back button are still open and each
+    blocks a submission.
     Order when it is picked up: Bubblewrap build → upload to internal testing →
     read the fingerprint → paste it here → deploy the site → THEN install and
     check there is no address bar.

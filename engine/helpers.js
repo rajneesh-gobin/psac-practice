@@ -50,6 +50,49 @@ function isFreeGrade(grade) {
 }
 function isFreeSubjectId(subjectId) { return isFreeGrade(gradeOfSubjectId(subjectId)); }
 
+// ⚠ Am I being viewed inside the Google Play app (the TWA) rather than in a
+// browser? ONE codebase serves both - the Android app is a shell holding this
+// same URL, and a deploy changes them together - so every difference between
+// them is a runtime question, never a build. Google Play forbids SELLING
+// digital content inside the app and expressly allows HONOURING a purchase
+// made elsewhere, so the shop, the plans modal and every price are hidden
+// here and stay exactly as they are on the web.
+//
+// ⚠ PRESENTATION ONLY, the same category as _planAllowsChapter() and
+//   lockedChapters. A flag the client sets can be cleared; it exists so that no
+//   sale is REACHABLE in the app, not to control access. Money and entitlements
+//   stay in questions.js, purchase_chapter() and payment_admin_confirm().
+//
+// ⚠ sessionStorage, NOT localStorage. A TWA runs on Chrome's own profile and
+//   shares this origin's localStorage with the user's ordinary browser on the
+//   same phone, so a sticky flag there would also hide the shop on the WEB for a
+//   parent who later opened nouklass.com in Chrome. sessionStorage is per
+//   browsing context and the app is its own.
+//
+// ⚠ NOT display-mode:standalone: that is equally true of a PWA installed from
+//   Chrome, which is still the web and must keep its payment options.
+//
+// ⚠ NOT a ?platform= start URL either, tempting as that is. sw.js matches with
+//   caches.match(request) and no ignoreSearch, so "/?platform=android" would miss
+//   the cached "/" and cold-launching the app offline would land on "Offline -
+//   resource not cached yet." document.referrer costs nothing and is set both on
+//   a cold launch and on a captured deep link.
+function _isAndroidApp() {
+  // ⚠ The referrer is tested FIRST and OUTSIDE the try. sessionStorage does not
+  //   merely return null when site data is blocked, it THROWS - and with both
+  //   tests inside one try, such a device answered false with android-app://
+  //   staring at it, putting the shop back inside the Play app: the single place
+  //   it must never appear. Storage is a cache here and never the source of truth.
+  if (String(document.referrer || '').startsWith('android-app://')) {
+    try { sessionStorage.setItem('psac-platform', 'android'); } catch (_) {}
+    return true;
+  }
+  // The referrer is set on the launch navigation; an in-app link or a reload
+  // later in the same session may arrive without one, which is what this reads.
+  try { return sessionStorage.getItem('psac-platform') === 'android'; } catch (_) {}
+  return false;
+}
+
 // chapterId → is it in a free grade? Resolved through the loaded packs rather
 // than the id, because chapter ids carry no grade (g5m-…, eng-passages, …) and
 // several are not prefixed at all.
