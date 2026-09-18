@@ -894,8 +894,18 @@
              ⚠ Re-check SUBJECT_PACKS before widening the sentence further.
              _appShareText() (app.js) and _inviteText() (auth.js) must be kept
              in step with whatever this line says. -->
+        <!-- ⚠ THE PILL MUST WRAP. It is inline-flex, so it sizes to max-content,
+             and a flex container does NOT wrap without flex-wrap. With eight subject
+             names in it the pill measured 646px wide at every phone width - 302px
+             off-screen at 360px - and #screen-landing’s overflow-x:hidden CROPPED it
+             silently. Reported from a real Android build: "maths ict biology
+             chemistry, phy and the rest is cropped".
+             ⚠ flex-wrap alone is not enough: max-w-full is what stops the container
+             growing past the parent in the first place. Both, or it still overflows.
+             ⚠ Every subject added to this sentence makes it wider. Re-measure with
+             scripts/audit-mobile-screens.js 360 after touching it. -->
         <p class="text-center mb-7">
-          <span class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 text-sm text-emerald-200">
+          <span class="inline-flex flex-wrap justify-center items-center gap-2 max-w-full rounded-full bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 text-sm text-emerald-200">
             <span class="rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-emerald-950">Live</span>
             All NCE Grade 9 subjects live — <b class="text-white">Maths</b>, <b class="text-white">ICT</b>, <b class="text-white">Biology</b>, <b class="text-white">Chemistry</b>, <b class="text-white">Physics</b>, <b class="text-white">English</b>, <b class="text-white">French</b> &amp; <b class="text-white">Social Studies</b>
           </span>

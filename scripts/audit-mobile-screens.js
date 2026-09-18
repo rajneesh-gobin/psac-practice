@@ -9,8 +9,9 @@
 //   scrollWidth check while the content is simply cut off — the exact
 //   "not displaying properly" a phone user reports.
 // ⚠ Fresh Chrome profile + SW bypass, or a stale shell measures old CSS.
-// Elements inside a deliberate horizontal scroller (overflow-x auto/scroll
-// ancestor) are fine and skipped; decorative empty boxes are skipped too.
+// Elements inside a deliberate horizontal SCROLLER (overflow-x auto/scroll) are
+// fine and skipped; decorative empty boxes too. ⚠ A CLIPPER (overflow-x
+// hidden/clip) is NOT skipped — clipped content is cropped content.
 const http = require('http');
 const fs   = require('fs');
 const path = require('path');
@@ -62,21 +63,37 @@ const PROBE_FN = `
     if (el.classList.length) out += '.' + Array.from(el.classList).slice(0, 3).join('.');
     return out;
   };
-  // A deliberate horizontal scroller OR a clipping ancestor (truncate,
-  // overflow-hidden) contains its child — the child cannot cause visible
-  // breakage. Stop at body: its overflow-x clip is the page-level mask this
-  // audit exists to see through.
+  // ⚠⚠ A SCROLLER IS NOT A CLIPPER, and treating them alike made this audit
+  //   blind to the thing it exists for. auto/scroll mean the user can reach the
+  //   content, so a wide child is fine. hidden/clip mean the content is
+  //   DESTROYED — which is exactly the "not displaying properly" a phone user
+  //   reports. Every .screen carries overflow-x:hidden, so lumping them together
+  //   skipped every element on every screen: the landing page reported CLEAN
+  //   while a 646px pill sat in a 328px paragraph, 302px of it cropped away at
+  //   360px, until it was spotted by eye on a real Android build.
+  // ⚠ Stop at body: its own overflow-x clip is the page-level mask this audit
+  //   exists to see through.
   const inScroller = el => {
     for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
       const o = getComputedStyle(p).overflowX;
-      if (o === 'auto' || o === 'scroll' || o === 'hidden' || o === 'clip') return true;
+      if (o === 'auto' || o === 'scroll') return true;   // reachable by scrolling
     }
     return false;
   };
+  // ⚠ Deliberately off-screen, not broken: an aria-hidden honeypot field exists
+  //   to catch form-filling bots, and .contact-hp parks it at left:-9999px. It is
+  //   the ONLY thing this audit reported at 320px and 360px once the
+  //   clipped-content blind spot above was fixed, and a permanently red check is
+  //   one people learn to ignore. Matched on the class, so a real element that
+  //   drifts off-screen still fails.
+  const deliberatelyOffscreen = el =>
+    el.classList.contains('contact-hp') || el.closest('.contact-hp') !== null;
+
   const bad = [];
   for (const el of screen.querySelectorAll('*')) {
     const r = el.getBoundingClientRect();
     if (r.width === 0 || r.height === 0) continue;
+    if (deliberatelyOffscreen(el)) continue;
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden') continue;
     const overR = r.right - vw, overL = -r.left;
