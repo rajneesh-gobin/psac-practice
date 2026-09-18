@@ -91,6 +91,12 @@ const FILES = [
 //   .env, .git, node_modules and the file extensions stay unanchored: those are
 //   wrong at any depth.
 const FORBIDDEN = [
+  // ⚠ The internal licence gap list, which says in as many words that 114
+  //   bundled images ship with no recorded source or licence. It carried a
+  //   netlify.toml 404 that stopped applying when production moved to
+  //   Cloudflare, and answered 200 on nouklass.com (measured 2026-09-18).
+  //   CREDITS.md beside it is PUBLIC ATTRIBUTION and must keep shipping.
+  /^assets\/questions\/PROVENANCE-TODO\.md$/,
   /(^|\/)\.env$/, /(^|\/)\.git($|\/)/, /(^|\/)node_modules($|\/)/,
   /^past-papers($|\/)/, /^exam_papers($|\/)/,
   /^\.netlify($|\/)/, /^netlify($|\/)/, /^\.import-conflicts($|\/)/,
@@ -111,6 +117,11 @@ function copyDir(relSrc) {
 }
 
 function copyFile(rel) {
+  // ⚠ FORBIDDEN was only ever audited AFTER the copy (see `leaked` below), so
+  //   adding a pattern to it made the run fail rather than making the file stay
+  //   behind. Filtering here as well is what actually keeps it out; the audit
+  //   stays as the independent second gate it was written to be.
+  if (FORBIDDEN.some(re => re.test(rel))) return;
   const from = path.join(ROOT, rel);
   const to = path.join(OUT, rel);
   fs.mkdirSync(path.dirname(to), { recursive: true });

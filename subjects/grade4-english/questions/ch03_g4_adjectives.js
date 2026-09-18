@@ -209,7 +209,15 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Small</b>" is a size adjective describing this modest cottage. Size adjectives include: big, small, tiny, huge, enormous, tall, short. A cottage is a small, simple house - the opposite of "huge" or "enormous".' }),
 
   makeMCQ({ id:'g4eng-adj-026', chapterId:'g4eng-adjectives', subsection:'picture_words', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/rainbow.jpg" alt="a sky phenomenon" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which adjective best describes what is shown in this picture, in terms of colour?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px" aria-label="a sky phenomenon after rain">' +
+      '<svg viewBox="0 0 340 190" style="width:100%;max-width:300px;height:auto" xmlns="http://www.w3.org/2000/svg" role="img">' +
+        '<rect width="340" height="190" rx="10" fill="#dff1fb"/>' +
+        '<path d="M38 176 A132 132 0 0 1 302 176" fill="none" stroke="#e53935" stroke-width="10"/><path d="M47 176 A123 123 0 0 1 293 176" fill="none" stroke="#fb8c00" stroke-width="10"/><path d="M56 176 A114 114 0 0 1 284 176" fill="none" stroke="#fdd835" stroke-width="10"/><path d="M65 176 A105 105 0 0 1 275 176" fill="none" stroke="#43a047" stroke-width="10"/><path d="M74 176 A96 96 0 0 1 266 176" fill="none" stroke="#1e88e5" stroke-width="10"/><path d="M83 176 A87 87 0 0 1 257 176" fill="none" stroke="#3949ab" stroke-width="10"/><path d="M92 176 A78 78 0 0 1 248 176" fill="none" stroke="#8e24aa" stroke-width="10"/>' +
+        '<ellipse cx="58" cy="46" rx="30" ry="16" fill="#fff"/><ellipse cx="78" cy="38" rx="22" ry="14" fill="#fff"/>' +
+        '<ellipse cx="280" cy="58" rx="26" ry="14" fill="#fff"/><ellipse cx="262" cy="50" rx="18" ry="11" fill="#fff"/>' +
+        '<rect y="176" width="340" height="14" fill="#8bc34a"/>' +
+      '</svg></div>' +
+      '<b>Which adjective best describes what is shown in this picture, in terms of colour?</b>',
     options:['plain','colourful','dull','pale'],
     answer:'colourful',
     hint:'This natural phenomenon shows many different colours at once.',

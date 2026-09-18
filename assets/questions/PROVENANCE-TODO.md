@@ -1,18 +1,24 @@
 # Image provenance — outstanding work
 
-**Status: INCOMPLETE for 115 of 138 images.**
+**Status: INCOMPLETE for 114 of 149 images.**
 
 This is an internal record, not the credits page. Public attribution for the
-images whose provenance IS established lives in `CREDITS.md`, which is served;
-this file is 404'd in `netlify.toml` and should stay that way until the gap
-below is closed.
+images whose provenance IS established lives in `CREDITS.md`, which is served.
+
+⚠ **This file IS publicly reachable, and the 404 it used to claim is gone.** It
+said it was 404'd in `netlify.toml`; production moved to Cloudflare and that rule
+stopped applying with nothing to notice. Measured 2026-09-18:
+`/assets/questions/PROVENANCE-TODO.md` answers **200** on nouklass.com. So the
+sentence "114 images ship with no recorded licence" is currently served to
+anyone who asks for it. Block it in the Cloudflare config or close the gap.
 
 | Group | Count | Size | Provenance |
 |---|---|---|---|
 | Imported 2026-09-08 | 23 | 4.56 MB | **Recorded** — see `CREDITS.md` |
-| Pre-existing | 115 | 7.43 MB | **UNVERIFIED** — below |
+| Label diagrams 2026-09-17 | 12 | 2.38 MB | **Recorded** — see `CREDITS.md` |
+| Pre-existing | 114 | 7.39 MB | **UNVERIFIED** — below |
 
-## The 115 unverified images
+## The 114 unverified images
 
 They ship inside the app with no recorded source, author or licence. Most stock
 and Wikimedia images carry terms that require attribution, so this has to be
@@ -134,7 +140,6 @@ published as attribution without confirming it against the original download.
 | `prop-roots-of-maize-plant.jpg` | 53 KB | 2 questions | **unknown** | **unknown** | **unknown** |
 | `pteropus-niger.jpg` | 24 KB | 2 questions | **unknown** | **unknown** | **unknown** |
 | `rain.jpg` | 43 KB | grade5-french/g5fr-voc-041 | **unknown** | **unknown** | **unknown** |
-| `rainbow.jpg` | 40 KB | grade4-english/g4eng-adj-026 | **unknown** | **unknown** | **unknown** |
 | `red-apple.jpg` | 46 KB | 2 questions | **unknown** | **unknown** | **unknown** |
 | `roof.jpg` | 13 KB | grade5-french/g5fr-nom-037 | **unknown** | **unknown** | **unknown** |
 | `rub-al-khali-002.jpg` | 19 KB | grade6-science/g6sci-enr-eco-005 | **unknown** | **unknown** | **unknown** |

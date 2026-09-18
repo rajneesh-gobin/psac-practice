@@ -252,6 +252,14 @@ async function main() {
 
   console.log('  saved     assets/questions/labels/' + path.basename(finalDest) + '  (' + (bytes.length / 1024).toFixed(0) + ' KB)');
   console.log('  recorded  docs/label-diagrams/provenance.json');
+
+  // ⚠ The record above is not the one anything READS. build-image-credits.js and
+  //   test-question-image-offline.js both read assets/questions/provenance.json,
+  //   and nothing used to carry entries across — twelve label diagrams, eight of
+  //   them attribution-required, were served with no line on the credits page.
+  //   Syncing here means a fetch cannot leave that gap open again.
+  require('child_process').execFileSync(process.execPath,
+    [path.join(__dirname, 'sync-label-provenance.js')], { stdio: 'inherit' });
 }
 
 main().catch(e => { console.error('FAILED: ' + e.message); process.exit(1); });
