@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 // Targeted practice to give the smaller Grade 4 adjective and adverb sections
 // enough varied, age-appropriate questions for repeat practice.
 (function () {
@@ -19,17 +19,46 @@
     ['toujours', 'souvent', 'parfois', 'jamais'], answer, 'Cherche un mot qui indique la fréquence.',
     `<b>${answer}</b> indique à quelle fréquence se passe l\'action.`));
 
-  [
-    ['Voici ___ chat. (à moi)', 'mon'], ['Voici ___ trousse. (à moi)', 'ma'],
-    ['Voici ___ crayons. (à moi)', 'mes'], ['Où est ___ livre ? (à toi)', 'ton'],
-    ['Où est ___ règle ? (à toi)', 'ta'], ['Range ___ chaussures. (à toi)', 'tes'],
-    ['Il cherche ___ chapeau. (à lui)', 'son'], ['Elle ferme ___ fenêtre. (à elle)', 'sa'],
-    ['Il nourrit ___ poissons. (à lui)', 'ses'], ['Nous décorons ___ classe. (à nous)', 'notre'],
-    ['Vous ouvrez ___ cahiers. (à vous)', 'vos'], ['Les enfants retrouvent ___ parents. (à eux)', 'leurs'],
-    ['Je présente ___ sœur. (à moi)', 'ma']
-  ].forEach(([question, answer], i) => add(`g4fr-cov-pos-${i}`, 'g4fr-adjectifs', 'possessifs', question,
-    ['mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'vos', 'leurs'], answer,
-    'L\'adjectif possessif indique à qui appartient le nom.', `<b>${answer}</b> convient au propriétaire et au nom.`));
+  // possessifs — individual calls so each question's distractors are wrong for its specific person/gender/number
+  add('g4fr-cov-pos-0', 'g4fr-adjectifs', 'possessifs', 'Voici ___ chat. (à moi)',
+    ['mon', 'ma', 'mes', 'ton'], 'mon',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>mon</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-1', 'g4fr-adjectifs', 'possessifs', 'Voici ___ trousse. (à moi)',
+    ['ma', 'mon', 'mes', 'ta'], 'ma',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>ma</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-2', 'g4fr-adjectifs', 'possessifs', 'Voici ___ crayons. (à moi)',
+    ['mes', 'mon', 'ma', 'tes'], 'mes',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>mes</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-3', 'g4fr-adjectifs', 'possessifs', 'Où est ___ livre ? (à toi)',
+    ['ton', 'ta', 'tes', 'mon'], 'ton',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>ton</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-4', 'g4fr-adjectifs', 'possessifs', 'Où est ___ règle ? (à toi)',
+    ['ta', 'ton', 'tes', 'ma'], 'ta',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>ta</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-5', 'g4fr-adjectifs', 'possessifs', 'Range ___ chaussures. (à toi)',
+    ['tes', 'ton', 'ta', 'mes'], 'tes',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>tes</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-6', 'g4fr-adjectifs', 'possessifs', 'Il cherche ___ chapeau. (à lui)',
+    ['son', 'sa', 'ses', 'ton'], 'son',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>son</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-7', 'g4fr-adjectifs', 'possessifs', 'Elle ferme ___ fenêtre. (à elle)',
+    ['sa', 'son', 'ses', 'ta'], 'sa',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>sa</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-8', 'g4fr-adjectifs', 'possessifs', 'Il nourrit ___ poissons. (à lui)',
+    ['ses', 'son', 'sa', 'mes'], 'ses',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>ses</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-9', 'g4fr-adjectifs', 'possessifs', 'Nous décorons ___ classe. (à nous)',
+    ['notre', 'nos', 'votre', 'leur'], 'notre',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>notre</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-10', 'g4fr-adjectifs', 'possessifs', 'Vous ouvrez ___ cahiers. (à vous)',
+    ['vos', 'votre', 'nos', 'leurs'], 'vos',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>vos</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-11', 'g4fr-adjectifs', 'possessifs', 'Les enfants retrouvent ___ parents. (à eux)',
+    ['leurs', 'leur', 'vos', 'ses'], 'leurs',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>leurs</b> convient au propriétaire et au nom.');
+  add('g4fr-cov-pos-12', 'g4fr-adjectifs', 'possessifs', 'Je présente ___ sœur. (à moi)',
+    ['ma', 'mon', 'mes', 'sa'], 'ma',
+    'L\'adjectif possessif indique à qui appartient le nom.', '<b>ma</b> convient au propriétaire et au nom.');
 
   [
     ['___ livre est passionnant.', 'Ce'], ['___ arbre est très haut.', 'Cet'],

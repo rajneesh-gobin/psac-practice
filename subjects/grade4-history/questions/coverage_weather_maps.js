@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
 // Real reasons, keyed by id. Every question in this file used to carry only
 // "<b>X</b> is correct.", which restates the answer and teaches nothing.
@@ -103,57 +103,126 @@ const G4HG_EXPL = {
   'g4hg-cov-usemap-9': "A map of a neighbourhood shows <b>where places are</b> and how they sit in relation to each other.",
 };
   const add = (id, c, s, question, options, answer, hint) => STATIC_QUESTIONS.push(makeMCQ({ id, chapterId:c, subsection:s, difficulty:2, question, options, answer, hint, explanation: G4HG_EXPL[id] || `<b>${answer}</b> is correct.` }));
-  const rows = (p,c,s,data,options,hint) => data.forEach(([q,a],i)=>add(`g4hg-cov-${p}-${i}`,c,s,q,options,a,hint));
-  rows('season','g4ge-weather','seasons',[
-    ['Which months are usually summer in Mauritius?','usually November to April'],['Which months are usually winter in Mauritius?','usually May to October'],
-    ['Mauritian summer is usually…','usually hot and rainy'],['Mauritian winter is usually…','cooler and much drier'],['During which season are cyclones more likely?','the warm summer season'],
-    ['What should you take when rain is forecast?','an umbrella or raincoat'],['Why do farmers watch the seasons?','the weather affects crops'],['Which season comes after April?','the cooler winter season'],
-    ['A hot, humid day is more common in…','the warm summer season'],['A cooler, dry day is more common in…','the cooler winter season'],['Why can weather vary from one place to another?','some areas are higher up'],['A season is…','a time of year with its weather']
-  ],['usually November to April','usually May to October','usually hot and rainy','cooler and much drier','the warm summer season','an umbrella or raincoat','the weather affects crops','the cooler winter season','some areas are higher up','a time of year with its weather'],'Think about Mauritius\'s two main seasons.');
-  rows('instrument','g4ge-weather','instruments',[
-    ['Which instrument measures temperature?','a thermometer'],['Which instrument measures rainfall?','a rain gauge'],['Which instrument shows wind direction?','a wind vane'],
-    ['Which instrument measures wind speed?','an anemometer'],['Which measurement is written in degrees Celsius?','the temperature'],['Which instrument might be outside in the rain?','a rain gauge'],
-    ['A wind vane points towards…','where wind comes from']
-  ],['a thermometer','a rain gauge','a wind vane','an anemometer','the temperature','where wind comes from'],'Match the instrument with what it measures.');
-  rows('element','g4ge-weather','elements',[
-    ['Rainfall is the amount of…','rain that falls on a place'],['Temperature tells us how…','hot or cold the air is'],['Wind is moving…','air over the land'],
-    ['Cloud cover describes…','how much sky has clouds'],['A weather forecast tells us what weather may…','happen in the next days'],['Strong winds can make travelling by sea…','rough and dangerous'],
-    ['Why do people check the forecast?','to plan their day safely'],['A sunny symbol on a forecast usually means…','there is little or no rain'],['Heavy rainfall can cause…','flooding of low land'],
-    ['A drought happens when there is…','very little rain for weeks'],['Weather affects farmers because plants need…','suitable rain and sunshine'],['A cyclone warning helps people…','prepare and stay safe'],
-    ['Which element describes how fast air moves?','the speed of the wind'],['Which element might make you wear a coat?','a very low temperature']
-  ],['rain that falls on a place','hot or cold the air is','air over the land','how much sky has clouds','happen in the next days','rough and dangerous','to plan their day safely','there is little or no rain','flooding of low land','very little rain for weeks','suitable rain and sunshine','prepare and stay safe','the speed of the wind','a very low temperature'],'Use the meaning of each weather word.');
-  rows('cyclone','g4ge-weather','cyclones',[
-    ['What should a family do when an official cyclone warning is given?','follow official safety advice'],['Why should people stay indoors during dangerous winds?','to avoid being injured'],
-    ['What should be stored before a cyclone?','safe drinking water'],['Why should loose objects be secured?','wind can blow them away'],['Which source gives trustworthy cyclone advice?','the official weather service'],
-    ['Why should people avoid flooded water?','it can be dangerous'],['A cyclone can bring…','strong winds and heavy rain'],['What should you do if electricity goes off?','use a torch safely'],
-    ['Why should a family make an emergency plan?','so everyone knows what to do'],['What should you not do during a cyclone?','go outside to look'],
-    ['After a cyclone, why check for damaged wires?','they can be dangerous'],['Who should children stay with during an emergency?','a trusted adult at all times'],
-    ['Why should roads be avoided if officials say so?','there may be hazards'],['What can heavy rain do to low-lying land?','cause flooding of the land'],
-    ['A warning is meant to help people…','act early and safely'],['What is a good emergency supply?','a first-aid kit and a torch']
-  ],['follow official safety advice','to avoid being injured','safe drinking water','wind can blow them away','the official weather service','it can be dangerous','strong winds and heavy rain','use a torch safely','so everyone knows what to do','go outside to look','they can be dangerous','a trusted adult at all times','there may be hazards','cause flooding of the land','act early and safely','a first-aid kit and a torch'],'Choose the action that keeps people safe.');
-  rows('direction','g4ge-map-skills','directions',[
-    ['Which direction is opposite north?','south'],['Which direction is opposite east?','west'],['On most maps, the top points to…','north'],['If the school is east of the park, the park is…','west of the school'],
-    ['The sun rises in the…','east'],['The sun sets in the…','west'],['A compass rose shows…','directions'],['If you walk north then turn right, you face…','east']
-  ],['south','west','north','west of the school','east','directions'],'Use the compass directions: north, south, east and west.');
-  rows('symbol','g4ge-map-skills','symbols',[
-    ['Why does a map use symbols?','to show features simply'],['Where do you find the meaning of map symbols?','in the key or legend'],['A blue line on a map often shows…','a river or stream'],
-    ['A small plane symbol may show…','an airport or airfield'],['A cross symbol may show…','a hospital or clinic'],['A star can be used to show…','a capital or important place'],
-    ['Why must you check the map key?','symbols can differ on maps'],['A road is often shown by…','a line on the map'],['A map symbol for a school helps you…','find the school quickly'],
-    ['Which is a good map key label?','river - blue line'],['What should a symbol be?','clear and easy to recognise'],['A green area may show…','a forest or a park'],
-    ['A map key is also called a…','a legend on the map'],['Which symbol would best suit a beach?','a small wave symbol'],['Why are symbols useful on small maps?','there is little room on them']
-  ],['to show features simply','in the key or legend','a river or stream','an airport or airfield','a hospital or clinic','a capital or important place','symbols can differ on maps','a line on the map','find the school quickly','river - blue line','clear and easy to recognise','a forest or a park','a legend on the map','a small wave symbol','there is little room on them'],'Look at what each symbol represents.');
-  rows('part','g4ge-map-skills','parts_of_map',[
-    ['What tells you what a map is about?','the map title'],['What explains symbols on a map?','the key or legend'],['What shows north on a map?','the north arrow'],
-    ['What helps compare map distance with real distance?','the map scale'],['Why is a title important?','it tells the map subject'],['Why is a north arrow important?','it shows the direction'],
-    ['A scale helps you estimate…','the real distance'],['Which part would say "Map of Mauritius"?','the map title'],['Which part might show "1 cm = 1 km"?','the map scale'],
-    ['Which map part should every map have?','a clear title'],['What does a legend explain?','the map symbols'],['A north arrow is a type of…','direction guide'],
-    ['Why use a scale?','to work out distance'],['A map without a key can be…','hard to understand'],['What should a clear title be?','short and accurate'],
-    ['The compass on a map helps a reader…','orient the map north']
-  ],['the map title','the key or legend','the north arrow','the map scale','it tells the map subject','it shows the direction','the real distance','a clear title','the map symbols','direction guide','to work out distance','hard to understand','short and accurate','orient the map north'],'Think about what each map part helps a reader do.');
-  rows('usemap','g4ge-map-skills','using_map',[
-    ['Before using a map, what should you read first?','the title and key'],['If a shop is north of the school, which direction do you travel from school?','towards the north'],
-    ['To find a feature, look for its…','symbol in the key'],['Why draw a simple map of your route?','to help others follow it'],['A map can help a visitor…','find places easily'],
-    ['If the scale says 1 cm = 1 km, 3 cm represents…','3 km on the ground'],['What should be labelled on a simple map?','important places'],['How can you show a route on a map?','draw a line with arrows'],
-    ['Why should a map be neat?','so people can read it'],['What can a map show about a neighbourhood?','where places are']
-  ],['the title and key','towards the north','symbol in the key','to help others follow it','find places easily','3 km on the ground','important places','draw a line with arrows','so people can read it','where places are'],'Use the title, key, directions and scale together.');
+
+  // --- seasons ---
+  const H = 'Think about Mauritius\'s two main seasons.';
+  add('g4hg-cov-season-0','g4ge-weather','seasons','Which months are usually summer in Mauritius?',['usually November to April','usually May to October','usually January to June','usually July to December'],'usually November to April',H);
+  add('g4hg-cov-season-1','g4ge-weather','seasons','Which months are usually winter in Mauritius?',['usually May to October','usually November to April','usually February to July','usually August to January'],'usually May to October',H);
+  add('g4hg-cov-season-2','g4ge-weather','seasons','Mauritian summer is usually…',['usually hot and rainy','cooler and much drier','cold and windy','dry and very warm'],'usually hot and rainy',H);
+  add('g4hg-cov-season-3','g4ge-weather','seasons','Mauritian winter is usually…',['cooler and much drier','usually hot and rainy','cold and snowy','warm and very wet'],'cooler and much drier',H);
+  add('g4hg-cov-season-4','g4ge-weather','seasons','During which season are cyclones more likely?',['the warm summer season','the cooler winter season','the dry spring season','the cold autumn season'],'the warm summer season',H);
+  add('g4hg-cov-season-5','g4ge-weather','seasons','What should you take when rain is forecast?',['an umbrella or raincoat','a hat and sunglasses','a scarf and warm gloves','a water bottle and snack'],'an umbrella or raincoat',H);
+  add('g4hg-cov-season-6','g4ge-weather','seasons','Why do farmers watch the seasons?',['the weather affects crops','rain never falls in summer','all seasons feel the same','crops grow without any rain'],'the weather affects crops',H);
+  add('g4hg-cov-season-7','g4ge-weather','seasons','Which season comes after April?',['the cooler winter season','the warm summer season','the wet rainy season','the hot dry period'],'the cooler winter season',H);
+  add('g4hg-cov-season-8','g4ge-weather','seasons','A hot, humid day is more common in…',['the warm summer season','the cooler winter season','the early dry season','the mild spring period'],'the warm summer season',H);
+  add('g4hg-cov-season-9','g4ge-weather','seasons','A cooler, dry day is more common in…',['the cooler winter season','the warm summer season','the wet cyclone season','the hot rainy period'],'the cooler winter season',H);
+  add('g4hg-cov-season-10','g4ge-weather','seasons','Why can weather vary from one place to another?',['some areas are higher up','the sun only warms the coast','rain always falls in the south','the ocean blocks the wind'],'some areas are higher up',H);
+  add('g4hg-cov-season-11','g4ge-weather','seasons','A season is…',['a time of year with its weather','a type of weather instrument','a kind of map symbol','a daily weather forecast'],'a time of year with its weather',H);
+
+  // --- instruments ---
+  const HI = 'Match the instrument with what it measures.';
+  add('g4hg-cov-instrument-0','g4ge-weather','instruments','Which instrument measures temperature?',['a thermometer','a rain gauge','a wind vane','an anemometer'],'a thermometer',HI);
+  add('g4hg-cov-instrument-1','g4ge-weather','instruments','Which instrument measures rainfall?',['a rain gauge','a thermometer','a wind vane','an anemometer'],'a rain gauge',HI);
+  add('g4hg-cov-instrument-2','g4ge-weather','instruments','Which instrument shows wind direction?',['a wind vane','an anemometer','a rain gauge','a thermometer'],'a wind vane',HI);
+  add('g4hg-cov-instrument-3','g4ge-weather','instruments','Which instrument measures wind speed?',['an anemometer','a wind vane','a thermometer','a rain gauge'],'an anemometer',HI);
+  add('g4hg-cov-instrument-4','g4ge-weather','instruments','Which measurement is written in degrees Celsius?',['the temperature','the rainfall','the wind speed','the cloud cover'],'the temperature',HI);
+  add('g4hg-cov-instrument-5','g4ge-weather','instruments','Which instrument is placed in the open to collect rain?',['a rain gauge','a thermometer','a wind vane','an anemometer'],'a rain gauge',HI);
+  add('g4hg-cov-instrument-6','g4ge-weather','instruments','A wind vane points towards…',['where wind comes from','where wind is going to','the nearest body of water','the highest recorded temperature'],'where wind comes from',HI);
+
+  // --- elements ---
+  const HE = 'Use the meaning of each weather word.';
+  add('g4hg-cov-element-0','g4ge-weather','elements','Rainfall is the amount of…',['rain that falls on a place','wind that blows over the sea','cloud that covers the sky','heat held in the air'],'rain that falls on a place',HE);
+  add('g4hg-cov-element-1','g4ge-weather','elements','Temperature tells us how…',['hot or cold the air is','fast the wind is blowing','much rain has fallen today','cloudy the sky looks'],'hot or cold the air is',HE);
+  add('g4hg-cov-element-2','g4ge-weather','elements','Wind is moving…',['air over the land','water in a river','cloud across the sky','rain through the clouds'],'air over the land',HE);
+  add('g4hg-cov-element-3','g4ge-weather','elements','Cloud cover describes…',['how much sky has clouds','how fast the wind blows','how warm the air is','how much rain has fallen'],'how much sky has clouds',HE);
+  add('g4hg-cov-element-4','g4ge-weather','elements','A weather forecast tells us what weather may…',['happen in the next days','have occurred last week','only occur in summer','stay the same for years'],'happen in the next days',HE);
+  add('g4hg-cov-element-5','g4ge-weather','elements','Strong winds can make travelling by sea…',['rough and dangerous','calm and easy','fast and comfortable','warm and pleasant'],'rough and dangerous',HE);
+  add('g4hg-cov-element-6','g4ge-weather','elements','Why do people check the weather forecast?',['to plan their day safely','to change the weather','to measure the rainfall','to find a map symbol'],'to plan their day safely',HE);
+  add('g4hg-cov-element-7','g4ge-weather','elements','A sunny symbol on a forecast usually means…',['there is little or no rain','a cyclone is approaching','winds will be very strong','there will be heavy flooding'],'there is little or no rain',HE);
+  add('g4hg-cov-element-8','g4ge-weather','elements','Heavy rainfall can cause…',['flooding of low land','very strong sunshine','high temperatures all day','a cool and dry period'],'flooding of low land',HE);
+  add('g4hg-cov-element-9','g4ge-weather','elements','A drought happens when there is…',['very little rain for weeks','too much cloud in the sky','very strong wind every day','an unusually hot single day'],'very little rain for weeks',HE);
+  add('g4hg-cov-element-10','g4ge-weather','elements','Weather affects farmers because plants need…',['suitable rain and sunshine','cold winters only','windy weather all year','very dry soil at all times'],'suitable rain and sunshine',HE);
+  add('g4hg-cov-element-11','g4ge-weather','elements','A cyclone warning helps people…',['prepare and stay safe','enjoy the strong winds','travel to higher ground immediately','go outside to look at the sky'],'prepare and stay safe',HE);
+  add('g4hg-cov-element-12','g4ge-weather','elements','Which element describes how fast air moves?',['the speed of the wind','the amount of rainfall','the level of cloud cover','the air temperature'],'the speed of the wind',HE);
+  add('g4hg-cov-element-13','g4ge-weather','elements','Which element might make you put on a coat?',['a very low temperature','a very heavy rainfall','a very cloudy sky','a very strong wind'],'a very low temperature',HE);
+
+  // --- cyclones ---
+  const HC = 'Choose the action that keeps people safe.';
+  add('g4hg-cov-cyclone-0','g4ge-weather','cyclones','What should a family do when an official cyclone warning is given?',['follow official safety advice','go to the beach to watch','ignore it and carry on','wait until the storm arrives'],'follow official safety advice',HC);
+  add('g4hg-cov-cyclone-1','g4ge-weather','cyclones','Why should people stay indoors during dangerous winds?',['to avoid being injured','to keep the house cool','to save electricity','to check on garden plants'],'to avoid being injured',HC);
+  add('g4hg-cov-cyclone-2','g4ge-weather','cyclones','What should be stored before a cyclone arrives?',['safe drinking water','a map and compass','a weather thermometer','extra clothing only'],'safe drinking water',HC);
+  add('g4hg-cov-cyclone-3','g4ge-weather','cyclones','Why should loose objects be secured before a cyclone?',['wind can blow them away','rain can rust them quickly','they might block the doorway','animals may take them inside'],'wind can blow them away',HC);
+  add('g4hg-cov-cyclone-4','g4ge-weather','cyclones','Which source gives the most trustworthy cyclone advice?',['the official weather service','a neighbour\'s opinion','a social media post','a guess from a friend'],'the official weather service',HC);
+  add('g4hg-cov-cyclone-5','g4ge-weather','cyclones','Why should people avoid walking through flooded water?',['it can be dangerous','it is always very cold','it smells unpleasant','it moves very slowly'],'it can be dangerous',HC);
+  add('g4hg-cov-cyclone-6','g4ge-weather','cyclones','A cyclone can bring…',['strong winds and heavy rain','clear skies and bright sunshine','cold dry air and light frost','warm breezes and light cloud'],'strong winds and heavy rain',HC);
+  add('g4hg-cov-cyclone-7','g4ge-weather','cyclones','What should you use safely if electricity goes off during a cyclone?',['use a torch safely','light many candles indoors','go outside to find daylight','open all windows wide'],'use a torch safely',HC);
+  add('g4hg-cov-cyclone-8','g4ge-weather','cyclones','Why should a family make an emergency plan before a cyclone?',['so everyone knows what to do','to track the cyclone\'s exact path','to contact the weather service','to store enough food only'],'so everyone knows what to do',HC);
+  add('g4hg-cov-cyclone-9','g4ge-weather','cyclones','What should you NOT do during a cyclone?',['go outside to look','stay inside and rest','drink stored water','listen to the radio'],'go outside to look',HC);
+  add('g4hg-cov-cyclone-10','g4ge-weather','cyclones','After a cyclone, why should you check for damaged wires?',['they can be dangerous','they need to be washed','they may block the footpath','they fall only into the sea'],'they can be dangerous',HC);
+  add('g4hg-cov-cyclone-11','g4ge-weather','cyclones','Who should children stay with during a cyclone emergency?',['a trusted adult at all times','a group of other children','alone in their bedroom','their school teacher only'],'a trusted adult at all times',HC);
+  add('g4hg-cov-cyclone-12','g4ge-weather','cyclones','Why should roads be avoided when officials give the warning?',['there may be hazards','traffic is always very heavy','the road is being repaired','it is the law in every case'],'there may be hazards',HC);
+  add('g4hg-cov-cyclone-13','g4ge-weather','cyclones','What can heavy rain do to low-lying land?',['cause flooding of the land','bring cooler temperatures only','improve crop growth quickly','clear blocked drains quickly'],'cause flooding of the land',HC);
+  add('g4hg-cov-cyclone-14','g4ge-weather','cyclones','A cyclone warning is meant to help people…',['act early and safely','watch the storm as it arrives','ignore the bad weather','stay calm and do nothing'],'act early and safely',HC);
+  add('g4hg-cov-cyclone-15','g4ge-weather','cyclones','What is a good item to have in an emergency supply?',['a first-aid kit and a torch','a compass and a map','a thermometer and a wind vane','an umbrella and a calendar'],'a first-aid kit and a torch',HC);
+
+  // --- directions ---
+  const HD = 'Use the compass directions: north, south, east and west.';
+  add('g4hg-cov-direction-0','g4ge-map-skills','directions','Which direction is opposite north?',['south','east','west','north-east'],'south',HD);
+  add('g4hg-cov-direction-1','g4ge-map-skills','directions','Which direction is opposite east?',['west','north','south','north-west'],'west',HD);
+  add('g4hg-cov-direction-2','g4ge-map-skills','directions','On most maps, the top of the map points to…',['north','south','east','west'],'north',HD);
+  add('g4hg-cov-direction-3','g4ge-map-skills','directions','If the school is east of the park, then the park is…',['west of the school','north of the school','south of the school','east of the school'],'west of the school',HD);
+  add('g4hg-cov-direction-4','g4ge-map-skills','directions','The sun rises in the…',['east','west','north','south'],'east',HD);
+  add('g4hg-cov-direction-5','g4ge-map-skills','directions','The sun sets in the…',['west','east','north','south'],'west',HD);
+  add('g4hg-cov-direction-6','g4ge-map-skills','directions','A compass rose on a map shows…',['directions','distances','symbols','the map scale'],'directions',HD);
+  add('g4hg-cov-direction-7','g4ge-map-skills','directions','If you walk north and then turn right, you face…',['east','west','south','north'],'east',HD);
+
+  // --- symbols ---
+  const HS = 'Look at what each symbol represents.';
+  add('g4hg-cov-symbol-0','g4ge-map-skills','symbols','Why does a map use symbols instead of pictures?',['to show features simply','to make the map colourful','to replace the map title','to measure distances'],'to show features simply',HS);
+  add('g4hg-cov-symbol-1','g4ge-map-skills','symbols','Where do you find the meaning of map symbols?',['in the key or legend','in the map title','on the north arrow','next to the scale bar'],'in the key or legend',HS);
+  add('g4hg-cov-symbol-2','g4ge-map-skills','symbols','A blue line on a map often shows…',['a river or stream','a main road','a railway line','a forest boundary'],'a river or stream',HS);
+  add('g4hg-cov-symbol-3','g4ge-map-skills','symbols','A small plane symbol on a map may show…',['an airport or airfield','a hospital or clinic','a capital city','a park or forest'],'an airport or airfield',HS);
+  add('g4hg-cov-symbol-4','g4ge-map-skills','symbols','A cross symbol on a map may show…',['a hospital or clinic','an airport or airfield','a school or library','a market or shop'],'a hospital or clinic',HS);
+  add('g4hg-cov-symbol-5','g4ge-map-skills','symbols','A star symbol on a map can be used to show…',['a capital or important place','a river or stream','a forest or park','a road or footpath'],'a capital or important place',HS);
+  add('g4hg-cov-symbol-6','g4ge-map-skills','symbols','Why must you always check the map key?',['symbols can differ on maps','the scale is hidden in the key','colours never carry meaning','the title is found inside the key'],'symbols can differ on maps',HS);
+  add('g4hg-cov-symbol-7','g4ge-map-skills','symbols','A road is often shown on a map by…',['a line on the map','a blue wavy symbol','a green shaded area','a small plane picture'],'a line on the map',HS);
+  add('g4hg-cov-symbol-8','g4ge-map-skills','symbols','A map symbol for a school helps you…',['find the school quickly','measure the distance to school','read the name of the school','draw the school building'],'find the school quickly',HS);
+  add('g4hg-cov-symbol-9','g4ge-map-skills','symbols','Which is a good example of a map key entry?',['river - blue line','road - green square','school - red circle','forest - black dot'],'river - blue line',HS);
+  add('g4hg-cov-symbol-10','g4ge-map-skills','symbols','What should a good map symbol be?',['clear and easy to recognise','large enough to fill the map','the same on every map','written in words only'],'clear and easy to recognise',HS);
+  add('g4hg-cov-symbol-11','g4ge-map-skills','symbols','A green shaded area on a map may show…',['a forest or a park','a river or a lake','a road or a path','a town or a village'],'a forest or a park',HS);
+  add('g4hg-cov-symbol-12','g4ge-map-skills','symbols','A map key is also called a…',['a legend on the map','a north arrow','a scale bar','a map title'],'a legend on the map',HS);
+  add('g4hg-cov-symbol-13','g4ge-map-skills','symbols','Which symbol would best suit a beach on a map?',['a small wave symbol','a small plane symbol','a green tree symbol','a cross symbol'],'a small wave symbol',HS);
+  add('g4hg-cov-symbol-14','g4ge-map-skills','symbols','Why are symbols especially useful on small maps?',['there is little room on them','they make the map more colourful','they replace the scale bar','they always show distances'],'there is little room on them',HS);
+
+  // --- parts of a map ---
+  const HP = 'Think about what each map part helps a reader do.';
+  add('g4hg-cov-part-0','g4ge-map-skills','parts_of_map','What tells you what a map is about?',['the map title','the north arrow','the map scale','the key or legend'],'the map title',HP);
+  add('g4hg-cov-part-1','g4ge-map-skills','parts_of_map','What part of a map explains its symbols?',['the key or legend','the map title','the north arrow','the map scale'],'the key or legend',HP);
+  add('g4hg-cov-part-2','g4ge-map-skills','parts_of_map','What shows which way is north on a map?',['the north arrow','the map title','the map scale','the key or legend'],'the north arrow',HP);
+  add('g4hg-cov-part-3','g4ge-map-skills','parts_of_map','What helps you compare map distance with real distance?',['the map scale','the north arrow','the key or legend','the map title'],'the map scale',HP);
+  add('g4hg-cov-part-4','g4ge-map-skills','parts_of_map','Why is a map title important?',['it tells the map subject','it shows the direction','it lists the symbols','it measures distances'],'it tells the map subject',HP);
+  add('g4hg-cov-part-5','g4ge-map-skills','parts_of_map','Why is a north arrow important on a map?',['it shows the direction','it lists the symbols','it measures distances','it names the map subject'],'it shows the direction',HP);
+  add('g4hg-cov-part-6','g4ge-map-skills','parts_of_map','A scale helps you work out…',['the real distance','what the symbols mean','which way is north','what the map is about'],'the real distance',HP);
+  add('g4hg-cov-part-7','g4ge-map-skills','parts_of_map','Which map part would say "Map of Mauritius"?',['the map title','the key or legend','the north arrow','the map scale'],'the map title',HP);
+  add('g4hg-cov-part-8','g4ge-map-skills','parts_of_map','Which map part might show "1 cm = 1 km"?',['the map scale','the map title','the north arrow','the key or legend'],'the map scale',HP);
+  add('g4hg-cov-part-9','g4ge-map-skills','parts_of_map','Which map part should every map include?',['a clear title','a detailed key','a distance scale','a direction guide'],'a clear title',HP);
+  add('g4hg-cov-part-10','g4ge-map-skills','parts_of_map','What does a map legend explain?',['the map symbols','the north direction','the real distance','the map subject'],'the map symbols',HP);
+  add('g4hg-cov-part-11','g4ge-map-skills','parts_of_map','A north arrow is a type of…',['direction guide','symbol list','distance measure','map title'],'direction guide',HP);
+  add('g4hg-cov-part-12','g4ge-map-skills','parts_of_map','Why do you use a map scale?',['to work out distance','to find north on the map','to read the map symbols','to understand the map title'],'to work out distance',HP);
+  add('g4hg-cov-part-13','g4ge-map-skills','parts_of_map','A map without a key can be…',['hard to understand','very easy to read','larger than normal','missing a north arrow'],'hard to understand',HP);
+  add('g4hg-cov-part-14','g4ge-map-skills','parts_of_map','What should a clear map title be?',['short and accurate','long and detailed','written in symbols','placed at the bottom'],'short and accurate',HP);
+  add('g4hg-cov-part-15','g4ge-map-skills','parts_of_map','The compass on a map helps a reader…',['orient the map north','measure the distance','read the symbols','understand the title'],'orient the map north',HP);
+
+  // --- using a map ---
+  const HU = 'Use the title, key, directions and scale together.';
+  add('g4hg-cov-usemap-0','g4ge-map-skills','using_map','Before using a map, what should you read first?',['the title and key','the north arrow only','the scale bar only','the symbols at the edge'],'the title and key',HU);
+  add('g4hg-cov-usemap-1','g4ge-map-skills','using_map','If a shop is north of the school, which direction do you travel from school?',['towards the north','towards the south','towards the east','towards the west'],'towards the north',HU);
+  add('g4hg-cov-usemap-2','g4ge-map-skills','using_map','To find a feature on a map, first look for its…',['symbol in the key','name in the title','colour on the north arrow','number on the scale'],'symbol in the key',HU);
+  add('g4hg-cov-usemap-3','g4ge-map-skills','using_map','Why draw a simple map of your route?',['to help others follow it','to measure the exact distance','to replace the map title','to add symbols to the key'],'to help others follow it',HU);
+  add('g4hg-cov-usemap-4','g4ge-map-skills','using_map','A map can help a visitor to…',['find places easily','change the weather forecast','read the season names','measure air temperature'],'find places easily',HU);
+  add('g4hg-cov-usemap-5','g4ge-map-skills','using_map','If the scale says 1 cm = 1 km, what does 3 cm on the map represent?',['3 km on the ground','1 km on the ground','6 km on the ground','30 km on the ground'],'3 km on the ground',HU);
+  add('g4hg-cov-usemap-6','g4ge-map-skills','using_map','What should be labelled on a simple map you draw?',['important places','the weather forecast','the temperature reading','the cyclone warning level'],'important places',HU);
+  add('g4hg-cov-usemap-7','g4ge-map-skills','using_map','How can you show a route on a map?',['draw a line with arrows','write the distance in words','shade the whole area green','put a cross at each turning'],'draw a line with arrows',HU);
+  add('g4hg-cov-usemap-8','g4ge-map-skills','using_map','Why should a map be kept neat?',['so people can read it','so it looks colourful','so it shows the weather','so it fits on one page'],'so people can read it',HU);
+  add('g4hg-cov-usemap-9','g4ge-map-skills','using_map','What can a map of a neighbourhood show?',['where places are','what the weather will be','who lives in each house','how high the temperature is'],'where places are',HU);
 })();

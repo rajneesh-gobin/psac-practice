@@ -1,20 +1,31 @@
-﻿'use strict';
+'use strict';
 (function () {
   const add = (id, chapterId, subsection, question, options, answer, hint, explanation) =>
     STATIC_QUESTIONS.push(makeMCQ({ id, chapterId, subsection, difficulty: 2, question, options, answer, hint, explanation }));
-  const phrase = (prefix, subsection, rows, options, hint, explanation) => rows.forEach(([question, answer], i) =>
-    add(`g4fr-cov-${prefix}-${i}`, 'g4fr-phrase', subsection, question, options, answer, hint, explanation(answer)));
 
-  phrase('cod', 'cod_coi', [
-    ['Dans « Lina mange une pomme », quel groupe est le COD ?', 'une pomme'], ['Dans « Papa lit le journal », quel groupe est le COD ?', 'le journal'],
-    ['Dans « Le chat poursuit la souris », quel groupe est le COD ?', 'la souris'], ['Dans « Nous regardons un film », quel groupe est le COD ?', 'un film'],
-    ['Dans « Sami dessine une maison », quel groupe est le COD ?', 'une maison'], ['Dans « Maman prépare le repas », quel groupe est le COD ?', 'le repas'],
-    ['Dans « J\'écoute la chanson », quel groupe est le COD ?', 'la chanson'], ['Dans « Ils construisent un château », quel groupe est le COD ?', 'un château'],
-    ['Dans « Tu portes ton sac », quel groupe est le COD ?', 'ton sac'], ['Dans « Le bébé boit son lait », quel groupe est le COD ?', 'son lait'],
-    ['Dans « Nous visitons le musée », quel groupe est le COD ?', 'le musée'], ['Dans « Elle ferme la porte », quel groupe est le COD ?', 'la porte'],
-    ['Dans « Le maître explique la leçon », quel groupe est le COD ?', 'la leçon'], ['Dans « Vous cueillez des fleurs », quel groupe est le COD ?', 'des fleurs'],
-    ['Dans « Je range mes jouets », quel groupe est le COD ?', 'mes jouets'], ['Dans « Le vent pousse les nuages », quel groupe est le COD ?', 'les nuages']
-  ], ['une pomme', 'le journal', 'la souris', 'un film', 'une maison', 'le repas', 'la chanson', 'un château', 'ton sac', 'son lait', 'le musée', 'la porte', 'la leçon', 'des fleurs', 'mes jouets', 'les nuages'], 'Pose la question « quoi ? » après le verbe.', a => `Le COD répond à la question « le verbe + quoi ? » : <b>${a}</b>.`);
+  // COD — each question gets its own 3 distractors (subject or plausible wrong NPs)
+  [
+    ['Dans « Lina mange une pomme », quel groupe est le COD ?', 'une pomme', ['Lina', 'une orange', 'la table']],
+    ['Dans « Papa lit le journal », quel groupe est le COD ?', 'le journal', ['Papa', 'un livre', 'les nouvelles']],
+    ['Dans « Le chat poursuit la souris », quel groupe est le COD ?', 'la souris', ['le chat', 'la balle', 'un oiseau']],
+    ['Dans « Nous regardons un film », quel groupe est le COD ?', 'un film', ['nous', 'la télévision', 'un dessin']],
+    ['Dans « Sami dessine une maison », quel groupe est le COD ?', 'une maison', ['Sami', 'une fleur', 'un arbre']],
+    ['Dans « Maman prépare le repas », quel groupe est le COD ?', 'le repas', ['Maman', 'le gâteau', 'la cuisine']],
+    ['Dans « J\'écoute la chanson », quel groupe est le COD ?', 'la chanson', ['je', 'la musique', 'la radio']],
+    ['Dans « Ils construisent un château », quel groupe est le COD ?', 'un château', ['ils', 'une maison', 'un mur']],
+    ['Dans « Tu portes ton sac », quel groupe est le COD ?', 'ton sac', ['tu', 'un cartable', 'tes livres']],
+    ['Dans « Le bébé boit son lait », quel groupe est le COD ?', 'son lait', ['le bébé', 'de l\'eau', 'son biberon']],
+    ['Dans « Nous visitons le musée », quel groupe est le COD ?', 'le musée', ['nous', 'le jardin', 'la ville']],
+    ['Dans « Elle ferme la porte », quel groupe est le COD ?', 'la porte', ['elle', 'la fenêtre', 'le rideau']],
+    ['Dans « Le maître explique la leçon », quel groupe est le COD ?', 'la leçon', ['le maître', 'la règle', 'l\'exercice']],
+    ['Dans « Vous cueillez des fleurs », quel groupe est le COD ?', 'des fleurs', ['vous', 'des fruits', 'des légumes']],
+    ['Dans « Je range mes jouets », quel groupe est le COD ?', 'mes jouets', ['je', 'mes affaires', 'mes livres']],
+    ['Dans « Le vent pousse les nuages », quel groupe est le COD ?', 'les nuages', ['le vent', 'les arbres', 'les feuilles']]
+  ].forEach(([question, answer, wrong], i) =>
+    add(`g4fr-cov-cod-${i}`, 'g4fr-phrase', 'cod_coi', question,
+      [answer].concat(wrong), answer,
+      'Pose la question « quoi ? » après le verbe.',
+      `Le COD répond à la question « le verbe + quoi ? » : <b>${answer}</b>.`));
 
   const impDecl = ['Tu fermes la porte.', 'Elle range ses jouets.', 'Vous écoutez bien.', 'Nous prenons le bus.', 'Il mange sa soupe.', 'Vous attendez votre tour.', 'Nous regardons le tableau.', 'Tu es prudent.', 'Vous avez confiance.', 'Tu choisis un livre.', 'Ils ne courent pas.', 'Tu écris ton prénom.', 'Vous vous lavez les mains.', 'Nous finissons notre travail.'];
   ['Ferme la porte !', 'Range tes jouets !', 'Écoutez bien !', 'Prenons le bus !', 'Mange ta soupe !', 'Attendez votre tour !', 'Regardons le tableau !', 'Sois prudent !', 'Ayez confiance !', 'Choisis un livre !', 'Ne courez pas !', 'Écris ton prénom !', 'Lavez-vous les mains !', 'Finissons notre travail !'].forEach((answer, i) =>
@@ -94,14 +105,22 @@
     'Choisis la forme complète du passé composé (auxiliaire + participe passé) qui correspond au sujet.',
     `La bonne forme est <b>${answer} ${part}</b>. Le passé composé = auxiliaire + participe passé.`));
 
+  // Participe passé — each question gets its own 3 wrong-form distractors (infinitive, present, imparfait)
   [
-    ['Quel est le participe passé de « manger » ?', 'mangé'], ['Quel est le participe passé de « finir » ?', 'fini'],
-    ['Quel est le participe passé de « jouer » ?', 'joué'], ['Quel est le participe passé de « voir » ?', 'vu'],
-    ['Quel est le participe passé de « prendre » ?', 'pris'], ['Quel est le participe passé de « faire » ?', 'fait'],
-    ['Quel est le participe passé de « lire » ?', 'lu'], ['Quel est le participe passé du verbe « écrire » ?', 'écrit'],
-    ['Quel est le participe passé de « mettre » ?', 'mis'], ['Quel est le participe passé de « dire » ?', 'dit'],
-    ['Quel est le participe passé du verbe « ouvrir » ?', 'ouvert']
-  ].forEach(([question, answer], i) => add(`g4fr-cov-partic-${i}`, 'g4fr-passe-comp', 'participe', question,
-    ['mangé', 'fini', 'joué', 'vu', 'pris', 'fait', 'lu', 'écrit', 'mis', 'dit', 'ouvert'], answer, 'Le participe passé est la deuxième partie du passé composé.',
-    `Le participe passé de ce verbe est <b>${answer}</b>.`));
+    ['Quel est le participe passé de « manger » ?',          'mangé',  ['manger',  'mange',   'mangeait']],
+    ['Quel est le participe passé de « finir » ?',           'fini',   ['finir',   'finit',   'finissait']],
+    ['Quel est le participe passé de « jouer » ?',           'joué',   ['jouer',   'joue',    'jouait']],
+    ['Quel est le participe passé de « voir » ?',            'vu',     ['voir',    'voit',    'voyait']],
+    ['Quel est le participe passé de « prendre » ?',         'pris',   ['prendre', 'prend',   'prenait']],
+    ['Quel est le participe passé de « faire » ?',           'fait',   ['faire',   'fais',    'faisait']],
+    ['Quel est le participe passé de « lire » ?',            'lu',     ['lire',    'lit',     'lisait']],
+    ['Quel est le participe passé du verbe « écrire » ?',    'écrit',  ['écrire',  'écris',   'écrivait']],
+    ['Quel est le participe passé de « mettre » ?',          'mis',    ['mettre',  'met',     'mettait']],
+    ['Quel est le participe passé de « dire » ?',            'dit',    ['dire',    'dis',     'disait']],
+    ['Quel est le participe passé du verbe « ouvrir » ?',    'ouvert', ['ouvrir',  'ouvre',   'ouvrait']]
+  ].forEach(([question, answer, wrong], i) =>
+    add(`g4fr-cov-partic-${i}`, 'g4fr-passe-comp', 'participe', question,
+      [answer].concat(wrong), answer,
+      'Le participe passé est la deuxième partie du passé composé.',
+      `Le participe passé de ce verbe est <b>${answer}</b>.`));
 })();

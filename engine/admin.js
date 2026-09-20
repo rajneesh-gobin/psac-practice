@@ -973,8 +973,8 @@ const AdminPanel = (() => {
     if (!ctype.includes("application/json")) {
       console.error("[AdminPanel] " + path + " did not return JSON:", response.status, ctype);
       throw new Error(`${path} is not available (HTTP ${response.status}). `
-        + "This action needs its Netlify function, which does not run on a plain "
-        + "local server and is not on this deploy yet.");
+        + "This action needs a server function. Open the site on the deployed URL, "
+        + "or run the dev server locally — not a plain static file server.");
     }
     const result = await response.json().catch(() => ({}));
     if (!response.ok || !result.ok) throw new Error(result.error || "The server refused the request.");
@@ -1278,8 +1278,8 @@ const AdminPanel = (() => {
   function _fetchBlockedReason() {
     if (typeof location !== 'undefined' && !/^https?:$/.test(location.protocol)) {
       return `This page is open as ${location.protocol}//, so there is no server to ask. `
-           + 'This action needs its Netlify function: run `npm run dev` (or `netlify dev`) '
-           + 'and open http://localhost:8888, or use the deployed site.';
+           + 'Run the dev server (`node dev-server.js`) and open http://localhost:3000, '
+           + 'or use the deployed site.';
     }
     if (typeof navigator !== 'undefined' && navigator.onLine === false) {
       return 'This device is offline. Reconnect and try again.';
@@ -1330,7 +1330,7 @@ const AdminPanel = (() => {
         }
         if (attempt === 2) {
           throw Object.assign(new Error(json ? (result?.error || `Email service returned HTTP ${response.status}.`) :
-            'The email service is unavailable on this server. Use the deployed website or restart the project development server (npm run dev).'), { permanent: true });
+            'The email service is unavailable on this server. Use the deployed website or restart the dev server (node dev-server.js).'), { permanent: true });
         }
       } catch (error) {
         if (error.permanent) throw error;

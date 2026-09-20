@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
 // Real reasons, keyed by id. Every question in this file used to carry only
 // "<b>X</b> is correct.", which restates the answer and teaches nothing.
@@ -109,80 +109,120 @@ const G4HG_EXPL = {
     ['A place with fields, fewer buildings and farms is usually a…', 'rural locality']
   ], ['urban locality', 'rural locality', 'coastal locality'], 'Think about what you would see in that place.', a => `<b>${a}</b> matches this description.`);
 
-  rows('change', 'g4hist-locality', 'change', [
-    ['Which item helps us learn what a locality looked like long ago?', 'an old photograph of it'],
-    ['A new road built where there was once a footpath is an example of…', 'change in the locality'],
-    ['A village keeps the same old temple. This is an example of…', 'continuity over time'],
-    ['To compare the past with today, it is useful to use…', 'old and new pictures'],
-    ['Which transport was common before many people owned cars?', 'a bicycle or a cart'],
-    ['A timeline helps us put events in…', 'the order they happened'],
-    ['A new supermarket in a village shows that the locality has…', 'changed over the years'],
-    ['Which question is useful when comparing old and new houses?', 'What are the walls made of?'],
-    ['A monument that remains in the same place shows…', 'continuity over time'],
-    ['Which source is evidence from the past?', 'an old map of the area'],
-    ['A bridge replacing a small wooden crossing is an example of…', 'change in the locality'],
-    ['What can an elderly person share about the past?', 'memories of the locality'],
-    ['Why do we label dates on a timeline?', 'to show when events happened']
-  ], ['an old photograph of it', 'change in the locality', 'continuity over time', 'old and new pictures', 'a bicycle or a cart', 'the order they happened', 'changed over the years', 'What are the walls made of?', 'an old map of the area', 'memories of the locality', 'to show when events happened'], 'Look for clues about what stayed the same and what became different.', a => `The best answer is <b>${a}</b>.`);
+  // change
+  const HINT_CHANGE = 'Look for clues about what stayed the same and what became different.';
+  add('g4hg-cov-change-0', 'g4hist-locality', 'change', 'Which item helps us learn what a locality looked like long ago?', ['an old photograph of it', 'a story someone made up', 'a modern tourist leaflet', 'a recent school project'], 'an old photograph of it', HINT_CHANGE);
+  add('g4hg-cov-change-1', 'g4hist-locality', 'change', 'A new road built where there was once a footpath is an example of…', ['change in the locality', 'continuity over time', 'a natural disaster', 'a local tradition'], 'change in the locality', HINT_CHANGE);
+  add('g4hg-cov-change-2', 'g4hist-locality', 'change', 'A village keeps the same old temple. This is an example of…', ['continuity over time', 'change in the locality', 'a modern improvement', 'a new tradition'], 'continuity over time', HINT_CHANGE);
+  add('g4hg-cov-change-3', 'g4hist-locality', 'change', 'To compare the past with today, it is useful to use…', ['old and new pictures', 'only a modern photograph', 'a story someone invented', "a list of today's prices"], 'old and new pictures', HINT_CHANGE);
+  add('g4hg-cov-change-4', 'g4hist-locality', 'change', 'Which transport was common before many people owned cars?', ['a bicycle or a cart', 'a motor bus', 'a motor boat', 'an aeroplane'], 'a bicycle or a cart', HINT_CHANGE);
+  add('g4hg-cov-change-5', 'g4hist-locality', 'change', 'A timeline helps us put events in…', ['the order they happened', 'alphabetical order', 'order of importance', 'the order we prefer'], 'the order they happened', HINT_CHANGE);
+  add('g4hg-cov-change-6', 'g4hist-locality', 'change', 'A new supermarket in a village shows that the locality has…', ['changed over the years', 'stayed exactly the same', 'lost all its old buildings', 'moved to another place'], 'changed over the years', HINT_CHANGE);
+  add('g4hg-cov-change-7', 'g4hist-locality', 'change', 'Which question is useful when comparing old and new houses?', ['What are the walls made of?', 'How many people live inside?', 'What colour are the curtains?', 'Who owns the house today?'], 'What are the walls made of?', HINT_CHANGE);
+  add('g4hg-cov-change-8', 'g4hist-locality', 'change', 'A monument that remains in the same place shows…', ['continuity over time', 'change in the locality', 'a recent addition', 'a new tradition'], 'continuity over time', HINT_CHANGE);
+  add('g4hg-cov-change-9', 'g4hist-locality', 'change', 'Which source is evidence from the past?', ['an old map of the area', 'a leaflet printed this year', 'a recent school project', 'a story told by a child'], 'an old map of the area', HINT_CHANGE);
+  add('g4hg-cov-change-10', 'g4hist-locality', 'change', 'A bridge replacing a small wooden crossing is an example of…', ['change in the locality', 'continuity over time', 'a natural event', 'a local celebration'], 'change in the locality', HINT_CHANGE);
+  add('g4hg-cov-change-11', 'g4hist-locality', 'change', 'What can an elderly person share about the past?', ['memories of the locality', 'facts from a school textbook', 'a map drawn last year', 'a photograph taken recently'], 'memories of the locality', HINT_CHANGE);
+  add('g4hg-cov-change-12', 'g4hist-locality', 'change', 'Why do we label dates on a timeline?', ['to show when events happened', 'to make it look colourful', 'to list the people involved', 'to describe the weather'], 'to show when events happened', HINT_CHANGE);
 
-  rows('buildings', 'g4hist-locality', 'buildings', [
-    ['Which building is used for learning?', 'a school building'], ['Which building is used for medical care?', 'a hospital or clinic'],
-    ['Which landmark can help people recognise a place?', 'a monument or statue'], ['A post office is a building where people can…', 'send letters and parcels'],
-    ['Why are old buildings sometimes protected?', 'they tell us about the past'], ['Which building is a place of worship?', 'a mosque or temple'],
-    ['A library is a place where people can…', 'borrow and read books'], ['What can a town hall be used for?', 'local community services'],
-    ['Which feature is most likely to be a landmark?', 'a historic tower'], ['Why should we respect places of worship?', 'they matter to many people'],
-    ['A market building is used mainly to…', 'buy and sell goods'], ['Which building helps travellers catch a train?', 'a railway station'],
-    ['What is one way to care for an old monument?', 'never damage or mark it'], ['A museum helps visitors learn about…', 'objects from the past']
-  ], ['a school building', 'a hospital or clinic', 'a monument or statue', 'send letters and parcels', 'they tell us about the past', 'a mosque or temple', 'borrow and read books', 'local community services', 'a historic tower', 'they matter to many people', 'buy and sell goods', 'a railway station', 'never damage or mark it', 'objects from the past'], 'Think about the purpose of the building.', a => `<b>${a}</b> is correct.`);
+  // buildings
+  const HINT_BLDG = 'Think about the purpose of the building.';
+  add('g4hg-cov-buildings-0', 'g4hist-locality', 'buildings', 'Which building is used for learning?', ['a school building', 'a hospital or clinic', 'a market building', 'a railway station'], 'a school building', HINT_BLDG);
+  add('g4hg-cov-buildings-1', 'g4hist-locality', 'buildings', 'Which building is used for medical care?', ['a hospital or clinic', 'a school building', 'a post office', 'a library building'], 'a hospital or clinic', HINT_BLDG);
+  add('g4hg-cov-buildings-2', 'g4hist-locality', 'buildings', 'Which landmark can help people recognise a place?', ['a monument or statue', 'an ordinary house', 'a small garden wall', 'a private car park'], 'a monument or statue', HINT_BLDG);
+  add('g4hg-cov-buildings-3', 'g4hist-locality', 'buildings', 'A post office is a building where people can…', ['send letters and parcels', 'buy and sell food', 'borrow and read books', 'see a doctor or nurse'], 'send letters and parcels', HINT_BLDG);
+  add('g4hg-cov-buildings-4', 'g4hist-locality', 'buildings', 'Why are old buildings sometimes protected?', ['they tell us about the past', 'they are always the largest', 'they are the cheapest to maintain', 'they are made of modern materials'], 'they tell us about the past', HINT_BLDG);
+  add('g4hg-cov-buildings-5', 'g4hist-locality', 'buildings', 'Which building is a place of worship?', ['a mosque or temple', 'a hospital or clinic', 'a market building', 'a town hall'], 'a mosque or temple', HINT_BLDG);
+  add('g4hg-cov-buildings-6', 'g4hist-locality', 'buildings', 'A library is a place where people can…', ['borrow and read books', 'buy and sell goods', 'send letters and parcels', 'see a doctor or nurse'], 'borrow and read books', HINT_BLDG);
+  add('g4hg-cov-buildings-7', 'g4hist-locality', 'buildings', 'What can a town hall be used for?', ['local community services', 'buying and selling goods', 'caring for the sick', 'storing food for festivals'], 'local community services', HINT_BLDG);
+  add('g4hg-cov-buildings-8', 'g4hist-locality', 'buildings', 'Which feature is most likely to be a landmark?', ['a historic tower', 'a small garden wall', 'an ordinary bus stop', 'a regular lamp post'], 'a historic tower', HINT_BLDG);
+  add('g4hg-cov-buildings-9', 'g4hist-locality', 'buildings', 'Why should we respect places of worship?', ['they matter to many people', 'they are always the oldest buildings', 'they are always the largest', 'they are painted the brightest'], 'they matter to many people', HINT_BLDG);
+  add('g4hg-cov-buildings-10', 'g4hist-locality', 'buildings', 'A market building is used mainly to…', ['buy and sell goods', 'borrow and read books', 'send letters and parcels', 'treat the sick and injured'], 'buy and sell goods', HINT_BLDG);
+  add('g4hg-cov-buildings-11', 'g4hist-locality', 'buildings', 'Which building helps travellers catch a train?', ['a railway station', 'a post office', 'a town hall', 'a market building'], 'a railway station', HINT_BLDG);
+  add('g4hg-cov-buildings-12', 'g4hist-locality', 'buildings', 'What is one way to care for an old monument?', ['never damage or mark it', 'paint over it every year', 'move it to a storage room', 'take a small piece home'], 'never damage or mark it', HINT_BLDG);
+  add('g4hg-cov-buildings-13', 'g4hist-locality', 'buildings', 'A museum helps visitors learn about…', ['objects from the past', 'how to build new houses', 'where to buy food today', 'which trains to catch'], 'objects from the past', HINT_BLDG);
 
-  rows('festivals', 'g4hist-community', 'festivals', [
-    ['Divali is often called the festival of…', 'lights and lamps'], ['At Eid ul-Fitr, many Muslim families celebrate the end of…', 'the month of Ramadan'],
-    ['Christmas is celebrated by many Christians in…', 'December each year'], ['Maha Shivaratri is important to many…', 'Hindu families here'],
-    ['A good way to learn about a festival is to…', 'ask those who celebrate it']
-  ], ['lights and lamps', 'the month of Ramadan', 'December each year', 'Hindu families here', 'ask those who celebrate it'], 'Remember that different communities may celebrate in different ways.', a => `The correct answer is <b>${a}</b>.`);
+  // festivals
+  const HINT_FEST = 'Remember that different communities may celebrate in different ways.';
+  add('g4hg-cov-festivals-0', 'g4hist-community', 'festivals', 'Divali is often called the festival of…', ['lights and lamps', 'colours and water', 'drums and dancing', 'gifts and feasting'], 'lights and lamps', HINT_FEST);
+  add('g4hg-cov-festivals-1', 'g4hist-community', 'festivals', 'At Eid ul-Fitr, many Muslim families celebrate the end of…', ['the month of Ramadan', 'the harvest season', 'the school holiday', 'a long pilgrimage'], 'the month of Ramadan', HINT_FEST);
+  add('g4hg-cov-festivals-2', 'g4hist-community', 'festivals', 'Christmas is celebrated by many Christians in…', ['December each year', 'March each year', 'August each year', 'October each year'], 'December each year', HINT_FEST);
+  add('g4hg-cov-festivals-3', 'g4hist-community', 'festivals', 'Maha Shivaratri is important to many…', ['Hindu families here', 'Christian families here', 'Muslim families here', 'Buddhist families here'], 'Hindu families here', HINT_FEST);
+  add('g4hg-cov-festivals-4', 'g4hist-community', 'festivals', 'A good way to learn about a festival is to…', ['ask those who celebrate it', 'read only one old book', 'decide it is not for you', 'wait until it is over'], 'ask those who celebrate it', HINT_FEST);
 
-  rows('religions', 'g4hist-community', 'religions', [
-    ['A church is a place of worship for many…', 'Christian families here'], ['A mosque is a place of worship for many…', 'Muslim families here'],
-    ['A temple is a place of worship for many…', 'Hindu families here'], ['A pagoda is linked to many…', 'Buddhist families here'],
-    ['What should you do when visiting any place of worship?', 'always be respectful'], ['Why do people have different religions?', 'people have different beliefs'],
-    ['Which action shows respect for a different faith?', 'listening without making fun'], ['A person may practise a religion by…', 'taking part in prayers'],
-    ['Mauritius has people from many religious backgrounds. This is called…', 'religious diversity'], ['Is it kind to judge someone because of their religion?', 'No, it is never kind'],
-    ['What can classmates share about their celebrations?', 'what the celebration means'], ['Religious diversity can help us…', 'learn about one another'],
-    ['A place of worship should be kept…', 'clean, quiet and peaceful'], ['Which value is important in a diverse country?', 'respect for everyone'],
-    ['Can two friends have different religions?', 'Yes, of course they can'], ['What should a visitor do before entering a sacred place?', 'follow the rules of that place'],
-    ['Why is kindness important when discussing beliefs?', 'everyone deserves respect']
-  ], ['Christian families here', 'Muslim families here', 'Hindu families here', 'Buddhist families here', 'always be respectful', 'people have different beliefs', 'listening without making fun', 'taking part in prayers', 'religious diversity', 'No, it is never kind', 'what the celebration means', 'learn about one another', 'clean, quiet and peaceful', 'respect for everyone', 'Yes, of course they can', 'follow the rules of that place', 'everyone deserves respect'], 'Choose the respectful and accurate answer.', a => `<b>${a}</b> is correct.`);
+  // religions
+  const HINT_REL = 'Choose the respectful and accurate answer.';
+  add('g4hg-cov-religions-0', 'g4hist-community', 'religions', 'A church is a place of worship for many…', ['Christian families here', 'Muslim families here', 'Hindu families here', 'Buddhist families here'], 'Christian families here', HINT_REL);
+  add('g4hg-cov-religions-1', 'g4hist-community', 'religions', 'A mosque is a place of worship for many…', ['Muslim families here', 'Christian families here', 'Hindu families here', 'Buddhist families here'], 'Muslim families here', HINT_REL);
+  add('g4hg-cov-religions-2', 'g4hist-community', 'religions', 'A temple is a place of worship for many…', ['Hindu families here', 'Christian families here', 'Muslim families here', 'Buddhist families here'], 'Hindu families here', HINT_REL);
+  add('g4hg-cov-religions-3', 'g4hist-community', 'religions', 'A pagoda is linked to many…', ['Buddhist families here', 'Hindu families here', 'Muslim families here', 'Christian families here'], 'Buddhist families here', HINT_REL);
+  add('g4hg-cov-religions-4', 'g4hist-community', 'religions', 'What should you do when visiting any place of worship?', ['always be respectful', 'take photographs freely', 'speak loudly inside', 'leave as quickly as possible'], 'always be respectful', HINT_REL);
+  add('g4hg-cov-religions-5', 'g4hist-community', 'religions', 'Why do people have different religions?', ['people have different beliefs', 'one religion is always right', 'all religions say the same things', 'only adults choose a religion'], 'people have different beliefs', HINT_REL);
+  add('g4hg-cov-religions-6', 'g4hist-community', 'religions', 'Which action shows respect for a different faith?', ['listening without making fun', 'asking rude questions', 'refusing to listen', 'laughing at their customs'], 'listening without making fun', HINT_REL);
+  add('g4hg-cov-religions-7', 'g4hist-community', 'religions', 'A person may practise a religion by…', ['taking part in prayers', 'refusing to speak to others', 'staying indoors always', 'wearing only white'], 'taking part in prayers', HINT_REL);
+  add('g4hg-cov-religions-8', 'g4hist-community', 'religions', 'Mauritius has people from many religious backgrounds. This is called…', ['religious diversity', 'religious conflict', 'cultural isolation', 'a single tradition'], 'religious diversity', HINT_REL);
+  add('g4hg-cov-religions-9', 'g4hist-community', 'religions', 'Is it kind to judge someone because of their religion?', ['No, it is never kind', 'Yes, always', 'Yes, sometimes', 'Only for adults'], 'No, it is never kind', HINT_REL);
+  add('g4hg-cov-religions-10', 'g4hist-community', 'religions', 'What can classmates share about their celebrations?', ['what the celebration means', 'how much everything costs', 'which shops to visit', 'how long the holiday lasts'], 'what the celebration means', HINT_REL);
+  add('g4hg-cov-religions-11', 'g4hist-community', 'religions', 'Religious diversity can help us…', ['learn about one another', 'argue more often', 'avoid each other', 'forget our own traditions'], 'learn about one another', HINT_REL);
+  add('g4hg-cov-religions-12', 'g4hist-community', 'religions', 'A place of worship should be kept…', ['clean, quiet and peaceful', 'loud and busy always', 'locked at all times', 'bright and colourful always'], 'clean, quiet and peaceful', HINT_REL);
+  add('g4hg-cov-religions-13', 'g4hist-community', 'religions', 'Which value is important in a diverse country?', ['respect for everyone', 'following only one tradition', 'avoiding those who differ', 'celebrating only your own festivals'], 'respect for everyone', HINT_REL);
+  add('g4hg-cov-religions-14', 'g4hist-community', 'religions', 'Can two friends have different religions?', ['Yes, of course they can', 'No, never at all', 'Only if parents agree', 'Only when they are adults'], 'Yes, of course they can', HINT_REL);
+  add('g4hg-cov-religions-15', 'g4hist-community', 'religions', 'What should a visitor do before entering a sacred place?', ['follow the rules of that place', 'take a photograph first', 'bring a food gift always', 'wait outside at all times'], 'follow the rules of that place', HINT_REL);
+  add('g4hg-cov-religions-16', 'g4hist-community', 'religions', 'Why is kindness important when discussing beliefs?', ['everyone deserves respect', 'beliefs are not important', 'it makes talks shorter', 'it is only a school rule'], 'everyone deserves respect', HINT_REL);
 
-  rows('food', 'g4hist-community', 'food_dress', [
-    ['Different families may eat different traditional foods because of…', 'their culture and traditions'], ['A respectful response to unfamiliar food is to…', 'ask politely about it'],
-    ['Clothing worn at a celebration can show…', 'a cultural tradition'], ['Why should we never make fun of someone\'s clothes?', 'everyone deserves respect'],
-    ['Food from different communities lets us…', 'discover new tastes and food'], ['Traditional dress may be worn especially for…', 'a very special occasion'],
-    ['What is a good way to describe food you have not tried?', 'It is quite new to me.'], ['Families may prepare special dishes for…', 'festivals and holidays'],
-    ['What can food tell us about a family?', 'some of their traditions'], ['It is good to share meals with others because it can…', 'bring people together'],
-    ['Which action is polite at a shared meal?', 'saying thank you kindly'], ['Cultural clothing should be treated with…', 'great care and respect'],
-    ['A recipe passed down in a family is part of its…', 'heritage and history'], ['Trying a new dish can help you…', 'learn about another culture'],
-    ['Different foods and clothes in Mauritius show…', 'our cultural diversity'], ['What should you do if you do not want to eat a food?', 'say no thank you politely']
-  ], ['their culture and traditions', 'ask politely about it', 'a cultural tradition', 'everyone deserves respect', 'discover new tastes and food', 'a very special occasion', 'It is quite new to me.', 'festivals and holidays', 'some of their traditions', 'bring people together', 'saying thank you kindly', 'great care and respect', 'heritage and history', 'learn about another culture', 'our cultural diversity', 'say no thank you politely'], 'Think about respect and learning from one another.', a => `<b>${a}</b> is the best answer.`);
+  // food and dress
+  const HINT_FOOD = 'Think about respect and learning from one another.';
+  add('g4hg-cov-food-0', 'g4hist-community', 'food_dress', 'Different families may eat different traditional foods because of…', ['their culture and traditions', 'the price of ingredients', 'what shops are nearby', 'what the weather is like'], 'their culture and traditions', HINT_FOOD);
+  add('g4hg-cov-food-1', 'g4hist-community', 'food_dress', 'A respectful response to unfamiliar food is to…', ['ask politely about it', 'refuse it without a word', 'make a face at it', 'push it away quickly'], 'ask politely about it', HINT_FOOD);
+  add('g4hg-cov-food-2', 'g4hist-community', 'food_dress', 'Clothing worn at a celebration can show…', ['a cultural tradition', 'the latest fashion trend', 'how much money someone has', 'the colour of their school'], 'a cultural tradition', HINT_FOOD);
+  add('g4hg-cov-food-3', 'g4hist-community', 'food_dress', "Why should we never make fun of someone's clothes?", ['everyone deserves respect', 'clothes are always expensive', 'it is a school rule only', 'teachers will punish you'], 'everyone deserves respect', HINT_FOOD);
+  add('g4hg-cov-food-4', 'g4hist-community', 'food_dress', 'Food from different communities lets us…', ['discover new tastes and food', 'save money on meals', 'eat faster at school', 'avoid going to shops'], 'discover new tastes and food', HINT_FOOD);
+  add('g4hg-cov-food-5', 'g4hist-community', 'food_dress', 'Traditional dress may be worn especially for…', ['a very special occasion', 'everyday shopping trips', 'a sports lesson at school', 'any ordinary weekday'], 'a very special occasion', HINT_FOOD);
+  add('g4hg-cov-food-6', 'g4hist-community', 'food_dress', 'What is a good way to describe food you have not tried?', ['It is quite new to me.', 'It looks disgusting.', 'I will never try that.', 'That smells strange.'], 'It is quite new to me.', HINT_FOOD, '<b>It is quite new to me.</b> is kind and honest — it says the food is unfamiliar without criticising it.');
+  add('g4hg-cov-food-7', 'g4hist-community', 'food_dress', 'Families may prepare special dishes for…', ['festivals and holidays', 'ordinary school lunches', 'a quick weekday breakfast', 'a trip to the market'], 'festivals and holidays', HINT_FOOD);
+  add('g4hg-cov-food-8', 'g4hist-community', 'food_dress', 'What can food tell us about a family?', ['some of their traditions', 'how much money they have', 'which school they attend', 'where they go on holiday'], 'some of their traditions', HINT_FOOD);
+  add('g4hg-cov-food-9', 'g4hist-community', 'food_dress', 'It is good to share meals with others because it can…', ['bring people together', 'make food last longer', 'save money on cooking', 'keep the kitchen clean'], 'bring people together', HINT_FOOD);
+  add('g4hg-cov-food-10', 'g4hist-community', 'food_dress', 'Which action is polite at a shared meal?', ['saying thank you kindly', 'taking the largest portion', 'leaving without a word', 'talking with your mouth full'], 'saying thank you kindly', HINT_FOOD);
+  add('g4hg-cov-food-11', 'g4hist-community', 'food_dress', 'Cultural clothing should be treated with…', ['great care and respect', 'little concern at all', 'only water and soap', 'a light-hearted attitude'], 'great care and respect', HINT_FOOD);
+  add('g4hg-cov-food-12', 'g4hist-community', 'food_dress', 'A recipe passed down in a family is part of its…', ['heritage and history', 'shopping budget', 'weekly timetable', 'school curriculum'], 'heritage and history', HINT_FOOD);
+  add('g4hg-cov-food-13', 'g4hist-community', 'food_dress', 'Trying a new dish can help you…', ['learn about another culture', 'win a cooking prize', 'save money on food', 'impress your teacher'], 'learn about another culture', HINT_FOOD);
+  add('g4hg-cov-food-14', 'g4hist-community', 'food_dress', 'Different foods and clothes in Mauritius show…', ['our cultural diversity', 'our shopping habits', 'the local weather', 'our school uniform rules'], 'our cultural diversity', HINT_FOOD);
+  add('g4hg-cov-food-15', 'g4hist-community', 'food_dress', 'What should you do if you do not want to eat a food?', ['say no thank you politely', 'throw it away quickly', 'make a disgusted face', 'demand something else'], 'say no thank you politely', HINT_FOOD);
 
-  rows('lang', 'g4hist-community', 'languages', [
-    ['Mauritian Creole is spoken by many people in…', 'Mauritius and Rodrigues'], ['English is used officially in many Mauritian schools and offices.', 'Yes, that is quite true'],
-    ['French is one of the languages many Mauritians use.', 'Yes, that is quite true'], ['Which action helps a friend who is learning a language?', 'speak kindly and clearly'],
-    ['Knowing more than one language can help us…', 'communicate with more people'], ['Should we laugh at someone\'s accent?', 'No, we should never do that'],
-    ['Language diversity means people may speak…', 'many different languages'], ['A respectful way to ask about a language is…', 'How do you say this word?'],
-    ['Why can families use different languages at home?', 'they have different roots'], ['What can you do if you do not understand a word?', 'ask politely what it means'],
-    ['A language can be part of a person\'s…', 'own identity and culture'], ['Learning greetings in another language shows…', 'respect for other people'],
-    ['Which is a good classroom rule?', 'Let everyone speak freely'], ['Can one person speak several languages?', 'Yes, many people can do so'],
-    ['Languages help people share…', 'their ideas and stories'], ['Why do we value language diversity?', 'it helps us understand others'],
-    ['A translation tells us…', 'the meaning in another language'], ['When a classmate speaks differently, you should…', 'listen to them respectfully']
-  ], ['Mauritius and Rodrigues', 'Yes, that is quite true', 'speak kindly and clearly', 'communicate with more people', 'No, we should never do that', 'many different languages', 'How do you say this word?', 'they have different roots', 'ask politely what it means', 'own identity and culture', 'respect for other people', 'Let everyone speak freely', 'Yes, many people can do so', 'their ideas and stories', 'it helps us understand others', 'the meaning in another language', 'listen to them respectfully'], 'Think about how it feels when someone makes the effort to greet you in your own language.', a => `The correct answer is <b>${a}</b>.`);
+  // languages
+  const HINT_LANG = 'Think about how it feels when someone makes the effort to greet you in your own language.';
+  add('g4hg-cov-lang-0', 'g4hist-community', 'languages', 'Mauritian Creole is spoken by many people in…', ['Mauritius and Rodrigues', 'France and Belgium', 'India and Pakistan', 'England and Scotland'], 'Mauritius and Rodrigues', HINT_LANG);
+  add('g4hg-cov-lang-1', 'g4hist-community', 'languages', 'English is used officially in many Mauritian schools and offices.', ['Yes, that is quite true', 'No, that is not true', 'Only in private schools', 'Only for older students'], 'Yes, that is quite true', HINT_LANG);
+  add('g4hg-cov-lang-2', 'g4hist-community', 'languages', 'French is one of the languages many Mauritians use.', ['Yes, that is quite true', 'No, it is never used here', 'Only for cooking recipes', 'Only on public holidays'], 'Yes, that is quite true', HINT_LANG);
+  add('g4hg-cov-lang-3', 'g4hist-community', 'languages', 'Which action helps a friend who is learning a language?', ['speak kindly and clearly', 'speak as fast as possible', 'use only difficult words', 'ignore their mistakes loudly'], 'speak kindly and clearly', HINT_LANG);
+  add('g4hg-cov-lang-4', 'g4hist-community', 'languages', 'Knowing more than one language can help us…', ['communicate with more people', 'win more games at school', 'get higher marks in maths', 'finish homework faster'], 'communicate with more people', HINT_LANG);
+  add('g4hg-cov-lang-5', 'g4hist-community', 'languages', "Should we laugh at someone's accent?", ['No, we should never do that', 'Yes, if it sounds funny', 'Yes, with their permission', 'Only among close friends'], 'No, we should never do that', HINT_LANG);
+  add('g4hg-cov-lang-6', 'g4hist-community', 'languages', 'Language diversity means people may speak…', ['many different languages', 'only one shared language', 'the same language always', 'only official languages'], 'many different languages', HINT_LANG);
+  add('g4hg-cov-lang-7', 'g4hist-community', 'languages', 'A respectful way to ask about a language is…', ['How do you say this word?', 'Why do you speak like that?', 'Can you please stop talking?', "Why can't you speak normally?"], 'How do you say this word?', HINT_LANG);
+  add('g4hg-cov-lang-8', 'g4hist-community', 'languages', 'Why can families use different languages at home?', ['they have different roots', 'they have more televisions', 'they live in bigger houses', 'they have more children'], 'they have different roots', HINT_LANG);
+  add('g4hg-cov-lang-9', 'g4hist-community', 'languages', 'What can you do if you do not understand a word?', ['ask politely what it means', 'pretend you understood', 'walk away immediately', 'laugh at the word instead'], 'ask politely what it means', HINT_LANG);
+  add('g4hg-cov-lang-10', 'g4hist-community', 'languages', "A language can be part of a person's…", ['own identity and culture', 'weekly school timetable', 'sports team selection', 'favourite television show'], 'own identity and culture', HINT_LANG);
+  add('g4hg-cov-lang-11', 'g4hist-community', 'languages', 'Learning greetings in another language shows…', ['respect for other people', 'disrespect for your own language', 'a wish to change schools', 'a dislike of your own culture'], 'respect for other people', HINT_LANG);
+  add('g4hg-cov-lang-12', 'g4hist-community', 'languages', 'Which is a good classroom rule?', ['Let everyone speak freely', "Speak only the teacher's language", 'Stay silent at all times', 'Speak only if you are fluent'], 'Let everyone speak freely', HINT_LANG);
+  add('g4hg-cov-lang-13', 'g4hist-community', 'languages', 'Can one person speak several languages?', ['Yes, many people can do so', 'No, it is impossible', 'Only language teachers can', 'Only adults can manage it'], 'Yes, many people can do so', HINT_LANG);
+  add('g4hg-cov-lang-14', 'g4hist-community', 'languages', 'Languages help people share…', ['their ideas and stories', 'their school uniforms', 'their lunch boxes', 'their sports equipment'], 'their ideas and stories', HINT_LANG);
+  add('g4hg-cov-lang-15', 'g4hist-community', 'languages', 'Why do we value language diversity?', ['it helps us understand others', 'it makes exams easier', 'it shortens school days', 'it reduces homework'], 'it helps us understand others', HINT_LANG);
+  add('g4hg-cov-lang-16', 'g4hist-community', 'languages', 'A translation tells us…', ['the meaning in another language', 'the spelling in our language', 'the history of a word', 'the sound of a letter'], 'the meaning in another language', HINT_LANG);
+  add('g4hg-cov-lang-17', 'g4hist-community', 'languages', 'When a classmate speaks differently, you should…', ['listen to them respectfully', 'correct them immediately', 'ask them to be quiet', 'repeat what they said mockingly'], 'listen to them respectfully', HINT_LANG);
 
-  rows('diversity', 'g4hist-community', 'diversity', [
-    ['Diversity means that people can have…', 'different cultures and customs'], ['A diverse classroom can include children who…', 'celebrate different festivals'],
-    ['What helps a community live happily together?', 'respecting differences'], ['If a friend\'s tradition is new to you, you can…', 'ask kind questions about it'],
-    ['Why is Mauritius described as diverse?', 'people have many backgrounds'], ['Which word means treating everyone fairly?', 'respect for all people'],
-    ['Sharing stories about families can help classmates…', 'understand each other'], ['What should you do when someone is left out?', 'invite them to join in'],
-    ['Different traditions are something to…', 'to appreciate and enjoy'], ['Diversity can make a country…', 'richer in ideas and customs'],
-    ['What is an inclusive action?', 'making space for everyone'], ['A person\'s culture may include their…', 'language, food and celebrations'],
-    ['Why should we listen to others\' experiences?', 'to learn and show respect']
-  ], ['different cultures and customs', 'celebrate different festivals', 'respecting differences', 'ask kind questions about it', 'people have many backgrounds', 'respect for all people', 'understand each other', 'invite them to join in', 'to appreciate and enjoy', 'richer in ideas and customs', 'making space for everyone', 'language, food and celebrations', 'to learn and show respect'], 'Look for the answer that includes and respects everyone.', a => `<b>${a}</b> is correct.`);
+  // diversity
+  const HINT_DIV = 'Look for the answer that includes and respects everyone.';
+  add('g4hg-cov-diversity-0', 'g4hist-community', 'diversity', 'Diversity means that people can have…', ['different cultures and customs', 'exactly the same habits', 'only one type of food', 'the same festivals always'], 'different cultures and customs', HINT_DIV);
+  add('g4hg-cov-diversity-1', 'g4hist-community', 'diversity', 'A diverse classroom can include children who…', ['celebrate different festivals', 'all wear the same clothes', 'all eat the same food', 'all speak one language only'], 'celebrate different festivals', HINT_DIV);
+  add('g4hg-cov-diversity-2', 'g4hist-community', 'diversity', 'What helps a community live happily together?', ['respecting differences', 'ignoring each other', 'expecting everyone to be the same', 'avoiding new traditions'], 'respecting differences', HINT_DIV);
+  add('g4hg-cov-diversity-3', 'g4hist-community', 'diversity', "If a friend's tradition is new to you, you can…", ['ask kind questions about it', 'tell them it is wrong', 'walk away from them', 'make fun of their tradition'], 'ask kind questions about it', HINT_DIV);
+  add('g4hg-cov-diversity-4', 'g4hist-community', 'diversity', 'Why is Mauritius described as diverse?', ['people have many backgrounds', 'it has one religion only', 'everyone speaks one language', 'its food never changes'], 'people have many backgrounds', HINT_DIV);
+  add('g4hg-cov-diversity-5', 'g4hist-community', 'diversity', 'Which word means treating everyone fairly?', ['respect for all people', 'respect for winners only', 'fairness for close friends', 'kindness for family only'], 'respect for all people', HINT_DIV);
+  add('g4hg-cov-diversity-6', 'g4hist-community', 'diversity', 'Sharing stories about families can help classmates…', ['understand each other', 'win class prizes', 'finish their work faster', 'score better in tests'], 'understand each other', HINT_DIV);
+  add('g4hg-cov-diversity-7', 'g4hist-community', 'diversity', 'What should you do when someone is left out?', ['invite them to join in', 'ignore the situation', 'tell a teacher only', 'look the other way'], 'invite them to join in', HINT_DIV);
+  add('g4hg-cov-diversity-8', 'g4hist-community', 'diversity', 'Different traditions are something to…', ['to appreciate and enjoy', 'to avoid and ignore', 'to argue about always', 'to find confusing'], 'to appreciate and enjoy', HINT_DIV);
+  add('g4hg-cov-diversity-9', 'g4hist-community', 'diversity', 'Diversity can make a country…', ['richer in ideas and customs', 'harder to govern', 'poorer in traditions', 'smaller in population'], 'richer in ideas and customs', HINT_DIV);
+  add('g4hg-cov-diversity-10', 'g4hist-community', 'diversity', 'What is an inclusive action?', ['making space for everyone', 'keeping a small group together', 'choosing only close friends', 'working alone always'], 'making space for everyone', HINT_DIV);
+  add('g4hg-cov-diversity-11', 'g4hist-community', 'diversity', "A person's culture may include their…", ['language, food and celebrations', 'height, weight and age', 'exam scores and grades', 'favourite sports only'], 'language, food and celebrations', HINT_DIV);
+  add('g4hg-cov-diversity-12', 'g4hist-community', 'diversity', "Why should we listen to others' experiences?", ['to learn and show respect', 'to win an argument', 'to copy their answers', 'to fill in time at school'], 'to learn and show respect', HINT_DIV);
 })();
