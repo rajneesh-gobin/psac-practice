@@ -40,6 +40,24 @@ const LabSunmoonData = (() => {
     return Math.round(pa / (Math.PI / 4)) % 8;
   }
 
+  // ── The observer's clock and the shadow stick ──
+  // earthSpin is a fraction of one turn: 0.5 = Mauritius facing the Sun
+  // (noon); 0.25–0.75 is the day side. The three times the stick is read at.
+  const TIMES = { sunrise: 0.28, noon: 0.5, sunset: 0.72 };
+  const isDay = spin => spin > 0.25 && spin < 0.75;
+  // The word the bench writes for the shadow at that spin: a low Sun casts a
+  // long shadow, a high Sun a short one (g6sc-hd-059).
+  function shadowLabel(spin) {
+    const angle = Math.abs(spin - 0.5) * 2 * Math.PI; // 0 = noon, π/2 = sunrise or sunset
+    if (angle > Math.PI * 0.45) return 'very long';
+    if (angle > Math.PI * 0.3)  return 'long';
+    if (angle > Math.PI * 0.15) return 'medium';
+    return 'short';
+  }
+  // Moon angle for a phase index: one Next Phase tap is one eighth of a turn.
+  const PHASE_STEP = Math.PI / 4;
+  const angleForPhase = idx => (Math.PI + idx * PHASE_STEP) % (2 * Math.PI);
+
   // ── Filter helpers ───────────────────────────
   // Returns only items tagged for the given grade.
   function forGrade(list, g) {
@@ -498,12 +516,14 @@ const LabSunmoonData = (() => {
       out.push('moon_orbit');
       out.push('gravity_orbit');
       out.push('tides');
-      if (g >= 7) { out.push('tidal_locking'); out.push('sidereal_month'); }
+      // The tilted orbit is what the Moon does every month it does NOT line
+      // up, so orbiting is what shows it (an eclipse needs the Eclipse buttons).
+      if (g >= 7) { out.push('tidal_locking'); out.push('sidereal_month'); out.push('eclipse_tilt'); }
     }
     if (eclipseType === 'solar') {
       out.push('solar_eclipse');
       out.push('eclipse_new_moon');
-      if (g >= 7) { out.push('eclipse_strip'); out.push('eclipse_tilt'); out.push('eclipse_new_moon7'); }
+      if (g >= 7) { out.push('eclipse_strip'); out.push('eclipse_new_moon7'); }
     }
     if (eclipseType === 'lunar') {
       out.push('lunar_eclipse');
@@ -517,8 +537,203 @@ const LabSunmoonData = (() => {
     return out;
   }
 
+  // ── Experiments (lab_experiment.js, LAB_SPEC.md §10) ──────────────────
+  // One question a child can say back, the picture already set up, a tap to
+  // predict, at most five decisions or observations, what the bench showed,
+  // two or three questions asked with the notebook beside them, and the paper
+  // point. `check` refs are "<mission id>:<quiz index>" into that grade's
+  // MISSIONS, or an inline { q, options, why } (options[0] correct) where the
+  // grade's missions have no question on it. Every See text is replayed by
+  // scripts/test-labs-sunmoon-data.js through TIMES/shadowLabel/PHASES/finds/
+  // missionReady, so it is true of the bench, not just of the sentence.
+  // ⚠ Grade 6 has Next Phase too (the syllabus lists the phases of the Moon);
+  //   Prev Phase stays Grade 7.
+  // ⚠ 'phase:N' as an `on` is "tap Next Phase until phase N" - the bench hears
+  //   each tap and the step waits for the one it names.
+  const EXPERIMENTS = [
+    // ─ Grade 6 · g6-solar-system ─
+    { id: 'g6_day_night', grades: [6], chapter: 'g6-solar-system', icon: '🌓',
+      title: 'Why do we have day and night?',
+      aim: 'Half of Earth is lit by the Sun and half is dark. Make Earth move and find out what gives us day and night.',
+      setup: [],
+      predict: { q: 'What gives us day and night?', answer: 'spin',
+        options: [{ id: 'spin', label: 'Earth spins round once a day' }, { id: 'sun', label: 'The Sun goes round Earth' },
+                  { id: 'orbit', label: 'Earth goes round the Sun once a year' }, { id: 'moon', label: 'The Moon covers the Sun at night' }] },
+      steps: [
+        { ask: 'What must move to give us day and night?', on: 'spin:on', options: ['spin:on', 'orbit:on'],
+          wrong: { 'orbit:on': 'The Moon going round Earth gives us the Moon\'s phases, not day and night. Earth itself must turn.' } },
+        { on: 'observe', say: 'Tap Observe. Which half of Earth is lit?' },
+      ],
+      see: { saw: 'The half of Earth facing the Sun was lit: day. The half facing away was dark: night. Earth kept turning, so every place had day, then night.',
+             learn: 'Earth rotates (spins) on its axis once every 24 hours. The side facing the Sun has day; the side facing away has night.' },
+      check: [
+        { q: 'What causes day and night on Earth?',
+          options: ['The Earth rotating on its axis', 'The Sun moving around the Earth', 'The Moon passing in front of us', 'Clouds blocking the Sun at night'],
+          why: 'g6sci-sol-012 (PSAC 2025 Q2b): Earth rotates once every 24 hours. The half facing the Sun has day; the half facing away has night.' },
+        { q: 'How long does Earth take to spin round once?',
+          options: ['24 hours (1 day)', '28 days (1 month)', '365 days (1 year)', '12 hours'],
+          why: 'One rotation takes 24 hours: one day and one night. One orbit round the Sun takes 365.25 days: one year.' },
+        { q: 'Which movement of Earth takes ONE YEAR?',
+          options: ['Revolution: orbiting round the Sun', 'Rotation: spinning on its axis', 'The Moon orbiting the Earth', 'The tilting of Earth\'s axis'],
+          why: 'g6sci-sol-011 (PSAC 2025 Q2b): rotation takes 24 hours and gives day and night. Revolution round the Sun takes 365.25 days: one year.' },
+      ],
+      exam: 'PSAC 2025 Q2b asked which movement of Earth takes one year: revolution round the Sun. Rotation, one spin in 24 hours, gives day and night.' },
+
+    { id: 'g6_shadow', grades: [6], chapter: 'g6-solar-system', icon: '📏',
+      title: 'When is the shadow shortest?',
+      aim: 'A stick stands in the sun at Mauritius. Record its shadow at sunrise, noon and sunset. When is it shortest?',
+      setup: ['time:sunrise', 'stick:on'],
+      predict: { q: 'When will the shadow be shortest?', answer: 'noon',
+        options: [{ id: 'sunrise', label: 'At sunrise', sub: 'Sun low in the east' }, { id: 'noon', label: 'At noon', sub: 'Sun at its highest' },
+                  { id: 'sunset', label: 'At sunset', sub: 'Sun low in the west' }, { id: 'same', label: 'The same all day' }] },
+      steps: [
+        { on: 'observe', say: 'It is sunrise. Tap Observe to record the shadow.' },
+        { ask: 'Put the Sun at its highest. Which time?', on: 'time:noon', options: ['time:noon', 'time:sunrise', 'time:sunset'],
+          wrong: { 'time:sunrise': 'At sunrise the Sun is low, just up in the east. You have recorded that one already.',
+                   'time:sunset': 'At sunset the Sun is low again, going down in the west. The Sun is highest in the middle of the day.' } },
+        { on: 'observe', say: 'Tap Observe. How long is the shadow at noon?' },
+        { ask: 'Last one: the Sun going down in the west. Which time?', on: 'time:sunset', options: ['time:sunset', 'time:noon', 'time:sunrise'],
+          wrong: { 'time:noon': 'Noon is the middle of the day, with the Sun at its highest. The Sun goes down at sunset.',
+                   'time:sunrise': 'The Sun comes UP at sunrise, in the east. It goes down in the west, at sunset.' } },
+        { on: 'observe', say: 'Tap Observe. Is the shadow long again?' },
+      ],
+      see: { saw: 'Sunrise: a long shadow. Noon: a short shadow. Sunset: a long shadow again.',
+             learn: 'The higher the Sun, the shorter the shadow. At noon the Sun is highest, so the shadow is shortest. At sunrise and sunset the Sun is low and shadows are long.' },
+      check: ['shadow_detective:0', 'shadow_detective:1'],
+      exam: 'g6sc-hd-059: "Why do shadows outdoors change length through the day?" The Sun\'s height in the sky changes. A low Sun casts a long shadow, a high Sun a short one.' },
+
+    { id: 'g6_moon_shape', grades: [6], chapter: 'g6-solar-system', icon: '🌙',
+      title: 'Why does the Moon change shape?',
+      aim: 'The Moon starts new: all dark. Move it round Earth one step at a time and watch how much of it is lit.',
+      setup: [],
+      predict: { q: 'After four steps, how much of the Moon will be lit?', answer: 'all',
+        options: [{ id: 'all', label: 'All of it: a Full Moon' }, { id: 'half', label: 'Half of it' }, { id: 'none', label: 'None: it stays dark' }] },
+      steps: [
+        { ask: 'The Moon is new. What moves it to its next shape?', on: 'phase:1', options: ['phase:1', 'spin:on'],
+          wrong: { 'spin:on': 'Earth spinning changes day and night, not the Moon\'s shape. The Moon itself must move round Earth.' } },
+        { on: 'phase:2', say: 'Tap Next Phase. Half the Moon is lit: First Quarter.' },
+        { on: 'phase:3', say: 'Tap Next Phase. More than half is lit now.' },
+        { on: 'phase:4', say: 'Tap Next Phase. The whole face is lit: Full Moon.' },
+      ],
+      see: { saw: 'The lit part grew each step: a thin slice, then half, then more than half, then the whole face at Full Moon.',
+             learn: 'The Moon makes no light of its own; it reflects sunlight. As it goes round Earth we see different amounts of its lit half. Those are the phases.' },
+      check: [
+        { q: 'Where does the Moon\'s light come from?',
+          options: ['It reflects light from the Sun', 'It makes its own light, like the Sun', 'It reflects light from Earth', 'It glows because it is hot'],
+          why: 'g6sci-sol-007: the Moon does not produce its own light. It reflects sunlight.' },
+        { q: 'Why does the Moon appear to change shape from night to night?',
+          options: ['We see different parts lit by the Sun', 'Clouds cover parts of it each night', 'Earth\'s shadow falls on it nightly', 'The Moon really shrinks and grows'],
+          why: 'g6sci-sol-008: the Moon is always half lit by the Sun. As it orbits Earth we see different portions of that lit half.' },
+      ],
+      exam: 'g6sci-sol-008: "Why does the Moon appear to change shape from night to night?" We see different parts lit by the Sun.' },
+
+    { id: 'g6_eclipse', grades: [6], chapter: 'g6-solar-system', icon: '🌑',
+      title: 'What makes an eclipse?',
+      aim: 'Put the Moon in front of the Sun, then behind Earth. Watch whose shadow falls on whom.',
+      setup: [],
+      predict: { q: 'The Moon moves between Earth and the Sun. What happens?', answer: 'solar',
+        options: [{ id: 'solar', label: 'The Moon blocks the Sun', sub: 'a solar eclipse' }, { id: 'lunar', label: 'The Moon goes dark', sub: 'a lunar eclipse' },
+                  { id: 'none', label: 'Nothing', sub: 'the Moon is too small' }] },
+      steps: [
+        { ask: 'Make the Moon block the Sun. Where must it go?', on: 'eclipse:solar', options: ['eclipse:solar', 'eclipse:lunar'],
+          wrong: { 'eclipse:lunar': 'Behind Earth, the Moon sits in Earth\'s shadow. That is a lunar eclipse. To block the Sun it must be in front of Earth.' } },
+        { on: 'observe', say: 'Tap Observe. Where does the Moon\'s shadow fall?' },
+        { ask: 'Now put the Moon in Earth\'s shadow. Where?', on: 'eclipse:lunar', options: ['eclipse:lunar', 'eclipse:solar'],
+          wrong: { 'eclipse:solar': 'In front of the Sun, the Moon blocks the Sun. Earth\'s shadow falls the other way, behind Earth.' } },
+        { on: 'observe', say: 'Tap Observe. What has happened to the Moon?' },
+      ],
+      see: { saw: 'In front of the Sun, the Moon\'s shadow fell on Earth: a solar eclipse. Behind Earth, the Moon went dark in Earth\'s shadow: a lunar eclipse.',
+             learn: 'A solar eclipse: the Moon passes between Earth and the Sun and blocks the Sun. A lunar eclipse: Earth passes between the Sun and the Moon, and its shadow covers the Moon.' },
+      check: ['eclipse_spotter:0', 'eclipse_spotter:1', 'eclipse_spotter:4'],
+      exam: 'g6sci-sol-017: "A solar eclipse occurs when…" the Moon passes between Earth and Sun. Never look at the Sun during an eclipse without eclipse glasses.' },
+
+    // ─ Grade 7 · g7s-solar-system ─
+    { id: 'g7_seasons', grades: [7], chapter: 'g7s-solar-system', icon: '🌍',
+      title: 'Why is December hot in Mauritius?',
+      aim: 'Earth\'s axis leans over by 23.5°. Compare Earth in June and in December. Which half of Earth leans towards the Sun?',
+      setup: ['season:june'],
+      predict: { q: 'In December, which hemisphere is warm?', answer: 'south',
+        options: [{ id: 'south', label: 'Southern Hemisphere', sub: 'where Mauritius is' }, { id: 'north', label: 'Northern Hemisphere', sub: 'where France is' },
+                  { id: 'both', label: 'Both the same', sub: 'the Sun does not change' }] },
+      steps: [
+        { on: 'observe', say: 'It is June. Tap Observe. Which way does the axis lean?' },
+        { ask: 'Move Earth to the other side of the Sun. Which button?', on: 'season:december', options: ['season:december', 'spin:on'],
+          wrong: { 'spin:on': 'Spinning takes one day and gives day and night, not seasons. Earth must travel half way round the Sun: six months on, it is December.' } },
+        { on: 'observe', say: 'Tap Observe. Which hemisphere leans towards the Sun now?' },
+      ],
+      see: { saw: 'The axis leaned the same way in June and in December. In June the Northern Hemisphere leaned towards the Sun. In December the Southern Hemisphere did: summer in Mauritius.',
+             learn: 'Earth\'s axis stays tilted at 23.5° as it orbits the Sun. The hemisphere leaning towards the Sun gets more direct sunlight and has summer. Six months later it leans away: winter.' },
+      check: ['seasons_explorer:0', 'seasons_explorer:1', 'seasons_explorer:3'],
+      exam: 'In your exam you may be asked to explain from a diagram why Mauritius has summer in December: the Southern Hemisphere leans towards the Sun. It is not nearer the Sun.' },
+
+    { id: 'g7_phases_order', grades: [7], chapter: 'g7s-solar-system', icon: '🌔',
+      title: 'What order do the Moon\'s phases come in?',
+      aim: 'Step the Moon round Earth one phase at a time, from New Moon to Full Moon and back. Name each shape as it comes.',
+      setup: [],
+      predict: { q: 'What comes straight after First Quarter?', answer: 'gibbous',
+        options: [{ id: 'gibbous', label: 'Waxing Gibbous', sub: 'more than half lit' }, { id: 'full', label: 'Full Moon' }, { id: 'crescent', label: 'Waxing Crescent', sub: 'a thin slice' }] },
+      steps: [
+        { ask: 'The Moon is new. Which button moves it to the next phase?', on: 'phase:1', options: ['phase:1', 'orbit:on'],
+          wrong: { 'orbit:on': 'Orbit Moon runs the whole month at once. To name each phase, move one step at a time.' } },
+        { on: 'phase:2', say: 'Tap Next Phase. Half lit: First Quarter.' },
+        { on: 'phase:3', say: 'Tap Next Phase. Waxing Gibbous: more than half lit.' },
+        { on: 'phase:4', say: 'Tap Next Phase. Full Moon: the whole face is lit.' },
+        { on: 'phase:0', say: 'Tap Next Phase four more times, back to New Moon. Watch it wane.' },
+      ],
+      see: { saw: 'New Moon, Waxing Crescent, First Quarter, Waxing Gibbous, Full Moon, then Waning Gibbous, Last Quarter, Waning Crescent and New Moon again: eight phases, one cycle.',
+             learn: 'Waxing means the lit part is growing; waning means it is shrinking. The eight phases repeat every 29.5 days, from one New Moon to the next.' },
+      check: ['phase_tracker:0', 'phase_tracker:1', 'phase_tracker:2'],
+      exam: 'In your exam you may be asked to name the phases in order, or to say whether a Moon is waxing or waning.' },
+
+    { id: 'g7_far_side', grades: [7], chapter: 'g7s-solar-system', icon: '🔒',
+      title: 'Why do we never see the far side of the Moon?',
+      aim: 'A dark dot marks one face of the Moon. Send the Moon round Earth and watch where the dot points.',
+      setup: [],
+      predict: { q: 'As the Moon goes round Earth, which face do we see?', answer: 'same',
+        options: [{ id: 'same', label: 'Always the same face' }, { id: 'all', label: 'Every face in turn' }, { id: 'full', label: 'The far side, at Full Moon' }] },
+      steps: [
+        { on: 'orbit:on', say: 'Tap Orbit Moon. Watch the dark dot on the Moon.' },
+        { on: 'observe', say: 'Tap Observe. Does the dot still point at Earth?' },
+      ],
+      see: { saw: 'The dot pointed at Earth the whole way round. The Moon turned once for every orbit, so its far side never faced us.',
+             learn: 'The Moon spins once in the same time it takes to orbit Earth, about 27 days. This is tidal locking: the same face always points at Earth.' },
+      check: ['phase_tracker:3',
+        { q: 'What do we call a natural object that orbits a planet, as the Moon orbits Earth?',
+          options: ['A satellite', 'A planet', 'A comet', 'A star'],
+          why: 'g7s-solar-system-019: any object in orbit round a planet is a satellite. The Moon is Earth\'s natural satellite.' }],
+      exam: 'g7s-solar-system-019: "What name is given to a natural object that orbits a planet, as the Moon orbits the Earth?" A satellite.' },
+
+    { id: 'g7_eclipse_phase', grades: [7], chapter: 'g7s-solar-system', icon: '🔭',
+      title: 'Which Moon phase gives an eclipse?',
+      aim: 'Line the Moon up in front of the Sun, then behind Earth. Read the phase name each time.',
+      setup: [],
+      predict: { q: 'A solar eclipse can only happen at which phase?', answer: 'new',
+        options: [{ id: 'new', label: 'New Moon' }, { id: 'full', label: 'Full Moon' }, { id: 'quarter', label: 'First Quarter' }] },
+      steps: [
+        { ask: 'Block the Sun. Where does the Moon go?', on: 'eclipse:solar', options: ['eclipse:solar', 'eclipse:lunar'],
+          wrong: { 'eclipse:lunar': 'Behind Earth the Moon is in Earth\'s shadow: a lunar eclipse. To block the Sun it must be in front.' } },
+        { on: 'observe', say: 'Tap Observe. Read the phase name above the picture.' },
+        { ask: 'Now put the Moon in Earth\'s shadow. Where?', on: 'eclipse:lunar', options: ['eclipse:lunar', 'eclipse:solar'],
+          wrong: { 'eclipse:solar': 'In front of the Sun the Moon blocks the Sun. Earth\'s shadow falls behind Earth, on the far side from the Sun.' } },
+        { on: 'observe', say: 'Tap Observe. Which phase is it now?' },
+      ],
+      see: { saw: 'The solar eclipse came at New Moon, with the Moon between Earth and the Sun. The lunar eclipse came at Full Moon, with Earth in the middle.',
+             learn: 'An eclipse needs Sun, Moon and Earth in a straight line. That happens only at New Moon (solar) or Full Moon (lunar). The Moon\'s orbit is tilted about 5°, so most months it misses the line.' },
+      check: [
+        { q: 'A solar eclipse can only happen at which phase?',
+          options: ['New Moon', 'Full Moon', 'First Quarter', 'Last Quarter'],
+          why: 'The Moon must be between Earth and the Sun to block it. It is there only at New Moon.' },
+        'phase_tracker:4',
+        { q: 'Why is there not an eclipse every month?',
+          options: ['The Moon\'s orbit is tilted about 5°, so it usually misses the line', 'The Moon is too small to block the Sun', 'The Sun is further away at New Moon', 'Earth\'s shadow is too short to reach the Moon'],
+          why: 'The Moon\'s orbit is tilted about 5° from Earth\'s orbit round the Sun. Most months it passes above or below the Sun-Earth line.' },
+      ],
+      exam: 'In your exam you may be asked to draw the Sun, Moon and Earth in a straight line for a solar eclipse (Moon in the middle) and a lunar eclipse (Earth in the middle).' },
+  ];
+
   return {
-    GRADES, PHASES, FACTS, HAZARDS, RESULTS, DISCOVERIES, GUIDES, MISSIONS,
+    GRADES, PHASES, FACTS, HAZARDS, RESULTS, DISCOVERIES, GUIDES, MISSIONS, EXPERIMENTS,
+    TIMES, PHASE_STEP, isDay, shadowLabel, angleForPhase,
     phaseIdxFromAngle, forGrade, finds, missionReady,
   };
 })();

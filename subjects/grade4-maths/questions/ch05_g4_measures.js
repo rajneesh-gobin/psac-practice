@@ -82,11 +82,11 @@ STATIC_QUESTIONS.push(
     explanation:'Area = 6 × 4 = <b>24 cm²</b>. For a rectangle: Area = length × width. This works because you are counting a grid of rows and columns: 6 columns × 4 rows = 24 squares.' }),
 
   makeMCQ({ id:'g4m-meas-013', chapterId:'g4-measures', subsection:'time', difficulty:1,
-    question:'What time is 14:30 in 12-hour clock format?',
-    options:['2:30 a.m.','2:30 p.m.','4:30 p.m.','14:30 a.m.'],
+    question:'The clock shows half past two in the afternoon. How is that written?',
+    options:['2:30 p.m.','2:30 a.m.','3:30 p.m.','2:15 p.m.'],
     answer:'2:30 p.m.',
-    hint:'Subtract 12 from the hours: 14 − 12 = 2. It is afternoon so it is p.m.',
-    explanation:'14:30 − 12 hours = 2 hours, 30 minutes after noon = <b>2:30 p.m.</b>. For 24-hour to 12-hour: if hours > 12, subtract 12 and add p.m. Hours 0–11 are a.m.; 12–23 are p.m.' }),
+    hint:'Half past means 30 minutes after the hour. Afternoon is p.m.',
+    explanation:'Half past two is 30 minutes after 2 o\'clock, so it is written <b>2:30</b>. The afternoon runs from noon to midnight, so it is <b>p.m.</b>' }),
 
   makeNum({ id:'g4m-meas-014', chapterId:'g4-measures', subsection:'time', difficulty:2,
     question:'A film starts at 2:45 p.m. and lasts 1 hour 35 minutes. What time does the film END?',

@@ -171,7 +171,7 @@ const tokenOk = on => {
   if (k === 'bulb') return !!C.SLOTS[a] && (b === 'out' || b === 'in');
   if (k === 'wait') return /^\d+$/.test(a) && +a > 0 && +a <= 30;
   if (k === 'view') return a === 'symbols' || a === 'picture';
-  return on === 'read';
+  return k === 'read' ? (!a || /^[0-9.]+(?:A|V)$/.test(a)) : false;
 };
 const badDisc = all.filter(x => !x.learn || !x.hint || !x.saw || !x.title || !x.icon || !Array.isArray(x.how) || !x.how.length || !x.how.every(tokenOk));
 ok('every discovery has what you saw, why it happens, a clue and a valid recipe', badDisc.length === 0, badDisc.map(x => x.id));
@@ -506,6 +506,124 @@ const bank7 = fs.readdirSync(path.join(ROOT, 'subjects', 'grade7-science', 'ques
 ok('the Grade 7 bank really teaches it: symbols, the ammeter in series, the voltmeter across, 4.5 V from three cells, parallel house lights, the fuse',
    /Which labelled symbol is the <b>switch<\/b>/.test(bank7) && /It is always connected in series/.test(bank7) && /connected in parallel, across the component/.test(bank7)
    && /answer: 4\.5/.test(bank7) && /lights in a house connected in parallel/.test(bank7) && /A fuse is designed to melt/.test(bank7));
+
+// ══ Experiments (lab_experiment.js, LAB_SPEC.md §10) ═══════════
+// The contract is checked by scripts/test-labs-experiments-data.js; this is
+// the bench's side of it: every setup and step token is one _do() performs,
+// every check ref is a real quiz question, and - replayed through the same
+// solve()/facts()/primaryMistake() the bench uses - each See text is TRUE and
+// no path, right or wrong, trips a hazard or a "what went wrong" card.
+console.log('\nExperiments');
+const X = C.EXPERIMENTS || [];
+ok('the data file exports EXPERIMENTS', Array.isArray(X) && X.length > 0);
+ok('experiment ids are unique and carry their grade', new Set(X.map(e => e.id)).size === X.length && X.every(e => e.id.startsWith('g' + e.grades[0] + '_')), X.map(e => e.id));
+const xChapters = (core.match(/circuit:\s*\{([^}]*)\}/) || [, ''])[1];
+const xGradeChapters = g => ((xChapters.match(new RegExp(`\\b${g}:\\s*\\[([^\\]]*)\\]`)) || [, ''])[1].match(/'([^']+)'/g) || []).map(x => x.slice(1, -1));
+for (const g of [4, 6, 7, 9]) {
+  const mine = C.forGrade(X, g);
+  ok(`Grade ${g}: 3 to 5 experiments (${mine.length}), each on a chapter lab_core.js lists for the Circuit Board at Grade ${g}`,
+     mine.length >= 3 && mine.length <= 5 && mine.every(e => xGradeChapters(g).includes(e.chapter)), { n: mine.length, chapters: mine.map(e => e.chapter), registry: xGradeChapters(g) });
+}
+ok('every experiment is tagged with one grade the Circuit Board serves', X.every(e => e.grades.length === 1 && [4, 6, 7, 9].includes(e.grades[0])));
+const xTok = on => tokenOk(on) || /^wait:\d+$/.test(on);
+const xSteps = e => e.steps.map(s => s.on || (s.any && s.any[0]));
+const xQ = ref => { if (ref && typeof ref === 'object') return ref; const [m, i] = String(ref).split(':'); const M = C.MISSIONS.find(x => x.id === m); return M ? M.quiz[Number(i)] : null; };
+// What the harness reads as a control's label: a slot's tag ("gap", or the
+// part in it), a palette button's name, the action button's text.
+const xLabel = (lay, tok) => {
+  const [k, a, b] = tok.split(':');
+  const slotTag = s => { const p = lay[s]; return !p ? 'gap' : C.OBJECTS[p.kind] ? C.OBJECTS[p.kind].name.toLowerCase() : C.KINDS[p.kind].name.toLowerCase(); };
+  if (k === 'place' || k === 'remove' || k === 'bulb' || k === 'flip') return slotTag(a);
+  if (k === 'switch') { const sw = Object.keys(lay).sort().find(s => lay[s].kind === 'switch'); return sw ? slotTag(sw) : null; }
+  if (k === 'wait') return 'Wait 10 seconds';
+  if (k === 'read') return 'Take a reading';
+  if (k === 'view') return a === 'symbols' ? 'Symbols' : 'Picture';
+  return null;
+};
+for (const e of X) {
+  const t = e.id;
+  ok(`${t}: every setup token is one the bench performs`, e.setup.every(xTok), e.setup.filter(x => !xTok(x)));
+  ok(`${t}: every step token (on, any, options) is one the bench performs`, e.steps.every(s => (s.options || s.any || [s.on]).every(xTok)), e.steps);
+  ok(`${t}: an ask step lists 2-4 options, its answer among them, and each wrong text names an option`,
+     e.steps.filter(s => s.ask).every(s => Array.isArray(s.options) && s.options.length >= 2 && s.options.length <= 4
+       && (s.any ? s.any.every(x => s.options.includes(x)) : s.options.includes(s.on)) && Object.keys(s.wrong || {}).every(k => s.options.includes(k) && k !== s.on)), e.steps.filter(s => s.ask));
+  ok(`${t}: each ask offers controls the bench performs directly`, e.steps.filter(s => s.ask).every(s => s.options.every(xTok)));
+  ok(`${t}: every check ref is a Grade ${e.grades[0]} quiz question with 4 distinct options and a reason`,
+     e.check.every(ref => { const q = xQ(ref); const M = typeof ref === 'string' && C.MISSIONS.find(x => x.id === ref.split(':')[0]);
+       return !!q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && !!q.why && (!M || M.grades.includes(e.grades[0])); }), e.check);
+  ok(`${t}: at most 5 steps, each under 25 words and 15 words a sentence`,
+     e.steps.length <= 5 && e.steps.every(s => words(s.say || s.ask) <= 25 && sentences(s.say || s.ask).every(x => words(x) <= 15)), e.steps.map(s => words(s.say || s.ask)));
+  // The right path: no card, and the label of every `on` step is in its instruction.
+  const path = [...e.setup, ...xSteps(e)];
+  const run = simulate(path);
+  ok(`${t}: the right path trips no hazard or "what went wrong" card (setup included)`, run.cards.length === 0, run.cards);
+  const labels = [];
+  for (let i = 0; i < e.steps.length; i++) {
+    const s = e.steps[i];
+    if (!s.say) continue;
+    const lay = simulate([...e.setup, ...xSteps(e).slice(0, i)]).lay;
+    const label = xLabel(lay, s.on);
+    if (!label || !s.say.toLowerCase().includes(label.toLowerCase())) labels.push({ step: i + 1, say: s.say, label });
+  }
+  ok(`${t}: every instruction names the control it points at (the glowing slot's tag, or the button's text)`, labels.length === 0, labels);
+  // Every wrong option, taken at its step: no card either (the runner's card is the lesson).
+  const wrongs = [];
+  e.steps.forEach((s, i) => Object.keys(s.wrong || {}).forEach(w => {
+    const r = simulate([...e.setup, ...xSteps(e).slice(0, i), w]);
+    if (r.cards.length) wrongs.push(w + ': ' + r.cards.join('; '));
+  }));
+  ok(`${t}: no wrong option trips a bench card of its own`, wrongs.length === 0, wrongs);
+}
+// The See text of each experiment is what the solver shows.
+const xRun = (id, n) => { const e = X.find(x => x.id === id); return simulate([...e.setup, ...xSteps(e).slice(0, n === undefined ? e.steps.length : n)]); };
+const xLit = r => C.litBulbs(r.sol);
+let xr = xRun('g4_light', 2);
+ok('"Can you light the bulb?": wire in the gap and switch closed, the bulb lights at normal brightness', xLit(xr).join() === 'h12' && near(xr.sol.bulbs.h12.brightness, 1));
+xr = xRun('g4_light');
+ok('…and opening the switch puts it out (the See says both)', xLit(xr).length === 0 && xr.seen.has('switch_off') && /lit when the loop was complete.*went out when you opened the switch/.test(X.find(x => x.id === 'g4_light').see.saw));
+ok('"Can you light the bulb?": the set-up has ONE gap, on the right, and the switch is open', C.hasGap(C.layoutOf('gap')) && !C.layoutOf('gap').v31 && C.layoutOf('gap').v00.open === true);
+xr = xRun('g4_conductors', 2);
+ok('"Which things let electricity through?": the spoon lights the bulb (a conductor)', xr.tests.spoon === 'conductor' && xLit(xr).length === 1);
+xr = xRun('g4_conductors');
+ok('…then the plastic ruler leaves it dark (an insulator) - the See says both', xr.tests.ruler === 'insulator' && xLit(xr).length === 0 && /spoon lit the bulb.*ruler left it dark/.test(X.find(x => x.id === 'g4_conductors').see.saw));
+ok('…its wrong options really are what their cards say: ruler and stick insulate, coin conducts, pencil lead conducts dimly',
+   ['ruler', 'stick'].every(o => C.testResult(inGap(o), C.TEST_SLOT) === 'insulator') && C.testResult(inGap('coin'), C.TEST_SLOT) === 'conductor'
+   && C.testResult(inGap('lead'), C.TEST_SLOT) === 'conductor' && C.brightnessWord(S(inGap('lead')).bulbs.h12.brightness) === 'dim');
+xr = xRun('g4_heat');
+ok('"What does a bulb give out?": lit, and warm after 10 seconds', xLit(xr).length === 1 && xr.seen.has('warm'));
+xr = xRun('g4_loose', 1);
+ok('"Why does a torch stop working?": unscrewing the bulb puts the light out', xLit(xr).length === 0 && xr.seen.has('unscrew'));
+xr = xRun('g4_loose');
+ok('…and screwing it back in brings the light back', xLit(xr).join() === 'h12');
+ok('"Why does this torch not work?": the set-up really has both faults, a gap and a loose bulb', C.hasGap(C.layoutOf('broken')) && C.layoutOf('broken').h12.out === true);
+xr = xRun('g6_torch');
+ok('…and with the wire in, the bulb screwed in and the switch closed, it lights', xLit(xr).join() === 'h12' && near(xr.sol.bulbs.h12.brightness, 1));
+xr = xRun('g6_conductor', 2);
+ok('"What makes a good wire?": the coin lights the bulb at full brightness', xr.tests.coin === 'conductor' && near(xr.sol.bulbs.h12.brightness, 1));
+xr = xRun('g6_conductor');
+ok('…and the pencil lead lights it dimly (the See says "brightly" and "dimly")', xr.tests.lead === 'conductor' && C.brightnessWord(xr.sol.bulbs.h12.brightness) === 'dim' && /brightly.*dimly/.test(X.find(x => x.id === 'g6_conductor').see.saw));
+xr = xRun('g6_energy', 2);
+ok('"Where does the light come from?": the second cell makes the bulb four times as bright, without blowing it', near(xr.sol.bulbs.h12.brightness, 4) && !C.diagnose(xr.lay, xr.sol).over.length && xr.seen.has('brighter'));
+xr = xRun('g6_energy');
+ok('…and after 10 seconds it is warm', xr.seen.has('warm'));
+// Words: the same reading level as the rest of Grades 4-6, and a paper quoted only where the bank quotes it.
+const xt = [];
+for (const e of X) {
+  const addx = (k, v) => { if (v) xt.push({ where: e.id + '.' + k, t: String(v), g: e.grades[0] }); };
+  addx('title', e.title); addx('aim', e.aim); addx('predict', e.predict.q); e.predict.options.forEach((o, i) => { addx('opt' + i, o.label); addx('sub' + i, o.sub); });
+  e.steps.forEach((s, i) => { addx('step' + i, s.say || s.ask); Object.values(s.wrong || {}).forEach((w, j) => addx(`wrong${i}.${j}`, w)); });
+  addx('saw', e.see.saw); addx('learn', e.see.learn); addx('exam', e.exam);
+  e.check.filter(c => typeof c === 'object').forEach((q, i) => { addx('q' + i, q.q); q.options.forEach(o => addx('qopt' + i, o)); addx('why' + i, q.why); });
+}
+const xj = xt.filter(x => JARGON.test(x.t)).map(x => x.where + ': ' + x.t.match(JARGON)[0]);
+ok('experiments: no NCE jargon (volts, amps, series, parallel, charge…) in any text', xj.length === 0, xj);
+const xl = xt.flatMap(x => sentences(x.t).filter(y => words(y) > 22).map(y => x.where + ': ' + y));
+ok('experiments: no sentence runs past 22 words', xl.length === 0, xl);
+ok('experiments: Grade 4 quotes no paper (there is no Grade 4 paper)', !xt.some(x => x.g === 4 && /PSAC 20/.test(x.t)), xt.filter(x => x.g === 4 && /PSAC 20/.test(x.t)).map(x => x.where));
+const g6bank = fs.readdirSync(ppDir).map(f => fs.readFileSync(path.join(ppDir, f), 'utf8')).join('\n');
+const xrefs = xt.flatMap(x => (x.t.match(/PSAC 20\d\d(?: Q\d+[a-z]?)?/g) || []).map(m => ({ where: x.where, ref: m })));
+ok(`experiments: every PSAC reference (${[...new Set(xrefs.map(r => r.ref))].join(', ')}) is quoted verbatim in subjects/grade6-science/questions`, xrefs.length > 0 && xrefs.every(r => g6bank.includes(r.ref)), xrefs.filter(r => !g6bank.includes(r.ref)));
+ok('the bench exports the experiment adapter and performs wait:<s> tokens', !bench || (/experiment\s*=\s*\{/.test(bench) && /case 'wait': _wait\(/.test(bench) && /return \{ study, experiment,/.test(bench)));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

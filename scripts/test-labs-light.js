@@ -1,8 +1,10 @@
 'use strict';
 // Science Labs › Light Bench, driven in a real browser.
 //
-// Proves the bench end to end: it loads its own files only when opened, the
-// start panel says what to do, all three guided experiments finish, every
+// Proves the bench end to end: it loads its own files only when opened, it
+// opens on an experiment Aim at both grades (lab_experiment.js - the old
+// bench sits behind "Explore the bench freely"), the start panel says what to
+// do, all three guided experiments finish by tapping what glows, every
 // discovery unlocks by following its own "Show me how", both hazards stop the
 // experiment with the right sign, both "what went wrong" cards show the wrong
 // number, readings fill the notebook, both missions reach three stars, the
@@ -78,6 +80,16 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   const shelf = (kind, id) => click(`[data-add="${kind}"][data-id="${id}"]`);
   const tool = act => click(`#lab-light-controls [data-act="${act}"]`);
   const power = want => ev(`(() => { if (LabLight._debug().power !== ${want}) document.getElementById('lab-light-power').click(); return LabLight._debug().power; })()`);
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step. The test taps what glows, as a child would.
+  const next = () => click('.is-next');
+  // Since 2026-09-20 the lab opens on an experiment Aim (lab_experiment.js);
+  // the old bench, which the rest of this file drives, is behind Explore.
+  const explore = async () => {
+    if (!(await ev("!!document.querySelector('#lab-exp') && document.getElementById('labs-root').dataset.expMode !== 'explore'"))) return;
+    await click('[data-exp="explore"]');
+    await ev('LabLight.experiment.reset(); true');
+  };
 
   await call('Page.navigate', { url: PAGE });
   let ready = false;
@@ -110,11 +122,14 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   ok('Labs.openLab(\'light\') loads LabLight and renders the bench', up);
   ok('it fetched its own data file, then the bench', /lab_light_data\.js,lab_light\.js/.test(await labScripts()), await labScripts());
   await sleep(500);
-  ok('lab_light.css is linked and styles the tools', await ev("!!document.querySelector('link[data-lab-css=\"light\"]') && getComputedStyle(document.querySelector('.lab-light-tools')).display === 'grid'"));
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Light Bench/.test(ov.text) && /Show me how/.test(ov.text), ov);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('light').intro === true"));
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
+  ok('the welcome is marked seen (the Aim is the welcome)', await ev("Labs.store('light').intro === true"));
+  await explore();
+  ok('“Explore the bench freely” shows the old bench', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none'"));
+  // ⚠ Checked here, not on the Aim: there the runner's focus([]) hides every
+  //   tool, and a computed style on a hidden row reads "none".
+  ok('lab_light.css is linked and styles the tools', await ev("!!document.querySelector('link[data-lab-css=\"light\"]') && getComputedStyle(document.querySelector('.lab-light-tools')).display === 'grid'"));
   ok('the top bar has back, the ray-box switch and help', await ev("!!document.querySelector('.lab-light [data-act=\"hub\"]') && !!document.getElementById('lab-light-power') && !!document.querySelector('.lab-light [data-act=\"help\"]')"));
   ok('Grade 9: the eyebrow says “Physics · Grade 9”, with no 🔊 and no Grade 4 apparatus',
      await ev("document.querySelector('.lab-light .lab-eyebrow').textContent === 'Physics · Grade 9' && !document.querySelector('.lab-light [data-act=\"say-coach\"]') && !document.querySelector('[data-id=\"shadow\"], [data-id=\"bounce\"], [data-id=\"cracked\"], [data-id=\"torch\"], [data-id=\"lamp\"]')"));
@@ -133,32 +148,32 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   let gs = await guideState();
   ok('Bounce a beam: the mirror is already there, so it opens at step 2 - switch on - and the switch glows',
      gs.box && /Step 2 of 7/.test(gs.text) && /Switch on the ray box/.test(gs.text) && gs.next === 'lab-light-power' && !gs.start, gs);
-  await click('[data-guide-do]');
+  await next();
   gs = await guideState();
   ok('then “Draw the normal”, and that tool glows', /Step 3 of 7/.test(gs.text) && gs.next === 'normal', gs);
-  await click('[data-guide-do]');
+  await next();
   gs = await guideState();
   ok('then the protractor', /Step 4 of 7/.test(gs.text) && gs.next === 'protractor', gs);
-  await click('[data-guide-do]');
+  await next();
   gs = await guideState();
   ok('then “Read the angles”', /Step 5 of 7/.test(gs.text) && gs.next === 'read', gs);
-  await click('[data-guide-do]');
+  await next();
   gs = await guideState();
   ok('the reading is taken and the guide asks for 50°, with the clockwise turn button glowing', /Step 6 of 7/.test(gs.text) && gs.next === 'box1', gs);
   let nb = await ev("[...document.querySelectorAll('#lab-notebook tr')].map(r => [...r.children].map(c => c.textContent.trim()).join(' ')).join(' | ')");
   ok('the notebook table has i = 30°, r = 30°',
      /30° 30° ✓ i = r/.test(nb) && await ev("/Reflection at a plane mirror/.test(document.querySelector('#lab-notebook caption').textContent)"), nb.slice(0, 300));
   ok('the canvas shows the reading chip', /i = 30°, r = 30°/.test(await ev("document.getElementById('lab-light-contents').textContent")));
-  await click('[data-guide-do]');
-  ok('turning to 50° set the angle of incidence to 50°', (await dbg()).i === 50);
-  await click('[data-guide-do]');
+  await next(); await next(); await next(); await next();
+  ok('four taps on the glowing ↻ turn the ray box to 50°', (await dbg()).i === 50);
+  await next();
   ov = await overlay();
   ok('the second reading completes it, with “What you found out”', ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text) && /NORMAL/.test(ov.text), ov);
   ok('…remembered, and offers the next one', await ev("!!Labs.store('light').guides.reflect") && /Next: Bend a beam with glass/.test(ov.text));
   ok('both readings are in the table: 30/30 and 50/50', /50° 50°/.test(await ev("[...document.querySelectorAll('#lab-notebook tr')].map(r => [...r.children].map(c => c.textContent.trim()).join(' ')).join(' | ')")));
   await click('#lab-overlay [data-guide="bend"]');
-  const runGuide = () => ev(`(() => { for (let k = 0; k < 20 && LabLight._debug().guide; k++) {
-      const b = document.querySelector('#lab-guide [data-guide-do]'); if (b) b.click(); else LabLight._tick(6); }
+  const runGuide = () => ev(`(() => { for (let k = 0; k < 40 && LabLight._debug().guide; k++) {
+      const b = document.querySelector('.is-next'); if (b) b.click(); else LabLight._tick(6); }
     const o = document.getElementById('lab-overlay'); return o ? o.textContent.replace(/\\s+/g, ' ') : 'no overlay'; })()`);
   let txt = await runGuide();
   ok('“Bend a beam with glass” runs to the end: towards the normal, parallel out', /Experiment complete/.test(txt) && /TOWARDS the normal/.test(txt) && /parallel/.test(txt), txt.slice(0, 200));
@@ -182,6 +197,12 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   d = await dbg();
   ok('↻ Mirror turns the mirror 5°, and the angle of incidence with it', d.tau === 5 && d.i === 40, d);
   await click('[data-rot="tilt"][data-d="-1"]');
+  // ⚠ Putting the mirror on the bench starts a SMOOTH scroll to the picture
+  //   (_showStage). The pivot must be read once the page has stopped moving,
+  //   or the mouse events land on a bench that has since moved: measured, a
+  //   pivot read 28 px too high turns a 60° drag into 50°.
+  await ev("document.getElementById('lab-light-zone').scrollIntoView({ block: 'center', behavior: 'auto' }); true");
+  await sleep(700);
   const bp = (await dbg()).boxPx;
   const L = Math.hypot(bp.x - bp.px, bp.y - bp.py), tgt = [bp.px - L * Math.sin(60 * Math.PI / 180), bp.py - L * Math.cos(60 * Math.PI / 180)];
   await call('Input.dispatchMouseEvent', { type: 'mousePressed', x: bp.x, y: bp.y, button: 'left', clickCount: 1 });
@@ -189,6 +210,8 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   await call('Input.dispatchMouseEvent', { type: 'mouseMoved', x: tgt[0], y: tgt[1], button: 'left', buttons: 1 });
   await call('Input.dispatchMouseEvent', { type: 'mouseReleased', x: tgt[0], y: tgt[1], button: 'left', clickCount: 1 });
   d = await dbg();
+  const bp2 = d.boxPx;
+  ok('the bench did not move under the drag (the pivot is where it was read)', Math.abs(bp2.px - bp.px) < 1 && Math.abs(bp2.py - bp.py) < 1, { before: [bp.px, bp.py], after: [bp2.px, bp2.py] });
   ok('with a mouse, dragging the ray box round turns it (to about 60°)', Math.abs(d.beta - 60) <= 2, { beta: d.beta, bp, tgt });
 
   // ── Mistakes that teach ────────────────────────
@@ -315,10 +338,10 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
         document.getElementById('lab-overlay')?.remove();
         LabLight.discoveryGuide('${id}');
         if (!LabLight._debug().guide) return 'no guide started';
-        for (let k = 0; k < 24 && LabLight._debug().guide; k++) {
+        for (let k = 0; k < 40 && LabLight._debug().guide; k++) {
           const hz = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
           if (hz) return 'card: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-          const btn = document.querySelector('#lab-guide [data-guide-do]');
+          const btn = document.querySelector('.is-next');
           if (btn) btn.click(); else LabLight._tick(6);
         }
         if (LabLight._debug().guide) return 'guide never finished at step ' + LabLight._debug().guide.step;
@@ -393,21 +416,18 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     for (let i = 0; i < 60 && !m; i++) { await sleep(150); m = await ev("!!document.querySelector('#labs-root .lab-light')"); }
     const g0 = (await dbg()).grade;
     ok(`Grade ${n}: the lab opens at Grade ${n}`, m && g0 === n, g0);
+    await sleep(300);
+    ok(`Grade ${n}: it opens on an experiment Aim, with no overlay in the way`, !(await overlay()) && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"));
+    await explore();
     return real;
   };
   const idxOf = id => ev(`LabLightData.MISSIONS.findIndex(m => m.id === '${id}')`);
 
   console.log('\n-- Grade 4: opening');
   const real4 = await atGrade(4);
-  await sleep(300);
-  ov = await overlay();
-  ok('Grade 4: a first visit shows its own welcome, with 🔊 and “Show me how”, and no protractor',
-     ov && /Welcome to the Light Bench/.test(ov.text) && /🔊/.test(ov.text) && /Show me how/.test(ov.text) && !/protractor/i.test(ov.text), ov && ov.text.slice(0, 300));
   ok('Grade 4: nothing was read aloud on its own', (await speech()).spoken.length === 0);
-  await closeOv();
-  ok('Grade 4: the welcome is remembered for this grade only', await ev("Labs.store('light').intro_g4 === true && Labs.store('light').intro === true"));
   ok('Grade 4: the eyebrow says “Science · Grade 4”, and the switch is the torch',
-     await ev("document.querySelector('.lab-light .lab-eyebrow').textContent === 'Science · Grade 4' && /Torch off/.test(document.getElementById('lab-light-power').textContent)"));
+     await ev("document.querySelector('.lab-light .lab-eyebrow').textContent === 'Science · Grade 4' && /Switch on torch/.test(document.getElementById('lab-light-power').textContent)"));
   ok('Grade 4: no Grade 9 apparatus - no ray box, laser, glass block, plane mirror, protractor or normal',
      await ev("!document.querySelector('[data-id=\"raybox\"], [data-id=\"laser\"], [data-id=\"block\"], [data-id=\"mirror\"], [data-act=\"protractor\"], [data-act=\"normal\"], [data-act=\"read\"]')"));
   await ev('LabLight._test({ instant: true }); true');
@@ -446,7 +466,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   sp = await speech();
   ok('Grade 4: 🔊 on the guide box reads the step', sp.spoken.length === sp0 + 1 && /Switch on the torch/.test(sp.spoken[sp.spoken.length - 1]), sp.spoken.slice(-1));
   const c1 = sp.cancels;
-  await click('[data-guide-do]');
+  await next();
   ok('Grade 4: the next step cancels the speech', (await speech()).cancels > c1, await speech());
   gs = await guideState();
   ok('…then the tracing paper, and its button glows', /Step 4 of 5/.test(gs.text) && gs.next === 'tracing', gs);
@@ -627,6 +647,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   await sleep(300);
   await ev("if (!document.querySelector('#labs-root .lab-light')) Labs.openLab('light'); true");
   await sleep(300);
+  await explore();
   await click('[data-act="say-coach"]');
   const c3 = (await speech()).cancels;
   ok('…speaking again after coming back, and the loop restarted', await ev('LabLight._debug().talking && LabLight._debug().looping'));

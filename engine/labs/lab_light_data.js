@@ -722,6 +722,170 @@ const LabLightData = (() => {
       ] },
   ];
 
+  // ══ Experiments (lab_experiment.js, LAB_SPEC.md §10) ═══════════
+  // The six stops, re-cut from the guides, missions and discoveries above:
+  // steps in the guide tokens, check refs "<mission id>:<quiz index>",
+  // saw/learn from the discoveries. Every See text is replayed through this
+  // file's own maths by scripts/test-labs-light-data.js, so a number quoted
+  // here is one the bench really shows. Grade 4 experiments carry no paper
+  // reference (there is no Grade 4 paper); Grade 9 quotes none because the
+  // NCE light questions in subjects/grade9-physics do not quote a year and
+  // question number.
+  // ⚠ A wrong option that would draw the bench's OWN card (a wrong name, a
+  //   reading from the surface, a turn the wrong way) is heard by the bench
+  //   without acting - _expWrong() in lab_light.js - so the runner's card is
+  //   the only one. A wrong OBJECT in the holder is placed for real: the dark
+  //   shadow it makes is the lesson.
+  const EXPERIMENTS = [
+    // ── Grade 4 ─────────────────────────────────
+    { id: 'g4_through', grades: [4], chapter: 'g4sci-materials', icon: '🪟',
+      title: 'Which things let light through?',
+      aim: 'A torch, a holder and a white screen. Put glass, tracing paper and wood in the holder. Which one lets the light through?',
+      setup: ['setup:shadow', 'obj:card', 'power:on'],
+      predict: { q: 'Which one lets ALL the light through?', answer: 'glass',
+        options: [{ id: 'glass', label: 'Glass sheet', icon: '🪟' }, { id: 'tracing', label: 'Tracing paper', icon: '📄' }, { id: 'wood', label: 'Wooden block', icon: '🪵' }, { id: 'all', label: 'All of them' }] },
+      steps: [
+        { ask: 'Put in the thing that lets ALL the light through.', on: 'obj:glass', options: ['obj:glass', 'obj:tracing', 'obj:wood'],
+          wrong: { 'obj:tracing': 'Tracing paper lets only SOME light through. Look: its shadow is pale and fuzzy.',
+                   'obj:wood': 'The wooden block blocks ALL the light. Look: a dark shadow on the screen.' } },
+        { ask: 'Almost no shadow. What is glass?', on: 'name:transparent', options: ['name:transparent', 'name:translucent', 'name:opaque'],
+          wrong: { 'name:translucent': 'Translucent means only some light gets through, and things look blurry. You can see clearly through glass.',
+                   'name:opaque': 'Opaque means no light gets through at all. But the light went straight through the glass.' } },
+        { ask: 'Now put in the thing that lets only SOME light through.', on: 'obj:tracing', options: ['obj:tracing', 'obj:wood', 'obj:glass'],
+          wrong: { 'obj:wood': 'The wooden block lets NO light through. Look: a dark shadow, not a pale one.',
+                   'obj:glass': 'Glass lets ALL the light through. It is already in the holder, and there is almost no shadow.' } },
+        { ask: 'A pale, fuzzy shadow. What is tracing paper?', on: 'name:translucent', options: ['name:translucent', 'name:transparent', 'name:opaque'],
+          wrong: { 'name:transparent': 'Transparent means you can see clearly through it, like glass. Tracing paper looks blurry.',
+                   'name:opaque': 'Opaque means no light gets through. But some light did get through: the shadow is pale.' } },
+        { ask: 'Last one: put in the thing that blocks ALL the light.', on: 'obj:wood', options: ['obj:wood', 'obj:glass', 'obj:tracing'],
+          wrong: { 'obj:glass': 'Glass lets the light straight through. There is almost no shadow at all.',
+                   'obj:tracing': 'Tracing paper is already in the holder. Some light gets through it, so its shadow is pale, not dark.' } },
+      ],
+      see: { saw: 'The glass sheet made almost no shadow. The tracing paper made a pale, fuzzy shadow. The wooden block made a dark shadow.',
+             learn: 'Transparent: light goes through (glass). Translucent: some light goes through (tracing paper). Opaque: no light goes through (wood).' },
+      check: ['g4_detective:0', 'g4_detective:1', 'g4_detective:3'],
+      exam: 'In the exam you may be asked which material is transparent, translucent or opaque. Think glass, tracing paper, wood.' },
+    { id: 'g4_shadow', grades: [4], chapter: 'g4sci-energy', icon: '🌑',
+      title: 'What makes a shadow?',
+      aim: 'A card tree stands in front of a white screen. The torch is off. What do you need to make a shadow?',
+      setup: ['setup:shadow', 'obj:card'],
+      predict: { q: 'What do you need to make a shadow?', answer: 'both',
+        options: [{ id: 'both', label: 'A light and something to block it', icon: '🔦' }, { id: 'dark', label: 'Only a dark room', icon: '🌚' }, { id: 'mirror', label: 'A mirror', icon: '🪞' }] },
+      steps: [
+        { on: 'power:on', say: 'Tap 💡 Switch on torch. Look at the screen.' },
+        { on: 'power:off', say: 'Tap 💡 Torch on to switch it off. Does the shadow stay?' },
+        { on: 'power:on', say: 'Tap 💡 Switch on torch again. The shadow is back.' },
+        { ask: 'Which of these would make a dark shadow too?', on: 'obj:book', options: ['obj:book', 'obj:glass'],
+          wrong: { 'obj:glass': 'Glass is transparent. The light goes straight through it, so there is almost no shadow.' } },
+      ],
+      see: { saw: 'With the torch on, the card tree made a dark shadow. With the torch off, the shadow went too. The book made a dark shadow as well.',
+             learn: 'A shadow needs a light and an opaque object to block it. Light goes in straight lines, so the space behind the tree is dark.' },
+      check: ['g4_detective:4', 'g4_sizes:4', 'g4_detective:2'],
+      exam: 'In the exam you may be asked why an opaque object makes a shadow. A torch changes electrical energy into light.' },
+    { id: 'g4_bigger', grades: [4], chapter: 'g4sci-energy', icon: '📏',
+      title: 'Does a shadow get bigger?',
+      aim: 'The card tree is 25 cm from the torch. Measure its shadow. Then move the tree nearer the torch and measure again.',
+      setup: ['setup:shadow', 'obj:card', 'pos:25', 'power:on'],
+      predict: { q: 'Move the tree nearer the torch. What happens to its shadow?', answer: 'bigger',
+        options: [{ id: 'bigger', label: 'It gets bigger', icon: '⬆️' }, { id: 'smaller', label: 'It gets smaller', icon: '⬇️' }, { id: 'same', label: 'It stays the same', icon: '↔️' }] },
+      steps: [
+        { on: 'measure', say: 'Tap 📏 Measure the shadow. Read the ruler.' },
+        { ask: 'Make the shadow BIGGER. Which way do you move the tree?', on: 'pos:15', options: ['pos:15', 'pos:30'],
+          wrong: { 'pos:30': 'Further from the torch, the tree blocks a thinner part of the light. The shadow would get smaller.' } },
+        { on: 'measure', say: 'Tap 📏 Measure the shadow again. Bigger?' },
+        { ask: 'Make it bigger still. Which way?', on: 'pos:12', options: ['pos:12', 'pos:25'],
+          wrong: { 'pos:25': 'That moves it back away from the torch. The shadow would shrink to 12 cm again.' } },
+        { on: 'measure', say: 'Tap 📏 Measure the shadow one more time.' },
+      ],
+      see: { saw: 'At 25 cm the shadow was 12 cm tall. At 15 cm it was 20 cm. At 12 cm it was 25 cm. Nearer the torch, bigger.',
+             learn: 'Light spreads out from the torch. Near the torch the tree blocks a wide part of it, so the shadow is big. You moved only the tree, so it was a fair test.' },
+      check: ['g4_sizes:0', 'g4_sizes:1', 'g4_sizes:2'],
+      exam: 'In the exam you may be asked about a shadow when the object moves nearer the light. It gets bigger.' },
+    { id: 'g4_straight', grades: [4], chapter: 'g4sci-energy', icon: '🕳️',
+      title: 'Can light bend round a corner?',
+      aim: 'Three cards with a hole in each stand in a row. The torch shines through them at a screen. Then you move one card.',
+      setup: ['setup:cards', 'power:on'],
+      predict: { q: 'Move the middle card out of line. Will light still reach the screen?', answer: 'no',
+        options: [{ id: 'no', label: 'No, the card blocks it', icon: '🚧' }, { id: 'yes', label: 'Yes, light bends round it', icon: '↪️' }, { id: 'some', label: 'Some light gets round', icon: '🌗' }] },
+      steps: [
+        { on: 'look', say: 'Tap 👀 Look at the screen. Is there a spot of light?' },
+        { on: 'cards:move', say: 'Tap ↔ Move the middle card. Its hole goes out of line.' },
+        { on: 'look', say: 'Tap 👀 Look at the screen again. Where did the spot go?' },
+      ],
+      see: { saw: 'With the three holes in a line, a spot of light reached the screen. With the middle card moved, the spot went out.',
+             learn: 'Light travels in straight lines. It cannot bend round the card to reach the screen. That is also why shadows form.' },
+      check: ['g4_sizes:4',
+              { q: 'The torch shone through three holes in a straight line. What does that show?',
+                options: ['Light travels in straight lines', 'Light can bend round corners', 'Card is transparent', 'The torch is not bright enough'],
+                why: 'The light reached the screen only when the three holes were on one straight line.' }],
+      exam: 'In the exam you may be asked why a shadow has the same shape as the object. Light goes in straight lines and cannot bend round it.' },
+    // ── Grade 9 ─────────────────────────────────
+    { id: 'g9_reflect', grades: [9], chapter: 'g9s-p2-light', pack: 'grade9-physics', icon: '🪞',
+      title: 'What is the angle of reflection at 30°?',
+      aim: 'A ray box shines at a plane mirror at 30° to the normal. Measure the angle of reflection with the protractor, then try a bigger angle.',
+      setup: ['setup:mirror', 'power:on', 'angle:30', 'normal'],
+      predict: { q: 'The angle of incidence is 30°. What will the angle of reflection be?', answer: '30',
+        options: [{ id: '30', label: '30°' }, { id: '60', label: '60°' }, { id: '15', label: '15°' }, { id: '90', label: '90°' }] },
+      steps: [
+        { ask: 'Place the protractor. Which line does it count from?', on: 'protractor:normal', options: ['protractor:normal', 'protractor:surface'],
+          wrong: { 'protractor:surface': 'Not the mirror. Every angle in a ray diagram is measured from the normal. Counting from the mirror you would read 60°, and 90° − 60° = 30°.' } },
+        { on: 'read', say: 'Tap 📝 Read the angles. Compare i and r.' },
+        { ask: 'Make the angle of incidence bigger. Which way do you turn the ray box?', on: 'angle:35', options: ['angle:35', 'angle:25'],
+          wrong: { 'angle:25': 'That turns the ray box towards the normal: the angle of incidence would get smaller, 25°. Turn it the other way.' } },
+        { on: 'read', say: 'Tap 📝 Read the angles again. Are they still equal?' },
+      ],
+      see: { saw: 'At 30° the protractor read i = 30°, r = 30°. At 35° it read 35° and 35°. Equal both times.',
+             learn: 'The law of reflection: the angle of incidence equals the angle of reflection, both measured from the normal - the dashed line at 90° to the mirror.' },
+      check: ['law:0', 'law:1', 'law:2'],
+      exam: 'In the exam you may be given a ray diagram and asked to draw the normal, measure the angle of incidence with a protractor and state the angle of reflection.' },
+    { id: 'g9_refract', grades: [9], chapter: 'g9s-p2-light', pack: 'grade9-physics', icon: '🧊',
+      title: 'Which way does light bend going into glass?',
+      aim: 'The ray meets a glass block at 40° to the normal. Read the angle inside the glass, then try a bigger angle of incidence.',
+      setup: ['setup:block', 'power:on', 'angle:40', 'normal', 'protractor:normal'],
+      predict: { q: 'Going from air into glass, which way does the ray bend?', answer: 'towards',
+        options: [{ id: 'towards', label: 'Towards the normal' }, { id: 'away', label: 'Away from the normal' }, { id: 'straight', label: 'It does not bend' }] },
+      steps: [
+        { on: 'read', say: 'Tap 📝 Read the angles: i in the air, r in the glass.' },
+        { ask: 'Make the angle of incidence bigger. Which way do you turn the ray box?', on: 'angle:45', options: ['angle:45', 'angle:35'],
+          wrong: { 'angle:35': 'That turns the ray box towards the normal: 35°, a smaller angle of incidence. Turn it the other way.' } },
+        { on: 'read', say: 'Tap 📝 Read the angles again. Is r still smaller than i?' },
+      ],
+      see: { saw: 'At i = 40° the ray inside the glass was at r = 25°. At i = 45° it was at r = 28°. Smaller both times: bent towards the normal.',
+             learn: 'Light slows down in glass, so it bends towards the normal on the way in. The bigger the angle of incidence, the bigger the angle of refraction - but r is always smaller than i.' },
+      check: ['bend:0', 'bend:4', 'bend:3'],
+      exam: 'In the exam you may be asked to draw the refracted ray inside a glass block: bent towards the normal, with the angle of refraction smaller than the angle of incidence.' },
+    { id: 'g9_parallel', grades: [9], chapter: 'g9s-p2-light', pack: 'grade9-physics', icon: '⏸️',
+      title: 'Does the ray come out parallel?',
+      aim: 'The ray goes through the block at 40°. Read the angles, then trace the ray with a pencil and lift the block to see the whole path.',
+      setup: ['setup:block', 'power:on', 'angle:40', 'normal', 'protractor:normal'],
+      predict: { q: 'After the block, which way does the ray travel?', answer: 'parallel',
+        options: [{ id: 'parallel', label: 'Parallel to the way it came in, shifted sideways' }, { id: 'same', label: 'Along exactly the same line' }, { id: 'bent', label: 'Bent further, at a new angle' }] },
+      steps: [
+        { on: 'read', say: 'Tap 📝 Read the angles. At what angle does it leave the far side?' },
+        { ask: 'Now see the path after the block. Which tool?', on: 'lift', options: ['lift', 'read'],
+          wrong: { 'read': 'You have the angles already. To see the path, trace the rays with a pencil and lift the block off the paper.' } },
+      ],
+      see: { saw: 'It went in at 40° and left the far side at 40°. Your trace showed the ray coming out parallel to the ray that went in, shifted sideways by about 17 mm.',
+             learn: 'The ray bends towards the normal going in and by the same amount away from the normal coming out. The two faces are parallel, so it leaves in its original direction, displaced sideways.' },
+      check: ['bend:2', 'bend:5'],
+      exam: 'In the exam you may be asked how the emergent ray compares with the incident ray: parallel to it, but displaced sideways.' },
+    { id: 'g9_normal', grades: [9], chapter: 'g9s-p2-light', pack: 'grade9-physics', icon: '⬇️',
+      title: 'Does a ray along the normal bend?',
+      aim: 'The ray box points straight at the glass block, along the normal: angle of incidence 0°. Read the angle inside, then trace the ray.',
+      setup: ['setup:block', 'power:on', 'angle:0', 'normal', 'protractor:normal'],
+      predict: { q: 'Along the normal, what does the ray do inside the glass?', answer: 'straight',
+        options: [{ id: 'straight', label: 'Goes straight through, no bend' }, { id: 'towards', label: 'Bends towards the normal' }, { id: 'away', label: 'Bends away from the normal' }] },
+      steps: [
+        { on: 'read', say: 'Tap 📝 Read the angles. What is r when i is 0°?' },
+        { ask: 'Now see the whole path through the block. Which tool?', on: 'lift', options: ['lift', 'read'],
+          wrong: { 'read': 'You already have the reading: 0° and 0°. To see the path, trace the rays and lift the block.' } },
+      ],
+      see: { saw: 'i = 0° and r = 0°. The trace was one straight line through the block: no bend going in, none coming out, no sideways shift.',
+             learn: 'A ray along the normal meets the surface square on, so it does not change direction. Refraction is a change of speed first, and a bend only when the ray arrives at an angle.' },
+      check: ['bend:1', 'bend:5'],
+      exam: 'In the exam you may be asked what happens to a ray entering a glass block along the normal: it passes straight through without bending.' },
+  ];
+
   // One list per kind, each item tagged with its grades (untagged = Grade 9).
   const tag4 = x => Object.assign(x, { grades: [4] });
   G4_DISCOVERIES.forEach(d => DISCOVERIES.push(tag4(d)));
@@ -734,6 +898,6 @@ const LabLightData = (() => {
            reflectAngle, refractAngle, emergentAngle, criticalAngle, lateralShift, fromSurface, readAngle,
            reflectDir, refractDir, between, frame, trace, reading, cardsPath,
            GRADES, LEVELS, OBJECTS, LIGHT_WORDS, SHADOW, shadowCm, readShadow, BOUNCE, bounceSpot, bounceHits, cap,
-           SETUPS, SOURCES, DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_G4, MISSIONS, GUIDES };
+           SETUPS, SOURCES, DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_G4, MISSIONS, GUIDES, EXPERIMENTS };
 })();
 if (typeof window !== 'undefined') window.LabLightData = LabLightData;

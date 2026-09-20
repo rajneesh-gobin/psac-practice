@@ -321,7 +321,7 @@ STATIC_QUESTIONS.push(
     options:['January has 31 days','February has 31 days','April has 31 days','June has 31 days'],
     answer:'January has 31 days',
     hint:'January, March, May, July, August, October, December all have 31 days.',
-    explanation:'<b>January</b> has 31 days.' }),
+    explanation:'<b>January has 31 days.</b> The months with 31 days are January, March, May, July, August, October and December. April and June have 30, and February has 28 (29 in a leap year).' }),
 
   makeMCQ({ id:'g2mth-tim-046', chapterId:'g2mth-time', difficulty:2, subsection:'calendar',
     question:'Rani\'s birthday is on the 20th of January. Today is the 10th of January. How many days until her birthday?',

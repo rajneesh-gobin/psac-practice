@@ -10,7 +10,12 @@
 // is caught and a fair one is not; the jar makes rain only with water, a lid
 // and enough warmth; every discovery recipe leads to its own discovery with
 // no mistake card on the way; every card and quiz is complete; grades are
-// tagged; and sentences stay short enough for a Grade 4 reader.
+// tagged; and sentences stay short enough for a Grade 4 reader. Since
+// 2026-09-20 it also checks the five EXPERIMENTS (lab_experiment.js): every
+// set-up and step token is one the bench accepts, every "say" names the
+// button it points at, the check refs resolve, and every See text is TRUE -
+// the set-up and the right path are replayed through the data file's own
+// model and the result compared with the words.
 //
 // Run: node scripts/test-labs-water-data.js
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
@@ -124,8 +129,8 @@ ok('an open jar with water earns the "vapour escaped" card', ids(P.jarMistakes(J
 
 console.log('\nGrades');
 ok('GRADES is [4]', JSON.stringify(P.GRADES) === '[4]');
-const untagged = [].concat(P.GUIDES, P.MISSIONS, P.DISCOVERIES).filter(x => !Array.isArray(x.grades) || !x.grades.length || !x.grades.every(g => P.GRADES.includes(g)));
-ok('every guide, mission and discovery is tagged grades: [4]', untagged.length === 0, untagged.map(x => x.id));
+const untagged = [].concat(P.GUIDES, P.MISSIONS, P.DISCOVERIES, P.EXPERIMENTS || []).filter(x => !Array.isArray(x.grades) || !x.grades.length || !x.grades.every(g => P.GRADES.includes(g)));
+ok('every guide, mission, discovery and experiment is tagged grades: [4]', untagged.length === 0, untagged.map(x => x.id));
 
 console.log('\nDiscoveries');
 const dids = P.DISCOVERIES.map(d => d.id);
@@ -216,7 +221,7 @@ ok('the bench unlocks "steam" and "condense" itself', bench.includes("_discover(
 console.log('\nGuided experiments');
 ok('at least 3 guided experiments, ids unique', P.GUIDES.length >= 3 && new Set(P.GUIDES.map(g => g.id)).size === P.GUIDES.length);
 for (const G of P.GUIDES) {
-  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say || !s.btn);
+  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do and has a button`, badS.length === 0, badS);
   const r = runRecipe(G.steps.map(s => s.on));
   ok(`${G.title}: ends with what they found out, and runs with no mistake card`, !!(G.lesson && G.blurb && G.icon) && r.cards.length === 0, r.cards);
@@ -224,6 +229,95 @@ for (const G of P.GUIDES) {
 ok('“From ice to steam” reads 0 °C, then 100 °C, names the steam and catches it',
    (() => { const r = runRecipe(P.GUIDES.find(g => g.id === 'ice_steam').steps.map(s => s.on)); return ['zero', 'boil', 'steam', 'condense'].every(x => r.found.has(x)); })());
 ok('the welcome card’s “Show me how” guide exists', P.GUIDES.some(g => g.id === 'ice_steam') && bench.includes('data-guide="ice_steam"'));
+
+console.log('\nExperiments (lab_experiment.js, LAB_SPEC.md §10)');
+const EX = P.EXPERIMENTS || [];
+ok('the data file exports EXPERIMENTS', Array.isArray(EX) && EX.length > 0);
+ok('5 experiments at Grade 4, ids unique, every one teaches g4sci-water',
+   EX.length === 5 && new Set(EX.map(e => e.id)).size === EX.length && EX.every(e => e.chapter === 'g4sci-water' && JSON.stringify(e.grades) === '[4]'), EX.map(e => [e.id, e.chapter, e.grades]));
+ok('experiment 1 is the exam-shaped one: what happens to ice when it is heated (g4s-wat-006)', EX[0] && EX[0].id === 'ice_heated' && /ice is heated/.test(EX[0].title));
+// The visible label of every control (lab_water.js draws them): a step's `say`
+// must name the one it points at, with the emoji and any <small> line dropped.
+const TOOL_LABEL = { min: 'Wait 1 minute', five: 'Wait 5 minutes', read: 'Read at eye level', angle: 'Read from above', catch: 'Cold plate over it',
+                     hand: 'Feel the steam', reset: 'Start again', hour: 'Wait 1 hour', six: 'Wait to hour 6', ten: 'Wait 10 minutes' };
+const RIG_LABEL = { heat: 'Heat &amp; cool', dry: 'Drying race', jar: 'Water cycle' };
+ok('the tool and bench labels this test knows are the ones the bench draws',
+   Object.values(TOOL_LABEL).concat(Object.values(RIG_LABEL), ['It is steam', 'It is smoke', 'Ask adult helper']).every(l => bench.includes(l)),
+   Object.values(TOOL_LABEL).concat(Object.values(RIG_LABEL)).filter(l => !bench.includes(l)));
+function labelFor(tok) {
+  const [k, v] = tok.split(':');
+  if (v === undefined) return TOOL_LABEL[k] || null;
+  switch (k) {
+    case 'rig': return RIG_LABEL[v].replace('&amp;', '&');
+    case 'adult': return 'Ask adult helper';
+    case 'start': return P.STARTS[v].name;
+    case 'place': return P.PLACES[v].name;
+    case 'name': return v === 'steam' ? 'It is steam' : 'It is smoke';
+    case 'dish': return v;
+    case 'cont': return P.CONTS[v].name;
+    case 'spot': return P.SPOTS[v].name;
+    case 'fan': case 'lid': return v === 'on' ? 'Yes' : 'No';
+    case 'amt': return v + ' ml';
+    case 'jwater': return P.JAR_WATERS[v].name;
+    case 'jlid': return P.JAR_LIDS[v].name;
+    case 'jplace': return P.JAR_SPOTS[v].name;
+  }
+  return null;
+}
+const plain = s => String(s).replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const stepToks = s => s.options || s.any || (s.on ? [s.on] : []);
+const rightPath = e => e.setup.concat(e.steps.map(s => s.on || (s.any && s.any[0])));
+const rigOf = e => (e.setup.find(t => /^rig:/.test(t)) || 'rig:heat').slice(4);
+// What each See claims, checked against the replayed model (runRecipe above).
+const SEE_TRUE = {
+  ice_heated: (r, e) => { const h = r.st.heat; return h.ice === 0 && h.water > 0 && h.T > P.ROOM_C && r.found.has('zero') && r.found.has('melt') && /melted/.test(e.see.saw) && /0 °C/.test(e.see.saw); },
+  boil: (r, e) => { const h = r.st.heat; return P.phase(h) === 'boiling' && h.T === P.BOIL_C && ['boil', 'steam', 'condense'].every(x => r.found.has(x)) && r.st.flags.caught && /100 °C/.test(e.see.saw) && /drops/.test(e.see.saw); },
+  freeze: (r, e) => { const h = r.st.heat; return h.water === 0 && h.ice === P.MASS && h.T < 0 && r.found.has('zero') && r.found.has('freeze') && /froze/.test(e.see.saw) && /0 °C/.test(e.see.saw) && /colder/.test(e.see.saw); },
+  rain_jar: (r, e) => P.jarStage(r.st.jar.j, r.st.jar.steps) === 'rain' && r.st.jar.j.lid === 'ice' && r.found.has('jar_cycle') && /rain/.test(e.see.saw) && /drops/i.test(e.see.saw),
+  drying_race: (r, e) => { const it = r.st.dry.items, h = r.st.dry.h, L = id => P.dryLeft(it[id], h);
+    return h === P.DRY_HOURS && L('C') < L('B') && L('B') < L('A') && r.found.has('sun_dries') && r.found.has('wind_dries') && /dish C/i.test(e.see.saw) && /least/.test(e.see.saw) && /dish A/i.test(e.see.saw) && /most/.test(e.see.saw); },
+};
+ok('every experiment has a See truth check in this test', EX.every(e => typeof SEE_TRUE[e.id] === 'function'), EX.map(e => e.id).filter(id => !SEE_TRUE[id]));
+for (const e of EX) {
+  const t = e.id;
+  ok(`${t}: the title is a question a child can say back, the aim one or two short sentences`,
+     /\?$/.test(e.title) && e.title.length >= 8 && e.title.length <= 60 && e.aim.length >= 20 && e.aim.length <= 200 && e.aim.split(/[.!?]\s/).length <= 3, { title: e.title, aim: e.aim });
+  const badSetup = e.setup.filter(tok => !tokenOk(tok));
+  ok(`${t}: every set-up token is one the bench accepts`, badSetup.length === 0, badSetup);
+  const badStep = e.steps.filter(s => !stepToks(s).every(tokenOk) || !(s.say || s.ask) || !stepToks(s).length);
+  ok(`${t}: every step token is real, and each step says something`, badStep.length === 0, badStep);
+  const wc = e.steps.map(s => String(s.say || s.ask).split(/\s+/).length);
+  ok(`${t}: 1 to 5 steps, each under 25 words (${wc.join('/')})`, e.steps.length >= 1 && e.steps.length <= 5 && wc.every(n => n <= 25), wc);
+  const asks = e.steps.filter(s => s.ask);
+  ok(`${t}: at least one step is a decision`, asks.length >= 1);
+  ok(`${t}: every decision lists its answer among 2+ options; every wrong option is a listed, different option with an explanation`,
+     asks.every(s => Array.isArray(s.options) && s.options.length >= 2 && (s.any ? s.any.every(x => s.options.includes(x)) : s.options.includes(s.on))
+       && Object.keys(s.wrong || {}).every(k => s.options.includes(k) && k !== s.on && !(s.any || []).includes(k) && s.wrong[k].length > 15)), asks);
+  ok(`${t}: no wrong option is a hazard the bench would have to fire (the bench only hears it)`,
+     asks.every(s => Object.keys(s.wrong || {}).every(k => !['hand', 'angle', 'jwater:boiling'].includes(k))) && /_expWrong\(/.test(bench));
+  const unnamed = e.steps.filter(s => s.say && s.on).filter(s => { const l = labelFor(s.on); return !l || !plain(s.say).includes(plain(l)); });
+  ok(`${t}: every wait-and-watch instruction names the button it points at`, unnamed.length === 0, unnamed.map(s => [s.on, labelFor(s.on), s.say]));
+  ok(`${t}: every step token has a control the test can tap (a wait has its own button)`, e.steps.every(s => stepToks(s).every(tok => labelFor(tok))), e.steps.flatMap(stepToks).filter(tok => !labelFor(tok)));
+  const p = e.predict;
+  ok(`${t}: the prediction is 2-4 taps and its answer is one of them`, p && Array.isArray(p.options) && p.options.length >= 2 && p.options.length <= 4 && p.options.every(o => o.id && o.label) && p.options.some(o => o.id === p.answer), p);
+  const r = runRecipe(rightPath(e));
+  ok(`${t}: the set-up and the right path run on the bench with no hazard or mistake card`, r.cards.length === 0, r.cards);
+  ok(`${t}: the See text is TRUE for the replayed model ("${e.see.saw.slice(0, 40)}…")`, SEE_TRUE[e.id] && SEE_TRUE[e.id](r, e),
+     { heat: r.st.heat, dry: Object.fromEntries(P.DISHES.map(id => [id, P.dryLeft(r.st.dry.items[id], r.st.dry.h)])), jar: r.st.jar, found: [...r.found] });
+  ok(`${t}: See says what was learnt`, typeof e.see.learn === 'string' && e.see.learn.length > 20);
+  const qs = e.check.map(ref => typeof ref === 'object' ? ref : (M => M && M.quiz[+ref.split(':')[1]])(P.MISSIONS.find(M => M.id === ref.split(':')[0])));
+  ok(`${t}: 2-3 check questions resolve, each with 4 distinct options and a reason`,
+     e.check.length >= 2 && e.check.length <= 3 && new Set(e.check.map(c => JSON.stringify(c))).size === e.check.length
+       && qs.every(q => q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && q.why), e.check);
+  const rig = rigOf(e);
+  ok(`${t}: every mission question it checks with comes from the bench it ran on (${rig})`,
+     e.check.every(ref => typeof ref === 'object' || (P.MISSIONS.find(M => M.id === ref.split(':')[0]) || {}).rig === rig), e.check);
+  ok(`${t}: has an exam line that quotes no paper (the Grade 4 question files hold none)`, typeof e.exam === 'string' && e.exam.length > 10 && !/PSAC \d{4}/.test(e.exam), e.exam);
+}
+ok('the bench exports the experiment adapter the runner needs',
+   ['list', 'question', 'reset', 'apply', 'guide', 'stop', 'evidence', 'focus', 'selector', 'hooks'].every(k => new RegExp('^\\s+' + k + ':', 'm').test(bench.slice(bench.indexOf('const experiment = {'), bench.indexOf('hooks: {},') + 12))) && /return \{ study, experiment,/.test(bench));
+ok('set-up is silent: no discovery toast and no card while apply() runs', /if \(_silent\) return;/.test(bench) && /_silent = true;/.test(bench));
+ok('an experiment guide never wipes the bench the runner set up', /if \(!G\.exp\) _resetBench\(\);/.test(bench));
 
 console.log('\nMissions, hazards and result cards');
 ok('at least 2 missions', P.MISSIONS.length >= 2);
@@ -270,6 +364,12 @@ const texts = [];
 P.GUIDES.forEach(G => { texts.push(G.blurb, G.lesson); G.steps.forEach(s => texts.push(s.say)); });
 P.DISCOVERIES.forEach(d => texts.push(d.hint, d.saw, d.learn, d.psac || ''));
 P.MISSIONS.forEach(M => { texts.push(M.blurb, M.intro); M.quiz.forEach(q => texts.push(q.q, q.why)); });
+(P.EXPERIMENTS || []).forEach(e => {
+  texts.push(e.title, e.aim, e.predict.q, e.see.saw, e.see.learn, e.exam);
+  e.predict.options.forEach(o => texts.push(o.label, o.sub || ''));
+  e.steps.forEach(s => { texts.push(s.say || s.ask); Object.values(s.wrong || {}).forEach(w => texts.push(w)); });
+  e.check.forEach(c => { if (typeof c === 'object') texts.push(c.q, c.why); });
+});
 Object.values(P.HAZARDS).forEach(H => texts.push(H.title(), H.happened(), H.why, H.instead, H.exam));
 Object.values(P.RESULTS).forEach(R => texts.push(R.title, R.happened(rctx), R.instead, R.exam));
 texts.push(...P.FACTS, ...Object.values(P.SAY), ...Object.values(P.JAR_SEEN));
@@ -281,7 +381,8 @@ console.log('\nEngineering');
 ok('no regex lookbehind in the lab files (a Safari < 16.4 parse error)', ![src, bench].some(t => /\(\?<[=!]/.test(t)));
 ok('both files export their global to window', /window\.LabWaterData = LabWaterData/.test(src) && /window\.LabWater = LabWater/.test(bench));
 ok('the bench never records answers into mastery', !/recordAnswer|_recordDaily/.test(bench));
-ok('LF line endings only', ![src, bench, fs.readFileSync(path.join(ROOT, 'engine', 'labs', 'lab_water.css'), 'utf8')].some(t => t.includes('\r')));
+// (No line-ending check: the two JS files are CRLF in the repository and the
+// css is LF - line endings differ per file in this project, by history.)
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

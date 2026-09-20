@@ -538,9 +538,80 @@ const LabRustingData = (() => {
       ] },
   ];
 
+  // ── Experiments (lab_experiment.js, LAB_SPEC.md §10) ──────────────────
+  // One question a child can say back, a picture already set up, a tap to
+  // predict, at most five real decisions, what they saw, two or three of the
+  // mission questions asked WITH the notebook beside them, and the PSAC point.
+  // `check` refs are "<mission id>:<quiz index>". `setup` tokens are applied
+  // silently before the Aim; `steps` are guide tokens the child performs
+  // (an `ask` step lists every option that glows and what a wrong one teaches).
+  const EXPERIMENTS = [
+    { id: 'which_nail', grades: [6], chapter: 'g6-materials', icon: '🔑',
+      title: 'Which nail will rust?',
+      aim: 'Three iron nails in three tubes, set up like the PSAC 2024 paper. Only one will go rusty. Which one?',
+      setup: ['rig:tubes', 'adult:on', 'tube:A', 'water:boiled', 'oil:on', 'tube:B', 'water:tap', 'tube:C', 'dryer:on', 'cork:on', 'tube:A'],
+      predict: { q: 'Which nail will rust?', answer: 'B',
+        options: [{ id: 'A', label: 'Nail A', sub: 'boiled water, oil on top' }, { id: 'B', label: 'Nail B', sub: 'tap water' }, { id: 'C', label: 'Nail C', sub: 'dry air, corked' }, { id: 'all', label: 'All three', sub: 'they are all iron' }] },
+      steps: [
+        { on: 'week', say: 'Tap ⏩ Wait to day 7. Watch the three nails.' },
+      ],
+      see: { saw: 'Only nail B went rusty. Nails A and C stayed shiny.',
+             learn: 'Iron needs air AND water to rust. Take either one away and the nail stays shiny.' },
+      check: ['needs:0', 'needs:4', 'needs:5'],
+      exam: 'PSAC 2024 Q4, Diagram 6: which pin will change colour? Pin B only - it is the one with water AND air.' },
+    { id: 'no_air', grades: [6], chapter: 'g6-materials', icon: '🛢️',
+      title: 'Can iron rust without air?',
+      aim: 'Nail A goes under water with NO air in it. You set the tube up. Then we wait a week.',
+      setup: ['rig:tubes', 'adult:on', 'tube:A'],
+      predict: { q: 'Will a nail under water with no air rust?', answer: 'no',
+        options: [{ id: 'no', label: 'No, it stays shiny' }, { id: 'yes', label: 'Yes, it goes rusty' }, { id: 'bit', label: 'Only a little' }] },
+      steps: [
+        { ask: 'Tube A must have NO air in it. Which water?', on: 'water:boiled', options: ['water:boiled', 'water:tap', 'water:salt'],
+          wrong: { 'water:tap': 'Tap water has air mixed in it. The nail would rust, and the test would prove nothing.',
+                   'water:salt': 'Salt water has air in it too, and the salt makes iron rust even faster.' } },
+        { ask: 'Now keep the air out. What goes on top of the water?', on: 'oil:on', options: ['oil:on', 'cork:on'],
+          wrong: { 'cork:on': 'A cork traps the air that is already in the tube. Oil floats on the water and seals the air out.' } },
+        { on: 'week', say: 'Tap ⏩ Wait to day 7. Watch nail A.' },
+      ],
+      see: { saw: 'After 7 days nail A was still shiny. No rust at all.',
+             learn: 'Boiling drove the air out of the water, and the oil kept it out. No air, so no rust.' },
+      check: ['needs:1', 'needs:2'],
+      exam: 'PSAC 2024 Q4: pin A does not change colour. The oil stops air reaching the iron.' },
+    { id: 'which_coat', grades: [6], chapter: 'g6-materials', icon: '🛡️',
+      title: 'Which coat stops rust?',
+      aim: 'Five nails in five jars of water. Jar 1 stays bare and you protect two others. Which nails rust?',
+      setup: ['rig:coats', 'jar:2'],
+      predict: { q: 'Which nail will go rusty?', answer: 'bare',
+        options: [{ id: 'bare', label: 'Only the bare nail' }, { id: 'all', label: 'All of them' }, { id: 'painted', label: 'Only the painted one' }, { id: 'none', label: 'None of them' }] },
+      steps: [
+        { ask: 'Protect the nail in jar 2. Pick a coat.', any: ['coat:paint', 'coat:grease', 'coat:plastic', 'coat:zinc'], options: ['coat:paint', 'coat:grease', 'coat:plastic', 'coat:zinc'] },
+        { on: 'jar:3', say: 'Now tap Jar 3.' },
+        { ask: 'Give this nail a different coat.', any: ['coat:paint', 'coat:grease', 'coat:plastic', 'coat:zinc'], options: ['coat:paint', 'coat:grease', 'coat:plastic', 'coat:zinc'] },
+        { on: 'week', say: 'Tap ⏩ Wait to day 7. Which nails rust?' },
+      ],
+      see: { saw: 'Only the bare nail in jar 1 went rusty. The coated nails stayed shiny.',
+             learn: 'Paint, grease, plastic and zinc all keep air and water away from the iron. No air and water, no rust.' },
+      check: ['stop:0', 'stop:1', 'stop:3'],
+      exam: 'PSAC asks how to stop iron rusting: painting, greasing, or galvanising (a coat of zinc).' },
+    { id: 'scratch', grades: [6], chapter: 'g6-materials', icon: '🩹',
+      title: 'What if the paint gets scratched?',
+      aim: 'Two painted nails. You scratch through the paint on one of them. Then we wait a week.',
+      setup: ['rig:coats', 'jar:2', 'coat:paint', 'jar:3'],
+      predict: { q: 'The paint on nail 3 is scratched. Will it rust?', answer: 'scratch',
+        options: [{ id: 'scratch', label: 'Only at the scratch' }, { id: 'all', label: 'All over' }, { id: 'no', label: 'Not at all' }] },
+      steps: [
+        { on: 'coat:scratched', say: 'Tap 🩹 Painted, then scratched. That scratches through the paint on nail 3.' },
+        { on: 'week', say: 'Tap ⏩ Wait to day 7. Look closely at jar 3.' },
+      ],
+      see: { saw: 'Nail 2 stayed shiny. Nail 3 went rusty along the scratch.',
+             learn: 'Air and water got in where the paint was scratched, so rust started there. Repaint a scratch quickly.' },
+      check: ['stop:4', 'stop:1'],
+      exam: 'PSAC: a painted gate rusts where the paint chips off, because air and water reach the iron there.' },
+  ];
+
   return { GRADES, DAYS, HOUR, VISIBLE, FLAKY, SCRATCH_CAP, TUBES, JARS, WATERS, JAR_WATERS, COATS, RATES,
            blankTube, blankJar, newItems, isOn, activeItems, conditions, outcome, rustAt, visible, role,
            seen, short, setupWords, label, SAY, applySet, finds, mistakes, missionReady,
-           DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES };
+           DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, EXPERIMENTS };
 })();
 if (typeof window !== 'undefined') window.LabRustingData = LabRustingData;

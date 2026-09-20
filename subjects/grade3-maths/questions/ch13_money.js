@@ -448,10 +448,10 @@ STATIC_QUESTIONS.push(
     explanation:'6 × 120 = Rs 720. Rs 720 − Rs 500 = <b>Rs 220</b>.' }),
 
   makeMCQ({ id:'g3mth-mon-068', chapterId:'g3mth-money', difficulty:3, subsection:'money_problems',
-    question:'A family saves Rs 1000 a year. They want to buy a TV for Rs 4500. How many years must they save?',
-    options:['3','4','5','6'], answer:'5',
-    hint:'4500 ÷ 1000 = ?',
-    explanation:'4500 ÷ 1000 = <b>4.5</b> years. Since they can only save whole years, they need <b>5</b> years.' }),
+    question:'A family saves Rs 200 a month. They want to buy a fan for Rs 800. How many months must they save?',
+    options:['4','3','5','6'], answer:'4',
+    hint:'How many 200s make 800?',
+    explanation:'800 ÷ 200 = <b>4</b> months.' }),
 
   makeMCQ({ id:'g3mth-mon-069', chapterId:'g3mth-money', difficulty:3, subsection:'money_problems',
     question:'At a bakery, a cake costs Rs 250 and a pie costs Rs 180. Mrs Liu buys 2 cakes and 1 pie. She pays with Rs 1000. What change does she get?',
@@ -504,10 +504,10 @@ STATIC_QUESTIONS.push(
     explanation:'8 × 75 = 600. 4 × 125 = 500. Total = 600 + 500 = <b>Rs 1100</b>.' }),
 
   makeMCQ({ id:'g3mth-mon-077', chapterId:'g3mth-money', difficulty:3, subsection:'money_problems',
-    question:'A family holiday costs Rs 3500. The parents save Rs 500 per month. How many months do they need to save?',
-    options:['5','6','7','8'], answer:'7',
-    hint:'3500 ÷ 500 = ?',
-    explanation:'3500 ÷ 500 = <b>7</b> months.' }),
+    question:'A family outing costs Rs 700. The parents save Rs 100 per month. How many months do they need to save?',
+    options:['7','5','6','8'], answer:'7',
+    hint:'How many 100s make 700?',
+    explanation:'700 ÷ 100 = <b>7</b> months.' }),
 
   makeMCQ({ id:'g3mth-mon-078', chapterId:'g3mth-money', difficulty:3, subsection:'money_problems',
     question:'Two friends want to buy a present for Rs 460. One pays Rs 230. How much does the second pay?',

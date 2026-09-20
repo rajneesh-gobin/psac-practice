@@ -1,0 +1,28 @@
+{
+  "pack": "grade6-french",
+  "source": "French.pdf — MIE Teaching and Learning Syllabus, Français, Grades 1 à 6, la section 'LA GRAMMAIRE', liste du Grade 6 (page imprimée 21)",
+  "note": "Une entrée par point que la liste de grammaire du Grade 6 nomme. `any` = couvert dès qu'une question contient UNE de ces expressions dans son énoncé ou sa réponse. `all` = couvert seulement si UNE question les contient TOUTES. Les termes sont cherchés dans l'ÉNONCÉ ET LA RÉPONSE uniquement, jamais dans l'explication : un fait cité dans une explication est un fait que l'enfant n'a jamais eu à répondre. ⚠ PORTÉE : la liste de grammaire seule. Le reste de ce syllabus est une matrice de compétences (compréhension et expression, orale et écrite) dont les lignes sont des savoir-faire — « utiliser un vocabulaire plus étendu » — et dont le niveau est marqué par une TRAME GRISE, pas par du texte. Un savoir-faire de ce genre ne se détecte pas en cherchant des mots dans un énoncé, et rien ici ne dit que ces compétences sont couvertes ou non. La liste de grammaire, elle, nomme ses points, en toutes lettres, sous un titre « Grade 6 ». ⚠ Les accents : le corpus écrit tantôt « passé composé », tantôt « pass&eacute; compos&eacute; » ; le harnais replie les deux formes sur l'ASCII, donc les termes sont écrits ici sans accent à dessein.",
+  "facts": [
+    { "id": "phr-01", "unit": "La phrase", "fact": "La phrase : le groupe nominal", "any": ["groupe nominal"] },
+    { "id": "phr-02", "unit": "La phrase", "fact": "La phrase : le groupe verbal", "any": ["groupe verbal"] },
+
+    { "id": "typ-01", "unit": "Les types de phrase", "fact": "La phrase declarative", "any": ["declarative"] },
+    { "id": "typ-02", "unit": "Les types de phrase", "fact": "La phrase interrogative", "any": ["interrogative"] },
+    { "id": "typ-03", "unit": "Les types de phrase", "fact": "La phrase imperative", "any": ["imperative"] },
+    { "id": "typ-04", "unit": "Les types de phrase", "fact": "La phrase exclamative", "any": ["exclamative"] },
+
+    { "id": "tps-01", "unit": "Les temps", "fact": "L'imparfait de l'indicatif", "any": ["imparfait"] },
+    { "id": "tps-02", "unit": "Les temps", "fact": "Le present du conditionnel", "any": ["conditionnel"] },
+    { "id": "tps-03", "unit": "Les temps du passe", "fact": "Le passe simple", "any": ["passe simple"] },
+    { "id": "tps-04", "unit": "Les temps du passe", "fact": "Le plus-que-parfait de l'indicatif", "any": ["plus-que-parfait", "plus que parfait"] },
+
+    { "id": "frm-01", "unit": "Les formes", "fact": "La forme affirmative", "any": ["affirmative"] },
+    { "id": "frm-02", "unit": "Les formes", "fact": "La forme negative", "any": ["negative"] },
+
+    { "id": "pro-01", "unit": "Le pronom relatif", "fact": "Le pronom relatif", "any": ["pronom relatif"] },
+    { "id": "pro-02", "unit": "Le pronom relatif", "fact": "Les pronoms relatifs qui, que, dont, ou", "all": ["pronom", "dont"] },
+
+    { "id": "cnj-01", "unit": "La conjonction de coordination", "fact": "La conjonction de coordination", "any": ["conjonction de coordination"] },
+    { "id": "cnj-02", "unit": "La conjonction de coordination", "fact": "Les conjonctions mais, ou, et, donc, or, ni, car", "all": ["conjonction", "donc"] }
+  ]
+}

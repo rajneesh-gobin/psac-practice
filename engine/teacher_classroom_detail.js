@@ -3,7 +3,10 @@ const TeacherClassroomDetail = (() => {
   const el = id => document.getElementById(id);
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const I = () => (typeof TeacherInsights !== 'undefined' ? TeacherInsights : null);
-  const SECTIONS = ['overview', 'work', 'pupils', 'materials', 'results', 'settings'];
+  // Calendar is a PRIMARY section for the same reason Materials is: "when is
+  // the test / when am I away / when is it due" is a question a teacher asks
+  // per classroom, and would never look for behind More.
+  const SECTIONS = ['overview', 'work', 'pupils', 'materials', 'calendar', 'results', 'settings'];
   // Materials is a PRIMARY section, not a More entry: "where do I put a file for
   // this class" was the one question the ⋯ menu could not answer, because a
   // teacher looking for it has no reason to open a menu labelled More.
@@ -19,6 +22,10 @@ const TeacherClassroomDetail = (() => {
   // Self-registered devices in a SHARED-PIN classroom (name + short device tag).
   let _devices = [];
   let _assignments = [];
+  // This classroom's calendar (teacher_class_events): exams, hand-in dates,
+  // days away, other events. Per classroom, never per teacher.
+  let _events = [];
+  let _eventsError = '';
   let _physicalHomework = [];
   let _materials = [];
   // Per-material completion claims for the open classroom: { expected, materials }.
@@ -103,6 +110,7 @@ const TeacherClassroomDetail = (() => {
     _classPin = null;
     _classGrade = null;
     _physicalHomework = [];
+    _events = []; _eventsError = '';
     _materials = [];
     _matSource = 'file';
     _libCode = null;
@@ -133,7 +141,7 @@ const TeacherClassroomDetail = (() => {
 
     showSection(SECTIONS.includes(opts.section) ? opts.section : 'overview');
     if (!same && typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(classId, className, _activeSection);
-    await Promise.all([_loadWork(), _loadPupils(), _loadMaterials()]);
+    await Promise.all([_loadWork(), _loadPupils(), _loadMaterials(), _loadEvents()]);
     if (_classId === classId) _setClassroomLoading(false);
   }
 
@@ -178,6 +186,7 @@ const TeacherClassroomDetail = (() => {
     if (sec === 'work')     _renderWork();
     if (sec === 'pupils')   _renderPupils();
     if (sec === 'settings') { _renderSettings(); _paintGradeSelect(); }
+    if (sec === 'calendar') _renderCalendar();
     if (sec === 'results')  _renderResults(_resultsAssignId);
     if (_classId && typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(_classId, _className, sec);
   }
@@ -607,16 +616,15 @@ const TeacherClassroomDetail = (() => {
             </div>
           </div>
           <div class="ncf-field">
-            <label for="phw-expiry">Due in</label>
-            <select id="phw-expiry" class="ncf-input">
-              <option value="1">1 day</option>
-              <option value="3">3 days</option>
-              <option value="7" selected>1 week</option>
-              <option value="14">2 weeks</option>
-              <option value="30">1 month</option>
-              <option value="90">3 months</option>
-              <option value="180">6 months</option>
-            </select>
+            <label for="phw-due">Due on</label>
+            <input id="phw-due" type="date" class="ncf-input" min="${_todayKey()}" value="${_dayKeyPlus(7)}">
+            <div class="ta-due-chips" role="group" aria-label="Quick due dates" style="margin-top:.4rem">
+              <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.setPhwDue(1)">Tomorrow</button>
+              <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.setPhwDue(3)">In 3 days</button>
+              <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.setPhwDue(7)">Next week</button>
+              <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.setPhwDue(14)">2 weeks</button>
+            </div>
+            <p class="tc-cd-hint" style="margin:.4rem 0 0">Pupils see it on the class page and its calendar until the end of that day.</p>
           </div>
           <p class="ncf-err hidden" id="phw-err"></p>
         </div>
@@ -643,6 +651,9 @@ const TeacherClassroomDetail = (() => {
     if (hint) hint.textContent = file ? file.name : 'No file chosen';
   }
 
+  function _dayKeyPlus(n) { const d = new Date(); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function setPhwDue(days) { const el = document.getElementById('phw-due'); if (el) el.value = _dayKeyPlus(days); }
+
   function _phwSetErr(msg) {
     const e = document.getElementById('phw-err');
     if (!e) return;
@@ -659,8 +670,14 @@ const TeacherClassroomDetail = (() => {
     const desc    = document.getElementById('phw-desc')?.value.trim() || null;
     const file    = document.getElementById('phw-camera')?.files[0] || document.getElementById('phw-file')?.files[0];
     if (file && file.size > 10 * 1024 * 1024) { _phwSetErr('File must be under 10 MB.'); return; }
-    const days    = parseInt(document.getElementById('phw-expiry')?.value || '7', 10);
-    const expiresAt = new Date(Date.now() + days * 86400000).toISOString();
+    // The deadline is the END of the chosen local day, like a digital
+    // activity's due date (teacher.js _dueDateValue) - "due Friday" means all
+    // of Friday, not 09:14 on Friday because that is when it was set.
+    const dueKey = document.getElementById('phw-due')?.value || '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dueKey)) { _phwSetErr('Choose a due date.'); document.getElementById('phw-due')?.focus(); return; }
+    if (dueKey < _todayKey()) { _phwSetErr('The due date cannot be in the past.'); document.getElementById('phw-due')?.focus(); return; }
+    const dp = dueKey.split('-').map(Number);
+    const expiresAt = new Date(dp[0], dp[1] - 1, dp[2], 23, 59, 59).toISOString();
 
     const btn = document.getElementById('phw-submit');
     if (btn) { btn.disabled = true; btn.textContent = 'Assigning…'; }
@@ -1794,6 +1811,174 @@ const TeacherClassroomDetail = (() => {
     return Math.round(s / 60) + ' min';
   }
 
+  // ── Calendar ───────────────────────────────────────────────────────
+  const EVENT_KIND = {
+    exam:   { icon: '📝', label: 'Exam / test' },
+    due:    { icon: '📌', label: 'Hand-in date' },
+    absent: { icon: '🚫', label: 'I am away' },
+    event:  { icon: '📅', label: 'Other event' },
+  };
+  const _todayKey = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  const _dayText = (k, o) => { const p = String(k || '').split('-'); if (p.length !== 3) return ''; return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])).toLocaleDateString('en-GB', o || { weekday: 'short', day: 'numeric', month: 'short' }); };
+  const _spanText = e => (!e.end_date || e.end_date === e.date) ? _dayText(e.date) : _dayText(e.date) + ' – ' + _dayText(e.end_date);
+
+  async function _loadEvents() {
+    const classId = _classId;
+    _eventsError = '';
+    try {
+      const { data, error } = await _sb.from('teacher_class_events')
+        .select('id, date, end_date, kind, title, notes, created_at')
+        .eq('classroom_id', classId)
+        .order('date', { ascending: true });
+      if (error) throw error;
+      if (_classId !== classId) return;
+      _events = data || [];
+    } catch (e) {
+      if (_classId !== classId) return;
+      _events = [];
+      // A table that is not there yet reads as "no calendar", not as an error
+      // the teacher can do something about.
+      _eventsError = (e && (e.code === '42P01' || /does not exist/.test(e.message || ''))) ? '' : 'Could not load the calendar.';
+    }
+    if (_activeSection === 'calendar') _renderCalendar();
+  }
+
+  function _eventRow(e, past) {
+    const k = EVENT_KIND[e.kind] ? e.kind : 'event';
+    return `<div class="tc-phw-card tc-ev-card tc-ev-${k}${past ? ' tc-phw-expired' : ''}">
+        <div class="tc-phw-badge">${EVENT_KIND[k].icon} ${esc(EVENT_KIND[k].label)}</div>
+        <div class="tc-phw-body">
+          <p class="tc-phw-title">${esc(e.title)}</p>
+          <p class="tc-phw-due">📅 ${esc(_spanText(e))}</p>
+          ${e.notes ? `<p class="tc-phw-desc">${esc(e.notes)}</p>` : ''}
+        </div>
+        <div class="tc-phw-actions">
+          <button onclick="TeacherClassroomDetail.deleteEvent('${esc(e.id)}')" class="tc-cd-pill tc-cd-pill-red">Delete</button>
+        </div>
+      </div>`;
+  }
+  // Homework due dates sit in the same list, read-only: the teacher set them
+  // on the activity and changes them there.
+  function _dueRow(a, badge) {
+    const iso = a.due_at || a.expires_at;
+    if (!iso) return '';
+    const d = new Date(iso);
+    return `<div class="tc-phw-card tc-ev-card ${badge ? 'tc-ev-ws' : 'tc-ev-hw'}">
+        <div class="tc-phw-badge">${badge || '⏰ Homework due'}</div>
+        <div class="tc-phw-body">
+          <p class="tc-phw-title">${esc(a.title || 'Homework')}</p>
+          <p class="tc-phw-due">📅 ${esc(d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }))}</p>
+        </div>
+        <div class="tc-phw-actions"><span class="tc-phw-meta">set on the activity</span></div>
+      </div>`;
+  }
+
+  function _renderCalendar() {
+    const box = el('tc-cd-calendar');
+    if (!box) return;
+    const today = _todayKey();
+    const upcoming = _events.filter(e => (e.end_date || e.date) >= today);
+    const past = _events.filter(e => (e.end_date || e.date) < today).slice(-12).reverse();
+    const dueSoon = (_assignments || []).filter(a => !a.archived && (a.due_at || a.expires_at) && new Date(a.due_at || a.expires_at) >= new Date(today + 'T00:00:00'))
+      .sort((a, b) => new Date(a.due_at || a.expires_at) - new Date(b.due_at || b.expires_at));
+    // Merge events and due dates by day for the upcoming list.
+    const dayOf = iso => { const d = new Date(iso); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+    const sheetsSoon = (_physicalHomework || []).filter(w => w.expires_at && new Date(w.expires_at) >= new Date(today + 'T00:00:00'));
+    const merged = [
+      ...upcoming.map(e => ({ k: e.date, html: _eventRow(e, false) })),
+      ...dueSoon.map(a => ({ k: dayOf(a.due_at || a.expires_at), html: _dueRow(a) })),
+      ...sheetsSoon.map(w => ({ k: dayOf(w.expires_at), html: _dueRow(w, '📄 Worksheet due') })),
+    ].sort((a, b) => a.k.localeCompare(b.k));
+
+    box.innerHTML = `
+      <div class="tc-cd-section-header">
+        <h3 class="tc-cd-section-title">🗓️ Class calendar</h3>
+      </div>
+      <p class="tc-cd-hint">Exams, hand-in dates, days you are away, and anything else the class should know. Pupils see it on the class page behind their PIN, next to their homework dates.</p>
+      <div class="tc-cd-upload-panel" id="tc-cd-ev-form">
+        <div class="tc-cd-upload-row">
+          <select id="tc-cd-ev-kind" class="tc-cd-input" style="flex:2" onchange="TeacherClassroomDetail.setEventKind()" aria-label="What kind of date">
+            ${Object.entries(EVENT_KIND).map(([k, v]) => `<option value="${k}">${v.icon} ${esc(v.label)}</option>`).join('')}
+          </select>
+          <input id="tc-cd-ev-date" type="date" class="tc-cd-input" style="flex:2" aria-label="Date" min="${today}">
+          <input id="tc-cd-ev-end" type="date" class="tc-cd-input hidden" style="flex:2" aria-label="Until (last day away)">
+        </div>
+        <div class="tc-cd-upload-row">
+          <input id="tc-cd-ev-title" type="text" maxlength="120" placeholder="What is it? e.g. Maths test, Project due" class="tc-cd-input" style="flex:3">
+          <input id="tc-cd-ev-notes" type="text" maxlength="500" placeholder="Note for pupils (optional)" class="tc-cd-input" style="flex:3">
+        </div>
+        <div class="tc-cd-upload-row">
+          <button type="button" class="tc-cd-action-btn" onclick="TeacherClassroomDetail.addEvent(this)">＋ Add to calendar</button>
+          <span id="tc-cd-ev-status" class="tc-cd-status-msg" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+      ${_eventsError ? `<p class="tc-cd-err">${esc(_eventsError)}</p>` : ''}
+      <h4 class="tc-work-subhead">Coming up</h4>
+      <div id="tc-cd-ev-list">${merged.length ? merged.map(m => m.html).join('') : '<p class="tc-cd-empty">Nothing on the calendar yet. Add the next test, or the day you will be away.</p>'}</div>
+      ${past.length ? `<h4 class="tc-work-subhead" style="margin-top:14px">Past</h4><div>${past.map(e => _eventRow(e, true)).join('')}</div>` : ''}`;
+    const dateEl = el('tc-cd-ev-date');
+    if (dateEl && !dateEl.value) dateEl.value = today;
+  }
+
+  function setEventKind() {
+    const kind = el('tc-cd-ev-kind')?.value;
+    const end = el('tc-cd-ev-end');
+    if (end) end.classList.toggle('hidden', kind !== 'absent');
+    const title = el('tc-cd-ev-title');
+    if (title && !title.value && kind === 'absent') title.placeholder = 'e.g. Away at a workshop';
+  }
+
+  async function addEvent(btn) {
+    const status = el('tc-cd-ev-status');
+    const say = (m, bad) => { if (status) { status.textContent = m; status.classList.toggle('tc-cd-err', !!bad); } };
+    const kind  = el('tc-cd-ev-kind')?.value || 'event';
+    const date  = el('tc-cd-ev-date')?.value || '';
+    const endIn = kind === 'absent' ? (el('tc-cd-ev-end')?.value || '') : '';
+    const title = (el('tc-cd-ev-title')?.value || '').trim();
+    const notes = (el('tc-cd-ev-notes')?.value || '').trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { say('Pick a date.', true); el('tc-cd-ev-date')?.focus(); return; }
+    if (!title) { say('Give it a name pupils will understand.', true); el('tc-cd-ev-title')?.focus(); return; }
+    if (endIn && endIn < date) { say('The last day cannot be before the first.', true); return; }
+    if (!EVENT_KIND[kind]) { say('Choose what kind of date it is.', true); return; }
+    const uid = (typeof Auth !== 'undefined' && Auth.getParentProfile) ? Auth.getParentProfile()?.id : null;
+    if (!uid || !_classId) { say('Please sign in again.', true); return; }
+    if (btn) btn.disabled = true;
+    say('Saving…');
+    try {
+      // ⚠ .select('id') and a zero-row answer is a REFUSAL: RLS matches no row
+      //   silently, and a teacher who is not this classroom's owner - or whose
+      //   approval lapsed - must see "not allowed", not "saved".
+      const { data, error } = await _sb.from('teacher_class_events')
+        .insert({ classroom_id: _classId, teacher_id: uid, date, end_date: endIn || null, kind, title, notes: notes || null })
+        .select('id, date, end_date, kind, title, notes, created_at');
+      if (error) throw error;
+      if (!data || !data.length) { say('Not allowed - this classroom is not yours, or your teacher access has lapsed.', true); return; }
+      _events = [..._events, data[0]].sort((a, b) => a.date.localeCompare(b.date) || String(a.created_at).localeCompare(String(b.created_at)));
+      _renderCalendar();
+      if (typeof toast === 'function') toast('Added to the class calendar 🗓️', 2000);
+    } catch (e) {
+      say('Could not save. ' + (e && e.message ? e.message : 'Please try again.'), true);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  async function deleteEvent(id) {
+    const e = _events.find(x => x.id === id);
+    if (!e) return;
+    if (!confirm(`Remove "${e.title}" from the class calendar?`)) return;
+    try {
+      const { data, error } = await _sb.from('teacher_class_events').delete().eq('id', id).select('id');
+      if (error) throw error;
+      // ⚠ Zero rows = refusal, never "already gone".
+      if (!data || !data.length) { if (typeof toast === 'function') toast('Not allowed - that date could not be removed.', 3000); return; }
+      _events = _events.filter(x => x.id !== id);
+      _renderCalendar();
+    } catch (_e) {
+      if (typeof toast === 'function') toast('Could not remove it. Please try again.', 3000);
+    }
+  }
+
   function _fmtDate(iso) {
     if (!iso) return '';
     const d = new Date(iso);
@@ -2140,6 +2325,7 @@ const TeacherClassroomDetail = (() => {
     uploadMaterial, _onMatFileChosen, setMaterialSort, setMatSource, shareMaterial, copyFileLink, openFile, deleteFile,
     createLibraryLink, shareLibraryLink, copyLibraryLink, rotateLibraryLink, disableLibraryLink,
     shareToClass,
+    addEvent, deleteEvent, setEventKind, setPhwDue,
     saveName, saveGrade, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
     openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },

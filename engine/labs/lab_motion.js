@@ -15,6 +15,10 @@
 //  ⚠ Calm Mode and reduced motion: a run or a walk completes at once - the
 //    full graph and the final position are drawn straight away.
 //  ⚠ Every control is a real <button>; there is no drag in this lab.
+//  ⚠ Since 2026-09-20 the lab opens on an EXPERIMENT (lab_experiment.js,
+//    LAB_SPEC.md §10): the `experiment` adapter below is what the runner
+//    drives; the ramp height is a row of chips (one control per height) so a
+//    step can ask "which height?" and glow every option.
 // ══════════════════════════════════════════════
 const LabMotion = (() => {
   const D = () => LabMotionData;
@@ -28,7 +32,7 @@ const LabMotion = (() => {
   let _root = null, _cv = null, _cx = null, _W = 0, _H = 0;
   let _raf = 0, _last = 0, _uiAcc = 0, _resizeWired = false, _clock = 0;
   let _b = null, _panel = 'sandbox', _mission = null, _guide = null;
-  let _log = [], _runs = [], _walks = [], _fx = [], _busy = false, _instant = false;
+  let _log = [], _runs = [], _walks = [], _fx = [], _busy = false, _instant = false, _silent = false, _focus = null;
   let _run = null, _walk = null, _fall = null, _runN = 0, _swK = 0, _said = {}, _tipIdx = -1;
 
   function _newBench(setup) {
@@ -124,10 +128,8 @@ const LabMotion = (() => {
     _root.onclick = e => {
       const a = e.target.closest('[data-act]');
       if (a) { _act(a.dataset.act, a); return; }
-      const hb = e.target.closest('[data-h]');
-      if (hb) { stepHeight(+hb.dataset.h); return; }
       const so = e.target.closest('[data-set]');
-      if (so) { setOpt(so.dataset.set, so.dataset.v); return; }
+      if (so) { if (so.dataset.set === 'height') setHeight(+so.dataset.v); else setOpt(so.dataset.set, so.dataset.v); return; }
       const rt = e.target.closest('[data-route]');
       if (rt) { setRoute(rt.dataset.route); return; }
       const gd = e.target.closest('[data-guide]');
@@ -205,7 +207,7 @@ const LabMotion = (() => {
   function setHeight(h) {
     const H = D().HEIGHTS;
     if (!H.includes(h) || !_guard() || _b.setup !== 'ramp') return;
-    if (_b.h === h) return;
+    if (_b.h === h) { _guideEvent('height:' + h); return; }
     _b.h = h;
     _coach(h === 0 ? 'Track flat on the bench.' : h === 2 ? 'Raised just 2 cm: enough to cancel friction. A friction-compensated runway.'
       : `Top of the ramp raised to ${h} cm - a slope of about ${Math.round(D().angleDeg(h))}°.`);
@@ -429,6 +431,7 @@ const LabMotion = (() => {
   // ══ Cards ════════════════════════════════════
   // A wrong-but-safe mistake: flash the reading on the canvas, then the card.
   function _card(kind, ctx, after) {
+    if (_silent) return;
     const R = D().RESULTS[kind];
     _busy = true;
     _fxAdd('mark', () => {
@@ -439,6 +442,7 @@ const LabMotion = (() => {
   }
 
   function _hazard(id, ctx) {
+    if (_silent) return;
     const H = D().HAZARDS[id];
     const st = Labs.store('motion');
     st.hazards[id] = (st.hazards[id] || 0) + 1;
@@ -536,7 +540,9 @@ const LabMotion = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('motion', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _reset();
+    // An experiment's guide runs on the bench the runner already set up - the
+    // set-up IS the experiment; never wipe it.
+    if (!G.exp) _reset();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
@@ -547,8 +553,10 @@ const LabMotion = (() => {
     if (z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
-  // A step already true on the bench is skipped. Actions never are.
+  // A step already true on the bench is skipped. Actions never are, and nor
+  // is a decision (an `ask` with options): the child must make it.
   function _satisfied(on) {
+    if (!on) return false;
     const [k, v] = on.split(':');
     switch (k) {
       case 'setup': return _b.setup === v;
@@ -565,7 +573,7 @@ const LabMotion = (() => {
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
-    while (s && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
+    while (s && !s.options && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     const box = $('lab-guide');
     if (box) {
@@ -580,13 +588,19 @@ const LabMotion = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any` (an experiment
+  // that says "pick a height" accepts several). The runner hears every token
+  // first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); if (!s.on.startsWith('wait:')) _coachGuide(s.on); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); _coachGuide(token); }
     else _highlight();
   }
 
@@ -594,19 +608,8 @@ const LabMotion = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (!s) return;
-    const [k, v] = s.on.split(':');
-    switch (k) {
-      case 'setup': place(v); break;
-      case 'height': if (_b.setup !== 'ramp') place('ramp'); setHeight(+v); break;
-      case 'start': case 'timer': case 'meaning': case 'disp': setOpt(k, v); break;
-      case 'block': setBlock(v === 'on'); break;
-      case 'route': if (_b.setup !== 'walk') place('walk'); setRoute(v); break;
-      case 'run': run(); break;
-      case 'gradient': gradient(); break;
-      case 'area': area(); break;
-      case 'walk': walk(); break;
-    }
+    const tok = s && (s.on || (s.any && s.any[0]));
+    if (tok) _do(tok);
   }
 
   function _guideHint() {
@@ -647,8 +650,8 @@ const LabMotion = (() => {
     switch (k) {
       case 'setup': return v === 'ramp' ? { on, say: 'Put the trolley and ramp on the bench.', btn: '🛷 Set up the ramp' }
                                          : { on, say: 'Go out onto the school field with a tape measure and a compass.', btn: `${S.walk.icon} Go to the field` };
-      case 'height': return +v === 0 ? { on, say: 'Lay the track flat (0 cm).', btn: '▼ Lay the track flat' }
-        : { on, say: `Set the raised end of the ramp to ${v} cm${+v === 2 ? ' - just enough to cancel friction' : ''}.`, btn: `▲ Set the ramp to ${v} cm` };
+      case 'height': return +v === 0 ? { on, say: 'Tap 0 cm to lay the track flat.', btn: '0 cm' }
+        : { on, say: `Tap ${v} cm to set the raised end of the ramp${+v === 2 ? ' - just enough to cancel friction' : ''}.`, btn: `${v} cm` };
       case 'start': return v === 'push' ? { on, say: 'This time give the trolley a gentle push.', btn: '👋 Choose “Pushed”' }
                                          : { on, say: 'Let go from rest - no push.', btn: '✋ Choose “From rest”' };
       case 'timer': return v === 'stopwatch' ? { on, say: 'Time the run with a hand stopwatch instead of the light gates.', btn: '⏱️ Use a stopwatch' }
@@ -713,6 +716,7 @@ const LabMotion = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('motion', G)) { _stopGuide(true); return; }
     const st = Labs.store('motion');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -754,29 +758,94 @@ const LabMotion = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [k, v] = s.on.split(':');
-    let sel = null;
+    // Every option of a decision glows, not just the right one.
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => _root.querySelector(_selFor(t))).filter(Boolean);
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-add],[data-set],[data-route]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
+  }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // One guide token, performed as if the control had been tapped. Setup tokens
+  // go through apply(), which makes a run or a walk finish at once and keeps
+  // the discovery toasts and the mistake cards quiet.
+  function _do(tok) {
+    const i = String(tok).indexOf(':');
+    const k = i > 0 ? tok.slice(0, i) : tok, v = i > 0 ? tok.slice(i + 1) : null;
     switch (k) {
-      case 'setup': sel = `[data-add="setup"][data-id="${v}"]`; break;
-      case 'height': sel = `[data-h="${+v > _b.h ? 1 : -1}"]`; break;
-      case 'start': case 'timer': case 'meaning': case 'disp': sel = `[data-set="${k}"][data-v="${v}"]`; break;
-      case 'block': sel = '#lab-motion-block'; break;
-      case 'route': sel = `[data-route="${v}"]`; break;
-      default: sel = `#lab-motion-controls [data-act="${k}"]`;
-    }
-    const el = sel && _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-add],[data-set],[data-h],[data-route]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
+      case 'setup': place(v); break;
+      case 'height': if (_b.setup !== 'ramp') place('ramp'); setHeight(+v); break;
+      case 'start': case 'timer': case 'meaning': case 'disp': setOpt(k, v); break;
+      case 'block': setBlock(v === 'on'); break;
+      case 'route': if (_b.setup !== 'walk') place('walk'); setRoute(v); break;
+      case 'run': run(); break;
+      case 'gradient': gradient(); break;
+      case 'area': area(); break;
+      case 'walk': walk(); break;
+      case 'clear': clearGraph(); break;
     }
   }
+
+  // The control a token belongs to (the runner's test taps it; _highlight glows it).
+  function _selFor(tok) {
+    const i = String(tok).indexOf(':');
+    const k = i > 0 ? tok.slice(0, i) : tok, v = i > 0 ? tok.slice(i + 1) : null;
+    switch (k) {
+      case 'setup': return `[data-add="setup"][data-id="${v}"]`;
+      case 'height': case 'start': case 'timer': case 'meaning': case 'disp': return `[data-set="${k}"][data-v="${v}"]`;
+      case 'block': return '#lab-motion-block';
+      case 'route': return `[data-route="${v}"]`;
+      default: return `#lab-motion-controls [data-act="${k}"]`;
+    }
+  }
+
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the controls and the shelf.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const has = tok => on && _focus.has(tok);
+    _root.querySelectorAll('#lab-motion-controls [data-act], #lab-motion-controls [data-set], #lab-motion-controls [data-route], #lab-motion-shelf [data-add]').forEach(b => {
+      const tok = b.dataset.act || (b.dataset.set ? b.dataset.set + ':' + b.dataset.v : b.dataset.route ? 'route:' + b.dataset.route : 'setup:' + b.dataset.id);
+      b.hidden = on && !has(tok);
+    });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-motion-hrow, .lab-motion-optrow, .lab-motion-tools, .lab-motion-routes, #lab-motion-shelf').forEach(el => { el.hidden = on && !anyShown(el); });
+  }
+  const experiment = {
+    list: () => (D().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _mission = null; _guide = null;
+      _reset('ramp'); _log = []; _runs = []; _walks = []; _runN = 0; _swK = 0; _panel = 'sandbox';
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _renderPanel(); _renderControls(); _syncBlock(); _readouts(); _draw(0);
+    },
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _silent = true;
+      try { _do(tok); } finally { _instant = was; _silent = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}${e.formula ? ' (' + e.formula + ')' : ''}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   function _startHTML() {
     const st = Labs.store('motion');
@@ -819,6 +888,7 @@ const LabMotion = (() => {
     else if (_panel === 'missions') p.innerHTML = _mission ? _missionHTML() + _notebookHTML() : _missionListHTML();
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -831,10 +901,12 @@ const LabMotion = (() => {
     if (sh) sh.outerHTML = _shelfHTML();
     if (_panel === 'found') { const p = $('lab-panel'); if (p) p.innerHTML = _foundHTML(); }
     _foundCount();
+    _applyFocus();
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
   function _discover(id) {
+    if (_silent) return;
     const d = D().DISCOVERIES.find(x => x.id === id);
     if (Labs.discover('motion', id, { title: d && d.title, total: D().DISCOVERIES.length })) _refresh();
   }
@@ -962,9 +1034,8 @@ const LabMotion = (() => {
     if (b.setup === 'ramp') {
       const sub = b.h === 0 ? 'flat track' : b.h === 2 ? 'cancels friction' : `slope about ${Math.round(D().angleDeg(b.h))}°`;
       html += `<div class="lab-motion-hrow" role="group" aria-label="Height of the ramp">
-          <button type="button" class="lab-btn lab-motion-hbtn" data-h="-1" aria-label="Lower the ramp">▼ Lower</button>
           <p class="lab-motion-hval"><b>${b.h} cm</b><small>${esc(sub)}</small></p>
-          <button type="button" class="lab-btn lab-motion-hbtn" data-h="1" aria-label="Raise the ramp">▲ Raise</button>
+          <div class="lab-motion-heights">${D().HEIGHTS.map(h => `<button type="button" data-set="height" data-v="${h}" aria-pressed="${b.h === h}" aria-label="Set the ramp to ${h} cm">${h} cm</button>`).join('')}</div>
         </div>
         ${seg('start', 'Start', [['rest', '✋ From rest'], ['push', '👋 Pushed']])}
         ${seg('timer', 'Timing', [['gates', '⚡ Light gates'], ['stopwatch', '⏱️ Stopwatch']])}
@@ -983,6 +1054,7 @@ const LabMotion = (() => {
         <div class="lab-motion-tools">${tool('walk', '🚶', 'Jog the route')}</div>`;
     }
     c.innerHTML = html;
+    _applyFocus();
     _highlight();
   }
 
@@ -1014,7 +1086,7 @@ const LabMotion = (() => {
       <h2 id="lab-ov-title" class="lab-help-title">How the Motion Track works</h2>
       <div class="lab-help">
         <section><h3>Using the track</h3><ul>
-          <li>▲ ▼ change the height of the raised end of the ramp (0-50 cm).</li>
+          <li>The height buttons set the raised end of the ramp (0-50 cm).</li>
           <li>▶ lets the trolley go (from rest, or with a gentle push). A data logger draws its speed-time graph.</li>
           <li>📐 draws a triangle on the line and works out its gradient; ▦ shades the area under the line.</li>
           <li>The walk on the field compares distance with displacement.</li></ul></section>
@@ -1426,7 +1498,7 @@ const LabMotion = (() => {
              show: b.show, fall: !!_fall, fx: _fx.length,
              last: b.last && Object.assign({ a: b.last.p.a, dur: b.last.p.dur }, b.last.row),
              grad: b.grad, area: b.area && { d: b.area.d, shape: b.area.shape },
-             guide: _guide && { id: _guide.id, step: _guide.step },
+             guide: _guide && { id: _guide.id, step: _guide.step, exp: !!(_gdef() && _gdef().exp) }, focus: _focus ? [..._focus] : null, silent: _silent,
              runs: _runs.map(r => ({ n: r.n, h: r.h, start: r.start, timer: r.timer, t: r.t, avg: r.avg, vEnd: r.vEnd, a: r.a, aBad: r.aBad, d: r.d, ok: r.ok })),
              walks: _walks.map(r => ({ route: r.route, distance: r.distance, displacement: r.displacement, recorded: r.recorded, ok: r.ok })),
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
@@ -1444,7 +1516,7 @@ const LabMotion = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, place, setHeight, stepHeight, setOpt, setBlock, setRoute,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, place, setHeight, stepHeight, setOpt, setBlock, setRoute,
            run, gradient, area, walk, clearGraph, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMotion = LabMotion;

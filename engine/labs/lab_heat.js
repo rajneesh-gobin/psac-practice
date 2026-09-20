@@ -11,6 +11,11 @@
 //     show the black can heating up faster.
 //  Guided experiments, two Missions, Discoveries, and 🔊 read-aloud on the
 //  lab assistant and guide box (never automatic).
+//  Since 2026-09-20 the lab opens on an EXPERIMENT (lab_experiment.js,
+//  LAB_SPEC.md §10): the `experiment` adapter at the end of this file gives the
+//  runner a clean bench, silent set-up, focus (only this experiment's
+//  controls), the notebook as evidence, and the selector of every control.
+//  The three stations stay as Explore.
 //
 //  ⚠ Every rate, temperature, quiz question and text comes from
 //    engine/labs/lab_heat_data.js (LabHeatData). If a result looks wrong,
@@ -35,6 +40,7 @@ const LabHeat = (() => {
   let _raf = 0, _last = 0, _uiAcc = 0, _resizeWired = false;
   let _st = null, _panel = 'sandbox', _mission = null, _guide = null;
   let _fx = [], _busy = false, _instant = false;
+  let _focus = null, _silent = false;   // experiment runner: focused tokens; set-up in progress
   let _colors = null, _tipIdx = -1, _talking = false, _obs = null;
   let _convPhase = 0;          // 0–1, advances continuously for convection particles
   let _flamePh = 0;            // 0–1, flame flicker phase
@@ -201,13 +207,20 @@ const LabHeat = (() => {
       z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
+  // A guide token as if tapped. ⚠ 'dye:add' is the one token whose control is
+  //   a data-act button, not a data-set pair - it has its own route.
   function _do(tok) {
+    if (tok === 'dye:add') { _addDye(); return; }
     const i = tok.indexOf(':');
     if (i > 0) _set(tok.slice(0, i), tok.slice(i + 1));
     else _act(tok);
   }
+  const _actTok = act => (act === 'dye' ? 'dye:add' : act);
 
   function _act(act) {
+    // A wrong option of an experiment step is heard (the runner explains it)
+    // but never performed - "wait 30 s" must not run the clock.
+    if (_expWrong(_actTok(act))) { _guideEvent(_actTok(act)); return; }
     switch (act) {
       case 'hub':     _hush(); Labs.backToHub(); break;
       case 'help':    _help(); break;
@@ -228,6 +241,7 @@ const LabHeat = (() => {
   }
 
   function _set(k, v) {
+    if (_expWrong(k + ':' + v)) { _guideEvent(k + ':' + v); return; }
     if (_busy) { _coach('One thing at a time. Let that finish first.'); return; }
     const st = _st;
     switch (k) {
@@ -269,6 +283,7 @@ const LabHeat = (() => {
           st.burner = false;
           _coach('Burner off. The rods will cool down slowly.');
         }
+        _renderTools();
         _after('burner:' + v);
         break;
       }
@@ -281,6 +296,7 @@ const LabHeat = (() => {
           st.heater = false;
           _coach('Heater off. The convection current will slow down.');
         }
+        _renderTools();
         _after('heater:' + v);
         break;
       }
@@ -293,6 +309,7 @@ const LabHeat = (() => {
           st.lamp = false;
           _coach('Lamp off. The cans will slowly cool back to room temperature.');
         }
+        _renderTools();
         _after('lamp:' + v);
         break;
       }
@@ -338,6 +355,10 @@ const LabHeat = (() => {
       if (!st.stationsDone) st.stationsDone = {};
       st.stationsDone.convection = true;
       coach = st.dye ? 'The dye drop is circulating around the loop!' : 'The convection current is flowing. Add a dye drop to see it!';
+      _logEntry({ title: Math.round(st.convTime) + ' s', obs: st.convMode === 'air'
+        ? 'Warm air rose over the heater. Cool air moved in along the floor from the other side.'
+        : st.dye ? 'The dye rose from the coil, crossed the top and sank down the side.'
+                 : 'Warm water rose from the coil. Cool water sank down the side.' });
     } else {
       if (!st.lamp) { _coach('Turn on the lamp first.'); return; }
       st.radTime += expSec;
@@ -352,8 +373,8 @@ const LabHeat = (() => {
     _checkMission();
     _readouts();
     _refresh();
-    _guideEvent(st.station === 'conduction' ? 'tick120' : st.station === 'convection' ? 'tick30' : 'tick60');
-    // For the specific tick token
+    // ⚠ Only the wait that was tapped. It used to fire a station default first
+    //   (tick120 on the rack), so ANY wait satisfied a "wait 2 minutes" step.
     const tokMap = { 30: 'tick30', 60: 'tick60', 120: 'tick120' };
     if (tokMap[expSec]) _guideEvent(tokMap[expSec]);
   }
@@ -365,6 +386,7 @@ const LabHeat = (() => {
     if (st.dye) { _coach('There is already a dye drop in the water. Watch it circulate!'); return; }
     st.dye = true;
     _coach('Dye drop added! Watch it follow the convection current around the loop.');
+    _renderTools();
     _after('dye:add');
   }
 
@@ -397,10 +419,13 @@ const LabHeat = (() => {
     _readouts();
   }
 
-  // After any action: repaint and advance the guide.
+  // After any action: repaint, score discoveries and advance the guide.
+  // ⚠ Discoveries used to be scored only on a wait or a reading, so a recipe
+  //   ending in "add dye" or "switch to Air" never unlocked its own card.
   function _after(token) {
     _syncSet();
     _readouts();
+    _checkFinds();
     _refresh();
     _guideEvent(token);
   }
@@ -589,6 +614,7 @@ const LabHeat = (() => {
         <button type="button" class="lab-tool" data-act="reset"><span aria-hidden="true">🔄</span>Start again</button>
       </div>`;
     _syncSet();
+    _applyFocus();
     _highlight();
   }
 
@@ -678,7 +704,8 @@ const LabHeat = (() => {
 
   function _discover(id) {
     const d = P().DISCOVERIES.find(x => x.id === id);
-    if (Labs.discover(ID, id, { title: d && d.title, total: P().DISCOVERIES.length })) _refresh();
+    if (!d || _silent) return;
+    if (Labs.discover(ID, id, { title: d.title, total: P().DISCOVERIES.length })) _refresh();
   }
   function _foundCount() {
     const n = $('lab-found-n');
@@ -863,6 +890,11 @@ const LabHeat = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('heat', G, () => startGuide(idOrDef))) return;
     _mission = null;
+    // A guided experiment or a "Show me how" starts from a clean bench: the
+    // rack refuses any material while the burner is lit, so a recipe after a
+    // lit one glowed at a button that did nothing. An EXPERIMENT's guide runs
+    // on the bench the runner already set up - never wipe that.
+    if (!G.exp) _resetBench();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
@@ -874,7 +906,10 @@ const LabHeat = (() => {
     if (z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
+  // A step whose setting is already in place needs no tap. ⚠ An experiment's
+  //   ask step may carry `any` and no `on` at all.
   function _satisfied(tok) {
+    if (!tok) return false;
     const i = tok.indexOf(':');
     if (i < 0) return false;
     const k = tok.slice(0, i), v = tok.slice(i + 1);
@@ -913,13 +948,19 @@ const LabHeat = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any` (the handle
+  // experiment accepts wood OR plastic). The runner hears every token first,
+  // so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); }
   }
 
   function _guideHint() {
@@ -942,6 +983,8 @@ const LabHeat = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    // An experiment's guide ends in the runner's See, not in a card here.
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('heat', G)) { _stopGuide(true); return; }
     const lSt = Labs.store(ID);
     if (!G.adhoc) { lSt.guides = lSt.guides || {}; lSt.guides[G.id] = Date.now(); Labs.persist(); }
@@ -976,10 +1019,12 @@ const LabHeat = (() => {
   }
 
   function _selFor(tok) {
+    if (tok === 'dye:add') return '[data-act="dye"]';
     const i = tok.indexOf(':');
     return i > 0 ? `[data-set="${tok.slice(0, i)}"][data-v="${tok.slice(i + 1)}"]`
                  : `[data-act="${tok}"]`;
   }
+  // Every token of the step glows: the one `on`, or all of an ask's options.
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
@@ -987,19 +1032,68 @@ const LabHeat = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const el = _root.querySelector('.lab-heat ' + _selFor(s.on));
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => _root.querySelector('.lab-heat ' + _selFor(t))).filter(Boolean);
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ── Experiments (lab_experiment.js) ───────────────────────────────────────
+  // The token a control stands for. The dye button is data-act="dye" but its
+  // guide token is 'dye:add'; a toggle's data-v is the state it would SET.
+  const _tokOf = b => (b.dataset.act ? _actTok(b.dataset.act) : b.dataset.set + ':' + b.dataset.v);
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the tools (station tabs too).
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    _root.querySelectorAll('.lab-heat-tools .lab-tool, .lab-heat-stabs button').forEach(b => { b.hidden = on && !_focus.has(_tokOf(b)); });
+    const anyShown = el => !!el && [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-heat-mats, .lab-heat-burner-row, .lab-heat-row, .lab-heat-timebtns, .lab-heat-shelf, .lab-heat-stabs, .lab-heat-tools')
+      .forEach(r => { r.hidden = on && !anyShown(r); });
+    const h3 = _root.querySelector('.lab-heat-shelf h3');
+    if (h3) h3.hidden = on && !anyShown(_root.querySelector('.lab-heat-mats'));
+  }
+  // A wrong option of the current experiment step: heard, never performed.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
+  const experiment = {
+    list: () => (P().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    // A clean bench: the rack station, nothing on it, no mission, no guide,
+    // an empty notebook, every control re-rendered.
+    reset: () => {
+      _hush(); _mission = null; _guide = null; _silent = false; _focus = null;
+      _resetBench(); _panel = 'sandbox';
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _renderPanel(); _renderTools(); _syncSet(); _readouts();
+      if (_cx) _draw(0);
+    },
+    // Set-up: instant, and no discovery toast for something the child did not do.
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _silent = true;
+      try { _do(tok); } finally { _instant = was; _silent = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ── Intro / help ─────────────────────────────────────────────────────────
   function _intro() {
@@ -1206,8 +1300,10 @@ const LabHeat = (() => {
         // Elliptical loop: x oscillates, y moves counterclockwise
         const px = bx + bw / 2 + Math.sin(ph * Math.PI * 2) * (bw * 0.32);
         const py = by + bh / 2 - Math.cos(ph * Math.PI * 2) * (bh * 0.38);
-        // Color: red near bottom (hot, ph~0), blue near top (cool, ph~0.5)
-        const hotness = 1 - (1 - Math.cos(ph * Math.PI * 2)) / 2;
+        // Colour: red at the BOTTOM by the coil (ph = 0.5), blue at the top
+        // (ph = 0). Rising on the left, sinking on the right. ⚠ It was the
+        // other way round until 2026-09-20 - hot water drawn at the top.
+        const hotness = (1 - Math.cos(ph * Math.PI * 2)) / 2;
         const r = Math.round(hotness * 220 + (1 - hotness) * 30);
         const bl = Math.round(hotness * 30 + (1 - hotness) * 200);
         c.fillStyle = 'rgba(' + r + ',60,' + bl + ',0.75)';
@@ -1246,14 +1342,22 @@ const LabHeat = (() => {
     c.fillRect(rx + 4, hy, 16, hh);
     for (let k = 0; k < 4; k++) { c.fillStyle = 'rgba(0,0,0,0.15)'; c.fillRect(rx + 6, hy + k * (hh / 4) + 3, 12, 2); }
 
-    // Air convection particles
+    // Air convection: one cell. Up over the heater (the land), across the
+    // ceiling, down on the cool sea side, back along the floor - that last
+    // leg is the sea breeze. ⚠ It was drawn as one diagonal line, up and
+    // back down the same path, until 2026-09-20.
     if (st.heater || st.convTime > 0) {
       if (!Labs.calm()) _convPhase = (_convPhase + (dt || 0) * D.CONV_SPEED * 0.7) % 1;
+      const x0 = rx + 34, x1 = rx + rw - 34, yFloor = ry + rh - 22, yCeil = ry + 24;
       for (let k = 0; k < 12; k++) {
         const ph = (_convPhase + k / 12) % 1;
-        const px = rx + 20 + (rw - 40) * Math.abs(Math.sin(ph * Math.PI));
-        const py = ry + rh - 20 - (rh - 40) * (ph < 0.5 ? (ph * 2) : (2 - ph * 2));
-        const hotness = ph < 0.1 ? 1 : ph > 0.9 ? 1 : Math.max(0, 1 - Math.abs(ph - 0.1) / 0.35);
+        const leg = Math.floor(ph * 4), t = ph * 4 - leg;
+        let px, py;
+        if (leg === 0) { px = x0; py = yFloor - (yFloor - yCeil) * t; }
+        else if (leg === 1) { px = x0 + (x1 - x0) * t; py = yCeil; }
+        else if (leg === 2) { px = x1; py = yCeil + (yFloor - yCeil) * t; }
+        else { px = x1 - (x1 - x0) * t; py = yFloor; }
+        const hotness = leg === 0 ? 1 : leg === 1 ? 1 - t : 0;
         const r = Math.round(hotness * 210 + (1 - hotness) * 30);
         const bl = Math.round(hotness * 30 + (1 - hotness) * 190);
         c.fillStyle = 'rgba(' + r + ',70,' + bl + ',0.65)';
@@ -1265,8 +1369,11 @@ const LabHeat = (() => {
     c.fillStyle = _colors.ink; c.textAlign = 'left'; c.font = '700 10px system-ui,sans-serif';
     c.fillText('Heater (land)', rx + 24, hy - 4);
     if (st.heater) {
-      c.fillStyle = '#D84000'; c.fillText('warm air rises ↑', rx + 30, ry + rh * 0.4);
-      c.fillStyle = '#1A6080'; c.fillText('cool air sinks ↓', rx + rw * 0.5, ry + rh * 0.75);
+      c.fillStyle = '#D84000'; c.fillText('warm air rises ↑', rx + 44, ry + rh * 0.45);
+      c.textAlign = 'right';
+      c.fillStyle = '#1A6080'; c.fillText('cool air sinks ↓', rx + rw - 44, ry + rh * 0.45);
+      c.textAlign = 'center';
+      c.fillText('← sea breeze', rx + rw / 2, ry + rh - 8);
     }
     c.fillStyle = _colors.ink; c.textAlign = 'right'; c.font = '700 10px system-ui,sans-serif';
     c.fillText('Sea (cool air)', rx + rw - 6, hy + hh / 2);
@@ -1386,6 +1493,8 @@ const LabHeat = (() => {
       stationsDone: Object.keys(st.stationsDone || {}),
       guide: _guide && { id: _guide.id, step: _guide.step },
       mission: _mission && { id: _mission.id, errors: _mission.errors, success: _mission.success },
+      focus: _focus ? [..._focus] : null,
+      log: _log.length,
     };
   }
 
@@ -1399,7 +1508,7 @@ const LabHeat = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startGuide, discoveryGuide, startMission,
+  return { study, experiment, mount, unmount, startGuide, discoveryGuide, startMission,
            set: _set, act: _do, tick: _tick, addDye: _addDye, readTemp: _readTemp,
            _test, _tick: _tick_hook, _debug };
 })();

@@ -195,6 +195,32 @@ automatically* writes `global_settings.teacher_auto_approve` (**default off**).
 - Tests: `scripts/sql-tests/run-teacher-approve-tests.sh` (21 assertions, as
   `authenticated`) and `scripts/test-teacher-approved-email.js`.
 
+### Classroom calendar (2026-09-20, APPLIED)
+`migrations/20260920_classroom_calendar.sql` — applied to production, proved
+on a throwaway postgres first (fresh build + re-apply + 17 assertions,
+`scripts/sql-tests/run-class-events-tests.sh`), read back from `pg_class` /
+`pg_policies` / `pg_proc`, schema regenerated. Adds `teacher_class_events`
+(RLS, one policy `class_events_teacher` for `authenticated`),
+`teacher_owns_guest_classroom(uuid)` (SECURITY DEFINER, STABLE), and replaces
+`materials_library_open()` with the live body plus an `events` key.
+- ⚠⚠ **A policy cannot read `teacher_guest_classes` directly**: that table has
+  grants for `service_role` only, so an `EXISTS (SELECT … FROM
+  teacher_guest_classes)` inside a policy fails every teacher write with
+  `permission denied for table`. Caught by the throwaway build, not by
+  production, which would have accepted the migration and then refused every
+  insert. Ownership lookups on service-role-only tables go in a definer
+  function. Same shape as `owns_classroom()` for the other classroom world.
+- ⚠ Supabase's default privileges granted the new function to `anon` as well
+  and the new table `ALL` to `authenticated` (TRUNCATE included), exactly as
+  every other public table here. RLS is what protects rows; noted, not fixed.
+- The function body was fetched from `pg_proc` on the day and patched in three
+  places (a declaration, a query, a return key) — never retyped.
+- **Same day, second pass** — `migrations/20260920_classroom_worksheets.sql`
+  replaces `materials_library_open()` again (live body re-fetched AFTER the
+  first migration, then patched) to return `worksheets` from
+  `physical_homework`. Applied, read back from `pg_proc`, schema regenerated;
+  `run-class-events-tests.sh` now applies and re-applies both files.
+
 ### Admin support panel (2026-09-11, APPLIED)
 `migrations/20260911_admin_support_panel.sql`. Tested on a fresh postgres by
 `scripts/sql-tests/run-admin-support-tests.sh` (37 assertions, as

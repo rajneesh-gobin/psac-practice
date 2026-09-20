@@ -94,8 +94,21 @@ export default async function handler(request, env) {
     };
   }));
 
+  // Worksheets (physical_homework): same bucket, same per-visit signing, and
+  // the storage key never leaves this function either.
+  const sheets = await Promise.all((Array.isArray(out.worksheets) ? out.worksheets : []).map(async (w) => ({
+    id: w.id, title: w.title, subject: w.subject || null, description: w.description || null,
+    file_name: w.file_name || null, file_size: w.file_size || null,
+    expires_at: w.expires_at || null, created_at: w.created_at || null,
+    url: w.file_path ? await signUrl(sbUrl, sbKey, BUCKET, w.file_path, 3600) : null,
+  })));
+
   return new Response(JSON.stringify({
     ok: true, name: out.name || '', classroom: out.classroom || null, materials,
+    worksheets: sheets,
     assignments: Array.isArray(out.assignments) ? out.assignments : [],
+    // The classroom calendar (teacher_class_events), already filtered to this
+    // classroom and the last 60 days by the RPC. Dates only - nothing to sign.
+    events: Array.isArray(out.events) ? out.events : [],
   }), { status: 200, headers: HEADERS });
 }

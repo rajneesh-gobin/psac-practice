@@ -77,15 +77,71 @@ const Calendar = (() => {
     return SUBJECT_PACKS.find(p => p.id === id) || null;
   }
 
+  // ── A session's progress, from the signed-in child's own day bucket ──
+  // `daily[date].sub[packId]` is seconds spent in that subject (see
+  // _recordTimeOnTask in app.js); `daily[date].ch[chapterId]` is
+  // [attempted, correct]. Only the child's OWN blob is read - for any other
+  // student this answers "nothing yet", and the parent calendar audits with
+  // _loadActivity() instead.
+  //
+  // Two kinds of session: a CHAPTER task (chapter_id set) is done once the
+  // chapter has been practised that day; a SUBJECT session (no chapter) is
+  // done once the minutes target is met, or, with no target, once any time
+  // was spent in the subject.
+  function _dayBucketFor(dateStr) {
+    if (typeof ACTIVE_STUDENT_ID === 'undefined' || ACTIVE_STUDENT_ID !== _studentId) return null;
+    if (typeof DB === 'undefined' || !DB || !DB.daily) return null;
+    return DB.daily[dateStr] || null;
+  }
+  function _sessionProgress(subjectId, chapterId, minutesTarget, dateStr) {
+    const d = _dayBucketFor(dateStr);
+    const secs = d && d.sub && subjectId ? (d.sub[subjectId] || 0) : 0;
+    const doneMinutes = Math.floor(secs / 60);
+    const pair = d && d.ch && chapterId ? d.ch[chapterId] : null;
+    const questions = pair ? (pair[0] || 0) : 0;
+    const kind = chapterId ? 'chapter' : 'subject';
+    const done = kind === 'chapter' ? questions > 0
+               : minutesTarget ? doneMinutes >= minutesTarget
+               : secs > 0;
+    return { kind, doneMinutes, questions, done };
+  }
+
+  // One shape for every child-facing consumer. chapter_id is authoritative
+  // when set; rows written before it was populated still resolve by label.
+  function _childRow(e, today) {
+    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []);
+    let pack = packs.find(p => p.id === e.subject_id) || null;
+    let chapter = null;
+    if (e.chapter_id) {
+      const pool = pack ? (pack._chapters || pack.chapters || []) : packs.flatMap(p => p._chapters || p.chapters || []);
+      chapter = pool.find(c => c.id === e.chapter_id) || null;
+      if (chapter && !pack) pack = packs.find(p => (p._chapters || p.chapters || []).includes(chapter)) || null;
+    }
+    if (!chapter) { const r = _resolveChapter(e); pack = pack || r.pack; chapter = r.chapter; }
+    const subjectId = pack?.id || e.subject_id || null;
+    const prog = _sessionProgress(subjectId, chapter?.id || null, e.duration_mins || 0, e.date);
+    return {
+      id: e.id, date: e.date, label: e.topic_label || 'Study session',
+      minutes: e.duration_mins || null, notes: e.notes || null,
+      subjectId, subjectName: pack?.subject || pack?.name || null,
+      chapterId: chapter?.id || null,
+      icon: chapter?.icon || pack?.icon || '📚',
+      kind: prog.kind, done: prog.done, doneMinutes: prog.doneMinutes, questions: prog.questions,
+      isToday: e.date === today, isPast: e.date < today,
+    };
+  }
+
   // ── Entry point (parent calendar) ───────────────
   async function render() {
     const students = Store.getAccounts();
-    if (!_studentId && students.length > 0) {
-      const s = students[0];
-      _studentId    = s.id;
-      _studentName  = s.name;
-      _studentGrade = s.grade || 5;
-    }
+    // Resolve name and grade for WHOEVER _studentId is, every time. The child
+    // screens set _studentId through getBacklog()/getUpcoming() without a
+    // grade, so a parent opening the calendar afterwards used to get a null
+    // grade - and an empty subject list in both the generator and the
+    // session planner.
+    let s = students.find(st => st.id === _studentId) || null;
+    if (!s && students.length > 0) { s = students[0]; _studentId = s.id; }
+    if (s) { _studentName = s.name; _studentGrade = s.grade || 5; }
 
     const sel = _el('cal-student-select');
     if (sel) {
@@ -98,6 +154,7 @@ const Calendar = (() => {
     await _loadActivity();
     _renderFilters();
     _renderCalendar();
+    _syncPlanFirst();
   }
 
   async function setStudent(id) {
@@ -112,6 +169,41 @@ const Calendar = (() => {
     await _loadActivity();
     _renderFilters();
     _renderCalendar();
+    _syncPlanFirst();
+  }
+
+  // ── "Today's plan first" - a parent restriction, saved like chapter locks ──
+  // Lives in students.settings (the same row as lockedChapters / maxDifficulty)
+  // and is mirrored into DB.restrictions for the child in focus. Client-side
+  // only, deliberately: same category as lockedChapters - the parent is not
+  // the adversary, and the gate is a nudge that keeps the plan in front of the
+  // child, not an entitlement.
+  function _studentRow() {
+    const list = (typeof Auth !== 'undefined' && Auth.getStudents) ? (Auth.getStudents() || []) : [];
+    return list.find(s => s.id === _studentId) || null;
+  }
+  function _syncPlanFirst() {
+    const box = _el('cal-plan-first');
+    if (!box) return;
+    const s = _studentRow();
+    box.checked = !!(s && s.settings && s.settings.planFirst);
+    box.disabled = !s;
+    const name = _el('cal-plan-first-name');
+    if (name) name.textContent = s ? (s.display_name || s.username || 'your child') : 'your child';
+  }
+  async function setPlanFirst(on) {
+    const s = _studentRow();
+    if (!s || typeof Store === 'undefined' || !Store.updateStudent) { _syncPlanFirst(); return; }
+    const merged = Object.assign({ lockedChapters: [] }, s.settings || {}, { planFirst: !!on });
+    const res = await Store.updateStudent(s.id, { settings: merged });
+    if (!res?.ok) {
+      if (typeof toast === 'function') toast('Could not save that setting. Please try again.', 3000);
+      _syncPlanFirst();
+      return;
+    }
+    s.settings = merged;
+    if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID === s.id && typeof DB !== 'undefined' && DB) DB.restrictions = merged;
+    if (typeof toast === 'function') toast(on ? "Today's plan comes first for " + (s.display_name || s.username) + ' ✓' : 'Any chapter can be opened again ✓', 2200);
   }
 
   // ── Supabase ─────────────────────────────────────
@@ -190,18 +282,7 @@ const Calendar = (() => {
     return (_entries || [])
       .filter(e => e.entry_type === 'study' && e.date >= today && e.date <= untilStr)
       .sort((a, b) => a.date.localeCompare(b.date))
-      .map(e => {
-        const { pack, chapter } = _resolveChapter(e);
-        return {
-          id: e.id, date: e.date, label: e.topic_label || 'Study session',
-          minutes: e.duration_mins || null, notes: e.notes || null,
-          subjectId: pack?.id || e.subject_id || null,
-          subjectName: pack?.subject || pack?.name || null,
-          chapterId: chapter?.id || null,
-          icon: chapter?.icon || '📚',
-          isToday: e.date === today,
-        };
-      });
+      .map(e => _childRow(e, today));
   }
 
   // Mirror of getUpcoming() but for today + past dates (backlog view).
@@ -222,19 +303,23 @@ const Calendar = (() => {
     return (_entries || [])
       .filter(e => e.entry_type === 'study' && e.date <= today)
       .sort((a, b) => b.date.localeCompare(a.date))
-      .map(e => {
-        const { pack, chapter } = _resolveChapter(e);
-        return {
-          id: e.id, date: e.date, label: e.topic_label || 'Study session',
-          minutes: e.duration_mins || null, notes: e.notes || null,
-          subjectId: pack?.id || e.subject_id || null,
-          subjectName: pack?.subject || pack?.name || null,
-          chapterId: chapter?.id || null,
-          icon: chapter?.icon || '📚',
-          isToday: e.date === today,
-          isPast: e.date < today,
-        };
-      });
+      .map(e => _childRow(e, today));
+  }
+
+  // ── Points for planned sessions done today ──────────────────────────
+  // Fired from the child's screens on render. Idempotent server-side (keyed
+  // on the entry id), so every re-render costs one cheap RPC per done row and
+  // mints nothing the second time. Subject sessions count too now - the old
+  // loop in renderTodayPlan only knew chapters, and that panel is no longer
+  // painted, so the award had quietly stopped firing at all.
+  function awardDoneToday(rows) {
+    if (typeof Store === 'undefined' || !Store.awardActivityPoints) return;
+    for (const r of rows || []) {
+      if (!r || !r.isToday || !r.done || !r.id) continue;
+      Store.awardActivityPoints('timetable', String(r.id))
+        .then(res => { if (res && res.awarded && typeof applyServerPoints === 'function') applyServerPoints(res.points, res.level); })
+        .catch(() => {});
+    }
   }
 
   async function _ensureSchedule() {
@@ -706,18 +791,97 @@ const Calendar = (() => {
   }
 
   // ── Add / Edit manual event ──────────────────────────────
-  function showAddEvent(dateStr) {
+  // ── Study-session fields in the add/edit modal ───────────────────────
+  // A parent can plan a SUBJECT for a number of minutes ("Maths, 60 min") and,
+  // optionally, name one chapter to complete. The chapter is a second row
+  // rather than a field on the first: "practise Maths for an hour" and
+  // "finish Fractions" are two things the child can tick off separately, and
+  // the minutes count whichever chapter they choose.
+  const STUDY_MINUTES = [15, 20, 30, 45, 60, 90, 120];
+  function _studyVisible(on) {
+    _el('add-event-study')?.classList.toggle('hidden', !on);
+    _el('add-event-label-wrap')?.classList.toggle('hidden', !!on);
+    // Repeat is for NEW study sessions only: editing one row must not fan out.
+    _el('add-event-repeat-wrap')?.classList.toggle('hidden', !on || !!_editingEntryId);
+  }
+  const REPEAT_MAX_WEEKS = 26;
+  function onRepeatChange() {
+    const on = !!_el('add-event-repeat')?.checked;
+    const until = _el('add-event-repeat-until');
+    if (!until) return;
+    until.classList.toggle('hidden', !on);
+    const start = _el('add-event-date')?.value;
+    if (on && start && (!until.value || until.value <= start)) until.value = _addDays(start, 7 * 8 - 1);
+  }
+  // Every date from the first, a week apart, up to and including `until`.
+  function _repeatDates(start, until) {
+    const out = [];
+    if (!start) return out;
+    let d = start;
+    while (d <= until && out.length < REPEAT_MAX_WEEKS) { out.push(d); d = _addDays(d, 7); }
+    return out;
+  }
+  function _fillStudySubjects(selected) {
+    const sel = _el('add-event-subject');
+    if (!sel) return;
+    const subjects = _subjectsForGrade(_studentGrade);
+    sel.innerHTML = subjects.map(p => `<option value="${_esc(p.id)}" ${p.id === selected ? 'selected' : ''}>${p.icon || '📚'} ${_esc(p.subject || p.name)}</option>`).join('')
+      || '<option value="">No subjects for this grade yet</option>';
+    const mins = _el('add-event-minutes');
+    if (mins && !mins.options.length) mins.innerHTML = STUDY_MINUTES.map(n => `<option value="${n}">${n >= 60 ? (n / 60) + ' h' + (n % 60 ? ' ' + (n % 60) + ' min' : '') : n + ' min'}</option>`).join('');
+  }
+  // Chapters arrive after PackLoader.ensure() - the eager index carries names
+  // already, but a pack that has never been opened on this device may not.
+  let _chapterFillSeq = 0;
+  async function _fillStudyChapters(subjectId, selected) {
+    const sel = _el('add-event-chapter');
+    if (!sel) return;
+    const seq = ++_chapterFillSeq;
+    sel.innerHTML = '<option value="">— No specific chapter, just practise —</option>';
+    const pack = _subjectById(subjectId);
+    if (!pack) return;
+    if (typeof PackLoader !== 'undefined' && !(pack._chapters || pack.chapters || []).length) {
+      try { await PackLoader.ensure(pack.id); } catch (_) {}
+      if (seq !== _chapterFillSeq) return;
+    }
+    const chs = (pack._chapters || pack.chapters || []).filter(c => !c.hidden);
+    sel.innerHTML = '<option value="">— No specific chapter, just practise —</option>'
+      + chs.map(c => `<option value="${_esc(c.id)}" ${c.id === selected ? 'selected' : ''}>${c.icon || '📖'} ${_esc(c.name)}</option>`).join('');
+  }
+  function onTypeChange() {
+    const type = _el('add-event-type')?.value;
+    _studyVisible(type === 'study');
+    if (type === 'study') {
+      _fillStudySubjects(_el('add-event-subject')?.value || null);
+      _fillStudyChapters(_el('add-event-subject')?.value, null);
+    }
+  }
+  function onSubjectChange() {
+    _fillStudyChapters(_el('add-event-subject')?.value, null);
+  }
+  function _studyLabel(pack, chapter, minutes) {
+    if (chapter) return `${chapter.icon || '📖'} ${chapter.name}`;
+    const subj = pack ? (pack.subject || pack.name) : 'Study';
+    return `${pack?.icon || '📚'} ${subj} practice${minutes ? ` · ${minutes} min` : ''}`;
+  }
+
+  function showAddEvent(dateStr, type) {
     closeDayModal();
     _editingEntryId = null;
     const m = _el('modal-add-event');
     if (!m) return;
-    const titleEl = _el('add-event-modal-title'); if (titleEl) titleEl.textContent = 'Add Event';
+    const titleEl = _el('add-event-modal-title'); if (titleEl) titleEl.textContent = type === 'study' ? 'Plan a study session' : 'Add Event';
     const saveBtn = _el('add-event-save-btn');   if (saveBtn) saveBtn.textContent = 'Save';
     const di = _el('add-event-date');  if (di) di.value = dateStr || _toDateStr(new Date());
-    const ti = _el('add-event-type');  if (ti) ti.value = 'exam';
+    const ti = _el('add-event-type');  if (ti) ti.value = type || 'exam';
     const li = _el('add-event-label'); if (li) li.value = '';
     const ni = _el('add-event-notes'); if (ni) ni.value = '';
+    const mi = _el('add-event-minutes'); if (mi) mi.value = '';
+    const rp = _el('add-event-repeat'); if (rp) rp.checked = false;
+    const ru = _el('add-event-repeat-until'); if (ru) { ru.value = ''; ru.classList.add('hidden'); }
     const er = _el('add-event-error'); if (er) er.classList.add('hidden');
+    onTypeChange();
+    if (mi && type === 'study') mi.value = '30';
     m.classList.remove('hidden');
   }
 
@@ -746,6 +910,17 @@ const Calendar = (() => {
     const li = _el('add-event-label'); if (li) li.value = entry.topic_label;
     const ni = _el('add-event-notes'); if (ni) ni.value = entry.notes || '';
     const er = _el('add-event-error'); if (er) er.classList.add('hidden');
+    if (entry.entry_type === 'study') {
+      _studyVisible(true);
+      const { pack, chapter } = entry.chapter_id
+        ? { pack: _subjectById(entry.subject_id), chapter: null }
+        : _resolveChapter(entry);
+      _fillStudySubjects(pack?.id || entry.subject_id || null);
+      const mi = _el('add-event-minutes'); if (mi) mi.value = entry.duration_mins ? String(entry.duration_mins) : '';
+      _fillStudyChapters(pack?.id || entry.subject_id, entry.chapter_id || chapter?.id || null);
+    } else {
+      _studyVisible(false);
+    }
     m.classList.remove('hidden');
   }
 
@@ -762,15 +937,33 @@ const Calendar = (() => {
     if (!_studentId)  { _showErr(errEl, 'No student selected - please choose a student from the dropdown.'); return; }
     const date  = _el('add-event-date')?.value;
     const type  = _el('add-event-type')?.value  || 'other';
-    const label = (_el('add-event-label')?.value || '').trim();
+    let   label = (_el('add-event-label')?.value || '').trim();
     const notes = (_el('add-event-notes')?.value || '').trim();
     if (!date)  { _showErr(errEl, 'Please select a date.'); return; }
+
+    // A study session is subject + minutes (+ optional chapter); its label is
+    // derived so the child's screens and the parent's grid say the same thing.
+    let study = null;
+    if (type === 'study') {
+      const subjectId = _el('add-event-subject')?.value || '';
+      const chapterId = _el('add-event-chapter')?.value || '';
+      const minutes   = parseInt(_el('add-event-minutes')?.value, 10) || null;
+      const pack = _subjectById(subjectId);
+      if (!pack) { _showErr(errEl, 'Please choose a subject.'); return; }
+      const chapter = chapterId ? (pack._chapters || pack.chapters || []).find(c => c.id === chapterId) || null : null;
+      if (chapterId && !chapter) { _showErr(errEl, 'That chapter could not be found. Please pick it again.'); return; }
+      if (!chapter && !minutes) { _showErr(errEl, 'Choose how long, or pick a chapter to complete.'); return; }
+      study = { subject_id: pack.id, chapter_id: chapter ? chapter.id : null, duration_mins: minutes };
+      label = _studyLabel(pack, chapter, minutes);
+    }
     if (!label) { _showErr(errEl, 'Please enter an event name.'); return; }
 
     // ── UPDATE existing entry ──────────────────────
     if (_editingEntryId) {
+      const patch = { date, topic_label: label, entry_type: type, notes: notes || null };
+      if (study) Object.assign(patch, study);
       const { data, error } = await _sb.from('schedule_entries')
-        .update({ date, topic_label: label, entry_type: type, notes: notes || null })
+        .update(patch)
         .eq('id', _editingEntryId)
         .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id, chapter_id').single();
       if (error) { _showErr(errEl, 'Could not update. Please try again.'); return; }
@@ -789,20 +982,31 @@ const Calendar = (() => {
     const sid = await _ensureSchedule();
     if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-schema.sql in your Supabase SQL editor, then refresh the page.'); return; }
 
-    const { data, error } = await _sb.from('schedule_entries').insert({
+    const row = {
       schedule_id: sid, student_id: _studentId,
       date, topic_label: label, entry_type: type,
       notes: notes || null, duration_mins: null,
-    }).select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id, chapter_id').single();
-    if (error) { _showErr(errEl, 'Could not save. Please try again.'); return; }
+    };
+    if (study) Object.assign(row, study);
 
-    _entries.push(data);
+    // Weekly repeat: the same session on the same weekday until a date. One
+    // insert of N rows, so the family sees all of them or none of them.
+    const repeatOn = !!(study && _el('add-event-repeat')?.checked);
+    const until = repeatOn ? (_el('add-event-repeat-until')?.value || '') : '';
+    if (repeatOn && (!until || until < date)) { _showErr(errEl, 'Choose a "repeat until" date after the first session.'); return; }
+    const dates = repeatOn ? _repeatDates(date, until) : [date];
+    const rows = dates.map(ds => ({ ...row, date: ds }));
+
+    const { data, error } = await _sb.from('schedule_entries').insert(rows).select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id, chapter_id');
+    if (error || !data || !data.length) { _showErr(errEl, 'Could not save. Please try again.'); return; }
+
+    _entries.push(...data);
     closeAddEvent();
     const d = _parseDate(date);
     _viewYear = d.getFullYear(); _viewMonth = d.getMonth();
     _selectedDate = date;
     _renderCalendar();
-    if (typeof toast !== 'undefined') toast('Event added! 📌', 1500);
+    if (typeof toast !== 'undefined') toast(!study ? 'Event added! 📌' : data.length > 1 ? `${data.length} sessions planned, one a week 📚` : 'Session planned! 📚', 2000);
   }
 
   // ── Reset schedule ────────────────────────────────
@@ -851,6 +1055,11 @@ const Calendar = (() => {
     session: 30,       // minutes per chapter visit
     focus: 'weak',     // weak | balanced | order
     includeBonus: true,
+    // What a generated session IS. 'chapter': a named chapter per session
+    // (the original). 'subject': the subject and its minutes, the child picks
+    // the chapter. 'both': the subject's minutes plus ONE chapter to complete
+    // inside them - two rows the child ticks off separately.
+    shape: 'chapter',  // chapter | subject | both
   };
   function _genSetting(key) { return _gen[key] ?? _GEN_DEFAULTS[key]; }
   function _addDays(dateStr, n) { const d = _parseDate(dateStr); d.setDate(d.getDate() + n); return _toDateStr(d); }
@@ -891,6 +1100,7 @@ const Calendar = (() => {
     setSel('gen-maxday',  _genSetting('maxPerDay'));
     setSel('gen-session', _genSetting('session'));
     setSel('gen-focus',   _genSetting('focus'));
+    setSel('gen-shape',   _genSetting('shape'));
     const bonus = _el('gen-bonus'); if (bonus) bonus.checked = _genSetting('includeBonus') !== false;
 
     // "Until exam" shortcut: only offered when the parent has actually put an
@@ -988,6 +1198,7 @@ const Calendar = (() => {
       maxPerDay:    _clampInt(_el('gen-maxday')?.value, 15, 240, 90),
       session:      _clampInt(_el('gen-session')?.value, 10, 120, 30),
       focus:        ['weak','balanced','order'].includes(_el('gen-focus')?.value) ? _el('gen-focus').value : 'weak',
+      shape:        ['chapter','subject','both'].includes(_el('gen-shape')?.value) ? _el('gen-shape').value : 'chapter',
       includeBonus: _el('gen-bonus') ? _el('gen-bonus').checked : true,
       subjectHours: subjHours,
       subjects,
@@ -1084,7 +1295,10 @@ const Calendar = (() => {
     const perDate = _genAssignDays(cfg, dates, active);
     const { plan, dayCount } = _genMinutes(cfg, dates, perDate, active);
     let totalMins = 0, sessions = 0;
-    dates.forEach(ds => plan[ds].forEach(x => { totalMins += x.mins; sessions += Math.ceil(x.mins / cfg.session); }));
+    dates.forEach(ds => plan[ds].forEach(x => {
+      totalMins += x.mins;
+      sessions += cfg.shape === 'subject' ? 1 : cfg.shape === 'both' ? 2 : Math.ceil(x.mins / cfg.session);
+    }));
     const avg = Math.round(totalMins / dates.length);
     const missing = active.filter(s => !dayCount[s.id]).map(s => s.name);
     const parts = [
@@ -1184,6 +1398,36 @@ const Calendar = (() => {
     return rotation;
   }
 
+  // One day's time budget for one subject → rows, by shape. Pure: `fill` is
+  // the rotation closure from generateTimetable (or a stub in tests).
+  //   chapter: a named chapter per session, minutes split by cfg.session
+  //   subject: one row, the subject and its minutes; the child picks
+  //   both:    the subject row (all the minutes) + one chapter to complete,
+  //            no minutes of its own - it is done INSIDE the subject time
+  function _genEntries(cfg, dates, plan, fill) {
+    const out = [];
+    const shape = ['chapter', 'subject', 'both'].includes(cfg.shape) ? cfg.shape : 'chapter';
+    for (const dateStr of dates) {
+      for (const { subject, mins } of (plan[dateStr] || [])) {
+        if (shape === 'chapter') {
+          for (const { chapter, mins: m } of fill(subject.id, mins)) {
+            out.push({ date: dateStr, subject_id: subject.id, chapter_id: chapter.id,
+              topic_label: `${chapter.icon} ${chapter.name}`, duration_mins: m, entry_type: 'study' });
+          }
+          continue;
+        }
+        out.push({ date: dateStr, subject_id: subject.id, chapter_id: null,
+          topic_label: _studyLabel(subject, null, mins), duration_mins: mins, entry_type: 'study' });
+        if (shape === 'both') {
+          const pick = fill(subject.id, Math.max(10, Math.min(mins, cfg.session || 30)))[0];
+          if (pick) out.push({ date: dateStr, subject_id: subject.id, chapter_id: pick.chapter.id,
+            topic_label: `${pick.chapter.icon} ${pick.chapter.name}`, duration_mins: null, entry_type: 'study' });
+        }
+      }
+    }
+    return out;
+  }
+
   async function generateTimetable() {
     if (typeof _planAllowsFeature === 'function' && !_planAllowsFeature('timetable_generator')) {
       closeGenModal();
@@ -1257,15 +1501,7 @@ const Calendar = (() => {
     const perDate  = _genAssignDays(cfg, allStudyDates, activeSubjects);
     const { plan } = _genMinutes(cfg, allStudyDates, perDate, activeSubjects);
 
-    const allEntries = [];
-    for (const dateStr of allStudyDates) {
-      for (const { subject, mins } of plan[dateStr]) {
-        for (const { chapter, mins: m } of _fillFromRotation(subject.id, mins)) {
-          allEntries.push({ date: dateStr, subject_id: subject.id, chapter_id: chapter.id,
-            topic_label: `${chapter.icon} ${chapter.name}`, duration_mins: m, entry_type: 'study' });
-        }
-      }
-    }
+    const allEntries = _genEntries(cfg, allStudyDates, plan, _fillFromRotation);
     if (!allEntries.length) {
       _showErr(errEl, 'Those settings leave no time for any session - raise the hours or the daily cap.');
       reset(); return;
@@ -1701,8 +1937,10 @@ const Calendar = (() => {
     render, setStudent, getUpcoming, getBacklog,
     prevMonth, nextMonth,
     openDay, closeDayModal,
-    showAddEvent, closeAddEvent, saveEvent,
+    showAddEvent, closeAddEvent, saveEvent, onTypeChange, onSubjectChange, onRepeatChange,
+    _genEntries, _repeatDates,
     editEntry, deleteEntry,
+    setPlanFirst, awardDoneToday,
     confirmReset,
     showGenModal, closeGenModal, generateTimetable, genPreview, genSyncFromWeeks, genSyncFromEnd, genUntilExam, genStyleChanged,
     showNotes, closeNotes,

@@ -28,3 +28,5 @@
 .lab-food-tools { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 .lab-food .lab-table tr.is-mistake td, .lab-food .lab-table tr.is-mistake th { color: var(--lab-warn); }
+
+.lab-exp .lab-shelf { margin: 0; border-radius: 0 0 14px 14px; }

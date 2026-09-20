@@ -54,6 +54,14 @@
 .lab-materials-obj.is-on { border: 2px solid var(--lab-accent); background: var(--lab-accent-soft); }
 .lab-materials-obj:hover { border-color: var(--lab-accent); }
 .lab-materials-ico { width: 36px; height: 36px; display: block; flex: 0 0 auto; }
+
+/* A job on the bench (experiments): its four choices in place of the tray. */
+.lab-materials-jobgroup { display: flex; flex-direction: column; gap: 6px; }
+.lab-materials-jobask { margin: 0; font-size: 0.9rem; line-height: 1.4; }
+.lab-materials-picks { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+.lab-materials-obj small { font-size: 0.64rem; line-height: 1.1; color: var(--lab-muted); text-align: center; }
+.lab-materials-obj.is-right { border: 2px solid var(--lab-ok); background: var(--lab-ok-soft); }
+.lab-materials-obj.is-wrong { border: 2px solid var(--lab-danger); background: var(--lab-danger-soft); }
 .lab-materials-drag { font-size: 0.72rem; }
 @media (pointer: coarse) { .lab-materials-drag { display: none; } }
 

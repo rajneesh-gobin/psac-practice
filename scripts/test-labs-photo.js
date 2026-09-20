@@ -2,8 +2,10 @@
 // Science Labs › Photosynthesis Lab, driven in a real browser.
 //
 // Proves the lab end to end at every grade it serves.
+//  Since 2026-09-20 the lab opens on an experiment Aim (lab_experiment.js) at
+//  every grade; the old bench is reached through "Explore the bench freely".
 //  Grade 9 (the original level): it loads its own three files when opened,
-//  lands with "What would you like to do?", a guided experiment runs to its
+//  opens on an Aim, then in Explore "What would you like to do?", a guided experiment runs to its
 //  end, every discovery unlocks by following its own "Show me how", every
 //  hazard and result card fires and explains itself, all three missions can be
 //  finished with three stars, the animation loop really runs, Calm Mode
@@ -85,6 +87,12 @@ const quit = code => {
   const closeOv = () => click('#lab-overlay [data-ov-close]');
   const set = (k, v) => clicks(`[data-set="${k}"][data-v="${v}"]`);
   const act = a => clicks(`[data-act="${a}"]`);
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step. The test taps what glows, as a child would.
+  const next = () => click('.is-next');
+  // A converted grade opens on an experiment Aim; the old-bench checks need
+  // the free bench behind "Explore", reset to a clean start panel.
+  const explore = async () => { await click('[data-exp="explore"]'); await ev('LabPhoto.experiment.reset(); true'); };
   const speech = () => ev('({ spoken: window.__tts.spoken.slice(), cancels: window.__tts.cancels })');
   // Content for one grade: untagged items are the original Grade 9 level.
   const forGrade = (kind, g) => `LabPhotoData.${kind}.filter(x => (x.grades || [9]).includes(${g}))`;
@@ -134,7 +142,7 @@ const quit = code => {
         for (let k = 0; k < 24 && LabPhoto._debug().guide; k++) {
           const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
           if (o) return 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-          const btn = document.querySelector('#lab-guide [data-guide-do]');
+          const btn = document.querySelector('.is-next');
           if (btn) btn.click(); else LabPhoto._tick(7);
         }
         if (LabPhoto._debug().guide) return 'guide never finished at step ' + LabPhoto._debug().guide.step;
@@ -194,10 +202,14 @@ const quit = code => {
   await sleep(500);
   ok('its stylesheet is linked and styles the set-up buttons',
      await ev("!!document.querySelector('link[data-lab-css=\"photo\"]') && getComputedStyle(document.querySelector('.lab-photo-opt')).minHeight === '44px'"));
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Photosynthesis Lab/.test(ov.text) && /Show me how/.test(ov.text), ov);
-  await closeOv();
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim' && LabExperiment._debug().lab === 'photo'"), ov);
+  ok('…a Grade 9 experiment, and only Grade 9 ones are listed', await ev("/^g9_/.test(LabExperiment._debug().exp) && LabExperiment._debug().list.length === 5 && LabExperiment._debug().list.every(id => /^g9_/.test(id))"), await ev('LabExperiment._debug().list'));
   ok('the welcome is remembered', await ev("Labs.store('photo').intro === true"));
+  await explore();
+  ok('"Explore the bench freely" shows the old bench', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none'"));
   ok('top bar: back, Biology · Grade 9, title and help',
      await ev("!!document.querySelector('.lab-photo .lab-top [data-act=\"hub\"]') && /Biology · Grade 9/.test(document.querySelector('.lab-photo .lab-eyebrow').textContent) && !!document.querySelector('.lab-photo [data-act=\"help\"]')"));
   ok('Grade 9 is unchanged: no read-aloud button, and its own two rigs',
@@ -223,17 +235,17 @@ const quit = code => {
   let g = await gs();
   ok('Make it bubble: already on the pondweed rig, so it opens at step 2 - add sodium hydrogencarbonate - and that button glows',
      g.box && /Step 2 of 7/.test(g.text) && /sodium hydrogencarbonate/.test(g.text) && g.next === 'water:high' && !g.start, g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('then the heat shield glows', g.next === 'shield:on' && /Step 3 of 7/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('the lamp is already at 30 cm, so that step is skipped and “Count for 1 minute” glows under the picture', g.next === 'count' && /Step 5 of 7/.test(g.text) && (await dbg()).pond.dist === 30, g);
-  await click('[data-guide-do]');
+  await next();
   let d = await dbg();
   ok('the count gives 13 bubbles per minute at 30 cm and goes in the notebook', d.pond.last && d.pond.last.bubbles === 13
      && /13 bubbles per minute/.test(await ev("document.getElementById('lab-notebook').textContent")), d.pond.last);
-  await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next();
   ov = await overlay();
   ok('bringing the lamp to 10 cm and counting completes it, with “What you found out”', ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text), ov);
   ok('…31 bubbles per minute, more than at 30 cm', (await dbg()).pond.last.bubbles === 31);
@@ -382,9 +394,9 @@ const quit = code => {
     const real = await atGrade(n);
     await sleep(300);
     ov = await overlay();
-    ok(`Grade ${n}: a first visit at this grade shows its own welcome, with “Show me how”`, ov && /Welcome to the Photosynthesis Lab/.test(ov.text) && /Show me how/.test(ov.text) && /🔊/.test(ov.text) && !/starch test/i.test(ov.text), ov && ov.text.slice(0, 300));
+    ok(`Grade ${n}: opens on an experiment Aim of its own grade, with no overlay in the way`, !ov && await ev(`!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim' && LabExperiment._debug().list.length === 5 && LabExperiment._debug().list.every(id => id.startsWith('g${n}_'))`), ov || await ev('LabExperiment._debug().list'));
     ok(`Grade ${n}: nothing was read aloud on its own`, (await speech()).spoken.length === spokenBefore);
-    await closeOv();
+    await explore();
     ok(`Grade ${n}: the welcome is remembered for this grade only`, await ev(`Labs.store('photo')['intro_g${n}'] === true`));
     ok(`Grade ${n}: the eyebrow says “Science · Grade ${n}”, and its own rigs`,
        await ev(`document.querySelector('.lab-photo .lab-eyebrow').textContent === 'Science · Grade ${n}' && [...document.querySelectorAll('.lab-photo-rigs [data-v]')].map(b => b.dataset.v).join() === '${L.rigs}'`));
@@ -427,10 +439,10 @@ const quit = code => {
     ok(`Grade ${n}: 🔊 on the guide box reads the step`, sp.spoken.length === spoken0 + 1 && g.text.includes(sp.spoken[sp.spoken.length - 1].slice(0, 10)), sp.spoken.slice(-1));
     const c1 = sp.cancels;
     await ev("window.__tts.speaking = true; true");
-    await click('[data-guide-do]');
+    await next();
     await ev("window.__tts.speaking = false; true");
     ok(`Grade ${n}: the next step cancels the speech`, (await speech()).cancels > c1, await speech());
-    for (let k = 0; k < 12 && (await dbg()).guide; k++) await click('[data-guide-do]');
+    for (let k = 0; k < 12 && (await dbg()).guide; k++) await next();
     ov = await overlay();
     ok(`Grade ${n}: the guided experiment runs to “What you found out”`, ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text), ov);
     ok(`Grade ${n}: it is remembered`, await ev(`!!Labs.store('photo').guides['${L.first}']`));
@@ -565,11 +577,13 @@ const quit = code => {
      st.disc.some(x => x.startsWith('g4_')) && st.disc.some(x => x.startsWith('g6_')) && st.disc.includes('bubbles') && st.disc.includes('g6_bubbles') && st.missions.includes('light') && st.missions.includes('g4_needs'), st);
   await atGrade(9);
   await sleep(300);
+  await explore();
   cnt = await counter(9);
   ok('back at Grade 9: its counter still reads 17/17 - the primary discoveries do not leak into it', cnt.shown === '17/17' && cnt.shown === cnt.saved, cnt);
   ok('…the Grade 9 eyebrow, rigs and missions are back', await ev("/Biology · Grade 9/.test(document.querySelector('.lab-photo .lab-eyebrow').textContent) && [...document.querySelectorAll('.lab-photo-rigs [data-v]')].map(b => b.dataset.v).join() === 'pond,leaf'"));
   await atGrade(4);
   await sleep(300);
+  await explore();
   cnt = await counter(4);
   ok('back at Grade 4: its own counter, from its own ids', cnt.shown === cnt.saved && /^11\/11$/.test(cnt.shown), cnt);
 
@@ -588,6 +602,7 @@ const quit = code => {
   await sleep(300);
   await ev("if (!document.querySelector('#labs-root .lab-photo')) Labs.openLab('photo'); true");
   await sleep(300);
+  if (await ev("LabExperiment.active() && document.getElementById('labs-root').dataset.expMode !== 'explore'")) await explore();
   await act('say-coach');
   const c3 = (await speech()).cancels;
   ok('…speaking again after coming back, and the loop restarted', await ev('LabPhoto._debug().talking && LabPhoto._debug().looping'));

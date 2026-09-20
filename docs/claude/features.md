@@ -794,14 +794,221 @@ write them:
   `test-grade-access-ui.js` (both surfaces in real Chrome at 360px, both themes),
   and the grade checks in `test-parent-restrictions.js`.
 
+## The timetable — sessions a child can carry out, and be held to (2026-09-20)
+Rows live in `schedule_entries` (see [data-storage.md](data-storage.md) for the
+blob); nothing here needed a migration — `subject_id`, `chapter_id`,
+`duration_mins` and `entry_type` were already columns.
+- **Two kinds of study session.** A **SUBJECT session** (`chapter_id` null,
+  `duration_mins` set: "📚 Maths practice · 60 min") is done when the minutes
+  are met, and **any chapter in the subject counts**. A **CHAPTER task**
+  (`chapter_id` set) is done once that chapter is practised that day. A parent
+  plans either from **📚 Plan a session** on the timetable screen (subject +
+  how long + optional chapter); the label is derived by `_studyLabel()`.
+  ⚠ `_childRow()` in calendar.js is the ONE mapper every child screen reads
+  (`kind`, `done`, `doneMinutes`, `questions`); `chapter_id` is
+  authoritative when set and older rows still resolve by label.
+- ⚠ **Minutes per subject per day**: `_recordTimeOnTask()` now also credits
+  `daily[day].sub[packId]` (seconds) beside the whole-day `s`, keyed on
+  `ACTIVE_PACK.id`. Same capped answer-gap method, same honest floor.
+  `_subjectMinutesOn(dayKey)` reads it back.
+- ⚠ **Done is derived, still** — from the child's own `DB.daily` (only when
+  `ACTIVE_STUDENT_ID === _studentId`; the parent calendar audits with
+  `_loadActivity()`). `Calendar.awardDoneToday(rows)` fires the timetable
+  points from the child's home card and timetable screen; the old award loop
+  in `renderTodayPlan` fed a panel that is no longer painted, so timetable
+  points had quietly stopped. "Overdue" now means past **and not done**.
+- ⚠ **"Today's plan first"** — `students.settings.planFirst`, saved like
+  `lockedChapters` from the parent's timetable screen (`Calendar.setPlanFirst`)
+  and mirrored to `DB.restrictions`. While today's planned sessions are not
+  all done, `startChapterDirect()` on a chapter outside the plan opens
+  `#modal-plan-first` (the same `_scheduleRow` cards, each startable). A
+  planned chapter stays open all day, done or not, and so does every chapter
+  of a planned subject — the plan is a door, never a cage. Assignments, the
+  coach, previews and the drills never pass through it. The gate reads
+  `_planToday`, cached from the last `getBacklog()`; with nothing cached it
+  stays open. Client-only, deliberately (same category as `lockedChapters`).
+- ⚠ **`Calendar.render()` used to skip the grade** when `_studentId` was
+  already set by a child-side read, so a parent opening the calendar after the
+  child got an empty subject list in the generator and the planner. It now
+  resolves name and grade for whoever `_studentId` is, every time.
+- **The generator knows the new shape** (`_gen.shape`, "Each session is"):
+  `chapter` (the original, a named chapter per session), `subject` (one row
+  per subject-day carrying all its minutes, the child picks the chapter), or
+  `both` (the subject row plus ONE chapter to complete, with no minutes of
+  its own — it is done inside the subject time). `_genEntries(cfg, dates,
+  plan, fill)` is the pure row builder, exported for the test; the preview
+  counts sessions by shape. Saved with the other generator settings.
+- **Weekly repeat** in the planner, for NEW study sessions only: the same
+  session on the same weekday until a date, at most 26 rows, written as ONE
+  insert so the family sees all of them or none. Editing a row never fans
+  out (`_studyVisible` hides the control while `_editingEntryId` is set).
+  ⚠ `saveEvent()`'s insert path now always inserts an ARRAY and reads back
+  without `.single()`; a stub that answers `.single()` only will break it.
+- Tests: `scripts/test-timetable-plan.js` (26 checks, real browser, Supabase
+  stubbed at `_sb.from` — the client is a const, its methods are not) and
+  `scripts/test-timetable-views.js` (unchanged, 58).
+
+## The classroom calendar — per classroom, on the class page (2026-09-20)
+`teacher_class_events` (`migrations/20260920_classroom_calendar.sql`, applied
+to production and the schema regenerated the same day): `classroom_id`,
+`teacher_id`, `date`, `end_date` (absence spans), `kind` ∈ `exam | due |
+absent | event`, `title`, `notes`. **Per classroom, never per teacher** — a
+teacher with three classes has three exam dates.
+- **Teacher**: the classroom's **🗓️ Calendar** tab (a PRIMARY section, like
+  Materials — `_renderCalendar()` in `teacher_classroom_detail.js`): add
+  (kind, date, last day for an absence, title, note), delete, "coming up" with
+  the homework due dates merged in read-only, and a short "past" list.
+  ⚠ Writes go through RLS (`class_events_teacher`): same-row `teacher_id`,
+  `teacher_guest_authorized()`, and `teacher_owns_guest_classroom()`.
+  ⚠⚠ **A policy cannot subquery `teacher_guest_classes`** — that table carries
+  grants for `service_role` only, so the first draft failed every teacher
+  write with "permission denied for table teacher_guest_classes" on the
+  throwaway postgres. The ownership test is a SECURITY DEFINER function for
+  that reason. `.insert().select('id')` and `.delete().select('id')`: **zero
+  rows is a refusal**, shown as such.
+- **Pupil**: the class page `/m/<CODE>` — `materials_library_open()` now
+  returns `events` (this classroom, last 60 days onward) behind the same PIN
+  and never on the `info` call; `workers/api/materials-library.js` and the
+  Netlify twin pass it through. `materials.js` **🗓️ Calendar** is one grid
+  with three sources — events, homework due dates, files by day shared — with
+  a per-kind dot and key, a "📅 Coming up" strip above the homework list, and
+  the next event as a header chip. ⚠ **Event dates are strings and are never
+  parsed through `Date`** — a date the teacher typed must not shift by a
+  timezone; a malformed one is dropped everywhere (grid, strip AND chip — the
+  chip once showed "Invalid Date" for a bad row that sorted first).
+  ⚠ The calendar view renders even when a file search matches nothing.
+- **Worksheets reach the class page too** (`migrations/20260920_classroom_worksheets.sql`,
+  applied the same day): `materials_library_open()` returns `worksheets` —
+  this classroom's `physical_homework` up to a fortnight past its deadline —
+  and the Worker signs each file per visit from the same bucket, never
+  exposing `file_path`. The class page lists them under Homework (current,
+  then past), puts the deadline on the calendar (`ws` dot) and in the
+  "Coming up" strip; a paper-only sheet says so, an unsigned file says "tell
+  your teacher". No "done" — a paper task is handed in, not ticked.
+  ⚠ The teacher's worksheet form now takes a **real due date** (`#phw-due`
+  + quick chips), saved as the END of that local day like a digital
+  activity's due date; "due in N days" from the moment of upload is gone.
+  Worksheet deadlines appear on the classroom Calendar tab beside homework.
+- Tests: `scripts/sql-tests/run-class-events-tests.sh` (fresh build,
+  idempotency of both migrations, 21 assertions as `authenticated` + service_role),
+  `test-materials-library-render.js` (+13 event checks, +6 worksheet checks),
+  `test-teacher-command-centre.js` / `-layout.js` and
+  `test-classroom-materials-access.js` (five primary sections).
+
+## Learning Coach — one spaced-retrieval mission a day, every subject
+`engine/learning_coach.js`. A **topic** is one chapter subsection of one pack,
+keyed `packId/chapterId/subsection`. Its life: **starting check** (6
+questions, hints off, first attempt only) → **practice** (up to 8 fresh
+questions, hints on; the subsection first, then chapter-mates) → **fresh
+check** three days later on 6 questions **reserved at the start and never
+shown since**. A strong start (5/6) skips practice and is re-checked after a
+week. One mission per Mauritius day, across all subjects.
+- ⚠ **It was a Grade 5 Maths pilot until 2026-09-19**, keyed
+  `chapter/subsection/difficulty` with 20+ questions per key, and it was in no
+  `.md` at all. Measured on the built bundles: that rule left **22 of 49 packs
+  with nothing the coach could pick** (every history pack, grade 4–6 science,
+  every Grade 7–8 pack). Grouping by `pack/chapter/subsection` at **12+**
+  leaves only the three `comingSoon` ICT placeholders empty, and
+  `test-learning-coach.js` fails if any live pack ever has zero topics.
+- ⚠ **A v1 blob is migrated in `state()`** — several v1 keys (one per
+  difficulty) fold into one v2 key, and every id they used or reserved is kept,
+  so no question a child has already seen is dealt as "fresh". A pending v1
+  mission keeps going under its new key.
+- ⚠ **Packs are loaded one at a time, only as far as the mission needs.**
+  `wantedPacks()` names the packs of a pending mission, a topic awaiting
+  practice, or a check due today; a topic resting until next week costs no
+  fetch. Fresh topics rotate **fewest-topics-started first**, so a child is not
+  coached on Maths five days running. Loading a whole grade to deal 6
+  questions is the French pack's 600 KB for nothing.
+- ⚠ **A subsection of exactly 12 has nothing left after the two checks.**
+  Practice tops up from the same chapter; if that still yields under 4, the
+  topic is `noPractice` and goes straight to its fresh check after the practice
+  gap. `mission.spare` is measured at the starting check so `complete()` can
+  tell "practise next" from "nothing left" without a pool.
+- ⚠ **The cycle continues after the first fresh check (2026-09-20).** It used
+  to stop there whatever the score, so a child who scored 2/6 on the fresh
+  check was never coached on that topic again. Every topic now carries
+  `next` (`practice` | `check` | `done`), `due`, `checks[]`, `rounds`
+  and `streak`, normalised on read so older shapes keep going from where they
+  stopped. A **weak** check (under 5/6) → another practice round → re-check
+  three days later; after **3** rounds without a strong check the topic is
+  **stalled** — re-checked in 14 days, and the parent card says practice alone
+  is not fixing it. A **strong** check → next check in 7, then 14, then 30
+  days; **three in a row** and the topic is **done**. Later checks deal unseen
+  questions (subsection, then chapter) and reuse the oldest-seen only when
+  both run dry; the reserve is spent by the first check.
+- Every question passes the same gates as ordinary practice (chapter declared,
+  not parent-locked, plan allows it, difficulty within the cap), and the pack
+  is `activateSubjectPack`ed before launch so hints and labels resolve.
+- The card (`#coach-child-home`, `#coach-child-subject`) shows for any child
+  whose grade has a live pack; the parent summary for the child in focus.
+  `scripts/test-learning-coach.js` (pure lifecycle + a scripted launch) and
+  `scripts/test-coach-teacher-layout.js` (the card in a real browser).
+
+## Fix My Mistakes — spaced since 2026-09-19
+A wrong answer is a row in `DB.mistakes`; a correct answer **from anywhere**
+counts a fix; **three** fixes retire it (`_FIX_TO_RETIRE`). Each fix stamps
+the row `due` — one day after the first, three after the second
+(`_FIX_GAP_DAYS`) — and **the drill deals only `_dueMistakes()`**, longest
+waiting first, then the most-missed.
+- ⚠ Two fixes in one sitting proved recall over thirty seconds; the paper is
+  weeks away. The spacing is enforced **only where the child deliberately
+  revisits** — ordinary chapter rounds never hide a question and still count.
+- ⚠ **The home card counts what is DUE**, and when every mistake is parked it
+  shows a dashed "Mistakes resting" card saying when they return
+  (`_fixDueLabel`: "tomorrow", "on Thursday", "on 3 Oct" — never an ISO date)
+  rather than vanishing, or the child concludes they are gone. A re-miss
+  resets the row (no `due`, `fix` 0). `scripts/test-fix-my-mistakes.js`
+  (real browser, 29 checks).
+
 ## Teacher Mode — one destination, one to-do list, one question per screen
 Rebuilt 2026-09-10 on one rule: **a teacher must never be asked the same
 question in two places, and must never have to work out what to do next.**
 
+### How a parent gets in — "Enable teacher mode", never a second sign-up
+A parent's dashboard carries one card (`_renderTeacherApplyCard()`, app.js):
+**Enable teacher mode** → the same profile row becomes role `teacher` → the card
+turns into **Switch to teacher view** (`Auth.openTeacherDashboard()`), and the
+👩‍🏫 header button appears. Same account, same email, no note to write.
+- ⚠ **The card only draws; the SERVER decides.** It calls
+  `request_teacher_access()`, and whether that is instant or queued is
+  `global_settings.teacher_auto_approve` — **ON in production since 2026-09-11,
+  re-read 2026-09-19**. Instant needs a confirmed email and a never-decided
+  account; a previously rejected one goes to the admin queue and the card says
+  "requested". Every teacher RPC still checks `role='teacher' AND
+  teacher_status='approved'` itself, so the card cannot grant anything.
+- ⚠ **Do not point a parent at the teacher sign-up tab.** Registering again with
+  the same email cannot create a second profile (profiles key on the auth uid),
+  but it confuses the parent and files nothing useful. The landing page and the
+  header comment say "enable it from your parent dashboard" for that reason.
+- ⚠ The old "Are you a tutor?" pitch was dismissable and stored a per-user
+  localStorage key; the enable button is **always visible** now and those helpers
+  are gone. `scripts/test-teacher-mode-card.js` renders all six states.
+
 ### Navigation — Set Work and Results are NOT top-level
-Main navigation is **🏫 My classes** and a labelled `⋯ More` (Marks book, All my
-files, Past work, Messages, Teacher settings). The classroom screen is
-**Today · Work · Pupils · Files** plus `⋯ More` (All marks, Settings).
+Main navigation is one row of folder tabs, **the same shape the parent dashboard
+uses**: **🏫 My classes** then the seven tools — Marks book, My files, Past work,
+Test papers, Chapter preview, Messages, Settings. The classroom screen is still
+**Today · Work · Pupils · Files** plus its own `⋯ More` (All marks, Settings) —
+that one is a different component (`TeacherClassroomDetail.toggleMore`).
+- ⚠ **The seven tools used to sit behind a top-level `⋯ More` dropdown** and no
+  longer do (2026-09-19). It put one tap and one guess in front of every tool a
+  teacher has, and the parent dashboard — the same person, the same board — had
+  no such menu. The `<small>` description each item carried in the menu is now
+  the button's `title`. `TeacherMode.toggleMore/closeMore` are gone with it.
+  ⚠ **The menu is how two tools went missing from the test:** the layout test
+  asserted *five* tools behind More while the markup had seven — `papers` and
+  `preview` were added and nothing noticed. The row is now asserted by
+  `data-tab`, in order, and measured at 360px (4 rows) and 1280px (1 row).
+- ⚠ **Account & Settings renders INSIDE the Settings tab** (`#tc-profile-content`,
+  `_renderTeacherAccount()`), by the same `_renderParentProfile()` the parent
+  dashboard uses. It was a card that called `showProfile()` and left for
+  `#screen-profile`: no tab row, no board, a different header — the one tool that
+  did not behave like a tool. `showProfile()` now routes to the tab whenever the
+  teacher screen is open, the same way it already routed a parent to `PD.mainTab`.
+  ⚠ **The `=== false` in that guard is load-bearing**: `getElementById` returns
+  `null` where the screen is not in the DOM and `!undefined` is *true*, which
+  would route a child into teacher mode.
 - ⚠ **`create` and `results` are still real tabs** and `switchTab()` still opens
   them; they are simply not somewhere a teacher *picks*. They used to sit in the
   main nav **beside a classroom screen carrying the same two names**, so
@@ -812,7 +1019,7 @@ files, Past work, Messages, Teacher settings). The classroom screen is
   two tabs with the same greeting, the same "recent activity" and the same
   "needs help" panel. The classroom boards render into `#tc-list` directly under
   `#ta-home` on that one screen.
-- `MAIN_TABS` / `DETAIL_TABS` / `MORE_TABS` / `ALL_TABS` in `engine/teacher.js`.
+- `MAIN_TABS` / `DETAIL_TABS` / `TOOL_TABS` / `ALL_TABS` in `engine/teacher.js`.
 
 ### "What needs you today" — ONE builder
 `TeacherInsights.todo(groups, {showClass, limit})` is pure, and **both** Home

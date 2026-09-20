@@ -23,25 +23,37 @@ const LabForcesData = (() => {
   // weight = mass × G_EARTH (all exact integers or one decimal)
   const OBJECTS = {
     feather: { name: 'Feather',        short: 'feather',  mass: 0.005, weight: 0.05, swatch: '#F5F0E8', icon: '🪶',
-               meta: '0.005 kg · 0.05 N', maxSafe: true,
+               meta: '5 g', maxSafe: true,
                desc: 'Almost too light to read on a basic spring balance.' },
     wooden:  { name: 'Wooden block',   short: 'wood',     mass: 0.1,   weight: 1,    swatch: '#C8A26A', icon: '🟫',
-               meta: '100 g · 1 N', maxSafe: true,
+               meta: '100 g', maxSafe: true,
                desc: 'A light block of dry wood.' },
     stone:   { name: 'Small stone',    short: 'stone',    mass: 0.3,   weight: 3,    swatch: '#8A9BA3', icon: '🪨',
-               meta: '300 g · 3 N', maxSafe: true,
+               meta: '300 g', maxSafe: true,
                desc: 'A smooth pebble from the beach.' },
     iron:    { name: 'Iron block',     short: 'iron',     mass: 0.5,   weight: 5,    swatch: '#6E7E85', icon: '⬛',
-               meta: '500 g · 5 N', maxSafe: true,
+               meta: '500 g', maxSafe: true,
                desc: 'Dense and heavy for its size.' },
     bottle:  { name: 'Water bottle',   short: 'bottle',   mass: 1.0,   weight: 10,   swatch: '#A0D4F5', icon: '🍶',
-               meta: '1 kg · 10 N', maxSafe: true,
+               meta: '1 kg', maxSafe: true,
                desc: 'A full 1-litre bottle of water.' },
     brick:   { name: 'Brick',          short: 'brick',    mass: 2.5,   weight: 25,   swatch: '#C47C4A', icon: '🧱',
-               meta: '2.5 kg · 25 N — TOO HEAVY', maxSafe: false,
+               meta: '2.5 kg — too heavy?', maxSafe: false,
                desc: 'Way beyond the spring balance\'s 10 N limit.' },
   };
   const SHELF_OBJECTS = ['feather', 'wooden', 'stone', 'iron', 'bottle', 'brick'];
+  // "What does it read?" - the child names the reading, so the shelf must not
+  // print it (meta is the mass only). The four safe weights, in N.
+  const VALUES_N = [1, 3, 5, 10];
+  // "Which force is this?" - g8s-forces types_forces. Tapping one in Explore
+  // just says what it means; an experiment asks for the right one.
+  const NAMED_FORCES = {
+    gravity:  { label: 'Gravity',  icon: '🍎', desc: 'pulls every object down toward the centre of the Earth. It is the weight.' },
+    tension:  { label: 'Tension',  icon: '🪢', desc: 'the pull along a stretched spring, rope or cable.' },
+    friction: { label: 'Friction', icon: '🛞', desc: 'opposes sliding between two surfaces that touch.' },
+    upthrust: { label: 'Upthrust', icon: '🌊', desc: 'the upward push of a liquid or gas on an object in it.' },
+  };
+  const SHELF_NAMES = ['gravity', 'tension', 'friction', 'upthrust'];
 
   // Spring balance limits
   const SPRING = {
@@ -317,6 +329,109 @@ const LabForcesData = (() => {
       ] },
   ];
 
+  // ── Experiments (lab_experiment.js) ─────────
+  // Aim → Predict → Do → See → Check → Done. Steps are decisions (ask +
+  // options) or observations; set-up goes in `setup`. The See text is what the
+  // bench shows after those tokens - the data test replays them and checks
+  // every number. Tokens: mode:<bench|pressure> · obj:<id> · val:<N> ·
+  // name:<force> · pad:<id> · force:<N> · apply · read.
+  const EXPERIMENTS = [
+    { id: 'weigh_bottle', grades: D8, chapter: 'g8s-forces', icon: '⚖️',
+      title: 'How much does the bottle weigh in newtons?',
+      aim: 'A 1 kg bottle of water goes on the spring balance. The pointer will show its weight in newtons. Read it, then try a lighter object.',
+      setup: ['mode:bench'],
+      predict: { q: 'The bottle holds 1 kg of water. What will the spring balance read?', answer: '10',
+        options: [{ id: '1', label: '1 N', sub: '1 kg = 1 N?' }, { id: '10', label: '10 N', sub: 'ten for each kilogram' }, { id: '100', label: '100 N', sub: 'a hundred' }] },
+      steps: [
+        { on: 'obj:bottle', say: 'Tap Water bottle to hang it on the hook. Watch the pointer move down the scale.' },
+        { ask: 'Read the pointer. What does the spring balance say?', on: 'val:10', options: ['val:1', 'val:3', 'val:5', 'val:10'],
+          wrong: { 'val:1': '1 N is near the top of the scale. The pointer has gone right down to the last mark.',
+                   'val:3': '3 N would be near the top of the scale. Look where the pointer really is: the last mark.',
+                   'val:5': '5 N is half way down. The pointer has gone all the way down to the last mark.' } },
+        { on: 'obj:stone', say: 'Now tap Small stone. It is 300 g, which is 0.3 kg.' },
+        { ask: 'Read the pointer again. What does it say now?', on: 'val:3', options: ['val:1', 'val:3', 'val:5', 'val:10'],
+          wrong: { 'val:10': '10 N was the bottle. The stone is lighter, so the pointer stopped higher up.',
+                   'val:1': '1 N is only the first small mark. The pointer went past it.',
+                   'val:5': '5 N is half way down. The pointer stopped before that.' } },
+      ],
+      see: { saw: 'The bottle (1 kg) read 10 N. The stone (0.3 kg) read 3 N. Every kilogram weighs 10 newtons.',
+             learn: 'Weight is the pull of gravity on a mass: W = m × g, and g = 10 N/kg on Earth. A spring balance reads weight in newtons (N); mass is measured in kilograms (kg).' },
+      check: ['spring_survey:0', 'spring_survey:2', 'spring_survey:3'],
+      exam: 'In the exam you may be asked: a crate weighs 480 N on Earth, what is its mass? Mass = W ÷ g = 480 ÷ 10 = 48 kg.' },
+
+    { id: 'which_pad', grades: D8, chapter: 'g8s-pressure', icon: '👠',
+      title: 'Which pad sinks deeper?',
+      aim: 'The same 10 N push on a wide flat plate and on a stiletto heel. One sinks much deeper into the sand. Which one?',
+      setup: ['mode:pressure', 'pad:flat', 'force:10', 'apply'],
+      predict: { q: 'Same push of 10 N. Which one sinks deeper?', answer: 'heel',
+        options: [{ id: 'heel', label: 'The stiletto heel', sub: 'tip of 2 cm²' }, { id: 'flat', label: 'The wide flat plate', sub: '100 cm²' }, { id: 'same', label: 'Both the same', sub: 'same push' }] },
+      steps: [
+        { on: 'read', say: 'The plate is pressed already. Tap 📋 Record. 10 N ÷ 0.01 m² = 1 000 Pa.' },
+        { ask: 'Now the same push on a much smaller area. Which pad?', on: 'pad:heel', options: ['pad:heel', 'pad:tile'],
+          wrong: { 'pad:tile': 'The square tile is 25 cm². Smaller, but the heel tip is only 2 cm². Pick the stiletto heel.' } },
+        { ask: 'Keep it a fair test. Which force on the heel?', on: 'force:10', options: ['force:10', 'force:20'],
+          wrong: { 'force:20': 'That is a harder push. A fair test changes one thing only, the area. Keep 10 N.' } },
+        { on: 'apply', say: 'Tap ▼ Apply force. Watch how deep the heel sinks.' },
+        { on: 'read', say: 'Tap 📋 Record. 10 N ÷ 0.0002 m² = 50 000 Pa.' },
+      ],
+      see: { saw: 'Same 10 N push. The flat plate gave 1 000 Pa and a shallow dent. The stiletto heel gave 50 000 Pa and sank much deeper.',
+             learn: 'Pressure = force ÷ area. The same force on a smaller area gives a higher pressure, 50 times higher here. That is why a heel sinks into soft ground and a drawing pin goes into wood.' },
+      check: ['pressure_detective:1', 'pressure_detective:2', 'pressure_detective:3'],
+      exam: 'In the exam you may be asked why a woman in high heels puts more pressure on the floor than an elephant: the heel has a very small contact area.' },
+
+    { id: 'more_force', grades: D8, chapter: 'g8s-pressure', icon: '🧮',
+      title: 'Does more force mean more pressure?',
+      aim: 'One square tile, pushed with 10 N and then with 50 N. Does the pressure change, and by how much?',
+      setup: ['mode:pressure', 'pad:tile', 'force:10'],
+      predict: { q: 'Five times the force on the same tile. What happens to the pressure?', answer: 'x5',
+        options: [{ id: 'x5', label: 'Five times bigger' }, { id: 'same', label: 'Stays the same', sub: 'same tile' }, { id: 'less', label: 'Gets smaller' }] },
+      steps: [
+        { on: 'apply', say: 'Tap ▼ Apply force. 10 N presses on the 25 cm² tile.' },
+        { on: 'read', say: 'Tap 📋 Record. 10 N ÷ 0.0025 m² = 4 000 Pa.' },
+        { ask: 'Now push five times harder on the same tile. Which force?', on: 'force:50', options: ['force:50', 'force:20', 'force:10'],
+          wrong: { 'force:20': 'That is only twice as hard. Five times 10 N is 50 N.',
+                   'force:10': 'That is the same push again, so nothing would change.' } },
+        { on: 'apply', say: 'Tap ▼ Apply force. Is the dent deeper?' },
+        { on: 'read', say: 'Tap 📋 Record. 50 N ÷ 0.0025 m² = 20 000 Pa.' },
+      ],
+      see: { saw: '10 N on the tile gave 4 000 Pa. 50 N on the same tile gave 20 000 Pa, five times more, and a deeper dent.',
+             learn: 'Pressure = force ÷ area. Keep the area the same and the pressure rises in step with the force. Deep water presses harder for the same reason: more water above pushes down with more force.' },
+      check: ['pressure_detective:0', 'pressure_detective:4',
+        { q: 'Why are dams built thicker at the base than at the top?',
+          options: ['Water pressure is greatest at the base', 'The base has to hold the dam upright', 'The top is easier to build', 'Water is heavier near the top'],
+          why: 'More water above means more force on the same area, so the pressure is highest at the bottom. The wall must be strongest there.' }],
+      exam: 'In the exam you may be asked: a force of 400 N acts on an area of 0.5 m². Pressure = 400 ÷ 0.5 = 800 Pa.' },
+
+    { id: 'which_force', grades: D8, chapter: 'g8s-forces', icon: '🍎',
+      title: 'Which force is this?',
+      aim: 'A water bottle hangs still on the spring balance. Two forces act on it, one down and one up. Can you name them?',
+      setup: ['mode:bench', 'obj:bottle'],
+      predict: { q: 'Which force pulls the bottle DOWN and stretches the spring?', answer: 'gravity',
+        options: [{ id: 'gravity', label: 'Gravity', sub: 'its weight' }, { id: 'tension', label: 'Tension', sub: 'in the spring' }, { id: 'friction', label: 'Friction' }, { id: 'upthrust', label: 'Upthrust' }] },
+      steps: [
+        { ask: 'The bottle pulls the spring down and stretches it. Name that force.', on: 'name:gravity', options: ['name:gravity', 'name:tension', 'name:friction', 'name:upthrust'],
+          wrong: { 'name:tension': 'Tension is the pull inside the stretched spring. It pulls the bottle UP, not down.',
+                   'name:friction': 'Friction only acts when two surfaces rub or slide. Nothing is sliding here.',
+                   'name:upthrust': 'Upthrust is the upward push of a liquid or gas. It pushes up, and the bottle is not floating.' } },
+        { ask: 'The spring pulls the bottle UP so it hangs still. Name that force.', on: 'name:tension', options: ['name:gravity', 'name:tension', 'name:friction', 'name:upthrust'],
+          wrong: { 'name:gravity': 'Gravity pulls DOWN. We want the upward pull that stops the bottle falling.',
+                   'name:friction': 'Friction needs two surfaces sliding past each other. A stretched spring pulls; it does not rub.',
+                   'name:upthrust': 'Upthrust comes from a liquid or gas the object sits in. This pull comes from the stretched spring.' } },
+        { on: 'read', say: 'Tap 📋 Record reading. The reading is the size of the pull of gravity, in newtons.' },
+      ],
+      see: { saw: 'The bottle hung still. Gravity pulled it down with 10 N and the tension in the spring pulled it up with 10 N.',
+             learn: 'A force is a push or a pull. Gravity is a non-contact force: it pulls every object toward the Earth without touching it. Tension, friction and upthrust need contact. Balanced forces, 10 N down and 10 N up, leave the bottle still.' },
+      check: [
+        { q: 'The bottle hangs still on the spring balance. Which force pulls it down?',
+          options: ['Gravity, its weight', 'Tension in the spring', 'Friction', 'Upthrust'],
+          why: 'Gravity pulls the bottle toward the Earth. That pull is its weight, 10 N, and it is what stretches the spring.' },
+        { q: 'Which of these is a non-contact force, one that pulls without touching?',
+          options: ['Gravity', 'Friction', 'Tension', 'Air resistance'],
+          why: 'Gravity pulled the bottle down without touching it. Friction, tension and air resistance all need contact with the object.' },
+        'spring_survey:1'],
+      exam: 'In the exam you may be asked which of a list is a non-contact force. Gravity is; friction, tension and air resistance all need contact.' },
+  ];
+
   // Quick science facts for the 💡 button
   const FACTS = [
     'A force is a push or a pull. Forces are measured in newtons (N), named after Sir Isaac Newton.',
@@ -339,12 +454,12 @@ const LabForcesData = (() => {
   return {
     GRADES, forGrade,
     G_EARTH, SPRING,
-    OBJECTS, SHELF_OBJECTS,
+    OBJECTS, SHELF_OBJECTS, VALUES_N, NAMED_FORCES, SHELF_NAMES,
     PADS, SHELF_PADS, FORCES_N,
     calcPressure, indentDepth,
     HAZARDS, RESULTS, CARD_ORDER,
     DISCOVERIES, discoveriesFor,
-    WAITS, GUIDES, MISSIONS,
+    WAITS, GUIDES, MISSIONS, EXPERIMENTS,
     FACTS,
   };
 })();

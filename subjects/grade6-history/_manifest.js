@@ -32,6 +32,11 @@ const G6HG_SYLLABUS = {
     { id:'tourism',         name:'Tourism' },  // 5
     { id:'change',          name:'Then & Now' },  // 1
     { id:'sustainability',  name:'Sustainable Land Use' },  // 1
+    // ⚠ The Grade 6 LAND USE table asks the learner to define land use and give
+    //   reasons for its different types, to define wasteland, and to DRAW AND
+    //   LABEL a land-use map with all four key items. The chapter had 125
+    //   questions and no figure at all, so the map outcomes were unaskable.
+    { id:'land_use_types',  name:'Types of Land Use & Maps' },
   ]},
   'g6-natural-hazards': { subsections: [
     { id:'cyclones',        name:'Cyclones & Warnings' },  // 16
@@ -49,6 +54,13 @@ const G6HG_SYLLABUS = {
     { id:'directions',      name:'Compass Directions' },  // 2
     { id:'symbols',         name:'Map Symbols & Key' },  // 1
     { id:'using_map',       name:'Using a Map' },  // 10
+    // ⚠ The Grade 6 MAP SKILLS table's Level 3 row is "extract and interpret
+    //   information tables and graphs (line graph, bar graph, pie chart)" - a
+    //   geography outcome, printed in the geography syllabus and asked on the
+    //   PSAC paper. The chapter had nothing at all behind it. The two ids are
+    //   the ones grade9-social-modern-studies already uses, not new inventions.
+    { id:'graph_reading',   name:'Reading a Graph' },
+    { id:'table_reading',   name:'Reading a Table' },
   ]},
   'g6enr-personalities': { subsections: [
     { id:'portraits',       name:'Who Is This? (Photos)' },  // 3

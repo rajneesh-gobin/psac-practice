@@ -23,6 +23,10 @@
 //  ⚠ Drag is for mouse and pen only (the ray box on the canvas, apparatus from
 //    the shelf). On touch a drag would fight the page scroll, so the big
 //    buttons are the way that always works - also for keyboard users.
+//  ⚠ Since 2026-09-20 the lab opens on an EXPERIMENT (lab_experiment.js,
+//    LAB_SPEC §10) at both grades: the `experiment` adapter at the end of
+//    this file is what the runner drives. The bench, its guides, missions and
+//    discoveries survive unchanged behind "Explore the bench freely".
 // ══════════════════════════════════════════════
 const LabLight = (() => {
   const D = () => LabLightData;
@@ -39,6 +43,7 @@ const LabLight = (() => {
   let _log = [], _readings = [], _fx = [], _busy = false, _instant = false;
   let _tipIdx = -1, _drag = null, _turn = null, _suppressClick = false;
   let _g = 9, _talking = false, _obs = null;
+  let _focus = null, _silent = false;   // experiments: the controls to show; setup tokens applied quietly
 
   // The grade the lab is being used at (Labs.grade(), LAB_SPEC §9). Anything
   // the lab has no level for is the original Grade 9 level.
@@ -129,7 +134,10 @@ const LabLight = (() => {
     _syncPower();
     _readouts();
     const st = Labs.store('light'), prim = _primary();
-    if (!st[_introKey()]) _intro();
+    // The runner attaches straight after mount and its Aim is the welcome
+    // (it marks st.intro itself); the bench's own card would sit in the way.
+    const expSoon = typeof LabExperiment !== 'undefined' && experiment.list().length > 0;
+    if (!st[_introKey()] && !st.intro && !expSoon) _intro();
     else if (_guide) _guideEnter();
     else if (_mission) _coach(prim ? 'Back on your mission. Carry on where you left off.' : 'Back on your mission - carry on where you left off.');
     else _coach(_mine(D().GUIDES).some(G => st.guides[G.id])
@@ -365,6 +373,7 @@ const LabLight = (() => {
   function place(id) {
     const S = D().SETUPS[id];
     if (!S || !(S.grades || [9]).includes(_g) || !_guard()) return;
+    if (_expWrong('setup:' + id)) { _guideEvent('setup:' + id); return; }
     if (S.hazard) { _hazard(S.hazard, {}); return; }
     if (_mission && _mission.setup !== id) { _coach(`This mission uses the ${D().SETUPS[_mission.setup].name.toLowerCase()}. Leave the mission to try something else.`); return; }
     Object.assign(_b, { setup: id, beta: _primary() ? D().BOUNCE.beta : 30, tau: 0, normal: false, prot: false, lifted: false, traced: null, aligned: true, looking: false, shown: null, beamT: 0,
@@ -382,6 +391,7 @@ const LabLight = (() => {
   function setSource(id) {
     const S = D().SOURCES[id];
     if (!S || !(S.grades || [9]).includes(_g) || !_guard()) return;
+    if (_expWrong('source:' + id)) { _guideEvent('source:' + id); return; }
     if (_b.source === id) { _coach(`The ${S.name.toLowerCase()} is already on the bench.`); return; }
     _b.source = id; _b.beamT = 0; _b.looking = false; _b.m4 = null;
     if (_primary()) _coach(S.hot ? 'A desk lamp with an old bulb. It gives light - and it gets hot.'
@@ -402,6 +412,7 @@ const LabLight = (() => {
     const S = _src();
     if (_primary()) {
       const k = _kind();
+      if (_b.setup === 'shadow') _noteShadow(want);
       if (want) _coach(_b.setup === 'shadow' ? _shadowSay()
         : _b.setup === 'bounce' ? `${S.short} on. Follow the light: where does it go after the mirror?`
         : _b.setup === 'cards' ? `${S.short} on. Now look at the screen at the end.`
@@ -447,6 +458,7 @@ const LabLight = (() => {
   }
   function placeProtractor(ref) {
     if (!_optical()) return;
+    if (_expWrong('protractor:' + ref)) { _guideEvent('protractor:' + ref); return; }
     _b.prot = true; _b.ref = ref === 'surface' ? 'surface' : 'normal'; _b.shown = null;
     _coach(_b.ref === 'normal'
       ? 'Protractor in place, its centre on the point where the ray hits. It counts from the normal: 0° along the normal.'
@@ -456,6 +468,7 @@ const LabLight = (() => {
   }
   function setRef(ref) {
     if (!_guard()) return;
+    if (_expWrong('protractor:' + ref)) { _guideEvent('protractor:' + ref); return; }
     if (!_b.prot) { placeProtractor(ref); return; }
     if (_b.ref === ref) return;
     placeProtractor(ref);
@@ -463,6 +476,8 @@ const LabLight = (() => {
 
   function toggleEye() {
     if (!_guard()) return;
+    const to = 'eye:' + (_b.eye === 'above' ? 'side' : 'above');
+    if (_expWrong(to)) { _guideEvent(to); return; }
     _b.eye = _b.eye === 'above' ? 'side' : 'above';
     _b.shown = null;
     _coach(_b.eye === 'above' ? 'Eye directly above the scale, looking straight down. That is how to read it.'
@@ -475,6 +490,8 @@ const LabLight = (() => {
   function rotate(kind, d) {
     if (!_guard() || !(_optical() || (_b.setup === 'bounce' && kind === 'tilt'))) return;
     const L = D().LIMITS;
+    const would = kind === 'box' ? 'angle:' + Math.abs(_b.beta + d * L.step + _b.tau) : 'tilt:' + (_b.tau + d * L.tiltStep);
+    if (_expWrong(would)) { _guideEvent(would); return; }
     if (kind === 'box') {
       const nb = _b.beta + d * L.step;
       if (nb < L.betaMin || nb > L.betaMax || Math.abs(nb + _b.tau) > L.maxI) { _coach(nb < L.betaMin ? 'The ray box is already straight in front - turn the other way.' : 'That’s as far as it goes: any further and the ray only grazes the surface.'); return; }
@@ -519,6 +536,7 @@ const LabLight = (() => {
 
   function read() {
     if (!_guard()) return;
+    if (_expWrong('read')) { _guideEvent('read'); return; }
     if (!_optical()) { _coach('Readings are taken at the mirror or the glass block.'); return; }
     if (!_b.power) { _coach('Switch on the ray box first - no ray, nothing to measure.'); return; }
     if (_b.lifted) { _coach('Put the block back on its outline first (tap “Put block back”).'); return; }
@@ -566,6 +584,7 @@ const LabLight = (() => {
 
   function look() {
     if (!_guard()) return;
+    if (_expWrong('look')) { _guideEvent('look'); return; }
     // Grade 4 looks at the spot on the SCREEN - never along the beam.
     if (_primary()) {
       if (_b.setup !== 'cards') { _coach('Looking at the screen is for the three-card test. Pick the three cards from the shelf.'); return; }
@@ -607,6 +626,7 @@ const LabLight = (() => {
 
   function moveCard() {
     if (!_guard() || _b.setup !== 'cards') return;
+    if (_expWrong(_b.aligned ? 'cards:move' : 'cards:align')) { _guideEvent(_b.aligned ? 'cards:move' : 'cards:align'); return; }
     _b.aligned = !_b.aligned; _b.looking = false; _b.beamT = _b.power ? 0 : _b.beamT;
     _coach(_b.aligned ? 'The middle card is back in line with the other two.' : 'The middle card is now to one side - its hole is out of line.');
     _afterChange();
@@ -615,6 +635,7 @@ const LabLight = (() => {
 
   function lift() {
     if (!_guard() || _b.setup !== 'block') return;
+    if (_expWrong('lift')) { _guideEvent('lift'); return; }
     if (_b.lifted) { _b.lifted = false; _b.traced = null; _b.beamT = 0; _coach('Block back on its outline.'); _afterChange(); return; }
     if (!_b.power) { _coach('Switch on the ray box first, so there is a ray to trace.'); return; }
     const t = D().trace({ setup: 'block', beta: _b.beta, tau: _b.tau, lifted: false });
@@ -637,6 +658,7 @@ const LabLight = (() => {
 
   function pack() {
     if (!_guard()) return;
+    if (_expWrong('pack')) { _guideEvent('pack'); return; }
     const prim = _primary();
     if (_b.power) { _coach(prim ? `Switch the ${_src().short.toLowerCase()} off first.` : 'Switch the ray box off first.'); return; }
     if (_b.heat > D().HEAT.hot) { _hazard(prim ? 'g4_hot' : 'hot_lamp', {}); return; }
@@ -663,15 +685,27 @@ const LabLight = (() => {
     return `The light goes straight through the ${n}. There is almost no shadow.`;
   }
 
+  // A wrong object in an experiment IS placed - the shadow it makes is the
+  // lesson - unless it is the one already there, which the bench only hears.
   function putObj(id) {
     const O = D().OBJECTS[id];
     if (!O || !_guard()) return;
     if (_b.setup !== 'shadow') { _coach('The holder is on the shadow bench. Put the shadow bench on the table first.'); return; }
-    if (_b.obj === id) { _coach(`The ${O.name.toLowerCase()} is already in the holder.`); return; }
+    if (_b.obj === id) { if (_expWrong('obj:' + id)) _guideEvent('obj:' + id); else _coach(`The ${O.name.toLowerCase()} is already in the holder.`); return; }
     _b.obj = id; _b.m4 = null;
+    if (_b.power) _noteShadow(true);
     _coach(_shadowSay());
     _afterChange();
     _guideEvent('obj:' + id);
+  }
+  // The notebook line for what the screen shows: written when the torch goes
+  // on or off and when the holder changes, so an experiment has evidence
+  // even before anything is measured.
+  function _noteShadow(on) {
+    if (_b.setup !== 'shadow' || !_obj()) return;
+    const O = _obj(), W = D().LIGHT_WORDS[O.light];
+    if (on) _logEntry({ title: `Shadow of the ${O.name.toLowerCase()}`, obs: `${D().cap(W.shadow)}. ${W.lets}` });
+    else _logEntry({ title: 'Torch off', obs: 'The shadow went too. No light, no shadow.' });
   }
 
   function movePos(d) {
@@ -682,6 +716,7 @@ const LabLight = (() => {
     setPos(P[k]);
   }
   function setPos(cm) {
+    if (_expWrong('pos:' + cm)) { _guideEvent('pos:' + cm); return; }
     if (_b.setup !== 'shadow' || !D().SHADOW.positions.includes(cm) || _b.pos === cm) return;
     const was = _b.pos;
     _b.pos = cm; _b.moved.obj = true; _b.m4 = null;
@@ -690,7 +725,9 @@ const LabLight = (() => {
     _guideEvent('pos:' + cm);
   }
   function moveTorch(v) {
-    if (!_guard() || _b.setup !== 'shadow' || _b.torch === v || !(v in D().SHADOW.torchAt)) return;
+    if (!_guard() || _b.setup !== 'shadow') return;
+    if (_expWrong('torch:' + v)) { _guideEvent('torch:' + v); return; }
+    if (_b.torch === v || !(v in D().SHADOW.torchAt)) return;
     _b.torch = v; _b.moved.torch = true; _b.m4 = null;
     _coach(v === 'back' ? 'You moved the torch 10 cm back.' : 'The torch is back on the 0 mark.');
     _afterChange();
@@ -698,6 +735,7 @@ const LabLight = (() => {
   }
   function setRuler(v) {
     if (!_guard() || _b.setup !== 'shadow') return;
+    if (_expWrong('ruler:' + v)) { _guideEvent('ruler:' + v); return; }
     _b.ruler = v === 'flip' ? 'flip' : 'zero'; _b.m4 = null;
     _coach(_b.ruler === 'zero' ? 'Ruler the right way up: 0 at the bottom of the shadow.'
                                : `Ruler upside down: its ${D().SHADOW.rulerCm} cm end is at the bottom of the shadow…`);
@@ -707,6 +745,7 @@ const LabLight = (() => {
 
   function measure() {
     if (!_guard()) return;
+    if (_expWrong('measure')) { _guideEvent('measure'); return; }
     if (_b.setup !== 'shadow') { _coach('Shadows are measured on the shadow bench.'); return; }
     if (!_b.power) { _coach(`Switch on the ${_src().short.toLowerCase()} first. No light, no shadow to measure.`); return; }
     if (_kind() !== 'opaque') { _coach(`The ${_obj().name.toLowerCase()} makes too pale a shadow to measure. Use the card tree.`); return; }
@@ -759,6 +798,7 @@ const LabLight = (() => {
   function nameIt(word) {
     const W = D().LIGHT_WORDS;
     if (!W[word] || !_guard() || _b.setup !== 'shadow') return;
+    if (_expWrong('name:' + word)) { _guideEvent('name:' + word); return; }
     if (!_b.power) { _coach(`Switch on the ${_src().short.toLowerCase()} first, so you can see the shadow.`); return; }
     const O = _obj(), is = O.light;
     if (word !== is) {
@@ -953,7 +993,9 @@ const LabLight = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('light', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _reset();
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // already set up - the set-up IS the experiment; never wipe it.
+    if (!G.exp) _reset();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
@@ -965,8 +1007,10 @@ const LabLight = (() => {
   }
 
   // A step already true on the bench is skipped (the mirror is already there,
-  // the lamp is already off…). Actions - read, look, lift, pack - never are.
+  // the lamp is already off…). Actions - read, look, lift, pack - never are,
+  // and neither is an experiment's decision (a step with options).
   function _satisfied(on) {
+    if (!on) return false;
     const [k, v] = on.split(':');
     switch (k) {
       case 'setup': return _b.setup === v;
@@ -992,7 +1036,7 @@ const LabLight = (() => {
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
-    while (s && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
+    while (s && !s.options && !s.any && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     _hush();
     const box = $('lab-guide');
@@ -1009,15 +1053,24 @@ const LabLight = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. The runner
+  // hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
+  const _expStep = () => { const G = _gdef(); return (G && G.exp && G.steps[_guide.step]) || null; };
+  const _expWrong = tok => { const s = _expStep(); return !!(s && s.wrong && s.wrong[tok]); };
+  // Does the current experiment step offer a choice of <kind>:… tokens?
+  const _expAsks = kind => { const s = _expStep(); return !!(s && (s.options || s.any || []).some(t => t.startsWith(kind + ':'))); };
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) {
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) {
       _guide.step++; _guideEnter();
-      if (!s.on.startsWith('wait:') && !s.on.startsWith('observe') && !s.on.startsWith('cards:')) _coachGuide(s.on);
+      if (!token.startsWith('wait:') && !token.startsWith('observe') && !token.startsWith('cards:')) _coachGuide(token);
     } else _highlight();
   }
 
@@ -1063,8 +1116,12 @@ const LabLight = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (!s) return;
-    const [k, v] = s.on.split(':');
+    if (s && s.on) _do(s.on);
+  }
+  // One guide token, performed as if tapped. Toggles are idempotent; `cool`
+  // runs the clock until the lamp is cool (an experiment's set-up).
+  function _do(tok) {
+    const [k, v] = String(tok).split(':');
     switch (k) {
       case 'setup': place(v); break;
       case 'source': setSource(v); break;
@@ -1085,6 +1142,7 @@ const LabLight = (() => {
       case 'ruler': setRuler(v); break;
       case 'measure': measure(); break;
       case 'name': nameIt(v); break;
+      case 'cool': { const H = D().HEAT; for (let i = 0; i < 600 && _b.heat > H.hot; i++) _step(0.5); _readouts(); break; }
     }
   }
 
@@ -1175,6 +1233,7 @@ const LabLight = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('light', G)) { _stopGuide(true); return; }
     const st = Labs.store('light');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -1208,8 +1267,40 @@ const LabLight = (() => {
     if (!silent) _coach('Guide stopped. Pick another experiment below, or explore freely.');
   }
 
-  // The yellow glow on whatever the current guide step wants tapped.
-  // All other interactive controls are dimmed so only the target stands out.
+  // The control a guide token belongs to - what glows, what an experiment
+  // keeps on screen, and what the tests tap. Depends on the bench state: a
+  // turn glows the button that turns the right way, the protractor's line
+  // glows the ref row once it is placed (or while an experiment asks for it).
+  function _selFor(tok) {
+    const [k, v] = String(tok).split(':');
+    switch (k) {
+      case 'setup': return `.lab-light [data-add="setup"][data-id="${v}"]`;
+      case 'source': return `.lab-light [data-add="source"][data-id="${v}"]`;
+      case 'power': return '#lab-light-power';
+      case 'normal': return '.lab-light [data-act="normal"]';
+      case 'protractor': return _b.prot || _expAsks('protractor') ? `.lab-light [data-ref="${v}"]` : '.lab-light [data-act="protractor"]';
+      case 'eye': return '.lab-light [data-act="eye"]';
+      case 'angle': return `.lab-light [data-rot="box"][data-d="${+v > _i() ? 1 : -1}"]`;
+      case 'tilt': return `.lab-light [data-rot="tilt"][data-d="${+v > _b.tau ? 1 : -1}"]`;
+      case 'read': return '.lab-light [data-act="read"]';
+      case 'look': return '.lab-light [data-act="look"]';
+      case 'cards': return '.lab-light [data-act="card"]';
+      case 'lift': return '.lab-light [data-act="lift"]';
+      case 'pack': return '.lab-light [data-act="pack"]';
+      case 'obj': return `.lab-light [data-obj="${v}"]`;
+      case 'pos': return `.lab-light [data-pos="${+v < _b.pos ? -1 : 1}"]`;
+      case 'torch': return '.lab-light [data-act="torch"]';
+      case 'ruler': return '.lab-light [data-act="ruler"]';
+      case 'measure': return '.lab-light [data-act="measure"]';
+      case 'name': return `.lab-light [data-name="${v}"]`;
+      // a wait (cool) has no control: something harmless and always visible
+      default: return '#lab-light-zone';
+    }
+  }
+
+  // The yellow glow on whatever the current guide step wants tapped - every
+  // option of an experiment's decision. All other interactive controls are
+  // dimmed so only the targets stand out.
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
@@ -1217,49 +1308,74 @@ const LabLight = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [k, v] = s.on.split(':');
-    let sel = null;
-    switch (k) {
-      case 'setup': sel = `[data-add="setup"][data-id="${v}"]`; break;
-      case 'source': sel = `[data-add="source"][data-id="${v}"]`; break;
-      case 'power': sel = '#lab-light-power'; break;
-      case 'normal': sel = '[data-act="normal"]'; break;
-      case 'protractor': sel = _b.prot ? `[data-ref="${v}"]` : '[data-act="protractor"]'; break;
-      case 'eye': sel = '[data-act="eye"]'; break;
-      case 'angle': sel = `[data-rot="box"][data-d="${+v > _i() ? 1 : -1}"]`; break;
-      case 'tilt': sel = `[data-rot="tilt"][data-d="${+v > _b.tau ? 1 : -1}"]`; break;
-      case 'read': sel = '[data-act="read"]'; break;
-      case 'look': sel = '[data-act="look"]'; break;
-      case 'cards': sel = '[data-act="card"]'; break;
-      case 'lift': sel = '[data-act="lift"]'; break;
-      case 'pack': sel = '[data-act="pack"]'; break;
-      case 'obj': sel = `[data-obj="${v}"]`; break;
-      case 'pos': sel = `[data-pos="${+v < _b.pos ? -1 : 1}"]`; break;
-      case 'torch': sel = '[data-act="torch"]'; break;
-      case 'ruler': sel = '[data-act="ruler"]'; break;
-      case 'measure': sel = '[data-act="measure"]'; break;
-      case 'name': sel = `[data-name="${v}"]`; break;
-    }
-    const el = sel && _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      // Scroll the target into view smoothly so it's always visible.
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      // Dim every other clickable so only the target stands out.
-      const DIM_SELS = [
-        '[data-add]', '[data-act]', '[data-obj]', '[data-pos]', '[data-rot]',
-        '[data-guide]', '[data-name]', '[data-ref]',
-        '#lab-light-power',
-      ];
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll(DIM_SELS.join(',')).forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = [...new Set(toks.map(t => _root.querySelector(_selFor(t))).filter(Boolean))];
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    // Scroll the target into view - never in an experiment, where the runner
+    // keeps the picture and the yellow box in place.
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const DIM_SELS = [
+      '[data-add]', '[data-act]', '[data-obj]', '[data-pos]', '[data-rot]',
+      '[data-guide]', '[data-name]', '[data-ref]',
+      '#lab-light-power',
+    ];
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll(DIM_SELS.join(',')).forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the controls and the shelf.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const keep = new Set();
+    if (on) _focus.forEach(t => { const el = _root.querySelector(_selFor(t)); if (el) keep.add(el); });
+    _root.querySelectorAll('#lab-light-controls button, #lab-light-shelf .lab-item').forEach(b => { b.hidden = on && !keep.has(b); });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-light-objs, .lab-light-turn, .lab-light-names, .lab-light-tools, .lab-light-refrow, .lab-items').forEach(row => {
+      row.hidden = on && !anyShown(row);
+      const head = row.previousElementSibling;
+      if (head && (head.classList.contains('lab-shelf-head') || head.classList.contains('lab-light-names-h'))) head.hidden = row.hidden;
+    });
+    _root.querySelectorAll('#lab-light-controls .lab-hint, #lab-light-controls .lab-callout').forEach(p => { p.hidden = on; });
+    const shelf = $('lab-light-shelf');
+    if (shelf) shelf.hidden = on && !anyShown(shelf);
+  }
+  const experiment = {
+    list: () => _mine(D().EXPERIMENTS || []),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null;
+      _reset(); _log = []; _readings = []; _panel = 'sandbox';
+      _renderPanel(); _renderControls(); _syncPower(); _readouts();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    // A set-up token, done at once and quietly: no discovery toast, no wait.
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _silent = true;
+      try { _do(tok); } finally { _instant = was; _silent = false; }
+      if (_b) _b.beamT = 1;
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.filter(e => !e.note).slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   function _startHTML() {
     const st = Labs.store('light');
@@ -1306,6 +1422,7 @@ const LabLight = (() => {
     else if (_panel === 'missions') p.innerHTML = _mission ? _missionHTML() + _notebookHTML() : _missionListHTML();
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -1320,6 +1437,7 @@ const LabLight = (() => {
     if (sh) sh.outerHTML = _shelfHTML();
     if (_panel === 'found') { const p = $('lab-panel'); if (p) p.innerHTML = _foundHTML(); }
     _foundCount();
+    _applyFocus();
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is
@@ -1329,7 +1447,7 @@ const LabLight = (() => {
   //   the store - every grade's - so the count goes in the title instead.
   function _discover(id) {
     const all = _discs(), d = all.find(x => x.id === id);
-    if (!d) return;
+    if (!d || _silent) return;
     const st = Labs.store('light');
     if (st.disc[id]) return;
     const n = all.filter(x => st.disc[x.id]).length + 1;
@@ -1486,6 +1604,7 @@ const LabLight = (() => {
         html += '<p class="lab-callout">The table is empty. Pick the shadow bench, the safety mirror or the three cards from the shelf.</p>';
       }
       c.innerHTML = html;
+      _applyFocus();
       _highlight();
       return;
     }
@@ -1497,7 +1616,9 @@ const LabLight = (() => {
         <button type="button" class="lab-btn lab-light-rot" data-rot="tilt" data-d="-1" aria-label="Turn the ${sn} anticlockwise"><span aria-hidden="true">↺</span> ${sn === 'block' ? 'Block' : 'Mirror'}</button>
         <button type="button" class="lab-btn lab-light-rot" data-rot="tilt" data-d="1" aria-label="Turn the ${sn} clockwise"><span aria-hidden="true">↻</span> ${sn === 'block' ? 'Block' : 'Mirror'}</button>
       </div>`;
-      if (b.prot) html += `<div class="lab-light-refrow"><span>Protractor counts from:</span>
+      // The ref row is the decision "which line?" - shown while an experiment
+      // asks it, before the protractor is placed (setRef then places it).
+      if (b.prot || _expAsks('protractor')) html += `<div class="lab-light-refrow"><span>Protractor counts from:</span>
         <div class="lab-seg" role="group" aria-label="Protractor counts from">
           <button type="button" data-ref="normal" aria-pressed="${b.ref === 'normal'}">The normal</button>
           <button type="button" data-ref="surface" aria-pressed="${b.ref === 'surface'}">The ${sn === 'block' ? 'surface' : 'mirror'}</button>
@@ -1521,6 +1642,7 @@ const LabLight = (() => {
       html += '<p class="lab-callout">The bench is empty. Pick a mirror, a glass block or the three cards from the shelf.</p>';
     }
     c.innerHTML = html;
+    _applyFocus();
     _highlight();
   }
 
@@ -2204,7 +2326,7 @@ const LabLight = (() => {
              obj: b.obj, pos: b.pos, torch: b.torch, ruler: b.ruler, named: Object.assign({}, b.named),
              shadows: (b.shadows || []).map(m => ({ pos: m.pos, cm: m.cm, torch: m.torch })), m4: b.m4,
              hit: b.setup === 'bounce' && D().bounceHits(b.tau),
-             guide: _guide && { id: _guide.id, step: _guide.step },
+             guide: _guide && { id: _guide.id, step: _guide.step, exp: !!(_gdef() && _gdef().exp) }, focus: _focus ? [..._focus] : null,
              readings: _readings.map(r => ({ setup: r.setup, i: r.i, r: r.r, ok: r.ok, faults: r.faults, pos: r.pos, cm: r.cm, fault: r.fault })),
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
              mission: _mission && { id: _mission.id, n: _mission.readings.length, mistakes: _mission.mistakes, hazards: _mission.hazards,
@@ -2221,7 +2343,7 @@ const LabLight = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, place, setSource, power, toggleNormal, toggleProtractor,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, place, setSource, power, toggleNormal, toggleProtractor,
            placeProtractor, setRef, toggleEye, rotate, setAngle, setTilt, read, look, moveCard, lift, pack,
            putObj, movePos, setPos, moveTorch, setRuler, measure, nameIt, stare,
            _test, _tick, _debug };

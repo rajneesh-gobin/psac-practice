@@ -281,3 +281,12 @@
 .lab-table tr:nth-child(even) td {
   background: #FAFCFE;
 }
+
+/* ── Experiments (lab_experiment.js) ─────────────────────────────────────── */
+/* focus() hides controls with the hidden attribute; the flex rows above would
+   otherwise win over the UA [hidden] rule and keep an empty row on screen. */
+.lab-gastests [hidden],
+.lab-gastests-stations[hidden],
+.lab-gastests .lab-tools[hidden] {
+  display: none !important;
+}

@@ -1,0 +1,496 @@
+{
+  "pack": "grade5-maths",
+  "source": "Maths.pdf — MIE Teaching and Learning Syllabus, Mathematics, Grades 1 to 6, 'CONTENT AREAS AND SPECIFIC LEARNING OUTCOMES OF MATHEMATICS FOR GRADE 5', printed pages 13-15",
+  "note": "One entry per thing the Grade 5 table says a learner must be able to do, across its four content areas (Numbers, Geometry, Measure, Graphs). `any` = covered when some question's stem or answer contains ANY of these phrases. `all` = covered only when ONE question contains ALL of them. Terms are matched against the question STEM AND ANSWER ONLY, never the explanation. ⚠ MATHS IS THE HARDEST PACK TO LEDGER: a bare computation carries no words, so '4 862 x 7 = ?' tests multiplication while containing neither 'multiply' nor 'multiplication'. Terms here were chosen against the wording this pack actually uses. ⚠ SHORT TERMS ARE TRAPS: 'mm' matches co-mm-on and 'cl' matches cl-assroom, so units are written out or spaced. ⚠ Grade 5 is where the syllabus puts powers of two and three, the square number, the kite and the parallelogram, and drawing a pictogram and a bar chart; Grade 6 does not repeat them.",
+  "facts": [
+    {
+      "id": "num-01",
+      "unit": "Numbers — whole numbers",
+      "fact": "Read and write numbers up to 100 000",
+      "any": [
+        "100 000",
+        "100,000",
+        "hundred thousand"
+      ]
+    },
+    {
+      "id": "num-02",
+      "unit": "Numbers — whole numbers",
+      "fact": "Place value of a digit in a given number",
+      "any": [
+        "place value",
+        "value of the digit"
+      ]
+    },
+    {
+      "id": "num-03",
+      "unit": "Numbers — whole numbers",
+      "fact": "Expanded notation for numbers up to 5 digits",
+      "any": [
+        "expanded form",
+        "expanded notation"
+      ]
+    },
+    {
+      "id": "num-04",
+      "unit": "Numbers — whole numbers",
+      "fact": "Count, compare and order numbers up to 100 000",
+      "any": [
+        "order these",
+        "smallest to largest",
+        "largest to smallest",
+        "ascending",
+        "descending"
+      ]
+    },
+    {
+      "id": "num-05",
+      "unit": "Numbers — whole numbers",
+      "fact": "Multiply by multiples of 10, 100 and 1 000",
+      "any": [
+        "multiple of 10",
+        "by 100",
+        "by 1 000",
+        "by 1000"
+      ]
+    },
+    {
+      "id": "num-06",
+      "unit": "Numbers — whole numbers",
+      "fact": "Divide numbers by 10, 100 and 1 000",
+      "all": [
+        "divide",
+        "100"
+      ]
+    },
+    {
+      "id": "num-07",
+      "unit": "Numbers — whole numbers",
+      "fact": "Word problems involving the four arithmetic operations",
+      "any": [
+        "altogether",
+        "in total",
+        "how many more"
+      ]
+    },
+    {
+      "id": "num-08",
+      "unit": "Numbers — patterns",
+      "fact": "Recognise and complete number patterns",
+      "any": [
+        "pattern",
+        "sequence"
+      ]
+    },
+    {
+      "id": "num-09",
+      "unit": "Numbers — types of numbers",
+      "fact": "Identify square numbers",
+      "any": [
+        "square number"
+      ]
+    },
+    {
+      "id": "num-10",
+      "unit": "Numbers — fractions",
+      "fact": "Recognise and use equivalent fractions",
+      "all": [
+        "fraction",
+        "equivalent"
+      ]
+    },
+    {
+      "id": "num-11",
+      "unit": "Numbers — fractions",
+      "fact": "Convert a mixed number to an improper fraction and back",
+      "any": [
+        "improper",
+        "mixed number"
+      ]
+    },
+    {
+      "id": "num-12",
+      "unit": "Numbers — fractions",
+      "fact": "Add and subtract fractions",
+      "all": [
+        "fraction",
+        "+"
+      ]
+    },
+    {
+      "id": "num-13",
+      "unit": "Numbers — fractions",
+      "fact": "Multiply and divide fractions by whole numbers",
+      "all": [
+        "fraction",
+        "whole number"
+      ]
+    },
+    {
+      "id": "num-14",
+      "unit": "Numbers — fractions",
+      "fact": "Convert fractions into decimals and vice versa",
+      "any": [
+        "as a decimal",
+        "as a fraction"
+      ]
+    },
+    {
+      "id": "num-15",
+      "unit": "Numbers — decimals",
+      "fact": "Add and subtract decimals",
+      "any": [
+        "decimal"
+      ]
+    },
+    {
+      "id": "num-16",
+      "unit": "Numbers — powers",
+      "fact": "Recognise a number in power of two and three",
+      "any": [
+        "power of",
+        "squared",
+        "cubed"
+      ]
+    },
+    {
+      "id": "num-17",
+      "unit": "Numbers — powers",
+      "fact": "Expand and simplify numbers expressed in power form",
+      "any": [
+        "power notation",
+        "exponent",
+        "power form"
+      ]
+    },
+    {
+      "id": "num-18",
+      "unit": "Numbers — ratio",
+      "fact": "Compare two quantities and write down their ratio",
+      "any": [
+        "ratio"
+      ]
+    },
+    {
+      "id": "num-19",
+      "unit": "Numbers — ratio",
+      "fact": "Express a ratio in its simplest form",
+      "all": [
+        "ratio",
+        "simplest"
+      ]
+    },
+    {
+      "id": "num-20",
+      "unit": "Numbers — ratio",
+      "fact": "Express a ratio as a fraction and vice versa",
+      "all": [
+        "ratio",
+        "fraction"
+      ]
+    },
+    {
+      "id": "num-21",
+      "unit": "Numbers — proportion",
+      "fact": "The concept of direct proportion",
+      "any": [
+        "proportion"
+      ]
+    },
+    {
+      "id": "num-22",
+      "unit": "Numbers — average",
+      "fact": "Find the average of numbers",
+      "any": [
+        "average"
+      ]
+    },
+    {
+      "id": "num-23",
+      "unit": "Numbers — average",
+      "fact": "Find the average from a given sum",
+      "all": [
+        "average",
+        "total"
+      ]
+    },
+    {
+      "id": "num-24",
+      "unit": "Numbers — average",
+      "fact": "Find the sum from a given average",
+      "all": [
+        "average",
+        "sum"
+      ]
+    },
+    {
+      "id": "geo-01",
+      "unit": "Geometry — symmetry",
+      "fact": "Identify symmetrical figures",
+      "any": [
+        "symmetr"
+      ]
+    },
+    {
+      "id": "geo-02",
+      "unit": "Geometry — symmetry",
+      "fact": "Recognise and draw the line of symmetry of a figure",
+      "any": [
+        "line of symmetry",
+        "lines of symmetry"
+      ]
+    },
+    {
+      "id": "geo-03",
+      "unit": "Geometry — symmetry",
+      "fact": "Complete a symmetrical figure",
+      "all": [
+        "symmetr",
+        "complete"
+      ]
+    },
+    {
+      "id": "geo-04",
+      "unit": "Geometry — angles",
+      "fact": "Recognise a right angle",
+      "any": [
+        "right angle"
+      ]
+    },
+    {
+      "id": "geo-05",
+      "unit": "Geometry — angles",
+      "fact": "Compare angles",
+      "all": [
+        "angle",
+        "larger"
+      ]
+    },
+    {
+      "id": "geo-06",
+      "unit": "Geometry — angles",
+      "fact": "Distinguish clockwise from anti-clockwise directions",
+      "any": [
+        "clockwise"
+      ]
+    },
+    {
+      "id": "geo-07",
+      "unit": "Geometry — shapes",
+      "fact": "Recognise and name shapes up to the pentagon",
+      "any": [
+        "pentagon"
+      ]
+    },
+    {
+      "id": "geo-08",
+      "unit": "Geometry — shapes",
+      "fact": "Identify and name the isosceles triangle",
+      "any": [
+        "isosceles"
+      ]
+    },
+    {
+      "id": "geo-09",
+      "unit": "Geometry — shapes",
+      "fact": "Identify and name the equilateral triangle",
+      "any": [
+        "equilateral"
+      ]
+    },
+    {
+      "id": "geo-10",
+      "unit": "Geometry — shapes",
+      "fact": "Identify and name the right-angled triangle",
+      "any": [
+        "right-angled triangle",
+        "right angled triangle"
+      ]
+    },
+    {
+      "id": "geo-11",
+      "unit": "Geometry — shapes",
+      "fact": "Recognise and name the parallelogram",
+      "any": [
+        "parallelogram"
+      ]
+    },
+    {
+      "id": "geo-12",
+      "unit": "Geometry — shapes",
+      "fact": "Recognise and name the kite",
+      "any": [
+        "kite"
+      ]
+    },
+    {
+      "id": "mea-01",
+      "unit": "Measure — length",
+      "fact": "Use the units metre and centimetre in practical situations",
+      "any": [
+        "centimetre",
+        " cm "
+      ]
+    },
+    {
+      "id": "mea-02",
+      "unit": "Measure — length",
+      "fact": "Convert metres to centimetres and back",
+      "all": [
+        "convert",
+        "centimetre"
+      ]
+    },
+    {
+      "id": "mea-03",
+      "unit": "Measure — perimeter",
+      "fact": "Find the perimeter of triangles, squares and rectangles",
+      "any": [
+        "perimeter"
+      ]
+    },
+    {
+      "id": "mea-04",
+      "unit": "Measure — capacity",
+      "fact": "Use the units millilitre, centilitre and litre",
+      "any": [
+        "millilitre",
+        "centilitre",
+        "litre"
+      ]
+    },
+    {
+      "id": "mea-05",
+      "unit": "Measure — capacity",
+      "fact": "Convert units of volume or capacity from one to another",
+      "all": [
+        "litre",
+        "convert"
+      ]
+    },
+    {
+      "id": "mea-06",
+      "unit": "Measure — mass",
+      "fact": "Use the units gram and kilogram in practical situations",
+      "any": [
+        "kilogram",
+        "gram"
+      ]
+    },
+    {
+      "id": "mea-07",
+      "unit": "Measure — mass",
+      "fact": "Convert grams to kilograms and back",
+      "all": [
+        "gram",
+        "convert"
+      ]
+    },
+    {
+      "id": "mea-08",
+      "unit": "Measure — money",
+      "fact": "Use rupees and cents in practical situations",
+      "any": [
+        "rupee",
+        "cents"
+      ]
+    },
+    {
+      "id": "mea-09",
+      "unit": "Measure — money",
+      "fact": "Work out shopping problems",
+      "any": [
+        "shop",
+        "buys",
+        "change from"
+      ]
+    },
+    {
+      "id": "mea-10",
+      "unit": "Measure — money",
+      "fact": "Word problems involving profit and loss",
+      "any": [
+        "profit"
+      ]
+    },
+    {
+      "id": "mea-11",
+      "unit": "Measure — time",
+      "fact": "Use the units hour, minute and second",
+      "all": [
+        "minute",
+        "second"
+      ]
+    },
+    {
+      "id": "mea-12",
+      "unit": "Measure — time",
+      "fact": "Convert units of time from one to another",
+      "all": [
+        "minute",
+        "hour"
+      ]
+    },
+    {
+      "id": "mea-13",
+      "unit": "Measure — area",
+      "fact": "Find the area of a rectangle or a square",
+      "any": [
+        "area of"
+      ]
+    },
+    {
+      "id": "mea-14",
+      "unit": "Measure — area",
+      "fact": "Find the area of a triangle",
+      "all": [
+        "area",
+        "triangle"
+      ]
+    },
+    {
+      "id": "mea-15",
+      "unit": "Measure — area",
+      "fact": "Find the width or length of a rectangle given its area",
+      "all": [
+        "area",
+        "length"
+      ]
+    },
+    {
+      "id": "gra-01",
+      "unit": "Graphs",
+      "fact": "Use and interpret pictograms",
+      "any": [
+        "pictogram"
+      ]
+    },
+    {
+      "id": "gra-02",
+      "unit": "Graphs",
+      "fact": "Draw pictograms",
+      "all": [
+        "pictogram",
+        "draw"
+      ]
+    },
+    {
+      "id": "gra-03",
+      "unit": "Graphs",
+      "fact": "Use and interpret bar charts",
+      "any": [
+        "bar chart",
+        "bar graph"
+      ]
+    },
+    {
+      "id": "gra-04",
+      "unit": "Graphs",
+      "fact": "Draw bar charts",
+      "all": [
+        "bar chart",
+        "draw"
+      ]
+    }
+  ]
+}

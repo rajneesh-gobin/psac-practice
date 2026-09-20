@@ -104,6 +104,21 @@ const ASSIGNMENTS = [
     due_at: new Date(Date.now() + 5 * 86400000).toISOString(), done: true },
 ];
 
+// The teacher's classroom calendar: date strings, never shifted by a timezone.
+const dk = t => { const d = new Date(t); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const EVENTS = [
+  { id: 'e1', date: dk(now + 3 * day), end_date: null, kind: 'exam', title: 'Maths test', notes: 'Chapters 1-4' },
+  { id: 'e2', date: dk(now), end_date: dk(now + 1 * day), kind: 'absent', title: 'Away at a workshop', notes: null },
+  { id: 'e3', date: dk(now - 30 * day), end_date: null, kind: 'event', title: 'Sports day', notes: null },
+  { id: 'e4', date: '<b>bad</b>', kind: 'exam', title: 'Broken row' },
+];
+
+const WORKSHEETS = [
+  { id: 'w1', title: 'Fractions sheet', subject: 'maths', description: 'Q1-10', file_name: 'a.pdf', file_size: 1234, expires_at: new Date(now + 3 * day).toISOString(), url: 'https://s.test/w.pdf?token=9' },
+  { id: 'w2', title: 'Paper only', subject: null, description: null, file_name: null, file_size: null, expires_at: new Date(now + 6 * day).toISOString(), url: null },
+  { id: 'w3', title: 'Unsigned file', subject: 'english', file_name: 'b.pdf', file_size: 50, expires_at: new Date(now - 5 * day).toISOString(), url: null },
+];
+
 let lastCall = null;
 global.fetch = async (_url, opts) => {
   const body = JSON.parse(opts.body);
@@ -117,7 +132,7 @@ global.fetch = async (_url, opts) => {
   }
   return { ok: true, json: async () => ({
     ok: true, name: body.name, classroom: { name: 'Grade 5 Blue', grade: 5 },
-    materials: MATERIALS, assignments: ASSIGNMENTS }) };
+    materials: MATERIALS, assignments: ASSIGNMENTS, events: EVENTS, worksheets: WORKSHEETS }) };
 };
 
 // ── Run ──────────────────────────────────────────────────────────────────
@@ -219,6 +234,39 @@ const ck = (label, ok, extra) => {
   ck('days holding something are tappable', /class="cal-cell has/.test(cal));
   ck('a material with no date is listed rather than dropped', /No date recorded/.test(cal));
   ck('the day panel shows what was shared that day', /class="cal-day"/.test(cal));
+
+  // ── The class calendar: the teacher's events ──
+  const cell = k => (cal.match(new RegExp('<button type="button" class="cal-cell[^"]*" data-day="' + k + '"[^>]*>[^]*?<\/button>')) || [''])[0];
+  ck('the four event rows loaded', S.events.length === 4, String(S.events.length));
+  ck('an event dated today lands on today, not yesterday (date strings are not shifted)',
+    /class="cal-cell has today/.test(cell(dk(now))), cell(dk(now)).slice(0, 160));
+  ck('the exam day carries an exam dot', /<i class="d-exam">/.test(cell(dk(now + 3 * day))), cell(dk(now + 3 * day)).slice(0, 200));
+  ck('a two-day absence marks both days', /Teacher away/.test(cell(dk(now))) && /Teacher away/.test(cell(dk(now + 1 * day))));
+  ck('a key explains the dots', /class="cal-key"/.test(cal) && /Exam/.test(cal) && /Teacher away/.test(cal));
+  ck("today's panel shows the absence as an event card", /class="ev ev-absent"/.test(cal) && /Away at a workshop/.test(cal));
+  ck('a row with a malformed date is skipped, not drawn', !/Broken row/.test(cal));
+  ck('the calendar view still renders when a search matches no file',
+    (() => { S.q = 'zzzz-no-such-file'; api.render(); const c = els.out.innerHTML; S.q = ''; api.render(); return /class="cal-grid"/.test(c) && /Maths test|Away at a workshop/.test(c); })());
+
+  // ── Coming up, on the homework view ──
+  S.view = 'work'; api.applyView(); api.render();
+  const work2 = els.out.innerHTML;
+  ck('the homework view opens with what is coming', /Coming up/.test(work2) && work2.indexOf('Coming up') < work2.indexOf('To do'));
+  ck("…the exam and the absence, not last month's sports day", /Maths test/.test(work2) && /Away at a workshop/.test(work2) && !/Sports day/.test(work2));
+  ck('…and homework still due, but never homework already overdue as a future item',
+    /ev-hw[^]*Fractions homework/.test(work2.slice(0, work2.indexOf('To do'))) && !/ev-hw[^]*Timed test/.test(work2.slice(0, work2.indexOf('To do'))));
+  ck('the header chip names the next event', /Away at a workshop/.test(els['cls-chips'].innerHTML), els['cls-chips'].innerHTML);
+
+  // ── Worksheets ──
+  ck('the three worksheets loaded', S.worksheets.length === 3, String(S.worksheets.length));
+  ck('the homework view lists current worksheets, and past ones apart', /📄 Worksheets/.test(work2) && /Past worksheets/.test(work2) && work2.indexOf('Fractions sheet') < work2.indexOf('Unsigned file'));
+  ck('a worksheet with a signed file opens it', /Open worksheet ↗/.test(work2) && /https:\/\/s\.test\/w\.pdf/.test(work2));
+  ck('a paper-only worksheet says so, and an unsigned file says to tell the teacher', /On paper/.test(work2) && /not available right now/.test(work2));
+  ck('worksheet deadlines join the coming-up strip', /ev-ws[^]*Fractions sheet/.test(work2.slice(0, work2.indexOf('To do'))));
+  S.view = 'calendar'; api.applyView(); api.render();
+  const cal2 = els.out.innerHTML;
+  const wsCell = (cal2.match(new RegExp('<button type="button" class="cal-cell[^"]*" data-day="' + dk(now + 3 * day) + '"[^>]*>[^]*?<\/button>')) || [''])[0];
+  ck('the worksheet deadline day carries a worksheet dot', /<i class="d-ws">/.test(wsCell), wsCell.slice(0, 200));
 
   // ── Search ──
   S.view = 'list'; api.applyView(); S.q = 'comprehension'; api.render();

@@ -157,7 +157,27 @@
   .cal-cell.has.sel{background:var(--brand);color:var(--on-brand)}
   .cal-cell .dot{position:absolute;left:50%;transform:translateX(-50%);bottom:5px;width:5px;height:5px;
                  border-radius:50%;background:currentColor;opacity:.7}
+  .cal-cell .dots{position:absolute;left:0;right:0;bottom:4px;display:flex;justify-content:center;gap:2px}
+  .cal-cell .dots i,.cal-key i{display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor}
+  .d-exam{background:#dc2626!important}.d-due{background:#d97706!important}.d-absent{background:#6b7280!important}
+  .d-event{background:var(--brand)!important}.d-hw{background:#7c3aed!important}.d-ws{background:#0f766e!important}.d-file{background:#0891b2!important}
+  .cal-cell.has.sel .dots i{background:var(--on-brand)!important;opacity:.9}
+  .cal-key{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;margin-top:10px;font-size:11px;color:var(--muted)}
+  .cal-key span{display:inline-flex;align-items:center;gap:5px}
   .cal-legend{margin-top:10px;font-size:12px;color:var(--muted);text-align:center}
+  /* Calendar events: the teacher's dated items. Left border colour = kind. */
+  .ev{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+      border-left:4px solid var(--brand);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow)}
+  .ev-exam{border-left-color:#dc2626}.ev-due{border-left-color:#d97706}.ev-absent{border-left-color:#6b7280}
+  .ev-hw{border-left-color:#7c3aed}.ev-ws{border-left-color:#0f766e}
+  .card.ws{border-left:4px solid #0f766e}
+  .ev-ico{font-size:22px;line-height:1.1}
+  .ev-title{font-weight:800;font-size:15px}
+  .ev-meta{font-size:12px;color:var(--muted);margin-top:2px}
+  .ev-notes{font-size:13px;margin-top:4px;white-space:pre-wrap}
+  .upnext{margin-bottom:18px}
+  .upnext-more{display:block;width:100%;min-height:44px;border:1px dashed var(--line);border-radius:12px;background:transparent;
+               color:var(--brand-dk);font:inherit;font-weight:700;cursor:pointer}
   .cal-day{margin-top:14px}
   .cal-day h3{font-size:13px;font-weight:800;color:var(--muted);margin:0 2px 8px}
 
@@ -234,6 +254,9 @@
       <button type="button" class="view-btn"    data-view="list"    role="tab" aria-selected="false">📋 Files</button>
       <button type="button" class="view-btn"    data-view="subject" role="tab" aria-selected="false">📚 Subject</button>
       <button type="button" class="view-btn"    data-view="calendar" role="tab" aria-selected="false">🗓️ Calendar</button>
+      <!-- The calendar holds three things: the teacher's dated items (exam,
+           hand-in, away, event), homework due dates, and the day each file
+           was shared. Events arrive as date strings and are never shifted. -->
     </div>
     <div class="search">
       <span class="ico" aria-hidden="true">🔍</span>

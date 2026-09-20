@@ -10,7 +10,10 @@
 //
 //  One test tube; a shelf of dilute acids, an alkali, water, universal
 //  indicator and eight metals; a lighted splint, a glowing splint, a bung.
-//  Sandbox, two Missions and a collection of Discoveries.
+//  Sandbox, two Missions and a collection of Discoveries. Since 2026-09-20 the
+//  bench opens on an EXPERIMENT (lab_experiment.js, LAB_SPEC.md §10): the
+//  `experiment` adapter below is what the runner drives, EXPERIMENTS live in
+//  lab_chem_data.js, and Explore is the old bench, missions and discoveries.
 //
 //  ⚠ Every outcome comes from lab_chem_data.js (LabChem). This file only moves
 //    amounts over time and draws them. If a reaction looks wrong on screen,
@@ -28,7 +31,7 @@ const LabMixing = (() => {
   const TUBE_VIS = 24;        // cm³ drawn from the round bottom to the lip
   const DROP = 0.25;          // cm³ per dropper drop of 1.0 mol/dm³ → 0.25 mmol
   const FRAME_MS = 1000 / 30; // a low-end phone does not need 60 fps for bubbles
-  const FX_DUR = { pour: 0.65, drop: 0.36, splint: 0.9, pop: 0.75, explode: 1.15, splash: 0.95, bung: 0.95, streak: 1.4 };
+  const FX_DUR = { pour: 0.65, drop: 0.36, splint: 0.9, pop: 0.75, explode: 1.15, splash: 0.95, bung: 0.95, streak: 1.4, evap: 1.0 };
 
   const $ = id => document.getElementById(id);
   const esc = s => Labs.esc(s);
@@ -40,12 +43,13 @@ const LabMixing = (() => {
   let _log = [], _parts = [], _fx = [], _shake = 0, _busy = false, _instant = false;
   let _colors = null, _tipIdx = -1, _said = {}, _drag = null, _suppressClick = false;
   let _grade = null;          // the level on the bench: 8 or 9
+  let _focus = null, _silent = false, _expDrop = null;   // experiments: the controls shown, a silent set-up, the dropper without a mission
 
   function _newTube() {
     return { v: 0, h: 0, oh: 0, chloride: 0, sulfate: 0, added: {}, indicator: false, metals: [],
              ion: null, ionAmt: 0, cloudy: 0, gas: 0, pressure: 0, bung: false, warm: 0,
              demo: false, acidOut: false, neutralised: false,
-             co2: 0, fizz: 0, facc: 0, lime: null, paper: null, tooMuch: false };
+             co2: 0, fizz: 0, facc: 0, lime: null, paper: null, tooMuch: false, residue: null };
   }
   const _pH = () => _grade === 8
     ? LabChem.pHMix(_tube.h, _tube.oh, _tube.v, Object.keys(_tube.added))
@@ -62,7 +66,7 @@ const LabMixing = (() => {
   const _kind = k => (k === 'solid' ? 'metal' : k);
   const _introKey = () => (_g8() ? 'intro8' : 'intro');
   // The drop-by-drop missions: Hit pH 7 (sodium hydroxide) and Settle the Stomach (antacid).
-  const _dropBase = () => (_mission ? (_mission.id === 'neutral' ? 'naoh' : _mission.base || null) : null);
+  const _dropBase = () => (_mission ? (_mission.id === 'neutral' ? 'naoh' : _mission.base || null) : _expDrop ? _expDrop.base : null);
   const _isDrop = () => !!_dropBase();
   const _held = () => Object.keys(_tube.added).filter(k => k !== 'indicator' && k !== 'water');
   const _lname = id => LabChem.LIQUIDS[id].name.toLowerCase();
@@ -82,6 +86,7 @@ const LabMixing = (() => {
   // ══ Shell ════════════════════════════════════
   function _shellHTML() {
     return `<div class="lab lab-mixing">
+      <style>.lab-mixing .lab-canvas-wrap .lab-watch{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);white-space:nowrap}</style>
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-act="hub" aria-label="Back to Science Labs">←</button>
         <div class="lab-top-title"><span class="lab-eyebrow">${_g8() ? 'Science · Grade 8' : 'Chemistry · Grade 9'}</span><h1>Mixing Bench</h1></div>
@@ -97,6 +102,7 @@ const LabMixing = (() => {
             <div class="lab-chip lab-ph" id="lab-ph"></div>
             <div class="lab-status" id="lab-status"></div>
             <div class="lab-contents" id="lab-contents"></div>
+            <div class="lab-chip lab-watch" id="lab-watch" hidden>👀 Watch the tube</div>
           </div>
           <div class="lab-coach">
             <span class="lab-coach-face" aria-hidden="true">🧑‍🔬</span>
@@ -115,6 +121,7 @@ const LabMixing = (() => {
             <button type="button" class="lab-tool" data-act="splint"><span aria-hidden="true">🔥</span>Lighted splint</button>
             <button type="button" class="lab-tool" data-act="glow"><span aria-hidden="true">🪵</span>Glowing splint</button>
             <button type="button" class="lab-tool" id="lab-bung-btn" data-act="bung"><span aria-hidden="true">🟫</span><em>Put bung in</em></button>
+            <button type="button" class="lab-tool" data-act="evap"><span aria-hidden="true">♨️</span>Evaporate</button>
             <button type="button" class="lab-tool" data-act="rinse"><span aria-hidden="true">🧽</span>Empty &amp; rinse</button>`}
           </div>
         </div>
@@ -132,11 +139,12 @@ const LabMixing = (() => {
 
   function mount(root) {
     _root = root;
+    _focus = null;
     const g = _readGrade();
     // A different grade is a different bench: nothing in one level's tube,
     // notebook, mission or guide carries into the other.
     if (g !== _grade || !_tube) {
-      _grade = g; _tube = _newTube(); _log = []; _mission = null; _guide = null; _goggles = false;
+      _grade = g; _tube = _newTube(); _log = []; _mission = null; _guide = null; _goggles = false; _expDrop = null;
       _shelf = 'liquid'; _panel = 'sandbox'; _said = {}; _parts = []; _fx = []; _busy = false; _tipIdx = -1;
     }
     root.innerHTML = _shellHTML();
@@ -148,7 +156,9 @@ const LabMixing = (() => {
     _syncGoggles();
     _readouts();
     const st = Labs.store('mixing');
-    if (!st[_introKey()]) _intro();
+    // The runner's Aim is the welcome (it sets `intro`); the old card only
+    // shows where no experiment does.
+    if (!st[_introKey()] && !st.intro) _intro();
     else if (_guide) _guideEnter();
     else if (_mission) _coach('Back on your mission - carry on where you left off.');
     else _coach(_mine(LabChem.GUIDES).some(G => st.guides[G.id])
@@ -279,6 +289,7 @@ const LabMixing = (() => {
       case 'litmus-blue': litmus('blue'); break;
       case 'lime': limewater(); break;
       case 'taste': taste(); break;
+      case 'evap': evaporate(); break;
       case 'quiz': _quiz(); break;
       case 'exit-mission': _mission = null; _coach('Back to free experimenting. The shelf is all yours.'); _renderPanel(); break;
       case 'neutral-restart': _prepNeutral(); _renderPanel(); break;
@@ -307,7 +318,7 @@ const LabMixing = (() => {
     _syncGoggles();
     _coach(_goggles ? 'Goggles on. Now you’re ready for acids and alkalis.'
                     : 'Goggles off. You’ll need them again before you touch an acid or an alkali.');
-    if (_goggles && _isDrop() && _mission.waiting) { _prepNeutral(); _renderPanel(); }
+    if (_goggles && _mission && _isDrop() && _mission.waiting) { _prepNeutral(); _renderPanel(); }
     if (_goggles) _guideEvent('goggles');
     else _highlight();
   }
@@ -329,8 +340,10 @@ const LabMixing = (() => {
 
   function addLiquid(id) {
     const L = LabChem.LIQUIDS[id];
-    if (!L || !_guard()) return;
-    if (_isDrop()) { _coach(`This mission uses the dropper below - add the ${_g8() ? 'antacid' : 'sodium hydroxide'} one drop at a time.`); return; }
+    if (!L) return;
+    if (_expWrong('liquid:' + id)) { _guideEvent('liquid:' + id); return; }
+    if (!_guard()) return;
+    if (_isDrop()) { _coach(`Use the dropper below - add the ${_g8() ? 'antacid' : 'sodium hydroxide'} one drop at a time.`); return; }
     if (L.hazard) { _hazard(L.hazard, { what: L.name.toLowerCase() }); return; }
     if (_tube.v + L.pour > TUBE_CAP + 1e-9) {
       _coach(`The tube already holds ${fmt(_tube.v)} cm³. An overfilled tube spills when it fizzes - tap “Empty & rinse” to start again.`);
@@ -368,7 +381,10 @@ const LabMixing = (() => {
       if ((L.oh > 0 && acidBefore) || (L.h > 0 && alkBefore)) { if (_g8()) _neutralised8(id, fizz > 0.01); else _neutralised(); }
       else if (L.indicator) {
         const p = _pH();
-        if (p != null) _coach(`Universal indicator turns ${LabChem.indicatorName(p)}: pH ${p.toFixed(1)} - ${LabChem.pHMeaning(p)}.`);
+        if (p != null) {
+          _coach(`Universal indicator turns ${LabChem.indicatorName(p)}: pH ${p.toFixed(1)} - ${LabChem.pHMeaning(p)}.`);
+          _logEntry({ title: 'Universal indicator', note: true, obs: `Turned ${LabChem.indicatorName(p)}: pH ${p.toFixed(1)} - ${LabChem.pHMeaning(p)}.` });
+        }
       } else if (id === 'water' && acidBefore) _coach('Water dilutes the acid, so the pH rises a little - but it is still an acid.');
       else if (L.corrosive && !t.indicator && !t.metals.length) _say('ind', L.h > 0
         ? 'Acid in the tube. Add universal indicator to see how acidic it is - or drop in a metal.'
@@ -427,7 +443,9 @@ const LabMixing = (() => {
 
   function addMetal(id) {
     const M = _solid(id), t = _tube;
-    if (!M || !_guard()) return;
+    if (!M) return;
+    { const tok = (_g8() ? 'solid:' : 'metal:') + id; if (_expWrong(tok)) { _guideEvent(tok); return; } }
+    if (!_guard()) return;
     if (_isDrop()) { _coach(_g8() ? 'No solids in this mission - just acid, antacid and indicator.' : 'No metals in this mission - just acid, alkali and indicator.'); return; }
     if (_mission && _mission.id === 'g8_survey') { _coach('This survey is about liquids. Test each sample with universal indicator - leave the solids for later.'); return; }
     if (_mission && _mission.id === 'race' && t.metals.length) {
@@ -468,6 +486,7 @@ const LabMixing = (() => {
   }
 
   function splint(lit) {
+    { const heard = lit ? ['pop', 'out'].find(_expWrong) : (_expWrong('glow') ? 'glow' : null); if (heard) { _guideEvent(heard); return; } }
     if (_busy) return;
     if (_tube.bung) { _coach('Take the bung out first, then test the gas at the mouth of the tube.'); return; }
     _busy = true;
@@ -503,6 +522,7 @@ const LabMixing = (() => {
   }
 
   function bung() {
+    if (_expWrong('bung')) { _guideEvent('bung'); return; }
     const t = _tube;
     if (_busy) return;
     if (t.bung) { t.bung = false; t.pressure = 0; _coach('Bung out. The tube is open again.'); }
@@ -517,8 +537,9 @@ const LabMixing = (() => {
   }
 
   function rinse() {
+    if (_expWrong('rinse')) { _guideEvent('rinse'); return; }
     if (_busy) return;
-    if (_isDrop()) { _prepNeutral(); _renderPanel(); return; }
+    if (_isDrop()) { if (_mission) _prepNeutral(); else _startDropper(_expDrop.base); _renderPanel(); return; }
     _reset();
     _coach(_mission && _mission.id === 'race' ? 'Clean tube. Pour fresh hydrochloric acid, then add the next metal.'
       : _mission && _mission.id === 'g8_survey' ? 'Clean tube. Pour the next sample, then add universal indicator.'
@@ -530,6 +551,7 @@ const LabMixing = (() => {
 
   // ── Grade 8 tests: litmus paper, limewater - and the one you never do ──
   function litmus(color) {
+    if (_expWrong('litmus:' + color)) { _guideEvent('litmus:' + color); return; }
     if (_busy) return;
     const t = _tube;
     if (t.v <= 0) { _coach('The tube is empty. Pour a liquid in first, then dip the litmus paper.'); return; }
@@ -567,6 +589,7 @@ const LabMixing = (() => {
   }
 
   function limewater() {
+    if (_expWrong('lime')) { _guideEvent('lime'); return; }
     if (_busy) return;
     const t = _tube;
     if (t.co2 > 0.03) {
@@ -587,9 +610,39 @@ const LabMixing = (() => {
   }
 
   function taste() {
+    if (_expWrong('taste')) { _guideEvent('taste'); return; }
     if (_busy) return;
     if (_tube.v <= 0) { _coach('Nothing to taste - and in a lab you never taste anything, not even to check.'); return; }
     _hazard('g8_taste', { what: _held().map(_lname).join(' and ') || 'water' });
+  }
+
+  // Grade 9 "Evaporate": heat a NEUTRAL salt solution gently until the water
+  // has gone and the salt is left as crystals (g9s-c5-salts). Anything else is
+  // refused with the reason - acid fumes, or alkali mixed into the salt.
+  function evaporate() {
+    if (_expWrong('evap')) { _guideEvent('evap'); return; }
+    if (_busy) return;
+    const t = _tube;
+    if (t.v <= 0) { _coach(t.residue ? 'The tube is already dry - those crystals are your salt.' : 'The tube is empty - there is nothing to evaporate.'); return; }
+    if (t.bung) { _coach('Take the bung out first - never heat a sealed tube.'); return; }
+    if (t.demo) { _coach('Not during a teacher demo. Wait until it is over, then empty & rinse.'); return; }
+    if (t.metals.some(m => m.left > 1e-6)) { _coach('There is still solid in the tube. Let it finish reacting before you evaporate.'); return; }
+    const p = _pH();
+    if (p < 6.5) { _coach(`Not yet - pH ${p.toFixed(1)}, still acidic. Heating it would boil off acid fumes. Neutralise it to pH 7 first.`); return; }
+    if (p > 7.5) { _coach(`Not yet - pH ${p.toFixed(1)}, still alkaline. The crystals would be mixed with alkali. Get it to exactly pH 7 first.`); return; }
+    const salt = t.chloride > 0.01 ? LabChem.NEUTRAL.hcl.salt : t.sulfate > 0.01 ? LabChem.NEUTRAL.h2so4.salt : null;
+    _busy = true;
+    _fxAdd('evap', () => {
+      _busy = false;
+      _tube = _newTube(); _parts = [];
+      _tube.residue = salt ? { name: salt } : null;
+      _logEntry(salt
+        ? { title: 'Evaporated', note: true, obs: `Heated gently until all the water had gone. White crystals of ${salt} were left in the tube.` }
+        : { title: 'Evaporated', note: true, obs: 'Heated until the water had gone. Nothing was left - there was no salt dissolved in it.' });
+      _coach(salt ? `White crystals of ${salt}. Acid + alkali → salt + water - and now the water has gone.` : 'A dry, empty tube. Only a salt solution leaves crystals behind.');
+      _readouts();
+      _guideEvent('evap');
+    });
   }
 
   // ══ Hazards ══════════════════════════════════
@@ -749,6 +802,7 @@ const LabMixing = (() => {
     if (!M || _busy) return;
     _stopGuide(true);
     _reset();
+    _expDrop = null;
     _mission = { id, metals: M.metals || [], samples: M.samples || [], base: M.base || null, results: {}, hazards: 0,
                  drops: 0, acidDrops: 0, overshot: false, mixed: false, success: false, waiting: false };
     _panel = 'missions';
@@ -776,7 +830,8 @@ const LabMixing = (() => {
   }
 
   function drop(n, acid) {
-    const ms = _mission;
+    const ms = _mission || _expDrop, tok = acid ? 'drop:acid' : 'drop:' + n;
+    if (_expWrong(tok)) { _guideEvent(tok); return; }
     if (!ms || !_isDrop() || ms.waiting || _busy) return;
     if (_tube.v + DROP * n > TUBE_CAP) { _coach('The tube is nearly full. Tap “Start again”.'); return; }
     const id = acid ? 'hcl' : _dropBase();
@@ -791,14 +846,14 @@ const LabMixing = (() => {
         // the swirl mixes it in - the real sign that you are close.
         if (!acid && net > 1e-9 && net <= 0.75 + 1e-9) _fxAdd('streak');
         k++;
-        if (k < n) one(); else _afterDrops();
+        if (k < n) one(); else { _afterDrops(); _guideEvent(tok); }
       }, { color: LabChem.LIQUIDS[id].swatch });
     };
     one();
   }
 
   function _afterDrops() {
-    const ms = _mission;
+    const ms = _mission || _expDrop;
     _busy = false;
     const p = _pH(), net = _tube.h - _tube.oh;
     if (!ms.success && Math.abs(p - 7) < 0.5) {
@@ -814,8 +869,9 @@ const LabMixing = (() => {
         _logEntry({ title: 'Neutralised!', obs: 'The indicator turned green: pH 7. The acid and the alkali cancelled out exactly, leaving sodium chloride solution - salt water.',
                     word: LabChem.NEUTRAL.hcl.word, sym: LabChem.NEUTRAL.hcl.sym });
       }
-      _coach('🎯 Green - pH 7, exactly neutral! Tap “Answer the questions” to finish the mission.');
-      Labs.confetti();
+      _coach(_mission ? '🎯 Green - pH 7, exactly neutral! Tap “Answer the questions” to finish the mission.' : '🎯 Green - pH 7, exactly neutral!');
+      if (_mission) Labs.confetti();
+      _guideEvent('neutral');
     } else if (!ms.success && p > 7.5) {
       if (!ms.overshot && _g8()) {
         ms.overshot = true;
@@ -882,7 +938,9 @@ const LabMixing = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('mixing', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _reset();
+    // An experiment's guide (lab_experiment.js) runs on the tube the runner
+    // already set up - the set-up IS the experiment; never wipe it.
+    if (!G.exp) { _expDrop = null; _reset(); }
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
@@ -899,8 +957,9 @@ const LabMixing = (() => {
     let s = G.steps[_guide.step];
     while (s && s.on === 'goggles' && _goggles) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
-    const kind = _kind(s.on.split(':')[0]);
-    if ((kind === 'liquid' || kind === 'metal') && _shelf !== kind) { _shelf = kind; if (_panel === 'sandbox') _renderPanel(); }
+    const first = s.on || (s.any && s.any[0]) || (s.options && s.options[0]) || '';
+    const kind = _kind(first.split(':')[0]);
+    if (!_focus && (kind === 'liquid' || kind === 'metal') && _shelf !== kind) { _shelf = kind; if (_panel === 'sandbox') _renderPanel(); }
     const box = $('lab-guide');
     if (box) {
       const n = G.steps.length, i = _guide.step;
@@ -914,31 +973,64 @@ const LabMixing = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any` (an experiment
+  // that says "pick a metal" accepts every metal). The runner hears every token
+  // first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.btn) _coachGuide(s.on); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); if (s.btn) _coachGuide(s.on); }
   }
 
-  function _guideDo() {
-    const G = _gdef();
-    if (!G) return;
-    const s = G.steps[_guide.step];
-    if (!s) return;
-    const [k, id] = s.on.split(':');
-    const kind = _kind(k);
-    if (kind === 'goggles') { if (!_goggles) goggles(); }
-    else if (kind === 'liquid') addLiquid(id);
-    else if (kind === 'metal') addMetal(id);
-    else if (kind === 'rinse') rinse();
-    else if (kind === 'pop' || kind === 'out') splint(true);
-    else if (kind === 'glow') splint(false);
-    else if (kind === 'litmus') litmus(id);
-    else if (kind === 'lime') limewater();
-    else if (kind === 'conclude') conclude('notalk');
+  // One guide token, done as if tapped: an experiment's set-up before its Aim.
+  // A watch token runs the clock until the tube has been looked at (or the
+  // demo is over); a wait runs it for the seconds given.
+  function _do(tok) {
+    const [k, id] = String(tok).split(':'), kind = _kind(k);
+    switch (kind) {
+      case 'goggles': if (!_goggles) goggles(); break;
+      case 'liquid': addLiquid(id); break;
+      case 'metal': addMetal(id); break;
+      case 'rinse': rinse(); break;
+      case 'pop': case 'out': splint(true); break;
+      case 'glow': splint(false); break;
+      case 'litmus': litmus(id); break;
+      case 'lime': limewater(); break;
+      case 'conclude': conclude('notalk'); break;
+      case 'taste': taste(); break;
+      case 'bung': bung(); break;
+      case 'evap': evaporate(); break;
+      case 'drop': drop(id === 'acid' ? 1 : +id, id === 'acid'); break;
+      case 'dropper': _startDropper(id); break;
+      case 'observe': _settle('observe'); break;
+      case 'demo-end': _settle('demo'); break;
+      case 'wait': _tick(+id || 3); break;
+    }
+  }
+  function _settle(kind) {
+    const t = _tube;
+    const met = () => (kind === 'demo' ? !t.demo : !t.metals.some(m => m.armed && m.left > 1e-6));
+    for (let i = 0; i < 600 && !met(); i++) _step(0.05);
+    _readouts();
+  }
+  // A fresh tube of 5 cm³ hydrochloric acid with universal indicator and the
+  // dropper for a base - what Hit pH 7 / Settle the Stomach prepare, but for
+  // an experiment, with no mission running.
+  function _startDropper(base) {
+    if (!LabChem.LIQUIDS[base]) return;
+    _mission = null;
+    _expDrop = { base, drops: 0, acidDrops: 0, overshot: false, success: false, waiting: false };
+    _reset();
+    _applyLiquid('hcl', 5, true);
+    _applyLiquid('indicator', 0.15, true);
+    _renderPanel();
+    _readouts();
   }
 
   function _guideHint() {
@@ -1047,6 +1139,7 @@ const LabMixing = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('mixing', G)) { _stopGuide(true); return; }
     const st = Labs.store('mixing');
     // A discovery's "Show me how" is not one of the four guided experiments;
@@ -1082,37 +1175,108 @@ const LabMixing = (() => {
     if (!silent) _coach('Guide stopped. Pick another experiment below, or explore freely with the shelf.');
   }
 
-  // The yellow glow on whatever the current guide step wants tapped.
+  // The yellow glow on whatever the current guide step wants tapped - every
+  // option of an experiment's decision, or the one control of a plain step.
+  // A watch step shows the 👀 chip over the tube instead.
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
     _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
+    const toks = s ? (s.options || s.any || (s.on ? [s.on] : [])) : [];
+    const watch = $('lab-watch');
+    if (watch) watch.hidden = !toks.some(t => /^(observe|demo-end|wait)/.test(t));
     if (!s) return;
-    const [k, id] = s.on.split(':');
-    const kind = _kind(k);
-    const sel = kind === 'goggles' ? '#lab-goggles'
-      : (kind === 'liquid' || kind === 'metal') ? `[data-add="${kind}"][data-id="${id}"]`
-      : kind === 'rinse' ? '.lab-tools [data-act="rinse"]'
-      : (kind === 'pop' || kind === 'out') ? '.lab-tools [data-act="splint"]'
-      : kind === 'glow' ? '.lab-tools [data-act="glow"]'
-      : kind === 'litmus' ? `.lab-tools [data-act="litmus-${id}"]`
-      : kind === 'lime' ? '.lab-tools [data-act="lime"]'
-      : kind === 'conclude' ? '[data-conclude="notalk"]' : null;
-    const el = sel && _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-add]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    const els = toks.map(t => { const sel = _selFor(t); return sel && _root.querySelector(sel); }).filter(Boolean);
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-add],[data-drop]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // The runner sets the tube up with apply(), runs the steps as an `exp` guide
+  // and hears every token through hooks.token. A token the current step lists
+  // as WRONG is only heard: nothing is poured, dropped, tasted or sealed - the
+  // runner's card explains. That is how "Taste it" can sit next to the
+  // indicator, and a bung next to a fizzing tube, without either happening.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
+
+  // The control a token belongs to. A watch (observe / demo-end) points at the
+  // 👀 chip over the tube; the dropper's end point (neutral) at its 1-drop button.
+  function _selFor(tok) {
+    const [k, id] = String(tok).split(':'), kind = _kind(k);
+    switch (kind) {
+      case 'goggles': return '#lab-goggles';
+      case 'liquid': case 'metal': return `[data-add="${kind}"][data-id="${id}"]`;
+      case 'pop': case 'out': return '.lab-tools [data-act="splint"]';
+      case 'litmus': return `.lab-tools [data-act="litmus-${id}"]`;
+      case 'rinse': case 'glow': case 'lime': case 'taste': case 'bung': case 'evap': return `.lab-tools [data-act="${kind}"]`;
+      case 'conclude': return '[data-conclude="notalk"]';
+      case 'drop': return `[data-drop="${id}"]`;
+      case 'neutral': case 'close': case 'dropper': return '[data-drop="1"]';
+      case 'observe': case 'demo-end': case 'wait': return '#lab-watch';
+    }
+    return null;
+  }
+
+  // focus(tokens): show only the tools, shelf items and dropper buttons an
+  // experiment's steps use; null shows everything. Re-applied after every
+  // render of those controls. Goggles stay: a hazard card may send a child there.
+  const _itemTok = b => (b.dataset.add === 'metal' && _g8() ? 'solid' : b.dataset.add) + ':' + b.dataset.id;
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus, has = t => on && _focus.has(t);
+    _root.querySelectorAll('.lab-tools .lab-tool').forEach(b => {
+      const a = b.dataset.act;
+      b.hidden = on && !(a === 'splint' ? (has('pop') || has('out')) : a.startsWith('litmus-') ? has('litmus:' + a.slice(7)) : has(a));
+    });
+    const tools = _root.querySelector('.lab-tools');
+    if (tools) tools.hidden = on && ![...tools.querySelectorAll('.lab-tool')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-shelf .lab-item').forEach(b => { b.hidden = on && !has(_itemTok(b)); });
+    _root.querySelectorAll('.lab-shelf [data-shelf], .lab-shelf .lab-hint').forEach(el => { el.hidden = on; });
+    const shelf = _root.querySelector('.lab-shelf');
+    if (shelf) shelf.hidden = on && !shelf.querySelector('.lab-item:not([hidden])');
+    _root.querySelectorAll('[data-drop]').forEach(b => {
+      const v = b.dataset.drop;
+      b.hidden = on && !(has('drop:' + v) || v === 'acid' || (v === '1' && (has('neutral') || has('close') || has('dropper'))));
+    });
+    _root.querySelectorAll('[data-act="neutral-restart"]').forEach(b => { b.hidden = on; });
+  }
+
+  const experiment = {
+    list: () => LabChem.forGrade(LabChem.EXPERIMENTS || [], _grade || _readGrade()),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = LabChem.MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _mission = null; _guide = null; _expDrop = null;
+      _reset(); _log = []; _goggles = false; _panel = 'sandbox'; _shelf = 'liquid'; _fx = []; _busy = false;
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _syncGoggles(); _renderPanel(); _readouts(); _draw(0);
+    },
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _silent = true;
+      try { _do(tok); } finally { _instant = was; _silent = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => { _expDrop = null; _stopGuide(true); },
+    evidence: () => _log.slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _renderPanel(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // What the Bench tab opens with when nothing is under way: what this page is
   // for, and every way to start - guided experiments first, then missions.
@@ -1157,8 +1321,9 @@ const LabMixing = (() => {
     else if (_panel === 'missions') p.innerHTML = _mission
       ? _missionHTML() + (_mission.id === 'race' || _mission.id === 'g8_survey' ? _shelfHTML() + _notebookHTML() : _notebookHTML())
       : _missionListHTML();
-    else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
+    else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + (_expDrop ? _dropperHTML() : '') + _shelfHTML() + _notebookHTML();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -1169,8 +1334,11 @@ const LabMixing = (() => {
     if (nb) nb.outerHTML = _notebookHTML();
     const mi = $('lab-mission');
     if (mi) mi.outerHTML = _missionHTML();
+    const dp = $('lab-dropper');
+    if (dp) dp.outerHTML = _dropperHTML();
     if (_panel === 'found') { const p = $('lab-panel'); if (p) p.innerHTML = _foundHTML(); }
     _foundCount();
+    _applyFocus();
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is
@@ -1181,7 +1349,7 @@ const LabMixing = (() => {
   function _discover(id) {
     const all = _mine(LabChem.DISCOVERIES);
     const d = all.find(x => x.id === id);
-    if (!d) return;
+    if (!d || _silent) return;
     if (Labs.discover('mixing', id, { title: d.title, total: all.length })) _refresh();
   }
   function _foundCount() {
@@ -1207,13 +1375,16 @@ const LabMixing = (() => {
         <span class="lab-item-text"><b>${esc(x.name)}</b><small>${esc(x.meta)}</small></span>
         ${x.alkali ? `<span class="lab-item-sign" title="Explosive and flammable">${Labs.sign('flammable', true)}</span>` : ''}</button>`;
     };
-    const items = _g8()
-      ? (_shelf === 'metal'
-        ? ['magnesium', 'zinc', 'marble'].map(metal)
-        : ['lemon', 'vinegar', 'salt', 'bakingsoda', 'toothpaste', 'antacid', 'hcl', 'naoh', 'water', 'indicator', 'bleach'].map(liquid))
-      : _shelf === 'metal'
-        ? ['magnesium', 'zinc', 'iron', 'copper', 'aluminium', 'calcium', 'sodium', 'potassium'].map(metal)
-        : ['hcl', 'h2so4', 'naoh', 'water', 'indicator'].map(liquid);
+    const liquids = _g8() ? ['lemon', 'vinegar', 'salt', 'bakingsoda', 'toothpaste', 'antacid', 'hcl', 'naoh', 'water', 'indicator', 'bleach'] : ['hcl', 'h2so4', 'naoh', 'water', 'indicator'];
+    const solids = _g8() ? ['magnesium', 'zinc', 'marble'] : ['magnesium', 'zinc', 'iron', 'copper', 'aluminium', 'calcium', 'sodium', 'potassium'];
+    // An experiment shows only the items its steps use - liquids and solids
+    // together, so a decision between an acid and a metal needs no tab switch.
+    if (_focus) {
+      const sk = _g8() ? 'solid:' : 'metal:';
+      const items = [...liquids.filter(id => _focus.has('liquid:' + id)).map(liquid), ...solids.filter(id => _focus.has(sk + id)).map(metal)];
+      return `<section class="lab-shelf" aria-label="Shelf"${items.length ? '' : ' hidden'}><div class="lab-items">${items.join('')}</div></section>`;
+    }
+    const items = _shelf === 'metal' ? solids.map(metal) : liquids.map(liquid);
     return `<section class="lab-shelf" aria-label="Shelf">
       <div class="lab-shelf-head">
         <div class="lab-seg" role="group" aria-label="Shelf">
@@ -1326,6 +1497,30 @@ const LabMixing = (() => {
         <button type="button" class="lab-link" style="min-height:44px" data-act="exit-mission">Leave mission</button></div>
       ${body}
       ${ms.success ? '<button type="button" class="lab-btn lab-btn-primary lab-btn-wide" data-act="quiz">📝 Answer the questions</button>' : ''}
+    </section>`;
+  }
+
+  // The dropper an experiment uses with no mission running: the same target
+  // and buttons as Hit pH 7 / Settle the Stomach, plus 10 drops for the long
+  // red stretch. Focus hides the buttons a step does not offer.
+  function _dropperHTML() {
+    const ds = _expDrop;
+    if (!ds) return '';
+    const p = _tube.v > 0 ? _pH() : null;
+    const col = p != null ? LabChem.indicatorColor(p) : 'transparent';
+    const B = LabChem.LIQUIDS[ds.base];
+    return `<section class="lab-mission" id="lab-dropper" aria-label="Dropper">
+      <div class="lab-target">
+        <div class="lab-target-now"><i style="background:${col}"></i><span><small>Now</small><b>pH ${p != null ? p.toFixed(1) : '-'}</b></span></div>
+        <div class="lab-target-goal"><i style="background:${LabChem.indicatorColor(7)}"></i><span><small>Goal</small><b>pH 7</b></span></div>
+      </div>
+      <p class="lab-progress-text">${esc(B.short)} added: ${ds.drops} drop${ds.drops === 1 ? '' : 's'} (${fmt(ds.drops * DROP)} cm³)</p>
+      <div class="lab-dropper">
+        <button type="button" class="lab-btn lab-btn-primary" data-drop="1">💧 Add 1 drop</button>
+        <button type="button" class="lab-btn" data-drop="5">💧 Add 5 drops</button>
+        <button type="button" class="lab-btn" data-drop="10">💧 Add 10 drops</button>
+        ${ds.overshot && !ds.success ? '<button type="button" class="lab-btn lab-btn-warn" data-drop="acid">↩ 1 drop of acid</button>' : ''}
+      </div>
     </section>`;
   }
 
@@ -1447,7 +1642,7 @@ const LabMixing = (() => {
         .map(k => `${LabChem.LIQUIDS[k].short.toLowerCase()} ${fmt(t.added[k])} cm³`);
       if (t.indicator) bits.push('indicator');
       t.metals.forEach(m => bits.push(_solid(m.id).name.toLowerCase() + (m.left <= 0 ? ' (used up)' : '')));
-      c.textContent = bits.length ? 'In the tube: ' + bits.join(' · ') : 'The test tube is clean and empty.';
+      c.textContent = t.residue ? `In the tube: white crystals of ${t.residue.name} - dry` : bits.length ? 'In the tube: ' + bits.join(' · ') : 'The test tube is clean and empty.';
     }
     const s = $('lab-status');
     if (s) {
@@ -1457,6 +1652,7 @@ const LabMixing = (() => {
       if (t.fizz > 0.3) chips.push('<span class="lab-chip">🫧 Fizzing</span>');
       if (t.paper) chips.push(`<span class="lab-chip">${t.paper.from === 'red' ? '🟥 Red' : '🟦 Blue'} litmus: ${t.paper.to === t.paper.from ? 'no change' : 'turned ' + t.paper.to}</span>`);
       if (t.lime) chips.push(`<span class="lab-chip">🥛 Limewater ${t.lime}</span>`);
+      if (t.residue) chips.push('<span class="lab-chip">🧂 Dry: white crystals</span>');
       if (t.bung && t.pressure > 0.04) chips.push('<span class="lab-chip is-danger">⚠️ Pressure rising!</span>');
       else if (t.bung) chips.push('<span class="lab-chip">🟫 Sealed</span>');
       else if (t.gas > 0.03 || t.co2 > 0.03) chips.push('<span class="lab-chip">💨 Gas at the mouth</span>');
@@ -1657,6 +1853,12 @@ const LabMixing = (() => {
       if (t.cloudy > 0.02) { c.fillStyle = `rgba(246,246,242,${Math.min(0.65, t.cloudy * 0.65)})`; c.fillRect(g.left, sy, g.tw, g.bot - sy + 4); }
       c.beginPath(); c.moveTo(g.left, sy - 1); c.quadraticCurveTo(g.cx, sy + 5, g.right, sy - 1);
       c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 1.5; c.stroke();
+    }
+    if (t.residue && t.v <= 0) {
+      c.fillStyle = 'rgba(255,255,255,0.95)';
+      c.beginPath(); c.ellipse(g.cx, g.bot - 7, g.tw * 0.34, 5, 0, 0, Math.PI * 2); c.fill();
+      c.fillStyle = 'rgba(226,226,214,0.9)';
+      for (let j = 0; j < 7; j++) c.fillRect(g.cx + ((j * 37) % 23) - 11, g.bot - 10 - ((j * 19) % 6), 3, 3);
     }
     const n = t.metals.length;
     t.metals.forEach((m, i) => {
@@ -1863,6 +2065,8 @@ const LabMixing = (() => {
     return { grade: _grade, v: t.v, h: t.h, oh: t.oh, pH: _tube ? _pH() : null, indicator: t.indicator, gas: t.gas, bung: t.bung, demo: t.demo,
              co2: t.co2, fizz: t.fizz, lime: t.lime, paper: t.paper, added: Object.assign({}, t.added),
              goggles: _goggles, busy: _busy, panel: _panel, guide: _guide && { id: _guide.id, step: _guide.step },
+             focus: _focus ? [..._focus] : null, residue: t.residue,
+             expDrop: _expDrop && { base: _expDrop.base, drops: _expDrop.drops, overshot: _expDrop.overshot, success: _expDrop.success },
              metals: t.metals.map(m => ({ id: m.id, left: m.left, rate: m.rate, key: m.key })),
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
              mission: _mission && { id: _mission.id, results: Object.keys(_mission.results), drops: _mission.drops,
@@ -1879,7 +2083,7 @@ const LabMixing = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, addLiquid, addMetal, splint, bung, rinse, goggles, drop,
-           litmus, limewater, taste, conclude, _test, _tick, _debug };
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, addLiquid, addMetal, splint, bung, rinse, goggles, drop,
+           litmus, limewater, taste, conclude, evaporate, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMixing = LabMixing;

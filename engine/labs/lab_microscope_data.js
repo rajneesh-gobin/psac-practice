@@ -19,6 +19,11 @@
 //  ⚠ MAGNIFICATION = IMAGE SIZE ÷ ACTUAL SIZE, both in the SAME unit, and the
 //    answer has no unit. 1 mm = 1000 µm. scripts/test-labs-microscope-data.js
 //    re-derives every number below.
+//  ⚠ EXPERIMENTS (LAB_SPEC §10, lab_experiment.js) is what a child opens on:
+//    Aim → Predict → Do → See → Check → Done. Four per grade, re-cut from the
+//    GUIDES, MISSIONS and DISCOVERIES below. Every See text is replayed through
+//    this file's own model by the data test, so it can only say what the bench
+//    will show.
 //
 //  The focus model (knob positions in steps of 0.1 mm):
 //    z = where the focus knobs have put the lens. Each objective is sharp at
@@ -472,6 +477,29 @@ const LabMicroscopeData = (() => {
       } else if (w.converted) out.push(`Image = ${fmt(image)} × 1000 = ${fmt(mmToUm(image))} µm`);
     }
     return out;
+  }
+
+  // ── Writing the answer ─────────────────────────
+  // Three answers to choose from on the desk: the right one and the two
+  // mistakes the model can explain (work() → RESULTS). The order is fixed per
+  // figure, so a token `pick:b` always names the same answer and an experiment
+  // can list it. The label is what a pupil would WRITE - so the wrong-unit
+  // answer to "in µm?" reads "0.002 µm", not the 0.002 mm the sum gave.
+  const PICK_IDS = ['a', 'b', 'c'];
+  const PICKS = { rbc: ['multiply', 'right', 'no_convert'], phago: ['no_convert', 'right', 'multiply'],
+                  lympho: ['right', 'multiply', 'no_convert'], platelet: ['no_convert', 'multiply', 'right'] };
+  const needConvert = f => f.mode === 'findM' || f.askUnit === 'µm';
+  function pickWork(f, key) {
+    if (key === 'right') return { ruler: 'cell', converted: needConvert(f), op: 'divide' };
+    if (key === 'multiply') return { ruler: 'cell', converted: false, op: 'multiply' };
+    return { ruler: 'cell', converted: !needConvert(f), op: 'divide' };
+  }
+  function pickOptions(f) {
+    return (PICKS[f.id] || ['right']).map((key, i) => {
+      const w = pickWork(f, key), r = work(f, w);
+      const label = key === 'no_convert' && f.mode === 'findActual' ? `${fmt(r.value)} ${f.askUnit}` : r.shown;
+      return { id: PICK_IDS[i], key, w, label, correct: key === 'right' };
+    });
   }
 
   // What a correct answer unlocks.
@@ -1106,6 +1134,168 @@ const LabMicroscopeData = (() => {
       ] },
   ];
 
+  // ── Experiments (LAB_SPEC §10) ─────────────────
+  // What a child opens on. `setup` is applied silently before the Aim, so the
+  // picture is already set up; every step is a decision (ask + options, the
+  // wrong ones explaining themselves) or one observation (on + say), and each
+  // completes with ONE tap - focusing is done with the knob tokens, never the
+  // guide's focus:near/sharp pseudo-tokens, which can take two. The default
+  // objective is ×10, so "lower, then a fine nudge" leaves the lens where one
+  // coarse turn on ×4 finds the cells and one fine turn makes them sharp.
+  // Check refs are "<mission id>:<quiz index>" into MISSIONS of the same grade.
+  const SHARP_LOW = set => set.concat(['obj:4', 'lower', 'coarse:up', 'coarse:up', 'fine:up', 'fine:up']);
+  const SHARP_HIGH = set => SHARP_LOW(set).concat(['obj:40', 'fine:up']);
+  const EXPERIMENTS = [
+    // ── Grade 7 · g7s-cells ──
+    { id: 'g7_onion_inside', grades: [7], chapter: 'g7s-cells', icon: '🧅',
+      title: 'What is inside an onion skin cell?',
+      aim: 'A thin layer of onion skin, stained with iodine, is on the stage under a cover slip. The lens is lowered, watching from the side. Focus it, then look inside one cell.',
+      setup: ['rig:scope', 'slide:onion', 'stain:iodine', 'cover:angle', 'clips', 'light:lamp', 'lower', 'fine:up'],
+      predict: { q: 'Onion skin is part of a plant. Will you see green chloroplasts?', answer: 'no',
+        options: [{ id: 'yes', label: 'Yes, lots of green discs' }, { id: 'no', label: 'No, none at all' }, { id: 'some', label: 'Only in a few cells' }] },
+      steps: [
+        { ask: 'Which objective do you start with?', on: 'obj:4', options: ['obj:4', 'obj:40'],
+          wrong: { 'obj:40': 'Starting on high power is a mistake. The long ×40 lens would hit the slide and crack it, and its image is sharp only over a tiny distance. Start on ×4.' } },
+        { on: 'coarse:up', say: 'Look through the eyepiece. Tap Coarse up: the lens moves away from the slide and the cells appear.' },
+        { on: 'fine:up', say: 'Tap Fine up to make the cells sharp.' },
+        { on: 'obj:40', say: 'Rows of brick-shaped cells. Now tap ×40 to look inside one cell.' },
+        { on: 'fine:up', say: 'Tap Fine up once. At high power use only the fine focus.' },
+      ],
+      see: { saw: 'At ×400 the onion cells were big enough to look inside: a thick cell wall, a big clear vacuole, a thin layer of cytoplasm and a dark brown nucleus - and no green chloroplasts.',
+             learn: 'Onion skin is a single layer of plant cells. Each has a cell wall, a large vacuole, cytoplasm and a nucleus, but no chloroplasts: the layers of an onion bulb grow out of the light.' },
+      check: ['g7_onionparts:6', 'g7_onionparts:2', 'g7_onionparts:3'],
+      exam: 'In the exam you may be asked to label the parts of a plant cell - cell wall, cell membrane, cytoplasm, nucleus and vacuole - and to explain why onion cells have no chloroplasts.' },
+    { id: 'g7_make_slide', grades: [7], chapter: 'g7s-cells', icon: '👄',
+      title: 'How do you make a slide with no bubbles?',
+      aim: 'Cells from inside your own cheek are in a drop of water on a clean slide. Stain them, put the cover slip on and light the slide - without trapping any air.',
+      setup: ['rig:scope', 'slide:cheek'],
+      predict: { q: 'If you lower the cover slip at an angle, what happens to the air?', answer: 'out',
+        options: [{ id: 'out', label: 'The water pushes it out in front' }, { id: 'in', label: 'It is trapped as bubbles' }, { id: 'same', label: 'Nothing - air does not matter' }] },
+      steps: [
+        { ask: 'Cheek cells are almost colourless. Which stain?', on: 'stain:blue', options: ['stain:blue', 'stain:iodine'],
+          wrong: { 'stain:iodine': 'Iodine solution is the stain for onion skin: it turns plant cells brown. Cheek cells are stained with methylene blue.' } },
+        { ask: 'Now the cover slip. How does it go on?', on: 'cover:angle', options: ['cover:angle', 'cover:drop'],
+          wrong: { 'cover:drop': 'Dropped flat, the cover slip traps air under it: round bubbles with black rims that hide the cells. Touch one edge down first and lower it slowly, at an angle.' } },
+        { ask: 'The slide needs light from below. Which?', on: 'light:lamp', options: ['light:lamp', 'sun'],
+          wrong: { 'sun': 'Never aim the mirror at the Sun. The mirror and the lenses would focus sunlight into your eye and could blind you. Use the lamp, or a mirror aimed at a window.' } },
+      ],
+      see: { saw: 'No air bubbles: lowered at an angle, the water spread under the cover slip and pushed the air out in front of it. The cells are stained blue and the lamp is on.',
+             learn: 'Stain first, then the cover slip - slowly, one edge first, at an angle - so no air is trapped. Light comes from the lamp, or a mirror aimed at a window, never at the Sun.' },
+      check: ['g7_onionparts:5', 'g7_onionparts:4', 'g7_compare:6'],
+      exam: 'In the exam you may be asked how to prepare a slide - a drop of stain, then a cover slip lowered at an angle so no air bubbles are trapped - and a safety rule, such as never using direct sunlight.' },
+    { id: 'g7_plant_or_animal', grades: [7], chapter: 'g7s-cells', icon: '🔍',
+      title: 'Plant or animal cell?',
+      aim: 'Your cheek cells, stained blue and sharp at ×400. Onion cells had a thick wall round each one - do cheek cells have one too? Name the parts and decide.',
+      setup: SHARP_HIGH(['rig:scope', 'slide:cheek', 'stain:blue', 'cover:angle', 'clips', 'light:lamp']),
+      predict: { q: 'Do cheek cells have a cell wall, like onion cells?', answer: 'no',
+        options: [{ id: 'yes', label: 'Yes, every cell has one' }, { id: 'no', label: 'No, only a thin membrane' }, { id: 'some', label: 'Some of them do' }] },
+      steps: [
+        { ask: 'Name the dark blue spot under the pointer.', on: 'part:nucleus', options: ['part:nucleus', 'part:wall'],
+          wrong: { 'part:wall': 'A cell wall is a thick line round the OUTSIDE of a cell. This dark round spot inside the cell is the nucleus.' } },
+        { on: 'move:left', say: 'Tap Left. The pointer moves off the nucleus into the jelly-like cytoplasm.' },
+        { on: 'move:left', say: 'Tap Left again, to the very edge of the cell.' },
+        { ask: 'A very thin line, right at the edge. Name it.', on: 'part:membrane', options: ['part:membrane', 'part:wall'],
+          wrong: { 'part:wall': 'There is no thick wall here. This thin line is the cell membrane - the only thing round the outside of an animal cell.' } },
+        { ask: 'So: plant cell or animal cell?', on: 'kind:animal', options: ['kind:animal', 'kind:plant'],
+          wrong: { 'kind:plant': 'Look again: no thick wall, no big clear vacuole, no green discs. A cell with only a thin membrane round it is an animal cell.' } },
+      ],
+      see: { saw: 'The cheek cell had a nucleus, cytoplasm and a thin cell membrane round the outside - but no cell wall, no large vacuole and no chloroplasts.',
+             learn: 'Plant and animal cells both have a cell membrane, cytoplasm and a nucleus. Only plant cells have a cell wall, a large vacuole and chloroplasts. Cheek cells are animal cells.' },
+      check: ['g7_compare:0', 'g7_compare:1', 'g7_compare:3'],
+      exam: 'In the exam you may be asked which part an onion cell has that a cheek cell does not - the cell wall - and which three parts both kinds of cell share.' },
+    { id: 'g7_leaf_food', grades: [7], chapter: 'g7s-cells', icon: '🌿',
+      title: 'Where does a leaf make its food?',
+      aim: 'One thin pondweed leaf, in water under a cover slip, sharp on low power. It needed no stain. Go to high power and find the green parts.',
+      setup: SHARP_LOW(['rig:scope', 'slide:leaf', 'cover:angle', 'clips', 'light:lamp']),
+      predict: { q: 'What will be green inside a leaf cell?', answer: 'discs',
+        options: [{ id: 'discs', label: 'Many small green discs' }, { id: 'nucleus', label: 'The nucleus' }, { id: 'all', label: 'The whole cell, evenly' }] },
+      steps: [
+        { on: 'obj:40', say: 'Neat green boxes. Tap ×40 to look inside one leaf cell.' },
+        { on: 'fine:up', say: 'Tap Fine up once - only the fine focus at high power.' },
+        { ask: 'Small green discs line the cell. Name the one under the pointer.', on: 'part:chloroplast', options: ['part:chloroplast', 'part:nucleus'],
+          wrong: { 'part:nucleus': 'The nucleus is one dark round spot, not many green discs. These green discs are chloroplasts.' } },
+        { ask: 'A cell wall and chloroplasts. Plant cell or animal cell?', on: 'kind:plant', options: ['kind:plant', 'kind:animal'],
+          wrong: { 'kind:animal': 'Animal cells have no cell wall and no chloroplasts. A box-shaped cell with a wall and green discs is a plant cell.' } },
+      ],
+      see: { saw: 'Each leaf cell was a neat box with a cell wall, and small green discs - chloroplasts - lined the inside of every cell.',
+             learn: 'Chloroplasts contain chlorophyll, the green pigment that traps light for photosynthesis, so the leaf can make its own food. Only plant cells that get light have them.' },
+      check: ['g7_compare:2', 'g7_compare:4'],
+      exam: 'In the exam you may be asked which part traps light for photosynthesis - the chloroplast, with its green chlorophyll - and why root cells and onion cells have none.' },
+    // ── Grade 9 · g9s-b1-circulatory ──
+    { id: 'g9_rbc_size', grades: [9], chapter: 'g9s-b1-circulatory', icon: '📐',
+      title: 'How big is a red blood cell?',
+      aim: 'A printed drawing of a red blood cell, the way the paper shows it. The real cell is 8 µm wide. Measure the drawing and work out how many times bigger it is.',
+      setup: ['rig:measure', 'fig:rbc'],
+      predict: { q: 'The drawing is about 6 cm wide. Is it more or less than 1000 times bigger than the real cell?', answer: 'more',
+        options: [{ id: 'more', label: 'More than ×1000' }, { id: 'less', label: 'Less than ×1000' }, { id: 'same', label: 'About ×1000 exactly' }] },
+      steps: [
+        { ask: 'First, the image size. How do you find it?', on: 'ruler:cell', options: ['ruler:cell', 'ruler:eye'],
+          wrong: { 'ruler:eye': 'A guess can be several millimetres out, and a big magnification turns a small slip into a big one. Lay the ruler across the whole cell, 0 on one edge.' } },
+        { ask: 'Image 60 mm, actual 8 µm. Magnification = image ÷ actual, in the SAME unit. Which is it?', on: 'pick:b', options: ['pick:a', 'pick:b', 'pick:c'],
+          wrong: { 'pick:a': '60 × 8 = 480 is not a magnification. Magnification says how many times bigger the drawing is: image ÷ actual, never multiplied.',
+                   'pick:c': '60 ÷ 8 = 7.5 is 1000 times too small, because 60 is in mm and 8 is in µm. 8 µm = 0.008 mm, so it is 60 ÷ 0.008.' } },
+      ],
+      see: { saw: 'The drawing measured 60 mm. The real cell is 8 µm = 0.008 mm, so 60 ÷ 0.008 = ×7500: the drawing is 7500 times bigger than the cell.',
+             learn: 'Magnification = image size ÷ actual size, with both lengths in the same unit (1 mm = 1000 µm). A magnification has no unit.' },
+      check: ['mag:0', 'mag:1', 'mag:6'],
+      exam: 'The Grade 9 biology questions ask exactly this: a drawing 58 mm wide of a cell 0.0058 mm wide is ×10 000. Measure with a ruler, match the units, divide - and write no unit.' },
+    { id: 'g9_blood_400', grades: [9], chapter: 'g9s-b1-circulatory', icon: '🔬',
+      title: 'What can you see in blood at ×400?',
+      aim: 'A stained blood smear is clipped on the stage with the lamp on, and the lens is lowered, watching from the side. Focus it, then go up to ×400.',
+      setup: ['rig:scope', 'slide:blood', 'clips', 'light:lamp', 'lower', 'fine:up'],
+      predict: { q: 'At ×400, which will you see most of?', answer: 'red',
+        options: [{ id: 'red', label: 'Red blood cells' }, { id: 'white', label: 'White blood cells' }, { id: 'platelets', label: 'Platelets' }, { id: 'equal', label: 'Equal numbers of each' }] },
+      steps: [
+        { ask: 'Which objective do you start with?', on: 'obj:4', options: ['obj:4', 'obj:40'],
+          wrong: { 'obj:40': 'Never start on high power. With the lens lowered, the long ×40 objective would hit the slide and crack it - and its image is sharp only over a tiny distance. Start on ×4.' } },
+        { on: 'coarse:up', say: 'Look through the eyepiece. Tap Coarse up: the lens moves away from the slide and the cells appear.' },
+        { on: 'fine:up', say: 'Tap Fine up to make the image sharp.' },
+        { on: 'obj:40', say: 'Hundreds of tiny dots on low power. Tap ×40, the high-power objective, to see single cells.' },
+        { on: 'fine:up', say: 'Tap Fine up once. Only the fine focus at high power.' },
+      ],
+      see: { saw: 'At ×400 the smear was full of pink discs with pale centres and no nucleus: red blood cells, far more of them than anything else. Total magnification 10 × 40 = ×400.',
+             learn: 'Red blood cells outnumber every other kind. They have no nucleus, leaving room for haemoglobin, which carries oxygen. Total magnification = eyepiece × objective.' },
+      check: ['focus:0', 'focus:1', 'cells:1'],
+      exam: 'In the exam you may be asked the total magnification - eyepiece × objective, 10 × 40 = ×400 - and which objective to start with: low power, focusing away from the slide.' },
+    { id: 'g9_white_hunt', grades: [9], chapter: 'g9s-b1-circulatory', icon: '🧭',
+      title: 'Can you find the white blood cells?',
+      aim: 'The smear is sharp at ×400 and a big cell sits under the pointer. White cells are rare: name this one, then move the slide and hunt for another kind.',
+      setup: SHARP_HIGH(['rig:scope', 'slide:blood', 'clips', 'light:lamp']).concat(['move:right']),
+      predict: { q: 'How will you tell a white blood cell from a red one?', answer: 'nucleus',
+        options: [{ id: 'nucleus', label: 'It has a nucleus, stained purple' }, { id: 'smaller', label: 'It is smaller, with no nucleus' }, { id: 'white', label: 'It looks white, not pink' }] },
+      steps: [
+        { ask: 'Nearly all nucleus: one big round purple ball, a thin rim of cytoplasm. Name it.', on: 'id:lympho', options: ['id:lympho', 'id:phago', 'id:rbc'],
+          wrong: { 'id:phago': 'A phagocyte has a purple nucleus in several lobes and grainy cytoplasm. One large round nucleus that almost fills the cell is a lymphocyte.',
+                   'id:rbc': 'A red blood cell has no nucleus at all - it is a plain pink disc. This cell is nearly all nucleus.' } },
+        { on: 'move:left', say: 'Tap Left. Back to the middle: pink red cells again.' },
+        { on: 'move:left', say: 'Tap Left once more. Keep hunting for a purple nucleus.' },
+        { ask: 'A big cell with a purple nucleus in lobes and grainy cytoplasm. Name it.', on: 'id:phago', options: ['id:phago', 'id:lympho', 'id:platelet'],
+          wrong: { 'id:lympho': 'A lymphocyte is nearly all one round nucleus. This nucleus is in several lobes, with grainy cytoplasm round it: a phagocyte.',
+                   'id:platelet': 'A platelet is a tiny purple fragment, smaller than a red cell, with no nucleus. This is a big cell with a lobed nucleus.' } },
+      ],
+      see: { saw: 'Two white blood cells found: a lymphocyte, nearly all round nucleus, and a phagocyte with a nucleus in lobes. Both nuclei were purple; the red cells all round them had none.',
+             learn: 'White blood cells defend the body. Phagocytes engulf and digest microbes; lymphocytes make antibodies. Their nucleus, which the stain turns purple, tells them from red cells.' },
+      check: ['cells:2', 'cells:3', 'cells:5'],
+      exam: 'In the exam you may be asked to tell a white blood cell from a red one on a slide - the white cell has a nucleus - and what each does: phagocytes engulf microbes, lymphocytes make antibodies.' },
+    { id: 'g9_platelet_15000', grades: [9], chapter: 'g9s-b1-circulatory', icon: '📝',
+      title: 'How big is a platelet drawn at ×15 000?',
+      aim: 'The paper\'s hardest sum. A platelet is drawn at ×15 000, and the ruler says the drawing is 30 mm wide. Find its real size, in µm.',
+      setup: ['rig:measure', 'fig:platelet', 'ruler:cell'],
+      predict: { q: 'Will the real platelet be bigger or smaller than the drawing?', answer: 'smaller',
+        options: [{ id: 'smaller', label: 'Much smaller', sub: 'the drawing is enlarged' }, { id: 'bigger', label: 'Much bigger' }, { id: 'same', label: 'The same size' }] },
+      steps: [
+        { ask: 'Image 30 mm, magnification ×15 000. To find the actual size, do you divide or multiply?', on: 'divide', options: ['divide', 'multiply'],
+          wrong: { 'multiply': '30 × 15 000 = 450 000 mm - a platelet 450 metres wide! The drawing is 15 000 times BIGGER than the cell, so the cell is image ÷ 15 000.' } },
+        { ask: '30 ÷ 15 000 = 0.002 mm. The question asks for µm. Which answer?', on: 'pick:c', options: ['pick:a', 'pick:b', 'pick:c'],
+          wrong: { 'pick:a': '0.002 is in mm, not µm. 1 mm = 1000 µm, so 0.002 mm × 1000 = 2 µm. Written as 0.002 µm the platelet would be 1000 times too small.',
+                   'pick:b': '450 000 mm is what multiplying gives: a platelet 450 metres wide. Cells are a few micrometres across - divide, then change mm to µm.' } },
+      ],
+      see: { saw: 'The drawing measured 30 mm. 30 ÷ 15 000 = 0.002 mm, and 0.002 × 1000 = 2 µm. The real platelet is 2 µm wide.',
+             learn: 'Actual size = image size ÷ magnification. Then give the answer in the unit the question asks for: 1 mm = 1000 µm, so multiply mm by 1000 to get µm.' },
+      check: ['mag:2', 'mag:4', 'mag:3'],
+      exam: 'Biology 2024 Q4(e)(ii) asks the same thing at ×8000: measure the printed drawing in mm, divide by the magnification, and answer in the unit the question asks for.' },
+  ];
+
   return { GRADES, forGrade, STAINS, COVERS, TISSUE, brick, onionNucleus, leafChloros, CHEEK, CHEEK_TILE, CHEEK_NUC, CHEEK_MEM, cheekR,
            partAt, G7_POINTS, pointG7, partUnder, BUBBLES, G7_VIEW_K, viewUmG7, ONION_WIDTH_UM, CELL_PARTS, PART_IDS,
            identifyPart, classify, ID_SAY_G7, highFirst, COLOURS_G7, SLIDE_TINT, FACTS_G7, imageOf, PICS,
@@ -1116,6 +1306,7 @@ const LabMicroscopeData = (() => {
            view, scopeDiscoveries, identify, ID_SAY, DRAW,
            UM_PER_MM, mmToUm, umToMm, magnification, actualMm, actualUm, imageMm, same, fmt,
            FIGURES, figure, rulerLen, imageFor, rightAnswer, work, workLines, measureDiscoveries,
-           PARTS, COLOURS, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES };
+           PICK_IDS, PICKS, needConvert, pickWork, pickOptions,
+           PARTS, COLOURS, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, EXPERIMENTS };
 })();
 if (typeof window !== 'undefined') window.LabMicroscopeData = LabMicroscopeData;

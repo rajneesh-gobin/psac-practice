@@ -353,6 +353,29 @@ const LabAirData = (() => {
     });
   }
 
+  // The visible text of the control a token belongs to, exactly as the bench
+  // draws it (lab_air.js reads THIS, so an experiment's instruction and the
+  // button it names cannot drift apart - LAB_SPEC §10). `st` gives the state:
+  // the jar decides what "burn" is called, the fire what "fueloff" is, and a
+  // lit candle or a ready stopwatch changes its own button.
+  function controlLabel(tok, g, st) {
+    const [k, v] = String(tok).split(':');
+    const s = st || {};
+    switch (k) {
+      case 'safety': return v === 'on' ? '🎀 Tie hair' : '🎀 Hair tied';
+      case 'station': { const S = station(v); return S ? `${S.icon} ${S.name}` : ''; }
+      case 'jar': { const J = JARS[v]; if (!J) return ''; return g === 6 ? (v === 'none' ? 'No jar (S)' : `Jar ${J.letter}`) : J.name; }
+      case 'candle': return CANDLES[v] ? CANDLES[v].name : '';
+      case 'fire': return FIRES[v] ? `${FIRES[v].icon} ${FIRES[v].name}` : '';
+      case 'light': return s.lit ? '🕯️ The candle is lit' : stepText(tok, g, s).btn;
+      case 'watch': return s.watch === 'ready' ? '⏱ Stopwatch ready ✓' : '⏱ Get the stopwatch ready';
+      case 'lift': return '✋ Lift it now';
+      case 'tap': return '🚿 Cool it under the cold tap';
+      case 'peek': return '👀 Lift the jar a little';
+    }
+    return stepText(tok, g, s).btn;
+  }
+
   // ── Discoveries ────────────────────────────────
   // unlock: an event the bench emits must match every field given. `compare`
   // needs a fair, well-timed run and the last well-timed covered run (`prev`):
@@ -791,9 +814,214 @@ const LabAirData = (() => {
       ['station:products', 'safety:on', 'jartemp:cold', 'light', 'hold', 'lime', 'control']),
   ];
 
+  // ── Experiments (lab_experiment.js, LAB_SPEC.md §10) ──────────────────
+  // One question a child can say back, a picture already set up, a tap to
+  // predict, at most five real decisions, what they saw, two or three of the
+  // mission questions asked WITH the notebook beside them, and the exam point.
+  // `setup` and every step token go through apply() exactly as a tap would -
+  // the data test replays them and checks the See text against what came out.
+  // `check` refs are "<mission id>:<quiz index>"; a Grade 4 experiment asks
+  // only Grade 4 questions. A `wrong` option is HEARD by the bench, never done
+  // (lab_air.js _expWrong): a hot jar is never really grabbed.
+  // ⚠ The hot-jar decision after a burn: `reset` is the safe choice; `lift`
+  //   and `tap` are the two hazards, told in the card instead of the flash.
+  const HOT_JAR = {
+    lift: 'Ouch! The flame heated the glass. A hot jar can burn your fingers. Let it cool first.',
+    tap: 'Crack! Hot glass breaks when cold water hits it. Let it cool slowly in the air.',
+  };
+  const EXPERIMENTS = [
+    // Grade 4 - g4sci-air
+    { id: 'jar_out', grades: [4], chapter: 'g4sci-air', icon: '🕯️',
+      title: 'Does a candle need air?',
+      aim: 'A lit candle, and a jar beside it. When the jar goes over the flame, what happens?',
+      setup: ['station:jars', 'safety:on', 'candle:small', 'jar:medium', 'light', 'watch:ready'],
+      predict: { q: 'What will the flame do under the jar?', answer: 'out',
+        options: [{ id: 'out', label: 'It goes out' }, { id: 'on', label: 'It keeps burning' }, { id: 'big', label: 'It gets bigger' }] },
+      steps: [
+        { on: 'burn', say: 'Put the jar on. Watch the flame.' },
+        { ask: 'The jar is hot. Let it cool, then lift it? Lift it now? Cool it under the cold tap?', on: 'reset',
+          options: ['reset', 'lift', 'tap'], wrong: HOT_JAR },
+      ],
+      see: { saw: 'The flame got smaller and smaller. It went out after 12 seconds.',
+             learn: 'A flame needs air. Under the jar it used up the oxygen it needs, so it went out.' },
+      check: ['jar_race:1', 'jar_race:2', 'jar_race:4'],
+      exam: 'Exam question g4s-air-005: a candle under a glass jar goes out after a few minutes. Why? It used up the oxygen in the jar.' },
+    { id: 'big_small', grades: [4], chapter: 'g4sci-air', icon: '🫙',
+      title: 'Big jar or small jar: which burns longer?',
+      aim: 'One candle and two jars. Time the small jar, then the large jar, and keep it fair.',
+      setup: ['station:jars', 'safety:on', 'candle:small', 'jar:small', 'light', 'watch:ready'],
+      predict: { q: 'Which jar keeps the flame burning longer?', answer: 'large',
+        options: [{ id: 'small', label: 'The small jar', sub: '250 mL of air' }, { id: 'large', label: 'The large jar', sub: '1000 mL of air' }, { id: 'same', label: 'The same time' }] },
+      steps: [
+        { on: 'burn', say: 'Put the jar on. Time the small jar.' },
+        { ask: 'Same candle, new jar. Large jar or Small jar?', on: 'jar:large', options: ['jar:large', 'jar:small'],
+          wrong: { 'jar:small': 'That is the same jar again. To compare, change the jar: pick the large one.' } },
+        { on: 'light', say: 'Ask the teacher to light it again.' },
+        { ask: 'Before the jar goes on: Get the stopwatch ready, or Put the jar on?', on: 'watch:ready', options: ['watch:ready', 'burn'],
+          wrong: { burn: 'Not yet! The stopwatch was not ready. It would start late, and the time would be wrong.' } },
+        { on: 'burn', say: 'Put the jar on. Time the large jar.' },
+      ],
+      see: { saw: 'The small jar: out after 6 seconds. The large jar: out after 24 seconds. Same candle.',
+             learn: 'A large jar holds more air, so more oxygen. The flame has more to use, so it burns longer.' },
+      check: ['jar_race:0', 'jar_race:3'],
+      exam: 'Exam question g4sci-hd-021: small jar, out after 10 seconds; large jar, 40 seconds. Burning uses up oxygen, and the bigger jar holds more of it.' },
+    { id: 'put_out', grades: [4], chapter: 'g4sci-air', icon: '💨',
+      title: 'How do you put a candle out?',
+      aim: 'A candle on the table, ready to be lit. Find two safe ways to put the flame out.',
+      setup: ['station:jars', 'candle:small', 'jar:medium', 'watch:ready'],
+      predict: { q: 'Which will put a small flame out?', answer: 'both',
+        options: [{ id: 'puff', label: 'A gentle puff' }, { id: 'jar', label: 'A jar over it' }, { id: 'both', label: 'Both of them' }, { id: 'none', label: 'Neither' }] },
+      steps: [
+        { ask: 'The teacher is coming with a flame. Tie hair first, or Ask the teacher to light it?', on: 'safety:on', options: ['safety:on', 'light'],
+          wrong: { light: 'Stop! Loose hair and floppy sleeves can swing into a flame. Tie your hair back first.' } },
+        { on: 'light', say: 'Now ask the teacher to light it.' },
+        { on: 'blow', say: 'Blow it out gently. One small puff.' },
+        { on: 'light', say: 'Ask the teacher to light it again.' },
+        { on: 'burn', say: 'Now put the jar on. Watch the flame.' },
+      ],
+      see: { saw: 'One gentle puff and the flame went out. Under the jar it went out too, after 12 seconds.',
+             learn: 'A puff cools a small flame. A jar takes away the air it needs. Both stop the burning.' },
+      check: ['jar_race:4', 'jar_race:1'],
+      exam: 'Exam question g4sci-hd-022: blowing brings oxygen, but one puff cools a small flame and it goes out.' },
+    { id: 'glass_dry', grades: [4], chapter: 'g4sci-air', icon: '🥛',
+      title: 'Is an empty glass really empty?',
+      aim: 'A dry tissue sits inside an empty glass. Push the glass upside down into the water: does the tissue get wet?',
+      setup: ['station:space'],
+      predict: { q: 'Will the tissue get wet?', answer: 'dry',
+        options: [{ id: 'dry', label: 'No, it stays dry' }, { id: 'wet', label: 'Yes, it gets wet' }, { id: 'bit', label: 'Only the edge' }] },
+      steps: [
+        { on: 'push', say: 'Push it straight down. Watch the tissue.' },
+        { ask: 'The tissue is dry. To let the water in: Tilt the glass, or Push it straight down again?', on: 'tilt', options: ['tilt', 'push'],
+          wrong: { push: 'Pushing straight down keeps the air trapped inside. The water still cannot get in.' } },
+        { on: 'bottle', say: 'Now squeeze the bottle under the water. What comes out?' },
+      ],
+      see: { saw: 'Pushed straight down, the tissue stayed dry. Tilted, bubbles came out and water went in. The bottle was full of air too.',
+             learn: 'Air takes up space. The empty glass was full of air, and the air kept the water out.' },
+      check: ['air_there:0', 'air_there:1', 'air_there:4'],
+      exam: 'Exam question g4sci-hd-019: an upside-down glass is pushed into water and almost no water goes in. The air inside takes up the space.' },
+    { id: 'balloon', grades: [4], chapter: 'g4sci-air', icon: '🎈',
+      title: 'Does air weigh anything?',
+      aim: 'Two balloons hang from a stick, one each side. Blow both up, let the air out of one, and watch the stick.',
+      setup: ['station:weight'],
+      predict: { q: 'Let the air out of one balloon. What happens?', answer: 'full',
+        options: [{ id: 'full', label: 'The full side goes down' }, { id: 'empty', label: 'The empty side goes down' }, { id: 'level', label: 'It stays level' }] },
+      steps: [
+        { on: 'fill', say: 'Blow up both balloons to the same size.' },
+        { ask: 'Level. Now change ONE thing. Let the air out of one, or Blow up both again?', on: 'letout', options: ['letout', 'fill'],
+          wrong: { fill: 'Both balloons are already full. Change one thing only: let the air out of one.' } },
+      ],
+      see: { saw: 'Both full: the stick hung level. Air out of one: the side with the full balloon went down.',
+             learn: 'Air has weight. The full balloon is heavier because of the air inside it.' },
+      check: ['air_there:2', 'air_there:3'],
+      exam: 'Exam question g4s-air-013: air has mass, it weighs something. True: a blown-up balloon is heavier than an empty one.' },
+    // Grade 6 - g6-air
+    { id: 'pqrs', grades: [6], chapter: 'g6-air', icon: '🏁',
+      title: 'Which candle burns the longest?',
+      aim: 'Four candles, as in PSAC 2021: P and Q are timed already. You time R, under the large jar, and S, with no jar.',
+      setup: ['station:jars', 'safety:on', 'candle:small', 'jar:small', 'light', 'watch:ready', 'burn',
+              'jar:medium', 'light', 'watch:ready', 'burn', 'jar:large', 'light', 'watch:ready'],
+      predict: { q: 'Which candle burns the longest?', answer: 'S',
+        options: [{ id: 'P', label: 'Candle P', sub: 'small jar' }, { id: 'Q', label: 'Candle Q', sub: 'medium jar' }, { id: 'R', label: 'Candle R', sub: 'large jar' }, { id: 'S', label: 'Candle S', sub: 'no jar' }] },
+      steps: [
+        { on: 'burn', say: 'Put the jar on: jar R. Watch the flame and the oxygen.' },
+        { on: 'jar:none', say: 'Now candle S. Pick No jar (S).' },
+        { on: 'light', say: 'Ask the teacher to light it.' },
+        { ask: 'Before you time it: Get the stopwatch ready, or Time the open candle?', on: 'watch:ready', options: ['watch:ready', 'burn'],
+          wrong: { burn: 'Not yet! The stopwatch was not ready. It would start late, and the time would be wrong.' } },
+        { on: 'burn', say: 'Time the open candle. Is it still burning?' },
+      ],
+      see: { saw: 'P: out after 6 seconds. Q: 12 seconds. R: 24 seconds. S, with no jar, was still burning after 40 seconds.',
+             learn: 'Candle S has fresh air all the time, so it never runs short of oxygen. More air, longer flame.' },
+      check: ['pqrs:0', 'pqrs:3', 'pqrs:4'],
+      exam: 'PSAC 2021: four identical candles P, Q, R and S. P, Q and R are under jars of different sizes; S is uncovered. Which burns longest? Candle S.' },
+    { id: 'oxygen_left', grades: [6], chapter: 'g6-air', icon: '🫧',
+      title: 'Does the flame use up all the oxygen?',
+      aim: 'A candle under the large jar, with an oxygen meter. Watch the reading as the flame burns and dies.',
+      setup: ['station:jars', 'safety:on', 'candle:small', 'jar:large', 'light', 'watch:ready'],
+      predict: { q: 'When the flame dies, how much oxygen is left?', answer: '16',
+        options: [{ id: '0', label: 'None at all', sub: '0%' }, { id: '16', label: 'Some is left', sub: 'about 16%' }, { id: '21', label: 'All of it', sub: 'still 21%' }] },
+      steps: [
+        { on: 'burn', say: 'Put the jar on. Watch the O₂ reading fall.' },
+        { ask: 'The jar is still hot. Let it cool, then lift it? Lift it now? Cool it under the cold tap?', on: 'reset',
+          options: ['reset', 'lift', 'tap'], wrong: HOT_JAR },
+      ],
+      see: { saw: 'The oxygen fell from 21% to about 16%. Then the flame went out, after 24 seconds.',
+             learn: 'A flame needs enough oxygen. It dies when too little is left, not at 0%. Breathing uses oxygen too.' },
+      check: ['pqrs:1', 'pqrs:2', 'pqrs:4'],
+      exam: 'PSAC 2024 Q1: which gas is necessary for burning? Oxygen. Dry air is 21% oxygen, and a flame dies at about 16%.' },
+    { id: 'triangle', grades: [6], chapter: 'g6-air', icon: '🔺',
+      title: 'How do you put a wood fire out?',
+      aim: 'A wood fire burns in the safe yard. A fire needs fuel, heat and oxygen, so take one away, three different ways.',
+      setup: ['station:fire', 'fire:wood'],
+      predict: { q: 'Which of these will put the wood fire out?', answer: 'all',
+        options: [{ id: 'water', label: 'Throwing water' }, { id: 'blanket', label: 'A fire blanket' }, { id: 'rake', label: 'Raking the wood away' }, { id: 'all', label: 'All three' }] },
+      steps: [
+        { ask: 'Take away the HEAT. Throw water, Fire blanket, or Rake the wood away?', on: 'method:water',
+          options: ['method:water', 'method:blanket', 'method:fueloff'],
+          wrong: { 'method:blanket': 'A blanket cuts off the air. That takes away the oxygen, not the heat.',
+                   'method:fueloff': 'Raking the wood away takes away the fuel, not the heat.' } },
+        { on: 'fire:wood', say: 'Ask the firefighter for the Wood fire again.' },
+        { ask: 'Take away the OXYGEN. Fire blanket, Throw water, or Rake the wood away?', on: 'method:blanket',
+          options: ['method:blanket', 'method:water', 'method:fueloff'],
+          wrong: { 'method:water': 'Water cools the wood. That takes away the heat, not the oxygen.',
+                   'method:fueloff': 'Raking the wood away takes away the fuel, not the oxygen.' } },
+        { on: 'fire:wood', say: 'Ask the firefighter for the Wood fire once more.' },
+        { ask: 'Take away the FUEL. Rake the wood away, Throw water, or Fire blanket?', on: 'method:fueloff',
+          options: ['method:fueloff', 'method:water', 'method:blanket'],
+          wrong: { 'method:water': 'Water takes away the heat. The wood, the fuel, is still there.',
+                   'method:blanket': 'A blanket takes away the oxygen. The wood, the fuel, is still there.' } },
+      ],
+      see: { saw: 'Water put the fire out. The blanket put it out. Raking the wood away put it out too.',
+             learn: 'A fire needs fuel, heat and oxygen: the fire triangle. Take any one away and the fire goes out.' },
+      check: ['fire_officer:0', 'fire_officer:1'],
+      exam: 'Exam question g6sci-air-001: the fire triangle is fuel, heat and oxygen. Question g6sci-air-009: water on a wood fire takes away the heat.' },
+    { id: 'no_water', grades: [6], chapter: 'g6-air', icon: '🍳',
+      title: 'Which fires must never get water?',
+      aim: 'A pan of oil is burning on the stove outside, then an old plug catches fire. Water is the wrong answer for both.',
+      setup: ['station:fire', 'fire:oil'],
+      predict: { q: 'Water goes on the burning oil. What happens?', answer: 'ball',
+        options: [{ id: 'out', label: 'The fire goes out' }, { id: 'ball', label: 'Burning oil shoots up' }, { id: 'none', label: 'Nothing changes' }] },
+      steps: [
+        { ask: 'Put out the pan of oil. Fire blanket, Throw water, or CO₂ extinguisher?', on: 'method:blanket',
+          options: ['method:blanket', 'method:water', 'method:co2'],
+          wrong: { 'method:water': 'Whoosh! Water sinks under the hot oil and boils at once. The steam throws burning oil everywhere.',
+                   'method:co2': 'It would go out, but the blast can splash burning oil. A fire blanket is safer.' } },
+        { on: 'fire:elec', say: 'Ask the firefighter for the Electrical fire.' },
+        { ask: 'An electrical fire. What FIRST: Switch off the power, Throw water, or CO₂ extinguisher?', on: 'method:fueloff',
+          options: ['method:fueloff', 'method:water', 'method:co2'],
+          wrong: { 'method:water': 'Stop! Water carries electricity. The shock could reach you.',
+                   'method:co2': 'It would go out, but the power is still on, so it could start again. Switch off first.' } },
+        { ask: 'The power is off. Now: CO₂ extinguisher, Fire blanket, or Throw water?', any: ['method:co2', 'method:blanket'],
+          options: ['method:co2', 'method:blanket', 'method:water'],
+          wrong: { 'method:water': 'Never water on an electrical fire, even switched off. Water conducts electricity.' } },
+      ],
+      see: { saw: 'The fire blanket covered the pan, and the oil fire went out. The electrical fire went out once the power was off, with no water.',
+             learn: 'Water throws burning oil and carries electricity. Smother oil, and switch off before you put out an electrical fire.' },
+      check: ['fire_officer:2', 'fire_officer:3', 'fire_officer:4'],
+      exam: 'PSAC 2019, 2021 and 2022: which gas is used to put out fires? Carbon dioxide. It does not burn and does not conduct electricity.' },
+    { id: 'products', grades: [6], chapter: 'g6-air', icon: '🫙',
+      title: 'What does a flame make?',
+      aim: 'A lit candle and a jar from hot water. Catch what the flame gives off, then test the gas with limewater.',
+      setup: ['station:products', 'safety:on', 'jartemp:warm', 'light'],
+      predict: { q: 'Hold a cold jar over the flame. What appears inside?', answer: 'drops',
+        options: [{ id: 'drops', label: 'Tiny drops of water' }, { id: 'smoke', label: 'Black smoke only' }, { id: 'nothing', label: 'Nothing at all' }] },
+      steps: [
+        { ask: 'To catch the water: Cold jar or Warm jar?', on: 'jartemp:cold', options: ['jartemp:cold', 'jartemp:warm'],
+          wrong: { 'jartemp:warm': 'No mist on a warm jar. Water vapour only turns into drops on something cold.' } },
+        { on: 'hold', say: 'Hold the jar over the flame. Look inside the glass.' },
+        { on: 'lime', say: 'Add limewater and shake. Watch the colour.' },
+        { ask: 'Was it the flame, or just the air? Limewater in fresh air, or Add limewater and shake again?', on: 'control', options: ['control', 'lime'],
+          wrong: { lime: 'That tests the flame gas again. A control is the same test without the flame: fresh air.' } },
+      ],
+      see: { saw: 'Mist on the cold jar. The limewater turned milky. In fresh air it stayed clear.',
+             learn: 'Burning makes water and carbon dioxide. Limewater is the test for carbon dioxide, and the control proves the flame made it.' },
+      check: ['burn_makes:0', 'burn_makes:1', 'burn_makes:2'],
+      exam: 'In the exam you may be asked what a burning candle makes: carbon dioxide and water. Limewater turning milky is the test for carbon dioxide.' },
+  ];
+
   return { GRADES, STATIONS, JARS, JAR_ORDER, CANDLES, SECONDS_PER_LITRE, UNCOVERED_CAP, LATE_S, SPEED, O2_AIR, O2_OUT, AIR,
-           FIRES, METHODS, FUEL_OFF, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, TOK_STATION,
+           FIRES, METHODS, FUEL_OFF, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, EXPERIMENTS, TOK_STATION,
            forGrade, station, burnTime, o2At, jarName, methodName, fireResult, newState, apply, settle, newSeries, satisfied,
-           stepText, recipeTexts, unlocks, keyOf, missionProgress };
+           stepText, recipeTexts, controlLabel, unlocks, keyOf, missionProgress };
 })();
 if (typeof window !== 'undefined') window.LabAirData = LabAirData;

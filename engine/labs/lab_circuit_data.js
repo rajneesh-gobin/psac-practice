@@ -64,6 +64,16 @@
 //      paper is quoted; the exam heading is "📝 In your exams".
 //    Progress never collides: every id below Grade 9 carries its grade (g4_…,
 //    g6_…, g7_…).
+//  ⚠ EXPERIMENTS (lab_experiment.js) at every grade the lab serves: Grades 4
+//    and 6 (the PSAC levels above), Grade 7 (g7s-electricity: the symbols and a
+//    diagram with a gap, parallel house wiring, the ammeter in the loop and the
+//    voltmeter across, the fuse) and Grade 9 (g9s-p5-electricity: series and
+//    parallel brightness with the current read off an ammeter, both meters
+//    placed and read, two cells in series, the diagram view). Grade 9 quotes
+//    no paper: the app's Grade 9 physics question files carry no
+//    "Physics 20xx Qn" reference for P5, so the exam lines are plain sentences.
+//    A reading is an ask step over 'read:<value>' tokens (read:0.50A): the
+//    bench shows the values as buttons and the right one takes the reading.
 // ══════════════════════════════════════════════
 const LabCircuitData = (() => {
   const GRADES = [4, 6, 7, 9];
@@ -179,6 +189,14 @@ const LabCircuitData = (() => {
     broken:       P('A torch that does not work', { v31: null, h12: 'bulb:out' }),
     // Grade 7: the only switch is on one branch, as a light switch is in a house.
     branch_switch: P('Two lamps in parallel, a switch on one branch', { h11: 'bulb', v11: 'switch', v21: 'wire', v00: 'wire' }),
+    // Experiments (Grades 7 and 9). meters_gap: a complete lamp loop with two
+    // stubs rising over the lamp, so "in the loop" (h20, a wire) and "across
+    // the lamp" (h11, a gap) are both one tap. fuse_gap: the same, with the
+    // loop broken at h20 for the fuse. diagram7: two lamps in series, one of
+    // them missing (the Grade 7 "diagram with a gap" question).
+    meters_gap: P('A lamp circuit, ready for an ammeter and a voltmeter', { v11: 'wire', v21: 'wire' }),
+    fuse_gap:   P('A lamp circuit with a gap for a fuse', { h20: null, v11: 'wire', v21: 'wire' }),
+    diagram7:   P('Two lamps in one loop, one of them missing', { h22: 'bulb', h12: null }),
   };
   // Quick layouts offered on the shelf (the others belong to guides and missions).
   const QUICK = ['single', 'series2', 'parallel2', 'twocells', 'meters', 'resistor', 'fuse'];
@@ -1403,6 +1421,339 @@ const LabCircuitData = (() => {
       ] },
   ];
 
+  // ── Experiments (lab_experiment.js; LAB_SPEC.md §10) ──────────
+  // Aim → Predict → Do → See → Check → Done, run by the shared runner. Each
+  // one re-cuts a guide of its grade into decisions and observations:
+  // `setup` is applied silently before the Aim (the picture is already there);
+  // every `say` names the control it points at (a slot's tag reads "gap",
+  // "switch", "bulb" or "wire" when it glows; a palette button its name); an
+  // `ask` step lists its options, and the wrong ones explain themselves.
+  // ⚠ Nothing here closes a switch on an EMPTY gap: that is the "there is a
+  //   gap" result card, which would interrupt the runner mid-step. An object
+  //   goes in first; an insulator in the gap is a test, not a gap.
+  // ⚠ `check` refs are "<mission id>:<quiz index>" into MISSIONS above.
+  //   scripts/test-labs-circuit-data.js replays every setup and step through
+  //   solve()/facts() and fails if a See text is not what the bench shows.
+  // ⚠ Grades 7 and 9: a decision over SLOTS ("where does the ammeter go?")
+  //   lists the same part in two slots; the bench picks the part up and glows
+  //   both slots. A wrong slot for a real component (a meter across the lamp,
+  //   a fuse across it) is HEARD by the bench and not performed - the runner's
+  //   card is the lesson and the board stays as it was. A reading is an ask
+  //   over 'read:<value>' tokens; the right value takes the reading.
+  const EXPERIMENTS = [
+    // ── Grade 4 (g4sci-energy: the torch's circuit, the switch, light and some heat; g4sci-materials: conductors) ──
+    { id: 'g4_light', grades: [4], chapter: 'g4sci-energy', icon: '💡',
+      title: 'Can you light the bulb?',
+      aim: 'A cell, a switch and a bulb, but one wire is missing. Can you make the bulb light?',
+      setup: ['build:gap'],
+      predict: { q: 'Fill the gap and close the switch. Will the bulb light?', answer: 'yes',
+        options: [{ id: 'yes', label: 'Yes, it lights' }, { id: 'no', label: 'No, it stays dark' }, { id: 'bit', label: 'Only a little' }] },
+      steps: [
+        { on: 'place:v31:wire', say: 'Tap the glowing gap to put a wire in.' },
+        { on: 'switch:on',      say: 'Tap the switch to close it. Watch the bulb.' },
+        { on: 'switch:off',     say: 'Now tap the switch to open it. What happens?' },
+      ],
+      see: { saw: 'The bulb lit when the loop was complete. It went out when you opened the switch.',
+             learn: 'Electricity flows only round a complete loop. A gap or an open switch stops it, and the bulb goes out.' },
+      check: ['g4_torch:0', 'g4_torch:2', 'g4_torch:3'],
+      exam: 'A torch lights only when its circuit is complete. The cell, the switch and the bulb must join in one loop with no gaps.' },
+    { id: 'g4_conductors', grades: [4], chapter: 'g4sci-materials', icon: '🥄',
+      title: 'Which things let electricity through?',
+      aim: 'A tester with a gap in it. Put a thing in the gap and close the switch. Does the bulb light?',
+      setup: ['build:tester'],
+      predict: { q: 'Which of these will light the bulb?', answer: 'spoon',
+        options: [{ id: 'spoon', label: 'The metal spoon', icon: '🥄' }, { id: 'ruler', label: 'The plastic ruler', icon: '📏' }, { id: 'both', label: 'Both of them' }, { id: 'none', label: 'Neither of them' }] },
+      steps: [
+        { ask: 'Which thing lets electricity through? Tap it.', on: 'place:v31:spoon',
+          options: ['place:v31:spoon', 'place:v31:ruler', 'place:v31:stick'],
+          wrong: { 'place:v31:ruler': 'The ruler is plastic. Plastic stops electricity, so the bulb would stay dark.',
+                   'place:v31:stick': 'The stick is dry wood. Wood stops electricity, so the bulb would stay dark.' } },
+        { on: 'switch:on', say: 'Tap the switch to close it. Does the bulb light?' },
+        { ask: 'Which thing STOPS electricity? Tap it to swap it in.', on: 'place:v31:ruler',
+          options: ['place:v31:ruler', 'place:v31:coin', 'place:v31:lead'],
+          wrong: { 'place:v31:coin': 'A coin is metal. Metal lets electricity through. Look, the bulb is still lit.',
+                   'place:v31:lead': 'Pencil lead lets a little electricity through. Look, the bulb glows dimly.' } },
+      ],
+      see: { saw: 'The metal spoon lit the bulb. The plastic ruler left it dark.',
+             learn: 'Metal lets electricity through: it is a conductor. Plastic, rubber and wood stop it: they are insulators.' },
+      check: ['g4_sort:0', 'g4_sort:4', 'g4_sort:2'],
+      exam: 'Which of these is a good electrical conductor? Copper wire. Rubber, plastic and wood are insulators.' },
+    { id: 'g4_heat', grades: [4], chapter: 'g4sci-energy', icon: '🔥',
+      title: 'What does a bulb give out?',
+      aim: 'A cell, a switch and a bulb. Switch it on and leave it on. What comes out of the bulb?',
+      setup: ['build:single'],
+      predict: { q: 'What will the bulb give out?', answer: 'both',
+        options: [{ id: 'light', label: 'Light only' }, { id: 'both', label: 'Light and some heat' }, { id: 'sound', label: 'Sound' }] },
+      steps: [
+        { on: 'switch:on', say: 'Tap the switch to close it.' },
+        { on: 'wait:10',   say: 'Tap ⏩ Wait 10 seconds. Is the bulb warm?' },
+      ],
+      see: { saw: 'The bulb gave out light. After 10 seconds it was warm too.',
+             learn: 'A bulb changes electrical energy into light. It gives out some heat as well. That is why an old bulb feels hot.' },
+      check: ['g4_torch:4', 'g4_torch:1'],
+      exam: 'What form of energy does an electric bulb produce? Light energy, and some heat.' },
+    { id: 'g4_loose', grades: [4], chapter: 'g4sci-energy', icon: '🔧',
+      title: 'Why does a torch stop working?',
+      aim: 'The bulb is on. Now the bulb comes loose in its holder. What happens to the light?',
+      setup: ['build:single', 'switch:on'],
+      predict: { q: 'Unscrew the bulb a little. What happens?', answer: 'out',
+        options: [{ id: 'out', label: 'The light goes out' }, { id: 'stays', label: 'It stays on' }, { id: 'dim', label: 'It gets dimmer' }] },
+      steps: [
+        { on: 'bulb:h12:out', say: 'Tap the bulb to unscrew it.' },
+        { on: 'bulb:h12:in',  say: 'Tap the bulb to screw it back in.' },
+      ],
+      see: { saw: 'The light went out when the bulb was loose. It came back when you screwed it in.',
+             learn: 'A loose bulb makes a gap, just like an open switch. If a torch will not light, check that the bulb is screwed in.' },
+      check: ['g4_torch:3', 'g4_torch:0'],
+      exam: 'A torch will not light: check that the circuit is complete and the bulb is screwed in.' },
+
+    // ── Grade 6 (g6-energy: the wire carries the current, conductors and insulators, PSAC 2025 Q6c/d, cell → light and heat) ──
+    { id: 'g6_torch', grades: [6], chapter: 'g6-energy', icon: '🔧',
+      title: 'Why does this torch not work?',
+      aim: 'A torch that will not light. Look closely at the loop. Find what is wrong and mend it.',
+      setup: ['build:broken'],
+      predict: { q: 'What is wrong with this torch?', answer: 'both',
+        options: [{ id: 'gap', label: 'A wire is missing' }, { id: 'bulb', label: 'The bulb is loose' }, { id: 'both', label: 'Both of those' }, { id: 'cell', label: 'The cell is flat' }] },
+      steps: [
+        { on: 'place:v31:wire', say: 'Tap the glowing gap to put a wire in.' },
+        { on: 'bulb:h12:in',    say: 'Tap the loose bulb to screw it back in.' },
+        { on: 'switch:on',      say: 'Tap the switch to close it. Does it light now?' },
+      ],
+      see: { saw: 'With the wire back and the bulb screwed in, the torch lit.',
+             learn: 'The torch had two faults: a gap and a loose bulb. Each one broke the circuit. Current flows only when the loop is complete.' },
+      check: ['g6_fix:0', 'g6_fix:1', 'g6_fix:2'],
+      exam: 'PSAC 2025 Q6d: the wire carries the electric current round the circuit. A gap anywhere stops it.' },
+    { id: 'g6_conductor', grades: [6], chapter: 'g6-energy', icon: '🧵',
+      title: 'What makes a good wire?',
+      aim: 'A wire must carry the current. Test things in the gap. Which ones could work as a wire?',
+      setup: ['build:tester'],
+      predict: { q: 'Which of these could carry the current, like a wire?', answer: 'coin',
+        options: [{ id: 'coin', label: 'The coin', icon: '🪙' }, { id: 'rubber', label: 'The rubber', icon: '⬜' }, { id: 'both', label: 'Both of them' }, { id: 'none', label: 'Neither of them' }] },
+      steps: [
+        { ask: 'Which thing could carry the current? Tap it.', on: 'place:v31:coin',
+          options: ['place:v31:coin', 'place:v31:rubber', 'place:v31:ruler'],
+          wrong: { 'place:v31:rubber': 'Rubber is an insulator. No current can pass through it, so it would leave a gap.',
+                   'place:v31:ruler': 'Plastic is an insulator. No current can pass through it, so it would leave a gap.' } },
+        { on: 'switch:on', say: 'Tap the switch to close it. Does the current flow?' },
+        { ask: 'Now a non-metal. Which one lets a little current through? Tap it.', on: 'place:v31:lead',
+          options: ['place:v31:lead', 'place:v31:rubber', 'place:v31:stick'],
+          wrong: { 'place:v31:rubber': 'Rubber stops the current completely. Look, the bulb is dark.',
+                   'place:v31:stick': 'Dry wood stops the current completely. Look, the bulb is dark.' } },
+      ],
+      see: { saw: 'The coin lit the bulb brightly. The pencil lead lit it only dimly.',
+             learn: 'Metals are good conductors, so a wire is copper inside. Graphite conducts a little. Rubber and plastic are insulators: they cover the wire to keep you safe.' },
+      check: ['g6_wire:0', 'g6_wire:2', 'g6_wire:3'],
+      exam: 'PSAC 2025 Q6c: the inside of a wire is copper, a conductor. The plastic covering is an insulator.' },
+    { id: 'g6_energy', grades: [6], chapter: 'g6-energy', icon: '🔋',
+      title: 'Where does the light come from?',
+      aim: 'The cell stores energy. Switch on, then add a second cell. What does the bulb do?',
+      setup: ['build:single'],
+      predict: { q: 'Add a second cell. What will the bulb do?', answer: 'brighter',
+        options: [{ id: 'brighter', label: 'Get brighter' }, { id: 'same', label: 'Stay the same' }, { id: 'out', label: 'Go out' }] },
+      steps: [
+        { on: 'switch:on',      say: 'Tap the switch to close it. Note how bright the bulb is.' },
+        { on: 'place:h10:cell', say: 'Tap the glowing wire to swap in a second cell.' },
+        { on: 'wait:10',        say: 'Tap ⏩ Wait 10 seconds. Is the bulb warm?' },
+      ],
+      see: { saw: 'With two cells the bulb was much brighter. After 10 seconds it was warm too.',
+             learn: 'The cell stores chemical energy. The wire carries it as electrical energy. The bulb changes it into light and some heat. Two cells give more energy, so the bulb is brighter.' },
+      check: ['g6_fix:3',
+              { q: 'You added a second cell. What happened to the bulb?', options: ['It got much brighter', 'It got dimmer', 'It went out', 'It stayed the same'],
+                why: 'Two cells push harder than one, so more current flows through the bulb and it shines brighter.' }],
+      exam: 'PSAC 2024 Q1 asked for the energy at the output of a switched-on television. For a bulb: light, and some heat.' },
+
+    // ── Grade 7 (g7s-electricity: circuit_parts, circuit_symbols, simple_circuits) ──
+    { id: 'g7_diagram', grades: [7], chapter: 'g7s-electricity', icon: '✏️',
+      title: 'Can you read the circuit diagram?',
+      aim: 'A circuit diagram with two lamps in one loop, but one lamp is missing. Read the symbols, fill the gap and switch on.',
+      setup: ['build:diagram7', 'view:symbols'],
+      predict: { q: 'With both lamps in one loop, how bright will each lamp be?', answer: 'dim',
+        options: [{ id: 'dim', label: 'Dim' }, { id: 'same', label: 'As bright as one lamp alone' }, { id: 'bright', label: 'Very bright' }] },
+      steps: [
+        { ask: 'The other lamp is drawn as a circle with a cross. Tap the part with that symbol.', on: 'place:h12:bulb',
+          options: ['place:h12:bulb', 'place:h12:resistor', 'place:h12:cell'],
+          wrong: { 'place:h12:resistor': 'A plain rectangle is the resistor. It limits the current and gives no light. The lamp is the circle with a cross.',
+                   'place:h12:cell': 'A long line and a short line are a cell. It would push the current, not give light. The lamp is the circle with a cross.' } },
+        { on: 'switch:on',    say: 'Tap the switch to close it. How bright are the two lamps?' },
+        { on: 'bulb:h22:out', say: 'Tap the glowing bulb to unscrew it. Watch the other lamp.' },
+      ],
+      see: { saw: 'With the lamp in the gap, both lamps lit but only dimly. Unscrewing one lamp put the other out too.',
+             learn: 'A circuit diagram uses standard symbols: a circle with a cross is a lamp. Two lamps in one loop are in series. They share the voltage, so each is dim, and one break stops the current everywhere.' },
+      check: ['g7_diagram:0', 'g7_sp:0', 'g7_diagram:4'],
+      exam: 'In your exams you may be shown four symbols and asked which is the switch, the cell, the lamp or the resistor, or a diagram whose lamp does not light because of a break in the wire.' },
+    { id: 'g7_house', grades: [7], chapter: 'g7s-electricity', icon: '🏠',
+      title: 'Why are house lights wired in parallel?',
+      aim: 'Two lamps, each on its own branch, and a switch on the upper branch only. Which lamp does the switch control?',
+      setup: ['build:branch_switch'],
+      predict: { q: 'Close the switch, then open it again. Which lamp goes out?', answer: 'upper',
+        options: [{ id: 'upper', label: 'Only the upper lamp' }, { id: 'both', label: 'Both lamps' }, { id: 'none', label: 'Neither lamp' }] },
+      steps: [
+        { on: 'switch:on',    say: 'Tap the switch to close it. Do both lamps light?' },
+        { on: 'bulb:h12:out', say: 'Tap the glowing bulb to unscrew the lower lamp. Does the upper lamp stay on?' },
+        { on: 'bulb:h12:in',  say: 'Tap the bulb to screw it back in.' },
+        { on: 'switch:off',   say: 'Tap the switch to open it. Which lamp goes out?' },
+      ],
+      see: { saw: 'The switch turned only the upper lamp on and off. Unscrewing the lower lamp left the upper one lit.',
+             learn: 'In parallel each lamp has its own path back to the cell. A switch on one branch controls only that lamp, and one broken lamp does not put out the rest. That is how the lights in a house are wired.' },
+      check: ['g7_sp:1', 'g7_sp:3', 'g7_sp:4'],
+      exam: 'In your exams: two lamps in parallel, one breaks, the other stays on. House lights are in parallel so each can be switched on its own.' },
+    { id: 'g7_meters', grades: [7], chapter: 'g7s-electricity', icon: '⏲️',
+      title: 'Where do the ammeter and the voltmeter go?',
+      aim: 'A lamp circuit with one cell. Add an ammeter to measure the current and a voltmeter to measure the voltage, each in the right place.',
+      setup: ['build:meters_gap'],
+      predict: { q: 'One 1.5 V cell. What will the voltmeter across the lamp read?', answer: 'v15',
+        options: [{ id: 'v15', label: '1.5 V' }, { id: 'v075', label: '0.75 V' }, { id: 'v3', label: '3 V' }, { id: 'v0', label: '0 V' }] },
+      steps: [
+        { ask: 'The ammeter measures the current THROUGH the lamp. Tap where it goes: in the loop, or across the lamp?', on: 'place:h20:ammeter',
+          options: ['place:h20:ammeter', 'place:h11:ammeter'],
+          wrong: { 'place:h11:ammeter': 'Across the lamp, the ammeter would make a short cut round it: the lamp goes out and the needle shoots off the scale. An ammeter goes IN the loop, in series.' } },
+        { ask: 'The voltmeter measures the voltage ACROSS the lamp. Tap where it goes: across the lamp, or in the loop?', on: 'place:h11:voltmeter',
+          options: ['place:h11:voltmeter', 'place:h10:voltmeter'],
+          wrong: { 'place:h10:voltmeter': 'In the loop, the voltmeter would let almost no current through: the lamp goes out, and it reads the cell, not the lamp. A voltmeter goes ACROSS the lamp.' } },
+        { on: 'switch:on', say: 'Tap the switch to close it. Watch both needles.' },
+        { ask: 'Read the ammeter. What does it show?', on: 'read:0.50A',
+          options: ['read:0.50A', 'read:0.25A', 'read:1.00A', 'read:1.50A'],
+          wrong: { 'read:0.25A': 'Look at the ammeter: its needle is a quarter of the way along the 0 to 2 A scale. A quarter of 2 A is 0.5 A, not 0.25 A.',
+                   'read:1.00A': 'Half way along a 0 to 2 A scale would be 1 A. The needle is only a quarter of the way along: 0.5 A.',
+                   'read:1.50A': 'Three quarters of the way along a 0 to 2 A scale would be 1.5 A. The needle is only a quarter of the way along: 0.5 A.' } },
+        { ask: 'Now read the voltmeter. What does it show?', on: 'read:1.50V',
+          options: ['read:1.50V', 'read:0.75V', 'read:3.00V', 'read:0.00V'],
+          wrong: { 'read:0.75V': 'That would be half the cell, as two lamps in series would share it. One lamp across one cell gets the whole 1.5 V.',
+                   'read:3.00V': 'Two cells would give 3 V. There is one 1.5 V cell, so the lamp gets 1.5 V.',
+                   'read:0.00V': 'The lamp is lit, so there is a voltage across it. The needle is not at zero: it reads 1.5 V.' } },
+      ],
+      see: { saw: 'With the ammeter in the loop and the voltmeter across the lamp, the meters read 0.50 A and 1.50 V.',
+             learn: 'An ammeter goes in series, in the loop, so the current flows through it. A voltmeter goes in parallel, across the part, so it compares its two ends. Current is measured in amperes (A) and voltage in volts (V).' },
+      check: ['g7_meters:1', 'g7_meters:2', 'g7_meters:0'],
+      exam: 'In your exams: an ammeter measures current in amperes and is connected in series; a voltmeter measures voltage in volts and is connected in parallel, across the part.' },
+    { id: 'g7_fuse', grades: [7], chapter: 'g7s-electricity', icon: '🧵',
+      title: 'What does a fuse do?',
+      aim: 'A lamp circuit with a gap for a fuse. Put the fuse in, switch on, then make a short cut round the lamp and watch the fuse.',
+      setup: ['build:fuse_gap'],
+      predict: { q: 'A short-cut wire is added round the lamp. What happens?', answer: 'melts',
+        options: [{ id: 'melts', label: 'The fuse melts and breaks the circuit' }, { id: 'brighter', label: 'The lamp gets brighter' }, { id: 'nothing', label: 'Nothing changes' }] },
+      steps: [
+        { ask: 'The fuse must carry ALL the current. Tap where it goes: the gap in the loop, or the gap across the lamp?', on: 'place:h20:fuse',
+          options: ['place:h20:fuse', 'place:h11:fuse'],
+          wrong: { 'place:h11:fuse': 'Across the lamp, the fuse is just a thin wire making a short cut round it. The current would shoot up and melt it at once, for nothing. A fuse goes IN the loop, in series.' } },
+        { on: 'switch:on',      say: 'Tap the switch to close it. The lamp lights as normal.' },
+        { on: 'place:h11:wire', say: 'Now tap the glowing gap across the lamp to add a short-cut wire. Watch the fuse!' },
+      ],
+      see: { saw: 'The short-cut wire sent a huge current round the lamp. The thin fuse wire melted and broke the circuit: the lamp went out and nothing else got hot.',
+             learn: 'A fuse is a weak point built in on purpose. It goes in series, so all the current passes through it, and it melts when the current is too big, before the wiring can overheat.' },
+      check: [
+        { q: 'What did the fuse do when the current got too big?', options: ['It melted and broke the circuit', 'It made the lamp brighter', 'It stored the extra current', 'It sent the current back to the cell'],
+          why: 'A fuse is a thin wire that melts when the current is too big. Melting breaks the circuit, so the current stops.' },
+        { q: 'Why is a fuse built as a weak point on purpose?', options: ['It fails first, before the wiring can overheat', 'It makes the circuit use less energy', 'It makes the cell last longer', 'It makes the lamp easier to change'],
+          why: 'The fuse is the weakest link, so it melts before anything else gets hot enough to start a fire.' },
+        { q: 'Which of these is the circuit symbol for a fuse?', options: [PIC7.fuse, PIC7.resistor, PIC7.switch, PIC7.ammeter],
+          why: 'A fuse is a rectangle with the wire drawn straight through it. A plain rectangle is a resistor, a lifted line is a switch, and a circle with an A is an ammeter.' },
+      ],
+      exam: 'In your exams: a fuse is designed to melt if too much current flows. Building a weak point on purpose is sensible because it breaks the circuit before the wiring can overheat.' },
+
+    // ── Grade 9 (g9s-p5-electricity: series_circuits, measuring_current_voltage, current_voltage_resistance, circuit_symbols) ──
+    // No paper is quoted: the Grade 9 physics question files carry no "Physics 20xx Qn" reference for P5.
+    { id: 'g9_series', grades: [9], chapter: 'g9s-p5-electricity', icon: '🔗',
+      title: 'Two lamps in series: how bright, how much current?',
+      aim: 'Two identical lamps in one loop with one 1.5 V cell and an ammeter. Predict the brightness, read the current, then break the loop.',
+      setup: ['build:series_amm'],
+      predict: { q: 'Compared with one lamp on its own, each lamp in series will be:', answer: 'dimmer',
+        options: [{ id: 'dimmer', label: 'Dimmer' }, { id: 'same', label: 'Exactly as bright' }, { id: 'brighter', label: 'Brighter' }] },
+      steps: [
+        { on: 'switch:on', say: 'Tap the switch to close it. How bright are the two lamps?' },
+        { ask: 'Read the ammeter. One lamp alone takes 0.50 A. What does it show now?', on: 'read:0.25A',
+          options: ['read:0.25A', 'read:0.50A', 'read:1.00A', 'read:0.75A'],
+          wrong: { 'read:0.50A': '0.50 A is the current for one 3 Ω lamp. Two lamps in series make 6 Ω, so the same 1.5 V pushes only half as much. Look at the needle.',
+                   'read:1.00A': 'Twice the current would need half the resistance. Two lamps in series have TWICE the resistance, so the current is smaller. Look at the needle.',
+                   'read:0.75A': 'The needle is only an eighth of the way along the 0 to 2 A scale. That is 0.25 A, not 0.75 A.' } },
+        { on: 'bulb:h12:out',  say: 'Tap the glowing bulb to unscrew it. What happens to the other lamp?' },
+        { on: 'view:symbols',  say: 'Tap ✏️ Symbols to see the series circuit as a diagram.' },
+      ],
+      see: { saw: 'Both lamps were dim and the ammeter read 0.25 A, half the current of one lamp alone. Unscrewing one lamp put the other out.',
+             learn: 'In series the resistances add (3 Ω + 3 Ω = 6 Ω), so the same cell pushes half the current and each lamp gets half the voltage. There is only one path, so one break stops the current everywhere.' },
+      check: ['compare:0', 'compare:1',
+              { q: 'The ammeter read 0.25 A with two lamps in series, but 0.50 A with one lamp. Why is the series current smaller?',
+                options: ['Two lamps in series have twice the resistance', 'The cell gives less voltage to two lamps', 'The ammeter slows the current down', 'The second lamp stores half the current'],
+                why: 'Resistances in series add: 3 Ω + 3 Ω = 6 Ω. I = V ÷ R = 1.5 V ÷ 6 Ω = 0.25 A, half of 1.5 V ÷ 3 Ω.' }],
+      exam: 'In the exam you may be asked to compare the brightness of lamps in series and to explain why one broken lamp puts the others out: there is only one path, so the current stops everywhere.' },
+    { id: 'g9_parallel', grades: [9], chapter: 'g9s-p5-electricity', icon: '🔀',
+      title: 'Two lamps in parallel: how bright, how much current?',
+      aim: 'The same two lamps, now each on its own branch, with the ammeter next to the cell. Predict, read the total current, then break one branch.',
+      setup: ['build:parallel_amm'],
+      predict: { q: 'Compared with one lamp on its own, each lamp in parallel will be:', answer: 'same',
+        options: [{ id: 'same', label: 'Exactly as bright' }, { id: 'dimmer', label: 'Dimmer' }, { id: 'brighter', label: 'Brighter' }] },
+      steps: [
+        { on: 'switch:on', say: 'Tap the switch to close it. How bright is each lamp?' },
+        { ask: 'Read the ammeter next to the cell. What does it show?', on: 'read:1.00A',
+          options: ['read:1.00A', 'read:0.50A', 'read:0.25A', 'read:2.00A'],
+          wrong: { 'read:0.50A': '0.50 A flows in EACH branch. The ammeter is next to the cell, so it reads the two branch currents added together. Look at the needle.',
+                   'read:0.25A': '0.25 A is the series current. In parallel each branch gets the full 1.5 V and its own 0.50 A, and the cell supplies both. Look at the needle.',
+                   'read:2.00A': 'The needle is half way along the 0 to 2 A scale, not at the end. Half of 2 A is 1 A.' } },
+        { on: 'bulb:h12:out', say: 'Tap the glowing bulb to unscrew it. What happens to the other lamp?' },
+      ],
+      see: { saw: 'Each lamp was as bright as one alone and the ammeter read 1.00 A, twice the current of one lamp. Unscrewing one lamp left the other lit.',
+             learn: 'In parallel each branch gets the full 1.5 V, so each lamp carries 0.50 A and the cell supplies the sum, 1.00 A. Each branch is its own path back to the cell, so breaking one leaves the other complete. Houses are wired this way.' },
+      check: ['compare:2', 'compare:4', 'compare:3'],
+      exam: 'In the exam you may be asked why house lights are wired in parallel, and to add the currents in the branches: the current from the cell is the sum of the branch currents.' },
+    { id: 'g9_meters', grades: [9], chapter: 'g9s-p5-electricity', icon: '⏲️',
+      title: 'Where does each meter go, and what does it read?',
+      aim: 'One lamp on one 1.5 V cell. Connect an ammeter and a voltmeter where they belong, then use both readings to find the resistance of the lamp.',
+      setup: ['build:meters_gap'],
+      predict: { q: 'The lamp is 3 Ω on a 1.5 V cell. What current will the ammeter read?', answer: 'a05',
+        options: [{ id: 'a05', label: '0.5 A' }, { id: 'a2', label: '2 A' }, { id: 'a45', label: '4.5 A' }, { id: 'a15', label: '1.5 A' }] },
+      steps: [
+        { ask: 'The ammeter measures the current through the lamp. Tap where it goes: in the loop, or across the lamp?', on: 'place:h20:ammeter',
+          options: ['place:h20:ammeter', 'place:h11:ammeter'],
+          wrong: { 'place:h11:ammeter': 'An ammeter has almost no resistance. Across the lamp it would short-circuit it: the lamp goes out and the needle shoots off the scale. An ammeter goes in series, in the loop.' } },
+        { ask: 'The voltmeter measures the potential difference across the lamp. Tap where it goes: across the lamp, or in the loop?', on: 'place:h11:voltmeter',
+          options: ['place:h11:voltmeter', 'place:h10:voltmeter'],
+          wrong: { 'place:h10:voltmeter': 'A voltmeter has a huge resistance. In the loop it would stop almost all the current: the lamp goes out and it reads the cell, not the lamp. A voltmeter goes in parallel, across the lamp.' } },
+        { on: 'switch:on', say: 'Tap the switch to close it. Watch both needles.' },
+        { ask: 'Read the ammeter. What does it show?', on: 'read:0.50A',
+          options: ['read:0.50A', 'read:0.25A', 'read:1.00A', 'read:2.00A'],
+          wrong: { 'read:0.25A': 'The needle is a quarter of the way along the 0 to 2 A scale: 0.5 A. And I = V ÷ R = 1.5 V ÷ 3 Ω = 0.5 A.',
+                   'read:1.00A': 'Half way along the 0 to 2 A scale would be 1 A. The needle is only a quarter of the way along: 0.5 A.',
+                   'read:2.00A': '2 A is the end of the scale. The needle is only a quarter of the way along: 0.5 A.' } },
+        { ask: 'Read the voltmeter. What does it show?', on: 'read:1.50V',
+          options: ['read:1.50V', 'read:0.75V', 'read:3.00V', 'read:5.00V'],
+          wrong: { 'read:0.75V': '0.75 V is what one of two lamps in series would get. One lamp across one cell gets the whole 1.5 V.',
+                   'read:3.00V': 'Two cells in series would give 3 V. There is one 1.5 V cell.',
+                   'read:5.00V': '5 V is the end of the voltmeter’s scale. The needle is less than a third of the way along: 1.5 V.' } },
+      ],
+      see: { saw: 'The ammeter in the loop read 0.50 A and the voltmeter across the lamp read 1.50 V.',
+             learn: 'An ammeter goes in series and a voltmeter in parallel. Resistance = voltage ÷ current: 1.5 V ÷ 0.5 A = 3 Ω, the resistance of the lamp (V = IR).' },
+      check: ['light:2', 'light:3', 'light:5'],
+      exam: 'In the exam you may be asked to draw a circuit from a description, with the ammeter in series and the voltmeter in parallel, and to define resistance as voltage ÷ current, in ohms.' },
+    { id: 'g9_two_cells', grades: [9], chapter: 'g9s-p5-electricity', icon: '🔋',
+      title: 'Two cells in series: what do the meters read?',
+      aim: 'One lamp with an ammeter in the loop and a voltmeter across it: 0.50 A and 1.50 V. Add a second 1.5 V cell in series and read both meters again.',
+      setup: ['build:meters', 'switch:on'],
+      predict: { q: 'With two 1.5 V cells in series, the voltmeter across the lamp will read:', answer: 'v3',
+        options: [{ id: 'v3', label: '3.0 V' }, { id: 'v15', label: '1.5 V' }, { id: 'v075', label: '0.75 V' }, { id: 'v45', label: '4.5 V' }] },
+      steps: [
+        { on: 'place:h10:cell', say: 'Tap the glowing wire to add a second cell in series. Watch the lamp.' },
+        { ask: 'Read the voltmeter. What does it show now?', on: 'read:3.00V',
+          options: ['read:3.00V', 'read:1.50V', 'read:0.75V', 'read:4.50V'],
+          wrong: { 'read:1.50V': 'That was the reading with ONE cell. Cells in series add their voltages: 1.5 V + 1.5 V. Look at the needle.',
+                   'read:0.75V': 'A second cell adds voltage, it does not share it out. Two 1.5 V cells in series give more than one. Look at the needle.',
+                   'read:4.50V': '4.5 V would need three cells: 1.5 V + 1.5 V + 1.5 V. There are two. Look at the needle.' } },
+        { ask: 'Read the ammeter. What does it show now?', on: 'read:1.00A',
+          options: ['read:1.00A', 'read:0.50A', 'read:0.25A', 'read:2.00A'],
+          wrong: { 'read:0.50A': 'That was the current with one cell. Twice the voltage across the same 3 Ω lamp pushes twice the current (V = IR). Look at the needle.',
+                   'read:0.25A': 'More voltage means MORE current through the same resistance, not less. Look at the needle.',
+                   'read:2.00A': 'The needle is half way along the 0 to 2 A scale, not at the end: 1 A. And 3 V ÷ 3 Ω = 1 A.' } },
+      ],
+      see: { saw: 'With two cells the voltmeter read 3.00 V and the ammeter 1.00 A: double the 1.50 V and 0.50 A of one cell. The lamp was very bright.',
+             learn: 'Cells in series add their voltages: 1.5 V + 1.5 V = 3 V. Doubling the voltage across the same lamp doubled the current, so V ÷ I stayed 3 Ω: the resistance did not change (V = IR).' },
+      check: [
+        { q: 'You added a second 1.5 V cell in series. The voltmeter across the lamp went from 1.50 V to:', options: ['3.00 V', '0.75 V', '1.50 V', '4.50 V'],
+          why: 'Cells in series add their voltages: 1.5 V + 1.5 V = 3.0 V.' },
+        { q: 'The voltage doubled and the current doubled. Which quantity stayed the same?', options: ['The resistance of the lamp', 'The current through the lamp', 'The brightness of the lamp', 'The voltage across the lamp'],
+          why: 'R = V ÷ I: 1.5 V ÷ 0.5 A = 3 Ω and 3.0 V ÷ 1.0 A = 3 Ω. Resistance belongs to the lamp, not to the cell.' },
+        'light:5'],
+      exam: 'In the exam you may be asked to add the voltages of cells in series, and to use V = IR: doubling the voltage across a fixed resistance doubles the current.' },
+  ];
+
   return { GRADES, forGrade, COLS, ROWS, NODES, EMF, R, SHORT_A, FUSE_A, BULB_MAX_V, P_REF, LIT, FS,
            SLOTS, SYMBOL, KINDS, TOOLS, PRESETS, QUICK, QUICK_BY_GRADE, TEST_SLOT, layoutOf,
            OBJECTS, TEST_OBJECTS, JOBS_P, JOBS_7, toolsFor, kindsFor, symbolsFor,
@@ -1410,6 +1761,6 @@ const LabCircuitData = (() => {
            switchControls, ammeterInSeries, litBulbs, meterChecks, oneLoop,
            testResult, objectTests, WHENS, facts, primaryMistake,
            charge, energy, resistance, seriesR, parallelR, round2, reading,
-           DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_BY_GRADE, MISSIONS, GUIDES, DIAGRAM_G7 };
+           DISCOVERIES, HAZARDS, RESULTS, SIGN_LABELS, FACTS, FACTS_BY_GRADE, MISSIONS, GUIDES, DIAGRAM_G7, EXPERIMENTS };
 })();
 if (typeof window !== 'undefined') window.LabCircuitData = LabCircuitData;

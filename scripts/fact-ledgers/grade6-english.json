@@ -1,0 +1,45 @@
+{
+  "pack": "grade6-english",
+  "source": "English.pdf — MIE Teaching and Learning Syllabus, English, Grades 1 to 6, the 'NCF GRAMMAR SYLLABUS' table, Grade 6 column (printed pages 19-22)",
+  "note": "One entry per item the Grade 6 column of the grammar table names. `any` = covered when some question's stem or answer contains ANY of these phrases. `all` = covered only when ONE question contains ALL of them. Terms are matched against the question STEM AND ANSWER ONLY, never the explanation: a fact mentioned in an explanation is a fact the child is never asked. ⚠ SCOPE: the grammar table only. The rest of this syllabus is four competency matrices (listening, speaking, reading, writing) whose rows are skills — 'show willingness to engage in writing activities' — and whose grade is marked by SHADING, not text. A skill of that kind cannot be detected by matching words in a question stem, and nothing here should be read as saying those competencies are covered or uncovered. The grammar table is different: it names the items, in text, in a column headed Grade 6, and it is what the PSAC paper's grammar questions test. ⚠ Phonics at Grade 6 is 'reinforce according to learners' needs' and names no item, so it carries no entry.",
+  "facts": [
+    { "id": "nou-01", "unit": "1. Nouns", "fact": "Frequently used abstract nouns (pollution, happiness, friendship)", "any": ["abstract noun"] },
+    { "id": "nou-02", "unit": "1. Nouns", "fact": "Form a noun from an adjective (happy - happiness)", "all": ["noun", "adjective"] },
+    { "id": "nou-03", "unit": "1. Nouns", "fact": "Form a noun from a verb (pollute - pollution)", "all": ["noun", "verb"] },
+
+    { "id": "pro-01", "unit": "2. Pronouns", "fact": "Use of anyone, anybody, anything", "any": ["anyone", "anybody", "anything"] },
+    { "id": "pro-02", "unit": "2. Pronouns", "fact": "Use of everyone, everybody, everything", "any": ["everyone", "everybody", "everything"] },
+    { "id": "pro-03", "unit": "2. Pronouns", "fact": "Use of someone, somebody, something", "any": ["someone", "somebody", "something"] },
+    { "id": "pro-04", "unit": "2. Pronouns", "fact": "Use of no-one, nobody, nothing", "any": ["no-one", "no one", "nobody", "nothing"] },
+
+    { "id": "adj-01", "unit": "3. Adjectives", "fact": "Form adjectives from nouns or verbs (shine - shiny, metal - metallic, wood - wooden)", "any": ["wooden", "metallic", "shiny"] },
+    { "id": "adj-02", "unit": "3. Adjectives", "fact": "Use of adverbs to modify adjectives (very slow, too good)", "all": ["adverb", "adjective"] },
+
+    { "id": "vrb-01", "unit": "4. Verbs and tenses", "fact": "The Present Perfect Tense", "any": ["present perfect"] },
+    { "id": "vrb-02", "unit": "4. Verbs and tenses", "fact": "The Past Perfect Tense", "any": ["past perfect"] },
+    { "id": "vrb-03", "unit": "4. Verbs and tenses", "fact": "Common phrasal verbs", "any": ["phrasal verb"] },
+
+    { "id": "det-01", "unit": "5. Determiners", "fact": "Words taking no article (I went to school)", "any": ["no article", "without an article", "needs no article"] },
+    { "id": "det-02", "unit": "5. Determiners", "fact": "Quantifiers: both, all, enough, less, more", "any": ["quantifier"] },
+
+    { "id": "adv-01", "unit": "6. Adverbs", "fact": "Adverbs of degree (very, really, so)", "any": ["adverb of degree", "adverbs of degree"] },
+
+    { "id": "mod-01", "unit": "7. Modals", "fact": "Use of 'might' to convey possibility", "all": ["might", "possib"] },
+
+    { "id": "pre-01", "unit": "8. Prepositions", "fact": "Use of 'for', 'with' and 'without'", "all": ["preposition", "without"] },
+
+    { "id": "sen-01", "unit": "9. Sentence Structure", "fact": "Complex sentences formed with relative pronouns", "any": ["relative pronoun"] },
+    { "id": "sen-02", "unit": "9. Sentence Structure", "fact": "The relative pronouns who, which, that, whose, where, when, why", "all": ["whose", "which"] },
+    { "id": "sen-03", "unit": "9. Sentence Structure", "fact": "Sentences in the Present Conditional", "any": ["conditional"] },
+
+    { "id": "pun-01", "unit": "10. Punctuation", "fact": "The comma in addresses", "all": ["comma", "address"] },
+
+    { "id": "con-01", "unit": "11. Conjunctions", "fact": "Conjunctions of reason: because, as, for", "all": ["conjunction", "because"] },
+    { "id": "con-02", "unit": "11. Conjunctions", "fact": "Conjunction of purpose: so that", "any": ["so that"] },
+    { "id": "con-03", "unit": "11. Conjunctions", "fact": "Conjunction of place: where", "all": ["conjunction", "where"] },
+    { "id": "con-04", "unit": "11. Conjunctions", "fact": "Conjunction of duration: while", "all": ["conjunction", "while"] },
+    { "id": "con-05", "unit": "11. Conjunctions", "fact": "Conjunction of condition: if", "all": ["conjunction", "if"] },
+    { "id": "con-06", "unit": "11. Conjunctions", "fact": "Conjunctions of cause and effect: so that, therefore", "any": ["therefore"] },
+    { "id": "con-07", "unit": "11. Conjunctions", "fact": "Conjunctions of choice: either...or, neither...nor", "any": ["either", "neither"] }
+  ]
+}

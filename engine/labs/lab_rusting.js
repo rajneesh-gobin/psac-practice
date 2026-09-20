@@ -543,7 +543,9 @@ const LabRusting = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('rusting', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _resetBench();
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // already set up - the tubes are the experiment; never wipe them.
+    if (!G.exp) _resetBench();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderAdult();
@@ -558,6 +560,7 @@ const LabRusting = (() => {
 
   // A step whose setting is already in place needs no tap.
   function _satisfied(tok) {
+    if (!tok) return false;
     const [k, v] = tok.split(':');
     if (v === undefined) return false;
     const t = _T.items[_T.sel], j = _C.items[_C.sel];
@@ -600,13 +603,19 @@ const LabRusting = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any` (an experiment
+  // that says "pick a coat" accepts every coat). The runner hears every token
+  // first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.on !== 'wait' && s.on !== 'week' && s.on !== 'hour') _coachGuide(s.on); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); if (token !== 'wait' && token !== 'week' && token !== 'hour') _coachGuide(token); }
   }
 
   function _guideHint() {
@@ -712,6 +721,7 @@ const LabRusting = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('rusting', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -757,19 +767,62 @@ const LabRusting = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const el = _root.querySelector('.lab-rusting ' + _selFor(s.on));
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => _root.querySelector('.lab-rusting ' + _selFor(t))).filter(Boolean);
+    if (els.length) {
+      els.forEach(el => el.classList.add('is-next'));
+      if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       const guideBox = _root.querySelector('#lab-guide');
       _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
+        if (!els.some(el => other === el || el.contains(other) || other.contains(el))
             && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
         }
       });
     }
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Applied after every render of the tools and the shelf.
+  let _focus = null;
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const has = tok => on && _focus.has(tok);
+    _root.querySelectorAll('.lab-rusting-tools .lab-tool, .lab-rusting-opt, .lab-rusting-rigs button').forEach(b => {
+      const tok = b.dataset.act || (b.dataset.set + ':' + b.dataset.v);
+      b.hidden = on && !has(tok);
+    });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-rusting-pair').forEach(r => { r.hidden = on && !anyShown(r); });
+    _root.querySelectorAll('.lab-rusting-row').forEach(r => { r.hidden = on && !anyShown(r); });
+    ['.lab-rusting-rigs', '#lab-rusting-shelf', '#lab-rusting-tools'].forEach(sel => {
+      const el = _root.querySelector(sel); if (el) el.hidden = on && !anyShown(el);
+    });
+  }
+  const experiment = {
+    list: () => (P().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null;
+      _resetBench(); _rig = 'tubes'; _panel = 'sandbox'; _log = [];
+      _renderAdult(); _renderTools(); _renderPanel(); _syncSet(); _readouts();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    apply: tok => _do(tok),
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.filter(e => !e.note).slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -813,6 +866,7 @@ const LabRusting = (() => {
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _syncSet();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -830,6 +884,7 @@ const LabRusting = (() => {
     const sh = $('lab-rusting-shelf');
     if (sh) sh.outerHTML = _shelfHTML();
     _syncSet();
+    _applyFocus();
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
@@ -852,6 +907,7 @@ const LabRusting = (() => {
       <button type="button" class="lab-tool" data-act="tweezers"><span aria-hidden="true">🔍</span>Tweezers: look closely</button>
       <button type="button" class="lab-tool lab-rusting-danger" data-act="hand"><i class="lab-rusting-toolsign">${Labs.sign('sharp', true)}</i><span aria-hidden="true">🖐️</span>Pick up by hand</button>
       <button type="button" class="lab-tool" data-act="reset"><span aria-hidden="true">🔄</span>Start again</button>`;
+    _applyFocus();
     _highlight();
   }
 
@@ -1338,7 +1394,7 @@ const LabRusting = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, wait,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, wait,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabRusting = LabRusting;

@@ -34,7 +34,7 @@ const same = (a, b) => JSON.stringify([...a].sort()) === JSON.stringify([...b].s
 
 console.log('\nGrades');
 ok('the lab declares GRADES = [4]', JSON.stringify(Array.from(L.GRADES)) === '[4]');
-for (const [name, list] of [['objects', L.OBJECTS], ['guided experiments', L.GUIDES], ['missions', L.MISSIONS], ['discoveries', L.DISCOVERIES], ['jobs', L.JOBS]]) {
+for (const [name, list] of [['objects', L.OBJECTS], ['guided experiments', L.GUIDES], ['missions', L.MISSIONS], ['discoveries', L.DISCOVERIES], ['jobs', L.JOBS], ['experiments', L.EXPERIMENTS || []]]) {
   const bad = list.filter(x => !Array.isArray(x.grades) || !x.grades.length || !x.grades.every(g => L.GRADES.includes(g)));
   ok(`every one of the ${list.length} ${name} carries grades: [4]`, bad.length === 0, ids(bad));
 }
@@ -130,12 +130,14 @@ console.log('\nDiscoveries');
 ok('at least 10 discoveries', L.DISCOVERIES.length >= 10, L.DISCOVERIES.length);
 ok('discovery ids are unique', new Set(ids(L.DISCOVERIES)).size === L.DISCOVERIES.length);
 const tokenOk = on => {
-  const [k, v] = on.split(':');
+  const i = on.indexOf(':'), k = on.slice(0, i), v = on.slice(i + 1);
   if (k === 'station') return !!L.station(v);
   if (k === 'lights') return v === 'on' || v === 'off';
+  if (k === 'power') return v === 'battery' || v === 'socket';
   if (k === 'test') return !!L.obj(v);
   if (k === 'sort') return !!L.PROPS[v] && L.STATIONS.some(s => s.prop === v);
-  if (k === 'job') return L.JOBS.some(j => j.id === v);
+  if (k === 'job' || k === 'show') return L.JOBS.some(j => j.id === v);
+  if (k === 'pick') { const [j, o] = v.split(':'); const J = L.JOBS.find(x => x.id === j); return !!J && J.choices.includes(o); }
   return false;
 };
 const badDisc = L.DISCOVERIES.filter(d => !d.title || !d.icon || !d.hint || !d.saw || !d.rule || !d.learn || !d.unlock || !Array.isArray(d.how) || !d.how.length || !d.how.every(tokenOk));
@@ -144,12 +146,20 @@ ok('every discovery has a clue, what you saw, the rule, why it matters and a val
 // A model of the bench: follow a recipe and report what unlocks - and any card
 // that would interrupt it.
 function run(steps) {
-  const st = { station: 'magnet', lights: true, results: {} }, ev = [], cards = [];
+  const st = { station: 'magnet', lights: true, power: 'battery', job: null, results: {}, picks: [] }, ev = [], cards = [];
   for (const on of steps) {
-    const [k, v] = on.split(':');
-    if (k === 'station') st.station = v;
+    const i = on.indexOf(':'), k = on.slice(0, i), v = on.slice(i + 1);
+    if (k === 'station') { st.station = v; st.job = null; }
     else if (k === 'lights') st.lights = v === 'on';
+    else if (k === 'power') { if (v === 'socket') cards.push('mains'); else st.power = 'battery'; }
+    else if (k === 'show') st.job = v;
+    else if (k === 'pick') {
+      const [j, o] = v.split(':'), r = L.judge(j, o);
+      st.job = j; st.picks.push({ job: j, obj: o, ok: !!(r && r.ok) });
+      if (r && r.ok) ev.push({ job: j });
+    }
     else if (k === 'test') {
+      st.job = null;
       if (st.station === 'torch' && st.lights) { cards.push('lights_on'); continue; }
       const o = L.obj(v);
       if (st.station === 'bend' && (o.material === 'glass' || o.material === 'frosted')) cards.push('glass');
@@ -165,7 +175,7 @@ function run(steps) {
       if (L.judge(v, J.choices[0]).ok) ev.push({ job: v });
     }
   }
-  return { ev, cards };
+  return { ev, cards, st };
 }
 const hits = (u, e) => u.station ? e.station === u.station && (u.value === undefined || u.value === e.value) && (!u.obj || u.obj === e.obj) && (u.metal === undefined || L.isMetal(e.obj) === u.metal)
   : u.sort ? e.sort === u.sort && !!e.full : u.job ? !!e.job : false;
@@ -180,7 +190,7 @@ console.log('\nGuided experiments');
 ok('at least 3 guided experiments', L.GUIDES.length >= 3, L.GUIDES.length);
 ok('guide ids are unique', new Set(ids(L.GUIDES)).size === L.GUIDES.length);
 for (const G of L.GUIDES) {
-  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say || !s.btn);
+  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   const r = run(G.steps.map(s => s.on));
   ok(`${G.title}: every step names a real action, says what to do and has a button`, bad.length === 0, bad);
   ok(`${G.title}: runs with no hazard or unfair-test card, and ends with what they found out`, r.cards.length === 0 && !!(G.lesson && G.blurb && G.icon), r.cards);
@@ -234,8 +244,114 @@ ok('a PSAC paper reference is only quoted where the app' + "'" + 's own question
    (JSON.stringify(L).match(/PSAC \d{4} Q\w+/g) || []).every(r => r === 'PSAC 2025 Q6c')
    && fs.readFileSync(path.join(ROOT, 'subjects', 'grade6-science', 'questions', 'ch05_g6_energy.js'), 'utf8').includes('PSAC 2025 Q6c'));
 
+console.log('\nExperiments (lab_experiment.js, LAB_SPEC §10)');
+const EX = L.EXPERIMENTS || [];
+ok('EXPERIMENTS is exported: 3 to 5 for Grade 4, ids unique, every one on g4sci-materials',
+   EX.length >= 3 && EX.length <= 5 && new Set(ids(EX)).size === EX.length && EX.every(e => same(e.grades, [4]) && e.chapter === 'g4sci-materials'), ids(EX));
+const plain = s => String(s || '').replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{FE0F}\u{200D}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+// The visible label of the control a token belongs to (the bench's button text without its <small> line).
+const labelOf = tok => {
+  const i = tok.indexOf(':'), k = tok.slice(0, i), v = tok.slice(i + 1);
+  if (k === 'station') return L.station(v).name;
+  if (k === 'lights') return v === 'off' ? 'Lights off' : 'Lights on';
+  if (k === 'power') return v === 'battery' ? 'Battery' : 'Wall socket';
+  if (k === 'test') return L.obj(v).name;
+  if (k === 'pick') return L.materialName(v.split(':')[1]);
+  if (k === 'sort') return L.PROPS[v].name;
+  if (k === 'job') return L.JOBS.find(j => j.id === v).title;
+  return '';
+};
+const question = ref => {
+  if (ref && typeof ref === 'object') return ref;
+  const [m, i] = String(ref).split(':');
+  const M = L.MISSIONS.find(x => x.id === m);
+  return M ? M.quiz[Number(i)] : null;
+};
+// What a run amounts to, so a wrong option can be compared with the right one:
+// the cards it drew, the last result it produced, and whether each pick was right.
+const outcome = r => {
+  const last = r.ev[r.ev.length - 1];
+  return JSON.stringify({ cards: r.cards, last: last ? (last.value !== undefined ? last.value : last) : null, picks: r.st.picks.map(p => p.ok) });
+};
+const tokensOf = s => s.options || s.any || (s.on ? [s.on] : []);
+const onPath = e => [...e.setup, ...e.steps.map(s => s.on || (s.any && s.any[0]))];
+// What each See sentence claims, checked against the replayed model, not against a belief.
+const TRUTH = {
+  magnet_pull: (r, saw, e) => r.nail.magnet === true && r.pin.magnet === true && r.copper.magnet === false
+    && /pulled the iron nail and the steel pin/i.test(saw) && /did not pull the copper wire/i.test(saw)
+    && e.predict.answer === 'nail' && !L.obj('copper').magnetic,
+  light: (r, saw, e, st) => r.glass.torch === 'transparent' && r.frosted.torch === 'translucent' && r.wood.torch === 'opaque' && st.lights === false
+    && /glass tile: bright light/i.test(saw) && /frosted glass: a dim, blurry glow/i.test(saw) && /wooden block: a dark shadow/i.test(saw)
+    && e.predict.answer === 'glass',
+  bulb: (r, saw, e, st) => r.copper.circuit === true && r.lead.circuit === true && r.bottle.circuit === false && st.power === 'battery'
+    && /copper wire and the pencil lead lit the bulb/i.test(saw) && /plastic bottle kept it dark/i.test(saw)
+    && e.predict.answer === 'bottle' && !L.isMetal('lead'),
+  pot: (r, saw, e, st) => st.picks.length === 2 && st.picks.every(p => p.ok) && st.picks[0].obj === 'foil' && st.picks[1].obj === 'wood'
+    && L.obj('foil').heat === 'conductor' && L.obj('wood').heat === 'insulator' && L.obj('nail').heat === 'conductor'
+    && /aluminium was right for the pot/i.test(saw) && /wood was right for the spoon/i.test(saw) && e.predict.answer === 'metal',
+  origin: (r, saw, e) => r.towel.origin === 'natural' && r.bottle.origin === 'man-made' && r.cork.origin === 'natural' && /plant/.test(L.obj('towel').from)
+    && /cotton[^.]*natural/i.test(saw) && /plastic[^.]*man-made/i.test(saw) && /cork[^.]*natural/i.test(saw) && e.predict.answer === 'plant',
+};
+for (const e of EX) {
+  const t = e.id;
+  ok(`${t}: a question a child can say back, and a short aim`, /\?$/.test(e.title.trim()) && e.title.length <= 60 && e.aim.length >= 20 && e.aim.length <= 200 && e.aim.split(/[.!?]\s/).length <= 3, { title: e.title, aim: e.aim });
+  ok(`${t}: every setup and step token is one the bench accepts`, e.setup.every(tokenOk) && e.steps.every(s => tokensOf(s).length && tokensOf(s).every(tokenOk)), { setup: e.setup, steps: e.steps.map(tokensOf) });
+  ok(`${t}: 1 to 5 steps, each a decision (ask + options, the answer among them) or an observation (on + say)`,
+     e.steps.length >= 1 && e.steps.length <= 5 && e.steps.every(s => s.ask ? (Array.isArray(s.options) && s.options.length >= 2 && (s.any ? s.any.every(x => s.options.includes(x)) : s.options.includes(s.on))) : !!(s.on && s.say)), e.steps);
+  ok(`${t}: at least one step is a decision`, e.steps.some(s => s.ask));
+  ok(`${t}: the prediction is 2-4 taps with the answer among them`, e.predict && e.predict.options.length >= 2 && e.predict.options.length <= 4 && e.predict.options.some(o => o.id === e.predict.answer));
+  const longSay = e.steps.map(s => (s.say || s.ask).split(/\s+/).length).filter(n => n > 12);
+  ok(`${t}: every instruction is 12 words or fewer (Grade 4)`, longSay.length === 0, longSay);
+  const badLabel = e.steps.filter(s => s.say && !plain(s.say).includes(plain(labelOf(s.on))));
+  ok(`${t}: every observation names its control ("Tap the Iron nail")`, badLabel.length === 0, badLabel.map(s => [s.say, labelOf(s.on)]));
+  const path = onPath(e);
+  const r0 = run(path);
+  ok(`${t}: the right path draws no hazard or result card`, r0.cards.length === 0, r0.cards);
+  const wrongBad = [];
+  e.steps.forEach((s, i) => {
+    if (!s.wrong) return;
+    const before = [...e.setup, ...e.steps.slice(0, i).map(x => x.on || x.any[0])];
+    const right = outcome(run([...before, s.on || s.any[0]]));
+    for (const [w, text] of Object.entries(s.wrong)) {
+      if (!tokensOf(s).includes(w) || w === s.on || (s.any || []).includes(w)) wrongBad.push(`${w}: not one of the step's other options`);
+      else if (outcome(run([...before, w])) === right) wrongBad.push(`${w}: the bench gives the same result as ${s.on}`);
+      const name = labelOf(w);
+      if (typeof text !== 'string' || text.length < 20) wrongBad.push(`${w}: no explanation`);
+      else if (w.startsWith('test:') || w.startsWith('pick:')) {
+        const o = L.obj(w.split(':').pop());
+        if (!plain(text).includes(plain(o.name)) && !plain(text).includes(plain(L.MATERIALS[o.material].name))) wrongBad.push(`${w}: the explanation does not name ${name}`);
+      }
+    }
+  });
+  ok(`${t}: every wrong option really is wrong on the bench (a different result, or a card), and explains itself by name`, wrongBad.length === 0, wrongBad);
+  const st = r0.st, tested = new Set(), named = new Set();
+  for (const o of L.OBJECTS) {
+    if (st.results[o.id]) tested.add(o.id);
+    if (st.picks.some(p => p.ok && p.obj === o.id)) tested.add(o.id);
+    const s = plain(e.see.saw);
+    if (s.includes(plain(o.name)) || s.includes(plain(L.MATERIALS[o.material].name))) named.add(o.id);
+  }
+  ok(`${t}: the See names exactly the things the child tested on the right path (${[...tested].join(', ')})`, same(tested, named), { tested: [...tested], named: [...named] });
+  const truth = TRUTH[t];
+  ok(`${t}: the See is TRUE for the data model (replayed: ${JSON.stringify(st.results)})`, !!truth && truth(st.results, e.see.saw, e, st), { saw: e.see.saw, results: st.results, picks: st.picks });
+  ok(`${t}: see.learn is one or two sentences`, typeof e.see.learn === 'string' && e.see.learn.length > 20 && e.see.learn.split(/[.!?]\s/).length <= 3, e.see.learn);
+  const qs = (e.check || []).map(question);
+  ok(`${t}: 2 or 3 check questions, each resolving to a question with 4 distinct options and a reason`,
+     qs.length >= 2 && qs.length <= 3 && qs.every(q => q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && q.why), e.check);
+  ok(`${t}: an exam line, and no PSAC paper quoted (there is no Grade 4 paper)`, typeof e.exam === 'string' && e.exam.length > 20 && !/PSAC \d{4}/.test(e.exam), e.exam);
+}
+ok('the pot experiment picks at the bench, so the bench draws jobs and their choices', /data-pick=/.test(bench) && /case 'show'/.test(bench) && /function _drawJob/.test(bench));
+ok('the bench exports the experiment adapter with every hook the runner needs',
+   /const experiment = \{/.test(bench) && ['list:', 'question:', 'reset:', 'apply:', 'guide:', 'stop:', 'evidence:', 'focus:', 'selector:', 'hooks:'].every(k => bench.includes(k))
+   && /experiment\.hooks\.token\(token, s\)/.test(bench) && /experiment\.hooks\.step\(_guide\.step\)/.test(bench) && /experiment\.hooks\.done\(\)/.test(bench) && /const _stepHit/.test(bench));
+ok('a wrong choice the experiment lists is heard by the runner: the socket is never used, and a wrong test shows its end state at once',
+   /_expWrong\('power:socket'\)/.test(bench) && /_expWrong\('test:' \+ objId\)/.test(bench) && /_expWrong\('test:' \+ sc\.obj\)/.test(bench));
+ok('setup tokens are applied silently (no discovery toasts, no cards)', /_quiet = true/.test(bench) && /if \(!_quiet\) _checkDisc/.test(bench));
+
 console.log('\nReading level (a 9-year-old: short sentences)');
 const texts = [];
+EX.forEach(e => { texts.push(e.title, e.aim, e.see.saw, e.see.learn, e.exam, e.predict.q); e.steps.forEach(s => { texts.push(s.say || s.ask); Object.values(s.wrong || {}).forEach(w => texts.push(w)); });
+  e.check.forEach(c => { if (typeof c === 'object') texts.push(c.q, c.why); }); });
 L.GUIDES.forEach(g => { texts.push(g.blurb, g.lesson); g.steps.forEach(s => texts.push(s.say)); });
 L.DISCOVERIES.forEach(d => texts.push(d.hint, d.saw, d.learn));
 L.JOBS.forEach(j => texts.push(j.ask, j.why));

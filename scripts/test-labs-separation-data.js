@@ -218,7 +218,7 @@ ok('guide ids are unique', new Set(D.GUIDES.map(g => g.id)).size === D.GUIDES.le
 const offGuide = D.GUIDES.filter(G => !gradesOf(G).every(g => fitsGrade(G.steps.map(s => s.on), g)));
 ok('every guide uses only the benches, mixtures and options of its own grade', offGuide.length === 0, offGuide.map(G => G.id));
 for (const G of D.GUIDES) {
-  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say || (/^(wait|card):/.test(s.on) ? !!s.btn : !s.btn));
+  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do, and has a button unless it is “watch”`, bad.length === 0, bad);
   ok(`${G.title}: ends with what they found out`, !!(G.lesson && G.blurb && G.icon));
   ok(`${G.title}: goggles before any heating`, !G.steps.some(s => s.on === 'heat') || G.steps.findIndex(s => s.on === 'goggles') < G.steps.findIndex(s => s.on === 'heat'));

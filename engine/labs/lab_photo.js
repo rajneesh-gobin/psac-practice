@@ -10,6 +10,9 @@
 //     pick a leaf and run the starch test: boil → ethanol in a water bath →
 //     rinse → iodine.
 //  Guided experiments, three Missions and a collection of Discoveries.
+//  Since 2026-09-20 the lab opens on an EXPERIMENT (lab_experiment.js,
+//  LAB_SPEC.md §10) at every grade: the `experiment` adapter below runs the
+//  same bench; the old bench survives as Explore.
 //
 //  ⚠ Every outcome comes from lab_photo_data.js (LabPhotoData). This file only
 //    moves things over time and draws them. If a result looks wrong on screen,
@@ -36,6 +39,7 @@ const LabPhoto = (() => {
   let _panel = 'sandbox', _mission = null, _guide = null;
   let _parts = [], _fx = [], _shake = 0, _busy = false, _instant = false;
   let _colors = null, _tipIdx = -1, _said = {}, _emit = 0;
+  let _focus = null, _silent = false;   // experiments: the controls in focus; setup runs with no toasts or cards
   // Primary levels (Grades 4 and 6): two pots, seed dishes, waterweed.
   let _g = 9, _pots = null, _seeds = null, _weed = null, _wprev = null, _wruns = [], _potRuns = [], _seedRuns = [];
   let _lapse = null, _talking = false, _obs = null;
@@ -166,6 +170,7 @@ const LabPhoto = (() => {
     _hush();
     if (_obs) { _obs.disconnect(); _obs = null; }
     _stop();
+    _focus = null;
     _root = null; _cv = null; _cx = null;
   }
 
@@ -204,8 +209,8 @@ const LabPhoto = (() => {
   }
   // Every overlay goes through these, so speech never talks over a card.
   function _overlay(html, o) { _hush(); return Labs.overlay(html, o); }
-  function _hazardCard(o) { _hush(); return Labs.hazardCard(o); }
-  function _resultCard(o) { _hush(); return Labs.resultCard(o); }
+  function _hazardCard(o) { if (_silent) return null; _hush(); return Labs.hazardCard(o); }
+  function _resultCard(o) { if (_silent) return null; _hush(); return Labs.resultCard(o); }
 
   function _readColors() {
     const cs = getComputedStyle(_root.querySelector('.lab') || _root);
@@ -273,6 +278,7 @@ const LabPhoto = (() => {
   }
 
   function _act(act) {
+    if (_expWrong(act)) { _guideEvent(act); return; }
     switch (act) {
       case 'hub': _hush(); Labs.backToHub(); break;
       case 'help': _help(); break;
@@ -335,6 +341,7 @@ const LabPhoto = (() => {
   const WEED_KEYS = ['wlamp', 'wdist', 'wwater'];
   const G9_KEYS = ['dist', 'lamp', 'water', 'temp', 'shield', 'plant', 'cover', 'day', 'bunsen'];
   function _set(k, v) {
+    if (_expWrong(k + ':' + v)) { _guideEvent(k + ':' + v); return; }
     if (_busy) { _coach(_primary() ? 'One thing at a time. Let that finish first.' : 'One thing at a time - let that finish first.'); return; }
     if (_primary()) { if (G9_KEYS.includes(k)) return; if (_setPrimary(k, v)) return; }
     else if (POT_KEYS.includes(k) || SEED_KEYS.includes(k) || WEED_KEYS.includes(k)) return;
@@ -1097,7 +1104,9 @@ const LabPhoto = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('photo', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _resetBench();
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // already set up - the pots or the tube ARE the experiment; never wipe them.
+    if (!G.exp) _resetBench();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderTools();
@@ -1106,11 +1115,12 @@ const LabPhoto = (() => {
     _readouts();
     _guideEnter();
     const z = $('lab-photo-stage');
-    if (z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
+    if (!G.exp && z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
   // A step whose setting is already in place needs no tap.
   function _satisfied(tok) {
+    if (!tok) return false;
     const [k, v] = tok.split(':');
     if (v === undefined) return false;
     if (_primary()) {
@@ -1163,13 +1173,19 @@ const LabPhoto = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any` (an experiment
+  // that says "pick a coat" accepts every coat). The runner hears every token
+  // first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.btn) _coachGuide(s.on); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); if (s.btn) _coachGuide(token); }
   }
 
   function _guideDo() {
@@ -1309,6 +1325,7 @@ const LabPhoto = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('photo', G)) { _stopGuide(true); return; }
     const st = Labs.store('photo');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -1353,19 +1370,76 @@ const LabPhoto = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const el = _root.querySelector('.lab-body ' + _selFor(s.on));
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => _root.querySelector('.lab-body ' + _selFor(t))).filter(Boolean);
+    if (els.length) {
+      els.forEach(el => el.classList.add('is-next'));
+      if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       const guideBox = _root.querySelector('#lab-guide');
       _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
+        if (!els.some(el => other === el || el.contains(other) || other.contains(el))
             && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
         }
       });
     }
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // The runner sets the bench up with apply(), runs the steps as an `exp` guide
+  // and hears every token through hooks.token. A token the current step lists
+  // as WRONG is only heard: the bench does nothing with it - no pot goes under
+  // the hot lamp, no ethanol goes near the flame - and the runner's card
+  // explains why. Every real tap enters through _set() or _act(), so the check
+  // sits at the top of both.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
+
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Applied after every render of the tools, the rig switch and the
+  // shelf. A row or group left with nothing to show hides with its buttons.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const has = tok => on && _focus.has(tok);
+    _root.querySelectorAll('.lab-photo-tools .lab-tool, .lab-photo-opt, .lab-photo-rigs button').forEach(b => {
+      const tok = b.dataset.act || (b.dataset.set + ':' + b.dataset.v);
+      b.hidden = on && !has(tok);
+    });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-photo-row').forEach(r => { r.hidden = on && !anyShown(r); });
+    _root.querySelectorAll('.lab-photo-rigs, #lab-photo-tools, .lab-photo-set').forEach(el => { el.hidden = on && !anyShown(el); });
+  }
+  const experiment = {
+    list: () => { const g = _grade(); return (P().EXPERIMENTS || []).filter(e => (e.grades || [9]).includes(g)); },
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null; _focus = null;
+      _rig = _level().rigs[0]; _resetBench(); _panel = 'sandbox';
+      _prev = null; _runs = []; _leafRuns = []; _log = []; _potRuns = []; _seedRuns = [];
+      // The Aim is the welcome: the bench's own first-visit card must not come
+      // back the next time this grade's bench is mounted.
+      const st = Labs.store('photo');
+      if (!st[_introKey()]) { st[_introKey()] = true; Labs.persist(); }
+      _renderTools(); _renderPanel(); _syncSet(); _readouts();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _silent = true;
+      try { _do(tok); } finally { _instant = was; _silent = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -1410,6 +1484,7 @@ const LabPhoto = (() => {
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _syncSet();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -1425,6 +1500,7 @@ const LabPhoto = (() => {
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
   function _discover(id) {
+    if (_silent) return;
     const d = P().DISCOVERIES.find(x => x.id === id);
     if (Labs.discover('photo', id, { title: d && d.title, total: _mine(P().DISCOVERIES).length })) _refresh();
   }
@@ -1436,7 +1512,7 @@ const LabPhoto = (() => {
   function _renderTools() {
     const box = $('lab-photo-tools');
     if (!box) return;
-    if (_primary()) { _pToolsHTML(box); _highlight(); return; }
+    if (_primary()) { _pToolsHTML(box); _applyFocus(); _highlight(); return; }
     const sign = k => `<i class="lab-photo-toolsign">${Labs.sign(k, true)}</i>`;
     if (_rig === 'pond') {
       box.className = 'lab-tools lab-photo-tools';
@@ -1455,6 +1531,7 @@ const LabPhoto = (() => {
         <button type="button" class="lab-tool" data-act="rinse"><span aria-hidden="true">🚿</span>Rinse, warm water</button>
         <button type="button" class="lab-tool" data-act="iodine">${sign('irritant')}<span aria-hidden="true">🟤</span>Iodine solution</button>`;
     }
+    _applyFocus();
     _highlight();
   }
 
@@ -2449,7 +2526,7 @@ const LabPhoto = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, count,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, count,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabPhoto = LabPhoto;

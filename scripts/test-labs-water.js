@@ -2,7 +2,9 @@
 // Science Labs › Water & States (PSAC Grade 4), driven in a real browser.
 //
 // Proves the lab end to end: it loads its own three files only when opened,
-// lands with "What would you like to do?", the "From ice to steam" guided
+// opens on an experiment Aim (lab_experiment.js, since 2026-09-20) with no
+// overlay in the way, "Explore the bench freely" shows the old bench with
+// "What would you like to do?", the "From ice to steam" guided
 // experiment runs to its end (0 °C, 100 °C, steam, condensation), every
 // discovery unlocks by following its own "Show me how", every hazard and
 // result card fires and explains itself (with "In the PSAC exam" from the
@@ -98,6 +100,12 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   const set = (k, v) => clicks(`[data-set="${k}"][data-v="${v}"]`);
   const act = a => clicks(`[data-act="${a}"]`);
   const speech = () => ev('({ spoken: window.__tts.spoken.slice(), cancels: window.__tts.cancels })');
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step. The test taps what glows, as a child would.
+  const next = () => click('.is-next');
+  // The lab opens on an experiment Aim; the old bench is behind "Explore the
+  // bench freely", and experiment.reset() gives it a clean, guide-free start.
+  const explore = async () => { await click('[data-exp="explore"]'); await ev('LabWater.experiment.reset(); true'); };
   // A clean bench with no guide and no mission: start a guide, stop it (that
   // resets the bench), then pick the bench.
   const freshBench = async (rig = 'heat') => {
@@ -136,11 +144,17 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   await sleep(500);
   ok('its stylesheet is linked and styles the set-up buttons',
      await ev("!!document.querySelector('link[data-lab-css=\"water\"]') && getComputedStyle(document.querySelector('.lab-water-opt')).minHeight === '44px'"));
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to Water & States/.test(ov.text) && /Show me how/.test(ov.text), ov);
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim' && LabExperiment._debug().exp === 'ice_heated'"), ov);
+  ok('the Aim shows the picture already set up: a beaker of ice, an adult helping, the controls hidden',
+     await ev("(() => { const d = LabWater._debug(); return d.rig === 'heat' && d.adult === true && d.heat.start === 'ice' && d.heat.min === 0 && [...document.querySelectorAll('#labs-root .lab-tool, #labs-root .lab-water-opt')].every(b => b.hidden || !b.offsetParent); })()"));
+  ok('the runner lists the five Grade 4 experiments', await ev("LabWater.experiment.list().map(e => e.id).join()") === 'ice_heated,boil,freeze,rain_jar,drying_race');
   ok('nothing was read aloud on its own', (await speech()).spoken.length === 0);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('water').intro === true"));
+  ok('the welcome is marked seen', await ev("Labs.store('water').intro === true"));
+  await explore();
+  ok('"Explore the bench freely" shows the old bench, with every control back', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none' && [...document.querySelectorAll('#labs-root .lab-tool')].every(b => !b.hidden)"));
   ok('top bar: back, Science · Grade 4, title, adult helper and help',
      await ev("!!document.querySelector('.lab-water .lab-top [data-act=\"hub\"]') && /Science · Grade 4/.test(document.querySelector('.lab-water .lab-eyebrow').textContent) && /Water & States/.test(document.querySelector('.lab-water h1').textContent) && !!document.getElementById('lab-water-adult') && !!document.querySelector('.lab-water [data-act=\"help\"]')"));
   await act('help');
@@ -175,10 +189,10 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   let g = await gs();
   ok('From ice to steam: already on the heating bench, so it opens at step 2 - ask an adult - and the adult button glows',
      g.box && /Step 2 of 10/.test(g.text) && /adult/.test(g.text) && g.next === 'adult:on' && !g.start, g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('…then “On the hot plate” glows (step 3)', g.next === 'place:hot' && /Step 3 of 10/.test(g.text), g);
-  await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next();
   let d = await dbg();
   ok('after 5 minutes on the hot plate the ice is melting, at 0 °C', d.heat.min === 5 && d.heat.phase === 'melting' && d.heat.T === 0, d.heat);
   g = await gs();
@@ -187,17 +201,17 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   sp = await speech();
   ok('🔊 in the guide box reads the step', /thermometer/.test(sp.spoken[sp.spoken.length - 1]), sp.spoken.slice(-1));
   const c1 = sp.cancels;
-  await click('[data-guide-do]');
+  await next();
   ok('the next step cancels the speech', (await speech()).cancels === c1 + 1, await speech());
   ok('the reading says 0 °C and finds “Ice melts at 0 °C”', /0 °C/.test(await ev("document.getElementById('lab-coach-text').textContent")) && await ev("!!Labs.store('water').disc.zero"));
-  await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next();
   d = await dbg();
   ok('five minutes and one more: the water boils at 100 °C', d.heat.min === 11 && d.heat.phase === 'boiling' && d.heat.T === 100 && d.heat.steamy, d.heat);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('…read again (100 °C), then “It is steam” glows', g.next === 'name:steam' && /Step 9 of 10/.test(g.text) && (await dbg()).heat.readings.join() === '0,100', g);
-  await click('[data-guide-do]');
-  await click('[data-guide-do]');
+  await next();
+  await next();
   ov = await overlay();
   ok('the cold plate catches the steam and the experiment completes with “What you found out”',
      ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text) && /0 °C/.test(ov.text) && /100 °C/.test(ov.text) && (await dbg()).heat.caught, ov);
@@ -397,7 +411,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
       for (let k = 0; k < 30 && LabWater._debug().guide; k++) {
         const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
         if (o) return 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        const btn = document.querySelector('.is-next');
         if (btn) btn.click(); else LabWater._tick(3);
       }
       if (LabWater._debug().guide) return 'guide never finished at step ' + LabWater._debug().guide.step;
@@ -425,6 +439,8 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   await sleep(300);
   await ev("Labs.openLab('water'); true");
   await sleep(300);
+  ok('coming back opens on an experiment Aim again', await ev("LabExperiment._debug().phase === 'aim'"));
+  await explore();
   await act('say-coach');
   const c3 = (await speech()).cancels;
   ok('…speaking again after coming back, and the loop restarted', await ev('LabWater._debug().talking && LabWater._debug().looping'));

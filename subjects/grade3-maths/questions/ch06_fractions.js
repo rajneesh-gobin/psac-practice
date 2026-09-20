@@ -241,10 +241,10 @@ STATIC_QUESTIONS.push(
     explanation:'⅓ of 12 = 12 ÷ 3 = <b>4</b>.' }),
 
   makeMCQ({ id:'g3mth-frc-040', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
-    question:'A class of 30 children visited the beach. ¾ of them swam. How many children swam?',
-    options:['22 (wrong — should be straightforward)','20','15','10'], answer:'20',
-    hint:'¼ of 30 = ? then × 3. But wait: ¾ of 30 = (30÷4)×3 — but 30÷4=7.5 which is not whole... Let\'s check: ¼ × 30 = 7.5. Use ⅓: ⅓ of 30 = 10. This question changed to ⅔: ⅔ of 30 = 20.',
-    explanation:'⅔ of 30 = (30 ÷ 3) × 2 = 10 × 2 = <b>20</b>.' }),
+    question:'A class of 28 children visited the beach. ¾ of them swam. How many children swam?',
+    options:['21','24','14','7'], answer:'21',
+    hint:'First find ¼ of 28, then take 3 of those parts.',
+    explanation:'¼ of 28 = 28 ÷ 4 = 7. So ¾ of 28 = 7 × 3 = <b>21</b> children.' }),
 
 // ── ordering_fractions ────────────────────────────────────────────────────────
 

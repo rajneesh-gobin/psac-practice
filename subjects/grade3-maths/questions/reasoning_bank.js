@@ -234,11 +234,11 @@
           2 * (l + w), 'Add a length and a width, then double.',
           `2 × (${l} + ${w}) = <b>${2 * (l + w)}</b> cm.`, 3);
       } else if (s === 1) {
-        const l = 6 + (n % 7), w = 5 + (n % 5);
+        const side = 5 + (n % 6), w = 3 + (n % 4), l = 2 * side - w;
         add('g3mth-geometry', 'perimeter_area', 'geo', n,
-          `A garden is <b>${l} m</b> by <b>${w} m</b>. A shed <b>2 m</b> by <b>3 m</b> stands on it. What area of garden is left?`,
-          l * w - 6, 'Find the garden area, then take away the shed.',
-          `${l} × ${w} = ${l * w} m². Shed = 6 m². Left = <b>${l * w - 6}</b> m².`, 4);
+          `A rectangle is <b>${l} m</b> long and <b>${w} m</b> wide. A square fence uses exactly the same length of wire all the way round. How long is one side of the square?`,
+          side, 'Find the distance round the rectangle first, then share it between four equal sides.',
+          `Round the rectangle: 2 × (${l} + ${w}) = ${2 * (l + w)} m. A square has 4 equal sides, so ${2 * (l + w)} ÷ 4 = <b>${side}</b> m.`, 4);
       } else if (s === 2) {
         const per = 4 * (5 + (n % 7));
         add('g3mth-geometry', 'perimeter_area', 'geo', n,

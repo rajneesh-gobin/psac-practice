@@ -11,7 +11,11 @@
 //  population: mean per quadrat × (plot area ÷ quadrat area). Then let a
 //  cyclone, a drought, ten years of invasion, deforestation or a conservation
 //  team change the plot, and survey it again.
-//  Guided experiments, three Missions and a collection of Discoveries.
+//  Since 2026-09-20 the lab opens on an EXPERIMENT (lab_experiment.js: Aim →
+//  Predict → Do → See → Check → Done) through the `experiment` adapter below;
+//  the guided experiments, three Missions and the Discoveries live on in
+//  Explore. An experiment's set-up carries a `seed:<n>` token so every pupil
+//  gets the same throws and the See text can state the real numbers.
 //
 //  ⚠ Every outcome comes from lab_quadrat_data.js (LabQuadratData). This file
 //    only moves things over time and draws them. If a count looks wrong on
@@ -43,6 +47,7 @@ const LabQuadrat = (() => {
   let _panel = 'sandbox', _mission = null, _guide = null, _lastQuiz = null;
   let _fx = [], _shake = 0, _busy = false, _instant = false, _colors = null, _tipIdx = -1;
   let _seed = (Date.now() >>> 0), _rand = null, _fieldCv = null, _fieldDirty = true, _estShow = null;
+  let _focus = null, _applying = false, _evid = [];
 
   const SP = sp => P().SPECIES[sp || _sp];
 
@@ -92,12 +97,7 @@ const LabQuadrat = (() => {
           </div>
           <div class="lab-task-strip">Place your quadrat and count the organisms inside it.</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
-          <div class="lab-tools" id="lab-quadrat-tools">
-            <button type="button" class="lab-tool" data-act="throw"><span aria-hidden="true">🎲</span>Throw at random</button>
-            <button type="button" class="lab-tool" data-act="count"><span aria-hidden="true">✅</span>Count (edge rule)</button>
-            <button type="button" class="lab-tool" data-act="auto5"><span aria-hidden="true">⏩</span>5 more at random</button>
-            <button type="button" class="lab-tool" data-act="estimate"><span aria-hidden="true">🧮</span>Estimate</button>
-          </div>
+          <div class="lab-tools" id="lab-quadrat-tools">${_toolsHTML()}</div>
         </div>
         <div class="lab-side">
           <div class="lab-tabs" role="tablist" aria-label="Bench, missions and discoveries">
@@ -194,6 +194,9 @@ const LabQuadrat = (() => {
     const r = _cv.getBoundingClientRect();
     const x = e.clientX - r.left, y = e.clientY - r.top;
     if (_view === 'field') {
+      // A chosen square would make an experiment's survey biased, and its
+      // See text is written for the seeded throws.
+      if (_expStep()) return;
       const g = _fieldGeom();
       const mx = (x - g.x0) / g.k, my = (y - g.y0) / g.k;
       if (mx < 0 || my < 0 || mx >= P().FIELD.w || my >= P().FIELD.h) return;
@@ -225,6 +228,7 @@ const LabQuadrat = (() => {
   }
 
   function _act(act) {
+    if (_expWrong(act)) { _guideEvent(act); return; }
     switch (act) {
       case 'hub': Labs.backToHub(); break;
       case 'help': _help(); break;
@@ -262,9 +266,17 @@ const LabQuadrat = (() => {
 
   // ══ Settings ═════════════════════════════════
   function _set(k, v) {
+    if (_expWrong(k + ':' + v)) { _guideEvent(k + ':' + v); return; }
     if (_busy) { _coach('One thing at a time - let that finish first.'); return; }
     const D = P();
     switch (k) {
+      case 'seed':
+        _seed = Number(v) >>> 0; _rand = D.rng(_seed);
+        return;
+      case 'est':
+        // The estimate as an answer: only the right one works it out.
+        if (v === 'right') estimate('est:right');
+        return;
       case 'species': {
         if (!D.SPECIES[v]) return;
         if (v === _sp) { _coach(`You are already counting ${SP().plural}.`); break; }
@@ -381,6 +393,7 @@ const LabQuadrat = (() => {
       return;
     }
     _record(right, false);
+    _note(`Quadrat ${_series.quads.length} at x ${_q.x}, y ${_q.y}: ${right} ${S.short}`);
     const bits = [];
     if (c.edge_in.length) bits.push(`${c.edge_in.length} on the top or left side counted`);
     if (c.edge_out.length) bits.push(`${c.edge_out.length} on the bottom or right side left out`);
@@ -401,6 +414,7 @@ const LabQuadrat = (() => {
     }
     if (marks.size === ruleSet.size && [...marks].every(id => ruleSet.has(id))) {
       _record(ruleSet.size, false);
+      _note(`Quadrat ${_series.quads.length} at x ${_q.x}, y ${_q.y}: ${ruleSet.size} ${SP().short}, ticked by hand`);
       _coach(`Exactly right: ${ruleSet.size}. You followed the edge rule - recorded in your table.`);
       _after('record');
       return;
@@ -451,6 +465,7 @@ const LabQuadrat = (() => {
     const next = i => {
       if (i >= list.length) {
         _busy = false;
+        _note(`${got.length} more at random: ${got.join(', ')} ${SP().short} - ${_series.quads.length} quadrats now`);
         _coach(`${got.length} more quadrat${got.length === 1 ? '' : 's'} thrown at random and counted: ${got.join(', ')}. That makes ${_series.quads.length} in your table.`);
         _after('auto5');
         return;
@@ -470,7 +485,9 @@ const LabQuadrat = (() => {
   }
 
   // ══ The estimate ═════════════════════════════
-  function estimate() {
+  // tok: the guide token this estimate answers - 'estimate' from the tool,
+  // 'est:right' when an experiment asked for the number.
+  function estimate(tok) {
     if (_busy) return;
     const s = _series, qs = s.quads, D = P(), S = SP();
     if (!qs.length) { _coach('Count at least one quadrat first - 🎲 throw it, then ✅ count it.'); return; }
@@ -486,6 +503,7 @@ const LabQuadrat = (() => {
       : entry.est === trueN ? 'spot on' : `${off}% too ${entry.est > trueN ? 'high' : 'low'}`;
     _logEntry({ title: `Estimate: ${num(entry.est)} ${S.plural}`,
       obs: `${e.n} quadrat${e.n === 1 ? '' : 's'}${random ? ' at random' : ', not all at random'} · mean ${dp2(e.mean)} per quadrat × ${e.factor} ≈ ${num(entry.est)}. The true population (the lab counted every plant) is ${num(trueN)}: ${offWords}.` });
+    _note(`Estimate from ${e.n} quadrats${random ? '' : ' (chosen spots)'}: mean ${dp2(e.mean)} × 400 ≈ ${num(entry.est)} ${S.short}. True number: ${num(trueN)}`);
     let card = null;
     const cen = D.census(_plants, _sp);
     if (!random) {
@@ -511,7 +529,7 @@ const LabQuadrat = (() => {
       else _coach(msg || `Estimate: ${num(entry.est)} ${S.plural}. The true population is ${num(trueN)} - ${offWords}.`
         + (e.n < D.MISSION_Q ? ` More quadrats would make it more reliable.` : ''));
       if (card && msg) _coach(msg);
-      _guideEvent('estimate');
+      _guideEvent(tok || 'estimate');
     });
   }
 
@@ -532,6 +550,7 @@ const LabQuadrat = (() => {
       _logEntry({ title: `Census: all 400 squares (${S.plural})`, note: true,
         obs: `With the edge rule: ${num(c.rule)} - exactly the true population (${num(trueN)}). Counting every plant touching a frame: ${num(c.all)}, too many. Only the ones wholly inside: ${num(c.inside)}, too few.` });
       _discover('census');
+      _note(`Census of all 400 squares: ${num(c.rule)} ${S.short} - the true number`);
       const last = _series.est && _series.est.sp === _sp ? ` Your estimate was ${num(_series.est.est)}.` : '';
       _coach(`The ranger team counted all 400 squares: ${num(c.rule)} ${S.plural} with the edge rule - exactly the true number.${last} A census like this takes days; a sample takes an hour.`);
       _after('census');
@@ -567,6 +586,7 @@ const LabQuadrat = (() => {
       _newSeries();
       const line = D.SPECIES_ORDER.map(sp => `${D.SPECIES[sp].short} ${before[sp]} → ${D.truePop(_plants, sp)}`).join(' · ');
       _logEntry({ title: `${E.icon} ${E.name} · year ${_series.year}`, obs: `${E.say} Ranger’s full count: ${line}.`, note: true });
+      _note(`${E.name}, year ${_series.year}: guava ${before.guava} → ${D.truePop(_plants, 'guava')}, ebony ${before.ebony} → ${D.truePop(_plants, 'ebony')}`);
       _coach(`${E.say}${hadQ ? ' Your old table is closed.' : ''} Survey the plot again.`);
       _after('event:' + id);
     }, { id });
@@ -677,7 +697,9 @@ const LabQuadrat = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('quadrat', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _resetBench();
+    // An experiment's guide (lab_experiment.js) runs on the plot the runner
+    // already set up - the counted quadrats ARE the experiment; never wipe them.
+    if (!G.exp) _resetBench();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
@@ -685,10 +707,13 @@ const LabQuadrat = (() => {
     _readouts();
     _guideEnter();
     const z = $('lab-quadrat-stage');
-    if (z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
+    if (z && !G.exp && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
+  // A step whose setting is already in place needs no tap - unless it is a
+  // decision (an `ask` with options), which is the point of the step.
   function _satisfied(tok) {
+    if (!tok) return false;
     const [k, v] = tok.split(':');
     if (v === undefined) return false;
     switch (k) {
@@ -704,7 +729,7 @@ const LabQuadrat = (() => {
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
-    while (s && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
+    while (s && !s.options && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     const box = $('lab-guide');
     if (box) {
@@ -718,14 +743,20 @@ const LabQuadrat = (() => {
         </div>`;
       box.hidden = false;
     }
+    _renderTools();
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. The runner
+  // hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); if (!token.startsWith('wait:')) _coachGuide(token); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); if (!token.startsWith('wait:')) _coachGuide(token); }
   }
 
   function _guideDo() {
@@ -760,7 +791,7 @@ const LabQuadrat = (() => {
     }
     if (on === 'record') { _coach('Result recorded in the notebook.'); return; }
     if (on === 'auto5') { _coach('Five quadrats sampled automatically.'); return; }
-    if (on === 'estimate') { _coach('Population estimated. The formula: mean per quadrat × total area ÷ quadrat area.'); return; }
+    if (on === 'estimate' || k === 'est') { _coach('Population estimated. The formula: mean per quadrat × total area ÷ quadrat area.'); return; }
     if (on === 'new') { _coach('New quadrat placed.'); return; }
     if (on === 'census') { _coach('Full census done. Compare with the estimate.'); return; }
     if (k === 'event') { _coach('Environmental event noted.'); return; }
@@ -768,27 +799,67 @@ const LabQuadrat = (() => {
     _coach('Good — on to the next step.');
   }
 
+  // The control a token belongs to: its icon and the label a step must name.
+  // `est:<kind>` is the estimate offered as an answer - its label is the number
+  // that kind of working gives for the survey on the bench.
+  function _ctl(tok) {
+    const i = tok.indexOf(':'), k = i > 0 ? tok.slice(0, i) : tok, v = i > 0 ? tok.slice(i + 1) : undefined;
+    const D = P();
+    switch (k) {
+      case 'species': { const S = D.SPECIES[v]; return S ? { icon: S.icon, label: S.name } : null; }
+      case 'gloves': return v === 'on' ? { icon: '🧤', label: 'Gloves on' } : { icon: '✋', label: 'Bare hands' };
+      case 'view': return v === 'zoom' ? { icon: '🔍', label: 'In the quadrat' } : { icon: '🗺', label: 'The plot' };
+      case 'throw': return { icon: '🎲', label: 'Throw at random' };
+      case 'thick': return { icon: '🎯', label: 'Where it is thickest' };
+      case 'count': return v === undefined ? { icon: '✅', label: 'Count (edge rule)' } : v === 'all' ? { label: 'Every plant touching' } : { label: 'Only wholly inside' };
+      case 'record': return { icon: '✔', label: 'Record my ticks' };
+      case 'untap': return { icon: '✖', label: 'Clear my ticks' };
+      case 'auto5': return { icon: '⏩', label: '5 more at random' };
+      case 'estimate': return { icon: '🧮', label: 'Estimate' };
+      case 'new': return { icon: '🧹', label: 'New survey' };
+      case 'census': return { icon: '🔢', label: 'Count every square' };
+      case 'event': { const E = D.EVENTS[v]; return E ? { icon: E.icon, label: E.name } : null; }
+      case 'restore': return { icon: '↺', label: 'Restore the plot' };
+      case 'est': { const o = _estOptions().find(x => x.tok === tok); return o ? { label: o.label } : null; }
+    }
+    return null;
+  }
+  // The estimate and the three classic slips, from the survey on the bench:
+  // right = mean × 400 · forgot = total × 400 (no division) · total · mean.
+  // Ordered by a fixed permutation of the total, so the answer has no home
+  // position; a value that repeats another is dropped (the answer stays).
+  function _estOptions() {
+    const e = P().estimate(_series ? _series.quads.map(q => q.count) : []);
+    const vals = { right: e.rounded, forgot: e.total * e.factor, total: e.total, mean: Math.round(e.mean * 100) / 100 };
+    const label = k => k === 'mean' ? String(vals.mean) : num(vals[k]);
+    const orders = [['mean', 'right', 'forgot', 'total'], ['right', 'total', 'mean', 'forgot'], ['forgot', 'mean', 'total', 'right'], ['total', 'forgot', 'right', 'mean']];
+    const seen = new Set([label('right')]);
+    const keep = orders[(e.total + e.n) % 4].filter(k => { if (k === 'right') return true; const s = label(k); if (seen.has(s)) return false; seen.add(s); return true; });
+    return keep.map(k => ({ tok: 'est:' + k, label: label(k) }));
+  }
+
   // The words for a discovery's "how" tokens.
   function _autoStep(on) {
     const [k, v] = on.split(':');
     const D = P();
+    const c = _ctl(on), btn = c ? `${c.icon ? c.icon + ' ' : ''}${c.label}` : on;
     switch (k) {
-      case 'species': { const S = D.SPECIES[v]; return { on, say: `Choose what to count: ${S.plural} (${D.STATUS_WORDS[S.status].toLowerCase()}).`, btn: `${S.icon} ${S.name}` }; }
-      case 'gloves': return v === 'on' ? { on, say: 'Put your gloves on - some plants here have prickles.', btn: '🧤 Gloves on' } : { on, say: 'Take your gloves off.', btn: 'Gloves off' };
-      case 'view': return v === 'zoom' ? { on, say: 'Look inside the quadrat.', btn: '🔍 In the quadrat' } : { on, say: 'Look at the whole plot.', btn: '🗺 The plot' };
-      case 'throw': return { on, say: 'Throw the quadrat at random coordinates.', btn: '🎲 Throw at random' };
-      case 'thick': return { on, say: 'Put the quadrat where the plants are thickest.', btn: '🎯 Where it is thickest' };
-      case 'count': return v === undefined ? { on, say: 'Count the plants inside with the edge rule.', btn: '✅ Count (edge rule)' }
-        : v === 'all' ? { on, say: 'Count every plant touching the frame.', btn: 'Count every plant touching' } : { on, say: 'Count only the plants wholly inside.', btn: 'Count only wholly inside' };
-      case 'record': return { on, say: 'Record the plants you ticked.', btn: '✔ Record my ticks' };
-      case 'auto5': return { on, say: 'Throw and count five quadrats at random.', btn: '⏩ 5 at random' };
-      case 'estimate': return { on, say: 'Work out the estimate: mean per quadrat × (400 m² ÷ 1 m²).', btn: '🧮 Work out the estimate' };
-      case 'new': return { on, say: 'Start a new, empty results table.', btn: '🧹 New survey' };
-      case 'census': return { on, say: 'Count every one of the 400 squares - a census.', btn: '🔢 Count every square' };
-      case 'event': { const E = D.EVENTS[v]; return { on, say: `${E.name}: ${E.blurb.toLowerCase()}.`, btn: `${E.icon} ${E.name}` }; }
-      case 'restore': return { on, say: 'Put the plot back as it was at the start.', btn: '↺ Restore the plot' };
+      case 'species': { const S = D.SPECIES[v]; return { on, say: `Choose what to count: ${S.plural} (${D.STATUS_WORDS[S.status].toLowerCase()}).`, btn }; }
+      case 'gloves': return v === 'on' ? { on, say: 'Put your gloves on - some plants here have prickles.', btn } : { on, say: 'Take your gloves off.', btn };
+      case 'view': return v === 'zoom' ? { on, say: 'Look inside the quadrat.', btn } : { on, say: 'Look at the whole plot.', btn };
+      case 'throw': return { on, say: 'Throw the quadrat at random coordinates.', btn };
+      case 'thick': return { on, say: 'Put the quadrat where the plants are thickest.', btn };
+      case 'count': return v === undefined ? { on, say: 'Count the plants inside with the edge rule.', btn }
+        : v === 'all' ? { on, say: 'Count every plant touching the frame.', btn } : { on, say: 'Count only the plants wholly inside.', btn };
+      case 'record': return { on, say: 'Record the plants you ticked.', btn };
+      case 'auto5': return { on, say: 'Throw and count five quadrats at random.', btn };
+      case 'estimate': return { on, say: 'Work out the estimate: mean per quadrat × (400 m² ÷ 1 m²).', btn };
+      case 'new': return { on, say: 'Start a new, empty results table.', btn };
+      case 'census': return { on, say: 'Count every one of the 400 squares - a census.', btn };
+      case 'event': { const E = D.EVENTS[v]; return { on, say: `${E.name}: ${E.blurb.toLowerCase()}.`, btn }; }
+      case 'restore': return { on, say: 'Put the plot back as it was at the start.', btn };
     }
-    return { on, say: on, btn: on };
+    return { on, say: on, btn };
   }
 
   function discoveryGuide(id) {
@@ -842,6 +913,7 @@ const LabQuadrat = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('quadrat', G)) { _stopGuide(true); return; }
     const st = Labs.store('quadrat');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -871,6 +943,7 @@ const LabQuadrat = (() => {
     _guide = null;
     const box = $('lab-guide');
     if (box) { box.hidden = true; box.innerHTML = ''; }
+    _renderTools();
     if (had) _renderPanel(); else _highlight();
     if (!silent) _coach('Guide stopped. Pick another experiment below, or explore freely.');
   }
@@ -886,19 +959,97 @@ const LabQuadrat = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const el = _root.querySelector('.lab-body ' + _selFor(s.on));
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => _root.querySelector('.lab-body ' + _selFor(t))).filter(Boolean);
+    if (els.length) {
+      els.forEach(el => el.classList.add('is-next'));
+      if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       const guideBox = _root.querySelector('#lab-guide');
       _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
+        if (!els.some(el => other === el || el.contains(other) || other.contains(el))
             && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
         }
       });
     }
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // The runner sets the plot up with apply(), runs the steps as an `exp` guide
+  // and hears every token through hooks.token. A token the current step lists
+  // as WRONG is only heard: nothing is placed, no species changes, no event
+  // strikes the plot - the runner's card explains, and the survey (and the
+  // See text written for it) stays intact.
+  const _expStep = () => { const G = _gdef(); return G && G.exp ? G.steps[_guide.step] || null : null; };
+  const _expWrong = tok => { const s = _expStep(); return !!(s && s.wrong && s.wrong[tok]); };
+
+  // The tools row under the picture. Free bench: throw, count, 5 more,
+  // estimate. During an experiment step: exactly that step's controls, so a
+  // decision's options sit together under the yellow box.
+  function _toolsHTML() {
+    const s = _expStep();
+    const toks = s ? (s.options || s.any || (s.on ? [s.on] : [])) : ['throw', 'count', 'auto5', 'estimate'];
+    const plain = toks.filter(t => !t.startsWith('est:'));
+    const ests = toks.some(t => t.startsWith('est:')) ? _estOptions().filter(o => toks.includes(o.tok)).map(o => o.tok) : [];
+    return plain.concat(ests).map(t => {
+      const c = _ctl(t); if (!c) return '';
+      const i = t.indexOf(':');
+      const attr = i > 0 ? `data-set="${t.slice(0, i)}" data-v="${esc(t.slice(i + 1))}"` : `data-act="${t}"`;
+      return `<button type="button" class="lab-tool${t.startsWith('est:') ? ' is-answer' : ''}" ${attr}>${c.icon ? `<span aria-hidden="true">${c.icon}</span>` : ''}${esc(c.label)}</button>`;
+    }).join('');
+  }
+  function _renderTools() {
+    const el = $('lab-quadrat-tools');
+    if (!el) return;
+    el.innerHTML = _toolsHTML();
+    _applyFocus();
+  }
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the tools and the shelf.
+  // While an experiment step runs, the tools row carries that step's own
+  // controls, so the shelf's copies (and its other rows) stay hidden.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus, has = tok => on && _focus.has(tok), exp = !!_expStep();
+    const tokOf = b => b.dataset.act || (b.dataset.set + ':' + b.dataset.v);
+    const shown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    const tools = $('lab-quadrat-tools');
+    if (tools) { tools.querySelectorAll('.lab-tool').forEach(b => { b.hidden = on && !has(tokOf(b)); }); tools.hidden = on && !shown(tools); }
+    _root.querySelectorAll('.lab-quadrat-set .lab-quadrat-opt').forEach(b => { b.hidden = on && (exp || !has(tokOf(b))); });
+    _root.querySelectorAll('.lab-quadrat-row').forEach(r => { r.hidden = on && !shown(r); });
+    _root.querySelectorAll('.lab-quadrat-set').forEach(s => { s.hidden = on && !shown(s); });
+  }
+  // A line for the notebook the runner pins beside the quiz - what a child
+  // would write down.
+  function _note(line) {
+    _evid.push(line);
+    if (_evid.length > 12) _evid.splice(0, _evid.length - 12);
+  }
+  const experiment = {
+    list: () => (P().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _mission = null; _guide = null;
+      _serialN = 0; _hist = []; _log = []; _evid = [];
+      _resetBench();
+      _panel = 'sandbox';
+      _renderPanel(); _renderTools(); _syncSet(); _readouts();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    // Silent and instant: no throw flies, no bars grow, no discovery toasts.
+    apply: tok => { _applying = true; try { _do(tok); } finally { _applying = false; } },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _evid.slice(-6),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -942,6 +1093,7 @@ const LabQuadrat = (() => {
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _syncSet();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -956,6 +1108,7 @@ const LabQuadrat = (() => {
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
   function _discover(id) {
+    if (_applying) return;
     const d = P().DISCOVERIES.find(x => x.id === id);
     if (Labs.discover('quadrat', id, { title: d && d.title, total: P().DISCOVERIES.length })) _refresh();
   }
@@ -1187,6 +1340,7 @@ const LabQuadrat = (() => {
       } else {
         const n = _series.quads.length;
         h += `<span class="lab-chip lab-quadrat-count">🟩 <b>${n}</b> quadrat${n === 1 ? '' : 's'}</span>`;
+        if (n) { const e = D.estimate(_series.quads.map(q => q.count)); h += `<span class="lab-chip lab-quadrat-count">Total <b>${e.total}</b> · mean <b>${dp2(e.mean)}</b></span>`; }
         h += `<span class="lab-chip">📅 Year ${_series.year}</span>`;
         h += `<span class="lab-chip${_gloves ? '' : ' is-warm'}">🧤 ${_gloves ? 'Gloves on' : 'No gloves'}</span>`;
       }
@@ -1203,7 +1357,7 @@ const LabQuadrat = (() => {
 
   // ══ Effects ══════════════════════════════════
   function _fxAdd(type, done, data) {
-    if (_instant || Labs.calm() || !_cx) { if (done) done(); return; }
+    if (_instant || _applying || Labs.calm() || !_cx) { if (done) done(); return; }
     const d = data || {};
     _fx.push({ type, t: 0, dur: type === 'throw' && d.fast ? FX_DUR.fast : (FX_DUR[type] || 0.5), done, data: d });
   }
@@ -1507,7 +1661,9 @@ const LabQuadrat = (() => {
              series: s && { id: s.id, sp: s.sp, key: s.key, year: s.year, n: s.quads.length, counts: s.quads.map(q => q.count), hows: s.quads.map(q => q.how), est: s.est && s.est.est },
              hist: _hist.slice(0, 5).map(h => ({ sp: h.sp, n: h.n, est: h.est, trueN: h.trueN, random: h.random, key: h.key })),
              est: _estShow && { est: _estShow.est, trueN: _estShow.trueN, k: _estShow.k },
-             guide: _guide && { id: _guide.id, step: _guide.step },
+             guide: _guide && { id: _guide.id, step: _guide.step, exp: !!(_gdef() && _gdef().exp) },
+             focus: _focus ? [..._focus] : null, evid: _evid.slice(-6),
+             tools: _root ? [..._root.querySelectorAll('#lab-quadrat-tools .lab-tool')].filter(b => !b.hidden).map(b => b.dataset.act || b.dataset.set + ':' + b.dataset.v) : [],
              mission: _mission && { id: _mission.id, errors: _mission.errors, success: _mission.success, stage: _mission.stage,
                                    biased: _mission.biased && _mission.biased.est, random: _mission.random && _mission.random.est },
              quiz: _lastQuiz && _lastQuiz.map(q => ({ q: q.q, a: q.options[0] })),
@@ -1529,7 +1685,7 @@ const LabQuadrat = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, place, tapPlant, count, estimate,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, place, tapPlant, count, estimate,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabQuadrat = LabQuadrat;

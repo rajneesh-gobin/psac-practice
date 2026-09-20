@@ -14,6 +14,13 @@
 //  ⚠ MutationObserver restarts the loop when the Labs screen comes back.
 //  ⚠ Speech is cancelled on every step change, overlay and unmount.
 //  ⚠ Never call recordAnswer() or _recordDaily() — progress through Labs.store.
+//  ⚠ Opens on an EXPERIMENT (lab_experiment.js) since 2026-09-20: the runner
+//    owns the panel above the bench; this file exports the `experiment`
+//    adapter (LAB_SPEC §10.2). A wrong option of an experiment step is HEARD
+//    (`_expWrong`) and never performed - the runner's card is the lesson, and
+//    applying the wrong test would hide the right one. The tool row is
+//    rendered from LabGastestsData.CONTROLS, so a step's `say` and the
+//    button's label come from one place.
 // ══════════════════════════════════════════════
 const LabGastests = (() => {
   const D = () => LabGastestsData;
@@ -34,10 +41,15 @@ const LabGastests = (() => {
   let _goggles = false, _active = null, _said = {}, _tipIdx = -1;
   let _busy = false, _instant = false, _colors = null;
   let _fx = [], _bubbles = [];
+  let _log = [];              // the notebook: short lines, oldest first
+  let _mystery = null;        // a station whose gas name is hidden ("unknown gas")
+  let _airView = false;       // the air-composition bar on the canvas
+  let _quiet = false;         // an experiment's silent set-up: no toasts, no coach
+  let _focus = null;          // Set of tokens whose controls may show, or null
 
   // Station state: track each gas station independently.
   const _newStation = () => ({ setup: false, collecting: false, collected: false,
-                                fillFrac: 0, testApplied: null, result: null,
+                                fillFrac: 0, testApplied: null, result: null, tests: [],
                                 excessDone: false, afterpopDone: false, n2tested: false });
   let _stations = {};
 
@@ -45,7 +57,10 @@ const LabGastests = (() => {
     _stations = {};
     D().GAS_ORDER.forEach(id => { _stations[id] = _newStation(); });
     _active = null; _fx = []; _bubbles = []; _busy = false; _said = {};
+    _mystery = null; _airView = false; _log = [];
   }
+  const _gasLabel = id => (_mystery === id ? 'Unknown gas' : (D().GASES[id] || {}).name || id);
+  function _note(line) { _log.push(String(line)); if (_log.length > 12) _log = _log.slice(-12); }
 
   const _st = () => _active ? _stations[_active] : null;
 
@@ -83,13 +98,8 @@ const LabGastests = (() => {
           <div class="lab-task-strip">Test each gas: does it relight a glowing splint, pop with a lighted splint, or turn limewater milky?</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools" id="lab-gastests-tools">
-            <button type="button" class="lab-tool" data-act="setup" id="btn-setup"><span aria-hidden="true">⚗️</span><em>Set up</em></button>
-            <button type="button" class="lab-tool" data-act="collect" id="btn-collect"><span aria-hidden="true">🧪</span><em>Collect gas</em></button>
-            <button type="button" class="lab-tool" data-act="test:glowing" id="btn-glowing"><span aria-hidden="true">🪵</span>Glowing splint</button>
-            <button type="button" class="lab-tool" data-act="test:lit" id="btn-lit"><span aria-hidden="true">🔥</span>Lighted splint</button>
-            <button type="button" class="lab-tool" data-act="test:limewater" id="btn-limewater"><span aria-hidden="true">🥛</span>Limewater</button>
-            <button type="button" class="lab-tool" data-act="aircomp" id="btn-aircomp"><span aria-hidden="true">🌍</span>Air composition</button>
-            <button type="button" class="lab-tool" data-act="reset-station" id="btn-reset"><span aria-hidden="true">🧽</span>Reset station</button>
+            ${D().TOOL_ORDER.map(tok => { const c = D().CONTROLS[tok];
+              return `<button type="button" class="lab-tool" data-act="${esc(c.act)}" id="${esc(c.id)}"><span aria-hidden="true">${esc(c.icon)}</span>${esc(c.label)}</button>`; }).join('')}
           </div>
         </div>
         <div class="lab-side">
@@ -194,6 +204,7 @@ const LabGastests = (() => {
   }
 
   function _act(act) {
+    if (_expWrong(act === 'reset-station' ? 'reset' : act)) return;
     if (act === 'hub') { Labs.backToHub(); return; }
     if (act === 'goggles') { _toggleGoggles(); return; }
     if (act === 'help') { _help(); return; }
@@ -228,9 +239,10 @@ const LabGastests = (() => {
   // ══ Stations ═════════════════════════════════
   function _selectStation(id) {
     if (!D().GASES[id]) return;
+    if (_expWrong('station:' + id)) return;
     _active = id;
     const g = D().GASES[id];
-    _coach(`${g.name} station selected. ${g.meta}.`);
+    _coach(_mystery === id ? 'Unknown gas selected. Test it to find out what it is.' : `${g.name} station selected. ${g.meta}.`);
     _updateTools();
     _renderPanel();
     _guideEvent('station:' + id);
@@ -254,17 +266,27 @@ const LabGastests = (() => {
   }
 
   // ── Tools: only show relevant actions for the current state ──
+  // A collected tube can take a second test (the "one test is not enough"
+  // lesson needs a splint AND limewater on the same gas). An experiment's
+  // focus() then hides every control its steps do not use, and the rows
+  // that end up empty.
   function _updateTools() {
+    if (!_root) return;
     const st = _st();
-    const show = (id, visible) => { const b = $(id); if (b) b.hidden = !visible; };
+    const on = !!_focus, has = tok => on && _focus.has(tok);
+    const show = (tok, visible) => { const c = D().CONTROLS[tok], b = c && c.id && $(c.id); if (b) b.hidden = !visible || (on && !has(tok)); };
     const noStation = !_active;
-    show('btn-setup',     !noStation && st && !st.setup);
-    show('btn-collect',   !noStation && st && st.setup && !st.collected && !st.collecting);
-    show('btn-glowing',   !noStation && st && st.collected && !st.testApplied);
-    show('btn-lit',       !noStation && st && st.collected && !st.testApplied);
-    show('btn-limewater', !noStation && st && st.collected && !st.testApplied);
-    show('btn-aircomp',   _active === 'o2');
-    show('btn-reset',     !noStation && st && (st.setup || st.collected || st.testApplied));
+    show('setup',          !noStation && st && !st.setup);
+    show('collect',        !noStation && st && st.setup && !st.collected && !st.collecting);
+    show('test:glowing',   !noStation && st && st.collected);
+    show('test:lit',       !noStation && st && st.collected);
+    show('test:limewater', !noStation && st && st.collected);
+    show('aircomp',        _active === 'o2');
+    show('reset',          !noStation && st && (st.setup || st.collected || st.testApplied));
+    _root.querySelectorAll('[data-station]').forEach(b => { b.hidden = on && !has('station:' + b.dataset.station); });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    const row = _root.querySelector('.lab-gastests-stations'); if (row) row.hidden = on && !anyShown(row);
+    const tools = $('lab-gastests-tools'); if (tools) tools.hidden = on && !anyShown(tools);
   }
 
   // ══ Actions ══════════════════════════════════
@@ -280,7 +302,7 @@ const LabGastests = (() => {
     _fxAdd('bubble', () => {
       _busy = false;
       st.setup = true;
-      _coach(`Generator ready. ${g.generatorFull} is producing ${g.name}. Now collect the gas.`);
+      _coach(_mystery === _active ? 'Generator ready. It is bubbling. Now collect the gas.' : `Generator ready. ${g.generatorFull} is producing ${g.name}. Now collect the gas.`);
       _updateTools();
       _guideEvent('setup');
       _discover('observe:' + _active);
@@ -305,7 +327,8 @@ const LabGastests = (() => {
         s.collecting = false;
         s.collected = true;
         _busy = false;
-        _coach(`The tube is full of ${D().GASES[gasId].name}. Now apply a test.`);
+        _note(`${_gasLabel(gasId)} collected: tube full.`);
+        _coach(`The tube is full of ${_gasLabel(gasId).toLowerCase()}. Now apply a test.`);
         _updateTools();
         _guideEvent('collect');
         _discover('collect:' + gasId);
@@ -328,22 +351,27 @@ const LabGastests = (() => {
     const fx = testId === 'limewater' ? 'limewater' : testId === 'lit' ? 'pop' : 'glow';
     _fxAdd(fx, () => {
       _busy = false;
-      st.testApplied = testId;
-      const result = D().testResult(gasId, testId);
-      st.result = result;
-      if (result) {
-        _coach(result.saw + (result.correct ? ' ✅' : ''));
-        if (!result.correct) {
-          _discover('wrongtest:' + gasId + ':' + testId);
-        } else {
-          _discover('result:' + gasId + ':' + testId);
-        }
-        if (result.sym) _discover('equation:' + gasId);
-      }
+      _applyResult(st, gasId, testId);
       _updateTools();
       _guideEvent('test:' + testId);
       _guideEvent('observe');
     });
+  }
+
+  // The bookkeeping of one test on one tube: state, notebook, coach, discoveries.
+  function _applyResult(st, gasId, testId) {
+    const result = D().testResult(gasId, testId);
+    st.testApplied = testId;
+    st.result = result;
+    if (!result) return;
+    const T = D().TESTS[testId];
+    (st.tests = st.tests || []).push({ test: testId, correct: result.correct, fx: result.fx });
+    _note(`${_gasLabel(gasId)} + ${T ? T.name.toLowerCase() : testId}: ${result.saw}`);
+    if (_quiet) return;
+    _coach(result.saw + (result.correct ? ' ✅' : ''));
+    if (!result.correct) _discover('wrongtest:' + gasId + ':' + testId);
+    else _discover('result:' + gasId + ':' + testId);
+    if (result.sym) _discover('equation:' + gasId);
   }
 
   function _doAircomp() {
@@ -358,27 +386,29 @@ const LabGastests = (() => {
             <h3>By percentage</h3>
             <table class="lab-table">
               <tr><th>Gas</th><th>%</th></tr>
-              <tr><td>Nitrogen (N₂)</td><td>78%</td></tr>
-              <tr><td>Oxygen (O₂)</td><td>21%</td></tr>
-              <tr><td>Argon and other gases</td><td>0.96%</td></tr>
-              <tr><td>Carbon dioxide (CO₂)</td><td>0.04%</td></tr>
+              ${D().AIR.map(a => `<tr><td>${esc(a.name)}${a.formula ? ` (${esc(a.formula)})` : ''}</td><td>${esc(a.pct)}%</td></tr>`).join('')}
             </table>
           </section>
           <section class="lab-hz-sec is-exam">
             <h3>Why it matters</h3>
-            <p>Only the oxygen (21%) supports burning. Nitrogen is unreactive. Carbon dioxide is only 0.04% — so little that you need a sensitive test (limewater) to detect it.</p>
+            <p>Only the oxygen (${esc(D().airPct('o2'))}%) supports burning. Nitrogen is unreactive. Carbon dioxide is only ${esc(D().airPct('co2'))}% — so little that you need a sensitive test (limewater) to detect it.</p>
           </section>
         </div>
       </div>
       <div class="lab-ov-actions">
         <button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Got it</button>
       </div>`, { cls: 'is-done' });
+    if (!_airView) _note(D().airLine());
+    _airView = true;
+    _draw(0);
     _discover('aircomp');
+    _guideEvent('aircomp');
   }
 
   function _doReset() {
     if (!_active) return;
     _stations[_active] = _newStation();
+    if (_mystery === _active) _mystery = null;
     _coach('Station reset. Set up the generator again when you\'re ready.');
     _updateTools();
     _draw(0);
@@ -439,6 +469,7 @@ const LabGastests = (() => {
 
   // ══ Discoveries ══════════════════════════════
   function _discover(eventId) {
+    if (_quiet) return;
     const disc = _mine(D().DISCOVERIES).find(d => d.unlock === eventId);
     if (!disc) return;
     const st = Labs.store(ID);
@@ -555,6 +586,7 @@ const LabGastests = (() => {
     // Skip 'goggles' if already on, skip station if already active
     while (idx < steps.length) {
       const tok = typeof steps[idx] === 'object' ? steps[idx].on : steps[idx];
+      if (!tok) break;
       if (tok === 'goggles' && _goggles) { idx++; continue; }
       if (tok.startsWith('station:') && _active === tok.slice(8)) { idx++; continue; }
       break;
@@ -564,7 +596,6 @@ const LabGastests = (() => {
     const rawStep = steps[idx];
     const tok = typeof rawStep === 'object' ? rawStep.on : rawStep;
     const say = typeof rawStep === 'object' ? rawStep.say : _stepText(tok).say;
-    const btn = typeof rawStep === 'object' ? rawStep.btn : _stepText(tok).btn;
     const box = $('lab-guide');
     if (box) {
       const n = steps.length, i = idx;
@@ -577,16 +608,35 @@ const LabGastests = (() => {
         </div>`;
       box.hidden = false;
     }
+    _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(idx);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. An experiment
+  // guide hears EVERY token first (the runner shows the card for a wrong one).
+  const _stepHit = (s, token) => {
+    if (!s) return false;
+    if (typeof s !== 'object') return s === token;
+    return s.any ? s.any.includes(token) : s.on === token;
+  };
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const steps = G.steps || G.how || [];
     if (!_guide || _guide.step >= steps.length) return;
     const rawStep = steps[_guide.step];
-    const on = typeof rawStep === 'object' ? rawStep.on : rawStep;
-    if (on === token) { _guide.step++; _guideEnter(); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, rawStep);
+    if (_stepHit(rawStep, token)) { _guide.step++; _guideEnter(); }
+  }
+  // A token the current experiment step lists as wrong: the bench hears it
+  // (the runner's card explains) and does NOT perform it.
+  function _expWrong(tok) {
+    const G = _gdef();
+    if (!G || !G.exp || !_guide) return false;
+    const s = (G.steps || [])[_guide.step];
+    if (!s || typeof s !== 'object' || !s.wrong || !s.wrong[tok]) return false;
+    _guideEvent(tok);
+    return true;
   }
 
   function _guideHint() {
@@ -605,33 +655,41 @@ const LabGastests = (() => {
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
     _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
-    const rawStep = G && (G.steps || G.how || [])[_guide ? _guide.step : 0];
-    const on = typeof rawStep === 'object' ? rawStep.on : rawStep;
-    if (!on) return;
-    let sel = null;
-    if (on === 'goggles') sel = '[data-act="goggles"]';
-    else if (on.startsWith('station:')) sel = `[data-station="${on.slice(8)}"]`;
-    else if (on === 'setup') sel = '[data-act="setup"]';
-    else if (on === 'collect') sel = '[data-act="collect"]';
-    else if (on.startsWith('test:')) sel = `[data-act="${on}"]`;
-    else if (on === 'aircomp') sel = '[data-act="aircomp"]';
-    const el = sel && _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    if (!G || !_guide) return;
+    const rawStep = (G.steps || G.how || [])[_guide.step];
+    if (!rawStep) return;
+    const toks = typeof rawStep === 'object' ? (rawStep.options || rawStep.any || (rawStep.on ? [rawStep.on] : [])) : [rawStep];
+    const els = toks.map(t => _root.querySelector(_selFor(t))).filter(el => el && el.matches('button'));
+    if (els.length) {
+      els.forEach(el => el.classList.add('is-next'));
+      if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       const guideBox = _root.querySelector('#lab-guide');
       _root.querySelectorAll('[data-act],[data-station]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
+        if (!els.some(el => other === el || el.contains(other) || other.contains(el))
             && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
         }
       });
     }
   }
+  // The control a token belongs to. A token with no control (observe, a
+  // mystery set-up) answers with the canvas - harmless to tap.
+  function _selFor(tok) {
+    const c = D().CONTROLS[tok];
+    if (c) return c.sel;
+    if (String(tok).startsWith('mystery:')) return `[data-station="${tok.slice(8)}"]`;
+    return '#lab-gastests-canvas';
+  }
 
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) {
+      _stopGuide(true);
+      if (_mystery) { _mystery = null; _draw(0); }
+      if (experiment.hooks.done) experiment.hooks.done();
+      return;
+    }
     if (Labs.studyComplete && Labs.studyComplete('gastests', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides = st.guides || {}; st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -659,6 +717,7 @@ const LabGastests = (() => {
     _guide_step = 0;
     const box = $('lab-guide');
     if (box) box.hidden = true;
+    if (_root) _root.querySelectorAll('.is-next, .is-guide-dim').forEach(el => el.classList.remove('is-next', 'is-guide-dim'));
     if (!done) _coach('Guide stopped. The bench is all yours.');
   }
 
@@ -954,13 +1013,14 @@ const LabGastests = (() => {
         cx.fillRect(colW * i, 0, colW, H * 0.85);
       }
 
-      // Gas label at top
+      // Gas label at top (an unknown gas keeps its secret until the guide ends)
+      const hidden = _mystery === id;
       cx.fillStyle = isActive ? '#1A3A5C' : '#4A6070';
       cx.font = `bold ${Math.round(W * 0.028)}px sans-serif`;
       cx.textAlign = 'center';
-      cx.fillText(g.name, cx0, H * 0.07);
+      cx.fillText(hidden ? 'Unknown gas' : g.name, cx0, H * 0.07);
       cx.font = `${Math.round(W * 0.022)}px sans-serif`;
-      cx.fillText(g.formula, cx0, H * 0.12);
+      cx.fillText(hidden ? '?' : g.formula, cx0, H * 0.12);
 
       // Generator flask (when setup)
       const flaskX = cx0, flaskY = H * 0.72, flaskR = Math.min(colW * 0.22, H * 0.1);
@@ -1082,6 +1142,25 @@ const LabGastests = (() => {
       }
     });
 
+    // Air composition bar along the bench, once the table has been opened
+    if (_airView) {
+      const bx = W * 0.04, bw = W * 0.92, by = H * 0.875, bh = H * 0.075;
+      let x = bx;
+      cx.font = `${Math.round(W * 0.022)}px sans-serif`;
+      D().AIR.forEach(a => {
+        const w = bw * a.pct / 100;
+        cx.fillStyle = a.color || '#CCC';
+        cx.fillRect(x, by, w, bh);
+        if (w > W * 0.12) {
+          cx.fillStyle = '#14211D'; cx.textAlign = 'center';
+          cx.fillText(`${a.name} ${a.pct}%`, x + w / 2, by + bh * 0.68);
+        }
+        x += w;
+      });
+      cx.strokeStyle = 'rgba(20,33,29,0.5)'; cx.lineWidth = 1;
+      cx.strokeRect(bx, by, bw, bh);
+    }
+
     // Active station indicator on bench
     if (_active) {
       const i = D().GAS_ORDER.indexOf(_active);
@@ -1100,6 +1179,56 @@ const LabGastests = (() => {
     });
   }
 
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // apply(tok): one guide token, silently and at once - no animation, no
+  // coach, no discovery toast. The runner builds the Aim picture with it.
+  function _apply(tok) {
+    tok = String(tok);
+    _quiet = true;
+    try {
+      const st = _st();
+      if (tok === 'goggles') { _goggles = true; _syncGoggles(); }
+      else if (tok.startsWith('station:') || tok.startsWith('mystery:')) {
+        const id = tok.slice(tok.indexOf(':') + 1);
+        if (D().GASES[id]) { _active = id; if (tok.startsWith('mystery:')) _mystery = id; }
+      }
+      else if (tok === 'setup') { if (st) st.setup = true; }
+      else if (tok === 'collect') {
+        if (st) { st.setup = true; st.collecting = false; st.fillFrac = 1; st.collected = true; _note(`${_gasLabel(_active)} collected: tube full.`); }
+      }
+      else if (tok.startsWith('test:')) { const t = tok.slice(5); if (st && st.collected && D().TESTS[t]) _applyResult(st, _active, t); }
+      else if (tok === 'aircomp') { if (!_airView) _note(D().airLine()); _airView = true; }
+      else if (tok === 'reset') { if (_active) { _stations[_active] = _newStation(); if (_mystery === _active) _mystery = null; } }
+    } finally { _quiet = false; }
+    _updateTools();
+    _draw(0);
+  }
+  const experiment = {
+    list: () => _mine(D().EXPERIMENTS || []),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush();
+      _mission = null; _guide = null; _guide_step = 0; _fx = []; _panel = 'sandbox';
+      _resetAll();
+      _goggles = false; _syncGoggles();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      if (_root) _root.querySelectorAll('.is-next, .is-guide-dim').forEach(el => el.classList.remove('is-next', 'is-guide-dim'));
+      _renderPanel(); _updateTools(); _draw(0);
+    },
+    apply: _apply,
+    guide: def => _startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(-6),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _updateTools(); },
+    selector: _selFor,
+    hooks: {},
+  };
+
   // ══ Test hooks (spec §5) ═════════════════════
   function _test({ instant }) {
     _instant = !!instant;
@@ -1115,6 +1244,7 @@ const LabGastests = (() => {
       guide: _guide ? { id: _guide.id, step: _guide.step } : null,
       mission: _mission ? { id: _mission.id } : null,
       disc: Object.keys(st.disc || {}),
+      log: _log.slice(-6), mystery: _mystery, airView: _airView, focus: _focus ? [..._focus] : null,
     };
   }
 
@@ -1123,12 +1253,12 @@ const LabGastests = (() => {
   const study = {
     guides: () => _mine(D().GUIDES),
     start: _startGuide,
-    snapshot: () => _busy ? null : ({ _panel, _guide, _guide_step, _goggles, _active, _said, _stations }),
-    restore: state => { ({ _panel, _guide, _guide_step, _goggles, _active, _said, _stations } = state); },
+    snapshot: () => _busy ? null : ({ _panel, _guide, _guide_step, _goggles, _active, _said, _stations, _log, _mystery, _airView }),
+    restore: state => { ({ _panel, _guide, _guide_step, _goggles, _active, _said, _stations, _log = [], _mystery = null, _airView = false } = state); },
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, _test, _tick, _debug };
+  return { study, experiment, mount, unmount, _test, _tick, _debug };
 })();
 
 if (typeof window !== 'undefined') window.LabGastests = LabGastests;

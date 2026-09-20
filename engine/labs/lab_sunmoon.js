@@ -13,6 +13,14 @@
 //  ⚠ Speech cancelled on every step change, overlay, unmount and screen change.
 //  ⚠ Grade filter: Labs.grade() → only that grade's guides/missions/discoveries.
 //  ⚠ Read-aloud 🔊 on coach and guide box; never auto-play; English voice.
+//  ⚠ Since 2026-09-20 the lab opens on an EXPERIMENT (lab_experiment.js): the
+//    `experiment` adapter at the end is the contract (LAB_SPEC.md §10). The
+//    old bench survives as Explore.
+//  ⚠ An eclipse needs the Moon LINED UP by the Eclipse buttons. Moving the
+//    Moon (Next Phase, the orbit) breaks the line. It used to be geometry
+//    alone, so the resting bench (Moon at new) drew a permanent solar eclipse
+//    and every Full Moon reached by stepping was drawn as a lunar eclipse -
+//    a phases experiment could never end on a lit Full Moon.
 // ══════════════════════════════════════════════
 const LabSunmoon = (() => {
   const D = () => LabSunmoonData;
@@ -40,6 +48,7 @@ const LabSunmoon = (() => {
   let _colors = null, _tipIdx = -1, _talking = false;
   let _log = [], _instant_spin = false;
   let _lastGrade = null;
+  let _focus = null, _silent = false;   // experiments: shown controls · setup in progress
 
   // ── Helpers ────────────────────────────────
   const _g = () => {
@@ -66,7 +75,7 @@ const LabSunmoon = (() => {
     return null;
   }
   // Day-time for observer (earthSpin 0.25–0.75 = facing toward-Sun side).
-  function _dayTime() { const s = _earthSpin; return s > 0.25 && s < 0.75; }
+  function _dayTime() { return D().isDay(_earthSpin); }
 
   // ── Shell HTML ──────────────────────────────
   function _shellHTML() {
@@ -194,6 +203,7 @@ const LabSunmoon = (() => {
 
   function _ov(html, o) { _hush(); return Labs.overlay(html, o); }
   function _card(kind, o) {
+    if (_silent) return;
     _hush();
     if (kind === 'hazard') Labs.hazardCard(o); else Labs.resultCard(o);
     const h = document.querySelector('#lab-overlay .is-exam h3');
@@ -249,8 +259,15 @@ const LabSunmoon = (() => {
     switch (k) {
       case 'time':    _setTime(v); break;
       case 'eclipse': _setEclipse(v); break;
+      case 'season':  _setSeason(v); break;
     }
   }
+
+  // An experiment step can list a control as WRONG (the runner explains why).
+  // The bench then hears the token without acting - Spin Earth in the seasons
+  // view, or the lunar position when the child was asked for the solar one.
+  const _expWrong = tok => { const G = _gdef(), st = G && G.exp && _guide && G.steps[_guide.step]; return !!(st && st.wrong && st.wrong[tok]); };
+  const _heard = tok => { if (!_expWrong(tok)) return false; _guideEvent(tok); return true; };
 
   function _do(tok) {
     const i = tok.indexOf(':');
@@ -260,6 +277,7 @@ const LabSunmoon = (() => {
 
   // ── Controls ─────────────────────────────────
   function _toggleSpin() {
+    if (_heard(_spinning ? 'spin:off' : 'spin:on')) return;
     _spinning = !_spinning;
     _syncSet();
     _coach(_spinning
@@ -269,6 +287,7 @@ const LabSunmoon = (() => {
   }
 
   function _toggleOrbit() {
+    if (_heard(_orbiting ? 'orbit:off' : 'orbit:on')) return;
     _orbiting = !_orbiting;
     _syncSet();
     _coach(_orbiting
@@ -278,6 +297,7 @@ const LabSunmoon = (() => {
   }
 
   function _toggleStick() {
+    if (_heard(_stickOn ? 'stick:off' : 'stick:on')) return;
     _stickOn = !_stickOn;
     _syncSet();
     if (_stickOn && !_dayTime()) {
@@ -292,9 +312,10 @@ const LabSunmoon = (() => {
   }
 
   function _setTime(v) {
-    _season = null;
-    const times = { sunrise: 0.28, noon: 0.5, sunset: 0.72 };
+    const times = D().TIMES;
     if (!(v in times)) return;
+    if (_heard('time:' + v)) return;
+    _season = null;
     _observeTime = v;
     _earthSpin = times[v];
     // Selecting a time is setup, not a recorded observation.
@@ -309,6 +330,8 @@ const LabSunmoon = (() => {
   }
 
   function _setEclipse(v) {
+    if (v !== 'solar' && v !== 'lunar') return;
+    if (_heard('eclipse:' + v)) return;
     if (v === 'solar')  { _moonAngle = Math.PI;  _eclipseType = 'solar';  _solarSeen = true; }
     if (v === 'lunar')  { _moonAngle = 0;         _eclipseType = 'lunar';  _lunarSeen = true; }
     _phasesVisited.add(_phaseIdx());
@@ -319,26 +342,30 @@ const LabSunmoon = (() => {
     _checkFinds();
   }
 
+  // Stepping the Moon takes it off the eclipse line: a Full Moon reached by
+  // tapping is a Full Moon, not a lunar eclipse.
   function _nextPhase() {
-    _moonAngle = (_moonAngle + Math.PI / 4) % (2 * Math.PI);
+    if (_heard('phase:' + (_phaseIdx() + 1) % 8)) return;
+    _moonAngle = (_moonAngle + D().PHASE_STEP) % (2 * Math.PI);
+    _eclipseType = null;
+    _stepPhase();
+  }
+
+  function _prevPhase() {
+    if (_heard('phase:' + (_phaseIdx() + 7) % 8)) return;
+    _moonAngle = ((_moonAngle - D().PHASE_STEP) + 2 * Math.PI) % (2 * Math.PI);
+    _eclipseType = null;
+    _stepPhase();
+  }
+
+  function _stepPhase() {
     const idx = _phaseIdx();
     _phasesVisited.add(idx);
     const ph = D().PHASES[idx];
     _coach(ph.name + '. ' + _phaseCoachLine(idx));
-    _eclipseType = _getEclipseType();
-    if (_eclipseType === 'solar') _solarSeen = true;
-    if (_eclipseType === 'lunar') _lunarSeen = true;
+    _logEntry({ title: ph.name, obs: _phaseCoachLine(idx) });
     _after('phase:' + idx);
     _checkFinds();
-  }
-
-  function _prevPhase() {
-    _moonAngle = ((_moonAngle - Math.PI / 4) + 2 * Math.PI) % (2 * Math.PI);
-    const idx = _phaseIdx();
-    _phasesVisited.add(idx);
-    _coach(D().PHASES[idx].name + '. ' + _phaseCoachLine(idx));
-    _eclipseType = _getEclipseType();
-    _after('phase:' + idx);
   }
 
   function _phaseCoachLine(idx) {
@@ -357,37 +384,70 @@ const LabSunmoon = (() => {
 
   function _setSeason(value) {
     if (!['june', 'december'].includes(value)) return;
+    if (_heard('season:' + value)) return;
     _season = value; _spinning = false; _orbiting = false;
     _coach(value === 'june' ? 'June: the Northern Hemisphere tilts toward the Sun. Mauritius is in the Southern Hemisphere.' : 'December: the Southern Hemisphere tilts toward the Sun. Compare the same axis direction.');
     _draw(0); _after('season:' + value);
   }
 
+  // What Observe records depends on what is set up: the season view, an
+  // eclipse the Moon is lined up for, the shadow stick, a spinning Earth, an
+  // orbiting Moon, or just where Mauritius is. One notebook line each time.
   function _observe() {
+    if (_heard('observe')) return;
+    let entry;
     if (_season) {
+      const june = _season === 'june';
       _seasonSeen[_season] = true;
-      _coach(_season === 'june' ? 'June: Mauritius has winter. The Southern Hemisphere tilts away from the Sun.' : 'December: Mauritius has summer. The Southern Hemisphere tilts toward the Sun.');
-      _after('observe'); _checkFinds(); return;
-    }
-    _stickObserved++;
-    if (_stickOn) _shadowObservations[_observeTime] = _shadowLengthLabel();
-    const et = _getEclipseType();
-    if (et) {
-      if (et === 'solar') { _solarSeen = true; _coach('Solar eclipse observed! The Moon\'s shadow covers part of Earth.'); }
-      if (et === 'lunar')  { _lunarSeen = true; _coach('Lunar eclipse observed! Earth\'s shadow is on the Moon.'); }
-    } else if (_spinning) {
-      _coach('Earth is spinning. See the dark night side and the lit day side.');
+      _coach(june ? 'June: Mauritius has winter. The Southern Hemisphere tilts away from the Sun.' : 'December: Mauritius has summer. The Southern Hemisphere tilts toward the Sun.');
+      entry = { title: june ? 'June' : 'December',
+                obs: june ? 'The Northern Hemisphere leans towards the Sun. Mauritius: winter.' : 'The Southern Hemisphere leans towards the Sun. Mauritius: summer.' };
     } else {
-      _coach('The observer is on the ' + (_dayTime() ? 'day' : 'night') + ' side of Earth.');
+      _stickObserved++;
+      const ph = _phaseName();
+      if (_eclipseType === 'solar') {
+        _solarSeen = true; _coach('Solar eclipse observed! The Moon\'s shadow covers part of Earth.');
+        entry = { title: 'Solar eclipse', obs: 'The Moon is between Earth and the Sun. Its shadow falls on Earth. Phase: ' + ph + '.' };
+      } else if (_eclipseType === 'lunar') {
+        _lunarSeen = true; _coach('Lunar eclipse observed! Earth\'s shadow is on the Moon.');
+        entry = { title: 'Lunar eclipse', obs: 'Earth is between the Sun and the Moon. Earth\'s shadow covers the Moon. Phase: ' + ph + '.' };
+      } else if (_stickOn) {
+        const t = _observeTime[0].toUpperCase() + _observeTime.slice(1);
+        if (_dayTime()) {
+          const len = _shadowLengthLabel();
+          _shadowObservations[_observeTime] = len;
+          _coach(t + ': the shadow is ' + len + '.');
+          entry = { title: t, obs: 'The shadow is ' + len + '.' };
+        } else {
+          _coach('Mauritius is on the night side. No sunlight, so no shadow.');
+          entry = { title: t, obs: 'No shadow: Mauritius is on the night side.' };
+        }
+      } else if (_spinning) {
+        _coach('Earth is spinning. See the dark night side and the lit day side.');
+        entry = { title: 'Earth spinning', obs: 'The half facing the Sun is lit (day). The half facing away is dark (night).' };
+      } else if (_orbiting) {
+        const g7 = _g() >= 7;
+        _coach(g7 ? 'The Moon is going round Earth. The marked face keeps pointing at Earth.' : 'The Moon is going round Earth. The Sun lights the half facing it.');
+        entry = { title: 'Moon orbiting', obs: g7 ? 'The dot on the Moon pointed at Earth all the way round.' : 'The Moon went round Earth. The Sun lit the half facing it.' };
+      } else {
+        const side = _dayTime() ? 'day' : 'night';
+        _coach('The observer is on the ' + side + ' side of Earth.');
+        entry = { title: 'Observation', obs: 'Mauritius is on the ' + side + ' side. Phase: ' + ph + '.' };
+      }
     }
+    if (entry) _logEntry(entry);
     _after('observe');
     _checkFinds();
   }
 
-  function _reset() {
+  function _clear() {
     _spinning = false; _orbiting = false; _stickOn = false;
-    _moonAngle = Math.PI; _earthSpin = 0.5; _observeTime = 'noon';
+    _moonAngle = Math.PI; _earthSpin = D().TIMES.noon; _observeTime = 'noon';
     _eclipseType = null; _stickObserved = 0; _solarSeen = false; _lunarSeen = false;
-    _shadowObservations = {}; _season = null; _seasonSeen = {};
+    _shadowObservations = {}; _season = null; _seasonSeen = {}; _phasesVisited = new Set();
+  }
+  function _reset() {
+    _clear();
     _syncSet();
     _coach('Reset. Earth and Moon are back to the starting position.');
     _after('reset');
@@ -395,7 +455,7 @@ const LabSunmoon = (() => {
 
   function _resultCard(id) {
     const R = D().RESULTS[id];
-    if (!R) return;
+    if (!R || _silent) return;
     setTimeout(() => {
       _card('result', { icon: R.icon, title: R.title, happened: R.happened({}), instead: R.instead, exam: R.exam,
         onClose: () => _coach('Try again with the observer on the day side.') });
@@ -442,6 +502,7 @@ const LabSunmoon = (() => {
   }
 
   function _checkFinds() {
+    if (_silent) return;
     const ids = D().finds(_state());
     let changed = false;
     ids.forEach(id => { if (_discover(id)) changed = true; });
@@ -508,7 +569,9 @@ const LabSunmoon = (() => {
     if (!G) return;
     if (Labs.studyBegin && Labs.studyBegin('sunmoon', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _reset();
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // already set up - the set-up IS the experiment; never wipe it.
+    if (!G.exp) _reset();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderTools(); _renderPanel(); _syncSet(); _readouts();
@@ -558,13 +621,18 @@ const LabSunmoon = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. The runner
+  // hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (st, token) => !!st && (st.any ? st.any.includes(token) : st.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); }
   }
 
   function _guideDo() {
@@ -650,6 +718,7 @@ const LabSunmoon = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('sunmoon', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -694,6 +763,7 @@ const LabSunmoon = (() => {
       case 'season':  return `[data-season="${v}"]`;
       case 'eclipse': return `[data-set="eclipse"][data-v="${v}"]`;
       case 'phase':   return '[data-act="phase-next"]';
+      case 'phase-prev': return '[data-act="phase-prev"]';
       case 'observe': return '[data-act="observe"]';
       case 'reset':   return '[data-act="reset"]';
     }
@@ -707,19 +777,77 @@ const LabSunmoon = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide && _guide.step];
     if (!s) return;
-    const el = _root.querySelector('.lab-sunmoon ' + _selFor(s.on));
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    // Every option of a decision glows, not just the right one.
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = [...new Set(toks.map(t => _root.querySelector('.lab-sunmoon ' + _selFor(t))).filter(Boolean))];
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-set],[data-season]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the tools. A toggle button
+  // (Spin Earth, Orbit Moon, Shadow Stick) is shown for either of its tokens;
+  // Next Phase for any 'phase:N'.
+  function _applyFocus() {
+    const box = $('lab-sunmoon-tools');
+    if (!box) return;
+    const on = !!_focus;
+    const heads = on ? new Set([..._focus].map(t => t.split(':')[0])) : null;
+    const tools = [...box.querySelectorAll('.lab-tool')];
+    tools.forEach(b => {
+      let show = true;
+      if (on) {
+        if (b.dataset.set) show = _focus.has(b.dataset.set + ':' + b.dataset.v);
+        else if (b.dataset.season) show = _focus.has('season:' + b.dataset.season);
+        else { const a = b.dataset.act; show = a === 'phase-next' ? heads.has('phase') : (_focus.has(a) || heads.has(a)); }
+      }
+      b.hidden = !show;
+    });
+    box.hidden = on && !tools.some(b => !b.hidden);
+  }
+  const experiment = {
+    list: () => (D().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null; _focus = null;
+      _clear(); _log = []; _panel = 'sandbox';
+      _renderTools(); _renderPanel(); _syncSet(); _readouts();
+      if (_cx) _draw(0);
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    // One token, silently and instantly: no card, no toast, no coach line
+    // that outlives the set-up. A toggle already in that state is left alone;
+    // 'phase:N' puts the Moon straight at that phase.
+    apply: tok => {
+      const was = _instant; _instant = true; _silent = true;
+      try {
+        if (_satisfied(tok)) return;
+        const [k, v] = tok.split(':');
+        if (k === 'phase') { _moonAngle = D().angleForPhase(Number(v)); _eclipseType = null; _phasesVisited.add(_phaseIdx()); _syncSet(); _readouts(); return; }
+        _do(tok);
+      } finally { _instant = was; _silent = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(0, 6).reverse().map(e => e.title + ': ' + e.obs),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ── Panels ───────────────────────────────────
   function _startHTML() {
@@ -865,8 +993,8 @@ const LabSunmoon = (() => {
       <button type="button" class="lab-tool" data-act="orbit" aria-pressed="${_orbiting}"><span aria-hidden="true">🌙</span>Orbit Moon</button>
       <button type="button" class="lab-tool" data-act="stick" aria-pressed="${_stickOn}"><span aria-hidden="true">📏</span>Shadow Stick</button>
       <button type="button" class="lab-tool" data-act="observe"><span aria-hidden="true">👁</span>Observe</button>
-      ${is7 ? `<button type="button" class="lab-tool" data-act="phase-prev"><span aria-hidden="true">◀</span>Prev Phase</button>
-               <button type="button" class="lab-tool" data-act="phase-next"><span aria-hidden="true">▶</span>Next Phase</button>` : ''}
+      ${is7 ? '<button type="button" class="lab-tool" data-act="phase-prev"><span aria-hidden="true">◀</span>Prev Phase</button>' : ''}
+      <button type="button" class="lab-tool" data-act="phase-next"><span aria-hidden="true">▶</span>Next Phase</button>
       <button type="button" class="lab-tool lab-sunmoon-time" data-set="time" data-v="sunrise" aria-pressed="${_observeTime==='sunrise'}">🌅 Sunrise</button>
       <button type="button" class="lab-tool lab-sunmoon-time" data-set="time" data-v="noon" aria-pressed="${_observeTime==='noon'}">🌞 Noon</button>
       <button type="button" class="lab-tool lab-sunmoon-time" data-set="time" data-v="sunset" aria-pressed="${_observeTime==='sunset'}">🌇 Sunset</button>
@@ -875,6 +1003,7 @@ const LabSunmoon = (() => {
       <button type="button" class="lab-tool lab-sunmoon-danger" data-act="sun-gaze" title="Hazard">${Labs.sign('eye', true)}<span aria-hidden="true">👁</span>Look at Sun</button>
       <button type="button" class="lab-tool" data-act="reset"><span aria-hidden="true">🔄</span>Reset</button>`;
     _highlight();
+    _applyFocus();
   }
 
   // ── Intro / Help ─────────────────────────────
@@ -948,14 +1077,7 @@ const LabSunmoon = (() => {
     chips.innerHTML = h;
   }
 
-  function _shadowLengthLabel() {
-    const obs = _earthSpin;
-    const angle = Math.abs(obs - 0.5) * 2 * Math.PI; // 0=noon, π/2=sunrise
-    if (angle > Math.PI * 0.45) return 'very long';
-    if (angle > Math.PI * 0.3)  return 'long';
-    if (angle > Math.PI * 0.15) return 'medium';
-    return 'short';
-  }
+  function _shadowLengthLabel() { return D().shadowLabel(_earthSpin); }
 
   // ── Canvas ────────────────────────────────────
   function _resize() {
@@ -1082,7 +1204,7 @@ const LabSunmoon = (() => {
     const MOON_OR  = EARTH_R * 3.4;   // Moon orbital radius
     const MOON_R   = Math.min(EARTH_R * 0.42, 8);
 
-    const eclipse = _getEclipseType();
+    const eclipse = _eclipseType;
 
     // ── Sun ──
     const sunGlow = c.createRadialGradient(SX, CY, SUN_R * 0.3, SX, CY, SUN_R * 2.5);
@@ -1102,7 +1224,7 @@ const LabSunmoon = (() => {
     // ── Eclipse cone (drawn before Earth so Earth covers it) ──
     const moonX = EX + MOON_OR * Math.cos(_moonAngle);
     const moonY = CY + MOON_OR * Math.sin(_moonAngle);
-    if (eclipse === 'solar' || (_eclipseType === 'solar')) {
+    if (eclipse === 'solar') {
       // Shadow cone from Moon toward Earth
       const coneAngle = Math.atan2(0, EX - moonX);
       const coneW = EARTH_R * 0.6;
@@ -1119,7 +1241,7 @@ const LabSunmoon = (() => {
       c.closePath(); c.fill();
       c.restore();
     }
-    if (eclipse === 'lunar' || (_eclipseType === 'lunar')) {
+    if (eclipse === 'lunar') {
       // Shadow cone from Earth away from Sun
       const coneW = EARTH_R * 0.9;
       c.save();
@@ -1321,18 +1443,9 @@ const LabSunmoon = (() => {
     }
     if (_orbiting) {
       _moonAngle = (_moonAngle + dt * 0.4) % (2 * Math.PI);
-      const et = _getEclipseType();
-      if (et && et !== _eclipseType) {
-        _eclipseType = et;
-        if (et === 'solar') { _solarSeen = true; _coach('Solar eclipse! The Moon is in front of the Sun.'); }
-        if (et === 'lunar') { _lunarSeen = true; _coach('Lunar eclipse! Earth\'s shadow covers the Moon.'); }
-        const ph = _phaseIdx();
-        _phasesVisited.add(ph);
-        _after('eclipse:' + et);
-        _checkFinds();
-      } else if (!et) {
-        _eclipseType = null;
-      }
+      // The Moon's orbit is tilted, so passing the Sun-Earth line is not an
+      // eclipse; only the Eclipse buttons line it up, and moving on ends it.
+      if (_eclipseType && _getEclipseType() !== _eclipseType) { _eclipseType = null; _readouts(); }
       // Phase changes
       const ph = _phaseIdx();
       if (!_phasesVisited.has(ph)) {
@@ -1352,6 +1465,8 @@ const LabSunmoon = (() => {
       moonAngle: +_moonAngle.toFixed(3), earthSpin: +_earthSpin.toFixed(3),
       phase: _phaseName(), eclipseType: _eclipseType,
       phasesVisited: [..._phasesVisited], solarSeen: _solarSeen, lunarSeen: _lunarSeen,
+      observeTime: _observeTime, stickObserved: _stickObserved, shadowObservations: { ..._shadowObservations },
+      season: _season, seasonSeen: { ..._seasonSeen }, log: _log.length, focus: _focus ? [..._focus] : null,
       panel: _panel, looping: !!_raf, talking: _talking,
       guide: _guide && { id: _guide.id, step: _guide.step },
       mission: _mission && { id: _mission.id, errors: _mission.errors, success: _mission.success },
@@ -1368,7 +1483,7 @@ const LabSunmoon = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabSunmoon = LabSunmoon;

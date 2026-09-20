@@ -319,7 +319,7 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Write the balanced equation for the reaction of copper oxide with sulfuric acid.',
       marks: 2,
       hint: 'Base + acid → salt + water.',
-      explanation: 'CuO + H₂SO₄ → CuSO₄ + H₂O.',
+      explanation: 'Copper oxide is a base, so base + acid → salt + water: <b>CuO + H₂SO₄ → CuSO₄ + H₂O</b>. It already balances as written — one Cu, one S, four O from the acid plus one from the oxide, and two H on each side.',
       response: { kind: 'expression', answer: 'CuO + H₂SO₄ → CuSO₄ + H₂O', accept: ['CuO+H2SO4→CuSO4+H2O'] }
     },
     {
@@ -606,7 +606,7 @@ STATIC_QUESTIONS.push(makeTask({
       label: 'a',
       prompt: 'Write the balanced equation for the reaction between HCl and NaOH.',
       marks: 1,
-      explanation: 'HCl + NaOH → NaCl + H₂O.',
+      explanation: 'A strong acid and a strong alkali neutralise to give a salt and water: <b>HCl + NaOH → NaCl + H₂O</b>. The ratio is 1:1, which is what makes the titration calculation straightforward.',
       response: { kind: 'expression', answer: 'HCl + NaOH → NaCl + H₂O' }
     },
     {
@@ -738,7 +738,7 @@ STATIC_QUESTIONS.push(makeTask({
       label: 'a',
       prompt: 'Write the balanced equation for the reaction of calcium with cold water.',
       marks: 2,
-      explanation: 'Ca + 2H₂O → Ca(OH)₂ + H₂.',
+      explanation: 'Calcium is reactive enough to attack cold water, giving the hydroxide and hydrogen: <b>Ca + 2H₂O → Ca(OH)₂ + H₂</b>. Two water molecules are needed to supply the two OH groups.',
       response: { kind: 'expression', answer: 'Ca + 2H₂O → Ca(OH)₂ + H₂', accept: ['Ca+2H2O→Ca(OH)2+H2'] }
     },
     {

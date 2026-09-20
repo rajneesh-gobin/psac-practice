@@ -13,6 +13,10 @@
 //     condensation, then "rain".
 //  Guided experiments, three Missions, Discoveries, and 🔊 read-aloud on the
 //  lab assistant and the guide box (never automatic).
+//  Since 2026-09-20 the lab opens on an EXPERIMENT (lab_experiment.js, LAB_SPEC
+//  §10): the `experiment` adapter below sets the bench up silently, runs the
+//  steps as an `exp` guide, hears every token and shows only the controls a
+//  step uses. The old bench survives as Explore.
 //
 //  ⚠ Every outcome comes from lab_water_data.js (LabWaterData). This file
 //    only moves time along and draws it. If water behaves wrongly, fix the DATA.
@@ -48,6 +52,7 @@ const LabWater = (() => {
   let _log = [], _panel = 'sandbox', _mission = null, _guide = null;
   let _fx = [], _shake = 0, _busy = false, _instant = false;
   let _colors = null, _tipIdx = -1, _talking = false, _obs = null;
+  let _focus = null, _silent = false;
 
   // The grade the lab is being used at (LAB_SPEC §9); this lab's own if unknown.
   const _grade = () => (typeof Labs.grade === 'function' && Labs.grade()) || P().GRADES[0];
@@ -212,6 +217,7 @@ const LabWater = (() => {
   }
 
   function _act(act) {
+    if (_expWrong(act)) { _guideEvent(act); return; }
     switch (act) {
       case 'hub': _hush(); Labs.backToHub(); break;
       case 'help': _help(); break;
@@ -282,6 +288,7 @@ const LabWater = (() => {
   // Every overlay goes through here: speech stops first.
   function _ov(html, o) { _hush(); return Labs.overlay(html, o); }
   function _card(kind, o) {
+    if (_silent) return;
     _hush();
     if (kind === 'hazard') Labs.hazardCard(o); else Labs.resultCard(o);
   }
@@ -294,6 +301,7 @@ const LabWater = (() => {
   }
 
   function _set(k, v) {
+    if (_expWrong(k + ':' + v)) { _guideEvent(k + ':' + v); return; }
     if (_busy) { _coach('One thing at a time. Let that finish first.'); return; }
     const D = P();
     if (k === 'rig') {
@@ -678,7 +686,9 @@ const LabWater = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('water', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _resetBench();
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // already set up - the beaker, dishes or jar ARE the experiment; never wipe them.
+    if (!G.exp) _resetBench();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderAdult();
@@ -693,6 +703,7 @@ const LabWater = (() => {
 
   // A step whose setting is already in place needs no tap.
   function _satisfied(tok) {
+    if (!tok) return false;
     const [k, v] = tok.split(':');
     if (v === undefined) return false;
     const hs = _heat.s, d = _dry.items[_dry.sel], j = _jar.j;
@@ -739,13 +750,18 @@ const LabWater = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. The runner
+  // hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); }
   }
 
   function _guideHint() {
@@ -844,6 +860,7 @@ const LabWater = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('water', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -889,19 +906,70 @@ const LabWater = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const el = _root.querySelector('.lab-water ' + _selFor(s.on));
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => _root.querySelector('.lab-water ' + _selFor(t))).filter(Boolean);
+    if (els.length) {
+      els.forEach(el => el.classList.add('is-next'));
+      if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       const guideBox = _root.querySelector('#lab-guide');
       _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
+        if (!els.some(el => other === el || el.contains(other) || other.contains(el))
             && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
         }
       });
     }
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // A token the current experiment step lists as WRONG is only heard: the bench
+  // does nothing with it (no beaker moves, no hazard fires) and the runner's
+  // card explains. Everything else runs exactly as a tap would.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Applied after every render of the tools and the shelf.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const has = tok => on && _focus.has(tok);
+    _root.querySelectorAll('.lab-water-tools .lab-tool, .lab-water-opt, .lab-water-rigs button').forEach(b => {
+      const tok = b.dataset.act || (b.dataset.set + ':' + b.dataset.v);
+      b.hidden = on && !has(tok);
+    });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-water-pair, .lab-water-row').forEach(r => { r.hidden = on && !anyShown(r); });
+    ['.lab-water-rigs', '#lab-water-shelf', '#lab-water-tools'].forEach(sel => {
+      const el = _root.querySelector(sel); if (el) el.hidden = on && !anyShown(el);
+    });
+  }
+  const experiment = {
+    list: () => (P().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(_grade())),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null;
+      _resetBench(); _rig = 'heat'; _panel = 'sandbox'; _log = [];
+      _renderAdult(); _renderTools(); _renderPanel(); _syncSet(); _readouts();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    // Perform one token silently and at once: no toast, no card, no time-lapse.
+    // A wait token runs the clock until it is met, so a set-up can pre-heat.
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _silent = true;
+      try { _do(tok); } finally { _instant = was; _silent = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.filter(e => !e.bad).slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -944,6 +1012,7 @@ const LabWater = (() => {
     else if (_panel === 'missions') p.innerHTML = _mission ? _missionHTML() + _shelfHTML() + _notebookHTML() : _missionListHTML();
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _syncSet();
+    _applyFocus();
     _foundCount();
     _highlight();
   }
@@ -962,10 +1031,12 @@ const LabWater = (() => {
     const sh = $('lab-water-shelf');
     if (sh) sh.outerHTML = _shelfHTML();
     _syncSet();
+    _applyFocus();
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
   function _discover(id) {
+    if (_silent) return;
     const d = P().DISCOVERIES.find(x => x.id === id);
     if (Labs.discover(ID, id, { title: d && d.title, total: _forGrade(P().DISCOVERIES).length })) _refresh();
   }
@@ -991,6 +1062,7 @@ const LabWater = (() => {
       box.innerHTML = t('ten', '⏱', 'Wait 10 minutes') + t('reset', '🔄', 'Start again');
     }
     box.dataset.rig = _rig;
+    _applyFocus();
     _highlight();
   }
 
@@ -1582,7 +1654,7 @@ const LabWater = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabWater = LabWater;

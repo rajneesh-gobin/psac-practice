@@ -62,3 +62,9 @@
 
 @media (prefers-reduced-motion: reduce) { .lab-microscope-opt:active { transform: none; } }
 .kid-calm .lab-microscope-opt:active { transform: none; }
+
+/* Experiments (lab_experiment.js): focus() hides every control a step does not
+   use with the `hidden` attribute, which must beat the display rules above. */
+.lab-microscope [hidden] { display: none !important; }
+/* The desk's three answers: numbers, read as numbers */
+.lab-microscope-pick { font-variant-numeric: tabular-nums; font-size: 0.92rem; }

@@ -6,11 +6,14 @@
 //   - MEAL BUILDER: a plate divided into 5 segments. Tap a food from the shelf
 //     to place it in the correct group segment. "Check my meal" evaluates the
 //     balance. An iodine dropper tests foods for starch.
-//   - TEETH LABELLER: a canvas half-jaw of 7 teeth. Tap a tooth → its label
-//     chip appears and the coach reads what it does. A drag-to-label mission
-//     mode follows.
-//  Guided experiments, two Missions, 15 Discoveries, and 🔊 read-aloud on the
-//  lab assistant and guide box (never automatic).
+//   - TEETH LABELLER: a canvas half-jaw of 7 teeth. Tap a tooth on the canvas
+//     or its named button under it → its label chip appears and the coach
+//     reads what it does.
+//  Opens on an EXPERIMENT (lab_experiment.js: Aim → Predict → Do → See →
+//  Check → Done) built from EXPERIMENTS in the data file; the `experiment`
+//  adapter at the end of this file is the contract (LAB_SPEC.md §10). The
+//  free bench with its guides, two Missions, 15 Discoveries and 🔊 read-aloud
+//  (never automatic) survives as Explore.
 //
 //  ⚠ Every outcome comes from lab_nutrition_data.js (LabNutritionData). This
 //    file only draws and moves. If a food is in the wrong group, fix the DATA.
@@ -40,6 +43,8 @@ const LabNutrition = (() => {
   let _tipIdx = -1, _talking = false;
   let _highlight = null;     // { type:'tooth'|'group'|'food', id, t } for canvas flash
   let _checkAnim = 0;        // 0-1 bounce when check is pressed
+  let _focus = null;         // Set of tokens an experiment shows, or null for everything
+  let _silent = false;       // true while experiment.apply() sets the bench up: no toasts, no speech
 
   function _resetBench() {
     _meal = P().blankMeal();
@@ -104,10 +109,12 @@ const LabNutrition = (() => {
     _cx = _cv.getContext('2d');
     _resize();
     _wire();
+    _cv.addEventListener('click', _onCanvasClick);
     _renderPanel();
     _renderShelf();
     _renderTools();
     _syncStationBtns();
+    _applyFocus();
     _loop(performance.now());
     const st = Labs.store(ID);
     if (!st.intro) _intro();
@@ -115,6 +122,7 @@ const LabNutrition = (() => {
 
   function unmount() {
     _ttsStop();
+    _focus = null;
     cancelAnimationFrame(_raf); _raf = 0;
   }
 
@@ -135,7 +143,9 @@ const LabNutrition = (() => {
     if (!wrap) return;
     const rect = wrap.getBoundingClientRect();
     const dpr = Math.min(devicePixelRatio || 1, 2);
-    _W = rect.width; _H = rect.height || Math.min(_W, 340);
+    // Height from width, never from the wrap: the experiment runner parks the
+    // guide box inside the wrap, so measuring it would grow the canvas each time.
+    _W = rect.width; _H = Math.min(_W, 340);
     _cv.width = Math.round(_W * dpr);
     _cv.height = Math.round(_H * dpr);
     _cv.style.width = _W + 'px'; _cv.style.height = _H + 'px';
@@ -267,22 +277,35 @@ const LabNutrition = (() => {
   }
 
   function _guideExpectedFood(gid) {
-    if (!_guide || _guideStep >= _guide.steps.length) return null;
-    const token = _guide.steps[_guideStep].on;
-    const [k, v] = token.split(':');
-    if (k === 'food' && P().foodGroup(v) === gid) return v;
-    return null;
+    const t = _stepToks(_curStep()).find(tok => tok.indexOf('food:') === 0 && P().foodGroup(tok.slice(5)) === gid);
+    return t ? t.slice(5) : null;
   }
 
   // ── Teeth Labeller ───────────────────────────────────────────────────────────
-  function _drawTeethStation() {
-    const cx = _cx;
+  // Where the half jaw sits on the canvas - shared by the drawing and the tap.
+  function _jawGeom() {
     const slots = P().JAW_SLOTS;  // ['molar','molar','premolar','premolar','canine','incisor','incisor']
     const n = slots.length;
     const tw = Math.min((_W - 32) / n, 60);
-    const startX = (_W - tw * n) / 2;
-    const baseY = _H * 0.62;
-    const gumH = 22;
+    return { slots, n, tw, startX: (_W - tw * n) / 2, baseY: _H * 0.62, gumH: 22 };
+  }
+  function _toothAt(x, y) {
+    const { slots, n, tw, startX, baseY, gumH } = _jawGeom();
+    if (y < baseY - gumH - 44 || y > baseY + 12) return null;
+    const i = Math.floor((x - startX) / tw);
+    return i >= 0 && i < n ? slots[i] : null;
+  }
+  function _onCanvasClick(e) {
+    if (_station !== 'teeth' || !_cv) return;
+    const r = _cv.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    const type = _toothAt((e.clientX - r.left) * (_W / r.width), (e.clientY - r.top) * (_H / r.height));
+    if (type) _onToothTap(type);
+  }
+
+  function _drawTeethStation() {
+    const cx = _cx;
+    const { slots, n, tw, startX, baseY, gumH } = _jawGeom();
 
     // Gum line
     cx.save();
@@ -382,16 +405,8 @@ const LabNutrition = (() => {
     }
   }
 
-  function _guideIsNextTooth(type) {
-    if (!_guide || _guideStep >= _guide.steps.length) return false;
-    const token = _guide.steps[_guideStep].on;
-    return token === 'tooth:' + type;
-  }
-
-  function _guideIsNext(token) {
-    if (!_guide || _guideStep >= _guide.steps.length) return false;
-    return _guide.steps[_guideStep].on === token;
-  }
+  const _guideIsNext = token => _stepToks(_curStep()).includes(token);
+  const _guideIsNextTooth = type => _guideIsNext('tooth:' + type);
 
   // ══ Interactions ════════════════════════════════════════════════════════════
   function _wire() {
@@ -401,15 +416,15 @@ const LabNutrition = (() => {
   }
 
   function _onTouch(e) {
-    const btn = e.target.closest('button[data-act],button[data-set],button[data-panel],.lab-nutrition-food-btn,.lab-nutrition-tooth-hit');
+    const btn = e.target.closest('button[data-act],button[data-set],button[data-panel],.lab-nutrition-food-btn,.lab-nutrition-tooth-btn');
     if (btn) { e.preventDefault(); btn.click(); }
   }
 
   function _onClick(e) {
-    const el = e.target.closest('[data-act],[data-set],[data-panel],.lab-nutrition-food-btn,.lab-nutrition-tooth-hit');
+    const el = e.target.closest('[data-act],[data-set],[data-panel],.lab-nutrition-food-btn,.lab-nutrition-tooth-btn');
     if (!el) return;
-    if (el.classList.contains('lab-nutrition-food-btn')) { _onFoodTap(el.dataset.food); return; }
-    if (el.classList.contains('lab-nutrition-tooth-hit')) { _onToothTap(el.dataset.tooth); return; }
+    if (el.dataset.food) { _onFoodTap(el.dataset.food); return; }
+    if (el.dataset.tooth) { _onToothTap(el.dataset.tooth); return; }
     const act = el.dataset.act;
     const panel = el.dataset.panel;
     const setK = el.dataset.set, setV = el.dataset.v;
@@ -421,22 +436,27 @@ const LabNutrition = (() => {
     if (act === 'say-guide') { _sayGuide(); return; }
     if (act === 'tip') { _showTip(); return; }
     if (act === 'check') { _checkMeal(); return; }
-    if (act === 'guide-start') { _startGuide(el.dataset.guide); return; }
+    if (act === 'guide-start') { startGuide(el.dataset.guide); return; }
     if (act === 'guide-hint') { _guideHint(); return; }
+    if (act === 'guide-stop') { _stopGuide(false); return; }
     if (act === 'test') { _activateTest(el.dataset.testid); return; }
+    if (act === 'read') { _doRead(); return; }
+    if (act === 'label') { _doLabel(); return; }
   }
 
   // ── Station switch ────────────────────────────────────────────────────────────
   function _switchStation(v) {
-    if (_mission) return;
+    if (_mission || !P().SETS.station.includes(v)) return;
+    if (_expWrong('station:' + v)) { _guideEvent('station:' + v); return; }
     _ttsStop();
     _station = v;
     _syncStationBtns();
     _renderShelf();
     _renderTools();
-    _advanceGuideIfNeeded('station:' + v);
-    _coach(v === 'meal' ? 'Meal Builder: tap a food to place it on the plate.'
-                        : 'Teeth Lab: tap each tooth to learn what it does.');
+    _renderChips();
+    if (!_silent) _coach(v === 'meal' ? 'Meal Builder: tap a food to place it on the plate.'
+                                      : 'Teeth Lab: tap each tooth to learn what it does.');
+    _guideEvent('station:' + v);
   }
 
   function _syncStationBtns() {
@@ -449,15 +469,19 @@ const LabNutrition = (() => {
   function _onFoodTap(foodId) {
     const f = P().FOODS[foodId];
     if (!f) return;
+    if (_expWrong('food:' + foodId)) { _guideEvent('food:' + foodId); return; }
 
     if (_meal.activeTest) {
       // Test mode: record this food as tested
-      if (!_meal.testedFoods.includes(foodId)) _meal.testedFoods.push(foodId);
-      const res = P().testResult(_meal.activeTest, foodId);
       const T = P().FOOD_TESTS[_meal.activeTest];
-      _coach(f.name + ': iodine is ' + (res ? res.word : '?') + '. ' + T.note);
-      _log.push(f.name + ' — ' + (res ? res.word : ''));
-      _advanceGuideIfNeeded('food:' + foodId);
+      const res = P().testResult(_meal.activeTest, foodId);
+      const nutrient = T.nutrient.split(' ')[0];
+      if (!_meal.testedFoods.includes(foodId)) {
+        _meal.testedFoods.push(foodId);
+        _log.push(f.name + ' + ' + T.short + ': ' + res.word + (res.positive ? ' - ' + nutrient + ' found.' : ' - no ' + nutrient + '.'));
+      }
+      _coach(f.name + ': ' + T.short + ' is ' + res.word + '. ' + T.note);
+      _guideEvent('food:' + foodId);
       return;
     }
 
@@ -471,7 +495,7 @@ const LabNutrition = (() => {
     }
 
     _meal.plate[group] = foodId;
-    _log.push('Added ' + f.name + ' → ' + g.name);
+    _log.push(f.name + ' went into ' + g.name + ': ' + g.function.toLowerCase());
     _coach(f.name + ': a ' + g.short + '. ' + g.function);
     _highlight = { type: 'group', id: group, t: 1 };
 
@@ -481,100 +505,157 @@ const LabNutrition = (() => {
       : group === 'vitamins' ? 'vit_protect'
       : 'water_life');
 
-    _advanceGuideIfNeeded('food:' + foodId);
+    _renderShelf();
     _renderPanel();
+    _guideEvent('food:' + foodId);
   }
 
   // ── Meal check ────────────────────────────────────────────────────────────────
+  // In an experiment the See screen states the result, so no card opens here:
+  // an overlay would sit on top of the runner's own next stop.
   function _checkMeal() {
+    if (_expWrong('check')) { _guideEvent('check'); return; }
     _checkAnim = 1;
     if (P().isBalanced(_meal.plate)) {
       _coach(P().SAY.balanced);
+      _log.push('Checked the plate: all five groups filled. Balanced!');
       _discover('balanced_plate');
-      Labs.resultCard({ icon: '✅', title: 'Balanced meal!',
+      if (!_expOn()) Labs.resultCard({ icon: '✅', title: 'Balanced meal!',
         happened: () => 'Your plate has all five food groups. That is a balanced meal.',
         instead: 'Eat like this every day to stay healthy.',
         exam: '📝 In the PSAC exam: a balanced diet has food from all five groups.' });
     } else {
       const missing = P().missingGroups(_meal.plate).map(g => P().FOOD_GROUPS[g].name);
       _coach('Missing: ' + missing.join(', ') + '. Try to fill every section.');
-      Labs.hazardCard(P().HAZARDS.missing_group, {});
+      _log.push('Checked the plate: missing ' + missing.join(', ') + '. Not balanced.');
+      if (!_expOn()) Labs.hazardCard(P().HAZARDS.missing_group, {});
     }
-    _advanceGuideIfNeeded('check');
+    _guideEvent('check');
   }
 
   // ── Test activation ───────────────────────────────────────────────────────────
   function _activateTest(testId) {
+    const T = P().FOOD_TESTS[testId];
+    if (!T) return;
+    if (_expWrong('test:' + testId)) { _guideEvent('test:' + testId); return; }
     _meal.activeTest = testId;
     _meal.testedFoods = [];
-    const T = P().FOOD_TESTS[testId];
     _coach('Test: ' + T.note + ' Tap a food to test it.');
     _renderTools();
-    _advanceGuideIfNeeded('test:' + testId);
+    _guideEvent('test:' + testId);
   }
 
   // ── Tooth tap ─────────────────────────────────────────────────────────────────
   function _onToothTap(toothId) {
     const tooth = P().TEETH[toothId];
     if (!tooth) return;
+    if (_expWrong('tooth:' + toothId)) { _guideEvent('tooth:' + toothId); return; }
+    if (!_tappedTeeth.has(toothId)) _log.push(tooth.name + ': ' + tooth.function.toLowerCase());
     _tappedTeeth.add(toothId);
     const say = P().SAY[toothId];
     _coach(say);
-    if (!calm()) _speak(say);
+    if (!calm() && !_silent) _speak(say);
 
     const discMap = { incisor: 'incisor_cuts', canine: 'canine_tears', premolar: 'premolar_crush', molar: 'molar_grind' };
     _discover(discMap[toothId]);
-    _advanceGuideIfNeeded('tooth:' + toothId);
+    _syncToothBtns();
     _renderChips();
+    _guideEvent('tooth:' + toothId);
+  }
+
+  function _syncToothBtns() {
+    _root.querySelectorAll('.lab-nutrition-tooth-btn').forEach(b => {
+      const on = _tappedTeeth.has(b.dataset.tooth);
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
   }
 
   // ── Label action ──────────────────────────────────────────────────────────────
   function _doLabel() {
+    if (_expWrong('label')) { _guideEvent('label'); return; }
     const all4 = P().TOOTH_IDS.every(t => _tappedTeeth.has(t));
     if (all4) {
       _discover('dental_health');
       _coach('All four tooth types labelled! Adults have ' + P().TOTAL_TEETH + ' teeth in total.');
+      _log.push('Labelled all four tooth types. An adult has ' + P().TOTAL_TEETH + ' teeth.');
     } else {
       _discover('dental_acid');
       _coach('Fizzy drinks are acidic. They wear away tooth enamel over time.');
+      _log.push('Labelled ' + _tappedTeeth.size + ' of 4 tooth types.');
     }
-    _advanceGuideIfNeeded('label');
     _renderPanel();
+    _guideEvent('label');
   }
 
   // ══ Guide system ════════════════════════════════════════════════════════════
-  function _startGuide(guideId) {
-    const G = P().GUIDES.find(g => g.id === guideId);
+  // A guide is one of P().GUIDES by id, or an ad-hoc def from the experiment
+  // runner (lab_experiment.js): { exp: true, steps: [{ on | any, options,
+  // wrong, say }] }. A step is met by its `on` token or any token in `any`.
+  const _stepToks = s => (s ? (s.options || s.any || (s.on ? [s.on] : [])) : []);
+  const _curStep = () => (_guide && _guide.steps[_guideStep]) || null;
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
+  const _expOn = () => !!(_guide && _guide.exp);
+  // A token the current experiment step lists as WRONG is only heard: no food
+  // lands, no tooth lights, no test starts - the runner's card explains why.
+  const _expWrong = tok => { const s = _curStep(); return !!(_expOn() && s && s.wrong && s.wrong[tok]); };
+
+  function startGuide(idOrDef) {
+    const adhoc = typeof idOrDef === 'object' && idOrDef;
+    const G = adhoc || P().GUIDES.find(g => g.id === idOrDef);
     if (!G) return;
-    if (Labs.studyBegin && Labs.studyBegin('nutrition', G, () => _startGuide(guideId))) return;
+    if (Labs.studyBegin && Labs.studyBegin('nutrition', G, () => startGuide(idOrDef))) return;
     _ttsStop();
+    _mission = null;
     _guide = G; _guideStep = 0;
-    _renderGuide();
-    const step = G.steps[0];
-    _coach(step.say);
-    if (step.on.startsWith('station:')) _switchStation(step.on.split(':')[1]);
+    // An experiment's guide runs on the bench the runner already set up - the
+    // plate or the jaw IS the experiment; never move the child off it.
+    if (!G.exp) {
+      const first = G.steps[0];
+      if (first && first.on && first.on.indexOf('station:') === 0) _switchStation(first.on.slice(8));
+    }
+    _guideEnter();
   }
 
-  function _advanceGuideIfNeeded(token) {
-    if (!_guide || _guideStep >= _guide.steps.length) return;
-    if (_guide.steps[_guideStep].on !== token) return;
+  function _guideEnter() {
+    if (Labs.studyCheckpoint) Labs.studyCheckpoint('nutrition');
+    if (!_guide) return;
+    const s = _curStep();
+    if (!s) { _guideDone(); return; }
+    _renderGuide();
+    if (s.say) _coach(s.say);
+    if (_guide.exp && experiment.hooks.step) experiment.hooks.step(_guideStep);
+  }
+
+  // Every bench action reports its token here. The runner hears it first, so
+  // a listed wrong choice can explain itself; a hit moves the guide on.
+  function _guideEvent(token) {
+    if (!_guide) return;
+    const s = _curStep();
+    if (_guide.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (!_stepHit(s, token)) return;
     _guideStep++;
     _ttsStop();
-    if (_guideStep >= _guide.steps.length) {
-      _coach(_guide.lesson);
-      _finishGuide();
-    } else {
-      const step = _guide.steps[_guideStep];
-      _renderGuide();
-      _coach(step.say);
-    }
+    _guideEnter();
   }
 
-  function _finishGuide() {
-    if (_guide && Labs.studyComplete) Labs.studyComplete('nutrition', _guide);
-    _guide = null;
-    $('lab-guide') && ($('lab-guide').hidden = true);
+  function _guideDone() {
+    const G = _guide;
+    if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
+    if (Labs.studyComplete) Labs.studyComplete('nutrition', G);
+    _stopGuide(true);
+    if (G.lesson) _coach(G.lesson);
+  }
+
+  function _stopGuide(silent) {
+    _guide = null; _guideStep = 0;
+    _ttsStop();
+    const box = $('lab-guide');
+    if (box) { box.hidden = true; box.innerHTML = ''; }
+    _highlightGuide();
     _renderPanel();
+    if (!silent) _coach('Guide stopped. Pick another one below, or explore freely.');
   }
 
   function _guideHint() {
@@ -585,65 +666,65 @@ const LabNutrition = (() => {
     void el.offsetWidth;
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (!_expOn()) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // The control a token belongs to: the glow lands on it and the tests tap it.
+  function _selFor(tok) {
+    const i = String(tok).indexOf(':');
+    const k = i > 0 ? tok.slice(0, i) : tok, v = i > 0 ? tok.slice(i + 1) : null;
+    switch (k) {
+      case 'food':    return `.lab-nutrition-food-btn[data-food="${v}"]`;
+      case 'station': return `[data-set="station"][data-v="${v}"]`;
+      case 'test':    return `[data-act="test"][data-testid="${v}"]`;
+      case 'tooth':   return `.lab-nutrition-tooth-btn[data-tooth="${v}"]`;
+      case 'check': case 'read': case 'label': return `[data-act="${k}"]`;
+    }
+    return null;
   }
 
   function _highlightGuide() {
+    if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
     _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
-    if (!_guide || _guideStep >= _guide.steps.length) return;
-    const token = _guide.steps[_guideStep].on;
-    let el = null;
-    if (token.startsWith('food:')) {
-      el = _root.querySelector('[data-food="' + token.slice(5) + '"]:not(.lab-nutrition-food-placed)');
-    } else if (token.startsWith('station:')) {
-      el = _root.querySelector('[data-set-station="' + token.slice(8) + '"], [data-panel="' + token.slice(8) + '"]');
-    } else if (token.startsWith('test:')) {
-      el = _root.querySelector('[data-test="' + token.slice(5) + '"], [data-act="test"][data-val="' + token.slice(5) + '"]');
-    } else if (token === 'check') {
-      el = _root.querySelector('[data-act="check"]');
-    } else if (token === 'read') {
-      el = _root.querySelector('[data-act="read"]');
-    } else if (token === 'label') {
-      el = _root.querySelector('[data-act="label"]');
-    } else if (token.startsWith('tooth:')) {
-      el = _cv;
-    }
-    if (el) {
-      el.classList.add('is-next');
-      if (el !== _cv) el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-set-station],[data-panel],.lab-nutrition-food-btn').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    const s = _curStep();
+    if (!s) return;
+    const els = _stepToks(s).map(t => { const sel = _selFor(t); return sel && _root.querySelector(sel); }).filter(Boolean);
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!_expOn()) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-set],.lab-nutrition-food-btn,.lab-nutrition-tooth-btn').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
 
   function _renderGuide() {
-    if (Labs.studyCheckpoint) Labs.studyCheckpoint('nutrition');
     const el = $('lab-guide');
     if (!el) return;
-    if (!_guide) { el.hidden = true; return; }
-    const step = _guide.steps[_guideStep];
+    const s = _curStep();
+    if (!s) { el.hidden = true; el.innerHTML = ''; _highlightGuide(); return; }
     el.hidden = false;
     el.innerHTML = '<div class="lab-nutrition-guide-inner">'
-      + '<span class="lab-nutrition-guide-title">' + esc(_guide.title) + '</span>'
-      + '<p>' + esc(step.say) + '</p>'
+      + '<span class="lab-nutrition-guide-title lab-guide-meta">' + esc(_guide.title) + ' · Step ' + (_guideStep + 1) + ' of ' + _guide.steps.length + '</span>'
+      + '<p class="lab-guide-say">' + esc(s.say || s.ask || '') + '</p>'
       + '<div class="lab-guide-actions">'
       + '<button type="button" class="lab-guide-hint-btn" data-act="guide-hint" aria-label="Show me where to go">💡 Hint</button>'
       + '<button type="button" class="lab-nutrition-say-guide lab-coach-tip" data-act="say-guide" aria-label="Read guide aloud">🔊</button>'
+      + (_guide.exp ? '' : '<button type="button" class="lab-link" data-act="guide-stop">Stop guide</button>')
       + '</div>'
       + '</div>';
     _highlightGuide();
   }
 
-  function _advanceGuide(token) {
-    _advanceGuideIfNeeded(token);
-    // Also carry out the action the button represents
-    const [k, v] = token.split(':');
+  // One token, done as if tapped. The set-up before an Aim runs through here
+  // silently (experiment.apply); the free bench itself never calls it.
+  function _do(token) {
+    const i = String(token).indexOf(':');
+    const k = i > 0 ? token.slice(0, i) : token, v = i > 0 ? token.slice(i + 1) : null;
     if (k === 'food') _onFoodTap(v);
     else if (k === 'tooth') _onToothTap(v);
     else if (k === 'station') _switchStation(v);
@@ -651,22 +732,74 @@ const LabNutrition = (() => {
     else if (token === 'check') _checkMeal();
     else if (token === 'read') _doRead();
     else if (token === 'label') _doLabel();
+    else if (token === 'reset') { _meal = P().blankMeal(); _tappedTeeth = new Set(); _renderShelf(); _renderTools(); _renderChips(); }
   }
 
   function _doRead() {
-    _advanceGuideIfNeeded('read');
+    if (_expWrong('read')) { _guideEvent('read'); return; }
     if (!_meal.activeTest || !_meal.testedFoods.length) {
       _coach('Pick a food to test first.'); return;
     }
     const T = P().FOOD_TESTS[_meal.activeTest];
-    const pos = _meal.testedFoods.filter(f => P().testResult(_meal.activeTest, f) && P().testResult(_meal.activeTest, f).positive);
-    _coach('Tested: ' + _meal.testedFoods.length + ' foods. ' + (pos.length ? pos.map(f => P().FOODS[f].name).join(', ') + ' turned ' + T.after + '.' : 'None turned ' + T.after + '.'));
+    const pos = _meal.testedFoods.filter(f => { const r = P().testResult(_meal.activeTest, f); return r && r.positive; });
+    const names = pos.map(f => P().FOODS[f].name).join(' and ');
+    _coach('Tested: ' + _meal.testedFoods.length + ' foods. ' + (pos.length ? names + ' turned ' + T.after + '.' : 'None turned ' + T.after + '.'));
+    _log.push(T.short + ' on ' + _meal.testedFoods.length + ' foods: ' + (pos.length ? names + ' turned ' + T.after : 'none turned ' + T.after) + '.');
     const TEST_DISC = { iodine: 'starch_iodine', biuret: 'protein_biuret', grease: 'fat_spot' };
     if (pos.length && TEST_DISC[_meal.activeTest]) _discover(TEST_DISC[_meal.activeTest]);
     _meal.activeTest = null;
     _renderTools();
     _renderPanel();
+    _guideEvent('read');
   }
+
+  // ══ Experiments (lab_experiment.js, LAB_SPEC.md §10) ════════════════════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the stations, shelf and tools.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const tokOf = b => b.dataset.food ? 'food:' + b.dataset.food
+      : b.dataset.tooth ? 'tooth:' + b.dataset.tooth
+      : b.dataset.set === 'station' ? 'station:' + b.dataset.v
+      : b.dataset.act === 'test' ? 'test:' + b.dataset.testid
+      : b.dataset.act;
+    _root.querySelectorAll('.lab-nutrition-food-btn, .lab-nutrition-tooth-btn, [data-set="station"], .lab-nutrition-tools .lab-tool, [data-act="label"]')
+      .forEach(b => { b.hidden = on && !_focus.has(tokOf(b)); });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    ['.lab-nutrition-stations', '#lab-nutrition-shelf', '#lab-nutrition-tools'].forEach(sel => {
+      const el = _root.querySelector(sel); if (el) el.hidden = on && !anyShown(el);
+    });
+    const sep = _root.querySelector('.lab-nutrition-tools-sep');
+    if (sep) sep.hidden = on && ![..._root.querySelectorAll('[data-act="test"]')].some(b => !b.hidden);
+  }
+
+  const experiment = {
+    list: () => (P().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _ttsStop();
+      _resetBench();
+      // A clean bench shows every control. The runner narrows it again with
+      // focus([]) for an Aim; after Explore nothing must stay hidden.
+      _focus = null;
+      _syncStationBtns(); _renderShelf(); _renderTools(); _renderChips(); _renderPanel();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _highlightGuide();
+    },
+    apply: tok => { _silent = true; try { _do(tok); } finally { _silent = false; } },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(-6),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panel rendering ══════════════════════════════════════════════════════════
   function _switchPanel(p) {
@@ -710,7 +843,7 @@ const LabNutrition = (() => {
     const store = Labs.store(ID);
     let html = '<div class="lab-missions">';
     P().MISSIONS.forEach(M => {
-      const stars = (store.missions || {})[M.id] || 0;
+      const stars = ((store.missions || {})[M.id] || {}).stars || 0;
       html += '<div class="lab-mission-card">'
         + '<button type="button" class="lab-mission-start" data-act="mission-start" data-mid="' + esc(M.id) + '">'
         + M.icon + ' ' + esc(M.title) + '</button>'
@@ -764,11 +897,22 @@ const LabNutrition = (() => {
     _ttsStop();
     _mission = M; _missionStep = 0;
     _coach(M.intro);
-    Labs.quiz(M.quiz, { title: M.title, icon: M.icon, intro: M.intro }, stars => {
-      _mission = null;
-      Labs.missionDone(ID, mid, stars, P().MISSIONS.findIndex(m => m.id === mid));
-      _renderPanel();
-    });
+    // ⚠ Same contract as every other bench: Labs.quiz(questions, { title,
+    //   onDone }) and Labs.missionDone({ … }). This used to pass a third
+    //   argument and a positional missionDone, so both missions could be
+    //   played but never saved a star.
+    Labs.quiz(M.quiz, { title: M.title, onDone: r => {
+      const s = r.firstTry >= r.total - 1 ? 3 : r.firstTry >= r.total - 2 ? 2 : 1;
+      const st = Labs.store(ID);
+      const prev = st.missions[mid] || {};
+      st.missions[mid] = { stars: Math.max(prev.stars || 0, s), last: s, at: Date.now() };
+      Labs.persist();
+      const lines = s === 3 ? ['Every food group and every tooth in the right place. 🥗']
+        : [`${r.total - r.firstTry} to look at again. All but one right first time earns three stars.`];
+      Labs.missionDone({ icon: M.icon, title: M.title, stars: s, score: r.firstTry, total: r.total, lines,
+        onAgain: () => _startMission(mid),
+        onClose: () => { _mission = null; _renderPanel(); } });
+    } });
   }
 
   // ══ Chips (tooth label chips) ════════════════════════════════════════════════
@@ -796,27 +940,25 @@ const LabNutrition = (() => {
             + ' data-food="' + esc(fid) + '" aria-label="' + esc(f.name) + '"'
             + (placed ? ' aria-disabled="true"' : '') + '>'
             + '<span aria-hidden="true">' + f.icon + '</span>'
-            + '<small>' + esc(f.name) + '</small>'
+            + '<span class="lab-nutrition-food-name">' + esc(f.name) + '</span>'
             + '</button>';
         }).join('')
         + '</div>';
       el.querySelectorAll('.lab-nutrition-food-btn:not(.lab-nutrition-food-placed)').forEach(btn => _wireFoodDrag(btn));
     } else {
-      // Teeth station: hit targets overlaid on canvas
-      const slots = P().JAW_SLOTS;
-      const n = slots.length;
-      const tw = Math.min((_W - 32) / n, 60);
-      const startX = (_W - tw * n) / 2;
-      el.innerHTML = '<div class="lab-nutrition-tooth-row" role="group" aria-label="Teeth" style="position:relative;height:80px;">'
-        + slots.map((type, i) => {
-          const tooth = P().TEETH[type];
-          return '<button type="button" class="lab-nutrition-tooth-hit" data-tooth="' + esc(type) + '"'
-            + ' aria-label="' + esc(tooth.name) + '" style="left:' + (startX + i * tw) + 'px;width:' + (tw * 0.85) + 'px;"></button>';
+      // Teeth station: one named button per tooth type under the jaw. Tapping
+      // a tooth on the canvas does the same thing (_onCanvasClick).
+      el.innerHTML = '<div class="lab-nutrition-tooth-row" role="group" aria-label="Tooth types">'
+        + P().TOOTH_IDS.map(type => {
+          const tooth = P().TEETH[type], on = _tappedTeeth.has(type);
+          return '<button type="button" class="lab-nutrition-tooth-btn' + (on ? ' is-on' : '') + '" data-tooth="' + esc(type) + '"'
+            + ' aria-pressed="' + on + '">🦷 ' + esc(tooth.name) + '</button>';
         }).join('')
-        + '<button type="button" class="lab-btn lab-nutrition-label-btn" data-act="label" style="position:static;margin:8px auto;display:block;">🏷️ Label teeth</button>'
+        + '<button type="button" class="lab-btn lab-nutrition-label-btn" data-act="label">🏷️ Label teeth</button>'
         + '</div>';
       _renderChips();
     }
+    _applyFocus();
   }
 
   // ══ Tools (check button + test dropper) ═════════════════════════════════════
@@ -833,13 +975,13 @@ const LabNutrition = (() => {
           + esc(T.short) + '</button>';
       });
       if (_meal.activeTest) {
-        html += '<button type="button" class="lab-tool" data-act="read-test">🔎 Read</button>';
+        html += '<button type="button" class="lab-tool" data-act="read">🔎 Read</button>';
       }
       el.innerHTML = html;
-      el.querySelector('[data-act="read-test"]') && el.querySelector('[data-act="read-test"]').addEventListener('click', _doRead);
     } else {
       el.innerHTML = '';
     }
+    _applyFocus();
   }
 
   // ══ Coach and TTS ════════════════════════════════════════════════════════════
@@ -860,7 +1002,7 @@ const LabNutrition = (() => {
   }
 
   function _speak(text) {
-    if (!window.speechSynthesis || !text) return;
+    if (!window.speechSynthesis || !text || _silent) return;
     _ttsStop();
     const utt = new SpeechSynthesisUtterance(text);
     utt.lang = 'en-GB'; utt.rate = 0.9;
@@ -961,7 +1103,7 @@ const LabNutrition = (() => {
   // ══ Discovery helper ═════════════════════════════════════════════════════════
   function _discover(discId) {
     const D = P().DISCOVERIES.find(d => d.id === discId);
-    if (!D) return;
+    if (!D || _silent) return;
     Labs.discover(ID, discId, { title: D.title, total: P().DISCOVERIES.length });
     _renderPanel();
   }
@@ -982,6 +1124,10 @@ const LabNutrition = (() => {
       tappedTeeth: [..._tappedTeeth],
       guide: _guide ? _guide.id : null,
       guideStep: _guideStep,
+      exp: _expOn(),
+      focus: _focus ? [..._focus] : null,
+      activeTest: _meal.activeTest,
+      testedFoods: _meal.testedFoods.slice(),
       panel: _panel,
       log: _log.slice(),
     };
@@ -991,12 +1137,12 @@ const LabNutrition = (() => {
   // Explicit persistence boundary: no DOM nodes, timers, listeners or canvas contexts.
   const study = {
     guides: () => P().GUIDES,
-    start: _startGuide,
+    start: startGuide,
     snapshot: () => _busy ? null : ({ _station, _meal, _tappedTeeth, _guide, _guideStep, _panel, _log }),
     restore: state => { ({ _station, _meal, _tappedTeeth, _guide, _guideStep, _panel, _log } = state); },
     refresh: () => { if (_guide) _renderGuide(); },
-    stop: () => { _guide = null; _renderGuide(); _renderPanel(); }
+    stop: () => _stopGuide(true),
   };
-  return { study, mount, unmount, _test, _tick, _debug };
+  return { study, experiment, mount, unmount, startGuide, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabNutrition = LabNutrition;

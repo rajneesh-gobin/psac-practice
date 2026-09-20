@@ -98,9 +98,9 @@ ok('sw.js precaches the module', /'\/engine\/paper_builder\.js'/.test(shell));
 ok('the parent panel is registered', /_PD_PANELS = \[[^\]]*'papers'/.test(app));
 ok('the parent panel renders the builder', /PaperBuilder\.render\('pd-papers-host', 'parent'\)/.test(app));
 ok('the parent tab button exists', /id="pd-tab-papers"/.test(index));
-ok('the teacher tab is registered', /MORE_TABS = \[[^\]]*'papers'/.test(teacher));
+ok('the teacher tab is registered', /TOOL_TABS = \[[^\]]*'papers'/.test(teacher));
 ok('the teacher panel renders the builder', /PaperBuilder\.render\('tc-papers-host', 'teacher'\)/.test(teacher));
-ok('the teacher menu item exists', /data-more="papers"/.test(index));
+ok('the teacher tab button exists', /class="ta-tab" data-tab="papers"/.test(index));
 
 // ⚠ A panel that is not INSIDE a .screen is never hidden by anything —
 //   showScreen() toggles .hidden on .screen elements only. Both hosts must sit in

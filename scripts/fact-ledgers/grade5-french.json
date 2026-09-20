@@ -1,0 +1,39 @@
+{
+  "pack": "grade5-french",
+  "source": "French.pdf — MIE Teaching and Learning Syllabus, Français, Grades 1 à 6, la section 'LA GRAMMAIRE', liste du Grade 5 (page imprimée 21)",
+  "note": "Une entrée par point que la liste de grammaire du Grade 5 nomme. `any` = couvert dès qu'une question contient UNE de ces expressions dans son énoncé ou sa réponse. `all` = couvert seulement si UNE question les contient TOUTES. Les termes sont cherchés dans l'ÉNONCÉ ET LA RÉPONSE uniquement, jamais dans l'explication. ⚠ PORTÉE : la liste de grammaire seule. Le reste du syllabus est une matrice de compétences dont le niveau est marqué par une TRAME GRISE et dont les lignes sont des savoir-faire ; rien ici ne dit que ces compétences sont couvertes ou non. ⚠ Les accents : le corpus écrit tantôt « passé composé », tantôt « pass&eacute; compos&eacute; ». Le harnais replie les deux sur l'ASCII, donc les termes sont écrits ici sans accent à dessein.",
+  "facts": [
+    { "id": "mod-01", "unit": "Les modes", "fact": "Le mode infinitif", "any": ["infinitif"] },
+    { "id": "mod-02", "unit": "Les modes", "fact": "Le mode imperatif", "any": ["imperatif"] },
+
+    { "id": "tps-01", "unit": "Les temps", "fact": "Le passe compose", "any": ["passe compose"] },
+    { "id": "tps-02", "unit": "Les temps", "fact": "Le passe simple", "any": ["passe simple"] },
+    { "id": "tps-03", "unit": "Les temps", "fact": "Le present du subjonctif", "any": ["subjonctif"] },
+
+    { "id": "par-01", "unit": "Le participe", "fact": "Le participe present", "any": ["participe present"] },
+    { "id": "par-02", "unit": "Le participe", "fact": "L'adjectif verbal", "any": ["adjectif verbal"] },
+    { "id": "par-03", "unit": "Le participe", "fact": "Le participe passe employe avec l'auxiliaire avoir", "all": ["participe passe", "avoir"] },
+    { "id": "par-04", "unit": "Le participe", "fact": "Le participe passe employe avec l'auxiliaire etre", "all": ["participe passe", "etre"] },
+    { "id": "par-05", "unit": "Le participe", "fact": "Le participe passe employe sans auxiliaire", "all": ["participe passe", "sans auxiliaire"] },
+
+    { "id": "phr-01", "unit": "Les phrases", "fact": "La phrase interrogative", "any": ["interrogative"] },
+    { "id": "phr-02", "unit": "Les phrases", "fact": "La phrase negative", "any": ["negative"] },
+    { "id": "phr-03", "unit": "Les phrases", "fact": "La phrase conditionnelle avec « si »", "any": ["conditionnel"] },
+
+    { "id": "frm-01", "unit": "La formation des mots", "fact": "L'adjectif forme a partir d'un nom", "all": ["adjectif", "nom"] },
+    { "id": "frm-02", "unit": "La formation des mots", "fact": "Le nom forme a partir d'un adjectif", "all": ["nom", "adjectif"] },
+    { "id": "frm-03", "unit": "La formation des mots", "fact": "La formation des noms au feminin", "any": ["feminin"] },
+
+    { "id": "adv-01", "unit": "L'adverbe", "fact": "L'adverbe", "any": ["adverbe"] },
+
+    { "id": "pro-01", "unit": "Les pronoms", "fact": "Le pronom relatif", "any": ["pronom relatif"] },
+    { "id": "pro-02", "unit": "Les pronoms", "fact": "Le pronom personnel complement", "any": ["pronom personnel", "pronom complement"] },
+    { "id": "pro-03", "unit": "Les pronoms", "fact": "Le pronom demonstratif", "any": ["demonstratif"] },
+
+    { "id": "cpl-01", "unit": "Les complements", "fact": "Le complement du nom", "any": ["complement du nom"] },
+    { "id": "cpl-02", "unit": "Les complements", "fact": "Les complements circonstanciels", "any": ["circonstanciel"] },
+
+    { "id": "cnj-01", "unit": "Les conjonctions", "fact": "Les conjonctions de coordination (mais, ou, et, donc, or, ni, car)", "any": ["conjonction de coordination", "coordination"] },
+    { "id": "cnj-02", "unit": "Les conjonctions", "fact": "Les conjonctions de subordination (quand, comme...)", "any": ["subordination", "conjonction de subordination"] }
+  ]
+}

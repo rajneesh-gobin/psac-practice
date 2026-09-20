@@ -90,13 +90,63 @@ const Labs = (() => {
       8: 'Classify reactions by observation: colour change, gas, precipitate, temperature shift.' }, [7, 8], true),
     L('energy',    '⚡', 'Work, Energy & Power', 'Science', 'LabEnergy',
       'Pull a weight up a ramp and calculate the work done. Do it faster — compare the power.', [8], true),
-    { id: 'periodic', icon: '⚗️', name: 'Periodic Table', subject: 'Chemistry', global: 'LabPeriodic',
-      grades: [9], ready: true,
-      blurb: 'Explore all 118 elements — filter by type, build compound formulae.',
-      blurbs: null,
-      files: ['engine/labs/lab_periodic_data.js', 'engine/labs/lab_periodic.js'],
-      css: 'engine/labs/lab_periodic.css' },
+    // ⚠ 'periodic' (engine/labs/lab_periodic*.js) is NOT registered: it was
+    //   listed at Grade 9 with no guides, missions, discoveries or chapter -
+    //   the periodic table is a Grade 7 subsection (g7s-elements) - and it
+    //   recorded no progress. Re-home it at Grade 7 with real experiments, or
+    //   delete the files (docs/labs/REWORK_PLAN_2026-09-19.md §7).
   ];
+  // Which chapter each lab teaches, per grade - the first time a lab says so in
+  // code rather than a comment. The hub groups cards by these, the chapter
+  // cards in app.js link into them (_LAB_CHAPTERS there must agree -
+  // scripts/test-labs-experiments-data.js fails if it drifts), and every
+  // experiment's "Practise this chapter" lands on one. Ids are chapter ids in
+  // subjects/grade<N>-science (grade9-biology/chemistry/physics at 9).
+  const CHAPTERS_BY_LAB = {
+    mixing:     { 9: ['g9s-c4-metals', 'g9s-c5-salts'], 8: ['g8s-acids'] },
+    separation: { 9: ['g9s-c2-mixtures'], 8: ['g8s-mixtures'], 7: ['g7s-elements'] },
+    light:      { 9: ['g9s-p2-light'], 4: ['g4sci-materials', 'g4sci-energy'] },
+    measure:    { 9: ['g9s-p1-measurements'], 8: ['g8s-inquiry'], 7: ['g7s-measurement'], 4: ['g4sci-enr-equipment'] },
+    circuit:    { 9: ['g9s-p5-electricity'], 7: ['g7s-electricity'], 6: ['g6-energy'], 4: ['g4sci-energy', 'g4sci-materials'] },
+    motion:     { 9: ['g9s-p4-motion'] },
+    photo:      { 9: ['g9s-b4-plant-nutrition'], 6: ['g6-plants'], 4: ['g4sci-plants'] },
+    quadrat:    { 9: ['g9s-b3-biodiversity'] },
+    microscope: { 9: ['g9s-b1-circulatory'], 7: ['g7s-cells'] },
+    rusting:    { 6: ['g6-materials'] },
+    materials:  { 4: ['g4sci-materials'] },
+    water:      { 4: ['g4sci-water'] },
+    air:        { 6: ['g6-air'], 4: ['g4sci-air'] },
+    food:       { 8: ['g8s-food'] },
+    sunmoon:    { 7: ['g7s-solar-system'], 6: ['g6-solar-system'] },
+    forces:     { 8: ['g8s-forces', 'g8s-pressure'] },
+    magnets:    { 8: ['g8s-magnetism'], 4: ['g4sci-materials'] },
+    heat:       { 6: ['g6-materials', 'g6-energy'] },
+    nutrition:  { 6: ['g6-animals'] },
+    gastests:   { 7: ['g7s-air'] },
+    changes:    { 8: ['g8s-chem-language'], 7: ['g7s-changes'] },
+    energy:     { 8: ['g8s-work-energy'] },
+  };
+  // How many experiments (lab_experiment.js) a lab has at a grade. The hub
+  // reads this before the lab's data file exists on the page; the data test
+  // checks it against EXPERIMENTS in that file. A lab absent here still opens
+  // on its old bench.
+  const EXPERIMENTS_BY_LAB = {
+    rusting: { 6: 4 },
+    circuit: { 4: 4, 6: 3, 7: 4, 9: 4 },
+    food:    { 8: 5 },
+    water:   { 4: 5 },
+    nutrition: { 6: 4 },
+    air:     { 4: 5, 6: 5 },
+    heat:    { 6: 5 },
+    sunmoon: { 6: 4, 7: 4 },
+    photo:   { 4: 5, 6: 5, 9: 5 },
+    magnets: { 4: 3, 8: 4 },
+    materials: { 4: 5 },
+    light:   { 4: 4, 9: 4 },
+    measure: { 4: 4, 7: 4, 8: 4, 9: 4 },
+    gastests: { 7: 5 },
+  };
+  LABS.forEach(l => { l.chapters = CHAPTERS_BY_LAB[l.id] || {}; l.experiments = EXPERIMENTS_BY_LAB[l.id] || {}; });
   // ⚠ The app has no core Grade 5 science yet (docs/labs/PLAN.md), so a Grade 5
   //   pupil uses the primary labs built for Grades 4 and 6.
   const GRADE_ALIASES = { 5: [4, 6] };
@@ -405,8 +455,12 @@ const Labs = (() => {
 
   // One question per screen, one try each, the reason shown either way.
   // A question's FIRST option is the answer (in each lab's data file); shuffled here.
+  // o.evidence: lines from the child's own notebook, pinned above the question
+  // so a Check question is answered from what they saw, not from memory.
   function quiz(questions, o = {}) {
     const qs = questions.map(q => ({ q: q.q, why: q.why, opts: _shuffle(q.options.map((t, i) => ({ t, ok: i === 0 }))) }));
+    const evidence = (o.evidence || []).length
+      ? `<details class="lab-quiz-evidence" open><summary>👀 What you saw</summary><ul>${o.evidence.map(v => `<li>${esc(v)}</li>`).join('')}</ul></details>` : '';
     let i = 0, first = 0, answered = false;
     const card = overlay('', { cls: 'is-quiz', dismiss: false });
     if (!card) return;
@@ -419,6 +473,7 @@ const Labs = (() => {
           <button type="button" class="lab-quiz-exit" data-quiz-exit aria-label="Exit quiz">✕</button>
         </div>
         <div class="lab-quiz-bar" aria-hidden="true"><i style="width:${Math.round((i / qs.length) * 100)}%"></i></div>
+        ${evidence}
         <h2 id="lab-ov-title" class="lab-quiz-q">${esc(q.q)}</h2>
         <div class="lab-quiz-opts">${q.opts.map((op, k) =>
           `<button type="button" class="lab-quiz-opt" data-k="${k}"><span class="lab-quiz-letter">${'ABCD'[k]}</span>${_optHTML(op.t)}</button>`).join('')}</div>
@@ -470,6 +525,51 @@ const Labs = (() => {
 
   // ── Hub ──────────────────────────────────────
   const _blurb = (l, g) => (l.blurbs && l.blurbs[_gradeForLab(l, g)]) || l.blurb;
+  // The chapters of a grade's science pack(s), from the eager subject index:
+  // id → { name, icon, order, pack }. Grade 9 is three packs.
+  function _chapterInfo(g) {
+    const m = new Map();
+    if (typeof SUBJECT_PACKS === 'undefined') return m;
+    let n = 0;
+    SUBJECT_PACKS.filter(p => Number(p.grade) === Number(g) && (p.id === `grade${g}-science` || /^grade9-(biology|chemistry|physics)$/.test(p.id)))
+      .forEach(p => (p.chapters || []).forEach(ch => { if (!m.has(ch.id)) m.set(ch.id, { name: ch.name, icon: ch.icon || '📘', order: n++, pack: p.id }); }));
+    return m;
+  }
+  // Cards grouped by the chapter they teach, in the syllabus order, and one
+  // "Start here": the chapter the child practised most recently that has a lab
+  // (DB.chapters[id].last), else the first chapter with one.
+  function _hubGroups(g, list) {
+    const groups = new Map();
+    list.forEach(l => {
+      const lg = _gradeForLab(l, g), info = _chapterInfo(lg);
+      const ch = ((l.chapters && l.chapters[lg]) || []).find(c => info.has(c)) || null;
+      const key = ch || 'more';
+      if (!groups.has(key)) {
+        groups.set(key, ch
+          ? { key, chapter: ch, pack: info.get(ch).pack, title: `${info.get(ch).icon} ${info.get(ch).name}${lg !== Number(g) ? ` · Grade ${lg}` : ''}`, order: info.get(ch).order + (lg !== Number(g) ? 1000 : 0), labs: [] }
+          : { key, chapter: null, title: 'More labs', order: 9999, labs: [] });
+      }
+      groups.get(key).labs.push(l);
+    });
+    const out = [...groups.values()].sort((a, b) => a.order - b.order);
+    const last = ch => { try { return (typeof DB !== 'undefined' && DB && DB.chapters && DB.chapters[ch] && DB.chapters[ch].last) || 0; } catch (e) { return 0; } };
+    let start = null;
+    out.filter(x => x.chapter).forEach(x => { const t = last(x.chapter); if (t && (!start || t > last(start.chapter))) start = x; });
+    // Nothing practised yet: the first chapter whose lab has experiments, else the first with a lab.
+    const hasExp = x => x.labs.some(l => l.experiments && l.experiments[_gradeForLab(l, g)]);
+    if (!start) start = out.find(x => x.chapter && hasExp(x)) || out.find(x => x.chapter) || out[0] || null;
+    if (start) start.labs.sort((a, b) => (hasExp({ labs: [b] }) ? 1 : 0) - (hasExp({ labs: [a] }) ? 1 : 0));
+    return { groups: out, start };
+  }
+  function _expMeta(l, lg) {
+    const n = l.experiments && l.experiments[lg];
+    if (!n) return '';
+    const done = Math.min(n, Object.keys(store(l.id).done || {}).length);
+    return `<span class="lab-card-exp">🔬 ${done} of ${n} experiment${n === 1 ? '' : 's'} done</span>`;
+  }
+  function labsForChapter(chapterId, g) {
+    return LABS.filter(l => l.ready && ((l.chapters[_gradeForLab(l, g)] || []).includes(chapterId)));
+  }
   function _hubHTML() {
     const g = _pickGrade();
     const usable = usableGrades();
@@ -482,14 +582,15 @@ const Labs = (() => {
           <span class="lab-card-blurb">${esc(l.blurb)}</span>
           <span class="lab-card-meta">Coming soon</span></div>`;
       }
-      const p = _progress(l, _gradeForLab(l, g));
-      const meta = p.found || p.stars ? `✨ ${p.found} found · ★ ${p.stars} stars` : 'Not started yet';
+      const lg = _gradeForLab(l, g), p = _progress(l, lg);
+      const exp = _expMeta(l, lg);
+      const meta = p.found || p.stars ? `✨ ${p.found} found · ★ ${p.stars} stars` : exp ? '' : 'Not started yet';
       return `<button type="button" class="lab-card" data-lab="${l.id}">
         <span class="lab-card-icon" aria-hidden="true">${l.icon}</span>
         <span class="lab-card-name">${esc(l.name)}</span>
         <span class="lab-card-blurb">${esc(_blurb(l, g))}</span>
-        <span class="lab-card-meta">${meta}</span>
-        <span class="lab-card-go" aria-hidden="true">Open the lab →</span></button>`;
+        ${exp}${meta ? `<span class="lab-card-meta">${meta}</span>` : ''}
+        <span class="lab-card-go" aria-hidden="true">${exp ? 'Start the experiment →' : 'Open the lab →'}</span></button>`;
     };
     // One grade needs no picker. More than one - their own plus grades a parent
     // unlocked above it - gets "My grade", and the labs follow the pick.
@@ -499,16 +600,22 @@ const Labs = (() => {
           ${usable.map(x => `<button type="button" class="lab-grade-chip" data-grade="${x}" aria-pressed="${x === g}">Grade ${x}</button>`).join('')}
         </div>`
       : '';
-    // Science is one subject up to Grade 8 (PSAC and the Grade 7-8 packs); only
-    // Grade 9 splits into Biology, Chemistry and Physics. So a Grade 9 physics
-    // lab used at Grade 4 or 7 sits under Science with that grade's other labs.
-    const subj = l => _gradeForLab(l, g) <= 8 ? 'Science' : l.subject;
-    const body = g
-      ? SUBJECTS.filter(sub => list.some(l => subj(l) === sub)).map(sub => `<section class="lab-hub-subject" aria-label="${sub}">
-          <h2 class="lab-card-subject">${sub}</h2>
-          <div class="lab-hub-grid">${list.filter(l => subj(l) === sub).map(card).join('')}</div>
-        </section>`).join('')
-      : '<p class="lab-hub-lede">There are no labs for your grade yet - they are on the way.</p>';
+    // Cards sit under the CHAPTER they teach ("🧲 Materials & Properties"), in
+    // syllabus order, with the most recently practised chapter's lab pulled out
+    // as "Start here" - so a child sees the lab for what they are revising, not
+    // a flat list in registry order (REWORK_PLAN §4.3).
+    let body;
+    if (!g) body = '<p class="lab-hub-lede">There are no labs for your grade yet - they are on the way.</p>';
+    else {
+      const { groups, start } = _hubGroups(g, list);
+      const startLab = start && start.labs[0];
+      const section = (grp, labs, cls, heading) => `<section class="lab-hub-subject${cls}" aria-label="${esc(heading)}">
+          <h2 class="lab-card-subject">${esc(heading)}</h2>
+          <div class="lab-hub-grid">${labs.map(card).join('')}</div>
+        </section>`;
+      body = (startLab ? section(start, [startLab], ' is-start', '▶ Start here · ' + start.title.replace(/^\S+\s/, '')) : '')
+        + groups.map(grp => { const labs = grp.labs.filter(l => l !== startLab); return labs.length ? section(grp, labs, '', grp.title) : ''; }).join('');
+    }
     return `<div class="lab lab-hub">
       <header class="lab-top">
         <button type="button" class="lab-icon-btn" data-hub-exit aria-label="Back to my board">←</button>
@@ -552,7 +659,7 @@ const Labs = (() => {
 
   function _scheduleHint() {
     _hintTimer = setTimeout(() => {
-      const el = _hintRoot && (_hintRoot.querySelector('.is-next:not(.is-guide-dim)') || _hintRoot.querySelector('#lab-study .lab-btn-primary') || _hintRoot.querySelector(_HINT_SEL));
+      const el = _hintRoot && (_hintRoot.querySelector('.is-next:not(.is-guide-dim)') || _hintRoot.querySelector(_HINT_SEL));
       if (!el) { _scheduleHint(); return; }
       el.classList.add('is-idle-hint');
       el.addEventListener('animationend', () => { el.classList.remove('is-idle-hint'); _scheduleHint(); }, { once: true });
@@ -585,9 +692,9 @@ const Labs = (() => {
       root.onclick = null;
       if (mod) {
         try {
-          if (window.LabStudy) LabStudy.detach();
           mod.mount(root);
-          if (window.LabStudy) LabStudy.attach(root, l, mod);
+          if (window.LabExperiment) LabExperiment.attach(root, l, mod, _openOpts);
+          _openOpts = null;
           _startIdleHint(root);
         } catch (err) {
           console.error('[Labs] Could not open ' + l.id, err);
@@ -617,10 +724,18 @@ const Labs = (() => {
     _startIdleHint(root);
   }
 
-  function openLab(id) {
+  // opts: { chapter } or { experiment } tells the experiment runner where to
+  // start (a chapter card's "Try the experiment" chip passes its chapter).
+  let _openOpts = null;
+  function openLab(id, opts) {
     const l = LABS.find(x => x.id === id);
     if (!l) return;
+    _openOpts = opts || null;
     _open = id; _openedAt = Date.now();
+    // ⚠ Re-pick the grade first: a chapter chip or a test can open a lab straight
+    //   after the child (or SELECTED_GRADE) changed, without the hub re-rendering,
+    //   and the cached pick would open a Grade 8 child on Grade 4.
+    _pickGrade();
     _labGrade = _gradeForLab(l);
     try { sessionStorage.setItem('psac-open-lab', id); } catch (_) {}
     render();
@@ -629,7 +744,7 @@ const Labs = (() => {
   }
 
   function _unmountOpen() {
-    if (window.LabStudy) LabStudy.detach();
+    if (window.LabExperiment) LabExperiment.detach();
     const l = _open && LABS.find(x => x.id === _open);
     const m = l && _module(l);
     if (m && m.unmount) m.unmount();
@@ -652,10 +767,31 @@ const Labs = (() => {
     else if (typeof showScreen === 'function') showScreen('student-home');
   }
 
-  return { LABS, SIGN_LABELS, GRADE_ALIASES, render, openLab, backToHub, exit, grade, labsFor, usableGrades,
-           studyBegin: (...args) => window.LabStudy ? LabStudy.begin(...args) : false,
-           studyComplete: (...args) => window.LabStudy ? LabStudy.complete(...args) : false,
-           studyCheckpoint: (...args) => window.LabStudy && LabStudy.checkpoint(...args),
+  // "Practise this chapter" on an experiment's Done card: the same route the
+  // search screen takes into a chapter from anywhere - make sure the pack is
+  // loaded and active, then start the chapter.
+  async function practiseChapter(packId, chapterId) {
+    closeOverlay(true);
+    _unmountOpen();
+    _open = null;
+    try { sessionStorage.removeItem('psac-open-lab'); } catch (_) {}
+    try { if (typeof PackLoader !== 'undefined') await PackLoader.ensure(packId); } catch (e) { console.warn('[Labs] pack', packId, e); }
+    const pack = typeof activateSubjectPack === 'function' ? activateSubjectPack(packId) : null;
+    if (!pack || typeof startChapterDirect !== 'function') {
+      if (typeof toast === 'function') toast('That chapter is not available yet.', 2200);
+      exit(); return;
+    }
+    const go = () => { try { startChapterDirect(chapterId, null); } catch (e) { console.warn('[Labs] chapter', chapterId, e); exit(); } };
+    if (typeof QuestionLoader !== 'undefined' && QuestionLoader.loadSubject) QuestionLoader.loadSubject(pack.id).then(go).catch(go);
+    else go();
+  }
+
+  // ⚠ No studyBegin/studyComplete/studyCheckpoint here any more (the 2026-09-12
+  //   investigation layer was withdrawn - docs/labs/REWORK_PLAN_2026-09-19.md).
+  //   Every bench guards those calls with `Labs.studyX &&`, so a guide simply
+  //   runs on the bench, as it did before.
+  return { LABS, SIGN_LABELS, GRADE_ALIASES, CHAPTERS_BY_LAB, render, openLab, backToHub, exit, grade, labsFor, usableGrades,
+           labsForChapter, practiseChapter,
            store, persist, discover, stars, confetti,
            calm, esc, sign, overlay, closeOverlay, hazardCard, resultCard, quiz, missionDone };
 })();

@@ -1,0 +1,511 @@
+{
+  "pack": "grade6-maths",
+  "source": "Maths.pdf — MIE Teaching and Learning Syllabus, Mathematics, Grades 1 to 6: 'CONTENT AREAS AND SPECIFIC LEARNING OUTCOMES OF MATHEMATICS FOR GRADE 6' (printed pages 16-17) and 'CONTENT AREA, SPECIFIC LEARNING OUTCOMES, ACHIEVEMENT CRITERIA AND LEVELS FOR GRADE 6' (printed page 23)",
+  "note": "One entry per thing the two Grade 6 tables say a learner must be able to do, across the four content areas (Numbers, Geometry, Measure, Graphs). `any` = covered when some question's stem or answer contains ANY of these phrases. `all` = covered only when ONE question contains ALL of them. Terms are matched against the question STEM AND ANSWER ONLY, never the explanation. ⚠ MATHS IS THE HARDEST PACK TO LEDGER, because a bare computation carries no words at all: '4 862 x 7 = ?' tests multiplication and contains neither 'multiply' nor 'multiplication'. Every term below was therefore chosen against the wording the corpus ACTUALLY uses, measured before the ledger was written — so a reported gap here means the topic is absent, not merely worded differently. ⚠ SHORT TERMS ARE TRAPS: 'mm' matches co-mm-on and 'cl' matches cl-assroom, so units are written out ('millimetre') or spaced (' mm '). ⚠ The Grade 6 tables are cumulative in spirit but not in text: what Grade 5 taught is not repeated here, so this ledger does not check Grade 5 work such as the four operations on whole numbers.",
+  "facts": [
+    {
+      "id": "num-01",
+      "unit": "Numbers — whole numbers",
+      "fact": "Read and write numbers up to 1 000 000",
+      "any": [
+        "1 000 000",
+        "1,000,000",
+        "one million",
+        "hundred thousand"
+      ]
+    },
+    {
+      "id": "num-02",
+      "unit": "Numbers — whole numbers",
+      "fact": "Place value of a digit in a given number",
+      "any": [
+        "place value"
+      ]
+    },
+    {
+      "id": "num-03",
+      "unit": "Numbers — whole numbers",
+      "fact": "Expanded notation for numbers up to 6 digits",
+      "any": [
+        "expanded form",
+        "expanded notation"
+      ]
+    },
+    {
+      "id": "num-04",
+      "unit": "Numbers — whole numbers",
+      "fact": "Addition and subtraction involving up to 6-digit numbers",
+      "any": [
+        "6-digit",
+        "6 digit",
+        "six-digit"
+      ]
+    },
+    {
+      "id": "num-05",
+      "unit": "Numbers — whole numbers",
+      "fact": "Word problems involving the four arithmetic operations",
+      "any": [
+        "altogether",
+        "in total",
+        "how many more"
+      ]
+    },
+    {
+      "id": "num-06",
+      "unit": "Numbers — types of numbers",
+      "fact": "Identify prime numbers",
+      "any": [
+        "prime"
+      ]
+    },
+    {
+      "id": "num-07",
+      "unit": "Numbers — types of numbers",
+      "fact": "Identify composite numbers",
+      "any": [
+        "composite"
+      ]
+    },
+    {
+      "id": "num-08",
+      "unit": "Numbers — factors and multiples",
+      "fact": "Find factors of a number",
+      "any": [
+        "factor of",
+        "factors of"
+      ]
+    },
+    {
+      "id": "num-09",
+      "unit": "Numbers — factors and multiples",
+      "fact": "Find multiples of a number",
+      "any": [
+        "multiple of",
+        "multiples of"
+      ]
+    },
+    {
+      "id": "num-10",
+      "unit": "Numbers — H.C.F. and L.C.M.",
+      "fact": "Find the H.C.F. of two numbers",
+      "any": [
+        "hcf",
+        "highest common factor"
+      ]
+    },
+    {
+      "id": "num-11",
+      "unit": "Numbers — H.C.F. and L.C.M.",
+      "fact": "Find the L.C.M. of two numbers",
+      "any": [
+        "lcm",
+        "lowest common multiple",
+        "least common multiple"
+      ]
+    },
+    {
+      "id": "num-12",
+      "unit": "Numbers — fractions",
+      "fact": "Add and subtract simple fractions and mixed numbers",
+      "any": [
+        "mixed number"
+      ]
+    },
+    {
+      "id": "num-13a",
+      "unit": "Numbers — fractions",
+      "fact": "Multiply a fraction by a fraction",
+      "all": [
+        "fraction",
+        "×"
+      ]
+    },
+    {
+      "id": "num-13b",
+      "unit": "Numbers — fractions",
+      "fact": "Divide a fraction by a fraction",
+      "all": [
+        "fraction",
+        "÷"
+      ]
+    },
+    {
+      "id": "num-14",
+      "unit": "Numbers — decimals",
+      "fact": "Add and subtract decimals in context",
+      "any": [
+        "decimal"
+      ]
+    },
+    {
+      "id": "num-15",
+      "unit": "Numbers — decimals",
+      "fact": "Multiply decimals by a 1-digit and 2-digit number to 3 decimal places",
+      "any": [
+        "decimal place",
+        "3 decimal",
+        "three decimal"
+      ]
+    },
+    {
+      "id": "num-16",
+      "unit": "Numbers — fractions and decimals",
+      "fact": "Use fractions and decimals in context",
+      "all": [
+        "fraction",
+        "decimal"
+      ]
+    },
+    {
+      "id": "num-17",
+      "unit": "Numbers — patterns",
+      "fact": "Identify and use number patterns",
+      "any": [
+        "pattern",
+        "sequence"
+      ]
+    },
+    {
+      "id": "num-18",
+      "unit": "Numbers — ratio",
+      "fact": "Use ratio in context",
+      "any": [
+        "ratio"
+      ]
+    },
+    {
+      "id": "num-19",
+      "unit": "Numbers — proportion",
+      "fact": "Ratio and proportion",
+      "any": [
+        "proportion"
+      ]
+    },
+    {
+      "id": "num-20",
+      "unit": "Numbers — average",
+      "fact": "Use average in context",
+      "any": [
+        "average",
+        "mean of"
+      ]
+    },
+    {
+      "id": "num-21",
+      "unit": "Numbers — percentage",
+      "fact": "Use percentage in context",
+      "any": [
+        "percentage",
+        "per cent",
+        "%"
+      ]
+    },
+    {
+      "id": "num-22",
+      "unit": "Numbers — mental computation",
+      "fact": "Perform and describe simple mental computation",
+      "any": [
+        "mental",
+        "in your head",
+        "without writing"
+      ]
+    },
+    {
+      "id": "geo-01",
+      "unit": "Geometry — 2-D shapes",
+      "fact": "Identify and name 2-D shapes up to the hexagon",
+      "any": [
+        "hexagon",
+        "pentagon"
+      ]
+    },
+    {
+      "id": "geo-02",
+      "unit": "Geometry — 2-D shapes",
+      "fact": "Use 2-D shapes in finding perimeter and area",
+      "any": [
+        "perimeter"
+      ]
+    },
+    {
+      "id": "geo-03",
+      "unit": "Geometry — 3-D shapes",
+      "fact": "Identify and name the cube and the cuboid",
+      "any": [
+        "cuboid"
+      ]
+    },
+    {
+      "id": "geo-04",
+      "unit": "Geometry — 3-D shapes",
+      "fact": "Identify and name the cylinder",
+      "any": [
+        "cylinder"
+      ]
+    },
+    {
+      "id": "geo-05",
+      "unit": "Geometry — 3-D shapes",
+      "fact": "Identify and name the prism",
+      "any": [
+        "prism"
+      ]
+    },
+    {
+      "id": "geo-06",
+      "unit": "Geometry — 3-D shapes",
+      "fact": "Identify and name the pyramid",
+      "any": [
+        "pyramid"
+      ]
+    },
+    {
+      "id": "geo-07",
+      "unit": "Geometry — 3-D shapes",
+      "fact": "Count the faces of a 3-D shape",
+      "any": [
+        "faces"
+      ]
+    },
+    {
+      "id": "geo-08",
+      "unit": "Geometry — 3-D shapes",
+      "fact": "Count the edges of a 3-D shape",
+      "any": [
+        "edges"
+      ]
+    },
+    {
+      "id": "geo-09",
+      "unit": "Geometry — 3-D shapes",
+      "fact": "Count the vertices of a 3-D shape",
+      "any": [
+        "vertices",
+        "vertex"
+      ]
+    },
+    {
+      "id": "geo-10",
+      "unit": "Geometry — symmetry",
+      "fact": "Draw the line or lines of symmetry of a shape",
+      "any": [
+        "line of symmetry",
+        "lines of symmetry"
+      ]
+    },
+    {
+      "id": "geo-11",
+      "unit": "Geometry — symmetry",
+      "fact": "Complete a figure given one or two lines of symmetry",
+      "all": [
+        "symmetry",
+        "complete"
+      ]
+    },
+    {
+      "id": "geo-12",
+      "unit": "Geometry — angles",
+      "fact": "Find an unknown angle",
+      "any": [
+        "unknown angle",
+        "missing angle"
+      ]
+    },
+    {
+      "id": "geo-13",
+      "unit": "Geometry — angles",
+      "fact": "Work with angles in degrees",
+      "any": [
+        "degrees",
+        "&deg;"
+      ]
+    },
+    {
+      "id": "geo-14",
+      "unit": "Geometry — angles",
+      "fact": "Differentiate acute, obtuse and reflex angles",
+      "any": [
+        "acute",
+        "obtuse",
+        "reflex"
+      ]
+    },
+    {
+      "id": "geo-15",
+      "unit": "Geometry — triangles",
+      "fact": "Recognise the scalene triangle",
+      "any": [
+        "scalene"
+      ]
+    },
+    {
+      "id": "mea-01",
+      "unit": "Measure — length",
+      "fact": "Measure and convert length using km, m, cm and mm",
+      "any": [
+        "millimetre",
+        "kilometre",
+        " mm ",
+        " km "
+      ]
+    },
+    {
+      "id": "mea-02",
+      "unit": "Measure — mass",
+      "fact": "Measure and convert mass using kg, g and tonnes",
+      "any": [
+        "tonne"
+      ]
+    },
+    {
+      "id": "mea-03",
+      "unit": "Measure — capacity",
+      "fact": "Measure and convert capacity using L, cL and mL",
+      "any": [
+        "centilitre",
+        "millilitre",
+        "litre"
+      ]
+    },
+    {
+      "id": "mea-04",
+      "unit": "Measure — money",
+      "fact": "Convert Mauritian currency into foreign currencies and back",
+      "any": [
+        "euro",
+        "sterling",
+        "us dollar",
+        "foreign currency"
+      ]
+    },
+    {
+      "id": "mea-05",
+      "unit": "Measure — money",
+      "fact": "Percentage profit",
+      "any": [
+        "profit"
+      ]
+    },
+    {
+      "id": "mea-06",
+      "unit": "Measure — money",
+      "fact": "Percentage loss",
+      "any": [
+        "loss"
+      ]
+    },
+    {
+      "id": "mea-07",
+      "unit": "Measure — area",
+      "fact": "Find areas of plane geometric shapes",
+      "any": [
+        "area of"
+      ]
+    },
+    {
+      "id": "mea-08",
+      "unit": "Measure — surface area",
+      "fact": "Find the total surface area of a cube or cuboid",
+      "any": [
+        "surface area"
+      ]
+    },
+    {
+      "id": "mea-09",
+      "unit": "Measure — volume",
+      "fact": "Find the volume of a cube or cuboid",
+      "any": [
+        "volume"
+      ]
+    },
+    {
+      "id": "mea-10",
+      "unit": "Measure — time",
+      "fact": "Use time notation a.m. and p.m.",
+      "any": [
+        "a.m.",
+        "p.m.",
+        "am/pm"
+      ]
+    },
+    {
+      "id": "mea-11",
+      "unit": "Measure — time",
+      "fact": "Read and write time using the 12-hour and 24-hour clock",
+      "any": [
+        "12-hour",
+        "24-hour",
+        "24 hour clock"
+      ]
+    },
+    {
+      "id": "mea-12",
+      "unit": "Measure — time",
+      "fact": "Addition and subtraction involving time",
+      "all": [
+        "hours",
+        "minutes"
+      ]
+    },
+    {
+      "id": "mea-13",
+      "unit": "Measure — time",
+      "fact": "Relate international time to G.M.T.",
+      "any": [
+        "gmt",
+        "g.m.t",
+        "greenwich mean time"
+      ]
+    },
+    {
+      "id": "mea-14",
+      "unit": "Measure — speed",
+      "fact": "Use the basic notion of speed in context",
+      "any": [
+        "speed"
+      ]
+    },
+    {
+      "id": "gra-01",
+      "unit": "Graphs",
+      "fact": "Read and interpret a pictogram",
+      "any": [
+        "pictogram"
+      ]
+    },
+    {
+      "id": "gra-02",
+      "unit": "Graphs",
+      "fact": "Read and interpret a bar chart",
+      "any": [
+        "bar chart",
+        "bar graph"
+      ]
+    },
+    {
+      "id": "gra-03",
+      "unit": "Graphs",
+      "fact": "Read and interpret a pie chart",
+      "any": [
+        "pie chart"
+      ]
+    },
+    {
+      "id": "gra-04",
+      "unit": "Graphs",
+      "fact": "Read and interpret a line graph",
+      "any": [
+        "line graph"
+      ]
+    },
+    {
+      "id": "gra-05",
+      "unit": "Graphs",
+      "fact": "Find and use coordinates in the x-y plane",
+      "any": [
+        "coordinate"
+      ]
+    }
+  ]
+}

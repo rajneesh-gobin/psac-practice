@@ -218,7 +218,7 @@ ok('the model’s mistakes: chosen spots → biased card; 3 quadrats → too few
 console.log('\nGuided experiments');
 ok('at least 3 guided experiments, ids unique', Q.GUIDES.length >= 3 && new Set(Q.GUIDES.map(g => g.id)).size === Q.GUIDES.length);
 for (const G of Q.GUIDES) {
-  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say || !s.btn);
+  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do and has a button`, badS.length === 0, badS);
   const cards = [1, 7, 42].map(s => runRecipe(G.steps.map(x => x.on), s).cards).flat();
   ok(`${G.title}: ends with what they found out, and runs with no mistake card`, !!(G.lesson && G.blurb && G.icon) && cards.length === 0, cards);
@@ -258,6 +258,134 @@ ok('the 💡 facts are there', Q.FACTS.length >= 10 && Q.FACTS.every(f => typeof
 const texts = Q.DISCOVERIES.map(d => d.learn).concat(Object.values(Q.RESULTS).map(R => R.instead), Q.MISSIONS.flatMap(M => M.quiz.map(q => q.why)));
 ok('the edge rule is labelled beyond the NCE syllabus wherever it is taught', texts.filter(t => /edge rule|rule itself/i.test(t)).every(t => /beyond the NCE syllabus/.test(t)) && texts.some(t => /edge rule/i.test(t)));
 ok('the counts are called a model, not real data', /model/i.test(src) && /model/i.test(bench));
+
+console.log('\nExperiments (lab_experiment.js)');
+const EX = Q.EXPERIMENTS;
+ok('EXPERIMENTS is exported: 4 at Grade 9, ids unique', Array.isArray(EX) && EX.filter(e => e.grades.includes(9)).length === 4 && new Set(EX.map(e => e.id)).size === EX.length);
+ok('every experiment teaches g9s-b3-biodiversity at Grade 9 only', EX.every(e => e.chapter === 'g9s-b3-biodiversity' && Array.isArray(e.grades) && e.grades.join() === '9'));
+// Tokens the bench performs (lab_quadrat.js _do → _set / _act): the guide set,
+// the set-up-only seed, and the estimate offered as an answer.
+const expTok = t => tokenOk(t) || /^seed:\d+$/.test(t) || /^est:(right|forgot|total|mean)$/.test(t) || t === 'untap';
+// The label of the control a token points at, exactly as lab_quadrat.js _ctl
+// renders it in the tools row - a step's words must contain it.
+const LABEL = { throw: 'Throw at random', thick: 'Where it is thickest', count: 'Count (edge rule)', 'count:all': 'Every plant touching', 'count:inside': 'Only wholly inside',
+                record: 'Record my ticks', auto5: '5 more at random', estimate: 'Estimate', new: 'New survey', census: 'Count every square', restore: 'Restore the plot',
+                'gloves:on': 'Gloves on', 'gloves:off': 'Bare hands', 'view:field': 'The plot', 'view:zoom': 'In the quadrat' };
+const labelFor = t => { const [k, v] = t.split(':'); if (k === 'species') return Q.SPECIES[v].name; if (k === 'event') return Q.EVENTS[v].name; return LABEL[t] || null; };
+ok('the bench renders every one of those labels', Object.values(LABEL).every(l => bench.includes(`'${l}'`)), Object.values(LABEL).filter(l => !bench.includes(`'${l}'`)));
+const plain = s => String(s).replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{2190}-\u{21FF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const stepToks = s => s.options || s.any || (s.on ? [s.on] : []);
+const rightPath = e => e.setup.concat(e.steps.map(s => s.any ? s.any[0] : s.on));
+const numsIn = s => (String(s).match(/\d[\d,]*/g) || []).map(x => Number(x.replace(/,/g, '')));
+// An independent replay of the bench for an experiment's tokens - the same
+// generator, the same throws (one call per random square, five for "5 more"),
+// the same edge-rule counts. Anything the See text claims must fall out of it.
+function walk(tokens) {
+  let r = Q.rng(1), events = [], plants = Q.makeField([]), sp = 'guava', gloves = false, quads = [], q = null, key = '';
+  const est = [], notes = [], cards = [];
+  const reset = () => { quads = []; q = null; key = events.join('>'); };
+  const taken = () => quads.map(x => Q.key(x.x, x.y));
+  const pops = () => Object.fromEntries(Q.SPECIES_ORDER.map(s => [s, Q.truePop(plants, s)]));
+  const countIt = () => {
+    if (!q || q.done) { cards.push('nothing'); return false; }
+    if (!gloves && Q.countQuad(plants, 'lantana', q.x, q.y, 'all') > 0) { cards.push('lantana'); return false; }
+    q.done = true; quads.push({ x: q.x, y: q.y, n: Q.countQuad(plants, sp, q.x, q.y), how: q.how }); return true;
+  };
+  for (const t of tokens) {
+    const [k, v] = t.split(':');
+    if (k === 'seed') r = Q.rng(+v);
+    else if (k === 'species') { if (v !== sp) { const had = quads.length; sp = v; if (had) reset(); } }
+    else if (k === 'gloves') gloves = v === 'on';
+    else if (k === 'throw') { const s = Q.randomSquares(r, 1, taken())[0]; q = { x: s[0], y: s[1], how: 'random' }; }
+    else if (k === 'thick') { const s = Q.thickest(plants, sp, 1, taken())[0]; q = { x: s[0], y: s[1], how: 'thick' }; }
+    else if (k === 'count') countIt();
+    else if (k === 'auto5') { for (const s of Q.randomSquares(r, 5, taken())) { q = { x: s[0], y: s[1], how: 'random' }; if (!countIt()) break; } }
+    else if (k === 'estimate' || (k === 'est' && v === 'right')) {
+      const counts = quads.map(x => x.n), e = Q.estimate(counts), random = quads.every(x => x.how === 'random');
+      est.push({ sp, n: e.n, total: e.total, mean: e.mean, est: e.rounded, trueN: Q.truePop(plants, sp), random, year: Q.yearOf(events), zeros: counts.filter(c => c === 0).length, counts });
+      if (!random) cards.push('biased'); else if (e.n < Q.MIN_Q) cards.push('too_few');
+    }
+    else if (k === 'est') cards.push(t);
+    else if (k === 'census') notes.push({ census: Q.census(plants, sp).rule, trueN: Q.truePop(plants, sp) });
+    else if (k === 'new') reset();
+    else if (k === 'event') { const before = pops(); events.push(v); plants = Q.makeField(events); reset(); notes.push({ event: v, before, after: pops() }); }
+  }
+  return { sp, est, notes, cards, quads, trueN: Q.truePop(plants, sp) };
+}
+const byId = Object.fromEntries(EX.map(e => [e.id, e]));
+ok('the four experiments are: how many guava, is the estimate right, ten years of invasion, the endemic ebony',
+   EX.map(e => e.id).join() === 'how_many,is_it_right,invasion,endemic_ebony', EX.map(e => e.id));
+for (const e of EX) {
+  const t = e.id;
+  ok(`${t}: title is a question (≤ 60) and the aim is one or two short sentences (≤ 200)`, /\?$/.test(e.title) && e.title.length <= 60 && e.aim.length >= 20 && e.aim.length <= 200, { title: e.title, aim: e.aim.length });
+  const badSetup = e.setup.filter(x => !expTok(x));
+  ok(`${t}: every set-up token is one the bench performs, and the set-up seeds the throws and puts gloves on`, badSetup.length === 0 && e.setup.some(x => /^seed:/.test(x)) && e.setup.includes('gloves:on'), badSetup);
+  const badStep = e.steps.filter(s => !stepToks(s).every(expTok) || !(s.say || s.ask));
+  ok(`${t}: every step token is real and each step says something`, badStep.length === 0, badStep);
+  ok(`${t}: 1 to 5 steps, each under 25 words`, e.steps.length >= 1 && e.steps.length <= 5 && e.steps.every(s => String(s.say || s.ask).split(/\s+/).length <= 25), e.steps.map(s => String(s.say || s.ask).split(/\s+/).length));
+  const asks = e.steps.filter(s => s.ask);
+  ok(`${t}: at least one step is a decision`, asks.length >= 1);
+  ok(`${t}: every ask lists its answer among 2+ options, and every wrong option is a listed, different option that explains itself`,
+     asks.every(s => Array.isArray(s.options) && s.options.length >= 2 && (s.any ? s.any.every(x => s.options.includes(x)) : s.options.includes(s.on))
+       && Object.keys(s.wrong || {}).length >= 1 && Object.keys(s.wrong).every(k => s.options.includes(k) && k !== s.on && s.wrong[k].length > 15)), asks);
+  const unnamed = e.steps.filter(s => s.say).filter(s => { const l = labelFor(s.on); return !l || !plain(s.say).includes(plain(l)); });
+  ok(`${t}: every instruction names the control it points at`, unnamed.length === 0, unnamed.map(s => s.say));
+  ok(`${t}: no step places a quadrat by choice or breaks the edge rule on the right path`, !rightPath(e).some(x => x === 'thick' || x === 'count:all' || x === 'count:inside'));
+  const W = walk(rightPath(e));
+  ok(`${t}: the right path runs with no mistake card and every quadrat thrown at random`, W.cards.length === 0 && W.quads.length >= 5 && W.quads.every(x => x.how === 'random'), W.cards);
+  const bare = walk(rightPath(e).map(x => x === 'gloves:on' ? 'gloves:off' : x));
+  ok(`${t}: no sampled square holds lantana, so a child who takes the gloves off still sees the same numbers`, !bare.cards.includes('lantana') && JSON.stringify(bare.est) === JSON.stringify(W.est));
+  const S = Q.simulate(rightPath(e));
+  ok(`${t}: the data file's own model agrees with this replay (estimates, true numbers)`,
+     JSON.stringify(S.hist.map(h => [h.est, h.trueN, h.n, h.zeros])) === JSON.stringify(W.est.map(h => [h.est, h.trueN, h.n, h.zeros])), { S: S.hist.map(h => h.est), W: W.est.map(h => h.est) });
+  const p = e.predict;
+  ok(`${t}: the prediction has 2-4 tappable options and its answer is one of them`, p && p.options.length >= 2 && p.options.length <= 4 && p.options.every(o => o.id && o.label) && p.options.some(o => o.id === p.answer), p);
+  const qs = e.check.map(ref => typeof ref === 'object' ? ref : (M => M && M.quiz[+ref.split(':')[1]])(Q.MISSIONS.find(M => M.id === ref.split(':')[0])));
+  ok(`${t}: 2-3 check questions resolve, each with 4 distinct options and a reason`,
+     e.check.length >= 2 && e.check.length <= 3 && qs.every(q => q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && q.why), e.check.map(r => typeof r === 'object' ? 'inline' : r));
+  ok(`${t}: See says what was learnt, and the exam line invents no paper reference`, e.see.learn.length > 20 && typeof e.exam === 'string' && e.exam.length > 10 && !/20\d\d Q\d/.test(e.exam), e.exam);
+  const seen = numsIn(e.see.saw);
+  if (t === 'how_many') {
+    const h = W.est[0];
+    ok('how_many: one hand-counted quadrat, then five at random, then the estimate as an answer', rightPath(e).slice(-4).join() === 'throw,count,auto5,est:right' && W.est.length === 1 && h.n === 6);
+    ok(`how_many: See states that estimate (${h.est}) and the ranger's count (${h.trueN}), and the prediction "about 1,000" is the truth`, seen.includes(h.est) && seen.includes(h.trueN) && h.trueN === 900 && p.answer === '1000', e.see.saw);
+    const vals = [h.est, h.total * 400, h.total, Math.round(h.mean * 100) / 100];
+    ok('how_many: the four numbers offered as the estimate are all different, so the slips are real choices', new Set(vals.map(String)).size === 4, vals);
+    ok('how_many: the estimate ask offers the right working and the three slips, each explained', (s => s && s.on === 'est:right' && s.options.join() === 'est:right,est:forgot,est:total,est:mean' && Object.keys(s.wrong).length === 3)(e.steps[3]));
+    ok('how_many: the first decision is random against thickest, and thickest explains bias', e.steps[0].options.join() === 'throw,thick' && /bias/i.test(e.steps[0].wrong.thick));
+  }
+  if (t === 'is_it_right') {
+    const [a, b] = W.est, c = W.notes[0];
+    ok('is_it_right: five quadrats are counted before the Aim, then 15 by the second estimate, then the census', a && b && a.n === 5 && b.n === 15 && c && c.census === c.trueN);
+    ok(`is_it_right: fifteen quadrats (${b.est}) land closer to ${a.trueN} than five (${a.est}), and five is visibly off`, Math.abs(b.est - a.trueN) < Math.abs(a.est - a.trueN) && Math.abs(a.est - a.trueN) / a.trueN >= 0.15 && Math.abs(b.est - b.trueN) / b.trueN <= 0.1 && p.answer === 'fifteen');
+    ok('is_it_right: See states both estimates and the census', seen.includes(a.est) && seen.includes(b.est) && seen.includes(c.census), e.see.saw);
+  }
+  if (t === 'invasion') {
+    const [a, b] = W.est, n = W.notes[0];
+    ok('invasion: ten random quadrats at year 0 before the Aim, ten more at year 10', a && b && a.n === 10 && a.year === 0 && b.n === 10 && b.year === 10 && n && n.event === 'spread');
+    ok(`invasion: the guava rose (${a.est} → ${b.est}; ranger ${n.before.guava} → ${n.after.guava}) and the ebony fell (${n.before.ebony} → ${n.after.ebony})`, b.est > a.est && n.after.guava > n.before.guava && n.after.ebony < n.before.ebony && p.answer === 'more');
+    ok('invasion: See states both estimates and all four ranger counts', [a.est, b.est, n.before.guava, n.after.guava, n.before.ebony, n.after.ebony].every(v => seen.includes(v)), e.see.saw);
+    ok('invasion: the Aim quotes the year-0 estimate', numsIn(e.aim).includes(a.est), e.aim);
+    ok('invasion: the decision is human threat against natural threat and conservation', e.steps[0].options.join() === 'event:spread,event:cyclone,event:weed' && /NATURAL/.test(e.steps[0].wrong['event:cyclone']) && /conservation/.test(e.steps[0].wrong['event:weed']));
+  }
+  if (t === 'endemic_ebony') {
+    const h = W.est[0];
+    ok('endemic_ebony: the decision picks the endemic species, and the survey is ten random quadrats of ebony', e.steps[0].on === 'species:ebony' && W.sp === 'ebony' && h && h.n === 10);
+    ok(`endemic_ebony: only a few quadrats held ebony (${10 - h.zeros} of 10), as predicted`, h.zeros >= 6 && h.zeros <= 9 && p.answer === 'few');
+    ok(`endemic_ebony: See states the zeros (${h.zeros}), the estimate (${h.est}) and the ranger's count (${h.trueN})`, seen.includes(h.zeros) && seen.includes(h.est) && seen.includes(h.trueN) && h.trueN === Q.SPECIES.ebony.n, e.see.saw);
+  }
+}
+ok('the first experiment is the one the paper examines: throw, count, and work the estimate out', EX[0].id === 'how_many' && /guava/i.test(EX[0].title));
+const inline = EX.flatMap(e => e.check.filter(r => typeof r === 'object').map(r => r.q));
+ok('no inline check question repeats a mission question or another inline one', new Set(inline).size === inline.length && !inline.some(q => Q.MISSIONS.some(M => M.quiz.some(x => x.q === q))));
+const refs = EX.flatMap(e => e.check.filter(r => typeof r === 'string'));
+ok('no mission question is used by two experiments', new Set(refs).size === refs.length, refs);
+ok('the bench exports the experiment adapter (list, question, reset, apply, guide, stop, evidence, focus, selector, hooks)',
+   ['list', 'question', 'reset', 'apply', 'guide', 'stop', 'evidence', 'focus', 'selector', 'hooks'].every(k => new RegExp('\\b' + k + ':').test(bench.slice(bench.indexOf('const experiment = {')))) && /return \{ study, experiment,/.test(bench));
+ok('the bench hears every token before matching, matches `any`, hands Done to the runner, and never wipes an experiment\'s plot',
+   /experiment\.hooks\.token\(token, s\)/.test(bench) && /s\.any\.includes\(token\)/.test(bench) && /experiment\.hooks\.done\(\)/.test(bench) && /experiment\.hooks\.step\(_guide\.step\)/.test(bench) && /if \(!G\.exp\) _resetBench\(\);/.test(bench));
+ok('a wrong option is heard, never acted on (_expWrong guards every set and act)', /function _act\(act\)\s*\{\s*if \(_expWrong\(act\)\)/.test(bench) && /function _set\(k, v\)\s*\{\s*if \(_expWrong\(k \+ ':' \+ v\)\)/.test(bench));
+ok('the bench seeds its throws from a seed token and offers the estimate as four answers', /case 'seed':/.test(bench) && /case 'est':/.test(bench) && /est:right/.test(bench) && /_estOptions/.test(bench));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

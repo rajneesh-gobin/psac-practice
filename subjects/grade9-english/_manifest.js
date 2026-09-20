@@ -194,7 +194,12 @@ const G9ENG_SYLLABUS = {
 registerSubject({
   id: 'grade9-english', name: 'English', grade: 9, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  // ⚠ 'Word Problems' until 2026-09-20 — the MATHS reading of L4, shown to a
+  //   Grade 9 English child on the practice badge (`🏆 Level 4 - ${label}`).
+  //   Grades 4-8 English have always said 'Extended Analysis'. grade9-french
+  //   carried the same wrong label and was fixed in the same pass; L4 is not
+  //   one thing across packs. See scripts/audit-difficulty-labels.js.
+  practiceble: true, notesBased: false, level4Label: 'Extended Analysis',
   syllabus: G9ENG_SYLLABUS,
   chapters: [
     { id: 'g9eng-listening',            name: 'Listening & Comprehension',                       icon: '👂', examWeight: 0,

@@ -77,6 +77,9 @@ process.on('SIGINT', () => quit(130));
   const closeOv = () => click('#lab-overlay [data-ov-close]');
   const set = (k, v) => clicks(`[data-set="${k}"][data-v="${v}"]`);
   const act = a => clicks(`[data-act="${a}"]`);
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step (2026-09-12). The test taps what glows, as a child would.
+  const next = () => click('.is-next');
   const speech = () => ev('({ spoken: window.__tts.spoken.slice(), cancels: window.__tts.cancels })');
   // A clean bench with no guide and no mission: start a guide, stop it (that
   // resets the bench), then pick the bench.
@@ -114,11 +117,14 @@ process.on('SIGINT', () => quit(130));
   await sleep(500);
   ok('its stylesheet is linked and styles the set-up buttons',
      await ev("!!document.querySelector('link[data-lab-css=\"rusting\"]') && getComputedStyle(document.querySelector('.lab-rusting-opt')).minHeight === '44px'"));
+  // Since 2026-09-19 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Rusting Lab/.test(ov.text) && /Show me how/.test(ov.text), ov);
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
   ok('nothing was read aloud on its own', (await speech()).spoken.length === 0);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('rusting').intro === true"));
+  ok('the welcome is marked seen', await ev("Labs.store('rusting').intro === true"));
+  await click('[data-exp="explore"]');
+  ok('"Explore the bench freely" shows the old bench', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none'"));
   ok('top bar: back, Science · Grade 6, title, adult helper and help',
      await ev("!!document.querySelector('.lab-rusting .lab-top [data-act=\"hub\"]') && /Science · Grade 6/.test(document.querySelector('.lab-rusting .lab-eyebrow').textContent) && /Rusting Lab/.test(document.querySelector('.lab-rusting h1').textContent) && !!document.getElementById('lab-rusting-adult') && !!document.querySelector('.lab-rusting [data-act=\"help\"]')"));
   await act('help');
@@ -153,25 +159,25 @@ process.on('SIGINT', () => quit(130));
   let g = await gs();
   ok('The three test tubes: already on the rack, so it opens at step 2 - ask an adult - and the adult button glows',
      g.box && /Step 2 of 11/.test(g.text) && /adult/.test(g.text) && g.next === 'adult:on' && !g.start, g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('tube A is already chosen, so “boiled water” glows next (step 4)', g.next === 'water:boiled' && /Step 4 of 11/.test(g.text), g);
-  await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next();
   g = await gs();
   ok('…then tube B', g.next === 'tube:B' && /Step 6 of 11/.test(g.text), g);
-  await click('[data-guide-do]'); await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next(); await next();
   g = await gs();
   ok('…then the drying agent for tube C', g.next === 'dryer:on' && /Step 9 of 11/.test(g.text), g);
   await click('[data-act="say-guide"]');
   sp = await speech();
   ok('🔊 in the guide box reads the step', /drying agent/.test(sp.spoken[sp.spoken.length - 1]), sp.spoken.slice(-1));
   const c1 = sp.cancels;
-  await click('[data-guide-do]');
+  await next();
   ok('the next step cancels the speech', (await speech()).cancels === c1 + 1, await speech());
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('…the cork, then “Wait 7 days” glows under the picture', g.next === 'week' && /Step 11 of 11/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   let d = await dbg();
   ok('after 7 days only nail B rusted: A (boiled + oil) and C (dry air) stay shiny',
      d.tubes.day === 7 && d.tubes.items.A.rust === 0 && d.tubes.items.B.rust === 1 && d.tubes.items.C.rust === 0 && !d.tubes.items.D.on, d.tubes.items);
@@ -337,7 +343,7 @@ process.on('SIGINT', () => quit(130));
       for (let k = 0; k < 30 && LabRusting._debug().guide; k++) {
         const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
         if (o) return 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        const btn = document.querySelector('.is-next');
         if (btn) btn.click(); else LabRusting._tick(3);
       }
       if (LabRusting._debug().guide) return 'guide never finished at step ' + LabRusting._debug().guide.step;
@@ -370,6 +376,7 @@ process.on('SIGINT', () => quit(130));
   await sleep(300);
   await ev("Labs.openLab('rusting'); true");
   await sleep(300);
+  await click('[data-exp="explore"]');
   await act('say-coach');
   const c3 = (await speech()).cancels;
   ok('…speaking again after coming back (the loop restarted too)', await ev('LabRusting._debug().talking && LabRusting._debug().looping'));

@@ -1,8 +1,11 @@
 'use strict';
 // Science Labs › Quadrat Field, driven in a real browser.
 //
-// Proves the lab end to end: it loads its own three files when opened, lands
-// with "What would you like to do?", a guided experiment runs to its end, every
+// Proves the lab end to end: it loads its own three files when opened, opens
+// on an experiment Aim (lab_experiment.js) and walks the first experiment -
+// the wrong option of each decision gets its card, the estimate is offered as
+// four numbers, and the See text's numbers are the bench's own - then, in
+// Explore, the old bench: "What would you like to do?", a guided experiment runs to its end, every
 // discovery unlocks by following its own "Show me how", the hazard card and
 // every result card fire and explain themselves (with the consequence drawn
 // on the canvas first), a tap on the picture chooses a square and ticks a
@@ -80,6 +83,8 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
   const closeOv = () => click('#lab-overlay [data-ov-close]');
   const set = (k, v) => clicks(`.lab-body [data-set="${k}"][data-v="${v}"]`);
   const act = a => clicks(`.lab-body [data-act="${a}"]`);
+  // The glowing control of the current guide step - the thing a child taps next.
+  const next = () => clicks('.is-next');
   // A clean bench with no guide and no mission: start a guide, stop it (that resets the bench).
   const freshBench = async () => {
     await ev("document.getElementById('lab-overlay')?.remove(); LabQuadrat.startGuide('first'); true");
@@ -107,7 +112,7 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
   for (let i = 0; i < 40 && !hub; i++) { await sleep(250); hub = await ev("typeof Labs !== 'undefined' && !!document.querySelector('#labs-root .lab-hub')"); }
   ok('Grade 9: the Labs hub renders', hub);
   await ev("Labs.openLab('quadrat'); true");
-  let mounted = false;
+  let mounted = false, d = null;
   for (let i = 0; i < 60 && !mounted; i++) { await sleep(200); mounted = await ev("typeof window.LabQuadrat !== 'undefined' && !!document.querySelector('#labs-root .lab-quadrat')"); }
   ok('Labs.openLab("quadrat") loads LabQuadrat and renders the field', mounted);
   const labScripts = await ev("[...document.scripts].map(s => s.src).filter(s => /engine\\/labs\\//.test(s)).map(s => s.split('/').pop()).join()");
@@ -115,10 +120,52 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
   await sleep(500);
   ok('its stylesheet is linked and styles the set-up buttons',
      await ev("!!document.querySelector('link[data-lab-css=\"quadrat\"]') && getComputedStyle(document.querySelector('.lab-quadrat-opt')).minHeight === '44px'"));
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Quadrat Field/.test(ov.text) && /Show me how/.test(ov.text), ov);
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim' && LabExperiment._debug().exp === 'how_many'"), ov || await ev('LabExperiment._debug()'));
+  ok('the welcome is marked seen', await ev("Labs.store('quadrat').intro === true"));
+  ok('the Aim hides every tool and shelf button, and the plot is drawn', await ev("[...document.querySelectorAll('#labs-root .lab-tool, #labs-root .lab-shelf button')].every(b => b.hidden || !b.offsetParent) && !!document.querySelector('#labs-root .lab-canvas-wrap canvas')"));
+
+  // ── The first experiment, through the runner ────
+  console.log('\n-- experiment: how many guava plants?');
+  await ev('LabQuadrat._test({ instant: true }); true');
+  const EXP = await ev("LabQuadrat.experiment.list().find(e => e.id === 'how_many')");
+  const xd = () => ev('LabExperiment._debug()');
+  await click('[data-exp="start"]');
+  await click('[data-exp-pick="100"]');
+  d = await xd();
+  ok('Start, then a tapped prediction, opens Do on step 1 with the seeded, gloved bench', d.phase === 'do' && d.step === 0 && d.predicted === '100' && await ev("LabQuadrat._debug().gloves === true && LabQuadrat._debug().sp === 'guava' && LabQuadrat._debug().series.n === 0"), d);
+  ok('step 1 is a decision: “Throw at random” and “Where it is thickest” sit together under the picture, both glowing, the shelf hidden',
+     await ev("(() => { const t = [...document.querySelectorAll('#lab-quadrat-tools .lab-tool')].filter(b => !b.hidden); return t.length === 2 && t.every(b => b.classList.contains('is-next')) && t.map(b => b.dataset.act).join() === 'throw,thick' && [...document.querySelectorAll('.lab-quadrat-set button')].every(b => !b.offsetParent); })()"));
+  await clicks('#lab-quadrat-tools [data-act="thick"]');
+  ov = await overlay();
+  ok('…the wrong option (thickest) gets a card that explains bias, and nothing was placed', ov && /Not that one/.test(ov.text) && /bias/.test(ov.text) && (await dbg()).q === null && (await xd()).step === 0, ov && ov.text.slice(0, 120));
   await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('quadrat').intro === true"));
+  await clicks('#lab-quadrat-tools [data-act="throw"]');
+  d = await dbg();
+  ok('…“Throw at random” lands the seeded quadrat at x 4, y 6 and moves to step 2', d.q && d.q.how === 'random' && d.q.x === 4 && d.q.y === 6 && (await xd()).step === 1, d.q);
+  await next();
+  await next();
+  d = await dbg();
+  ok('count, then 5 more at random: six random quadrats, and the picture shows the total and the mean',
+     d.series.n === 6 && d.series.hows.every(h => h === 'random') && (await xd()).step === 3 && /Total 16 · mean 2\.67/.test(await ev("document.getElementById('lab-quadrat-chips').textContent")), d.series);
+  const tools = await ev("[...document.querySelectorAll('#lab-quadrat-tools .lab-tool')].filter(b => !b.hidden).map(b => ({ tok: b.dataset.set + ':' + b.dataset.v, label: b.textContent.trim(), glow: b.classList.contains('is-next') }))");
+  ok('step 4 offers the estimate as four numbers - right, total × 400, the total, the mean - all glowing', tools.length === 4 && tools.every(t => t.glow) && tools.map(t => t.label).sort().join() === ['1,067', '6,400', '16', '2.67'].sort().join(), tools);
+  await clicks('#lab-quadrat-tools [data-set="est"][data-v="forgot"]');
+  ov = await overlay();
+  ok('…the “forgot to divide” number gets its card, and no estimate was made', ov && /forgets to divide/.test(ov.text) && (await dbg()).hist.length === 0, ov && ov.text.slice(0, 120));
+  await closeOv();
+  await clicks('#lab-quadrat-tools [data-set="est"][data-v="right"]');
+  d = await dbg();
+  const see = await xd();
+  ok('…the right number works the estimate out (1,067 against the true 900) and the runner moves to See', d.hist[0] && d.hist[0].est === 1067 && d.hist[0].trueN === 900 && see.phase === 'see', { hist: d.hist[0], phase: see.phase });
+  const seeTxt = await ev("document.querySelector('#lab-exp').textContent.replace(/\\s+/g, ' ')");
+  ok('See states the data file’s numbers, which are the bench’s own, and answers the prediction', seeTxt.includes(EXP.see.saw) && /1,067/.test(EXP.see.saw) && /You said: About 100/.test(seeTxt) && /It was About 1,000/.test(seeTxt), seeTxt.slice(0, 240));
+  ok('See pins the notebook: the hand count, the five more, the estimate', d.evid.length === 3 && /Quadrat 1 at x 4, y 6: 8 guava/.test(d.evid[0]) && /^5 more at random:/.test(d.evid[1]) && /Estimate from 6 quadrats: mean 2\.67 × 400 ≈ 1,067 guava\. True number: 900/.test(d.evid[2]), d.evid);
+  await click('[data-exp="explore"]');
+  await ev('LabQuadrat.experiment.reset(); true');
+  ok('“Explore the bench” shows the old bench, with the four tools back', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && [...document.querySelectorAll('#lab-quadrat-tools .lab-tool')].filter(b => !b.hidden).map(b => b.dataset.act).join() === 'throw,count,auto5,estimate' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none'"));
   ok('top bar: back, Biology · Grade 9, title, gloves and help',
      await ev("!!document.querySelector('.lab-quadrat .lab-top [data-act=\"hub\"]') && /Biology · Grade 9/.test(document.querySelector('.lab-quadrat .lab-eyebrow').textContent) && /Quadrat Field/.test(document.querySelector('.lab-quadrat h1').textContent) && !!document.querySelector('.lab-top [data-act=\"gloves\"]') && !!document.querySelector('.lab-quadrat [data-act=\"help\"]')"));
   await clicks('.lab-top [data-act="help"]');
@@ -143,25 +190,25 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
     start: !!document.querySelector('.lab-start') })`);
   let g = await gs();
   ok('Throw your first quadrats: step 1 - gloves on - and that button glows', g.box && /Step 1 of 8/.test(g.text) && /gloves/i.test(g.text) && g.next === 'gloves:on' && !g.start, g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('guava is already chosen, so that step is skipped and “Throw at random” glows under the picture',
      g.next === 'throw' && /Step 3 of 8/.test(g.text) && await ev("!!document.querySelector('.lab-tools .is-next')"), g);
-  await click('[data-guide-do]');
-  let d = await dbg();
+  await next();
+  d = await dbg();
   ok('the quadrat lands on a random square and the picture switches to the quadrat', d.q && d.q.how === 'random' && d.view === 'zoom' && d.q.x >= 0 && d.q.x < 20, d.q);
   g = await gs();
   ok('…then “Count (edge rule)” glows', g.next === 'count' && /Step 4 of 8/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   d = await dbg();
   const rule0 = d.q.cls.in.length + d.q.cls.edge_in.length;
   ok('the count follows the edge rule (inside + top/left, never bottom/right) and goes in the table',
      d.q.counted && d.q.count === rule0 && d.series.n === 1 && d.series.counts[0] === rule0
      && await ev("document.querySelectorAll('#lab-notebook .lab-table tbody tr').length === 1"), d.q);
-  for (let i = 0; i < 3; i++) await click('[data-guide-do]');
+  for (let i = 0; i < 3; i++) await next();
   d = await dbg();
   ok('two quadrats, then five more at random: seven in the table, all random', d.series.n === 7 && d.series.hows.every(h => h === 'random'), d.series);
-  await click('[data-guide-do]');
+  await next();
   ov = await overlay();
   ok('working out the estimate completes it, with “What you found out”', ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text), ov);
   d = await dbg();
@@ -390,7 +437,7 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
       for (let k = 0; k < 30 && LabQuadrat._debug().guide; k++) {
         const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
         if (o) return 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        const btn = document.querySelector('#labs-root .is-next');
         if (btn) btn.click(); else LabQuadrat._tick(2);
       }
       if (LabQuadrat._debug().guide) return 'guide never finished at step ' + LabQuadrat._debug().guide.step;

@@ -89,11 +89,18 @@ const ChapterPreview = (() => {
     if (!packs.some(p => p.id === _state.packId)) _state.packId = packs[0] ? packs[0].id : null;
 
     const who = _surface === 'teacher' ? 'your pupils' : 'your child';
+    // ⚠ Says where the real thing happens, not only that this is not it. Same
+    //   sentence as the in-run banner (_setPreviewBanner in app.js) - a parent
+    //   who reads one and not the other must not get two different answers.
+    const how = _surface === 'teacher'
+      ? 'Work only counts when a pupil answers it signed in themselves — from their own sign-in or your class link.'
+      : 'Work only counts when your child answers it themselves: tap 🎒 Switch to student mode on your dashboard and they sign in with their PIN.';
     host.innerHTML = `
       <div class="space-y-4">
         <p class="text-sm text-gray-600 dark:text-gray-300">
           Open any chapter exactly as ${esc(who)} would see it — the same questions, hints and explanations.
           <b>Nothing you answer is saved or counted.</b>
+          <span class="block mt-1">${esc(how)}</span>
         </p>
 
         <div class="grid gap-3 sm:grid-cols-3">

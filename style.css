@@ -2937,8 +2937,31 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 /* Remove the screen-level max-width caps; board frame handles layout */
 #pd-panel-calendar .max-w-2xl,
 #pd-panel-shop .max-w-3xl,
-#pd-panel-messages .max-w-2xl,
-#pd-panel-settings .max-w-2xl { max-width: 100%; }
+#pd-panel-messages .max-w-2xl { max-width: 100%; }
+
+/* ── Account & Settings inside the dashboard ──
+   ⚠ The renderer stopped writing .max-w-2xl a long time ago, so the rule above
+   matched nothing and Settings kept rendering as a 32rem strip down the middle
+   of a 1400px board - phone layout on a desktop. Anchor on .parent-settings-col,
+   a class the renderer owns, not on whichever Tailwind width it happens to use.
+   ⚠ Scoped to the PANEL. The same markup is also its own screen
+   (#screen-profile), where a centred column is the right answer. */
+#pd-panel-settings .parent-settings-col { max-width: 100%; }
+
+/* Two columns once there is room. Multicol, not grid: the cards are wildly
+   different heights and grid would leave a hole under every short one. */
+@media (min-width: 900px) {
+  #pd-panel-settings .parent-settings-col { columns: 2; column-gap: 1rem; }
+  /* ⚠ space-y-4 puts the gap on margin-top, which in a column puts a 1rem
+     indent above the first card of column two. Move it to margin-bottom. */
+  #pd-panel-settings .parent-settings-col > * {
+    break-inside: avoid;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  /* The back button and title head the page, not the left column. */
+  #pd-panel-settings .parent-settings-col > :first-child { column-span: all; }
+}
 
 /* Calendar back button is hidden inline (tab bar is the nav) */
 #pd-panel-calendar .pd-cal-back { display: none; }
@@ -3413,6 +3436,7 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
    is a win; red would make a list of the child own errors look like a telling-off. */
 .sh-mission-fix { border-color: rgba(52,211,153,.34); }
 .sh-mission-fix:hover { border-color: rgba(52,211,153,.6); background: rgba(52,211,153,.09); }
+.sh-mission-resting { opacity: .78; border-style: dashed; }
 
 /* Schedule screen - section dividers */
 .sch-section-head {
@@ -7101,6 +7125,10 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
 .tc-cd-loading { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 120px; color: rgba(240,236,220,.7); font-size: .85rem; }
 .tc-cd-err     { color: #fca5a5; font-size: 1rem; }
 .tc-cd-empty   { color: rgba(240,236,220,.45); font-size: 1rem; margin: .5rem 0 1rem; }
+.tc-cd-hint    { color: rgba(240,236,220,.7); font-size: .9rem; margin: -.25rem 0 .9rem; line-height: 1.45; }
+/* Class calendar rows share the worksheet card; the left edge says what kind of date it is. */
+.tc-ev-card { border-left: 4px solid #a78bfa; }
+.tc-ev-exam { border-left-color: #f87171; } .tc-ev-due { border-left-color: #fbbf24; } .tc-ev-absent { border-left-color: #9ca3af; } .tc-ev-hw { border-left-color: #c4b5fd; } .tc-ev-ws { border-left-color: #5eead4; }
 
 /* ── Tip box - sticky-note yellow (matches teacher home) ─────────── */
 .tc-cd-tip {
@@ -8371,31 +8399,79 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
 /* ── Header ───────────────────────────────────────────────────────────── */
 .ta-mode-switch { font-size: .95rem !important; padding: .55rem 1rem !important; min-height: 44px; }
 
-/* ── Main navigation: 4 tabs + More ───────────────────────────────────── */
+/* ── Main navigation: folder tabs, the same row the parent dashboard uses ──
+   ⚠ The seven tools used to hide behind a '⋯ More' dropdown here. Its rules
+   (.ta-more-wrap/-btn/-menu/-badge/-ico) are gone with it. .ta-more-OPTIONS,
+   further down, is a different component - the Set Work advanced panel. */
 #screen-teacher .ta-tab { min-height: 44px; }
-.ta-more-wrap { position: relative; margin-left: auto; align-self: flex-end; }
-#screen-teacher .ta-more-btn {
-  position: relative; min-height: 44px; padding: .55rem 1rem .5rem; border: none; border-radius: 5px 5px 0 0;
-  background: rgba(255,255,255,.06); color: rgba(240,236,220,.75); cursor: pointer;
-  font-family: 'Caveat', cursive; font-size: 1.1rem; font-weight: 700; transition: background .14s, color .14s;
+
+/* ── Account & Settings, rendered inside the teacher Settings tab ─────────
+   The markup is _renderParentProfile()'s - white cards and Tailwind greys - and
+   the board already knows what to do with that: 'strip inner white boxes' above
+   flattens .bg-white and every .bg-gray-*, and the chalk rules repaint p, label,
+   .text-xs, .text-sm, h3 and b. So the cards come out right for free.
+   ⚠ What does NOT come out right is a chip with its own COLOURED background.
+   The strip rule only knows white and grey, so the role pill, the selected theme
+   button, 'Set a PIN' and the danger zone kept a pale indigo/green/red ground
+   while the board painted their text cream: measured at 1.04-1.08:1, invisible.
+   Those keep their MEANING (the indigo border still marks the chosen theme) but
+   take a chalk wash and a tinted ink.
+   ⚠ Enumerated, not [class*="bg-indigo-"]: that substring also matches
+   bg-indigo-500, and flattening Save and Change Password would turn the two
+   primary actions on this screen into ghosts. */
+#screen-teacher .ta-tab-content .ta-account-host { margin-top: 1.1rem; }
+#screen-teacher .ta-tab-content .parent-settings-col { max-width: 100%; }
+/* The tab row is the navigation; a back arrow inside a tab goes nowhere useful.
+   The heading stays - it is what separates the account from the cards above. */
+#screen-teacher .ta-tab-content .parent-settings-col > :first-child button { display: none; }
+/* Its own heading sits ON the board, not inside a card, so it is chalk. */
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col > :first-child :is(h2, h3) { color: #f0ece8 !important; }
+
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-amber-50,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-blue-100,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-green-100,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-indigo-50,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-indigo-100,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-purple-100,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-red-50,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .bg-red-100,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-amber-900\/20,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-blue-900\/30,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-green-900\/30,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-indigo-900\/20,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-indigo-900\/30,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-indigo-900\/40,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-purple-900\/30,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-red-900\/20,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .dark\:bg-red-900\/40 {
+  background: rgba(255,255,255,.12) !important;
 }
-#screen-teacher .ta-more-btn:hover, #screen-teacher .ta-more-btn[aria-expanded="true"] { background: rgba(255,255,255,.14); color: #f0ece0; }
-#screen-teacher .ta-more-btn.ta-more-btn-active { background: #f2ebe0; color: #2a4d28; box-shadow: 0 -2px 0 #4a7a40 inset; }
-.dark #screen-teacher .ta-more-btn.ta-more-btn-active { background: #1a1208; color: #86efac; }
-.ta-more-badge { position: absolute; top: 2px; right: 2px; padding: 1px 6px; border-radius: 999px; background: #ef4444; color: #fff; font-size: .62rem; font-family: system-ui, sans-serif; font-weight: 800; }
-.ta-more-menu {
-  position: absolute; right: 0; top: calc(100% + 6px); z-index: 60; width: 290px; max-width: calc(100vw - 2rem);
-  padding: .4rem; border-radius: 14px; background: var(--tp-bg); color: var(--tp-ink); border: 1px solid var(--tp-line);
-  box-shadow: 0 18px 40px rgba(0,0,0,.28);
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-indigo-600,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-indigo-700,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-indigo-800,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-indigo-900 { color: #c7d2fe !important; }
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-red-500,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-red-600,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-red-700 { color: #fca5a5 !important; }
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-green-700 { color: #86efac !important; }
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-amber-700,
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-amber-800 { color: #fcd34d !important; }
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-blue-700 { color: #93c5fd !important; }
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col .text-purple-700 { color: #e9d5ff !important; }
+
+/* ⚠ And the greys on elements the board rule does NOT reach. It names label,
+   .text-xs, .text-sm and p; a bare <span class="text-gray-500"> is none of
+   those, which is how "cannot be changed here" stayed slate-on-board at 1.53:1
+   when everything around it was already chalk. */
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col :is(.text-gray-800, .text-gray-700, .text-gray-600) { color: #f0ece8 !important; }
+#screen-teacher#screen-teacher .ta-tab-content .parent-settings-col :is(.text-gray-500, .text-gray-400) { color: rgba(240,236,220,.8) !important; }
+
+/* Two columns once there is room, exactly like the parent's settings panel. */
+@media (min-width: 900px) {
+  #screen-teacher .ta-tab-content .parent-settings-col { columns: 2; column-gap: 1rem; }
+  #screen-teacher .ta-tab-content .parent-settings-col > * { break-inside: avoid; margin-top: 0; margin-bottom: 1rem; }
+  #screen-teacher .ta-tab-content .parent-settings-col > :first-child { column-span: all; }
 }
-.ta-more-menu.hidden { display: none; }
-.ta-more-menu button { display: flex; align-items: center; gap: .7rem; width: 100%; min-height: 52px; padding: .5rem .7rem; border: 0; border-radius: 10px; background: none; color: inherit; text-align: left; cursor: pointer; }
-.ta-more-menu button:hover, .ta-more-menu button:focus-visible { background: var(--tp-soft); outline: none; }
-.ta-more-menu button[aria-current="page"] { background: var(--tp-soft); box-shadow: inset 3px 0 0 var(--tp-accent); }
-.ta-more-menu .ta-more-ico { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 34px; border-radius: 9px; background: var(--tp-soft); font-size: 1.05rem; }
-.ta-more-menu strong, .ta-more-menu small { display: block; }
-.ta-more-menu strong { font-size: .92rem; }
-.ta-more-menu small { margin-top: 1px; color: var(--tp-muted); font-size: .74rem; }
 
 /* ── Home ─────────────────────────────────────────────────────────────── */
 .th-hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
@@ -8797,7 +8873,6 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
   .tr-row-actions { grid-column: 2 / -1; margin-top: .3rem; }
   .th-row { flex-wrap: wrap; }
   .th-row-btn { flex-basis: 100%; }
-  .ta-more-menu { width: 260px; }
   #screen-teacher .ta-tab-content { padding: 1rem .8rem .9rem; }
 }
 
@@ -10338,3 +10413,10 @@ button.tc-cd-stat:focus-visible { outline: 3px solid #f4ce52; outline-offset: 2p
   .st-text { font-size:1rem; line-height:1.65; }
   .st-opt { font-size:.85rem; padding:10px 12px; }
 }
+
+/* "🔬 Try the experiment" on a chapter card / syllabus row - injected by
+   innerHTML, so it cannot use Tailwind classes (ui-css.md). */
+.ch-lab-chip { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 4px 10px; border-radius: 999px; border: 1px solid #93c5fd; background: #eff6ff; color: #1d4ed8; font-size: 0.74rem; font-weight: 700; cursor: pointer; margin: 4px 8px 4px 0; }
+.ch-lab-chip:hover { background: #dbeafe; }
+.dark .ch-lab-chip { background: rgba(59, 130, 246, 0.18); border-color: #1e3a8a; color: #bfdbfe; }
+.ch-foot .ch-lab-chip { margin-right: auto; }

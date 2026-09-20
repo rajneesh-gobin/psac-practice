@@ -1,8 +1,9 @@
 'use strict';
 // Science Labs › Measurement Lab, driven in a real browser.
 //
-// Proves the lab end to end at 360px: it loads only its own files, the
-// welcome and the start panel say what to do, a guided experiment runs from
+// Proves the lab end to end at 360px: it loads only its own files, every
+// grade opens on an experiment Aim (lab_experiment.js) with the old bench
+// behind "Explore", the start panel says what to do, a guided experiment runs from
 // the first tap to "Experiment complete", every instrument draws at every zoom
 // for everything it can measure, every result card and the hazard card fire
 // from the mistake they explain, all three missions finish and score, EVERY
@@ -63,6 +64,11 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   };
   const click = sel => ev(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el) return 'missing: ' + ${JSON.stringify(sel)}; el.click(); return true; })()`);
   const dbg = () => ev('LabMeasure._debug()');
+  // The control the guide wants next glows; tapping it is what a pupil does.
+  const next = () => click('.lab-measure .is-next');
+  // Since 2026-09-19 the Aim of the first experiment IS the welcome; the old
+  // bench sits behind "Explore the bench freely", on a clean bench.
+  const explore = async () => { await click('[data-exp="explore"]'); await ev('LabMeasure.experiment.reset(); true'); await sleep(200); };
   const overlay = () => ev(`(() => { const o = document.getElementById('lab-overlay'); if (!o) return null;
     return { cls: o.className, text: o.textContent.replace(/\\s+/g, ' ').slice(0, 3000),
              signs: [...o.querySelectorAll('.lab-sign figcaption')].map(f => f.textContent) }; })()`);
@@ -101,12 +107,17 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   const labScripts = await ev("[...document.scripts].map(s => s.src).filter(s => /engine\\/labs\\//.test(s)).map(s => s.split('/').pop()).join()");
   ok('it fetches its own two files, data first, after the shell', /lab_core\.js/.test(labScripts) && /lab_measure_data\.js,lab_measure\.js/.test(labScripts), labScripts);
   await sleep(500);
-  ok('lab_measure.css is linked and styles the reading box',
-     await ev("!!document.querySelector('link[data-lab-css=\"measure\"]') && getComputedStyle(document.getElementById('lab-measure-read')).borderRadius === '14px'"));
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Measurement Lab/.test(ov.text) && /Show me how/.test(ov.text), ov);
-  await closeOv();
+  ok('first visit opens on an experiment Aim, with no welcome card in the way',
+     !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim' && LabExperiment._debug().lab === 'measure'"), ov);
+  ok('…the Aim is the first Grade 9 experiment, with the tools, the shelf and the typed box out of the way (nothing to type)',
+     await ev("document.getElementById('lab-exp-title').textContent === LabMeasureData.forGrade(LabMeasureData.EXPERIMENTS, 9)[0].title && [...document.querySelectorAll('#labs-root .lab-tool, #labs-root .lab-item')].every(b => b.hidden || !b.offsetParent) && !document.querySelector('#labs-root input[type=text]')"));
   ok('the welcome is remembered', await ev("Labs.store('measure').intro === true"));
+  await explore();
+  ok('"Explore the bench freely" shows the old bench, with the typed reading box back',
+     await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && !!document.querySelector('.lab-start') && !!document.getElementById('lab-measure-read')"));
+  ok('lab_measure.css is linked and styles the reading box',
+     await ev("!!document.querySelector('link[data-lab-css=\"measure\"]') && getComputedStyle(document.getElementById('lab-measure-read')).borderTopLeftRadius === '14px'"));
   ok('the start panel: “What would you like to do?”, the three steps, ≥3 guided experiments and ≥2 missions',
      await ev(`(() => { const s = document.querySelector('.lab-start'); return !!s && /What would you like to do/.test(s.textContent)
        && s.querySelectorAll('.lab-how li').length === 3 && s.querySelectorAll('[data-guide]').length >= 3 && s.querySelectorAll('[data-mission]').length >= 2; })()`));
@@ -128,13 +139,13 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     start: !!document.querySelector('.lab-start') })`);
   let g = await gs();
   ok('step 1 of 5 asks for the vernier caliper, and that shelf item glows', g.box && /Step 1 of 5/.test(g.text) && g.next === 'vernier' && !g.start, g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('step 2: the coin glows', /Step 2 of 5/.test(g.text) && g.next === 'coin', g);
   await click('[data-spec="coin"]');
   g = await gs();
   ok('tapping the coin on the shelf (not the yellow button) also moves the guide on: zoom glows', /Step 3 of 5/.test(g.text) && g.next === 'zin', g);
-  await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next();
   g = await gs();
   ok('zoomed to 3×, the Check button glows', (await dbg()).zoom === 3 && /Step 5 of 5/.test(g.text) && g.next === 'check', g);
   ok('the canvas has drawn the scales', await ev("(() => { const c = document.getElementById('lab-canvas'); const p = c.getContext('2d').getImageData(c.width / 2, c.height * 0.3, 1, 1).data; return p[3] > 0; })()"));
@@ -358,7 +369,9 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   console.log('\n-- every discovery');
   const ids = await ev('LabMeasureData.forGrade(LabMeasureData.DISCOVERIES, 9).map(d => d.id)');
   const unsolved = [];
-  // Follows a discovery's own "Show me how", closing any result card on the way.
+  // Follows a discovery's own "Show me how": taps the control that glows,
+  // types a reading (or the named misread) the way a pupil does, and closes
+  // any result card on the way.
   const solve = id => ev(`(() => {
       const st = Labs.store('measure'); delete st.disc['${id}'];
       document.getElementById('lab-overlay')?.remove();
@@ -368,30 +381,18 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
         if (hz) return 'hazard: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 90);
         const rc = document.querySelector('#lab-overlay.is-result [data-ov-close]');
         if (rc) { rc.click(); continue; }
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
-        if (btn) btn.click(); else LabMeasure._tick(20);
+        const tok = LabMeasure._debug().guide.token || '';
+        if (tok === 'read') LabMeasure.showReading();
+        else if (tok.startsWith('misread:')) LabMeasure.misread(tok.slice(8));
+        else { const btn = document.querySelector('.lab-measure .is-next'); if (btn) btn.click(); }
+        LabMeasure._tick(20);
       }
       if (LabMeasure._debug().guide) return 'guide never finished at step ' + LabMeasure._debug().guide.step + ': ' + document.getElementById('lab-guide').textContent.replace(/\\s+/g, ' ').slice(0, 120);
       document.getElementById('lab-overlay')?.remove();
       return !!st.disc['${id}'];
     })()`);
   for (const id of ids) {
-    const res = await ev(`(() => {
-      const st = Labs.store('measure'); delete st.disc['${id}'];
-      document.getElementById('lab-overlay')?.remove();
-      LabMeasure.discoveryGuide('${id}');
-      for (let k = 0; k < 24 && LabMeasure._debug().guide; k++) {
-        const hz = document.querySelector('#lab-overlay.is-hazard');
-        if (hz) return 'hazard: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-        const rc = document.querySelector('#lab-overlay.is-result [data-ov-close]');
-        if (rc) { rc.click(); continue; }
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
-        if (btn) btn.click(); else LabMeasure._tick(20);
-      }
-      if (LabMeasure._debug().guide) return 'guide never finished at step ' + LabMeasure._debug().guide.step + ': ' + document.getElementById('lab-guide').textContent.replace(/\\s+/g, ' ').slice(0, 120);
-      document.getElementById('lab-overlay')?.remove();
-      return !!st.disc['${id}'];
-    })()`);
+    const res = await solve(id);
     if (res !== true) unsolved.push(id + ' → ' + res);
   }
   ok(`all ${ids.length} discoveries unlock by following their own “Show me how”`, unsolved.length === 0, unsolved);
@@ -449,9 +450,9 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   if (!at4.registered) console.log('NOTE the cards’ exam heading comes from the grade the shell opened the lab at, so “In the PSAC exam” is asserted only once Grade 4 is registered.');
   const cardOk4 = o => o && /is-result/.test(o.cls) && /What happened/.test(o.text) && /What you should have done/.test(o.text) && examHead.test(o.text);
   ov = await overlay();
-  ok('first visit at Grade 4: its own short welcome (pick cm, ml, °C, g or s) and “Show me how”',
-     ov && /Welcome to the Measurement Lab/.test(ov.text) && /pick cm, ml, °C, g or s/.test(ov.text) && /Show me how/.test(ov.text) && !/vernier/i.test(ov.text), ov);
-  await closeOv();
+  ok('first visit at Grade 4 opens on a Grade 4 experiment Aim (g4_…), no welcome card in the way, nothing to type',
+     !ov && await ev("LabExperiment._debug().phase === 'aim' && LabExperiment._debug().list.length >= 3 && LabExperiment._debug().list.every(x => /^g4_/.test(x)) && !document.querySelector('#labs-root input[type=text]')"), ov);
+  await explore();
   ok('…remembered as intro4, apart from the Grade 9 welcome', await ev("Labs.store('measure').intro4 === true && Labs.store('measure').intro === true"));
   const exp4 = await ev(`(() => { const D = LabMeasureData; return { g: D.forGrade(D.GUIDES, 4).map(x => x.id), m: D.forGrade(D.MISSIONS, 4).map(x => x.id), d: D.forGrade(D.DISCOVERIES, 4).map(x => x.id) }; })()`);
   const s4 = await ev(`({ guides: [...document.querySelectorAll('.lab-start [data-guide]')].map(b => b.dataset.guide), missions: [...document.querySelectorAll('.lab-start [data-mission]')].map(b => b.dataset.mission),
@@ -481,10 +482,10 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
      g.box && /Step 1 of 4/.test(g.text) && g.next === 'ruler30' && await ev("!!document.querySelector('#lab-guide [data-act=\"say-guide\"]')"), g);
   await click('#lab-guide [data-act="say-guide"]');
   let spk = await speech();
-  ok('🔊 reads the step aloud, in English, when tapped', spk.spoken.length === 1 && /Pick the ruler/.test(spk.spoken[0].text) && /^en/.test(spk.spoken[0].lang) && (await dbg()).talking, spk);
-  await click('[data-guide-do]');
+  ok('🔊 reads the step aloud, in English, when tapped', spk.spoken.length === 1 && /the ruler to pick it/.test(spk.spoken[0].text) && /^en/.test(spk.spoken[0].lang) && (await dbg()).talking, spk);
+  await next();
   ok('…and the next step stops it', (await speech()).cancels > spk.cancels && !(await dbg()).talking);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('step 3: put the pencil’s end on 0 - the “Start” tool glows', /Step 3 of 4/.test(g.text) && g.next === 'ctx' && /Start: ruler end/.test(await ev("document.getElementById('lab-measure-ctx').textContent")), g);
   await type4('13', 'cm');
@@ -728,8 +729,10 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     ok(`Labs.grade() is ${G}, and the eyebrow says “Science · Grade ${G}”`,
        await ev(`Labs.grade() === ${G} && LabMeasure._debug().grade === ${G} && document.querySelector('.lab-measure .lab-eyebrow').textContent.trim() === 'Science · Grade ${G}'`));
     const o = await overlay();
-    ok(`first visit at Grade ${G}: its own welcome and “Show me how”, no vernier`, o && /Welcome to the Measurement Lab/.test(o.text) && welcome.test(o.text) && /Show me how/.test(o.text) && !/vernier/i.test(o.text), o);
-    await closeOv();
+    ok(`first visit at Grade ${G} opens on a g${G}_ experiment Aim, no welcome card in the way, nothing to type`,
+       !o && await ev(`LabExperiment._debug().phase === 'aim' && LabExperiment._debug().list.length >= 3 && LabExperiment._debug().list.every(x => /^g${G}_/.test(x)) && !document.querySelector('#labs-root input[type=text]')`), o);
+    void welcome;
+    await explore();
     ok(`…remembered as intro${G}, apart from the other grades’ welcomes`, await ev(`Labs.store('measure').intro${G} === true && Labs.store('measure').intro4 === true && Labs.store('measure').intro === true`));
     const exp = await ev(`(() => { const D = LabMeasureData; return { g: D.forGrade(D.GUIDES, ${G}).map(x => x.id), m: D.forGrade(D.MISSIONS, ${G}).map(x => x.id), d: D.forGrade(D.DISCOVERIES, ${G}).map(x => x.id) }; })()`);
     const s = await ev(`({ guides: [...document.querySelectorAll('.lab-start [data-guide]')].map(b => b.dataset.guide), missions: [...document.querySelectorAll('.lab-start [data-mission]')].map(b => b.dataset.mission),
@@ -779,7 +782,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   await click('.lab-start [data-guide="g7_cyl"]');
   g = await gs();
   ok('step 1 of 5 asks for the measuring cylinder, and it glows', g.box && /Step 1 of 5/.test(g.text) && g.next === 'cyl78', g);
-  for (let k = 0; k < 4; k++) await click('[data-guide-do]');
+  for (let k = 0; k < 4; k++) await next();
   g = await gs();
   ok('…zoomed to 3× on the water, the Check button glows', (await dbg()).zoom === 3 && /Step 5 of 5/.test(g.text) && g.next === 'check', g);
   await type4('47', 'cm³');
@@ -921,9 +924,9 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   await click('.lab-start [data-guide="g8_block"]');
   g = await gs();
   ok('step 1 of 4 asks for the density bench, and it glows', g.box && /Step 1 of 4/.test(g.text) && g.next === 'dens8', g);
-  await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next();
   ok('…the aluminium block shows its mass and sides; nothing to zoom', (await dbg()).spec === 'alu8' && await ev("document.querySelector('[data-act=\"zin\"]').disabled"));
-  await click('[data-guide-do]');
+  await type4('0.37', 'g/cm³');
   ov = await overlay();
   ok('the upside-down slip, 40 ÷ 108 = 0.37: FORMULA UPSIDE DOWN card', cardOk78(ov) && /upside down/.test(ov.text) && /108 ÷ 40 = 2\.70 g\/cm³/.test(ov.text), ov);
   await closeOv();
@@ -1015,6 +1018,8 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
 
   console.log('\n-- back to Grade 9');
   const at9 = await atGrade(9);
+  ok('Grade 9 again opens on its own experiment Aim', await ev("LabExperiment._debug().phase === 'aim' && !/^g\\d_/.test(LabExperiment._debug().exp)"));
+  await explore();
   const s9 = await ev(`({ eyebrow: document.querySelector('.lab-measure .lab-eyebrow').textContent.trim(), guides: [...document.querySelectorAll('.lab-start [data-guide]')].map(b => b.dataset.guide),
     missions: [...document.querySelectorAll('.lab-start [data-mission]')].map(b => b.dataset.mission), insts: [...document.querySelectorAll('#lab-panel [data-inst]')].map(b => b.dataset.inst),
     found: document.getElementById('lab-found-n').textContent, say: !!document.querySelector('[data-act="say-coach"]'), uselect: !!document.getElementById('lab-measure-uselect') })`);

@@ -27,6 +27,10 @@
 //    H₂ from acid:    Zn + 2HCl → ZnCl₂ + H₂
 //    H₂ burning:      2H₂ + O₂ → 2H₂O
 //  Time-lapse: 1 second on the bench = about 30 seconds in a real lab.
+//
+//  Since 2026-09-20 the lab opens on EXPERIMENTS (lab_experiment.js, Aim →
+//  Predict → Do → See → Check → Done). The guides, missions and discoveries
+//  survive in Explore. CONTROLS is the one place a button's label lives.
 // ══════════════════════════════════════════════
 const LabGastestsData = (() => {
 
@@ -91,6 +95,37 @@ const LabGastestsData = (() => {
       key: 'limewater test',
     },
   };
+
+  // ── Air ───────────────────────────────────────────────────────────────────
+  // Dry air by volume. The bench's Air composition table and canvas bar draw
+  // from this list, and the "What is air made of?" See text is checked
+  // against it (scripts/test-labs-gastests-data.js).
+  const AIR = [
+    { id: 'n2',  name: 'Nitrogen',              formula: 'N₂',  pct: 78,   color: '#7FA7D9' },
+    { id: 'o2',  name: 'Oxygen',                formula: 'O₂',  pct: 21,   color: '#BDD7F2' },
+    { id: 'ar',  name: 'Argon and other gases', formula: '',    pct: 0.96, color: '#C9D3DC' },
+    { id: 'co2', name: 'Carbon dioxide',        formula: 'CO₂', pct: 0.04, color: '#9DBF9D' },
+  ];
+  const airPct = id => (AIR.find(a => a.id === id) || {}).pct;
+  // The notebook line the bench writes when the table is opened.
+  const airLine = () => `Air: nitrogen ${airPct('n2')}%, oxygen ${airPct('o2')}%, carbon dioxide only ${airPct('co2')}%.`;
+
+  // ── Controls (guide token → the button a child taps) ─────────────────────
+  // `label` is the button's visible text - an experiment step's `say` must
+  // contain it; `sel` is what a test taps. The bench renders its tool row from
+  // TOOL_ORDER, so a label here IS the label on screen.
+  const CONTROLS = {
+    goggles:          { label: 'Goggles',         sel: '#lab-goggles' },
+    setup:            { label: 'Set up',          icon: '⚗️', act: 'setup',          id: 'btn-setup',     sel: '[data-act="setup"]' },
+    collect:          { label: 'Collect gas',     icon: '🧪', act: 'collect',        id: 'btn-collect',   sel: '[data-act="collect"]' },
+    'test:glowing':   { label: 'Glowing splint',  icon: '🪵', act: 'test:glowing',   id: 'btn-glowing',   sel: '[data-act="test:glowing"]' },
+    'test:lit':       { label: 'Lighted splint',  icon: '🔥', act: 'test:lit',       id: 'btn-lit',       sel: '[data-act="test:lit"]' },
+    'test:limewater': { label: 'Limewater',       icon: '🥛', act: 'test:limewater', id: 'btn-limewater', sel: '[data-act="test:limewater"]' },
+    aircomp:          { label: 'Air composition', icon: '🌍', act: 'aircomp',        id: 'btn-aircomp',   sel: '[data-act="aircomp"]' },
+    reset:            { label: 'Reset station',   icon: '🧽', act: 'reset-station',  id: 'btn-reset',     sel: '[data-act="reset-station"]' },
+  };
+  GAS_ORDER.forEach(id => { CONTROLS['station:' + id] = { label: GASES[id].name, icon: GASES[id].icon, sel: `[data-station="${id}"]` }; });
+  const TOOL_ORDER = ['setup', 'collect', 'test:glowing', 'test:lit', 'test:limewater', 'aircomp', 'reset'];
 
   // testResult: what happens when a test is applied to a gas.
   // correct = true when this is the proper test for this gas.
@@ -474,17 +509,124 @@ const LabGastestsData = (() => {
     },
   ];
 
+  // ── Experiments (lab_experiment.js) ───────────────────────────────────────
+  // Aim → Predict → Do → See → Check → Done, Grade 7, chapter g7s-air.
+  // `setup` tokens are applied silently before the Aim (`mystery:<gas>`
+  // selects a station and hides its name). Every step is a decision (`ask`
+  // + `options`, wrong ones explaining themselves) or an observation (`on`
+  // + `say`). A wrong test is HEARD by the bench, never applied - the card is
+  // the lesson. `check` refs are "<mission id>:<quiz index>" or inline.
+  // See texts are replayed against testResult()/AIR by the data test.
+  const EXPERIMENTS = [
+    { id: 'relight', grades: [7], chapter: 'g7s-air', icon: '🪵',
+      title: 'Which gas relights a glowing splint?',
+      aim: 'The tube is full of oxygen, made from hydrogen peroxide. A glowing splint is a wooden stick that has been lit and blown out. Which test proves the gas is oxygen?',
+      setup: ['station:o2', 'setup', 'collect'],
+      predict: { q: 'What will a glowing splint do in oxygen?', answer: 'relight',
+        options: [{ id: 'relight', label: 'Burst back into flame' }, { id: 'out', label: 'Go out' }, { id: 'pop', label: 'Go pop' }] },
+      steps: [
+        { ask: 'A flame is going near pure oxygen. What comes first?', on: 'goggles', options: ['goggles', 'test:glowing'],
+          wrong: { 'test:glowing': 'Not yet. Pure oxygen makes a flame burn fiercely. Put your goggles on first.' } },
+        { ask: 'The tube is full of oxygen. Which test proves it?', on: 'test:glowing', options: ['test:glowing', 'test:limewater', 'test:lit'],
+          wrong: { 'test:limewater': 'Limewater is the test for carbon dioxide. In oxygen it stays clear and proves nothing.',
+                   'test:lit': 'A lighted splint keeps burning in oxygen and in ordinary air, so it cannot tell them apart. Use a glowing splint.' } },
+      ],
+      see: { saw: 'The glowing splint burst back into flame.',
+             learn: 'Oxygen supports burning. A glowing splint that relights is the test for oxygen.' },
+      check: ['unknown_gas:0', 'gas_expert:0', 'gas_expert:3'],
+      exam: 'NCE Grade 7: "A glowing splint is lowered into a gas jar and bursts into flame. What does the result show?" Oxygen is present, because it supports burning.' },
+
+    { id: 'milky', grades: [7], chapter: 'g7s-air', icon: '🥛',
+      title: 'Which gas turns limewater milky?',
+      aim: 'Marble chips and dilute acid made this gas, and the tube is full. Limewater is a clear liquid that changes in one gas only.',
+      setup: ['goggles', 'station:co2', 'setup', 'collect'],
+      predict: { q: 'What will the limewater do when the gas bubbles through it?', answer: 'milky',
+        options: [{ id: 'milky', label: 'Turn milky', sub: 'cloudy white' }, { id: 'clear', label: 'Stay clear' }, { id: 'red', label: 'Turn red' }] },
+      steps: [
+        { ask: 'Which test proves the gas is carbon dioxide?', on: 'test:limewater', options: ['test:limewater', 'test:glowing', 'test:lit'],
+          wrong: { 'test:glowing': 'The splint goes out - but nitrogen puts a splint out too. That only says "not oxygen".',
+                   'test:lit': 'The flame goes out, but it would in nitrogen as well. A flame going out does not name the gas.' } },
+      ],
+      see: { saw: 'The limewater turned milky (cloudy white).',
+             learn: 'Carbon dioxide turns limewater milky. Tiny grains of solid calcium carbonate form in the liquid - say "milky", not "white".' },
+      check: ['unknown_gas:1', 'gas_expert:1', 'unknown_gas:4'],
+      exam: 'NCE Grade 7: "A gas is bubbled through limewater and the limewater turns milky. What has been shown?" The gas is carbon dioxide.' },
+
+    { id: 'pop', grades: [7], chapter: 'g7s-air', icon: '💥',
+      title: 'Which gas goes pop?',
+      aim: 'Zinc and dilute acid will make hydrogen at this station. Hydrogen burns with a bang. Set it up safely, then test it.',
+      setup: ['station:h2'],
+      predict: { q: 'What will a lighted splint do at the mouth of the hydrogen tube?', answer: 'pop',
+        options: [{ id: 'pop', label: 'A squeaky pop' }, { id: 'out', label: 'It goes out' }, { id: 'nothing', label: 'Nothing happens' }] },
+      steps: [
+        { ask: 'This station uses dilute acid. What do you do first?', on: 'goggles', options: ['goggles', 'setup'],
+          wrong: { setup: 'Stop. Dilute acid can splash into your eyes. Goggles on before you touch the acid.' } },
+        { on: 'setup', say: 'Tap ⚗️ Set up. Watch the bubbles form on the zinc.' },
+        { on: 'collect', say: 'Tap 🧪 Collect gas until the tube is full.' },
+        { ask: 'Hydrogen is in the tube. Which test, and where?', on: 'test:lit', options: ['test:lit', 'test:glowing', 'test:limewater'],
+          wrong: { 'test:glowing': 'A glowing splint inside the tube sets the hydrogen off where it is thickest. It can crack the glass. Hold a lighted splint at the mouth instead.',
+                   'test:limewater': 'Hydrogen does nothing to limewater. It stays clear and you learn nothing.' } },
+      ],
+      see: { saw: 'There was a squeaky pop and a small flash of flame at the tube mouth.',
+             learn: 'Hydrogen burns very fast in air and makes only water. A lighted splint at the mouth of the tube gives a squeaky pop - the test for hydrogen.' },
+      check: ['unknown_gas:2', 'gas_expert:2',
+        { q: 'Why must goggles go on before the hydrogen station is set up?',
+          options: ['The station uses dilute acid, which can splash into the eyes', 'Goggles make the hydrogen pop louder', 'Goggles stop the zinc from reacting', 'Goggles keep the tube from filling too fast'],
+          why: 'Dilute hydrochloric acid irritates the eyes and skin. Safety goggles must be worn whenever dilute acid is used in the laboratory.' }],
+      exam: 'In the exam you may be asked to name a safety precaution when testing gases - "wear safety goggles" is always right. A lighted splint that pops means hydrogen.' },
+
+    { id: 'air', grades: [7], chapter: 'g7s-air', icon: '🌍',
+      title: 'What is air made of?',
+      aim: 'Air is a mixture of gases. One of them makes up most of it. Open the air composition table and find out which.',
+      setup: ['station:o2'],
+      predict: { q: 'Which gas is there most of in air?', answer: 'n2',
+        options: [{ id: 'n2', label: 'Nitrogen' }, { id: 'o2', label: 'Oxygen' }, { id: 'co2', label: 'Carbon dioxide' }] },
+      steps: [
+        { on: 'aircomp', say: 'Tap 🌍 Air composition. Find the biggest number.' },
+      ],
+      see: { saw: 'Nitrogen 78%, oxygen 21%, carbon dioxide only 0.04%.',
+             learn: 'Air is mostly nitrogen. Only the oxygen part - about a fifth - lets things burn. Air is a mixture: its gases are not joined together.' },
+      check: [
+        { q: 'Which gas makes up most of the air?',
+          options: ['Nitrogen', 'Oxygen', 'Carbon dioxide', 'Argon'],
+          why: 'Dry air is about 78% nitrogen. Oxygen is about 21%, and carbon dioxide only 0.04%.' },
+        { q: 'About how much of the air is oxygen?',
+          options: ['About 21%', 'About 78%', 'About 50%', 'About 0.04%'],
+          why: 'Oxygen is about a fifth of the air - 21%. Nitrogen is the 78%.' },
+        { q: 'A candle in a sealed jar goes out long before all the air is used. Why?',
+          options: ['Only the oxygen supports burning, and it runs low', 'The nitrogen puts the candle out deliberately', 'The candle uses up the nitrogen first', 'The jar runs out of space for the flame'],
+          why: 'A flame uses only the oxygen, about a fifth of the air. Nitrogen takes no part, so the candle goes out once the oxygen runs low (g7s-hd-098).' }],
+      exam: 'NCE Grade 7: "Air is roughly 78% nitrogen and 21% oxygen, yet a candle in a sealed jar goes out long before all the gas is used. Why?" Only the oxygen supports burning, and it runs low.' },
+
+    { id: 'unknown', grades: [7], chapter: 'g7s-air', icon: '❔',
+      title: 'An unknown gas: which is it?',
+      aim: 'A tube of gas with no label. Use the tests to find out what it is. One test may not be enough.',
+      setup: ['goggles', 'mystery:co2', 'setup', 'collect'],
+      predict: { q: 'Which gas do you think it is?', answer: 'co2',
+        options: [{ id: 'o2', label: 'Oxygen' }, { id: 'co2', label: 'Carbon dioxide' }, { id: 'h2', label: 'Hydrogen' }] },
+      steps: [
+        { on: 'test:glowing', say: 'Tap 🪵 Glowing splint. Watch the tip.' },
+        { ask: 'The splint went out. Which test now proves what the gas is?', on: 'test:limewater', options: ['test:limewater', 'test:lit', 'test:glowing'],
+          wrong: { 'test:lit': 'A flame going out only says "not oxygen". Nitrogen does the same. It does not name the gas.',
+                   'test:glowing': 'The same test again gives the same answer: "not oxygen". Nitrogen would put it out too.' } },
+      ],
+      see: { saw: 'The glowing splint went out. The limewater turned milky (cloudy white). The unknown gas was carbon dioxide.',
+             learn: 'A splint going out only shows "not oxygen". The limewater test confirms carbon dioxide. One test is not enough.' },
+      check: ['unknown_gas:3', 'gas_expert:4', 'unknown_gas:1'],
+      exam: 'NCE Grade 7: "A pupil tests a gas with a glowing splint and it goes out. She concludes the gas is carbon dioxide. What is wrong with that?" Several gases put a splint out, so one test is not enough.' },
+  ];
+
   // ── SIGN label look-up (shared with lab_core.js) ─────────────────────────
   const SIGN_LABELS = { hot: 'Hot surface', irritant: 'Harmful', goggles: 'Eye protection required' };
 
   // ══════════════════════════════════════════════
   return {
     GRADES, forGrade,
-    GASES, GAS_ORDER, TESTS,
+    GASES, GAS_ORDER, TESTS, AIR, airPct, airLine, CONTROLS, TOOL_ORDER,
     testResult, hazardFor, CORRECT_TEST,
     HAZARDS, RESULTS,
     DISCOVERIES, FACTS,
-    GUIDES, MISSIONS,
+    GUIDES, MISSIONS, EXPERIMENTS,
     SIGN_LABELS,
   };
 })();

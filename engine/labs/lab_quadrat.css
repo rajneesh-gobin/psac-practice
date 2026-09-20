@@ -17,6 +17,12 @@
 .lab-quadrat .lab-contents { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lab-quadrat canvas { touch-action: manipulation; cursor: pointer; }
 
+/* During an experiment step (lab_experiment.js) the tools row holds only that
+   step's controls - one to four - so it wraps to fit instead of leaving empty
+   columns; the estimate offered as an answer is a bare number. */
+[data-exp-mode="do"] .lab-quadrat .lab-tools { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+.lab-quadrat .lab-tool.is-answer { font-variant-numeric: tabular-nums; font-size: 1.05rem; }
+
 /* Gloves toggle: the shared goggles pill, with its own words */
 .lab-quadrat-gloves { font-size: 0.85rem; }
 

@@ -408,7 +408,7 @@ const LabMotionData = (() => {
       steps: [
         { on: 'setup:ramp',  say: 'Tap 🛷 Set up the ramp to place the trolley on the bench.' },
         { on: 'block:on',    say: 'Tap 🧱 Fit the stop block — safety first!' },
-        { on: 'height:20',   say: 'Tap ▲ to raise the ramp to 20 cm.' },
+        { on: 'height:20',   say: 'Tap 20 cm to set the height of the ramp.' },
         { on: 'run',         say: 'Tap ▶ Release — watch the speed-time graph draw itself.' },
         { on: 'gradient',    say: 'Tap 📐 Find the gradient to draw a triangle on the line.' },
         { on: 'area',        say: 'Tap ▦ Shade the area — what distance does it show?' },
@@ -418,10 +418,10 @@ const LabMotionData = (() => {
       lesson: 'On the friction-compensated runway the speed stayed the same: a HORIZONTAL line, acceleration zero. On the flat track friction slowed it: a line sloping DOWN, a deceleration.',
       steps: [
         { on: 'setup:ramp',  say: 'Tap 🛷 Set up the ramp.' },
-        { on: 'height:2',    say: 'Tap ▲ to raise to 2 cm — just enough to cancel friction.' },
+        { on: 'height:2',    say: 'Tap 2 cm — just enough to cancel friction.' },
         { on: 'start:push',  say: 'Tap 👋 Choose "Pushed" to give the trolley a push.' },
         { on: 'run',         say: 'Tap ▶ Push the trolley and watch the line.' },
-        { on: 'height:0',    say: 'Tap ▼ to lay the track flat (0 cm).' },
+        { on: 'height:0',    say: 'Tap 0 cm to lay the track flat.' },
         { on: 'run',         say: 'Tap ▶ Push again — is the line still level?' },
       ] },
     { id: 'walk', icon: '🧭', title: 'Distance or displacement?',
@@ -437,9 +437,104 @@ const LabMotionData = (() => {
       ] },
   ];
 
+  // ── Experiments (lab_experiment.js) ─────────
+  // Aim → Predict → Do → See → Check → Done, run by the shared runner. Every
+  // number in a See or a Predict is computed here from the same model the
+  // bench draws, so it cannot drift from the picture (the data test replays
+  // each experiment's tokens through plan()/walk() and checks the claims).
+  // ⚠ A step's `say` must contain the visible label of its control
+  //   (lab_motion.js _renderControls): "Release the trolley", "Find the
+  //   gradient", "Shade the area", "Jog the route", "20 cm", "Light gates".
+  const P10 = plan(10, 'rest'), P20 = plan(20, 'rest'), P40 = plan(40, 'rest');
+  const EXPERIMENTS = [
+    { id: 'graph_shape', grades: [9], chapter: 'g9s-p4-motion', icon: '🛷',
+      title: 'Does the trolley speed up or stay steady?',
+      aim: 'A trolley at the top of a track with light gates every 0.5 m. Let it go and the data logger draws its speed-time graph as it rolls.',
+      setup: ['setup:ramp', 'block:on', 'start:rest', 'timer:gates', 'meaning:accel', 'height:0'],
+      predict: { q: 'Released from rest on a ramp, what shape will the speed-time line be?', answer: 'up',
+        options: [{ id: 'up', label: 'A straight line going up', sub: 'from the origin' },
+                  { id: 'flat', label: 'A flat line', sub: 'the same speed all the way' },
+                  { id: 'down', label: 'A line curving down', sub: 'slower as it goes' },
+                  { id: 'zero', label: 'A line along the time axis', sub: 'speed 0 the whole time' }] },
+      steps: [
+        { ask: 'The track is flat. Raise one end so the trolley rolls. Which height?', any: ['height:10', 'height:20', 'height:40'],
+          options: ['height:2', 'height:10', 'height:20', 'height:40'],
+          wrong: { 'height:2': '2 cm only cancels friction - a friction-compensated runway. Released from rest, the trolley would not move at all.' } },
+        { on: 'run', say: 'Tap ▶ Release the trolley. Watch the line draw itself as it rolls.' },
+        { on: 'gradient', say: 'Tap 📐 Find the gradient. The triangle shows how much the speed rose each second.' },
+      ],
+      see: { saw: 'The line started at the origin - speed 0 at time 0 - and rose in a straight line until the trolley hit the stop block. It sped up steadily.',
+             learn: 'Released from rest, the trolley gains the same speed every second: uniform acceleration. On a speed-time graph that is a straight line sloping up from the origin, and its gradient is the acceleration.' },
+      check: ['accel:4', 'accel:1', 'accel:6'],
+      exam: 'In the exam you may be shown a speed-time graph and asked what it tells you: a straight line rising to the right means the object is speeding up steadily - uniform acceleration.' },
+    { id: 'which_height', grades: [9], chapter: 'g9s-p4-motion', icon: '⛰️',
+      title: 'Which ramp height gives more acceleration?',
+      aim: `Run 1 is done: released from rest at 10 cm, gradient ${f2(gradientRead(P10).a)} m/s². Now raise the ramp, run it again and compare the two lines.`,
+      setup: ['setup:ramp', 'block:on', 'start:rest', 'timer:gates', 'meaning:accel', 'height:10', 'run', 'gradient'],
+      predict: { q: 'If the ramp is raised higher, what happens to the acceleration?', answer: 'more',
+        options: [{ id: 'more', label: 'It gets bigger', sub: 'a steeper line' },
+                  { id: 'same', label: 'It stays the same', sub: 'same trolley, same track' },
+                  { id: 'less', label: 'It gets smaller', sub: 'a flatter line' }] },
+      steps: [
+        { ask: 'Run 1 used 10 cm. To find out what the height does, which height for run 2?', on: 'height:40', options: ['height:10', 'height:40'],
+          wrong: { 'height:10': 'That is run 1 again. To find out what the height does you must change it - and change only the height.' } },
+        { on: 'run', say: 'Tap ▶ Release the trolley. Compare the new line with the grey line from run 1.' },
+        { ask: 'The line slopes up. What does its gradient (its steepness) measure?', on: 'meaning:accel', options: ['meaning:accel', 'meaning:speed'],
+          wrong: { 'meaning:speed': 'The gradient is change in speed ÷ time - that is an acceleration, in m/s². A speed is read off the vertical axis, in m/s.' } },
+        { on: 'gradient', say: `Tap 📐 Find the gradient. Is it bigger than run 1's ${f2(gradientRead(P10).a)} m/s²?` },
+      ],
+      see: { saw: `From 40 cm the line was much steeper: gradient ${f2(gradientRead(P40).a)} m/s², against ${f2(gradientRead(P10).a)} m/s² from 10 cm. The trolley reached the stop block in ${f2(P40.tEnd)} s instead of ${f2(P10.tEnd)} s.`,
+             learn: 'A higher ramp gives a greater acceleration, so the speed-time line is steeper. Only the height changed - same trolley, same track - so it is a fair test.' },
+      check: ['accel:5', 'accel:0', 'accel:1'],
+      exam: 'In the exam you may be asked to read the acceleration from a speed-time graph: a straight line from 0 to 12 m/s in 6 s has a gradient of 12 ÷ 6 = 2 m/s².' },
+    { id: 'field_walk', grades: [9], chapter: 'g9s-p4-motion', icon: '🧭',
+      title: 'Distance or displacement?',
+      aim: 'Out on the school field with a tape measure and a compass. Jog round the corner, then jog a route that ends where it started.',
+      setup: ['setup:walk', 'disp:straight', 'route:corner'],
+      predict: { q: 'You jog 30 m north, then 40 m east. Which is bigger?', answer: 'distance',
+        options: [{ id: 'distance', label: 'The distance', sub: 'every metre you jogged' },
+                  { id: 'displacement', label: 'The displacement', sub: 'start to finish in a straight line' },
+                  { id: 'same', label: 'They are the same', sub: 'same jog, same size' }] },
+      steps: [
+        { ask: 'The red arrow will be the displacement. How is it measured?', on: 'disp:straight', options: ['disp:straight', 'disp:path'],
+          wrong: { 'disp:path': 'Along the path is the DISTANCE - every metre you jogged. Displacement is the straight line from start to finish, with its direction.' } },
+        { on: 'walk', say: 'Tap 🚶 Jog the route. Watch the yellow trail, then the red arrow.' },
+        { ask: 'Now a route that finishes where it started. Which one?', any: ['route:back', 'route:track'], options: ['route:back', 'route:track', 'route:straight'],
+          wrong: { 'route:straight': 'A straight 60 m jog east ends 60 m from the start. Distance and displacement would both be 60 m - nothing to compare.' } },
+        { on: 'walk', say: 'Tap 🚶 Jog the route. How long is the red arrow this time?' },
+      ],
+      see: { saw: `Round the corner you jogged ${f1(walk('corner').distance)} m but finished only ${f1(walk('corner').displacement)} m from the start. Finishing where you started, the displacement was 0 m - however far you jogged.`,
+             learn: 'Distance is the whole length of the path: a scalar. Displacement is the straight line from start to finish, with a direction: a vector. Turn a corner or come back and it is shorter than the distance.' },
+      check: ['disp:2', 'disp:0', 'disp:1'],
+      exam: 'In the exam you may be asked for the distance AND the displacement of a pupil who walks 40 m east, then 40 m back west: distance 80 m, displacement 0 m - and which of the two is a vector.' },
+    { id: 'avg_speed', grades: [9], chapter: 'g9s-p4-motion', icon: '⏱️',
+      title: 'How fast was the trolley on average?',
+      aim: `Run 1 is in the notebook: 2.0 m down a 20 cm ramp in ${f2(P20.tEnd)} s, timed by the light gates. Work out its average speed, then time it again.`,
+      setup: ['setup:ramp', 'block:on', 'start:rest', 'timer:gates', 'meaning:accel', 'height:20', 'run'],
+      predict: { q: `Run 1: 2.0 m in ${f2(P20.tEnd)} s. What was the average speed?`, answer: 'avg',
+        options: [{ id: 'avg', label: `${f2(speed(TRACK, P20.tEnd))} m/s`, sub: `2.0 ÷ ${f2(P20.tEnd)}` },
+                  { id: 'times', label: `${f2(TRACK * P20.tEnd)} m/s`, sub: `2.0 × ${f2(P20.tEnd)}` },
+                  { id: 'end', label: `${f2(P20.vEnd)} m/s`, sub: 'the speed at the last gate' },
+                  { id: 'minus', label: `${f2(P20.tEnd - TRACK)} m/s`, sub: `${f2(P20.tEnd)} − 2.0` }] },
+      steps: [
+        { ask: 'Time the run again. Which timer has no reaction-time error?', on: 'timer:gates', options: ['timer:gates', 'timer:stopwatch'],
+          wrong: { 'timer:stopwatch': 'You see the trolley move, then press - about 0.2 s late. The time comes out short and the speed too high. Light gates start and stop the clock themselves.' } },
+        { on: 'run', say: 'Tap ▶ Release the trolley. Read the time at the last light gate.' },
+        { on: 'area', say: 'Tap ▦ Shade the area under the line. That area is the 2.0 m you divide by the time.' },
+      ],
+      see: { saw: `2.0 m in ${f2(P20.tEnd)} s. Average speed = distance ÷ time = 2.0 ÷ ${f2(P20.tEnd)} = ${f2(speed(TRACK, P20.tEnd))} m/s. At the end the trolley was doing ${f2(P20.vEnd)} m/s - twice the average.`,
+             learn: 'Average speed = total distance ÷ total time, in m/s, even when the speed keeps changing. Speeding up steadily from rest, the average is half the final speed.' },
+      check: [{ q: 'The light gates, not a hand stopwatch, timed the run. Why is that more accurate?',
+                options: ['They start and stop the clock themselves, with no reaction time', 'They measure a longer distance', 'They make the trolley roll faster', 'They round the time to a whole second'],
+                why: 'A hand stopwatch is pressed after you see the trolley move - about 0.2 s late. A light gate triggers the instant the beam is broken.' },
+              'disp:3', 'accel:2'],
+      exam: 'In the exam you may be asked to calculate an average speed from a distance and a time, in m/s: a runner who covers 100 m in 20 s has an average speed of 100 ÷ 20 = 5 m/s.' },
+  ];
+
   return { G, TRACK, MARK, FRICTION, PUSH, STILL_SEC, HEIGHTS, REACT, AXES, JOG, FAST_END, MODEL_NOTE,
+
            round, r2, f2, f1, sinTheta, angleDeg, accel, plan, state, timeAt, gates, gradientRead, areaRead, speed,
            stopwatch, mean, reading, ROUTES, pathLength, bearing, dirText, walk,
-           SETUPS, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES };
+           SETUPS, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, EXPERIMENTS };
 })();
 if (typeof window !== 'undefined') window.LabMotionData = LabMotionData;

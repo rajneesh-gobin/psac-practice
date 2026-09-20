@@ -23,12 +23,22 @@ const G6ENG_SYLLABUS = {
     { id:'continuous',      name:'Continuous Tense' },  // 2
     { id:'perfect',         name:'Perfect Tense' },  // 3
     { id:'present_tense',   name:'Present Tense' },  // 5
+    // ⚠ Named in the Grade 6 column as "Common Phrasal verbs"; the word
+    //   "phrasal" appeared nowhere in the pack. Same id as grade9-english.
+    { id:'phrasal_verbs',   name:'Phrasal Verbs' },
   ]},
   'g6eng-clauses': { subsections: [
     { id:'cloze',           name:'Gap-fill (Past Paper Style)' },  // 9
     { id:'clause_types',    name:'Main & Subordinate Clauses' },  // 18
     { id:'conjunctions',    name:'Conjunctions' },  // 3
     { id:'punctuation',     name:'Punctuation' },  // 1
+    // ⚠ The Grade 6 column of the NCF grammar table names adverbs of degree,
+    //   adverbs modifying an adjective, and the prepositions for/with/without.
+    //   The word "adverb" appeared in NONE of this pack's 988 questions. Both
+    //   ids are the ones sibling packs already use (grade4/5-english carry
+    //   `adverbs`, grade9-english carries `prepositions`).
+    { id:'adverbs',         name:'Adverbs' },
+    { id:'prepositions',    name:'Prepositions' },
   ]},
   'g6eng-comprehension': { subsections: [
     { id:'evidence',        name:'Using Evidence (PEE)' },  // 2

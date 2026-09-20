@@ -391,10 +391,11 @@ STATIC_QUESTIONS.push(
     explanation:'<b>15</b> is odd. It ends in 5.' }),
 
   makeMCQ({ id:'g1mth-pat-064', chapterId:'g1mth-patterns', difficulty:2, subsection:'odd_even_patterns',
-    question:'Tom has 8 stickers. He shares them equally between 2 children. How many does each child get?',
-    options:['4','3','5','8'], answer:'4',
-    hint:'8 is even. 8 ÷ 2 = ?',
-    explanation:'8 ÷ 2 = <b>4</b>. Each child gets 4 stickers.' }),
+    question:'Tom has 8 stickers. Can he share them equally between 2 children with none left over?',
+    options:['Yes, because 8 is an even number','No, because 8 is an odd number','No, because 8 is too many','Yes, because 8 is an odd number'],
+    answer:'Yes, because 8 is an even number',
+    hint:'Even numbers split into two equal groups. Odd numbers always leave one over.',
+    explanation:'<b>8 is an even number</b>, so it splits into two equal groups with none left over. An odd number such as 7 would always leave one sticker over.' }),
 
   makeMCQ({ id:'g1mth-pat-065', chapterId:'g1mth-patterns', difficulty:1, subsection:'odd_even_patterns',
     question:'Which number does NOT belong with the odd numbers: 1, 3, 4, 5, 7?',

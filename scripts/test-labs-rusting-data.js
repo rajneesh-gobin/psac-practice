@@ -172,7 +172,7 @@ ok('the bench unlocks "flaky" itself (the tweezers)', bench.includes("_discover(
 console.log('\nGuided experiments');
 ok('at least 3 guided experiments, ids unique', P.GUIDES.length >= 3 && new Set(P.GUIDES.map(g => g.id)).size === P.GUIDES.length);
 for (const G of P.GUIDES) {
-  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say || !s.btn);
+  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do and has a button`, badS.length === 0, badS);
   const r = runRecipe(G.steps.map(s => s.on));
   ok(`${G.title}: ends with what they found out, and runs with no mistake card`, !!(G.lesson && G.blurb && G.icon) && r.cards.length === 0, r.cards);

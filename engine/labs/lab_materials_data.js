@@ -540,7 +540,136 @@ const LabMaterialsData = (() => {
        { on: 'test:bottle',    say: 'Tap the plastic bottle — where does plastic come from?' }]),
   ];
 
-  return { GRADES, MATERIALS, OBJECTS, PROPS, STATIONS, TESTER, JOBS, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES,
+  // ── Experiments (lab_experiment.js, LAB_SPEC §10) ──
+  // Aim → Predict → Do → See → Check → Done. Re-cut from the guides, the
+  // mission quizzes and the discoveries above; the bench answers the
+  // prediction, never the text. Tokens the bench accepts:
+  //   station:<id>  lights:on|off  power:battery|socket  test:<obj>
+  //   sort:<prop>   job:<id> (answered right)  show:<job>  pick:<job>:<obj>
+  // `check` refs "<mission id>:<quiz index>" or an inline { q, options, why }
+  // (first option is the answer). The torch, origin and heat topics have no
+  // mission quiz, so those checks are inline, cut from the Grade 4 question
+  // stems (g4s-mat-001/003/004/009/011/012) and the discoveries.
+  // ⚠ Floating is not in the Grade 4 questions (see the header), so it stays
+  //   an Explore guide and is not an experiment.
+  const EXPERIMENTS = [
+    { id: 'magnet_pull', grades: [4], chapter: 'g4sci-materials', icon: '🧲',
+      title: 'Which things does a magnet pull?',
+      aim: 'A magnet hangs over the table. Test some things and find out which ones it pulls.',
+      setup: ['station:magnet'],
+      predict: { q: 'Which will the magnet pull?', answer: 'nail',
+        options: [{ id: 'nail', label: 'The iron nail' }, { id: 'copper', label: 'The copper wire' },
+                  { id: 'both', label: 'Both of them', sub: 'they are both metals' }, { id: 'none', label: 'Neither' }] },
+      steps: [
+        { on: 'test:nail', say: 'Tap the Iron nail. Watch the magnet.' },
+        { on: 'test:copper', say: 'Copper is a metal too. Tap the Copper wire.' },
+        { ask: 'Which one will the magnet pull?', on: 'test:pin', options: ['test:pin', 'test:bottle', 'test:wood'],
+          wrong: { 'test:bottle': 'The magnet did not pull the plastic bottle. Plastic is not a metal. Only iron and steel are attracted (pulled by a magnet).',
+                   'test:wood': 'The magnet did not pull the wooden block. Wood is not a metal. Only iron and steel are attracted (pulled by a magnet).' } },
+      ],
+      see: { saw: 'The magnet pulled the iron nail and the steel pin. It did not pull the copper wire.',
+             learn: 'A magnet attracts iron and steel. Attracted means the magnet pulls it. Copper is a metal, but a magnet does not pull it.' },
+      check: ['magnet_hunt:0', 'magnet_hunt:4', 'magnet_hunt:2'],
+      exam: 'In the exam you may be asked which object a magnet attracts. A steel nail or an iron key - never a copper coin, plastic, wood or rubber.' },
+    { id: 'light', grades: [4], chapter: 'g4sci-materials', icon: '🔦',
+      title: 'What lets light through?',
+      aim: 'A torch, a screen and three things to test. Which one lets the light through to the screen?',
+      setup: ['station:torch'],
+      predict: { q: 'Which one lets light through clearly?', answer: 'glass',
+        options: [{ id: 'glass', label: 'The glass tile' }, { id: 'frosted', label: 'The frosted glass' }, { id: 'wood', label: 'The wooden block' }] },
+      steps: [
+        { ask: 'The room lights are on. What should you do first?', on: 'lights:off', options: ['lights:off', 'test:glass'],
+          wrong: { 'test:glass': 'Too bright! With the room lights on you cannot see the torch light through the glass tile. Switch the lights off first. Then every test is fair.' } },
+        { on: 'test:glass', say: 'Tap the Glass tile. Look at the screen.' },
+        { ask: 'Which one gives a dim, blurry glow on the screen?', on: 'test:frosted', options: ['test:frosted', 'test:stone', 'test:bottle'],
+          wrong: { 'test:stone': 'A dark shadow. No light got through the stone. Stone is opaque: light cannot pass through it.',
+                   'test:bottle': 'Bright light on the screen. Clear plastic is transparent, like glass: light goes right through it.' } },
+        { ask: 'Which one makes a dark shadow?', on: 'test:wood', options: ['test:wood', 'test:paper', 'test:glass'],
+          wrong: { 'test:paper': 'A dim, blurry glow. Tracing paper is translucent, like frosted glass: only some light gets through.',
+                   'test:glass': 'Bright light on the screen, like before. Glass is transparent: light goes right through it.' } },
+      ],
+      see: { saw: 'Glass tile: bright light on the screen. Frosted glass: a dim, blurry glow. Wooden block: a dark shadow.',
+             learn: 'Glass is transparent: light goes through it. Frosted glass is translucent: only some light gets through, all blurry. Wood is opaque: no light gets through, so it makes a shadow.' },
+      check: [
+        { q: 'Which material is transparent - you can see through it clearly?', options: ['Glass', 'Wood', 'Stone', 'Cardboard'],
+          why: 'Light passes through glass clearly. Wood, stone and cardboard are opaque.' },
+        { q: 'Which of these is translucent?', options: ['Frosted glass', 'Clear glass', 'Wood', 'Metal'],
+          why: 'Frosted glass lets some light through, but everything looks blurry.' },
+        { q: 'What is an opaque material?', options: ['A material light cannot go through', 'A material you can see through clearly', 'A material that glows in the dark', 'A material that is very soft'],
+          why: 'Opaque means no light gets through. It makes a dark shadow, like the wooden block did.' },
+      ],
+      exam: 'In the exam you may be asked which material is transparent, translucent or opaque. Glass is transparent; frosted glass and tracing paper are translucent; wood, stone and metal are opaque.' },
+    { id: 'bulb', grades: [4], chapter: 'g4sci-materials', icon: '💡',
+      title: 'Which things let electricity through?',
+      aim: 'A small battery, a bulb and a gap. Put a thing across the gap. If the bulb lights, electricity went through it.',
+      setup: ['station:circuit'],
+      predict: { q: 'Which one will NOT light the bulb?', answer: 'bottle',
+        options: [{ id: 'copper', label: 'The copper wire' }, { id: 'bottle', label: 'The plastic bottle' }, { id: 'lead', label: 'The pencil lead' }] },
+      steps: [
+        { ask: 'Which power is safe for the test?', on: 'power:battery', options: ['power:battery', 'power:socket'],
+          wrong: { 'power:socket': 'Stop! Never use a wall socket. Mains electricity is very strong. It can give a shock that kills. Use the small battery: it is safe to touch.' } },
+        { on: 'test:copper', say: 'Tap the Copper wire. Does the bulb light up?' },
+        { ask: 'Which one keeps the bulb dark?', on: 'test:bottle', options: ['test:bottle', 'test:nail', 'test:foil'],
+          wrong: { 'test:nail': 'The bulb lit up! Iron lets electricity through. Iron is a conductor, like every metal.',
+                   'test:foil': 'The bulb lit up! Aluminium lets electricity through. Aluminium is a conductor, like every metal.' } },
+        { on: 'test:lead', say: 'Pencil lead is not a metal. Tap the Pencil lead.' },
+      ],
+      see: { saw: 'The copper wire and the pencil lead lit the bulb. The plastic bottle kept it dark.',
+             learn: 'Copper and pencil lead are conductors: electricity passes through them. Plastic is an insulator: it stops electricity. That is why wires are covered in plastic.' },
+      check: ['bulb:1', 'bulb:3', 'bulb:4'],
+      exam: 'In the exam you may be asked which material is a good electrical conductor (copper wire, any metal). And why wires are covered in plastic or rubber: it is an insulator.' },
+    { id: 'pot', grades: [4], chapter: 'g4sci-materials', icon: '🍲',
+      title: 'Which material for a cooking pot?',
+      aim: 'Two jobs in the kitchen: a cooking pot and a spoon for hot soup. Pick the best material for each.',
+      setup: ['show:pot'],
+      predict: { q: 'A metal spoon and a wooden spoon stand in hot soup. Which one gets hot?', answer: 'metal',
+        options: [{ id: 'metal', label: 'The metal spoon' }, { id: 'wood', label: 'The wooden spoon' }, { id: 'both', label: 'Both of them' }] },
+      steps: [
+        { ask: 'A pot must let heat through to the food. Which material?', on: 'pick:pot:foil', options: ['pick:pot:foil', 'pick:pot:bottle', 'pick:pot:wood', 'pick:pot:sponge'],
+          wrong: { 'pick:pot:bottle': 'Plastic is a poor conductor of heat: heat passes through it very slowly. The food would stay cold. A cooking pot must be a good conductor of heat.',
+                   'pick:pot:wood': 'Wood is a poor conductor of heat: heat passes through it very slowly. The food would stay cold. A cooking pot must be a good conductor of heat.',
+                   'pick:pot:sponge': 'Sponge is a poor conductor of heat, and it would soak up the soup! A cooking pot must be a good conductor of heat.' } },
+        { ask: 'A spoon for hot soup must stay cool to hold. Which material?', on: 'pick:spoon:wood', options: ['pick:spoon:wood', 'pick:spoon:nail', 'pick:spoon:pin', 'pick:spoon:copper'],
+          wrong: { 'pick:spoon:nail': 'Iron is a good conductor of heat: heat passes through it quickly. The spoon would get too hot to hold.',
+                   'pick:spoon:pin': 'Steel is a good conductor of heat: heat passes through it quickly. The spoon would get too hot to hold.',
+                   'pick:spoon:copper': 'Copper is a good conductor of heat: heat passes through it quickly. The spoon would get too hot to hold.' } },
+      ],
+      see: { saw: 'Aluminium was right for the pot: heat passes through it quickly. Wood was right for the spoon: heat passes through it very slowly.',
+             learn: 'Metals are good conductors of heat, so pots are made of metal. Wood is a poor conductor of heat, so a wooden spoon stays cool to hold.' },
+      check: ['right_job:2',
+        { q: 'A metal spoon and a wooden spoon stand in hot soup. Which one gets hot to hold?',
+          options: ['The metal spoon - metal is a good conductor of heat', 'The wooden spoon - wood is a good conductor of heat', 'Both of them - every spoon gets hot', 'Neither - soup cannot heat a spoon'],
+          why: 'Metal is a good conductor of heat, so the metal spoon gets hot. Wood is a poor conductor, so the wooden spoon stays cool.' }],
+      exam: 'In the exam you may be asked which material is best for a cooking pot. Metal, because it conducts heat. And why a wooden spoon stays cool to hold.' },
+    { id: 'origin', grades: [4], chapter: 'g4sci-materials', icon: '🌳',
+      title: 'Natural or made in a factory?',
+      aim: 'Where does each material come from - a plant, the ground, or a factory? Test three things and find out.',
+      setup: ['station:origin'],
+      predict: { q: 'Where does cotton come from?', answer: 'plant',
+        options: [{ id: 'plant', label: 'A plant' }, { id: 'factory', label: 'A factory' }, { id: 'ground', label: 'The ground' }] },
+      steps: [
+        { on: 'test:towel', say: 'Tap the Cotton towel. Where does cotton come from?' },
+        { ask: 'Which one is made in a factory?', on: 'test:bottle', options: ['test:bottle', 'test:wood', 'test:stone'],
+          wrong: { 'test:wood': 'Wood comes from trees. Nobody makes it in a factory. Wood is natural.',
+                   'test:stone': 'Stone comes from the ground. Nobody makes it in a factory. Stone is natural.' } },
+        { ask: 'Which one comes from a tree?', on: 'test:cork', options: ['test:cork', 'test:foil', 'test:glass'],
+          wrong: { 'test:foil': 'Aluminium is made in a factory from a rock called bauxite. It is man-made.',
+                   'test:glass': 'Glass is made in a factory by heating sand until it melts. It is man-made.' } },
+      ],
+      see: { saw: 'Cotton comes from a plant: natural. Plastic is made in a factory: man-made. Cork is the bark of a tree: natural.',
+             learn: 'Natural materials come from plants, animals or the ground. Man-made materials are made by people in a factory.' },
+      check: [
+        { q: 'Which of these is a man-made material?', options: ['Plastic', 'Cotton', 'Wood', 'Stone'],
+          why: 'Plastic is made in a factory. Cotton, wood and stone come from nature.' },
+        { q: 'Cork is the bark of a tree. So cork is…', options: ['A natural material', 'A man-made material', 'A metal', 'A conductor'],
+          why: 'Anything that comes from a plant, an animal or the ground is natural.' },
+        { q: 'Glass is made from sand. Why is glass called man-made?', options: ['People change the sand into glass in a factory', 'Sand is not natural', 'Glass grows on trees', 'Glass is a metal'],
+          why: 'Sand is natural, but people heat it in a factory to make glass. So glass is man-made.' },
+      ],
+      exam: 'In the exam you may be asked which materials are natural and which are man-made. Wood, cotton, stone, rubber and cork are natural; plastic, glass, metal and nylon are man-made.' },
+  ];
+
+  return { GRADES, MATERIALS, OBJECTS, PROPS, STATIONS, TESTER, JOBS, DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, EXPERIMENTS,
            obj, isMetal, materialName, valueOf, station, result, say, judge };
 })();
 if (typeof window !== 'undefined') window.LabMaterialsData = LabMaterialsData;

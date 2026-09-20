@@ -1,13 +1,16 @@
 'use strict';
 // Science Labs › Microscope, driven in a real browser.
 //
-// Proves the lab end to end: it loads its own three files when opened, lands
-// with "What would you like to do?", a guided experiment runs to its end (and
-// every other guide does too), every discovery unlocks by following its own
-// "Show me how", every hazard and result card fires and explains itself (the
-// consequence plays on the canvas first), all three missions can be finished
-// with three stars, the animation loop really runs, Calm Mode applies effects
-// at once, and the bench fits a 360px phone with no page errors.
+// Proves the lab end to end: it loads its own three files when opened, opens
+// on an experiment Aim at both grades (lab_experiment.js, since 2026-09-20 -
+// scripts/test-labs-experiments.js walks the experiments themselves), and
+// behind "Explore the bench freely" the old bench still lands with "What would
+// you like to do?", a guided experiment runs to its end (and every other guide
+// does too), every discovery unlocks by following its own "Show me how", every
+// hazard and result card fires and explains itself (the consequence plays on
+// the canvas first), all missions can be finished with three stars, the
+// animation loop really runs, Calm Mode applies effects at once, and the bench
+// fits a 360px phone with no page errors.
 //
 // Run:  CHROME_PATH=<Chrome for Testing> node scripts/test-labs-microscope.js
 // ⚠ Served over file:// (Chrome for Testing here cannot reach 127.0.0.1), and
@@ -77,6 +80,11 @@ process.on('SIGINT', () => quit(130));
   const closeOv = () => click('#lab-overlay [data-ov-close]');
   const set = (k, v) => clicks(`[data-set="${k}"][data-v="${v}"]`);
   const act = a => clicks(`[data-act="${a}"]`);
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step. The test taps what glows, as a child would.
+  const next = () => click('.is-next');
+  // The lab opens on an experiment Aim; the old bench is behind "Explore".
+  const explore = async () => { await click('[data-exp="explore"]'); await ev('LabMicroscope.experiment.reset(); true'); await sleep(150); };
   // A clean bench with no guide and no mission: start a guide, stop it (that resets the bench).
   const freshBench = async rig => {
     await ev("document.getElementById('lab-overlay')?.remove(); LabMicroscope.startGuide('firstlook'); true");
@@ -112,10 +120,15 @@ process.on('SIGINT', () => quit(130));
   await sleep(500);
   ok('its stylesheet is linked and styles the set-up buttons',
      await ev("!!document.querySelector('link[data-lab-css=\"microscope\"]') && getComputedStyle(document.querySelector('.lab-microscope-opt')).minHeight === '44px'"));
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Microscope/.test(ov.text) && /Show me how/.test(ov.text), ov);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('microscope').intro === true"));
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
+  ok('Grade 9 lists 4 experiments, all on the circulatory chapter', await ev("LabMicroscope.experiment.list().length === 4 && LabMicroscope.experiment.list().every(e => e.chapter === 'g9s-b1-circulatory')"));
+  ok('at the Aim no shelf or tool control is on screen', await ev("[...document.querySelectorAll('#labs-root .lab-tool, #labs-root .lab-shelf button')].every(b => b.hidden || !b.offsetParent)"));
+  ok('the welcome is marked seen', await ev("Labs.store('microscope').intro === true"));
+  await explore();
+  ok('"Explore the bench freely" shows the old bench, every control back', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none' && ![...document.querySelectorAll('#labs-root .lab-tool, #labs-root .lab-shelf button')].some(b => b.hidden)"));
   ok('top bar: back, Biology · Grade 9, title and help',
      await ev("!!document.querySelector('.lab-microscope .lab-top [data-act=\"hub\"]') && /Biology · Grade 9/.test(document.querySelector('.lab-microscope .lab-eyebrow').textContent) && !!document.querySelector('.lab-microscope [data-act=\"help\"]')"));
   await act('help');
@@ -140,30 +153,30 @@ process.on('SIGINT', () => quit(130));
   let g = await gs();
   ok('Your first look: already at the microscope, so it opens at step 2 - the blood smear - and that button glows',
      g.box && /Step 2 of 8/.test(g.text) && /blood smear/.test(g.text) && g.next === 'slide:blood' && !g.start, g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('then the stage clips glow', g.next === 'clips' && /Step 3 of 8/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('then the lamp', g.next === 'light:lamp', g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('then the LOW-power objective', g.next === 'obj:4' && /LOW-power/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('then “lower it, watching from the side”', g.next === 'lower' && /SIDE/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   let d = await dbg();
   ok('…the lens is now just above the slide, and nothing is visible yet', d.scope.z === -70 && d.view.focus !== 'sharp', d.scope);
   g = await gs();
-  ok('then COARSE focus UP glows under the picture', g.next === 'coarse:up' && /UP, away from the slide/.test(g.text), g);
-  await click('[data-guide-do]');
+  ok('then COARSE focus UP glows under the picture', g.next === 'coarse:up' && /COARSE focus UP/.test(g.text), g);
+  await next();
   d = await dbg();
   ok('…one turn: still blurred, the step waits', d.view.focus === 'blurred' && (await gs()).next === 'coarse:up', d.view);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('…two turns: the cells appear, and the FINE focus glows', (await dbg()).view.focus === 'near' && g.next === 'fine:up' && /FINE/.test(g.text), g);
-  await click('[data-guide-do]'); await click('[data-guide-do]');
+  await next(); await next();
   ov = await overlay();
   ok('two turns of the fine focus make it sharp and complete the experiment', ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text), ov);
   d = await dbg();
@@ -189,7 +202,8 @@ process.on('SIGINT', () => quit(130));
       for (; k < 60 && LabMicroscope._debug().guide; k++) {
         const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
         if (o) { out[G.id] = 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 80); break; }
-        document.querySelector('#lab-guide [data-guide-do]').click();
+        const btn = document.querySelector('.is-next');
+        if (btn) btn.click(); else LabMicroscope._tick(2);
       }
       if (!out[G.id]) out[G.id] = LabMicroscope._debug().guide ? 'stuck' : (/Experiment complete/.test((document.getElementById('lab-overlay') || {}).textContent || '') ? 'done' : 'no end card');
     }
@@ -338,6 +352,10 @@ process.on('SIGINT', () => quit(130));
   await act('labels');
   await set('rig', 'measure');
   await fit('360px, measuring desk: the same');
+  ok('the desk offers three answers to write, and picking the right one after measuring is marked correct', await clicks('[data-set="fig"][data-v="rbc"]', '[data-set="ruler"][data-v="cell"]', '[data-set="pick"][data-v="b"]') === true
+     && (await dbg()).sheet.done.shown === '×7500' && (await dbg()).sheet.done.correct);
+  await clicks('[data-set="ruler"][data-v="cell"]', '[data-set="pick"][data-v="c"]');
+  await resultCard('picking ×7.5 (units not matched) gets the units card', /1000 times too small/);
   await set('rig', 'scope');
 
   // ── Discoveries ────────────────────────────────
@@ -367,7 +385,7 @@ process.on('SIGINT', () => quit(130));
       for (let k = 0; k < 60 && LabMicroscope._debug().guide; k++) {
         const o = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
         if (o) return 'card: ' + o.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        const btn = document.querySelector('.is-next');
         if (btn) btn.click(); else LabMicroscope._tick(2);
       }
       if (LabMicroscope._debug().guide) return 'guide never finished at step ' + LabMicroscope._debug().guide.step;
@@ -397,6 +415,11 @@ process.on('SIGINT', () => quit(130));
     }
     await ev("Labs.openLab('microscope'); true");
     for (let i = 0; i < 60; i++) { await sleep(150); if (await ev(`!!document.querySelector('#labs-root .lab-microscope') && LabMicroscope._debug().grade === ${n}`)) break; }
+    await sleep(200);
+    // Both grades open on an experiment Aim now; the old bench is behind Explore.
+    const aim = await ev(`(() => { const o = document.getElementById('lab-overlay'); return { overlay: !!o, phase: LabExperiment._debug().phase, n: LabMicroscope.experiment.list().length, chapters: LabMicroscope.experiment.list().map(e => e.chapter).join() }; })()`);
+    ok(`Grade ${n}: opens on an experiment Aim, 4 experiments, no overlay in the way`, !aim.overlay && aim.phase === 'aim' && aim.n === 4, aim);
+    await explore();
     return registered;
   };
   const ids = g => ev(`(() => { const D = LabMicroscopeData, f = l => D.forGrade(l, ${g}).map(x => x.id); return { guides: f(D.GUIDES), missions: f(D.MISSIONS), discs: f(D.DISCOVERIES) }; })()`);
@@ -412,12 +435,9 @@ process.on('SIGINT', () => quit(130));
   console.log('\n-- Grade 7: opening');
   const reg7 = await atGrade(7);
   d = await dbg();
-  ok('Grade 7: the microscope opens at Grade 7 on a fresh bench', d.grade === 7 && d.scope.slide === null && !d.guide && !d.mission, { grade: d.grade, slide: d.scope.slide });
-  ov = await overlay();
-  ok('Grade 7: its own welcome - make your own slides - whose “Show me how” starts the onion guide',
-     ov && /Make your own slides/.test(ov.text) && /Show me how/.test(ov.text) && (await ev("(document.querySelector('#lab-overlay [data-guide]') || {}).dataset?.guide")) === G7.guides[0], ov);
-  await closeOv();
-  ok('…remembered for Grade 7 on its own', await ev("Labs.store('microscope').intro7 === true"));
+  ok('Grade 7: the microscope opens at Grade 7 on a fresh bench (Explore)', d.grade === 7 && d.scope.slide === null && !d.guide && !d.mission, { grade: d.grade, slide: d.scope.slide });
+  ok('Grade 7: its experiments are all on the cells chapter', await ev("LabMicroscope.experiment.list().every(e => e.chapter === 'g7s-cells' && e.grades.join() === '7')"));
+  ok('…the Grade 7 welcome is marked seen on its own key, with no card shown', await ev("Labs.store('microscope').intro7 === true") && !(await overlay()));
   let sh = await shown();
   ok('Grade 7 top bar: “Science · Grade 7”, and no measuring desk', /Science · Grade 7/.test(sh.eyebrow) && !sh.measure, sh);
   ok('Grade 7 start panel: only the Grade 7 guided experiments and missions',
@@ -440,18 +460,18 @@ process.on('SIGINT', () => quit(130));
   await click('.lab-start [data-guide="g7_onion"]');
   g = await gs();
   ok('Onion skin cells: opens at step 2 - make the slide - and the onion-skin button glows', g.box && /Step 2 of 13/.test(g.text) && /onion/.test(g.text) && g.next === 'slide:onion', g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('then ONE drop of iodine glows', g.next === 'stain:iodine' && /iodine/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   g = await gs();
   ok('then the cover slip, lowered at an angle', g.next === 'cover:angle' && /angle/.test(g.text), g);
-  await click('[data-guide-do]');
+  await next();
   d = await dbg();
   ok('…the slide is stained and covered, with no bubbles; then the clips glow', d.scope.stain === 'iodine' && d.scope.cover === 'angle' && !d.view.bubbles && (await gs()).next === 'clips', d.scope);
   let endG = 'stuck';
   for (let k = 0; k < 30; k++) {
-    const t = await ev("(() => { if (!LabMicroscope._debug().guide) return 'done'; if (document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result')) return 'card'; document.querySelector('#lab-guide [data-guide-do]').click(); return 'step'; })()");
+    const t = await ev("(() => { if (!LabMicroscope._debug().guide) return 'done'; if (document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result')) return 'card'; const b = document.querySelector('.is-next'); if (b) b.click(); else LabMicroscope._tick(2); return 'step'; })()");
     if (t !== 'step') { endG = t; break; }
   }
   ov = await overlay();

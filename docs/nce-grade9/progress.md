@@ -4200,3 +4200,527 @@ against the ~30 it has.
 ⚠ Still blocked on the user: the English / French / SMS written-response
 decision. ⚠ Still outstanding: rotate the Supabase Management API token pasted in
 chat, and the import + deploy, which are one action and not a batch step.
+
+---
+
+## Batch 28 — grade9-ict Level 4 (applied), 2026-09-19
+
+### Why
+
+Reported from the app: pupils say there are no Level 4 questions. Measured across
+the built bundles, they were right, and ICT was the worst pack in the project:
+**45 L4 items in 1,708 poolable — 2.6%**, the lowest L4 share of any live pack,
+with **three chapters at zero** (`g9ict-software-os`, `g9ict-presentation`,
+`g9ict-health-safety`).
+
+⚠ **L4 is static-only and nothing in the engine can cover for a thin chapter.**
+`getQuestionsForChapter()` returns `spaceFamilies(shuffle(pool).slice(0, count))`
+for difficulty 4 and never calls a generator — the comment in
+`questions_engine.js` says so. The static stock IS the ceiling, a round asks for
+20, and a chapter with none falls through `loadPracticeQuestion()` to mixed
+practice plus a toast. The timetable day popup offers a Challenge button for
+every chapter regardless (`app.js:9657`; the comment at 11700 concedes it cannot
+check stock), so in those three chapters that button could only ever apologise.
+
+⚠ **The exam inherits the shape of the bank.** `assembleExamPaper()` allocates
+slots by `examWeight` per chapter and uses difficulty only as a CAP, so a pack at
+2.6% L4 produces a 40-question paper carrying about one applied question.
+
+### What was written
+
+**195 items, `g9ict-l4-001` … `g9ict-l4-310`**, in four files under
+`subjects/grade9-ict/questions/`: `l4_applied_systems.js` (computer systems,
+software & OS, troubleshooting, health & safety), `l4_applied_office.js` (word
+processing, spreadsheets, databases, presentation), `l4_applied_networks.js`
+(networks, internet, ethics & security), `l4_applied_algorithms.js`.
+
+**Every one of the 12 chapters now holds exactly 20 L4**, spread over its
+declared subsections. The pack goes 45 → 240 L4, 2.6% → **12.6%** of its pool.
+
+- ⚠ **The id block was chosen, not continued.** 25 id prefixes are already in use
+  in this pack and none begins `g9ict-l4-`. `_familyOf()` matches only the
+  reserved `-fam-` namespace and an id ending in a digit cannot be read as a
+  family variant, so these 195 are 195 distinct exam-usable items.
+- ⚠ **L4 here is the applied band, not harder recall.** Every item puts the pupil
+  in front of a situation — a document already wrong, a fault already reported, a
+  choice with a consequence — and asks what follows. A question answerable by
+  recognising a definition is L1/L2, and this pack holds 1,663 of those.
+- Types: 220 mcq, 16 numeric, 3 text, 1 slots — deliberately not 100% MCQ, which
+  was one of the NCE difficulty audit's findings.
+- **240 L4 items, 240 distinct stems** once every number is replaced by `#`. No
+  template runs. The trap being avoided is grade6-maths, which holds 289 L4 items
+  built from 80 stems, 220 of them in runs of exactly 20.
+
+### Measured after
+
+`_CACHE_VERSION` → **151** (149 at HEAD; the other session had already taken it
+to 150). `SHELL_VERSION` left at **v371**, which is itself undeployed, so this
+rides that shell rather than forcing a second full re-download of the shell.
+`node scripts/sync-local-files.js --write` added the four files to `LOCAL_FILES`.
+
+Green: `check`, `test-subsection-invariant`, `test-live-pack-content`,
+`test-exam-paper-shape`, `test-question-cache-budget`,
+`test-question-import-parity`, `test-mcq-answer-in-options`,
+`test-option-synonyms`, `test-nce-paper`, `test-boot-smoke`,
+`test-question-families`, `test-family-batch`.
+
+`test-option-parity` — **grade9-ict passes cleanly**: answer visibly longest
+**14.9%** (limit 42%), mean within-question spread **7.0** chars (limit 12),
+A/B/C/D drift 3.1% over 1,648 MCQs. The suite-level FAIL is other packs (grades
+1–3, 7–8, and the Grade 9 sciences, English and French).
+
+`test-paper-variety` — ICT **improved**: memorable repeats 17 → **12** against a
+baseline of 17, so it reads DEBT rather than FAIL. It is not fixed: the pack
+still needs the SHAPE batch in `batch_plan.md` §6a (~25–30 more authored tasks),
+because volume at one mark each cannot move a mark total.
+
+### Failures that are NOT this batch, checked one by one
+
+- `test-answer-gradability` — 12 `multi` items in **grade4-french** whose own
+  answer the marker rejects.
+- `test-svg-figures` — pre-existing `g9ict-dm-*`, `g9ict-diag-*` and `g9s-*`
+  figures with no `role="img"`. The one figure this batch adds has it.
+- `test-netlify-redirects` — the publish-root allowlist (PDFs, `workers/`,
+  `wrangler.toml`), i.e. the Cloudflare migration.
+- `test-syllabus-facts` (preflight step 5) — only three packs have a fact ledger
+  and none of them is ICT.
+- ⚠ **`test-task-projection` fails on WINDOWS LINE ENDINGS, not on any code.**
+  Its guard is `/const incoming = await resp\.json\(\);[\s\S]{0,700}?return
+  true;/` against `engine/question_loader.js`. That block is **byte-identical to
+  HEAD apart from 11 carriage returns** (proved: strip the CRs and the two are
+  equal), and the gap inside it measures 698 characters on LF and **709 on
+  CRLF**. So the assertion passes in the object store and fails in a Windows
+  working tree, which is exactly the kind of false failure that teaches people to
+  ignore a harness. Widening the window to 900 fixes it. NOT changed here: it is
+  a shared file under `scripts/` and another session is working in this tree.
+
+### What this batch did NOT do
+
+- **The other five thin Grade 9 packs are untouched**: social-modern-studies 3.6%
+  L4, biology 4.0%, french 4.2%, chemistry 4.7%, physics 5.0%. ICT was taken
+  first because it was the worst.
+- **No visual QA.** Nothing here was rendered and looked at; V-2 is still open,
+  and this batch adds one SVG (a counting loop with no increment) to that queue.
+- **No import and no deploy.** Both remain one action, and the owner's.
+
+---
+
+## Batch 29 — grade9-social-modern-studies, depth + Level 4, 2026-09-20
+
+Seven parallel batches, one per chapter group, dispatched under §7. **899 items
+written, none of them mine to claim: A 164 · B 144 · C 120 · D 120 · E 115 ·
+F 119 · G 117.** The pack goes **441 → 1,340 poolable**.
+
+### Why it was not simply "the ICT batch again"
+
+The Level-4 gap was the reported complaint, and SMS was the second-worst pack in
+the project at **16 L4 in 441 items (3.6%)**, with six chapters at zero. But
+SMS's chapters hold a median of 23 items, so bolting 20 L4 onto each of 17
+chapters would have ended at 765 items with **44% L4** — more Challenge
+questions than L1, L2 and L3 together, against 34 L1 items in the whole pack.
+⚠ **The same numeric target that balances a 1,708-item pack inverts a 441-item
+one.** The decision taken was the larger one: close the 20-per-subsection floor
+AND reach 20 L4 per chapter, so the L4 share lands where the subject's own
+siblings sit (grade7-sms 27.7%, grade8-sms 26.5%).
+
+### Measured after
+
+| | before | after |
+|---|---|---|
+| poolable | 441 | **1,340** |
+| L1 / L2 / L3 / L4 | 34 / 216 / 175 / 16 | **182 / 467 / 347 / 344** |
+| L4 share | 3.6% | **25.7%** |
+| chapters at 20 L4 | 0 of 17 | **17 of 17** |
+| declared subsections at the 20-item floor | 0 of 67 | **67 of 67** |
+| non-MCQ | 36 (8.2%) | **160 (11.9%)** |
+
+**899 items, 899 distinct stems** once every number is replaced by `#`. 101 items
+carry a drawn stimulus, 55 of them an inline SVG.
+
+`_CACHE_VERSION` → **153**. `SHELL_VERSION` left at **v371** (undeployed, so
+this rides it). `scripts/sync-local-files.js --write` added all seven files.
+`scripts/probe-sms-depth.js` is new and is what each batch verified itself
+against — it reads SOURCE through `netlify/lib/questions-sandbox.js`, never the
+built bundles, because those are shared output and are stale mid-batch.
+
+### What the parallel batches caught that a single writer would not
+
+- ⚠ **A stem-normalised scan found four duplicate questions in the pack.** Two
+  are tonight's and were rewritten (`g9sms-dpa-037` repeated
+  `g9sms-pi001` word for word across two different chapters;
+  `g9sms-dpb-023` repeated `g9sms-sb-009`). **Two pre-date all of this and are
+  left for whoever owns them**: `g9sms-my003` / `g9sms-pi003` ask "In which year
+  did Mauritius become a Republic?" in the same subsection at two different
+  difficulty labels, and `g9sms-my033` / `g9sms-pi073` are the same print-media
+  question twice.
+- ⚠ **Two existing items disagree about the cyclone warning classes.**
+  `sms_multi_year.js` says Class 3 closes schools; `sms_paper_inspired.js` says
+  Class IV means dangerous winds "within 12 hours", which reads as wrong — a
+  Class IV is issued once gusts of 120 km/h have already occurred. Batch D
+  declined to restate either and wrote behavioural cyclone items instead. **Not
+  fixed here**: the correction needs the Meteorological Services definitions in
+  front of it, not a guess.
+- ⚠ **`blueprint-social-modern-studies.md` says Tromelin has a military base.**
+  Batch B could not confirm it, contradicted its own brief, and wrote the
+  documented meteorological station instead. The blueprint line is worth
+  checking.
+- ⚠ **`test-svg-figures` measures HTML entities as literal character runs**, so
+  `&#8211;` inside an `<svg><text>` counts as seven characters and reports a
+  label as clipped when it is not. Use the literal `–`, `²`, `É` characters in
+  SVG labels, as `family_expansion.js` already does.
+
+### Option parity — the batch IMPROVED the pack it landed in
+
+Measured from source with the harness's own rule (`ANSWER_MIN_LEN` 25,
+`LONGEST_MARGIN` 3):
+
+| | MCQs | answer visibly longest | leaks | mean spread |
+|---|---|---|---|---|
+| pre-existing items | 405 | 41.2% | 98 | **16.4** (limit 12) |
+| tonight's items | 775 | **5.2%** | **0** | **3.6** |
+| whole pack now | 1,180 | 17.5% | 98 | **7.9** |
+
+⚠ So the pack's mean option spread was FAILING at 16.4 before tonight and passes
+at 7.9 now, purely by dilution. `test-option-parity` still fails this pack on
+the 98 pre-existing leaks — **every one of them is a `my###`, `pi###`, `v###` or
+`sb-###` id and not one is from tonight's 899** — plus one pre-existing item
+(`g9sms-pi054`) that references the textbook in its stem. The pack has no
+`BASELINE` entry, so any leak count above zero fails; recording one would make
+the debt visible instead of drowning the pack in red.
+
+### Everything else, checked one by one
+
+Green: `check`, `test-subsection-invariant`, `test-live-pack-content`,
+`test-exam-paper-shape`, `test-question-cache-budget`,
+`test-question-import-parity`, `test-nce-paper`, `test-mcq-answer-in-options`,
+`test-option-synonyms`, `test-boot-smoke`, `test-question-families`,
+`test-family-batch`, and all seven steps of `scripts/preflight.js`.
+
+⚠ **`test-question-cache-budget` failed once and passes on four consecutive
+re-runs.** It reads the built bundles, and the other session was running
+`netlify/build-questions.js` in this same worktree at that moment, so it read a
+half-written file. A test that reads shared build output is not safe to run
+while anything else may be writing it. Grade 9 measures **1.39 MB cached of a
+3.70 MB budget**, so 899 items did not threaten the budget CLAUDE.md warns about.
+
+Failing for reasons that are not this batch's: `test-svg-figures` and
+`test-answer-gradability` name **none** of this pack's items;
+`test-paper-variety` fails on biology, chemistry and physics and does not cover
+this pack; `test-netlify-redirects` is the publish-root allowlist (the
+Cloudflare migration); and `test-task-projection` is still the Windows
+line-ending artefact recorded in Batch 28 — its 700-character window measures
+698 on LF and 709 on CRLF.
+
+### What this batch did NOT do
+
+- **`docs/nce-grade9/syllabus-social-modern-studies.md` still does not exist.**
+  All seven batches reported it independently. They worked from
+  `blueprint-social-modern-studies.md` plus the manifest's own `syllabus:`
+  prose. ⚠ The blueprint says what the PAPERS ask; the syllabus says what the
+  CURRICULUM requires, and a map derived only from past papers inherits whatever
+  those years omitted. §5 of the batch plan has flagged this for weeks.
+- **The Section B written-response gate (§4) is untouched and still open.**
+  Nothing here changes how extended written answers are handled; these 899 items
+  are all auto-markable.
+- **No visual QA.** 55 new inline SVGs have never been rendered and looked at.
+  V-2 grows again.
+- **No fact ledger**, so `test-syllabus-facts` still cannot tell whether this
+  pack asks what the syllabus teaches — it only reports that the pack has no
+  ledger.
+- **No import and no deploy.** Both remain one action, and the owner's.
+
+### Facts the batches flagged for a second pair of eyes
+
+Free travel for students, the elderly and disabled passengers (E); the 1810
+capitulation terms preserving language, law and religion, and Réunion as French
+territory (G); "housework and care of relatives are still done mainly by women
+in many homes", phrased without a number because it is the syllabus's claim
+about incomplete change rather than a measured figure (F). Each batch also
+listed what it refused to assert — seat counts, the UNGA vote tally, the £3m
+detachment payment, cyclone class thresholds, the presidential term, the
+constitutional-amendment majority, founding dates for SADC, COMESA, the AU and
+the IOC — which is the more useful list.
+
+---
+
+## Batch 30 — grade9-french, Level 4 + depth, 2026-09-20
+
+Four parallel batches under §7: **208 items** — ap1 57 · ap2 59 · ap3 65 · ap4 27.
+The pack goes **1,152 → 1,360 poolable**, L4 **48 → 202 (4.2% → 14.9%)**, and
+**nine of the eleven chapters now sit at 20 L4 with every declared subsection at
+the 20-item floor**.
+
+### Two chapters were deliberately NOT written, and that was the decision
+
+`g9fr-textes-trous` (99 items short) and `g9fr-correction` (74 short) are 173 of
+the 381 this pack owes. ⚠ **They are the NCE equivalents of PSAC Q6 and Q7 and
+the machinery already exists** — `engine/cloze.js` / `makeCloze` and
+`engine/errorhunt.js` / `makeErrorHunt`, as grades 4-6 French use. Filling them
+with ordinary MCQs would have built gap-filling as multiple choice, which is not
+the task the exam sets. ⚠ But `isPoolQuestion()` excludes `cloze` and
+`errorhunt` from EVERY pool, so items written the right way leave practice and
+exams entirely and the 20-per-subsection floor stops meaning anything there.
+**That is a design decision, not a content gap**, and it was left for a batch of
+its own. Both chapters keep their 47 existing ordinary items.
+
+### The gate was honoured, not worked around
+
+`g9fr-comprehension` (weight 8) and `g9fr-redaction` (weight 6) are [GATED] in
+§4 on the undecided extended-written-response question. The instruction given
+was: write only what the gate does not touch. ⚠ **`blueprint-french.md` states
+the problem outright** — rédaction is *"not auto-gradable … read-only prompts
+with a mark scheme reveal"* — which is the decision itself.
+So every rédaction item is ONE writing decision, marked by a four-option choice
+or one word copied out of a draft printed in the stem: which sentence opens the
+paragraph, where a draft slips from passé simple to présent, which pronoun
+reprise keeps the referent clear, where the paragraph break falls, which example
+actually supports the claim. Nothing asks for a long text, a word count, or a
+rubric. Both chapters reached the floor (comprehension 93 → 120, rédaction
+22 → 60, its L4 5 → 21) without presuming an answer.
+
+### `level4Label` was wrong and a child was seeing it
+
+⚠ `grade9-french` carried **`level4Label: 'Word Problems'`** — the MATHS reading
+of L4 — while grades 4-8 French have always carried `'Analyse de texte'`. The
+practice badge renders `🏆 Level 4 - ${ACTIVE_PACK.level4Label}`, so a Grade 9
+French child choosing the hardest level was told it was word problems. Fixed,
+with the reason recorded beside it.
+
+### Measured after
+
+| | before | after |
+|---|---|---|
+| poolable | 1,152 | **1,360** |
+| L1 / L2 / L3 / L4 | 25 / 601 / 478 / 48 | **44 / 621 / 493 / 202** |
+| chapters at 20 L4 | 0 of 11 | **9 of 11** (the two exercise chapters excepted) |
+| non-MCQ | 69 (6.0%) | **130 (9.6%)** |
+
+The 208 new items are **154 L4 · 21 L3 · 20 L2 · 13 L1**, 61 of them typed
+(`makeText`) — 29.3% non-MCQ, far above the pack's own rate, because a typed
+verb form tests French better than four options. 208 items, 208 distinct stems.
+
+`_CACHE_VERSION` → **154**. `SHELL_VERSION` left at **v371** (undeployed).
+`scripts/sync-local-files.js --write` added all four files.
+`scripts/probe-pack-depth.js <pack> [prefix]` is new — the generalised form of
+`probe-sms-depth.js`, which Batch 29 names and which therefore stays.
+
+### ⚠ Three harness defects found, two of them mine
+
+1. **`test-option-synonyms.js` reads the BUILT BUNDLES, not source**
+   (`const BUNDLES = netlify/question-bundles`; its own header says to rebuild
+   first). Three batches were told by the dispatcher that it reads source, ran
+   it, and got a green that could not have covered their own files. Two of them
+   noticed unprompted and re-applied the harness's own `GROUPS` table to their
+   items from source — 0 flags each. ⚠ **A harness that reads shared build
+   output cannot verify a batch that is forbidden from rebuilding**, and the
+   brief must say so.
+2. **The probe rejected two-option MCQs.** `makeTF()` produces an `mcq` with
+   exactly two options (Vrai/Faux off the `g9fr-` id prefix). Both probes
+   demanded four. ⚠ **Two independent batches stopped using `makeTF` to get past
+   it** — a harness changing the content instead of measuring it. Fixed in
+   `probe-pack-depth.js` and `probe-sms-depth.js`, with the reason in each.
+3. `test-question-cache-budget` remains flaky while anything else is rebuilding
+   bundles — recorded in Batch 29 and seen again here.
+
+### A factual error in existing content, corrected
+
+⚠ **The pack taught two different names for the same character.**
+`oeuvres.js` called Simon's mother *"La Blanche"* and glossed her as
+*"Blanche Teston"*; `family_expansion.js` (twice) and `starter_bank.js` call her
+**la Blanchotte**, which is the name Maupassant's text uses. Batch 4 refused to
+pick a side and wrote only *"la mère de Simon"* — correct for a batch, but it
+left a Grade 9 candidate being taught a name that would be marked wrong in Q10.
+`g9fr-oev-003` now answers **La Blanchotte** with new distractors of matched
+length, and `g9fr-oev-002`'s explanation was corrected too. The pack now says
+Blanchotte in all seven places and nothing else.
+
+⚠ **Still outstanding in the same file**: `oeuvres.js` asserts twice that
+Philippe *"adopte légalement"* Simon. The story ends with the marriage and the
+public claim of fatherhood at the forge; a legal adoption is a further claim
+nobody has verified. Batch 4 avoided it. It needs the text, not a recollection.
+Batch 4's full list of what it would not assert — the mother's name, the
+adoption, act and scene numbers, the closing line, Ernestine's change of
+attitude, the palmes académiques — is the more useful artefact and is worth
+reading before anyone writes on these two works again.
+
+### Everything else, checked one by one
+
+Green: `check`, `test-subsection-invariant`, `test-live-pack-content`,
+`test-exam-paper-shape`, `test-question-import-parity`, `test-nce-paper`,
+`test-mcq-answer-in-options`, `test-option-synonyms` (after the central
+rebuild), `test-boot-smoke`, `test-question-families`, `test-family-batch`,
+`test-question-cache-budget`.
+
+`test-option-parity` still fails this pack, **entirely on pre-existing items**:
+
+| | MCQs | answer visibly longest | leaks | mean spread |
+|---|---|---|---|---|
+| pre-existing | 1,061 | 27.6% | **223** | 13.7 (limit 12) |
+| tonight | 147 | **2.0%** | **0** | **4.2** |
+| whole pack now | 1,208 | 24.5% | 223 | **12.5** |
+
+Tonight moved the pack's mean spread 13.7 → 12.5 and contributed zero leaks, but
+only 147 of the 208 new items are four-option MCQs (61 are typed), so it could
+not pull the pack over the line on its own. All 223 leaks are `dav-`, `grv-`,
+`trv-`, `oev-` and similar pre-existing ids.
+
+Not this batch's: `test-svg-figures`, `test-answer-gradability` and
+`test-paper-variety` name **no** grade9-french item at all;
+`test-netlify-redirects` is the publish-root allowlist; `test-task-projection`
+is still the CRLF window from Batch 28; and preflight step 5
+(`test-syllabus-facts`) fails on **grade5-english and grade5-maths**, two of six
+fact ledgers the other session added in this same worktree tonight. No Grade 9
+pack has a ledger.
+
+### What this batch did NOT do
+
+- `g9fr-textes-trous` and `g9fr-correction` — 173 items, and a design decision
+  before any of them can be written. See the top of this entry.
+- The §4 gate is untouched and still open.
+- No visual QA; no fact ledger for any Grade 9 pack; no import; no deploy.
+
+---
+
+## Batch 31 — grade9-english, Level 4 + depth, 2026-09-20
+
+Seven parallel batches under §7: **422 items** — d1 83 · d2 60 · d3 53 · d4 52 ·
+d5 52 · d6 68 · d7 54. The pack goes **845 → 1,267 poolable**, L4 **98 → 314
+(11.6% → 24.8%)**, and **every declared subsection in every chapter is at the
+20-item floor** — 287 owed before, 0 now.
+
+### Listening and Speaking were deliberately left at 3 and 2 items
+
+⚠ `batch_plan.md` §5 said to confirm against the blueprint whether the NCE
+assesses them "before writing a single item for either". **It does not.**
+`blueprint-english.md` §8.8: *"Listening and Speaking are never examined"* —
+zero marks across five N500 papers, because the written paper cannot reach those
+skills. Both chapters already carry `examWeight: 0`. So the probe's
+"still owed 40 to 20 L4 per chapter" is those two chapters and is **correct as
+it stands**; it is not a gap and nothing should be written there.
+
+### The gate was honoured in both gated chapters
+
+`g9eng-reading` (weight 10) and `g9eng-writing` (weight 8) are [GATED] in §4 on
+the undecided extended-written-response question — 18 of the pack's 40 marks.
+The same ruling used for `g9fr-redaction` was applied: **write only what the gate
+does not touch.** Every writing item is ONE decision settled by a four-option or
+true/false choice, or by one word copied out of a draft printed in the stem.
+Reading is passages followed by auto-marked questions, which is what the chapter
+already held. Three batches each recorded the constraint in a file header so a
+later session cannot unpick it by accident. Result: writing 37 → 120 items and
+2 → 29 L4, reading 114 → 160 with all eight subsections at the floor, and
+**nothing written presumes an answer.**
+
+### `level4Label` was wrong here too
+
+⚠ `grade9-english` carried **`level4Label: 'Word Problems'`** — the maths reading
+of L4 — while grades 4-8 English all carry `'Extended Analysis'`. The practice
+badge renders `🏆 Level 4 - ${ACTIVE_PACK.level4Label}`, so a Grade 9 English
+child choosing the hardest level was told it was word problems. **grade9-french
+carried the identical defect and was fixed in Batch 30**: two of the three NCE
+language packs were showing a maths label. Fixed, with the reason recorded.
+
+### Measured after
+
+| | before | after |
+|---|---|---|
+| poolable | 845 | **1,267** |
+| L1 / L2 / L3 / L4 | 31 / 361 / 355 / 98 | **87 / 450 / 416 / 314** |
+| subsections below the floor | 287 items owed | **0** |
+| chapters at 20 L4 | 4 of 17 | **15 of 17** (listening and speaking excepted, correctly) |
+| non-MCQ | 63 (7.5%) | **157 (12.4%)** |
+
+The 422 new items are **216 L4 · 61 L3 · 89 L2 · 56 L1**, 94 of them typed —
+plus a large number of `makeTF` two-option items, which had been unusable until
+the probe was fixed (below). 422 items, 422 distinct stems.
+
+`_CACHE_VERSION` → **155**. `SHELL_VERSION` left at **v371** (undeployed).
+`sync-local-files.js --write` added all seven files.
+
+### ⚠⚠ THE HARNESS WAS WRONG THREE TIMES AND THE BATCHES WERE RIGHT
+
+This is the lesson of the batch, and it cost real content quality before it was
+caught. `scripts/probe-pack-depth.js` is mine, written for these runs, and:
+
+1. **It rejected two-option MCQs.** `makeTF()` produces an `mcq` with exactly two
+   options. **Two independent batches stopped using `makeTF`** to get past the
+   check — a harness changing the content instead of measuring it. After the fix,
+   the very next batch used it 11 times.
+2. **It demanded a `subsection` unconditionally** while guarding only the
+   "is it declared" branch, so a chapter that legitimately declares none
+   (`g9eng-gr-determiners`, `g9eng-gr-modals`) failed every correctly-written
+   item. It was flagging **58 pre-existing shipped `g9eng-gx-*` items** the same
+   way. The batch that hit it **followed the content rule and reported the
+   harness**, with the line number — exactly right, since tagging an undeclared
+   subsection HIDES the question from the Practise screen.
+3. **Its new render-duplicate check was wrong twice in a row**: lowercasing
+   flagged three correct capital-letter items (*"Mary has gone to england."*
+   against *"…to England."*), and mapping every HTML entity to one character
+   made `&gt;=` and `&lt;=` identical in two correct spreadsheet-formula items.
+   It now decodes entities and never changes case.
+
+⚠ **A harness that a batch has to work around is worse than no harness.** Both
+probes carry the reason for each fix inline so the next author does not
+"simplify" them back.
+
+### What the harness DID catch that nothing else would have
+
+`g9eng-d2-051` offered `it&rsquo;s` and `it's` as two of its four options —
+**different strings in JavaScript, identical on screen.** A child would have seen
+the same option twice. `test-option-parity.js` found it only after the central
+rebuild; the probe's raw-string comparison passed it through. That is what the
+render-duplicate check above now exists for, and a sweep of all four Grade 9
+packs worked on this week found **no others**.
+
+### Findings in existing content, recorded not fixed
+
+- ⚠ **Three mis-tagged items in `g9eng-gr-punctuation`**: `g9eng-my-020` is a
+  list-comma question tagged `non_defining_comma`, and `my-021` / `my-022` are
+  capital-letter questions tagged `quotation_marks`. They count toward the floor
+  without teaching their subsection. Retagging moves the floor arithmetic, so it
+  needs doing deliberately, not inside a content batch.
+- ⚠ **`g9eng-gx-072` and `g9eng-sb-019` are the same question** — a duplicate
+  that only became visible once the probe stopped drowning that chapter in false
+  subsection failures.
+- ⚠ **A syllabus/blueprint conflict, resolved in the syllabus's favour**: the
+  writing chapter declares `formal_letter`, and `blueprint-english.md` §8.9 says
+  formal letters **never appear** in the paper — but `syllabus-english.md` line
+  167 lists letters as required curriculum. Written, per the rule that the
+  blueprint says what the PAPERS asked and the syllabus says what the CURRICULUM
+  requires; no item claims the exam asks for one.
+
+### Everything else, checked one by one
+
+Green: `check`, `test-subsection-invariant`, `test-live-pack-content`,
+`test-exam-paper-shape`, `test-question-import-parity`, `test-nce-paper`,
+`test-mcq-answer-in-options`, `test-option-synonyms`, `test-boot-smoke`,
+`test-question-families`, `test-family-batch`, `test-question-cache-budget`.
+
+`test-option-parity` still fails this pack **entirely on pre-existing items**:
+
+| | MCQs | answer visibly longest | leaks | mean spread |
+|---|---|---|---|---|
+| pre-existing | 781 | 24.3% | **75** | 9.0 |
+| tonight | 283 | **3.9%** | **0** | **3.7** |
+| whole pack now | 1,064 | 18.9% | 75 | **7.6** |
+
+All 75 leaks are `pi-`, `grv-`, `sb-` and similar. Tonight pulled the pack's mean
+spread 9.0 → 7.6 and its longest-answer rate 24.3% → 18.9%.
+
+`test-answer-gradability` names **zero** of tonight's items (its 12 are
+grade4-french `multi` rows). `test-svg-figures`, `test-netlify-redirects` and
+`test-task-projection` are the known pre-existing failures; preflight step 5
+fails on two grade5 fact ledgers the other session added tonight.
+
+### ⚠ The first attempt at this batch was destroyed by a rate limit
+
+Seven agents were dispatched at once and **six were killed mid-write**, losing
+everything they had composed. Only `depth_e4_vocab_words.js` survived, because
+it had already saved. The rerun changed two things: batches were dispatched
+**three at a time**, and every brief now says **write the file in passes and save
+as you go**. Both are worth keeping for any batch of this size.
+
+### What this batch did NOT do
+
+- The §4 gate is untouched and still open — 18 of this pack's 40 marks.
+- No visual QA; no fact ledger for any Grade 9 pack; no import; no deploy.

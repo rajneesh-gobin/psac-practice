@@ -202,6 +202,36 @@
 .lab-changes-zone-icon { font-size: 1.5rem; }
 .lab-changes-zone-label { font-size: 0.78rem; }
 
+.lab-changes-zone.is-next {
+  border-style: solid;
+  background: #FFFBEB;
+  box-shadow: 0 0 0 3px #FDE68A;
+}
+
+/* ── Experiments (lab_experiment.js): the right answer's line, where the zones were ── */
+.lab-changes-exp-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid #2E7D32;
+  background: #F1F8E9;
+  text-align: center;
+}
+
+.lab-changes-exp-line {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #1A2E35;
+}
+
+/* The pill under the picture would sit on the instruction box the runner
+   moves into the canvas wrap; the canvas already names the scenario. */
+[data-exp-mode]:not([data-exp-mode="explore"]) .lab-changes-label { display: none; }
+
 /* ── Grade 8 sign chips ── */
 .lab-changes-signs-wrap {
   margin-top: 6px;

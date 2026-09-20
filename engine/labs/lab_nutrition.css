@@ -73,8 +73,9 @@
   touch-action: manipulation;
 }
 
-.lab-nutrition-food-item small {
+.lab-nutrition-food-name {
   font-size: 0.65rem;
+  font-weight: 600;
   color: #555;
   text-align: center;
   line-height: 1.1;
@@ -98,34 +99,53 @@
   border-style: dashed;
 }
 
-/* ── Tooth shelf / hit targets ────────────────────────────────────────────────── */
+/* ── Tooth type buttons (under the jaw; the canvas taps the same teeth) ─────── */
 .lab-nutrition-tooth-row {
   display: flex;
-  gap: 4px;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
 }
 
-.lab-nutrition-tooth-hit {
-  position: absolute;
-  top: 0;
-  height: 72px;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
+.lab-nutrition-tooth-btn {
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 2px solid #D8D0C8;
+  border-radius: 8px;
+  background: #FFF;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
   cursor: pointer;
-  transition: background 0.1s;
+  touch-action: manipulation;
+  transition: background 0.12s, border-color 0.12s;
 }
 
-.lab-nutrition-tooth-hit:hover,
-.lab-nutrition-tooth-hit:focus-visible {
-  background: rgba(33, 150, 243, 0.15);
-  outline: 2px solid #2196F3;
+.lab-nutrition-tooth-btn:hover,
+.lab-nutrition-tooth-btn:focus-visible {
+  border-color: #2196F3;
+  background: #F3F9FF;
+  outline: none;
+}
+
+.lab-nutrition-tooth-btn.is-on {
+  background: #E3F2FD;
+  border-color: #2196F3;
+  color: #1565C0;
 }
 
 .lab-nutrition-label-btn {
   min-height: 44px;
   min-width: 120px;
+}
+
+/* In an experiment the runner parks the guide box inside the canvas wrap;
+   the tooth chips must flow above it, not float over it. */
+[data-exp-mode] .lab-nutrition-chips {
+  position: static;
+  padding: 2px 8px 4px;
 }
 
 /* ── Tooth label chips ────────────────────────────────────────────────────────── */
@@ -294,20 +314,27 @@
     font-size: 1.3rem;
   }
 
-  .lab-nutrition-food-item small {
+  .lab-nutrition-food-name {
     font-size: 0.6rem;
+  }
+
+  .lab-nutrition-tooth-btn {
+    font-size: 0.78rem;
+    padding: 6px 8px;
   }
 }
 
 /* ── Calm Mode / reduced motion ──────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .lab-nutrition-food-item,
+  .lab-nutrition-tooth-btn,
   .lab-nutrition-stn-btn {
     transition: none;
   }
 }
 
 .kid-calm .lab-nutrition-food-item,
+.kid-calm .lab-nutrition-tooth-btn,
 .kid-calm .lab-nutrition-stn-btn {
   transition: none;
 }

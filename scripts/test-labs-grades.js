@@ -77,7 +77,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     return getComputedStyle(document.getElementById('sh-note-labs')).display !== 'none'; })()`);
   // Grade 3 stands for "a grade with no lab": Grades 1-3 are never planned one.
   for (const [g, want, why] of [[3, false, 'no lab for Grade 3'], [4, true, 'Materials Tester'], [5, true, 'borrows Grades 4 and 6'],
-                                [6, true, 'Rusting Lab'], [7, true, 'the Microscope'], [9, true, 'nine labs']]) {
+                                [6, true, 'Rusting Lab'], [7, true, 'the Microscope'], [9, true, 'the Grade 9 labs']]) {
     ok(`Grade ${g} ${want ? 'sees' : 'does not see'} Science Labs (${why})`, (await note(g)) === want);
   }
   const lg8 = await ev('_LAB_GRADES.includes(8)');
@@ -109,28 +109,29 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   const same = (h, w) => h.labs.slice().sort().join() === w.labs && h.soon.slice().sort().join() === w.soon;
   let h = await hub(4), w = await want(4);
   ok('Grade 4: "PSAC · Grade 4", no picker, exactly the Grade 4 labs', h.eyebrow === 'PSAC · Grade 4' && !h.chips.length && same(h, w), { h, w });
-  ok('…the Materials Tester and Water & States among them, all under Science',
-     h.labs.includes('materials') && h.labs.includes('water') && !h.labs.includes('rusting') && h.subjects.join() === 'Science', h);
+  ok('…the Materials Tester and Water & States among them, grouped by chapter with "Start here" first',
+     h.labs.includes('materials') && h.labs.includes('water') && !h.labs.includes('rusting') && h.subjects.length >= 2 && /^▶ Start here/.test(h.subjects[0]) && h.subjects.slice(1).every(t => !/^(Science|Physics|Chemistry|Biology)$/.test(t)), h);
   h = await hub(6); w = await want(6);
   ok('Grade 6: exactly the Grade 6 labs, the Rusting Lab among them', h.eyebrow === 'PSAC · Grade 6' && same(h, w) && h.labs.includes('rusting') && !h.labs.includes('materials'), { h, w });
   h = await hub(5);
   ok('Grade 5 borrows the primary labs built for Grades 4 and 6', h.eyebrow === 'PSAC · Grade 5' && h.labs.includes('materials') && h.labs.includes('rusting'), h);
-  h = await hub(9);
-  ok('Grade 9: "NCE · Grade 9", nine labs under Chemistry, Physics and Biology',
-     h.eyebrow === 'NCE · Grade 9' && h.labs.length === 9 && h.subjects.join() === 'Chemistry,Physics,Biology' && !h.labs.includes('rusting'), h);
+  h = await hub(9); w = await want(9);
+  ok('Grade 9: "NCE · Grade 9", exactly the Grade 9 labs under Chemistry, Physics and Biology',
+     h.eyebrow === 'NCE · Grade 9' && same(h, w) && h.subjects.length >= 2 && /^▶ Start here/.test(h.subjects[0]) && !h.labs.includes('rusting'), { h, w });
   h = await hub(7); w = await want(7);
-  ok('Grade 7: "NCE · Grade 7", exactly the Grade 7 labs, the Microscope under Science',
-     h.eyebrow === 'NCE · Grade 7' && !h.chips.length && same(h, w) && h.labs.includes('microscope') && !h.labs.includes('mixing') && h.subjects.join() === 'Science', { h, w });
+  ok('Grade 7: "NCE · Grade 7", exactly the Grade 7 labs, the Microscope under its chapter',
+     h.eyebrow === 'NCE · Grade 7' && !h.chips.length && same(h, w) && h.labs.includes('microscope') && !h.labs.includes('mixing') && h.subjects.some(t => /Cells/i.test(t)), { h, w });
   h = await hub(7, [9]);
   ok('Grade 7 with Grade 9 unlocked: "My grade" offers 7 and 9, starting on 7', h.chips.join() === 'Grade 7,Grade 9' && h.pressed === 'Grade 7', h);
-  h = await hub(3, [9]);
-  ok('Grade 3 with Grade 9 unlocked opens straight onto Grade 9, no picker', h.screen === 'labs' && h.eyebrow === 'NCE · Grade 9' && !h.chips.length && h.labs.length === 9, h);
+  h = await hub(3, [9]); w = await want(9);
+  ok('Grade 3 with Grade 9 unlocked opens straight onto Grade 9, no picker', h.screen === 'labs' && h.eyebrow === 'NCE · Grade 9' && !h.chips.length && same(h, w), { h, w });
   h = await hub(6, [9]);
   ok('Grade 6 with Grade 9 unlocked: "My grade" offers 6 and 9, starting on 6', h.chips.join() === 'Grade 6,Grade 9' && h.pressed === 'Grade 6' && h.labs.includes('rusting') && !h.labs.includes('mixing'), h);
   await ev("document.querySelector('.lab-grade-chip[data-grade=\"9\"]').click(); true");
   h = await ev(`({ pressed: (document.querySelector('.lab-grade-chip[aria-pressed="true"]') || {}).textContent, eyebrow: document.querySelector('#labs-root .lab-eyebrow').textContent,
     labs: [...document.querySelectorAll('#labs-root .lab-card[data-lab]')].map(b => b.dataset.lab) })`);
-  ok('…and picking Grade 9 shows the Grade 9 labs', h.pressed === 'Grade 9' && h.eyebrow === 'NCE · Grade 9' && h.labs.length === 9, h);
+  w = await want(9);
+  ok('…and picking Grade 9 shows the Grade 9 labs', h.pressed === 'Grade 9' && h.eyebrow === 'NCE · Grade 9' && h.labs.slice().sort().join() === w.labs, { h, w });
   const fit = await ev(`(() => { const vw = innerWidth;
     const off = [...document.querySelectorAll('#labs-root button')].filter(e => e.getBoundingClientRect().right > vw + 0.5).map(e => e.textContent.trim().slice(0, 20));
     const small = [...document.querySelectorAll('#labs-root .lab-grade-chip')].filter(e => e.getBoundingClientRect().height < 44).length;
@@ -180,7 +181,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   // their Grade 9 discoveries on its hub card.
   console.log('\n-- progress per grade');
   const card = id => ev(`(() => { const c = document.querySelector('.lab-card[data-lab="${id}"]');
-    return c && { meta: c.querySelector('.lab-card-meta').textContent, blurb: c.querySelector('.lab-card-blurb').textContent,
+    return c && { meta: (c.querySelector('.lab-card-meta') || {}).textContent || '', exp: (c.querySelector('.lab-card-exp') || {}).textContent || '', blurb: c.querySelector('.lab-card-blurb').textContent,
       subject: c.closest('.lab-hub-subject').querySelector('h2').textContent }; })()`);
   await ev('Labs.backToHub(); true');
   await hub(9);
@@ -189,11 +190,11 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     Labs.discover('circuit', 'test-g9-only', { title: 'Test' }); Labs.closeOverlay(true); return true; })()`);
   await ev('Labs.backToHub(); true');
   let c9 = await card('circuit');
-  ok('a Grade 9 discovery shows on the Grade 9 hub card', c9 && /1 found/.test(c9.meta) && c9.subject === 'Physics', c9);
+  ok('a Grade 9 discovery shows on the Grade 9 hub card, under its Grade 9 chapter', c9 && /1 found/.test(c9.meta) && /Electricity/.test(c9.subject), c9);
   await hub(4);
   const c4 = await card('circuit');
   ok('…but not on the Grade 4 card, which sits under Science with its own blurb',
-     c4 && c4.meta === 'Not started yet' && c4.subject === 'Science' && c4.blurb !== c9.blurb && !/series/.test(c4.blurb), c4);
+     c4 && !/found/.test(c4.meta || '') && /Energy/.test(c4.subject) && c4.blurb !== c9.blurb && !/series/.test(c4.blurb), c4);
   await openAt('circuit', 'LabCircuit');
   await ev(`(() => { Labs.discover('circuit', 'test-g4-only', { title: 'Test' }); Labs.closeOverlay(true); return true; })()`);
   await ev('Labs.backToHub(); true');

@@ -32,6 +32,8 @@ const S = {
   classroom: null,
   materials: [],
   assignments: [],
+  events: [],       // the teacher's classroom calendar (dates, read-only)
+  worksheets: [],   // paper tasks with a deadline (physical_homework), signed per visit
   access: null,     // 'pupil_pin' | 'shared_pin'
   name: '',
   view: 'work',
@@ -328,6 +330,8 @@ async function enter() {
   S.name        = r.name || name;
   S.materials   = Array.isArray(r.materials)   ? r.materials   : [];
   S.assignments = Array.isArray(r.assignments) ? r.assignments : [];
+  S.events      = Array.isArray(r.events)      ? r.events      : [];
+  S.worksheets  = Array.isArray(r.worksheets)  ? r.worksheets  : [];
   S.classroom   = r.classroom || S.classroom;
   S.view = readStore(VIEW_STORE, VIEWS, 'work');
   S.sort = readStore(SORT_STORE, SORTS, 'recent');
@@ -348,9 +352,11 @@ function showHub() {
   //   is the number a child acts on.
   chips.push(todo === 0 ? '✓ Homework done' : todo === 1 ? '1 to do' : todo + ' to do');
   chips.push(S.materials.length === 1 ? '1 file' : S.materials.length + ' files');
+  const nextEv = nextEventChip();
+  if (nextEv) chips.push(nextEv);
   $('cls-chips').innerHTML = chips.map(c => '<span class="chip">' + esc(c) + '</span>').join('');
 
-  if (!S.materials.length && !S.assignments.length) {
+  if (!S.materials.length && !S.assignments.length && !S.events.length && !S.worksheets.length) {
     $('out').innerHTML = '<div class="state"><div class="big">📭</div>'
       + '<h2>Nothing here yet</h2>'
       + '<p>Your teacher has not set any homework or shared any files with this class yet. '
@@ -476,9 +482,11 @@ function render() {
   bindYouTube(out);
   if (S.view === 'work') return renderWork(out);
   const rows = filtered();
+  // The calendar has two more sources than the file list, so an empty file
+  // search must not blank it.
+  if (S.view === 'calendar') return renderCalendar(rows, out);
   if (!rows.length) { out.innerHTML = noMatch(); return; }
   if (S.view === 'subject')  return renderSubject(rows, out);
-  if (S.view === 'calendar') return renderCalendar(rows, out);
   out.innerHTML = sortMats(rows, S.sort).map(cardHTML).join('');
 }
 
@@ -542,19 +550,35 @@ function workHTML(a) {
     + '</a>';
 }
 
+function worksheetsHTML() {
+  const now = Date.now();
+  const live = (S.worksheets || []).slice().sort((a, b) => (Date.parse(a.expires_at) || 0) - (Date.parse(b.expires_at) || 0));
+  if (!live.length) return '';
+  const current = live.filter(w => (Date.parse(w.expires_at) || 0) >= now - 86400000);
+  const past = live.filter(w => (Date.parse(w.expires_at) || 0) < now - 86400000);
+  return (current.length
+    ? '<section class="group"><div class="group-head"><h2>📄 Worksheets</h2><span class="n">' + current.length + '</span></div>' + current.map(worksheetHTML).join('') + '</section>'
+    : '')
+    + (past.length
+    ? '<section class="group"><div class="group-head"><h2>Past worksheets</h2><span class="n">' + past.length + '</span></div>' + past.map(worksheetHTML).join('') + '</section>'
+    : '');
+}
 function renderWork(out) {
+  const up = upcomingHTML(5);
+  const sheets = worksheetsHTML();
   if (!S.assignments.length) {
-    out.innerHTML = '<div class="state"><div class="big">🎉</div>'
+    out.innerHTML = up + sheets + (sheets ? '' : '<div class="state"><div class="big">🎉</div>'
       + '<h2>No homework right now</h2>'
       + '<p>Your teacher has not set anything for this class. '
-      + 'Tap <b>Files</b> to see what they have shared.</p></div>';
+      + 'Tap <b>Files</b> to see what they have shared.</p></div>');
+    wireUpNext(out);
     return;
   }
   const todo = S.assignments.filter(a => !a.done);
   const done = S.assignments.filter(a => a.done);
   // ⚠ To do FIRST and never mixed in. A child opening this page is answering
   //   one question — what do I still have to do?
-  out.innerHTML =
+  out.innerHTML = up +
     (todo.length
       ? '<section class="group"><div class="group-head"><h2>To do</h2>'
         + '<span class="n">' + todo.length + '</span></div>'
@@ -565,7 +589,9 @@ function renderWork(out) {
       ? '<section class="group"><div class="group-head"><h2>Finished</h2>'
         + '<span class="n">' + done.length + '</span></div>'
         + done.map(workHTML).join('') + '</section>'
-      : '');
+      : '')
+    + sheets;
+  wireUpNext(out);
 }
 
 function renderSubject(rows, out) {
@@ -591,70 +617,205 @@ function renderSubject(rows, out) {
   }).join('');
 }
 
-function renderCalendar(rows, out) {
-  const byDay = new Map();
-  const dated = [];
-  rows.forEach(m => {
-    const t = when(m);
-    // A material with no date cannot go in a square. It is listed underneath
-    // rather than dropped — dropping it would make the calendar quietly lie
-    // about how much the class has.
-    if (!t) { dated.push(m); return; }
-    const k = dayKey(t);
-    if (!byDay.has(k)) byDay.set(k, []);
-    byDay.get(k).push(m);
+function wireUpNext(out) {
+  if (!out || typeof out.querySelector !== 'function') return;
+  const b = out.querySelector('.upnext-more');
+  if (!b) return;
+  b.addEventListener('click', () => {
+    S.view = 'calendar';
+    writeStore(VIEW_STORE, S.view);
+    applyView();
+    render();
   });
+}
 
+// ── The class calendar ────────────────────────────────────────────────────
+// One grid, three sources: the teacher's own dated items (an exam, a hand-in
+// date, days they are away, anything else), the homework due dates, and the
+// day each file was shared. Events are DATE strings from the server and are
+// used as-is - a date the teacher typed must never shift by a timezone.
+const KIND = {
+  exam:   { icon: '📝', label: 'Exam' },
+  due:    { icon: '📌', label: 'Hand in' },
+  absent: { icon: '🚫', label: 'Teacher away' },
+  event:  { icon: '📅', label: 'Event' },
+  hw:     { icon: '⏰', label: 'Homework due' },
+  ws:     { icon: '📄', label: 'Worksheet due' },
+  file:   { icon: '📎', label: 'File shared' },
+};
+// A worksheet card: title, instructions, the file if there is one, and when
+// it is due. No "done" - a paper task is handed in, not ticked here.
+function worksheetHTML(w) {
+  const due = dueText({ due_at: w.expires_at });
+  const safe = /^https?:\/\//i.test(String(w.url || '')) ? w.url : '';
+  const tags = [];
+  if (w.subject) tags.push('<span class="tag subj">' + esc(w.subject) + '</span>');
+  if (due.text) tags.push('<span class="tag ' + due.cls + '">' + esc(due.text) + '</span>');
+  const sz = fmtSize(w.file_size); if (sz) tags.push('<span class="tag">' + esc(sz) + '</span>');
+  return '<article class="card ws">'
+    + '<div class="card-ico" aria-hidden="true">📄</div>'
+    + '<div>'
+    + '<div class="card-title">' + esc(w.title || 'Worksheet') + '</div>'
+    + (w.description ? '<div class="card-sub">' + esc(w.description) + '</div>' : '')
+    + (tags.length ? '<div class="tags">' + tags.join('') + '</div>' : '')
+    + (safe ? '<a class="open" href="' + esc(safe) + '" target="_blank" rel="noopener noreferrer">Open worksheet ↗</a>'
+            : w.file_name ? '<div class="dead">⚠ The file is not available right now — tell your teacher.</div>'
+            : '<div class="card-sub">On paper — your teacher will hand it out.</div>')
+    + '</div></article>';
+}
+function kindOf(e) { return KIND[e && e.kind] ? e.kind : 'event'; }
+// A calendar date is exactly YYYY-MM-DD. Anything else is dropped everywhere
+// - the grid, the strip AND the header chip - or a malformed row sorts first
+// as a string and the chip reads "Invalid Date".
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+const validDay = v => DAY_RE.test(String(v || ''));
+function lastDay(e) { return validDay(e.end_date) && e.end_date > e.date ? e.end_date : e.date; }
+function addDays(k, n) {
+  const p = k.split('-');
+  const d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]) + n);
+  return dayKey(d.getTime());
+}
+function dayText(k, o) {
+  const p = k.split('-');
+  return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])).toLocaleDateString('en-GB', o || { weekday: 'short', day: 'numeric', month: 'short' });
+}
+function spanText(e) {
+  if (!e.end_date || e.end_date === e.date) return dayText(e.date);
+  return dayText(e.date, { weekday: 'short', day: 'numeric', month: 'short' }) + ' – ' + dayText(e.end_date, { weekday: 'short', day: 'numeric', month: 'short' });
+}
+function eventHTML(e) {
+  const k = kindOf(e);
+  return '<div class="ev ev-' + k + '">'
+    + '<div class="ev-ico" aria-hidden="true">' + KIND[k].icon + '</div>'
+    + '<div><div class="ev-title">' + esc(e.title || KIND[k].label) + '</div>'
+    + '<div class="ev-meta">' + esc(KIND[k].label) + ' · ' + esc(spanText(e)) + '</div>'
+    + (e.notes ? '<div class="ev-notes">' + esc(e.notes) + '</div>' : '')
+    + '</div></div>';
+}
+// Every dated thing, keyed by local day. An absence spanning days lands on
+// each of them (capped, so a typo of a year does not draw four hundred dots).
+function calendarItems(rows) {
+  const byDay = new Map();
+  const put = (k, item) => { if (!byDay.has(k)) byDay.set(k, []); byDay.get(k).push(item); };
+  (S.events || []).forEach(e => {
+    if (!e || !validDay(e.date)) return;
+    const last = lastDay(e);
+    let k = e.date, guard = 0;
+    while (k <= last && guard++ < 62) { put(k, { kind: kindOf(e), order: 0, html: eventHTML(e) }); k = addDays(k, 1); }
+  });
+  (S.assignments || []).forEach(a => {
+    const t = Date.parse(a.due_at || a.expires_at || '') || 0;
+    if (!t) return;
+    put(dayKey(t), { kind: 'hw', order: 1, html: workHTML(a) });
+  });
+  (S.worksheets || []).forEach(w => {
+    const t = Date.parse(w.expires_at || '') || 0;
+    if (!t) return;
+    put(dayKey(t), { kind: 'ws', order: 1, html: worksheetHTML(w) });
+  });
+  (rows || []).forEach(m => {
+    const t = when(m);
+    if (!t) return;
+    put(dayKey(t), { kind: 'file', order: 2, html: cardHTML(m) });
+  });
+  byDay.forEach(list => list.sort((a, b) => a.order - b.order));
+  return byDay;
+}
+// The next few things on the calendar - shown above the homework list, which
+// is the screen a child opens first.
+function upcomingHTML(limit) {
+  const todayK = dayKey(Date.now());
+  const items = [];
+  (S.events || []).forEach(e => {
+    if (!e || !validDay(e.date)) return;
+    if (lastDay(e) < todayK) return;
+    items.push({ k: e.date < todayK ? todayK : e.date, html: eventHTML(e) });
+  });
+  (S.assignments || []).forEach(a => {
+    if (a.done) return;
+    const t = Date.parse(a.due_at || a.expires_at || '') || 0;
+    if (!t) return;
+    const k = dayKey(t);
+    if (k < todayK) return;
+    items.push({ k, html: '<div class="ev ev-hw"><div class="ev-ico" aria-hidden="true">⏰</div><div><div class="ev-title">' + esc(a.title || 'Homework') + '</div><div class="ev-meta">Homework due · ' + esc(dayText(k)) + '</div></div></div>' });
+  });
+  (S.worksheets || []).forEach(w => {
+    const t = Date.parse(w.expires_at || '') || 0;
+    if (!t) return;
+    const k = dayKey(t);
+    if (k < todayK) return;
+    items.push({ k, html: '<div class="ev ev-ws"><div class="ev-ico" aria-hidden="true">📄</div><div><div class="ev-title">' + esc(w.title || 'Worksheet') + '</div><div class="ev-meta">Worksheet due · ' + esc(dayText(k)) + '</div></div></div>' });
+  });
+  if (!items.length) return '';
+  items.sort((a, b) => a.k.localeCompare(b.k));
+  return '<section class="group upnext"><div class="group-head"><h2>📅 Coming up</h2>'
+    + '<span class="n">' + items.length + '</span></div>'
+    + items.slice(0, limit || 5).map(i => i.html).join('')
+    + (items.length > (limit || 5) ? '<button type="button" class="upnext-more" data-view="calendar">See the whole calendar →</button>' : '')
+    + '</section>';
+}
+function nextEventChip() {
+  const todayK = dayKey(Date.now());
+  const next = (S.events || []).filter(e => e && validDay(e.date) && lastDay(e) >= todayK)
+    .sort((a, b) => a.date.localeCompare(b.date))[0];
+  if (!next) return '';
+  const k = kindOf(next);
+  return KIND[k].icon + ' ' + (next.title || KIND[k].label) + ' · ' + dayText(next.date < todayK ? todayK : next.date, { day: 'numeric', month: 'short' });
+}
+
+function renderCalendar(rows, out) {
+  const byDay = calendarItems(rows);
+  // A material with no date cannot go in a square. It is listed underneath
+  // rather than dropped — dropping it would make the calendar quietly lie
+  // about how much the class has.
+  const dated = (rows || []).filter(m => !when(m));
+
+  const todayK = dayKey(Date.now());
   const days = Array.from(byDay.keys()).sort();
   if (!S.month) {
-    const last = days.length ? days[days.length - 1] : dayKey(Date.now());
-    const p = last.split('-');
-    S.month = new Date(Number(p[0]), Number(p[1]) - 1, 1);
-    S.selDay = days.length ? last : null;
+    // Land on THIS month: a class calendar answers "what is coming", so the
+    // reader starts from today and pages either way.
+    const now = new Date();
+    S.month = new Date(now.getFullYear(), now.getMonth(), 1);
+    S.selDay = byDay.has(todayK) ? todayK : null;
   }
-  // A search that empties the current month should not strand the reader on a
-  // blank grid: follow the results.
-  if (S.selDay && !byDay.has(S.selDay)) S.selDay = days.length ? days[days.length - 1] : null;
-  if (S.selDay) {
-    const p = S.selDay.split('-');
-    const selMonth = new Date(Number(p[0]), Number(p[1]) - 1, 1);
-    if (selMonth.getFullYear() !== S.month.getFullYear() || selMonth.getMonth() !== S.month.getMonth()) {
-      S.month = selMonth;
-    }
-  }
+  // A search that empties the selected day should not strand the reader on a
+  // stale panel: drop the selection rather than show another day's list.
+  if (S.selDay && !byDay.has(S.selDay)) S.selDay = null;
 
   const y = S.month.getFullYear(), mo = S.month.getMonth();
   const first = new Date(y, mo, 1);
   const daysIn = new Date(y, mo + 1, 0).getDate();
   // Monday-first, the way a Mauritian school week is written.
   const pad = (first.getDay() + 6) % 7;
-  const todayK = dayKey(Date.now());
 
-  const earliest = days.length ? days[0] : null;
-  const latest   = days.length ? days[days.length - 1] : null;
-  const canPrev = !!earliest && (y + '-' + String(mo + 1).padStart(2, '0')) > earliest.slice(0, 7);
-  const canNext = !!latest   && (y + '-' + String(mo + 1).padStart(2, '0')) < latest.slice(0, 7);
+  const monthKey = y + '-' + String(mo + 1).padStart(2, '0');
+  const earliest = days.length ? (days[0] < todayK ? days[0] : todayK) : todayK;
+  const latest   = days.length ? (days[days.length - 1] > todayK ? days[days.length - 1] : todayK) : todayK;
+  const canPrev = monthKey > earliest.slice(0, 7);
+  const canNext = monthKey < latest.slice(0, 7);
 
   let cells = '';
   for (let i = 0; i < pad; i++) cells += '<button type="button" class="cal-cell pad" tabindex="-1" aria-hidden="true"></button>';
   for (let d = 1; d <= daysIn; d++) {
-    const k = y + '-' + String(mo + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+    const k = monthKey + '-' + String(d).padStart(2, '0');
     const list = byDay.get(k);
     const cls = ['cal-cell'];
     if (list) cls.push('has');
     if (k === todayK) cls.push('today');
     if (list && k === S.selDay) cls.push('sel');
+    const kinds = list ? Array.from(new Set(list.map(i => i.kind))).slice(0, 3) : [];
     cells += '<button type="button" class="' + cls.join(' ') + '" data-day="' + k + '"'
-      + (list ? ' aria-label="' + esc(d + ' — ' + list.length + (list.length === 1 ? ' item' : ' items')) + '"' : ' disabled')
-      + '>' + d + (list ? '<span class="dot"></span>' : '') + '</button>';
+      + (list ? ' aria-label="' + esc(d + ' — ' + list.length + (list.length === 1 ? ' item' : ' items') + ': ' + kinds.map(x => KIND[x].label).join(', ')) + '"' : ' disabled')
+      + '>' + d
+      + (list ? '<span class="dots">' + kinds.map(x => '<i class="d-' + x + '"></i>').join('') + '</span>' : '')
+      + '</button>';
   }
 
   const monthName = first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
   const sel = S.selDay ? (byDay.get(S.selDay) || []) : [];
-  const selLabel = S.selDay
-    ? new Date(S.selDay + 'T00:00:00').toLocaleDateString('en-GB',
-        { weekday: 'long', day: 'numeric', month: 'long' })
-    : '';
+  const selLabel = S.selDay ? dayText(S.selDay, { weekday: 'long', day: 'numeric', month: 'long' }) : '';
+  const present = Array.from(new Set(Array.from(byDay.values()).flat().map(i => i.kind)));
 
   out.innerHTML = '<div class="cal">'
     + '<div class="cal-head">'
@@ -664,13 +825,16 @@ function renderCalendar(rows, out) {
     + '</div>'
     + '<div class="cal-dow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>'
     + '<div class="cal-grid">' + cells + '</div>'
-    + '<div class="cal-legend">Tap a highlighted day to see what was shared.</div>'
+    + (present.length
+        ? '<div class="cal-key">' + present.map(x => '<span><i class="d-' + x + '"></i>' + esc(KIND[x].label) + '</span>').join('') + '</div>'
+        : '')
+    + '<div class="cal-legend">Tap a highlighted day to see what is on.</div>'
     + '</div>'
-    // ⚠ No panel at all when nothing is selected. "Nothing shared on that day"
-    //   under a month the reader has only just paged to is an answer to a
-    //   question they never asked, and reads as an error.
+    // ⚠ No panel at all when nothing is selected. "Nothing on that day" under
+    //   a month the reader has only just paged to is an answer to a question
+    //   they never asked, and reads as an error.
     + (sel.length
-        ? '<div class="cal-day"><h3>' + esc(selLabel) + '</h3>' + sortMats(sel, 'recent').map(cardHTML).join('') + '</div>'
+        ? '<div class="cal-day"><h3>' + esc(selLabel) + '</h3>' + sel.map(i => i.html).join('') + '</div>'
         : '')
     + (dated.length
         ? '<section class="group" style="margin-top:18px"><div class="group-head"><h2>No date recorded</h2>'

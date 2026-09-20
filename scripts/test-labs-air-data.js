@@ -271,8 +271,142 @@ ok('PSAC 2024 Q1: "Which gas is necessary for burning?" - oxygen', /necessary fo
 ok('PSAC 2019, 2021 and 2022: carbon dioxide puts out fires',
    ['2019', '2021', '2022'].every(y => /fire[\s\S]{0,140}answer:'Carbon dioxide'/.test(Q6(`past_paper_${y}.js`))));
 
+console.log('\nExperiments (lab_experiment.js, LAB_SPEC §10)');
+// Every experiment is REPLAYED through apply() at its own grade: the set-up,
+// then each step's right answer, so the See text is checked against what the
+// bench would actually have shown, and every instruction against the very
+// label the bench draws (controlLabel - lab_air.js reads the same function).
+const CHAPTER = { 4: 'g4sci-air', 6: 'g6-air' };
+const plain = s => String(s || '').replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{2190}-\u{21FF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+// The controls the bench renders at a state (mirrors lab_air.js _renderControls
+// and the safety toggle) - a step may only name what is on screen.
+function controlsAt(st, g) {
+  const out = L.forGrade(L.STATIONS, g).map(s => 'station:' + s.id);
+  out.push(st.safety ? 'safety:off' : 'safety:on');
+  switch (st.station) {
+    case 'jars':
+      out.push('light', 'watch:ready', 'burn', ...L.JAR_ORDER.map(j => 'jar:' + j), ...Object.keys(L.CANDLES).map(c => 'candle:' + c));
+      if (g === 4) out.push('blow');
+      if (st.jarOn) out.push('reset', 'lift', 'tap');
+      break;
+    case 'space': out.push('push', 'tilt', 'bottle'); break;
+    case 'weight': out.push('fill', 'letout'); break;
+    case 'fire': out.push(...Object.keys(L.FIRES).map(f => 'fire:' + f), ...Object.keys(L.METHODS).map(m => 'method:' + m)); break;
+    case 'products': out.push('jartemp:cold', 'jartemp:warm', 'light', 'hold', 'lime', 'control'); break;
+  }
+  return out;
+}
+const QUESTION_IDS = {};
+for (const g of [4, 6]) {
+  const dir = path.join(ROOT, 'subjects', `grade${g}-science`, 'questions');
+  QUESTION_IDS[g] = new Set(fs.readdirSync(dir).flatMap(f => [...fs.readFileSync(path.join(dir, f), 'utf8').matchAll(/id:\s*'([^']+)'/g)].map(m => m[1])));
+}
+ok('EXPERIMENTS is exported, 5 per grade, ids unique', Array.isArray(L.EXPERIMENTS) && G4(L.EXPERIMENTS).length === 5 && G6(L.EXPERIMENTS).length === 5
+   && new Set(ids(L.EXPERIMENTS)).size === L.EXPERIMENTS.length, L.EXPERIMENTS && ids(L.EXPERIMENTS));
+ok('every experiment serves exactly one grade, with that grade\'s chapter', L.EXPERIMENTS.every(e => e.grades.length === 1 && L.GRADES.includes(e.grades[0]) && e.chapter === CHAPTER[e.grades[0]]),
+   L.EXPERIMENTS.filter(e => e.chapter !== CHAPTER[e.grades[0]]).map(e => e.id));
+ok('experiment 1 at each grade is the exam-shaped one: the candle under a jar (g4s-air-005) and PSAC 2021 candles P, Q, R, S',
+   G4(L.EXPERIMENTS)[0].id === 'jar_out' && /g4s-air-005/.test(G4(L.EXPERIMENTS)[0].exam) && G6(L.EXPERIMENTS)[0].id === 'pqrs' && /PSAC 2021/.test(G6(L.EXPERIMENTS)[0].exam));
+const replays = {};
+for (const e of L.EXPERIMENTS) {
+  const g = e.grades[0], t = e.id;
+  const st = L.newState(g);
+  const events = [], cards = [], failed = [], skipped = [], unnamed = [], offscreen = [], missing = [];
+  const run = tok => {
+    const r = L.apply(st, tok, g);
+    if (!r.ok) { failed.push(tok + (r.say ? ' (' + r.say + ')' : '')); return r; }
+    if (r.anim && r.anim.type === 'burn') L.settle(st);
+    events.push(...r.events);
+    if (r.hazard) cards.push('hazard:' + r.hazard);
+    if (r.result) cards.push('result:' + r.result);
+    return r;
+  };
+  // Set-up: applied silently; a token already true is still fine to apply.
+  for (const tok of e.setup) run(tok);
+  ok(`${t}: the set-up runs on the bench with no failed token, hazard or card`, !failed.length && !cards.length, { failed, cards });
+  for (const [i, s] of e.steps.entries()) {
+    const toks = s.options || s.any || [s.on];
+    const right = s.on || s.any[0];
+    const shown = controlsAt(st, g);
+    toks.forEach(k => { if (!shown.includes(k)) offscreen.push(`step ${i + 1}: ${k}`); });
+    if (s.on && L.satisfied(st, s.on)) skipped.push(`step ${i + 1}: ${s.on} already true - the guide would skip it`);
+    // The instruction names the control it points at, as the bench labels it now.
+    const named = tok => plain(s.say || s.ask).includes(plain(L.controlLabel(tok, g, st)));
+    if (!named(right)) unnamed.push(`step ${i + 1}: "${s.say || s.ask}" does not name ${L.controlLabel(right, g, st)}`);
+    if (s.ask) toks.forEach(k => { if (!named(k)) unnamed.push(`step ${i + 1}: the decision does not name its option ${L.controlLabel(k, g, st)}`); });
+    // A wrong option is heard, never done - but it must be a real control.
+    Object.keys(s.wrong || {}).forEach(k => { if (!toks.includes(k)) missing.push(`step ${i + 1}: wrong ${k} is not an option`); });
+    const before = failed.length + cards.length;
+    run(right);
+    if (failed.length + cards.length > before) failed.push(`(step ${i + 1})`);
+  }
+  replays[t] = { st, events };
+  ok(`${t}: every step's right answer runs with no failed token, hazard or card`, !failed.length && !cards.length, { failed, cards });
+  ok(`${t}: no step is already true when it is reached (the guide would skip it)`, !skipped.length, skipped);
+  ok(`${t}: every option is a control on screen at that moment`, !offscreen.length && !missing.length, offscreen.concat(missing));
+  ok(`${t}: every instruction names the control it points at`, !unnamed.length, unnamed);
+  const nums = new Set([L.O2_AIR, L.O2_OUT, ...events.flatMap(ev => [ev.measured, ev.time, ev.o2End]).filter(n => typeof n === 'number')].map(String));
+  const said = (e.see.saw.match(/\d+/g) || []);
+  ok(`${t}: every number in the See text came out of the replay (${said.join(', ') || 'none'})`, said.every(n => nums.has(n)), { said, nums: [...nums] });
+  const refs = e.check.map(r => r.split(':')[0]);
+  ok(`${t}: its Check questions come from missions of its own grade`, refs.every(m => { const M = L.MISSIONS.find(x => x.id === m); return M && M.grades.includes(g); }), refs);
+  const qids = e.exam.match(/g\d(?:sci|s|sc)-[a-z]+-\d{3}/g) || [];
+  ok(`${t}: every question id the exam line quotes exists in grade${g}-science (${qids.join(', ') || 'none quoted'})`, qids.every(q => QUESTION_IDS[g].has(q)), qids.filter(q => !QUESTION_IDS[g].has(q)));
+  ok(`${t}: the exam line quotes a paper or a question, or says "In the exam you may be asked"`, qids.length > 0 || /PSAC \d{4}/.test(e.exam) || /^In the exam you may be asked/.test(e.exam), e.exam);
+}
+// What each See text claims, checked against the replay.
+const R = id => replays[id];
+const runs = id => R(id).events.filter(ev => ev.kind === 'run');
+ok('jar_out: one covered run under the medium jar, 12 s, and the jar lifted safely at the end',
+   runs('jar_out').length === 1 && runs('jar_out')[0].jar === 'medium' && runs('jar_out')[0].measured === 12 && runs('jar_out')[0].good && !R('jar_out').st.jarOn && /12 seconds/.test(L.EXPERIMENTS.find(e => e.id === 'jar_out').see.saw));
+ok('big_small: the small jar 6 s then the large jar 24 s, same candle, both fair and well timed',
+   runs('big_small').map(r => `${r.jar}:${r.measured}:${r.candle}:${r.good && r.fair}`).join() === 'small:6:small:true,large:24:small:true');
+ok('put_out: a puff first, then the jar puts it out at 12 s', R('put_out').events.map(ev => ev.kind + (ev.measured ? ':' + ev.measured : '')).join() === 'blow,run:12');
+ok('glass_dry: push (dry), tilt (wet), bottle (bubbles)', R('glass_dry').events.map(ev => ev.act).join() === 'push,tilt,bottle');
+ok('balloon: fill, then let the air out of one', R('balloon').events.map(ev => ev.act).join() === 'fill,letout');
+ok('pqrs: P 6 s, Q 12 s, R 24 s, and S still burning after 40 s - S longest, as PSAC 2021 says',
+   runs('pqrs').map(r => r.jar + ':' + r.measured + (r.covered ? '' : '+')).join() === 'small:6,medium:12,large:24,none:40+');
+ok('oxygen_left: the large jar, 24 s, and the oxygen reading ends at 16% (from 21%)',
+   runs('oxygen_left').length === 1 && runs('oxygen_left')[0].measured === 24 && runs('oxygen_left')[0].o2End === 16 && L.O2_AIR === 21);
+ok('triangle: the wood fire goes out three ways - heat (water), oxygen (blanket), fuel (raking)',
+   R('triangle').events.filter(ev => ev.kind === 'fire').map(ev => `${ev.fire}:${ev.method}:${ev.side}:${ev.out}`).join() === 'wood:water:heat:true,wood:blanket:oxygen:true,wood:fueloff:fuel:true');
+ok('no_water: the blanket puts out the oil; the electrical fire is switched off first, then put out',
+   R('no_water').events.filter(ev => ev.kind === 'fire').map(ev => `${ev.fire}:${ev.method}:${ev.out}:${ev.off}`).join() === 'oil:blanket:true:false,elec:fueloff:false:true,elec:co2:true:true');
+{
+  // …and the other right answer of its last step (the blanket) also puts it out.
+  const st = L.newState(6);
+  ['station:fire', 'fire:elec', 'method:fueloff'].forEach(t => L.apply(st, t, 6));
+  const r = L.apply(st, 'method:blanket', 6);
+  ok('no_water: with the power off, the fire blanket is a right answer too', r.ok && r.events[0].out && r.events[0].best);
+}
+ok('products: a COLD jar mists, the limewater goes milky, the control stays clear',
+   R('products').events.map(ev => ev.act + (ev.act === 'hold' ? ':' + ev.warm : '')).join() === 'hold:false,lime,control');
+ok('a wrong option never reaches the bench: lab_air.js hears it (_expWrong) before apply()',
+   /if \(_expWrong\(tok\)\) \{ _guideEvent\(tok\); return false; \}/.test(bench) && bench.indexOf('_expWrong(tok)') < bench.indexOf('D().apply(_st, tok'));
+ok('the bench labels every control through controlLabel, so the instruction check above is the real button text',
+   /const _lbl = tok => D\(\)\.controlLabel\(tok, _g\(\), _st\)/.test(bench) && /controlLabel\(b\.dataset\.tok, _g\(\), _st\)/.test(bench) && !/The candle is lit/.test(bench));
+ok('the bench exports the experiment adapter with every method the runner calls',
+   /experiment = \{/.test(bench) && ['list', 'question', 'reset', 'apply', 'guide', 'stop', 'evidence', 'focus', 'selector', 'hooks'].every(k => new RegExp(`\\n\\s+${k}: `).test(bench)) && /return \{ study, experiment,/.test(bench));
+ok('an experiment guide: every token reaches the runner first, `any` matches, the skip guards a step with no `on`, done calls the runner, every option glows, no scrolling',
+   /experiment\.hooks\.token\(tok, s\)/.test(bench) && /s\.any \? s\.any\.includes\(tok\) : s\.on === tok/.test(bench) && /while \(s && _tokOf\(s\) && D\(\)\.satisfied/.test(bench)
+   && /if \(G\.exp\) \{ _stopGuide\(true\); if \(experiment\.hooks\.done\) experiment\.hooks\.done\(\); return; \}/.test(bench) && /_stepToks\(s\)\.map\(t => _root\.querySelector/.test(bench) && /if \(!G\.exp\) els\[0\]\.scrollIntoView/.test(bench));
+ok('set-up is silent: no coach, no discovery toast, no card, and an instant animation', /if \(!_silent\) _coach\(r\.say\)/.test(bench) && /if \(!_silent\) _checkDisc\(ev\)/.test(bench) && /if \(_silent\) \{ _afterChange\(\); return; \}/.test(bench) && /_instant \|\| _silent \|\| Labs\.calm\(\)/.test(bench));
+ok('focus hides unlisted controls and the rows they leave empty, after every render of the controls and the safety toggle',
+   /#lab-air-controls \[data-tok\], #lab-air-safety/.test(bench) && /\.lab-air-stations, \.lab-air-pick, \.lab-air-acts/.test(bench) && (bench.match(/_applyFocus\(\);/g) || []).length >= 3);
+const expText4 = JSON.stringify(G4(L.EXPERIMENTS));
+ok('Grade 4 experiments stay at Grade 4: no limewater, fire triangle, extinguishers or percentages',
+   !/limewater|fire triangle|extinguisher|\d+(\.\d+)?%/i.test(expText4), (expText4.match(/limewater|fire triangle|extinguisher|\d+(\.\d+)?%/i) || [])[0]);
+ok('Grade 6 experiments teach the Grade 6 syllabus: the fire triangle, carbon dioxide, limewater, 21% oxygen, and PSAC 2021 / 2024',
+   /fire triangle/i.test(JSON.stringify(G6(L.EXPERIMENTS))) && /carbon dioxide/i.test(JSON.stringify(G6(L.EXPERIMENTS))) && /limewater/i.test(JSON.stringify(G6(L.EXPERIMENTS))) && /21%/.test(JSON.stringify(G6(L.EXPERIMENTS))));
+ok('no experiment text hard-codes the "In the PSAC exam" heading', !/In the PSAC exam/.test(JSON.stringify(L.EXPERIMENTS)));
+
 console.log('\nReading level (a 9-11-year-old: short sentences)');
 const texts = [...says];
+L.EXPERIMENTS.forEach(e => {
+  texts.push(e.title, e.aim, e.predict.q, e.see.saw, e.see.learn, e.exam);
+  e.predict.options.forEach(o => texts.push(o.label, o.sub || ''));
+  e.steps.forEach(s => texts.push(s.say || s.ask, ...Object.values(s.wrong || {})));
+});
 L.GUIDES.forEach(g => { texts.push(g.blurb, g.lesson); g.steps.forEach(t => texts.push(L.stepText(t, g.grades[0], { jar: 'small', fire: 'wood' }).say)); });
 L.DISCOVERIES.forEach(d => { texts.push(d.hint, d.saw, d.learn); L.recipeTexts(d.how, d.grades[0]).forEach(t => texts.push(t.say)); });
 L.MISSIONS.forEach(m => { texts.push(m.blurb, m.intro); m.quiz.forEach(q => texts.push(q.q, q.why, ...q.options)); });

@@ -1,11 +1,15 @@
 'use strict';
 // Science Labs › Gas Tests (Science, Grade 7) — end-to-end browser test.
 //
-// Proves: start panel renders, guided experiments advance step by step,
-// applying a test triggers the correct canvas result, hazard cards fire when
-// safety rules are broken, discoveries unlock and appear in the panel,
-// missions score to 3 stars, Calm Mode skips animations, 360px layout fits,
-// no console errors during any of the above.
+// Proves: the lab opens on an experiment Aim (lab_experiment.js) with no
+// overlay in the way, Explore returns the old bench (station buttons, guide
+// cards, missions), guided experiments advance step by step with the next
+// control glowing, applying a test triggers the correct canvas result, a
+// collected tube can take a second test, hazard cards fire when safety rules
+// are broken, discoveries unlock and appear in the panel, missions score to
+// 3 stars, Calm Mode skips animations, 360px layout fits, no console errors
+// during any of the above.
+// ⚠ The experiments themselves are walked by scripts/test-labs-experiments.js.
 //
 // Run: CHROME_PATH=<Chrome for Testing> node scripts/test-labs-gastests.js
 // ⚠ Served over file:// — Chrome for Testing cannot reach 127.0.0.1.
@@ -90,6 +94,9 @@ const ok = (label, cond, detail) => {
   const dbg    = () => ev('LabGastests._debug()');
   const ovText = () => ev(`(() => { const o = document.getElementById('lab-overlay'); return o ? o.textContent.replace(/\\s+/g,' ').slice(0,3000) : null; })()`);
   const closeOv = () => click('#lab-overlay [data-ov-close]');
+  // The glowing control of the current guide step (a guide has no "do it" button).
+  const next   = () => click('.is-next:not(.is-guide-dim)');
+  const expDbg = () => ev('LabExperiment._debug()');
 
   // ── 1. App load ─────────────────────────────────────────────────────────────
   console.log('\n-- app load');
@@ -122,11 +129,29 @@ const ok = (label, cond, detail) => {
     "typeof LabGastests !== 'undefined' && typeof LabGastestsData !== 'undefined' && !!document.querySelector('.lab-gastests')");
   ok('lab_gastests.js and lab_gastests_data.js loaded', labLoaded === true);
 
-  // ── 3. Start panel content ────────────────────────────────────────────────────
-  console.log('\n-- start panel');
-  // Dismiss the intro overlay if it appeared
-  const ovEl = await ev("!!document.getElementById('lab-overlay')");
-  if (ovEl) { await closeOv(); await sleep(400); }
+  // ── 3. Opens on an experiment Aim, then Explore for the old bench ────────────
+  console.log('\n-- experiment aim');
+  const aim = await expDbg();
+  ok('opens on an experiment Aim (phase = aim)', aim && aim.phase === 'aim', aim);
+  ok('the Aim is the first Grade 7 experiment (relight)', aim && aim.exp === 'relight' && aim.list && aim.list.length === 5, aim && aim.list);
+  ok('no overlay in the way of the Aim', !(await ev("!!document.getElementById('lab-overlay')")));
+  const aimTitle = await ev("(document.querySelector('#lab-exp .lab-exp-title') || {}).textContent || ''");
+  ok('Aim shows the experiment title as a question', /relights a glowing splint\?/.test(aimTitle), aimTitle);
+  ok('Aim has a Start button', await ev("!!document.querySelector('[data-exp=\"start\"]')"));
+  const setupPic = await dbg();
+  ok('the picture is already set up (oxygen collected, tube full)', setupPic.active === 'o2' && setupPic.stations.o2.collected === true && setupPic.stations.o2.fillFrac >= 1, setupPic.stations && setupPic.stations.o2);
+  ok('every tool is hidden on the Aim (focus([]))', await ev("[...document.querySelectorAll('#lab-gastests-tools .lab-tool')].every(b => b.hidden)"));
+  ok('the station row is hidden on the Aim', await ev("document.querySelector('.lab-gastests-stations').hidden === true"));
+
+  console.log('\n-- explore');
+  await click('[data-exp="explore"]');
+  await sleep(300);
+  await ev('LabGastests.experiment.reset(); true');
+  await sleep(300);
+  ok('Explore: no overlay', !(await ev("!!document.getElementById('lab-overlay')")));
+  const afterReset = await dbg();
+  ok('reset gives a clean bench (no station, goggles off, empty notebook)', afterReset.active === null && afterReset.goggles === false && afterReset.log.length === 0, afterReset);
+  ok('reset shows the station row again', await ev("document.querySelector('.lab-gastests-stations').hidden === false"));
 
   const eyebrow = await ev("(document.querySelector('.lab-eyebrow') || {}).textContent || ''");
   ok('eyebrow shows "Science · Grade 7"', eyebrow.includes('Science') && eyebrow.includes('7'), eyebrow);
@@ -136,6 +161,8 @@ const ok = (label, cond, detail) => {
 
   const guideCards = await ev("document.querySelectorAll('[data-guide]').length");
   ok('at least 3 guide cards in the sidebar', guideCards >= 3, guideCards);
+  const toolLabels = await ev("[...document.querySelectorAll('#lab-gastests-tools .lab-tool')].map(b => b.textContent.trim())");
+  ok('tool row is rendered from CONTROLS (Set up … Reset station)', Array.isArray(toolLabels) && toolLabels[0] === 'Set up' && toolLabels.includes('Glowing splint') && toolLabels.includes('Air composition'), toolLabels);
 
   const missionCards = await ev("document.querySelectorAll('[data-mission]').length");
   ok('at least 2 mission cards', missionCards >= 2, missionCards);
@@ -181,6 +208,8 @@ const ok = (label, cond, detail) => {
   ok('testApplied = glowing',  d.stations.o2.testApplied === 'glowing');
   ok('result.correct = true',  d.stations.o2.result && d.stations.o2.result.correct === true);
   ok('result.fx = relight',    d.stations.o2.result && d.stations.o2.result.fx === 'relight');
+  ok('notebook wrote the collection and the result', d.log.length >= 2 && /Oxygen collected/.test(d.log[0]) && /glowing splint: The glowing splint burst back into flame/.test(d.log[1]), d.log);
+  ok('a collected tube can take a second test (test buttons still shown)', await ev("!document.getElementById('btn-limewater').hidden"));
 
   // ── 8. Discovery unlocked ─────────────────────────────────────────────────────
   console.log('\n-- discovery unlock');
@@ -237,19 +266,15 @@ const ok = (label, cond, detail) => {
   await sleep(500);
   const guideBox = await ev("!document.getElementById('lab-guide').hidden");
   ok('guide box is visible', guideBox === true);
+  // Goggles are on, so the guide starts at the station step; its control glows.
+  ok('the next control glows (the CO₂ station)', await ev("!!document.querySelector('[data-station=\"co2\"].is-next')"));
 
-  // Step through: station:co2
-  await click('[data-station="co2"]');
-  await sleep(300);
-  // setup
-  await click('[data-act="setup"]');
-  await sleep(600);
-  // collect
-  await click('[data-act="collect"]');
-  await sleep(1200);
-  // test:limewater
-  await click('[data-act="test:limewater"]');
-  await sleep(800);
+  // Step through by tapping whatever glows: station:co2 → setup → collect → test:limewater
+  await next(); await sleep(300);
+  ok('guide advanced to Set up', (await dbg()).guide && (await dbg()).guide.step === 2, (await dbg()).guide);
+  await next(); await sleep(600);
+  await next(); await sleep(1200);
+  await next(); await sleep(800);
   d = await dbg();
   ok('CO₂ limewater result correct', d.stations && d.stations.co2 && d.stations.co2.result && d.stations.co2.result.correct === true);
   ok('d_co2_test discovery unlocked', d.disc.includes('d_co2_test'));
@@ -278,6 +303,24 @@ const ok = (label, cond, detail) => {
   d = await dbg();
   ok('wrong test (glowing on CO₂) recorded', d.stations.co2.result && d.stations.co2.result.correct === false);
   ok('d_two_tests_co2 discovery unlocked (important exam point)', d.disc.includes('d_two_tests_co2'));
+  // …then limewater on the SAME tube: the second test the syllabus asks for.
+  await click('[data-act="test:limewater"]');
+  await sleep(800);
+  d = await dbg();
+  ok('a second test on the same tube: limewater after the splint', d.stations.co2.tests.length === 2 && d.stations.co2.result.correct === true, d.stations.co2.tests);
+
+  // ── 12b. Air composition draws from the data ─────────────────────────────────
+  console.log('\n-- air composition');
+  await click('[data-station="o2"]');
+  await sleep(200);
+  await click('[data-act="aircomp"]');
+  await sleep(400);
+  const airTxt = await ovText();
+  ok('air table lists nitrogen 78% and oxygen 21% from AIR', !!airTxt && airTxt.includes('Nitrogen') && airTxt.includes('78%') && airTxt.includes('21%'), airTxt && airTxt.slice(0, 200));
+  await closeOv();
+  await sleep(300);
+  d = await dbg();
+  ok('air bar drawn on the canvas and noted in the notebook', d.airView === true && d.log.some(l => /nitrogen 78%/.test(l)), d.log);
 
   // ── 13. Mission ───────────────────────────────────────────────────────────────
   console.log('\n-- mission');

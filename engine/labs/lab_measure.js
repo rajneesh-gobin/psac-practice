@@ -53,6 +53,9 @@ const LabMeasure = (() => {
   let _panel = 'sandbox', _group = 'length', _mission = null, _guide = null;
   let _rows = [], _log = [], _fx = [], _busy = false, _instant = false, _colors = null, _tipIdx = -1;
   let _stGrade = null, _trial = -1, _readTrial = -1, _trialVals = [], _crack = 0, _splash = 0, _bk = null, _talking = false, _obs = null;
+  // Experiments (lab_experiment.js): the controls in focus, a silent set-up,
+  // and the notebook lines the See screen shows, oldest first.
+  let _focus = null, _quiet = false, _ev = [], _readsHTML = '';
 
   const _I = () => (_inst ? DATA().INSTRUMENTS[_inst] : null);
   const _S = () => (_spec ? DATA().SPECIMENS[_spec] : null);
@@ -104,18 +107,11 @@ const LabMeasure = (() => {
             <button type="button" class="lab-tool" data-act="zout"><span aria-hidden="true">🔎</span>Zoom out</button>
             <button type="button" class="lab-tool" data-act="eye"><span aria-hidden="true">👁️</span><b id="lab-measure-eye">Eye: level</b></button>
             <button type="button" class="lab-tool" data-act="ctx"><span aria-hidden="true" id="lab-measure-ctx-ico">📖</span><b id="lab-measure-ctx">How to read</b></button>
+            ${['level', 'above', 'below'].map(v => `<button type="button" class="lab-tool" data-eye="${v}" hidden><span aria-hidden="true">👁️</span>${esc(DATA().CONTROL_LABELS['eye:' + v])}</button>`).join('')}
+            ${['zero', 'end', 'mark'].map(v => `<button type="button" class="lab-tool" data-align="${v}" hidden><span aria-hidden="true">📍</span>${esc(DATA().CONTROL_LABELS['align:' + v])}</button>`).join('')}
           </div>
-          <form class="lab-measure-read" id="lab-measure-read" autocomplete="off">
-            <label for="lab-measure-input">${_kid() ? 'Your reading: number and unit' : 'Your reading'}</label>
-            <div class="lab-measure-row">
-              <button type="button" class="lab-btn" data-act="neg" id="lab-measure-neg" aria-label="Make the reading negative" hidden>±</button>
-              <input id="lab-measure-input" class="lab-measure-input" type="text" inputmode="decimal" enterkeyhint="done" spellcheck="false">
-              ${_kid() ? `<select id="lab-measure-uselect" class="lab-measure-uselect" aria-label="Unit"><option value="">unit?</option>${_units().map(u => `<option value="${esc(u)}">${esc(u)}</option>`).join('')}</select>` : ''}
-              <span class="lab-measure-unit" id="lab-measure-unit"${_kid() ? ' hidden' : ''}></span>
-              <button type="button" class="lab-btn lab-btn-primary" data-act="check">Check</button>
-            </div>
-            <p class="lab-hint" id="lab-measure-hint"></p>
-          </form>
+          <div class="lab-measure-reads" id="lab-measure-reads" role="group" aria-label="What does it read?" hidden></div>
+          <div id="lab-measure-readwrap"></div>
         </div>
         <div class="lab-side">
           <div class="lab-tabs" role="tablist" aria-label="Bench, missions and discoveries">
@@ -137,6 +133,8 @@ const LabMeasure = (() => {
     _cx = _cv.getContext('2d');
     _resize();
     _wire();
+    _readsHTML = '';
+    _mountReadForm();
     _renderPanel();
     _readouts();
     const st = Labs.store(LAB);
@@ -170,7 +168,7 @@ const LabMeasure = (() => {
     _clock = { run: false, t: 0, target: 0, speed: 1 };
     _marks = []; _hit = false; _burst = 0; _crack = 0; _splash = 0; _fx = []; _busy = false;
     _panel = 'sandbox'; _group = _stGrade === 9 ? 'length' : _stGrade === 4 ? 'g4' : 'g78'; _mission = null; _guide = null;
-    _rows = []; _log = []; _tipIdx = -1; _trial = -1; _readTrial = -1; _trialVals = [];
+    _rows = []; _log = []; _ev = []; _tipIdx = -1; _trial = -1; _readTrial = -1; _trialVals = [];
   }
 
   function unmount() {
@@ -204,6 +202,12 @@ const LabMeasure = (() => {
   // ══ Events ═══════════════════════════════════
   function _wire() {
     _root.onclick = e => {
+      const rd = e.target.closest('[data-read]');
+      if (rd) { _pickRead(rd.dataset.read); return; }
+      const ey = e.target.closest('[data-eye]');
+      if (ey) { setEye(ey.dataset.eye); return; }
+      const al = e.target.closest('[data-align]');
+      if (al) { setAlign(al.dataset.align); return; }
       const a = e.target.closest('[data-act]');
       if (a) { _act(a.dataset.act); return; }
       const gd = e.target.closest('[data-guide]');
@@ -226,12 +230,34 @@ const LabMeasure = (() => {
       const m = e.target.closest('[data-mission]');
       if (m) startMission(m.dataset.mission);
     };
+  }
+
+  // The typed reading box lives in Explore only. An experiment removes it
+  // (nothing to type anywhere) and offers candidate readings instead.
+  function _readFormHTML() {
+    return `<form class="lab-measure-read" id="lab-measure-read" autocomplete="off">
+            <label for="lab-measure-input">${_kid() ? 'Your reading: number and unit' : 'Your reading'}</label>
+            <div class="lab-measure-row">
+              <button type="button" class="lab-btn" data-act="neg" id="lab-measure-neg" aria-label="Make the reading negative" hidden>±</button>
+              <input id="lab-measure-input" class="lab-measure-input" type="text" inputmode="decimal" enterkeyhint="done" spellcheck="false">
+              ${_kid() ? `<select id="lab-measure-uselect" class="lab-measure-uselect" aria-label="Unit"><option value="">unit?</option>${_units().map(u => `<option value="${esc(u)}">${esc(u)}</option>`).join('')}</select>` : ''}
+              <span class="lab-measure-unit" id="lab-measure-unit"${_kid() ? ' hidden' : ''}></span>
+              <button type="button" class="lab-btn lab-btn-primary" data-act="check">Check</button>
+            </div>
+            <p class="lab-hint" id="lab-measure-hint"></p>
+          </form>`;
+  }
+  function _mountReadForm() {
+    const wrap = $('lab-measure-readwrap');
+    if (!wrap) return;
+    wrap.innerHTML = _readFormHTML();
     const form = $('lab-measure-read');
     if (form) form.onsubmit = e => { e.preventDefault(); check(); };
     const inp = $('lab-measure-input');
     if (inp) inp.oninput = () => inp.classList.remove('is-right', 'is-wrong');
     const us = $('lab-measure-uselect');
     if (us && inp) us.onchange = () => inp.classList.remove('is-right', 'is-wrong');
+    _syncForm();
   }
 
   // On a phone the shelf sits below the stage: bring the scale back into view
@@ -324,6 +350,7 @@ const LabMeasure = (() => {
   function selectInstrument(id, quiet) {
     const I = DATA().INSTRUMENTS[id];
     if (!I || _busy || !_forG([I]).length) return;
+    if (_expWrong('inst:' + id)) { _guideEvent('inst:' + id); return; }
     _inst = id; _spec = null; _zoom = 1; _eye = 'level'; _tared = false; _timed = false; _tapped = false;
     if (I.grades) _align = 'end';
     _clock = { run: false, t: 0, target: 0, speed: 1 };
@@ -342,6 +369,7 @@ const LabMeasure = (() => {
   function selectSpecimen(id) {
     const D = DATA(), I = _I();
     if (_busy) return;
+    if (_expWrong('spec:' + id)) { _guideEvent('spec:' + id); return; }
     if (!I) { _coach(_kid() ? 'Pick a tool first.' : 'Pick an instrument first.'); return; }
     if (!D.specimensFor(_inst, _g()).includes(id)) return;
     const m = D.measure(_inst, id, Object.assign(_opts(), { timed: false, tapped: false }));
@@ -383,6 +411,7 @@ const LabMeasure = (() => {
   const _canZoom = () => !!_inst && !['balance', 'density', 'block'].includes(_kind());
 
   function setEye(pos) {
+    if (_expWrong('eye:' + pos)) { _guideEvent('eye:' + pos); return; }
     if (_kind() !== 'cylinder') { _coach(_kid() && !_mid() ? 'Move your eye when you read the measuring jug.' : 'Move your eye when you read the measuring cylinder - that is where parallax shows most.'); return; }
     _eye = pos;
     _clearReading();
@@ -401,6 +430,7 @@ const LabMeasure = (() => {
   function setAlign(a) {
     const I = _I();
     if (!I || I.kind !== 'rule' || I.endMm === 0) return;
+    if (_expWrong('align:' + a)) { _guideEvent('align:' + a); return; }
     _align = a;
     _clearReading();
     if (I.endMm != null) _coach(a === 'zero' ? 'The end of the object is on 0 now. Read the mark at the other end.'
@@ -445,7 +475,7 @@ const LabMeasure = (() => {
     _clock = { run: true, t: 0, target: S.trials ? S.trials[_trial % S.trials.length] : S.time, speed: S.speed || 1 };
     _coach(S.trials ? `Go! Try ${_trial + 1}: the ball is rolling…` : S.swings ? 'Go! Start as the bob is let go… the stopwatch stops after 10 swings.' : 'Go! The stopwatch stops when the water boils.');
     _readouts();
-    if (_instant || Labs.calm()) _finishTiming();
+    if (_instant || _quiet || Labs.calm()) _finishTiming();
   }
   function _finishTiming() {
     _clock.run = false; _clock.t = _clock.target; _timed = true;
@@ -477,22 +507,23 @@ const LabMeasure = (() => {
   // Grades 7-8: lifting the cylinder to your eye - it slips and smashes.
   function liftCylinder() {
     if (_kind() !== 'cylinder' || !_spec || _busy) return;
+    if (_expWrong('lift')) { _guideEvent('lift'); return; }
     _hazard4('cyl_dropped');
   }
   const _bubbleOn = () => { const S = _S(); return !!(S && S.bubble && !_tapped); };
 
   // The fourth tool does whatever this instrument needs.
   function _ctxDef() {
-    const k = _kind(), I = _I();
-    if (k === 'cylinder' && _mid()) return _bubbleOn() ? { ico: '👆', label: 'Tap the glass' } : { ico: '✋', label: 'Lift it to read', off: !_spec };
+    const k = _kind(), I = _I(), CL = DATA().CONTROL_LABELS;
+    if (k === 'cylinder' && _mid()) return _bubbleOn() ? { ico: '👆', label: CL.tap } : { ico: '✋', label: CL.lift, off: !_spec };
     if (k === 'block' || k === 'density') return { ico: '📖', label: 'How to work it out' };
     if (k === 'rule' && I.endMm === 0) return { ico: '📖', label: 'How to read' };
     if (k === 'rule' && I.endMm != null) return { ico: '📍', label: _align === 'end' ? 'Start: ruler end' : 'Start: 0 mark' };
     if (k === 'rule') return { ico: '📍', label: _align === 'end' ? 'Start: ruler end' : 'Start: 1 cm mark' };
     if (k === 'vernier' || k === 'micrometer') return { ico: '🤏', label: 'Close the jaws' };
-    if (k === 'balance') return { ico: '0️⃣', label: _tared ? 'Zeroed ✓' : 'Zero (tare)' };
-    if (k === 'dial') return { ico: '0️⃣', label: _tared ? 'On 0 ✓' : 'Set to 0' };
-    if (k === 'stopwatch') return { ico: '▶️', label: _clock.run ? 'Timing…' : (_timed && _S() && _S().trials ? 'Time it again' : 'Start timing'), off: !_spec || _clock.run };
+    if (k === 'balance') return { ico: '0️⃣', label: _tared ? 'Zeroed ✓' : CL['tare:balance'] };
+    if (k === 'dial') return { ico: '0️⃣', label: _tared ? 'On 0 ✓' : CL['tare:dial'] };
+    if (k === 'stopwatch') return { ico: '▶️', label: _clock.run ? 'Timing…' : (_timed && _S() && _S().trials ? CL['start:again'] : CL['start:first']), off: !_spec || _clock.run };
     if (k === 'thermometer' && I.stir) return { ico: '🥄', label: 'Stir with it', off: !_spec };
     return { ico: '📖', label: 'How to read', off: !_inst };
   }
@@ -526,10 +557,12 @@ const LabMeasure = (() => {
     if (!m.ok) { _coach(m.msg); return; }
     if (value != null && inp) inp.value = typeof value === 'number' ? D.fmt(value, m.dp) : String(value);
     if (unit != null && us) us.value = unit;
-    const kid = !!(us && _kid());
-    const v = D.parseReading(inp ? inp.value : '');
+    // A reading arrives typed (Explore) or as a tapped candidate (an
+    // experiment, where the box does not exist): the value wins over the box.
+    const kid = _kid();
+    const v = value != null ? (typeof value === 'number' ? value : D.parseReading(value)) : D.parseReading(inp ? inp.value : '');
     if (v == null) { _coach(kid ? 'Type your reading as a number first.' : `Type your reading as a number, in ${m.unit}.`); return; }
-    const u = kid ? us.value : m.unit;
+    const u = unit != null ? unit : (kid && us ? us.value : m.unit);
     const J = kid ? D.judgeUnit(m, v, u) : D.judge(m, v);
     const verdict = J.verdict;
     if (verdict === 'nounit') { _coach(D.UNIT_HINT[_g()] || D.UNIT_HINT[4]); return; }
@@ -547,6 +580,7 @@ const LabMeasure = (() => {
       if (verdict === 'sign') _coach(`You added the ${D.fmt(m.zero, m.dp)} g instead of taking it away. True mass = reading − empty reading.`);
       else if (verdict === 'near') _coach(I.kind === 'density' ? 'Close! Check your division, to two decimal places.' : 'Close! Look again at which mark is nearest. Zoom in if you need to.');
       else _coach(`Not quite - ${typed} is not it. ${I.how}`);
+      _miss(verdict);
       return;
     }
     if (kid) {
@@ -558,6 +592,7 @@ const LabMeasure = (() => {
         case 'near': _coach('Close! Count the marks again. Zoom in if you need to.'); break;
         default: _coach(`Not quite - ${typed} is not it. ${I.how}`);
       }
+      if (!['unit', 'end', 'apparent', 'raw'].includes(verdict)) _miss(verdict);
       return;
     }
     switch (verdict) {
@@ -573,6 +608,7 @@ const LabMeasure = (() => {
                          : 'Close! Look again at which mark is nearest - zoom in if you need to.'); break;
       default: _coach(`Not quite - ${typed} isn’t it. ${I.how}`);
     }
+    if (!['apparent', 'top', 'raw', 'end'].includes(verdict)) _miss(verdict);
   }
 
   function showReading() {
@@ -620,7 +656,7 @@ const LabMeasure = (() => {
     _okDiscoveries(m).forEach(_discover);
     _missionTick(m);
     _refresh();
-    if (m.tooCoarse) {
+    if (m.tooCoarse && !_quiet && !_expGuide()) {
       const S = _S();
       const stepS = D.fmt(I.step, I.dp) + ' ' + I.unit;
       _result('too_coarse', { typedS: m.wantS, inst: I.name.toLowerCase(), stepS, spec: S.label.length,
@@ -747,10 +783,15 @@ const LabMeasure = (() => {
     Labs.persist();
     if (_mission) _mission.cards++;
     if (disc) _discover(disc);
+    const tok = MISTAKE_TOKEN[kind];
+    // In an experiment a listed wrong reading is explained by the runner's
+    // own card: the scale keeps the marks (where it was read, where the truth
+    // is) and nothing else happens - no flash, no second card.
+    if (_expWrong(tok)) { _readouts(); _guideEvent(tok); return; }
     _busy = true;
     _fxAdd('flash', () => {
       _busy = false;
-      _result(kind, ctx, () => { if (after) after(); _guideEvent(MISTAKE_TOKEN[kind]); });
+      _result(kind, ctx, () => { if (after) after(); _guideEvent(tok); });
     }, { lines: [`You read ${youS} ✗`, `True ${f(m.want)} ✓`] });
   }
 
@@ -813,9 +854,12 @@ const LabMeasure = (() => {
     _rows.unshift({ what: S.label[I.quantity] + (S.trials ? ` (try ${_trialVals.length})` : ''), inst: I.short, value: D.fmt(m.want, m.dp) + ' ' + m.unit,
                     conv: D.convert(m.quantity, m.want, m.unit, g78 ? _g() : kid), prec: g78 ? I.prec : kid ? _markS(I) : I.prec.split(' · ')[0] });
     if (_rows.length > 30) _rows.length = 30;
+    const what = S.label[I.quantity];
+    _ev.push(what.charAt(0).toUpperCase() + what.slice(1) + ': ' + D.fmt(m.want, m.dp) + ' ' + m.unit);
   }
   function _logEntry(e) {
     _log.unshift(e);
+    _ev.push(e.title + ': ' + e.obs);
     if (_log.length > 30) _log.length = 30;
   }
   function _notebookHTML() {
@@ -962,23 +1006,28 @@ const LabMeasure = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('measure', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _inst = null; _spec = null; _zoom = 1; _eye = 'level'; _tared = false; _timed = false;
-    _clock = { run: false, t: 0, target: 0, speed: 1 };
-    _clearReading();
-    _trial = -1; _readTrial = -1; _trialVals = [];
-    _tapped = false;
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // has already set up - the picture IS the experiment; never wipe it.
+    if (!G.exp) {
+      _inst = null; _spec = null; _zoom = 1; _eye = 'level'; _tared = false; _timed = false;
+      _clock = { run: false, t: 0, target: 0, speed: 1 };
+      _clearReading();
+      _trial = -1; _readTrial = -1; _trialVals = [];
+      _tapped = false;
+    }
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
     _readouts();
     _guideEnter();
     const z = $('lab-measure-stage');
-    if (z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
+    if (!G.exp && z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
   // A step that is already true (eye already level, already zoomed right in)
   // is skipped rather than asking the pupil to do nothing.
   function _satisfied(on) {
+    if (!on) return false;
     const [k, v] = on.split(':');
     if (k === 'eye') return _kind() === 'cylinder' && _eye === v;
     if (k === 'align') return _kind() === 'rule' && _align === v;
@@ -994,9 +1043,9 @@ const LabMeasure = (() => {
     if (!G) return;
     _hush();
     let s = G.steps[_guide.step];
-    while (s && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
+    while (s && !s.any && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
-    const k = s.on.split(':')[0], v = s.on.split(':')[1];
+    const first = _stepToks(s)[0] || '', k = first.split(':')[0], v = first.split(':')[1];
     if (k === 'inst' && DATA().INSTRUMENTS[v] && _group !== DATA().INSTRUMENTS[v].group) { _group = DATA().INSTRUMENTS[v].group; if (_panel === 'sandbox') _renderPanel(); }
     const box = $('lab-guide');
     if (box) {
@@ -1011,19 +1060,34 @@ const LabMeasure = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
+
+  // The tokens a step points at: its options, its `any` list, or its one `on`.
+  const _stepToks = s => (s ? (s.options || s.any || (s.on ? [s.on] : [])) : []);
+  // A step is met by its `on` token, or by any token in `any`.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
+  const _expGuide = () => { const G = _gdef(); return !!(G && G.exp); };
+  // A token the current experiment step lists as wrong: the bench hears it
+  // (the runner explains) without acting on it.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
+  // A reading the assistant only talks about (near, sign, far…) still counts
+  // as a token, so an experiment can list it as a wrong option.
+  const _miss = v => _guideEvent('misread:' + v);
 
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) {
+    // The runner hears every token first, so a listed wrong choice explains itself.
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) {
       _guide.step++; _guideEnter();
-      if (!s.on.startsWith('wait:') && s.on !== 'read-bad' && s.on !== 'misread') _coachGuide(s.on);
+      if (!G.exp) _coachGuide(token);
     }
     // A mistake card can do a step for the pupil (after the gap-before-0 card
     // the pencil is moved to 0): move on rather than ask for it again.
-    else if (s && _satisfied(s.on)) _guideEnter();
+    else if (s && !s.any && _satisfied(s.on)) _guideEnter();
   }
 
   function _guideHint() {
@@ -1144,6 +1208,7 @@ const LabMeasure = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('measure', G)) { _stopGuide(true); return; }
     const st = Labs.store(LAB);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -1186,26 +1251,132 @@ const LabMeasure = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [k, v] = s.on.split(':');
-    const sel = k === 'inst' ? `[data-inst="${v}"]`
-      : k === 'spec' ? `[data-spec="${v}"]`
-      : k === 'zoom' ? '[data-act="zin"]'
-      : k === 'eye' ? '[data-act="eye"]'
-      : (k === 'align' || k === 'tare' || k === 'start' || k === 'tap') ? '[data-act="ctx"]'
-      : '[data-act="check"]';
-    const el = _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-inst],[data-spec]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
+    // An experiment step glows EVERY option it offers; a plain guide one control.
+    const exp = !!G.exp;
+    const els = _stepToks(s).map(t => _root.querySelector('.lab-measure ' + _selFor(t, exp))).filter(el => el && !el.hidden);
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-inst],[data-spec],[data-read],[data-eye],[data-align]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
+  }
+
+  // The control a guide token belongs to. In an experiment the eye positions,
+  // the ruler starts and the candidate readings are buttons of their own.
+  function _selFor(tok, exp) {
+    const t = String(tok), i = t.indexOf(':'), k = i > 0 ? t.slice(0, i) : t, v = i > 0 ? t.slice(i + 1) : '';
+    switch (k) {
+      case 'inst': return `[data-inst="${v}"]`;
+      case 'spec': return `[data-spec="${v}"]`;
+      case 'zoom': return '[data-act="zin"]';
+      case 'eye': return exp ? `[data-eye="${v}"]` : '[data-act="eye"]';
+      case 'align': return exp ? `[data-align="${v}"]` : '[data-act="ctx"]';
+      case 'tare': case 'start': case 'tap': case 'lift': return '[data-act="ctx"]';
+      case 'read': return exp ? '[data-read="ok"]' : '[data-act="check"]';
+      case 'misread': return exp ? `[data-read="${v}"]` : '[data-act="check"]';
+    }
+    return '[data-act="check"]';
+  }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use - the
+  // tools, the candidate readings, the shelf - and hide rows left empty; null
+  // shows everything and brings the typed reading box back. Re-applied after
+  // every render of those controls.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus, has = t => on && _focus.has(t);
+    const q = sel => _root.querySelectorAll(sel);
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    q('[data-act="zin"],[data-act="zout"]').forEach(b => { b.hidden = on && !has('zoom'); });
+    q('[data-act="eye"]').forEach(b => { b.hidden = on; });
+    q('[data-eye]').forEach(b => { b.hidden = !has('eye:' + b.dataset.eye); });
+    q('[data-align]').forEach(b => { b.hidden = !has('align:' + b.dataset.align); });
+    q('[data-act="ctx"]').forEach(b => { b.hidden = on && !['tare', 'start', 'tap', 'lift'].some(has); });
+    q('.lab-tools').forEach(r => { r.hidden = on && !anyShown(r); });
+    q('[data-read]').forEach(b => { b.hidden = !has(b.dataset.tok); });
+    const reads = $('lab-measure-reads');
+    if (reads) reads.hidden = !on || !anyShown(reads);
+    const wrap = $('lab-measure-readwrap');
+    if (wrap) { if (on) { if (wrap.firstChild) wrap.innerHTML = ''; } else if (!wrap.firstChild) _mountReadForm(); }
+    q('[data-inst]').forEach(b => { b.hidden = on && !has('inst:' + b.dataset.inst); });
+    q('[data-spec]').forEach(b => { b.hidden = on && !has('spec:' + b.dataset.spec); });
+    q('.lab-shelf-head').forEach(el => { el.hidden = on; });
+    q('.lab-shelf .lab-items').forEach(el => { el.hidden = on && !anyShown(el); });
+    q('.lab-measure-step').forEach(el => { el.hidden = on && !q('.lab-shelf [data-spec]:not([hidden])').length; });
+    q('.lab-shelf').forEach(el => { el.hidden = on && !anyShown(el); });
+  }
+  // The candidate readings for what is on the bench now (LabMeasureData
+  // .candidates): rebuilt only when they change, so a finger about to tap one
+  // is not pulled from under.
+  function _renderReads() {
+    const row = $('lab-measure-reads');
+    if (!row) return;
+    const m = _inst ? _m() : null;
+    const cs = m && m.ok ? DATA().candidates(m) : [];
+    const html = cs.map(c => `<button type="button" class="lab-tool lab-measure-readbtn" data-read="${c.key}" data-tok="${c.tok}" hidden>${esc(c.label)}</button>`).join('');
+    if (html === _readsHTML) return;
+    _readsHTML = html;
+    row.innerHTML = html;
+    _applyFocus();
+    _highlight();
+  }
+  function _pickRead(key) {
+    const m = _m();
+    if (!m.ok || _busy) return;
+    if (key === 'ok') showReading();
+    else if (key === 'near') check(DATA().clean(m.want + m.step), m.unit);
+    else misread(key);
+  }
+  // One guide token, performed as if tapped (an experiment's set-up).
+  function _do(tok) {
+    const t = String(tok), i = t.indexOf(':'), k = i > 0 ? t.slice(0, i) : t, v = i > 0 ? t.slice(i + 1) : '';
+    switch (k) {
+      case 'inst': selectInstrument(v, _quiet); break;
+      case 'spec': selectSpecimen(v); break;
+      case 'zoom': zoomIn(); break;
+      case 'eye': setEye(v); break;
+      case 'align': setAlign(v); break;
+      case 'tare': tare(); break;
+      case 'start': startTiming(); if (_quiet && _clock.run) _finishTiming(); break;
+      case 'tap': tapGlass(); break;
+      case 'lift': liftCylinder(); break;
+      case 'read': showReading(); break;
+      case 'misread': misread(v); break;
     }
   }
+  const experiment = {
+    list: () => DATA().forGrade(DATA().EXPERIMENTS || [], _g()),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [mid, i] = String(ref).split(':');
+      const M = DATA().MISSIONS.find(x => x.id === mid);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null; _focus = null;
+      _reset();
+      // The Aim is the welcome: the bench's own first-visit card must not
+      // come back the next time this grade's bench mounts.
+      const st = Labs.store(LAB);
+      if (!st[_introKey()]) { st[_introKey()] = true; Labs.persist(); }
+      if (!_root) return;
+      _renderPanel(); _readouts();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    apply: tok => { _quiet = true; try { _do(tok); } finally { _quiet = false; } _renderPanel(); _readouts(); },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _ev.slice(-6),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); _highlight(); },
+    selector: tok => _selFor(tok, true),
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -1293,6 +1464,7 @@ const LabMeasure = (() => {
       : _missionListHTML();
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -1311,6 +1483,7 @@ const LabMeasure = (() => {
   // Counts are this grade's only. The shell's toast counts every discovery the
   // lab has saved, so it is given a total only while those are all this grade's.
   function _discover(id) {
+    if (_quiet) return;
     const all = _forG(DATA().DISCOVERIES), d = all.find(x => x.id === id);
     if (!d) return;
     const onlyThis = Object.keys(Labs.store(LAB).disc).every(k => all.some(x => x.id === k));
@@ -1490,6 +1663,8 @@ const LabMeasure = (() => {
     if (ci) ci.textContent = cd.ico;
     if (cl) cl.textContent = cd.label;
     _syncForm();
+    _renderReads();
+    _applyFocus();
     void D;
   }
 
@@ -2292,7 +2467,8 @@ const LabMeasure = (() => {
     const m = _inst ? _m() : null;
     return { inst: _inst, spec: _spec, zoom: _zoom, eye: _eye, align: _align, tared: _tared, timed: _timed, clock: Object.assign({}, _clock),
              ok: !!(m && m.ok), want: m && m.ok ? m.want : null, busy: _busy, panel: _panel,
-             guide: _guide && { id: _guide.id, step: _guide.step },
+             guide: _guide && { id: _guide.id, step: _guide.step, token: (() => { const G = _gdef(), s = G && G.steps[_guide.step]; return s ? (s.on || (s.any && s.any[0]) || null) : null; })() },
+             focus: _focus ? [..._focus] : null, exp: _expGuide(), evidence: _ev.slice(-6),
              mission: _mission && { id: _mission.id, done: Object.keys(_mission.done), i: _mission.i, cards: _mission.cards, wrong: _mission.wrong, success: _mission.success },
              rows: _rows.slice(0, 6).map(r => r.what + ': ' + r.value), log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
              marks: _marks.map(x => x.t),
@@ -2310,7 +2486,7 @@ const LabMeasure = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, selectInstrument, selectSpecimen, zoomIn, zoomOut,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, selectInstrument, selectSpecimen, zoomIn, zoomOut,
            setEye, setAlign, tare, tapGlass, liftCylinder, startTiming, stir, check, showReading, misread, choose, speak, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMeasure = LabMeasure;

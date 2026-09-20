@@ -70,11 +70,11 @@ STATIC_QUESTIONS.push(
     explanation:'<b>12 square units</b>. Count all the squares: 12.' }),
 
   makeMCQ({ id:'g3mth-geo-059', chapterId:'g3mth-geometry', difficulty:3, subsection:'perimeter_area',
-    question:'A rectangle is 7 m long and 3 m wide. What is its area?',
+    question:'A vegetable patch is marked out in squares of 1 metre: 7 squares along and 3 squares down. What is its area?',
     options:['21 m²','20 m²','10 m²','14 m²'],
     answer:'21 m²',
-    hint:'Area of a rectangle = length × width.',
-    explanation:'<b>21 m²</b>. 7 m × 3 m = 21 m².' }),
+    hint:'Count the squares: 3 rows of 7.',
+    explanation:'3 rows of 7 squares = <b>21</b> squares of 1 m each, so the area is <b>21 m²</b>.' }),
 
   makeMCQ({ id:'g3mth-geo-060', chapterId:'g3mth-geometry', difficulty:4, subsection:'perimeter_area',
     question:'A garden is 8 m long and 5 m wide. Raj wants to put a fence all the way around it. How many metres of fence does he need?',

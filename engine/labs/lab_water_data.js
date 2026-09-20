@@ -18,6 +18,10 @@
 //  ⚠ Primary lab (docs/labs/LAB_SPEC.md §8): every guide, mission and
 //    discovery carries `grades`, and every sentence is written for a
 //    9-year-old. scripts/test-labs-water-data.js checks both.
+//  ⚠ EXPERIMENTS (LAB_SPEC §10) is what a child opens on: five at Grade 4,
+//    re-cut from the guides, missions and discoveries below. The data test
+//    replays every set-up and right path through this file's own model and
+//    fails if a See text is not what the bench would show.
 //
 //  The three benches:
 //   HEAT  - 100 g of water in a glass beaker, as ice (from the freezer, -10 °C)
@@ -657,12 +661,120 @@ const LabWaterData = (() => {
       ] },
   ];
 
+  // ── Experiments (lab_experiment.js, LAB_SPEC.md §10) ─────
+  // Aim → Predict → Do → See → Check → Done, the one shape every lab shares.
+  // `setup` is applied silently before the Aim, so the picture is already set
+  // up; a step is a DECISION (ask + options, the wrong ones explaining
+  // themselves) or a WAIT-AND-WATCH (on + say, naming the button it points
+  // at). `check` refs are "<mission id>:<quiz index>" into MISSIONS above.
+  // Experiment 1 is the exam-shaped one: "What happens to ice when it is
+  // heated?" is a Grade 4 question (g4s-wat-006). The `exam` lines quote no
+  // paper - the Grade 4 question files hold no PSAC past paper.
+  const EXPERIMENTS = [
+    { id: 'ice_heated', grades: [4], chapter: 'g4sci-water', icon: '🧊',
+      title: 'What happens when ice is heated?',
+      aim: 'A beaker of ice cubes, fresh from the freezer, and a hot plate. An adult is here to help.',
+      setup: ['rig:heat', 'adult:on', 'start:ice'],
+      predict: { q: 'The beaker of ice goes on the hot plate. What happens to the ice?', answer: 'melt',
+        options: [{ id: 'same', label: 'It stays ice', sub: 'nothing changes' }, { id: 'melt', label: 'It melts', sub: 'into liquid water' },
+                  { id: 'gas', label: 'It turns straight into steam' }, { id: 'grow', label: 'It gets bigger' }] },
+      steps: [
+        { ask: 'Where does the beaker go, to melt the ice fastest?', on: 'place:hot', options: ['place:hot', 'place:table', 'place:freezer'],
+          wrong: { 'place:table': 'The room is warm, so the ice would melt, but slowly. The hot plate is much faster.',
+                   'place:freezer': 'The freezer is colder than 0 °C. The ice would stay ice.' } },
+        { on: 'five', say: 'Tap ⏩ Wait 5 minutes. Watch the ice cubes.' },
+        { on: 'read', say: 'Tap 🌡️ Read at eye level. What does the thermometer say?' },
+        { on: 'five', say: 'Tap ⏩ Wait 5 minutes. Watch the water.' },
+      ],
+      see: { saw: 'The ice melted into water. The thermometer said 0 °C while the ice was melting. Then the water got hot.',
+             learn: 'Heat makes ice melt. Melting turns a solid into a liquid, and it happens at 0 °C.' },
+      check: ['states:0', 'states:4', 'states:5'],
+      exam: 'In the exam you may be asked what happens to ice when it is heated. It melts into liquid water, at 0 °C.' },
+
+    { id: 'boil', grades: [4], chapter: 'g4sci-water', icon: '🫧',
+      title: 'How hot does boiling water get?',
+      aim: 'Tap water sits on the hot plate, and an adult has switched it on. Watch the thermometer as the water heats up.',
+      setup: ['rig:heat', 'adult:on', 'start:water', 'place:hot'],
+      predict: { q: 'What will the thermometer say when the water boils?', answer: '100',
+        options: [{ id: '0', label: '0 °C' }, { id: '50', label: '50 °C' }, { id: '100', label: '100 °C' }, { id: '200', label: '200 °C' }] },
+      steps: [
+        { on: 'five', say: 'Tap ⏩ Wait 5 minutes. Look for big bubbles.' },
+        { on: 'read', say: 'Tap 🌡️ Read at eye level while it bubbles.' },
+        { ask: 'A white cloud rises from the water. What is it?', on: 'name:steam', options: ['name:steam', 'name:smoke'],
+          wrong: { 'name:smoke': 'Nothing is burning, so it is not smoke. The white cloud is water. Steam is water as a gas.' } },
+        { on: 'catch', say: 'Tap 🍽️ Cold plate over it. Look under the plate.' },
+      ],
+      see: { saw: 'Big bubbles rose and the thermometer said 100 °C. Steam rose from the water and turned into drops on the cold plate.',
+             learn: 'Water boils at 100 °C. Steam is water as a gas. On a cold plate it cools and condenses back into water.' },
+      check: ['states:1', 'states:2', 'states:3'],
+      exam: 'In the exam you may be asked at what temperature water boils. It is 100 °C, and steam is water as a gas.' },
+
+    { id: 'freeze', grades: [4], chapter: 'g4sci-water', icon: '❄️',
+      title: 'When does water turn into ice?',
+      aim: 'A beaker of tap water at 20 °C. You choose where it goes. Watch the thermometer as ice forms.',
+      setup: ['rig:heat', 'start:water'],
+      predict: { q: 'What will the thermometer say while the water is turning into ice?', answer: '0',
+        options: [{ id: '20', label: '20 °C' }, { id: '0', label: '0 °C' }, { id: 'm18', label: '−18 °C' }, { id: '100', label: '100 °C' }] },
+      steps: [
+        { ask: 'Where does the beaker go, to turn the water into ice?', on: 'place:freezer', options: ['place:freezer', 'place:table', 'place:hot'],
+          wrong: { 'place:table': 'The room is 25 °C. That is warmer than 0 °C, so the water stays liquid.',
+                   'place:hot': 'The hot plate makes water hotter and hotter, until it boils. It never freezes there.' } },
+        { on: 'five', say: 'Tap ⏩ Wait 5 minutes. Watch the water.' },
+        { on: 'read', say: 'Tap 🌡️ Read at eye level. Ice is forming.' },
+        { on: 'five', say: 'Tap ⏩ Wait 5 minutes more. Watch the ice.' },
+      ],
+      see: { saw: 'The water froze into solid ice. The thermometer said 0 °C while the ice was forming. Then the ice got colder.',
+             learn: 'Cold makes water freeze at 0 °C. Freezing turns a liquid into a solid. It is the opposite of melting.' },
+      check: ['states:0', 'states:5',
+        { q: 'Tap water is put in the freezer. What happens to it?',
+          options: ['It freezes into solid ice', 'It boils', 'It turns into steam', 'It stays liquid for ever'],
+          why: 'The freezer is colder than 0 °C. The water cools to 0 °C, then freezes into ice.' }],
+      exam: 'In the exam you may be asked at what temperature water freezes. It is 0 °C, and ice is water in its solid state.' },
+
+    { id: 'rain_jar', grades: [4], chapter: 'g4sci-water', icon: '🌧️',
+      title: 'Can we get the water back?',
+      aim: 'Warm water in a glass jar. The water will turn into vapour. Can we turn the vapour back into water?',
+      setup: ['rig:jar', 'jwater:warm'],
+      predict: { q: 'The jar gets a cold lid. What will we see after 20 minutes?', answer: 'rain',
+        options: [{ id: 'none', label: 'Nothing', sub: 'the jar stays clear' }, { id: 'rain', label: 'Drops under the lid', sub: 'falling like rain' },
+                  { id: 'ice', label: 'The water freezes' }] },
+      steps: [
+        { ask: 'The vapour must turn back into water. Which lid?', on: 'jlid:ice', options: ['jlid:ice', 'jlid:film', 'jlid:none'],
+          wrong: { 'jlid:film': 'Cling film is not cold. It catches a few drops, but the plate of ice is far colder.',
+                   'jlid:none': 'With no lid, the vapour floats out of the jar. No drops, and no rain.' } },
+        { on: 'ten', say: 'Tap ⏱ Wait 10 minutes. Look under the plate.' },
+        { on: 'ten', say: 'Tap ⏱ Wait 10 minutes again. Watch the drops.' },
+      ],
+      see: { saw: 'Drops of water formed under the cold plate. They grew bigger, then fell back into the water like rain.',
+             learn: 'This is the water cycle in a jar. Warm water evaporates, the vapour cools and condenses, and the drops fall as rain.' },
+      check: ['cycle:0', 'cycle:1', 'cycle:2'],
+      exam: 'In the exam you may be asked to order the water cycle. Evaporation, condensation, then precipitation: the rain.' },
+
+    { id: 'drying_race', grades: [4], chapter: 'g4sci-water', icon: '☀️',
+      title: 'Which dish dries first?',
+      aim: 'Three dishes with 30 ml of water each. Dish A stays in the shade, dish C gets the sun and a fan. You set up dish B.',
+      setup: ['rig:dry', 'dish:C', 'spot:sun', 'fan:on', 'dish:B'],
+      predict: { q: 'After 6 hours, which dish has the LEAST water left?', answer: 'C',
+        options: [{ id: 'A', label: 'Dish A', sub: 'shade, still air' }, { id: 'B', label: 'Dish B', sub: 'in the sun' },
+                  { id: 'C', label: 'Dish C', sub: 'sun and a fan' }, { id: 'same', label: 'All the same' }] },
+      steps: [
+        { ask: 'Dish C has sun AND a fan. Dish B needs the sun only. Where does dish B go?', on: 'spot:sun', options: ['spot:sun', 'spot:shade'],
+          wrong: { 'spot:shade': 'Then dish B is the same as dish A. Put it in the sun, so C differs from B in ONE thing: the fan.' } },
+        { on: 'six', say: 'Tap ⏩ Wait to hour 6. Which dish has the least water left?' },
+      ],
+      see: { saw: 'After 6 hours dish C, in the sun with a fan, had the least water left. Dish A, in the shade, had the most.',
+             learn: 'Heat and moving air both speed up evaporation. That is why washing dries fastest on a hot, windy day.' },
+      check: ['race:0', 'race:1', 'race:3'],
+      exam: 'In the exam: why do wet clothes dry faster on a sunny, windy day? Heat and moving air speed up evaporation.' },
+  ];
+
+
   return { GRADES, MASS, MELT_C, BOIL_C, ROOM_C, FREEZER_C, ICE_C, TAP_C, STEAMY_C, PARALLAX_C, HEAT, PLACES, STARTS,
            fmtC, heatNew, heatTick, heatRun, phase, steamy, angleRead, STATE_OF, heatSeen, heatShort, applyHeat, heatFinds, readFinds,
            DISHES, DRY, DRY_HOURS, AMTS, CONTS, SPOTS, FACTORS, blankDish, newDishes, dryRate, dryLeft, diffs, dishWords, dishLabel,
            applyDry, fairFactors, dryFinds, dryMistakes,
            JAR_STEP, JAR_STEPS, RAIN_AT, JAR_WATERS, JAR_LIDS, JAR_SPOTS, blankJar, jarVapour, jarDrops, jarStage, JAR_SEEN, JAR_SHORT,
            jarWords, applyJar, jarFinds, jarMistakes,
-           SAY, missionReady, MISSIONS, DISCOVERIES, HAZARDS, RESULTS, FACTS, GUIDES };
+           SAY, missionReady, MISSIONS, DISCOVERIES, HAZARDS, RESULTS, FACTS, GUIDES, EXPERIMENTS };
 })();
 if (typeof window !== 'undefined') window.LabWaterData = LabWaterData;

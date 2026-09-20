@@ -1,0 +1,1044 @@
+{
+  "pack": "grade6-science",
+  "source": "Science.pdf — MIE Teaching and Learning Syllabus, Science, Grades 3 to 6 (December 2015), 'FUNDAMENTAL TOPICS, SUBTOPICS, SPECIFIC LEARNING OUTCOMES AND ACHIEVEMENT LEVELS FOR GRADE 6', printed pages 15-17",
+  "note": "One entry per thing the Grade 6 table says a learner must be able to do, taken from the Specific Learning Outcomes and Achievement Levels 1-3 of the seven Grade 6 fundamental topics (Air, Materials in our Environment, Animals, Plants, Energy, The Earth/Moon/Sun in the Solar System, Ecosystems of Forests and Lagoons). `any` = covered when some question's stem or answer contains ANY of these phrases. `all` = covered only when ONE question contains ALL of them. Terms are matched against the question STEM AND ANSWER ONLY, never the explanation: a fact mentioned in an explanation is a fact the child is never asked. ⚠ The syllabus is the authority for WHAT is here; it does not list examples for every outcome, so where it says only 'list renewable sources' the obvious named examples are entered as separate facts and can be argued with. ⚠ Chapters the pack adds beyond the Grade 6 table (recycling, deforestation, endangered species) are deliberately absent: this ledger asks whether the pack covers the syllabus, not whether the syllabus covers the pack.",
+  "facts": [
+    {
+      "id": "air-01",
+      "unit": "Air",
+      "fact": "Air is a mixture of gases",
+      "any": [
+        "mixture of gas",
+        "mixture of several gas",
+        "composition of gases",
+        "composition of dry air"
+      ]
+    },
+    {
+      "id": "air-02",
+      "unit": "Air",
+      "fact": "Nitrogen is one of the gases present in air",
+      "all": [
+        "nitrogen",
+        "air"
+      ]
+    },
+    {
+      "id": "air-03",
+      "unit": "Air",
+      "fact": "Oxygen is one of the gases present in air",
+      "all": [
+        "oxygen",
+        "air"
+      ]
+    },
+    {
+      "id": "air-04",
+      "unit": "Air",
+      "fact": "Carbon dioxide is one of the gases present in air",
+      "all": [
+        "carbon dioxide",
+        "air"
+      ]
+    },
+    {
+      "id": "air-05",
+      "unit": "Air",
+      "fact": "Water vapour is one of the gases present in air",
+      "all": [
+        "water vapour",
+        "air"
+      ]
+    },
+    {
+      "id": "air-06",
+      "unit": "Air",
+      "fact": "Oxygen is essential for all living things",
+      "all": [
+        "oxygen",
+        "living thing"
+      ]
+    },
+    {
+      "id": "air-07",
+      "unit": "Air",
+      "fact": "Air exerts pressure",
+      "any": [
+        "air pressure"
+      ]
+    },
+    {
+      "id": "air-08",
+      "unit": "Air",
+      "fact": "Air pressure has everyday uses",
+      "all": [
+        "air pressure",
+        "use"
+      ]
+    },
+    {
+      "id": "air-09",
+      "unit": "Air",
+      "fact": "A fire needs oxygen, so cutting off the air puts it out",
+      "all": [
+        "fire",
+        "oxygen"
+      ]
+    },
+    {
+      "id": "air-10",
+      "unit": "Air",
+      "fact": "Different types of fire are extinguished in different ways",
+      "any": [
+        "extinguish",
+        "fire extinguisher",
+        "put out the fire",
+        "put out a fire"
+      ]
+    },
+    {
+      "id": "air-11",
+      "unit": "Air",
+      "fact": "Air pollution has identifiable causes",
+      "any": [
+        "cause of air pollution",
+        "causes air pollution",
+        "source of air pollution",
+        "sources of air pollution"
+      ]
+    },
+    {
+      "id": "air-12",
+      "unit": "Air",
+      "fact": "There are different types of air pollution",
+      "all": [
+        "air pollution",
+        "type"
+      ]
+    },
+    {
+      "id": "air-13",
+      "unit": "Air",
+      "fact": "Human activities cause air pollution",
+      "all": [
+        "air pollution",
+        "human"
+      ],
+      "any": [
+        "air pollution from traffic",
+        "vehicle exhaust",
+        "human activit"
+      ]
+    },
+    {
+      "id": "air-14",
+      "unit": "Air",
+      "fact": "Air pollution can be prevented",
+      "all": [
+        "air pollution",
+        "prevent"
+      ],
+      "any": [
+        "reduce air pollution",
+        "prevent air pollution"
+      ]
+    },
+    {
+      "id": "air-15",
+      "unit": "Air",
+      "fact": "Air pollution affects living things and the environment",
+      "any": [
+        "air pollution harm",
+        "air pollution affect",
+        "effect of air pollution",
+        "this air pollution"
+      ]
+    },
+    {
+      "id": "mat-01",
+      "unit": "Materials in our Environment",
+      "fact": "Materials are either natural or man-made",
+      "any": [
+        "man-made material",
+        "manmade material",
+        "man made material"
+      ]
+    },
+    {
+      "id": "mat-02",
+      "unit": "Materials in our Environment",
+      "fact": "Some materials are obtained naturally while others are made by people",
+      "all": [
+        "natural",
+        "man-made"
+      ]
+    },
+    {
+      "id": "mat-03",
+      "unit": "Materials in our Environment",
+      "fact": "Natural materials come from named sources",
+      "all": [
+        "material",
+        "obtained from"
+      ],
+      "any": [
+        "made from which natural material"
+      ]
+    },
+    {
+      "id": "mat-04",
+      "unit": "Materials in our Environment",
+      "fact": "The properties of a material decide what it is used for",
+      "any": [
+        "which property",
+        "property of",
+        "properties of"
+      ]
+    },
+    {
+      "id": "mat-05",
+      "unit": "Materials in our Environment",
+      "fact": "Common materials have common uses",
+      "all": [
+        "material",
+        "used to make"
+      ]
+    },
+    {
+      "id": "mat-06",
+      "unit": "Materials in our Environment",
+      "fact": "Rusting is defined",
+      "any": [
+        "rusting",
+        "rust"
+      ]
+    },
+    {
+      "id": "mat-07",
+      "unit": "Materials in our Environment",
+      "fact": "It is iron that rusts",
+      "all": [
+        "iron",
+        "rust"
+      ]
+    },
+    {
+      "id": "mat-08",
+      "unit": "Materials in our Environment",
+      "fact": "Rusting needs water as well as air",
+      "all": [
+        "rust",
+        "water"
+      ]
+    },
+    {
+      "id": "mat-09",
+      "unit": "Materials in our Environment",
+      "fact": "Rusting needs air (oxygen)",
+      "all": [
+        "rust",
+        "air"
+      ]
+    },
+    {
+      "id": "mat-10",
+      "unit": "Materials in our Environment",
+      "fact": "Rusting can be prevented",
+      "all": [
+        "rust",
+        "prevent"
+      ]
+    },
+    {
+      "id": "mat-11",
+      "unit": "Materials in our Environment",
+      "fact": "Iron is protected from rust by coating it (paint, oil, grease, galvanising)",
+      "any": [
+        "painting",
+        "oiling",
+        "greasing",
+        "galvanis",
+        "coat of paint"
+      ]
+    },
+    {
+      "id": "mat-12",
+      "unit": "Materials in our Environment",
+      "fact": "There are different types of environmental waste",
+      "all": [
+        "waste",
+        "type"
+      ]
+    },
+    {
+      "id": "mat-13",
+      "unit": "Materials in our Environment",
+      "fact": "Waste has to be disposed of",
+      "any": [
+        "waste disposal",
+        "dispose of waste",
+        "disposing of waste"
+      ]
+    },
+    {
+      "id": "mat-14",
+      "unit": "Materials in our Environment",
+      "fact": "Environmental waste affects planet Earth",
+      "all": [
+        "waste",
+        "environment"
+      ]
+    },
+    {
+      "id": "mat-15",
+      "unit": "Materials in our Environment",
+      "fact": "We need to care for planet Earth",
+      "any": [
+        "care for planet earth",
+        "care for the earth",
+        "care for our planet"
+      ]
+    },
+    {
+      "id": "ani-01",
+      "unit": "Animals",
+      "fact": "Animals obtain their food in different ways",
+      "all": [
+        "animal",
+        "food"
+      ]
+    },
+    {
+      "id": "ani-02",
+      "unit": "Animals",
+      "fact": "There are different types of animal",
+      "all": [
+        "type",
+        "animal"
+      ]
+    },
+    {
+      "id": "ani-03",
+      "unit": "Animals",
+      "fact": "A herbivore eats plants",
+      "any": [
+        "herbivor"
+      ]
+    },
+    {
+      "id": "ani-04",
+      "unit": "Animals",
+      "fact": "A carnivore eats other animals",
+      "any": [
+        "carnivor"
+      ]
+    },
+    {
+      "id": "ani-05",
+      "unit": "Animals",
+      "fact": "An omnivore eats both plants and animals",
+      "any": [
+        "omnivor"
+      ]
+    },
+    {
+      "id": "ani-06",
+      "unit": "Animals",
+      "fact": "Animals are classified by the type of food they eat",
+      "all": [
+        "classif",
+        "food"
+      ]
+    },
+    {
+      "id": "ani-07",
+      "unit": "Animals",
+      "fact": "Animals are classified into groups",
+      "all": [
+        "classif",
+        "animal"
+      ]
+    },
+    {
+      "id": "ani-08",
+      "unit": "Animals",
+      "fact": "Food is divided into food groups",
+      "any": [
+        "food group"
+      ]
+    },
+    {
+      "id": "ani-09",
+      "unit": "Animals",
+      "fact": "Carbohydrates are a food group",
+      "any": [
+        "carbohydrate"
+      ]
+    },
+    {
+      "id": "ani-10",
+      "unit": "Animals",
+      "fact": "Proteins are a food group",
+      "any": [
+        "protein"
+      ]
+    },
+    {
+      "id": "ani-11",
+      "unit": "Animals",
+      "fact": "Fats are a food group",
+      "any": [
+        "fats"
+      ]
+    },
+    {
+      "id": "ani-12",
+      "unit": "Animals",
+      "fact": "Vitamins are a food group",
+      "any": [
+        "vitamin"
+      ]
+    },
+    {
+      "id": "ani-13",
+      "unit": "Animals",
+      "fact": "Minerals are a food group",
+      "any": [
+        "mineral"
+      ]
+    },
+    {
+      "id": "ani-14",
+      "unit": "Animals",
+      "fact": "A balanced diet is defined",
+      "any": [
+        "balanced diet"
+      ]
+    },
+    {
+      "id": "ani-15",
+      "unit": "Animals",
+      "fact": "A balanced diet keeps the body healthy",
+      "all": [
+        "balanced diet",
+        "health"
+      ]
+    },
+    {
+      "id": "ani-16",
+      "unit": "Animals",
+      "fact": "Humans have milk teeth",
+      "any": [
+        "milk teeth",
+        "milk tooth"
+      ]
+    },
+    {
+      "id": "ani-17",
+      "unit": "Animals",
+      "fact": "Milk teeth are replaced by permanent teeth",
+      "any": [
+        "permanent teeth",
+        "permanent tooth"
+      ]
+    },
+    {
+      "id": "ani-18",
+      "unit": "Animals",
+      "fact": "Incisors are a type of human tooth",
+      "any": [
+        "incisor"
+      ]
+    },
+    {
+      "id": "ani-19",
+      "unit": "Animals",
+      "fact": "Canines are a type of human tooth",
+      "any": [
+        "canine"
+      ]
+    },
+    {
+      "id": "ani-20",
+      "unit": "Animals",
+      "fact": "Premolars are a type of human tooth",
+      "any": [
+        "premolar"
+      ]
+    },
+    {
+      "id": "ani-21",
+      "unit": "Animals",
+      "fact": "Molars are a type of human tooth",
+      "any": [
+        "molar"
+      ]
+    },
+    {
+      "id": "ani-22",
+      "unit": "Animals",
+      "fact": "Each type of tooth has its own function",
+      "all": [
+        "teeth",
+        "function"
+      ]
+    },
+    {
+      "id": "ani-23",
+      "unit": "Animals",
+      "fact": "Teeth have to be cared for",
+      "any": [
+        "teeth be brushed",
+        "tooth decay",
+        "brush your teeth"
+      ]
+    },
+    {
+      "id": "ani-24",
+      "unit": "Animals",
+      "fact": "Animals help maintain the composition of the air",
+      "all": [
+        "animal",
+        "carbon dioxide"
+      ]
+    },
+    {
+      "id": "ani-25",
+      "unit": "Animals",
+      "fact": "Humans use animals",
+      "all": [
+        "human",
+        "animal",
+        "use"
+      ]
+    },
+    {
+      "id": "pla-01",
+      "unit": "Plants",
+      "fact": "The leaf has functions",
+      "all": [
+        "leaf",
+        "food"
+      ]
+    },
+    {
+      "id": "pla-02",
+      "unit": "Plants",
+      "fact": "Plants make their own food",
+      "all": [
+        "plant",
+        "make",
+        "food"
+      ]
+    },
+    {
+      "id": "pla-03",
+      "unit": "Plants",
+      "fact": "Photosynthesis is defined",
+      "any": [
+        "photosynthesis"
+      ]
+    },
+    {
+      "id": "pla-04",
+      "unit": "Plants",
+      "fact": "Photosynthesis needs sunlight",
+      "all": [
+        "photosynthesis",
+        "light"
+      ]
+    },
+    {
+      "id": "pla-05",
+      "unit": "Plants",
+      "fact": "Photosynthesis needs water",
+      "all": [
+        "photosynthesis",
+        "water"
+      ]
+    },
+    {
+      "id": "pla-06",
+      "unit": "Plants",
+      "fact": "Photosynthesis needs carbon dioxide",
+      "all": [
+        "photosynthesis",
+        "carbon dioxide"
+      ]
+    },
+    {
+      "id": "pla-07",
+      "unit": "Plants",
+      "fact": "Chlorophyll in the leaf traps light",
+      "any": [
+        "chlorophyll"
+      ]
+    },
+    {
+      "id": "pla-08",
+      "unit": "Plants",
+      "fact": "Photosynthesis releases oxygen",
+      "all": [
+        "photosynthesis",
+        "oxygen"
+      ]
+    },
+    {
+      "id": "pla-09",
+      "unit": "Plants",
+      "fact": "Plants breathe",
+      "all": [
+        "plant",
+        "breath"
+      ]
+    },
+    {
+      "id": "pla-10",
+      "unit": "Plants",
+      "fact": "Gases enter and leave the leaf through stomata",
+      "any": [
+        "stomata",
+        "stomate"
+      ]
+    },
+    {
+      "id": "pla-11",
+      "unit": "Plants",
+      "fact": "Plants help maintain the composition of the air",
+      "all": [
+        "plant",
+        "oxygen",
+        "air"
+      ]
+    },
+    {
+      "id": "pla-12",
+      "unit": "Plants",
+      "fact": "Plants have uses",
+      "all": [
+        "plant",
+        "use"
+      ]
+    },
+    {
+      "id": "ene-01",
+      "unit": "Energy",
+      "fact": "Energy is transformed from one form into another",
+      "all": [
+        "energy",
+        "transform"
+      ]
+    },
+    {
+      "id": "ene-02",
+      "unit": "Energy",
+      "fact": "A fuel is defined",
+      "any": [
+        "fuel"
+      ]
+    },
+    {
+      "id": "ene-03",
+      "unit": "Energy",
+      "fact": "Fuels are used to produce electricity",
+      "all": [
+        "fuel",
+        "electricity"
+      ]
+    },
+    {
+      "id": "ene-04",
+      "unit": "Energy",
+      "fact": "A hydro-electric power station uses falling water",
+      "any": [
+        "hydro-electric",
+        "hydroelectric",
+        "hydro electric"
+      ]
+    },
+    {
+      "id": "ene-05",
+      "unit": "Energy",
+      "fact": "A thermal power station burns fuel",
+      "any": [
+        "thermal power"
+      ]
+    },
+    {
+      "id": "ene-06",
+      "unit": "Energy",
+      "fact": "Hydro-electric and thermal power stations can be compared",
+      "all": [
+        "hydro",
+        "thermal"
+      ]
+    },
+    {
+      "id": "ene-07",
+      "unit": "Energy",
+      "fact": "Some sources of energy cause pollution",
+      "all": [
+        "energy",
+        "pollut"
+      ]
+    },
+    {
+      "id": "ene-08",
+      "unit": "Energy",
+      "fact": "Some sources of energy do not cause pollution",
+      "any": [
+        "non-polluting",
+        "does not pollute",
+        "do not pollute"
+      ]
+    },
+    {
+      "id": "ene-09",
+      "unit": "Energy",
+      "fact": "Renewable sources of energy are defined",
+      "any": [
+        "renewable"
+      ]
+    },
+    {
+      "id": "ene-10",
+      "unit": "Energy",
+      "fact": "Non-renewable sources of energy are defined",
+      "any": [
+        "non-renewable",
+        "nonrenewable",
+        "non renewable"
+      ]
+    },
+    {
+      "id": "ene-11",
+      "unit": "Energy",
+      "fact": "Solar energy is renewable",
+      "all": [
+        "solar",
+        "renewable"
+      ]
+    },
+    {
+      "id": "ene-12",
+      "unit": "Energy",
+      "fact": "Wind energy is renewable",
+      "all": [
+        "wind",
+        "renewable"
+      ]
+    },
+    {
+      "id": "ene-13",
+      "unit": "Energy",
+      "fact": "Fossil fuels such as coal and oil are non-renewable",
+      "any": [
+        "fossil fuel"
+      ]
+    },
+    {
+      "id": "ene-14",
+      "unit": "Energy",
+      "fact": "Sources of energy are classified as renewable or non-renewable",
+      "any": [
+        "renewable or a non-renewable",
+        "renewable or non-renewable"
+      ]
+    },
+    {
+      "id": "ene-15",
+      "unit": "Energy",
+      "fact": "Green energy is defined",
+      "any": [
+        "green energy"
+      ]
+    },
+    {
+      "id": "ene-16",
+      "unit": "Energy",
+      "fact": "Green energy matters",
+      "all": [
+        "green energy",
+        "important"
+      ]
+    },
+    {
+      "id": "sol-01",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Sun is a star",
+      "all": [
+        "sun",
+        "star"
+      ]
+    },
+    {
+      "id": "sol-02",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Earth is a planet",
+      "all": [
+        "earth",
+        "planet"
+      ]
+    },
+    {
+      "id": "sol-03",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Sun, the Earth and the Moon are identified in the Solar System",
+      "all": [
+        "moon",
+        "solar system"
+      ]
+    },
+    {
+      "id": "sol-04",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Earth spins on its axis",
+      "any": [
+        "axis"
+      ]
+    },
+    {
+      "id": "sol-05",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Earth's spin causes day and night",
+      "any": [
+        "day and night"
+      ]
+    },
+    {
+      "id": "sol-06",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Earth moves around the Sun",
+      "all": [
+        "earth",
+        "around the sun"
+      ]
+    },
+    {
+      "id": "sol-07",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Moon moves around the Earth",
+      "any": [
+        "orbit the earth",
+        "orbits the earth",
+        "around the earth"
+      ]
+    },
+    {
+      "id": "sol-08",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "One spin of the Earth is one day",
+      "all": [
+        "day",
+        "24 hour"
+      ]
+    },
+    {
+      "id": "sol-09",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "One journey of the Earth around the Sun is one year",
+      "all": [
+        "year",
+        "sun"
+      ]
+    },
+    {
+      "id": "sol-10",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "The Sun, Earth and Moon are different celestial objects",
+      "any": [
+        "celestial"
+      ]
+    },
+    {
+      "id": "sol-11",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "Global warming is defined",
+      "any": [
+        "global warming"
+      ]
+    },
+    {
+      "id": "sol-12",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "Human activities cause global warming",
+      "all": [
+        "global warming",
+        "human"
+      ]
+    },
+    {
+      "id": "sol-13",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "A rise in carbon dioxide is related to global warming",
+      "all": [
+        "global warming",
+        "carbon dioxide"
+      ]
+    },
+    {
+      "id": "sol-14",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "Global warming can be prevented",
+      "all": [
+        "global warming",
+        "prevent"
+      ]
+    },
+    {
+      "id": "sol-15",
+      "unit": "The Earth, Moon and Sun in the Solar System",
+      "fact": "Global warming affects living things and the environment",
+      "all": [
+        "global warming",
+        "effect"
+      ]
+    },
+    {
+      "id": "eco-01",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "An ecosystem is defined",
+      "any": [
+        "ecosystem"
+      ]
+    },
+    {
+      "id": "eco-02",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "A terrestrial ecosystem is one on land",
+      "any": [
+        "terrestrial"
+      ]
+    },
+    {
+      "id": "eco-03",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "An aquatic or marine ecosystem is one in water",
+      "any": [
+        "aquatic",
+        "marine ecosystem"
+      ]
+    },
+    {
+      "id": "eco-04",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "The forest is an ecosystem",
+      "all": [
+        "forest",
+        "ecosystem"
+      ]
+    },
+    {
+      "id": "eco-05",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "The lagoon is an ecosystem",
+      "all": [
+        "lagoon",
+        "ecosystem"
+      ]
+    },
+    {
+      "id": "eco-06",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "The forest and the lagoon can be compared",
+      "all": [
+        "forest",
+        "lagoon"
+      ]
+    },
+    {
+      "id": "eco-07",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Forests and lagoons are important",
+      "all": [
+        "forest",
+        "important"
+      ]
+    },
+    {
+      "id": "eco-08",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Human activities threaten our forests and lagoons",
+      "all": [
+        "forest",
+        "harm"
+      ],
+      "any": [
+        "deforestation",
+        "cutting down the forest",
+        "clearing the forest"
+      ]
+    },
+    {
+      "id": "eco-09",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Forest and lagoon ecosystems can be protected",
+      "all": [
+        "protect",
+        "lagoon"
+      ]
+    },
+    {
+      "id": "eco-10",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Forests and lagoons need to be conserved",
+      "all": [
+        "conserv",
+        "forest"
+      ]
+    },
+    {
+      "id": "eco-11",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Beach erosion is defined",
+      "any": [
+        "beach erosion"
+      ]
+    },
+    {
+      "id": "eco-12",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Beach erosion can be prevented in Mauritius and Rodrigues",
+      "all": [
+        "beach erosion",
+        "prevent"
+      ]
+    },
+    {
+      "id": "eco-13",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Soil erosion is defined",
+      "any": [
+        "soil erosion"
+      ]
+    },
+    {
+      "id": "eco-14",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Human activities cause soil and beach erosion",
+      "all": [
+        "erosion",
+        "human"
+      ]
+    },
+    {
+      "id": "eco-15",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Erosion affects living things and the environment",
+      "any": [
+        "erosion affect",
+        "effect of erosion",
+        "erosion harm"
+      ]
+    },
+    {
+      "id": "eco-16",
+      "unit": "Ecosystems of Forests and Lagoons",
+      "fact": "Living things differ between one ecosystem and another",
+      "all": [
+        "ecosystem",
+        "living thing"
+      ]
+    }
+  ]
+}

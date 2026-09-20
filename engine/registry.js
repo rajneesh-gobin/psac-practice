@@ -219,16 +219,18 @@ const RoleModules = (() => {
       'engine/teacher.js',
       'engine/teacher_classroom_detail.js',
     ],
-    // Science Labs (NCE only): just the shared shell - the hub costs these TWO
-    // files out of 48 in engine/labs/. Each lab fetches its own data, bench and
-    // stylesheet when that lab is opened - see Labs.LABS / _ensure() in
-    // lab_core.js.
-    // ⚠ Said "one file" until lab_study.js was added beside it. Both globals
-    //   are asserted by scripts/test-role-modules.js, which reads this list
-    //   rather than counting it, so adding a third shell file is fine and
-    //   dropping one fails.
+    // Science Labs (Grades 4-9): just the shared shell - the hub costs these TWO
+    // files out of the 60-odd in engine/labs/ (the experiment runner and the
+    // core; scripts/test-role-modules.js asserts both globals). Each lab fetches its own data,
+    // bench and stylesheet when that lab is opened - see Labs.LABS / _ensure()
+    // in lab_core.js.
+    // ⚠ lab_study.js (the "investigation" layer of 2026-09-12) was dropped from
+    //   here on 2026-09-19: it hid the bench behind a text form and killed the
+    //   welcome card - docs/labs/REWORK_PLAN_2026-09-19.md §2.1. The benches
+    //   still guard every Labs.study* call, so nothing needs it to exist.
+    //   scripts/test-role-modules.js reads this list rather than counting it.
     labs: [
-      'engine/labs/lab_study.js',
+      'engine/labs/lab_experiment.js',
       'engine/labs/lab_core.js',
     ],
   };

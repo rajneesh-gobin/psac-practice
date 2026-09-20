@@ -1,15 +1,18 @@
 'use strict';
 // Science Labs › Forces & Pressure — browser test (Chrome for Testing).
 //
-// Opens the lab at Grade 8, then proves: the start panel is visible; guided
-// experiment "Measure the weight of objects" runs end to end; both hazard
-// cards trigger with their warning signs; both result cards appear; every
-// discovery unlocks by following "Show me how"; both missions reach at least
-// one star; Calm Mode applies; the bench fits 360px with no control past the
-// edge; the loop restarts after leaving and returning; nothing throws.
+// Opens the lab at Grade 8, then proves: it opens on an experiment Aim (since
+// 2026-09-20, lab_experiment.js) with nothing in the way; the four experiments
+// walk Aim → Predict → Do → See by tapping what glows, with the reading and
+// force-name palettes answering the ask steps; Explore still shows the start
+// panel; guided experiment "Measure the weight of objects" runs end to end;
+// the overload hazard and both result cards appear; discoveries unlock;
+// both missions reach at least one star; Calm Mode applies; the bench fits
+// 360px with no control past the edge; the loop restarts after leaving and
+// returning; nothing throws.
 //
 // Run: CHROME_PATH=<Chrome for Testing> node scripts/test-labs-forces.js
-// Port 9425 (LAB_DBG_PORT overrides). Scratch dir: forces/
+// Port 9425 (LAB_DBG_PORT overrides). Profile under LAB_TMP or the OS temp dir.
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), os = require('node:os');
 const { spawn } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
@@ -18,9 +21,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DBG = Number(process.env.LAB_DBG_PORT) || 9425;
 const CHROME_PATH = process.env.CHROME_PATH ||
   'C:/Users/rajneesh.gobin/AppData/Local/Temp/claude/D--git-repo-psac-practice/c232e26e-5526-4712-885f-5707afb8a26d/scratchpad/chrome/win64-153.0.8010.36/chrome-win64/chrome.exe';
-const SCRATCH = path.join(
-  'C:/Users/DEEPMA~1.GOB/AppData/Local/Temp/claude/C--Users-deepmala-gobin-OneDrive---Accenture-Desktop-shanvi/71266d30-7da5-4932-b2a8-580b55215f31/scratchpad',
-  'forces');
+const SCRATCH = path.join(process.env.LAB_TMP || os.tmpdir(), 'psac-labs-forces');
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const get = u => new Promise((res, rej) => http.get(u, r => {
@@ -96,6 +97,18 @@ fs.mkdirSync(SCRATCH, { recursive: true });
              exam: h ? h.textContent : '',
              signs: [...o.querySelectorAll('.lab-sign figcaption')].map(f => f.textContent) }; })()`);
   const closeOv = () => click('#lab-overlay [data-ov-close]');
+  // A guide advances on the bench action it asks for. The test taps what
+  // glows, as a child would; for an ask step it taps the right answer.
+  const next = () => click('.is-next');
+  const xdbg = () => ev('LabExperiment._debug()');
+  const doStep = async () => {
+    const d = await xdbg();
+    const sel = await ev(`LabForces.experiment.selector(${JSON.stringify(d.token)})`);
+    const r = await click(sel);
+    await tick(3);
+    await sleep(250);
+    return r;
+  };
   const hazardOk = (ov, signs, re) => !!(ov && /is-hazard/.test(ov.cls) &&
     signs.every(s => ov.signs.some(t => t.toLowerCase().includes(s.toLowerCase()))) &&
     re.test(ov.text) && /What happened/.test(ov.text) && /Why it'?s dangerous/.test(ov.text) &&
@@ -125,14 +138,7 @@ fs.mkdirSync(SCRATCH, { recursive: true });
   }
   ok('Labs shell loads', up);
 
-  // Temporarily register forces in LABS so openLab works before the lead adds it.
-  // This does not flip ready:true; the hub still won't show the card.
-  await ev(`Labs.LABS.push({
-    id:'forces', icon:'⚖️', name:'Forces & Pressure', subject:'Science',
-    global:'LabForces', grades:[8], ready:false,
-    files:['engine/labs/lab_forces_data.js','engine/labs/lab_forces.js'],
-    css:'engine/labs/lab_forces.css'
-  }); true`);
+  ok('the registry lists forces at Grade 8 with both chapters', await ev("(l => !!l && l.grades.join() === '8' && (l.chapters[8] || []).join() === 'g8s-forces,g8s-pressure')(Labs.LABS.find(x => x.id === 'forces'))"));
   await ev("Labs.openLab('forces'); true");
   let open = false;
   for (let i = 0; i < 60 && !open; i++) {
@@ -142,11 +148,82 @@ fs.mkdirSync(SCRATCH, { recursive: true });
   ok('Labs.openLab("forces") loads and renders', open);
   await sleep(600);
 
-  // ── Welcome overlay ──────────────────────────
-  const intro = await overlay();
-  ok('welcome overlay shows on first visit', intro && /Welcome to Forces/.test(intro.text));
-  await closeOv();
-  await sleep(300);
+  // ── Experiments (lab_experiment.js) ──────────
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome; the old
+  // bench sits behind "Explore the bench freely".
+  console.log('\n-- experiments');
+  let ov0 = await overlay();
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov0 && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov0);
+  const list = await ev('LabForces.experiment.list()');
+  ok('four experiments at Grade 8, the first reading the spring balance', list.length === 4 && list[0].id === 'weigh_bottle', list.map(e => e.id));
+  ok('the Aim shows the picture with every tool, item and palette hidden',
+    await ev("[...document.querySelectorAll('#labs-root .lab-tool, #labs-root .lab-shelf button, #labs-root .lab-item, #lab-forces-modebar button')].every(b => b.hidden || !b.offsetParent) && !!document.querySelector('#lab-forces-canvas')"));
+  for (const exp of list) {
+    await ev(`LabExperiment.open('${exp.id}'); true`); await sleep(250);
+    let d = await xdbg();
+    ok(`${exp.id}: Aim, then Start, then a tap to predict`, d.phase === 'aim');
+    await click('[data-exp="start"]'); await sleep(200);
+    await click(`[data-exp-pick="${exp.predict.answer}"]`); await sleep(300);
+    d = await xdbg();
+    ok(`${exp.id}: Do starts on step 1 with the guide box under the picture`, d.phase === 'do' && d.step === 0 && await ev("!document.getElementById('lab-guide').hidden && document.getElementById('lab-guide').parentElement.classList.contains('lab-canvas-wrap')"), d);
+    const shown = await ev("[...document.querySelectorAll('#labs-root .lab-shelf button, #labs-root .lab-tool')].filter(b => !b.hidden && b.offsetParent).length");
+    ok(`${exp.id}: only this experiment's controls are shown (${shown})`, shown >= 1 && shown <= 6, shown);
+    ok(`${exp.id}: every option of the first step glows`, await ev("document.querySelectorAll('#labs-root .is-next').length") === (exp.steps[0].options || exp.steps[0].any || [exp.steps[0].on]).length);
+    const wrongStep = exp.steps.find(st => st.wrong);
+    for (let k = 0; k < 8; k++) {
+      d = await xdbg();
+      if (d.phase !== 'do') break;
+      const st = exp.steps[d.step];
+      if (st === wrongStep) {
+        const w = Object.keys(st.wrong)[0];
+        const before = await ev('LabForces._debug()');
+        await click(await ev(`LabForces.experiment.selector(${JSON.stringify(w)})`)); await sleep(250);
+        const card = await overlay();
+        ok(`${exp.id} step ${d.step + 1}: the wrong option ${w} gets a card and changes nothing on the bench`,
+          card && card.text.includes(st.wrong[w].slice(0, 25)) && (await xdbg()).step === d.step
+          && JSON.stringify(await ev('(d => { delete d.looping; return d; })(LabForces._debug())')) === JSON.stringify((dd => { delete dd.looping; return dd; })(before)), card && card.text.slice(0, 120));
+        await closeOv(); await sleep(150);
+      }
+      const r = await (st.ask ? doStep() : next().then(async r => { await tick(3); await sleep(250); return r; }));
+      ok(`${exp.id} step ${d.step + 1}: tapping ${st.on || st.any[0]} advances`, r === true && ((await xdbg()).step > d.step || (await xdbg()).phase !== 'do'), await xdbg());
+    }
+    d = await xdbg();
+    const seeTxt = await ev("document.querySelector('#lab-exp').textContent.replace(/\\s+/g, ' ')");
+    ok(`${exp.id}: See states what the bench showed, with the notebook as evidence`, d.phase === 'see' && seeTxt.includes(exp.see.saw) && /That is what happened/.test(seeTxt) && await ev("document.querySelectorAll('#lab-exp .lab-exp-evidence li').length") >= 1, seeTxt.slice(0, 160));
+  }
+  const ev1 = await ev('LabForces.experiment.evidence()');
+  ok('the evidence is in a child\'s words, oldest first', ev1.length === 1 && /^Water bottle: 10 N/.test(ev1[0]), ev1);
+  await click('[data-exp="explore"]');
+  await ev('LabForces.experiment.reset(); true');
+  await sleep(200);
+  ok('"Explore the bench freely" shows everything again', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && [...document.querySelectorAll('#lab-forces-modebar button')].every(b => !b.hidden) && LabForces._debug().focus === null && LabForces._debug().reads.length === 0"));
+
+  // ── The reading and force-name palettes in Explore ──
+  console.log('\n-- palettes');
+  await ev("LabForces._placeObj('iron'); true"); await sleep(150);
+  ok('hanging an object shows its mass but not yet its weight', await ev("(t => /Iron block/.test(t) && /0.5 kg/.test(t) && !/5 N/.test(t))(document.getElementById('lab-forces-chips').textContent)"));
+  ok('the reading palette offers 1, 3, 5 and 10 N', await ev("[...document.querySelectorAll('[data-val]')].map(b => b.dataset.val).join() === '1,3,5,10'"));
+  await must('[data-val="3"]'); await sleep(150);
+  ok('a wrong reading points back at the scale and records nothing', await ev("/Not 3 N/.test(document.getElementById('lab-coach-text').textContent) && LabForces._debug().reads.length === 0"));
+  await must('[data-val="5"]'); await sleep(300);
+  {
+    const c = await overlay(); if (c) { await closeOv(); await sleep(150); }
+  }
+  ok('the right reading records it and shows the N chip', await ev("LabForces._debug().reads[0] === 'Iron block|5|N' && /5 N/.test(document.getElementById('lab-forces-chips').textContent)"), await dbg());
+  await must('[data-name="upthrust"]'); await sleep(100);
+  ok('tapping a force name says what it means', await ev("/^Upthrust: the upward push/.test(document.getElementById('lab-coach-text').textContent)"));
+  await ev("LabForces._switchMode('pressure'); true");
+  await must('[data-fn="20"]');
+  ok('a force button works by tap (data-fn; the parser lowercases data-fN)', (await dbg()).force === 20);
+  await must('[data-fn="50"]');
+  ok('…and again', (await dbg()).force === 50);
+  await must('[data-act="apply"]');
+  ok('Apply force by tap shows the Record button', await ev("!!document.querySelector('.lab-forces-shelf [data-act=\"read\"]') && LabForces._debug().applied === true"));
+  await ev('LabForces.experiment.reset(); true');
+  // The first-reading card was consumed by the palette check above; the
+  // Explore flow below still expects to see it once.
+  await ev("delete Labs.store('forces')._shownMW; true");
+  await sleep(200);
 
   // ── Start panel ──────────────────────────────
   console.log('\n-- start panel');
@@ -177,7 +254,7 @@ fs.mkdirSync(SCRATCH, { recursive: true });
   await sleep(300);
   // first read shows mass/weight result card
   const ov1 = await overlay();
-  ok('mass/weight result card appears on first bench reading', resultOk(ov1, /[Mm]ass.*weight|Weight.*mass/));
+  ok('mass/weight result card appears on first bench reading in Explore (experiments never show it)', resultOk(ov1, /[Mm]ass.*weight|Weight.*mass/));
   await closeOv();
   await sleep(300);
 
@@ -395,6 +472,12 @@ fs.mkdirSync(SCRATCH, { recursive: true });
   await sleep(500);
   const dAfter = await dbg();
   ok('animation loop restarts when returning to labs', dAfter.looping);
+  await ev("Labs.backToHub(); Labs.openLab('forces'); true");
+  await sleep(600);
+  ok('reopening the lab lands on an experiment Aim again', await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"));
+  await click('[data-exp="explore"]');
+  await ev('LabForces.experiment.reset(); true');
+  ok('…and Explore still has the old bench', await ev("!!document.querySelector('.lab-start') && LabForces._debug().looping"));
 
   // ── No JS errors ─────────────────────────────
   console.log('\n-- no JS errors');

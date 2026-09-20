@@ -90,6 +90,14 @@ const MOCK = `
   _sb.auth.getUser = async () => ({ data: { user: { id: 'teacher-1' } } });
   Auth.isTeacher = () => true;
   Auth.getParentProfile = () => ({ id: 'teacher-1', full_name: 'Mrs Devi', role: 'teacher' });
+  // Account & Settings renders INSIDE the Settings tab now, so the probe walks
+  // it like any other screen. These are what _renderParentProfile() reads.
+  Auth.getFamily = () => null;
+  Auth.getStudents = () => [];
+  window.Store = window.Store || {};
+  Store.getMyPreferences = async () => ({});
+  Store.getMyReferralCode = async () => null;
+  window.Biometric = { isAvailable: async () => false, isEnrolled: () => false };
   _isParentSession = () => true;
   if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadSubject = async () => [];
   try { localStorage.removeItem('psac_teacher_loc_v1'); } catch (_) {}
@@ -99,7 +107,7 @@ const MOCK = `
 const PROBE = `
 (() => {
   const W = innerWidth;
-  const KNOWN = [['.ta-tab-content', ['#243f26', '#101010']], ['.tc-cd-overlay', ['#23422a', '#0f0f0f']], ['.tc-setup-guide', ['#123922', '#123922']], ['.tc-cd-header', ['#1c3c2b', '#1c3c2b']], ['.tc-share-inner', ['#254528', '#254528']], ['.ncf-panel', ['#254528', '#254528']], ['#ta-build-btn', ['#22402a', '#22402a']], ['.ta-btn-pencil', ['#d7ae2d', '#d7ae2d']], ['.tc-cd-action-btn', ['#e8c245', '#e8c245']], ['.teacher-navigation', ['#23422a', '#23422a']], ['.ta-tab', ['#2b4a2c', '#1b1b1b']], ['.ta-more-btn', ['#2b4a2c', '#1b1b1b']], ['.tc-cd-nav-active', ['#f4ce52', '#f4ce52']], ['.tc-share-wa-btn', ['#25d366', '#25d366']], ['.tc-share-copy-btn', ['#e8c245', '#e8c245']], ['.ta-btn-eraser', ['#dcb5aa', '#dcb5aa']], ['.tp-flag', ['#1b2f20', '#1b2f20']], ['.tc-cd-student-pin-badge', ['#1b2f20', '#1b2f20']]];
+  const KNOWN = [['.ta-tab-content', ['#243f26', '#101010']], ['.tc-cd-overlay', ['#23422a', '#0f0f0f']], ['.tc-setup-guide', ['#123922', '#123922']], ['.tc-cd-header', ['#1c3c2b', '#1c3c2b']], ['.tc-share-inner', ['#254528', '#254528']], ['.ncf-panel', ['#254528', '#254528']], ['#ta-build-btn', ['#22402a', '#22402a']], ['.ta-btn-pencil', ['#d7ae2d', '#d7ae2d']], ['.tc-cd-action-btn', ['#e8c245', '#e8c245']], ['.teacher-navigation', ['#23422a', '#23422a']], ['.ta-tab', ['#2b4a2c', '#1b1b1b']], ['.tc-cd-nav-active', ['#f4ce52', '#f4ce52']], ['.tc-share-wa-btn', ['#25d366', '#25d366']], ['.tc-share-copy-btn', ['#e8c245', '#e8c245']], ['.ta-btn-eraser', ['#dcb5aa', '#dcb5aa']], ['.tp-flag', ['#1b2f20', '#1b2f20']], ['.tc-cd-student-pin-badge', ['#1b2f20', '#1b2f20']]];
   const dark = document.documentElement.classList.contains('dark');
   const parse = s => { const m = (s || '').match(/[\\d.]+/g); if (!m) return null; const v = m.map(Number); return { r: v[0], g: v[1], b: v[2], a: v.length > 3 ? v[3] : 1 }; };
   const hex = h => ({ r: parseInt(h.slice(1,3),16), g: parseInt(h.slice(3,5),16), b: parseInt(h.slice(5,7),16), a: 1 });
@@ -147,7 +155,7 @@ const PROBE = `
     const large = size >= 24 || (size >= 18.66 && bold);
     if (rt < (large ? 3 : 4.5)) contrast.push({ text: (el.textContent || '').trim().slice(0, 40), cls: String(el.className).slice(0, 60), ratio: +rt.toFixed(2), fg: s.color, bg: 'rgb(' + [bg.r, bg.g, bg.b].map(Math.round).join(',') + ')', size });
   }
-  const targets = [...scope.querySelectorAll('.ta-tab,.ta-more-btn,.th-action,.tw-btn,#ta-build-btn,.tr-insight-btn,.tr-bulk button,.ta-more-menu button,.tc-cd-nav-btn,.tc-work-filter,.ta-due-chips button,.ta-share-opt,.th-empty button,.tp-open,.ta-settings-card,.tc-cd-action-btn,.ta-state-retry,.tc-setup-step>button,.tc-setup-skip,.tc-setup-help,.th-todo-btn,.tc-todo-btn,.ta-wiz-next,.ta-wiz-back,.ta-wiz-quit,.ta-scope-opt,.tc-today-footnote button')];
+  const targets = [...scope.querySelectorAll('.ta-tab,.th-action,.tw-btn,#ta-build-btn,.tr-insight-btn,.tr-bulk button,.tc-cd-nav-btn,.tc-work-filter,.ta-due-chips button,.ta-share-opt,.th-empty button,.tp-open,.ta-settings-card,.tc-cd-action-btn,.ta-state-retry,.tc-setup-step>button,.tc-setup-skip,.tc-setup-help,.th-todo-btn,.tc-todo-btn,.ta-wiz-next,.ta-wiz-back,.ta-wiz-quit,.ta-scope-opt,.tc-today-footnote button')];
   for (const el of targets) { if (!visible(el)) continue; const r = el.getBoundingClientRect(); if (r.height < 43.5) small.push({ cls: String(el.className).slice(0, 50), text: (el.textContent || '').trim().slice(0, 30), h: Math.round(r.height) }); }
   const scroll = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth);
   return { overflow, contrast, small, scroll, W, checked: measured };
@@ -211,10 +219,15 @@ let chrome, ws; const pageErrorsRef = [];
     await evaluate(`document.documentElement.classList.toggle('dark', ${dark}); document.querySelectorAll('.screen').forEach(e => e.classList.add('hidden')); document.getElementById('screen-teacher').classList.remove('hidden'); typeof TeacherClassroomDetail !== 'undefined' && TeacherClassroomDetail.close(); localStorage.removeItem('psac_teacher_loc_v1'); TeacherMode.render(); true`);
     await sleep(1200);
     // Navigation shape
-    const nav = await evaluate(`({ tabs: [...document.querySelectorAll('#screen-teacher .teacher-navigation .ta-tab')].map(b => b.textContent.trim()), more: [...document.querySelectorAll('#ta-more-menu [data-more]')].map(b => b.dataset.more), home: document.querySelector('.ta-tab-content[data-tab="home"]').classList.contains('hidden') === false })`);
-    // ⚠ ONE destination. Set Work and Results are reached from inside a class.
-    assert.deepEqual(nav.tabs, ['🏫 My classes'], 'one main destination');
-    assert.deepEqual(nav.more, ['gradebook', 'materials', 'assignments', 'messages', 'settings'], 'five tools behind More');
+    const nav = await evaluate(`({ tabs: [...document.querySelectorAll('#screen-teacher .teacher-navigation .ta-tab')].map(b => b.dataset.tab), menus: document.querySelectorAll('#ta-more-menu, #ta-more-btn').length, home: document.querySelector('.ta-tab-content[data-tab="home"]').classList.contains('hidden') === false })`);
+    // ⚠ ONE destination, then the tools. Set Work and Results are reached from
+    //   inside a class, so they are NOT on the row even though switchTab opens them.
+    // ⚠ This assertion used to name five tools behind a '⋯ More' dropdown and was
+    //   two years of drift out of date - papers and preview had been added to the
+    //   menu and nobody updated it. Naming the tabs in order is the point: a tool
+    //   that quietly leaves the row is a tool a teacher can no longer reach.
+    assert.deepEqual(nav.tabs, ['home', 'gradebook', 'materials', 'assignments', 'papers', 'preview', 'messages', 'settings'], 'one destination and seven tools, on the row');
+    assert.equal(nav.menus, 0, 'and nothing is hidden behind a More menu');
     assert(nav.home, 'Home is the landing tab');
     const home = await evaluate(`({ greeting: document.querySelector('.th-hero h3')?.textContent, todos: [...document.querySelectorAll('.th-todo')].map(r => r.textContent.replace(/\\s+/g, ' ').trim()), oldCards: document.querySelectorAll('.th-card, .th-action').length, boards: document.querySelectorAll('#tc-list .tc-board-hanger').length, classesHead: !!document.querySelector('.th-classes-head') })`);
     if (!home.greeting) console.log('ta-home:', await evaluate("document.getElementById('ta-home').innerHTML.slice(0, 400)"));
@@ -234,10 +247,23 @@ let chrome, ws; const pageErrorsRef = [];
       'every job carries an action: ' + todoText);
     report('Home ' + tag, await evaluate(PROBE)); await shot('home-' + tag);
 
-    await evaluate("TeacherMode.toggleMore(true); true"); await sleep(150);
-    report('More menu ' + tag, await evaluate(PROBE)); await shot('more-' + tag);
-    await evaluate("TeacherMode.closeMore(); true"); await sleep(300);
-    report('Classrooms ' + tag, await evaluate(PROBE)); await shot('classes-' + tag);
+    // ⚠ The tool tabs wrap onto a second and third row at 360px. Measure the
+    //   row itself - a tab pushed off the right edge is a tool that is gone.
+    const row = await evaluate(`(() => { const t = [...document.querySelectorAll('#screen-teacher .teacher-navigation .ta-tab')]; return { off: t.filter(b => { const r = b.getBoundingClientRect(); return r.right > innerWidth + 1 || r.left < -1; }).map(b => b.dataset.tab), short: t.filter(b => b.getBoundingClientRect().height < 43.5).map(b => b.dataset.tab), rows: new Set(t.map(b => Math.round(b.getBoundingClientRect().top))).size }; })()`);
+    assert.deepEqual(row.off, [], 'every tool tab is on screen at ' + width + 'px');
+    assert.deepEqual(row.short, [], 'and every one is still a 44px tap target');
+    console.log('    nav rows at ' + tag + ': ' + row.rows);
+
+    // ⚠ Settings carries the SHARED account markup (_renderParentProfile), which
+    //   is written in Tailwind greys for a white page and is being drawn on a
+    //   dark board. Every one of its greys has to be mapped or it goes invisible,
+    //   and the only way to know is to measure it here.
+    await evaluate("TeacherMode.switchTab('settings'); true"); await sleep(1800);
+    const acct = await evaluate(`(() => { const c = document.querySelector('#tc-profile-content .parent-settings-col'); return c ? { cards: c.children.length, back: !!c.querySelector(':scope > :first-child button')?.getBoundingClientRect().height } : null; })()`);
+    assert(acct && acct.cards > 3, 'the account page renders inside the Settings tab: ' + JSON.stringify(acct));
+    assert(!acct.back, 'and its back arrow is hidden - the tab row is the navigation');
+    report('Settings ' + tag, await evaluate(PROBE)); await shot('settings-' + tag);
+    await evaluate("TeacherMode.switchTab('home'); true"); await sleep(400);
 
     await evaluate("TeacherMode.switchTab('create'); true"); await sleep(700);
     // ⚠ One question per screen. Anything the teacher has not been asked yet
@@ -313,7 +339,7 @@ let chrome, ws; const pageErrorsRef = [];
     await evaluate("TeacherGuestClasses.openById('c1'); true"); await sleep(1200);
     const ov = await evaluate(`({ open: !document.getElementById('tc-classroom-detail').classList.contains('hidden'), nav: [...document.querySelectorAll('.tc-cd-nav > .tc-cd-nav-btn')].map(b => b.dataset.sec), more: [...document.querySelectorAll('#tc-cd-more-menu [data-sec]')].map(b => b.dataset.sec), stats: [...document.querySelectorAll('.tc-today-stats')].length, headStrip: [...document.querySelectorAll('.tc-cd-stat strong')].map(e => e.textContent), todos: [...document.querySelectorAll('.tc-todo')].map(r => r.textContent.replace(/\\s+/g, ' ').trim()), foot: document.querySelectorAll('.tc-today-footnote').length, strip: document.querySelectorAll('button.tc-cd-stat').length })`);
     assert(ov.open, 'classroom overlay opens from Home data');
-    assert.deepEqual(ov.nav, ['overview', 'work', 'pupils', 'materials'], 'four primary classroom sections');
+    assert.deepEqual(ov.nav, ['overview', 'work', 'pupils', 'materials', 'calendar'], 'five primary classroom sections');
     assert.deepEqual(ov.more, ['settings'], 'Results are opened from the relevant activity, not a second navigation destination');
     // ⚠ There used to be TWO stat rows on this one screen, disagreeing:
     // "5 submitted" in the header strip beside "2 Submissions" below it,

@@ -2,13 +2,17 @@
 // Science Labs › Motion Track, driven in a real browser.
 //
 // Proves the lab end to end: it loads its own three files only when opened,
-// lands with "What would you like to do?", all three guided experiments run
-// to their end, every discovery unlocks by following its own "Show me how",
-// the hazard and every result card fire and explain themselves (with the
-// trolley shown falling before the card), readings fill the notebook tables,
-// both missions reach three stars, the trolley and the walker really move in
-// real time, Calm Mode applies everything at once, and the bench fits a 360px
-// phone with no page errors.
+// opens on the Aim of the first EXPERIMENT (lab_experiment.js, since
+// 2026-09-20) with the picture already set up and no welcome card in the way,
+// "Explore the bench freely" brings back the old bench, one experiment is
+// walked Aim → Predict → Do → See → Check → Done on the real controls (the
+// wrong height first, and its card), all three guided experiments run to their
+// end by tapping the glowing control, every discovery unlocks by following its
+// own "Show me how", the hazard and every result card fire and explain
+// themselves (with the trolley shown falling before the card), readings fill
+// the notebook tables, both missions reach three stars, the trolley and the
+// walker really move in real time, Calm Mode applies everything at once, and
+// the bench fits a 360px phone with no page errors.
 //
 // Run:  CHROME_PATH=<Chrome for Testing> node scripts/test-labs-motion.js
 // ⚠ Served over file:// (Chrome for Testing here cannot reach 127.0.0.1), and
@@ -26,7 +30,7 @@ const DBG = 9406;
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const get = u => new Promise((res, rej) => http.get(u, r => { let s = ''; r.on('data', v => s += v); r.on('end', () => { try { res(JSON.parse(s)); } catch (e) { rej(e); } }); }).on('error', rej));
-let checks = 0, failed = 0, d;
+let checks = 0, failed = 0, d, x;
 const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' + label); } else { failed++; console.log('FAIL ' + label + (detail !== undefined ? ' -- ' + JSON.stringify(detail) : '')); } };
 
 let chrome = null, profile = null, quitting = false;
@@ -71,15 +75,20 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
   };
   const click = sel => ev(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el) return 'missing: ' + ${JSON.stringify(sel)}; el.click(); return true; })()`);
   const clicks = async (...sels) => { for (const s of sels) { const r = await click(s); if (r !== true) { failed++; console.log('FAIL ' + r); return r; } } return true; };
+  // The glowing control is the one the guide wants tapped next.
+  const next = () => clicks('.is-next');
   const dbg = () => ev('LabMotion._debug()');
+  const xdbg = () => ev('LabExperiment._debug()');
   const overlay = () => ev(`(() => { const o = document.getElementById('lab-overlay'); if (!o) return null;
     return { cls: o.className, text: o.textContent.replace(/\\s+/g, ' ').slice(0, 3000),
              signs: [...o.querySelectorAll('.lab-sign figcaption')].map(f => f.textContent) }; })()`);
   const closeOv = () => click('#lab-overlay [data-ov-close]');
   const act = a => clicks(`#lab-motion-controls [data-act="${a}"]`);
   const set = (k, v) => clicks(`[data-set="${k}"][data-v="${v}"]`);
+  const height = h => set('height', h);
   const shelf = id => clicks(`[data-add="setup"][data-id="${id}"]`);
   const notebook = () => ev("[...document.querySelectorAll('#lab-notebook tr')].map(r => [...r.children].map(c => c.textContent.trim()).join(' ')).join(' | ')");
+  const expText = () => ev("(document.getElementById('lab-exp') || { textContent: '' }).textContent.replace(/\\s+/g, ' ')");
   // A clean bench, no guide or mission: start a guide and stop it (that resets the bench).
   const fresh = async () => { await ev("document.getElementById('lab-overlay')?.remove(); LabMotion.startGuide('ramp'); document.querySelector('[data-act=\"guide-stop\"]').click(); true"); };
 
@@ -105,13 +114,80 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
   ok('Labs.openLab(\'motion\') loads LabMotion and renders the bench', up);
   ok('it fetched its own data file, then the bench', /lab_motion_data\.js,lab_motion\.js/.test(await labScripts()), await labScripts());
   await sleep(500);
-  ok('lab_motion.css is linked and styles the tools', await ev("!!document.querySelector('link[data-lab-css=\"motion\"]') && getComputedStyle(document.querySelector('.lab-motion-tools')).display === 'grid'"));
+  ok('lab_motion.css is linked and styles the height chips', await ev("!!document.querySelector('link[data-lab-css=\"motion\"]') && getComputedStyle(document.querySelector('.lab-motion-heights')).display === 'flex'"));
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Motion Track/.test(ov.text) && /Show me how/.test(ov.text), ov);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('motion').intro === true"));
-  ok('the top bar has back, the stop-block switch and help', await ev("!!document.querySelector('.lab-motion [data-act=\"hub\"]') && !!document.getElementById('lab-motion-block') && !!document.querySelector('.lab-motion [data-act=\"help\"]')"));
+  x = await xdbg();
+  ok('first visit opens on the Aim of “Does the trolley speed up or stay steady?”, with no welcome card in the way',
+     !ov && x.phase === 'aim' && x.exp === 'graph_shape' && await ev("!!document.querySelector('#lab-exp') && /speed up or stay steady/.test(document.getElementById('lab-exp-title').textContent)"), { ov, x });
+  ok('the welcome is marked seen', await ev("Labs.store('motion').intro === true"));
+  ok('Grade 9 lists the four experiments in order', (await ev('LabMotion.experiment.list().map(e => e.id).join()')) === 'graph_shape,which_height,field_walk,avg_speed');
+  d = await dbg();
+  ok('the Aim picture is set up silently: flat track, stop block on, light gates, from rest - and no bench control competes with it',
+     d.setup === 'ramp' && d.h === 0 && d.block && d.timer === 'gates' && d.start === 'rest' && !d.busy && d.runs.length === 0
+     && await ev("[...document.querySelectorAll('#lab-motion-controls button, #lab-motion-shelf button')].every(b => b.hidden || !b.offsetParent)"), d);
+  ok('the top bar still has back, the stop-block switch and help', await ev("!!document.querySelector('.lab-motion [data-act=\"hub\"]') && !!document.getElementById('lab-motion-block') && !!document.querySelector('.lab-motion [data-act=\"help\"]')"));
+  await ev("LabExperiment.open('which_height'); true"); await sleep(200);
+  d = await dbg();
+  ok('opening “Which ramp height…” performs its set-up at once and quietly: run 1 at 10 cm, 3.16 s, gradient 0.40 m/s², no card, no toast',
+     d.runs.length === 1 && d.runs[0].h === 10 && d.runs[0].t === 3.16 && d.runs[0].a === 0.4 && d.show === 'gradient' && !d.busy && !d.running && !(await overlay()), d);
+  ok('…and the discovery it would have earned in Explore was NOT awarded during set-up', await ev("!Labs.store('motion').disc.gradient && !Labs.store('motion').disc.from_rest"));
+  await ev("LabExperiment.open('field_walk'); true"); await sleep(200);
+  d = await dbg();
+  ok('“Distance or displacement?” opens on the field with the corner route chosen', d.setup === 'walk' && d.route === 'corner' && d.disp === 'straight', d);
+
+  // ── One experiment, Aim → Done, on the real controls ──
+  console.log('\n-- an experiment from Aim to Done');
   await ev('LabMotion._test({ instant: true }); true');
+  await ev("LabExperiment.open('graph_shape'); true"); await sleep(200);
+  await clicks('[data-exp="start"]');
+  ok('Start goes to Predict with four graph shapes to tap', (await xdbg()).phase === 'predict' && (await ev("document.querySelectorAll('#lab-exp [data-exp-pick]').length")) === 4);
+  await clicks('[data-exp-pick="flat"]'); await sleep(300);
+  x = await xdbg();
+  ok('a (wrong) prediction is a tap; Do starts at step 1, the height decision', x.phase === 'do' && x.predicted === 'flat' && x.step === 0, x);
+  ok('every offered height chip glows, and only this experiment’s controls are on screen',
+     (await ev("[...document.querySelectorAll('.is-next')].map(e => e.dataset.v).join()")) === '2,10,20,40'
+     && (await ev("[...document.querySelectorAll('#lab-motion-controls button')].filter(b => !b.hidden).map(b => b.dataset.v || b.dataset.act).join()")) === '2,10,20,40,run,gradient');
+  ok('the yellow box sits under the picture with the question', await ev("document.querySelector('.lab-canvas-wrap #lab-guide') && /Which height/.test(document.getElementById('lab-guide').textContent)"));
+  await height(2);
+  ov = await overlay();
+  ok('2 cm is the wrong choice: a card explains the friction-compensated runway, and the step does not advance',
+     ov && /Not that one/.test(ov.text) && /cancels friction/.test(ov.text) && (await xdbg()).step === 0 && (await dbg()).h === 2, ov);
+  await closeOv();
+  await height(20);
+  x = await xdbg();
+  ok('20 cm is accepted: step 2, and ▶ Release the trolley glows', x.step === 1 && (await ev("document.querySelector('.is-next')?.dataset.act")) === 'run', x);
+  await next();
+  ok('the run is recorded, step 3 asks for the gradient', (await xdbg()).step === 2 && (await dbg()).runs[0].t === 2.11 && (await ev("document.querySelector('.is-next')?.dataset.act")) === 'gradient');
+  await next();
+  x = await xdbg();
+  let txt = await expText();
+  ok('Do is done: See answers the prediction from the bench, with the notebook row',
+     x.phase === 'see' && /You said: A flat line/.test(txt) && /It was A straight line going up/.test(txt) && /Run 1: ramp 20 cm, from rest/.test(txt) && /0\.90 m\/s²/.test(txt), txt.slice(0, 400));
+  await clicks('[data-exp="check"]');
+  ov = await overlay();
+  ok('Check opens the quiz with the evidence pinned', ov && /What you saw/.test(ov.text) && /Question 1 of 3/.test(ov.text), ov && ov.text.slice(0, 200));
+  const answerChecks = () => ev(`(() => {
+    const E = LabMotion.experiment, e = LabMotionData.EXPERIMENTS.find(z => z.id === LabExperiment._debug().exp);
+    for (let i = 0; i < 6; i++) {
+      const card = document.querySelector('#lab-overlay .lab-ov-card'); if (!card || !card.querySelector('.lab-quiz-q')) break;
+      const q = e.check.map(r => E.question(r)).find(z => z && z.q === card.querySelector('.lab-quiz-q').textContent);
+      const btn = q && [...card.querySelectorAll('.lab-quiz-opt')].find(b => b.lastElementChild.textContent === q.options[0]);
+      if (!btn) return 'no answer for: ' + card.querySelector('.lab-quiz-q').textContent;
+      btn.click(); card.querySelector('[data-next]').click();
+    }
+    return LabExperiment._debug().phase; })()`);
+  ok('answering all three right lands on Done', (await answerChecks()) === 'done');
+  txt = await expText();
+  ok('Done says what was found out and the exam point, and offers the next experiment and the chapter',
+     /uniform acceleration/.test(txt) && /In your exam/.test(txt) && /Next experiment: Which ramp height/.test(txt) && await ev("!!document.querySelector('[data-exp=\"practise\"]')"), txt.slice(0, 300));
+  ok('progress is saved: 3 of 3, prediction remembered as wrong', await ev("(s => s && s.total === 3 && s.score === 3 && s.predicted === 'flat' && s.right === false)(Labs.store('motion').done.graph_shape)"));
+  await clicks('[data-exp="explore"]');
+  ok('“Explore the bench” shows the old bench with every control back', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && [...document.querySelectorAll('#lab-motion-controls button')].every(b => !b.hidden) && getComputedStyle(document.querySelector('.lab-start')).display !== 'none'"));
+  await ev('LabMotion.experiment.reset(); true');
+  d = await dbg();
+  ok('experiment.reset(): a clean bench at 20 cm, nothing in the notebook, no guide', d.h === 20 && d.runs.length === 0 && !d.guide && !d.last && (await notebook()) === '', d);
 
   // ── Start panel and the guided experiments ─────
   console.log('\n-- what to do here');
@@ -119,23 +195,23 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
      await ev("/What would you like to do/.test(document.querySelector('.lab-start').textContent) && document.querySelectorAll('.lab-start [data-guide]').length === 3 && document.querySelectorAll('.lab-start [data-mission]').length === 2"));
   const guideState = () => ev(`(() => { const g = document.getElementById('lab-guide'), n = document.querySelector('.is-next');
     return { box: !g.hidden, text: g.textContent.replace(/\\s+/g, ' '),
-             next: n ? (n.id || n.getAttribute('data-act') || (n.getAttribute('data-set') ? n.getAttribute('data-set') + ':' + n.getAttribute('data-v') : null) || (n.getAttribute('data-h') ? 'h' + n.getAttribute('data-h') : null) || n.getAttribute('data-route') || n.getAttribute('data-id')) : null,
+             next: n ? (n.id || n.getAttribute('data-act') || (n.getAttribute('data-set') ? n.getAttribute('data-set') + ':' + n.getAttribute('data-v') : null) || n.getAttribute('data-route') || n.getAttribute('data-id')) : null,
              start: !!document.querySelector('.lab-start') }; })()`);
   await clicks('.lab-start [data-guide="ramp"]');
   let gs = await guideState();
   ok('Roll a trolley: ramp, stop block and 20 cm are already set, so it opens at step 4 - release - and ▶ glows',
-     gs.box && /Step 4 of 6/.test(gs.text) && /Let go of the trolley/.test(gs.text) && gs.next === 'run' && !gs.start, gs);
-  await clicks('[data-guide-do]');
+     gs.box && /Step 4 of 6/.test(gs.text) && /Release/.test(gs.text) && gs.next === 'run' && !gs.start, gs);
+  await next();
   gs = await guideState();
   ok('the run finishes and the guide asks for the gradient, with 📐 glowing', /Step 5 of 6/.test(gs.text) && gs.next === 'gradient', gs);
   let nb = await notebook();
   ok('the light-gate table fills: 0.5 m at 1.05 s … 2.0 m at 2.11 s, 1.90 m/s', /0\.5 1\.05 0\.95/.test(nb) && /2\.0 2\.11 1\.90/.test(nb), nb.slice(0, 300));
   ok('the runs table has run 1: 20 cm, 2.11 s, average speed 0.95 m/s', /1 20 cm 2\.11 0\.95/.test(nb), nb.slice(0, 500));
-  await clicks('[data-guide-do]');
+  await next();
   ok('the gradient reading appears under the canvas: 1.80 ÷ 2.0 = 0.90 m/s²', /gradient = 1\.80 m\/s ÷ 2\.0 s = 0\.90 m\/s²/.test(await ev("document.getElementById('lab-motion-contents').textContent")));
   gs = await guideState();
   ok('then the area, with ▦ glowing', /Step 6 of 6/.test(gs.text) && gs.next === 'area', gs);
-  await clicks('[data-guide-do]');
+  await next();
   ov = await overlay();
   ok('the area completes it, with “What you found out”', ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text) && /GRADIENT/.test(ov.text), ov);
   ok('…remembered, and it offers the next one', await ev("!!Labs.store('motion').guides.ramp") && /Next: Steady speed and slowing down/.test(ov.text));
@@ -143,12 +219,12 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
   ok('the runs table now has the acceleration 0.90 and the distance 2.0', /1 20 cm 2\.11 0\.95 0\.90 2\.0/.test(nb), nb.slice(0, 500));
   await clicks('#lab-overlay [data-guide="steady"]');
   gs = await guideState();
-  ok('Steady speed: the first step it needs is the 2 cm runway, and ▼ Lower glows', /Set the track to 2 cm|Raise one end just 2 cm/.test(gs.text) && gs.next === 'h-1', gs);
+  ok('Steady speed: the first step it needs is the 2 cm runway, and the 2 cm chip glows', /Tap 2 cm/.test(gs.text) && gs.next === 'height:2', gs);
   const runGuide = () => ev(`(() => { for (let k = 0; k < 30 && LabMotion._debug().guide; k++) {
       const c = document.querySelector('#lab-overlay.is-result [data-ov-close]'); if (c) { c.click(); continue; }
-      const b = document.querySelector('#lab-guide [data-guide-do]'); if (b) b.click(); else LabMotion._tick(6); }
+      const b = document.querySelector('.is-next'); if (b) b.click(); else LabMotion._tick(6); }
     const o = document.getElementById('lab-overlay'); return o ? o.textContent.replace(/\\s+/g, ' ') : 'no overlay'; })()`);
-  let txt = await runGuide();
+  txt = await runGuide();
   ok('“Steady speed and slowing down” runs to the end', /Experiment complete/.test(txt) && /HORIZONTAL/.test(txt) && /DOWN/.test(txt), txt.slice(0, 200));
   d = await dbg();
   ok('…a constant 1.00 m/s on the runway, slowing to 0.77 m/s on the flat',
@@ -167,10 +243,11 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
   // ── Controls ────────────────────────────────────
   console.log('\n-- controls');
   await fresh();
-  await clicks('[data-h="1"]');
-  ok('▲ Raise steps the ramp 20 → 30 cm', (await dbg()).h === 30);
-  await clicks('[data-h="-1"]', '[data-h="-1"]', '[data-h="-1"]');
-  ok('▼ Lower steps it 30 → 20 → 10 → 2 cm (the friction-compensated runway)', (await dbg()).h === 2 && /cancels friction/.test(await ev("document.querySelector('.lab-motion-hval').textContent")));
+  ok('the height row is one chip per height, 0-50 cm, with 20 cm pressed', (await ev("[...document.querySelectorAll('[data-set=\"height\"]')].map(b => b.dataset.v).join()")) === '0,2,10,20,30,40,50' && await ev("document.querySelector('[data-set=\"height\"][aria-pressed=\"true\"]').dataset.v === '20'"));
+  await height(30);
+  ok('tapping 30 cm sets the ramp to 30 cm (a slope of about 9°)', (await dbg()).h === 30 && /slope about 9°/.test(await ev("document.querySelector('.lab-motion-hval').textContent")));
+  await height(2);
+  ok('tapping 2 cm gives the friction-compensated runway', (await dbg()).h === 2 && /cancels friction/.test(await ev("document.querySelector('.lab-motion-hval').textContent")));
   await set('start', 'push'); await set('timer', 'stopwatch'); await set('meaning', 'speed');
   d = await dbg();
   ok('the Start / Timing / Gradient-means choices set the bench', d.start === 'push' && d.timer === 'stopwatch' && d.meaning === 'speed', d);
@@ -290,7 +367,7 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
         if (document.querySelector('#lab-overlay.is-hazard')) return 'hazard card';
         const rc = document.querySelector('#lab-overlay.is-result [data-ov-close]');
         if (rc) { rc.click(); continue; }
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        const btn = document.querySelector('.is-next');
         if (btn) btn.click(); else LabMotion._tick(6);
       }
       if (LabMotion._debug().guide) return 'guide never finished at step ' + LabMotion._debug().guide.step;
@@ -359,6 +436,15 @@ process.on('uncaughtException', e => { console.error(e); quit(1); });
       return { vw, root: document.getElementById('labs-root').scrollWidth, off, small }; })()`);
     ok(`${setup}: fits a 360px phone - no control past the edge, tap targets ≥ 44px`, fit.root <= fit.vw && fit.off.length === 0 && fit.small.length === 0, fit);
   }
+
+  // ── Coming back lands on an experiment again ────
+  console.log('\n-- coming back');
+  await ev('Labs.backToHub(); true'); await sleep(300);
+  await ev("Labs.openLab('motion'); true"); await sleep(600);
+  x = await xdbg();
+  ok('reopening the lab lands on the next unfinished experiment’s Aim, not the old bench', x.phase === 'aim' && x.exp === 'which_height' && !(await overlay()), x);
+  await clicks('[data-exp="explore"]');
+  await ev('LabMotion.experiment.reset(); true');
 
   await ev("showScreen('student-home'); true");
   ok('no page errors along the way', errors.length === 0, errors.slice(0, 5));

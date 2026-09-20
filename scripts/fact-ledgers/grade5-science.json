@@ -1,0 +1,529 @@
+{
+  "pack": "grade5-science",
+  "source": "Science.pdf — MIE Teaching and Learning Syllabus, Science, Grades 3 to 6 (December 2015), 'FUNDAMENTAL TOPICS, SUBTOPICS, SPECIFIC LEARNING OUTCOMES AND ACHIEVEMENT LEVELS FOR GRADE 5', printed pages 13-14",
+  "note": "One entry per thing the Grade 5 table says a learner must be able to do, from the Specific Learning Outcomes and Achievement Levels 1-3 of the five Grade 5 fundamental topics (Animals, Plants, Energy, The Simple Electric Circuit, Water). `any` = covered when some question's stem or answer contains ANY of these phrases. `all` = covered only when ONE question contains ALL of them. Terms are matched against the question STEM AND ANSWER ONLY, never the explanation: a fact named in an explanation is a fact the child is never asked. ⚠ Grade 5 is where the syllabus puts the simple electric circuit and the water cycle; Grade 6 does not repeat them. ⚠ Chapters the pack adds beyond the Grade 5 table carry no entry: this ledger asks whether the pack covers the syllabus, not whether the syllabus covers the pack.",
+  "facts": [
+    {
+      "id": "ani-01",
+      "unit": "Animals",
+      "fact": "Most animals live in habitats that suit them",
+      "any": [
+        "habitat"
+      ]
+    },
+    {
+      "id": "ani-02",
+      "unit": "Animals",
+      "fact": "Animals live in different kinds of habitat",
+      "any": [
+        "type of habitat",
+        "kind of habitat"
+      ]
+    },
+    {
+      "id": "ani-03",
+      "unit": "Animals",
+      "fact": "Habitats matter to the animals that live in them",
+      "all": [
+        "habitat",
+        "need"
+      ]
+    },
+    {
+      "id": "ani-04",
+      "unit": "Animals",
+      "fact": "Some animals are endangered",
+      "any": [
+        "endangered"
+      ]
+    },
+    {
+      "id": "ani-05",
+      "unit": "Animals",
+      "fact": "Endangered animals of Mauritius and Rodrigues are named",
+      "all": [
+        "endangered",
+        "mauritius"
+      ]
+    },
+    {
+      "id": "ani-06",
+      "unit": "Animals",
+      "fact": "The pink pigeon is one of them",
+      "any": [
+        "pink pigeon"
+      ]
+    },
+    {
+      "id": "ani-07",
+      "unit": "Animals",
+      "fact": "The kestrel is one of them",
+      "any": [
+        "kestrel"
+      ]
+    },
+    {
+      "id": "ani-08",
+      "unit": "Animals",
+      "fact": "Measures are taken to protect endangered animals",
+      "all": [
+        "endangered",
+        "protect"
+      ]
+    },
+    {
+      "id": "ani-09",
+      "unit": "Animals",
+      "fact": "An animal's features let it live in its particular habitat",
+      "any": [
+        "adapted"
+      ]
+    },
+    {
+      "id": "ani-10",
+      "unit": "Animals",
+      "fact": "Changing a habitat affects the animals in it",
+      "any": [
+        "habitat destruction",
+        "loss of habitat",
+        "habitat is destroyed"
+      ]
+    },
+    {
+      "id": "pla-01",
+      "unit": "Plants",
+      "fact": "Plants are flowering or non-flowering",
+      "any": [
+        "non-flowering",
+        "flowering plant"
+      ]
+    },
+    {
+      "id": "pla-02",
+      "unit": "Plants",
+      "fact": "Identify and name the parts of a plant",
+      "all": [
+        "part",
+        "plant"
+      ]
+    },
+    {
+      "id": "pla-03",
+      "unit": "Plants",
+      "fact": "Describe the parts of a flower",
+      "any": [
+        "petal",
+        "stamen",
+        "parts of a flower"
+      ]
+    },
+    {
+      "id": "pla-04",
+      "unit": "Plants",
+      "fact": "The root takes in water and minerals",
+      "all": [
+        "root",
+        "water"
+      ]
+    },
+    {
+      "id": "pla-05",
+      "unit": "Plants",
+      "fact": "The stem carries water up the plant",
+      "all": [
+        "stem",
+        "water"
+      ]
+    },
+    {
+      "id": "pla-06",
+      "unit": "Plants",
+      "fact": "Germination is defined",
+      "any": [
+        "germinat"
+      ]
+    },
+    {
+      "id": "pla-07",
+      "unit": "Plants",
+      "fact": "Conditions needed for a seed to germinate",
+      "all": [
+        "germinat",
+        "need"
+      ]
+    },
+    {
+      "id": "pla-08",
+      "unit": "Plants",
+      "fact": "Conditions needed for a plant to grow well",
+      "all": [
+        "plant",
+        "grow",
+        "need"
+      ]
+    },
+    {
+      "id": "pla-09",
+      "unit": "Plants",
+      "fact": "How a seed grows into a plant",
+      "any": [
+        "seedling",
+        "grows into"
+      ]
+    },
+    {
+      "id": "pla-10",
+      "unit": "Plants",
+      "fact": "Soil erosion is defined",
+      "any": [
+        "soil erosion"
+      ]
+    },
+    {
+      "id": "pla-11",
+      "unit": "Plants",
+      "fact": "The causes of soil erosion",
+      "all": [
+        "soil erosion",
+        "cause"
+      ]
+    },
+    {
+      "id": "pla-12",
+      "unit": "Plants",
+      "fact": "Measures to prevent soil erosion in Mauritius and Rodrigues",
+      "all": [
+        "soil erosion",
+        "prevent"
+      ]
+    },
+    {
+      "id": "pla-13",
+      "unit": "Plants",
+      "fact": "Human activities lead to soil erosion",
+      "all": [
+        "soil erosion",
+        "human"
+      ]
+    },
+    {
+      "id": "pla-14",
+      "unit": "Plants",
+      "fact": "Soil erosion affects living things and the environment",
+      "all": [
+        "soil erosion",
+        "effect"
+      ]
+    },
+    {
+      "id": "pla-15",
+      "unit": "Plants",
+      "fact": "Plants are classified by looking at their different parts",
+      "all": [
+        "classif",
+        "plant"
+      ]
+    },
+    {
+      "id": "ene-01",
+      "unit": "Energy",
+      "fact": "Sources of energy are named and listed",
+      "all": [
+        "source",
+        "energy"
+      ]
+    },
+    {
+      "id": "ene-02",
+      "unit": "Energy",
+      "fact": "The Sun is a source of energy",
+      "all": [
+        "sun",
+        "energy"
+      ]
+    },
+    {
+      "id": "ene-03",
+      "unit": "Energy",
+      "fact": "Energy from the Sun is widely used for our daily energy needs",
+      "any": [
+        "solar"
+      ]
+    },
+    {
+      "id": "ene-04",
+      "unit": "Energy",
+      "fact": "Fossil fuels are a source of energy and are widely used",
+      "any": [
+        "fossil fuel"
+      ]
+    },
+    {
+      "id": "ene-05",
+      "unit": "Energy",
+      "fact": "The different forms of energy are defined",
+      "all": [
+        "form",
+        "energy"
+      ]
+    },
+    {
+      "id": "ene-06",
+      "unit": "Energy",
+      "fact": "Light energy",
+      "any": [
+        "light energy"
+      ]
+    },
+    {
+      "id": "ene-07",
+      "unit": "Energy",
+      "fact": "Heat energy",
+      "any": [
+        "heat energy"
+      ]
+    },
+    {
+      "id": "ene-08",
+      "unit": "Energy",
+      "fact": "Sound energy",
+      "any": [
+        "sound energy"
+      ]
+    },
+    {
+      "id": "ene-09",
+      "unit": "Energy",
+      "fact": "Energy can be transformed from one form to another",
+      "all": [
+        "energy",
+        "transform"
+      ]
+    },
+    {
+      "id": "ene-10",
+      "unit": "Energy",
+      "fact": "Energy transformation in common devices",
+      "all": [
+        "energy",
+        "device"
+      ]
+    },
+    {
+      "id": "ene-11",
+      "unit": "Energy",
+      "fact": "Energy obtained from batteries, food, the Sun, wood, wind and falling water",
+      "any": [
+        "batter",
+        "falling water"
+      ]
+    },
+    {
+      "id": "ene-12",
+      "unit": "Energy",
+      "fact": "Measures we can take to save energy",
+      "all": [
+        "save",
+        "energy"
+      ]
+    },
+    {
+      "id": "ene-13",
+      "unit": "Energy",
+      "fact": "Sources and forms of energy are different things",
+      "all": [
+        "source",
+        "form"
+      ]
+    },
+    {
+      "id": "cir-01",
+      "unit": "The Simple Electric Circuit",
+      "fact": "A complete circuit lights a bulb",
+      "all": [
+        "circuit",
+        "bulb"
+      ]
+    },
+    {
+      "id": "cir-02",
+      "unit": "The Simple Electric Circuit",
+      "fact": "The components of a circuit are identified and named",
+      "all": [
+        "circuit",
+        "component"
+      ]
+    },
+    {
+      "id": "cir-03",
+      "unit": "The Simple Electric Circuit",
+      "fact": "The cell or battery is a component",
+      "any": [
+        "battery",
+        "cell"
+      ]
+    },
+    {
+      "id": "cir-04",
+      "unit": "The Simple Electric Circuit",
+      "fact": "The switch is a component",
+      "any": [
+        "switch"
+      ]
+    },
+    {
+      "id": "cir-05",
+      "unit": "The Simple Electric Circuit",
+      "fact": "Draw and label the diagram of a complete circuit",
+      "all": [
+        "circuit",
+        "draw"
+      ]
+    },
+    {
+      "id": "cir-06",
+      "unit": "The Simple Electric Circuit",
+      "fact": "The difference between an open and a closed circuit",
+      "any": [
+        "open circuit",
+        "closed circuit"
+      ]
+    },
+    {
+      "id": "cir-07",
+      "unit": "The Simple Electric Circuit",
+      "fact": "Electricity flows only in a complete circuit",
+      "all": [
+        "complete circuit"
+      ]
+    },
+    {
+      "id": "cir-08",
+      "unit": "The Simple Electric Circuit",
+      "fact": "Conductors let electricity through",
+      "any": [
+        "conductor"
+      ]
+    },
+    {
+      "id": "cir-09",
+      "unit": "The Simple Electric Circuit",
+      "fact": "Insulators do not let electricity through",
+      "any": [
+        "insulator"
+      ]
+    },
+    {
+      "id": "cir-10",
+      "unit": "The Simple Electric Circuit",
+      "fact": "The safe use of electricity at home and at school",
+      "all": [
+        "electricity",
+        "safe"
+      ]
+    },
+    {
+      "id": "wat-01",
+      "unit": "Water",
+      "fact": "The three states of water",
+      "any": [
+        "states of water",
+        "three states"
+      ]
+    },
+    {
+      "id": "wat-02",
+      "unit": "Water",
+      "fact": "Melting is defined",
+      "any": [
+        "melt"
+      ]
+    },
+    {
+      "id": "wat-03",
+      "unit": "Water",
+      "fact": "Freezing is defined",
+      "any": [
+        "freez"
+      ]
+    },
+    {
+      "id": "wat-04",
+      "unit": "Water",
+      "fact": "Evaporation is defined",
+      "any": [
+        "evaporat"
+      ]
+    },
+    {
+      "id": "wat-05",
+      "unit": "Water",
+      "fact": "Condensation is defined",
+      "any": [
+        "condens"
+      ]
+    },
+    {
+      "id": "wat-06",
+      "unit": "Water",
+      "fact": "The states of water are interchangeable",
+      "any": [
+        "interchangeable",
+        "change back"
+      ]
+    },
+    {
+      "id": "wat-07",
+      "unit": "Water",
+      "fact": "The water cycle",
+      "any": [
+        "water cycle"
+      ]
+    },
+    {
+      "id": "wat-08",
+      "unit": "Water",
+      "fact": "The steps of the water cycle",
+      "all": [
+        "water cycle",
+        "evaporat"
+      ]
+    },
+    {
+      "id": "wat-09",
+      "unit": "Water",
+      "fact": "The water cycle keeps the amount of water on Earth the same",
+      "all": [
+        "water cycle",
+        "earth"
+      ]
+    },
+    {
+      "id": "wat-10",
+      "unit": "Water",
+      "fact": "Salt is obtained from sea water by evaporation",
+      "all": [
+        "salt",
+        "evaporat"
+      ]
+    },
+    {
+      "id": "wat-11",
+      "unit": "Water",
+      "fact": "Measures we can take to save water",
+      "all": [
+        "save",
+        "water"
+      ]
+    },
+    {
+      "id": "wat-12",
+      "unit": "Water",
+      "fact": "Why saving water matters",
+      "all": [
+        "water",
+        "important"
+      ]
+    }
+  ]
+}

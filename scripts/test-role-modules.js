@@ -45,12 +45,10 @@ const GROUPS = {
   forum: ['Forum'],
   teacher: ['TeacherInsights', 'TeacherHome', 'TeacherWorkspace', 'TeacherGuestClasses',
     'TeacherMode', 'TeacherClassroomDetail'],
-  // Science Labs (NCE only) - engine/labs/, docs/labs/PLAN.md.
-  // ⚠ LabStudy is the shared study journey in the second shell file. It was
-  //   added to GROUPS.labs in registry.js but not here, so nothing checked it
-  //   actually arrives - and it is a top-level const, so it is reachable by
-  //   bare identifier only, never as window.LabStudy.
-  labs: ['Labs', 'LabStudy'],
+  // Science Labs (Grades 4-9) - engine/labs/, docs/labs/PLAN.md. One shell
+  // file again since 2026-09-19 (lab_study.js withdrawn - REWORK_PLAN §2.1).
+  labs: ['LabExperiment', 'Labs'],
+
 };
 
 let pass = 0;

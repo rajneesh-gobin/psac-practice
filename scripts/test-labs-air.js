@@ -3,12 +3,18 @@
 //
 // Opens the lab at Grade 4, Grade 6 and Grade 5 and proves each grade sees
 // only its own stations, guides, missions and discoveries. At each grade:
-// the welcome and the start panel, every guided experiment to the end, every
-// discovery unlocking by following its own "Show me how", every hazard and
-// "what went wrong" card, missions to three stars (and a hazard costing one),
-// read-aloud only on a tap and cancelled on a step change, an overlay, a
-// screen change and unmount, the loop restarting when the Labs screen comes
-// back, Calm Mode, and a 360px phone with 44px tap targets.
+// it opens on an experiment Aim (lab_experiment.js, since 2026-09-19 - the
+// old bench is behind "Explore the bench freely"), every one of its five
+// experiments walked Aim → Predict → Do → See → Check → Done with the wrong
+// option of each decision tapped first; then, on the free bench, the start
+// panel, every guided experiment to the end, every discovery unlocking by
+// following its own "Show me how", every hazard and "what went wrong" card,
+// missions to three stars (and a hazard costing one), read-aloud only on a
+// tap and cancelled on a step change, an overlay, a screen change and
+// unmount, the loop restarting when the Labs screen comes back, Calm Mode,
+// and a 360px phone with 44px tap targets.
+// ⚠ A guide advances on the bench action it asks for - there is no button
+//   that does the step. The test taps what glows (.is-next), as a child would.
 //
 // Run:  CHROME_PATH=<Chrome for Testing> node scripts/test-labs-air.js
 // ⚠ Served over file:// (Chrome for Testing here cannot reach 127.0.0.1), and
@@ -91,7 +97,11 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
     return { cls: o.className, text: o.textContent.replace(/\\s+/g, ' ').slice(0, 3000),
              signs: [...o.querySelectorAll('.lab-sign figcaption')].map(f => f.textContent) }; })()`);
   const closeOv = () => click('#lab-overlay [data-ov-close]');
+  const next = () => click('.is-next');
   const speech = () => ev('({ spoken: window.__speech.spoken.slice(), cancels: window.__speech.cancels })');
+  // The lab opens on an experiment Aim; the old bench sits behind "Explore the
+  // bench freely", and a reset gives the checks below a clean bench.
+  const explore = async () => { await click('[data-exp="explore"]'); await ev('LabAir.experiment.reset(); true'); await sleep(100); };
   const gids = (list, g) => ev(`LabAirData.${list}.filter(x => x.grades.includes(${g})).map(x => x.id)`);
 
   await call('Page.navigate', { url: PAGE });
@@ -137,8 +147,75 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   const runGuide = () => ev(`(() => { for (let k = 0; k < 60 && LabAir._debug().guide; k++) {
       const hz = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
       if (hz) return 'card: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 120);
-      const b = document.querySelector('#lab-guide [data-guide-do]'); if (b) b.click(); else LabAir._tick(3); }
+      const b = document.querySelector('.is-next'); if (b) b.click(); else LabAir._tick(3); }
     const o = document.getElementById('lab-overlay'); return o ? o.textContent.replace(/\\s+/g, ' ') : 'no overlay'; })()`);
+  // Walks one experiment as a child would: Start, the RIGHT prediction, the
+  // wrong option of every decision first (its card, no advance), then the glowing
+  // control, See, the quiz answered right, Done. Returns what went wrong.
+  const walkExp = async id => {
+    const exp = await ev(`LabAirData.EXPERIMENTS.find(e => e.id === '${id}')`);
+    const problems = [];
+    await ev(`LabExperiment.open('${id}'); true`); await sleep(200);
+    let x = await ev('LabExperiment._debug()');
+    if (x.phase !== 'aim' || x.exp !== id) problems.push('did not open at Aim: ' + JSON.stringify(x));
+    if (await overlay()) problems.push('an overlay sits over the Aim');
+    if (!(await ev("[...document.querySelectorAll('#lab-air-controls [data-tok], #lab-air-safety')].every(b => b.hidden)"))) problems.push('bench controls compete with the Aim');
+    await click('[data-exp="start"]'); await sleep(150);
+    await click(`[data-exp-pick="${exp.predict.answer}"]`); await sleep(300);
+    for (let k = 0; k < 8; k++) {
+      x = await ev('LabExperiment._debug()');
+      if (x.phase !== 'do') break;
+      const step = exp.steps[x.step];
+      if (!step) { problems.push('runner at step ' + x.step + ' which does not exist'); break; }
+      const t = step.on || step.any[0];
+      const box = await ev("document.getElementById('lab-guide').textContent.replace(/\\s+/g, ' ')");
+      if (!box.includes((step.say || step.ask).slice(0, 30))) problems.push(`step ${x.step + 1}: the yellow box does not show the instruction`);
+      const w = step.wrong && Object.keys(step.wrong)[0];
+      if (w) {
+        await tok(w); await sleep(150);
+        const o = await overlay();
+        if (!o || !o.text.includes(step.wrong[w].slice(0, 25))) problems.push(`step ${x.step + 1}: wrong ${w} gave no card`);
+        if ((await ev('LabExperiment._debug()')).step !== x.step) problems.push(`step ${x.step + 1}: wrong ${w} advanced the step`);
+        await closeOv();
+      }
+      const glow = await ev(`(() => { const e = document.querySelector('#labs-root [data-tok="${t}"]'); return !!e && !e.hidden && e.classList.contains('is-next'); })()`);
+      if (!glow) problems.push(`step ${x.step + 1}: ${t} is not on screen and glowing`);
+      const shown = await ev("[...document.querySelectorAll('#lab-air-controls [data-tok], #lab-air-safety')].filter(b => !b.hidden).map(b => b.dataset.tok)");
+      const allowed = exp.steps.flatMap(s => s.options || s.any || [s.on]);
+      if (shown.some(s => !allowed.includes(s))) problems.push(`step ${x.step + 1}: focus shows ${shown.filter(s => !allowed.includes(s)).join()}`);
+      await tok(t); await ev('LabAir._tick(1); true'); await sleep(120);
+    }
+    x = await ev('LabExperiment._debug()');
+    if (x.phase !== 'see') problems.push('did not reach See: ' + x.phase + ' at step ' + x.step);
+    const seeTxt = await ev("document.querySelector('#lab-exp').textContent.replace(/\\s+/g, ' ')");
+    if (!seeTxt.includes(exp.see.saw)) problems.push('See does not say what the data promised');
+    if (!/That is what happened/.test(seeTxt)) problems.push('the right prediction was not confirmed by the bench');
+    if (!(await ev("!!document.querySelector('#lab-exp .lab-exp-evidence li')"))) problems.push('See shows no notebook line');
+    await click('[data-exp="check"]'); await sleep(200);
+    for (let i = 0; i < 4; i++) {
+      if (!(await ev("!!document.querySelector('#lab-overlay .lab-quiz-opt')"))) break;
+      await ev(`(() => { const stem = document.querySelector('#lab-overlay .lab-quiz-q').textContent;
+        const q = ${JSON.stringify(exp.check)}.map(r => LabAir.experiment.question(r)).find(q => q && q.q === stem);
+        const b = q && [...document.querySelectorAll('#lab-overlay .lab-quiz-opt')].find(x => x.lastElementChild.textContent === q.options[0]);
+        if (b) b.click(); const n = document.querySelector('#lab-overlay [data-next]'); if (n) n.click(); return true; })()`);
+      await sleep(100);
+    }
+    x = await ev('LabExperiment._debug()');
+    if (x.phase !== 'done' || !x.result || x.result.firstTry !== exp.check.length) problems.push('not Done with full marks: ' + JSON.stringify(x.result));
+    const doneTxt = await ev("document.querySelector('#lab-exp').textContent.replace(/\\s+/g, ' ')");
+    if (!doneTxt.includes(exp.see.learn) || !doneTxt.includes(exp.exam.slice(0, 20))) problems.push('Done misses the lesson or the exam point');
+    if (!(await ev(`!!Labs.store('air').done['${id}']`))) problems.push('not saved in Labs.store("air").done');
+    if (await overlay()) await closeOv();
+    return problems.map(p => id + ': ' + p);
+  };
+  const walkAll = async g => {
+    const list = await ev('LabExperiment._debug().list');
+    const want = await ev(`LabAirData.EXPERIMENTS.filter(e => e.grades.includes(${g})).map(e => e.id)`);
+    ok(`Grade ${g}: the runner lists the ${want.length} Grade ${g} experiments and no other`, list.join() === want.join(), list);
+    const bad = [];
+    for (const id of list) bad.push(...await walkExp(id));
+    ok(`Grade ${g}: all ${list.length} experiments walk Aim → Predict → Do → See → Check → Done, wrong options carded, See true, full marks`, bad.length === 0, bad);
+  };
   const allDiscoveries = g => ev(`(() => {
     const ids = LabAirData.DISCOVERIES.filter(d => d.grades.includes(${g})).map(d => d.id), bad = [];
     for (const id of ids) {
@@ -149,7 +226,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
       for (let k = 0; k < 40 && LabAir._debug().guide; k++) {
         const hz = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
         if (hz) { res = 'card: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 90); break; }
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        const btn = document.querySelector('.is-next');
         if (btn) btn.click(); else LabAir._tick(3);
       }
       if (!res && LabAir._debug().guide) res = 'guide never finished at step ' + LabAir._debug().guide.step;
@@ -163,7 +240,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
     const off = [...document.querySelectorAll('#labs-root button, #labs-root canvas')]
       .filter(e => e.getClientRects().length && e.getBoundingClientRect().right > vw + 0.5)
       .map(e => (e.getAttribute('data-tok') || e.getAttribute('data-act') || e.getAttribute('data-panel') || e.tagName) + ' → ' + Math.round(e.getBoundingClientRect().right));
-    const small = [...document.querySelectorAll('#labs-root .lab-air-controls button, #labs-root .lab-top button, #labs-root .lab-coach button, #labs-root .lab-start button, #labs-root #lab-guide [data-guide-do]')]
+    const small = [...document.querySelectorAll('#labs-root .lab-air-controls button, #labs-root .lab-top button, #labs-root .lab-coach button, #labs-root .lab-start button')]
       .filter(e => e.getClientRects().length && e.getBoundingClientRect().height < 43.5).map(e => e.textContent.trim().slice(0, 24));
     return { vw, root: document.getElementById('labs-root').scrollWidth, off, small }; })()`);
 
@@ -176,11 +253,16 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   ok('it fetched its own data file, then the bench', /lab_air_data\.js,lab_air\.js/.test(await labScripts()), await labScripts());
   ok('lab_air.css is linked and styles the controls', await ev("!!document.querySelector('link[data-lab-css=\"air\"]') && getComputedStyle(document.querySelector('.lab-air-controls')).display === 'flex'"));
   ok('Labs.grade() is 4, and the eyebrow says “Science · Grade 4”', await ev("Labs.grade() === 4 && /Science · Grade 4/.test(document.querySelector('.lab-air .lab-eyebrow').textContent)"));
+  // Since 2026-09-19 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to Air & Burning/.test(ov.text) && /Show me how/.test(ov.text), ov);
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
   ok('nothing was read aloud on its own (no auto-play)', (await speech()).spoken.length === 0);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('air').intro === true"));
+  ok('the welcome is marked seen', await ev("Labs.store('air').intro === true"));
+  await ev('LabAir._test({ instant: true }); true');
+  await walkAll(4);
+  await explore();
+  ok('"Explore the bench freely" shows the old bench, reset', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none' && LabAir._debug().runs.length === 0"));
   ok('top bar: back, the hair-tie safety toggle and help',
      await ev("!!document.querySelector('.lab-air [data-act=\"hub\"]') && !!document.querySelector('.lab-air [data-act=\"help\"]') && document.getElementById('lab-air-safety').dataset.tok === 'safety:on'"));
   ok('the lab assistant has a 🔊 read-aloud button and a 💡 fact button',
@@ -205,7 +287,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   let sp = await speech();
   ok('🔊 on the guide box reads the step aloud, in English', sp.spoken.length === 1 && sp.spoken[0].text === 'Tie your hair back and roll up your sleeves.' && /^en/.test(sp.spoken[0].lang), sp);
   const c0 = sp.cancels;
-  await click('[data-guide-do]');
+  await next();
   ok('…and the next step cancels the speech', (await speech()).cancels > c0);
   gs = await guideState();
   ok('hair tied: the next step asks the teacher to light the candle, and that button glows', /light the candle/.test(gs.text) && gs.next === 'light' && (await dbg()).state.safety === true, gs);
@@ -364,7 +446,10 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   ok('Grade 6: the lab opens again', await openAt(6));
   ok('Labs.grade() is 6, and the eyebrow says “Science · Grade 6”', await ev("Labs.grade() === 6 && /Science · Grade 6/.test(document.querySelector('.lab-air .lab-eyebrow').textContent)"));
   await ev('LabAir._test({ instant: true }); true');
-  if (await overlay()) await closeOv();
+  ok('Grade 6 opens on an experiment Aim too, no overlay in the way', !(await overlay()) && await ev("LabExperiment._debug().phase === 'aim'"));
+  await walkAll(6);
+  await ev("Object.keys(Labs.store('air').disc).forEach(k => { if (LabAirData.DISCOVERIES.find(d => d.id === k && d.grades.includes(6))) delete Labs.store('air').disc[k]; }); true");
+  await explore();
   ok('Grade 6 stations only: candle & jars, the fire safety yard, what burning makes',
      (await ev("[...document.querySelectorAll('.lab-air-stations [data-tok]')].map(b => b.dataset.tok).join()")) === 'station:jars,station:fire,station:products');
   sp0 = await startIds();
@@ -444,6 +529,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   // ════════ Grade 5 ════════
   console.log('\n-- Grade 5');
   ok('Grade 5: the lab opens', await openAt(5));
+  await explore();
   ok('a Grade 5 pupil gets the Grade 4 level (Labs.grade() is 4, the eyebrow says Grade 4)',
      await ev("Labs.grade() === 4 && /Science · Grade 4/.test(document.querySelector('.lab-air .lab-eyebrow').textContent) && [...document.querySelectorAll('.lab-air-stations [data-tok]')].map(b => b.dataset.tok).join() === 'station:jars,station:space,station:weight'"));
 
@@ -458,6 +544,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   await ev("showScreen('labs'); true");
   await sleep(500);
   ok('coming back to the Labs screen restarts the loop', await ev("!document.getElementById('screen-labs').classList.contains('hidden') && LabAir._debug().looping"));
+  await click('[data-exp="explore"]');
   await click('[data-act="say-coach"]');
   const c3 = (await speech()).cancels;
   await ev('Labs.backToHub(); true');

@@ -91,14 +91,29 @@
   border-radius: 4px;
   border: 1px solid #B0CDE0;
 }
+.lab-magnets-sort-groups { display: flex; gap: 8px; }
+.lab-magnets-tosort:not(:empty) { margin-bottom: 8px; }
 .lab-magnets-sort-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 6px;
-  font-size: 12px;
+  font-size: 13px;
 }
-.lab-magnets-sort-row > span { flex: 1; }
+.lab-magnets-sort-row > span { flex: 1 1 100px; }
+.lab-magnets-sort-row .lab-btn { min-height: 44px; }
+
+/* ── Grade 8 tool rows ──────────────────────── */
+.lab-magnets-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+}
+.lab-magnets-row .lab-tool { min-height: 44px; }
+.lab-magnets-induced { border-top: 1px dashed #BFB49A; padding-top: 6px; }
 
 /* ── Canvas overlay ─────────────────────────── */
 .lab-magnets-overlay {

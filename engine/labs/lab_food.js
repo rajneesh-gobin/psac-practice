@@ -6,6 +6,9 @@
 //  bath, a spatula and five tests: iodine (starch), Benedict’s (reducing sugar,
 //  heated), Biuret (protein), the grease spot and the ethanol test (fat).
 //  Guided experiments, two Missions, Discoveries and mistakes that teach.
+//  It also exports an `experiment` adapter (LAB_SPEC.md §10): lab_experiment.js
+//  runs the data file's EXPERIMENTS on this bench - Aim → Predict → Do → See →
+//  Check → Done - using the guide box, the glow and focus() below.
 //
 //  ⚠ Every outcome comes from lab_food_data.js (LabFoodData). This file only
 //    moves time along and draws it. If a tube shows the wrong colour, fix the DATA.
@@ -30,6 +33,9 @@ const LabFood = (() => {
   let _rack = null, _burner = false, _bathT = 25, _goggles = false, _spatula = null;
   let _panel = 'sandbox', _shelf = 'food', _mission = null, _guide = null;
   let _reads = [], _fx = [], _shake = 0, _busy = false, _instant = false, _colors = null, _tipIdx = -1;
+  // Experiments: which controls to show (null = all), whether the runner owns
+  // the bench (powder X allowed outside its mission), and a silent set-up.
+  let _focus = null, _expOn = false, _silent = false;
 
   // The grade the lab is used at (LAB_SPEC §9). Only Grade 8 exists here.
   const _grade = () => {
@@ -100,6 +106,9 @@ const LabFood = (() => {
 
   function mount(root) {
     _root = root;
+    _focus = null; _expOn = false;
+    // An experiment's guide belongs to the runner, which re-attaches after mount.
+    if (_guide && _guide.def && _guide.def.exp) _guide = null;
     if (!_rack) _resetRack();
     root.innerHTML = _shellHTML();
     _cv = $('lab-food-canvas');
@@ -253,6 +262,7 @@ const LabFood = (() => {
 
   function select(n) {
     if (!(n >= 1 && n <= P().SLOTS)) return;
+    if (_expWrong('slot:' + n)) { _guideEvent('slot:' + n); return; }
     _rack.sel = n - 1;
     const s = _cur();
     if (!s.food) _shelf = 'food';
@@ -264,8 +274,10 @@ const LabFood = (() => {
 
   function addFood(id) {
     const F = P().FOODS[id];
-    if (!F || !_guard()) return;
-    if (F.missionOnly && !(_mission && _mission.id === F.missionOnly)) return;
+    if (!F) return;
+    if (_expWrong('food:' + id)) { _guideEvent('food:' + id); return; }
+    if (!_guard()) return;
+    if (F.missionOnly && !(_mission && _mission.id === F.missionOnly) && !_expOn) return;
     const s = _cur(), n = _rack.sel + 1;
     if (s.food) { _coach(`Tube ${n} already has ${_fshort(s.food)} in it. Choose an empty tube, or tap “Clean rack”.`); return; }
     _busy = true;
@@ -284,7 +296,9 @@ const LabFood = (() => {
 
   function addTest(id) {
     const T = P().TESTS[id];
-    if (!T || !_guard()) return;
+    if (!T) return;
+    if (_expWrong('test:' + id)) { _guideEvent('test:' + id); return; }
+    if (!_guard()) return;
     const s = _cur(), n = _rack.sel + 1;
     if (!s.food) { _coach(`Tube ${n} is empty. Add a food first - a small sample is enough.`); return; }
     if (s.test) { _coach(`Tube ${n} has already been tested with ${P().TESTS[s.test].short}. One test per tube - choose another tube.`); return; }
@@ -309,6 +323,7 @@ const LabFood = (() => {
   const _ethanolOut = () => _rack.slots.some(s => s.test === 'ethanol');
 
   function bath() {
+    if (_expWrong('bath')) { _guideEvent('bath'); return; }
     if (!_guard()) return;
     const s = _cur(), n = _rack.sel + 1;
     if (!s.food) { _coach(`Tube ${n} is empty - there is nothing to warm.`); return; }
@@ -343,6 +358,7 @@ const LabFood = (() => {
   }
 
   function flame() {
+    if (_expWrong('flame')) { _guideEvent('flame'); return; }
     if (!_guard()) return;
     const s = _cur(), n = _rack.sel + 1;
     if (!s.food || s.test === 'paper') { _coach('There is no tube of liquid to heat here.'); return; }
@@ -350,6 +366,7 @@ const LabFood = (() => {
   }
 
   function taste() {
+    if (_expWrong('taste')) { _guideEvent('taste'); return; }
     if (!_guard()) return;
     const s = _cur();
     if (!s.food) { _coach('There is nothing in this tube - and nothing in a lab is for tasting anyway.'); return; }
@@ -392,6 +409,7 @@ const LabFood = (() => {
   }
 
   function read() {
+    if (_expWrong('read')) { _guideEvent('read'); return; }
     if (!_guard()) return;
     const s = _cur(), n = _rack.sel + 1;
     if (!s.food) { _coach(`Tube ${n} is empty. Add a food and a test first.`); return; }
@@ -549,7 +567,9 @@ const LabFood = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('food', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _resetRack();
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // already set up - the tubes ARE the experiment; never wipe them.
+    if (!G.exp) _resetRack();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
@@ -560,9 +580,10 @@ const LabFood = (() => {
   }
 
   // A step that is already true is skipped (goggles on, burner off, tube chosen,
-  // spatula clean).
-  const _already = on => (on === 'goggles' && _goggles) || (on === 'burner-off' && !_burner)
-    || (on === 'rinse' && !_spatula) || (on.startsWith('slot:') && _rack.sel === +on.split(':')[1] - 1);
+  // spatula clean). An experiment's step may have `any` and no `on` at all.
+  const _already = on => !!on && ((on === 'goggles' && _goggles) || (on === 'burner-off' && !_burner)
+    || (on === 'rinse' && !_spatula) || (on.startsWith('slot:') && _rack.sel === +on.split(':')[1] - 1));
+  const _stepToks = s => s.options || s.any || (s.on ? [s.on] : []);
 
   function _guideEnter() {
     if (Labs.studyCheckpoint) Labs.studyCheckpoint('food');
@@ -571,9 +592,9 @@ const LabFood = (() => {
     let s = G.steps[_guide.step];
     while (s && _already(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
-    const kind = s.on.split(':')[0];
+    const kind = String(_stepToks(s)[0] || '').split(':')[0];
     const want = kind === 'food' ? 'food' : kind === 'test' ? 'test' : null;
-    if (want && _shelf !== want) { _shelf = want; if (_panel === 'sandbox') _renderPanel(); }
+    if (want && _shelf !== want && !_focus) { _shelf = want; if (_panel === 'sandbox') _renderPanel(); }
     const box = $('lab-guide');
     if (box) {
       const n = G.steps.length, i = _guide.step;
@@ -585,13 +606,18 @@ const LabFood = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. The experiment
+  // runner hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); }
   }
 
   function _guideHint() {
@@ -675,6 +701,7 @@ const LabFood = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('food', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -708,24 +735,110 @@ const LabFood = (() => {
     if (!silent) _coach('Guide stopped. Pick another experiment below, or test freely.');
   }
 
+  // Every token a step accepts glows (an "ask" step lists several).
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [kind, id] = s.on.split(':');
-    const sel = kind === 'goggles' ? '#lab-goggles'
-      : kind === 'slot' ? `#lab-food-slots [data-slot="${id}"]`
-      : (kind === 'food' || kind === 'test') ? `[data-add="${kind}"][data-id="${id}"]`
-      : kind === 'bath' ? '#lab-food-tools [data-act="bath"]'
-      : kind === 'burner-off' ? '#lab-food-tools [data-act="burner"]'
-      : kind === 'rinse' ? '#lab-food-tools [data-act="rinse"]'
-      : kind === 'read' ? '#lab-food-tools [data-act="read"]'
-      : kind === 'clean' ? '#lab-food-tools [data-act="clean"]' : null;
-    const el = sel && _root.querySelector(sel);
-    if (el) el.classList.add('is-next');
+    _stepToks(s).forEach(t => { const sel = _selFor(t), el = sel && _root.querySelector(sel); if (el) el.classList.add('is-next'); });
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // The runner sets the bench up with apply(), runs the steps as an `exp` guide
+  // and hears every token through hooks.token. A token the current step lists
+  // as WRONG is only heard: the bench does nothing with it - no reagent goes
+  // in, no tube empties, no hazard fires - and the runner's card explains.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
+
+  // The control a token belongs to. A wait (heated / developed / dry) points at
+  // the tube being watched - the selected one.
+  function _selFor(tok) {
+    const [kind, id] = String(tok).split(':');
+    switch (kind) {
+      case 'goggles': return '#lab-goggles';
+      case 'slot': return `#lab-food-slots [data-slot="${id}"]`;
+      case 'food': case 'test': return `[data-add="${kind}"][data-id="${id}"]`;
+      case 'burner-off': return '#lab-food-tools [data-act="burner"]';
+      case 'bath': case 'read': case 'rinse': case 'clean': case 'flame': case 'taste': return `#lab-food-tools [data-act="${kind}"]`;
+      case 'heated': case 'developed': case 'dry': return `#lab-food-slots [data-slot="${_rack ? _rack.sel + 1 : 1}"]`;
+    }
+    return null;
+  }
+
+  // focus(tokens): show only the tools and shelf items an experiment uses;
+  // null shows everything. Re-applied after every render of those controls.
+  const _toolTok = b => (b.dataset.act === 'burner' ? 'burner-off' : b.dataset.act);
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    _root.querySelectorAll('#lab-food-tools .lab-tool').forEach(b => { b.hidden = on && !_focus.has(_toolTok(b)); });
+    _root.querySelectorAll('.lab-shelf .lab-item').forEach(b => { b.hidden = on && !_focus.has(b.dataset.add + ':' + b.dataset.id); });
+    _root.querySelectorAll('.lab-shelf .lab-seg').forEach(el => { el.hidden = on; });
+    const tools = $('lab-food-tools');
+    if (tools) tools.hidden = on && ![...tools.querySelectorAll('.lab-tool')].some(b => !b.hidden);
+    const shelf = _root.querySelector('.lab-shelf');
+    if (shelf) shelf.hidden = on && !shelf.querySelector('.lab-item:not([hidden])');
+    // During an experiment the one available food or reagent is the next
+    // decision, not a thing a child should have to hunt for in the side panel.
+    // Put it directly below the runner's instruction; _renderPanel restores it
+    // to the normal shelf whenever Explore redraws the bench.
+    const guide = $('lab-guide');
+    if (on && shelf && !shelf.hidden && guide && guide.isConnected) guide.insertAdjacentElement('afterend', shelf);
+  }
+
+  // One guide token, done at once (no animation): the set-up before an Aim.
+  // Toggles are idempotent, and a wait runs the clock until it is met.
+  function _do(tok) {
+    const [kind, id] = String(tok).split(':');
+    switch (kind) {
+      case 'goggles': if (!_goggles) goggles(); break;
+      case 'slot': select(+id); break;
+      case 'food': addFood(id); break;
+      case 'test': addTest(id); break;
+      case 'bath': if (!_cur().bath) bath(); break;
+      case 'burner-off': if (_burner) burner(); break;
+      case 'rinse': rinse(); break;
+      case 'read': read(); break;
+      case 'clean': clean(); break;
+      case 'heated': case 'developed': case 'dry': _settle(kind); break;
+    }
+  }
+  function _settle(kind) {
+    const s = _cur();
+    if (!s || !s.test) return;
+    const met = () => (kind === 'heated' ? !!s.fired.heated : kind === 'developed' ? !!s.fired.developed : !!s.dry);
+    for (let i = 0; i < 2400 && !met(); i++) _step(0.05);
+    _readouts();
+  }
+
+  const experiment = {
+    list: () => (P().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(_grade())),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _expOn = true; _mission = null; _guide = null;
+      _resetRack(); _goggles = false; _burner = false; _bathT = P().ROOM; _reads = []; _panel = 'sandbox'; _shelf = 'food';
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _syncGoggles(); _renderPanel(); _readouts(); _draw(0);
+    },
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _silent = true;
+      try { _do(tok); } finally { _instant = was; _silent = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => { _expOn = false; _stopGuide(true); },
+    evidence: () => _reads.slice(0, 6).reverse().map(r => `Tube ${r.tube}: ${_fshort(r.food)} + ${P().TESTS[r.test].short} - ${r.word} (${r.meaning})`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; if ($('lab-panel')) _renderPanel(); else _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -769,6 +882,7 @@ const LabFood = (() => {
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _renderSlots();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -786,7 +900,7 @@ const LabFood = (() => {
   function _discover(id) {
     const all = _mine(P().DISCOVERIES);
     const d = all.find(x => x.id === id);
-    if (!d) return;
+    if (!d || _silent) return;
     if (Labs.discover(ID, id, { title: d.title, total: all.length })) _refresh();
   }
   function _foundCount() {
@@ -830,14 +944,23 @@ const LabFood = (() => {
         <span class="lab-item-text"><b>${esc(x.name)}</b><small>${esc(x.meta)}</small></span>
         ${sg ? `<span class="lab-item-sign" title="${esc(Labs.SIGN_LABELS[sg])}">${Labs.sign(sg, true)}</span>` : ''}</button>`;
     };
-    const items = _shelf === 'test' ? D.SHELF_TESTS.map(test) : foods.map(food);
+    // An experiment (focus) puts its own foods and tests on one shelf, no tabs.
+    const items = _focus
+      ? [...[...new Set(foods.concat('mystery'))].filter(id => _focus.has('food:' + id)).map(food),
+         ...D.SHELF_TESTS.filter(id => _focus.has('test:' + id)).map(test)]
+      : _shelf === 'test' ? D.SHELF_TESTS.map(test) : foods.map(food);
+    const next = _focus ? [
+      ...[...new Set(foods.concat('mystery'))].filter(id => _focus.has('food:' + id)).map(id => D.FOODS[id].name),
+      ...D.SHELF_TESTS.filter(id => _focus.has('test:' + id)).map(id => D.TESTS[id].name),
+    ] : [];
+    if (_focus && !items.length) return '';
     return `<section class="lab-shelf" aria-label="Shelf">
       <div class="lab-shelf-head">
-        <div class="lab-seg" role="group" aria-label="Shelf">
+        ${_focus ? '' : `<div class="lab-seg" role="group" aria-label="Shelf">
           <button type="button" data-shelf="food" aria-pressed="${_shelf === 'food'}">Foods</button>
           <button type="button" data-shelf="test" aria-pressed="${_shelf === 'test'}">Tests</button>
-        </div>
-        <p class="lab-hint">Tap to add to tube ${_rack.sel + 1}.</p>
+        </div>`}
+        <p class="lab-hint">${next.length ? `<b>Next: choose ${esc(next.join(' or '))}.</b> Tap it for tube ${_rack.sel + 1}.` : `Tap to add to tube ${_rack.sel + 1}.`}</p>
       </div>
       <div class="lab-items">${items.join('')}</div>
     </section>`;
@@ -1219,7 +1342,7 @@ const LabFood = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, select, addFood, addTest, read, bath, burner, flame, taste, rinse, clean, goggles,
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, select, addFood, addTest, read, bath, burner, flame, taste, rinse, clean, goggles,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabFood = LabFood;

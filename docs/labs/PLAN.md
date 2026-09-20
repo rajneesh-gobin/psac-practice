@@ -1,5 +1,8 @@
 # NCE Science Labs — build plan
 
+> ⚠ **2026-09-19: read [`REWORK_PLAN_2026-09-19.md`](REWORK_PLAN_2026-09-19.md) first.** Children could not find value in the labs; it measures why and sets the rework (one experiment shape, canvas-first phone layout, chapter links).
+
+
 > Status 2026-09-11: **Phase 0 built — the Mixing Bench — not yet deployed.**
 > Readable version of the plan published as an Artifact ("NCE Science Labs").
 

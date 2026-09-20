@@ -92,6 +92,12 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   const closeOv = () => click('#lab-overlay [data-ov-close]');
   const station = id => click(`#lab-materials-controls [data-station="${id}"]`);
   const tray = id => click(`#lab-materials-controls [data-obj="${id}"]`);
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step. The test taps what glows, as a child would.
+  const next = () => click('.is-next');
+  // Since 2026-09-19 the lab opens on an experiment Aim (lab_experiment.js);
+  // the old bench sits behind "Explore the bench freely", on a clean bench.
+  const explore = async () => { await click('[data-exp="explore"]'); await ev('LabMaterials.experiment.reset(); true'); };
   const speech = () => ev('({ spoken: window.__speech.spoken.slice(), cancels: window.__speech.cancels })');
 
   await call('Page.navigate', { url: PAGE });
@@ -122,12 +128,15 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   ok('Labs.openLab(\'materials\') loads LabMaterials and renders the bench', up);
   ok('it fetched its own data file, then the bench', /lab_materials_data\.js,lab_materials\.js/.test(await labScripts()), await labScripts());
   await sleep(400);
-  ok('lab_materials.css is linked and styles the tray', await ev("!!document.querySelector('link[data-lab-css=\"materials\"]') && getComputedStyle(document.querySelector('.lab-materials-tray')).display === 'grid'"));
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Materials Tester/.test(ov.text) && /Show me how/.test(ov.text), ov);
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
+  ok('…the picture is set up for it (the magnet station) and every control is out of the way',
+     await ev("LabMaterials._debug().station === 'magnet' && [...document.querySelectorAll('#lab-materials-controls button')].every(b => b.hidden)"));
   ok('nothing was read aloud on its own (no auto-play)', (await speech()).spoken.length === 0);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('materials').intro === true"));
+  ok('the welcome is marked seen', await ev("Labs.store('materials').intro === true"));
+  await explore();
+  ok('"Explore the bench freely" shows the old bench with every control back', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none' && [...document.querySelectorAll('#lab-materials-controls button')].every(b => !b.hidden)"));
+  ok('lab_materials.css is linked and styles the tray', await ev("!!document.querySelector('link[data-lab-css=\"materials\"]') && getComputedStyle(document.querySelector('.lab-materials-tray')).display === 'grid'"));
   ok('top bar: back, help, and the eyebrow “Science · Grade 4”',
      await ev("!!document.querySelector('.lab-materials [data-act=\"hub\"]') && !!document.querySelector('.lab-materials [data-act=\"help\"]') && /Science · Grade 4/.test(document.querySelector('.lab-materials .lab-eyebrow').textContent)"));
   ok('the lab assistant has a 🔊 read-aloud button and a 💡 fact button',
@@ -145,25 +154,26 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
              start: !!document.querySelector('.lab-start') }; })()`);
   await click('.lab-start [data-guide="magnet"]');
   let gs = await guideState();
+  const nailStep = await ev("LabMaterialsData.GUIDES.find(g => g.id === 'magnet').steps[1].say");
   ok('Magnet test: the magnet is already chosen, so it opens at step 2 - the iron nail - and the nail glows',
-     gs.box && /Step 2 of 5/.test(gs.text) && /Test the iron nail/.test(gs.text) && gs.next === 'nail' && !gs.start, gs);
+     gs.box && /Step 2 of 5/.test(gs.text) && gs.text.includes(nailStep) && /iron nail/.test(nailStep) && gs.next === 'nail' && !gs.start, { gs, nailStep });
   await click('#lab-guide [data-act="say-guide"]');
   let sp = await speech();
-  ok('🔊 on the guide box reads the step aloud, in English', sp.spoken.length === 1 && sp.spoken[0].text === 'Test the iron nail.' && /^en/.test(sp.spoken[0].lang), sp);
+  ok('🔊 on the guide box reads the step aloud, in English', sp.spoken.length === 1 && sp.spoken[0].text === nailStep && /^en/.test(sp.spoken[0].lang), sp);
   const c0 = sp.cancels;
-  await click('[data-guide-do]');
+  await next();
   sp = await speech();
   ok('…and the next step cancels the speech', sp.cancels > c0, sp);
   d = await dbg();
   ok('the nail went to the magnet: attracted, and the picture says so', d.results.nail && d.results.nail.magnet === true && d.verdict === 'Attracted', d);
   gs = await guideState();
   ok('then the steel pin, glowing', /Step 3 of 5/.test(gs.text) && gs.next === 'pin', gs);
-  await click('[data-guide-do]');
-  await click('[data-guide-do]');
+  await next();
+  await next();
   ok('the foil is a metal but is not attracted - and inside a guide no card interrupts', (await dbg()).results.foil.magnet === false && !(await overlay()));
   let nb = await ev("[...document.querySelectorAll('#lab-notebook tr')].map(r => [...r.children].map(c => c.textContent.trim()).join(' ')).join(' | ')");
   ok('the notebook table has the nail “attracted” and the foil “not attracted”', /Iron nail attracted/.test(nb) && /Aluminium foil not attracted/.test(nb), nb.slice(0, 300));
-  await click('[data-guide-do]');
+  await next();
   ov = await overlay();
   ok('the wooden block completes it, with “What you found out”', ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text) && /Only iron and steel/.test(ov.text), ov);
   ok('…remembered, and offers the next one', await ev("!!Labs.store('materials').guides.magnet") && /Next: Torch test/.test(ov.text));
@@ -183,7 +193,7 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   await closeOv();
 
   const runGuide = () => ev(`(() => { for (let k = 0; k < 30 && LabMaterials._debug().guide; k++) {
-      const b = document.querySelector('#lab-guide [data-guide-do]'); if (b) b.click(); else LabMaterials._tick(3); }
+      const b = document.querySelector('.is-next'); if (b) b.click(); else LabMaterials._tick(3); }
     const o = document.getElementById('lab-overlay'); return o ? o.textContent.replace(/\\s+/g, ' ') : 'no overlay'; })()`);
   for (const [id, re] of [['torch', /translucent/], ['bulb', /conductors/], ['water', /absorbent/], ['bend', /flexible/], ['origin', /natural/]]) {
     await ev(`LabMaterials.startGuide('${id}'); true`);
@@ -341,7 +351,15 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
       for (let k = 0; k < 24 && LabMaterials._debug().guide; k++) {
         const hz = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
         if (hz) return 'card: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        // A job step opens the job card: answer it with the job's own right choice.
+        const pick = document.querySelector('#lab-overlay [data-job-pick]');
+        if (pick) {
+          const j = pick.dataset.jobPick.split('|')[0], J = LabMaterialsData.JOBS.find(x => x.id === j);
+          document.querySelector('#lab-overlay [data-job-pick="' + j + '|' + J.choices[0] + '"]').click();
+          document.getElementById('lab-overlay')?.remove();
+          continue;
+        }
+        const btn = document.querySelector('.is-next');
         if (btn) btn.click(); else LabMaterials._tick(3);
       }
       if (LabMaterials._debug().guide) return 'guide never finished at step ' + LabMaterials._debug().guide.step;
@@ -394,7 +412,10 @@ process.on('unhandledRejection', e => { console.error(e); shutdown(1); });
   await sleep(400);
   ok('leaving the Labs screen cancels the speech', (await speech()).cancels > c2);
   await ev("showScreen('labs'); true");
-  await sleep(400);
+  await sleep(300);
+  await ev("Labs.openLab('materials'); true");
+  await sleep(300);
+  await explore();
   await click('[data-act="say-coach"]');
   const c3 = (await speech()).cancels;
   await ev("Labs.backToHub(); true");

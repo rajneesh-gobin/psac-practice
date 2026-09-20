@@ -44,6 +44,21 @@
   reports 0×0 and that reads as a collapsed layout rather than a late question.
 
 ### Cascade and the Tailwind CDN
+- ⚠ **The teacher board STRIPS Tailwind cards, by design.**
+  `#screen-teacher .ta-tab-content :is(.bg-white, [class*="bg-gray"], .rounded-2xl.shadow)`
+  is `background: transparent !important`, and `label`/`.text-xs`/`.text-sm`/`p`/`h3`/`b`
+  are repainted chalk with `!important`. Shared markup dropped in there therefore
+  comes out *right* — that is the point — **except any chip carrying its own
+  COLOURED background**: the strip rule only knows white and grey, so a
+  `bg-green-100` role pill or a `bg-indigo-50` selected state keeps a pale ground
+  and gets cream text. Measured on the teacher Account & Settings panel: 1.04:1,
+  invisible. Enumerate the pale `-50/-100` classes and give them a chalk wash;
+  ⚠ **never `[class*="bg-indigo-"]`** — it also matches `bg-indigo-500` and would
+  turn the primary buttons into ghosts.
+- ⚠ **Excluding a component from a board rule costs specificity unless you use
+  `:where()`.** `:not(:where(.x *))` adds nothing; a bare `:not(.x *)` lifts the
+  rule above the half-dozen later rules written to tie with it and win on order.
+  (Tried on the teacher board, reverted: mapping the chips was the smaller fix.)
 - ⚠ **`style.css` loads AFTER the Tailwind Play CDN**, so an equally-specific rule
   of yours wins — and a bare `display:flex` outranks `.hidden` (hence
   `.pd-action.hidden { display: none }`, and `.kid-hero`'s own gradient).

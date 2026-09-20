@@ -181,3 +181,86 @@ tells the open lab which grade it is being used at.
 Files created; counts of guided experiments / discoveries / missions / hazard and
 result cards; the science you checked and how; test results (numbers); anything
 you could not do; any change the shared shell needs.
+
+## 10. Experiments — the one shape every lab is moving to (2026-09-19)
+Read `docs/labs/REWORK_PLAN_2026-09-19.md` §4 first. Since Phase 1 a lab that
+exports an `experiment` adapter opens straight onto an **experiment** run by
+the shared runner `engine/labs/lab_experiment.js`: **Aim → Predict → Do → See →
+Check → Done**, in those words, at every grade. The bench keeps its canvas,
+its guide box and its glow; the runner owns everything else. The Rusting Lab
+(`lab_rusting.js`, `lab_rusting_data.js`, search "Experiments") is the
+reference: copy its shape exactly.
+
+### 10.1 The data — `EXPERIMENTS` in `lab_<id>_data.js`, exported
+```js
+{ id: 'which_nail', grades: [6], chapter: 'g6-materials', icon: '🔑',
+  title: 'Which nail will rust?',      // a QUESTION a child can say back, <= 60 chars, ends in "?"
+  aim: 'Three iron nails in three tubes. Only one will go rusty. Which one?', // 1-2 short sentences, <= 200 chars
+  setup: ['rig:tubes', 'adult:on', …], // guide tokens applied SILENTLY before the Aim, so the picture is already set up
+  predict: { q: 'Which nail will rust?', answer: 'B',
+    options: [{ id: 'A', label: 'Nail A', sub: 'boiled water, oil on top' }, …] }, // 2-4 taps, never typing
+  steps: [                              // 1 to 5, each a decision or an observation - never "tap X" for its own sake
+    { on: 'week', say: 'Tap ⏩ Wait to day 7. Watch the three nails.' },                 // one action; say CONTAINS the control's label
+    { ask: 'Tube A must have NO air. Which water?', on: 'water:boiled',                // a decision: every option glows,
+      options: ['water:boiled', 'water:tap', 'water:salt'],                            // the wrong ones explain themselves
+      wrong: { 'water:tap': 'Tap water has air mixed in it. The nail would rust and prove nothing.' } },
+    { ask: 'Pick a coat.', any: ['coat:paint', 'coat:grease'], options: ['coat:paint', 'coat:grease'] }, // several right answers
+  ],
+  see: { saw: 'Only nail B went rusty.', learn: 'Iron needs air AND water to rust.' },
+  check: ['needs:0', 'needs:4'],        // 2-3 refs "<mission id>:<quiz index>" into MISSIONS[].quiz (or inline { q, options, why })
+  exam: 'PSAC 2024 Q4: pin B only.' }   // the paper point, quoted only if it is in the question files
+```
+Rules: 3-5 experiments per grade; a step's instruction <= 25 words at Grades
+4-6 (<= 12 is better); the bench answers the prediction (See), never the text;
+the Check questions must be answerable from what the child just saw; when the
+exam paper gives the set-up as a diagram, `setup` builds it and the child
+predicts and observes - filling eleven things is not the skill. Where a real
+paper has a set-up (PSAC 2024 three tubes; Grade 4 "can you light the bulb"),
+that is experiment 1.
+
+### 10.2 The adapter — `experiment` exported by `Lab<Name>`
+```js
+const experiment = {
+  list: () => (P().EXPERIMENTS || []).filter(e => e.grades.includes(Number(Labs.grade()))),
+  question: ref => …,                 // "<mission>:<i>" → MISSIONS[].quiz[i], or the inline object
+  reset: () => { … },                 // a clean bench: no mission, no guide, no overlay, empty notebook, controls re-rendered
+  apply: tok => _do(tok),             // perform one guide token as if tapped (used for setup)
+  guide: def => startGuide(def),      // def = { id, adhoc: true, exp: true, icon, title, steps: [{ on, any, options, wrong, say }] }
+  stop: () => _stopGuide(true),
+  evidence: () => […],                // <= 6 short strings from the notebook, oldest first ("Day 7: Tube A: No rust · …")
+  focus: toks => …,                   // show ONLY the controls whose tokens are listed (null = show everything)
+  selector: tok => '…',               // CSS selector of the control a token belongs to (tests tap it)
+  hooks: {},                          // the runner sets { token, step, done }
+};
+```
+What the bench must do for an `exp` guide (see the Rusting diff):
+- `startGuide`: do NOT reset the bench when `G.exp` - the set-up IS the experiment;
+- `_guideEvent(token)`: call `experiment.hooks.token(token, step)` for EVERY token
+  before matching, and match `step.any.includes(token)` as well as `step.on === token`;
+- `_guideEnter`: after rendering, call `experiment.hooks.step(stepIndex)`; guard
+  `_satisfied()` against a step with no `on`;
+- `_guideDone`: when `G.exp`, stop the guide silently and call `experiment.hooks.done()`
+  instead of showing the "Experiment complete" overlay;
+- `_highlight`: glow EVERY token in `step.options || step.any || [step.on]`;
+- `focus(tokens)`: hide unlisted tools/shelf/palette buttons (and rows that end
+  up empty) after every render of those controls; the runner calls
+  `focus([])` for Aim/Predict/See and `focus(all step tokens)` for Do.
+The runner hides `.lab-side` (except in Do), the tabs, the start panel, the
+coach and the task strip by CSS (`[data-exp-mode]` in `labs.css`), moves
+`#lab-guide` inside `.lab-canvas-wrap` during Do and makes that wrap sticky on
+phones. Do not fight it: never position the guide box yourself.
+
+### 10.3 Registering
+The lead adds `EXPERIMENTS_BY_LAB[<id>] = { <grade>: <count> }` in
+`lab_core.js` and each chapter → lab line to `_LAB_CHAPTERS` in `app.js`
+(that is the "🔬 Try the experiment" chip on the chapter card). Report both;
+do not edit those files yourself.
+
+### 10.4 Tests
+- `node scripts/test-labs-experiments-data.js` — the contract above, every
+  lab, in Node (chapter ids, counts, shapes, check refs). Must be 0 failures.
+- `scripts/test-labs-experiments.js` — Chrome for Testing: walks every
+  experiment on a 360 px phone from the hub to Done, taps the wrong option of
+  every ask step and expects its card, asserts that the picture and the
+  instruction are both inside the viewport at every step and that every
+  `say` contains its control's label. The lead runs it (one Chrome at a time).

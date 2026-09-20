@@ -4,8 +4,9 @@
 // Every wrong answer has been recorded since this app shipped (_recordMistake)
 // and then only ever LISTED. The rows now carry the question id and pack that
 // make them practisable, a repeat miss updates the existing row instead of
-// filling the 60-row cap with copies of one question, and two correct answers
-// from anywhere retire a mistake for good.
+// filling the 60-row cap with copies of one question, and three correct answers
+// from anywhere retire a mistake for good - SPACED: each fix stamps a `due` day
+// (one day, then three) and the drill deals nothing before its day.
 //
 // Driven in a real browser against the real functions, with synthetic questions
 // pushed into STATIC_QUESTIONS and a scripted DB — the packs fetch their
@@ -106,11 +107,16 @@ const RECORD = `(() => {
   ok('missing the same question again does not duplicate the row', again.count === 6 && again.copies === 1, again);
   ok('the repeat is counted and moved to the front', again.n === 2 && again.first === 'tst-q1', again);
 
-  // ── retirement takes two correct answers, not one ────────────────────────
-  const r1 = await ev("(() => ({ retired: _retireMistake('tst-q1'), fix: (DB.mistakes.find(m => m.id === 'tst-q1') || {}).fix }))()");
-  ok('one correct answer does not retire a mistake', r1.retired === false && r1.fix === 1, r1);
-  const r2 = await ev("(() => ({ retired: _retireMistake('tst-q1'), still: DB.mistakes.some(m => m.id === 'tst-q1'), left: DB.mistakes.length }))()");
-  ok('the second correct answer retires it', r2.retired === true && r2.still === false && r2.left === 5, r2);
+  // ── retirement takes three correct answers, spaced ───────────────────────
+  const r1 = await ev("(() => { const r = _retireMistake('tst-q1'); const m = DB.mistakes.find(x => x.id === 'tst-q1') || {}; return { retired: r, fix: m.fix, due: m.due, tomorrow: _muDayKeyBack(-1) }; })()");
+  ok('one correct answer does not retire a mistake, and parks it until tomorrow', r1.retired === false && r1.fix === 1 && r1.due === r1.tomorrow, r1);
+  const r2 = await ev("(() => { const r = _retireMistake('tst-q1'); const m = DB.mistakes.find(x => x.id === 'tst-q1') || {}; return { retired: r, fix: m.fix, due: m.due, in3: _muDayKeyBack(-3) }; })()");
+  ok('the second correct answer parks it for three days', r2.retired === false && r2.fix === 2 && r2.due === r2.in3, r2);
+  const r3 = await ev("(() => ({ retired: _retireMistake('tst-q1'), still: DB.mistakes.some(m => m.id === 'tst-q1'), left: DB.mistakes.length }))()");
+  ok('the third correct answer retires it', r3.retired === true && r3.still === false && r3.left === 5, r3);
+  const spaced = await ev("(() => { _retireMistake('tst-q2'); const due = _dueMistakes().map(m => m.id); const next = _nextMistakeDue(); const row = DB.mistakes.find(m => m.id === 'tst-q2'); row.due = _muDayKeyBack(0); const back = _dueMistakes().map(m => m.id); row.due = undefined; row.fix = 0; return { due, next, tomorrow: _muDayKeyBack(-1), back }; })()");
+  ok('a mistake fixed today is not due until its day', !spaced.due.includes('tst-q2') && spaced.next === spaced.tomorrow, spaced);
+  ok('on its day it is due again', spaced.back.includes('tst-q2'), spaced);
   ok('retiring an unknown id is harmless', await ev("_retireMistake('nope') === false && _retireMistake('') === false && _retireMistake(undefined) === false"));
 
   // ── legacy rows (no id) are listed but never drilled ─────────────────────
@@ -161,10 +167,12 @@ const RECORD = `(() => {
     _logPracticeAnswer(q, 'B', true, false);
     const fixAfterOne = (DB.mistakes.find(m => m.id === q.id) || {}).fix;
     _logPracticeAnswer(q, 'B', true, false);
-    return { id: q.id, before, fixAfterOne, gone: !DB.mistakes.some(m => m.id === q.id), fixed: S.practice.session.fixed, after: DB.mistakes.length };
+    const stillAfterTwo = DB.mistakes.some(m => m.id === q.id);
+    _logPracticeAnswer(q, 'B', true, false);
+    return { id: q.id, before, fixAfterOne, stillAfterTwo, gone: !DB.mistakes.some(m => m.id === q.id), fixed: S.practice.session.fixed, after: DB.mistakes.length };
   })()`);
-  ok('a correct answer in the drill counts once, then retires the mistake',
-    flow.fixAfterOne === 1 && flow.gone === true && flow.after === flow.before - 1, flow);
+  ok('a correct answer in the drill counts once, and the third retires the mistake',
+    flow.fixAfterOne === 1 && flow.stillAfterTwo === true && flow.gone === true && flow.after === flow.before - 1, flow);
   ok('the round counts what it actually fixed', flow.fixed === 1, flow);
 
   // ── a wrong answer files the mistake under the REAL chapter ──────────────
@@ -193,6 +201,18 @@ const RECORD = `(() => {
   ok('the child\'s home shows a "Fix my mistakes" mission with a live count',
     card.present && /Fix my mistakes/.test(card.text) && /\d+ question/.test(card.text), card);
   ok('the card disappears when there is nothing to fix', card.hiddenWhenNone === true, card);
+  const resting = await ev(`(() => {
+    const keep = DB.mistakes.map(m => ({ ...m }));
+    DB.mistakes.forEach(m => { if (m.id) { m.fix = 1; m.due = _muDayKeyBack(-1); } });
+    _renderShMissions();
+    const on = document.querySelector('.sh-mission-fix');
+    const out = { present: !!on, resting: !!(on && on.classList.contains('sh-mission-resting')), text: on ? on.textContent.replace(/\\s+/g, ' ').trim() : '' };
+    DB.mistakes = keep;
+    _renderShMissions();
+    return out;
+  })()`);
+  ok('when every mistake is parked the card rests and says when they return',
+    resting.present && resting.resting && /Mistakes resting/.test(resting.text) && /tomorrow/.test(resting.text), resting);
 
   // ── the round-complete modal reports the repair ──────────────────────────
   const modal = await ev(`(() => {
@@ -220,7 +240,7 @@ const RECORD = `(() => {
     document.getElementById('modal-round-complete').classList.add('hidden');
     return out;
   })()`);
-  ok('an ordinary round gets its own wording back', /Practice Again/.test(relabel.next) && /Chapters/.test(relabel.back), relabel);
+  ok('an ordinary round gets its own wording back', /Continue with new questions/.test(relabel.next) && /Take a break/.test(relabel.back), relabel);
 
   console.log('\nFix My Mistakes: ' + checks + ' checks passed.');
   ws.close(); chrome.kill(); server.close(); process.exit(0);

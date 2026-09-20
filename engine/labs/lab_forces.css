@@ -137,6 +137,33 @@
   color: var(--lab-accent, #1D6A96);
 }
 
+/* ── Ask palettes: the reading (val:) and the force name (name:) ──── */
+.lab-forces-vals,
+.lab-forces-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 8px;
+}
+.lab-forces-vals .lab-forces-fBtn {
+  flex: 1 1 64px;
+}
+.lab-forces-nameBtn {
+  flex: 1 1 120px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1.5px solid var(--lab-border, #C2CFCD);
+  border-radius: 8px;
+  background: var(--lab-surface, #fff);
+  font: 600 14px/1.2 system-ui, sans-serif;
+  color: var(--lab-ink, #14211D);
+  cursor: pointer;
+}
+.lab-forces-nameBtn span { font-size: 1.1rem; }
+
+/* An experiment hides what it does not use (focus); the shared .lab-root [hidden]
+   rule wins over the flex display above. Nothing here may set display on [hidden]. */
+
 /* ── Calm / reduced motion ──── */
 @media (prefers-reduced-motion: reduce) {
   .lab-forces-mode-bar button { transition: none; }

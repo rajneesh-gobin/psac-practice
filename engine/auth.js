@@ -2314,10 +2314,10 @@ const Auth = (() => {
     }
     if (!_isTeacherUser) {
       const msg = {
-        pending:   'Your teacher application is awaiting approval.',
-        rejected:  'Your teacher application was not approved. Contact the administrator.',
-        suspended: 'Your teacher access has been suspended. Contact the administrator.',
-      }[_teacherStatus] || 'Teacher access is granted by an administrator.';
+        pending:   'Teacher mode has been requested and is awaiting approval.',
+        rejected:  'Teacher mode was not approved. Contact the administrator.',
+        suspended: 'Teacher mode has been suspended. Contact the administrator.',
+      }[_teacherStatus] || 'Enable teacher mode from the parent dashboard first.';
       toast(msg, 3500);
       return;
     }
@@ -2325,8 +2325,12 @@ const Auth = (() => {
   }
 
   // ── Apply for teacher access ───────────────────
-  // Any signed-in adult may apply; approval is an admin decision. The RPC is
-  // idempotent - re-applying while pending just returns 'pending'.
+  // "Enable teacher mode" on the parent dashboard. Any signed-in adult may
+  // ask; with global_settings.teacher_auto_approve on (production, 2026-09-19)
+  // the RPC approves a confirmed first-time account on the spot and the same
+  // profile row becomes role 'teacher' — no second account, no second email.
+  // Without the switch, or for an account already decided once, it queues for
+  // an admin. The RPC is idempotent - asking again while pending returns 'pending'.
   async function requestTeacherAccess(note) {
     if (!_sb || !_parentUser) { toast('Please sign in first.', 2500); return null; }
     // Premium is sold as the tier "for big families and private tutors", so the
@@ -2369,13 +2373,13 @@ const Auth = (() => {
       const tBtn = document.getElementById('btn-open-teacher');
       if (tBtn) { tBtn.classList.remove('hidden'); tBtn.classList.add('flex'); }
       toast(data.note === 'auto_approved'
-        ? 'You are approved - your teacher tools are ready. 👩‍🏫'
-        : 'You already have teacher access. 👩‍🏫 Look for the teacher button in the header.', 4500);
+        ? 'Teacher mode is on. 👩‍🏫 Tap "Switch to teacher view" when you are ready.'
+        : 'Teacher mode is already on. 👩‍🏫 Tap "Switch to teacher view" or the teacher button in the header.', 4500);
       renderParentDashboard();
       return data;
     }
     _teacherStatus = data.status;
-    toast('Application sent. An administrator will review it. ⏳', 4000);
+    toast('Teacher mode requested. An administrator will switch it on. ⏳', 4000);
     renderParentDashboard();
     return data;
   }

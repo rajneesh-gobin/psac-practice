@@ -4,6 +4,25 @@
 > ⚠ Re-check against the code — `Labs.LABS` in `engine/labs/lab_core.js` and
 > `_LAB_GRADES` in `engine/app.js` are the truth.
 
+## 2026-09-20 — Phase 1 is in the working tree too
+The experiment runner (`engine/labs/lab_experiment.js`, LAB_SPEC.md §10) with
+Rusting, Circuit Board (Grades 4 and 6) and Food Tests converted — 16
+experiments, walked green at 360 px by `scripts/test-labs-experiments.js`.
+Status and numbers: REWORK_PLAN §6 Phase 1. Next: put it in front of 6-8
+children (REWORK_PLAN §6, Phase 1 targets), then Phase 2 converts the other 19
+labs to `EXPERIMENTS` and rewrites their browser tests to the experiment path.
+
+## 2026-09-19 — Phase 0 of the rework is in the working tree
+Read [`REWORK_PLAN_2026-09-19.md`](REWORK_PLAN_2026-09-19.md) first. In short:
+`lab_study.js` is no longer loaded (the investigation layer hid the bench and
+killed the welcome card), the phone layout puts the picture first and the
+instruction above it, the Periodic Table is unregistered, and every data suite
+is clean again. ⚠ 18 of the 21 per-lab browser tests still drive guides through
+a `[data-guide-do]` button that no bench has rendered since 2026-09-12; only
+rusting, circuit and nutrition were converted to tap `.is-next`. The §7 notes
+below about `lab_study.js`, the study preview page and the "mobile fold fix"
+(`.lab-side { order: -1 }`) describe things that have since been reversed.
+
 ## Where things stand (2026-09-12)
 | Grade | Labs **live** (`ready: true`, lead-verified) | Labs **built but not yet live** (`ready: false`) |
 |---|---|---|

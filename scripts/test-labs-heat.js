@@ -118,7 +118,9 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     Labs.openLab('heat');
     return { hubScripts, registered };
   })()`);
-  ok('the hub loads only the shared lab shell', hubSetup && hubSetup.hubScripts === 'lab_core.js', hubSetup && hubSetup.hubScripts);
+  // The shell is two files since 2026-09-19: the core and the experiment runner.
+  ok('the hub loads only the shared lab shell (core + experiment runner)',
+     hubSetup && hubSetup.hubScripts.split(',').sort().join() === 'lab_core.js,lab_experiment.js', hubSetup && hubSetup.hubScripts);
   if (hubSetup && !hubSetup.registered) console.log('NOTE: Labs.LABS did not contain the heat entry. Injected for this run.');
   const labScripts = () => ev("[...document.scripts].map(s => s.src).filter(s => /engine\\/labs\\//.test(s)).map(s => s.split('/').pop()).join()");
   // Single CDP wait inside Chrome — avoids 90 separate round-trips each stalling
@@ -136,12 +138,52 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
      (await labScripts()).includes('lab_heat_data.js') && (await labScripts()).includes('lab_heat.js'), await labScripts());
   ok('lab_heat.css is loaded', (await ev("!!document.querySelector('link[data-lab-css=\"heat\"], link[href*=\"lab_heat.css\"]')")));
 
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step. The test taps what glows, as a child would.
+  const next = () => click('.is-next');
+  const xd = () => ev('LabExperiment._debug()');
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card for the Heat Transfer Lab',
-     ov && /Welcome to the Heat Transfer Lab/.test(ov.text), ov);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('heat').intro === true"));
+  ok('first visit opens on an experiment Aim, with no welcome card in the way',
+     !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
+  ok('the welcome is marked seen', await ev("Labs.store('heat').intro === true"));
   await ev('LabHeat._test({ instant: true }); true');
+
+  // ── Experiment 1: the rod race, Aim → Predict → Do → See ──
+  console.log('\n-- experiment: rod_race');
+  let x = await xd();
+  ok('the five Grade 6 experiments are listed, the rod race first', x.list.length === 5 && x.exp === 'rod_race', x.list);
+  let d0 = await dbg();
+  ok('the Aim picture is already set up: four rods on the rack, flame lit, no time passed', d0.materials.length === 4 && d0.burner && d0.condTime === 0, d0);
+  ok('outside Do every bench control is hidden (focus [])', await ev("[...document.querySelectorAll('.lab-heat-tools button, .lab-heat-stabs button')].every(b => b.hidden)"));
+  await click('[data-exp="start"]');
+  x = await xd();
+  ok('Start goes to Predict', x.phase === 'predict', x.phase);
+  await click('[data-exp-pick="metal"]');
+  x = await xd();
+  ok('picking an option starts Do at step 1 (30 seconds)', x.phase === 'do' && x.step === 0 && x.token === 'tick30', x);
+  ok('Do shows only this experiment\'s controls, and the wait glows',
+     await ev("[...document.querySelectorAll('.lab-heat-tools button')].filter(b => !b.hidden).map(b => b.dataset.act).join() === 'tick30,tick120' && document.querySelector('[data-act=\"tick30\"]').classList.contains('is-next') && document.querySelector('.lab-heat-stabs').hidden"));
+  await next();
+  x = await xd();
+  ok('after 30 s the guide is on step 2 (2 minutes)', x.step === 1 && x.token === 'tick120', x);
+  await next();
+  x = await xd();
+  d0 = await dbg();
+  ok('after 2 more minutes the run ends in See', x.phase === 'see' && d0.condTime === 150, { x, d0 });
+  const see = await ev("document.querySelector('#lab-exp').textContent.replace(/\\s+/g, ' ')");
+  ok('See says the metal rod melted first, the prediction was right, and the notebook is pinned',
+     /metal rod melted all four wax drops/.test(see) && /You said: Metal rod/.test(see) && /That is what happened/.test(see) && /Your notebook/.test(see) && /150 s/.test(see), see.slice(0, 400));
+  // ⚠ The "Explore the bench freely" button lives on the Aim card (inside its
+  //   <details>) and the Done card only - not in See. Go back to an Aim first,
+  //   and check the click landed.
+  await ev("LabExperiment.open('rod_race'); true");
+  const exploreClick = await click('[data-exp="explore"]');
+  ok('"Explore the bench freely" (from the Aim) shows the old bench and every control again',
+     exploreClick === true && await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && !document.querySelector('.lab-heat-stabs').hidden && [...document.querySelectorAll('.lab-heat-tools button')].every(b => !b.hidden) && !!document.querySelector('.lab-start')"), exploreClick);
+  await ev('LabHeat.experiment.reset(); true');
+  ok('a reset bench shows every control (focus cleared)', await ev("LabHeat._debug().focus === null && [...document.querySelectorAll('.lab-heat-tools button, .lab-heat-stabs button')].every(b => !b.hidden)"));
 
   // ── Bench basics ──────────────────────────────
   console.log('\n-- bench');
@@ -168,29 +210,35 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   for (let i = 0; i < 20; i++) { await sleep(100); if (await ev("!document.getElementById('lab-guide').hidden")) break; }
   const guideState = () => ev(`({ box: !document.getElementById('lab-guide').hidden,
     text: document.getElementById('lab-guide').textContent.replace(/\\s+/g, ' '),
-    next: document.querySelector('.is-next') ? (document.querySelector('.is-next').dataset.set || '') + ':' + (document.querySelector('.is-next').dataset.v || document.querySelector('.is-next').dataset.act || '') : null })`);
+    next: (() => { const e = document.querySelector('.is-next'); return e ? (e.dataset.set ? e.dataset.set + ':' + e.dataset.v : e.dataset.act) : null; })() })`);
   let gs = await guideState();
-  ok('guide_conduction opens with step 1 of 7', gs.box && /Step 1 of 7/.test(gs.text), gs);
-  ok('step 1 highlights the Conduction tab', gs.next && gs.next.includes('conduction'), gs.next);
-
-  // Step through: conduction already selected, so click the button
-  await click('[data-guide-do]');  // station:conduction
+  // The rack is already the station, so step 1 (station:conduction) is
+  // satisfied and the guide opens at step 2 with the metal rod glowing.
+  ok('guide_conduction opens at step 2 of 7: the Conduction step is already met', gs.box && /Step 2 of 7/.test(gs.text), gs);
+  ok('step 2 highlights the metal rod', gs.next === 'material:metal', gs.next);
+  await next();  // material:metal
   gs = await guideState();
-  ok('step 2: add metal rod (glowing)', /Step 2 of 7/.test(gs.text) && /metal/.test(gs.text.toLowerCase()), gs);
-  await click('[data-guide-do]');  // material:metal
-  await click('[data-guide-do]');  // material:wood
-  await click('[data-guide-do]');  // material:plastic
+  ok('step 3: add the wooden stick (glowing)', /Step 3 of 7/.test(gs.text) && gs.next === 'material:wood', gs);
+  await next();  // material:wood
+  await next();  // material:plastic
   gs = await guideState();
-  ok('step 5: burner step — all materials added', /Step 5 of 7/.test(gs.text) || /burner/i.test(gs.text), gs);
-  await click('[data-guide-do]');  // burner:on
+  ok('step 5: the burner step, all materials added, the burner glows', /Step 5 of 7/.test(gs.text) && gs.next === 'burner:on', gs);
+  await next();  // burner:on
   d = await dbg();
-  ok('burner turned on by the guide', d.burner === true, d);
-  await click('[data-guide-do]');  // tick30
+  ok('burner turned on by tapping what glows', d.burner === true, d);
+  gs = await guideState();
+  ok('step 6: the 30-second wait glows (the tools re-rendered and kept the glow)', /Step 6 of 7/.test(gs.text) && gs.next === 'tick30', gs);
+  await next();  // tick30
   d = await dbg();
-  ok('30 seconds ticked', d.condTime >= 30, d);
-  await click('[data-guide-do]');  // tick120
+  ok('30 seconds ticked', d.condTime === 30, d);
+  gs = await guideState();
+  ok('step 7: only the 2-minute wait satisfies it (no station default fires)', /Step 7 of 7/.test(gs.text) && gs.next === 'tick120', gs);
+  await click('[data-act="tick60"]');
+  gs = await guideState();
+  ok('…a 1-minute wait passes time but does not advance the step', /Step 7 of 7/.test(gs.text) && (await dbg()).condTime === 90, gs);
+  await next();  // tick120
   d = await dbg();
-  ok('guide step ticked 2 minutes', d.condTime >= 120, d);
+  ok('the 2-minute wait ends the guide', d.condTime === 210 && !d.guide, d);
   ov = await overlay();
   ok('guide ends with an experiment-complete card', ov && /Experiment complete/.test(ov.text), ov);
   ok('the guide lesson mentions conductors and insulators', ov && /insulator/i.test(ov.text), ov);
@@ -233,14 +281,13 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
         const st = Labs.store('heat'); delete st.disc['${id}'];
         document.getElementById('lab-overlay')?.remove();
         LabHeat.discoveryGuide('${id}');
-        for (let k = 0; k < 20; k++) {
-          const hz = document.querySelector('#lab-overlay.is-hazard');
-          if (hz) return 'hazard: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 60);
-          const btn = document.querySelector('#lab-guide [data-guide-do]');
-          if (btn) btn.click();
-          else LabHeat._tick(6);
-          if (!LabHeat._debug().guide) break;
+        for (let k = 0; k < 20 && LabHeat._debug().guide; k++) {
+          const hz = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
+          if (hz) return 'card: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 60);
+          const btn = document.querySelector('.is-next');
+          if (btn) btn.click(); else return 'nothing glows at step ' + LabHeat._debug().guide.step;
         }
+        if (LabHeat._debug().guide) return 'guide never finished at step ' + LabHeat._debug().guide.step;
         document.getElementById('lab-overlay')?.remove();
         return !!st.disc['${id}'];
       })()`);
@@ -259,10 +306,10 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   for (let i = 0; i < 20; i++) { await sleep(100); if (await ev("!document.getElementById('lab-guide').hidden")) break; }
   gs = await guideState();
   ok('guide_radiation opens', gs.box && /guide_radiation|radiation/i.test(gs.text), gs);
-  // Walk through all steps
+  // Walk through all steps by tapping what glows
   for (let k = 0; k < 10; k++) {
     if (await ev("document.getElementById('lab-guide').hidden")) break;
-    await click('[data-guide-do]');
+    await next();
     await sleep(50);
   }
   ov = await overlay();
@@ -326,8 +373,9 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   })()`);
   ok('hot_rod hazard card can be raised via Labs.hazardCard', hadHazard === true, hadHazard);
   ov = await overlay();
-  ok('hot_rod card shows hot + warning signs',
-     ov && ov.signs.includes('Hot') && ov.signs.includes('Warning'), ov);
+  // The shell's SIGN_LABELS (lab_core.js): hot → "Hot surface", warning → "Caution".
+  ok('hot_rod card shows the Hot surface and Caution signs',
+     ov && ov.signs.includes('Hot surface') && ov.signs.includes('Caution'), ov && ov.signs);
   ok('…with "What happened", "Why dangerous", "Do this instead" sections',
      ov && /What happened/.test(ov.text) && /Why/.test(ov.text) && /Do this instead/.test(ov.text), ov);
   await closeOv();

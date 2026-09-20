@@ -154,7 +154,12 @@ const G9FR_SYLLABUS = {
 registerSubject({
   id: 'grade9-french', name: 'Français', grade: 9, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
-  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  // ⚠ 'Word Problems' until 2026-09-20, which is the MATHS reading of L4 and is
+  //   what a Grade 9 French child was shown on the practice screen: the badge
+  //   reads `🏆 Level 4 - ${ACTIVE_PACK.level4Label}`. Every other French pack
+  //   (grades 4-8) has always said 'Analyse de texte'. L4 is not one thing —
+  //   see the L4-per-pack note in scripts/audit-difficulty-labels.js.
+  practiceble: true, notesBased: false, level4Label: 'Analyse de texte',
   syllabus: G9FR_SYLLABUS,
   chapters: [
     // ⚠ ONE CHAPTER PER EXAM QUESTION. The NCE French paper is structurally

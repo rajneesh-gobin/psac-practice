@@ -36,9 +36,12 @@ const LabMaterials = (() => {
   let _log = [], _results = {}, _fx = [], _busy = false, _instant = false;
   let _tipIdx = -1, _drag = null, _suppressClick = false, _sortProp = 'magnetic';
   let _seenMetalCard = false, _talking = false;
+  // Experiments (lab_experiment.js): the controls an experiment shows, and
+  // whether a setup token is being applied silently (no toasts, no cards).
+  let _focus = null, _quiet = false;
 
   function _newBench() {
-    return { station: 'magnet', lights: true, power: 'battery', obj: null, scene: null };
+    return { station: 'magnet', lights: true, power: 'battery', obj: null, scene: null, job: null, picks: {} };
   }
   // The grade the lab is being used at: the shell will say (LAB_SPEC §8); until
   // it does, this lab's own grade.
@@ -142,6 +145,8 @@ const LabMaterials = (() => {
 
   function mount(root) {
     _root = root;
+    _focus = null;
+    if (_guide && _guide.def && _guide.def.exp) _guide = null;
     if (!_b) _b = _newBench();
     root.innerHTML = _shellHTML();
     _cv = $('lab-materials-canvas');
@@ -192,6 +197,8 @@ const LabMaterials = (() => {
       if (sn) { setStation(sn.dataset.station); return; }
       const ob = e.target.closest('[data-obj]');
       if (ob) { test(ob.dataset.obj); _showStage(); return; }
+      const pk = e.target.closest('[data-pick]');
+      if (pk) { const [j, o] = pk.dataset.pick.split('|'); pickOnBench(j, o); _showStage(); return; }
       const pw = e.target.closest('[data-power]');
       if (pw) { setPower(pw.dataset.power); return; }
       const gd = e.target.closest('[data-guide]');
@@ -341,7 +348,7 @@ const LabMaterials = (() => {
   function setStation(id) {
     const S = D().station(id);
     if (!S || !_guard()) return;
-    if (_b.station !== id) { _b.station = id; _b.scene = null; _b.obj = null; }
+    if (_b.station !== id || _b.job) { _b.station = id; _b.scene = null; _b.obj = null; _b.job = null; }
     _coach(`${S.icon} ${S.name}. ${S.how} ${S.ask}`);
     _afterChange();
     _renderControls();
@@ -361,6 +368,9 @@ const LabMaterials = (() => {
   function setPower(p) {
     if (!_guard()) return;
     if (p === 'socket') {
+      // An experiment that lists the socket as the wrong choice hears the tap
+      // and explains; the socket is never actually used.
+      if (_expWrong('power:socket')) { _guideEvent('power:socket'); return; }
       _b.power = 'socket';
       _renderControls();
       _hazard('mains', { name: _b.obj ? D().obj(_b.obj).name : '' });
@@ -369,6 +379,7 @@ const LabMaterials = (() => {
     _b.power = 'battery';
     _coach('The tester uses one small battery. That is safe to touch.');
     _renderControls();
+    _guideEvent('power:battery');
   }
 
   // Put an object at the current station and run the test.
@@ -381,9 +392,13 @@ const LabMaterials = (() => {
                     broken: st === 'bend' && (o.material === 'glass' || o.material === 'frosted') };
     _b.obj = objId;
     _b.scene = scene;
+    _b.job = null;
     _busy = true;
     _renderControls();
     _readouts();
+    // A wrong choice in an experiment shows its end state at once, so the
+    // card that explains it is never a second behind the tap.
+    if (_expWrong('test:' + objId)) { scene.t = 1; _busy = false; _finish(scene); return; }
     _play(scene, () => { _busy = false; _finish(scene); });
   }
 
@@ -398,6 +413,7 @@ const LabMaterials = (() => {
       if (_mission) _mission.mistakes++;
       _logEntry({ title: `${S.icon} ${o.name} - not a fair test`, bad: true, obs: 'The room lights were on, so the result could not be seen.' });
       _afterChange();
+      if (_expWrong('test:' + sc.obj)) { _guideEvent('test:' + sc.obj); return; }
       _resultCard('lights_on', { name: o.name }, () => _coach('Tap 🌙 “Lights off”, then test it again.'));
       return;
     }
@@ -411,11 +427,11 @@ const LabMaterials = (() => {
       if (M.station === sc.st) _mission.tested.add(sc.obj);
       _missionCheck();
     }
-    _checkDisc({ station: sc.st, obj: sc.obj, value: sc.value });
+    if (!_quiet) _checkDisc({ station: sc.st, obj: sc.obj, value: sc.value });
     _afterChange();
     _guideEvent('test:' + sc.obj);
     if (sc.broken) { _hazard('glass', { name: o.name }); return; }
-    if (sc.st === 'magnet' && D().isMetal(sc.obj) && !sc.value && !_guide && !_seenMetalCard) {
+    if (sc.st === 'magnet' && D().isMetal(sc.obj) && !sc.value && !_guide && !_quiet && !_seenMetalCard) {
       _seenMetalCard = true;
       _resultCard('all_metals', { name: o.name, material: D().materialName(sc.obj) },
         () => _coach('Only iron and steel stick. Try the other metals!'));
@@ -432,7 +448,7 @@ const LabMaterials = (() => {
     if (el && el.getBoundingClientRect().top > window.innerHeight) el.scrollIntoView({ block: 'nearest' });
     const groups = _sortGroups(prop).filter(g => g.items.length).length;
     _coach(groups ? `Your ${D().PROPS[prop].name.toLowerCase()} results, sorted into groups.` : 'Nothing tested yet for this board. Test some things first!');
-    _checkDisc({ sort: prop, full: groups >= 2 });
+    if (!_quiet) _checkDisc({ sort: prop, full: groups >= 2 });
     _guideEvent('sort:' + prop);
   }
   const _stationFor = prop => D().STATIONS.find(s => s.prop === prop);
@@ -510,11 +526,31 @@ const LabMaterials = (() => {
     _logEntry({ title: `${J.icon} ${J.title}: ${D().materialName(objId)}`, obs: J.why });
     _coach(`Yes! ${J.why}`);
     if (_mission) { _mission.jobs.add(jobId); _missionCheck(); }
-    _checkDisc({ job: jobId });
+    if (!_quiet) _checkDisc({ job: jobId });
     _refresh();
     _guideEvent('job:' + jobId);
   }
   const _jobsDone = () => new Set(Object.keys(Labs.store(LAB).jobs || {}));
+
+  // A job on the bench (experiments): the picture shows the job, and its four
+  // choices sit under the picture in place of the tray. A wrong pick is drawn
+  // with a cross and explained; a right one is saved like any job answer.
+  function showJob(jobId) {
+    const J = D().JOBS.find(j => j.id === jobId);
+    if (!J || !_guard()) return;
+    _b.job = jobId; _b.scene = null; _b.obj = null;
+    _coach(`${J.icon} ${J.title}. ${J.ask}`);
+    _afterChange();
+  }
+  function pickOnBench(jobId, objId) {
+    const J = D().JOBS.find(j => j.id === jobId), r = D().judge(jobId, objId);
+    if (!J || !r || !_guard()) return;
+    _b.job = jobId; _b.picks[jobId] = objId; _b.scene = null; _b.obj = null;
+    _renderControls(); _readouts();
+    if (!r.ok) { _coach(r.text + ' Try another one.'); _guideEvent('pick:' + jobId + ':' + objId); return; }
+    pickJob(jobId, objId, true);
+    _guideEvent('pick:' + jobId + ':' + objId);
+  }
 
   // Everything a pupil does ends here: repaint.
   function _afterChange() {
@@ -654,16 +690,19 @@ const LabMaterials = (() => {
 
   // The station a test step belongs to: the last station step before it.
   function _stationAt(G, i) {
-    for (let k = i - 1; k >= 0; k--) if (G.steps[k].on.startsWith('station:')) return G.steps[k].on.split(':')[1];
+    for (let k = i - 1; k >= 0; k--) if ((G.steps[k].on || '').startsWith('station:')) return G.steps[k].on.split(':')[1];
     return null;
   }
   // A step already true on the bench is skipped. Tests, sorts and jobs never are.
   function _satisfied(on) {
+    if (!on) return false;
     const [k, v] = on.split(':');
     if (k === 'station') return _b.station === v;
     if (k === 'lights') return v === 'off' ? !_b.lights : _b.lights;
     return false;
   }
+  // The current experiment step lists this token as a wrong choice.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
 
   function _guideEnter() {
     if (Labs.studyCheckpoint) Labs.studyCheckpoint('materials');
@@ -687,39 +726,38 @@ const LabMaterials = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. An experiment
+  // hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) {
-      const want = token.startsWith('test:') && _stationAt(G, _guide.step);
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) {
+      const want = token.startsWith('test:') && !G.exp && _stationAt(G, _guide.step);
       if (want && _b.station !== want) { _highlight(); return; }
       _guide.step++;
       _guideEnter();
-      _coachGuide(s.on);
+      _coachGuide(token);
     } else _highlight();
   }
 
-  function _guideDo() {
-    const G = _gdef();
-    if (!G) return;
-    const s = G.steps[_guide.step];
-    if (!s) return;
-    const [k, v] = s.on.split(':');
+  // Perform one guide token as if it had been tapped (an experiment's setup).
+  function _do(tok) {
+    const i = tok.indexOf(':'), k = i > 0 ? tok.slice(0, i) : tok, v = i > 0 ? tok.slice(i + 1) : '';
     switch (k) {
       case 'station': setStation(v); break;
       case 'lights': setLights(v === 'on'); break;
-      case 'test': {
-        const want = _stationAt(G, _guide.step);
-        if (want && _b.station !== want) setStation(want);
-        if (_b.station === 'torch' && _b.lights) setLights(false);
-        test(v);
-        break;
-      }
+      case 'power': setPower(v); break;
+      case 'test': if (_b.station === 'torch' && _b.lights && !(_gdef() && _gdef().exp)) setLights(false); test(v); break;
       case 'sort': openSort(v); break;
       case 'job': { const J = D().JOBS.find(j => j.id === v); if (J) pickJob(v, J.choices[0], true); break; }
+      case 'show': showJob(v); break;
+      case 'pick': { const [j, o] = v.split(':'); pickOnBench(j, o); break; }
     }
   }
 
@@ -804,6 +842,7 @@ const LabMaterials = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('materials', G)) { _stopGuide(true); return; }
     const st = Labs.store(LAB);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -838,34 +877,120 @@ const LabMaterials = (() => {
     if (!silent) _coach('Guide stopped. Pick another experiment, or test freely.');
   }
 
-  // The yellow glow on whatever the current guide step wants tapped.
+  // The control a token belongs to (experiments tap it; the glow finds it).
+  function _selFor(tok) {
+    const i = tok.indexOf(':'), k = i > 0 ? tok.slice(0, i) : tok, v = i > 0 ? tok.slice(i + 1) : '';
+    switch (k) {
+      case 'station': return `#lab-materials-controls [data-station="${v}"]`;
+      case 'lights': return '#lab-materials-controls [data-act="lights"]';
+      case 'power': return `#lab-materials-controls [data-power="${v}"]`;
+      case 'test': return `#lab-materials-controls [data-obj="${v}"]`;
+      case 'pick': return `#lab-materials-controls [data-pick="${v.replace(':', '|')}"]`;
+      case 'sort': return `#lab-panel [data-sort="${v}"]`;
+      case 'job': return `#lab-panel [data-job="${v}"]`;
+    }
+    return '#lab-materials-canvas';
+  }
+  // The token a control stands for, for focus().
+  function _tokOf(b) {
+    const d = b.dataset;
+    if (d.station) return 'station:' + d.station;
+    if (d.obj) return 'test:' + d.obj;
+    if (d.pick) return 'pick:' + d.pick.replace('|', ':');
+    if (d.power) return 'power:' + d.power;
+    if (d.act === 'lights') return _b.lights ? 'lights:off' : 'lights:on';
+    if (d.sort) return 'sort:' + d.sort;
+    if (d.job) return 'job:' + d.job;
+    return null;
+  }
+  // focus(tokens): show only the controls an experiment's steps use, and hide
+  // any row or section left empty; null shows everything. A job group is
+  // shown only while the current step picks from it.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    _root.querySelectorAll('#lab-materials-controls button, #lab-panel button').forEach(b => {
+      const tok = _tokOf(b);
+      b.hidden = on && !(tok && _focus.has(tok));
+    });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-materials-stations, .lab-materials-opts, .lab-materials-tray, .lab-materials-jobgroup, #lab-materials-sort, #lab-materials-jobs, #lab-notebook, .lab-start')
+      .forEach(el => { el.hidden = on && !anyShown(el); });
+    _root.querySelectorAll('.lab-materials-drag').forEach(el => { el.hidden = on; });
+    _root.querySelectorAll('.lab-materials-ask').forEach(el => { el.hidden = on && !_focus.size; });
+    const G = _gdef(), s = G && G.exp && G.steps[_guide.step];
+    if (s) {
+      const toks = s.options || s.any || (s.on ? [s.on] : []);
+      _root.querySelectorAll('.lab-materials-jobgroup').forEach(g => {
+        if (!g.hidden) g.hidden = !toks.some(t => t.startsWith('pick:' + g.dataset.jobgroup + ':'));
+      });
+    }
+  }
+
+  // The yellow glow on whatever the current guide step wants tapped. An
+  // experiment step glows every option it offers; a bench guide glows one.
   function _highlight() {
     if (!_root) return;
+    _applyFocus();
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
     _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [k, v] = s.on.split(':');
-    let sel = null;
-    if (k === 'station') sel = `[data-station="${v}"]`;
-    else if (k === 'lights') sel = '[data-act="lights"]';
-    else if (k === 'test') { const want = _stationAt(G, _guide.step); sel = want && _b.station !== want ? `[data-station="${want}"]` : `#lab-materials-controls [data-obj="${v}"]`; }
-    else if (k === 'sort') sel = `[data-sort="${v}"]`;
-    else if (k === 'job') sel = `#lab-panel [data-job="${v}"]`;
-    const el = sel && _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    let els = [];
+    if (G.exp) {
+      els = (s.options || s.any || (s.on ? [s.on] : [])).map(t => _root.querySelector(_selFor(t))).filter(Boolean);
+    } else {
+      const [k, v] = s.on.split(':');
+      let sel = null;
+      if (k === 'station') sel = `[data-station="${v}"]`;
+      else if (k === 'lights') sel = '[data-act="lights"]';
+      else if (k === 'test') { const want = _stationAt(G, _guide.step); sel = want && _b.station !== want ? `[data-station="${want}"]` : `#lab-materials-controls [data-obj="${v}"]`; }
+      else if (k === 'sort') sel = `[data-sort="${v}"]`;
+      else if (k === 'job') sel = `#lab-panel [data-job="${v}"]`;
+      const el = sel && _root.querySelector(sel);
+      if (el) els = [el];
+    }
+    if (els.length) {
+      els.forEach(el => el.classList.add('is-next'));
+      if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-obj],[data-station],[data-sort],[data-job]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
+      _root.querySelectorAll('[data-act],[data-obj],[data-station],[data-sort],[data-job],[data-power],[data-pick]').forEach(other => {
+        if (!els.some(el => other === el || el.contains(other) || other.contains(el))
             && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
         }
       });
     }
   }
+
+  // ══ Experiments (lab_experiment.js, LAB_SPEC §10) ══
+  const experiment = {
+    list: () => (D().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(_grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null; _busy = false; _drag = null;
+      _b = _newBench(); _log = []; _results = {}; _fx = []; _panel = 'sandbox'; _sortProp = 'magnetic'; _seenMetalCard = false;
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _renderPanel(); _renderControls(); _readouts();
+    },
+    apply: tok => {
+      const was = _instant;
+      _instant = true; _quiet = true;
+      try { _do(tok); } finally { _instant = was; _quiet = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.filter(e => !e.bad).slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _renderControls(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -1038,12 +1163,22 @@ const LabMaterials = (() => {
           <button type="button" data-power="socket" aria-pressed="${_b.power === 'socket'}">🔌 Wall socket</button>
         </div></div>`;
     const done = o => _results[o.id] && S.id in _results[o.id];
+    // Jobs on the bench: every job an experiment picks from, or the one shown.
+    const jobs = _focus ? D().JOBS.filter(J => [..._focus].some(t => t.startsWith('pick:' + J.id + ':')))
+      : D().JOBS.filter(J => J.id === _b.job);
+    const jobHTML = J => `<div class="lab-materials-jobgroup" data-jobgroup="${J.id}" role="group" aria-label="${esc(J.title)}">
+        <p class="lab-materials-jobask"><b>${J.icon} ${esc(J.title)}.</b> ${esc(J.ask)}</p>
+        <div class="lab-materials-tray lab-materials-picks">${J.choices.map(id => {
+          const picked = _b.picks[J.id] === id, r = picked && D().judge(J.id, id);
+          return `<button type="button" class="lab-materials-obj${picked ? (r && r.ok ? ' is-right' : ' is-wrong') : ''}" data-pick="${J.id}|${id}">
+            ${_svg(id)}<b>${esc(D().materialName(id))}</b><small>like the ${esc(D().obj(id).name.toLowerCase())}</small></button>`; }).join('')}</div>
+      </div>`;
     c.innerHTML = `
       <div class="lab-materials-stations" role="group" aria-label="Test stations">
-        ${D().STATIONS.map(s => `<button type="button" class="lab-materials-st" data-station="${s.id}" aria-pressed="${s.id === S.id}"><span aria-hidden="true">${s.icon}</span>${esc(s.name)}</button>`).join('')}
+        ${D().STATIONS.map(s => `<button type="button" class="lab-materials-st" data-station="${s.id}" aria-pressed="${s.id === S.id && !_b.job}"><span aria-hidden="true">${s.icon}</span>${esc(s.name)}</button>`).join('')}
       </div>
-      <p class="lab-materials-ask"><b>${S.icon} ${esc(S.ask)}</b> ${esc(S.how)}</p>
-      ${opts}
+      ${_b.job ? '' : `<p class="lab-materials-ask"><b>${S.icon} ${esc(S.ask)}</b> ${esc(S.how)}</p>${opts}`}
+      ${jobs.map(jobHTML).join('')}
       <div class="lab-materials-tray" role="group" aria-label="Objects to test">
         ${_objects().map(o => `<button type="button" class="lab-materials-obj${_b.obj === o.id ? ' is-on' : ''}${done(o) ? ' is-tested' : ''}" data-obj="${o.id}" aria-label="Test the ${esc(o.name.toLowerCase())}">
           ${_svg(o.id)}<b>${esc(o.name)}</b>${done(o) ? '<i aria-hidden="true">✓</i>' : ''}</button>`).join('')}
@@ -1108,6 +1243,17 @@ const LabMaterials = (() => {
     if (!_root || !_b) return;
     const S = _st(), sc = _b.scene;
     const chip = $('lab-materials-chip');
+    const J = _b.job && D().JOBS.find(j => j.id === _b.job);
+    if (J) {
+      const pick = _b.picks[J.id], r = pick && D().judge(J.id, pick), mat = pick && D().materialName(pick);
+      if (chip) chip.innerHTML = `${J.icon} ${esc(J.title)} <small>${esc(J.ask)}</small>`;
+      const vd = $('lab-materials-verdict');
+      if (vd) { vd.textContent = pick ? `${r && r.ok ? '✓' : '✗'} ${mat}` : ''; vd.hidden = !pick; vd.classList.toggle('is-bad', !!(pick && !(r && r.ok))); }
+      const st = $('lab-materials-status'); if (st) st.innerHTML = '';
+      const c = $('lab-materials-contents'); if (c) c.textContent = pick ? `${J.title}: ${mat}` : 'Pick the best material below.';
+      if (_cv) _cv.setAttribute('aria-label', `${J.title}${pick ? `: ${mat}${r && r.ok ? ', the right choice' : ', not the right choice'}` : ''}`);
+      return;
+    }
     if (chip) chip.innerHTML = `${S.icon} ${esc(S.name)} <small>${esc(S.ask)}</small>`;
     const vd = $('lab-materials-verdict');
     if (vd) { const t = _verdict(sc); vd.textContent = t; vd.hidden = !t; vd.classList.toggle('is-bad', !!(sc && (!sc.fair || sc.broken))); }
@@ -1140,6 +1286,7 @@ const LabMaterials = (() => {
     const c = _cx;
     c.save();
     c.clearRect(0, 0, _W, _H);
+    if (_b.job) { _drawJob(); _drawFx(dt); c.restore(); return; }
     const sc = _b.scene && _b.scene.st === _b.station ? _b.scene : null;
     const t = sc ? sc.t : 0;
     switch (_b.station) {
@@ -1382,6 +1529,33 @@ const LabMaterials = (() => {
     c.globalAlpha = 1;
   }
 
+  // A job on the bench: the job on the left, the chosen material on the right
+  // with a tick or a cross - or a question mark until something is picked.
+  function _drawJob() {
+    const c = _cx, J = D().JOBS.find(j => j.id === _b.job);
+    if (!J) return;
+    _room(false); _table(_H * 0.84, false);
+    const pick = _b.picks[J.id], size = _sz(0.2), y = _H * 0.42;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.font = `${Math.round(size * 1.1)}px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+    c.fillText(J.icon, _W * 0.26, y);
+    c.textBaseline = 'alphabetic';
+    c.fillStyle = '#6D6656'; c.font = '700 13px system-ui, sans-serif';
+    c.fillText(J.title, _W * 0.26, y + size * 0.85);
+    c.strokeStyle = '#7C6F5A'; c.lineWidth = 3; c.lineCap = 'round';
+    c.beginPath(); c.moveTo(_W * 0.42, y); c.lineTo(_W * 0.56, y); c.stroke();
+    c.beginPath(); c.moveTo(_W * 0.52, y - 8); c.lineTo(_W * 0.56, y); c.lineTo(_W * 0.52, y + 8); c.stroke();
+    if (!pick) {
+      c.fillStyle = '#9CA3AF'; c.font = `800 ${Math.round(size * 0.9)}px system-ui, sans-serif`;
+      c.fillText('?', _W * 0.74, y + size * 0.3);
+      return;
+    }
+    const r = D().judge(J.id, pick), good = !!(r && r.ok);
+    _icon(pick, _W * 0.74, y, size);
+    c.fillStyle = good ? '#23734A' : '#B42318'; c.font = '800 15px system-ui, sans-serif';
+    c.fillText(`${good ? '✓' : '✗'} ${D().materialName(pick)}`, _W * 0.74, y + size * 0.85);
+  }
+
   function _drawFx(dt) {
     const c = _cx;
     for (let k = _fx.length - 1; k >= 0; k--) {
@@ -1439,7 +1613,8 @@ const LabMaterials = (() => {
   }
   function _debug() {
     const b = _b || _newBench(), sc = b.scene;
-    return { station: b.station, lights: b.lights, power: b.power, obj: b.obj, busy: _busy, panel: _panel, sortProp: _sortProp,
+    return { station: b.station, lights: b.lights, power: b.power, obj: b.obj, job: b.job, picks: Object.assign({}, b.picks), busy: _busy, panel: _panel, sortProp: _sortProp,
+             focus: _focus ? [..._focus] : null,
              scene: sc && { st: sc.st, obj: sc.obj, value: sc.value, fair: sc.fair, broken: sc.broken, t: sc.t },
              verdict: _verdict(sc), results: JSON.parse(JSON.stringify(_results)), talking: _talking,
              guide: _guide && { id: _guide.id, step: _guide.step },
@@ -1458,7 +1633,7 @@ const LabMaterials = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, setStation, setLights, setPower, test, openSort, guess, openJob, pickJob, startMission, startGuide,
-           discoveryGuide, speak, _test, _tick, _debug };
+  return { study, experiment, mount, unmount, setStation, setLights, setPower, test, openSort, guess, openJob, pickJob, showJob, pickOnBench,
+           startMission, startGuide, discoveryGuide, speak, act: _do, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMaterials = LabMaterials;

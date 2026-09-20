@@ -19,6 +19,11 @@ const G6FR_SYLLABUS = {
     { id:'relatives',       name:'Propositions relatives' },  // 11
     { id:'conjonctions',    name:'Les conjonctions' },  // 5
     { id:'analyse',         name:'Analyser la phrase' },  // 23
+    // ⚠ La liste « LA GRAMMAIRE / Grade 6 » nomme les quatre types de phrase et
+    //   les deux formes. Sur 2 337 questions, « declarative », « imperative » et
+    //   « exclamative » ne paraissaient nulle part. Identifiant repris de
+    //   grade3-french (g3fr-grammaire/types_phrases).
+    { id:'types_phrases',   name:'Types et formes de phrase' },
   ]},
   'g6fr-subjunctif': { subsections: [
     { id:'declencheurs',    name:'Ce qui déclenche le subjonctif' },  // 10

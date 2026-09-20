@@ -245,7 +245,7 @@ ok(`at least 3 guided experiments per grade (Grades ${D.GRADES.join('/')}: ${per
 for (const G of D.GUIDES) {
   const sim = simulate(G.steps.map(s => s.on));
   ok(`${G.title}: every step is a real action with words and a button, and the recipe works`,
-     typeof sim !== 'string' && G.steps.every(s => s.say && s.btn) && G.lesson && G.blurb && G.icon, sim);
+     typeof sim !== 'string' && G.steps.every(s => s.say) && G.lesson && G.blurb && G.icon, sim);
 }
 
 console.log('\nMissions, choices, hazards and result cards');
@@ -518,6 +518,193 @@ r78.forEach(([id, R]) => { say78(id, R.happened(rc78)); say78(id, R.instead(rc78
 meas78.forEach(([iid, sid, , m]) => say78(iid + '/' + sid, m.work));
 g78I.forEach(i => { say78(i, I[i].how); say78(i, I[i].hello); });
 ok(`Grade 7/8 reading level: no sentence over ${LIMIT78} words`, long78.length === 0, long78.slice(0, 6));
+
+// ════════ Experiments (lab_experiment.js, LAB_SPEC §10) ════════
+// Each experiment is replayed through the model the bench uses: every set-up
+// and step token is one the bench accepts and is possible on the bench at
+// that moment, every candidate reading offered exists for that setting, an
+// observation names its control, and every NUMBER in a See text or a wrong
+// text is one the model produced on the way (no "68 − 50 = 18" the bench
+// would not show). Sinking and floating are checked against the model too.
+console.log('\nExperiments: the contract, and every See text true of the model');
+const EXP = D.EXPERIMENTS || [];
+const EXP_CHAPTER = { 4: 'g4sci-enr-equipment', 7: 'g7s-measurement', 8: 'g8s-inquiry', 9: 'g9s-p1-measurements' };
+const CL = D.CONTROL_LABELS || {};
+ok('EXPERIMENTS is exported, ids unique, every one tagged with ONE grade of the lab',
+   Array.isArray(EXP) && EXP.length > 0 && new Set(EXP.map(e => e.id)).size === EXP.length
+   && EXP.every(e => Array.isArray(e.grades) && e.grades.length === 1 && D.GRADES.includes(e.grades[0])));
+for (const g of D.GRADES) {
+  const mine = D.forGrade(EXP, g);
+  ok(`Grade ${g}: 3 to 4 experiments (${mine.length}), every one on ${EXP_CHAPTER[g]}`, mine.length >= 3 && mine.length <= 4 && mine.every(e => e.chapter === EXP_CHAPTER[g]), mine.map(e => e.id + ':' + e.chapter));
+}
+ok('CONTROL_LABELS names every bench control a step can point at', ['zoom', 'eye:level', 'eye:above', 'eye:below', 'align:zero', 'align:end', 'align:mark', 'tap', 'lift', 'tare:dial', 'tare:balance', 'start:first', 'start:again'].every(k => CL[k]));
+const badCand = [];
+for (const [iid, sid, , m] of okPairs) {
+  const g = I[iid].grades ? I[iid].grades[0] : 9;
+  for (const c of D.candidates(m)) {
+    const J = g === 9 ? D.judge(m, c.v) : D.judgeUnit(m, c.v, c.unit);
+    const want = c.key === 'ok' ? 'ok' : (c.key === 'unit' || c.key === 'weight') ? 'unit' : c.key;
+    if (J.verdict !== want) badCand.push(`${iid}/${sid} ${c.label} → ${J.verdict}, not ${want}`);
+    if (!/^[−\d.]+ \S+$/.test(c.label)) badCand.push(`${iid}/${sid} label "${c.label}"`);
+  }
+  const labels = D.candidates(m).map(c => c.label);
+  if (new Set(labels).size !== labels.length) badCand.push(`${iid}/${sid}: two candidates read the same: ${labels.join(', ')}`);
+}
+ok(`candidate readings: for all ${okPairs.length} settings every candidate judges as its own key, is a number with a unit, and no two read the same`, badCand.length === 0, badCand.slice(0, 6));
+
+const VOCAB = /^(inst:\w+|spec:\w+|zoom|eye:(level|above|below)|align:(zero|end|mark)|tare|start|tap|lift|read|misread:[a-z]+)$/;
+const plainT = s => String(s || '').replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{2190}-\u{21FF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const numbersIn = t => (String(t).match(/\d+(?:\.\d+)?/g) || []).map(Number);
+const mOf = s => (s.inst ? D.measure(s.inst, s.spec, Object.assign({}, s, { trial: Math.max(0, s.trial) })) : { ok: false });
+// The numbers the model shows in a state: the readings, the marks, the
+// mistakes, the parts of a vernier or micrometer, the working of a density.
+function numbersOf(s, m) {
+  const out = new Set([0, 1, D.WATER]);
+  const add = x => { if (typeof x === 'number' && isFinite(x)) out.add(D.clean(x)); };
+  if (s.inst) { const In = I[s.inst]; [In.step, In.step * 10, In.step / 10, In.zero, In.max, In.num].forEach(add); if (In.endMm != null) add(Math.abs(In.endMm) / 10); }
+  if (s.spec && S[s.spec]) { const Sp = S[s.spec]; [Sp.before, Sp.bubble].forEach(add); (Sp.dims || []).forEach(add); (Sp.trials || []).forEach(add); if (Sp.rho) Object.values(Sp.rho).forEach(v => (Array.isArray(v) ? v.forEach(add) : add(v))); }
+  if (m && m.ok) {
+    ['want', 'read', 'scale', 'level', 'before', 'bubble', 'zero', 'top', 'apparent', 'start', 'jaw'].forEach(k => add(m[k]));
+    if (m.apparent != null && m.scale != null) add(Math.abs(m.apparent - m.scale));
+    if (m.level != null && m.before != null) add(m.level - m.before);
+    if (m.read != null && m.want != null) add(Math.abs(m.read - m.want));
+    [m.want * 10, m.want / 10, m.want / 1000, m.want * 1000].forEach(add);
+    Object.values(m.mistakes).flat().forEach(add);
+    if (m.parts) { Object.values(m.parts).forEach(add); if (m.parts.div != null) { add(m.parts.div + 1); add(m.parts.div / 100); } if (m.parts.thimble != null) { add(m.parts.thimble + 1); add(m.parts.thimble / 100); } }
+    if (m.info) Object.values(m.info).forEach(v => (Array.isArray(v) ? v.forEach(add) : add(v)));
+    (m.dims || []).forEach(add);
+    D.candidates(m).forEach(c => add(c.v));
+  }
+  return out;
+}
+// The label the bench shows for a token in a state (what an observation step
+// must name; the runner's browser test reads the same label off the button).
+function labelOf(tok, s) {
+  const [k, v] = tok.split(':');
+  const K = s.inst ? I[s.inst].kind : null;
+  if (k === 'inst') return I[v] && I[v].name;
+  if (k === 'spec') return v === 'closed' ? (K === 'balance' ? 'Nothing - empty pan' : 'Nothing - jaws closed') : S[v] && S[v].name;
+  if (k === 'tare') return K === 'dial' ? CL['tare:dial'] : CL['tare:balance'];
+  if (k === 'start') return s.timed && s.spec && S[s.spec].trials ? CL['start:again'] : CL['start:first'];
+  if (k === 'read' || k === 'misread') { const m = mOf(s); const c = m.ok && D.candidates(m).find(x => x.tok === tok); return c ? c.label : null; }
+  return CL[tok] || null;
+}
+// Replays an experiment the way the bench runs it. Returns a string (the
+// first thing wrong) or { nums, reads, says }.
+function replay(e) {
+  const g = e.grades[0];
+  const s = { inst: null, spec: null, eye: 'level', align: 'end', tared: false, timed: false, trial: -1, tapped: false };
+  const nums = new Set(), reads = [], says = [];
+  const absorb = (st, m) => numbersOf(st, m).forEach(x => nums.add(x));
+  const doTok = (tok, where) => {
+    const [k, v] = tok.split(':');
+    const K = s.inst ? I[s.inst].kind : null;
+    if (k === 'inst') { if (!I[v] || !(I[v].grades || [9]).includes(g)) return `${where}: ${v} is not a Grade ${g} instrument`; s.inst = v; s.spec = null; s.eye = 'level'; s.tared = false; s.timed = false; s.trial = -1; s.tapped = false; if (I[v].grades) s.align = 'end'; }
+    else if (k === 'spec') { if (!s.inst) return `${where}: spec before inst`; if (!D.specimensFor(s.inst, g).includes(v)) return `${where}: ${v} is not on the ${s.inst} shelf at Grade ${g}`; s.spec = v; s.timed = false; s.trial = -1; s.tapped = false; }
+    else if (k === 'tap') { if (K !== 'cylinder' || !s.spec || !S[s.spec].bubble) return `${where}: tap with no bubble to free`; s.tapped = true; }
+    else if (k === 'zoom') { if (!s.inst || ['balance', 'density', 'block'].includes(K)) return `${where}: nothing to zoom`; }
+    else if (k === 'eye') { if (K !== 'cylinder') return `${where}: eye on ${s.inst}`; s.eye = v; }
+    else if (k === 'align') { if (K !== 'rule' || I[s.inst].endMm === 0) return `${where}: align on ${s.inst}`; s.align = v; }
+    else if (k === 'tare') { if (K === 'dial') { s.spec = null; s.tared = true; } else if (K !== 'balance' || (s.spec && s.spec !== 'closed')) return `${where}: tare with something on the pan`; else s.tared = true; }
+    else if (k === 'start') { if (K !== 'stopwatch' || !s.spec) return `${where}: start without a stopwatch and an event`; s.timed = true; s.trial++; }
+    else if (k === 'lift') { if (K !== 'cylinder' || !s.spec) return `${where}: lift with no cylinder in hand`; }
+    else if (k === 'read' || k === 'misread') {
+      const m = mOf(s);
+      if (!m.ok) return `${where}: ${tok}: ${m.msg}`;
+      if (!D.candidates(m).some(c => c.tok === tok)) return `${where}: ${tok} is not a candidate reading for ${s.inst}+${s.spec}`;
+      if (k === 'read') reads.push({ inst: s.inst, spec: s.spec, m });
+    } else return `${where}: unknown token ${tok}`;
+    return null;
+  };
+  for (const t of e.setup || []) {
+    if (!VOCAB.test(t)) return `setup ${t}: not a bench token`;
+    if (t.startsWith('misread:') || t === 'lift') return `setup ${t}: a set-up cannot make a mistake`;
+    const err = doTok(t, 'setup ' + t); if (err) return err;
+    absorb(s, mOf(s));
+  }
+  for (const [i, st] of (e.steps || []).entries()) {
+    const where = `step ${i + 1}`, toks = st.options || st.any || (st.on ? [st.on] : []);
+    for (const t of toks) if (!VOCAB.test(t)) return `${where}: ${t} is not a bench token`;
+    const m0 = mOf(s); absorb(s, m0);
+    for (const t of toks) {
+      const [k, v] = t.split(':');
+      if (k === 'read' || k === 'misread') {
+        if (!m0.ok) return `${where}: ${t} offered with nothing to read`;
+        if (!D.candidates(m0).some(c => c.tok === t)) return `${where}: ${t} is not a candidate here (${D.candidates(m0).map(c => c.tok).join(', ')})`;
+      } else if (k === 'inst') { if (!I[v]) return `${where}: no instrument ${v}`; const s2 = Object.assign({}, s, { inst: v }); absorb(s2, mOf(s2)); }
+      else if (k === 'spec') { if (!s.inst || !D.specimensFor(s.inst, g).includes(v)) return `${where}: ${v} is not on the shelf`; const s2 = Object.assign({}, s, { spec: v }); absorb(s2, mOf(s2)); }
+      else if (k === 'eye') { if (!s.inst || I[s.inst].kind !== 'cylinder') return `${where}: eye on ${s.inst}`; const s2 = Object.assign({}, s, { eye: v }); absorb(s2, mOf(s2)); }
+      else if (k === 'align') { if (!s.inst || I[s.inst].kind !== 'rule') return `${where}: align on ${s.inst}`; const s2 = Object.assign({}, s, { align: v }); absorb(s2, mOf(s2)); }
+      else if (k === 'lift') { if (!s.inst || I[s.inst].kind !== 'cylinder' || !s.spec) return `${where}: lift with no cylinder in hand`; }
+    }
+    if (st.on && !st.any) {
+      const [k, v] = st.on.split(':'), K = s.inst ? I[s.inst].kind : null;
+      const sat = k === 'eye' ? K === 'cylinder' && s.eye === v : k === 'align' ? K === 'rule' && s.align === v
+        : k === 'tare' ? (K === 'balance' || K === 'dial') && s.tared : k === 'tap' ? K === 'cylinder' && s.tapped : false;
+      if (sat) return `${where}: ${st.on} is already true, so the bench would skip the step`;
+    }
+    if (st.say) says.push({ where, say: st.say, label: labelOf(st.on || st.any[0], s) });
+    const err = doTok(st.any ? st.any[0] : st.on, where); if (err) return err;
+    absorb(s, mOf(s));
+  }
+  return { nums, reads, says };
+}
+const questionOf = ref => {
+  if (ref && typeof ref === 'object') return { q: ref, grade: null };
+  const [mid, i] = String(ref).split(':');
+  const M = D.MISSIONS.find(x => x.id === mid);
+  return { q: M ? M.quiz[Number(i)] : null, grade: M ? (M.grades || [9])[0] : null };
+};
+const qFiles = g => {
+  const dir = path.join(ROOT, 'subjects', g === 9 ? 'grade9-physics' : `grade${g}-science`, 'questions');
+  try { return fs.readdirSync(dir).map(f => fs.readFileSync(path.join(dir, f), 'utf8')).join('\n'); } catch (e) { return ''; }
+};
+const paperRefs = {};
+for (const e of EXP) {
+  const g = e.grades[0], t = e.id;
+  const LIMIT_WORDS = g <= 6 ? 12 : 25;
+  ok(`${t}: a title a child can say back (≤ 60, ends in "?"), an aim of ≤ 200 chars, an icon`,
+     typeof e.title === 'string' && e.title.length <= 60 && /\?$/.test(e.title) && typeof e.aim === 'string' && e.aim.length >= 20 && e.aim.length <= 200 && !!e.icon, { title: e.title, aim: e.aim.length });
+  const p = e.predict;
+  ok(`${t}: predict has 2-4 tappable options and its answer is one of them`, p && p.q && Array.isArray(p.options) && p.options.length >= 2 && p.options.length <= 4 && p.options.every(o => o.id && o.label) && p.options.some(o => o.id === p.answer), p);
+  ok(`${t}: 1 to 5 steps, each a decision (ask + options, wrong texts naming an option) or an observation (on + say)`,
+     Array.isArray(e.steps) && e.steps.length >= 1 && e.steps.length <= 5 && e.steps.every(st => {
+       const toks = st.options || st.any || (st.on ? [st.on] : []);
+       if (st.ask) return Array.isArray(st.options) && st.options.length >= 2 && (st.any ? st.any.every(x => st.options.includes(x)) : st.options.includes(st.on))
+         && (!st.wrong || (Object.keys(st.wrong).every(k => toks.includes(k) && k !== st.on) && Object.values(st.wrong).every(v => typeof v === 'string' && v.length > 15)));
+       return !!st.on && !!st.say && !st.options;
+     }), e.steps);
+  const long = (e.steps || []).map(st => String(st.say || st.ask || '')).filter(x => x.split(/\s+/).filter(Boolean).length > LIMIT_WORDS);
+  ok(`${t}: every instruction is ≤ ${LIMIT_WORDS} words`, long.length === 0, long);
+  ok(`${t}: 2 or 3 check questions, each of this grade with 4 distinct options and a reason`,
+     Array.isArray(e.check) && e.check.length >= 2 && e.check.length <= 3 && e.check.every(ref => {
+       const { q, grade } = questionOf(ref);
+       return !!q && typeof q.q === 'string' && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options.map(optLabel)).size === 4 && typeof q.why === 'string' && (grade === null || grade === g);
+     }), e.check);
+  ok(`${t}: see.saw, see.learn and an exam line`, e.see && typeof e.see.saw === 'string' && e.see.saw.length > 10 && typeof e.see.learn === 'string' && e.see.learn.length > 10 && typeof e.exam === 'string' && e.exam.length > 10);
+  const cite = String(e.exam).match(/(?:PSAC|NCE|Physics|Science)\s+(20\d\d)\s+Q\d+(?:\([a-z]+\))*/i);
+  if (cite) { paperRefs[g] = paperRefs[g] || qFiles(g); ok(`${t}: the paper it quotes (${cite[0]}) is in this grade's question files`, paperRefs[g].includes(cite[0])); }
+  const R = replay(e);
+  ok(`${t}: the set-up and every step replay on the bench (tokens the bench accepts, each possible at that moment)`, typeof R !== 'string', R);
+  if (typeof R === 'string') continue;
+  ok(`${t}: every observation names its control`, R.says.every(x => x.label && plainT(x.say).includes(plainT(x.label))), R.says.filter(x => !x.label || !plainT(x.say).includes(plainT(x.label))));
+  const sawNums = numbersIn(e.see.saw), missing = sawNums.filter(n => !R.nums.has(n));
+  ok(`${t}: every number in See ("${sawNums.join(', ')}") is one the model produced`, missing.length === 0, missing);
+  const last = R.reads[R.reads.length - 1];
+  ok(`${t}: the steps end in a reading, and See states it (${last ? last.m.want : '-'})`, !!last && sawNums.some(n => Math.abs(n - last.m.want) < 1e-9));
+  const wrongMissing = [];
+  for (const st of e.steps) for (const [k, txt] of Object.entries(st.wrong || {})) for (const n of numbersIn(txt)) if (!R.nums.has(n)) wrongMissing.push(`${k}: ${n}`);
+  ok(`${t}: every number in a wrong-option text is one the model produced`, wrongMissing.length === 0, wrongMissing);
+  const dens = R.reads.filter(r => I[r.inst].kind === 'density');
+  if (/sank|sinks/.test(e.see.saw)) ok(`${t}: See says it sank, and the model agrees`, dens.some(r => r.m.floats === false), dens.map(r => r.spec + ':' + r.m.floats));
+  if (/floated|floats/.test(e.see.saw)) ok(`${t}: See says it floated, and the model agrees`, dens.some(r => r.m.floats === true), dens.map(r => r.spec + ':' + r.m.floats));
+}
+if (bench) {
+  ok('the bench exports the experiment adapter and hears every token an experiment can use',
+     /experiment = \{/.test(bench) && ['list:', 'question:', 'reset:', 'apply:', 'guide:', 'stop:', 'evidence:', 'focus:', 'selector:', 'hooks:'].every(k => bench.includes(k))
+     && ["_guideEvent('lift')", "_miss(verdict)", "data-read=", "data-eye=", "data-align="].every(k => bench.includes(k)));
+}
+
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

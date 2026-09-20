@@ -75,7 +75,7 @@
           a + b, 'Put the two groups together.',
           `${a} + ${b} = <b>${a + b}</b>.`, 2);
       } else if (s === 1) {
-        const total = 12 + n, part = 4 + (n % 5);
+        const total = 12 + (n % 8), part = 4 + (n % 5);
         add('g1mth-addition', 'number_sentences', 'add', n,
           `Meera has <b>${part}</b> beads. She needs <b>${total}</b> altogether. How many more beads does she need?`,
           total - part, 'Count up from the beads she has to the beads she needs.',
@@ -97,7 +97,7 @@
 
     { // Subtraction — taking away, and the reverse
       if (s === 0) {
-        const a = 10 + n, b = 3 + (n % 6);
+        const a = 10 + (n % 10), b = 3 + (n % 6);
         add('g1mth-subtraction', 'subtracting_within_20', 'sub', n,
           `There are <b>${a}</b> apples. <b>${b}</b> are eaten. How many are left?`,
           a - b, 'Take away the ones eaten.',
@@ -155,15 +155,15 @@
       if (s === 0) {
         const a = 8 + n, b = 4 + (n % 5);
         add('g1mth-measurement', 'comparing_length', 'mea', n,
-          `A red ribbon is <b>${a}</b> cm. A blue one is <b>${b}</b> cm. How much longer is the red one?`,
+          `A red ribbon is <b>${a}</b> paper clips long. A blue one is <b>${b}</b> paper clips long. How many more paper clips is the red one?`,
           a - b, 'Take the shorter length from the longer one.',
-          `${a} − ${b} = <b>${a - b}</b> cm.`, 3);
+          `${a} − ${b} = <b>${a - b}</b> paper clips.`, 3);
       } else if (s === 1) {
         const a = 5 + (n % 6), b = 3 + (n % 4);
         add('g1mth-measurement', 'comparing_mass', 'mea', n,
-          `A bag holds <b>${a}</b> kg. Another holds <b>${b}</b> kg. What do both weigh together?`,
-          a + b, 'Add the two masses.',
-          `${a} + ${b} = <b>${a + b}</b> kg.`, 2);
+          `One bag balances <b>${a}</b> blocks. Another balances <b>${b}</b> blocks. How many blocks balance both bags together?`,
+          a + b, 'Add the two numbers of blocks.',
+          `${a} + ${b} = <b>${a + b}</b> blocks.`, 2);
       } else if (s === 2) {
         const cups = 6 + (n % 7);
         add('g1mth-measurement', 'comparing_capacity', 'mea', n,
@@ -173,9 +173,9 @@
       } else {
         const a = 10 + (n % 8);
         add('g1mth-measurement', 'comparing_length', 'mea', n,
-          `A pencil is <b>${a}</b> cm. A crayon is <b>3</b> cm shorter. How long is the crayon?`,
+          `A pencil is <b>${a}</b> cubes long. A crayon is <b>3</b> cubes shorter. How long is the crayon?`,
           a - 3, 'Shorter means take away.',
-          `${a} − 3 = <b>${a - 3}</b> cm.`, 3);
+          `${a} − 3 = <b>${a - 3}</b> cubes.`, 3);
       }
     }
 

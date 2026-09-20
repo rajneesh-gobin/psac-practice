@@ -255,16 +255,16 @@ CHALLENGE_QS.push(
 
   makeMCQ({ id:'CH_FOP18', chapterId:'four_ops', subsection:'division', difficulty:3,
     question:'What is the remainder when 5,003 is divided by 17?',
-    options:['2','4','7','9'],
-    answer:'9',
+    options:['5','2','7','9'],
+    answer:'5',
     hint:'17 × 294 = 4,998. Then 5,003 − 4,998 = ?',
-    explanation:'17 × 294 = 4,998. 5,003 − 4,998 = 5. Wait: 17×295=5015>5003. 17×294=4998. 5003−4998=5. Hmm let me recheck: 17×294: 17×300=5100, minus 17×6=102, so 5100-102=4998. 5003-4998=5. So answer should be 5. Let me fix.' }),
+    explanation:'17 × 294 = 4,998, and 17 × 295 = 5,015 which is already past 5,003. So 5,003 ÷ 17 = 294 remainder <b>5</b>.' }),
 
   makeNum({ id:'CH_FOP19', chapterId:'four_ops', subsection:'division', difficulty:3,
     question:'What is the remainder when 5,003 is divided by 13?',
-    answer:'10',
-    hint:'13 × 384 = 4,992. Then 5,003 − 4,992 = 11. Hmm. 13×385=5005. 5005>5003. 13×384=4992. 5003-4992=11.',
-    explanation:'13 × 384 = 4,992. 5,003 − 4,992 = 11.' }),
+    answer:'11',
+    hint:'13 × 384 = 4,992. Then 5,003 − 4,992 = ?',
+    explanation:'13 × 384 = 4,992, and 13 × 385 = 5,005 which is already past 5,003. So 5,003 ÷ 13 = 384 remainder <b>11</b>.' }),
 
   makeMCQ({ id:'CH_FOP20', chapterId:'four_ops', subsection:'word_probs', difficulty:4,
     question:'A school canteen serves lunch to 654 students each day for 5 days. Each lunch costs Rs 45. What is the total weekly bill?',
@@ -499,10 +499,10 @@ CHALLENGE_QS.push(
     explanation:'(5 − 2) × 180° = 3 × 180° = 540°.' }),
 
   makeNum({ id:'CH_GEO17', chapterId:'geometry', subsection:'perimeter', difficulty:4,
-    question:'A rectangle has length 14 cm and width 9 cm. A square with the same perimeter is drawn. What is the area of the square?',
-    answer:'529',
-    hint:'Perimeter of rectangle = 2×(14+9). Square side = perimeter ÷ 4.',
-    explanation:'Perimeter = 2×23 = 46 cm. Square side = 46÷4 = 11.5 cm. Area = 11.5² = 132.25. Hmm, that doesn\'t give a clean answer. Let me adjust.' }),
+    question:'A rectangle has length 14 cm and width 10 cm. A square with the same perimeter is drawn. What is the area of the square, in cm²?',
+    answer:'144',
+    hint:'Perimeter of rectangle = 2×(14+10). Square side = perimeter ÷ 4.',
+    explanation:'Perimeter = 2 × 24 = 48 cm. Square side = 48 ÷ 4 = 12 cm. Area = 12 × 12 = <b>144 cm²</b>.' }),
 
   makeNum({ id:'CH_GEO18', chapterId:'geometry', subsection:'perimeter', difficulty:4,
     question:'A rectangle has length 16 cm and width 9 cm. A square with the same perimeter is drawn. What is the side of the square?',
@@ -620,10 +620,10 @@ CHALLENGE_QS.push(
 
   makeMCQ({ id:'CH_FRC15', chapterId:'fractions', subsection:'word_probs', difficulty:4,
     question:'Priya earns Rs 1,200. She saves 2/5, spends 1/3 on food. How much is left after saving and food?',
-    options:['Rs 200','Rs 280','Rs 300','Rs 400'],
-    answer:'Rs 280',
-    hint:'Saved = 2/5×1200=480. Food = 1/3×1200=400. Left = 1200−480−400.',
-    explanation:'Saved=480; Food=400. Total=880. Left=1200−880=Rs 320. Hmm: 2/5=480; 1/3=400; 480+400=880; 1200-880=320.' }),
+    options:['Rs 320','Rs 280','Rs 300','Rs 400'],
+    answer:'Rs 320',
+    hint:'Saved = 2/5 × 1200. Food = 1/3 × 1200. Left = 1200 − saved − food.',
+    explanation:'Saved = 2/5 × 1,200 = Rs 480. Food = 1/3 × 1,200 = Rs 400. Together that is Rs 880, so 1,200 − 880 = <b>Rs 320</b> is left.' }),
 
   makeNum({ id:'CH_FRC16', chapterId:'fractions', subsection:'word_probs', difficulty:4,
     question:'A jug holds 4½ L. ⅔ of it is poured out. How many mL remain in the jug?',

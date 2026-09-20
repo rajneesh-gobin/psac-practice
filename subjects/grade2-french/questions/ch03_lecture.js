@@ -124,10 +124,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-017', chapterId:CH, difficulty:1, subsection:'decodage_syllabes',
     question:'Quel mot a 2 syllabes ?',
-    options:['fleur','éléphant','papillon','bicyclette'],
-    answer:'fleur',
-    hint:'fleur = 1 ou 2 syllabes ? (fleur = 1 or 2 syllables?)',
-    explanation:'<b>Fleur</b> a 1 syllabe. Correction : tous les mots proposés ont plus de 2 syllabes sauf « fleur » (1 syllabe). Le mot à 2 syllabes parmi les choix classiques serait « mai-son ». — ici la réponse correcte est <b>fleur</b> car les autres ont 3+ syllabes. (Fleur has 1 syllable — it is the shortest word among the options.)' }),
+    options:['maison','éléphant','papillon','bicyclette'],
+    answer:'maison',
+    hint:'Frappe dans tes mains pour chaque syllabe. (Clap once for each syllable.)',
+    explanation:'<b>mai-son</b> a 2 syllabes. é-lé-phant et pa-pi-llon en ont 3, et bi-cy-clette en a 3 aussi. (maison has 2 syllables; the others have 3.)' }),
 
   makeMCQ({ id:'g2fr-lec-018', chapterId:CH, difficulty:1, subsection:'decodage_syllabes',
     question:'Combien de syllabes a le mot « ar-bre » ?',

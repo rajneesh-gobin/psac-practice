@@ -19,9 +19,13 @@
 //      Wax drop at position p melts when front >= p.
 //      Rates (illustrative; ORDER and zeros are the science):
 //        metal  0.25 /s  — wax at 0.25 melts at 1 s, full rod at 4 s
-//        glass  0.12 /s  — fair conductor
-//        wood   0.003 /s — poor conductor, wax at 0.25 melts at 83 s
+//        glass  0.003 /s — poor conductor, wax at 0.25 melts at 83 s
+//        wood   0.002 /s — poor conductor, wax at 0.25 melts at 125 s
 //        plastic 0.001 /s — insulator, wax at 0.25 melts at 250 s
+//      ⚠ Glass was 0.12 /s ("fair conductor") until 2026-09-20: its whole rod
+//        melted in 8 s, so after the shortest wait (30 s) glass and metal
+//        looked identical and the bench could not answer "which rod first?".
+//        Glass is on the PSAC insulator list with wood and plastic.
 //    CONVECTION — particles loop around a beaker/room at speed CONV_SPEED.
 //      Nothing quantitative; the finding is "loop exists and direction".
 //    RADIATION — black can warms at 0.40 °C/exp-s, silver at 0.15.
@@ -31,7 +35,7 @@ const LabHeatData = (() => {
   const GRADES = [6];
 
   // ── Conduction ─────────────────────────────────────────────────────────
-  const COND_RATES = { metal: 0.25, glass: 0.12, wood: 0.003, plastic: 0.001 };
+  const COND_RATES = { metal: 0.25, glass: 0.003, wood: 0.002, plastic: 0.001 };
   const WAX_POSITIONS = [0.25, 0.5, 0.75, 1.0];
 
   const MATERIALS = {
@@ -460,7 +464,9 @@ const LabHeatData = (() => {
       hint: 'Use all three stations, then think about the thermos flask.',
       saw: 'A thermos has a silvered inner wall, a vacuum gap, and a tight lid. Together they block all three types of heat transfer.',
       learn: '(1) The vacuum gap has no particles, so heat cannot pass by conduction or convection. (2) The silvered wall reflects radiation back in. (3) The tight lid stops heat escaping by convection at the top. All three paths are blocked, so the drink stays hot for hours.',
-      how: ['station:conduction', 'burner:on', 'tick30', 'station:convection', 'heater:on', 'station:radiation', 'lamp:on'],
+      // ⚠ The bench refuses a burner with an empty rack, and a station only
+      //   counts as done once time has passed there - so each one gets a wait.
+      how: ['station:conduction', 'material:metal', 'burner:on', 'tick30', 'station:convection', 'heater:on', 'tick30', 'station:radiation', 'lamp:on', 'tick30'],
       psac: 'A vacuum flask reduces heat transfer by conduction, convection and radiation.',
     },
     {
@@ -475,10 +481,127 @@ const LabHeatData = (() => {
     },
   ];
 
+  // ── Experiments (lab_experiment.js, LAB_SPEC.md §10) ─────────────────────
+  // Aim → Predict → Do → See → Check → Done, at Grade 6. `setup` is applied
+  // silently before the Aim so the picture is already the set-up; a step is a
+  // decision (ask + options, the wrong ones explaining themselves) or an
+  // observation (on + say, naming the button's own label). `see.saw` is what
+  // the bench really shows after those tokens - the data test replays them.
+  // Check refs are "<mission id>:<quiz index>" or an inline { q, options, why }
+  // (first option = the answer; Labs.quiz shuffles).
+  const EXPERIMENTS = [
+    { id: 'rod_race', grades: [6], chapter: 'g6-materials', icon: '⚙️',
+      title: 'Which rod gets hot first?',
+      aim: 'Four rods over one flame: metal, glass, wood and plastic. Each has four wax drops. The heat melts them as it travels up.',
+      setup: ['station:conduction', 'material:metal', 'material:glass', 'material:wood', 'material:plastic', 'burner:on'],
+      predict: { q: 'Which rod will melt its wax drops first?', answer: 'metal',
+        options: [{ id: 'metal', label: 'Metal rod', icon: '⚙️' }, { id: 'glass', label: 'Glass rod', icon: '🔮' },
+                  { id: 'wood', label: 'Wooden stick', icon: '🪵' }, { id: 'plastic', label: 'Plastic ruler', icon: '📏' }] },
+      steps: [
+        { on: 'tick30', say: 'Tap ⏩ 30 seconds. Which rod melts its wax?' },
+        { on: 'tick120', say: 'Tap ⏩ 2 minutes. Which rods still have wax?' },
+      ],
+      see: { saw: 'In 30 seconds the metal rod melted all four wax drops. Two minutes later, glass and wood had lost just one drop each. Plastic had lost none.',
+             learn: 'Heat travels through a solid by conduction. Metal is a good conductor. Glass, wood and plastic are poor conductors, called insulators.' },
+      check: ['mission_conductor:0', 'mission_conductor:3', 'mission_conductor:2'],
+      exam: 'In the exam you may be asked to sort materials. Good conductors of heat are metals such as copper, iron and steel. Insulators are wood, plastic and glass.' },
+
+    { id: 'handle', grades: [6], chapter: 'g6-materials', icon: '🍳',
+      title: 'Why is the handle wooden?',
+      aim: 'A cooking pot is metal, but its handle is wood or plastic. The metal rod is the pot. You choose the handle.',
+      setup: ['station:conduction', 'material:metal'],
+      predict: { q: 'After a minute over the flame, which rod could you still hold at the top?', answer: 'handle',
+        options: [{ id: 'handle', label: 'The handle rod', sub: 'wood or plastic' }, { id: 'metal', label: 'The metal rod' },
+                  { id: 'both', label: 'Both of them' }, { id: 'none', label: 'Neither of them' }] },
+      steps: [
+        { ask: 'The pot body is metal. Which material for the handle?', any: ['material:wood', 'material:plastic'],
+          options: ['material:wood', 'material:plastic', 'material:metal'],
+          wrong: { 'material:metal': 'A metal handle gets as hot as the pot. Metal carries heat straight to your hand.' } },
+        { on: 'burner:on', say: 'Tap 🔥 Turn on burner. Both rods get the same flame.' },
+        { on: 'tick60', say: 'Tap ⏩ 1 minute. Which rod could you still hold?' },
+      ],
+      see: { saw: 'The metal rod melted all its wax in a few seconds. The handle rod did not melt one drop in a whole minute. Its top end stayed cool.',
+             learn: 'Metal conducts heat into the food. Wood and plastic conduct heat badly, so a handle made of them stays cool.' },
+      check: ['mission_conductor:1', 'mission_conductor:4', 'mission_thermos:3'],
+      exam: 'Exam question: Why is the handle of a cooking pot often made of wood or plastic? Because they are poor conductors of heat, so the handle stays cool enough to hold.' },
+
+    { id: 'warm_water', grades: [6], chapter: 'g6-energy', icon: '🌊',
+      title: 'Which way does warm water go?',
+      aim: 'A beaker of water with a heating coil at the bottom. When the coil warms the water, where does the warm water go?',
+      setup: ['station:convection', 'convmode:water'],
+      predict: { q: 'The coil warms the water at the bottom. Which way does the warm water go?', answer: 'up',
+        options: [{ id: 'up', label: 'Up to the top', icon: '⬆️' }, { id: 'down', label: 'Down to the bottom', icon: '⬇️' },
+                  { id: 'stay', label: 'It stays by the coil', icon: '⏸️' }] },
+      steps: [
+        { on: 'heater:on', say: 'Tap 🔌 Turn on heater. Watch the coloured particles.' },
+        { ask: 'The water is clear, so the current is hard to see. What will show it?', on: 'dye:add',
+          options: ['dye:add', 'convmode:air', 'tick30'],
+          wrong: { 'convmode:air': 'That swaps the water for a room full of air. Stay with the water.',
+                   'tick30': 'Waiting longer does not help. Clear water looks the same however it moves.' } },
+        { on: 'tick30', say: 'Tap ⏩ 30 seconds. Follow the dye drop round.' },
+      ],
+      see: { saw: 'The warm water rose straight up from the coil. It spread across the top, cooled, and sank down the side. The dye went round and round.',
+             learn: 'Warm water rises and cool water sinks. This loop is called a convection current. It is how heat travels through a liquid or a gas.' },
+      check: [
+        { q: 'Where did the warm water go after the coil heated it?', options: ['Up to the top', 'Down to the bottom', 'It stayed by the coil', 'Out of the beaker'],
+          why: 'Warm water is lighter than cool water, so it rises. Cool water sinks to take its place.' },
+        { q: 'What is this round-and-round movement of heated water called?', options: ['A convection current', 'Conduction', 'Radiation', 'Evaporation'],
+          why: 'Convection is heat travelling by the movement of a liquid or a gas. Warm fluid rises; cool fluid sinks.' },
+        { q: 'Why did we add a dye drop to the water?', options: ['To see which way the water moves', 'To make the water hotter', 'To stop the water moving', 'To cool the water down'],
+          why: 'Clear water looks the same however it moves. The dye moves with the water and shows the path.' },
+      ],
+      exam: 'In the exam you may be asked how heat travels through a liquid or a gas. The answer is convection: warm water or air rises, and cool water or air sinks.' },
+
+    { id: 'lamp_cans', grades: [6], chapter: 'g6-energy', icon: '☀️',
+      title: 'Does heat cross empty air?',
+      aim: 'A lamp above two cans, one black and one silver. The lamp does not touch them. There is only air in between.',
+      setup: ['station:radiation'],
+      predict: { q: 'The lamp does not touch the cans. Which can will get hotter?', answer: 'black',
+        options: [{ id: 'black', label: 'The black can', icon: '⬛' }, { id: 'silver', label: 'The silver can', icon: '⬜' },
+                  { id: 'same', label: 'Both the same' }, { id: 'none', label: 'Neither', sub: 'nothing touches them' }] },
+      steps: [
+        { on: 'lamp:on', say: 'Tap 💡 Turn on lamp. It does not touch the cans.' },
+        { on: 'tick60', say: 'Tap ⏩ 1 minute. Look at both thermometers.' },
+        { on: 'read_temp', say: 'Tap 🌡️ Read temperature. It goes in your notebook.' },
+      ],
+      see: { saw: 'Both cans warmed up, though the lamp never touched them. After one minute the black can read 49 °C and the silver can only 34 °C.',
+             learn: 'Heat can travel across empty space as radiation. That is how the Sun heats the Earth. Dark surfaces absorb radiation; shiny surfaces reflect it.' },
+      check: [
+        { q: 'How did the heat get from the lamp to the cans?', options: ['By radiation, across the air', 'By conduction through the table', 'By convection in the water', 'It did not: the cans stayed cold'],
+          why: 'Nothing touched the cans, yet they warmed up. Heat travelled as radiation, which needs nothing to carry it.' },
+        { q: 'Which can got hotter under the same lamp?', options: ['The black can', 'The silver can', 'Both were the same', 'Neither warmed up'],
+          why: 'Dark surfaces absorb radiation. Shiny surfaces reflect most of it away, so the silver can stayed cooler.' },
+        'mission_thermos:1',
+      ],
+      exam: 'In the exam you may be asked how the Sun heats the Earth across empty space. The answer is radiation, which needs no air or water to travel through.' },
+
+    { id: 'sea_breeze', grades: [6], chapter: 'g6-energy', icon: '🏖️',
+      title: 'Where does the sea breeze come from?',
+      aim: 'A room of air. The heater on the left is the hot land by day. The cool side on the right is the sea.',
+      setup: ['station:convection', 'convmode:air'],
+      predict: { q: 'By day at the beach, which way does the breeze blow?', answer: 'sea',
+        options: [{ id: 'sea', label: 'From the sea to the land' }, { id: 'land', label: 'From the land to the sea' },
+                  { id: 'up', label: 'Straight up from the sand' }, { id: 'none', label: 'There is no breeze' }] },
+      steps: [
+        { on: 'heater:on', say: 'Tap 🔌 Turn on heater. That is the sun warming the land.' },
+        { on: 'tick30', say: 'Tap ⏩ 30 seconds. Which way does the cool air move?' },
+      ],
+      see: { saw: 'Warm air rose over the heater, the hot land. Cool air moved in along the floor from the sea side to take its place. That moving air is the sea breeze.',
+             learn: 'The land heats faster than the sea. Warm air over the land rises, and cool air from the sea moves in. A sea breeze is a convection current.' },
+      check: [
+        'mission_thermos:4',
+        { q: 'Which way did the cool air move along the floor?', options: ['From the sea side towards the land', 'From the land towards the sea', 'Straight up to the ceiling', 'It did not move at all'],
+          why: 'Warm air rose over the land and left a gap. Cool air from the sea moved in along the floor to fill it.' },
+        { q: 'A room heater warms the room best when it is low down. Why?', options: ['Warm air rises and goes round the room', 'Heat only travels downwards', 'Cold air cannot reach a low heater', 'A low heater is hotter'],
+          why: 'Warm air rises from a low heater, cools at the ceiling and sinks. The loop stirs the whole room.' },
+      ],
+      exam: 'The exam asks why a sea breeze blows from the sea to the land by day. Warm air over the land rises, and cooler air from the sea moves in.' },
+  ];
+
   return {
     GRADES, MATERIALS, MATERIAL_KEYS, WAX_POSITIONS, COND_RATES,
     ROOM_TEMP, TEMP_RATES, MAX_TEMP, CONV_SPEED, CONV_N,
-    FACTS, HAZARDS, RESULTS, GUIDES, MISSIONS, DISCOVERIES,
+    FACTS, HAZARDS, RESULTS, GUIDES, MISSIONS, DISCOVERIES, EXPERIMENTS,
     heatFrontAt, waxMelted, anyWaxMelted, allWaxMelted, meltTime,
     tempAt, finds, missionReady, newState, blankState, autoStep,
   };

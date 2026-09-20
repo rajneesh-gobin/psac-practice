@@ -6358,3 +6358,77 @@ Re-check with `pg_policies` / `pg_proc` before trusting any line of it.
 Open this file first, then grep `ENGINEERING-NOTES.md` for anything you are about
 to investigate. Immediate next steps are under **Pending / not yet done**.
 
+---
+
+## 2026-09-19 — Science Labs: why children could not use them, and Phase 0
+
+Full analysis and the rework plan: `docs/labs/REWORK_PLAN_2026-09-19.md`.
+Recorded here so nobody re-investigates.
+
+- **Measured, not reasoned.** Drove the app in Chrome for Testing at 360 px as a
+  Grade 4, 6 and 9 child and screenshotted every screen; executed all 22 data
+  files in Node to count content per grade; ran every data test.
+- **The 12 September "investigation" layer (`lab_study.js`) made things worse.**
+  It attached to every lab, set `data-study-mode="choose"`, and `labs.css` hid the
+  whole `.lab-body` in that mode — so a lab opened on a text form with no picture.
+  `attach()` also called `Labs.closeOverlay(true)` right after `mount()` opened
+  the welcome card, so "Show me how" was created and destroyed on every open and
+  `st.intro` was never set. Its "explain" phase asked Grade 4 children to type
+  two sentences and mark themselves; the MCQ quiz stayed behind Explore freely →
+  Missions → 9–15 set-up taps. Withdrawn 2026-09-19 (dropped from the RoleModules
+  group; benches guard every `Labs.study*` call, so nothing else changed).
+- **The "mobile fold fix" buried the experiment.** `.lab-side { order: -1 }` at
+  ≤ 899 px (12 September, "tester's #1 complaint") put the start panel, set-up
+  buttons and notebook before the canvas: measured on the Rusting Lab, the
+  test tubes sat ~1,500 px down a 2,800 px page. Removed; on phones the stage
+  comes first and the active `#lab-guide` is ordered first inside the stage and
+  sticky, with `.lab-top` static (two sticky boxes at top:0 stacked and the
+  header, z-index 20, hid the instruction).
+- **Circuit guide P0 (audit) fixed properly.** `_highlight()` now pre-selects
+  the part a `place:` step places (and the eraser for `remove:`), so "tap the
+  glowing gap" is one tap. `tapSlot()` no longer overwrites a switch, bulb or
+  cell with whatever is in the hand: it operates them; only a plain wire may be
+  built over (the "add a second cell in series" guides rely on that) and a test
+  object may be swapped for another.
+- **Stale tests were hiding real defects.** 17 of 22 data suites were red, almost
+  all on a `btn: 'Skip this step →'` contract that no bench had rendered since
+  12 September, plus a heat test on the pre-crash quiz schema, a sunmoon test
+  reading a top-level `const` off a vm context, and a water test asserting LF on
+  CRLF files. Behind that noise: Food Groups called `Labs.quiz`/`missionDone`
+  with the wrong signatures (missions never saved a star) and the Periodic Table
+  was registered at Grade 9 with no content, no chapter and no progress.
+- **Browser tests drive guides through `[data-guide-do]`**, a button removed on
+  12 September; rusting, circuit and nutrition now tap `.is-next` (what a child
+  taps). The other 18 are rewritten with the Phase 2 experiment runner.
+- Numbers after Phase 0: 22/22 data suites clean (3,090 checks), grades 38/0,
+  rusting 68/0, circuit 238/0, nutrition 21/1 (app header buttons, not a lab).
+
+## 2026-09-20 — Science Labs Phase 1: the experiment runner
+
+- **One shape, six words.** `lab_experiment.js` runs Aim → Predict → Do → See →
+  Check → Done above any bench that exports an `experiment` adapter
+  (LAB_SPEC §10). The bench keeps its canvas, guide box and glow; the runner
+  owns the panel, the prediction (a tap), the evidence, the quiz and what is
+  saved. Nothing to type anywhere - measured by the test.
+- **Re-cut, not rewrite.** The Rusting, Circuit and Food experiments were cut
+  from the existing GUIDES (steps), MISSIONS[].quiz (Check) and DISCOVERIES
+  (saw/learn). The circuit and food conversions were built by two agents in
+  parallel from the spec and the rusting reference; each needed ~15 lines of
+  bench changes (no reset on exp guides, token/step/done hooks, `any`
+  matching, multi-token glow, `focus`).
+- **Decisions, not taps.** An `ask` step lists every option; all of them glow;
+  a wrong one gets a result card and the step does not advance. Where the exam
+  gives the set-up (PSAC 2024 three tubes), `setup` builds it and the child
+  predicts and observes.
+- **Traps met:** a bench's `startGuide` reset the bench (wiping the set-up) -
+  guard on `G.exp`; the welcome overlay is created by `mount()` and must be
+  closed by the runner (the Aim is the welcome); the canvas id differs per lab
+  (`#lab-canvas`, `#lab-circuit-canvas`, `#lab-food-canvas`) - select
+  `.lab-canvas-wrap canvas`; "Explore the bench" keeps the experiment's set-up
+  on purpose, so an old-bench test must `experiment.reset()` first; the old
+  hub test asserted subject headings that are chapter names now.
+- **Hub "Start here"** picks the most recently practised chapter with a lab
+  (`DB.chapters[id].last`), else the first chapter whose lab has experiments.
+- Numbers: experiments 577/0 (16 experiments, 360 px, wrong options first),
+  experiments-data 423/0, 22 data suites 3,677/0, grades 38/0, rusting 69/0,
+  circuit 238/0, food 77/0, nutrition 21/1 (app header).

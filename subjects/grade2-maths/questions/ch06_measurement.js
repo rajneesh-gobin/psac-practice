@@ -245,11 +245,11 @@ STATIC_QUESTIONS.push(
     explanation:'7 kg + 2 kg = <b>9 kg</b>.' }),
 
   makeMCQ({ id:'g2mth-msr-035', chapterId:'g2mth-measurement', difficulty:1, subsection:'mass_kg',
-    question:'An apple weighs about ___ grams (g). 1000 g = 1 kg. Is one apple heavier than 1 kg?',
-    options:['No — one apple is much less than 1 kg','Yes — one apple weighs more than 1 kg','Yes — one apple weighs exactly 1 kg','cannot tell'],
-    answer:'No — one apple is much less than 1 kg',
-    hint:'A typical apple weighs about 150 g, and 1000 g = 1 kg.',
-    explanation:'One apple weighs about 150 g, which is <b>much less than 1 kg (1000 g)</b>.' }),
+    question:'Is one apple heavier or lighter than 1 kg?',
+    options:['Much lighter than 1 kg','Heavier than 1 kg','Exactly 1 kg','The same as a schoolbag'],
+    answer:'Much lighter than 1 kg',
+    hint:'You would need a big bagful of apples to reach 1 kg.',
+    explanation:'One apple is <b>much lighter than 1 kg</b>. It takes about six or seven apples to balance 1 kg.' }),
 
   makeMCQ({ id:'g2mth-msr-036', chapterId:'g2mth-measurement', difficulty:1, subsection:'mass_kg',
     question:'Which object would you weigh in kilograms?',

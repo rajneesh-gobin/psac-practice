@@ -21,7 +21,7 @@ STATIC_QUESTIONS.push(
     options:['Leaves','Roots','Stem','Fruit'],
     answer:'Leaves',
     hint:'This part is green and flat, and faces the sun.',
-    explanation:'<b>Leaves</b> contain a green substance called chlorophyll that captures sunlight. Leaves use sunlight, water and carbon dioxide to make food through photosynthesis.' }),
+    explanation:'<b>Leaves</b> are green and flat so that they can catch the sunlight. A plant makes its own food in its leaves, using sunlight, water and air.' }),
 
   makeMCQ({ id:'g3ssee-nat-003', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
     question:'What is the main function of the STEM of a plant?',
@@ -43,17 +43,18 @@ STATIC_QUESTIONS.push(
     explanation:'The <b>fruit</b> of a plant contains seeds. When the fruit is eaten or falls to the ground, seeds can grow into new plants.' }),
 
   makeMCQ({ id:'g3ssee-nat-006', chapterId:'g3ssee-natural', difficulty:2, subsection:'plants',
-    question:'What do plants need to make their own food through photosynthesis?',
-    options:['Sunlight, water and carbon dioxide','Sunlight, water and salty seawater','Moonlight, water and oxygen gas','Darkness, sand and carbon dioxide'],
-    answer:'Sunlight, water and carbon dioxide',
-    hint:'Plants are like factories that need three raw materials.',
-    explanation:'Plants make their own food using <b>sunlight</b>, <b>water</b> from the soil and <b>carbon dioxide</b> from the air. Moonlight, darkness and seawater cannot drive photosynthesis.'}),
+    question:'What do green plants need in order to make their own food?',
+    options:['Sunlight, water and air','Moonlight, water and sand','Darkness, sand and salt','Sunlight, salt and stones'],
+    answer:'Sunlight, water and air',
+    hint:'Think what a plant on a windowsill is given every day.',
+    explanation:'A green plant makes its own food in its leaves using <b>sunlight</b>, <b>water</b> taken up by the roots and <b>air</b>. Without light a plant cannot make food.'}),
 
   makeMCQ({ id:'g3ssee-nat-007', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
-    question:'Which gas do plants release during photosynthesis that humans breathe?',
-    options:['Oxygen','Hydrogen','Nitrogen','Helium'],
-    answer:'Oxygen',
-    explanation:'During photosynthesis plants release <b>oxygen</b> into the air, and humans and animals breathe it to stay alive. Hydrogen, nitrogen and helium are not released by leaves.'}),
+    question:'Which part of a plant takes in water from the soil?',
+    options:['The roots','The petals','The leaves','The fruit'],
+    answer:'The roots',
+    hint:'This part grows downwards, under the ground.',
+    explanation:'The <b>roots</b> take in water from the soil and hold the plant firmly in the ground. The stem then carries that water up to the leaves.'}),
 
   makeMCQ({ id:'g3ssee-nat-008', chapterId:'g3ssee-natural', difficulty:2, subsection:'plants',
     question:'A mango tree is an example of a ___ plant.',
@@ -65,7 +66,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g3ssee-nat-009', chapterId:'g3ssee-natural', difficulty:1, subsection:'plants',
     question:'All plants need sunlight to grow properly.',
     answer:true,
-    explanation:'Yes! All plants need <b>sunlight</b> (or artificial light) to carry out photosynthesis and make food to survive and grow.' }),
+    explanation:'Yes! All plants need <b>sunlight</b> (or artificial light) to make their food in their leaves, so that they can survive and grow.' }),
 
   makeMCQ({ id:'g3ssee-nat-010', chapterId:'g3ssee-natural', difficulty:2, subsection:'plants',
     question:'The sugarcane plant is very important in Mauritius. What part of it is harvested for sugar?',
@@ -76,7 +77,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3ssee-nat-011', chapterId:'g3ssee-natural', difficulty:2, subsection:'plants',
     question:'What is the process by which seeds are scattered away from the parent plant?',
-    options:['Seed dispersal','Photosynthesis','Pollination','Germination'],
+    options:['Seed dispersal','Ripening','Pollination','Germination'],
     answer:'Seed dispersal',
     hint:'Seeds need to move away from the parent plant to find space to grow.',
     explanation:'<b>Seed dispersal</b> is the process by which seeds are spread away from the parent plant by wind, water, animals or explosion.' }),
@@ -104,7 +105,7 @@ STATIC_QUESTIONS.push(
     options:['It will turn yellow and slowly die','It will grow much faster than usual','It will produce many more flowers','It will stay exactly as it is now'],
     answer:'It will turn yellow and slowly die',
     hint:'Think about what plants need to make food.',
-    explanation:'Without sunlight a plant cannot photosynthesise to make food. Its chlorophyll breaks down, the leaves turn <b>yellow</b> and in the end the plant dies. Darkness never speeds up growth or flowering.'}),
+    explanation:'Without sunlight a plant cannot make its food. Its leaves lose their green colour, turn <b>yellow</b>, and in the end the plant dies. Darkness never speeds up growth or flowering.'}),
 
 // ── animals (016-045) ──────────────────────────────────────────────────────
 

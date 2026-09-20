@@ -361,10 +361,10 @@ STATIC_QUESTIONS.push(
     explanation:'True — 20 ÷ 2 = 10.' }),
 
   makeMCQ({ id:'g2mth-div-060', chapterId:'g2mth-division', difficulty:3, subsection:'dividing_by_2',
-    question:'A number divided by 2 gives 7. Then doubled gives …',
+    question:'A number divided by 2 gives 7. What is the number?',
     options:['14','7','12','9'], answer:'14',
-    hint:'7 × 2 = 14.',
-    explanation:'The number is 14 (since 14 ÷ 2 = 7), and doubled = 14 × 2 = <b>28</b>. Wait — re-read: divided by 2 gives 7, so the number is 14. Then "doubled" means the original (14) doubled = <b>28</b>.' }),
+    hint:'Division and multiplication are opposites: what × 2 = ?',
+    explanation:'If the number ÷ 2 = 7, then the number = 7 × 2 = <b>14</b>. Check: 14 ÷ 2 = 7.' }),
 
 // ── div_word_probs (061–090) ─────────────────────────────────────────────────
 

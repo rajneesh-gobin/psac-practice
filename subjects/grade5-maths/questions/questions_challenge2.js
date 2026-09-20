@@ -401,10 +401,10 @@ CHALLENGE_QS2.push(
 
   makeMCQ({ id:'CH_ARE20', chapterId:'area', subsection:'word_probs', difficulty:4,
     question:'A school hall is 30 m × 20 m. The floor is tiled except for a stage area of 12 m × 8 m. Each tile is 0.5 m². How many tiles are needed?',
-    options:['1,104','1,200','1,310','1,400'],
-    answer:'1,104',
+    options:['1,008','1,104','1,310','1,400'],
+    answer:'1,008',
     hint:'Tiled area = 600 − 96 = 504 m². Tiles = 504 ÷ 0.5.',
-    explanation:'30×20=600. 12×8=96. Tiled=504. 504÷0.5=1,008. Hmm. Let me recheck: 504÷0.5=1008.' })
+    explanation:'Hall = 30 × 20 = 600 m². Stage = 12 × 8 = 96 m². Tiled floor = 600 − 96 = 504 m². Each tile covers 0.5 m², so 504 ÷ 0.5 = <b>1,008</b> tiles.' })
 );
 
 // ── CAPACITY ──────────────────────────────────
@@ -781,9 +781,9 @@ CHALLENGE_QS2.push(
 
   makeNum({ id:'CH_MON17', chapterId:'money', subsection:'profit_loss', difficulty:4,
     question:'A vendor buys 120 pens at Rs 8.50 each. She sells 95 at Rs 14 each and the rest at cost price. What is her total profit?',
-    answer:'503', acceptableAnswers:['503','Rs 503'],
+    answer:'522.50', acceptableAnswers:['522.50','522.5','Rs 522.50','Rs 522.5'],
     hint:'Revenue = 95×14 + 25×8.50. Cost = 120×8.50. Profit = Revenue − Cost.',
-    explanation:'Revenue=1330+212.50=1542.50. Cost=1020. Profit=522.50. Hmm: 95×14=1330; 25×8.5=212.5; Total revenue=1542.5; Cost=120×8.5=1020; Profit=522.5.' }),
+    explanation:'She sells 95 pens at Rs 14 = Rs 1,330, and the other 25 at cost = 25 × Rs 8.50 = Rs 212.50. Revenue = Rs 1,542.50. Cost = 120 × Rs 8.50 = Rs 1,020. Profit = 1,542.50 − 1,020 = <b>Rs 522.50</b>.' }),
 
   makeMCQ({ id:'CH_MON18', chapterId:'money', subsection:'word_probs', difficulty:3,
     question:'A bus ticket costs Rs 12.75. A weekly pass costs Rs 72. How much cheaper is the weekly pass for 6 days of travel (one trip per day)?',

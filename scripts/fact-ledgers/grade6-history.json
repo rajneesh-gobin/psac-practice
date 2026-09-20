@@ -1,0 +1,849 @@
+{
+  "pack": "grade6-history",
+  "source": "History.pdf — MIE Teaching and Learning Syllabus, History, Grades 3 to 6, 'CONTENT AREAS AND SPECIFIC LEARNING OUTCOMES OF HISTORY FOR GRADE 6' (printed page 12) · Geography.pdf — MIE Teaching and Learning Syllabus, Geography, Grades 3 to 6 (December 2015), the three GRADE 6 tables: LAND USE (printed 22-25), NATURAL HAZARDS (26-27) and MAP SKILLS (31-32)",
+  "note": "One entry per thing the Grade 6 tables say a learner must be able to do. `any` = covered when some question's stem or answer contains ANY of these phrases. `all` = covered only when ONE question contains ALL of them. Terms are matched against the question STEM AND ANSWER ONLY, never the explanation: a fact mentioned in an explanation is a fact the child is never asked. ⚠ GRADE 6 GEOGRAPHY IS LAND USE, NATURAL HAZARDS AND MAP SKILLS — nothing else. The weather and climate strand (the water cycle, windward and leeward sides, the South East Trade Winds, relief and convectional rain, temperature and altitude, climate change) is GRADE 5: its table is headed 'GRADE 5 - WEATHER' on printed page 19 and runs to page 22. Reading the extracted text rather than the pages puts that block under Grade 6, because in this PDF each grade's header sits at the FOOT of the preceding page. Do not add those facts here. ⚠ The enrichment chapters (famous figures, symbols, global connections) are deliberately absent: this ledger asks whether the pack covers the syllabus, not whether the syllabus covers the pack.",
+  "facts": [
+    {
+      "id": "set-01",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Slaves were brought to the island, and from named places",
+      "any": [
+        "slave"
+      ]
+    },
+    {
+      "id": "set-02",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Slaves came mainly from Africa and Madagascar",
+      "all": [
+        "slave",
+        "africa"
+      ]
+    },
+    {
+      "id": "set-03",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Indian immigrants came to the island as indentured labourers",
+      "any": [
+        "indentured"
+      ]
+    },
+    {
+      "id": "set-04",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Indian indentured labourers came from India",
+      "all": [
+        "indentured",
+        "india"
+      ]
+    },
+    {
+      "id": "set-05",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Chinese immigrants came to the island",
+      "all": [
+        "chinese",
+        "immigrant"
+      ]
+    },
+    {
+      "id": "set-06",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "The places the settlers, slaves and immigrants came from can be located on a map",
+      "all": [
+        "come from",
+        "slave"
+      ]
+    },
+    {
+      "id": "set-07",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "The life and work of the slaves on the island",
+      "all": [
+        "slave",
+        "work"
+      ]
+    },
+    {
+      "id": "set-08",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "The life and work of the Indian indentured labourers on the island",
+      "all": [
+        "indentured",
+        "work"
+      ]
+    },
+    {
+      "id": "set-09",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Slaves contributed to the development of the island",
+      "all": [
+        "slave",
+        "contribut"
+      ]
+    },
+    {
+      "id": "set-10",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Indian indentured labourers contributed to the development of the island",
+      "all": [
+        "indentured",
+        "contribut"
+      ]
+    },
+    {
+      "id": "set-11",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "The role of the Chinese immigrants in the country (trade and commerce)",
+      "all": [
+        "chinese",
+        "trade"
+      ]
+    },
+    {
+      "id": "set-12",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "The Aapravasi Ghat is where the indentured labourers landed",
+      "any": [
+        "aapravasi"
+      ]
+    },
+    {
+      "id": "set-13",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Le Morne is associated with the slaves who escaped (maroons)",
+      "any": [
+        "le morne",
+        "maroon"
+      ]
+    },
+    {
+      "id": "set-14",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Slavery was abolished",
+      "any": [
+        "abolition of slavery",
+        "abolished",
+        "abolition"
+      ]
+    },
+    {
+      "id": "set-15",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Life under Dutch rule",
+      "all": [
+        "dutch",
+        "rule"
+      ]
+    },
+    {
+      "id": "set-16",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Life under French rule",
+      "all": [
+        "french",
+        "rule"
+      ]
+    },
+    {
+      "id": "set-17",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "Life under British rule",
+      "all": [
+        "british",
+        "rule"
+      ]
+    },
+    {
+      "id": "set-18",
+      "unit": "History — Settlers, Slaves & Immigrants",
+      "fact": "The social and cultural life of the people before independence",
+      "all": [
+        "before independence"
+      ]
+    },
+    {
+      "id": "ind-01",
+      "unit": "History — Celebrating Independence",
+      "fact": "Mauritius became independent on 12 March 1968",
+      "any": [
+        "12 march 1968",
+        "1968"
+      ]
+    },
+    {
+      "id": "ind-02",
+      "unit": "History — Celebrating Independence",
+      "fact": "The National Flag of Mauritius",
+      "any": [
+        "national flag"
+      ]
+    },
+    {
+      "id": "ind-03",
+      "unit": "History — Celebrating Independence",
+      "fact": "The flag has four colours",
+      "any": [
+        "four colours",
+        "4 colours"
+      ]
+    },
+    {
+      "id": "ind-04",
+      "unit": "History — Celebrating Independence",
+      "fact": "Red on the flag stands for the struggle for freedom",
+      "all": [
+        "red",
+        "flag"
+      ]
+    },
+    {
+      "id": "ind-05",
+      "unit": "History — Celebrating Independence",
+      "fact": "Blue on the flag stands for the Indian Ocean",
+      "all": [
+        "blue",
+        "flag"
+      ]
+    },
+    {
+      "id": "ind-06",
+      "unit": "History — Celebrating Independence",
+      "fact": "Yellow on the flag stands for the light of independence",
+      "all": [
+        "yellow",
+        "flag"
+      ]
+    },
+    {
+      "id": "ind-07",
+      "unit": "History — Celebrating Independence",
+      "fact": "Green on the flag stands for the vegetation of the island",
+      "all": [
+        "green",
+        "flag"
+      ]
+    },
+    {
+      "id": "ind-08",
+      "unit": "History — Celebrating Independence",
+      "fact": "Mauritius is called the Star and Key of the Indian Ocean",
+      "any": [
+        "star and key",
+        "star & key"
+      ]
+    },
+    {
+      "id": "ind-09",
+      "unit": "History — Celebrating Independence",
+      "fact": "Why Mauritius is named the Star and Key of the Indian Ocean",
+      "all": [
+        "star",
+        "key",
+        "indian ocean"
+      ]
+    },
+    {
+      "id": "ind-10",
+      "unit": "History — Celebrating Independence",
+      "fact": "The Coat of Arms of Mauritius",
+      "any": [
+        "coat of arms"
+      ]
+    },
+    {
+      "id": "ind-11",
+      "unit": "History — Celebrating Independence",
+      "fact": "The features on the Coat of Arms (ship, key, star, dodo, deer, sugar cane)",
+      "all": [
+        "coat of arms",
+        "dodo"
+      ]
+    },
+    {
+      "id": "ind-12",
+      "unit": "History — Celebrating Independence",
+      "fact": "The motto Stella Clavisque Maris Indici",
+      "any": [
+        "stella clavisque",
+        "stella"
+      ]
+    },
+    {
+      "id": "ind-13",
+      "unit": "History — Celebrating Independence",
+      "fact": "Rodrigues has its own Coat of Arms",
+      "all": [
+        "coat of arms",
+        "rodrigues"
+      ]
+    },
+    {
+      "id": "her-01",
+      "unit": "History — Our Cultural Heritage",
+      "fact": "The country has places of historical interest",
+      "any": [
+        "historical site",
+        "place of historical interest",
+        "places of historical interest"
+      ]
+    },
+    {
+      "id": "her-02",
+      "unit": "History — Our Cultural Heritage",
+      "fact": "Historical sites and monuments must be preserved",
+      "any": [
+        "preserv"
+      ]
+    },
+    {
+      "id": "her-03",
+      "unit": "History — Our Cultural Heritage",
+      "fact": "Why historical sites matter",
+      "all": [
+        "historical",
+        "important"
+      ]
+    },
+    {
+      "id": "her-04",
+      "unit": "History — Our Cultural Heritage",
+      "fact": "Aapravasi Ghat and Le Morne are World Heritage Sites",
+      "any": [
+        "world heritage"
+      ]
+    },
+    {
+      "id": "her-05",
+      "unit": "History — Our Cultural Heritage",
+      "fact": "Places of historical interest in Rodrigues",
+      "all": [
+        "rodrigues",
+        "heritage"
+      ]
+    },
+    {
+      "id": "lnd-01",
+      "unit": "Geography — Land Use",
+      "fact": "Land use is defined",
+      "any": [
+        "land use",
+        "land is used"
+      ]
+    },
+    {
+      "id": "lnd-02",
+      "unit": "Geography — Land Use",
+      "fact": "There are different types of land use in Mauritius and Rodrigues",
+      "all": [
+        "land use",
+        "type"
+      ]
+    },
+    {
+      "id": "lnd-03",
+      "unit": "Geography — Land Use",
+      "fact": "There are reasons for the different types of land use",
+      "all": [
+        "land use",
+        "reason"
+      ],
+      "any": [
+        "why land use",
+        "reasons for the different types of land use"
+      ]
+    },
+    {
+      "id": "lnd-04",
+      "unit": "Geography — Land Use",
+      "fact": "Wasteland is defined",
+      "any": [
+        "wasteland"
+      ]
+    },
+    {
+      "id": "lnd-05",
+      "unit": "Geography — Land Use",
+      "fact": "Agriculture is defined",
+      "any": [
+        "agriculture"
+      ]
+    },
+    {
+      "id": "lnd-06",
+      "unit": "Geography — Land Use",
+      "fact": "Agriculture is important to the country",
+      "all": [
+        "agriculture",
+        "important"
+      ]
+    },
+    {
+      "id": "lnd-07",
+      "unit": "Geography — Land Use",
+      "fact": "Crops grown in Mauritius and Rodrigues are named",
+      "all": [
+        "crop",
+        "grown"
+      ]
+    },
+    {
+      "id": "lnd-08",
+      "unit": "Geography — Land Use",
+      "fact": "Animals reared in Mauritius and Rodrigues are named",
+      "any": [
+        "reared",
+        "rearing"
+      ]
+    },
+    {
+      "id": "lnd-09",
+      "unit": "Geography — Land Use",
+      "fact": "Sugar cane is the main crop and where it is grown",
+      "all": [
+        "sugar cane",
+        "grown"
+      ]
+    },
+    {
+      "id": "lnd-10",
+      "unit": "Geography — Land Use",
+      "fact": "Sugar mills are named and located",
+      "any": [
+        "sugar mill"
+      ]
+    },
+    {
+      "id": "lnd-11",
+      "unit": "Geography — Land Use",
+      "fact": "There are four types of farming in Mauritius and Rodrigues",
+      "all": [
+        "type",
+        "farming"
+      ]
+    },
+    {
+      "id": "lnd-12",
+      "unit": "Geography — Land Use",
+      "fact": "Terrace farming is practised in Rodrigues, and why",
+      "any": [
+        "terrace"
+      ]
+    },
+    {
+      "id": "lnd-13",
+      "unit": "Geography — Land Use",
+      "fact": "Places where land is used for agriculture can be located on a map",
+      "all": [
+        "agricultur",
+        "land"
+      ]
+    },
+    {
+      "id": "lnd-14",
+      "unit": "Geography — Land Use",
+      "fact": "A tourist is defined",
+      "any": [
+        "tourist"
+      ]
+    },
+    {
+      "id": "lnd-15",
+      "unit": "Geography — Land Use",
+      "fact": "Reasons why tourists come to Mauritius and Rodrigues",
+      "all": [
+        "tourist",
+        "why"
+      ]
+    },
+    {
+      "id": "lnd-16",
+      "unit": "Geography — Land Use",
+      "fact": "Jobs in the tourist industry",
+      "all": [
+        "tourism",
+        "job"
+      ]
+    },
+    {
+      "id": "lnd-17",
+      "unit": "Geography — Land Use",
+      "fact": "The benefits of the tourist industry",
+      "all": [
+        "tourism",
+        "benefit"
+      ]
+    },
+    {
+      "id": "lnd-18",
+      "unit": "Geography — Land Use",
+      "fact": "The countries tourists come from",
+      "all": [
+        "tourist",
+        "countr"
+      ]
+    },
+    {
+      "id": "lnd-19",
+      "unit": "Geography — Land Use",
+      "fact": "Most hotels are along the coast near sandy beaches",
+      "all": [
+        "hotel",
+        "coast"
+      ]
+    },
+    {
+      "id": "lnd-20",
+      "unit": "Geography — Land Use",
+      "fact": "Land use changed mostly from agriculture to tourism",
+      "all": [
+        "cane",
+        "hotel"
+      ]
+    },
+    {
+      "id": "lnd-21",
+      "unit": "Geography — Land Use",
+      "fact": "Land use in Mauritius has changed recently",
+      "all": [
+        "land use",
+        "chang"
+      ]
+    },
+    {
+      "id": "lnd-22",
+      "unit": "Geography — Land Use",
+      "fact": "A land-use map carries a title, scale, direction and key",
+      "all": [
+        "land use",
+        "key"
+      ]
+    },
+    {
+      "id": "lnd-23",
+      "unit": "Geography — Land Use",
+      "fact": "Data, maps, pictures and diagrams on land use can be read and interpreted",
+      "all": [
+        "land use",
+        "map"
+      ]
+    },
+    {
+      "id": "haz-01",
+      "unit": "Geography — Natural Hazards",
+      "fact": "A natural hazard is defined",
+      "any": [
+        "natural hazard"
+      ]
+    },
+    {
+      "id": "haz-02",
+      "unit": "Geography — Natural Hazards",
+      "fact": "A cyclone is one of the most common natural hazards here",
+      "any": [
+        "cyclone"
+      ]
+    },
+    {
+      "id": "haz-03",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Torrential rain is a natural hazard",
+      "any": [
+        "torrential"
+      ]
+    },
+    {
+      "id": "haz-04",
+      "unit": "Geography — Natural Hazards",
+      "fact": "A flash flood is a natural hazard",
+      "any": [
+        "flash flood"
+      ]
+    },
+    {
+      "id": "haz-05",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Drought is a natural hazard",
+      "any": [
+        "drought"
+      ]
+    },
+    {
+      "id": "haz-06",
+      "unit": "Geography — Natural Hazards",
+      "fact": "A volcano is a natural hazard",
+      "any": [
+        "volcano",
+        "volcanic"
+      ]
+    },
+    {
+      "id": "haz-07",
+      "unit": "Geography — Natural Hazards",
+      "fact": "An earthquake is a natural hazard",
+      "any": [
+        "earthquake"
+      ]
+    },
+    {
+      "id": "haz-08",
+      "unit": "Geography — Natural Hazards",
+      "fact": "A tsunami is a natural hazard",
+      "any": [
+        "tsunami"
+      ]
+    },
+    {
+      "id": "haz-09",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Which hazards affect Mauritius and Rodrigues in particular",
+      "all": [
+        "cyclone",
+        "mauritius"
+      ]
+    },
+    {
+      "id": "haz-10",
+      "unit": "Geography — Natural Hazards",
+      "fact": "The conditions in which a cyclone forms",
+      "all": [
+        "cyclone",
+        "form"
+      ]
+    },
+    {
+      "id": "haz-11",
+      "unit": "Geography — Natural Hazards",
+      "fact": "The causes of the other natural hazards",
+      "all": [
+        "natural hazard",
+        "cause"
+      ]
+    },
+    {
+      "id": "haz-12",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Hazards affect people and human activities",
+      "all": [
+        "cyclone",
+        "destroy"
+      ]
+    },
+    {
+      "id": "haz-13",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Hazards affect the natural environment",
+      "all": [
+        "cyclone",
+        "crop"
+      ]
+    },
+    {
+      "id": "haz-14",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Precautions are taken to be better prepared and reduce risk",
+      "any": [
+        "precaution",
+        "prepared"
+      ]
+    },
+    {
+      "id": "haz-15",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Cyclone warning classes are issued",
+      "any": [
+        "class ii",
+        "class iii",
+        "warning class",
+        "cyclone warning"
+      ]
+    },
+    {
+      "id": "haz-16",
+      "unit": "Geography — Natural Hazards",
+      "fact": "People show empathy and solidarity during such events",
+      "any": [
+        "solidarity",
+        "help each other",
+        "empathy"
+      ]
+    },
+    {
+      "id": "haz-17",
+      "unit": "Geography — Natural Hazards",
+      "fact": "Countries of the Indian Ocean region are affected by these hazards",
+      "all": [
+        "indian ocean",
+        "hazard"
+      ]
+    },
+    {
+      "id": "map-01",
+      "unit": "Geography — Map Skills",
+      "fact": "The four cardinal points are north, south, east and west",
+      "any": [
+        "cardinal point"
+      ]
+    },
+    {
+      "id": "map-02",
+      "unit": "Geography — Map Skills",
+      "fact": "The four intermediate points are NE, NW, SE and SW",
+      "any": [
+        "intermediate point",
+        "north-east",
+        "south-west"
+      ]
+    },
+    {
+      "id": "map-03",
+      "unit": "Geography — Map Skills",
+      "fact": "Places are located on a map using a simple grid",
+      "all": [
+        "grid",
+        "map"
+      ]
+    },
+    {
+      "id": "map-04",
+      "unit": "Geography — Map Skills",
+      "fact": "Direction is used to locate a place on a map",
+      "all": [
+        "direction",
+        "map"
+      ]
+    },
+    {
+      "id": "map-05",
+      "unit": "Geography — Map Skills",
+      "fact": "Straight-line distances are measured on a map using the scale",
+      "all": [
+        "scale",
+        "distance"
+      ]
+    },
+    {
+      "id": "map-06",
+      "unit": "Geography — Map Skills",
+      "fact": "A map has a key",
+      "all": [
+        "map",
+        "key"
+      ]
+    },
+    {
+      "id": "map-07",
+      "unit": "Geography — Map Skills",
+      "fact": "A map uses symbols",
+      "all": [
+        "map",
+        "symbol"
+      ]
+    },
+    {
+      "id": "map-08",
+      "unit": "Geography — Map Skills",
+      "fact": "A map has a title, a scale, a direction and a key",
+      "all": [
+        "title",
+        "scale",
+        "key"
+      ]
+    },
+    {
+      "id": "map-09",
+      "unit": "Geography — Map Skills",
+      "fact": "Contour lines are an isoline on a map",
+      "any": [
+        "contour"
+      ]
+    },
+    {
+      "id": "map-10",
+      "unit": "Geography — Map Skills",
+      "fact": "An isotherm joins places of equal temperature",
+      "any": [
+        "isotherm"
+      ]
+    },
+    {
+      "id": "map-11",
+      "unit": "Geography — Map Skills",
+      "fact": "An isohyet joins places of equal rainfall",
+      "any": [
+        "isohyet"
+      ]
+    },
+    {
+      "id": "map-12",
+      "unit": "Geography — Map Skills",
+      "fact": "Isolines are read and interpreted on a map",
+      "any": [
+        "isoline"
+      ]
+    },
+    {
+      "id": "map-13",
+      "unit": "Geography — Map Skills",
+      "fact": "Information is extracted from a line graph",
+      "any": [
+        "line graph"
+      ]
+    },
+    {
+      "id": "map-14",
+      "unit": "Geography — Map Skills",
+      "fact": "Information is extracted from a bar graph",
+      "any": [
+        "bar graph",
+        "bar chart"
+      ]
+    },
+    {
+      "id": "map-15",
+      "unit": "Geography — Map Skills",
+      "fact": "Information is extracted from a pie chart",
+      "any": [
+        "pie chart"
+      ]
+    },
+    {
+      "id": "map-16",
+      "unit": "Geography — Map Skills",
+      "fact": "Information is extracted from a table",
+      "any": [
+        "in a table",
+        "from a table",
+        "the table",
+        "read a table"
+      ]
+    },
+    {
+      "id": "map-17",
+      "unit": "Geography — Map Skills",
+      "fact": "Information is extracted from larger-scale maps of Mauritius and Rodrigues",
+      "all": [
+        "map",
+        "rodrigues"
+      ]
+    },
+    {
+      "id": "map-18",
+      "unit": "Geography — Map Skills",
+      "fact": "Maps of the Indian Ocean and the wider region are read",
+      "all": [
+        "map",
+        "indian ocean"
+      ]
+    },
+    {
+      "id": "map-19",
+      "unit": "Geography — Map Skills",
+      "fact": "A map can show the areas facing natural hazards in the Indian Ocean",
+      "all": [
+        "map",
+        "hazard"
+      ]
+    }
+  ]
+}

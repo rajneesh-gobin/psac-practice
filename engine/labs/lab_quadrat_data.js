@@ -536,10 +536,170 @@ const LabQuadratData = (() => {
       ] },
   ];
 
+  // ── The sampling model, replayed ─────────────────
+  // What the bench would record for a list of guide tokens: the same species,
+  // gloves, throws, counts and estimates, from the same seeded generator
+  // (`seed:<n>` re-seeds it; the bench does the same). The experiments below
+  // carry a FIXED seed, so every pupil - and the tests - get the same quadrats
+  // and the See text can state the real numbers. Explore keeps real chance.
+  function simulate(tokens) {
+    let r = rng(1), events = [], plants = makeField([]), sp = 'guava', gloves = false, series = null, q = null;
+    const hist = [], notes = [], cards = [];
+    const newSeries = () => { series = { sp, key: events.join('>'), year: yearOf(events), quads: [] }; q = null; };
+    newSeries();
+    const taken = () => series.quads.map(x => key(x.x, x.y));
+    const pops = () => { const o = {}; SPECIES_ORDER.forEach(s => { o[s] = truePop(plants, s); }); return o; };
+    const countIt = rule => {
+      if (!q || q.counted) { cards.push('nothing'); return false; }
+      if (!gloves && countQuad(plants, 'lantana', q.x, q.y, 'all') > 0) { cards.push('lantana'); return false; }
+      const c = classify(plants, sp, q.x, q.y);
+      if (rule !== 'rule' && countBy(c, rule) !== countBy(c, 'rule')) { cards.push('edge'); return false; }
+      q.counted = true; q.count = countBy(c, 'rule');
+      series.quads.push({ x: q.x, y: q.y, count: q.count, how: q.how });
+      return true;
+    };
+    for (const t of tokens) {
+      const i = t.indexOf(':'), k = i > 0 ? t.slice(0, i) : t, v = i > 0 ? t.slice(i + 1) : undefined;
+      if (k === 'seed') r = rng(Number(v) >>> 0);
+      else if (k === 'species') { if (SPECIES[v] && v !== sp) { const had = series.quads.length; sp = v; if (had) newSeries(); else series.sp = v; } }
+      else if (k === 'gloves') gloves = v === 'on';
+      else if (k === 'throw') { const s = randomSquares(r, 1, taken())[0]; q = { x: s[0], y: s[1], how: 'random', counted: false }; }
+      else if (k === 'thick') { const s = thickest(plants, sp, 1, taken())[0]; q = { x: s[0], y: s[1], how: 'thick', counted: false }; }
+      else if (k === 'count') countIt(v || 'rule');
+      else if (k === 'auto5') { for (const s of randomSquares(r, 5, taken())) { q = { x: s[0], y: s[1], how: 'random', counted: false }; if (!countIt('rule')) break; } }
+      else if (k === 'estimate' || k === 'est') {
+        if (k === 'est' && v !== 'right') { cards.push('est:' + v); continue; }
+        if (!series.quads.length) { cards.push('nothing'); continue; }
+        const counts = series.quads.map(x => x.count), e = estimate(counts), trueN = truePop(plants, sp);
+        const random = series.quads.every(x => x.how === 'random');
+        const entry = { sp, n: e.n, total: e.total, mean: e.mean, est: e.rounded, trueN, random, key: series.key, year: series.year,
+                        counts, zeros: counts.filter(c => c === 0).length };
+        hist.push(entry); series.est = entry;
+        if (!random) cards.push('biased'); else if (e.n < MIN_Q) cards.push('too_few');
+      }
+      else if (k === 'census') notes.push({ census: census(plants, sp).rule, trueN: truePop(plants, sp), sp });
+      else if (k === 'new') newSeries();
+      else if (k === 'event') { if (!EVENTS[v]) continue; const before = pops(); events.push(v); plants = makeField(events); newSeries(); notes.push({ event: v, before, after: pops(), year: series.year }); }
+      else if (k === 'restore') { events = []; plants = makeField([]); newSeries(); }
+    }
+    return { sp, gloves, events, series, hist, notes, cards, trueN: truePop(plants, sp), pops: pops() };
+  }
+  const num = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const _steps = steps => steps.map(s => s.any ? s.any[0] : s.on);
+
+  // ── Experiments (lab_experiment.js) ── Aim → Predict → Do → See → Check → Done.
+  // Re-cut from GUIDES (steps), MISSIONS[].quiz (check) and DISCOVERIES (see).
+  // Every number in a See text comes from simulate() over the experiment's own
+  // set-up and steps, so it is what the bench will show for that seed.
+  // Check refs: "<mission id>:<quiz index>" or an inline { q, options, why }
+  // whose FIRST option is the answer (the quiz shuffles).
+  const _E1 = { setup: ['seed:22', 'gloves:on', 'species:guava'],
+    steps: [
+      { ask: 'Where should the first quadrat go?', on: 'throw', options: ['throw', 'thick'],
+        wrong: { thick: 'Putting the quadrat where the guava is thickest samples the best patch, not the plot. The estimate would come out far too high - that is bias.' } },
+      { on: 'count', say: 'Tap ✅ Count (edge rule). A plant on the frame counts only on the top or left side.' },
+      { on: 'auto5', say: 'One square metre is not enough. Tap ⏩ 5 more at random.' },
+      { ask: 'The picture shows your total and your mean. Which number is the estimate for the whole 400 m² plot?', on: 'est:right',
+        options: ['est:right', 'est:forgot', 'est:total', 'est:mean'],
+        wrong: { 'est:forgot': 'That is the total × 400. It forgets to divide by the number of quadrats first: mean = total ÷ 6, then × 400.',
+                 'est:total': 'That is the total you counted in six square metres. The plot has 400 square metres.',
+                 'est:mean': 'That is the mean - the number in ONE average square metre. The plot has 400 of them.' } },
+    ] };
+  const _E2 = { setup: ['seed:78', 'gloves:on', 'species:guava', 'auto5'],
+    steps: [
+      { on: 'estimate', say: 'Tap 🧮 Estimate. Five quadrats, scaled up 400 times - how close is it?' },
+      { ask: 'The estimate is off. What would make it more reliable?', on: 'auto5', options: ['auto5', 'thick', 'new'],
+        wrong: { thick: 'Choosing the thickest patch is biased sampling: those squares hold far more than an average square, so the estimate would shoot up, not settle.',
+                 new: 'A new survey throws your five quadrats away. You would have fewer quadrats, not more - and a less reliable estimate.' } },
+      { on: 'auto5', say: 'Ten is better. Tap ⏩ 5 more at random - fifteen is better still.' },
+      { on: 'estimate', say: 'Tap 🧮 Estimate again. Closer this time?' },
+      { on: 'census', say: 'Tap 🔢 Count every square - the ranger’s full census of all 400.' },
+    ] };
+  const _E3 = { setup: ['seed:7', 'gloves:on', 'species:guava', 'auto5', 'auto5', 'estimate'],
+    steps: [
+      { ask: 'Ten years pass and nobody weeds. Is that a natural threat, a human threat, or conservation?', on: 'event:spread',
+        options: ['event:spread', 'event:cyclone', 'event:weed'],
+        wrong: { 'event:cyclone': 'A cyclone is a NATURAL threat. This one is HUMAN: people brought the guava to Mauritius, and nobody is controlling it.',
+                 'event:weed': 'Weeding out the invaders is conservation - the opposite of leaving them. Ten years of nobody weeding is the threat.' } },
+      { on: 'auto5', say: 'Year 10. Tap ⏩ 5 more at random to survey the plot again.' },
+      { on: 'auto5', say: 'Tap ⏩ 5 more at random - ten quadrats, like the first survey.' },
+      { on: 'estimate', say: 'Tap 🧮 Estimate. How much has the guava grown?' },
+    ] };
+  const _E4 = { setup: ['seed:2', 'gloves:on'],
+    steps: [
+      { ask: 'Which plant is endemic - found in Mauritius and nowhere else on Earth? Choose it to count.', on: 'species:ebony',
+        options: ['species:ebony', 'species:guava', 'species:lantana'],
+        wrong: { 'species:guava': 'Strawberry guava is an invasive alien: people brought it to Mauritius, and it spreads at the expense of native plants.',
+                 'species:lantana': 'Lantana is an invasive alien too - a prickly shrub brought in by people. Endemic means found here and nowhere else.' } },
+      { on: 'auto5', say: 'Tap ⏩ 5 more at random. How many quadrats hold an ebony seedling?' },
+      { on: 'auto5', say: 'Tap ⏩ 5 more at random - ten quadrats for a rare species.' },
+      { on: 'estimate', say: 'Tap 🧮 Estimate. Count the zeros in your table.' },
+    ] };
+  const X1 = simulate(_E1.setup.concat(_steps(_E1.steps)));
+  const X2 = simulate(_E2.setup.concat(_steps(_E2.steps)));
+  const X3 = simulate(_E3.setup.concat(_steps(_E3.steps)));
+  const X4 = simulate(_E4.setup.concat(_steps(_E4.steps)));
+  const EXP_NUMBERS = { X1, X2, X3, X4 };
+  const EXPERIMENTS = [
+    { id: 'how_many', grades: [9], chapter: 'g9s-b3-biodiversity', icon: '🟩',
+      title: 'How many guava plants are in the whole field?',
+      aim: 'A 20 m × 20 m plot - 400 square metres - full of strawberry guava. You cannot count them all. Six quadrats will tell you roughly how many.',
+      setup: _E1.setup,
+      predict: { q: 'How many strawberry guava plants grow in the whole plot?', answer: '1000',
+        options: [{ id: '100', label: 'About 100', sub: 'a handful' }, { id: '1000', label: 'About 1,000', sub: 'a few in every square metre' }, { id: '10000', label: 'About 10,000', sub: 'a solid thicket' }] },
+      steps: _E1.steps,
+      see: { saw: `Your estimate: ${num(X1.hist[0].est)} strawberry guava plants - the mean of six random quadrats × 400. The ranger’s full count is ${num(X1.trueN)}.`,
+             learn: 'Estimated population = mean number per quadrat × (area of the plot ÷ area of one quadrat). Six random square metres told you roughly what 400 hold.' },
+      check: ['estimate:0', 'estimate:1', 'estimate:4'],
+      exam: 'NCE Biology asks the calculation: five 1 m² quadrats with 4, 6, 5, 7 and 3 plants give a mean of 5 per m², so a 350 m² field holds about 5 × 350 = 1,750.' },
+    { id: 'is_it_right', grades: [9], chapter: 'g9s-b3-biodiversity', icon: '🔢',
+      title: 'Is the estimate right?',
+      aim: 'Five random quadrats are already counted in your table. Is an estimate from five squares right? More quadrats, then the ranger’s census, will tell.',
+      setup: _E2.setup,
+      predict: { q: 'Which estimate will land closer to the true number?', answer: 'fifteen',
+        options: [{ id: 'five', label: 'From 5 quadrats' }, { id: 'fifteen', label: 'From 15 quadrats' }, { id: 'same', label: 'Both the same' }] },
+      steps: _E2.steps,
+      see: { saw: `Five quadrats said ${num(X2.hist[0].est)}; fifteen said ${num(X2.hist[1].est)}. The census counted every plant once: ${num(X2.notes[0].census)} strawberry guava.`,
+             learn: 'More random quadrats give a more reliable estimate. Counting all 400 squares gives the exact number but takes days; fifteen quadrats take an hour.' },
+      check: ['estimate:2', { q: 'Counting all 400 squares gave exactly the true number. Why do ecologists usually sample instead?',
+                options: ['A census takes far too long; a sample gives a useful estimate in a fraction of the time', 'A census is always wrong', 'Quadrats cannot be used on every square', 'Sampling gives the exact number'],
+                why: 'A full census of a real habitat can take days or weeks. A sample of random quadrats gives an estimate close enough to be useful, in a fraction of the time.' },
+              'random:2'],
+      exam: 'In the exam you may be asked why the counts from several quadrats are averaged: one quadrat may not be typical of the whole area, and more quadrats make the estimate more reliable.' },
+    { id: 'invasion', grades: [9], chapter: 'g9s-b3-biodiversity', icon: '⏩',
+      title: 'What do ten years of invasion do?',
+      aim: `Ten quadrats of strawberry guava are already counted: about ${num(X3.hist[0].est)} today. Nobody controls the invaders for ten years. Then you survey again.`,
+      setup: _E3.setup,
+      predict: { q: 'After ten years with nobody controlling them, what happens to the guava?', answer: 'more',
+        options: [{ id: 'more', label: 'Many more', sub: 'they spread' }, { id: 'same', label: 'About the same' }, { id: 'fewer', label: 'Fewer', sub: 'the plants get old' }] },
+      steps: _E3.steps,
+      see: { saw: `Year 0: ${num(X3.hist[0].est)} guava; year 10: ${num(X3.hist[1].est)}. The ranger’s full count went from ${num(X3.notes[0].before.guava)} to ${num(X3.notes[0].after.guava)}, and the ebony seedlings fell from ${num(X3.notes[0].before.ebony)} to ${num(X3.notes[0].after.ebony)}.`,
+             learn: 'Invasive alien species are a human threat to biodiversity: people brought the guava here, it has no natural enemies, and its thickets shade out the endemic ebony seedlings.' },
+      check: ['threat:0', 'threat:1', 'threat:5'],
+      exam: 'In the exam you may be asked what an invasive alien species is, and to name natural threats (cyclones, droughts) and human threats (deforestation, invasive species) to biodiversity.' },
+    { id: 'endemic_ebony', grades: [9], chapter: 'g9s-b3-biodiversity', icon: '🌱',
+      title: 'Can you find the endemic ebony?',
+      aim: 'Somewhere in this plot grow seedlings of the Mauritian ebony - a tree found nowhere else on Earth. Ten random quadrats: how many will hold one?',
+      setup: _E4.setup,
+      predict: { q: 'Of 10 random quadrats, how many will hold an ebony seedling?', answer: 'few',
+        options: [{ id: 'most', label: 'Most of them' }, { id: 'few', label: 'Only a few' }, { id: 'none', label: 'None at all' }] },
+      steps: _E4.steps,
+      see: { saw: `${X4.hist[0].zeros} of your 10 quadrats held no ebony at all. Estimate: ${num(X4.hist[0].est)} seedlings; the ranger’s count is ${num(X4.trueN)}. Rare, and scattered.`,
+             learn: 'The Mauritian ebony is endemic - lost here, lost everywhere. A rare, scattered species gives many zeros, so it needs more quadrats than a common one for a reliable estimate.' },
+      check: [{ q: 'The Mauritian ebony is endemic. What does that mean?',
+                options: ['It is found naturally in Mauritius and nowhere else on Earth', 'It was brought to Mauritius by people', 'It grows on every continent', 'It grows only in gardens'],
+                why: 'Endemic means found naturally in one place and nowhere else. If an endemic species is lost here, it is lost everywhere.' },
+              { q: 'Most of your ten quadrats held no ebony at all. What does a rare, scattered species need for a reliable estimate?',
+                options: ['More random quadrats than a common species', 'Fewer quadrats, because there is less to count', 'Quadrats placed where the ebony is', 'A smaller plot'],
+                why: 'With many zeros, one lucky square can pull the mean a long way. More random quadrats let the mean settle; choosing where to put them is bias.' },
+              'threat:4'],
+      exam: 'In the exam you may be asked what endemic means, and to name a species endemic to Mauritius - the pink pigeon, the Mauritius kestrel, the dodo.' },
+  ];
+
   return { FIELD, QUAD, R, MIN_Q, MISSION_Q, SPECIES, SPECIES_ORDER, STATUS_WORDS, EVENTS, EVENT_ORDER, TRUE,
            rng, makeField, yearOf, truePop, where, classify, countBy, countQuad, speciesIn,
            estimate, EST_FORMULA, squares, key, randomSquares, thickest, census,
-           countDiscoveries, estimateDiscoveries, calcQuestion,
-           DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES };
+           countDiscoveries, estimateDiscoveries, calcQuestion, simulate, EXP_NUMBERS,
+           DISCOVERIES, HAZARDS, RESULTS, FACTS, MISSIONS, GUIDES, EXPERIMENTS };
 })();
 if (typeof window !== 'undefined') window.LabQuadratData = LabQuadratData;

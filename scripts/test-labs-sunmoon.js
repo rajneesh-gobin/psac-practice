@@ -4,6 +4,8 @@
 //  Run: CHROME_PATH=<Chrome for Testing> node scripts/test-labs-sunmoon.js
 //
 //  Opens the app at Grade 6, then Grade 7. Checks:
+//   - the lab opens on an experiment Aim (lab_experiment.js), no overlay in
+//     the way; the old bench sits behind "Explore the bench freely"
 //   - start panel shows grade-appropriate content
 //   - one guided experiment (day/night at G6, phases at G7) end to end
 //   - eclipse hazard card (sun_gaze)
@@ -14,7 +16,8 @@
 //
 //  ⚠ Served over file:// only (Chrome for Testing here cannot reach 127.0.0.1).
 //  ⚠ Run ONE Chrome at a time — this laptop has limited memory.
-//  ⚠ If LabSunmoon is not registered in Labs.LABS yet, atGrade() stubs Labs.grade().
+//  ⚠ Never stub Labs.grade(): Labs.openLab() re-picks the grade from
+//    SELECTED_GRADE (2026-09-20), and a stub would mask that.
 // ══════════════════════════════════════════════
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), os = require('node:os');
 const { spawn } = require('node:child_process');
@@ -82,16 +85,22 @@ const ok = (label, cond, detail) => {
     return { cls: o.className, text: o.textContent.replace(/\\s+/g, ' ').slice(0, 3000),
              signs: [...o.querySelectorAll('.lab-sign figcaption')].map(f => f.textContent) }; })()`);
   const closeOv  = () => click('#lab-overlay [data-ov-close]');
-
-  // Stub Labs.grade() when lab is not registered yet
-  const atGrade = async g => {
-    const registered = await ev(`typeof Labs !== 'undefined' && Labs.LABS && Labs.LABS.some(l => l.id === 'sunmoon')`);
-    if (!registered) {
-      console.log(`  NOTE: sunmoon not in Labs.LABS; stubbing Labs.grade() = ${g}`);
-      await ev(`if (typeof Labs !== 'undefined') Labs.grade = () => ${g}; true`);
-    }
-    await ev(`SELECTED_GRADE = ${g}; true`);
+  // A guide advances on the bench action it asks for. The test taps what
+  // glows, as a child would.
+  const next     = () => click('.is-next');
+  // Since 2026-09-20 the Aim of the first experiment IS the welcome; the old
+  // bench is reached through "Explore the bench freely" and a reset.
+  // ⚠ The button exists only on an Aim card (inside <details>) and on Done -
+  //   tapped from Do or See the click misses and focus stays set. Open an Aim
+  //   first, assert the tap landed, then reset the bench.
+  const explore  = async () => {
+    await ev('LabExperiment.open(LabExperiment._debug().list[0]); true'); await sleep(200);
+    const r = await click('[data-exp="explore"]'); await sleep(200);
+    ok('"Explore the bench freely" is tapped from an Aim and shows the old bench', r === true && await ev("document.getElementById('labs-root').dataset.expMode === 'explore'"), r);
+    await ev('LabSunmoon.experiment.reset(); true'); await sleep(200);
   };
+
+  const atGrade = g => ev(`SELECTED_GRADE = ${g}; true`);
 
   // ── Load the app ──────────────────────────────
   console.log('\n-- app boot');
@@ -122,12 +131,28 @@ const ok = (label, cond, detail) => {
   ok('phase strip is on canvas (canvas has content)', await ev("document.getElementById('lab-canvas').width > 0"));
   await ev('LabSunmoon._test({ instant: true }); true');
 
-  // ── Welcome overlay ──────────────────────────
-  console.log('\n-- welcome');
+  // ── Opens on an experiment ───────────────────
+  console.log('\n-- experiment Aim');
   let ov = await overlay();
-  ok('first-visit welcome appears', ov && /Welcome to the Sun/.test(ov.text), ov);
-  await closeOv();
-  await sleep(300);
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
+  ok('the welcome is marked seen', await ev("Labs.store('sunmoon').intro === true"));
+  ok('Grade 6 lists 4 experiments, the first on day and night', await ev("LabSunmoon.experiment.list().length === 4 && LabSunmoon.experiment.list()[0].id === 'g6_day_night'"));
+  ok('the Aim hides every bench control (focus([]))', await ev("[...document.querySelectorAll('#labs-root .lab-tool')].every(b => b.hidden || !b.offsetParent)"));
+  await click('[data-exp="start"]'); await sleep(200);
+  await click('[data-exp-pick="spin"]'); await sleep(300);
+  let d = await dbg();
+  ok('Do shows only this experiment\'s controls: Spin Earth, Orbit Moon, Observe', d.focus && d.focus.length === 3 && await ev("[...document.querySelectorAll('#labs-root .lab-tool')].filter(b => !b.hidden).map(b => b.dataset.act).sort().join() === 'observe,orbit,spin'"), d.focus);
+  ok('both options of the decision glow', await ev("document.querySelectorAll('#labs-root .lab-tool.is-next').length === 2"));
+  await click('[data-act="orbit"]'); await sleep(300);
+  ov = await overlay();
+  ok('the wrong option (Orbit Moon) gets the runner\'s card and does NOT orbit the Moon', ov && /Not that one/.test(ov.text) && !(await dbg()).orbiting, ov && ov.text.slice(0, 120));
+  await closeOv(); await sleep(200);
+  await click('[data-act="spin"]'); await sleep(300);
+  await click('[data-act="observe"]'); await sleep(400);
+  ok('spin then Observe reaches See, with a notebook line', await ev("LabExperiment._debug().phase === 'see' && /Earth spinning/.test(document.querySelector('#lab-exp').textContent)"));
+  await explore();
+  d = await dbg();
+  ok('after Explore + reset the bench is clean: nothing spinning, every control shown again', !d.spinning && d.focus === null && await ev("[...document.querySelectorAll('#labs-root .lab-tool')].every(b => !b.hidden)"), d);
 
   // ── Start panel ──────────────────────────────
   console.log('\n-- Grade 6 start panel');
@@ -150,10 +175,10 @@ const ok = (label, cond, detail) => {
 
   // Step 1 of day_night_guide: spin:on
   await ev("LabSunmoon._test({ instant: true }); true");
-  await click('[data-act="spin"]');
+  await next();
   await sleep(400);
-  let d = await dbg();
-  ok('spinning = true after tapping Spin Earth', d.spinning === true, d);
+  d = await dbg();
+  ok('spinning = true after tapping what glows (Spin Earth)', d.spinning === true, d);
 
   // Advance animation to let phase / eclipse events fire
   await ev('LabSunmoon._tick(3); true');
@@ -188,7 +213,7 @@ const ok = (label, cond, detail) => {
   await click('[data-set="eclipse"][data-v="solar"]');
   await sleep(300);
   d = await dbg();
-  ok('Solar eclipse: moonAngle ≈ π', Math.abs(d.moonAngle - Math.PI) < 0.1 || d.eclipseType === 'solar', d);
+  ok('Solar eclipse: moonAngle ≈ π and the Moon is lined up', Math.abs(d.moonAngle - Math.PI) < 0.1 && d.eclipseType === 'solar', d);
   ok('solarSeen = true', d.solarSeen === true, d);
 
   // ── Lunar eclipse position ────────────────────
@@ -213,6 +238,13 @@ const ok = (label, cond, detail) => {
   d = await dbg();
   ok('after reset: spinning=false, orbiting=false', !d.spinning && !d.orbiting, d);
   ok('after reset: moonAngle=π (new moon)', Math.abs(d.moonAngle - Math.PI) < 0.01, d);
+  ok('…and a New Moon at rest is NOT an eclipse (the Moon must be lined up)', d.eclipseType === null && d.phase === 'New Moon', d);
+  // Next Phase is at Grade 6 too since 2026-09-20 (the syllabus lists the phases).
+  ok('Next Phase exists at G6, Prev Phase does not', await ev("!!document.querySelector('[data-act=\"phase-next\"]') && !document.querySelector('[data-act=\"phase-prev\"]')"));
+  for (let i = 0; i < 4; i++) { await click('[data-act="phase-next"]'); await sleep(80); }
+  d = await dbg();
+  ok('four Next Phase taps reach a lit Full Moon, not a lunar eclipse', d.phase === 'Full Moon' && d.eclipseType === null && !d.lunarSeen, d);
+  await click('[data-act="reset"]'); await sleep(200);
 
   // ── Discovery unlock ─────────────────────────
   console.log('\n-- discovery unlock');
@@ -247,12 +279,11 @@ const ok = (label, cond, detail) => {
   await ev("LabSunmoon.startMission('shadow_detective'); true");
   await sleep(300);
   await click('[data-act="stick"]');
-  await click('[data-set="time"][data-v="sunrise"]');
-  await click('[data-set="time"][data-v="noon"]');
-  await click('[data-set="time"][data-v="sunset"]');
+  for (const tm of ['sunrise', 'noon', 'sunset']) { await click(`[data-set="time"][data-v="${tm}"]`); await click('[data-act="observe"]'); await sleep(80); }
   await ev('LabSunmoon._tick(1); true');
   d = await dbg();
-  ok('mission in progress: stickObserved > 0', d.stickObserved > 0, d);
+  ok('mission: one shadow observation per time, with the stick present', d.stickObserved === 3 && d.shadowObservations.sunrise === 'long' && d.shadowObservations.noon === 'short' && d.shadowObservations.sunset === 'long', d);
+  ok('…and the mission is ready for its questions', d.mission && d.mission.success === true, d.mission);
 
   // ── Calm Mode ────────────────────────────────
   console.log('\n-- calm mode');
@@ -284,10 +315,10 @@ const ok = (label, cond, detail) => {
   for (let i = 0; i < 30 && !(await ev("!!document.querySelector('.lab-sunmoon')").catch(() => false)); i++) await sleep(300);
   await sleep(400);
   await ev('LabSunmoon._test({ instant: true }); true');
-  // Close intro
   ov = await overlay();
-  if (ov) await closeOv();
-  await sleep(200);
+  ok('Grade 7 also opens on an experiment Aim, no overlay in the way', !ov && await ev("LabExperiment._debug().phase === 'aim' && LabSunmoon.experiment.list().length === 4 && LabSunmoon.experiment.list()[0].id === 'g7_seasons'"), ov);
+  ok('the seasons set-up is applied silently: Earth in June, no coach card', (await dbg()).season === 'june' && !(await overlay()));
+  await explore();
 
   const pt7 = await panelText();
   ok('Grade 7 start panel has phases_guide', /Phase|Lunar Phase/i.test(pt7), pt7.slice(0, 200));

@@ -1,7 +1,7 @@
 -- ══════════════════════════════════════════════════════════════════════════
 --  PSAC Exam Practice — CONSOLIDATED DATABASE SCHEMA
 --
---  GENERATED FROM THE LIVE DATABASE on 2026-09-16
+--  GENERATED FROM THE LIVE DATABASE on 2026-09-19
 --  (project xawvjwsiqhtxgpocdqgm, PostgreSQL 17.6).
 --
 --  This one file replaces 31 incremental migrations — every supabase-*.sql,
@@ -16,7 +16,7 @@
 --  • Answering "what is really deployed?": read this, not a migration file.
 --  • Re-running it against production: every statement is idempotent, so it is
 --    safe — but it is a SNAPSHOT, not a diff. It drops nothing, so an object
---    added to production since 2026-09-16 survives; and it overwrites function,
+--    added to production since 2026-09-19 survives; and it overwrites function,
 --    policy and trigger definitions with the ones recorded here, so regenerate
 --    before you re-run or you will roll a later fix backwards.
 --
@@ -1299,6 +1299,34 @@ ALTER TABLE public.subscriptions ALTER COLUMN status SET NOT NULL;
 ALTER TABLE public.subscriptions ALTER COLUMN started_at SET NOT NULL;
 ALTER TABLE public.subscriptions ALTER COLUMN created_at SET NOT NULL;
 
+CREATE TABLE IF NOT EXISTS public.teacher_class_events (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  classroom_id uuid NOT NULL,
+  teacher_id uuid NOT NULL,
+  date date NOT NULL,
+  end_date date,
+  kind text DEFAULT 'event'::text NOT NULL,
+  title text NOT NULL,
+  notes text,
+  created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS classroom_id uuid;
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS teacher_id uuid;
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS date date;
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS end_date date;
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS kind text DEFAULT 'event'::text;
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS title text;
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS notes text;
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.teacher_class_events ALTER COLUMN id SET NOT NULL;
+ALTER TABLE public.teacher_class_events ALTER COLUMN classroom_id SET NOT NULL;
+ALTER TABLE public.teacher_class_events ALTER COLUMN teacher_id SET NOT NULL;
+ALTER TABLE public.teacher_class_events ALTER COLUMN date SET NOT NULL;
+ALTER TABLE public.teacher_class_events ALTER COLUMN kind SET NOT NULL;
+ALTER TABLE public.teacher_class_events ALTER COLUMN title SET NOT NULL;
+ALTER TABLE public.teacher_class_events ALTER COLUMN created_at SET NOT NULL;
+
 CREATE TABLE IF NOT EXISTS public.teacher_guest_access (
   assignment_id uuid NOT NULL,
   mode text NOT NULL,
@@ -1833,6 +1861,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_class_events_pkey'
+                    AND conrelid = 'teacher_class_events'::regclass) THEN
+    ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_pkey PRIMARY KEY (id);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'teacher_guest_access_pkey'
                     AND conrelid = 'teacher_guest_access'::regclass) THEN
     ALTER TABLE teacher_guest_access ADD CONSTRAINT teacher_guest_access_pkey PRIMARY KEY (assignment_id);
@@ -2316,6 +2351,34 @@ DO $$ BEGIN
                   WHERE conname = 'students_username_notblank'
                     AND conrelid = 'students'::regclass) THEN
     ALTER TABLE students ADD CONSTRAINT students_username_notblank CHECK (((username IS NULL) OR (length(btrim(username)) >= 1)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_class_events_kind_chk'
+                    AND conrelid = 'teacher_class_events'::regclass) THEN
+    ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_kind_chk CHECK ((kind = ANY (ARRAY['exam'::text, 'due'::text, 'absent'::text, 'event'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_class_events_notes_len_chk'
+                    AND conrelid = 'teacher_class_events'::regclass) THEN
+    ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_notes_len_chk CHECK (((notes IS NULL) OR (char_length(notes) <= 500)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_class_events_span_chk'
+                    AND conrelid = 'teacher_class_events'::regclass) THEN
+    ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_span_chk CHECK (((end_date IS NULL) OR (end_date >= date)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_class_events_title_len_chk'
+                    AND conrelid = 'teacher_class_events'::regclass) THEN
+    ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_title_len_chk CHECK (((char_length(btrim(title)) >= 1) AND (char_length(btrim(title)) <= 120)));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2805,6 +2868,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_class_events_classroom_id_fkey'
+                    AND conrelid = 'teacher_class_events'::regclass) THEN
+    ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_classroom_id_fkey FOREIGN KEY (classroom_id) REFERENCES teacher_guest_classes(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'teacher_guest_access_assignment_id_fkey'
                     AND conrelid = 'teacher_guest_access'::regclass) THEN
     ALTER TABLE teacher_guest_access ADD CONSTRAINT teacher_guest_access_assignment_id_fkey FOREIGN KEY (assignment_id) REFERENCES guest_assignments(id) ON DELETE CASCADE;
@@ -2876,7 +2946,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 142 functions, verbatim from pg_get_functiondef().
+-- 143 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -5755,6 +5825,8 @@ DECLARE
   v_key    text;
   v_mats   jsonb;
   v_work   jsonb;
+  v_events jsonb;
+  v_sheets jsonb;
 BEGIN
   IF p_code IS NULL OR upper(btrim(p_code)) !~ '^[A-Z0-9]{10}$' THEN
     RETURN jsonb_build_object('ok', false, 'error', 'not_found');
@@ -5926,11 +5998,52 @@ BEGIN
           OR EXISTS (SELECT 1 FROM public.teacher_guest_roster r
                       WHERE r.assignment_id = a.id AND r.pupil_id::text = v_key));
 
+  -- ── The class calendar ──────────────────────────────────────────────────
+  -- Exams, hand-in dates, days the teacher is away, and anything else the
+  -- teacher wrote on this classroom's calendar. Read-only for the pupil; the
+  -- teacher writes through RLS on teacher_class_events. The last 60 days are
+  -- kept so a child can still see what they missed; nothing older is sent.
+  SELECT coalesce(jsonb_agg(jsonb_build_object(
+           'id',       e.id,
+           'date',     e.date,
+           'end_date', e.end_date,
+           'kind',     e.kind,
+           'title',    e.title,
+           'notes',    e.notes
+         ) ORDER BY e.date, e.created_at), '[]'::jsonb)
+    INTO v_events
+    FROM public.teacher_class_events e
+   WHERE e.classroom_id = c.id
+     AND coalesce(e.end_date, e.date) >= current_date - 60;
+
+  -- ── Worksheets set for this class ──────────────────────────────────────
+  -- physical_homework: a paper task the teacher uploaded (or just described)
+  -- with a deadline. Kept a fortnight past its deadline so a child can still
+  -- find one they missed; nothing older is sent. file_path is a storage key
+  -- for the Worker to sign per visit - it never reaches the browser.
+  SELECT coalesce(jsonb_agg(jsonb_build_object(
+           'id',          w.id,
+           'title',       w.title,
+           'subject',     w.subject,
+           'description', w.description,
+           'file_path',   w.file_path,
+           'file_name',   w.file_name,
+           'file_size',   w.file_size,
+           'expires_at',  w.expires_at,
+           'created_at',  w.created_at
+         ) ORDER BY w.expires_at), '[]'::jsonb)
+    INTO v_sheets
+    FROM public.physical_homework w
+   WHERE w.classroom_id = c.id
+     AND w.expires_at > now() - interval '14 days';
+
   RETURN jsonb_build_object('ok', true,
     'name', v_who,
     'classroom', jsonb_build_object('name', c.name, 'grade', c.grade),
     'materials', v_mats,
-    'assignments', v_work);
+    'assignments', v_work,
+    'events', v_events,
+    'worksheets', v_sheets);
 END;
 $function$;
 
@@ -8179,6 +8292,17 @@ BEGIN
 END;
 $function$;
 
+-- ── teacher_owns_guest_classroom(p_classroom uuid)
+CREATE OR REPLACE FUNCTION public.teacher_owns_guest_classroom(p_classroom uuid)
+ RETURNS boolean
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+  SELECT EXISTS (SELECT 1 FROM public.teacher_guest_classes c
+                  WHERE c.id = p_classroom AND c.teacher_id = auth.uid() AND c.deleted_at IS NULL);
+$function$;
+
 -- ── teacher_pupil_name_history(p_classroom_id uuid)
 CREATE OR REPLACE FUNCTION public.teacher_pupil_name_history(p_classroom_id uuid)
  RETURNS jsonb
@@ -8482,7 +8606,7 @@ ALTER TABLE public.forum_replies ALTER COLUMN author_student_id SET DEFAULT curr
 
 -- ═══ 6 · INDEXES ══════════════════════════════════════════════════════════════
 -- Indexes that back a constraint are omitted — §3 creates those with the
--- constraint itself. 77 standalone indexes.
+-- constraint itself. 78 standalone indexes.
 CREATE INDEX IF NOT EXISTS admin_actions_student_idx ON public.admin_actions USING btree (target_student, created_at DESC);
 CREATE INDEX IF NOT EXISTS admin_actions_user_idx ON public.admin_actions USING btree (target_user, created_at DESC);
 CREATE INDEX IF NOT EXISTS submissions_assignment_idx ON public.assignment_submissions USING btree (assignment_id);
@@ -8555,6 +8679,7 @@ CREATE INDEX IF NOT EXISTS student_sessions_student_idx ON public.student_sessio
 CREATE UNIQUE INDEX IF NOT EXISTS students_live_username_key ON public.students USING btree (family_id, username) WHERE (deleted_at IS NULL);
 CREATE INDEX IF NOT EXISTS subscriptions_plan_idx ON public.subscriptions USING btree (plan_id);
 CREATE INDEX IF NOT EXISTS subscriptions_user_status_idx ON public.subscriptions USING btree (user_id, status, started_at DESC);
+CREATE INDEX IF NOT EXISTS teacher_class_events_class_date_idx ON public.teacher_class_events USING btree (classroom_id, date);
 CREATE INDEX IF NOT EXISTS idx_tgc_deleted_at ON public.teacher_guest_classes USING btree (deleted_at) WHERE (deleted_at IS NOT NULL);
 CREATE UNIQUE INDEX IF NOT EXISTS teacher_guest_classes_materials_code_uq ON public.teacher_guest_classes USING btree (materials_code) WHERE (materials_code IS NOT NULL);
 CREATE UNIQUE INDEX IF NOT EXISTS tgc_teacher_name_unique ON public.teacher_guest_classes USING btree (teacher_id, name) WHERE (deleted_at IS NULL);
@@ -8627,7 +8752,7 @@ CREATE TRIGGER teacher_guest_pupils_name_log AFTER INSERT OR UPDATE OF name ON p
 -- ⚠ The forum is adults-only IN THE DATABASE (auth.uid() IS NOT NULL), not by
 --   hiding a button. A child session is anon and is excluded by construction.
 --
--- RLS is enabled on all 58 public tables.
+-- RLS is enabled on all 59 public tables.
 
 ALTER TABLE public.admin_actions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.assignment_submissions ENABLE ROW LEVEL SECURITY;
@@ -8678,6 +8803,7 @@ ALTER TABLE public.student_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.study_schedules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.teacher_class_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_access ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_archives ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.teacher_guest_class_throttle ENABLE ROW LEVEL SECURITY;
@@ -9180,6 +9306,14 @@ CREATE POLICY subs_write ON public.subscriptions
   USING (is_admin())
   WITH CHECK (is_admin());
 
+-- ── teacher_class_events
+DROP POLICY IF EXISTS class_events_teacher ON public.teacher_class_events;
+CREATE POLICY class_events_teacher ON public.teacher_class_events
+  FOR ALL
+  TO authenticated
+  USING (((teacher_id = auth.uid()) AND teacher_guest_authorized() AND teacher_owns_guest_classroom(classroom_id)))
+  WITH CHECK (((teacher_id = auth.uid()) AND teacher_guest_authorized() AND teacher_owns_guest_classroom(classroom_id)));
+
 -- ── teacher_guest_devices
 DROP POLICY IF EXISTS "teachers read class devices" ON public.teacher_guest_devices;
 CREATE POLICY "teachers read class devices" ON public.teacher_guest_devices
@@ -9325,6 +9459,9 @@ GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.subscriptions TO anon;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.subscriptions TO authenticated;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.subscriptions TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_class_events TO anon;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_class_events TO authenticated;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_class_events TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_access TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_archives TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.teacher_guest_class_throttle TO service_role;
@@ -9502,6 +9639,7 @@ GRANT EXECUTE ON FUNCTION public.teacher_guest_open(p_code text, p_name text, p_
 GRANT EXECUTE ON FUNCTION public.teacher_guest_results(p_assignment_id uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_submission_guard() TO service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_material_completions(p_classroom_id uuid) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.teacher_owns_guest_classroom(p_classroom uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_pupil_name_history(p_classroom_id uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.verify_classroom_pin(p_slug text, p_pin text, p_ip_hash text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.verify_student_pin(p_username text, p_pin text, p_family_name text) TO anon, authenticated, service_role;

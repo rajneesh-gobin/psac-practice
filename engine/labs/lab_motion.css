@@ -17,13 +17,18 @@
 
 .lab-motion-controls { display: flex; flex-direction: column; gap: 8px; }
 
-/* Ramp height: lower · value · raise */
-.lab-motion-hrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr); gap: 8px; align-items: stretch; }
-.lab-motion-hbtn { min-height: 48px; padding: 0 6px; font-size: 0.85rem; }
+/* Ramp height: the value, then one chip per height (an experiment step can
+   ask "which height?" and glow every option; focus() hides the rest). */
+.lab-motion-hrow { display: grid; grid-template-columns: minmax(84px, auto) minmax(0, 1fr); gap: 8px; align-items: stretch; }
 .lab-motion-hval { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-  border: 1px solid var(--lab-rule); border-radius: 12px; background: var(--lab-surface); padding: 4px; line-height: 1.2; }
+  border: 1px solid var(--lab-rule); border-radius: 12px; background: var(--lab-surface); padding: 4px 6px; line-height: 1.2; }
 .lab-motion-hval b { font-size: 1rem; font-variant-numeric: tabular-nums; }
 .lab-motion-hval small { font-size: 0.68rem; color: var(--lab-muted); }
+.lab-motion-heights { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-motion-heights button { flex: 1 1 44px; min-width: 44px; min-height: 44px; padding: 4px 6px; border: 1px solid var(--lab-rule); border-radius: 10px;
+  background: var(--lab-surface-2); color: var(--lab-muted); font-weight: 700; font-size: 0.8rem; font-variant-numeric: tabular-nums; cursor: pointer; white-space: nowrap; }
+.lab-motion-heights button[aria-pressed="true"] { background: var(--lab-accent); color: var(--lab-accent-ink); border-color: var(--lab-accent); }
+.lab-motion-heights button[hidden] { display: none; }
 
 /* Option rows: the label above, the choices sharing the full width. */
 .lab-motion-optrow { display: flex; flex-direction: column; gap: 4px; }

@@ -10,6 +10,10 @@
 //    lines (N→S outside), plotting compass, soft iron for electromagnets,
 //    credit-card hazard, induced magnetism.
 //  ⚠ Colours are always named in words (colour-blind pupils).
+//  ⚠ EXPERIMENTS (LAB_SPEC.md §10) are what a child opens on. Their tokens are
+//    the bench's own: drag:<obj>, sort:<obj>:<group>, poles:<AB>, distance:<v>,
+//    filings:on, compass:place, induced:on, induced:touch|remove:<nail|steel>,
+//    drop:magnet. scripts/test-labs-magnets-data.js replays every one.
 // ══════════════════════════════════════════════
 const LabMagnetsData = (() => {
   'use strict';
@@ -216,9 +220,7 @@ const LabMagnetsData = (() => {
       learn: 'Dropping, hitting or heating a magnet disrupts the alignment of its magnetic domains and weakens or destroys its magnetism.' },
   ];
 
-  // ── Guides ─────────────────────────────────────
-  // ⚠ btn on every step is ALWAYS 'Skip this step →'. _guideDo() never executes
-  //   the action — it only advances the step (LAB_SPEC §8, "actual interaction").
+  // ── Guides (Explore only; a step advances on the bench action named by `on`) ──
   const GUIDES = [
     // Grade 4
     {
@@ -267,11 +269,11 @@ const LabMagnetsData = (() => {
       title: 'Poles: attract and repel',
       blurb: 'Explore what happens when you bring magnets together with different poles facing.',
       lesson: 'Unlike poles attract (N–S). Like poles repel (N–N or S–S). Force is strongest when poles are closest.',
+      // Only magnet B flips, so the pairs a child can make are N-S and N-N.
       steps: [
-        { on: 'poles:NS',      say: 'Bring magnet A\'s N-pole toward magnet B\'s S-pole — what happens?' },
-        { on: 'poles:NN',      say: 'Flip magnet B so both N-poles face each other — what do you feel?' },
-        { on: 'poles:SS',      say: 'Now try two S-poles facing each other.' },
-        { on: 'distance:close', say: 'Move the magnets very close — how does the force change?' },
+        { on: 'poles:NN',       say: 'Tap ↔ Flip magnet B so both N poles face each other — what happens?' },
+        { on: 'poles:NS',       say: 'Tap ↔ Flip magnet B again so N faces S — what happens now?' },
+        { on: 'distance:close', say: 'Tap 📏 Move close — how does the force change?' },
       ],
     },
     {
@@ -280,10 +282,10 @@ const LabMagnetsData = (() => {
       blurb: 'Use iron filings to see the invisible magnetic field around the bar magnet.',
       lesson: 'Field lines show the direction and strength of a magnetic field. They run from north to south outside the magnet.',
       steps: [
-        { on: 'filings:on',    say: 'Tap "Iron filings" to reveal the invisible magnetic field!' },
-        { on: 'compass:place', say: 'Place a plotting compass in the field — which way does it point?' },
-        { on: 'poles:NS',      say: 'Bring a second magnet close with unlike poles — watch the field change.' },
-        { on: 'poles:NN',      say: 'Now try like poles — find where the field cancels out.' },
+        { on: 'filings:on',    say: 'Tap ✨ Iron filings to reveal the invisible magnetic field!' },
+        { on: 'compass:place', say: 'Tap 🧭 Plotting compass to place one in the field — which way does it point?' },
+        { on: 'poles:NN',      say: 'Tap ↔ Flip magnet B so like poles face — find where the lines bend away from each other.' },
+        { on: 'poles:NS',      say: 'Tap ↔ Flip magnet B back to unlike poles — watch the lines cross the gap again.' },
       ],
     },
     {
@@ -292,10 +294,10 @@ const LabMagnetsData = (() => {
       blurb: 'Discover how iron and steel become magnets when they touch one.',
       lesson: 'Soft iron gains magnetism by induction — it is magnetic while in contact with a magnet, then loses it. Hard steel retains magnetism longer.',
       steps: [
-        { on: 'induced:on',         say: 'Tap "Induced mode" to set up the experiment.' },
-        { on: 'induced:touch:nail', say: 'Tap the soft iron nail to touch the magnet — what happens to the paper clips?' },
-        { on: 'induced:remove:nail', say: 'Tap the nail to remove it from the magnet — does it keep attracting the clips?' },
-        { on: 'induced:touch:steel', say: 'Touch the steel nail to the magnet, then remove it — what is different?' },
+        { on: 'induced:on',          say: 'Tap 🪛 Induced mode to set up the experiment.' },
+        { on: 'induced:touch:nail',  say: 'Tap ↓ Touch soft iron nail to magnet — what happens to the paper clip?' },
+        { on: 'induced:remove:nail', say: 'Tap ↑ Remove soft iron nail — does it keep holding the clip?' },
+        { on: 'induced:touch:steel', say: 'Tap ↓ Touch steel nail to magnet, then remove it — what is different?' },
       ],
     },
   ];
@@ -518,16 +520,185 @@ const LabMagnetsData = (() => {
     { text: 'Induced magnetism: a piece of iron near a magnet becomes a temporary magnet.', grades: D8 },
   ];
 
+  // ── The model (the bench draws it; the tests replay it) ──────────────
+  const objById = id => OBJECTS.find(o => o.id === id) || null;
+  const isMagnetic = id => !!(objById(id) && objById(id).magnetic);
+  // A and B name the poles that FACE each other. Like poles repel.
+  const force = (a, b) => (a === b ? 'repel' : 'attract');
+  // A plotting compass just below the gap. Its N end follows the field line:
+  // N→S along the gap when the poles differ; away from two N poles (down);
+  // toward two S poles (up).
+  const needle = (a, b) => {
+    if (a !== b) return { dir: a === 'N' ? 'right' : 'left', words: `toward B's ${b} pole, away from A's ${a} pole` };
+    return a === 'N' ? { dir: 'down', words: 'down, away from both N poles' } : { dir: 'up', words: 'up, toward both S poles' };
+  };
+  // Notebook lines, in words a child wrote.
+  const NOTE = {
+    test: o => `${o.label}: ${o.magnetic ? 'stuck to the magnet.' : 'fell. Not magnetic.'}`,
+    sort: (o, grp) => `${o.label} → ${grp === 'magnetic' ? 'Magnetic' : 'Non-magnetic'} group.`,
+    poles: (a, b) => `${a} facing ${b}: ${force(a, b)} - they ${force(a, b) === 'repel' ? 'push apart' : 'pull together'}.`,
+    distance: close => (close ? 'Moved close: bigger arrows, a stronger force.' : 'Moved apart: smaller arrows, a weaker force.'),
+    filings: (a, b) => (a === b ? `Iron filings, ${a} facing ${b}: the lines in the gap bend away from each other.` : 'Iron filings: curved lines from the N pole to the S pole.'),
+    compass: (a, b) => `Compass N end points ${needle(a, b).words}.`,
+    induced: (kind, on) => {
+      const name = kind === 'nail' ? 'Soft iron nail' : 'Steel nail';
+      if (on) return `${name} on the magnet: it holds a paper clip.`;
+      return kind === 'nail' ? 'Soft iron nail off the magnet: the clip drops.' : 'Steel nail off the magnet: it still holds the clip.';
+    },
+    drop: () => 'Dropped the magnet: it is weaker now.',
+  };
+
+  // ── Experiments (lab_experiment.js, LAB_SPEC.md §10) ──────────────────
+  // One question a child can say back, the bench already set up, a tap to
+  // predict, at most five decisions or observations, what they saw, two or
+  // three of the mission questions asked WITH the notebook beside them, and
+  // the exam point. `check` refs are "<mission id>:<quiz index>". `setup`
+  // tokens are applied silently before the Aim; `steps` are bench tokens the
+  // child performs (an `ask` step lists every option that glows and what a
+  // wrong one teaches). Every See text is replayed by the data test.
+  const EXPERIMENTS = [
+    // Grade 4 - g4sci-materials: "Magnets attract iron and steel."
+    { id: 'which_pull', grades: D4, chapter: 'g4sci-materials', icon: '🧲',
+      title: 'Which things will the magnet pull?',
+      aim: 'A horseshoe magnet and eight things on the shelf. Some will jump to the magnet. Which ones?',
+      setup: [],
+      predict: { q: 'Which of these will the magnet pull?', answer: 'nail',
+        options: [{ id: 'nail', label: 'Iron nail', icon: '📌' }, { id: 'coin', label: 'Copper coin', icon: '🪙' }, { id: 'marble', label: 'Glass marble', icon: '🔵' }, { id: 'all', label: 'All of them' }] },
+      steps: [
+        { ask: 'Which one will the magnet pull? Tap it.', on: 'drag:nail', options: ['drag:nail', 'drag:coin', 'drag:marble'],
+          wrong: { 'drag:coin': 'A coin is metal, but it is copper. Copper is not magnetic, so the magnet cannot pull it.',
+                   'drag:marble': 'Glass is not magnetic. The magnet cannot pull a marble.' } },
+        { ask: 'Find one more thing the magnet pulls.', on: 'drag:clip', options: ['drag:clip', 'drag:foil', 'drag:ruler'],
+          wrong: { 'drag:foil': 'Foil is metal, but it is aluminium. Aluminium is not magnetic.',
+                   'drag:ruler': 'Plastic is not magnetic. The magnet cannot pull the ruler.' } },
+        { on: 'drag:block', say: 'Now tap the Wooden block. Watch where it goes.' },
+      ],
+      see: { saw: 'The iron nail and the steel paper clip stuck to the magnet. The wooden block fell.',
+             learn: 'A magnet pulls things made of iron or steel. We call them magnetic materials. Wood is not magnetic.' },
+      check: ['g4_sort_mission:0', 'g4_sort_mission:1', 'g4_sort_mission:3'],
+      exam: 'In the exam: "Which object would be ATTRACTED by a magnet?" The steel nail - steel has iron in it.' },
+    { id: 'all_metals', grades: D4, chapter: 'g4sci-materials', icon: '🪙',
+      title: 'Does a magnet pull every metal?',
+      aim: 'The iron nail is stuck to the magnet. The copper coin and the aluminium foil are metal too. Will they stick?',
+      setup: ['drag:nail'],
+      predict: { q: 'Will the magnet pull the copper coin and the foil?', answer: 'no',
+        options: [{ id: 'yes', label: 'Yes, they are metal' }, { id: 'no', label: 'No, only iron and steel' }, { id: 'coin', label: 'Only the coin' }] },
+      steps: [
+        { ask: 'Which metal thing will the magnet pull?', on: 'drag:clip', options: ['drag:clip', 'drag:coin', 'drag:foil'],
+          wrong: { 'drag:coin': 'Copper is a metal, but it is not iron. A magnet does not pull copper.',
+                   'drag:foil': 'Aluminium is a metal, but it is not iron. A magnet does not pull aluminium.' } },
+        { on: 'drag:coin', say: 'Tap the Copper coin. Does it stick?' },
+        { on: 'drag:foil', say: 'Tap the Aluminium foil. Does it stick?' },
+      ],
+      see: { saw: 'The steel paper clip stuck. The copper coin and the aluminium foil fell. They are metal, but not magnetic.',
+             learn: 'Not every metal is magnetic. A magnet pulls iron and steel only. Copper and aluminium are metals it does not pull.' },
+      check: ['g4_rules_mission:2', 'g4_sort_mission:2', 'g4_rules_mission:0'],
+      exam: 'In the exam: "Which of these would NOT be attracted to a magnet?" The copper coin. Only iron and steel are magnetic.' },
+    { id: 'sort_groups', grades: D4, chapter: 'g4sci-materials', icon: '📋',
+      title: 'Which group does each thing go in?',
+      aim: 'You tested all eight things. Now sort five of them: Magnetic or Non-magnetic. Which group will be bigger?',
+      setup: ['drag:nail', 'drag:clip', 'drag:coin', 'drag:foil', 'drag:block', 'drag:ruler', 'drag:marble', 'drag:rubber'],
+      predict: { q: 'Which group will have more things in it?', answer: 'non',
+        options: [{ id: 'mag', label: 'Magnetic', icon: '🧲' }, { id: 'non', label: 'Non-magnetic', icon: '❌' }, { id: 'same', label: 'The same number' }] },
+      steps: [
+        { ask: 'The iron nail stuck. Which group?', on: 'sort:nail:magnetic', options: ['sort:nail:magnetic', 'sort:nail:nonmagnetic'],
+          wrong: { 'sort:nail:nonmagnetic': 'The iron nail stuck to the magnet. Iron is magnetic, so it goes in the Magnetic group.' } },
+        { ask: 'The copper coin fell. Which group?', on: 'sort:coin:nonmagnetic', options: ['sort:coin:magnetic', 'sort:coin:nonmagnetic'],
+          wrong: { 'sort:coin:magnetic': 'The coin fell. Copper is metal, but it is not magnetic.' } },
+        { ask: 'The steel paper clip stuck. Which group?', on: 'sort:clip:magnetic', options: ['sort:clip:magnetic', 'sort:clip:nonmagnetic'],
+          wrong: { 'sort:clip:nonmagnetic': 'The clip stuck. Steel has iron in it, so it is magnetic.' } },
+        { ask: 'The glass marble fell. Which group?', on: 'sort:marble:nonmagnetic', options: ['sort:marble:magnetic', 'sort:marble:nonmagnetic'],
+          wrong: { 'sort:marble:magnetic': 'The marble fell. Glass is not magnetic.' } },
+        { ask: 'The wooden block fell. Which group?', on: 'sort:block:nonmagnetic', options: ['sort:block:magnetic', 'sort:block:nonmagnetic'],
+          wrong: { 'sort:block:magnetic': 'The block fell. Wood is not magnetic.' } },
+      ],
+      see: { saw: 'Magnetic: the iron nail and the steel paper clip. Non-magnetic: the copper coin, the glass marble and the wooden block. The Non-magnetic group is bigger.',
+             learn: 'Only iron and steel are magnetic. Most things - wood, glass, plastic, rubber, copper, aluminium - are non-magnetic.' },
+      check: ['g4_sort_mission:3', 'g4_sort_mission:4', 'g4_rules_mission:1'],
+      exam: 'In the exam you may be asked to pick the magnetic object from a list. Look for iron or steel.' },
+
+    // Grade 8 - g8s-magnetism: poles and fields, magnetic materials, uses.
+    { id: 'like_poles', grades: D8, chapter: 'g8s-magnetism', icon: '↔️',
+      title: 'Do like poles push or pull?',
+      aim: 'Magnet A\'s N pole faces magnet B\'s S pole. Flip B so that N faces N. Will they push apart or pull together?',
+      setup: [],
+      predict: { q: 'N faces N. What happens?', answer: 'repel',
+        options: [{ id: 'repel', label: 'They push apart', sub: 'repel' }, { id: 'attract', label: 'They pull together', sub: 'attract' }, { id: 'none', label: 'Nothing happens' }] },
+      steps: [
+        { ask: 'N faces S now. Make N face N. Which button?', on: 'poles:NN', options: ['poles:NN', 'distance:close'],
+          wrong: { 'distance:close': 'Move close only brings the magnets nearer. N still faces S. Flip magnet B to turn its poles round.' } },
+        { on: 'distance:close', say: 'Tap 📏 Move close. Watch the arrows.' },
+        { on: 'poles:NS', say: 'Tap ↔ Flip magnet B again, so N faces S. Watch the arrows.' },
+      ],
+      see: { saw: 'N facing N: the arrows pointed away from each other - repel. Closer, the arrows grew - a stronger push. N facing S again: the arrows pointed together - attract.',
+             learn: 'Like poles (N-N or S-S) repel. Unlike poles (N-S) attract. The force is stronger when the magnets are closer.' },
+      check: ['g8_poles_mission:0', 'g8_poles_mission:1',
+        { q: 'The two magnets are moved closer together. What happens to the force between them?',
+          options: ['It gets stronger', 'It gets weaker', 'It stays the same', 'It changes from repel to attract'],
+          why: 'A magnetic force is strongest close to the poles and weakens with distance. Closer means stronger - the arrows grew.' }],
+      exam: 'Exam question: "What happens when two like poles of magnets are brought together?" They repel each other.' },
+    { id: 'field_shape', grades: D8, chapter: 'g8s-magnetism', icon: '✨',
+      title: 'What shape is the field around a magnet?',
+      aim: 'A magnetic field is invisible. Iron filings are tiny bits of iron. Sprinkle them and the field shows itself.',
+      setup: [],
+      predict: { q: 'What pattern will the iron filings make?', answer: 'curves',
+        options: [{ id: 'curves', label: 'Curved lines from N to S' }, { id: 'straight', label: 'Straight lines all over' }, { id: 'random', label: 'No pattern at all' }] },
+      steps: [
+        { ask: 'How do you make the field show itself?', on: 'filings:on', options: ['filings:on', 'drop:magnet'],
+          wrong: { 'drop:magnet': 'Dropping a magnet only weakens it - it shows nothing. Iron filings line up along the field lines.' } },
+        { on: 'compass:place', say: 'Tap 🧭 Plotting compass. Its N end points along a field line.' },
+        { on: 'poles:NN', say: 'Tap ↔ Flip magnet B. N faces N: watch the lines in the gap.' },
+      ],
+      see: { saw: 'The iron filings made curved lines from A\'s N pole to B\'s S pole, closest together at the poles. The compass N end pointed along them. With N facing N, the lines in the gap bent away from each other.',
+             learn: 'Field lines leave a N pole and enter a S pole. Where the lines are closest together the field is strongest - at the poles.' },
+      check: ['g8_fields_mission:1', 'g8_fields_mission:2', 'g8_poles_mission:2'],
+      exam: 'Exam question: "Outside a magnet, field lines are always drawn pointing away from the north pole and towards the south pole." Use that to tell which end is N.' },
+    { id: 'compass_points', grades: D8, chapter: 'g8s-magnetism', icon: '🧭',
+      title: 'Which way does a compass point?',
+      aim: 'A plotting compass is a tiny magnet on a pivot. Put it between A\'s N pole and B\'s S pole. Which way will its N end point?',
+      setup: [],
+      predict: { q: 'Which way will the compass N end point?', answer: 'toB',
+        options: [{ id: 'toB', label: 'Toward B\'s S pole', sub: 'away from A\'s N' }, { id: 'toA', label: 'Toward A\'s N pole' }, { id: 'spin', label: 'It keeps spinning' }] },
+      steps: [
+        { ask: 'Which tool shows the direction of the field at one spot?', on: 'compass:place', options: ['compass:place', 'filings:on'],
+          wrong: { 'filings:on': 'Iron filings show the shape of the whole field, but a filing has no N end. Only a compass shows direction.' } },
+        { on: 'poles:NN', say: 'Tap ↔ Flip magnet B so N faces N. Watch the needle turn.' },
+        { on: 'poles:NS', say: 'Tap ↔ Flip magnet B back. Watch the needle swing round.' },
+      ],
+      see: { saw: 'Between N and S, the compass N end pointed toward B\'s S pole, away from A\'s N. With N facing N it swung to point down, away from both N poles. Flipped back, it pointed at B\'s S pole again.',
+             learn: 'A compass N end points along the field line: away from a N pole and toward a S pole. Moving a plotting compass around a magnet plots its field.' },
+      check: ['g8_poles_mission:4', 'g8_poles_mission:2'],
+      exam: 'Exam question: "Name the small instrument, containing a tiny pivoted magnet, that is moved around a bar magnet to plot the direction of its field." A plotting compass.' },
+    { id: 'keeps_magnetism', grades: D8, chapter: 'g8s-magnetism', icon: '🪛',
+      title: 'Which nail stays a magnet?',
+      aim: 'A soft iron nail and a steel nail. Each touches the magnet and picks up a paper clip. Take them off - which one keeps its clip?',
+      setup: ['induced:on'],
+      predict: { q: 'Off the magnet, which nail still holds its clip?', answer: 'steel',
+        options: [{ id: 'iron', label: 'The soft iron nail' }, { id: 'steel', label: 'The steel nail' }, { id: 'both', label: 'Both nails' }, { id: 'none', label: 'Neither' }] },
+      steps: [
+        { on: 'induced:touch:nail', say: 'Tap ↓ Touch soft iron nail to magnet. Watch for a clip.' },
+        { on: 'induced:remove:nail', say: 'Tap ↑ Remove soft iron nail. Does the clip stay?' },
+        { on: 'induced:touch:steel', say: 'Tap ↓ Touch steel nail to magnet. Watch for a clip.' },
+        { ask: 'The steel nail is on the magnet. Does it KEEP its magnetism? What is the test?', on: 'induced:remove:steel', options: ['induced:remove:steel', 'induced:touch:nail'],
+          wrong: { 'induced:touch:nail': 'Putting the iron nail back on shows nothing new. Take the steel nail OFF the magnet - that is the test.' } },
+      ],
+      see: { saw: 'On the magnet, both nails held a paper clip. Off the magnet, the soft iron nail dropped its clip. The steel nail kept it.',
+             learn: 'Touching a magnet makes iron or steel into a magnet too - induced magnetism. Soft iron loses it at once; steel keeps it.' },
+      check: ['g8_fields_mission:3', 'g8_poles_mission:3', 'g8_fields_mission:4'],
+      exam: 'Exam question: "The core of an electromagnet in a scrapyard crane is made of soft iron rather than steel. Why?" It loses its magnetism as soon as the current stops.' },
+  ];
+
   return {
     GRADES, D4, D8, D48,
     forGrade,
-    OBJECTS,
+    OBJECTS, objById, isMagnetic, force, needle, NOTE,
     HAZARDS,
     RESULTS,
     DISCOVERIES,
     GUIDES,
     MISSIONS,
     FACTS,
+    EXPERIMENTS,
   };
 })();
 if (typeof window !== 'undefined') window.LabMagnetsData = LabMagnetsData;

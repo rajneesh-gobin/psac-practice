@@ -144,6 +144,14 @@ exports.handler = async (event) => {
     };
   }));
 
+  const sheets = await Promise.all((Array.isArray(out.worksheets) ? out.worksheets : []).map(async (w) => {
+    let href = null;
+    if (w.file_path) { const { data: u } = await sb.storage.from(BUCKET).createSignedUrl(w.file_path, 3600); href = u?.signedUrl || null; }
+    return { id: w.id, title: w.title, subject: w.subject || null, description: w.description || null,
+      file_name: w.file_name || null, file_size: w.file_size || null,
+      expires_at: w.expires_at || null, created_at: w.created_at || null, url: href };
+  }));
+
   return {
     statusCode: 200,
     headers: HEADERS,
@@ -152,9 +160,11 @@ exports.handler = async (event) => {
       name: out.name || '',
       classroom: out.classroom || null,
       materials,
+      worksheets: sheets,
       // Already safe: the RPC returns codes, titles and this pupil's own
       // done-flag, never question ids, answers or anyone else's marks.
       assignments: Array.isArray(out.assignments) ? out.assignments : [],
+      events: Array.isArray(out.events) ? out.events : [],
     }),
   };
 };

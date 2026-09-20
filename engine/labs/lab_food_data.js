@@ -4,7 +4,7 @@
 //
 //  ⚠ THE SCIENCE LIVES HERE, NOT IN THE ANIMATION. Every food, every reagent
 //    colour, every "which food gives which result", every time, hazard, fact,
-//    guide, discovery, mission and quiz question comes from this file.
+//    guide, discovery, mission, experiment and quiz question comes from this file.
 //    lab_food.js only moves time along and draws it. If a tube shows the wrong
 //    colour, fix it HERE.
 //  ⚠ Grounded ONLY in the app\'s Grade 8 pack (subjects/grade8-science):
@@ -54,6 +54,10 @@ const LabFoodData = (() => {
                 meta: 'The CONTROL - no nutrients', rich: 'nothing: it is the control' },
     cornflour:{ name: 'Cornflour', short: 'cornflour', swatch: '#F3F1EA', starch: 3, sugar: 0, protein: 0, fat: 0,
                 meta: 'White powder, stirred into water', rich: 'starch (a carbohydrate)' },
+    // Everyday bread: mostly starch, with the little sugar and protein a real
+    // loaf gives (Benedict\'s green, Biuret a pale lilac) and no grease spot.
+    bread:    { name: 'Bread', short: 'bread', swatch: '#EAD9B0', starch: 3, sugar: 1, protein: 1, fat: 0,
+                meta: 'A small piece, crumbled into water', rich: 'starch, with a little sugar and protein' },
     glucose:  { name: 'Glucose solution', short: 'glucose', swatch: '#E4EEF0', starch: 0, sugar: 4, protein: 0, fat: 0,
                 meta: 'A sugar dissolved in water', rich: 'reducing sugar (a carbohydrate)' },
     sucrose:  { name: 'Table sugar solution', short: 'table sugar', swatch: '#E8EEF0', starch: 0, sugar: 0, protein: 0, fat: 0,
@@ -68,7 +72,7 @@ const LabFoodData = (() => {
     mystery:  { name: 'Mystery powder X', short: 'powder X', swatch: '#F1EEE4', starch: 3, sugar: 4, protein: 0, fat: 0,
                 meta: 'What is in it? Test it and see', rich: 'starch and reducing sugar', missionOnly: 'mystery' },
   };
-  const SHELF_FOODS = ['cornflour', 'glucose', 'gelatine', 'oil', 'milk', 'sucrose', 'water'];
+  const SHELF_FOODS = ['bread', 'cornflour', 'glucose', 'gelatine', 'oil', 'milk', 'sucrose', 'water'];
 
   const NUTRIENTS = { starch: 'starch', sugar: 'reducing sugar', protein: 'protein', fat: 'fat' };
 
@@ -441,6 +445,129 @@ const LabFoodData = (() => {
       ] },
   ];
 
+  // ── Experiments (lab_experiment.js, LAB_SPEC §10) ──
+  // Aim → Predict → Do → See → Check → Done. `setup` tokens are applied
+  // silently by LabFood.experiment.apply() before the Aim, so the picture is
+  // already set up (a wait token there runs the clock until it is met). A
+  // step's `say` names the control it points at - the shelf item's name, the
+  // tool's label, the tube number; a wait (heated / developed / dry) glows the
+  // tube being watched. A `wrong` option is only heard: the bench does nothing
+  // with it (no reagent goes in, no hazard fires) and the runner's card
+  // explains. Check refs are "<mission id>:<quiz index>" into MISSIONS[].quiz
+  // or an inline { q, options, why } whose FIRST option is the answer.
+  const EXPERIMENTS = [
+    { id: 'bread_starch', grades: D8, chapter: 'g8s-food', icon: '🍞',
+      title: 'Does bread contain starch?',
+      aim: 'Tube 1 has a little bread in water. Tube 2 has water only - the control. Iodine solution will tell us.',
+      setup: ['goggles', 'slot:1', 'food:bread', 'rinse', 'slot:2', 'food:water', 'test:iodine', 'slot:1'],
+      predict: { q: 'Does bread contain starch?', answer: 'yes',
+        options: [{ id: 'yes', label: 'Yes, a lot' }, { id: 'no', label: 'No, none' }, { id: 'bit', label: 'Only a trace' }] },
+      steps: [
+        { on: 'test:iodine', say: 'Tap Iodine solution: a few orange-brown drops into the bread in tube 1.' },
+        { on: 'read',        say: 'Look at tube 1. Tap 🔎 Read result to write the colour down.' },
+        { ask: 'Now compare. Which tube is the control - the fair comparison?', on: 'slot:2', options: ['slot:2', 'slot:3'],
+          wrong: { 'slot:3': 'Tube 3 is empty. A control is water with the same iodine drops, treated the same way - that is tube 2.' } },
+        { on: 'read',        say: 'Tap 🔎 Read result for tube 2. Did the water change colour?' },
+      ],
+      see: { saw: 'Tube 1 (bread): the iodine turned blue-black. Tube 2 (water): it stayed orange-brown.',
+             learn: 'Blue-black with iodine solution means starch. Bread is full of starch. The water control shows what "no starch" looks like, so the change in tube 1 was real.' },
+      check: ['name_it:0', 'mystery:1', 'name_it:4'],
+      exam: 'Iodine solution: orange-brown → blue-black shows starch. Always test a control tube of water in the same way.' },
+    { id: 'milk_sugar', grades: D8, chapter: 'g8s-food', icon: '🥛',
+      title: 'Is there sugar in milk?',
+      aim: 'Tube 1 has milk. Tube 2 is the control: water and Benedict\'s solution, already heated and read. Now test the milk.',
+      setup: ['goggles', 'slot:2', 'food:water', 'test:benedicts', 'bath', 'heated', 'read', 'rinse', 'slot:1', 'food:milk'],
+      predict: { q: 'Is there sugar in milk?', answer: 'yes',
+        options: [{ id: 'yes', label: 'Yes, milk has sugar' }, { id: 'no', label: 'No, milk is not sweet' }, { id: 'bit', label: 'Only a trace' }] },
+      steps: [
+        { ask: 'How do you find out if the milk has sugar in it?', on: 'test:benedicts', options: ['test:benedicts', 'taste'],
+          wrong: { taste: 'Never taste anything in the lab, even a food. Benches and glassware carry chemicals such as iodine and sodium hydroxide.' } },
+        { ask: 'Benedict\'s solution only works hot. How do you heat tube 1?', on: 'bath', options: ['bath', 'flame'],
+          wrong: { flame: 'Never heat a test tube straight in the flame: the liquid boils all at once and spits out. Use the water bath.' } },
+        { on: 'heated', say: 'Watch tube 1 in the bath. Blue, green, yellow, orange… Wait until the colour stops changing.' },
+        { on: 'read',   say: 'Tap 🔎 Read result for tube 1. Then compare with the water in tube 2.' },
+      ],
+      see: { saw: 'Heated with Benedict\'s, the milk climbed from blue to orange. The water control stayed blue.',
+             learn: 'Milk contains a reducing sugar called lactose. Benedict\'s climbs blue → green → yellow → orange → brick-red: the further it climbs, the more sugar. It only works hot - in a water bath, never in the flame.' },
+      check: ['name_it:2', 'mystery:2',
+        { q: 'Why must you never taste the milk to check for sugar in the lab?',
+          options: ['Lab benches and glassware carry chemicals, so the food may be contaminated', 'Milk goes off quickly in a warm lab', 'Tasting would change the Benedict\'s colour', 'Sugar has no taste once it is dissolved'],
+          why: 'Iodine, copper sulfate and sodium hydroxide are used on the same bench. Nothing in a lab is ever tasted - a food test finds the sugar instead.' }],
+      exam: 'Benedict\'s test: heat the food with Benedict\'s solution in a water bath. Blue → brick-red shows reducing sugar; unheated, the tube stays blue.' },
+    { id: 'gelatine_protein', grades: D8, chapter: 'g8s-food', icon: '🟣',
+      title: 'Is there protein in gelatine?',
+      aim: 'Tube 1 has gelatine - the powder that sets jelly. Biuret solution finds protein. It is corrosive, so think before you start.',
+      setup: ['slot:1', 'food:gelatine'],
+      predict: { q: 'Is there protein in gelatine?', answer: 'yes',
+        options: [{ id: 'yes', label: 'Yes, it is a protein' }, { id: 'no', label: 'No, it is a sugar' }, { id: 'fat', label: 'No, it is a fat' }] },
+      steps: [
+        { ask: 'Biuret solution is corrosive. What goes on before it comes out?', on: 'goggles', options: ['goggles', 'test:biuret'],
+          wrong: { 'test:biuret': 'Not without goggles. Biuret solution contains sodium hydroxide, which is corrosive: a splash can damage an eye for good.' } },
+        { on: 'test:biuret', say: 'Goggles on. Now tap Biuret solution to add it to the gelatine in tube 1.' },
+        { on: 'developed',   say: 'Watch tube 1 for a few minutes. Blue… lilac… what next?' },
+        { on: 'read',        say: 'Tap 🔎 Read result. What colour is tube 1 now?' },
+      ],
+      see: { saw: 'Over a few minutes the blue Biuret solution in tube 1 turned lilac, then purple.',
+             learn: 'Purple with Biuret solution means protein: gelatine is a protein. Biuret is corrosive, so goggles go on first - and the colour needs a few minutes to come through.' },
+      check: ['name_it:1',
+        { q: 'Why must goggles go on before Biuret solution is used?',
+          options: ['It is corrosive and a splash can damage the eyes', 'It is flammable and could catch fire', 'It gets very hot as it changes colour', 'It gives off a poisonous gas'],
+          why: 'Biuret solution contains sodium hydroxide, which is corrosive. Goggles protect the eyes from a splash.' },
+        { q: 'Why wait a few minutes before reading the Biuret test?',
+          options: ['The purple takes time to come through', 'The solution must cool down first', 'The gelatine needs time to dissolve', 'The tube must be heated first'],
+          why: 'Biuret goes from blue to lilac to purple slowly. Read it at once and you can miss the protein.' }],
+      exam: 'Biuret test: blue → purple (lilac) shows protein. Wear goggles - Biuret solution is corrosive - and give the colour time to develop.' },
+    { id: 'oil_fat', grades: D8, chapter: 'g8s-food', icon: '🧈',
+      title: 'Which spot is fat: oil or water?',
+      aim: 'Place 1 has cooking oil, place 2 has water on filter paper. Both make a wet spot. Which spot stays when the paper dries?',
+      setup: ['goggles', 'slot:2', 'food:water', 'test:paper', 'dry', 'rinse', 'slot:1', 'food:oil'],
+      predict: { q: 'Which spot will still be there when the paper is dry?', answer: 'oil',
+        options: [{ id: 'oil', label: 'The oil spot' }, { id: 'water', label: 'The water spot' }, { id: 'both', label: 'Both spots' }, { id: 'none', label: 'Neither' }] },
+      steps: [
+        { ask: 'Test the oil for fat. Which test?', on: 'test:paper', options: ['test:paper', 'test:iodine', 'test:biuret'],
+          wrong: { 'test:iodine': 'Iodine solution only sees starch. It would stay orange-brown and tell you nothing about fat.',
+                   'test:biuret': 'Biuret solution only sees protein. Fat needs the grease-spot test (or the ethanol test).' } },
+        { on: 'dry',    say: 'Both spots look see-through while wet. Watch paper 1 and wait for it to dry.' },
+        { on: 'read',   say: 'Tap 🔎 Read result: hold paper 1 up to the light.' },
+        { on: 'slot:2', say: 'Now the water spot. Tap 2 in the rack.' },
+        { on: 'read',   say: 'Tap 🔎 Read result. Is any spot left on paper 2?' },
+      ],
+      see: { saw: 'Dry, the oil spot stayed translucent: light shone through it. The water spot dried away and left nothing.',
+             learn: 'Fat does not dry away. A translucent spot that stays after drying means fat. Any liquid looks see-through while wet, so wait for the paper to dry before you read it.' },
+      check: ['name_it:3',
+        { q: 'A pupil reads the grease-spot test while the paper is still wet. Why is that a mistake?',
+          options: ['Any liquid makes paper see-through until it dries', 'Fat only shows when the paper is warm', 'A wet spot turns iodine blue-black', 'Fat dries away and leaves no spot'],
+          why: 'Water makes a see-through spot too - while it is wet. Only a spot that stays after drying shows fat.' },
+        'name_it:4'],
+      exam: 'Grease-spot test: a translucent spot that stays after the paper dries shows fat. A wet spot proves nothing.' },
+    { id: 'powder_x', grades: D8, chapter: 'g8s-food', icon: '🕵️',
+      title: 'Is powder X really a protein powder?',
+      aim: 'A shop sells powder X as a protein powder. Tube 1 has some - and one test can check the label. Which one?',
+      setup: ['goggles', 'slot:1', 'food:mystery'],
+      predict: { q: 'Is there protein in powder X?', answer: 'no',
+        options: [{ id: 'yes', label: 'Yes, lots' }, { id: 'no', label: 'No protein at all' }, { id: 'bit', label: 'Only a little' }] },
+      steps: [
+        { ask: 'Which test can prove whether powder X contains protein?', on: 'test:biuret', options: ['test:biuret', 'test:iodine', 'test:benedicts', 'test:paper'],
+          wrong: { 'test:iodine': 'Iodine solution only sees starch. Blue-black or not, it says nothing about protein.',
+                   'test:benedicts': 'Benedict\'s solution only sees reducing sugar. One test answers one question - and this is not that question.',
+                   'test:paper': 'The grease-spot test only shows fat. It cannot see protein.' } },
+        { ask: 'Tube 1 is still blue. Watch tube 1 for a few minutes, or tap Read result now?', on: 'developed', options: ['developed', 'read'],
+          wrong: { read: 'Too soon. Purple takes a few minutes to come through - read it now and you could miss the protein.' } },
+        { on: 'read', say: 'Time is up. Tap 🔎 Read result. What colour is tube 1?' },
+      ],
+      see: { saw: 'After a few minutes the Biuret solution in tube 1 was still blue. No purple at all.',
+             learn: 'Blue with Biuret solution means no protein. Powder X is not a protein powder, whatever the label says. Trust the test - and give it time before you decide.' },
+      check: [
+        { q: 'Powder X stayed blue with Biuret solution after a few minutes. What does that show?',
+          options: ['Powder X contains no protein', 'Powder X contains protein', 'The Biuret solution was not heated', 'Powder X contains starch'],
+          why: 'Biuret only turns purple with protein. Blue means none - and it says nothing about starch or sugar.' },
+        'name_it:4',
+        { q: 'The label says "protein powder" but the Biuret test stayed blue. What is the scientific conclusion?',
+          options: ['The test found no protein, so the label is not supported', 'The label must be right, so the test was wrong', 'Heating the tube would turn it purple', 'Powder X must contain fat instead'],
+          why: 'Trust the evidence. Biuret finds protein reliably, heat is for Benedict\'s, and a blue Biuret says nothing about fat.' }],
+      exam: 'Choose the test that answers the question: Biuret for protein. A Biuret tube that stays blue after a few minutes shows no protein.' },
+  ];
+
   // Short, true facts for the 💡 button, from the g8s-food chapter.
   const FACTS = [
     'Carbohydrates - starch and sugars - are the body\'s main source of energy.',
@@ -459,6 +586,6 @@ const LabFoodData = (() => {
 
   return { GRADES, forGrade, ROOM, TIME_LAPSE, SLOTS, COLORS: C, LADDER, FOODS, SHELF_FOODS, NUTRIENTS, TESTS, SHELF_TESTS,
            BATH, BENEDICT, BIURET, PAPER, levels, resultFor, HAZARDS, RESULTS, CARD_ORDER, DISCOVERIES, discoveriesFor,
-           WAITS, GUIDES, MISSIONS, tubeSvg, FACTS };
+           WAITS, GUIDES, MISSIONS, EXPERIMENTS, tubeSvg, FACTS };
 })();
 if (typeof window !== 'undefined') window.LabFoodData = LabFoodData;

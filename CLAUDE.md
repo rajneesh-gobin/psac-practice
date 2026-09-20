@@ -73,11 +73,15 @@ subjects/
 | localStorage + Supabase data layer, progress blob | `engine/store.js` |
 | Question fetching + 7-day localStorage cache | `engine/question_loader.js` |
 | Pack registry, `CHAPTERS`, `PackLoader`, `RoleModules` | `engine/registry.js` |
-| Timetable, calendar, activity layer | `engine/calendar.js` |
+| Timetable, calendar, activity layer — subject sessions with a minutes target, chapter tasks, "today's plan first" | `engine/calendar.js` · `_planFirstBlocks()` / `_recordTimeOnTask()` in `app.js` |
+| **Classroom calendar** — per classroom (`teacher_class_events`), teacher tab + the class page's calendar | `engine/teacher_classroom_detail.js` (`_renderCalendar`) · `materials.js` · `materials_library_open()` → `events` |
 | Chapter Preview (adult opens the child's practice screen, recording nothing) | `engine/chapter_preview.js` · `startChapterPreview()`/`_isPreviewRun()` in `app.js` |
 | Interactive map — the child's map AND the admin editor | `engine/interactive_map.js` |
+| **Science Labs** — hub, registry, chapter map (`Labs`) · the experiment runner Aim→Predict→Do→See→Check→Done (`LabExperiment`) · one bench + data file per lab | `engine/labs/lab_core.js` · `engine/labs/lab_experiment.js` · `engine/labs/lab_<id>*.js` — read [`docs/labs/REWORK_PLAN_2026-09-19.md`](docs/labs/REWORK_PLAN_2026-09-19.md) first |
 | Textes à Trous (French Q6) · Chasse aux Erreurs (French Q7) | `engine/cloze.js` · `engine/errorhunt.js` |
 | Minigames · their data · parent game settings | `engine/minigame.js` · `minigame_{gk,words,geo,time}.js` · `game_settings.js` |
+| **Learning Coach** — one spaced-retrieval mission a day from any live pack of the child's grade (`DB.learningCoach`) | `engine/learning_coach.js` · hooks in `app.js`: `recordAnswer` → `LearningCoach.record`, `renderDashboard`/`renderSubjectSelect` → `renderChild`, parent dashboard → `renderParent` |
+| Fix My Mistakes — the spaced mistake drill (`DB.mistakes`, `_dueMistakes()`, `_FIX_GAP_DAYS`) | `engine/app.js` |
 | Credits + entitlement model, `sellableChapters/Subjects` | `engine/shop.js` (the shop *screen*, `renderShop()`, is in `app.js`) |
 | Admin panel, shop settings, security log | `engine/admin.js` |
 | Server-side entitlement enforcement | `netlify/functions/questions.js` |

@@ -8,8 +8,9 @@
 // goes blue-black, Biuret purple); which food gives which result in every test;
 // that Benedict's needs heat, Biuret needs time and a grease spot needs to dry;
 // that a dirty spatula gives a false positive; that every discovery recipe is
-// valid and unlocks its own card; and that every quiz, hazard and result card is
-// complete.
+// valid and unlocks its own card; that every quiz, hazard and result card is
+// complete; and that every experiment (lab_experiment.js) is built from tokens
+// the bench performs, in an order that works, and names what it really shows.
 //
 // Run: node scripts/test-labs-food-data.js
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
@@ -77,6 +78,7 @@ const DONE = { heat: 99, t: 99, dry: true };
 const W = { iodine: 'orange-brown', benedicts: 'blue', biuret: 'blue', paper: 'no spot - the water dried away', ethanol: 'clear' };
 const expect = {
   water:     {},
+  bread:     { iodine: 'blue-black', benedicts: 'green', biuret: 'lilac (pale purple)' },
   cornflour: { iodine: 'blue-black' },
   glucose:   { benedicts: 'brick-red' },
   sucrose:   {},
@@ -196,7 +198,7 @@ const guides = D.forGrade(D.GUIDES, 8);
 ok(`at least 3 guided experiments (${guides.length})`, guides.length >= 3);
 ok('guide ids are unique', new Set(D.GUIDES.map(g => g.id)).size === D.GUIDES.length);
 for (const G of D.GUIDES) {
-  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say || (WAITS.includes(s.on) || s.on.startsWith('card:') ? !!s.btn : !s.btn));
+  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do, and has a button unless it is a wait`, bad.length === 0, bad);
   ok(`${G.title}: blurb, icon and what they found out`, !!(G.lesson && G.blurb && G.icon));
   const h = G.steps.map(s => s.on), final = lastTube(h);
@@ -233,6 +235,110 @@ ok(`The mystery powder: powder X really contains starch and reducing sugar only 
 ok('…so the quiz answer matches what the tests show', my.quiz[0].options[0] === 'Starch and reducing sugar');
 ok('…and the mission needs all four nutrient tests', my.needs.join() === 'iodine,benedicts,biuret,fat');
 ok('no quiz question is repeated', new Set(D.MISSIONS.flatMap(M => M.quiz.map(q => q.q))).size === D.MISSIONS.reduce((a, M) => a + M.quiz.length, 0));
+
+console.log('\nExperiments (lab_experiment.js)');
+const EX = D.EXPERIMENTS;
+ok('EXPERIMENTS is exported', Array.isArray(EX) && EX.length > 0);
+const ex8 = D.forGrade(EX || [], 8);
+ok(`3 to 5 experiments at Grade 8 (${ex8.length})`, ex8.length >= 3 && ex8.length <= 5);
+ok('experiment ids are unique', new Set(EX.map(e => e.id)).size === EX.length);
+ok('every experiment teaches g8s-food at Grade 8', EX.every(e => e.chapter === 'g8s-food' && Array.isArray(e.grades) && e.grades.join() === '8'));
+// The bench's tool labels (lab_food.js _shellHTML) - a step must name the one it points at.
+const CONTROL_LABEL = { goggles: 'Goggles', bath: 'Water bath', read: 'Read result', rinse: 'Rinse spatula', 'burner-off': 'Burner off', flame: 'Heat in flame', taste: 'Taste it', clean: 'Clean rack' };
+const expTok = on => {
+  const [k, a] = String(on).split(':');
+  if (k in CONTROL_LABEL || WAITS.includes(k)) return a === undefined;
+  if (k === 'slot') return +a >= 1 && +a <= D.SLOTS;
+  if (k === 'food') return !!D.FOODS[a];
+  if (k === 'test') return !!D.TESTS[a];
+  return false;
+};
+const labelFor = on => {
+  const [k, a] = on.split(':');
+  if (k === 'slot') return a;
+  if (k === 'food') return D.FOODS[a].name;
+  if (k === 'test') return D.TESTS[a].name;
+  return WAITS.includes(k) ? null : CONTROL_LABEL[k];
+};
+const plain = s => String(s).replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const stepToks = s => s.options || s.any || (s.on ? [s.on] : []);
+// Walk the set-up and then the right answer of every step, as the bench would:
+// what ends up in each tube, and whether every reading was a finished, fair one.
+function walkExp(e) {
+  let sel = 1, goggles = false, burner = false, spat = null;
+  const tubes = {}, errs = [];
+  const run = (on, phase) => {
+    const [k, a] = on.split(':');
+    const t = tubes[sel];
+    if (k === 'goggles') goggles = true;
+    else if (k === 'slot') sel = +a;
+    else if (k === 'food') { if (t && t.food) errs.push(`${phase}: tube ${sel} already has a food`); tubes[sel] = { food: a, trace: spat && spat !== a ? spat : null }; spat = a; }
+    else if (k === 'test') {
+      if (!t || !t.food) errs.push(`${phase}: ${on} into an empty tube ${sel}`);
+      else if (t.test) errs.push(`${phase}: tube ${sel} already tested`);
+      else { if (a === 'biuret' && !goggles) errs.push(`${phase}: Biuret without goggles`); if (a === 'ethanol' && burner) errs.push(`${phase}: ethanol with the burner lit`); t.test = a; }
+    }
+    else if (k === 'bath') { if (!t || !t.food || t.test === 'paper') errs.push(`${phase}: bath with nothing to warm`); else if (t.test === 'ethanol') errs.push(`${phase}: heating ethanol`); else { t.bath = true; burner = true; } }
+    else if (k === 'burner-off') burner = false;
+    else if (k === 'rinse') spat = null;
+    else if (k === 'heated') { if (!t || t.test !== 'benedicts' || !t.bath) errs.push(`${phase}: heated before Benedict's is in the bath`); else t.heated = true; }
+    else if (k === 'developed') { if (!t || t.test !== 'biuret') errs.push(`${phase}: developed without Biuret`); else t.developed = true; }
+    else if (k === 'dry') { if (!t || t.test !== 'paper') errs.push(`${phase}: dry without filter paper`); else t.dry = true; }
+    else if (k === 'read') {
+      if (!t || !t.test) errs.push(`${phase}: read with nothing to read`);
+      else {
+        const r = D.resultFor(t.test, t.food, t.trace, { heat: t.heated ? 99 : 0, t: t.developed ? 99 : 0, dry: !!t.dry });
+        if (!r.finished) errs.push(`${phase}: read too soon (${r.word})`);
+        if (r.fromTrace) errs.push(`${phase}: a dirty-spatula false positive`);
+        t.read = r.word;
+      }
+    }
+    else if (k === 'clean') { Object.keys(tubes).forEach(x => delete tubes[x]); spat = null; }
+  };
+  (e.setup || []).forEach(on => run(on, 'setup'));
+  (e.steps || []).forEach((s, i) => run(s.any ? s.any[0] : s.on, `step ${i + 1}`));
+  return { tubes, errs };
+}
+// The colour words each experiment's See must carry - and the bench must really show.
+const SEE_WORDS = { bread_starch: ['blue-black', 'orange-brown'], milk_sugar: ['orange', 'blue'], gelatine_protein: ['purple'], oil_fat: ['translucent'], powder_x: ['blue'] };
+for (const e of EX) {
+  const t = e.id;
+  ok(`${t}: the title is a question and the aim is short`, /\?$/.test(e.title) && e.title.length <= 60 && e.aim.length >= 20 && e.aim.length <= 200, { title: e.title, aim: e.aim.length });
+  const badSetup = e.setup.filter(on => !expTok(on));
+  ok(`${t}: every set-up token is one the bench performs`, badSetup.length === 0, badSetup);
+  const badStep = e.steps.filter(s => !stepToks(s).every(expTok) || !(s.say || s.ask));
+  ok(`${t}: every step token is real and each step says something`, badStep.length === 0, badStep);
+  ok(`${t}: 1 to 5 steps, each under 25 words`, e.steps.length >= 1 && e.steps.length <= 5 && e.steps.every(s => String(s.say || s.ask).split(/\s+/).length <= 25), e.steps.map(s => String(s.say || s.ask).split(/\s+/).length));
+  const asks = e.steps.filter(s => s.ask);
+  ok(`${t}: every ask lists its answer among 2+ options, and every wrong option is a listed, different option`,
+     asks.every(s => Array.isArray(s.options) && s.options.length >= 2 && (s.any ? s.any.every(x => s.options.includes(x)) : s.options.includes(s.on))
+       && Object.keys(s.wrong || {}).every(k => s.options.includes(k) && k !== s.on && !WAITS.includes(k.split(':')[0]) && s.wrong[k].length > 15)), asks);
+  ok(`${t}: at least one step is a decision`, asks.length >= 1);
+  const unnamed = e.steps.filter(s => s.say && s.on).filter(s => { const l = labelFor(s.on); return l ? !plain(s.say).includes(plain(l)) : !/\b[1-6]\b/.test(s.say); });
+  ok(`${t}: every instruction names the control it points at (a wait names the tube)`, unnamed.length === 0, unnamed.map(s => s.say));
+  const w = walkExp(e);
+  ok(`${t}: the set-up and the right path work on the bench (no empty tube, no early read, goggles before Biuret)`, w.errs.length === 0, w.errs);
+  const words = SEE_WORDS[t] || [];
+  const reads = Object.values(w.tubes).map(x => x.read).filter(Boolean);
+  ok(`${t}: See names colours in words (${words.join(', ')}) that the bench really showed`,
+     words.length > 0 && words.every(x => e.see.saw.toLowerCase().includes(x)) && words.every(x => reads.some(r => r.includes(x))), { saw: e.see.saw, reads });
+  ok(`${t}: See says what was learnt`, typeof e.see.learn === 'string' && e.see.learn.length > 20);
+  const p = e.predict;
+  ok(`${t}: the prediction has 2-4 tappable options and its answer is one of them`, p && p.options.length >= 2 && p.options.length <= 4 && p.options.every(o => o.id && o.label) && p.options.some(o => o.id === p.answer), p);
+  const qs = e.check.map(ref => typeof ref === 'object' ? ref : (M => M && M.quiz[+ref.split(':')[1]])(D.MISSIONS.find(M => M.id === ref.split(':')[0])));
+  ok(`${t}: 2-3 check questions resolve, each with 4 distinct options and a reason`,
+     e.check.length >= 2 && e.check.length <= 3 && qs.every(q => q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options.map(optLabel)).size === 4 && q.why), e.check.map(r => typeof r === 'object' ? 'inline' : r));
+  ok(`${t}: an exam line, with no paper reference invented`, typeof e.exam === 'string' && e.exam.length > 10 && !/20\d\d Q\d/.test(e.exam));
+}
+ok('the experiments cover all four nutrient tests', ['iodine', 'benedicts', 'biuret', 'paper'].every(id => EX.some(e => e.steps.some(s => s.on === 'test:' + id))));
+ok('the first experiment is the starch test on bread with a water control', EX[0] && EX[0].id === 'bread_starch' && EX[0].setup.includes('food:bread') && EX[0].setup.includes('food:water'));
+ok('the last experiment is the transfer challenge: choose the test for powder X', (e => e && e.setup.includes('food:mystery') && e.steps.some(s => s.ask && s.options.filter(o => o.startsWith('test:')).length >= 3))(EX[EX.length - 1]));
+const inline = EX.flatMap(e => e.check.filter(r => typeof r === 'object').map(r => r.q));
+ok('no inline check question repeats a mission question or another inline one', new Set(inline).size === inline.length && !inline.some(q => D.MISSIONS.some(M => M.quiz.some(x => x.q === q))));
+ok('the bench exports the experiment adapter (list, question, reset, apply, guide, stop, evidence, focus, selector, hooks)',
+   ['list', 'question', 'reset', 'apply', 'guide', 'stop', 'evidence', 'focus', 'selector', 'hooks'].every(k => new RegExp('\\b' + k + ':').test(bench.slice(bench.indexOf('const experiment = {')))) && /return \{ study, experiment,/.test(bench));
+ok('the bench hears every token before matching, matches `any`, and hands Done to the runner',
+   /experiment\.hooks\.token\(token, s\)/.test(bench) && /s\.any\.includes\(token\)/.test(bench) && /experiment\.hooks\.done\(\)/.test(bench) && /experiment\.hooks\.step\(_guide\.step\)/.test(bench) && /if \(!G\.exp\) _resetRack\(\);/.test(bench));
 
 console.log('\nHazards and result cards');
 const kinds = new Set([...core.match(/const SIGN_LABELS = \{([\s\S]*?)\};/)[1].matchAll(/(\w+):/g)].map(m => m[1]));

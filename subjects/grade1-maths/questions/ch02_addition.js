@@ -370,7 +370,7 @@ STATIC_QUESTIONS.push(
     question:'Which number sentence is correct?',
     options:['6 + 7 = 13','6 + 7 = 12','6 + 7 = 14','6 + 7 = 11'], answer:'6 + 7 = 13',
     hint:'Count on 7 from 6.',
-    explanation:'<b>6 + 7 = 13</b>.' }),
+    explanation:'Start at 6 and count on 7: 7, 8, 9, 10, 11, 12, <b>13</b>. So <b>6 + 7 = 13</b> is the correct sentence.' }),
 
   makeMCQ({ id:'g1mth-add-061', chapterId:'g1mth-addition', difficulty:1, subsection:'number_sentences',
     question:'□ + 10 = 20. What is □?',

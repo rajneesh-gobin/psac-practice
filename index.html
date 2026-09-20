@@ -591,8 +591,10 @@
           data-menu-desc="Switch to the grown-up view: children, progress, controls">
           <span class="hdr-ico" aria-hidden="true">🔒</span><span class="hdr-word">Parent</span></button>
         <!-- Teacher Dashboard: hidden by default. Auth reveals it ONLY when the
-             signed-in profile has role 'teacher' or 'admin'. Teachers are created
-             by an administrator; there is no self-service route in. -->
+             signed-in profile has role 'teacher' or 'admin'. A parent turns it on
+             from the "Enable teacher mode" card on their dashboard (the same
+             account - never a second sign-up); the SERVER decides whether that
+             is instant or queued for an admin. -->
         <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hdr-btn is-teacher hidden" data-hdr-pri="high" title="Teacher Dashboard" aria-label="Teacher dashboard"
           data-menu-desc="Your classes, assignments and pupils">
           <span class="hdr-ico" aria-hidden="true">👩‍🏫</span><span class="hdr-word">Teacher</span></button>
@@ -1224,7 +1226,7 @@
               <li class="flex gap-2"><span>🤝</span><span><b>Separate from families</b> - tutors never see or touch a child's home account, and parents keep their own controls</span></li>
             </ul>
             <p class="text-[11px] text-green-200/60 mt-4 pt-3 border-t border-white/10">
-              Tutor and parent are separate roles. A parent account can apply to become a tutor; it is never granted automatically.
+              Already a parent here? Enable teacher mode from your parent dashboard - same account, same email, no second sign-up.
             </p>
           </div>
 
@@ -2657,7 +2659,7 @@
         <span class="text-blue-400 dark:text-blue-500 text-2xl shrink-0">›</span>
       </button>
 
-      <!-- Learning Coach pilot - see #coach-child-subject. -->
+      <!-- Learning Coach - see #coach-child-subject. -->
       <div id="coach-child-home" class="coach-card hidden"></div>
 
       <!-- Game Zone - hidden by MiniGames.syncTile() when the parent switches
@@ -3000,9 +3002,9 @@
            the dashboard, so this is the first place the goal has to appear. -->
       <div id="goal-slot-kidhome"></div>
 
-      <!-- Learning Coach pilot (engine/learning_coach.js). Filled and shown
-           by LearningCoach.renderChild(), which hides it for anyone who is
-           not a Grade 5 child. -->
+      <!-- Learning Coach (engine/learning_coach.js). Filled and shown by
+           LearningCoach.renderChild() for any child whose grade has a live
+           pack; hidden for adults. Was a Grade 5 Maths pilot until 2026-09-19. -->
       <div id="coach-child-subject" class="coach-card hidden"></div>
 
       <!-- Two compact task buttons: today's plan, and anything the child paused.
@@ -3282,7 +3284,11 @@
            score as their child’s. Nothing here is recorded — see
            _isPreviewRun() in engine/app.js. -->
       <div id="practice-preview-note" class="hidden mx-auto max-w-3xl mb-2 px-4 py-2 rounded-xl text-sm font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700" role="status">
-        👀 Chapter preview — this is exactly what a child sees. Nothing you answer here is saved or counted.
+        <span class="block">👀 Chapter preview — this is exactly what a child sees. Nothing you answer here is saved or counted.</span>
+        <!-- The second line is the one an adult actually needs: a preview looks
+             so much like the real thing that parents have answered a whole round
+             believing it counted. Set per surface by _setPreviewBanner(). -->
+        <span id="practice-preview-how" class="block font-normal mt-1">For it to count, your child answers it themselves — go back and tap 🎒 Switch to student mode, then they sign in with their PIN.</span>
       </div>
       <div class="pr-wrap">
         <!-- Status: chapter, position, progress, level, session -->
@@ -4341,25 +4347,26 @@
         </div>
       </div>
 
-      <!-- ⚠ ONE main destination. Set Work and Results used to sit here too,
-           beside the same two jobs inside a classroom, so a teacher could not
-           tell which "Results" they were looking at. Both are now reached only
-           from inside the class they belong to; the tabs still exist in the DOM
-           and switchTab() still opens them, they are just not a place you pick. -->
+      <!-- ⚠ ONE main destination, then the tools. Set Work and Results used to
+           sit here too, beside the same two jobs inside a classroom, so a
+           teacher could not tell which "Results" they were looking at. Both are
+           now reached only from inside the class they belong to; the tabs still
+           exist in the DOM and switchTab() still opens them, they are just not
+           a place you pick.
+           ⚠ The seven tools were behind a "⋯ More" menu, which is one tap and
+           one guess in front of every one of them and has no counterpart on the
+           parent dashboard - the same person, the same board, two different
+           navigations. They are folder tabs now, like the parent's. The <small>
+           description each had in the menu lives on as the button's title. -->
       <div class="teacher-navigation" role="tablist" aria-label="Teaching workspace">
         <button role="tab" aria-selected="true" class="ta-tab" data-tab="home" onclick="TeacherMode.switchTab('home')"><strong>🏫 My classes</strong></button>
-        <div class="ta-more-wrap">
-          <button type="button" id="ta-more-btn" class="ta-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="ta-more-menu" onclick="TeacherMode.toggleMore()"><strong>⋯ More</strong><span id="tc-msg-badge" class="hidden ta-more-badge">new</span></button>
-          <div id="ta-more-menu" class="ta-more-menu hidden" role="menu" aria-label="More teacher tools">
-            <button type="button" role="menuitem" data-more="gradebook" onclick="TeacherMode.switchTab('gradebook')"><span class="ta-more-ico">📋</span><span><strong>Marks book</strong><small>Every score in one table, class by class</small></span></button>
-            <button type="button" role="menuitem" data-more="materials" onclick="TeacherMode.switchTab('materials')"><span class="ta-more-ico">📂</span><span><strong>All my files</strong><small>Every worksheet and note you have uploaded</small></span></button>
-            <button type="button" role="menuitem" data-more="assignments" onclick="TeacherMode.switchTab('assignments')"><span class="ta-more-ico">📦</span><span><strong>Past work</strong><small>Work that has closed or been put away</small></span></button>
-            <button type="button" role="menuitem" data-more="messages" onclick="TeacherMode.switchTab('messages')"><span class="ta-more-ico">💬</span><span><strong>Messages</strong><small>Ask a question or report a problem</small></span></button>
-            <button type="button" role="menuitem" data-more="papers" onclick="TeacherMode.switchTab('papers')"><span class="ta-more-ico">📝</span><span><strong>Test papers</strong><small>Build a printable paper with its answer sheet</small></span></button>
-            <button type="button" role="menuitem" data-more="preview" onclick="TeacherMode.switchTab('preview')"><span class="ta-more-ico">👀</span><span><strong>Chapter preview</strong><small>See a chapter as a pupil sees it</small></span></button>
-            <button type="button" role="menuitem" data-more="settings" onclick="TeacherMode.switchTab('settings')"><span class="ta-more-ico">⚙️</span><span><strong>Teacher settings</strong><small>Install, invite, account</small></span></button>
-          </div>
-        </div>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="gradebook" title="Every score in one table, class by class" onclick="TeacherMode.switchTab('gradebook')"><strong>📋 Marks book</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="materials" title="Every worksheet and note you have uploaded" onclick="TeacherMode.switchTab('materials')"><strong>📂 My files</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="assignments" title="Work that has closed or been put away" onclick="TeacherMode.switchTab('assignments')"><strong>📦 Past work</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="papers" title="Build a printable paper with its answer sheet" onclick="TeacherMode.switchTab('papers')"><strong>📝 Test papers</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="preview" title="See a chapter as a pupil sees it" onclick="TeacherMode.switchTab('preview')"><strong>👀 Chapter preview</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="messages" title="Ask a question or report a problem" onclick="TeacherMode.switchTab('messages')"><strong>💬 Messages</strong><span id="tc-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="settings" title="Install, invite, account" onclick="TeacherMode.switchTab('settings')"><strong>⚙️ Settings</strong></button>
       </div>
 
       <!-- ── TAB: MY CLASSES ──
@@ -4739,7 +4746,6 @@
         <p class="teacher-intro mb-4">Your account, this device, and how pupils get in.</p>
         <div class="ta-settings-grid">
           <button type="button" class="ta-settings-card" onclick="ProfileInstall.installTeacher()"><span>📲</span><strong>Install on this device</strong><small>Adds a teacher shortcut to your phone or computer.</small></button>
-          <button type="button" class="ta-settings-card" onclick="showProfile()"><span>👤</span><strong>Account &amp; settings</strong><small>Your name, password, email preferences and appearance.</small></button>
           <button type="button" class="ta-settings-card" onclick="Auth.openInviteModal()"><span>🎁</span><strong>Invite friends</strong><small>Share Nou Klass with other teachers and parents.</small></button>
           <button type="button" class="ta-settings-card" onclick="Auth.switchToStudentSelect()"><span>🎒</span><strong>Switch to student mode</strong><small>Hand this device to a pupil.</small></button>
         </div>
@@ -4747,6 +4753,12 @@
           <strong>How pupils get in</strong>
           <p>In a physical classroom, add pupils to a classroom and give each one their four-digit PIN. For online classes, share the work link - pupils with a PIN use it, and an open link lets anyone enter their name and begin.</p>
         </div>
+        <!-- ⚠ Account &amp; Settings renders HERE, in the tab, by the same
+             _renderParentProfile() the parent dashboard uses. It used to be a
+             card that called showProfile() and left for #screen-profile: no
+             folder tabs, no board, a different header - the one teacher tool
+             that did not behave like a tool. See _renderTeacherAccount(). -->
+        <div id="tc-profile-content" class="ta-account-host"></div>
       </div>
     </div>
 
@@ -4777,6 +4789,7 @@
           <button class="tc-cd-nav-btn" role="tab" data-sec="work"     onclick="TeacherClassroomDetail.showSection('work')">📋<span>Activities</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="pupils"   onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Resources</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="calendar" onclick="TeacherClassroomDetail.showSection('calendar')">🗓️<span>Calendar</span></button>
           <div class="tc-cd-nav-more">
             <button class="tc-cd-nav-btn" id="tc-cd-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="tc-cd-more-menu" onclick="TeacherClassroomDetail.toggleMore()">⋯<span>More</span></button>
             <div id="tc-cd-more-menu" class="tc-cd-more-menu hidden" role="menu" aria-label="More classroom tools">
@@ -4789,6 +4802,10 @@
           <div id="tc-cd-work"      class="tc-cd-section hidden"></div>
           <div id="tc-cd-pupils"    class="tc-cd-section hidden"></div>
           <div id="tc-cd-materials" class="tc-cd-section hidden"></div>
+          <!-- The classroom calendar: exams, hand-in dates, days away, other
+               events - per classroom (teacher_class_events). Pupils see it on
+               the class page. Filled by TeacherClassroomDetail._renderCalendar(). -->
+          <div id="tc-cd-calendar"  class="tc-cd-section hidden"></div>
           <div id="tc-cd-results"   class="tc-cd-section hidden"></div>
           <div id="tc-cd-settings"  class="tc-cd-section hidden"></div>
         </div>
@@ -4918,8 +4935,8 @@
       <!-- Teacher application card (filled by _renderTeacherApplyCard) -->
       <div id="pd-teacher-apply"></div>
 
-      <!-- Learning Coach pilot, parent view. LearningCoach.renderParent()
-           hides it unless the child in focus is in Grade 5. -->
+      <!-- Learning Coach, parent view. LearningCoach.renderParent() hides
+           it unless the child in focus has a grade with a live pack. -->
       <div id="coach-parent-summary" class="coach-card coach-parent hidden"></div>
 
       <!-- Shown INSTEAD of the empty state when the children query failed -
@@ -5748,6 +5765,22 @@
        Opened from a square in the month grid. Shows everything planned for that
        day plus the practice options for each topic, so a child can start work
        straight from the calendar instead of hunting for the chapter. -->
+  <!-- "Today's plan first" - shown instead of a chapter outside today's plan
+       while the plan is not done. Filled by _showPlanFirstModal(); the rows
+       are the same _scheduleRow() cards as the timetable, each with its own
+       Start / Choose chapter button. -->
+  <div id="modal-plan-first" class="hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="plan-first-title">
+    <div class="bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl p-5 w-full max-w-md shadow-2xl">
+      <div class="flex items-center justify-between mb-1">
+        <h3 id="plan-first-title" class="font-bold text-gray-800 dark:text-white">🗓️ Today's plan first</h3>
+        <button onclick="closePlanFirst()" aria-label="Close" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Your parent asked you to finish today's sessions before other chapters. Pick one to start:</p>
+      <div id="plan-first-list" class="space-y-2 max-h-[55vh] overflow-y-auto"></div>
+      <button onclick="closePlanFirst(); showScreen('schedule')" class="w-full mt-3 text-sm font-semibold text-indigo-600 dark:text-indigo-300 py-2">See my whole timetable →</button>
+    </div>
+  </div>
+
   <div id="modal-tt-day" class="hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm"
        onclick="if(event.target===this)closeTimetableDay()">
     <div class="tt-daysheet bg-white dark:bg-gray-800 w-full max-w-md shadow-2xl flex flex-col">
@@ -5780,6 +5813,10 @@
         class="bg-purple-500 hover:bg-purple-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors shadow-sm">
         ⚡ Generate Timetable
       </button>
+      <button onclick="Calendar.showAddEvent(null, 'study')"
+        class="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors shadow-sm">
+        📚 Plan a session
+      </button>
       <button onclick="Calendar.showAddEvent()"
         class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
         + Add Event
@@ -5793,6 +5830,17 @@
         🖨 Print
       </button>
     </div>
+
+    <!-- "Today's plan first": a parent restriction saved with the child's
+         other limits (students.settings.planFirst). While today's planned
+         sessions are not all done, other chapters open the plan instead. -->
+    <label class="flex items-start gap-3 mb-4 p-3 rounded-xl border border-indigo-200 dark:border-indigo-800/60 bg-indigo-50/60 dark:bg-indigo-900/10 cursor-pointer">
+      <input id="cal-plan-first" type="checkbox" onchange="Calendar.setPlanFirst(this.checked)" class="mt-0.5 w-4 h-4 accent-indigo-600">
+      <span class="text-sm text-gray-700 dark:text-gray-200">
+        <b>Today's plan first</b> for <span id="cal-plan-first-name">your child</span>.
+        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">Until today's planned sessions are done, opening another chapter shows the plan instead. Homework, the coach and the games are never blocked.</span>
+      </span>
+    </label>
 
     <!-- Layer filters. Rendered by Calendar._renderFilters(); the state lives in
          localStorage under mm_cal_filters so it survives a reload. -->
@@ -5849,16 +5897,46 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Type</label>
-          <select id="add-event-type"
+          <select id="add-event-type" onchange="Calendar.onTypeChange()"
             class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="study">📚 Study session</option>
             <option value="exam">📝 Exam</option>
             <option value="holiday">🎉 Holiday / Day Off</option>
             <option value="blocked">🚫 No Study Today</option>
             <option value="other">📌 Other</option>
-            <option value="study" class="hidden">📚 Study Session</option>
           </select>
         </div>
-        <div>
+        <!-- Study session: a subject and a time target, plus an optional
+             chapter to complete. The label is derived (Calendar._studyLabel),
+             so the free-text name is hidden for this type. -->
+        <div id="add-event-study" class="hidden space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Subject</label>
+            <select id="add-event-subject" onchange="Calendar.onSubjectChange()"
+              class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">How long</label>
+            <select id="add-event-minutes"
+              class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400"></select>
+            <p class="text-[11px] text-gray-400 mt-1">Any chapter in the subject counts towards the time.</p>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Chapter to complete <span class="font-normal">(optional)</span></label>
+            <select id="add-event-chapter"
+              class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400"></select>
+            <p class="text-[11px] text-gray-400 mt-1">Add a second session to plan another subject on the same day.</p>
+          </div>
+          <div id="add-event-repeat-wrap">
+            <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer">
+              <input id="add-event-repeat" type="checkbox" onchange="Calendar.onRepeatChange()" class="w-4 h-4 accent-purple-600">
+              Repeat every week
+            </label>
+            <input id="add-event-repeat-until" type="date" aria-label="Repeat until" class="hidden mt-2 w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <p class="text-[11px] text-gray-400 mt-1">Same weekday, until the date you choose (up to 26 weeks).</p>
+          </div>
+        </div>
+        <div id="add-event-label-wrap">
           <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Event Name</label>
           <input id="add-event-label" type="text" maxlength="80" placeholder="e.g. Maths Test, School Holiday"
             class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
@@ -5984,6 +6062,14 @@
             <option value="30" selected>30 min</option>
             <option value="45">45 min</option>
             <option value="60">60 min</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Each session is</label>
+          <select id="gen-shape" onchange="Calendar.genPreview()" class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-2 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="chapter" selected>A named chapter</option>
+            <option value="subject">A subject and a time - they pick the chapter</option>
+            <option value="both">Subject time, plus one chapter to complete</option>
           </select>
         </div>
         <div>

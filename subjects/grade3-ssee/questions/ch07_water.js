@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g3ssee-wat-017', chapterId:'g3ssee-water', difficulty:1, subsection:'uses_of_water',
     question:'Plants need water to grow.',
     answer:true,
-    explanation:'Yes! Plants need <b>water</b> for photosynthesis, to transport nutrients from soil to leaves, and to keep their cells firm and healthy. Without water, plants wilt and die.' }),
+    explanation:'Yes! Plants need <b>water</b> to make their food, to carry goodness from the soil up to the leaves, and to stay firm and healthy. Without water, plants wilt and die.' }),
 
   makeMCQ({ id:'g3ssee-wat-018', chapterId:'g3ssee-water', difficulty:1, subsection:'uses_of_water',
     question:'Farmers in Mauritius use water to ___.',

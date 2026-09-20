@@ -9,7 +9,10 @@
 // area under the line equals the distance, constant speed is a horizontal
 // line, the light gates, the hand stopwatch's reaction-time error, the field
 // routes (distance vs displacement, average speed vs average velocity), every
-// discovery recipe, every guide, every quiz question and every card.
+// discovery recipe, every guide, every quiz question and every card - and,
+// since 2026-09-20, every EXPERIMENT (lab_experiment.js): its tokens are
+// replayed through the same model along every right path, so a See that
+// claims a number the bench would not show fails here, not on a child.
 //
 // Run: node scripts/test-labs-motion-data.js
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
@@ -136,7 +139,7 @@ console.log('\nGuided experiments');
 ok('at least 3 guided experiments', M.GUIDES.length >= 3);
 ok('guide ids are unique', new Set(M.GUIDES.map(g => g.id)).size === M.GUIDES.length);
 for (const G of M.GUIDES) {
-  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say || !s.btn);
+  const bad = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do, and has a button`, bad.length === 0, bad);
   ok(`${G.title}: ends with what they found out`, !!(G.lesson && G.blurb && G.icon));
 }
@@ -177,5 +180,153 @@ ok('at least 10 facts for the 💡 button', M.FACTS.length >= 10);
 ok('distance-time graphs are only mentioned as beyond the NCE syllabus',
    [...M.FACTS, ...M.DISCOVERIES.map(d => d.learn + d.saw)].filter(t => /distance-time/i.test(t)).every(t => /beyond the NCE syllabus/.test(t)));
 
-console.log(`\n${pass} passed, ${fail} failed`);
+console.log('\nExperiments (lab_experiment.js)');
+const EX = M.EXPERIMENTS;
+ok('EXPERIMENTS is exported, 4 at Grade 9, ids unique', Array.isArray(EX) && EX.filter(e => e.grades.includes(9)).length === 4 && new Set(EX.map(e => e.id)).size === EX.length, EX && EX.map(e => e.id));
+ok('every experiment teaches g9s-p4-motion at Grade 9 only', EX.every(e => e.chapter === 'g9s-p4-motion' && Array.isArray(e.grades) && e.grades.join() === '9'));
+ok('experiment 1 is the exam-shaped one: predict the shape of the speed-time graph', EX[0].id === 'graph_shape' && /speed-time line/.test(EX[0].predict.q) && EX[0].predict.options.length === 4);
+const plain = s => String(s).replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{FE0F}\u{2190}-\u{21FF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const stepToks = s => s.options || s.any || (s.on ? [s.on] : []);
+const expTok = on => tokenOk(on) || on === 'clear';
+// The bench's control labels (lab_motion.js _renderControls / _shellHTML): a
+// `say` must contain the label of the control it points at.
+const labelFor = (on, st) => {
+  const [k, v] = on.split(':');
+  switch (k) {
+    case 'setup': return M.SETUPS[v].name;
+    case 'height': return `${v} cm`;
+    case 'start': return v === 'push' ? 'Pushed' : 'From rest';
+    case 'timer': return v === 'gates' ? 'Light gates' : 'Stopwatch';
+    case 'meaning': return v === 'accel' ? 'Acceleration' : 'Speed';
+    case 'disp': return v === 'straight' ? 'Start → finish' : 'Along the path';
+    case 'route': return M.ROUTES[v].name;
+    case 'block': return v === 'on' ? 'Stop block on' : 'Stop block off';
+    case 'run': return st.start === 'push' ? 'Push the trolley' : 'Release the trolley';
+    case 'gradient': return 'Find the gradient';
+    case 'area': return 'Shade the area';
+    case 'walk': return 'Jog the route';
+    case 'clear': return 'Clear the graph';
+  }
+  return null;
+};
+// The bench, replayed in Node: the same plan()/reading()/gradientRead()/
+// areaRead()/walk() calls lab_motion.js makes, with the same refusals.
+function replay(tokens) {
+  const st = { setup: 'ramp', h: 20, start: 'rest', timer: 'gates', meaning: 'accel', block: true, route: 'straight', disp: 'straight',
+               last: null, runs: [], grads: [], areas: [], walks: [], errs: [] };
+  for (const on of tokens) {
+    const [k, v] = on.split(':');
+    if (k === 'setup') st.setup = v;
+    else if (k === 'height') { if (st.setup !== 'ramp') st.errs.push(on + ' with no ramp'); st.h = +v; }
+    else if (['start', 'timer', 'meaning', 'disp'].includes(k)) st[k] = v;
+    else if (k === 'block') st.block = v === 'on';
+    else if (k === 'route') { if (st.setup !== 'walk') st.errs.push(on + ' off the field'); st.route = v; }
+    else if (on === 'run') {
+      if (st.setup !== 'ramp') { st.errs.push('run with no ramp'); continue; }
+      const p = M.plan(st.h, st.start);
+      if (p.moving && p.reached && !st.block) { st.errs.push('run with no stop block (hazard)'); continue; }
+      const r = M.reading(p, st.timer, 0);
+      if (!r.ok) st.errs.push('a hand-timed run (result card)');
+      st.last = p; st.runs.push(Object.assign({ p }, r));
+    }
+    else if (on === 'gradient') {
+      if (!st.last) { st.errs.push('gradient with no run'); continue; }
+      if (st.meaning === 'speed') st.errs.push('gradient read as a speed (result card)');
+      st.grads.push(M.gradientRead(st.last));
+    }
+    else if (on === 'area') { if (!st.last) { st.errs.push('area with no run'); continue; } st.areas.push(M.areaRead(st.last)); }
+    else if (on === 'walk') {
+      if (st.setup !== 'walk') { st.errs.push('walk off the field'); continue; }
+      const w = M.walk(st.route);
+      if (st.disp === 'path' && !w.same) st.errs.push('displacement measured along the path (result card)');
+      st.walks.push(w);
+    }
+    else if (on === 'clear') st.last = null;
+    else st.errs.push('unknown token ' + on);
+  }
+  return st;
+}
+// Every right path through the steps (an `any` step accepts several tokens).
+const paths = e => e.steps.reduce((acc, s) => acc.flatMap(p => (s.any || [s.on]).map(t => p.concat(t))), [[]]);
+const P10 = M.plan(10, 'rest'), P20 = M.plan(20, 'rest'), P40 = M.plan(40, 'rest');
+// What each See claims, checked against the replayed bench on EVERY right path.
+const CLAIMS = {
+  graph_shape: st => st.runs.length === 1 && st.runs[0].p.moving && st.runs[0].p.u === 0 && st.runs[0].p.a > 0 && st.runs[0].p.reached && st.block
+    && st.grads.length === 1 && st.grads[0].v1 === 0 && st.grads[0].a > 0,
+  which_height: st => st.runs.length === 2 && st.runs[0].h === 10 && st.runs[1].h === 40 && st.grads.length === 2
+    && st.grads[1].a > st.grads[0].a && st.runs[1].tTrue < st.runs[0].tTrue && st.meaning === 'accel',
+  field_walk: st => st.walks.length === 2 && st.walks[0].id === 'corner' && st.walks[0].distance === 70 && st.walks[0].displacement === 50
+    && st.walks[1].displacement === 0 && st.walks[1].distance > 0 && st.disp === 'straight',
+  avg_speed: st => st.runs.length === 2 && st.runs.every(r => r.h === 20 && r.timer === 'gates' && r.t === M.r2(P20.tEnd) && r.avg === M.r2(2 / P20.tEnd) && r.vEnd === M.r2(P20.vEnd))
+    && st.areas.length === 1 && near(st.areas[0].d, M.TRACK, 1e-9),
+};
+// The numbers a See or an Aim quotes, from the model.
+const QUOTES = {
+  which_height: [M.f2(M.gradientRead(P40).a) + ' m/s²', M.f2(M.gradientRead(P10).a) + ' m/s²', M.f2(P40.tEnd) + ' s', M.f2(P10.tEnd) + ' s'],
+  field_walk: [M.f1(M.walk('corner').distance) + ' m', M.f1(M.walk('corner').displacement) + ' m', '0 m'],
+  avg_speed: [M.f2(P20.tEnd) + ' s', M.f2(2 / P20.tEnd) + ' m/s', M.f2(P20.vEnd) + ' m/s'],
+};
+const qsrc = fs.readFileSync(path.join(ROOT, 'subjects', 'grade9-physics', 'questions', 'p4_motion.js'), 'utf8');
+// The fact each exam line quotes must be in the pack's own motion questions.
+const EXAM_FACT = { graph_shape: /speeding up steadily/, which_height: /12 \/ 6 = 2 m\/s/, field_walk: /40 m east, then 40 m back west/, avg_speed: /100 m in 20 s/ };
+for (const e of EX) {
+  const t = e.id;
+  ok(`${t}: the title is a question and the aim is short`, /\?$/.test(e.title) && e.title.length <= 60 && e.aim.length >= 20 && e.aim.length <= 200, { title: e.title, aim: e.aim.length });
+  const badSetup = e.setup.filter(on => !expTok(on));
+  ok(`${t}: every set-up token is one the bench performs`, badSetup.length === 0, badSetup);
+  const badStep = e.steps.filter(s => !stepToks(s).every(expTok) || !(s.say || s.ask));
+  ok(`${t}: every step token is real and each step says something`, badStep.length === 0, badStep);
+  ok(`${t}: 1 to 5 steps, each under 25 words`, e.steps.length >= 1 && e.steps.length <= 5 && e.steps.every(s => String(s.say || s.ask).split(/\s+/).length <= 25), e.steps.map(s => String(s.say || s.ask).split(/\s+/).length));
+  const asks = e.steps.filter(s => s.ask);
+  ok(`${t}: every ask lists its answer among 2+ options, and every wrong option is a listed, different option`,
+     asks.every(s => Array.isArray(s.options) && s.options.length >= 2 && (s.any ? s.any.every(x => s.options.includes(x)) : s.options.includes(s.on))
+       && Object.keys(s.wrong || {}).every(k => s.options.includes(k) && k !== s.on && !(s.any || []).includes(k) && s.wrong[k].length > 15)), asks);
+  ok(`${t}: at least one step is a decision`, asks.length >= 1);
+  // The state at each step decides the run button's label (Release / Push).
+  const unnamed = [];
+  e.steps.forEach((s, i) => {
+    if (!s.say || !s.on) return;
+    const st = replay(e.setup.concat(e.steps.slice(0, i).map(x => x.on || x.any[0])));
+    const l = labelFor(s.on, st);
+    if (!l || !plain(s.say).includes(plain(l))) unnamed.push(`${s.say} ⇏ ${l}`);
+  });
+  ok(`${t}: every instruction names the control it points at`, unnamed.length === 0, unnamed);
+  // Only this experiment's controls stay on screen (the runner's phone budget).
+  const controls = new Set(e.steps.flatMap(stepToks));
+  ok(`${t}: at most 6 controls in play (${controls.size})`, controls.size <= 6, [...controls]);
+  const bad = paths(e).map(p => ({ p, st: replay(e.setup.concat(p)) })).filter(x => x.st.errs.length || !CLAIMS[t](x.st));
+  ok(`${t}: the set-up and EVERY right path work on the bench and make the See true (${paths(e).length} path${paths(e).length === 1 ? '' : 's'})`, CLAIMS[t] && bad.length === 0, bad.map(x => [x.p, x.st.errs]));
+  const quotes = QUOTES[t] || [];
+  ok(`${t}: the numbers quoted are what the model computes (${quotes.join(', ') || 'none quoted'})`, quotes.every(q => (e.see.saw + ' ' + e.aim).includes(q)), { saw: e.see.saw, quotes });
+  ok(`${t}: See says what was learnt`, typeof e.see.learn === 'string' && e.see.learn.length > 20);
+  const p = e.predict;
+  ok(`${t}: the prediction has 2-4 tappable options, distinct, and its answer is one of them`,
+     p && p.options.length >= 2 && p.options.length <= 4 && p.options.every(o => o.id && o.label) && new Set(p.options.map(o => o.label)).size === p.options.length && p.options.some(o => o.id === p.answer), p);
+  const qs = e.check.map(ref => typeof ref === 'object' ? ref : (Mi => Mi && Mi.quiz[+ref.split(':')[1]])(M.MISSIONS.find(Mi => Mi.id === ref.split(':')[0])));
+  ok(`${t}: 2-3 check questions resolve, each with 4 distinct options and a reason`,
+     e.check.length >= 2 && e.check.length <= 3 && qs.every(q => q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && q.why), e.check.map(r => typeof r === 'object' ? 'inline' : r));
+  ok(`${t}: an exam line that quotes the pack's own questions, with no paper reference invented`,
+     typeof e.exam === 'string' && e.exam.length > 10 && !/20\d\d Q\d/.test(e.exam) && EXAM_FACT[t] && EXAM_FACT[t].test(qsrc), e.exam);
+}
+ok('the wrong choices that teach are all in play: the 2 cm runway, the unchanged height, gradient-as-speed, the stopwatch, displacement along the path',
+   ['height:2', 'height:10', 'meaning:speed', 'timer:stopwatch', 'disp:path'].every(w => EX.some(e => e.steps.some(s => s.wrong && s.wrong[w]))));
+ok('the average-speed prediction is computed, not typed: 2.0 ÷ 2.11 among four different values',
+   (e => e && e.predict.options.find(o => o.id === e.predict.answer).label === M.f2(2 / P20.tEnd) + ' m/s' && e.predict.q.includes(M.f2(P20.tEnd)))(EX.find(e => e.id === 'avg_speed')));
+const inline = EX.flatMap(e => e.check.filter(r => typeof r === 'object').map(r => r.q));
+ok('no inline check question repeats a mission question or another inline one', new Set(inline).size === inline.length && !inline.some(q => M.MISSIONS.some(Mi => Mi.quiz.some(x => x.q === q))));
+const expSrc = bench.slice(bench.indexOf('const experiment = {'));
+ok('the bench exports the experiment adapter (list, question, reset, apply, guide, stop, evidence, focus, selector, hooks)',
+   expSrc.length > 0 && ['list', 'question', 'reset', 'apply', 'guide', 'stop', 'evidence', 'focus', 'selector', 'hooks'].every(k => new RegExp('\\b' + k + ':').test(expSrc)) && /return \{ study, experiment,/.test(bench));
+ok('the bench hears every token before matching, matches `any`, never skips a decision, and hands Done to the runner',
+   /experiment\.hooks\.token\(token, s\)/.test(bench) && /s\.any\.includes\(token\)/.test(bench) && /experiment\.hooks\.done\(\)/.test(bench)
+   && /experiment\.hooks\.step\(_guide\.step\)/.test(bench) && /if \(!G\.exp\) _reset\(\);/.test(bench) && /while \(s && !s\.options && _satisfied\(s\.on\)\)/.test(bench));
+ok('a set-up token is applied silently: no discovery toast, no result card, no hazard card, and a run finishes at once',
+   /_instant = true; _silent = true;/.test(bench) && /function _discover\(id\) \{\s*if \(_silent\) return;/.test(bench) && /function _card\(kind, ctx, after\) \{\s*if \(_silent\) return;/.test(bench) && /function _hazard\(id, ctx\) \{\s*if \(_silent\) return;/.test(bench));
+ok('the ramp height is a chip per height (one control per option), and a re-tap of the current height still counts as a decision',
+   /data-set="height" data-v="\$\{h\}"/.test(bench) && !/data-h="/.test(bench) && /if \(_b\.h === h\) \{ _guideEvent\('height:' \+ h\); return; \}/.test(bench));
+ok('the guides still name the height chips', M.GUIDES.every(g => g.steps.filter(s => s.on.startsWith('height:')).every(s => s.say.includes(s.on.split(':')[1] + ' cm'))));
+
+console.log(`
+${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
+

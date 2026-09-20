@@ -18,8 +18,12 @@ const TeacherMode = (() => {
   // class they belong to, and leave by the Back button they now carry.
   const MAIN_TABS = ['home'];
   const DETAIL_TABS = ['create', 'results'];
-  const MORE_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'papers', 'preview', 'settings'];
-  const ALL_TABS = MAIN_TABS.concat(DETAIL_TABS, MORE_TABS);
+  // ⚠ These seven were behind a '⋯ More' menu until they became folder tabs of
+  // their own, matching the parent dashboard. They are still listed here
+  // separately from MAIN_TABS because they are TOOLS - a teacher visits one and
+  // comes back - while home is where the work is.
+  const TOOL_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'papers', 'preview', 'settings'];
+  const ALL_TABS = MAIN_TABS.concat(DETAIL_TABS, TOOL_TABS);
 
   function _getData() {
     try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { pin: null, assignments: [] }; }
@@ -762,7 +766,6 @@ const TeacherMode = (() => {
     // Older callers, and a location saved before the change, still name it.
     if (tab === 'classes') tab = 'home';
     if (!ALL_TABS.includes(tab)) tab = 'home';
-    closeMore();
     if (tab === 'home') {
       if (typeof TeacherHome !== 'undefined') TeacherHome.render({ silent: true });
       if (typeof TeacherGuestClasses !== 'undefined' && !opts.restoring) TeacherGuestClasses.refresh();
@@ -783,35 +786,17 @@ const TeacherMode = (() => {
       ChapterPreview.render('tc-preview-host', 'teacher');
     }
     if (tab === 'messages')  _renderTeacherMessages();
-    const inMore = MORE_TABS.includes(tab);
+    if (tab === 'settings')  _renderTeacherAccount();
     const _scope = document.getElementById('screen-teacher') || document;
     _scope.querySelectorAll('.ta-tab').forEach(b => {
       b.setAttribute('aria-selected', String(b.dataset.tab === tab));
     });
-    const more = _el('ta-more-btn');
-    if (more) more.classList.toggle('ta-more-btn-active', inMore);
-    document.querySelectorAll('#ta-more-menu [data-more]').forEach(b => b.setAttribute('aria-current', b.dataset.more === tab ? 'page' : 'false'));
     _scope.querySelectorAll('.ta-tab-content').forEach(c => {
       c.classList.toggle('hidden', c.dataset.tab !== tab);
     });
     _saveLoc({ tab });
   }
 
-  function toggleMore(force) {
-    const menu = _el('ta-more-menu'), btn = _el('ta-more-btn');
-    if (!menu || !btn) return;
-    const open = typeof force === 'boolean' ? force : menu.classList.contains('hidden');
-    menu.classList.toggle('hidden', !open);
-    btn.setAttribute('aria-expanded', String(open));
-    if (open) {
-      setTimeout(() => document.addEventListener('click', _moreOutside, { once: true }), 0);
-      document.addEventListener('keydown', _moreEscape);
-      menu.querySelector('[role=menuitem]')?.focus();
-    } else document.removeEventListener('keydown', _moreEscape);
-  }
-  function closeMore() { const menu = _el('ta-more-menu'); if (menu && !menu.classList.contains('hidden')) toggleMore(false); }
-  function _moreOutside(e) { if (!e.target.closest?.('.ta-more-wrap')) closeMore(); else if (!_el('ta-more-menu')?.classList.contains('hidden')) document.addEventListener('click', _moreOutside, { once: true }); }
-  function _moreEscape(e) { if (e.key === 'Escape') { closeMore(); _el('ta-more-btn')?.focus(); } }
 
   // ── Results tab ────────────────────────────────
   function _renderResultsAssignSelector() {
@@ -1520,6 +1505,21 @@ const TeacherMode = (() => {
     toast('Form pre-filled - adjust and generate.', 2500);
   }
 
+  // ⚠ ONE renderer, shared with the parent dashboard: _renderParentProfile()
+  //   in app.js. A second copy of an account screen is a second place for the
+  //   password rules, the email preferences and the delete-account path to
+  //   drift, and this one already handles a teacher (no family, so it draws no
+  //   family or co-parent card).
+  // ⚠ Re-rendered on every activation, like papers and preview: it reads the
+  //   profile and the saved preferences from the server each time.
+  function _renderTeacherAccount() {
+    const host = _el('tc-profile-content');
+    if (!host) return;
+    if (typeof _renderParentProfile !== 'function') { host.innerHTML = ''; return; }
+    host.innerHTML = '<p class="ta-state ta-state-loading">Loading your account…</p>';
+    _renderParentProfile(host);
+  }
+
   async function _renderTeacherMessages() {
     const list  = document.getElementById('tc-msg-list');
     const badge = document.getElementById('tc-msg-badge');
@@ -1554,7 +1554,7 @@ const TeacherMode = (() => {
     isTeacher, render, switchTab, subjectChange, gradeChange,
     buildAssignment, copyLink, deleteAssignment,
     shareAssignment, closeShare, shareCopy, shareWhatsApp, shareNative, shareCopyLink, shareView,
-    toggleMore, closeMore, getLocation, gotoStep, currentStep, wizardNext, wizardBack, leaveSetWork,
+    getLocation, gotoStep, currentStep, wizardNext, wizardBack, leaveSetWork,
     scopeChanged, chaptersChanged, countChanged, difficultyChanged, refreshSummary,
     saveLocation: _saveLoc, rememberClassroom, chooseClassroom, setShareMode,
     shareChoiceChanged, setDueInDays, dueChanged, modeChanged, reloadPupils, tickPupils, pupilsChanged,

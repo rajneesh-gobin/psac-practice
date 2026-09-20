@@ -1,0 +1,302 @@
+{
+  "pack": "grade5-english",
+  "source": "English.pdf — MIE Teaching and Learning Syllabus, English, Grades 1 to 6, the 'NCF GRAMMAR SYLLABUS' table, Grade 5 column (printed pages 19-22)",
+  "note": "One entry per item the Grade 5 column of the grammar table names. `any` = covered when some question's stem or answer contains ANY of these phrases. `all` = covered only when ONE question contains ALL of them. Terms are matched against the question STEM AND ANSWER ONLY, never the explanation. ⚠ SCOPE: the grammar table only. The rest of this syllabus is four competency matrices (listening, speaking, reading, writing) whose rows are skills and whose grade is marked by SHADING rather than text; a skill of that kind cannot be detected by matching words in a stem, and nothing here should be read as saying those competencies are covered or uncovered. ⚠ Phonics at Grade 5 is 'reinforce according to learners' needs' and names no item, so it carries no entry.",
+  "facts": [
+    {
+      "id": "nou-01",
+      "unit": "1. Nouns",
+      "fact": "Frequently used collective nouns (group, team, bunch)",
+      "any": [
+        "collective noun"
+      ]
+    },
+    {
+      "id": "nou-02",
+      "unit": "1. Nouns",
+      "fact": "A collective noun names a group of things",
+      "all": [
+        "noun",
+        "group"
+      ]
+    },
+    {
+      "id": "pro-01",
+      "unit": "2. Pronouns",
+      "fact": "Use of this, that, these, those",
+      "all": [
+        "pronoun",
+        "those"
+      ]
+    },
+    {
+      "id": "pro-02",
+      "unit": "2. Pronouns",
+      "fact": "Use of myself, yourself, himself, herself, itself",
+      "any": [
+        "myself",
+        "yourself",
+        "himself",
+        "herself",
+        "itself"
+      ]
+    },
+    {
+      "id": "pro-03",
+      "unit": "2. Pronouns",
+      "fact": "Use of ourselves, yourselves, themselves",
+      "any": [
+        "ourselves",
+        "yourselves",
+        "themselves"
+      ]
+    },
+    {
+      "id": "adj-01",
+      "unit": "3. Adjectives",
+      "fact": "Adjectives of opinion (e.g. good work)",
+      "all": [
+        "adjective",
+        "opinion"
+      ]
+    },
+    {
+      "id": "adj-02",
+      "unit": "3. Adjectives",
+      "fact": "Adjectives of shape",
+      "all": [
+        "adjective",
+        "shape"
+      ]
+    },
+    {
+      "id": "adj-03",
+      "unit": "3. Adjectives",
+      "fact": "Adjectives of origin (e.g. a French film)",
+      "all": [
+        "adjective",
+        "origin"
+      ]
+    },
+    {
+      "id": "adj-04",
+      "unit": "3. Adjectives",
+      "fact": "Adjectives of material (e.g. a wooden spoon)",
+      "all": [
+        "adjective",
+        "material"
+      ]
+    },
+    {
+      "id": "adj-05",
+      "unit": "3. Adjectives",
+      "fact": "Comparative and superlative: regular forms",
+      "any": [
+        "comparative",
+        "superlative"
+      ]
+    },
+    {
+      "id": "adj-06",
+      "unit": "3. Adjectives",
+      "fact": "Irregular comparatives and superlatives with 'more' and 'most'",
+      "any": [
+        "more beautiful",
+        "most beautiful",
+        "more difficult"
+      ]
+    },
+    {
+      "id": "adj-07",
+      "unit": "3. Adjectives",
+      "fact": "Irregular forms such as good, better, best",
+      "any": [
+        "better",
+        "best"
+      ]
+    },
+    {
+      "id": "vrb-01",
+      "unit": "4. Verbs and tenses",
+      "fact": "The Past Continuous Tense",
+      "any": [
+        "past continuous"
+      ]
+    },
+    {
+      "id": "vrb-02",
+      "unit": "4. Verbs and tenses",
+      "fact": "The Present Perfect Tense",
+      "any": [
+        "present perfect"
+      ]
+    },
+    {
+      "id": "vrb-03",
+      "unit": "4. Verbs and tenses",
+      "fact": "Frequently used phrasal verbs (take off, get out, come in)",
+      "any": [
+        "phrasal verb"
+      ]
+    },
+    {
+      "id": "det-01",
+      "unit": "5. Determiners",
+      "fact": "Use of 'the' to refer to items already mentioned",
+      "all": [
+        "the",
+        "already mentioned"
+      ]
+    },
+    {
+      "id": "det-02",
+      "unit": "5. Determiners",
+      "fact": "Use of 'the' with countries made of a cluster of islands or states",
+      "any": [
+        "the seychelles",
+        "the united states",
+        "the maldives"
+      ]
+    },
+    {
+      "id": "det-03",
+      "unit": "5. Determiners",
+      "fact": "Quantifiers referring to countable and uncountable nouns: some, few, little, many, much",
+      "any": [
+        "quantifier",
+        "countable"
+      ]
+    },
+    {
+      "id": "adv-01",
+      "unit": "6. Adverbs",
+      "fact": "Adverbs of frequency (often, never)",
+      "any": [
+        "adverb of frequency",
+        "adverbs of frequency"
+      ]
+    },
+    {
+      "id": "mod-01",
+      "unit": "7. Modals",
+      "fact": "Use of 'must' to express obligation",
+      "all": [
+        "must",
+        "obligation"
+      ]
+    },
+    {
+      "id": "mod-02",
+      "unit": "7. Modals",
+      "fact": "Use of 'must' to express necessity",
+      "all": [
+        "must",
+        "necess"
+      ]
+    },
+    {
+      "id": "pre-01",
+      "unit": "8. Prepositions",
+      "fact": "Prepositions of direction (e.g. he drove towards Port Louis)",
+      "any": [
+        "towards"
+      ]
+    },
+    {
+      "id": "pre-02",
+      "unit": "8. Prepositions",
+      "fact": "Prepositions of time (on Tuesday, during the week)",
+      "all": [
+        "preposition",
+        "time"
+      ]
+    },
+    {
+      "id": "sen-01",
+      "unit": "9. Sentence Structure",
+      "fact": "Sentences in direct speech",
+      "any": [
+        "direct speech"
+      ]
+    },
+    {
+      "id": "sen-02",
+      "unit": "9. Sentence Structure",
+      "fact": "Compound sentences built with 'and' and 'but'",
+      "any": [
+        "compound sentence"
+      ]
+    },
+    {
+      "id": "pun-01",
+      "unit": "10. Punctuation",
+      "fact": "Inverted commas in direct speech",
+      "any": [
+        "inverted comma",
+        "speech mark",
+        "quotation mark"
+      ]
+    },
+    {
+      "id": "pun-02",
+      "unit": "10. Punctuation",
+      "fact": "A capital letter for the first word of direct speech",
+      "all": [
+        "capital letter",
+        "said"
+      ]
+    },
+    {
+      "id": "pun-03",
+      "unit": "10. Punctuation",
+      "fact": "The comma in direct speech",
+      "all": [
+        "comma",
+        "said"
+      ]
+    },
+    {
+      "id": "pun-04",
+      "unit": "10. Punctuation",
+      "fact": "The comma for the addressee in direct speech",
+      "all": [
+        "comma",
+        "please"
+      ]
+    },
+    {
+      "id": "con-01",
+      "unit": "11. Conjunctions",
+      "fact": "The conjunction 'as'",
+      "all": [
+        "conjunction",
+        "as"
+      ]
+    },
+    {
+      "id": "con-02",
+      "unit": "11. Conjunctions",
+      "fact": "The conjunction 'before'",
+      "all": [
+        "conjunction",
+        "before"
+      ]
+    },
+    {
+      "id": "con-03",
+      "unit": "11. Conjunctions",
+      "fact": "The conjunction 'however'",
+      "any": [
+        "however"
+      ]
+    },
+    {
+      "id": "con-04",
+      "unit": "11. Conjunctions",
+      "fact": "The conjunction 'although'",
+      "any": [
+        "although"
+      ]
+    }
+  ]
+}

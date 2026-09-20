@@ -175,6 +175,11 @@
   animation: lab-heat-pulse 0.9s ease-in-out infinite alternate;
 }
 
+/* ── Experiment focus (lab_experiment.js): a control an experiment does not
+   use is hidden with the `hidden` attribute, and so is a row or shelf left
+   empty. The grid and flex rows above would otherwise win over [hidden]. ── */
+.lab-heat [hidden] { display: none !important; }
+
 /* ── Tool button base (inherits .lab-tool from labs.css) ─────────────── */
 .lab-heat .lab-tool.is-on {
   background: var(--lab-accent, #2A8F6A);

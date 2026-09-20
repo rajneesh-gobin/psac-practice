@@ -9,8 +9,10 @@
 // finishes the job); every magnification sum - both ways, with the mm ↔ µm
 // conversion, including the paper's ×15 000 and ×8000 shapes - comes out
 // right; the cell sizes are real; the smear puts the right cell under the
-// pointer; every discovery recipe is valid and leads to its own discovery; and
-// every card and quiz is complete.
+// pointer; every discovery recipe is valid and leads to its own discovery;
+// every card and quiz is complete; and every EXPERIMENT (LAB_SPEC §10) uses
+// tokens the bench accepts, names its control, and says in See only what the
+// model shows when its set-up and right answers are replayed.
 //
 // Run: node scripts/test-labs-microscope-data.js
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
@@ -168,13 +170,17 @@ ok('no recipe or guide ever takes a dangerous step', D.DISCOVERIES.map(d => d.ho
    .every(h => !h.some(t => ['prick', 'sun', 'coarse:down', 'multiply', 'cover:drop', 'swab', 'splash', 'press'].includes(t))));
 
 // A small model of the bench, run through each recipe with the data functions.
+// `logged` counts what the bench writes in the notebook on the way (a sharp
+// image, a slide made, a part or cell named, an answer written): an
+// experiment's See must have something to show.
 function runRecipe(how) {
   const s = { slide: null, clipped: false, light: 'off', diaph: 'mid', eye: 10, obj: 10, z: D.Z_START, pos: { x: 0, y: 0 }, stain: null, cover: null, lowSeen: false };
   let w = { fig: 'rbc', ruler: null, converted: false, op: null };
   const found = new Set(), cards = [];
+  let logged = 0;
   const V = () => D.view(s);
   const g7 = () => !!(s.slide && D.SLIDES[s.slide].g7);
-  const disc = (prev, tok) => { D.scopeDiscoveries(prev, V(), tok).forEach(x => found.add(x)); if (V().sharp && V().obj < 40) s.lowSeen = true; };
+  const disc = (prev, tok) => { D.scopeDiscoveries(prev, V(), tok).forEach(x => found.add(x)); if (V().sharp && V().obj < 40) s.lowSeen = true; if (V().sharp && !(prev.sharp && prev.total === V().total)) logged++; };
   const knob = (k, dir) => {
     const nz = D.clampZ(s.z + (dir === 'up' ? 1 : -1) * (k === 'coarse' ? D.COARSE : D.FINE));
     if (s.slide && D.clearance(nz, s.obj) <= 0) { cards.push(g7() ? 'g7_crack' : 'crack'); return; }
@@ -195,26 +201,33 @@ function runRecipe(how) {
       continue;
     }
     if (k === 'coarse' || k === 'fine') { knob(k, v); continue; }
-    if (k === 'slide') { s.slide = v; s.clipped = false; s.z = D.Z_START; s.pos = { x: 0, y: 0 }; s.stain = null; s.cover = null; s.lowSeen = false; }
-    else if (k === 'stain') { if (!g7() || s.cover || s.stain) { cards.push('stain refused'); continue; } s.stain = v; }
-    else if (k === 'cover') { if (!g7() || s.cover) { cards.push('cover refused'); continue; } s.cover = v; if (v === 'drop') cards.push('g7_bubbles'); }
+    if (k === 'slide') { s.slide = v; s.clipped = false; s.z = D.Z_START; s.pos = { x: 0, y: 0 }; s.stain = null; s.cover = null; s.lowSeen = false; logged++; }
+    else if (k === 'stain') { if (!g7() || s.cover || s.stain) { cards.push('stain refused'); continue; } s.stain = v; logged++; }
+    else if (k === 'cover') { if (!g7() || s.cover) { cards.push('cover refused'); continue; } s.cover = v; logged++; if (v === 'drop') cards.push('g7_bubbles'); }
     else if (k === 'clips') { if (g7() && !s.cover) { cards.push('clips: uncovered'); continue; } s.clipped = !!s.slide; }
     else if (k === 'light') s.light = v; else if (k === 'diaphragm') s.diaph = v; else if (k === 'eye') s.eye = +v;
     else if (k === 'obj') { if (s.slide && D.clearance(s.z, +v) <= 0) { cards.push(g7() ? 'g7_crack' : 'crack'); continue; } s.obj = +v; }
     else if (k === 'lower') { if (g7() && !s.cover) { cards.push('lower: uncovered'); continue; } if (s.slide && s.z > D.lowerTo(s.obj)) s.z = D.lowerTo(s.obj); }
     else if (k === 'move') { const r = D.move(s.pos, v); s.pos = { x: r.x, y: r.y }; }
-    else if (k === 'id') { const r = D.identify(V(), v); if (r.ok) found.add(v); else cards.push('id:' + r.why); }
-    else if (k === 'part') { const r = D.identifyPart(V(), v); if (r.ok) found.add('g7_' + v); else cards.push('part:' + r.why); }
-    else if (k === 'kind') { const r = D.classify(V(), v); if (r.ok) found.add('g7_' + v); else cards.push('kind:' + r.why); }
+    else if (k === 'id') { const r = D.identify(V(), v); if (r.ok) { found.add(v); logged++; } else cards.push('id:' + r.why); }
+    else if (k === 'part') { const r = D.identifyPart(V(), v); if (r.ok) { found.add('g7_' + v); logged++; } else cards.push('part:' + r.why); }
+    else if (k === 'kind') { const r = D.classify(V(), v); if (r.ok) { found.add('g7_' + v); logged++; } else cards.push('kind:' + r.why); }
     else if (k === 'draw') { const r = D.identify(V(), V().under); if (r.ok) found.add('drawing'); else cards.push('draw:' + r.why); }
     else if (k === 'fig') w = { fig: v, ruler: null, converted: false, op: null };
     else if (k === 'ruler') w = { fig: w.fig, ruler: v, converted: false, op: null };
     else if (k === 'convert') w.converted = true;
     else if (k === 'divide' || k === 'multiply') w.op = k;
-    else if (k === 'answer') { const f = D.figure(w.fig), r = D.work(f, w); if (r.correct) D.measureDiscoveries(f, r).forEach(x => found.add(x)); else cards.push(r.error); }
+    else if (k === 'answer') { const f = D.figure(w.fig), r = D.work(f, w); logged++; if (r.correct) D.measureDiscoveries(f, r).forEach(x => found.add(x)); else cards.push(r.error); }
+    else if (k === 'pick') {
+      const f = D.figure(w.fig), o = D.pickOptions(f).find(x => x.id === v);
+      if (!o || !w.ruler || w.done) { cards.push('pick: ' + (o ? 'nothing measured' : 'no such answer')); continue; }
+      w.converted = o.w.converted; w.op = o.w.op;
+      const r = D.work(f, w); w.done = r; logged++;
+      if (r.correct) D.measureDiscoveries(f, r).forEach(x => found.add(x)); else cards.push(r.error);
+    }
     if (['slide', 'clips', 'light', 'diaphragm', 'eye', 'obj', 'lower', 'move', 'stain', 'cover'].includes(k)) disc(prev, t);
   }
-  return { found, cards };
+  return { found, cards, s, w, logged, view: V() };
 }
 const gradeOf = x => (x.grades || [9]);
 const unsolved = D.DISCOVERIES.map(d => ({ d, r: runRecipe(d.how) })).filter(x => !x.r.found.has(x.d.id) || x.r.cards.length)
@@ -234,7 +247,7 @@ ok('the mistakes really are mistakes in the model: high power first + coarse dow
 console.log('\nGuided experiments');
 ok('at least 3 guided experiments, ids unique', D.GUIDES.length >= 3 && new Set(D.GUIDES.map(g => g.id)).size === D.GUIDES.length);
 for (const G of D.GUIDES) {
-  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say || !s.btn);
+  const badS = G.steps.filter(s => !tokenOk(s.on) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do and has a button`, badS.length === 0, badS);
   const r = runRecipe(G.steps.map(s => s.on));
   ok(`${G.title}: ends with what they found out, and runs with no mistake`, !!(G.lesson && G.blurb && G.icon) && r.cards.length === 0, r.cards);
@@ -386,6 +399,153 @@ const paperish = t => /Q\d+\(|\b20\d\d\b|\bNCE\b|\bpaper\b/.test(t) || /haemoglo
 ok('Grade 7 quotes no paper reference and nothing from the Grade 9 blood chapter', g7texts.every(t => !paperish(t)),
    g7texts.filter(paperish).map(t => t.slice(0, 80)));
 ok('Grade 7 has its own 💡 facts', D.FACTS_G7.length >= 10 && D.FACTS_G7.every(f => typeof f === 'string' && f.length > 20));
+
+// ══ Experiments (LAB_SPEC §10, lab_experiment.js) ══
+console.log('\nExperiments');
+const E = D.EXPERIMENTS;
+const CHAPTER = { 7: 'g7s-cells', 9: 'g9s-b1-circulatory' };
+ok('EXPERIMENTS is exported and its ids are unique', Array.isArray(E) && E.length > 0 && new Set(E.map(e => e.id)).size === E.length);
+ok('every experiment is tagged with one grade the lab declares', E.every(e => Array.isArray(e.grades) && e.grades.length === 1 && D.GRADES.includes(e.grades[0])), E.map(e => e.id + ':' + e.grades));
+for (const g of D.GRADES) {
+  const mine = by(E, g);
+  ok(`Grade ${g}: 3 to 5 experiments, every one on ${CHAPTER[g]}`, mine.length >= 3 && mine.length <= 5 && mine.every(e => e.chapter === CHAPTER[g]), mine.map(e => e.id + ':' + e.chapter));
+}
+ok('experiment 1 at Grade 7 is the exam-shaped one: parts of a plant cell, named in See', /cell wall/.test(by(E, 7)[0].see.saw) && /nucleus/.test(by(E, 7)[0].see.saw) && /vacuole/.test(by(E, 7)[0].see.saw));
+ok('experiment 1 at Grade 9 is the exam-shaped one: measure the printed drawing and divide', by(E, 9)[0].setup.includes('rig:measure') && by(E, 9)[0].steps.some(s => s.on === 'ruler:cell'));
+
+// Tokens and the words on the buttons. Labels that the bench writes as literals
+// are checked against its source, so this table cannot drift from the markup.
+SETS.pick = D.PICK_IDS;
+const DANGER = ['prick', 'sun', 'swab', 'splash', 'press'];
+const NEVER_RIGHT = DANGER.concat(['coarse:down', 'cover:drop', 'multiply']);
+const tokenAny = t => tokenOk(t) || DANGER.includes(t);
+const LIT = { clips: 'Clip the slide', lower: 'Lower lens (watch from side)', 'coarse:up': 'Coarse up', 'coarse:down': 'Coarse down', 'fine:up': 'Fine up', 'fine:down': 'Fine down',
+  'move:left': 'Left', 'move:right': 'Right', 'move:up': 'Up', 'move:down': 'Down', convert: 'Make units match', divide: 'Divide', multiply: 'Multiply', answer: 'Write the answer',
+  draw: 'Draw the cell in my notebook', sun: 'Mirror at the Sun', 'ruler:cell': 'Across the whole cell', 'ruler:eye': 'Guess by eye', 'kind:plant': 'Plant cell', 'kind:animal': 'Animal cell',
+  'rig:scope': 'Microscope', 'rig:measure': 'Measure a drawing' };
+ok('every literal button label this test relies on is in the bench markup', Object.values(LIT).every(l => bench.includes(l)), Object.values(LIT).filter(l => !bench.includes(l)));
+function labelFor(tok) {
+  if (LIT[tok]) return LIT[tok];
+  const [k, v] = tok.split(':');
+  if (k === 'obj' || k === 'eye') return '×' + v;
+  if (k === 'part') return D.CELL_PARTS[v].name;
+  if (k === 'id') return D.CELLS[v].short;
+  if (k === 'slide') return D.SLIDES[v].name;
+  if (k === 'stain') return D.STAINS[v].name;
+  if (k === 'cover') return D.COVERS[v].name;
+  if (k === 'light') return D.LIGHTS[v].name;
+  if (k === 'diaphragm') return D.DIAPHRAGM[v].name;
+  if (k === 'fig') return D.figure(v).title;
+  return null;
+}
+const plain = s => String(s || '').replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{2190}-\u{21FF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const expPath = e => e.setup.concat(e.steps.map(s => s.on || s.any[0]));
+const stepToks = s => s.options || s.any || (s.on ? [s.on] : []);
+const usedRefs = {};
+for (const e of E) {
+  const g = e.grades[0], toks = e.steps.flatMap(stepToks);
+  ok(`${e.id}: title is a question, aim is short, predict is 2-4 taps with the answer among them`,
+     /\?$/.test(e.title) && e.title.length <= 60 && e.aim.length <= 200 && e.aim.split(/[.!?]\s/).length <= 3
+     && e.predict && e.predict.options.length >= 2 && e.predict.options.length <= 4 && e.predict.options.some(o => o.id === e.predict.answer), { title: e.title, aim: e.aim.length });
+  ok(`${e.id}: 1 to 5 steps, and every set-up and step token is one the bench accepts`,
+     e.steps.length >= 1 && e.steps.length <= 5 && e.setup.every(tokenOk) && toks.every(tokenAny) && e.steps.every(s => (!s.on || tokenOk(s.on)) && (!s.any || s.any.every(tokenOk))),
+     [...e.setup, ...toks].filter(t => !tokenAny(t)));
+  ok(`${e.id}: the set-up and the right answers never take a dangerous step`, expPath(e).every(t => !NEVER_RIGHT.includes(t)), expPath(e).filter(t => NEVER_RIGHT.includes(t)));
+  ok(`${e.id}: every step completes with ONE tap (no focus:near/sharp pseudo-token in a step)`, toks.every(t => t.indexOf('focus:') !== 0));
+  for (const [i, s] of e.steps.entries()) {
+    const n = i + 1;
+    if (s.ask) ok(`${e.id} step ${n}: an ask lists 2-4 options with the answer among them, and every other option explains itself`,
+       Array.isArray(s.options) && s.options.length >= 2 && s.options.length <= 4 && s.options.includes(s.on) && !s.say
+       && s.options.filter(o => o !== s.on).every(o => s.wrong && typeof s.wrong[o] === 'string' && s.wrong[o].length > 30)
+       && Object.keys(s.wrong || {}).every(o => s.options.includes(o) && o !== s.on), s);
+    else ok(`${e.id} step ${n}: an observation is one token and a say`, !!s.on && !s.options && !s.any && typeof s.say === 'string' && s.say.length > 0, s);
+    const words = String(s.say || s.ask).split(/\s+/).length;
+    ok(`${e.id} step ${n}: instruction is 25 words or fewer`, words <= 25, words);
+    if (s.say) { const label = labelFor(s.on); ok(`${e.id} step ${n}: the say names its control ("${label}")`, !!label && plain(s.say).includes(plain(label)), { say: s.say, label }); }
+  }
+  const union = new Set(toks);
+  ok(`${e.id}: focus() shows ${union.size} controls, within every step's budget of max(6, its own tokens + 4)`,
+     e.steps.every(s => union.size <= Math.max(6, stepToks(s).length + 4)), [...union]);
+  ok(`${e.id}: 2 or 3 check refs, each into a mission of Grade ${g}, none repeated anywhere`,
+     e.check.length >= 2 && e.check.length <= 3 && e.check.every(r => { const [m, i] = r.split(':'); const Ms = D.MISSIONS.find(x => x.id === m); return !!(Ms && gradeOf(Ms).includes(g) && Ms.quiz[+i]) && !usedRefs[r] && (usedRefs[r] = e.id); }), e.check);
+  ok(`${e.id}: see, learn and an exam line`, e.see && e.see.saw.length > 20 && e.see.learn.length > 20 && typeof e.exam === 'string' && e.exam.length > 20);
+  const r = runRecipe(expPath(e));
+  ok(`${e.id}: the set-up and the right path run through the model with no mistake card`, r.cards.length === 0, r.cards);
+  ok(`${e.id}: the notebook has something to show at See`, r.logged > 0, r.logged);
+}
+ok('Grade 7 experiments quote no paper reference', by(E, 7).every(e => !/Q\d+\(|\b20\d\d\b|\bNCE\b/.test([e.aim, e.exam, e.see.saw, e.see.learn].join(' '))));
+
+// What See says is what the model shows. Each experiment is replayed to the
+// point the text describes, and its wrong options are checked to be wrong.
+console.log('\nExperiments: See is true, wrong is wrong');
+const X = id => E.find(e => e.id === id);
+const after = (e, extra) => runRecipe(e.setup.concat(extra || []));
+{
+  const e = X('g7_onion_inside'), end = runRecipe(expPath(e)), ask = after(e);
+  ok('onion inside: ends sharp at ×400 on stained onion, pointer on the nucleus; onion skin has no chloroplasts',
+     end.view.sharp && end.view.total === 400 && end.view.slide === 'onion' && end.view.stained && end.view.under === 'nucleus' && !so.chloroplast
+     && /cell wall/.test(e.see.saw) && /vacuole/.test(e.see.saw) && /cytoplasm/.test(e.see.saw) && /nucleus/.test(e.see.saw) && /no green chloroplasts/.test(e.see.saw), end.view);
+  ok('…the wrong start, ×40 with the lens lowered, really would hit the slide', D.clearance(ask.s.z, 40) <= 0 && D.clearance(ask.s.z, 4) > 0, ask.s.z);
+  ok('…one coarse turn on ×4 finds the cells, one fine turn makes them sharp, one fine turn again at ×40',
+     after(e, ['obj:4']).view.focus === 'blurred' && after(e, ['obj:4', 'coarse:up']).view.focus === 'near' && after(e, ['obj:4', 'coarse:up', 'fine:up']).view.sharp
+     && after(e, ['obj:4', 'coarse:up', 'fine:up', 'obj:40']).view.focus === 'near' && end.view.sharp);
+}
+{
+  const e = X('g7_make_slide'), end = runRecipe(expPath(e));
+  ok('make a slide: ends stained blue, cover slip at an angle, lamp on, no bubbles', end.s.stain === 'blue' && end.s.cover === 'angle' && end.s.light === 'lamp' && !end.view.bubbles && /No air bubbles/.test(e.see.saw), end.s);
+  ok('…dropping the cover slip flat is the bubbles mistake; iodine is the onion stain, not the cheek one', after(e, ['stain:blue', 'cover:drop']).cards[0] === 'g7_bubbles' && D.STAINS.iodine.for === 'onion' && D.STAINS.blue.for === 'cheek');
+}
+{
+  const e = X('g7_plant_or_animal'), start = after(e), edge = after(e, ['part:nucleus', 'move:left', 'move:left']), end = runRecipe(expPath(e));
+  ok('plant or animal: sharp at ×400 on stained cheek cells with the nucleus under the pointer, then the cytoplasm, then the membrane',
+     start.view.sharp && start.view.total === 400 && start.view.slide === 'cheek' && start.view.under === 'nucleus'
+     && after(e, ['part:nucleus', 'move:left']).view.under === 'cytoplasm' && edge.view.under === 'membrane', [start.view.under, edge.view.under]);
+  ok('…a cheek cell has no wall (naming one is wrong at both pointer positions) and is not a plant cell',
+     D.identifyPart(start.view, 'wall').why === 'wrong' && D.identifyPart(edge.view, 'wall').why === 'wrong' && D.classify(edge.view, 'plant').why === 'wrong' && !sc.wall && !sc.vacuole && !sc.chloroplast);
+  ok('…See says so', /no cell wall/.test(e.see.saw) && /membrane/.test(e.see.saw) && /nucleus/.test(e.see.saw) && end.cards.length === 0);
+}
+{
+  const e = X('g7_leaf_food'), high = after(e, ['obj:40', 'fine:up']), end = runRecipe(expPath(e));
+  ok('leaf: sharp on low power at the start, sharp at ×400 with a chloroplast under the pointer after two taps',
+     after(e).view.sharp && after(e).view.total === 40 && high.view.sharp && high.view.total === 400 && high.view.under === 'chloroplast' && high.view.stained, high.view);
+  ok('…the nucleus is the wrong name here, and a leaf cell is not an animal cell; leaf cells have walls and chloroplasts',
+     D.identifyPart(high.view, 'nucleus').why === 'wrong' && D.classify(high.view, 'animal').why === 'wrong' && sl.wall && sl.chloroplast && end.found.has('g7_chloroplast') && end.found.has('g7_plant'));
+}
+{
+  const e = X('g9_rbc_size'), f = D.figure('rbc'), picks = D.pickOptions(f), end = runRecipe(expPath(e));
+  ok('red cell size: the three answers on the desk are ×480 (multiplied), ×7500 (right) and ×7.5 (units not matched), and the step points at ×7500',
+     picks.map(o => o.id + '=' + o.label).join() === 'a=×480,b=×7500,c=×7.5' && e.steps[1].on === 'pick:b' && picks.find(o => o.id === 'b').correct, picks);
+  ok('…the right pick ends correct at ×7500 with the working in the notebook; the wrong picks are the model\'s own mistakes',
+     end.w.done && end.w.done.correct && end.w.done.shown === '×7500' && D.work(f, D.pickWork(f, 'multiply')).error === 'multiply' && D.work(f, D.pickWork(f, 'no_convert')).error === 'no_convert'
+     && D.workLines(f, end.w).join(' | ').includes('60 ÷ 0.008 = ×7500'), end.w);
+  ok('…guessing by eye is the by_eye mistake; See quotes the sum', D.work(f, { ruler: 'eye', converted: true, op: 'divide' }).error === 'by_eye' && /60 mm/.test(e.see.saw) && /0\.008/.test(e.see.saw) && /×7500/.test(e.see.saw));
+}
+{
+  const e = X('g9_blood_400'), ask = after(e), end = runRecipe(expPath(e));
+  const n = {}; D.fieldCells(0, 0).forEach(c => { n[c.type] = (n[c.type] || 0) + 1; });
+  ok('blood at ×400: the wrong start would crack the slide; the right path ends sharp at ×400 with a red cell under the pointer, red cells outnumbering the rest',
+     D.clearance(ask.s.z, 40) <= 0 && end.view.sharp && end.view.total === 400 && end.view.slide === 'blood' && end.view.under === 'rbc'
+     && Object.keys(n).every(t => t === 'rbc' || n.rbc > n[t]) && /red blood cells/.test(e.see.saw) && /10 × 40 = ×400/.test(e.see.saw), { z: ask.s.z, n });
+}
+{
+  const e = X('g9_white_hunt'), start = after(e), mid = after(e, ['id:lympho', 'move:left']), end = runRecipe(expPath(e));
+  ok('white cell hunt: a lymphocyte under the pointer at the start, red cells after one move, a phagocyte after two',
+     start.view.sharp && start.view.total === 400 && start.view.under === 'lympho' && mid.view.under === 'rbc' && after(e, ['id:lympho', 'move:left', 'move:left']).view.under === 'phago', [start.view.under, mid.view.under]);
+  ok('…the wrong names are wrong, and both white cells are named on the way',
+     D.identify(start.view, 'phago').why === 'wrong' && D.identify(start.view, 'rbc').why === 'wrong' && end.found.has('lympho') && end.found.has('phago') && /lymphocyte/.test(e.see.saw) && /phagocyte/.test(e.see.saw));
+}
+{
+  const e = X('g9_platelet_15000'), f = D.figure('platelet'), picks = D.pickOptions(f), end = runRecipe(expPath(e));
+  ok('the ×15 000 platelet: the answers on the desk are 0.002 µm (unit not changed), 450 000 mm (multiplied) and 2 µm (right)',
+     picks.map(o => o.id + '=' + o.label).join() === 'a=0.002 µm,b=450 000 mm,c=2 µm' && e.steps[1].on === 'pick:c', picks);
+  ok('…multiplying is the 450 m mistake, and the right path ends at 2 µm', D.work(f, { ruler: 'cell', converted: false, op: 'multiply' }).error === 'multiply' && end.w.done && end.w.done.correct && end.w.done.shown === '2 µm'
+     && /0\.002 mm/.test(e.see.saw) && /2 µm/.test(e.see.saw), end.w.done);
+}
+ok('every figure offers exactly one right answer, three distinct labels, and each wrong one is the mistake its key names',
+   D.FIGURES.every(f => { const p = D.pickOptions(f); return p.length === 3 && p.filter(o => o.correct).length === 1 && new Set(p.map(o => o.label)).size === 3
+     && D.show(D.rightAnswer(f).value, D.rightAnswer(f).unit) === p.find(o => o.correct).label
+     && p.filter(o => !o.correct).every(o => D.work(f, o.w).error === o.key); }),
+   D.FIGURES.map(f => f.id + ': ' + D.pickOptions(f).map(o => o.label + (o.correct ? '*' : '/' + D.work(f, o.w).error)).join(', ')));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

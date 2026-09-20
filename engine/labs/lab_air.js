@@ -41,7 +41,10 @@ const LabAir = (() => {
   // The grade the lab is used at (Labs.grade(): Grade 5 arrives here as 4).
   const _g = () => { const g = typeof Labs.grade === 'function' ? Number(Labs.grade()) : 0; return D().GRADES.includes(g) ? g : D().GRADES[0]; };
   const _forGrade = list => D().forGrade(list, _g());
-  const _still = () => _instant || Labs.calm() || !_cx;
+  // `_silent`: an experiment's set-up (experiment.apply) - instant, no coach,
+  // no discovery toast, no card, so the picture is simply ready at the Aim.
+  let _silent = false, _focus = null;
+  const _still = () => _instant || _silent || Labs.calm() || !_cx;
   const _durOf = a => a.type === 'burn' ? Math.max(1, a.sim / D().SPEED) : (DUR[a.type] || 0);
   const _S = () => D().station(_st.station);
 
@@ -247,6 +250,9 @@ const LabAir = (() => {
   // ══ Actions: every control is a token for LabAirData.apply ══
   function act(tok) {
     if (!_st || !_root) return false;
+    // A wrong option of an experiment's ask step is HEARD, never done - a hot
+    // jar is not grabbed, water never reaches the oil. The runner explains.
+    if (_expWrong(tok)) { _guideEvent(tok); return false; }
     if (tok === 'peek') return _peek();
     if (_busy) { _coach('One thing at a time. Watch this first!'); return false; }
     const r = D().apply(_st, tok, _g());
@@ -300,9 +306,9 @@ const LabAir = (() => {
   function _outcome(r, tok) {
     const g = _g();
     if (r.anim && r.anim.type === 'burn') D().settle(_st);
-    _coach(r.say);
-    _verdict = _verdictFor(r);
-    _verdictBad = !!(r.hazard || r.result);
+    if (!_silent) _coach(r.say);
+    _verdict = _silent ? '' : _verdictFor(r);
+    _verdictBad = !_silent && !!(r.hazard || r.result);
     const a = r.anim && r.anim.type;
     if (a === 'hold') _view.mist = !r.anim.warm;
     if (a === 'lime') _view.lime = true;
@@ -316,9 +322,10 @@ const LabAir = (() => {
         _logEntry({ title: `${D().jarName(ev.jar, g)} · ${D().CANDLES[ev.candle].name.toLowerCase()}`, obs: r.say, bad: !ev.good || !ev.fair });
       } else _logEntry({ title: D().stepText(tok, g, _st).btn, obs: r.say });
       if (_mission) { const k = D().keyOf(ev); if (k) _mission.keys.add(k); }
-      _checkDisc(ev);
+      if (!_silent) _checkDisc(ev);
     });
     if (_mission) _missionCheck();
+    if (_silent) { _afterChange(); return; }
     if (r.hazard) _hazard(r.hazard, r.ctx || {}, !!(r.anim && r.anim.type !== 'light'));
     else if (r.result) {
       if (_mission) _mission.mistakes++;
@@ -431,6 +438,14 @@ const LabAir = (() => {
   // discovery's recipe. Steps already true on the bench are skipped
   // (LabAirData.satisfied).
   const _gdef = () => _guide && (_guide.def || _forGrade(D().GUIDES).find(g => g.id === _guide.id));
+  // A guide step is a token string (GUIDES, discovery recipes) or, in an
+  // experiment (lab_experiment.js), { on, any, options, wrong, say }.
+  const _tokOf = s => typeof s === 'string' ? s : (s && s.on) || null;
+  const _stepToks = s => typeof s === 'string' ? [s] : (s ? (s.options || s.any || (s.on ? [s.on] : [])) : []);
+  // A step is met by its token, or by any token in `any` ("put it out with
+  // the extinguisher or the blanket"). The runner hears every token first.
+  const _stepHit = (s, tok) => typeof s === 'string' ? s === tok : !!s && (s.any ? s.any.includes(tok) : s.on === tok);
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && typeof s === 'object' && s.wrong && s.wrong[tok]); };
 
   function startGuide(idOrDef) {
     const adhoc = typeof idOrDef === 'object' && idOrDef;
@@ -454,11 +469,13 @@ const LabAir = (() => {
     if (!G) return;
     _hush();
     let s = G.steps[_guide.step];
-    while (s && D().satisfied(_st, s)) { _guide.step++; s = G.steps[_guide.step]; }
+    // A step already true on the bench needs no tap - but a decision with no
+    // single answer (`any` only) is always asked.
+    while (s && _tokOf(s) && D().satisfied(_st, _tokOf(s))) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     const box = $('lab-guide');
     if (box) {
-      const n = G.steps.length, i = _guide.step, txt = D().stepText(s, _g(), _st);
+      const n = G.steps.length, i = _guide.step, txt = typeof s === 'string' ? D().stepText(s, _g(), _st) : { say: s.say || '' };
       box.innerHTML = `<p class="lab-guide-meta">${G.icon} ${esc(G.title)} · Step ${i + 1} of ${n}</p>
         <div class="lab-guide-dots" aria-hidden="true">${G.steps.map((_, k) => `<i class="${k < i ? 'is-done' : k === i ? 'is-now' : ''}"></i>`).join('')}</div>
         <div class="lab-air-sayrow"><p class="lab-guide-say">${esc(txt.say)}</p>
@@ -470,12 +487,15 @@ const LabAir = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
   function _guideEvent(tok) {
     const G = _gdef();
     if (!G) return;
-    if (G.steps[_guide.step] === tok) { _guide.step++; _guideEnter(); }
+    const s = G.steps[_guide.step];
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(tok, s);
+    if (_stepHit(s, tok)) { _guide.step++; _guideEnter(); }
     else _highlight();
   }
 
@@ -488,23 +508,6 @@ const LabAir = (() => {
     el.classList.add('is-idle-hint');
     el.addEventListener('animationend', () => el.classList.remove('is-idle-hint'), { once: true });
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  function _guideDo() {
-    const G = _gdef();
-    if (!G || _busy) return;
-    const s = G.steps[_guide.step];
-    if (!s) return;
-    const k = s.split(':')[0];
-    const where = D().TOK_STATION[k];
-    if (where && !where.includes(_st.station)) act('station:' + where[0]);
-    const needFlame = () => { if (_st.jarOn) act('reset'); if (!_st.lit) { if (!_st.safety) act('safety:on'); act('light'); } };
-    if (k === 'burn') { needFlame(); if (_st.watch !== 'ready') act('watch:ready'); }
-    if (k === 'light' && !_st.safety) act('safety:on');
-    if (k === 'blow') needFlame();
-    if (k === 'hold' || k === 'lime') { needFlame(); if (k === 'hold' && _st.jartemp !== 'cold') act('jartemp:cold'); }
-    if (k === 'letout' && _st.balloons !== 'full') act('fill');
-    act(s);
   }
 
   // ── Discoveries: every card opens ─────────────
@@ -553,6 +556,8 @@ const LabAir = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    // An experiment's guide ends in the runner's See, not in a card here.
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('air', G)) { _stopGuide(true); return; }
     const st = Labs.store(LAB);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -595,21 +600,72 @@ const LabAir = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const where = D().TOK_STATION[s.split(':')[0]];
-    const sel = where && !where.includes(_st.station) ? `[data-tok="station:${where[0]}"]` : `[data-tok="${s}"]`;
-    const el = _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-tok]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
+    let els;
+    if (G.exp) {
+      // Every option of a decision glows; the runner keeps the picture still.
+      els = _stepToks(s).map(t => _root.querySelector(`[data-tok="${t}"]`)).filter(Boolean);
+    } else {
+      const where = D().TOK_STATION[s.split(':')[0]];
+      const sel = where && !where.includes(_st.station) ? `[data-tok="station:${where[0]}"]` : `[data-tok="${s}"]`;
+      const el = _root.querySelector(sel);
+      els = el ? [el] : [];
     }
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-tok]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ══ Experiments (lab_experiment.js, LAB_SPEC.md §10) ═══
+  // focus(tokens): show only the controls an experiment's steps use - null
+  // shows everything. Re-applied after every render of the controls and of
+  // the safety toggle, because both are rebuilt on every action.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus, has = tok => on && _focus.has(tok);
+    _root.querySelectorAll('#lab-air-controls [data-tok], #lab-air-safety').forEach(b => { b.hidden = on && !has(b.dataset.tok); });
+    const any = el => [...el.querySelectorAll('[data-tok]')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-air-stations, .lab-air-pick, .lab-air-acts').forEach(r => {
+      r.hidden = on && !any(r);
+      const label = r.previousElementSibling;
+      if (label && label.classList.contains('lab-air-label')) label.hidden = r.hidden;
+    });
+    const ask = _root.querySelector('.lab-air-ask');
+    if (ask) ask.hidden = on;
+  }
+  const experiment = {
+    list: () => (D().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(_g())),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    // A clean bench: no mission, no guide, empty notebook, controls re-rendered.
+    reset: () => {
+      _hush();
+      _fresh();
+      if (!_root) return;
+      _panel = 'sandbox';
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _renderTop(); _renderPanel(); _renderControls(); _readouts();
+      _draw(0);
+    },
+    // One token, silently and instantly (the set-up before the Aim).
+    apply: tok => { const was = _silent; _silent = true; try { return act(tok); } finally { _silent = was; } },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: tok => `[data-tok="${tok}"]`,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -736,12 +792,15 @@ const LabAir = (() => {
     b.dataset.tok = _st.safety ? 'safety:off' : 'safety:on';
     b.setAttribute('aria-pressed', String(!!_st.safety));
     b.setAttribute('aria-label', _st.safety ? 'Hair tied back and sleeves rolled up. Tap to undo.' : 'Tie your hair back and roll up your sleeves');
-    b.textContent = _st.safety ? '🎀 Hair tied' : '🎀 Tie hair';
+    b.textContent = D().controlLabel(b.dataset.tok, _g(), _st);
+    _applyFocus();
   }
 
   // ── Controls under the picture ────────────────
   const _btn = (tok, label, cls) => `<button type="button" class="lab-btn ${cls || ''}" data-tok="${esc(tok)}">${esc(label)}</button>`;
-  const _lbl = tok => D().stepText(tok, _g(), _st).btn;
+  // Every label comes from the data (controlLabel), so an experiment's "say"
+  // can be checked against the very text on the button.
+  const _lbl = tok => D().controlLabel(tok, _g(), _st);
   function _renderControls() {
     const c = $('lab-air-controls');
     if (!c || !_st) return;
@@ -751,20 +810,20 @@ const LabAir = (() => {
     if (S.id === 'jars') {
       const running = _busy && _scene && _scene.type === 'burn' && _scene.covered;
       const acts = [
-        _btn('light', _st.lit ? '🕯️ The candle is lit' : _lbl('light')),
-        _btn('watch:ready', _st.watch === 'ready' ? '⏱ Stopwatch ready ✓' : '⏱ Get the stopwatch ready'),
+        _btn('light', _lbl('light')),
+        _btn('watch:ready', _lbl('watch:ready')),
         _btn('burn', _lbl('burn'), 'lab-btn-primary'),
       ];
       if (g === 4) acts.push(_btn('blow', _lbl('blow')));
-      if (running) acts.push(_btn('peek', '👀 Lift the jar a little', 'lab-air-risky'));
-      if (_st.jarOn) acts.push(_btn('reset', _lbl('reset'), 'lab-btn-primary'), _btn('lift', '✋ Lift it now', 'lab-air-risky'), _btn('tap', '🚿 Cool it under the cold tap', 'lab-air-risky'));
+      if (running) acts.push(_btn('peek', _lbl('peek'), 'lab-air-risky'));
+      if (_st.jarOn) acts.push(_btn('reset', _lbl('reset'), 'lab-btn-primary'), _btn('lift', _lbl('lift'), 'lab-air-risky'), _btn('tap', _lbl('tap'), 'lab-air-risky'));
       body = `<p class="lab-air-label">Jar</p>
         <div class="lab-air-pick" role="group" aria-label="Choose a jar">${D().JAR_ORDER.map(id => {
           const J = D().JARS[id];
-          return opt(`jar:${id}`, g === 6 ? (id === 'none' ? 'No jar (S)' : `Jar ${J.letter}`) : J.name, J.ml ? `${J.ml} mL` : 'open air', _st.jar === id);
+          return opt(`jar:${id}`, _lbl(`jar:${id}`), J.ml ? `${J.ml} mL` : 'open air', _st.jar === id);
         }).join('')}</div>
         <p class="lab-air-label">Candle</p>
-        <div class="lab-air-pick" role="group" aria-label="Choose a candle">${Object.values(D().CANDLES).map(C => opt(`candle:${C.id}`, C.name, C.flame, _st.candle === C.id)).join('')}</div>
+        <div class="lab-air-pick" role="group" aria-label="Choose a candle">${Object.values(D().CANDLES).map(C => opt(`candle:${C.id}`, _lbl(`candle:${C.id}`), C.flame, _st.candle === C.id)).join('')}</div>
         <div class="lab-air-acts">${acts.join('')}</div>`;
     } else if (S.id === 'space') {
       body = `<div class="lab-air-acts">${['push', 'tilt', 'bottle'].map(t => _btn(t, _lbl(t))).join('')}</div>`;
@@ -772,13 +831,13 @@ const LabAir = (() => {
       body = `<div class="lab-air-acts">${['fill', 'letout'].map(t => _btn(t, _lbl(t))).join('')}</div>`;
     } else if (S.id === 'fire') {
       body = `<p class="lab-air-label">Fire</p>
-        <div class="lab-air-pick" role="group" aria-label="Choose a fire">${Object.values(D().FIRES).map(F => opt(`fire:${F.id}`, `${F.icon} ${F.name}`, '', _st.fire === F.id && !_st.fireOut)).join('')}</div>
+        <div class="lab-air-pick" role="group" aria-label="Choose a fire">${Object.values(D().FIRES).map(F => opt(`fire:${F.id}`, _lbl(`fire:${F.id}`), '', _st.fire === F.id && !_st.fireOut)).join('')}</div>
         <p class="lab-air-label">Put it out with…</p>
         <div class="lab-air-acts">${Object.keys(D().METHODS).map(m => _btn(`method:${m}`, _lbl(`method:${m}`))).join('')}</div>`;
     } else if (S.id === 'products') {
       body = `<p class="lab-air-label">The jar</p>
         <div class="lab-air-pick" role="group" aria-label="Cold or warm jar">${['cold', 'warm'].map(v => opt(`jartemp:${v}`, _lbl(`jartemp:${v}`), '', _st.jartemp === v)).join('')}</div>
-        <div class="lab-air-acts">${[_btn('light', _st.lit ? '🕯️ The candle is lit' : _lbl('light')), _btn('hold', _lbl('hold'), 'lab-btn-primary'),
+        <div class="lab-air-acts">${[_btn('light', _lbl('light')), _btn('hold', _lbl('hold'), 'lab-btn-primary'),
           _btn('lime', _lbl('lime')), _btn('control', _lbl('control'))].join('')}</div>`;
     }
     c.innerHTML = `
@@ -787,6 +846,7 @@ const LabAir = (() => {
       </div>
       <p class="lab-air-ask"><b>${S.icon} ${esc(S.ask)}</b> ${esc(S.how)}</p>
       ${body}`;
+    _applyFocus();
     _highlight();
   }
 
@@ -1271,6 +1331,7 @@ const LabAir = (() => {
              scene: _scene && { type: _scene.type, t: _scene.t, covered: !!_scene.covered },
              watch: _watch, runs: _runs.map(r => Object.assign({}, r)), talking: _talking, looping: !!_raf,
              guide: _guide && { id: _guide.id, step: _guide.step }, view: Object.assign({}, _view),
+             focus: _focus ? [..._focus] : null, silent: _silent,
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
              mission: _mission && { id: _mission.id, keys: [..._mission.keys], mistakes: _mission.mistakes, hazards: _mission.hazards, success: _mission.success } };
   }
@@ -1285,6 +1346,6 @@ const LabAir = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, act, startGuide, startMission, discoveryGuide, speak, _test, _tick, _debug };
+  return { study, experiment, mount, unmount, act, startGuide, startMission, discoveryGuide, speak, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabAir = LabAir;

@@ -16,12 +16,18 @@
 //    scenario state, but nothing moves between frames.
 //  ⚠ LAB_SPEC §9: Labs.grade() is 7 or 8. Guides, missions and
 //    discoveries are filtered by grade before anything is shown.
+//  ⚠ LAB_SPEC §10: the lab opens on an EXPERIMENT (lab_experiment.js) at
+//    both grades. The `experiment` adapter at the bottom is the contract;
+//    an experiment step is a decision on the scenario already on the canvas
+//    ('sort:<scenario>:<zone>' drops the card in a zone, 'spot:<scenario>:<sign>'
+//    taps a sign). The old bench survives as Explore.
 // ══════════════════════════════════════════════
 const LabChanges = (() => {
   const ID = 'changes';
   const FRAME_MS = 1000 / 30;
   const WATCH_DUR = 3.0;     // seconds before classify chips appear
   const ANIM_DUR = 2.8;      // seconds for the scenario animation to complete
+  const REVEAL_DUR = 2.2;    // seconds a right answer's line stays before the next scenario (experiments)
 
   const $ = id => document.getElementById(id);
   const esc = s => Labs.esc(s);
@@ -45,6 +51,12 @@ const LabChanges = (() => {
   let _said = {};
   let _instant = false;
   let _colors = null;
+  let _log = [];           // notebook lines an experiment wrote, oldest first
+  let _pending = null;     // experiment token to fire once the reveal has been read
+  let _pendingT = 0;
+  let _classifyOpen = false;
+  let _quiet = false;      // experiment set-up: no discovery toasts
+  let _focus = null;       // experiment: the tokens whose controls stay visible (null = all)
 
   // ── Grade level ──────────────────────────────
   function _readGrade() {
@@ -110,6 +122,7 @@ const LabChanges = (() => {
       _signsFound = new Set(); _classified = new Set();
       _guide = null; _mission = null; _panel = 'sandbox';
       _said = {}; _tipIdx = -1;
+      _log = []; _pending = null; _classifyOpen = false;
     }
     if (!_signsFound) _signsFound = new Set();
     if (!_classified) _classified = new Set();
@@ -135,6 +148,7 @@ const LabChanges = (() => {
 
   function unmount() {
     _stop();
+    _focus = null; _pending = null;
     _root = null; _cv = null; _cx = null;
   }
 
@@ -179,13 +193,17 @@ const LabChanges = (() => {
 
   function _tick(dt) {
     if (_phase === 'watch') {
-      const dur = _instant ? 0 : WATCH_DUR;
-      _phaseT = Math.min(_phaseT + dt, dur + 0.5);
-      if (_phaseT >= dur && $('lab-changes-classify') && $('lab-changes-classify').hidden) {
-        $('lab-changes-classify').hidden = false;
+      // In an experiment the zones are there at once: the decision is the step.
+      const dur = (_instant || _expOn()) ? 0 : WATCH_DUR;
+      _phaseT = Math.min(_phaseT + dt, Math.max(dur, ANIM_DUR) + 0.5);
+      if (_phaseT >= dur && !_classifyOpen) {
+        _showClassify(true);
         _renderChips();
-        _coach('Drag the card to the right bucket — or just tap Physical or Chemical.');
+        if (!_expOn()) _coach('Drag the card to the right bucket — or just tap Physical or Chemical.');
       }
+    } else if (_phase === 'reveal' && _pending) {
+      _pendingT += dt;
+      if (_instant || _pendingT >= REVEAL_DUR) _firePending();
     }
     _draw();
   }
@@ -224,6 +242,7 @@ const LabChanges = (() => {
       case 'tip':    _nextTip(); break;
       case 'submit': _submit(); break;
       case 'next':   _nextScenario(); break;
+      case 'exp-next': _firePending(); break;
       case 'guide-stop': _stopGuide(false); break;
     }
   }
@@ -270,15 +289,25 @@ const LabChanges = (() => {
     _chips = { newSub: null, reversible: null };
     _signsChosen = new Set();
     _said = {};
-    const classify = $('lab-changes-classify');
+    _pending = null;
+    _showClassify(false);
     const reveal = $('lab-changes-reveal');
-    if (classify) { classify.hidden = true; }
     if (reveal) { reveal.hidden = true; }
     _readouts();
     _coach(`Watch: ${sc.name}. Is a new substance formed? Can you reverse it?`);
     _guideEvent('watch:' + id);
-    if (_instant && classify) { classify.hidden = false; _renderChips(); }
+    if (_instant || _expOn()) { _showClassify(true); _renderChips(); }
     _renderPanel();
+  }
+
+  // The classify area is open once the scenario has played (or at once in an
+  // experiment); an experiment's focus can still hide it when it holds nothing.
+  function _showClassify(open) { _classifyOpen = !!open; _syncClassify(); }
+  const _visibleInside = el => !!el.querySelector('.lab-changes-exp-reveal') || [...el.querySelectorAll('button')].some(b => !b.hidden);
+  function _syncClassify() {
+    const el = $('lab-changes-classify');
+    if (!el) return;
+    el.hidden = !_classifyOpen || (!!_focus && !_visibleInside(el));
   }
 
   // ── Classification chips ──────────────────────
@@ -317,6 +346,8 @@ const LabChanges = (() => {
     }
     const card = $('lab-changes-drag-card');
     if (card) _wireDrag(card);
+    _applyFocus();
+    _highlight();
   }
 
   function _tapChip(chip, val) {
@@ -327,12 +358,40 @@ const LabChanges = (() => {
 
   // ── Sign identification (Grade 8) ─────────────
   function identifySign(signId) {
-    if (!D().SIGNS[signId] || !_g8()) return;
+    const sign = D().SIGNS[signId];
+    if (!sign || !_g8()) return;
+    if (_expOn()) {
+      // An experiment step: the sign the step asks for advances it; a sign the
+      // bench never showed is a wrong answer the runner (or the bench) explains.
+      if (!_current || _phase !== 'watch') return;
+      const sc = _current, tok = `spot:${sc.id}:${signId}`;
+      if (!_expStepHit(tok)) {
+        const listed = _expWrong(tok);
+        _guideEvent(tok);
+        if (!listed && !sc.signs.includes(signId)) {
+          Labs.resultCard({ icon: sign.icon, title: 'That sign was not there',
+            happened: `${sc.name}: the bench did not show "${sign.name}".`,
+            instead: 'Look at the picture again and tap the sign you actually saw.',
+            exam: 'Signs of a chemical change: colour change, gas given off, precipitate formed, temperature change.' });
+        }
+        return;
+      }
+      if (!_signsChosen) _signsChosen = new Set();
+      _signsChosen.add(signId); _signsFound.add(signId);
+      _log.push(`${sc.name}: ${sign.name.toLowerCase()}`);
+      _phase = 'reveal';
+      _renderExpReveal(sc, `${sign.icon} ${sign.name}`, sign.desc);
+      _pending = tok; _pendingT = 0;
+      if (_signsFound.size >= 4) _discover('g8_disc_signs');
+      if (signId === 'heat') _discover('g8_disc_exothermic');
+      if (signId === 'temperature_drop') _discover('g8_disc_endothermic');
+      if (signId === 'precipitate' && sc.id === 'precipitate' && _classified.has('precipitate')) _discover('g8_disc_precipitate');
+      return;
+    }
     if (!_signsChosen) _signsChosen = new Set();
     _signsChosen.has(signId) ? _signsChosen.delete(signId) : _signsChosen.add(signId);
     _signsFound.add(signId);
     _renderChips();
-    const sign = D().SIGNS[signId];
     _coach(`${sign.icon} ${sign.name}: ${sign.desc}`);
     _guideEvent('sign:' + signId);
     if (_g8() && _signsFound.size >= 4) _discover('g8_disc_signs');
@@ -410,9 +469,8 @@ const LabChanges = (() => {
   }
 
   function _nextScenario() {
-    const classify = $('lab-changes-classify');
     const reveal = $('lab-changes-reveal');
-    if (classify) classify.hidden = true;
+    _showClassify(false);
     if (reveal) reveal.hidden = true;
     _current = null;
     _phase = 'idle';
@@ -420,6 +478,7 @@ const LabChanges = (() => {
     _chips = null;
     _signsChosen = null;
     _said = {};
+    _pending = null;
     _renderPanel();
     _readouts();
     _coach('Choose the next scenario from the list below, or try a guided experiment.');
@@ -862,6 +921,29 @@ const LabChanges = (() => {
     if (!_current || _phase !== 'watch') return;
     const sc = _current;
     const correct = type === sc.type;
+    if (_expOn()) {
+      // An experiment step. The bench never acts on a wrong zone: the runner
+      // explains a listed one, the bench's own card an unlisted one.
+      const tok = `sort:${sc.id}:${type}`;
+      if (!correct) {
+        const listed = _expWrong(tok);
+        _guideEvent(tok);
+        if (!listed) _showResultCard(sc, true, false);
+        return;
+      }
+      _chips = { newSub: type === 'chemical', reversible: type === 'physical' };
+      _phase = 'reveal';
+      _log.push(`${sc.name}: ${type} change - ${type === 'chemical' ? 'something new was made' : 'nothing new was made'}`);
+      _renderExpReveal(sc, type === 'physical' ? '🔄 Physical change' : '⚗️ Chemical change', sc.short || sc.explanation);
+      _pending = tok; _pendingT = 0;
+      _classified.add(sc.id);
+      _guideEvent('classify');
+      if (sc.disc) _discover(sc.disc);
+      if (!_classified.has('_phys') && sc.type === 'physical') { _classified.add('_phys'); _discover('disc_physical'); }
+      if (!_classified.has('_chem') && sc.type === 'chemical') { _classified.add('_chem'); _discover('disc_chemical'); }
+      _renderPanel();
+      return;
+    }
     _chips = { newSub: type === 'chemical', reversible: type === 'physical' };
     const wrongSub = !correct;
     _phase = 'reveal';
@@ -880,6 +962,29 @@ const LabChanges = (() => {
       _showResultCard(sc, wrongSub, false);
     }
     _renderPanel();
+  }
+
+  // The right answer's line in an experiment, in the place the zones were so it
+  // sits right under the picture. The next scenario follows after REVEAL_DUR,
+  // or sooner on Next.
+  function _renderExpReveal(sc, badge, line) {
+    const el = $('lab-changes-chips');
+    if (!el) return;
+    const cls = sc.type === 'physical' ? 'is-physical' : 'is-chemical';
+    el.innerHTML = `<div class="lab-changes-exp-reveal ${cls}" role="status">
+        <span class="lab-changes-reveal-badge ${cls}">✓ ${esc(badge)}</span>
+        <p class="lab-changes-exp-line"><b>${esc(sc.name)}.</b> ${esc(line)}</p>
+        <button type="button" class="lab-btn lab-btn-sm" data-act="exp-next">Next ▶</button>
+      </div>`;
+    const sw = $('lab-changes-signs-wrap');
+    if (sw) sw.hidden = true;
+    _syncClassify();
+  }
+  function _firePending() {
+    const tok = _pending;
+    if (!tok) return;
+    _pending = null; _pendingT = 0;
+    _guideEvent(tok);
   }
 
   function _intro() {
@@ -914,6 +1019,10 @@ const LabChanges = (() => {
     if (_panel === 'sandbox') el.innerHTML = _sandboxHTML();
     else if (_panel === 'missions') el.innerHTML = _missionsHTML();
     else el.innerHTML = _foundHTML();
+    _applyFocus();
+    // The scenario list was just rebuilt: a guide pointing at a scenario must
+    // glow again (it used to go dark after every classification).
+    _highlight();
   }
 
   function _sandboxHTML() {
@@ -1027,6 +1136,7 @@ const LabChanges = (() => {
 
   // ── Discover ──────────────────────────────────
   function _discover(id) {
+    if (_quiet) return;
     const disc = D().DISCOVERIES.find(d => d.id === id);
     if (!disc) return;
     if (!disc.grades.includes(_grade)) return;
@@ -1045,11 +1155,15 @@ const LabChanges = (() => {
     if (!G) return;
     if (Labs.studyBegin && Labs.studyBegin('changes', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _current = null; _phase = 'idle'; _phaseT = 0;
-    const classify = $('lab-changes-classify');
-    const reveal = $('lab-changes-reveal');
-    if (classify) classify.hidden = true;
-    if (reveal) reveal.hidden = true;
+    _pending = null;
+    // An experiment's guide (lab_experiment.js) runs on the scenario the runner
+    // already put on the canvas - never wipe it.
+    if (!G.exp) {
+      _current = null; _phase = 'idle'; _phaseT = 0;
+      _showClassify(false);
+      const reveal = $('lab-changes-reveal');
+      if (reveal) reveal.hidden = true;
+    }
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel();
@@ -1062,6 +1176,7 @@ const LabChanges = (() => {
     if (!G) return;
     const s = G.steps[_guide.step];
     if (!s) { _guideDone(); return; }
+    if (G.exp) _expEnter(s);
     const box = $('lab-guide');
     if (box) {
       const n = G.steps.length, i = _guide.step;
@@ -1075,13 +1190,41 @@ const LabChanges = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // An experiment step names its scenario in its tokens ('sort:melting:…'):
+  // put that scenario on the bench, with the zones open, before the box says
+  // what to decide. Same scenario as the last step: just reopen the zones.
+  function _expEnter(s) {
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const p = String(toks[0] || '').split(':');
+    const sc = (p[0] === 'sort' || p[0] === 'spot') ? p[1] : null;
+    _pending = null;
+    if (sc && (!_current || _current.id !== sc)) { selectScenario(sc); return; }
+    if (!_current) return;
+    if (_phase !== 'watch') {
+      _phase = 'watch';
+      const reveal = $('lab-changes-reveal');
+      if (reveal) reveal.hidden = true;
+    }
+    _showClassify(true);
+    _renderChips();
+  }
+
+  // A step is met by its `on` token, or by any token in `any`. The runner hears
+  // every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
+  const _expOn = () => { const G = _gdef(); return !!(G && G.exp); };
+  const _expStep = () => { const G = _gdef(); return G && G.exp ? G.steps[_guide.step] : null; };
+  const _expStepHit = tok => _stepHit(_expStep(), tok);
+  const _expWrong = tok => { const s = _expStep(); return !!(s && s.wrong && s.wrong[tok]); };
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); }
   }
 
   function _guideDo() {
@@ -1108,15 +1251,18 @@ const LabChanges = (() => {
 
   function _stopGuide(silent) {
     _guide = null;
+    _pending = null;
     const box = $('lab-guide');
-    if (box) box.hidden = true;
+    if (box) { box.hidden = true; box.innerHTML = ''; }
     if (!silent) _coach('Guide stopped. The bench is all yours.');
     _renderPanel();
+    _highlight();
   }
 
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('changes', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -1140,33 +1286,102 @@ const LabChanges = (() => {
       </div>`, { cls: 'is-done' });
   }
 
+  // The control a guide token belongs to. Tests tap it; the guide glows it.
+  function _selFor(tok) {
+    const p = String(tok).split(':');
+    if (p[0] === 'watch') return `[data-scenario="${p[1]}"]`;
+    if (p[0] === 'sort') return `[data-zone="${p[2]}"]`;
+    if (p[0] === 'zone') return `[data-zone="${p[1]}"]`;
+    if (p[0] === 'spot') return `[data-sign="${p[2]}"]`;
+    if (p[0] === 'sign') return `[data-sign="${p[1]}"]`;
+    if (p[0] === 'classify') return '[data-zone]';
+    return `[data-act="${tok}"]`;
+  }
   function _highlight() {
-    const G = _gdef();
+    if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
     _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
-    if (!G) return;
-    const s = G.steps[_guide.step];
+    const G = _gdef();
+    const s = G && G.steps[_guide.step];
     if (!s) return;
-    let el = null;
-    if (s.on.startsWith('watch:')) {
-      el = _root.querySelector(`[data-scenario="${s.on.slice(6)}"]`);
-    } else if (s.on.startsWith('sign:')) {
-      el = _root.querySelector(`[data-sign="${s.on.slice(5)}"]`);
-    } else if (s.on === 'classify') {
-      el = $('lab-changes-submit');
-    }
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-scenario],[data-sign],[data-act]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    let toks = s.options || s.any || (s.on ? [s.on] : []);
+    if (toks.includes('classify')) toks = toks.filter(t => t !== 'classify').concat(['zone:physical', 'zone:chemical']);
+    const els = [...new Set(toks.map(t => _root.querySelector(_selFor(t))).filter(Boolean))];
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-scenario],[data-sign],[data-zone],[data-act]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ══ Experiments (lab_experiment.js, LAB_SPEC §10) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the zones, signs and panel.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const zones = new Set(), signs = new Set(), scs = new Set();
+    if (on) for (const t of _focus) {
+      const p = String(t).split(':');
+      if (p[0] === 'sort') zones.add(p[2]);
+      else if (p[0] === 'zone') zones.add(p[1]);
+      else if (p[0] === 'classify') { zones.add('physical'); zones.add('chemical'); }
+      else if (p[0] === 'spot') signs.add(p[2]);
+      else if (p[0] === 'sign') signs.add(p[1]);
+      else if (p[0] === 'watch') scs.add(p[1]);
+    }
+    _root.querySelectorAll('[data-zone]').forEach(b => { b.hidden = on && !zones.has(b.dataset.zone); });
+    _root.querySelectorAll('[data-sign]').forEach(b => { b.hidden = on && !signs.has(b.dataset.sign); });
+    _root.querySelectorAll('[data-scenario]').forEach(b => { b.hidden = on && !scs.has(b.dataset.scenario); });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-changes-zones, .lab-changes-scenario-list').forEach(el => { el.hidden = on && !anyShown(el); });
+    const sw = $('lab-changes-signs-wrap');
+    if (sw) sw.hidden = on ? !anyShown(sw) : !(_g8() && _current && _phase !== 'idle');
+    const zonesEl = _root.querySelector('.lab-changes-zones');
+    _root.querySelectorAll('.lab-changes-drag-prompt, .lab-changes-drag-area').forEach(el => { el.hidden = on && !!zonesEl && zonesEl.hidden; });
+    _syncClassify();
+  }
+  const experiment = {
+    list: () => (D().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _guide = null; _mission = null; _pending = null; _quiet = false;
+      _current = null; _phase = 'idle'; _phaseT = 0; _chips = null; _signsChosen = null;
+      _log = []; _said = {}; _panel = 'sandbox';
+      _showClassify(false);
+      const reveal = $('lab-changes-reveal'); if (reveal) reveal.hidden = true;
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _renderPanel(); _readouts(); _highlight();
+    },
+    // A set-up token, performed at once with no discovery toast.
+    apply: tok => {
+      const p = String(tok).split(':');
+      _quiet = true;
+      try {
+        if (p[0] === 'watch') selectScenario(p[1]);
+        else if (p[0] === 'sort' || p[0] === 'spot') {
+          if (!_current || _current.id !== p[1]) selectScenario(p[1]);
+          if (p[0] === 'sort') _classifyDirect(p[2]); else identifySign(p[2]);
+        } else if (p[0] === 'sign') identifySign(p[1]);
+      } finally { _quiet = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(-6),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ── Discovery guide ───────────────────────────
   function _autoStep(on) {
@@ -1178,7 +1393,7 @@ const LabChanges = (() => {
       const name = sc ? sc.name : id;
       return { on, say: `Watch the scenario: ${name}.`, btn: `▶️ Watch: ${name}` };
     }
-    if (on === 'classify') return { on, say: 'Use the chips to classify: physical or chemical?' };
+    if (on === 'classify') return { on, say: 'Tap Physical Change or Chemical Change to sort it.' };
     if (on.startsWith('sign:')) {
       const sid = on.slice(5);
       const sign = Sg[sid];
@@ -1222,8 +1437,7 @@ const LabChanges = (() => {
   // ── Test hooks ────────────────────────────────
   function _testHook({ instant } = {}) {
     _instant = !!instant;
-    const classify = $('lab-changes-classify');
-    if (_instant && _current && classify) { classify.hidden = false; _renderChips(); }
+    if (_instant && _current && _phase === 'watch') { _showClassify(true); _renderChips(); }
   }
   function _debug() {
     const st = Labs.store(ID);
@@ -1239,6 +1453,8 @@ const LabChanges = (() => {
       }).length,
       classifiedCount: _classified ? _classified.size : 0,
       chips: _chips ? Object.assign({}, _chips) : null,
+      classifyOpen: _classifyOpen, pending: _pending, log: _log.slice(),
+      focus: _focus ? [..._focus] : null,
     };
   }
 
@@ -1252,6 +1468,6 @@ const LabChanges = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, _test: _testHook, _tick, _debug, startGuide, startMission, selectScenario, discoveryGuide, identifySign };
+  return { study, experiment, mount, unmount, _test: _testHook, _tick, _debug, startGuide, startMission, selectScenario, discoveryGuide, identifySign };
 })();
 if (typeof window !== 'undefined') window.LabChanges = LabChanges;

@@ -594,6 +594,35 @@ const LabMeasureData = (() => {
     return odd.length ? { usual: keys[0], odd: odd[odd.length - 1] } : null;
   }
 
+  // ── Candidate readings (experiments) ───────────
+  // An experiment never asks a child to type: reading a scale is a choice
+  // between the true value and the misreads this model already names for the
+  // same setting, each labelled as a number with its unit. `near` is one
+  // division past the truth (a line that "nearly" lines up); `unit` is the
+  // right number with the wrong unit; `weight` is a mass written in newtons.
+  // Sorted by value, so the truth sits in no fixed place.
+  function candidates(m) {
+    if (!m || !m.ok) return [];
+    const out = [{ key: 'ok', tok: 'read', v: m.want, unit: m.unit }];
+    for (const k of MISTAKE_ORDER) if ((m.mistakes[k] || []).length) out.push({ key: k, tok: 'misread:' + k, v: m.mistakes[k][0], unit: m.unit });
+    const all = Object.values(m.mistakes).flat();
+    const nearV = clean(m.want + m.step);
+    if (!all.some(x => Math.abs(x - nearV) < m.step / 1000)) out.push({ key: 'near', tok: 'misread:near', v: nearV, unit: m.unit });
+    if (m.wrongUnit && m.want !== 0) out.push({ key: 'unit', tok: 'misread:unit', v: m.want, unit: m.wrongUnit });
+    if (m.quantity === 'mass' && mid(INSTRUMENTS[m.inst])) out.push({ key: 'weight', tok: 'misread:weight', v: m.want, unit: 'N' });
+    out.forEach(c => { c.label = fmt(c.v, m.dp) + ' ' + c.unit; });
+    return out.sort((a, b) => (a.v - b.v) || ((a.unit === m.unit ? 0 : 1) - (b.unit === m.unit ? 0 : 1)));
+  }
+  // The visible label of each bench control an experiment step can point at
+  // (the bench draws these; the tests read them). `start` and `tare` depend on
+  // the bench state, so both labels are listed.
+  const CONTROL_LABELS = {
+    zoom: 'Zoom in', 'eye:level': 'Eye level', 'eye:above': 'Eye above', 'eye:below': 'Eye below',
+    'align:zero': 'Start at 0', 'align:end': 'Start at the ruler end', 'align:mark': 'Start at the 1 cm mark',
+    tap: 'Tap the glass', lift: 'Lift it to read', 'tare:dial': 'Set to 0', 'tare:balance': 'Zero (tare)',
+    'start:first': 'Start timing', 'start:again': 'Time it again',
+  };
+
   // ── Discoveries ────────────────────────────────
   // `how` uses the guide vocabulary: inst:<id>, spec:<id>, zoom, eye:<pos>,
   // align:<end|mark>, tare, start (the stopwatch has stopped), read (a correct
@@ -1800,12 +1829,307 @@ const LabMeasureData = (() => {
       ] },
   ];
 
+  // ── Experiments (lab_experiment.js, LAB_SPEC §10) ──
+  // One instrument, one thing to measure, one idea. Reading a scale is an
+  // `ask` whose options are candidates(): the truth plus the misreads the
+  // model names for that setting, so a wrong reading explains itself. Every
+  // number in a `saw` or a `wrong` is one the model produces on the way -
+  // scripts/test-labs-measure-data.js replays each experiment and checks.
+  const EXPERIMENTS = [
+    // ── Grade 4 ── g4sci-enr-equipment: pick the tool, read it right.
+    { id: 'g4_ruler', grades: [4], chapter: 'g4sci-enr-equipment', icon: '📏',
+      title: 'How long is the pencil?',
+      aim: 'A pencil lies against the end of a 30 cm ruler. Read it, then find out where a pencil should really start.',
+      setup: ['inst:ruler30', 'spec:pencil4'],
+      predict: { q: 'How long is the pencil?', answer: '14',
+        options: [{ id: '13', label: '13 cm', sub: 'the mark at its tip' }, { id: '14', label: '14 cm' }, { id: '12', label: '12 cm' }] },
+      steps: [
+        { ask: 'The pencil is against the ruler\'s end. How long is it?', on: 'read', options: ['read', 'misread:end', 'misread:unit'],
+          wrong: { 'misread:end': '13 is the mark at the tip. But this ruler has a 1 cm gap before 0, so the pencil is 13 + 1 = 14 cm long.',
+                   'misread:unit': '14 m is longer than a bus! A ruler counts in centimetres (cm).' } },
+        { ask: 'Next time, where should the pencil start?', on: 'align:zero', options: ['align:zero', 'align:end'],
+          wrong: { 'align:end': 'From the very end, every reading is 1 cm too short. Put the pencil on the 0 mark.' } },
+      ],
+      see: { saw: 'Against the end, the tip reached 13. Moved to the 0 mark, it reached 14. The pencil is 14 cm long.',
+             learn: 'Line one end up with the 0 mark, not the end of the ruler. Then read the other end in centimetres (cm).' },
+      check: ['g4_read:1', 'g4_read:5'],
+      exam: 'In the exam a picture may show an object that does not start at 0. Count from where it starts, or move it to 0.' },
+    { id: 'g4_jug', grades: [4], chapter: 'g4sci-enr-equipment', icon: '🫗',
+      title: 'How much juice is in the jug?',
+      aim: 'Orange juice in a measuring jug. You are looking down at it from above. Where should your eye be?',
+      setup: ['inst:jug', 'spec:juice4', 'eye:above'],
+      predict: { q: 'How much juice is in the jug?', answer: '350',
+        options: [{ id: '450', label: '450 ml', sub: 'where the dashed line points' }, { id: '350', label: '350 ml' }, { id: '300', label: '300 ml' }] },
+      steps: [
+        { ask: 'Your eye is above the juice. What do you do?', on: 'eye:level', options: ['eye:level', 'misread:apparent', 'eye:below'],
+          wrong: { 'misread:apparent': '450 ml is where the dashed line meets the marks. From above, the juice looks higher than it really is.',
+                   'eye:below': 'From below, the juice looks lower than it really is. Only eye level is right.' } },
+        { ask: 'Eye level now. How much juice is there?', on: 'read', options: ['read', 'misread:unit'],
+          wrong: { 'misread:unit': '350 l would fill a bath! A jug counts in millilitres (ml).' } },
+      ],
+      see: { saw: 'From above, the dashed line pointed at 450 ml. At eye level the juice was on the 350 ml mark.',
+             learn: 'Keep the jug on the table. Bend down so your eye is level with the liquid. Then read the mark in millilitres (ml).' },
+      check: ['g4_read:2', 'g4_read:3'],
+      exam: 'In the exam you may be asked why a jug is read at eye level: from above or below, the reading is wrong.' },
+    { id: 'g4_scale', grades: [4], chapter: 'g4sci-enr-equipment', icon: '⚖️',
+      title: 'How heavy is the mango?',
+      aim: 'A kitchen scale with nothing on it. Look at the pointer before you weigh the mango.',
+      setup: ['inst:scale4'],
+      predict: { q: 'Look at the pointer. Is the scale ready to weigh?', answer: 'no',
+        options: [{ id: 'no', label: 'No', sub: 'the pointer is not on 0' }, { id: 'yes', label: 'Yes', sub: 'nothing is on it' }] },
+      steps: [
+        { ask: 'The pointer is not on 0. What first?', on: 'tare', options: ['tare', 'spec:mango4'],
+          wrong: { 'spec:mango4': 'The pointer started at 40 g. The mango would read 380 g, which is 40 g too heavy. Set the pointer to 0 first.' } },
+        { on: 'spec:mango4', say: 'Tap 🥭 Mango to put it on the scale.' },
+        { ask: 'Read the pointer. How heavy is the mango?', on: 'read', options: ['read', 'misread:unit'],
+          wrong: { 'misread:unit': '340 kg is heavier than four grown-ups! A kitchen scale counts in grams (g).' } },
+      ],
+      see: { saw: 'Set to 0 first, the pointer stopped on 340 g. Not set to 0, it would have pointed to 380 g.',
+             learn: 'A kitchen scale must start on 0. Turn the knob first, then weigh in grams (g). 1000 g = 1 kg.' },
+      check: ['g4_read:4', 'g4_choose:5'],
+      exam: 'In the exam you may be asked what to do when a scale does not point to 0: set it to 0 before you weigh.' },
+    { id: 'g4_fair', grades: [4], chapter: 'g4sci-enr-equipment', icon: '🔁',
+      title: 'Is one time the odd one out?',
+      aim: 'A ball rolls down a slope and a stopwatch times it. Try 1 took 5 s. Time it two more times.',
+      setup: ['inst:watch4', 'spec:ball4', 'start', 'read'],
+      predict: { q: 'You time the ball three times. Will the times all agree?', answer: 'no',
+        options: [{ id: 'no', label: 'No', sub: 'one might be a mistake' }, { id: 'yes', label: 'Yes', sub: 'exactly the same' }, { id: 'all', label: 'No', sub: 'all three different' }] },
+      steps: [
+        { on: 'start', say: 'Tap ▶️ Time it again. Watch the red hand.' },
+        { ask: 'Try 2. How long did the ball take?', on: 'read', options: ['read', 'misread:unit'],
+          wrong: { 'misread:unit': '5 min is longer than a whole song! A stopwatch counts in seconds (s).' } },
+        { on: 'start', say: 'Tap ▶️ Time it again for try 3.' },
+        { ask: 'Try 3. How long did it take this time?', on: 'read', options: ['read', 'misread:unit'],
+          wrong: { 'misread:unit': '8 min is longer than a whole song! The stopwatch counts in seconds (s).' } },
+      ],
+      see: { saw: 'The ball took 5 s, 5 s and then 8 s. The 8 s is the odd one out.',
+             learn: 'Measure more than once. If one result is different, do that one again.' },
+      check: ['g4_fair:0', 'g4_fair:1'],
+      exam: 'In the exam you may be shown three timings where one is odd, and asked what to do: time it again.' },
+
+    // ── Grade 7 ── g7s-measurement: the cylinder, displacement, the balance.
+    { id: 'g7_meniscus', grades: [7], chapter: 'g7s-measurement', icon: '🧪',
+      title: 'Where do you read the water level?',
+      aim: 'Water in a measuring cylinder. Your eye is above it. Find the true level.',
+      setup: ['inst:cyl78', 'spec:water78', 'eye:above'],
+      predict: { q: 'Where must your eye be to read the cylinder?', answer: 'level',
+        options: [{ id: 'level', label: 'Level with the water' }, { id: 'above', label: 'Above, looking down' }, { id: 'lift', label: 'Anywhere', sub: 'lift it up to look' }] },
+      steps: [
+        { ask: 'Your eye is above the water. What do you do?', on: 'eye:level', options: ['eye:level', 'misread:apparent', 'lift'],
+          wrong: { 'misread:apparent': '48 cm³ is where a slanted line of sight meets the scale, 2 cm³ too high. That is parallax error.',
+                   lift: 'Lifting the cylinder to your eye is how wet glass slips and smashes. Leave it on the bench and bend down.' } },
+        { ask: 'Eye level. What does the cylinder read?', on: 'read', options: ['read', 'misread:top'],
+          wrong: { 'misread:top': '47 cm³ is the edge of the meniscus, where water creeps up the glass. The true level is the bottom of the curve.' } },
+      ],
+      see: { saw: 'At eye level the bottom of the meniscus sat on 46 cm³. From above it had looked like 48, and the edge of the curve touched 47.',
+             learn: 'Read a measuring cylinder with your eye level with the bottom of the meniscus, the curved surface of the water. 1 cm³ = 1 ml.' },
+      check: ['g7_volume:2', 'g7_volume:0', 'g7_volume:4'],
+      exam: 'In the exam you may be asked where to read a measuring cylinder and why: at the bottom of the meniscus, with your eye level, to avoid parallax error.' },
+    { id: 'g7_displace', grades: [7], chapter: 'g7s-measurement', icon: '🪨',
+      title: 'How big is the stone?',
+      aim: 'A stone has no straight sides to measure. A measuring cylinder and some water can still find its volume.',
+      setup: ['inst:cyl78'],
+      predict: { q: 'How can you measure the volume of an odd-shaped stone?', answer: 'water',
+        options: [{ id: 'water', label: 'Put it in water', sub: 'see how much the level rises' }, { id: 'ruler', label: 'Measure its sides', sub: 'and multiply' }, { id: 'balance', label: 'Weigh it', sub: 'on the balance' }] },
+      steps: [
+        { ask: 'Which goes in safely: the stone on a thread, or the dropped block?', on: 'spec:stone78', options: ['spec:stone78', 'spec:drop78'],
+          wrong: { 'spec:drop78': 'Dropped straight in, the steel block hits the bottom hard and cracks the glass. Lower a solid in gently on a thread.' } },
+        { ask: 'The water rose. What is the volume of the stone?', on: 'read', options: ['read', 'misread:level'],
+          wrong: { 'misread:level': '68 cm³ is the water and the stone together. There was 50 cm³ of water before: 68 − 50 = 18 cm³.' } },
+      ],
+      see: { saw: 'The water stood at 50 cm³. With the stone lowered in, the bottom of the meniscus rose to 68. The stone is 68 − 50 = 18 cm³.',
+             learn: 'A solid that sinks pushes aside (displaces) its own volume of water. Volume of the solid = final reading − first reading.' },
+      check: ['g7_volume:1',
+        { q: 'A stone is lowered into a measuring cylinder on a thread. Why not drop it in?',
+          options: ['The glass could crack and water could splash out', 'The stone would soak up the water', 'The water level would rise too little', 'The meniscus would disappear'],
+          why: 'A solid dropped into a glass cylinder can crack it, and splashed-out water spoils the reading. Lower it in gently.' }],
+      exam: 'In the exam you may be given two cylinder readings and asked for the volume of the solid: final reading minus first reading.' },
+    { id: 'g7_bubble', grades: [7], chapter: 'g7s-measurement', icon: '🫧',
+      title: 'Why does the rough stone read too big?',
+      aim: 'A rough stone in 40 cm³ of water, with an air bubble stuck to it. Find its true volume.',
+      setup: ['inst:cyl78', 'spec:bubble78'],
+      predict: { q: 'An air bubble is stuck to the stone. What does it do to the reading?', answer: 'big',
+        options: [{ id: 'big', label: 'Makes it too big' }, { id: 'small', label: 'Makes it too small' }, { id: 'none', label: 'Nothing', sub: 'air has no volume' }] },
+      steps: [
+        { ask: 'There is a bubble on the stone. What now?', on: 'tap', options: ['tap', 'misread:bubble'],
+          wrong: { 'misread:bubble': '24 cm³ counts the air bubble as stone. The bubble pushed the water up 1 cm³ more than the stone did.' } },
+        { ask: 'Bubble gone. What is the volume of the rough stone?', on: 'read', options: ['read', 'misread:level'],
+          wrong: { 'misread:level': '63 cm³ is the water and the stone. Take away the 40 cm³ that was there first: 63 − 40 = 23 cm³.' } },
+      ],
+      see: { saw: 'With the bubble on, the level was 64 cm³. Tapped free, it fell to 63. The stone is 63 − 40 = 23 cm³, not 24.',
+             learn: 'Air takes up space too. Tap the glass so no bubble stays on the solid, then read the level.' },
+      check: [{ q: 'A bubble is stuck to a stone in a measuring cylinder. What does it do to the volume you work out?',
+          options: ['Makes it too big, because the bubble pushes the water up too', 'Makes it too small, because air is lighter than water', 'Nothing, because air is not counted', 'It changes the first reading, not the final one'],
+          why: 'The bubble is under the water with the stone, so the level rises by the stone AND the bubble. Tap the glass to free it.' },
+        'g7_volume:1'],
+      exam: 'In the exam you may be asked how to make a displacement reading accurate: no air bubbles on the solid, and the solid fully under the water.' },
+    { id: 'g7_balance', grades: [7], chapter: 'g7s-measurement', icon: '⚖️',
+      title: 'Does the empty balance read 0.0 g?',
+      aim: 'An electronic balance with nothing on the pan. Check it, then weigh the stone.',
+      setup: ['inst:bal78', 'spec:closed', 'read'],
+      predict: { q: 'The empty pan shows 2.4 g. What should you do before weighing?', answer: 'zero',
+        options: [{ id: 'zero', label: 'Press Zero', sub: 'with the pan empty' }, { id: 'on', label: 'Put the stone straight on' }, { id: 'add', label: 'Add 2.4 g', sub: 'to every reading' }] },
+      steps: [
+        { ask: 'It reads 2.4 g with nothing on. What now?', on: 'tare', options: ['tare', 'spec:stone78'],
+          wrong: { 'spec:stone78': 'Put on now, the stone would read 47.4 g, which is 2.4 g too heavy. Press Zero first, or take 2.4 g off.' } },
+        { on: 'spec:stone78', say: 'Tap 🪨 Stone to put it on the pan.' },
+        { ask: 'What is the mass of the stone?', on: 'read', options: ['read', 'misread:weight'],
+          wrong: { 'misread:weight': 'Newtons (N) measure weight, a force. A balance measures mass: 45.0 g, or 0.045 kg.' } },
+      ],
+      see: { saw: 'Zeroed first, the balance read 45.0 g for the stone. Without zeroing it would have shown 47.4 g.',
+             learn: 'An electronic balance measures mass in grams. Zero it with the pan empty, or every reading is too big by the same amount.' },
+      check: ['g7_mass:1', 'g7_mass:2', 'g7_mass:4'],
+      exam: 'In the exam you may be told a balance reads a mass with nothing on it, and asked for the true mass: take that amount off.' },
+
+    // ── Grade 8 ── g8s-inquiry: density = mass ÷ volume, float or sink.
+    { id: 'g8_alu', grades: [8], chapter: 'g8s-inquiry', icon: '⬜',
+      title: 'Will the aluminium block sink?',
+      aim: 'An aluminium block on the balance, its sides measured. Work out its density and watch it in water.',
+      setup: ['inst:dens8', 'spec:alu8'],
+      predict: { q: '108 g, sides 5 × 4 × 2 cm. Float or sink in water?', answer: 'sink',
+        options: [{ id: 'sink', label: 'Sinks' }, { id: 'float', label: 'Floats' }, { id: 'half', label: 'Floats half under' }] },
+      steps: [
+        { ask: 'Density = mass ÷ volume. What is the density of the block?', on: 'read', options: ['read', 'misread:flip'],
+          wrong: { 'misread:flip': '0.37 is 40 ÷ 108: volume ÷ mass, the formula upside down. Aluminium would float, and it does not. 108 ÷ 40 = 2.70 g/cm³.' } },
+      ],
+      see: { saw: '108 g ÷ 40 cm³ = 2.70 g/cm³, more than water\'s 1.00 g/cm³. On the bench the block sank.',
+             learn: 'Density is the mass packed into each cm³. Anything denser than water (1.0 g/cm³) sinks in it, and every piece of aluminium is 2.7 g/cm³.' },
+      check: ['g8_density:0', 'g8_density:3', 'g8_density:4'],
+      exam: 'In the exam you may be given a mass and a volume and asked for the density in g/cm³, then whether it floats.' },
+    { id: 'g8_stone', grades: [8], chapter: 'g8s-inquiry', icon: '🪨',
+      title: 'What is the density of the stone?',
+      aim: 'The stone weighed 45.0 g on a zeroed balance. Now it sits in a cylinder of water. Finish the method.',
+      setup: ['inst:bal78', 'tare', 'spec:stone78', 'read', 'inst:cyl78', 'spec:stone78'],
+      predict: { q: 'A stone has no straight sides. How do you find its volume?', answer: 'water',
+        options: [{ id: 'water', label: 'Displacement', sub: 'the rise of the water' }, { id: 'sides', label: 'Measure its sides', sub: 'and multiply' }, { id: 'balance', label: 'Read it off the balance' }] },
+      steps: [
+        { ask: 'Water 50 → 68 cm³ with the stone in. Volume of the stone?', on: 'read', options: ['read', 'misread:level'],
+          wrong: { 'misread:level': '68 cm³ is the water and the stone together. Take away the 50 cm³ of water: 68 − 50 = 18 cm³.' } },
+        { on: 'inst:dens8', say: 'Tap 🧮 Density bench to work out the density.' },
+        { on: 'spec:stone8', say: 'Tap 🪨 Stone. Its mass and volume are in your notebook.' },
+        { ask: 'Mass 45 g, volume 18 cm³. What is the density?', on: 'read', options: ['read', 'misread:dlevel', 'misread:flip'],
+          wrong: { 'misread:dlevel': '0.66 divides by 68 cm³, the water and the stone. The stone alone is 68 − 50 = 18 cm³: 45 ÷ 18 = 2.50 g/cm³.',
+                   'misread:flip': '0.40 is 18 ÷ 45, upside down. Density = mass ÷ volume = 45 ÷ 18 = 2.50 g/cm³.' } },
+      ],
+      see: { saw: 'Mass 45.0 g. Volume 68 − 50 = 18 cm³. Density 45 ÷ 18 = 2.50 g/cm³, so the stone sank.',
+             learn: 'Density = mass ÷ volume. Take the mass from a zeroed balance and the volume by displacement, then divide. Give the unit, g/cm³.' },
+      check: ['g8_density:1', 'g8_float:1'],
+      exam: 'In the exam you may be given a mass and two cylinder readings: subtract the readings for the volume, then divide mass by volume.' },
+    { id: 'g8_float', grades: [8], chapter: 'g8s-inquiry', icon: '🛟',
+      title: 'Which block floats: cork or steel?',
+      aim: 'A cork block and a steel block. Work out each density and compare it with water, 1.0 g/cm³.',
+      setup: ['inst:dens8', 'spec:cork8'],
+      predict: { q: 'Cork: 24 g in 100 cm³. Steel: 79 g in 10 cm³. Which floats?', answer: 'cork',
+        options: [{ id: 'cork', label: 'The cork' }, { id: 'steel', label: 'The steel' }, { id: 'both', label: 'Both' }, { id: 'neither', label: 'Neither' }] },
+      steps: [
+        { ask: 'What is the density of the cork?', on: 'read', options: ['read', 'misread:flip'],
+          wrong: { 'misread:flip': '4.17 is 100 ÷ 24, upside down. That would make cork sink like a stone. 24 ÷ 100 = 0.24 g/cm³.' } },
+        { on: 'spec:steel8', say: 'Tap 🔩 Steel block next.' },
+        { ask: 'What is the density of the steel?', on: 'read', options: ['read', 'misread:flip'],
+          wrong: { 'misread:flip': '0.13 is 10 ÷ 79, upside down. A metal must come out above 1 g/cm³. 79 ÷ 10 = 7.90 g/cm³.' } },
+      ],
+      see: { saw: 'Cork, 0.24 g/cm³, floated high in the tank. Steel, 7.90 g/cm³, sank. Water is 1.00 g/cm³.',
+             learn: 'Less dense than water (1.0 g/cm³) floats; denser sinks. The lower the density, the higher it floats.' },
+      check: ['g8_float:0', 'g8_float:1', 'g8_float:4'],
+      exam: 'In the exam you may be given a density and asked whether the object floats or sinks in water, and why.' },
+    { id: 'g8_oil', grades: [8], chapter: 'g8s-inquiry', icon: '🫒',
+      title: 'How do you find the density of a liquid?',
+      aim: 'Cooking oil in a measuring cylinder on the balance. The cylinder was weighed empty first.',
+      setup: ['inst:dens8', 'spec:oil8'],
+      predict: { q: 'The cylinder is 80 g empty and 126 g with the oil. Mass of the oil?', answer: '46',
+        options: [{ id: '46', label: '46 g' }, { id: '126', label: '126 g' }, { id: '206', label: '206 g' }] },
+      steps: [
+        { ask: '50 cm³ of oil. What is its density?', on: 'read', options: ['read', 'misread:total', 'misread:flip'],
+          wrong: { 'misread:total': '2.52 uses 126 g, the oil AND the cylinder. The oil alone is 126 − 80 = 46 g: 46 ÷ 50 = 0.92 g/cm³.',
+                   'misread:flip': '1.09 is 50 ÷ 46, upside down. Density = mass ÷ volume = 46 ÷ 50 = 0.92 g/cm³.' } },
+      ],
+      see: { saw: 'Mass of oil = 126 − 80 = 46 g in 50 cm³: 0.92 g/cm³. Less dense than water, it floated on top.',
+             learn: 'For a liquid, weigh the container empty and full: the difference is the liquid\'s mass. Then density = mass ÷ volume.' },
+      check: ['g8_density:2', 'g8_float:3'],
+      exam: 'In the exam you may be given the mass of an empty and a full container and asked for the liquid\'s density.' },
+
+    // ── Grade 9 ── g9s-p1-measurements: vernier, parallax, zero error, precision.
+    { id: 'vernier', grades: [9], chapter: 'g9s-p1-measurements', icon: '🔧',
+      title: 'What does the vernier caliper read?',
+      aim: 'A coin between the jaws of a vernier caliper, zoomed in on both scales. Read it to 0.01 cm.',
+      setup: ['inst:vernier', 'spec:coin', 'zoom', 'zoom'],
+      predict: { q: 'Which scale gives the hundredths of a centimetre?', answer: 'vernier',
+        options: [{ id: 'vernier', label: 'The short sliding vernier scale' }, { id: 'main', label: 'The long fixed main scale' }, { id: 'none', label: 'Neither', sub: 'a caliper reads to 0.1 cm' }] },
+      steps: [
+        { ask: 'Main scale, then the vernier line that lines up. Diameter of the coin?', on: 'read', options: ['read', 'misread:near'],
+          wrong: { 'misread:near': '2.38 cm takes the 8th vernier line, which does not quite meet a main-scale mark. Only ONE line lines up exactly: the 7th. 2.3 + 0.07 = 2.37 cm.' } },
+        { on: 'spec:rod', say: 'Tap 🔩 Metal rod and measure it with the same caliper.' },
+        { ask: 'Diameter of the rod?', on: 'read', options: ['read', 'misread:near'],
+          wrong: { 'misread:near': '1.23 cm: the 3rd line does not meet a mark exactly. The 2nd does: 1.2 + 0.02 = 1.22 cm.' } },
+      ],
+      see: { saw: 'The coin: main scale 2.3 cm, 7th vernier line matched, 2.37 cm. The rod: 1.2 cm and the 2nd line, 1.22 cm.',
+             learn: 'Reading = main scale + vernier division × 0.01 cm. A vernier caliper reads to 0.01 cm (0.1 mm), ten times finer than a metre rule.' },
+      check: ['vernier:0', 'vernier:1', 'vernier:2'],
+      exam: 'In the exam you may be asked to label the main scale M and the vernier scale V on a diagram, and to read a caliper to 0.01 cm.' },
+    { id: 'parallax', grades: [9], chapter: 'g9s-p1-measurements', icon: '👁️',
+      title: 'Does your eye position change the reading?',
+      aim: 'Water in a measuring cylinder, seen from above. The dashed line is your line of sight.',
+      setup: ['inst:cylinder', 'spec:water', 'eye:above'],
+      predict: { q: 'Your eye is above the water level. The reading will be…', answer: 'high',
+        options: [{ id: 'high', label: 'Too high' }, { id: 'low', label: 'Too low' }, { id: 'same', label: 'The same', sub: 'as at eye level' }] },
+      steps: [
+        { ask: 'Your eye is above the level. What do you do?', on: 'eye:level', options: ['eye:level', 'misread:apparent', 'eye:below'],
+          wrong: { 'misread:apparent': '66 cm³ is where your slanted line of sight crosses the scale, 2 cm³ above the true level. That is parallax error.',
+                   'eye:below': 'From below, the line of sight crosses the scale 2 cm³ too LOW. Parallax works both ways; only eye level is right.' } },
+        { ask: 'Eye level, at right angles to the scale. Volume of the water?', on: 'read', options: ['read', 'misread:top'],
+          wrong: { 'misread:top': '65 cm³ is the edge of the meniscus, where water climbs the glass. Read the BOTTOM of the curve.' } },
+      ],
+      see: { saw: 'From above, the line of sight met the scale at 66 cm³. At eye level the bottom of the meniscus was on 64 cm³.',
+             learn: 'A line of sight that is not perpendicular to the scale gives a parallax error: too high from above, too low from below. Read at eye level, at the bottom of the meniscus.' },
+      check: ['errors:0', 'errors:3'],
+      exam: 'In the exam you may be asked to name the error when a scale is read from above (parallax error) and how to avoid it.' },
+    { id: 'zero', grades: [9], chapter: 'g9s-p1-measurements', icon: '0️⃣',
+      title: 'Does the old caliper have a zero error?',
+      aim: 'Old caliper A with its jaws closed on nothing, zoomed in. Read it, then correct a reading on the rod.',
+      setup: ['inst:vernier_old', 'spec:closed', 'zoom', 'zoom'],
+      predict: { q: 'Jaws closed on nothing. What will old caliper A read?', answer: 'pos',
+        options: [{ id: 'pos', label: 'A little more than 0.00 cm' }, { id: 'zero', label: 'Exactly 0.00 cm' }, { id: 'neg', label: 'A little less than 0.00 cm' }] },
+      steps: [
+        { ask: 'Jaws closed. What does it read?', on: 'read', options: ['read', 'misread:near'],
+          wrong: { 'misread:near': '0.04 cm: the 4th line is not the one that meets a main-scale mark. The 3rd does: +0.03 cm.' } },
+        { on: 'spec:rod', say: 'Tap 🔩 Metal rod and measure it with the same caliper.' },
+        { ask: 'The scale shows 1.25 cm. What is the TRUE diameter of the rod?', on: 'read', options: ['read', 'misread:raw', 'misread:sign'],
+          wrong: { 'misread:raw': '1.25 cm is straight off the scale. With nothing between the jaws it already read +0.03 cm, so 1.25 is 0.03 too big.',
+                   'misread:sign': '1.28 cm ADDS the zero error. True reading = scale reading − zero error = 1.25 − 0.03 = 1.22 cm.' } },
+      ],
+      see: { saw: 'Closed, old caliper A read +0.03 cm. On the rod the scale read 1.25 cm, so the rod is 1.25 − 0.03 = 1.22 cm.',
+             learn: 'Check the zero first. True reading = scale reading − zero error. Subtract a positive zero error; for a negative one, add its size.' },
+      check: ['errors:1', 'errors:2'],
+      exam: 'In the exam you may be asked to identify a zero error and correct a reading: true reading = scale reading − zero error.' },
+    { id: 'precise', grades: [9], chapter: 'g9s-p1-measurements', icon: '🗜️',
+      title: 'Which instrument can measure a thin wire?',
+      aim: 'A copper wire on a metre rule, from the 1 cm mark. It is thinner than one division. Pick a better instrument.',
+      setup: ['inst:rule', 'spec:wire', 'align:mark'],
+      predict: { q: 'The wire is under 1 mm thick. Which instrument reads it properly?', answer: 'micro',
+        options: [{ id: 'micro', label: 'Micrometer screw gauge', sub: 'reads to 0.01 mm' }, { id: 'vernier', label: 'Vernier caliper', sub: 'reads to 0.1 mm' }, { id: 'rule', label: 'Metre rule', sub: 'reads to 1 mm' }] },
+      steps: [
+        { ask: 'Which instrument for the wire?', on: 'inst:micrometer', options: ['inst:micrometer', 'inst:vernier', 'inst:rule'],
+          wrong: { 'inst:rule': 'A metre rule reads to 0.1 cm, and the whole wire is about one division. Not precise enough.',
+                   'inst:vernier': 'A vernier caliper reads to 0.01 cm: the wire would be 0.09 cm, one figure. The micrometer reads to 0.01 mm.' } },
+        { on: 'spec:wire', say: 'Tap 〰️ Copper wire and close the micrometer on it.' },
+        { ask: 'Sleeve, then the thimble line on the datum. Diameter of the wire?', on: 'read', options: ['read', 'misread:near'],
+          wrong: { 'misread:near': '0.93 mm reads the thimble as 43. The line on the datum is 42: sleeve 0.5 + 42 × 0.01 = 0.92 mm.' } },
+      ],
+      see: { saw: 'The micrometer read the wire as 0.92 mm: 0.5 mm on the sleeve plus 42 thimble divisions of 0.01 mm.',
+             learn: 'Metre rule 1 mm, vernier caliper 0.1 mm, micrometer 0.01 mm. Choose the instrument whose smallest division is tiny compared with what you measure.' },
+      check: ['choose:0',
+        { q: 'A copper wire is about 0.9 mm across. Which instrument measures its diameter most precisely?',
+          options: ['Micrometer screw gauge', 'Vernier caliper', 'Metre rule', 'Measuring tape'],
+          why: 'The micrometer reads to 0.01 mm, so a 0.92 mm wire gets two significant figures. A vernier gives 0.9 mm and a rule only 1 mm.' }],
+      exam: 'In the exam you may be asked to choose the most suitable instrument and say why: the smallest division, and so the precision.' },
+  ];
+
   return { GRADES, forGrade, QUANTITIES, WATER, INSTRUMENTS, SPECIMENS, RULE, MENISCUS, PARALLAX, COARSE, parallaxShift, jugCmPerMl,
            round, clean, fmt, parseReading, vernierParts, micrometerParts, stopwatchParts, convert, toKelvin,
            specimensFor, measure, judge, MISTAKE_ORDER, betterFor, mid,
            UNITS, UNIT_CHOICES, UNIT_CHOICES_BY_GRADE, UNIT_HINT, WRONG_UNIT, judgeUnit, countOn, oddOne,
            DISCOVERIES, HAZARDS, SIGN_LABELS, RESULTS, FACTS, FACTS4, FACTS7, FACTS8, FACTS_BY_GRADE, RULES4, RULES_BY_GRADE,
            INTRO_BY_GRADE, HELP_HINT, EMPTY_ICONS, PICS, PICS78, floatPic, MISSIONS, CHOICES, CHOICE_INSTRUMENTS,
-           CHOICES4, CHOICE_INSTRUMENTS4, wrongToolReason, GUIDES };
+           CHOICES4, CHOICE_INSTRUMENTS4, wrongToolReason, GUIDES, EXPERIMENTS, candidates, CONTROL_LABELS };
 })();
 if (typeof window !== 'undefined') window.LabMeasureData = LabMeasureData;

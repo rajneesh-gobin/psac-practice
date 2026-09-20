@@ -17,11 +17,11 @@ STATIC_QUESTIONS.push(
     explanation:'A <b>cat</b> is living — it breathes, eats, grows, moves and reproduces. A stone, a cup and a spoon are non-living.'}),
 
   makeMCQ({ id:'g3ssee-liv-002', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
-    question:'How many main characteristics do living things share?',
-    options:['7','2','10','1'],
-    answer:'7',
-    hint:'MRS GREN is a useful way to remember them.',
-    explanation:'Living things share <b>7 characteristics</b>: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion and Nutrition (MRS GREN).' }),
+    question:'Which of these is NOT a characteristic of living things?',
+    options:['Being built in a factory','Growing bigger over time','Moving from place to place','Producing young offspring'],
+    answer:'Being built in a factory',
+    hint:'Four of these are things only living things do.',
+    explanation:'Living things <b>move</b>, <b>feed</b>, <b>grow</b>, <b>reproduce</b> and are <b>sensitive</b> to their surroundings. Being built in a factory is something done to a non-living object.' }),
 
   makeTF({ id:'g3ssee-liv-003', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'All living things grow.',
@@ -29,32 +29,32 @@ STATIC_QUESTIONS.push(
     explanation:'Yes! <b>Growth</b> is a characteristic of all living things. Animals grow from young to adult; plants grow from seed to mature plant.' }),
 
   makeMCQ({ id:'g3ssee-liv-004', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
-    question:'Which characteristic of living things refers to getting rid of waste products from the body?',
-    options:['Excretion','Nutrition','Growth','Sensitivity'],
-    answer:'Excretion',
-    hint:'Think of how our body removes wastes it no longer needs.',
-    explanation:'<b>Excretion</b> is the process by which living things remove waste products from their bodies — for example, humans breathe out carbon dioxide and excrete urine.' }),
+    question:'Which characteristic of living things refers to going from place to place?',
+    options:['Movement','Nutrition','Growth','Sensitivity'],
+    answer:'Movement',
+    hint:'Think of a bird flying or a child running.',
+    explanation:'<b>Movement</b> is a characteristic of all living things. Animals walk, swim or fly, and plants move slowly, turning their leaves towards the light.' }),
 
   makeMCQ({ id:'g3ssee-liv-005', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
-    question:'What is RESPIRATION in living things?',
-    options:['The process of using food to release energy','The process of making food using sunlight','The ability to move from place to place','The ability to feel and respond to changes'],
-    answer:'The process of using food to release energy',
-    hint:'Animals breathe in oxygen for this process.',
-    explanation:'<b>Respiration</b> is the process by which living things use food (glucose) and oxygen to release energy for their activities.' }),
+    question:'What is NUTRITION in living things?',
+    options:['The taking in of food to stay alive','The making of new young offspring','The going from one place to another','The growing taller and heavier'],
+    answer:'The taking in of food to stay alive',
+    hint:'Think of what every animal must do every day to stay alive.',
+    explanation:'<b>Nutrition</b> is taking in food. Animals eat other living things, and plants make their own food in their leaves using sunlight.' }),
 
   makeMCQ({ id:'g3ssee-liv-006', chapterId:'g3ssee-living', difficulty:2, subsection:'living_things',
     question:'A plant grows towards a light source. Which characteristic of living things does this show?',
-    options:['Sensitivity','Reproduction','Respiration','Excretion'],
+    options:['Sensitivity','Reproduction','Movement','Nutrition'],
     answer:'Sensitivity',
     hint:'The plant is detecting and responding to a change in its environment.',
-    explanation:'Growing towards light shows <b>sensitivity</b> — detecting and responding to a change (a stimulus) in the surroundings. Reproduction makes offspring, respiration releases energy and excretion removes waste.'}),
+    explanation:'Growing towards light shows <b>sensitivity</b> — detecting and responding to a change in the surroundings. Reproduction makes offspring, movement is going from place to place and nutrition is feeding.'}),
 
   makeMCQ({ id:'g3ssee-liv-007', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'Which characteristic of living things refers to producing offspring?',
-    options:['Reproduction','Respiration','Excretion','Nutrition'],
+    options:['Reproduction','Movement','Growth','Nutrition'],
     answer:'Reproduction',
     hint:'This is how living things make more of themselves.',
-    explanation:'<b>Reproduction</b> is the making of offspring: animals produce young and plants produce seeds. Respiration releases energy, excretion removes waste and nutrition is feeding.'}),
+    explanation:'<b>Reproduction</b> is the making of offspring: animals produce young and plants produce seeds. Movement is going from place to place, growth is getting bigger and nutrition is feeding.'}),
 
   makeTF({ id:'g3ssee-liv-008', chapterId:'g3ssee-living', difficulty:1, subsection:'living_things',
     question:'All living things need food (nutrition).',
@@ -134,7 +134,7 @@ STATIC_QUESTIONS.push(
     options:['Sunlight','A mushroom','An earthworm','A butterfly'],
     answer:'Sunlight',
     hint:'Non-living things can still be essential for life.',
-    explanation:'<b>Sunlight</b> is non-living, but it is essential for life — plants use it for photosynthesis, and animals depend on plants for food and oxygen.' }),
+    explanation:'<b>Sunlight</b> is non-living, but living things cannot do without it — plants use it to make their food, and animals depend on plants for food and for the air they breathe.' }),
 
   makeMCQ({ id:'g3ssee-liv-020', chapterId:'g3ssee-living', difficulty:2, subsection:'non_living',
     question:'What is the correct term for things that have never been alive and show no life processes?',
@@ -173,7 +173,7 @@ STATIC_QUESTIONS.push(
     question:'Carbon dioxide is a gas in the air. Is it living or non-living?',
     options:['Non-living','Once living','Dormant','Extinct'],
     answer:'Non-living',
-    explanation:'Carbon dioxide is a <b>non-living</b> gas — a chemical compound. It was never alive, even though plants take it in during photosynthesis.'}),
+    explanation:'Carbon dioxide is a <b>non-living</b> gas. It was never alive, even though plants take it in from the air when they make their food.'}),
 
   makeMCQ({ id:'g3ssee-liv-026', chapterId:'g3ssee-living', difficulty:1, subsection:'non_living',
     question:'Which list contains ONLY non-living things?',
@@ -191,7 +191,7 @@ STATIC_QUESTIONS.push(
     options:['Water','Plastic','Metal','Glass'],
     answer:'Water',
     hint:'Plants wilt and die when they do not get this.',
-    explanation:'<b>Water</b> is the most important non-living substance for plant survival — plants use it for photosynthesis and to transport nutrients through their stems.' }),
+    explanation:'<b>Water</b> is the most important non-living thing a plant needs. The roots take it in from the soil and the stem carries it up to the leaves.' }),
 
   makeMCQ({ id:'g3ssee-liv-029', chapterId:'g3ssee-living', difficulty:2, subsection:'non_living',
     question:'Which non-living factor affects where animals and plants can live?',
@@ -205,7 +205,7 @@ STATIC_QUESTIONS.push(
     options:['No, fire cannot carry out all life processes','No, because fire is always cold to the touch','Yes, because it moves about and needs oxygen','Yes, because it grows and makes waste gases'],
     answer:'No, fire cannot carry out all life processes',
     hint:'One or two characteristics of life are not enough to be alive.',
-    explanation:'The pupil is wrong. Fire uses oxygen and gives off carbon dioxide, which looks like respiration, but it has no cells and cannot reproduce, so it does not carry out all the life processes.'}),
+    explanation:'The pupil is wrong. Fire spreads and needs oxygen, so it can look alive, but it cannot feed itself and it cannot reproduce, so it does not carry out all the life processes.'}),
 
 // ── classifying (031-075) ──────────────────────────────────────────────────
 
@@ -237,7 +237,7 @@ STATIC_QUESTIONS.push(
     question:'Which criterion is used to separate living from non-living things?',
     options:['Whether it shows life processes','Whether it is green or dark brown','Whether it is big or small','Whether it is wet or dry'],
     answer:'Whether it shows life processes',
-    explanation:'We sort things as living or non-living by whether they show <b>life processes</b> — growth, respiration, reproduction and the rest. Colour, size and wetness tell us nothing.'}),
+    explanation:'We sort things as living or non-living by whether they show <b>life processes</b> — movement, feeding, growth, reproduction and sensitivity. Colour, size and wetness tell us nothing.'}),
 
   makeMCQ({ id:'g3ssee-liv-036', chapterId:'g3ssee-living', difficulty:2, subsection:'classifying',
     question:'Which of the following is an example of CLASSIFYING animals?',

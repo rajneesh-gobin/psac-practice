@@ -22,6 +22,13 @@
  * 14. Every result card has: grades, icon, title(), happened(), instead, exam()
  * 15. Minimum counts: 16 discoveries, 3 guides, 2 missions, 4 hazards, 3 result cards
  * 16. Grade 7 science question files can be loaded and gas-test questions found
+ * 17. Experiments (lab_experiment.js): every setup/step token is one the bench
+ *     accepts and is REACHABLE when it is asked for (a test needs a collected
+ *     tube, setup needs a station, acid needs goggles); refs resolve; a `say`
+ *     names its control's label (CONTROLS); the See text is TRUE - the tokens
+ *     are replayed through testResult()/AIR and every result sentence must
+ *     appear in see.saw; a mystery gas is named in the See; wrong options are
+ *     tokens the bench routes through _expWrong (heard, not acted).
  */
 'use strict';
 
@@ -246,6 +253,149 @@ if (fs.existsSync(Q_DIR)) {
   process.stderr.write('  ✗ grade7-science/questions directory not found\n');
   fail++;
 }
+
+// ── 17. Experiments ───────────────────────────────────────────────────────────
+// Every check here goes through ok(), so a broken experiment prints a ✗ line
+// on stderr and the run exits 1 - the same loudness as the sections above.
+process.stdout.write('\n  Experiments\n');
+const EXPS = D.EXPERIMENTS;
+ok('EXPERIMENTS exported as a non-empty array', Array.isArray(EXPS) && EXPS.length >= 3 && EXPS.length <= 5, 'got ' + (EXPS && EXPS.length));
+ok('CONTROLS exported with a label and selector per token', D.CONTROLS && Object.values(D.CONTROLS).every(c => c.label && c.sel));
+ok('TOOL_ORDER tokens all have a control with an id (the bench renders the tool row from it)',
+   Array.isArray(D.TOOL_ORDER) && D.TOOL_ORDER.every(t => D.CONTROLS[t] && D.CONTROLS[t].id && D.CONTROLS[t].act));
+ok('AIR sums to 100%', Array.isArray(D.AIR) && Math.abs(D.AIR.reduce((a, x) => a + x.pct, 0) - 100) < 0.001, JSON.stringify(D.AIR && D.AIR.map(a => a.pct)));
+ok('AIR: nitrogen is the biggest gas', D.AIR && D.AIR.slice().sort((a, b) => b.pct - a.pct)[0].id === 'n2');
+
+const BENCH_SRC = fs.readFileSync(path.join(ROOT, 'engine', 'labs', 'lab_gastests.js'), 'utf8');
+ok('bench hears a wrong option before acting (_expWrong in _act and _selectStation)',
+   /function _act\(act\) \{\s*if \(_expWrong\(/.test(BENCH_SRC) && /_expWrong\('station:' \+ id\)/.test(BENCH_SRC));
+ok('bench renders its tool row from CONTROLS/TOOL_ORDER', BENCH_SRC.includes('D().TOOL_ORDER.map('));
+ok('bench exports the experiment adapter', /return \{ study, experiment, mount/.test(BENCH_SRC));
+
+// The grammar of a token the bench accepts, and the state it needs.
+const GAS_TOKENS = new Set(Object.keys(D.CONTROLS));
+const accepted = tok => GAS_TOKENS.has(tok) || /^mystery:(o2|co2|h2)$/.test(tok) || tok === 'observe';
+// A tiny model of the bench: what a token needs to FIRE its guide event, and
+// what it changes. Mirrors _doSetup/_doCollect/_doTest/_doAircomp.
+function newModel() { return { goggles: false, active: null, mystery: null, stations: {}, seen: [], air: false }; }
+const station = (m, id) => (m.stations[id] = m.stations[id] || { setup: false, collected: false, tests: [] });
+function fire(m, tok) {
+  if (tok === 'goggles') { m.goggles = true; return null; }
+  if (tok.startsWith('station:') || tok.startsWith('mystery:')) {
+    const id = tok.slice(tok.indexOf(':') + 1);
+    if (!D.GASES[id]) return 'no such gas ' + id;
+    m.active = id; if (tok.startsWith('mystery:')) m.mystery = id; station(m, id); return null;
+  }
+  if (!m.active) return tok + ' needs a station selected first';
+  const st = station(m, m.active);
+  if (tok === 'setup') {
+    if (!m.goggles && (m.active === 'h2' || m.active === 'co2')) return 'setup at ' + m.active + ' without goggles raises a hazard card, never the token';
+    st.setup = true; return null;
+  }
+  if (tok === 'collect') { if (!st.setup) return 'collect before setup does nothing'; st.collected = true; return null; }
+  if (tok.startsWith('test:')) {
+    const t = tok.slice(5);
+    if (!D.TESTS[t]) return 'no such test ' + t;
+    if (!st.collected) return tok + ' before the tube is collected does nothing';
+    if (D.hazardFor(m.active, t, m.goggles) || !m.goggles) return tok + ' at ' + m.active + ' raises a hazard card (' + (D.hazardFor(m.active, t, m.goggles) || 'no goggles') + '), never the token';
+    const r = D.testResult(m.active, t);
+    st.tests.push(t); m.seen.push(r.saw); return null;
+  }
+  if (tok === 'aircomp') { if (m.active !== 'o2') return 'aircomp only shows at the oxygen station'; m.air = true; return null; }
+  if (tok === 'reset') { m.stations[m.active] = { setup: false, collected: false, tests: [] }; return null; }
+  if (tok === 'observe') return null;
+  return 'unknown token ' + tok;
+}
+const questionRef = ref => {
+  if (ref && typeof ref === 'object') return ref;
+  const [mid, i] = String(ref).split(':');
+  const M = D.MISSIONS.find(x => x.id === mid);
+  return M ? M.quiz[Number(i)] : null;
+};
+const strip = s => String(s).replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+
+ok('experiment ids are unique', new Set(EXPS.map(e => e.id)).size === EXPS.length);
+ok('every experiment is Grade 7 on chapter g7s-air', EXPS.every(e => Array.isArray(e.grades) && e.grades.length === 1 && e.grades[0] === 7 && e.chapter === 'g7s-air'));
+ok('the first experiment is the oxygen test (the exam-shaped one, g7s-hd-096)', EXPS[0] && EXPS[0].id === 'relight' && EXPS[0].setup.includes('station:o2'));
+
+EXPS.forEach(e => {
+  const t = 'exp ' + e.id;
+  ok(t + ': title is a question (<= 60 chars, ends in ?)', typeof e.title === 'string' && e.title.length <= 60 && /\?$/.test(e.title), e.title);
+  ok(t + ': aim <= 200 chars', typeof e.aim === 'string' && e.aim.length >= 20 && e.aim.length <= 200, e.aim && e.aim.length);
+  ok(t + ': predict has 2-4 options and the answer among them',
+     e.predict && Array.isArray(e.predict.options) && e.predict.options.length >= 2 && e.predict.options.length <= 4 && e.predict.options.some(o => o.id === e.predict.answer), JSON.stringify(e.predict));
+  ok(t + ': 1-5 steps', Array.isArray(e.steps) && e.steps.length >= 1 && e.steps.length <= 5, e.steps && e.steps.length);
+
+  // Replay: set-up, then each step's right token, through the model.
+  const m = newModel();
+  const bad = [];
+  (e.setup || []).forEach(tok => { if (!accepted(tok)) bad.push('setup token not accepted: ' + tok); else { const err = fire(m, tok); if (err) bad.push('setup: ' + err); } });
+  ok(t + ': every setup token is accepted and reachable', bad.length === 0, bad.join(' | '));
+
+  e.steps.forEach((s, i) => {
+    const st = t + ' step ' + (i + 1);
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const right = s.any || (s.on ? [s.on] : []);
+    ok(st + ': has an instruction (say or ask) and a token', !!(s.say || s.ask) && toks.length > 0 && right.length > 0, JSON.stringify(s));
+    ok(st + ': every token is one the bench accepts', toks.every(accepted), toks.filter(x => !accepted(x)).join(','));
+    ok(st + ': instruction <= 25 words', String(s.say || s.ask).split(/\s+/).length <= 25, String(s.say || s.ask).split(/\s+/).length);
+    if (s.ask) {
+      ok(st + ': an ask lists 2+ options with the right answer among them', Array.isArray(s.options) && s.options.length >= 2 && right.every(r => s.options.includes(r)), JSON.stringify(s.options));
+      const wrongs = s.options.filter(o => !right.includes(o));
+      ok(st + ': every wrong option explains itself (> 15 chars)', wrongs.length > 0 && wrongs.every(w => s.wrong && typeof s.wrong[w] === 'string' && s.wrong[w].length > 15), JSON.stringify(s.wrong));
+      ok(st + ': wrong keys are all options', !s.wrong || Object.keys(s.wrong).every(k => s.options.includes(k)), JSON.stringify(Object.keys(s.wrong || {})));
+      // A wrong option must be heard, never performed: only tokens that enter
+      // the bench through _act() or _selectStation() are guarded that way.
+      ok(st + ': wrong options are act/station tokens the bench guards with _expWrong',
+         Object.keys(s.wrong || {}).every(k => GAS_TOKENS.has(k)), JSON.stringify(Object.keys(s.wrong || {})));
+    } else {
+      ok(st + ': an observation names its control ("' + (D.CONTROLS[s.on] || {}).label + '")',
+         !!D.CONTROLS[s.on] && strip(s.say).includes(strip(D.CONTROLS[s.on].label)), s.say);
+    }
+    // Fire the right token through the model: it must be reachable NOW.
+    const err = fire(m, right[0]);
+    ok(st + ': the right token ' + right[0] + ' fires in the bench at this point', !err, err);
+  });
+
+  // The See text is true: every test result sentence in order, air numbers, the mystery named.
+  ok(t + ': see.saw and see.learn are sentences', e.see && typeof e.see.saw === 'string' && e.see.saw.length > 10 && typeof e.see.learn === 'string' && e.see.learn.length > 10, JSON.stringify(e.see));
+  if (e.see && e.see.saw) {
+    let pos = 0, inOrder = true;
+    m.seen.forEach(saw => { const k = e.see.saw.indexOf(saw, pos); if (k < 0) inOrder = false; else pos = k + saw.length; });
+    ok(t + ': see.saw contains every test result the bench will show, in order (' + m.seen.length + ')', inOrder, JSON.stringify({ saw: e.see.saw, results: m.seen }));
+    if (m.air) ok(t + ': see.saw states the nitrogen and oxygen percentages from AIR',
+                  e.see.saw.includes(D.airPct('n2') + '%') && e.see.saw.includes(D.airPct('o2') + '%'), e.see.saw);
+    if (m.mystery) ok(t + ': see.saw names the mystery gas (' + D.GASES[m.mystery].name + ')',
+                      e.see.saw.toLowerCase().includes(D.GASES[m.mystery].name.toLowerCase()), e.see.saw);
+    ok(t + ': the bench shows something in See (a test result, the air table, or a collected tube)',
+       m.seen.length > 0 || m.air || Object.values(m.stations).some(s => s.collected), JSON.stringify(m));
+  }
+  // The prediction is answered by the bench: the answer's outcome is in the model.
+  if (e.predict && e.predict.answer) {
+    const ans = e.predict.options.find(o => o.id === e.predict.answer);
+    const lastGas = m.active, tests = lastGas ? station(m, lastGas).tests : [];
+    const lastTest = tests[tests.length - 1];
+    let truth = true, why = '';
+    if (lastTest) {
+      const fx = D.testResult(lastGas, lastTest).fx;
+      const want = { relight: 'relight', milky: 'milky', pop: 'pop', out: 'out', clear: 'clear', nothing: 'nothing' }[fx];
+      truth = e.predict.answer === want || (m.mystery && e.predict.answer === m.mystery);
+      why = 'last result fx=' + fx + ' but predict.answer=' + e.predict.answer + (m.mystery ? ' (mystery ' + m.mystery + ')' : '');
+    } else if (m.air) {
+      truth = e.predict.answer === D.AIR.slice().sort((a, b) => b.pct - a.pct)[0].id;
+      why = 'biggest gas in AIR is not ' + e.predict.answer;
+    }
+    ok(t + ': predict.answer (' + (ans && ans.label) + ') is what the bench will show', truth, why);
+  }
+
+  ok(t + ': 2-3 check questions', Array.isArray(e.check) && e.check.length >= 2 && e.check.length <= 3, e.check && e.check.length);
+  (e.check || []).forEach(ref => {
+    const q = questionRef(ref);
+    ok(t + ': check ' + (typeof ref === 'string' ? ref : '(inline)') + ' resolves to a 4-option question with a reason',
+       !!q && typeof q.q === 'string' && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options.map(o => String(o).trim().toLowerCase())).size === 4 && typeof q.why === 'string', JSON.stringify(ref));
+  });
+  ok(t + ': has an exam line', typeof e.exam === 'string' && e.exam.length > 10);
+});
 
 // ── Summary ──────────────────────────────────────────────────────────────────
 console.log('\n' + (fail === 0 ? '✅' : '❌') + ' ' + pass + ' passed, ' + fail + ' failed\n');

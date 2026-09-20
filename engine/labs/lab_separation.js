@@ -20,6 +20,10 @@
 //    filtration, evaporation, chromatography and its own "Which technique?";
 //    Grade 7 has dissolving, evaporation, a ready-made distillation rig and
 //    "Element, compound or mixture?". Everything Grade 9 does is unchanged.
+//  ⚠ EXPERIMENTS (lab_experiment.js): the runner sets up the bench through
+//    `experiment.apply()`, and while it is in Do the simulation clock only
+//    runs during a `wait:` step - a child reading a question never boils a
+//    basin dry. A wrong option the step lists is heard, never acted on.
 // ══════════════════════════════════════════════
 const LabSeparation = (() => {
   const SD = LabSeparationData;
@@ -82,6 +86,7 @@ const LabSeparation = (() => {
   let _colors = null, _tipIdx = -1;
   let _dist = null, _cry = null, _sub = null, _ch = null;
   let _fil = null, _eva = null, _chr = null, _dis = null, _lastGrade = null;
+  let _silent = false, _focus = null;   // experiments: set-up runs without toasts or cards; focus hides unlisted controls
 
   // ══ Grade levels (LAB_SPEC §9) ═══════════════
   // Labs.grade() is 7, 8 or 9; a grade this lab has no level for is 9. Only
@@ -95,6 +100,8 @@ const LabSeparation = (() => {
   const _missions = () => _mine(SD.MISSIONS);
   const _discs = () => _mine(SD.DISCOVERIES);
   const _modes = () => SD.MODES_BY_GRADE[_g()];
+  const _hasExp = () => SD.forGrade(SD.EXPERIMENTS || [], _g()).length > 0;
+  const _confetti = () => { if (!_silent) Labs.confetti(); };
   const _chSet = () => SD.CHOOSE[_g()];
   const _mdef = () => _mission && SD.MISSIONS.find(x => x.id === _mission.id);
   const _modeName = m => (m === 'choose' ? _chSet().modeLabel : MODES[m].name);
@@ -122,7 +129,7 @@ const LabSeparation = (() => {
   function _newCry() {
     const K = SD.CRYSTAL;
     return { heat: false, heated: false, T: SD.ROOM, water: K.water, grams: K.grams, cool: null, crystals: 0,
-             onset: null, crust: false, dry: false, done: false, rods: [], rodOK: false };
+             onset: null, crust: false, dry: false, done: false, rods: [], rodOK: false, point: false };
   }
   function _newSub(parts) {
     const p = Object.assign({ mixture: null, place: null, cover: null }, parts || {});
@@ -221,7 +228,7 @@ const LabSeparation = (() => {
     _readouts();
     _setAria();
     const st = Labs.store('separation');
-    if (!st[_introKey()]) _intro();
+    if (!st[_introKey()] && !_hasExp()) _intro();
     else if (_guide) _guideEnter();
     else if (_mission) _coach('Back on your mission - carry on where you left off.');
     else _coach(Object.keys(st.guides).length
@@ -287,8 +294,20 @@ const LabSeparation = (() => {
     };
   }
 
+  // What a tap would tell the guide. A wrong option listed by the current
+  // experiment step is HEARD (the runner shows its card) but never acted on.
+  const ACT_TOK = { heat: () => (_heating() ? 'heat-off' : 'heat'), rod: 'rod', 'cool-slow': 'cool:slow', 'cool-fast': 'cool:fast', drop: 'drop', reset: 'reset',
+                    pour: 'pour', run: 'run', add: 'add', stir: 'stir', leave: 'leave', wait: 'wait', build: () => _buildTok() };
+  const _curStep = () => { const G = _gdef(); return G ? G.steps[_guide.step] : null; };
+  const _buildTok = () => { const s = _curStep(); return s && s.on && s.on.startsWith('build:') ? s.on : null; };
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(tok && s && s.wrong && s.wrong[tok]); };
+  const _heard = tok => { if (!_expWrong(tok)) return false; _guideEvent(tok); return true; };
   function _act(act) {
+    const t = ACT_TOK[act];
+    if (_heard(typeof t === 'function' ? t() : t)) return;
     switch (act) {
+      case 'wait': _skip(); break;
+      case 'build': { const b = _buildTok(); if (b) build(b.slice(6)); break; }
       case 'hub': Labs.backToHub(); break;
       case 'goggles': goggles(); break;
       case 'help': _help(); break;
@@ -363,6 +382,7 @@ const LabSeparation = (() => {
   }
 
   function setPart(k, v) {
+    if (_heard('part:' + k + ':' + v)) return;
     if (_busy) { _coach('One thing at a time - let that finish first.'); return; }
     if (SD.PARTS[k]) _setDistPart(k, v);
     else if (SD.SUB_PARTS[k]) _setSubPart(k, v);
@@ -555,7 +575,7 @@ const LabSeparation = (() => {
       if (D.parts.flask === 'sea') {
         ms.success = true;
         _coach('🎯 25 cm³ of pure water from sea water! Tap “Answer the questions” to finish the mission.');
-        Labs.confetti();
+        _confetti();
       } else _coach('That was inky water - this mission needs SEA water. Clear the bench and build it again.');
     } else _coach(`${f0(D.dist)} cm³ of pure water collected. Try 💧 “Test a drop” to prove nothing is dissolved in it.`);
     _syncTools(); _refresh();
@@ -584,6 +604,7 @@ const LabSeparation = (() => {
       C.T = Math.min(K.boils, C.T + K.heatRate * dt);
       if (C.T >= K.boils) {
         C.water = Math.max(0, C.water - K.evap * dt);
+        if (!C.point && C.water <= SD.crystalPoint()) { C.point = true; _guideEvent('wait:point'); }
         if (!C.crust && C.water <= SD.crustPoint()) {
           C.crust = true;
           _logEntry({ title: 'Crust forming', note: true, obs: 'Crystals are forming even in the boiling solution, round the edge of the basin, and it has started to spit.' });
@@ -662,7 +683,7 @@ const LabSeparation = (() => {
     _discover(slow ? 'c_big' : 'c_small');
     const ms = _mission;
     if (ms && ms.id === 'crystals') {
-      if (slow) { ms.success = true; _coach('🎯 Big blue crystals! Tap “Answer the questions” to finish the mission.'); Labs.confetti(); }
+      if (slow) { ms.success = true; _coach('🎯 Big blue crystals! Tap “Answer the questions” to finish the mission.'); _confetti(); }
       else _coach('Tiny crystals - for this mission you need BIG ones. Tap “Start again” and cool it slowly.');
     } else _coach(slow ? 'Slow cooling gave big crystals. Try cooling quickly next time and compare.' : 'Fast cooling gave tiny crystals. Try cooling slowly and compare.');
     _refresh();
@@ -787,7 +808,7 @@ const LabSeparation = (() => {
         : `Nothing was left on the filter paper. ${f0(F.filtrate)} cm³ of ${M.filtrate} ran through - the dissolved salt passed straight through the paper.` });
     _discover(SD.DONE_DISC.filter[F.parts.fmix]);
     const goal = _goalMet('filter', 'fmix', F.parts.fmix);
-    if (goal === true) { _mission.success = true; _coach('🎯 Clear filtrate! Tap “Answer the questions” to finish the mission.'); Labs.confetti(); }
+    if (goal === true) { _mission.success = true; _coach('🎯 Clear filtrate! Tap “Answer the questions” to finish the mission.'); _confetti(); }
     else if (goal === false) _coach(`This mission needs ${SD.FIL_MIXES[_mdef().goal.fmix].name.toLowerCase()}. Tap “Start again”.`);
     else _coach(M.residue ? `The ${M.residue} is the residue; the liquid in the beaker is the filtrate.` : 'The dissolved salt went straight through the paper - filtering cannot get it out.');
     _syncTools(); _refresh(); _readouts();
@@ -857,7 +878,7 @@ const LabSeparation = (() => {
       obs: `All the water evaporated and ${M.grams} g of ${M.solid} crystals were left in the basin. Nothing new was made - it is the same ${M.solid} that was dissolved.` });
     _discover((SD.DONE_DISC.evap[_g()] || {})[E.parts.emix]);
     const goal = _goalMet('evap', 'emix', E.parts.emix);
-    if (goal === true) { _mission.success = true; _coach(`🎯 The ${M.solid} is back! Tap “Answer the questions” to finish the mission.`); Labs.confetti(); }
+    if (goal === true) { _mission.success = true; _coach(`🎯 The ${M.solid} is back! Tap “Answer the questions” to finish the mission.`); _confetti(); }
     else if (goal === false) _coach(`This mission needs ${SD.EVAP_MIXES[_mdef().goal.emix].name.toLowerCase()}. Tap “Start again”.`);
     else _coach(`The ${M.solid} is back, unchanged${_g() === 7 ? ' - dissolving is a physical change' : ''}.`);
     _syncTools(); _refresh();
@@ -901,7 +922,7 @@ const LabSeparation = (() => {
         : `The spot moved up the paper but stayed as one ${names} spot: a single dye.` });
     _discover(SD.DONE_DISC.chroma[R.parts.ink]);
     const goal = _goalMet('chroma', 'ink', R.parts.ink);
-    if (goal === true) { _mission.success = true; _coach(`🎯 ${I.dyes.length} dyes found in the black ink! Tap “Answer the questions” to finish the mission.`); Labs.confetti(); }
+    if (goal === true) { _mission.success = true; _coach(`🎯 ${I.dyes.length} dyes found in the black ink! Tap “Answer the questions” to finish the mission.`); _confetti(); }
     else if (goal === false) _coach(`This mission needs ${SD.INKS[_mdef().goal.ink].name.toLowerCase()}. Tap “Start again”.`);
     else _coach(I.dyes.length > 1 ? `${I.dyes.length} spots: this ink is a mixture of ${I.dyes.length} dyes.` : 'One spot: a single dye, not a mixture of dyes.');
     _syncTools(); _refresh(); _readouts();
@@ -956,7 +977,7 @@ const LabSeparation = (() => {
         : `After stirring, the sand was still there as grains and sank to the bottom. The balance reads ${m} g. Sand is insoluble in water.` });
     _discover(SD.DONE_DISC.dissolve[V.parts.solid]);
     const goal = _goalMet('dissolve', 'solid', V.parts.solid);
-    if (goal === true) { _mission.success = true; _coach(`🎯 Dissolved - and still ${m} g! Tap “Answer the questions” to finish the mission.`); Labs.confetti(); }
+    if (goal === true) { _mission.success = true; _coach(`🎯 Dissolved - and still ${m} g! Tap “Answer the questions” to finish the mission.`); _confetti(); }
     else if (goal === false) _coach(`This mission needs ${SD.SOLIDS[_mdef().goal.solid].name.toLowerCase()}. Tap “Start again”.`);
     else _coach(S.dissolves ? `It dissolved, and the balance still reads ${m} g. The ${S.name.toLowerCase()} is still there.` : 'Sand is insoluble - it does not dissolve, however long you stir.');
     _syncTools(); _refresh(); _readouts();
@@ -965,15 +986,18 @@ const LabSeparation = (() => {
 
   // ══ Which technique? ═════════════════════════
   function _selectMix(id) {
+    if (_heard('mix:' + id)) return;
     const i = _chSet().items.findIndex(m => m.id === id);
     if (i < 0 || _busy) return;
     if (_mode !== 'choose') setMode('choose', true);
     if (_mode !== 'choose') return;
     _ch.idx = i; _ch.phase = 'tech';
     _refreshBench(); _readouts(); _highlight();
+    _guideEvent('mix:' + id);
   }
 
   function pickTech(t) {
+    if (_heard('tech:' + t)) return;
     if (_busy || _mode !== 'choose') return;
     const mx = _curMix(), set = _chSet();
     if (!mx || _ch.done[mx.id] || _ch.phase !== 'tech' || !set.kinds[t]) return;
@@ -984,9 +1008,11 @@ const LabSeparation = (() => {
       _result(set.card, { why: mx.wrong[t], right: mx.tech });
     }
     _refreshBench(); _readouts(); _highlight();
+    if (t === mx.tech) _guideEvent('tech:' + t);
   }
 
   function pickWhy(p) {
+    if (_heard('why:' + p)) return;
     if (_busy || _mode !== 'choose') return;
     const mx = _curMix(), set = _chSet();
     if (!mx || _ch.phase !== 'why' || !set.principles[p]) return;
@@ -1005,7 +1031,7 @@ const LabSeparation = (() => {
     const all = set.items.every(m => _ch.done[m.id]);
     if (all) {
       _discover(set.discAll);
-      if (_mission && _mdef().mode === 'choose') { _mission.success = true; _coach('🎯 All six sorted! Tap “Answer the questions” to finish the mission.'); Labs.confetti(); }
+      if (_mission && _mdef().mode === 'choose') { _mission.success = true; _coach('🎯 All six sorted! Tap “Answer the questions” to finish the mission.'); _confetti(); }
       else _coach(_g() === 7 ? 'All six substances sorted - you know your elements, compounds and mixtures.' : 'All six mixtures sorted - you are a technique expert.');
     } else {
       _ch.idx = set.items.findIndex(m => !_ch.done[m.id]);
@@ -1013,6 +1039,7 @@ const LabSeparation = (() => {
       _coach(`Right: ${T.name.toLowerCase()}. Next mixture…`);
     }
     _refreshBench(); _readouts(); _refresh();
+    _guideEvent('why:' + p);
     _guideEvent('choose:' + mx.id);
   }
 
@@ -1029,6 +1056,7 @@ const LabSeparation = (() => {
   // ══ Hazards and result cards ═════════════════
   function _hazard(id, ctx) {
     const H = SD.HAZARDS[id];
+    if (_silent) { _allHeatOff(); return; }
     const st = Labs.store('separation');
     st.hazards[id] = (st.hazards[id] || 0) + 1;
     Labs.persist();
@@ -1056,6 +1084,7 @@ const LabSeparation = (() => {
   }
 
   function _result(id, ctx) {
+    if (_silent) return;
     if (SD.CARD_DISC[id]) _discover(SD.CARD_DISC[id]);
     if (_mission) _mission.mistakes++;
     _cards.push({ id, ctx: ctx || {} });
@@ -1137,13 +1166,15 @@ const LabSeparation = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('separation', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _resetAll();
+    // An experiment's guide runs on the bench the runner already set up - the
+    // set-up IS the experiment; never wipe it.
+    if (!G.exp) _resetAll();
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPanel(); _syncTools(); _readouts();
     _guideEnter();
     const z = $('lab-sep-stage');
-    if (z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
+    if (!G.exp && z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
   // A step that is already true is skipped, so the guide never waits for
@@ -1155,6 +1186,7 @@ const LabSeparation = (() => {
     if (k === 'part') { const m = _ptMode(a); return !!m && _mode === m && _stateOf(m).parts[a] === b; }
     if (k === 'heat') return _heating();
     if (k === 'choose') return !!_ch.done[a];
+    if (k === 'mix') return _mode === 'choose' && _curMix().id === a;
     return false;
   }
 
@@ -1163,7 +1195,7 @@ const LabSeparation = (() => {
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
-    while (s && _alreadyDone(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
+    while (s && s.on && _alreadyDone(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     const box = $('lab-guide');
     if (box) {
@@ -1177,14 +1209,20 @@ const LabSeparation = (() => {
         </div>`;
       box.hidden = false;
     }
+    if (_mode === 'distil') _syncTools();   // the 🔧 Set up the rig tool follows a build: step
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. An experiment's
+  // runner hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); if (!s.on.startsWith('wait:') && !s.on.startsWith('card:')) _coachGuide(s.on); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); if (!token.startsWith('wait:') && !token.startsWith('card:')) _coachGuide(token); }
   }
 
   function _guideHint() {
@@ -1219,31 +1257,10 @@ const LabSeparation = (() => {
     if (k === 'stir') return _coach('Good stirring. Is it dissolving?');
     if (k === 'leave') return _coach('Basin left to dry. The solvent evaporates slowly.');
     if (k === 'choose') return _coach('Technique chosen. Read the result carefully.');
+    if (k === 'mix') return _coach('Read what you want from this mixture, then choose.');
+    if (k === 'tech') return _coach('Good choice. Now the reason it works.');
+    if (k === 'why') return _coach('Right reason. Next one…');
     _coach('Good — on to the next step.');
-  }
-
-  function _guideDo() {
-    const G = _gdef();
-    if (!G) return;
-    const s = G.steps[_guide.step];
-    if (!s) return;
-    const [k, a, b] = s.on.split(':');
-    if (k === 'goggles') { if (!_goggles) goggles(); }
-    else if (k === 'mode') setMode(a);
-    else if (k === 'part') setPart(a, b);
-    else if (k === 'build') build(a);
-    else if (k === 'heat') heatOn();
-    else if (k === 'heat-off') heatOff();
-    else if (k === 'rod') rod();
-    else if (k === 'cool') cool(a);
-    else if (k === 'drop') drop();
-    else if (k === 'reset') reset();
-    else if (k === 'choose') choose(a);
-    else if (k === 'pour') pour();
-    else if (k === 'run') run();
-    else if (k === 'add') add();
-    else if (k === 'stir') stir();
-    else if (k === 'leave') leave();
   }
 
   // ── Discoveries: every card opens ─────────────
@@ -1328,6 +1345,7 @@ const LabSeparation = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('separation', G)) { _stopGuide(true); return; }
     const st = Labs.store('separation');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -1349,7 +1367,7 @@ const LabSeparation = (() => {
             : '<button type="button" class="lab-btn lab-btn-primary" data-ov-close data-panel="missions" data-autofocus>Try a mission →</button>'}
       </div>`, { cls: 'is-done' });
     _coach(`Experiment complete: ${G.title}. Pick the next one below, try a mission, or explore freely.`);
-    Labs.confetti();
+    _confetti();
   }
 
   function _stopGuide(silent) {
@@ -1357,11 +1375,12 @@ const LabSeparation = (() => {
     _guide = null;
     const box = $('lab-guide');
     if (box) { box.hidden = true; box.innerHTML = ''; }
-    if (had) _renderPanel(); else _highlight();
+    if (had) { _renderPanel(); _syncTools(); } else _highlight();
     if (!silent) _coach('Guide stopped. Pick another experiment below, or explore freely.');
   }
 
-  // The yellow glow on whatever the current guide step wants tapped.
+  // The yellow glow on whatever the current guide step wants tapped - every
+  // option of an experiment's ask step at once.
   function _highlight() {
     if (!_root) return;
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
@@ -1369,35 +1388,157 @@ const LabSeparation = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [k, a, b] = s.on.split(':');
-    let sel = null;
-    if (k === 'goggles') sel = '#lab-goggles';
-    else if (k === 'mode') sel = `[data-mode="${a}"]`;
-    else if (k === 'part') sel = `[data-part="${a}"][data-opt="${b}"]`;
-    else if (k === 'heat' || k === 'heat-off') sel = '.lab-tools [data-act="heat"]';
-    else if (k === 'rod') sel = '.lab-tools [data-act="rod"]';
-    else if (k === 'cool') sel = `.lab-tools [data-act="cool-${a}"]`;
-    else if (k === 'drop') sel = '.lab-tools [data-act="drop"]';
-    else if (k === 'reset') sel = '.lab-tools [data-act="reset"]';
-    else if (['pour', 'run', 'add', 'stir', 'leave'].includes(k)) sel = `.lab-tools [data-act="${k}"]`;
-    else if (k === 'choose') {
-      const set = _chSet(), mx = set.items.find(m => m.id === a);
-      if (mx && _curMix().id === a) sel = _ch.phase === 'tech' ? `[data-tech="${mx.tech}"]` : `[data-why="${set.kindPrinciple[mx.tech]}"]`;
-      else sel = `[data-mix="${a}"]`;
-    }
-    const el = sel && _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-mode],[data-part],[data-opt],[data-mix],[data-tech],[data-why]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => { const sel = _selFor(t); return sel && _root.querySelector(sel); }).filter(Boolean);
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-mode],[data-part],[data-opt],[data-mix],[data-tech],[data-why]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ══ Experiments (lab_experiment.js, LAB_SPEC.md §10) ═══════════
+  // The control a token belongs to. A `wait:` token points at whatever starts
+  // that wait (🔥 Heat, 🫗 Pour, 🪟 Leave to dry…) until it has been tapped,
+  // then at ⏩ Wait - so "Tap 🔥 Heat, then ⏩ Wait" is one observation step.
+  function _selFor(tok) {
+    const [k, a, b] = String(tok).split(':');
+    const tool = act => `#lab-tools [data-act="${act}"]`;
+    switch (k) {
+      case 'goggles': return '#lab-goggles';
+      case 'mode': return `#lab-panel [data-mode="${a}"]`;
+      case 'part': return `#lab-panel [data-part="${a}"][data-opt="${b}"]`;
+      case 'build': return tool('build');
+      case 'heat': case 'heat-off': return tool('heat');
+      case 'cool': return tool('cool-' + a);
+      case 'rod': case 'drop': case 'reset': case 'pour': case 'run': case 'add': case 'stir': case 'leave': return tool(k);
+      case 'wait': return a ? _selFor(_waitLaunch(a) || 'wait') : tool('wait');
+      case 'mix': return `#lab-panel [data-mix="${a}"]`;
+      case 'tech': return `#lab-panel [data-tech="${a}"]`;
+      case 'why': return `#lab-panel [data-why="${a}"]`;
+      case 'choose': {
+        const set = _chSet(), mx = set.items.find(m => m.id === a);
+        if (!mx) return null;
+        if (_curMix().id === a) return _ch.phase === 'tech' ? `#lab-panel [data-tech="${mx.tech}"]` : `#lab-panel [data-why="${set.kindPrinciple[mx.tech]}"]`;
+        return `#lab-panel [data-mix="${a}"]`;
+      }
+    }
+    return null;
+  }
+  // Which control starts each wait, or null once it is under way.
+  const WAIT_LAUNCH = { boil: ['heat'], 100: ['heat'], distillate: ['heat'], point: ['heat'], edge: ['heat'], sublimate: ['heat'],
+                        crystals: ['cool:slow'], dry: ['leave'], filtrate: ['pour'], chromatogram: ['run'], dissolved: ['add', 'stir'], settled: ['add', 'stir'] };
+  function _waitLaunch(a) {
+    switch (a) {
+      case 'boil': case '100': case 'distillate': return _dist.heat || _dist.done ? null : 'heat';
+      case 'point': return _cry.heat || _cry.point ? null : 'heat';
+      case 'crystals': return _cry.cool || _cry.done ? null : 'cool:slow';
+      case 'sublimate': return _sub.heat || _sub.done ? null : 'heat';
+      case 'edge': return _eva.heat || _eva.edge ? null : 'heat';
+      case 'dry': return _eva.leave || _eva.done ? null : 'leave';
+      case 'filtrate': return _fil.pouring || _fil.done ? null : 'pour';
+      case 'chromatogram': return _chr.running || _chr.done ? null : 'run';
+      case 'dissolved': case 'settled': return _dis.stir > 0 || _dis.done ? null : (_dis.added ? 'stir' : 'add');
+    }
+    return null;
+  }
+  const _selsFor = tok => { const [k, a] = String(tok).split(':'); const list = k === 'wait' && a ? ['wait', ...(WAIT_LAUNCH[a] || [])] : [tok]; return list.map(_selFor).filter(Boolean); };
+
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Applied after every render of the tools and the shelf.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const sels = on ? [..._focus].flatMap(_selsFor) : [];
+    const listed = el => sels.some(s => el.matches(s));
+    _root.querySelectorAll('#lab-tools .lab-tool, .lab-separation-opt, .lab-separation-modes button, .lab-separation-chip, .lab-separation-choice').forEach(b => { b.hidden = on && !listed(b); });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-separation-part, .lab-separation-modes, .lab-separation-chips, .lab-separation-choices, .lab-separation-why').forEach(r => { r.hidden = on && !anyShown(r); });
+  }
+
+  // While an experiment is in Do, the clock only moves during a `wait:` step
+  // (or on ⏩ Wait): nothing boils dry while a child is reading a question.
+  // Explore, and a bench with no experiment, run in real time as before.
+  function _clockRuns() {
+    const m = _root && _root.dataset.expMode;
+    if (!m || m === 'explore') return true;
+    if (m !== 'do') return false;
+    const s = _curStep();
+    return !!(s && s.on && s.on.startsWith('wait:'));
+  }
+  const SKIP_SECS = 5;
+  function _skip() {
+    if (_busy) { _coach('One thing at a time - let that finish first.'); return; }
+    for (let i = 0; i < SKIP_SECS * 20; i++) _step(0.05);
+    _readouts(); _syncTools(); _showCard();
+  }
+  const WAIT_MET = { boil: () => _dist.boiling, 100: () => _dist.said100, distillate: () => _dist.done, point: () => _cry.point, crystals: () => _cry.done,
+                     sublimate: () => _sub.done, edge: () => _eva.edge, dry: () => _eva.done, filtrate: () => _fil.done, chromatogram: () => _chr.done,
+                     dissolved: () => _dis.done, settled: () => _dis.done };
+  function _runUntil(a) {
+    const met = WAIT_MET[a];
+    if (!met) return;
+    for (let i = 0; i < 2400 && !met(); i++) _step(0.05);
+    _readouts(); _syncTools();
+  }
+  // Perform one guide token as if it had been tapped.
+  function _perform(tok) {
+    const [k, a, b] = String(tok).split(':');
+    if (k === 'goggles') { if (!_goggles) goggles(); }
+    else if (k === 'mode') setMode(a, true);
+    else if (k === 'part') setPart(a, b);
+    else if (k === 'build') build(a);
+    else if (k === 'heat') heatOn();
+    else if (k === 'heat-off') heatOff();
+    else if (k === 'rod') rod();
+    else if (k === 'cool') cool(a);
+    else if (k === 'drop') drop();
+    else if (k === 'reset') reset();
+    else if (k === 'choose') choose(a);
+    else if (k === 'mix') _selectMix(a);
+    else if (k === 'tech') pickTech(a);
+    else if (k === 'why') pickWhy(a);
+    else if (k === 'pour') pour();
+    else if (k === 'run') run();
+    else if (k === 'add') add();
+    else if (k === 'stir') stir();
+    else if (k === 'leave') leave();
+    else if (k === 'wait') { if (a) _runUntil(a); else _skip(); }
+  }
+  const _brief = s => {
+    const parts = String(s || '').match(/[^.!?]+[.!?]+\s*/g) || [String(s || '')];
+    let out = '';
+    for (const p of parts) { if (out && (out + p).length > 150) break; out += p; }
+    return out.trim();
+  };
+  const experiment = {
+    list: () => SD.forGrade(SD.EXPERIMENTS || [], _g()),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = SD.MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _stopGuide(true);
+      _mission = null; _cards = []; _fx = []; _busy = false; _log = []; _goggles = false; _focus = null;
+      _resetAll(); _mode = _modes()[0]; _panel = 'sandbox';
+      _renderPanel(); _syncTools(); _syncGoggles(); _readouts(); _setAria();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+    },
+    apply: tok => { _silent = true; try { _perform(tok); } finally { _silent = false; } },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.slice(0, 6).reverse().map(e => `${e.title}: ${_brief(e.obs)}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -1440,6 +1581,7 @@ const LabSeparation = (() => {
     else if (_panel === 'missions') p.innerHTML = _mission ? _missionHTML() + _benchHTML() + _notebookHTML() : _missionListHTML();
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _modesHTML() + _benchHTML() + _notebookHTML();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -1457,11 +1599,12 @@ const LabSeparation = (() => {
   function _refreshBench() {
     const b = $('lab-bench');
     if (b) b.outerHTML = _benchHTML();
+    _applyFocus();
     _highlight();
   }
   // Every discovery goes through here so the ✨ counter repaints AFTER it is saved.
   function _discover(id) {
-    if (!id) return;
+    if (!id || _silent) return;
     // Only this grade's discoveries count - another grade's are not on its shelf.
     const all = _discs(), d = all.find(x => x.id === id);
     if (!d) return;
@@ -1717,16 +1860,21 @@ const LabSeparation = (() => {
     const btn = (act, icon, label, extra) => `<button type="button" class="lab-tool" data-act="${act}"${extra || ''}><span aria-hidden="true">${icon}</span><em>${esc(label)}</em></button>`;
     const h = _heating();
     const heat = btn('heat', h ? '🧯' : '🔥', h ? 'Stop heating' : (_mode === 'sublime' ? 'Heat gently' : 'Heat'), ` aria-pressed="${h}"`);
+    // ⏩ Wait skips 5 minutes of lab time (1 s here = 1 min); 🔧 appears only
+    // while a guide step asks for a ready-made rig.
+    const wait = btn('wait', '⏩', 'Wait');
+    const setUp = _mode === 'distil' && _buildTok() ? btn('build', '🔧', 'Set up the rig') : '';
     let html;
-    if (_mode === 'distil') html = heat + btn('drop', '💧', 'Test a drop') + btn('reset', '🧽', 'Clear the bench');
-    else if (_mode === 'crystal') html = heat + btn('rod', '🥢', 'Glass rod') + btn('cool-slow', '🐢', 'Cool slowly') + btn('cool-fast', '❄️', 'Cool quickly') + btn('reset', '🧽', 'Start again');
-    else if (_mode === 'sublime') html = heat + btn('reset', '🧽', 'Clear the bench');
-    else if (_mode === 'filter') html = btn('pour', '🫗', 'Pour') + btn('reset', '🧽', 'Start again');
-    else if (_mode === 'evap') html = heat + btn('leave', '🪟', 'Leave to dry') + btn('reset', '🧽', 'Start again');
-    else if (_mode === 'chroma') html = btn('run', '💧', 'Stand in water') + btn('reset', '🧽', 'Start again');
-    else if (_mode === 'dissolve') html = btn('add', '🥄', 'Tip it in') + btn('stir', '🥢', 'Stir') + btn('reset', '🧽', 'Start again');
+    if (_mode === 'distil') html = setUp + heat + wait + btn('drop', '💧', 'Test a drop') + btn('reset', '🧽', 'Clear the bench');
+    else if (_mode === 'crystal') html = heat + btn('rod', '🥢', 'Glass rod') + btn('cool-slow', '🐢', 'Cool slowly') + btn('cool-fast', '❄️', 'Cool quickly') + wait + btn('reset', '🧽', 'Start again');
+    else if (_mode === 'sublime') html = heat + wait + btn('reset', '🧽', 'Clear the bench');
+    else if (_mode === 'filter') html = btn('pour', '🫗', 'Pour') + wait + btn('reset', '🧽', 'Start again');
+    else if (_mode === 'evap') html = heat + btn('leave', '🪟', 'Leave to dry') + wait + btn('reset', '🧽', 'Start again');
+    else if (_mode === 'chroma') html = btn('run', '💧', 'Stand in water') + wait + btn('reset', '🧽', 'Start again');
+    else if (_mode === 'dissolve') html = btn('add', '🥄', 'Tip it in') + btn('stir', '🥢', 'Stir') + wait + btn('reset', '🧽', 'Start again');
     else html = btn('reset', '🧽', 'Start the sort again');
     t.innerHTML = html;
+    _applyFocus();
     _highlight();
   }
 
@@ -1904,7 +2052,7 @@ const LabSeparation = (() => {
 
   // ══ Effects ══════════════════════════════════
   function _fxAdd(type, done, data) {
-    if (_instant || Labs.calm() || !_cx) { if (done) done(); return; }
+    if (_instant || _silent || Labs.calm() || !_cx) { if (done) done(); return; }
     const f = { type, t: 0, dur: FX_DUR[type] || 0.6, done, data: data || {} };
     if (type === 'spit' || type === 'bump' || type === 'burst' || type === 'crack') f.parts = _burst(type === 'crack' ? 'burst' : type);
     _fx.push(f);
@@ -2627,7 +2775,7 @@ const LabSeparation = (() => {
     if (_last && ts - _last < FRAME_MS - 1) return;
     const dt = _last ? Math.min(0.1, (ts - _last) / 1000) : 0;
     _last = ts;
-    _step(dt);
+    if (_clockRuns()) _step(dt);
     _animate(dt);
     _draw(dt);
     _uiAcc += dt;
@@ -2657,6 +2805,7 @@ const LabSeparation = (() => {
              sub: { parts: Object.assign({}, U.parts), heat: U.heat, left: U.left, sublimate: U.sublimate, escaped: U.escaped, done: U.done },
              ch: { idx: K.idx, phase: K.phase, done: Object.keys(K.done) },
              cards: _cards.length, particles: _parts.length, fx: _fx.length,
+             exp: { focus: _focus ? [..._focus] : null, clock: _clockRuns(), silent: _silent },
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
              mission: _mission && Object.assign({}, _mission) };
   }
@@ -2671,7 +2820,7 @@ const LabSeparation = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, setMode, setPart, build, heatOn, heatOff, rod, cool, drop,
-           reset, goggles, pickTech, pickWhy, choose, pour, leave, run, add, stir, _test, _tick, _debug };
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, setMode, setPart, build, heatOn, heatOff, rod, cool, drop,
+           reset, goggles, pickTech, pickWhy, choose, pour, leave, run, add, stir, act: _act, selectMix: _selectMix, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabSeparation = LabSeparation;

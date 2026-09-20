@@ -77,3 +77,20 @@
     box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.12);
   }
 }
+
+/* Experiments (lab_experiment.js): the candidate readings a child taps instead
+   of typing, the eye and ruler-start buttons an ask step offers, and the
+   controls focus() hides. .lab-tool and .lab-item set a display of their own,
+   which beats the browser's [hidden]. */
+.lab-measure .lab-tool[hidden], .lab-measure .lab-item[hidden], .lab-measure .lab-tools[hidden],
+.lab-measure .lab-shelf[hidden], .lab-measure .lab-items[hidden], .lab-measure .lab-shelf-head[hidden],
+.lab-measure .lab-measure-step[hidden], .lab-measure-reads[hidden] { display: none; }
+.lab-measure-reads { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.lab-measure-readbtn {
+  flex: 1 1 calc(33% - 8px); min-width: 96px; min-height: 48px; justify-content: center;
+  font-size: 1.05rem; font-weight: 800; font-variant-numeric: tabular-nums;
+}
+.lab-measure .lab-tool[data-eye], .lab-measure .lab-tool[data-align] { min-height: 44px; }
+@media (max-width: 420px) {
+  .lab-measure-readbtn { font-size: 0.95rem; flex-basis: calc(50% - 8px); }
+}

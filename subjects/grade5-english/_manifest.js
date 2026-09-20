@@ -37,6 +37,14 @@ const G5ENG_SYLLABUS = {
     { id:'types',           name:'Types of Sentence' },  // 3
     { id:'direct_speech',   name:'Direct & Reported Speech' },  // 4
     { id:'in_context',      name:'Finding Them in a Sentence' },  // 3
+    // ⚠ The Grade 5 column of the NCF grammar table names prepositions of time
+    //   (on Tuesday, during the week) and 'before' as a conjunction. Neither had
+    //   a question behind it. Both ids are reused from sibling packs rather than
+    //   invented (grade9-english carries `prepositions`, grade6-english
+    //   `conjunctions`), and this is the chapter that already holds punctuation,
+    //   sentence types and direct speech.
+    { id:'prepositions',    name:'Prepositions' },
+    { id:'conjunctions',    name:'Conjunctions' },
   ]},
   'eng-comprehension': { subsections: [
     { id:'vocabulary',      name:'Word Meaning in Context' },  // 6

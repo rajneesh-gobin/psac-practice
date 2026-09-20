@@ -32,6 +32,15 @@
 // ══════════════════════════════════════════════
 const LabCircuit = (() => {
   const D = () => LabCircuitData;
+  // Experiments (lab_experiment.js, LAB_SPEC.md §10): the runner drives this
+  // bench through the `experiment` adapter at the bottom of the file. An exp
+  // guide (G.exp) never resets the board, reports every token to the runner
+  // first, glows every option of an ask step, and ends silently. Grades 7 and
+  // 9 add two step shapes: a decision over SLOTS (the same part offered in
+  // two places - the part goes in the hand, both slots glow, and a wrong slot
+  // for a real component is HEARD, not performed, so the runner's card is the
+  // lesson and the board stays put) and a READING as a decision ('read:0.50A'
+  // tokens shown as value buttons; the right one takes the reading).
   const FRAME_MS = 1000 / 30;
   const FX_DUR = { short: 1.2, pop: 0.8, fuse: 0.8, zap: 1.0 };
 
@@ -46,7 +55,7 @@ const LabCircuit = (() => {
   let _panel = 'sandbox', _mission = null, _guide = null;
   let _log = [], _readings = [], _fx = [], _busy = false, _instant = false;
   let _tipIdx = -1, _undo = [], _hadGap = false, _vmSeen = false, _drag = null, _suppressClick = false;
-  let _talking = false, _obs = null, _lastGrade = null;
+  let _talking = false, _obs = null, _lastGrade = null, _quiet = false;
   let _tests = {}, _gapPrev = false, _gapFilled = false, _warm = false;   // Grades 4 and 6 only
 
   // ── The grade the board is being used at ──
@@ -111,8 +120,10 @@ const LabCircuit = (() => {
           <div class="lab-task-strip">Build a circuit: connect the components and check if the bulb lights up.</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-circuit-palette" class="lab-circuit-palette-wrap"></div>
-          <div class="lab-tools lab-circuit-actions${P ? ' is-two' : ''}">
-            ${P ? '' : '<button type="button" class="lab-tool" data-act="read"><span aria-hidden="true">📝</span>Take a reading</button>'}
+          <div id="lab-circuit-values" class="lab-tools lab-circuit-values" role="group" aria-label="What does the meter read?" hidden></div>
+          <div class="lab-tools lab-circuit-actions">
+            ${P ? '<button type="button" class="lab-tool" data-act="wait"><span aria-hidden="true">⏩</span>Wait 10 seconds</button>'
+                : '<button type="button" class="lab-tool" data-act="read"><span aria-hidden="true">📝</span>Take a reading</button>'}
             <button type="button" class="lab-tool" data-act="undo"><span aria-hidden="true">↩️</span>Undo</button>
             <button type="button" class="lab-tool" data-act="clear"><span aria-hidden="true">🗑️</span>Clear the board</button>
           </div>
@@ -146,6 +157,7 @@ const LabCircuit = (() => {
       _mission = null; _guide = null; _tool = 'hand'; _panel = 'sandbox'; _busy = false;
     }
     _lastGrade = g;
+    _focus = null;   // an experiment's focus never outlives the runner that set it
     if (!D().symbolsFor(g)) _view = 'picture';
     root.innerHTML = _shellHTML();
     _cv = $('lab-circuit-canvas');
@@ -185,7 +197,7 @@ const LabCircuit = (() => {
     _hush();
     if (_obs) { _obs.disconnect(); _obs = null; }
     _stop();
-    _drag = null;
+    _drag = null; _focus = null;
     _root = null; _cv = null; _cx = null;
   }
 
@@ -217,13 +229,15 @@ const LabCircuit = (() => {
   function _buildSlots() {
     const box = $('lab-circuit-slots');
     if (!box) return;
-    box.innerHTML = Object.keys(D().SLOTS).map(id => `<button type="button" class="lab-circuit-slot" data-slot="${id}"></button>`).join('');
+    box.innerHTML = Object.keys(D().SLOTS).map(id => `<button type="button" class="lab-circuit-slot" data-slot="${id}"><span class="lab-circuit-slot-tag" aria-hidden="true"></span></button>`).join('');
   }
 
   // ══ Events ═══════════════════════════════════
   function _wire() {
     _root.onclick = e => {
       if (_suppressClick) { _suppressClick = false; return; }
+      const rv = e.target.closest('[data-read]');
+      if (rv) { read(rv.dataset.read); return; }
       const a = e.target.closest('[data-act]');
       if (a) { _act(a.dataset.act); return; }
       const sl = e.target.closest('[data-slot]');
@@ -306,6 +320,7 @@ const LabCircuit = (() => {
       case 'cable': _danger('cable'); break;
       case 'view': setView(_view === 'picture' ? 'symbols' : 'picture'); break;
       case 'read': read(); break;
+      case 'wait': _wait(10); break;
       case 'undo': undo(); break;
       case 'clear': clearBoard(); break;
       case 'quiz': _quiz(); break;
@@ -375,6 +390,11 @@ const LabCircuit = (() => {
     _tool = t;
     _renderPalette();
     _renderSlots();
+    // An experiment's ask step ("Which thing lets electricity through?") is ONE
+    // tap: the option chosen goes straight into the step's slot, so a wrong
+    // choice can explain itself at once instead of waiting for a second tap.
+    const hit = _expOption(t);
+    if (hit) { place(hit, t); return; }
     const K = D().KINDS[t];
     _coach(t === 'hand' ? '✋ Tap a switch to open or close it, a bulb to unscrew it, or a cell to turn it round.'
       : t === 'eraser' ? '🧽 Tap a part on the board to take it off.'
@@ -385,10 +405,24 @@ const LabCircuit = (() => {
   // What a tap on a space does depends on the part in the hand.
   function tapSlot(slot) {
     if (!_guard() || !D().SLOTS[slot]) return;
+    if (_expHears('place:' + slot + ':' + _tool)) { _guideEvent('place:' + slot + ':' + _tool); return; }
     const p = _layout[slot];
     if (_tool === 'eraser') { if (p) remove(slot); else _coach('That space is already empty.'); return; }
     if (_tool === 'hand') { if (p) _operate(slot); else _coach('An empty space. Pick a part from the palette under the board, then tap here to place it.'); return; }
     if (p && p.kind === _tool) { _operate(slot); return; }
+    // ⚠ A different part in the hand used to REPLACE whatever sat here, so a
+    //   child told "tap the switch" while still holding a wire swapped the
+    //   switch for a wire and the guide never advanced (usability audit
+    //   2026-09-12, P0). Now an occupied space is OPERATED if it can be, and
+    //   otherwise explains itself. A plain WIRE is the blank connector and may
+    //   be built over ("add a second cell in series" places a cell where a wire
+    //   was), and a test object may be swapped for another test object.
+    //   Replacing a real component is 🧽 Remove, then place.
+    if (p && p.kind !== 'wire' && !(D().OBJECTS[p.kind] && D().KINDS[_tool] && D().KINDS[_tool].obj)) {
+      if (p.kind === 'switch' || p.kind === 'bulb' || p.kind === 'cell' || (p.kind === 'fuse' && p.blown)) { _operate(slot); return; }
+      _coach(`There is already a ${toolName(p.kind).toLowerCase()} here. Use 🧽 Remove to take it off first, or tap an empty space.`);
+      return;
+    }
     place(slot, _tool);
   }
 
@@ -406,6 +440,7 @@ const LabCircuit = (() => {
   function place(slot, kind) {
     const K = D().KINDS[kind];
     if (!K || !D().SLOTS[slot] || !_guard()) return;
+    if (_expHears('place:' + slot + ':' + kind)) { _guideEvent('place:' + slot + ':' + kind); return; }
     _snap();
     const was = _layout[slot];
     _layout[slot] = kind === 'switch' ? { kind, open: true } : { kind };
@@ -629,7 +664,10 @@ const LabCircuit = (() => {
       _logEntry({ title: 'Bulb unscrewed', obs: 'The light went out. A loose bulb makes a gap.' });
     } else if (/^bulb:.*:in$/.test(evt)) _coach('Bulb screwed back in.');
     else if (evt.startsWith('place:') && lit.length && !prevLit.length) _coach('The bulb lights! The last gap is closed, so electricity can flow all the way round.');
-    else if (/^place:.*:cell$/.test(evt) && bright) _coach('A second cell - the bulb is much brighter now!');
+    else if (/^place:.*:cell$/.test(evt) && bright) {
+      _coach('A second cell - the bulb is much brighter now!');
+      _logEntry({ title: 'Second cell added', obs: 'The bulb got much brighter. Two cells push harder than one.' });
+    }
   }
 
   // Grades 4/6: remember what each thing tested as, and note it the first time.
@@ -711,18 +749,25 @@ const LabCircuit = (() => {
   }
 
   // ══ Readings ═════════════════════════════════
-  function read() {
+  // `as` is a value the pupil says the meter shows ('0.50A', from an experiment's
+  // read:<value> button): a wrong one is only heard; the right one takes the
+  // reading, once - the same reading asked twice is not logged twice.
+  function read(as) {
     if (!_guard()) return;
+    const tok = as ? 'read:' + as : 'read';
+    if (as && _expHears(tok)) { _guideEvent(tok); return; }
     const C = D(), s = _sol || C.solve(_layout);
     const r = C.reading(_layout, s, _t);
     const lit = C.litBulbs(s);
     if (!r.amps.length && !r.volts.length) {
       _coach('There is no meter on the board. Put an ⏲️ ammeter IN the loop, or a 🎚️ voltmeter ACROSS a bulb, to measure.');
       _logEntry({ title: 'Looked at the circuit', obs: lit.length ? `${C.ARR_NAMES[r.arr]}: ${r.bulbs.filter(w => w !== 'off').join(', ')}. (No meter to measure with.)` : 'Nothing is lit. (No meter to measure with.)' });
-      _guideEvent('read');
+      _guideEvent(tok);
       return;
     }
-    _readings.push(r);
+    const last = _readings[_readings.length - 1];
+    const dup = !!as && !!last && last.label === r.label && last.amps.join() === r.amps.join() && last.volts.join() === r.volts.join();
+    if (!dup) _readings.push(r);
     const parts = [];
     if (r.amps.length) parts.push(`current ${r.amps.map(a => f2(a) + ' A').join(' and ')}`);
     if (r.volts.length) parts.push(`voltage ${r.volts.map(v => f2(v) + ' V').join(' and ')}`);
@@ -731,7 +776,7 @@ const LabCircuit = (() => {
     let formula = '';
     if (g9 && r.Q != null) formula = `In ${r.t} s: Q = It = ${f2(r.amps[0])} A × ${r.t} s = ${f1(r.Q)} C` + (r.W != null ? `;  W = QV = ${f1(r.Q)} C × ${f2(r.volts[0])} V = ${f1(r.W)} J` : '');
     else if (g9 && r.amps.length && r.volts.length && r.amps[0] > 0.01 && lit.length === 1) formula = `R = V ÷ I = ${f2(r.volts[0])} V ÷ ${f2(r.amps[0])} A = ${f1(C.resistance(r.volts[0], r.amps[0]))} Ω`;
-    _logEntry({ title: `Reading: ${r.label}`, obs: parts.join(', ') + '.', formula });
+    if (!dup) _logEntry({ title: `Reading: ${r.label}`, obs: parts.join(', ') + '.', formula });
     _coach(`📝 Recorded: ${parts.join(', ')}.${g9 && r.Q != null ? ` And ${f1(r.Q)} C of charge has flowed so far.` : ''}`);
     // Discoveries a reading can unlock
     const amm = Object.keys(s.meters).filter(k => s.meters[k].kind === 'ammeter' && s.meters[k].value > 0.01);
@@ -745,7 +790,7 @@ const LabCircuit = (() => {
     if (_is7()) _checkDiscP('read', s);
     _missionRead(s, r);
     _refresh();
-    _guideEvent('read');
+    _guideEvent(tok);
   }
 
   // ══ Discoveries from the state of the board ═══
@@ -781,9 +826,13 @@ const LabCircuit = (() => {
     if (!dt || !_sol) return;
     if (_sol.flowing) _t += dt;
     // A bulb left on for 10 s has got warm (Grades 4/6: light AND heat).
-    if (!_warm && _primary() && _t >= 10 - 1e-9 && D().litBulbs(_sol).length) { _warm = true; _checkDiscP('warm', _sol, true); _readouts(); }
+    if (!_warm && _primary() && _t >= 10 - 1e-9 && D().litBulbs(_sol).length) {
+      _warm = true;
+      _logEntry({ title: 'After 10 seconds', obs: 'The bulb was still shining, and it had got warm.' });
+      _checkDiscP('warm', _sol, true); _readouts();
+    }
     const G = _gdef(), s = G && G.steps[_guide.step];
-    if (s && s.on.startsWith('wait:') && _t >= +s.on.split(':')[1] - 1e-9) _guideEvent(s.on);
+    if (s && s.on && s.on.startsWith('wait:') && _t >= +s.on.split(':')[1] - 1e-9) _guideEvent(s.on);
   }
 
   // ══ Missions ═════════════════════════════════
@@ -929,10 +978,14 @@ const LabCircuit = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('circuit', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _layout = {}; _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = [];
-    _tests = {}; _gapFilled = false; _gapPrev = false;
-    _sol = D().solve(_layout);
-    _tool = 'hand';
+    // An experiment's guide (lab_experiment.js) runs on the board the runner
+    // already set up - the set-up IS the experiment; never wipe it.
+    if (!G.exp) {
+      _layout = {}; _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = [];
+      _tests = {}; _gapFilled = false; _gapPrev = false;
+      _sol = D().solve(_layout);
+      _tool = 'hand';
+    }
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _renderPalette();
@@ -945,6 +998,7 @@ const LabCircuit = (() => {
 
   // A step already true on the board is skipped. Actions never are.
   function _satisfied(on) {
+    if (!on) return false;
     const [k, a, b] = on.split(':');
     const p = _layout[a];
     switch (k) {
@@ -981,14 +1035,21 @@ const LabCircuit = (() => {
         </div>`;
       box.hidden = false;
     }
+    _renderValues();
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any` (an experiment
+  // that says "pick a conductor" accepts more than one). The runner hears
+  // every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); if (s.btn && !s.on.startsWith('build:')) _coachGuide(s.on); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); if (s.btn && !s.on.startsWith('build:')) _coachGuide(s.on); }
     else _highlight();
   }
 
@@ -996,8 +1057,13 @@ const LabCircuit = (() => {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (!s) return;
-    const [k, a, b] = s.on.split(':');
+    if (s && s.on) _do(s.on);
+  }
+  // Perform one guide token (build:<preset> place:<slot>:<kind> remove:<slot>
+  // switch:on|off bulb:<slot>:out|in flip:<slot> read view:<v> wait:<s>).
+  // Experiments apply their `setup` through this too.
+  function _do(tok) {
+    const [k, a, b] = String(tok || '').split(':');
     switch (k) {
       case 'build': build(a); break;
       case 'place': if (_tool !== b) { _tool = b; _renderPalette(); } place(a, b); break;
@@ -1005,9 +1071,20 @@ const LabCircuit = (() => {
       case 'switch': toggleSwitch(a === 'on'); break;
       case 'bulb': setBulb(a, b === 'out'); break;
       case 'flip': flip(a); break;
-      case 'read': read(); break;
+      case 'read': read(a); break;
       case 'view': setView(a); break;
+      case 'wait': _wait(+a || 10); break;
     }
+  }
+
+  // ⏩ Fast-forward the bench clock (the primary grades' "Wait 10 seconds").
+  // A bulb left on for 10 s gets warm; a guide's wait:<s> step is met here.
+  function _wait(sec) {
+    if (!_guard()) return;
+    if (!_sol || !_sol.flowing) { _coach(_primary() ? 'Nothing is flowing yet. Close the switch first, then wait.' : 'No current is flowing. Close the switch first, then wait.'); return; }
+    _tick(sec);
+    _paint();
+    _coach(`${sec} seconds went by. ${_primary() && D().litBulbs(_sol).length ? 'Feel the bulb - it is warm.' : 'Look at the board.'}`);
   }
 
   function _guideHint() {
@@ -1100,6 +1177,7 @@ const LabCircuit = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('circuit', G)) { _stopGuide(true); return; }
     const st = Labs.store('circuit');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -1129,6 +1207,7 @@ const LabCircuit = (() => {
     _guide = null;
     const box = $('lab-guide');
     if (box) { box.hidden = true; box.innerHTML = ''; }
+    _renderValues();
     if (had) _renderPanel(); else _highlight();
     if (!silent) _coach('Guide stopped. Pick another experiment below, or build freely.');
   }
@@ -1141,30 +1220,45 @@ const LabCircuit = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [k, a, b] = s.on.split(':');
-    // Operating an existing part must not place the last selected component.
-    if (['switch', 'bulb', 'flip'].includes(k) && _tool !== 'hand') {
-      _tool = 'hand';
-      _renderPalette();
-      return;
+    const toks = _stepTokens(s);
+    if (!toks.length) return;
+    const [k, a, b] = toks[0].split(':');
+    // A decision over SLOTS offers ONE part in several places ("where does the
+    // ammeter go?"): that part goes in the hand too, so every slot on offer
+    // glows and the answer is one tap on a slot.
+    const kinds = new Set(toks.map(t => { const [kk, , bb] = t.split(':'); return kk === 'place' && bb && D().KINDS[bb] ? bb : null; }));
+    const oneKind = kinds.size === 1 && !kinds.has(null) ? [...kinds][0] : null;
+    if (toks.length === 1 || oneKind) {
+      // ⚠ "Tap the glowing gap to put a wire in" must be ONE tap: pick the part the
+      //   step places, so the gap tap places it. It used to leave ✋ in the hand,
+      //   and the first tap answered "An empty space. Pick a part…" (audit P0).
+      const wants = oneKind || (k === 'remove' ? 'eraser' : null);
+      if (wants && _tool !== wants) {
+        _tool = wants;
+        _renderSlots();
+        _renderPalette();
+        return;
+      }
+      // Operating an existing part must not place the last selected component.
+      if (toks.length === 1 && ['switch', 'bulb', 'flip'].includes(k) && _tool !== 'hand') {
+        _tool = 'hand';
+        _renderSlots();
+        _renderPalette();
+        return;
+      }
     }
+    // An ask step glows EVERY option (the palette buttons); the slot joins in
+    // once the thing in the hand is one of them.
     const sels = [];
-    switch (k) {
-      case 'place': sels.push(`#lab-circuit-slots [data-slot="${a}"]`); if (_tool !== b) sels.push(`#lab-circuit-palette [data-tool="${b}"]`); break;
-      case 'remove': sels.push(`#lab-circuit-slots [data-slot="${a}"]`); if (_tool !== 'eraser') sels.push('#lab-circuit-palette [data-tool="eraser"]'); break;
-      case 'switch': { const sw = _switchSlot(); if (sw) sels.push(`#lab-circuit-slots [data-slot="${sw}"]`); break; }
-      case 'bulb': case 'flip': sels.push(`#lab-circuit-slots [data-slot="${a}"]`); break;
-      case 'read': sels.push('.lab-circuit-actions [data-act="read"]'); break;
-      case 'view': sels.push('#lab-circuit-view'); break;
-    }
+    toks.forEach(tok => sels.push(..._selsFor(tok, toks.length > 1)));
     const guideBox = _root.querySelector('#lab-guide');
     let firstEl = null;
     sels.forEach(sel => {
       const el = _root.querySelector(sel);
-      if (el) { el.classList.add('is-next'); if (!firstEl) firstEl = el; }
+      if (el && !el.hidden) { el.classList.add('is-next'); if (!firstEl) firstEl = el; }
     });
     if (firstEl) {
-      firstEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      if (!G.exp) firstEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       _root.querySelectorAll('[data-act],[data-slot],[data-tool]').forEach(other => {
         if (!other.classList.contains('is-next') && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
@@ -1172,6 +1266,119 @@ const LabCircuit = (() => {
       });
     }
   }
+
+  // The tokens a guide step waits for: its options, its `any` list, or its `on`.
+  const _stepTokens = s => (s && (s.options || s.any || (s.on ? [s.on] : []))) || [];
+  // The selectors that glow for one token, the one a test taps FIRST. In a
+  // multi-option step a `place` token is its palette button (tapping it places
+  // the thing - see setTool) until that thing is in the hand, and then the
+  // slot (a decision over slots); alone, it is the slot, and the palette
+  // button too until the part is picked. A read with a value is its button.
+  function _selsFor(tok, multi) {
+    const [k, a, b] = String(tok || '').split(':');
+    switch (k) {
+      case 'place': return multi ? [...(_tool === b ? [`#lab-circuit-slots [data-slot="${a}"]`] : []), `#lab-circuit-palette [data-tool="${b}"]`]
+                                 : [`#lab-circuit-slots [data-slot="${a}"]`, ...(_tool !== b ? [`#lab-circuit-palette [data-tool="${b}"]`] : [])];
+      case 'remove': return [`#lab-circuit-slots [data-slot="${a}"]`, ...(_tool !== 'eraser' ? ['#lab-circuit-palette [data-tool="eraser"]'] : [])];
+      case 'switch': { const sw = _switchSlot(); return sw ? [`#lab-circuit-slots [data-slot="${sw}"]`] : []; }
+      case 'bulb': case 'flip': return [`#lab-circuit-slots [data-slot="${a}"]`];
+      case 'read': return a ? [`#lab-circuit-values [data-read="${a}"]`] : ['.lab-circuit-actions [data-act="read"]'];
+      case 'wait': return ['.lab-circuit-actions [data-act="wait"]'];
+      case 'view': return ['#lab-circuit-view'];
+      case 'build': return [`[data-build="${a}"]`];
+    }
+    return [];
+  }
+  // In an experiment's ask step, is tool `t` one of the things on offer? Returns
+  // the ONE slot it goes in - or null when the step offers that part in several
+  // slots (a decision over slots): then the palette tap only picks it up.
+  function _expOption(t) {
+    const G = _gdef(), s = G && G.exp && G.steps[_guide.step];
+    const toks = _stepTokens(s);
+    if (toks.length < 2) return null;
+    const hits = toks.filter(x => { const [k, a, b] = x.split(':'); return k === 'place' && b === t && !!D().SLOTS[a]; });
+    return hits.length === 1 ? hits[0].split(':')[1] : null;
+  }
+  // A token the current experiment step lists as WRONG is heard, not done, when
+  // doing it would change the board for nothing: a real component in the wrong
+  // slot (a meter across the lamp, a fuse across it) or a misread value. A
+  // wrong TEST OBJECT is still placed - the bulb staying dark is the lesson.
+  function _expHears(tok) {
+    const G = _gdef(), s = G && G.exp && G.steps[_guide.step];
+    if (!s || !s.wrong || !s.wrong[tok]) return false;
+    const [k, , b] = String(tok).split(':');
+    return !(k === 'place' && D().KINDS[b] && D().KINDS[b].obj);
+  }
+  // A reading as a decision: the values an ask step offers ('read:0.50A'), shown
+  // as buttons under the palette while that step is current.
+  const _valueLabel = v => String(v).replace(/([A-Za-z]+)$/, ' $1');
+  function _renderValues() {
+    const box = $('lab-circuit-values');
+    if (!box) return;
+    const G = _gdef(), s = G && G.exp && G.steps[_guide.step];
+    const vals = _stepTokens(s).filter(t => /^read:./.test(t)).map(t => t.slice(5));
+    box.hidden = !vals.length;
+    box.innerHTML = vals.map(v => `<button type="button" class="lab-tool" data-read="${esc(v)}">${esc(_valueLabel(v))}</button>`).join('');
+  }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Applied after every render of the palette, the shelf and the
+  // panel. Slots stay - the board is the picture.
+  let _focus = null;
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const tools = new Set(), acts = new Set();
+    let view = false;
+    if (on) for (const tok of _focus) {
+      const [k, a, b] = String(tok).split(':');
+      if (k === 'place' && b) tools.add(b);
+      else if (k === 'remove') tools.add('eraser');
+      else if (k === 'read') { if (!a) acts.add('read'); }
+      else if (k === 'wait') acts.add('wait');
+      else if (k === 'view') view = true;
+    }
+    _root.querySelectorAll('#lab-circuit-palette [data-tool]').forEach(b => { b.hidden = on && !tools.has(b.dataset.tool); });
+    _root.querySelectorAll('#lab-circuit-palette [data-palette]').forEach(row => { row.hidden = on && ![...row.querySelectorAll('[data-tool]')].some(b => !b.hidden); });
+    const pal = $('lab-circuit-palette');
+    if (pal) pal.hidden = on && !tools.size;
+    _root.querySelectorAll('.lab-circuit-actions [data-act]').forEach(b => { b.hidden = on && !acts.has(b.dataset.act); });
+    _root.querySelectorAll('.lab-circuit-actions').forEach(row => { row.hidden = on && ![...row.querySelectorAll('[data-act]')].some(b => !b.hidden); });
+    const safety = _root.querySelector('.lab-circuit-safety');
+    if (safety) safety.hidden = on;
+    const shelf = $('lab-circuit-shelf');
+    if (shelf) shelf.hidden = on;
+    const vb = $('lab-circuit-view');
+    if (vb) vb.hidden = on && !view;
+  }
+  const experiment = {
+    list: () => (D().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = D().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _hush(); _mission = null; _guide = null; _busy = false; _drag = null;
+      _layout = {}; _undo = []; _t = 0; _hadGap = false; _vmSeen = false; _fx = []; _clock = 0;
+      _tests = {}; _gapFilled = false; _gapPrev = false; _warm = false; _log = []; _readings = [];
+      _tool = 'hand'; _panel = 'sandbox'; _view = 'picture';
+      _sol = D().solve(_layout);
+      _syncView(); _renderPalette(); _renderPanel(); _paint();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _renderValues();
+    },
+    // Set-up is silent: no discovery toast for something the runner did.
+    apply: tok => { _quiet = true; try { _do(tok); } finally { _quiet = false; } },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.filter(e => !e.note).slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; const toks = _stepTokens(s); return _selsFor(tok, toks.length > 1 && toks.includes(tok))[0] || null; },
+    hooks: {},
+  };
 
   function _startHTML() {
     const st = Labs.store('circuit');
@@ -1214,6 +1421,7 @@ const LabCircuit = (() => {
     else if (_panel === 'missions') p.innerHTML = _mission ? _missionHTML() + _notebookHTML() : _missionListHTML();
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -1232,7 +1440,7 @@ const LabCircuit = (() => {
   //   the title here instead, from this grade's set.
   function _discover(id) {
     const all = _discs(), d = all.find(x => x.id === id);
-    if (!d) return;
+    if (!d || _quiet) return;
     const st = Labs.store('circuit');
     if (st.disc[id]) return;
     const n = all.filter(x => st.disc[x.id]).length + 1;
@@ -1407,10 +1615,11 @@ const LabCircuit = (() => {
       return `<button type="button" class="lab-circuit-tool" data-tool="${t}" aria-pressed="${_tool === t}" title="${esc(K ? (P ? _job(t) : K.meta) : T.meta)}">${inner}</button>`;
     };
     c.innerHTML = `<div class="lab-circuit-palette" role="toolbar" aria-label="Parts and tools">${C.toolsFor(_g()).map(btn).join('')}</div>
-    ${P ? `<p class="lab-hint lab-circuit-phint"><b>Things to test:</b> put one in a gap, then close the switch.</p>
-    <div class="lab-circuit-palette" role="toolbar" aria-label="Things to test">${C.TEST_OBJECTS.map(btn).join('')}</div>` : ''}
+    ${P ? `<div data-palette="objects"><p class="lab-hint lab-circuit-phint"><b>Things to test:</b> put one in a gap, then close the switch.</p>
+    <div class="lab-circuit-palette" role="toolbar" aria-label="Things to test">${C.TEST_OBJECTS.map(btn).join('')}</div></div>` : ''}
     <p class="lab-hint lab-circuit-phint">${_tool === 'hand' ? '✋ Tap a switch, a bulb or a cell on the board to use it.' : _tool === 'eraser' ? '🧽 Tap a part on the board to remove it.' : `Now tap a space on the board to place the ${esc(toolName(_tool).toLowerCase())}.`} <span class="lab-circuit-drag">With a mouse you can also drag a part onto the board.</span></p>`;
     _root && _root.querySelectorAll('.lab-circuit-kind').forEach(b => b.classList.toggle('is-on', b.dataset.tool === _tool));
+    _applyFocus();
     _highlight();
   }
 
@@ -1431,6 +1640,8 @@ const LabCircuit = (() => {
         if ((p.kind === 'ammeter' || p.kind === 'voltmeter') && _sol && _sol.meters[id]) what += `, reading ${_meterText(p.kind, _sol.meters[id].value)}`;
       }
       b.setAttribute('aria-label', `${S.name}: ${what}`);
+      const tag = b.querySelector('.lab-circuit-slot-tag');
+      if (tag) tag.textContent = !p ? 'gap' : C.OBJECTS[p.kind] ? C.OBJECTS[p.kind].name.toLowerCase() : C.KINDS[p.kind].name.toLowerCase();
     });
   }
 
@@ -2057,6 +2268,7 @@ const LabCircuit = (() => {
     return { layout: JSON.parse(JSON.stringify(_layout)), view: _view, tool: _tool, t: _t, clock: _clock, busy: _busy, panel: _panel,
              cellI: s.cellI, short: s.short, flowing: s.flowing, arrangement: D().arrangement(s), bulbs, meters,
              guide: _guide && { id: _guide.id, step: _guide.step }, grade: _g(), tests: Object.assign({}, _tests),
+             values: _root ? [..._root.querySelectorAll('#lab-circuit-values [data-read]')].filter(b => !b.hidden && !b.closest('[hidden]')).map(b => b.dataset.read) : [],
              readings: _readings.map(r => ({ label: r.label, amps: r.amps, volts: r.volts, Q: r.Q })),
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs),
              mission: _mission && { id: _mission.id, success: _mission.success, hazards: _mission.hazards, mistakes: _mission.mistakes,
@@ -2074,7 +2286,7 @@ const LabCircuit = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, build, place, remove, tapSlot, toggleSwitch, setBulb, flip,
-           read, setView, setTool, undo, clearBoard, danger: _danger, _test, _tick, _debug };
+  return { study, experiment, mount, unmount, startMission, startGuide, discoveryGuide, build, place, remove, tapSlot, toggleSwitch, setBulb, flip,
+           read, setView, setTool, undo, clearBoard, wait: _wait, act: _do, danger: _danger, _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabCircuit = LabCircuit;

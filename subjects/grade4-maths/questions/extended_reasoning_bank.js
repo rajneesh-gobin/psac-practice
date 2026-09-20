@@ -148,12 +148,12 @@
 
     { // ── Geometry: an angle or perimeter fact applied, not recited
       if (s === 0) {
-        const a = 40 + n, b = 55 + n;
-        add('g4-geometry', 'angles', 'geo', n,
-          `A triangle has angles of <b>${a}°</b> and <b>${b}°</b>. What is the third angle?`,
-          180 - a - b,
-          'The three angles of a triangle add up to 180°.',
-          `180 − (${a} + ${b}) = <b>${180 - a - b}°</b>.`);
+        const cubes = 2 + (n % 5), pyr = 1 + (n % 3);
+        add('g4-geometry', 'shapes_3d', 'geo', n,
+          `A model is built from <b>${cubes}</b> cube${cubes === 1 ? '' : 's'} and <b>${pyr}</b> square-based pyramid${pyr === 1 ? '' : 's'}. How many faces do they have altogether?`,
+          cubes * 6 + pyr * 5,
+          'A cube has 6 faces. A square-based pyramid has 5.',
+          `Cubes: ${cubes} × 6 = ${cubes * 6}. Pyramids: ${pyr} × 5 = ${pyr * 5}. Altogether <b>${cubes * 6 + pyr * 5}</b> faces.`);
       } else if (s === 1) {
         const w = 5 + (n % 8), l = w + 4 + (n % 5);
         add('g4-geometry', 'perimeter', 'geo', n,
@@ -162,12 +162,12 @@
           'Half the perimeter is one length plus one width.',
           `Perimeter = 2 × (${l} + ${w}) = ${2 * (l + w)} cm. Half = ${l + w}. Width = ${l + w} − ${l + 2} = <b>${(l + w) - (l + 2)} cm</b>.`);
       } else if (s === 2) {
-        const x = 30 + n * 2;
-        add('g4-geometry', 'angles', 'geo', n,
-          `Two angles lie together on a straight line. One is <b>${x}°</b>. How big is the other?`,
-          180 - x,
-          'Angles on a straight line add up to 180°.',
-          `180 − ${x} = <b>${180 - x}°</b>.`);
+        const pent = 2 + (n % 6), hex = 1 + (n % 5);
+        add('g4-geometry', 'shapes_2d', 'geo', n,
+          `A tiling pattern uses <b>${pent}</b> pentagon${pent === 1 ? '' : 's'} and <b>${hex}</b> hexagon${hex === 1 ? '' : 's'}. How many sides are there altogether?`,
+          pent * 5 + hex * 6,
+          'A pentagon has 5 sides. A hexagon has 6.',
+          `Pentagons: ${pent} × 5 = ${pent * 5}. Hexagons: ${hex} × 6 = ${hex * 6}. Altogether <b>${pent * 5 + hex * 6}</b> sides.`);
       } else {
         const side = 6 + (n % 9);
         add('g4-geometry', 'perimeter', 'geo', n,

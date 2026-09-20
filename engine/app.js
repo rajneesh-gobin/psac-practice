@@ -179,7 +179,7 @@ const _FEATURE_COPY = {
   timetable_generator: 'The study timetable generator is part of a paid plan.\n\nAsk a parent about upgrading to build a revision timetable automatically.',
   push_reminders:      'Daily study reminders are part of a paid plan.\n\nAsk a parent about upgrading to switch them on.',
   // Parent-facing wording: only a signed-in adult ever reaches this one.
-  tutor_status:        'Applying for tutor access is part of the Premium plan.\n\nUpgrade to apply, then an administrator reviews your application.',
+  tutor_status:        'Teacher mode is part of the Premium plan.\n\nUpgrade to enable it on this account.',
   past_papers:         'Real past exam papers are part of a paid plan.\n\nAsk a parent about upgrading to practise with them.',
   question_search:     'Searching across every subject is part of a paid plan.\n\nAsk a parent about upgrading to switch it on.',
   // Parent-facing wording: the forum is adult-only now (see
@@ -745,8 +745,15 @@ function _pruneResumeStore(store) {
 // temporal-dead-zone trap this project has already hit once.
 const _FIX_CHAPTER_ID = 'fix-mistakes';
 // A mistake is not fixed by getting it right once - on a 4-option MCQ that is a
-// 1-in-4 guess. Two correct answers, from anywhere in the app, retire it.
-const _FIX_TO_RETIRE  = 2;
+// 1-in-4 guess. Three correct answers, from anywhere in the app, retire it.
+// ⚠ SPACED (2026-09-19): each fix stamps the row with a `due` day - one day
+// after the first, three after the second - and the drill deals nothing before
+// its day. Getting a question right twice in one sitting proves recall over
+// thirty seconds; the paper is weeks away. Ordinary practice still counts a
+// correct answer whenever it happens: the spacing lives where the child
+// deliberately revisits, and never hides a question from a chapter round.
+const _FIX_TO_RETIRE  = 3;
+const _FIX_GAP_DAYS   = [1, 3];
 const _FIX_ROUND_MAX  = 10;
 
 function _saveResume() {
@@ -3424,14 +3431,29 @@ function _checkDailyGoal(d) {
 const _TIME_GAP_CAP_MS = 3 * 60 * 1000;   // a hard word problem, generously
 let _lastAnswerAt = 0;
 
+// `d.sub[packId]` splits the same seconds by subject, so a planned "Maths,
+// 60 min" can be measured against what actually happened. The active pack is
+// an honest-enough label: a coach mission or a mistake drill activates the
+// pack it deals from, and a mixed round credits whatever was open.
 function _recordTimeOnTask(d) {
   const now = Date.now();
   const gap = now - _lastAnswerAt;
   if (_lastAnswerAt && gap > 0 && gap < _TIME_GAP_CAP_MS) {
-    d.s = (d.s || 0) + Math.round(gap / 1000);
+    const secs = Math.round(gap / 1000);
+    d.s = (d.s || 0) + secs;
+    const pid = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK && ACTIVE_PACK.id) || '';
+    if (pid) { if (!d.sub) d.sub = {}; d.sub[pid] = (d.sub[pid] || 0) + secs; }
   }
   _lastAnswerAt = now;
 }
+// Minutes per subject on a Mauritius day, for the child's own screens.
+function _subjectMinutesOn(dayKey) {
+  const d = DB && DB.daily ? DB.daily[dayKey || _muDayKey()] : null;
+  const out = {};
+  Object.entries((d && d.sub) || {}).forEach(([pid, secs]) => { out[pid] = Math.floor((secs || 0) / 60); });
+  return out;
+}
+window._subjectMinutesOn = _subjectMinutesOn;
 
 function _recordDaily(correct, chapterId, source) {
   const d = _dayBucket();
@@ -3527,7 +3549,10 @@ function _retireMistake(questionId) {
   if (i < 0) return false;
   const row = DB.mistakes[i];
   row.fix = (row.fix || 0) + 1;
-  if (row.fix < _FIX_TO_RETIRE) return false;
+  if (row.fix < _FIX_TO_RETIRE) {
+    row.due = _muDayKeyBack(-_FIX_GAP_DAYS[Math.min(row.fix, _FIX_GAP_DAYS.length) - 1]);
+    return false;
+  }
   DB.mistakes.splice(i, 1);
   return true;
 }
@@ -3535,6 +3560,29 @@ function _retireMistake(questionId) {
 // Only rows carrying a question id can be served back (see _recordMistake).
 function _practisableMistakes() {
   return (DB.mistakes || []).filter(m => m && m.id);
+}
+
+// Due today: never fixed yet, or fixed long enough ago. Longest-waiting first,
+// then the most-missed; ties keep the list's own newest-first order.
+function _dueMistakes() {
+  const today = _muDayKey();
+  return _practisableMistakes()
+    .filter(m => !m.due || m.due <= today)
+    .sort((a, b) => String(a.due || '').localeCompare(String(b.due || '')) || (b.n || 1) - (a.n || 1));
+}
+function _nextMistakeDue() {
+  const today = _muDayKey();
+  return _practisableMistakes().map(m => m.due).filter(d => d && d > today).sort()[0] || null;
+}
+// "tomorrow", "on Thursday", "on 3 Oct" - for a child, never an ISO date.
+function _fixDueLabel(dayKey) {
+  if (!dayKey) return 'soon';
+  if (dayKey === _muDayKey()) return 'today';
+  if (dayKey === _muDayKeyBack(-1)) return 'tomorrow';
+  const d = new Date(dayKey + 'T00:00:00Z');
+  const days = Math.round((d - new Date(_muDayKey() + 'T00:00:00Z')) / 86400000);
+  if (days > 0 && days < 7) return 'on ' + d.toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' });
+  return 'on ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 }
 
 // Question text is innerHTML by design (see the question file pattern), so it
@@ -5609,7 +5657,7 @@ function _renderFamilyOverview(students, progressById) {
   slot.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
     <div class="flex items-baseline justify-between gap-2 mb-3">
       <div class="font-bold text-gray-800 dark:text-white text-sm">👨‍👩‍👧‍👦 The whole family, last 7 days</div>
-      <div class="text-[11px] text-gray-400 dark:text-gray-500">${rows.length} children</div>
+      <div class="text-[11px] text-gray-500 dark:text-gray-400">${rows.length} children</div>
     </div>
     ${body}
   </div>`;
@@ -5627,71 +5675,59 @@ function _renderTeacherApplyCard() {
   // ⚠ THREE ways to already be a teacher, and the card must honour all of them.
   //   It used to test isTeacher() alone, so an account the SERVER considers a
   //   teacher — status 'approved' on a profile whose role had not been re-read,
-  //   or an admin — fell through to the "Are you a tutor?" pitch. The parent
-  //   then pressed Apply and was told they already had access, with the Apply
-  //   button still in front of them.
+  //   or an admin — fell through to the "enable" pitch. The parent then pressed
+  //   the button and was told they already had access, with the button still
+  //   in front of them.
   const alreadyTeacher = (Auth.isTeacher && Auth.isTeacher())
     || status === 'approved'
     || (Auth.isAdmin && Auth.isAdmin());
-  if (alreadyTeacher) { slot.innerHTML = ''; return; }
 
+  // Teacher mode is self-service on the parent's OWN account: one email, one
+  // profile row, the role flipped in place by request_teacher_access(). There
+  // is deliberately no second sign-up — a parent re-registering "as a teacher"
+  // with the same email is how duplicate accounts start.
   const VIEW = {
     pending: {
       cls: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-700/40',
-      icon: '⏳', title: 'Teacher application pending',
-      body: 'An administrator is reviewing your application. You will get access as soon as it is approved.',
+      icon: '⏳', title: 'Teacher mode requested',
+      body: 'An administrator will switch it on shortly. A "Switch to teacher view" button will appear here when it is ready.',
       btn: null,
     },
     rejected: {
       cls: 'bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700',
-      icon: '📄', title: 'Application not approved',
-      body: 'Your teacher application was not approved. You can apply again with more detail.',
-      btn: 'Apply again',
+      icon: '📄', title: 'Teacher mode not enabled',
+      body: 'Your request was not approved. You can ask again, or contact the administrator.',
+      btn: 'Enable teacher mode', action: '_submitTeacherApplication(this)',
     },
     suspended: {
       cls: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700/40',
-      icon: '🚫', title: 'Teacher access suspended',
+      icon: '🚫', title: 'Teacher mode suspended',
       body: 'Please contact the administrator.',
       btn: null,
     },
-    // ⚠ Unreachable while the guard above works, and kept deliberately: if a
-    //   future change lets an approved account reach here, it must never be
-    //   asked to apply for something it already has.
-    approved: {
-      cls: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/40',
-      icon: '👩‍🏫', title: 'You have teacher access',
-      body: 'Your teacher tools are ready - open them from the button in the header.',
-      btn: null,
-    },
   };
-  const v = VIEW[status] || {
+  const v = alreadyTeacher ? {
     cls: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/40',
-    icon: '👩‍🏫', title: 'Are you a tutor?',
-    body: 'Apply for a teacher account to set homework your students complete without needing an account of their own.',
-    btn: 'Apply for teacher access',
-    dismissable: true,
+    icon: '👩‍🏫', title: 'Teacher mode is on',
+    body: 'Set homework, run classes and see results for pupils outside your family. Your children and their progress are untouched.',
+    btn: 'Switch to teacher view', action: 'Auth.openTeacherDashboard()',
+  } : VIEW[status] || {
+    cls: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/40',
+    icon: '👩‍🏫', title: 'Do you also tutor or teach?',
+    body: 'Enable teacher mode on this same account to set homework and run classes for pupils outside your family. No new sign-up, and nothing changes for your children.',
+    btn: 'Enable teacher mode', action: '_submitTeacherApplication(this)',
   };
-
-  // Only the unsolicited "Are you a tutor?" pitch is dismissable. The pending /
-  // rejected / suspended cards report the state of an application the parent
-  // actually filed, so hiding those would lose information they need.
-  if (v.dismissable && _teacherPitchDismissed()) { slot.innerHTML = ''; return; }
 
   slot.innerHTML = `
-    <div class="rounded-2xl border p-4 mb-4 relative ${v.cls}">
-      ${v.dismissable ? `<button onclick="_dismissTeacherPitch()" aria-label="Dismiss"
-        class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-sm leading-none">✕</button>` : ''}
+    <div class="rounded-2xl border p-4 mb-4 ${v.cls}">
       <div class="flex items-start gap-3">
         <span class="text-2xl select-none shrink-0">${v.icon}</span>
-        <div class="flex-1 min-w-0 ${v.dismissable ? 'pr-6' : ''}">
+        <div class="flex-1 min-w-0">
           <div class="font-bold text-sm text-gray-800 dark:text-white">${v.title}</div>
           <p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">${v.body}</p>
           ${v.btn ? `
-          <textarea id="pd-teacher-note" rows="2" maxlength="500"
-            class="w-full mt-3 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400"
-            placeholder="Where do you tutor, and which subjects? (helps the reviewer)"></textarea>
-          <button onclick="_submitTeacherApplication(this)"
-            class="mt-2 text-xs font-semibold bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl transition-colors">
+          <button onclick="${v.action}"
+            class="mt-3 text-xs font-semibold bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl transition-colors">
             ${v.btn}
           </button>` : ''}
         </div>
@@ -6091,7 +6127,7 @@ function _shopGradeLabel(g) { return Number.isFinite(g) ? `Grade ${g}` : 'Other'
 function _shopGradeHeader(grade, sub) {
   return `<div class="flex items-baseline gap-2 mt-4 first:mt-0 mb-1.5 pb-1 border-b border-gray-200 dark:border-gray-700">
     <span class="text-sm font-black text-gray-800 dark:text-white">${_profEsc(_shopGradeLabel(grade))}</span>
-    <span class="text-[11px] text-gray-400 dark:text-gray-500">${_profEsc(sub)}</span>
+    <span class="text-[11px] text-gray-500 dark:text-gray-400">${_profEsc(sub)}</span>
   </div>`;
 }
 
@@ -6122,7 +6158,7 @@ function _renderShopSubjects(body, bal, days, q) {
       ${full ? _shopBadge('All active', 'owned') : _shopBadge(sub.price + ' 🪙', afford ? 'price' : 'poor')}
       <button onclick="shopBuySubject('${_attr(sub.id)}', this)" ${afford ? '' : 'disabled'}
         class="shrink-0 text-xs font-bold px-3 py-2 rounded-xl transition-colors ${afford
-          ? 'bg-indigo-500 hover:bg-indigo-400 text-white'
+          ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
           : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'}">
         ${full ? '+' + days + 'd' : 'Unlock'}</button>
     </div>`;
@@ -6182,7 +6218,7 @@ function _renderShopChapters(body, bal, days, q) {
                 : _shopBadge(price + ' 🪙', afford ? 'price' : 'poor')}
       <button onclick="shopBuy('${_attr(c.id)}', this)" ${afford ? '' : 'disabled'}
         class="shrink-0 text-xs font-bold px-3 py-2 rounded-xl transition-colors ${afford
-          ? 'bg-indigo-500 hover:bg-indigo-400 text-white'
+          ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
           : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'}">
         ${isOwned ? '+' + days + 'd' : 'Buy'}</button>
     </div>`;
@@ -6213,7 +6249,7 @@ function _renderShopChapters(body, bal, days, q) {
         </div>
         ${_shopBadge(Shop.daysLeft(c.id) + ' day' + (Shop.daysLeft(c.id) === 1 ? '' : 's') + ' left', 'owned')}
         <button onclick="shopBuy('${_attr(c.id)}', this)"
-          class="shrink-0 text-xs font-bold px-3 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white transition-colors">+${days}d</button>
+          class="shrink-0 text-xs font-bold px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-colors">+${days}d</button>
       </div>`).join('')}
     </div>`;
   }
@@ -6536,25 +6572,9 @@ function closePlansModal() {
   document.getElementById('modal-plans')?.classList.add('hidden');
 }
 
-// Keyed by user id so dismissing it on a shared device does not hide it from
-// the next parent who signs in there.
-function _teacherPitchKey() {
-  const p = (typeof Auth !== 'undefined' && Auth.getParentProfile) ? Auth.getParentProfile() : null;
-  return 'psac_tutor_pitch_hidden_' + (p?.id || 'anon');
-}
-function _teacherPitchDismissed() {
-  try { return localStorage.getItem(_teacherPitchKey()) === '1'; } catch (e) { return false; }
-}
-function _dismissTeacherPitch() {
-  try { localStorage.setItem(_teacherPitchKey(), '1'); } catch (e) {}
-  const slot = document.getElementById('pd-teacher-apply');
-  if (slot) slot.innerHTML = '';
-}
-
 async function _submitTeacherApplication(btn) {
-  const note = document.getElementById('pd-teacher-note')?.value || '';
-  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
-  await Auth.requestTeacherAccess(note);
+  if (btn) { btn.disabled = true; btn.textContent = 'Enabling…'; }
+  await Auth.requestTeacherAccess('Enabled teacher mode from the parent dashboard.');
   _renderTeacherApplyCard();
 }
 
@@ -7142,7 +7162,7 @@ function _repRecentDays() {
 
   return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
     <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🕘 What they did</div>
-    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2.5">Today and yesterday, chapter by chapter.</p>
+    <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2.5">Today and yesterday, chapter by chapter.</p>
     <div class="rep-days">
       ${card('Today', _muDayKeyBack(0))}
       ${card('Yesterday', _muDayKeyBack(1))}
@@ -7180,7 +7200,7 @@ function _repActivityStrip() {
       <div class="font-bold text-gray-800 dark:text-white text-sm">📅 Last 30 days</div>
       <div class="text-xs text-gray-500 dark:text-gray-400">${active} of 30 days active</div>
     </div>
-    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2">Bar height is how much they did. Colour is how well.</p>
+    <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2">Bar height is how much they did. Colour is how well.</p>
     <div class="rep-strip">${bars}</div>
     <div class="flex justify-between text-[10px] text-gray-400 dark:text-gray-500 mt-1">
       <span>${_repNiceDate(days[0].k)}</span><span>today</span>
@@ -7338,7 +7358,7 @@ function _repSubjects(acct) {
 
   return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
     <div class="font-bold text-gray-800 dark:text-white text-sm mb-0.5">📚 Subjects, weakest first</div>
-    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1">Where the next hour of revision is worth the most.</p>
+    <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-1">Where the next hour of revision is worth the most.</p>
     ${done.map(row).join('')}
     ${never.length ? `<div class="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 text-[11px] text-gray-500 dark:text-gray-400">
       Not started yet: ${never.map(r => `${r.icon || '📘'} ${_attr(r.name)}`).join(' · ')}
@@ -7372,7 +7392,7 @@ function _repMistakes() {
 
   return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
     <div class="font-bold text-gray-800 dark:text-white text-sm mb-0.5">❌ Recent mistakes (${all.length})</div>
-    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2.5">The actual questions they got wrong. Go over these together.</p>
+    <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2.5">The actual questions they got wrong. Go over these together.</p>
     <div class="space-y-2">${shown.map(item).join('')}</div>
     ${all.length > 8 ? `<button onclick="_repToggleMistakes()" class="w-full mt-2.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 py-2 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
       ${_repShowAllMistakes ? 'Show fewer ▲' : `Show all ${all.length} ▼`}
@@ -7458,7 +7478,7 @@ function _renderReports(keepState) {
   const summary = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
     <div class="flex items-baseline justify-between gap-2 mb-2.5">
       <div class="font-bold text-gray-800 dark:text-white text-sm">🗓️ Last 7 days</div>
-      <div class="text-[11px] text-gray-400 dark:text-gray-500">vs the 7 days before</div>
+      <div class="text-[11px] text-gray-500 dark:text-gray-400">vs the 7 days before</div>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
       ${_repStatCard('Questions',   now.a, _repDelta(now.a, prev.a), '#2563eb')}
@@ -8669,6 +8689,7 @@ function _chapterCard(ch, borderColor) {
       ${status}
       ${locked ? '' : `<p class="ch-status">${_journeyCoverage(ch.id, prog, total)}</p>`}
       <div class="ch-foot">
+        ${locked ? '' : _labChip(ch.id)}
         <span class="ch-cta">${locked ? 'Locked' : _journeyCta(ch.id, resume, attempted)}</span>
       </div>
     </div>
@@ -8928,6 +8949,43 @@ window.startKidMission = async function() {
 //
 // Every call from markup passes two arguments, so the default keeps the public
 // signature exactly as it was.
+// ── "Today's plan first" ────────────────────────────────────────────────
+// A parent switch (students.settings.planFirst, mirrored in DB.restrictions).
+// While today's planned sessions are not all done, a chapter outside the plan
+// opens the plan instead. A chapter IN the plan, or any chapter of a subject
+// the plan asks minutes of, goes straight through - "practise Maths for an
+// hour" means any Maths chapter counts. Assignments, previews, the coach and
+// the drills never pass through here, so they are never gated.
+// ⚠ The cache is whatever getBacklog last returned for this child; the home
+//   screen and the timetable screen both fill it. With nothing cached the gate
+//   stays open - a child must never be locked out by a fetch that has not
+//   happened yet.
+let _planToday = { studentId: null, rows: [] };
+function _cachePlanToday(studentId, rows) {
+  _planToday = { studentId, rows: (rows || []).filter(r => r && r.isToday) };
+}
+function _planFirstBlocks(chapterId) {
+  if (!DB.restrictions?.planFirst) return false;
+  if (_isParentContext() || ASSIGNMENT_MODE || _isPreviewRun()) return false;
+  if (_planToday.studentId !== ACTIVE_STUDENT_ID) return false;
+  const rows = _planToday.rows;
+  if (!rows.length || rows.every(r => r.done)) return false;
+  const pid = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK && ACTIVE_PACK.id) || '';
+  // Done or not: a planned chapter stays open all day, and so does every
+  // chapter of a planned subject - the plan is a door, never a cage.
+  const inPlan = rows.some(r => r.chapterId === chapterId || (r.kind === 'subject' && r.subjectId === pid));
+  return !inPlan;
+}
+function _showPlanFirstModal() {
+  const m = document.getElementById('modal-plan-first');
+  const list = document.getElementById('plan-first-list');
+  if (!m || !list) { showScreen('schedule'); return; }
+  list.innerHTML = _planToday.rows.map(e => _scheduleRow(e, false)).join('');
+  m.classList.remove('hidden');
+}
+function closePlanFirst() { document.getElementById('modal-plan-first')?.classList.add('hidden'); }
+window.closePlanFirst = closePlanFirst;
+
 function startChapterDirect(chapterId, forceDiff, _attempt) {
   _ttsAutoRead = false;
   const mode = _practiceMode;
@@ -8937,6 +8995,7 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
   const locked = DB.restrictions?.lockedChapters || [];
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
   if (!_planAllowsChapter(chapterId)) { _showChapterLockedModal(chapterId); return; }
+  if (_planFirstBlocks(chapterId)) { _showPlanFirstModal(); return; }
   // A Textes a Trous chapter opens its own screen, not the practice flow.
   // MUST be after the lock/plan checks above, and BEFORE the pool lookup below:
   // getStaticQs() excludes type 'cloze', so hasQs is false for these chapters
@@ -9191,6 +9250,15 @@ function _setPreviewBanner(on) {
   //   promising to bring you back to this question has nothing to offer.
   document.getElementById('practice-pause-btn')?.classList.toggle('hidden', !!on);
   document.getElementById('practice-preview-note')?.classList.toggle('hidden', !on);
+  // ⚠ "Nothing is saved" tells an adult what does NOT happen and leaves them to
+  //   guess what does. Name the route instead - a teacher has no child to hand
+  //   the device to, so the two surfaces get different sentences.
+  const how = document.getElementById('practice-preview-how');
+  if (on && how) {
+    how.textContent = S.practice.previewBack === 'teacher'
+      ? 'For it to count, a pupil answers it themselves — from their own sign-in or your class link.'
+      : 'For it to count, your child answers it themselves — go back and tap 🎒 Switch to student mode, then they sign in with their PIN.';
+  }
 }
 
 // ── ASSIGNMENT DIRECT LAUNCH ──────────────────
@@ -9233,27 +9301,52 @@ function _scheduleDayLabel(dateStr) {
 // else simply gets no button.
 const _SLUG_RE = /^[a-z0-9][a-z0-9_-]*$/i;
 
+// A SUBJECT session ("Maths · 60 min") starts at the subject's chapter list;
+// a CHAPTER task starts the chapter. Either shows how far along it is today.
+function _sessionProgressText(e) {
+  if (e.kind === 'subject') {
+    if (e.minutes) return `${Math.min(e.doneMinutes || 0, e.minutes)} of ${e.minutes} min${e.done ? ' ✓' : ''}`;
+    return e.done ? 'practised ✓' : '';
+  }
+  return e.questions ? `${e.questions} question${e.questions === 1 ? '' : 's'} done ✓` : (e.minutes ? `${e.minutes} min` : '');
+}
 function _scheduleRow(e, compact) {
-  const startable = _SLUG_RE.test(e.subjectId || '') && _SLUG_RE.test(e.chapterId || '');
-  const start = startable
+  const subjectOk = _SLUG_RE.test(e.subjectId || '');
+  const startable = subjectOk && _SLUG_RE.test(e.chapterId || '');
+  const start = e.done
+    ? `<span class="shrink-0 text-xs font-bold text-green-600 dark:text-green-400">✅ Done</span>`
+    : startable
     ? `<button onclick="startScheduledSession('${e.subjectId}','${e.chapterId}')"
          class="shrink-0 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg">Start</button>`
+    : (e.kind === 'subject' && subjectOk)
+    ? `<button onclick="startScheduledSubject('${e.subjectId}')"
+         class="shrink-0 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg">Choose chapter</button>`
     // No matching chapter: the label is still shown, but there is nothing
     // honest to start. Better than hiding a session the child was told about.
     : `<span class="shrink-0 text-[11px] text-gray-400">see timetable</span>`;
-  return `<div class="flex items-center gap-3 p-3 rounded-xl border ${e.isToday
+  const prog = e.isToday || e.isPast ? _sessionProgressText(e) : (e.minutes ? `${e.minutes} min` : '');
+  return `<div class="flex items-center gap-3 p-3 rounded-xl border ${e.done
+      ? 'border-green-200 dark:border-green-800 bg-green-50/60 dark:bg-green-900/10'
+      : e.isToday
       ? 'border-indigo-300 dark:border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20'
       : 'border-gray-200 dark:border-gray-700'}">
     <span class="text-xl select-none">${e.icon}</span>
     <div class="flex-1 min-w-0">
       <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_profEsc(e.label)}</div>
       <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">
-        ${compact ? _scheduleDayLabel(e.date) + (e.subjectName ? ' · ' : '') : ''}${_profEsc(e.subjectName || '')}${e.minutes ? ` · ${e.minutes} min` : ''}
+        ${compact ? _scheduleDayLabel(e.date) + (e.subjectName ? ' · ' : '') : ''}${_profEsc(e.subjectName || '')}${prog ? ` · ${prog}` : ''}
       </div>
     </div>
     ${start}
   </div>`;
 }
+// Opens the subject's chapter list for a subject-only session.
+function startScheduledSubject(subjectId) {
+  closePlanFirst();
+  if (typeof closeTimetableDay === 'function') closeTimetableDay();
+  if (typeof Calendar !== 'undefined' && Calendar.startPractice) Calendar.startPractice(subjectId, null);
+}
+window.startScheduledSubject = startScheduledSubject;
 
 // Dashboard: the next few sessions only. A full month here would bury the
 // practice tiles underneath it.
@@ -9384,6 +9477,8 @@ async function renderSchedule() {
     actByDate.get(a.date).push(a);
   }
 
+  _cachePlanToday(sid, backlog || []);
+  if (Calendar.awardDoneToday) Calendar.awardDoneToday(backlog || []);
   _ttData = {
     backlog: backlog || [],
     future: (upcoming || []).filter(e => !e.isToday && e.date <= untilStr),
@@ -9627,11 +9722,13 @@ window.ttChooseChapter = ttChooseChapter;
 // same slug requirement applies: anything that is not a manifest slug simply
 // gets no buttons rather than being escaped into one.
 function _ttSessionCard(e) {
-  const startable = _SLUG_RE.test(e.subjectId || '') && _SLUG_RE.test(e.chapterId || '');
+  const subjectOk = _SLUG_RE.test(e.subjectId || '');
+  const startable = subjectOk && _SLUG_RE.test(e.chapterId || '');
   const prog = (startable && typeof _chapterProgress === 'function') ? _chapterProgress(e.chapterId) : null;
   // ⚠ "correct", never "mastery" - _chapterProgress().acc is accuracy.
   const progTxt = !prog ? '' : prog.attempted ? `${prog.acc}% correct so far` : 'Not started yet';
-  const meta = [e.subjectName ? _profEsc(e.subjectName) : '', e.minutes ? `${e.minutes} min` : '', progTxt]
+  const todayTxt = (e.isToday || e.isPast) ? _sessionProgressText(e) : '';
+  const meta = [e.subjectName ? _profEsc(e.subjectName) : '', todayTxt || (e.minutes ? `${e.minutes} min` : ''), progTxt]
     .filter(Boolean).join(' · ');
 
   // Levels above the parent's cap are not offered: startChapterDirect clamps
@@ -9647,6 +9744,9 @@ function _ttSessionCard(e) {
          ${diffs.map(n => `<button type="button" class="tt-diff"
             onclick="startTimetableSession('${e.subjectId}','${e.chapterId}',${n})">${_TT_DIFF_ICON[n]} ${_DIFF_NAMES[n]}</button>`).join('')}
        </div>`
+    : (e.kind === 'subject' && subjectOk)
+    ? `<button type="button" class="tt-start" onclick="startScheduledSubject('${e.subjectId}')">▶ Choose a chapter</button>
+       <p class="tt-sess-note">Any chapter in ${_profEsc(e.subjectName || 'this subject')} counts towards the time.</p>`
     : `<p class="tt-sess-note">This one has no topic set - open your subject list to practise it.</p>`;
 
   return `<div class="tt-sess">
@@ -10805,7 +10905,10 @@ function _renderShMissions() {
   const weakOk = _planAllowsFeature('weak_area_drill');
   // Only offered when there is something to fix. A permanent "0 to fix" card
   // would be a standing reminder of failure on a nine-year-old's home screen.
-  const toFix = _practisableMistakes().length;
+  // ⚠ Counts what is DUE. Mistakes fixed once are resting until their day; the
+  // card says so rather than vanishing, or the child concludes they are gone.
+  const toFix   = _dueMistakes().length;
+  const resting = toFix ? 0 : _practisableMistakes().length;
   slot.innerHTML = `
     <div class="sh-mission-row">
       <button class="sh-mission-card" onclick="startKidMission()">
@@ -10828,9 +10931,15 @@ function _renderShMissions() {
       <span class="sh-mission-icon">🩹</span>
       <div class="sh-mission-info">
         <span class="sh-mission-title">Fix my mistakes</span>
-        <span class="sh-mission-sub">${toFix} question${toFix === 1 ? '' : 's'} you got wrong. Get one right twice and it's gone.</span>
+        <span class="sh-mission-sub">${toFix} question${toFix === 1 ? '' : 's'} ready to fix. Get each right three times, on different days, and it's gone.</span>
       </div>
       <span class="sh-mission-arrow">›</span>
+    </button>` : resting ? `<button class="sh-mission-card sh-mission-fix sh-mission-resting" onclick="startMistakeDrill()" style="width:100%;margin-top:.55rem">
+      <span class="sh-mission-icon">😴</span>
+      <div class="sh-mission-info">
+        <span class="sh-mission-title">Mistakes resting</span>
+        <span class="sh-mission-sub">All checked for now. ${resting} come${resting === 1 ? 's' : ''} back ${_fixDueLabel(_nextMistakeDue())}.</span>
+      </div>
     </button>` : ''}
     <button class="sh-mission-card sh-mission-schedule" id="sh-schedule-card" onclick="showScreen('schedule')" style="width:100%;margin-top:.55rem">
       <span class="sh-mission-icon">🗓️</span>
@@ -10842,13 +10951,18 @@ function _renderShMissions() {
     </button>`;
   if (typeof Calendar !== 'undefined' && Calendar.getBacklog) {
     Calendar.getBacklog(ACTIVE_STUDENT_ID).then(items => {
+      _cachePlanToday(ACTIVE_STUDENT_ID, items);
+      if (Calendar.awardDoneToday) Calendar.awardDoneToday(items);
       const sub = document.getElementById('sh-schedule-sub');
       if (!sub) return;
       const todayItems   = items.filter(e => e.isToday);
-      const backlogItems = items.filter(e => e.isPast);
+      const todayDone    = todayItems.filter(e => e.done);
+      // Overdue means planned, past, and never done - a session that was done
+      // on its day is not a debt.
+      const backlogItems = items.filter(e => e.isPast && !e.done);
       if (!items.length) { sub.textContent = 'No sessions planned yet'; return; }
       const parts = [];
-      if (todayItems.length)   parts.push(`${todayItems.length} today`);
+      if (todayItems.length)   parts.push(todayDone.length === todayItems.length ? `${todayItems.length} today, all done ✓` : `${todayDone.length} of ${todayItems.length} done today`);
       if (backlogItems.length) parts.push(`${backlogItems.length} overdue`);
       sub.textContent = parts.join(' · ') || 'See your plan';
     }).catch(() => {
@@ -10913,6 +11027,68 @@ function openLabs() {
   if (!_labsAvailable()) { toast('🔬 There are no Science Labs for your grade yet.', 2500); return; }
   showScreen('labs');
 }
+// Chapter → the lab whose EXPERIMENTS teach it (lab_experiment.js). Only labs
+// that have experiments belong here: the chip promises "Try the experiment",
+// not "open a bench". ⚠ Duplicated from Labs.CHAPTERS_BY_LAB / EXPERIMENTS_BY_LAB
+//   in lab_core.js because that file is loaded on demand and the chapter cards
+//   draw first; scripts/test-labs-experiments-data.js fails if they drift.
+// A value is one lab id or a list of them, first choice first.
+const _LAB_CHAPTERS = {
+  'g6-materials': ['rusting', 'heat'],
+  'g4sci-energy': ['circuit', 'light'],
+  'g4sci-materials': ['materials', 'magnets', 'circuit', 'light'],
+  'g6-energy': ['circuit', 'heat'],
+  'g7s-electricity': 'circuit',
+  'g9s-p5-electricity': 'circuit',
+  'g8s-food': 'food',
+  'g4sci-water': 'water',
+  'g6-animals': 'nutrition',
+  'g4sci-air': 'air',
+  'g6-air': 'air',
+  'g6-solar-system': 'sunmoon',
+  'g7s-solar-system': 'sunmoon',
+  'g4sci-plants': 'photo',
+  'g6-plants': 'photo',
+  'g9s-b4-plant-nutrition': 'photo',
+  'g8s-magnetism': 'magnets',
+  'g9s-p2-light': 'light',
+  'g4sci-enr-equipment': 'measure',
+  'g7s-measurement': 'measure',
+  'g8s-inquiry': 'measure',
+  'g9s-p1-measurements': 'measure',
+  'g7s-air': 'gastests',
+};
+function _labsForChapter(chapterId) {
+  const v = _LAB_CHAPTERS[chapterId];
+  return v ? (Array.isArray(v) ? v : [v]) : [];
+}
+function _labForChapter(chapterId) {
+  return _labsAvailable() ? (_labsForChapter(chapterId)[0] || null) : null;
+}
+function _labChip(chapterId) {
+  return _labForChapter(chapterId)
+    ? `<button type="button" class="ch-lab-chip" onclick="event.stopPropagation();openLabForChapter('${chapterId}')">🔬 Try the experiment</button>`
+    : '';
+}
+// Straight into that chapter's first unfinished experiment - not the hub.
+function openLabForChapter(chapterId) {
+  const labs = _labsAvailable() ? _labsForChapter(chapterId) : [];
+  if (!labs.length) { openLabs(); return; }
+  showScreen('labs');
+  RoleModules.withGroup('labs', () => {
+    // The first listed lab that still has an experiment to do for this
+    // chapter at the grade on screen; else the first listed.
+    const g = Number(typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 0;
+    const pick = labs.find(id => {
+      const l = Labs.LABS.find(x => x.id === id);
+      const n = l && l.experiments && (l.experiments[g] || l.experiments[Object.keys(l.experiments)[0]]);
+      if (!n) return false;
+      const done = Object.keys((Labs.store(id).done) || {}).length;
+      return done < n;
+    }) || labs[0];
+    Labs.openLab(pick, { chapter: chapterId });
+  });
+}
 
 const StudentHome = (() => {
   function tab(name) {
@@ -10966,10 +11142,28 @@ const PracticeHub = (() => {
     'history':             { from:'rgba(120,50,200,.55)', to:'rgba(55,15,100,.6)',   border:'rgba(196,181,253,.55)', glow:'168,85,247' },
     'history & geography': { from:'rgba(120,50,200,.55)', to:'rgba(55,15,100,.6)',   border:'rgba(196,181,253,.55)', glow:'168,85,247' },
     'geography':           { from:'rgba(120,50,200,.55)', to:'rgba(55,15,100,.6)',   border:'rgba(196,181,253,.55)', glow:'168,85,247' },
+    // ⚠ EVERY LIVE SUBJECT NEEDS A ROW, not just the five core ones. Health
+    //   Education, SSEE and the four NCE subjects fell through to the grey
+    //   fallback book with a 📚 on it, so a Grade 1-3 child saw two anonymous
+    //   grey spines beside coloured Maths/English/French. The palettes match
+    //   the landing-page cards for the same subjects.
+    //   scripts/test-subject-book-art.js fails when a live subject has no row.
+    'health education':    { from:'rgba(190,24,93,.55)',  to:'rgba(90,10,45,.6)',    border:'rgba(251,207,232,.55)', glow:'236,72,153' },
+    'ssee':                { from:'rgba(13,148,136,.55)', to:'rgba(2,55,50,.6)',     border:'rgba(94,234,212,.55)',  glow:'20,184,166' },
+    'ict skills':          { from:'rgba(8,145,178,.55)',  to:'rgba(4,60,75,.6)',     border:'rgba(103,232,249,.55)', glow:'6,182,212'  },
+    'information and communication technology':
+                           { from:'rgba(8,145,178,.55)',  to:'rgba(4,60,75,.6)',     border:'rgba(103,232,249,.55)', glow:'6,182,212'  },
+    'social & modern studies': { from:'rgba(194,65,12,.55)', to:'rgba(90,30,5,.6)',  border:'rgba(253,186,116,.55)', glow:'249,115,22' },
+    'biology':             { from:'rgba(5,150,105,.55)',  to:'rgba(2,60,40,.6)',     border:'rgba(110,231,183,.55)', glow:'16,185,129' },
+    'chemistry':           { from:'rgba(124,58,237,.55)', to:'rgba(50,15,95,.6)',    border:'rgba(196,181,253,.55)', glow:'139,92,246' },
+    'physics':             { from:'rgba(162,28,175,.55)', to:'rgba(70,10,80,.6)',    border:'rgba(240,171,252,.55)', glow:'217,70,239' },
   };
   const BOOK_ICONS = {
     'maths':'🔢', 'mathematics':'🔢', 'english':'📖', 'french':'🗣️',
     'science':'🔬', 'history':'🏛️', 'history & geography':'🌍', 'geography':'🗺️',
+    'health education':'❤️', 'ssee':'🌍',
+    'ict skills':'💻', 'information and communication technology':'💻',
+    'social & modern studies':'🌍', 'biology':'🦠', 'chemistry':'🧪', 'physics':'⚛️',
   };
   const BOOK_TAGLINES = {
     'maths':'Numbers, shapes & problem solving',
@@ -10980,14 +11174,25 @@ const PracticeHub = (() => {
     'history':'History & geography of Mauritius',
     'history & geography':'History & geography of Mauritius',
     'geography':'History & geography of Mauritius',
+    'health education':'Hygiene, food & keeping safe',
+    'ssee':'Our environment, living things & weather',
+    'ict skills':'Computers, safety & everyday tools',
+    'information and communication technology':'Hardware, software, data & online safety',
+    'social & modern studies':'Citizenship, governance & our region',
+    'biology':'Living things, cells & the human body',
+    'chemistry':'Matter, reactions & the elements',
+    'physics':'Forces, energy, light & electricity',
   };
   function _bookStyle(subject) {
     const k = (subject || '').toLowerCase();
     return BOOK_COLORS[k] || { from:'rgba(255,255,255,.15)', to:'rgba(0,0,0,.2)', border:'rgba(255,255,255,.3)', glow:'255,255,255' };
   }
-  function _bookIcon(subject) {
+  // ⚠ The pack's own icon is the fallback, NOT 📚 - a subject the map has
+  //   never heard of still has a declared icon in its manifest, and an
+  //   anonymous stack of books is the one thing it must not fall back to.
+  function _bookIcon(subject, pack) {
     const k = (subject || '').toLowerCase();
-    return BOOK_ICONS[k] || '📚';
+    return BOOK_ICONS[k] || (pack && pack.icon) || '📚';
   }
   function _bookTagline(subject) {
     const k = (subject || '').toLowerCase();
@@ -11092,7 +11297,7 @@ const PracticeHub = (() => {
     grid.innerHTML = packs.map(pack => {
       const subj = pack.subject || pack.name || '';
       const s = _bookStyle(subj);
-      const icon = _bookIcon(subj);
+      const icon = _bookIcon(subj, pack);
       const tagline = _bookTagline(subj);
       const count = pack.questionCount || pack.questions || '';
       const countBadge = count ? `<span class="ph-book-count">${count} questions</span>` : '';
@@ -12990,7 +13195,7 @@ function renderSyllabus() {
     // of `subsHTML || ((enrNote + pointsHTML) || fallback)`, so any chapter
     // with subsections dropped it - which is every enrichment chapter there is,
     // leaving the note dead for the only chapters it describes.
-    const bodyHTML = enrNote + (subsHTML || pointsHTML || `
+    const bodyHTML = _labChip(ch.id) + enrNote + (subsHTML || pointsHTML || `
       <p class="text-sm text-gray-500 dark:text-gray-400 py-3">${chQs
         ? `${chQs} practice question${chQs === 1 ? '' : 's'} in this chapter.`
         : 'Questions for this chapter are still being written.'}</p>`);
@@ -13130,11 +13335,14 @@ function _setPracticeBackLabel(text, aria) {
 }
 
 async function startMistakeDrill() {
-  const rows = _practisableMistakes();
+  const rows = _dueMistakes();
   if (!rows.length) {
-    toast((DB.mistakes || []).length
-      ? 'Your older mistakes were saved before this could re-ask them. New ones can be practised. ✏️'
-      : 'Nothing to fix - you have no mistakes saved. 🎉', 4000);
+    const waiting = _practisableMistakes().length;
+    toast(waiting
+      ? `All checked for now. ${waiting} mistake${waiting === 1 ? '' : 's'} come${waiting === 1 ? 's' : ''} back ${_fixDueLabel(_nextMistakeDue())}. ⏳`
+      : (DB.mistakes || []).length
+        ? 'Your older mistakes were saved before this could re-ask them. New ones can be practised. ✏️'
+        : 'Nothing to fix - you have no mistakes saved. 🎉', 4000);
     return;
   }
   // A child's mistakes can span several subjects, and STATIC_QUESTIONS only
@@ -13392,6 +13600,20 @@ const _SUBJECT_THEME = {
   'French':              { bg: 'from-purple-500 to-violet-600', chip: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300', icon: 'bg-purple-100 dark:bg-purple-900/40' },
   'Science':             { bg: 'from-teal-500 to-cyan-600',     chip: 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300',     icon: 'bg-teal-100 dark:bg-teal-900/40' },
   'History & Geography': { bg: 'from-amber-500 to-orange-500',  chip: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',  icon: 'bg-amber-100 dark:bg-amber-900/40' },
+  // ⚠ Keyed by pack.subject, and a subject that is not here falls to the grey
+  //   _DEFAULT_THEME - which is what Health Education, SSEE and the four NCE
+  //   subjects got. Colours match the practice-hub books and the landing cards.
+  'Health Education':    { bg: 'from-rose-500 to-pink-600',    chip: 'bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300',      icon: 'bg-rose-100 dark:bg-rose-900/40' },
+  // SSEE is the Grade 3 science-and-environment subject, so it carries the
+  // Science palette - no grade ships both.
+  'SSEE':                { bg: 'from-teal-500 to-cyan-600',    chip: 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300',      icon: 'bg-teal-100 dark:bg-teal-900/40' },
+  'ICT Skills':          { bg: 'from-cyan-500 to-sky-600',     chip: 'bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300',      icon: 'bg-cyan-100 dark:bg-cyan-900/40' },
+  'Information and Communication Technology':
+                         { bg: 'from-cyan-500 to-sky-600',     chip: 'bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300',      icon: 'bg-cyan-100 dark:bg-cyan-900/40' },
+  'Social & Modern Studies': { bg: 'from-orange-500 to-amber-600', chip: 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300', icon: 'bg-orange-100 dark:bg-orange-900/40' },
+  'Biology':             { bg: 'from-emerald-500 to-green-600', chip: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300', icon: 'bg-emerald-100 dark:bg-emerald-900/40' },
+  'Chemistry':           { bg: 'from-violet-500 to-purple-600', chip: 'bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300', icon: 'bg-violet-100 dark:bg-violet-900/40' },
+  'Physics':             { bg: 'from-fuchsia-500 to-pink-600',  chip: 'bg-fuchsia-100 dark:bg-fuchsia-900/40 text-fuchsia-700 dark:text-fuchsia-300', icon: 'bg-fuchsia-100 dark:bg-fuchsia-900/40' },
 };
 const _DEFAULT_THEME = { bg: 'from-gray-500 to-gray-600', chip: 'bg-gray-100 text-gray-700', icon: 'bg-gray-100' };
 const _SUBJECT_BORDER_COLOR = {
@@ -13400,6 +13622,14 @@ const _SUBJECT_BORDER_COLOR = {
   'French':              '#9333ea',
   'Science':             '#0d9488',
   'History & Geography': '#f59e0b',
+  'Health Education':    '#e11d48',
+  'SSEE':                '#0d9488',
+  'ICT Skills':          '#0891b2',
+  'Information and Communication Technology': '#0891b2',
+  'Social & Modern Studies': '#ea580c',
+  'Biology':             '#059669',
+  'Chemistry':           '#7c3aed',
+  'Physics':             '#c026d3',
 };
 
 function _kidHomeHero() {
@@ -14116,6 +14346,17 @@ async function showProfile() {
     PD.mainTab('settings');
     return;
   }
+  // Same rule for the teaching workspace: the header Account button, and the
+  // Settings tab itself, stay on the board instead of navigating to a bare
+  // screen with no tab row.
+  // ⚠ `=== false`, not `!`: getElementById returns null wherever the screen is
+  //   not in the DOM, and `!undefined` is true - which would route a child or a
+  //   signed-out visitor into teacher mode.
+  if (document.getElementById('screen-teacher')?.classList.contains('hidden') === false
+      && typeof TeacherMode !== 'undefined' && TeacherMode.isTeacher && TeacherMode.isTeacher()) {
+    TeacherMode.switchTab('settings');
+    return;
+  }
   _profileFromScreen = S.currentScreen;
   showScreen('profile');
   const container = document.getElementById('profile-content');
@@ -14238,7 +14479,7 @@ async function _renderStudentProfile(container) {
           <button onclick="${bioOn ? 'Auth.disableStudentBiometricLogin()' : 'Auth.enableStudentBiometricLogin(this)'}"
             class="px-4 py-2 ${bioOn
               ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-              : 'bg-indigo-500 hover:bg-indigo-400 text-white'} font-semibold rounded-xl text-xs transition-colors shrink-0">${bioOn ? 'Disable' : 'Enable'}</button>
+              : 'bg-indigo-600 hover:bg-indigo-500 text-white'} font-semibold rounded-xl text-xs transition-colors shrink-0">${bioOn ? 'Disable' : 'Enable'}</button>
         </div>
       </div>`;
   }
@@ -14478,7 +14719,7 @@ async function _renderParentProfile(container) {
           <button onclick="${bioOn ? 'Auth.disableBiometricLogin()' : 'Auth.enableBiometricLogin(this)'}"
             class="px-4 py-2 ${bioOn
               ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-              : 'bg-indigo-500 hover:bg-indigo-400 text-white'} font-semibold rounded-xl text-xs transition-colors shrink-0">${bioOn ? 'Disable' : 'Enable'}</button>
+              : 'bg-indigo-600 hover:bg-indigo-500 text-white'} font-semibold rounded-xl text-xs transition-colors shrink-0">${bioOn ? 'Disable' : 'Enable'}</button>
         </div>`;
   }
 
@@ -14517,7 +14758,7 @@ async function _renderParentProfile(container) {
         <input id="set-family-name" type="text" maxlength="40" value="${_profEsc(family.family_name || '')}"
           class="selectable flex-1 border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
         <button data-label="Save" onclick="_saveFamilyName(this)"
-          class="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
+          class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
       </div>
       <p class="text-xs text-gray-500 dark:text-gray-400">Private family code: <span class="font-mono font-bold select-all">${_profEsc(family.family_code || '-')}</span></p>
     </div>` : (family ? `
@@ -14622,7 +14863,7 @@ async function _renderParentProfile(container) {
           'An email when a child finishes a piece of homework a teacher set.')}` : ''}
         ${subToggle('set-email-announcements', mail.announcements !== false, '_toggleAnnouncementEmail', '📣', 'News and announcements',
           'Occasional messages about new subjects and features. Never more than a few a term.')}
-        <p class="text-[11px] text-gray-400 dark:text-gray-500 leading-relaxed">Emails about your account itself — a password reset, or an administrator activating your account — are always sent, because you need them to sign in.</p>
+        <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">Emails about your account itself — a password reset, or an administrator activating your account — are always sent, because you need them to sign in.</p>
       </div>
 
       ${children.length ? `
@@ -14707,7 +14948,7 @@ async function _renderParentProfile(container) {
       ${defToggle('set-def-hints', !d.hintsDisabled,       '💡 In-app hints',         'First-time tip callouts')}
 
       <button data-label="Apply to all children" onclick="_applyDefaultsToAll(this)"
-        class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Apply to all children</button>
+        class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors">Apply to all children</button>
       <p id="set-defaults-status" class="text-xs text-gray-500 dark:text-gray-400 text-center"></p>
     </div>` : '';
 
@@ -14723,8 +14964,14 @@ async function _renderParentProfile(container) {
       </div>` : ''}
     </div>`;
 
+  // ⚠ The class is what style.css anchors on, NOT max-w-lg: this markup renders
+  //   into two places - its own screen, where a centred 32rem column is right,
+  //   and the dashboard settings panel, where the board frame is already the
+  //   column and capping it again left a phone-width strip down the middle of
+  //   it. A Tailwind width utility is a value; the override kept missing when
+  //   the value changed (it still named max-w-2xl).
   container.innerHTML = `
-    <div class="max-w-lg mx-auto space-y-4">
+    <div class="parent-settings-col max-w-lg mx-auto space-y-4">
       <div class="flex items-center gap-3 mb-4">
         <button onclick="_profileBack()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
@@ -14760,7 +15007,7 @@ async function _renderParentProfile(container) {
             <input id="prof-name-input" type="text" maxlength="60" value="${_profEsc(profile.full_name || '')}"
               class="selectable flex-1 border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
             <button data-label="Save" onclick="_saveProfileName(this)"
-              class="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
+              class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
           </div>
         </div>
 
@@ -14793,7 +15040,7 @@ async function _renderParentProfile(container) {
         </div>
         <p id="prof-pw-error" class="text-red-500 text-xs hidden"></p>
         <button data-label="Change Password" onclick="_saveProfilePassword(this)"
-          class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Change Password</button>
+          class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors">Change Password</button>
 
         <!-- ⚠ The parent PIN had NO control anywhere. _promptSetParentPin() was
              its only entry point, it ran once from _openParentDashboard(), and it
@@ -14900,7 +15147,7 @@ async function _renderCoparents() {
       <div class="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-3 space-y-2">
         <p class="text-xs text-amber-800 dark:text-amber-300">An invite link is waiting to be used.${when}</p>
         <div class="flex gap-2">
-          <button onclick="_shareCoparentLink(this)" class="flex-1 px-3 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-xs transition-colors">Send a new link</button>
+          <button onclick="_shareCoparentLink(this)" class="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-colors">Send a new link</button>
           <button onclick="_revokeCoparent(this)" class="px-3 py-2 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 font-semibold rounded-xl text-xs">Cancel it</button>
         </div>
       </div>`;
@@ -14917,7 +15164,7 @@ async function _renderCoparents() {
         </ol>
       </div>
       <button onclick="_shareCoparentLink(this)" data-label="Invite another parent - create secure link"
-        class="w-full px-4 py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">
+        class="w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition-colors">
         1. Invite another parent - create secure link
       </button>
       <p class="text-xs text-gray-500 dark:text-gray-400">

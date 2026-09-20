@@ -12,7 +12,9 @@
 //  ⚠ All science comes from lab_forces_data.js (LabForcesData).
 //  ⚠ Only the <canvas> animates. No transform/filter on any ancestor.
 //  ⚠ Guide steps glow the target and WAIT for the student to tap.
-//     The "Skip step" button calls the action directly as a fallback only.
+//  ⚠ Experiments (lab_experiment.js) run on this bench through the
+//     `experiment` adapter: set-up tokens are applied silently, a step's
+//     options all glow, and a listed wrong option is heard but not acted on.
 //  ⚠ Calm Mode: animation is instant; effects are skipped.
 //  ⚠ Never calls recordAnswer() or _recordDaily().
 // ══════════════════════════════════════════════
@@ -23,6 +25,7 @@ const LabForces = (() => {
 
   const $ = id => document.getElementById(id);
   const esc = s => Labs.esc(s);
+  const _fmt = n => Number.isInteger(n) ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : String(n);
 
   let _root = null, _cv = null, _cx = null, _W = 0, _H = 0;
   let _raf = 0, _last = 0, _resizeWired = false, _obs = null, _clock = 0;
@@ -37,6 +40,9 @@ const LabForces = (() => {
   let _mission = null;     // { id, results:{}, success:false } or null
   let _instant = false;
   let _tipIdx = -1;
+  let _weighed = false;    // the current object's reading has been recorded (shows the N chip)
+  let _silent = false;     // experiment set-up: no cards, no toasts, no animation
+  let _focus = null;       // Set of tokens whose controls stay visible (null = all)
   let _springExt = 0;      // current spring extension in px (animated)
   let _indentAnim = 0;     // current indentation in px (animated)
   let _flashAlpha = 0;     // red flash for hazards
@@ -180,8 +186,12 @@ const LabForces = (() => {
       if (ob) { _placeObj(ob.dataset.obj); return; }
       const pd = e.target.closest('[data-pad]');
       if (pd) { _setPad(pd.dataset.pad); return; }
-      const fn = e.target.closest('[data-fN]');
-      if (fn) { _setForce(+fn.dataset.fN); return; }
+      const fn = e.target.closest('[data-fn]');
+      if (fn) { _setForce(+fn.dataset.fn); return; }
+      const vl = e.target.closest('[data-val]');
+      if (vl) { _pickVal(+vl.dataset.val); return; }
+      const nm = e.target.closest('[data-name]');
+      if (nm) { _pickName(nm.dataset.name); return; }
     };
   }
 
@@ -218,7 +228,7 @@ const LabForces = (() => {
   function _switchMode(m) {
     if (_mode === m) return;
     _mode = m;
-    _hook = null; _applied = false;
+    _hook = null; _applied = false; _weighed = false;
     _springExt = 0; _indentAnim = 0;
     _syncModeBar();
     _renderShelf();
@@ -243,6 +253,7 @@ const LabForces = (() => {
   function _placeObj(id) {
     const D = P(), obj = D.OBJECTS[id];
     if (!obj) return;
+    if (_expWrong('obj:' + id)) { _guideEvent('obj:' + id); return; }
     if (_mode !== 'bench') { _switchMode('bench'); }
     if (!obj.maxSafe) {
       // hazard: overload
@@ -251,15 +262,16 @@ const LabForces = (() => {
       return;
     }
     _hook = id;
-    _applied = false;
-    _coach(`${obj.name} is on the hook — it weighs ${obj.weight} N. Tap "Record" to save the reading.`);
+    _applied = false; _weighed = false;
+    if (_silent) _springExt = Math.min(D.SPRING.maxPx, obj.weight * D.SPRING.pxPerN);
+    _coach(`${obj.name} is on the hook. Read the pointer on the scale, then tap the reading or "Record".`);
     _renderShelf();
     _readouts();
     _guideEvent('obj:' + id);
   }
 
   function _removeObj() {
-    _hook = null; _springExt = 0;
+    _hook = null; _springExt = 0; _weighed = false;
     _coach('Object removed. Choose another from the shelf.');
     _renderShelf();
     _readouts();
@@ -269,6 +281,7 @@ const LabForces = (() => {
   // ══ Pressure: pad & force ════════════════════
   function _setPad(id) {
     if (!P().PADS[id]) return;
+    if (_expWrong('pad:' + id)) { _guideEvent('pad:' + id); return; }
     _pad = id;
     _applied = false; _indentAnim = 0;
     _renderShelf();
@@ -279,6 +292,7 @@ const LabForces = (() => {
 
   function _setForce(n) {
     if (!P().FORCES_N.includes(n)) return;
+    if (_expWrong('force:' + n)) { _guideEvent('force:' + n); return; }
     _force = n;
     _applied = false;
     _renderShelf();
@@ -288,28 +302,56 @@ const LabForces = (() => {
 
   function _applyForce() {
     if (_mode !== 'pressure') return;
+    if (_expWrong('apply')) { _guideEvent('apply'); return; }
     _applied = true;
     const r = P().calcPressure(_force, _pad);
     if (!r) return;
-    _coach(`${_force} N on ${r.areaCm2} cm² (${r.areaM2} m²) = ${r.pa.toLocaleString()} Pa. Tap "Record" to save.`);
+    if (_silent) _indentAnim = P().indentDepth(r.pa);
+    _renderShelf();   // the Record button only exists once a force is applied
+    _coach(`${_force} N on ${r.areaCm2} cm² (${r.areaM2} m²) = ${_fmt(r.pa)} Pa. Tap "Record" to save.`);
     _readouts();
     _guideEvent('apply');
   }
 
+  // "What does it read?" - the child names the pointer's reading. The right
+  // value IS the recording; a wrong one points back at the scale.
+  function _pickVal(n) {
+    if (!P().VALUES_N.includes(n)) return;
+    if (_expWrong('val:' + n)) { _guideEvent('val:' + n); return; }
+    if (_mode !== 'bench' || !_hook) { _coach('Hang an object first, then read the pointer.'); return; }
+    const obj = P().OBJECTS[_hook];
+    if (obj.weight !== n) { _coach(`Not ${n} N. Look where the pointer sits on the scale, then try again.`); _guideEvent('val:' + n); return; }
+    _coach(`Yes: the ${obj.name.toLowerCase()} weighs ${n} N.`);
+    _read();
+    _guideEvent('val:' + n);
+  }
+
+  // "Name the force" - in Explore a tap just says what the word means.
+  function _pickName(id) {
+    const f = P().NAMED_FORCES[id];
+    if (!f) return;
+    _coach(`${f.label}: ${f.desc}`);
+    _guideEvent('name:' + id);
+  }
+
   // ══ Read and record ══════════════════════════
   function _read() {
+    if (_expWrong('read')) { _guideEvent('read'); return; }
     if (_mode === 'bench') {
       if (!_hook) { _coach('Nothing on the hook yet. Tap an object from the shelf first.'); return; }
       const D = P(), obj = D.OBJECTS[_hook];
       _reads.unshift({ mode: 'bench', label: obj.name, value: obj.weight, unit: 'N',
-                       sub: `mass ${obj.mass} kg · W = ${obj.mass} × 10 = ${obj.weight} N` });
+                       sub: `mass ${obj.mass} kg · W = ${obj.mass} × 10 = ${obj.weight} N`,
+                       note: `${obj.name}: ${obj.weight} N (${obj.mass} kg × 10)` });
       if (_reads.length > 20) _reads.length = 20;
+      _weighed = true;
       _coach(`Recorded: ${obj.name} weighs ${obj.weight} N.`);
       // mission tracking happens before any early return so every read counts
       _missionReadBench(_hook);
       // check for mass/weight confusion: show result card on first bench reading
+      // (not inside an experiment, where the step is the lesson)
       const st = Labs.store(ID);
-      if (!st._shownMW) {
+      if (!st._shownMW && !_exp() && !_silent) {
         st._shownMW = true; Labs.persist();
         _guideEvent('read');
         _resultCard('mass_weight', { obj: obj.short, mass: obj.mass, weight: obj.weight });
@@ -327,13 +369,14 @@ const LabForces = (() => {
       const pad = P().PADS[_pad];
       _reads.unshift({ mode: 'pressure', label: `${pad.short} · ${_force} N`,
                        value: r.pa, unit: 'Pa',
-                       sub: `F = ${_force} N · A = ${r.areaCm2} cm² = ${r.areaM2} m² · P = F÷A` });
+                       sub: `F = ${_force} N · A = ${r.areaCm2} cm² = ${r.areaM2} m² · P = F÷A`,
+                       note: `${pad.name}, ${_force} N: ${_fmt(r.pa)} Pa (${_force} ÷ ${r.areaM2})` });
       if (_reads.length > 20) _reads.length = 20;
       // mission tracking before any early return
       _missionReadPressure(_pad, _force);
       // unit conversion result card on first pressure reading
       const st = Labs.store(ID);
-      if (!st._shownUnits) {
+      if (!st._shownUnits && !_exp() && !_silent) {
         st._shownUnits = true; Labs.persist();
         _guideEvent('read');
         _resultCard('wrong_units', { nPerCm2: +(r.forceN / r.areaCm2).toFixed(4) });
@@ -341,7 +384,7 @@ const LabForces = (() => {
         return;
       }
       P().discoveriesFor(null, _pad, _force).forEach(_discover);
-      _coach(`Recorded: ${pad.name} at ${_force} N = ${r.pa.toLocaleString()} Pa.`);
+      _coach(`Recorded: ${pad.name} at ${_force} N = ${_fmt(r.pa)} Pa.`);
       _guideEvent('read');
       _renderPanel();
     }
@@ -476,10 +519,8 @@ const LabForces = (() => {
     for (let n = 0; n <= P().SPRING.maxSafe; n += 2) {
       const y = markTop + (n / P().SPRING.maxSafe) * markH;
       c.fillStyle = _colors.ink; c.fillRect(cx + 24, y, 10, 1);
-      if (n % 4 === 0) {
-        c.font = '600 8px system-ui,sans-serif'; c.textAlign = 'left';
-        c.fillText(n + ' N', cx + 36, y + 3);
-      }
+      c.font = '600 8px system-ui,sans-serif'; c.textAlign = 'left';
+      c.fillText(n + ' N', cx + 36, y + 3);
     }
     // pointer
     const ptr = markTop + (_springExt / P().SPRING.maxPx) * markH;
@@ -579,7 +620,7 @@ const LabForces = (() => {
       if (r) {
         c.fillStyle = 'rgba(255,255,255,0.88)';
         c.font = '700 11px system-ui,sans-serif'; c.textAlign = 'center';
-        c.fillText(r.pa.toLocaleString() + ' Pa', _W / 2, indY + depth + 16);
+        c.fillText(_fmt(r.pa) + ' Pa', _W / 2, indY + depth + 16);
       }
     }
   }
@@ -612,8 +653,8 @@ const LabForces = (() => {
       if (_hook) {
         const obj = P().OBJECTS[_hook];
         bits.push(`<span class="lab-chip">⚖️ ${esc(obj.name)}</span>`);
-        bits.push(`<span class="lab-chip is-warm">${obj.weight} N</span>`);
         bits.push(`<span class="lab-chip">${obj.mass} kg</span>`);
+        if (_weighed) bits.push(`<span class="lab-chip is-warm">${obj.weight} N</span>`);
       }
     } else {
       const pad = P().PADS[_pad];
@@ -622,7 +663,7 @@ const LabForces = (() => {
       bits.push(`<span class="lab-chip">${_force} N</span>`);
       if (_applied) {
         const r = P().calcPressure(_force, _pad);
-        if (r) bits.push(`<span class="lab-chip is-warm">${r.pa.toLocaleString()} Pa</span>`);
+        if (r) bits.push(`<span class="lab-chip is-warm">${_fmt(r.pa)} Pa</span>`);
       }
     }
     chips.innerHTML = bits.join('');
@@ -648,10 +689,20 @@ const LabForces = (() => {
         ? `<button type="button" class="lab-tool" data-act="remove"><span aria-hidden="true">❌</span> Remove</button>` : '';
       const readBtn = _hook
         ? `<button type="button" class="lab-tool lab-btn-primary" data-act="read"><span aria-hidden="true">📋</span> Record reading</button>` : '';
+      const vals = _hook ? `<p class="lab-hint">What does it read? Tap the pointer's reading.</p>
+        <div class="lab-forces-vals" role="group" aria-label="What does the spring balance read?">${P().VALUES_N.map(n =>
+          `<button type="button" class="lab-forces-fBtn" data-val="${n}">${n} N</button>`).join('')}</div>` : '';
+      const names = `<p class="lab-hint">Name the force. Tap a name to see what it means.</p>
+        <div class="lab-forces-names" role="group" aria-label="Name the force">${P().SHELF_NAMES.map(id => {
+          const f = P().NAMED_FORCES[id];
+          return `<button type="button" class="lab-forces-nameBtn" data-name="${esc(id)}"><span aria-hidden="true">${f.icon}</span> ${esc(f.label)}</button>`;
+        }).join('')}</div>`;
       box.innerHTML = `<section class="lab-shelf" aria-label="Objects shelf">
         <p class="lab-hint">Tap an object to hang it on the spring balance.</p>
         <div class="lab-items lab-forces-objects">${items}</div>
+        ${vals}
         <div class="lab-tools lab-forces-tools">${removeBtn}${readBtn}</div>
+        ${names}
       </section>`;
     } else {
       const padItems = P().SHELF_PADS.map(id => {
@@ -662,7 +713,7 @@ const LabForces = (() => {
         </button>`;
       }).join('');
       const forceItems = P().FORCES_N.map(n =>
-        `<button type="button" class="lab-forces-fBtn${_force === n ? ' is-active' : ''}" data-fN="${n}" aria-pressed="${_force === n}">${n} N</button>`
+        `<button type="button" class="lab-forces-fBtn${_force === n ? ' is-active' : ''}" data-fn="${n}" aria-pressed="${_force === n}">${n} N</button>`
       ).join('');
       const applyBtn = `<button type="button" class="lab-tool lab-btn-primary" data-act="apply">▼ Apply force</button>`;
       const readBtn = _applied ? `<button type="button" class="lab-tool" data-act="read">📋 Record</button>` : '';
@@ -673,6 +724,7 @@ const LabForces = (() => {
         <div class="lab-tools lab-forces-tools">${applyBtn}${readBtn}</div>
       </section>`;
     }
+    _applyFocus();
     _highlight();
   }
 
@@ -712,29 +764,50 @@ const LabForces = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
+  // A step is met by its `on` token, or by any token in `any`. The runner
+  // hears every token first, so a listed wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _guideEnter(); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _guideEnter(); }
   }
 
-  function _guideDo() {
-    const G = _gdef();
-    if (!G) return;
-    const s = G.steps[_guide.step];
-    if (!s) return;
-    const [kind, id] = s.on.split(':');
+  // Perform one token as if the child had tapped its control.
+  function _do(tok) {
+    const [kind, id] = String(tok).split(':');
     if (kind === 'mode') { _switchMode(id); }
     else if (kind === 'obj')  { _placeObj(id); }
     else if (kind === 'pad')  { _setPad(id); }
     else if (kind === 'force'){ _setForce(+id); }
+    else if (kind === 'val')  { _pickVal(+id); }
+    else if (kind === 'name') { _pickName(id); }
     else if (kind === 'apply'){ _applyForce(); }
     else if (kind === 'read') { _read(); }
     else if (kind === 'remove'){ _removeObj(); }
   }
+
+  // The control a token belongs to; null for a card, which has none.
+  function _selFor(tok) {
+    const [kind, id] = String(tok).split(':');
+    switch (kind) {
+      case 'mode': return `.lab-forces [data-act="mode-${id}"]`;
+      case 'obj': return `.lab-forces [data-obj="${id}"]`;
+      case 'pad': return `.lab-forces [data-pad="${id}"]`;
+      case 'force': return `.lab-forces [data-fn="${id}"]`;
+      case 'val': return `.lab-forces [data-val="${id}"]`;
+      case 'name': return `.lab-forces [data-name="${id}"]`;
+      case 'apply': case 'read': case 'remove': return `.lab-forces [data-act="${kind}"]`;
+    }
+    return null;
+  }
+  const _exp = () => { const G = _gdef(); return !!(G && G.exp); };
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
 
   function _guideHint() {
     _highlight();
@@ -752,25 +825,16 @@ const LabForces = (() => {
     _root.querySelectorAll('.is-next').forEach(el => el.classList.remove('is-next'));
     _root.querySelectorAll('.is-guide-dim').forEach(el => el.classList.remove('is-guide-dim'));
     const G = _gdef();
-    if (!G) return;
-    const s = G.steps[_guide.step];
+    const s = G && G.steps[_guide.step];
     if (!s) return;
-    const [kind, id] = s.on.split(':');
-    const sel = kind === 'mode' && id === 'bench' ? '[data-act="mode-bench"]'
-      : kind === 'mode' && id === 'pressure'      ? '[data-act="mode-pressure"]'
-      : kind === 'obj'   ? `[data-obj="${id}"]`
-      : kind === 'pad'   ? `[data-pad="${id}"]`
-      : kind === 'force' ? `[data-fN="${id}"]`
-      : kind === 'apply' ? '[data-act="apply"]'
-      : kind === 'read'  ? '[data-act="read"]'
-      : null;
-    const el = sel && _root.querySelector(sel);
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => { const sel = _selFor(t); return sel && _root.querySelector(sel); }).filter(el => el && !el.hidden);
+    if (els.length) {
+      els.forEach(el => el.classList.add('is-next'));
+      if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-obj],[data-pad],[data-fN]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
+      _root.querySelectorAll('[data-act],[data-obj],[data-pad],[data-fn],[data-val],[data-name]').forEach(other => {
+        if (!els.some(el => other === el || el.contains(other) || other.contains(el))
             && !(guideBox && guideBox.contains(other))) {
           other.classList.add('is-guide-dim');
         }
@@ -781,6 +845,7 @@ const LabForces = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('forces', G)) { _stopGuide(true); return; }
     const st = Labs.store(ID);
     if (!G.adhoc) { st.guides = st.guides || {}; st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -831,11 +896,14 @@ const LabForces = (() => {
     if (k === 'apply') return { on, say: 'Apply the force to the pad.', btn: '▼ Apply force' };
     if (k === 'read')  return { on, say: 'Record the reading.', btn: '📋 Record reading' };
     if (k === 'remove')return { on, say: 'Remove the object.', btn: '❌ Remove' };
+    if (k === 'val')   return { on, say: `Tap the reading: ${a} N.`, btn: a + ' N' };
+    if (k === 'name')  return { on, say: `Tap ${D.NAMED_FORCES[a].label}.`, btn: D.NAMED_FORCES[a].icon + ' ' + D.NAMED_FORCES[a].label };
     if (k === 'card')  return { on, say: 'Read the card that appears.' };
     return { on, say: on };
   }
 
   function _discover(id) {
+    if (_silent) return;
     const all = _mine(P().DISCOVERIES);
     const d = all.find(x => x.id === id);
     if (!d) return;
@@ -944,6 +1012,51 @@ const LabForces = (() => {
     _refresh();
   }
 
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Applied after every render of the shelf; the mode bar is static.
+  const _tokOf = b => b.dataset.obj ? 'obj:' + b.dataset.obj
+    : b.dataset.pad ? 'pad:' + b.dataset.pad
+    : b.dataset.fn ? 'force:' + b.dataset.fn
+    : b.dataset.val ? 'val:' + b.dataset.val
+    : b.dataset.name ? 'name:' + b.dataset.name
+    : b.dataset.act === 'mode-bench' ? 'mode:bench'
+    : b.dataset.act === 'mode-pressure' ? 'mode:pressure'
+    : b.dataset.act || '';
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const has = tok => on && _focus.has(tok);
+    _root.querySelectorAll('#lab-forces-shelf button, #lab-forces-modebar button').forEach(b => { b.hidden = on && !has(_tokOf(b)); });
+    const anyShown = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('#lab-forces-shelf .lab-items, #lab-forces-shelf .lab-tools, #lab-forces-shelf .lab-forces-force-row, #lab-forces-shelf .lab-forces-vals, #lab-forces-shelf .lab-forces-names, #lab-forces-shelf .lab-shelf, #lab-forces-modebar')
+      .forEach(el => { el.hidden = on && !anyShown(el); });
+    _root.querySelectorAll('#lab-forces-shelf .lab-hint').forEach(p => { p.hidden = on; });
+  }
+  const experiment = {
+    list: () => (P().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(Number(Labs.grade()))),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const M = P().MISSIONS.find(x => x.id === m);
+      return M ? M.quiz[Number(i)] : null;
+    },
+    reset: () => {
+      _mission = null; _guide = null; _focus = null;
+      _mode = 'bench'; _hook = null; _pad = 'flat'; _force = 10; _applied = false; _weighed = false;
+      _springExt = 0; _indentAnim = 0; _flashAlpha = 0; _reads = []; _panel = 'sandbox';
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      _syncModeBar(); _renderShelf(); _renderPanel(); _readouts(); _draw(0);
+    },
+    apply: tok => { _silent = true; try { _do(tok); } finally { _silent = false; } },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _reads.slice(0, 6).reverse().map(r => r.note || `${r.label}: ${_fmt(r.value)} ${r.unit}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: tok => _selFor(tok) || '#lab-forces-stage',
+    hooks: {},
+  };
+
   // ══ Panel rendering ═══════════════════════════
   function _renderPanel() {
     if (!_root) return;
@@ -1050,7 +1163,7 @@ const LabForces = (() => {
     } else {
       items = M.scenarios.map(s => {
         const r = ms.results[s.label];
-        return `<li class="${r !== undefined ? 'is-done' : ''}">${esc(s.label)}: ${r !== undefined ? r.toLocaleString() + ' Pa' : 'calculate'}</li>`;
+        return `<li class="${r !== undefined ? 'is-done' : ''}">${esc(s.label)}: ${r !== undefined ? _fmt(r) + ' Pa' : 'calculate'}</li>`;
       });
     }
     const total = ms.id === 'spring_survey' ? M.needs.length : M.scenarios.length;
@@ -1136,7 +1249,7 @@ const LabForces = (() => {
     return {
       grade: _grade(), mode: _mode, hook: _hook, pad: _pad, force: _force,
       applied: _applied, springExt: Math.round(_springExt), indentAnim: Math.round(_indentAnim),
-      panel: _panel, looping: !!_raf,
+      panel: _panel, looping: !!_raf, weighed: _weighed, focus: _focus ? [..._focus] : null,
       guide: _guide && { id: _guide.id, step: _guide.step },
       mission: _mission && { id: _mission.id, results: Object.keys(_mission.results), success: _mission.success },
       reads: _reads.slice(0, 6).map(r => `${r.label}|${r.value}|${r.unit}`),
@@ -1153,8 +1266,8 @@ const LabForces = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startGuide, discoveryGuide, startMission,
-           _placeObj, _setPad, _setForce, _applyForce, _read, _removeObj, _switchMode,
+  return { study, experiment, mount, unmount, startGuide, discoveryGuide, startMission,
+           _placeObj, _setPad, _setForce, _applyForce, _read, _removeObj, _switchMode, _pickVal, _pickName, _do,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabForces = LabForces;

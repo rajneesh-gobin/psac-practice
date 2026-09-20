@@ -29,6 +29,13 @@
 //    the PARTS of a cell under the pointer; the measuring desk, the blood
 //    slides and the drawings are Grade 9 only. Everything Grade 9 does is
 //    unchanged.
+//  ⚠ EXPERIMENTS (LAB_SPEC §10): the lab opens on lab_experiment.js's
+//    Aim → Predict → Do → See → Check → Done at both grades, through the
+//    `experiment` adapter at the end of this file. In Do, focus() hides every
+//    control the experiment does not use (this bench draws ~35 at Grade 7), and
+//    a wrong option the current step lists is HEARD but not acted on
+//    (_expWrong) - so "×40 first" explains itself instead of cracking the slide.
+//    The old bench survives as Explore.
 // ══════════════════════════════════════════════
 const LabMicroscope = (() => {
   const M = () => LabMicroscopeData;
@@ -48,6 +55,7 @@ const LabMicroscope = (() => {
   let _colors = null, _tipIdx = -1, _said = {};
   let _vc = null, _vcSmall = null, _vcKey = '';
   let _lastGrade = null;
+  let _focus = null, _quiet = false;   // experiments: the controls to show; applying a set-up token silently
   const _cellsMemo = new Map();
 
   // ── The grade the microscope is being used at ──
@@ -79,7 +87,7 @@ const LabMicroscope = (() => {
     _fx = []; _said = {}; _busy = false; _shake = 0;
   }
   const _view = () => M().view(_s);
-  const _still = () => _instant || Labs.calm();
+  const _still = () => _instant || _quiet || Labs.calm();
 
   // ══ Shell ════════════════════════════════════
   function _shellHTML() {
@@ -142,6 +150,10 @@ const LabMicroscope = (() => {
     _syncSet();
     _readouts();
     const st = Labs.store('microscope');
+    // With experiments at this grade the Aim IS the welcome (lab_experiment.js
+    // attaches right after mount); the runner marks `intro`, but Grade 7 keeps
+    // its own key, so mark it here rather than flash a card the runner closes.
+    if (!st[_introKey()] && experiment.list().length) { st[_introKey()] = true; Labs.persist(); }
     if (!st[_introKey()]) _intro();
     else if (_guide) _guideEnter();
     else if (_mission) _coach('Back on your mission - carry on where you left off.');
@@ -216,6 +228,7 @@ const LabMicroscope = (() => {
   }
 
   function _act(act) {
+    if (_expWrong(act)) { _guideEvent(act); return; }
     switch (act) {
       case 'hub': Labs.backToHub(); break;
       case 'help': _help(); break;
@@ -270,8 +283,9 @@ const LabMicroscope = (() => {
     cheek: 'You gently scraped the inside of your own cheek with a clean cotton bud and smeared it in a drop of water on a slide, on the stage. The used bud went straight into the disinfectant. Next: one drop of stain, then a cover slip.',
     leaf: 'You laid one small pondweed leaf flat in a drop of water on a slide, on the stage. It is so thin that light passes through it. Next: a cover slip - no stain needed.',
   };
-  const SHEET_KEYS = ['fig', 'ruler'];
+  const SHEET_KEYS = ['fig', 'ruler', 'pick'];
   function _set(k, v) {
+    if (_expWrong(k + ':' + v)) { _guideEvent(k + ':' + v); return; }
     if (_busy) { _coach('One thing at a time - let that finish first.'); return; }
     const D = M();
     if (SCOPE_KEYS.includes(k)) _toRig('scope');
@@ -295,6 +309,7 @@ const LabMicroscope = (() => {
         _s.stain = null; _s.cover = null; _s.lowSeen = false;
         _cracked = false; _snap();
         _mark('stage');
+        _logEntry(made ? { title: 'Made a slide', obs: `${D.SLIDES[v].name}, flat in a drop of water.` } : { title: 'Slide on the stage', obs: `${D.SLIDES[v].name}.` });
         _coach(made ? MAKE7[v]
           : `${D.SLIDES[v].name} on the stage, over the hole in the middle. The lens was raised first, so nothing could scrape the slide.${v === 'unstained' ? ' No stain on this one.' : ''}`);
         _scopeAfter('slide:' + v, prev);
@@ -308,6 +323,7 @@ const LabMicroscope = (() => {
         const prev = _view();
         _s.stain = v;
         _mark('stage');
+        _logEntry({ title: 'Stain', obs: `One drop of ${D.STAINS[v].name.toLowerCase()}.` });
         _coach(_s.slide === 'leaf'
           ? `${D.STAINS[v].name} added. A leaf does not need it - its chloroplasts are green already - but it does no harm.`
           : `One drop of ${D.STAINS[v].name.toLowerCase()}. It colours the parts of the cells so you can see them. Now the cover slip.`);
@@ -321,6 +337,7 @@ const LabMicroscope = (() => {
         const prev = _view();
         _s.cover = v;
         _mark('stage');
+        _logEntry({ title: 'Cover slip', obs: v === 'drop' ? 'Dropped flat: air bubbles trapped under it.' : 'Lowered at an angle: no air bubbles.' });
         if (v === 'drop') {
           if (_mission) _mission.errors++;
           _coach('The cover slip fell flat onto the drop.');
@@ -340,6 +357,7 @@ const LabMicroscope = (() => {
       }
       case 'part': part(v); return;
       case 'kind': kind(v); return;
+      case 'pick': pick(v); return;
       case 'light': {
         if (!D.LIGHTS[v]) return;
         const prev = _view();
@@ -740,9 +758,23 @@ const LabMicroscope = (() => {
   }
   function answer() {
     if (!_sheetGuard()) return;
-    const D = M(), f = D.figure(_w.fig);
     if (!_w.op) { _coach('Work it out first: divide (or multiply) before you write the answer.'); return; }
-    const r = D.work(f, _w);
+    _write('answer');
+  }
+  // Writing one of the desk's three answers (data: pickOptions). The right one
+  // is the sum done properly; a wrong one is the mistake it came from, so the
+  // notebook and the card show that working - and the label the pupil chose.
+  function pick(id) {
+    if (!_sheetGuard()) return;
+    const D = M(), f = D.figure(_w.fig), o = D.pickOptions(f).find(x => x.id === id);
+    if (!o) return;
+    _w.converted = o.w.converted; _w.op = o.w.op;
+    _write('pick:' + id, o.correct ? null : o.label);
+  }
+  function _write(tok, label) {
+    const D = M(), f = D.figure(_w.fig);
+    const r = Object.assign({}, D.work(f, _w));
+    if (label) r.shown = label;
     _w.done = r;
     _calcs.unshift({ fig: f.id, title: f.title, lines: D.workLines(f, _w), shown: r.shown, correct: r.correct, right: r.rightShown });
     if (_calcs.length > 12) _calcs.length = 12;
@@ -758,7 +790,7 @@ const LabMicroscope = (() => {
         else if (!ms.success) msg += ms.need.includes(f.id) ? ` (${n}/${ms.need.length} mission drawings done)` : ' That one is not a mission drawing - see the mission steps.';
       }
       _coach(msg);
-      _after('answer');
+      _after(tok);
       return;
     }
     if (ms && ms.id === 'mag') ms.errors++;
@@ -778,7 +810,7 @@ const LabMicroscope = (() => {
       Labs.resultCard({ icon: R.icon, title: R.title, happened: R.happened(ctx), instead: R.instead, exam: R.exam,
         onClose: () => _coach('Lay the ruler again and try once more - measure the whole cell, match the units, divide.') });
     });
-    _guideEvent('answer');
+    _guideEvent(tok);
   }
   function _stampOff() { _fx = _fx.filter(f => f.type !== 'stamp'); }
 
@@ -887,8 +919,9 @@ const LabMicroscope = (() => {
     if (!G || _busy) return;
     if (Labs.studyBegin && Labs.studyBegin('microscope', G, () => startGuide(idOrDef))) return;
     _mission = null;
-    _resetBench();
-    _rig = 'scope';
+    // An experiment's guide (lab_experiment.js) runs on the bench the runner
+    // has already set up - the slide IS the experiment; never wipe it.
+    if (!G.exp) { _resetBench(); _rig = 'scope'; }
     _guide = { id: G.id, step: 0, def: adhoc || null };
     _panel = 'sandbox';
     _resize();
@@ -898,11 +931,12 @@ const LabMicroscope = (() => {
     _readouts();
     _guideEnter();
     const z = $('lab-microscope-stage');
-    if (z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
+    if (!G.exp && z && z.getBoundingClientRect().top < 0) z.scrollIntoView({ block: 'center', behavior: Labs.calm() ? 'auto' : 'smooth' });
   }
 
   // A step whose setting is already in place needs no tap.
   function _satisfied(tok) {
+    if (!tok) return false;
     const [k, v] = tok.split(':');
     switch (k) {
       case 'rig': return _rig === v;
@@ -928,7 +962,7 @@ const LabMicroscope = (() => {
     const G = _gdef();
     if (!G) return;
     let s = G.steps[_guide.step];
-    while (s && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
+    while (s && s.on && _satisfied(s.on)) { _guide.step++; s = G.steps[_guide.step]; }
     if (!s) { _guideDone(); return; }
     const box = $('lab-guide');
     if (box) {
@@ -941,17 +975,26 @@ const LabMicroscope = (() => {
       box.hidden = false;
     }
     _highlight();
+    if (G.exp && experiment.hooks.step) experiment.hooks.step(_guide.step);
   }
 
-  // Any action may complete the current step - by its own token, or by
-  // putting in place what a focus step asks for.
+  // Any action may complete the current step - by its own token, by any token
+  // in `any` (an experiment's "pick one of these"), or by putting in place what
+  // a focus step asks for. The runner hears every token first, so a listed
+  // wrong choice can explain itself.
+  const _stepHit = (s, token) => !!s && (s.any ? s.any.includes(token) : s.on === token);
   function _guideEvent(token) {
     const G = _gdef();
     if (!G) return;
     const s = G.steps[_guide.step];
-    if (s && s.on === token) { _guide.step++; _coachGuide(token); }
+    if (G.exp && experiment.hooks.token) experiment.hooks.token(token, s);
+    if (_stepHit(s, token)) { _guide.step++; _coachGuide(token); }
     _guideEnter();
   }
+  // The current experiment step lists this token as a wrong answer: the bench
+  // must not act on it (×40 with the lens down would crack the slide; the
+  // mirror at the Sun would blind), only let the runner explain.
+  const _expWrong = tok => { const G = _gdef(), s = G && G.exp && G.steps[_guide.step]; return !!(s && s.wrong && s.wrong[tok]); };
 
   function _guideHint() {
     _highlight();
@@ -990,6 +1033,7 @@ const LabMicroscope = (() => {
     if (on === 'divide')   return _coach('Division done. Check your decimal point.');
     if (on === 'multiply') return _coach('Multiplication done. Check your decimal point.');
     if (on === 'answer')   return _coach('Magnification calculated.');
+    if (k === 'pick')      return _coach('Answer written.');
     _coach('Good — on to the next step.');
   }
 
@@ -1083,6 +1127,7 @@ const LabMicroscope = (() => {
   function _guideDone() {
     const G = _gdef();
     if (!G) return;
+    if (G.exp) { _stopGuide(true); if (experiment.hooks.done) experiment.hooks.done(); return; }
     if (Labs.studyComplete && Labs.studyComplete('microscope', G)) { _stopGuide(true); return; }
     const st = Labs.store('microscope');
     if (!G.adhoc) { st.guides[G.id] = Date.now(); Labs.persist(); }
@@ -1131,19 +1176,71 @@ const LabMicroscope = (() => {
     const G = _gdef();
     const s = G && G.steps[_guide.step];
     if (!s) return;
-    const el = _root.querySelector('.lab-body ' + _selFor(s.on));
-    if (el) {
-      el.classList.add('is-next');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      const guideBox = _root.querySelector('#lab-guide');
-      _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
-        if (other !== el && !el.contains(other) && !other.contains(el)
-            && !(guideBox && guideBox.contains(other))) {
-          other.classList.add('is-guide-dim');
-        }
-      });
-    }
+    const toks = s.options || s.any || (s.on ? [s.on] : []);
+    const els = toks.map(t => _root.querySelector('.lab-body ' + _selFor(t))).filter(Boolean);
+    if (!els.length) return;
+    els.forEach(el => el.classList.add('is-next'));
+    if (!G.exp) els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    const guideBox = _root.querySelector('#lab-guide');
+    _root.querySelectorAll('[data-act],[data-set]').forEach(other => {
+      if (!els.some(el => other === el || el.contains(other) || other.contains(el))
+          && !(guideBox && guideBox.contains(other))) {
+        other.classList.add('is-guide-dim');
+      }
+    });
   }
+
+  // ══ Experiments (lab_experiment.js) ═══════════
+  // focus(tokens): show only the controls an experiment's steps use; null shows
+  // everything. Re-applied after every render of the tools and the shelf. A
+  // focus:near/sharp token shows the knob its selector points at right now.
+  function _applyFocus() {
+    if (!_root) return;
+    const on = !!_focus;
+    const sels = on ? [..._focus].filter(t => t.indexOf('focus:') === 0).map(_selFor) : [];
+    const shown = b => { const tok = b.dataset.act || (b.dataset.set + ':' + b.dataset.v); return _focus.has(tok) || sels.some(s => b.matches(s)); };
+    _root.querySelectorAll('.lab-microscope-opt, #lab-microscope-tools .lab-tool, #lab-microscope-tools .lab-btn, .lab-microscope-rigs button')
+      .forEach(b => { b.hidden = on && !shown(b); });
+    const any = el => [...el.querySelectorAll('button')].some(b => !b.hidden);
+    _root.querySelectorAll('.lab-microscope-row, .lab-microscope-toolgrp').forEach(el => { el.hidden = on && !any(el); });
+    _root.querySelectorAll('.lab-microscope-set h2, .lab-microscope-set .lab-hint').forEach(el => { el.hidden = on; });
+    ['.lab-microscope-rigs', '#lab-microscope-tools', '.lab-microscope-set'].forEach(sel => {
+      const el = _root.querySelector(sel); if (el) el.hidden = on && !any(el);
+    });
+  }
+  const experiment = {
+    list: () => (M().EXPERIMENTS || []).filter(e => !e.grades || e.grades.includes(_g())),
+    question: ref => {
+      if (ref && typeof ref === 'object') return ref;
+      const [m, i] = String(ref).split(':');
+      const Ms = M().MISSIONS.find(x => x.id === m);
+      return Ms ? Ms.quiz[Number(i)] : null;
+    },
+    // A clean bench: no mission, no guide, an empty notebook, controls re-rendered.
+    reset: () => {
+      _mission = null; _guide = null;
+      _resetBench(); _rig = 'scope'; _panel = 'sandbox';
+      _ids = []; _drawings = []; _calcs = []; _log = []; _lastGrade = _g();
+      const box = $('lab-guide'); if (box) { box.hidden = true; box.innerHTML = ''; }
+      if (_root) { _resize(); _renderTools(); _renderPanel(); _syncSet(); _readouts(); }
+    },
+    // One set-up token, silently and at once: no discovery toast, no animation.
+    // A focus token turns the right knob until the image is there.
+    apply: tok => {
+      _quiet = true;
+      try {
+        if (tok === 'focus:near' || tok === 'focus:sharp') {
+          for (let i = 0; i < 40; i++) { const v = _view(); if (!v.visible || (tok === 'focus:sharp' ? v.sharp : v.seen)) break; _focusStep(tok.slice(6)); }
+        } else _do(tok);
+      } finally { _quiet = false; }
+    },
+    guide: def => startGuide(def),
+    stop: () => _stopGuide(true),
+    evidence: () => _log.filter(e => !e.note).slice(0, 6).reverse().map(e => `${e.title}: ${e.obs}`),
+    focus: toks => { _focus = toks ? new Set(toks) : null; _applyFocus(); },
+    selector: _selFor,
+    hooks: {},
+  };
 
   // ══ Panels ═══════════════════════════════════
   function _startHTML() {
@@ -1187,6 +1284,7 @@ const LabMicroscope = (() => {
     else p.innerHTML = (_guide || _mission ? '' : _startHTML()) + _shelfHTML() + _notebookHTML();
     _syncSet();
     _foundCount();
+    _applyFocus();
     _highlight();
   }
 
@@ -1203,6 +1301,7 @@ const LabMicroscope = (() => {
   // Only this grade's discoveries count here, so a Grade 7 bench never
   // collects a Grade 9 card (and the counter never mixes the two).
   function _discover(id) {
+    if (_quiet) return;
     const L = _discs(), d = L.find(x => x.id === id);
     if (!d) return;
     if (Labs.discover('microscope', id, { title: d.title, total: L.length })) _refresh();
@@ -1254,6 +1353,7 @@ const LabMicroscope = (() => {
         <button type="button" class="lab-btn lab-btn-wide" data-act="draw">✏️ Draw the cell in my notebook</button></div>`}`;
     }
     _syncSet();
+    _applyFocus();
     _highlight();
   }
 
@@ -1313,7 +1413,9 @@ const LabMicroscope = (() => {
           ${_opt('ruler', 'cell', '📏 Across the whole cell', 'edge to edge, at its widest')}
           ${f.innerMm ? _opt('ruler', 'inner', '📏 Across ' + f.innerName, 'the middle part only') : ''}
           ${_opt('ruler', 'eye', '👁️ Guess by eye', 'no ruler')}</div></div>
-      <p class="lab-hint">The ruler is drawn to the same scale as the figure, just as a ruler lies on the printed page. Then use the buttons under the picture: make the units match, divide, write the answer.</p>
+      <div class="lab-microscope-row"><span class="lab-microscope-label">3 · Write the answer</span>
+        <div class="lab-microscope-opts">${D.pickOptions(f).map(o => _opt('pick', o.id, esc(o.label), null, 'lab-microscope-pick')).join('')}</div></div>
+      <p class="lab-hint">The ruler is drawn to the same scale as the figure, just as a ruler lies on the printed page. Work it out with the buttons under the picture - make the units match, divide - then write the answer.</p>
     </section>`;
   }
 
@@ -2101,7 +2203,8 @@ const LabMicroscope = (() => {
              view: { total: v.total, focus: v.focus, sharp: v.sharp, dark: v.dark, visible: v.visible, under: v.under, covered: v.covered, stained: v.stained, bubbles: v.bubbles },
              sheet: { fig: w.fig, ruler: w.ruler, converted: w.converted, op: w.op, done: w.done && { shown: w.done.shown, correct: w.done.correct, error: w.done.error } },
              ids: _ids.map(x => x.cell), drawings: _drawings.length, calcs: _calcs.length,
-             guide: _guide && { id: _guide.id, step: _guide.step },
+             guide: _guide && { id: _guide.id, step: _guide.step, exp: !!(_guide.def && _guide.def.exp) },
+             focus: _focus ? [..._focus] : null,
              mission: _mission && { id: _mission.id, errors: _mission.errors, success: _mission.success, found: Object.keys(_mission.found), done: Object.keys(_mission.done), lowFirst: _mission.lowFirst },
              log: _log.slice(0, 6).map(e => e.title + ': ' + e.obs) };
   }
@@ -2116,7 +2219,7 @@ const LabMicroscope = (() => {
     refresh: () => { if (_guide) _guideEnter(); },
     stop: () => { _stopGuide(true); }
   };
-  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do,
+  return { study, mount, unmount, startMission, startGuide, discoveryGuide, set: _set, act: _do, experiment,
            _test, _tick, _debug };
 })();
 if (typeof window !== 'undefined') window.LabMicroscope = LabMicroscope;

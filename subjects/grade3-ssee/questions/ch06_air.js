@@ -47,7 +47,7 @@ STATIC_QUESTIONS.push(
     options:['Moving air','Hot water vapour','A type of rain','A solid substance'],
     answer:'Moving air',
     hint:'Think about what makes a kite fly.',
-    explanation:'<b>Wind</b> is moving air. When air moves from one place to another — due to differences in air pressure — we feel it as wind.' }),
+    explanation:'<b>Wind</b> is moving air. When air moves from one place to another, we feel it as wind.' }),
 
   makeTF({ id:'g3ssee-air-007', chapterId:'g3ssee-air', difficulty:1, subsection:'properties_air',
     question:'Air has weight.',
@@ -68,11 +68,11 @@ STATIC_QUESTIONS.push(
     explanation:'Squeezing air into the tank packs <b>more oxygen into a smaller space</b>, so the diver carries a bigger supply and can stay under water for longer.'}),
 
   makeMCQ({ id:'g3ssee-air-010', chapterId:'g3ssee-air', difficulty:1, subsection:'properties_air',
-    question:'Air pressure is the weight of air pushing on ___.',
+    question:'Air has weight, so it presses down on ___.',
     options:['Everything around it, including us','Only the clouds high up in the sky','Only the water in the deep blue sea','Only the objects that are made of metal'],
     answer:'Everything around it, including us',
     hint:'Air is all around us and above us.',
-    explanation:'Air pressure is the force of the weight of air pressing on <b>everything it surrounds</b> — the ground, the sea, buildings and our own bodies.'}),
+    explanation:'Air has <b>weight</b>, and it presses on <b>everything it surrounds</b> — the ground, the sea, buildings and our own bodies. We do not feel it because it pushes from every side at once.'}),
 
   makeMCQ({ id:'g3ssee-air-011', chapterId:'g3ssee-air', difficulty:3, subsection:'properties_air',
     question:'A pupil fills a sealed plastic bag with air and squeezes it. What does she observe?',
@@ -96,7 +96,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g3ssee-air-014', chapterId:'g3ssee-air', difficulty:1, subsection:'properties_air',
     question:'Both animals and plants need air to survive.',
     answer:true,
-    explanation:'Yes! Animals need <b>oxygen</b> (from air) to breathe; plants need <b>carbon dioxide</b> (from air) for photosynthesis. All living things depend on air.' }),
+    explanation:'Yes! Animals need <b>oxygen</b> from the air to breathe, and plants take in air through their leaves to make their food. All living things depend on air.' }),
 
   makeMCQ({ id:'g3ssee-air-015', chapterId:'g3ssee-air', difficulty:2, subsection:'properties_air',
     question:'What does a weather vane (girouette) measure?',
@@ -111,7 +111,7 @@ STATIC_QUESTIONS.push(
     options:['Breathing in and out','Cooking a hot meal','Building a new house','Washing dirty clothes'],
     answer:'Breathing in and out',
     hint:'Without this, we cannot survive more than a few minutes.',
-    explanation:'The main use of air is <b>breathing</b> (respiration) — we take in oxygen and breathe out carbon dioxide.'}),
+    explanation:'The main use of air is <b>breathing</b> — we take in oxygen and breathe out carbon dioxide.'}),
 
   makeMCQ({ id:'g3ssee-air-017', chapterId:'g3ssee-air', difficulty:1, subsection:'uses_of_air',
     question:'Windmills use _____ to generate electricity or grind grain.',
@@ -139,17 +139,17 @@ STATIC_QUESTIONS.push(
     explanation:'A kite flies because <b>moving air (wind)</b> pushes against its surface and lifts it. Without wind a kite will not fly, however hard you pull the string.'}),
 
   makeMCQ({ id:'g3ssee-air-021', chapterId:'g3ssee-air', difficulty:2, subsection:'uses_of_air',
-    question:'Which of the following uses air pressure to work?',
+    question:'Which of the following works by squeezing air into a small space?',
     options:['A bicycle pump','A hammer','A paintbrush','A pencil'],
     answer:'A bicycle pump',
-    hint:'This device compresses air into a small space.',
-    explanation:'A <b>bicycle pump</b> uses air pressure — it compresses air and forces it through the valve into the tyre, increasing the tyre\'s air pressure.' }),
+    hint:'This tool pushes air into a smaller and smaller space.',
+    explanation:'A <b>bicycle pump</b> squeezes air into a small space and pushes it through the valve into the tyre. This shows that air <b>can be compressed</b>.' }),
 
   makeMCQ({ id:'g3ssee-air-022', chapterId:'g3ssee-air', difficulty:1, subsection:'uses_of_air',
     question:'Birds and aeroplanes use _____ to fly.',
     options:['Air','Water','Fire','Sunlight'],
     answer:'Air',
-    explanation:'Birds and aeroplanes fly on <b>air</b>: the shape of a wing makes the air pressure below it greater than above it, and that difference gives lift.'}),
+    explanation:'Birds and aeroplanes fly on <b>air</b>: their wings push against the air, and the air pushes back and holds them up.'}),
 
   makeTF({ id:'g3ssee-air-023', chapterId:'g3ssee-air', difficulty:1, subsection:'uses_of_air',
     question:'Fish need air to breathe, just like humans.',
@@ -202,8 +202,8 @@ STATIC_QUESTIONS.push(
     question:'How do TREES help reduce air pollution?',
     options:['They take in carbon dioxide and give out oxygen','They make more smoke to hide the pollution','They blow the pollution away with their leaves','They burn up the car fumes in their branches'],
     answer:'They take in carbon dioxide and give out oxygen',
-    hint:'Trees use carbon dioxide for photosynthesis.',
-    explanation:'Through photosynthesis, trees <b>absorb carbon dioxide</b> and <b>release oxygen</b>, and their leaves also trap dust. That improves the air quality.'}),
+    hint:'Think about which gas trees take in, and which one they give out.',
+    explanation:'Trees <b>take in carbon dioxide</b> and <b>give out oxygen</b> when they make their food, and their leaves also trap dust. That makes the air cleaner.'}),
 
   makeMCQ({ id:'g3ssee-air-031', chapterId:'g3ssee-air', difficulty:1, subsection:'air_pollution',
     question:'In Mauritius, sugar cane fields are sometimes BURNT after harvest. What does this cause?',

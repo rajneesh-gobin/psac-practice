@@ -7,7 +7,9 @@
 // law with n = 1.5 at several angles, no bending along the normal, the emergent
 // ray parallel to the incident ray and displaced by t·sin(i−r)/cos r, the wrong
 // readings (from the surface, parallax), every discovery recipe, every guide,
-// every quiz question and every hazard / result card.
+// every quiz question and every hazard / result card - and, since 2026-09-20,
+// every EXPERIMENT (lab_experiment.js): its tokens, its refs, the label each
+// instruction names, and its See text replayed through this file's own maths.
 //
 // Run: node scripts/test-labs-light-data.js
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
@@ -141,7 +143,7 @@ console.log('\nGuided experiments');
 ok('at least 3 Grade 9 guided experiments', L.GUIDES.filter(G9).length >= 3);
 ok('guide ids are unique', new Set(L.GUIDES.map(g => g.id)).size === L.GUIDES.length);
 for (const G of L.GUIDES) {
-  const bad = G.steps.filter(s => !tokenOk(s.on, G4(G) ? 4 : 9) || !s.say || (s.on === 'cool' ? !!s.btn : !s.btn));
+  const bad = G.steps.filter(s => !tokenOk(s.on, G4(G) ? 4 : 9) || !s.say);
   ok(`${G.title}: every step names a real action, says what to do, and has a button unless it is a wait`, bad.length === 0, bad);
   ok(`${G.title}: ends with what they found out`, !!(G.lesson && G.blurb && G.icon));
 }
@@ -252,6 +254,205 @@ ok('at least 10 Grade 4 facts for the 💡 button', L.FACTS_G4.length >= 10);
 ok('read-aloud is only ever started by a tap: one speak() call, reached only from the two 🔊 buttons',
    (bench.match(/\.speak\(/g) || []).length === 1 && (bench.match(/_say\([^)]/g) || []).length === 3
    && /case 'say-coach'[^\n]*_say\(/.test(bench) && /case 'say-guide'[^\n]*_say\(/.test(bench));
+
+// ══ Experiments (lab_experiment.js, LAB_SPEC.md §10) ═══════════
+// The contract is checked by scripts/test-labs-experiments-data.js; this is
+// the bench's side of it: every setup and step token is one _do() performs at
+// that grade, every check ref is a quiz question of that grade, every `say`
+// names the control it points at, no step is already satisfied when it is
+// reached, and - replayed through the same reading()/readShadow()/trace() the
+// bench draws from - each See text is TRUE and the right path trips no card.
+console.log('\nExperiments');
+const X = L.EXPERIMENTS || [];
+ok('the data file exports EXPERIMENTS', Array.isArray(X) && X.length > 0);
+ok('experiment ids are unique and start with their grade', new Set(X.map(e => e.id)).size === X.length && X.every(e => e.grades.length === 1 && e.id.startsWith('g' + e.grades[0] + '_')), X.map(e => e.id));
+const xChapters = (core.match(/\blight:\s*\{([^}]*)\}/) || [, ''])[1];
+const xGradeChapters = g => ((xChapters.match(new RegExp(`\\b${g}:\\s*\\[([^\\]]*)\\]`)) || [, ''])[1].match(/'([^']+)'/g) || []).map(x => x.slice(1, -1));
+for (const g of [4, 9]) {
+  const mine = X.filter(e => e.grades.includes(g));
+  ok(`Grade ${g}: 3 to 5 experiments (${mine.length}), each on a chapter lab_core.js lists for the Light Bench at Grade ${g}`,
+     mine.length >= 3 && mine.length <= 5 && mine.every(e => xGradeChapters(g).includes(e.chapter)), { n: mine.length, chapters: mine.map(e => e.chapter), registry: xGradeChapters(g) });
+}
+ok('Grade 9 experiments name their pack (there is no grade9-science pack)', X.filter(e => e.grades[0] === 9).every(e => e.pack === 'grade9-physics') && X.filter(e => e.grades[0] === 4).every(e => !e.pack));
+const xTok = (t, g) => tokenOk(t, g) || t === 'cool' || t === 'measure' || /^(obj|name|pos|torch|ruler):/.test(t) && g === 4;
+const xSteps = e => e.steps.map(s => s.on || (s.any && s.any[0]));
+const xQ = ref => { if (ref && typeof ref === 'object') return ref; const [m, i] = String(ref).split(':'); const M = L.MISSIONS.find(x => x.id === m); return M ? M.quiz[Number(i)] : null; };
+const words = s => String(s).trim().split(/\s+/).filter(Boolean).length;
+
+// A model of the bench, driven by the same tokens _do() takes, with every
+// number from this file. Returns the notebook and any card the bench would show.
+function xRun(g, tokens) {
+  const st = { setup: null, source: g === 4 ? 'torch' : 'raybox', power: false, beta: 30, tau: 0, normal: false, prot: false, ref: 'normal', eye: 'above',
+               aligned: true, lifted: false, obj: 'card', pos: L.SHADOW.start, torch: 'front', ruler: 'zero', moved: { torch: false, obj: false }, shadows: [],
+               log: [], cards: [], readings: [] };
+  const i = () => Math.abs(st.beta + st.tau);
+  const optical = () => st.setup === 'mirror' || st.setup === 'block';
+  const note = () => { const O = L.OBJECTS[st.obj], W = L.LIGHT_WORDS[O.light]; st.log.push(`Shadow of the ${O.name.toLowerCase()}: ${L.cap(W.shadow)}. ${W.lets}`); };
+  for (const t of tokens) {
+    const [k, v] = t.split(':');
+    switch (k) {
+      case 'setup': if (L.SETUPS[v].hazard) { st.cards.push(L.SETUPS[v].hazard); break; }
+        Object.assign(st, { setup: v, beta: g === 4 ? L.BOUNCE.beta : 30, tau: 0, normal: false, prot: false, lifted: false, aligned: true, obj: 'card', pos: L.SHADOW.start, torch: 'front', ruler: 'zero', moved: { torch: false, obj: false }, shadows: [] }); break;
+      case 'source': st.source = v; break;
+      case 'power': st.power = v === 'on'; if (g === 4 && st.setup === 'shadow') { if (st.power) note(); else st.log.push('Torch off: The shadow went too. No light, no shadow.'); } break;
+      case 'obj': if (st.setup === 'shadow' && st.obj !== v) { st.obj = v; if (st.power) note(); } break;
+      case 'pos': if (st.setup === 'shadow' && st.pos !== +v) { st.pos = +v; st.moved.obj = true; } break;
+      case 'torch': if (st.torch !== v) { st.torch = v; st.moved.torch = true; } break;
+      case 'ruler': st.ruler = v; break;
+      case 'measure': {
+        if (st.setup !== 'shadow' || !st.power || L.OBJECTS[st.obj].light !== 'opaque') break;
+        const R = L.readShadow(st.pos, st.torch, st.ruler), last = st.shadows[st.shadows.length - 1];
+        if (!R.ok) { st.cards.push('g4_ruler'); break; }
+        if (last && st.moved.torch && st.moved.obj) { st.cards.push('g4_unfair'); st.shadows = []; st.moved = { torch: false, obj: false }; break; }
+        st.shadows.push({ pos: st.pos, cm: R.cm }); st.moved = { torch: false, obj: false };
+        st.readings.push({ pos: st.pos, cm: R.cm });
+        st.log.push(`Shadow of the ${L.OBJECTS[st.obj].name.toLowerCase()}: at the ${st.pos} cm mark → shadow ${R.cm} cm tall`); break; }
+      case 'name': { if (st.setup !== 'shadow' || !st.power) break; const is = L.OBJECTS[st.obj].light;
+        if (v !== is) st.cards.push('g4_label'); else st.log.push(`${L.OBJECTS[st.obj].name}: ${is}`); break; }
+      case 'look': { if (st.setup !== 'cards') break;
+        if (g === 4) { if (!st.power) break; st.log.push(L.cardsPath(st.aligned) === 'through' ? 'Holes in a straight line: A spot of light on the screen.' : 'One card out of line: No spot on the screen.'); break; }
+        if (st.power && L.SOURCES[st.source].laser && st.aligned) { st.cards.push('laser_eye'); break; }
+        st.log.push(!st.power ? 'Looking with the lamp off' : L.cardsPath(st.aligned) === 'through' ? 'Holes in a straight line' : 'One card out of line'); break; }
+      case 'cards': if (st.setup === 'cards') st.aligned = v === 'align'; break;
+      case 'normal': if (optical()) st.normal = true; break;
+      case 'protractor': if (optical()) { st.prot = true; st.ref = v; } break;
+      case 'eye': st.eye = v; break;
+      case 'angle': if (optical()) st.beta = Math.max(L.LIMITS.betaMin, Math.min(L.LIMITS.betaMax, +v - st.tau)); break;
+      case 'tilt': if (optical() || st.setup === 'bounce') st.tau = +v; break;
+      case 'read': { if (!optical() || !st.power || st.lifted || !st.prot || (st.ref === 'normal' && !st.normal)) break;
+        const r = L.reading({ setup: st.setup, beta: st.beta, tau: st.tau, ref: st.ref, eye: st.eye });
+        st.readings.push(r);
+        if (!r.ok) { st.cards.push(r.faults[0]); break; }
+        st.log.push(st.setup === 'mirror' ? `Reading at the plane mirror: i = ${r.i}°, r = ${r.r}°` : `Reading at the glass block: i = ${r.i}° r = ${r.r}° e = ${r.e}°`); break; }
+      case 'lift': { if (st.setup !== 'block') break; if (st.lifted) { st.lifted = false; break; } if (!st.power) break;
+        const tr = L.trace({ setup: 'block', beta: st.beta, tau: st.tau, lifted: false }); st.lifted = true; st.trace = tr;
+        st.log.push(tr.i > 0 ? `Traced and lifted the block: parallel, shifted by about ${Math.round(tr.shift * L.BLOCK.thicknessMm)} mm` : 'Traced and lifted the block: one straight line, no shift'); break; }
+      case 'pack': st.setup = null; break;
+      case 'cool': break;
+    }
+  }
+  return st;
+}
+// Mirrors _satisfied() in the bench: what a guide skips because it is already so.
+const xSat = (st, t) => { if (!t) return false; const [k, v] = t.split(':'); switch (k) {
+  case 'setup': return st.setup === v; case 'source': return st.source === v; case 'power': return v === 'on' ? st.power : !st.power;
+  case 'normal': return st.normal; case 'protractor': return st.prot && st.ref === v; case 'eye': return st.eye === v;
+  case 'angle': return (st.setup === 'mirror' || st.setup === 'block') && Math.abs(st.beta + st.tau) === +v; case 'tilt': return st.tau === +v;
+  case 'cards': return v === 'move' ? !st.aligned : st.aligned; case 'obj': return st.setup === 'shadow' && st.obj === v;
+  case 'pos': return st.setup === 'shadow' && st.pos === +v; case 'torch': return st.torch === v; case 'ruler': return st.ruler === v; default: return false; } };
+// What a child reads on the control a token belongs to (_renderControls / _shelfHTML), emoji aside.
+const xLabel = (st, t, g) => { const [k, v] = t.split(':'); const src = L.SOURCES[st.source].short; switch (k) {
+  case 'setup': return L.SETUPS[v].name; case 'source': return L.SOURCES[v].name;
+  case 'power': return st.power ? `${src} on` : `Switch on ${src.toLowerCase()}`;
+  case 'normal': return st.normal ? 'Rub out normal' : 'Draw the normal';
+  case 'protractor': return st.prot ? (v === 'normal' ? 'The normal' : st.setup === 'block' ? 'The surface' : 'The mirror') : 'Protractor';
+  case 'eye': return st.eye === 'above' ? 'Eye: above' : 'Eye: to the side'; case 'angle': return 'Ray box';
+  case 'tilt': return st.setup === 'block' ? 'Block' : 'Mirror'; case 'read': return 'Read the angles';
+  case 'look': return g === 4 ? 'Look at the screen' : 'Look through the holes'; case 'cards': return st.aligned ? 'Move the middle card' : 'Line the card up';
+  case 'lift': return st.lifted ? 'Put block back' : 'Trace & lift block'; case 'pack': return 'Pack away';
+  case 'obj': return L.OBJECTS[v].name; case 'pos': return +v < st.pos ? 'Nearer the torch' : 'Further away';
+  case 'torch': return st.torch === 'front' ? 'Move the torch back' : 'Torch back to 0'; case 'ruler': return st.ruler === 'zero' ? 'Ruler: 0 at the bottom' : 'Ruler: upside down';
+  case 'measure': return 'Measure the shadow'; case 'name': return v; default: return null; } };
+const plain = s => String(s || '').replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{2190}-\u{21FF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+// A wrong option the bench must only HEAR (its own card or a state change would
+// fight the runner's card): the guard in lab_light.js that hears it.
+const xGuard = { name: "_expWrong('name:'", protractor: "_expWrong('protractor:'", angle: '_expWrong(would)', tilt: '_expWrong(would)', pos: "_expWrong('pos:'",
+                 read: "_expWrong('read')", lift: "_expWrong('lift')", look: "_expWrong('look')", ruler: "_expWrong('ruler:'", torch: "_expWrong('torch:'",
+                 eye: '_expWrong(to)', cards: "_expWrong(_b.aligned ? 'cards:move'", measure: "_expWrong('measure')", pack: "_expWrong('pack')", setup: "_expWrong('setup:'", source: "_expWrong('source:'" };
+for (const e of X) {
+  const t = e.id, g = e.grades[0];
+  ok(`${t}: every setup token is one the bench performs at Grade ${g}`, e.setup.every(x => xTok(x, g)), e.setup.filter(x => !xTok(x, g)));
+  ok(`${t}: every step token (on, any, options) is one the bench performs at Grade ${g}`, e.steps.every(s => (s.options || s.any || [s.on]).every(x => xTok(x, g))), e.steps);
+  ok(`${t}: an ask step lists 2-4 options, its answer among them, and each wrong text names another option`,
+     e.steps.filter(s => s.ask).every(s => Array.isArray(s.options) && s.options.length >= 2 && s.options.length <= 4
+       && (s.any ? s.any.every(x => s.options.includes(x)) : s.options.includes(s.on)) && Object.keys(s.wrong || {}).every(k => s.options.includes(k) && k !== s.on)), e.steps.filter(s => s.ask));
+  ok(`${t}: every check ref is a Grade ${g} quiz question with 4 distinct options and a reason`,
+     e.check.every(ref => { const q = xQ(ref); const M = typeof ref === 'string' && L.MISSIONS.find(x => x.id === ref.split(':')[0]);
+       return !!q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && !!q.why && (!M || (M.grades || [9]).includes(g)); }), e.check);
+  ok(`${t}: at most 5 steps, each under 25 words${g === 4 ? ' (and 12 at Grade 4)' : ''}`,
+     e.steps.length <= 5 && e.steps.every(s => words(s.say || s.ask) <= (g === 4 ? 12 : 25)), e.steps.map(s => words(s.say || s.ask)));
+  const path = [...e.setup, ...xSteps(e)];
+  const run = xRun(g, path);
+  ok(`${t}: the right path trips no hazard or "what went wrong" card (setup included)`, run.cards.length === 0, run.cards);
+  ok(`${t}: the right path writes at least one notebook line (the See and the Check need evidence)`, run.log.length >= 1, run.log);
+  const skipped = [], labels = [];
+  e.steps.forEach((s, k) => {
+    const before = xRun(g, [...e.setup, ...xSteps(e).slice(0, k)]);
+    if (!s.options && !s.any && xSat(before, s.on)) skipped.push({ step: k + 1, on: s.on });
+    if (s.say) { const label = xLabel(before, s.on, g); if (!label || !plain(s.say).includes(plain(label))) labels.push({ step: k + 1, say: s.say, label }); }
+  });
+  ok(`${t}: no step is already satisfied when it is reached (the guide would skip it unseen)`, skipped.length === 0, skipped);
+  ok(`${t}: every instruction names the control it points at (the button's text without its emoji)`, labels.length === 0, labels);
+  const wrongs = [];
+  e.steps.forEach((s, k) => Object.keys(s.wrong || {}).forEach(w => {
+    const kind = w.split(':')[0];
+    if (kind === 'obj') { const r = xRun(g, [...e.setup, ...xSteps(e).slice(0, k), w]); if (r.cards.length) wrongs.push(w + ': ' + r.cards.join(';')); }
+    else if (!xGuard[kind] || !bench.includes(xGuard[kind])) wrongs.push(w + ': no _expWrong guard in lab_light.js');
+  }));
+  ok(`${t}: every wrong option is placed harmlessly (an object) or heard without acting (the bench guards it)`, wrongs.length === 0, wrongs);
+}
+// The See text of each experiment is what the maths gives.
+const xSee = id => X.find(x => x.id === id).see.saw;
+const xGo = (id, n) => { const e = X.find(x => x.id === id); return xRun(e.grades[0], [...e.setup, ...xSteps(e).slice(0, n === undefined ? e.steps.length : n)]); };
+const W = L.LIGHT_WORDS;
+let r = xGo('g4_through');
+ok('"Which things let light through?": glass, tracing paper and wood each went in and were named, and the See quotes the three shadows',
+   r.log.some(l => /^Glass sheet: transparent/.test(l)) && r.log.some(l => /^Tracing paper: translucent/.test(l)) && r.log.some(l => /wooden block/.test(l))
+   && [W.transparent.shadow, W.translucent.shadow, W.opaque.shadow].every(s => xSee('g4_through').includes(s)), r.log);
+ok('…its wrong objects are what their cards say: tracing paper translucent, wood opaque, glass transparent',
+   L.OBJECTS.tracing.light === 'translucent' && L.OBJECTS.wood.light === 'opaque' && L.OBJECTS.glass.light === 'transparent');
+r = xGo('g4_shadow');
+ok('"What makes a shadow?": a dark shadow with the torch on, gone with it off, and the book makes one too',
+   r.log.some(l => /card tree: A dark shadow/.test(l)) && r.log.some(l => /^Torch off/.test(l)) && r.log.some(l => /book: A dark shadow/.test(l)) && L.OBJECTS.book.light === 'opaque'
+   && /shadow went too/.test(xSee('g4_shadow')) && /book made a dark shadow/.test(xSee('g4_shadow')), r.log);
+r = xGo('g4_bigger');
+const cms = r.readings.map(x => x.cm);
+ok(`"Does a shadow get bigger?": 25 → 15 → 12 cm from the torch measures ${cms.join(', ')} cm, each bigger, torch never moved`,
+   r.readings.map(x => x.pos).join() === '25,15,12' && cms.join() === [25, 15, 12].map(p => L.readShadow(p, 'front').realCm).join() && cms[0] < cms[1] && cms[1] < cms[2] && r.shadows.length === 3, r.readings);
+ok('…and the See quotes all three numbers', cms.every(c => xSee('g4_bigger').includes(`${c} cm`)), xSee('g4_bigger'));
+ok('…its "back to 25 cm" card quotes the shadow at 25 cm', X.find(x => x.id === 'g4_bigger').steps[3].wrong['pos:25'].includes(L.readShadow(25, 'front').realCm + ' cm'));
+r = xGo('g4_straight');
+ok('"Can light bend round a corner?": a spot with the holes in line, none with the middle card moved',
+   L.cardsPath(true) === 'through' && L.cardsPath(false) === 'blocked' && r.log.some(l => /spot of light/.test(l)) && r.log.some(l => /No spot/.test(l)) && /spot went out/.test(xSee('g4_straight')), r.log);
+r = xGo('g9_reflect');
+ok('"Angle of reflection at 30°": i = r at 30° and at 35°, both from the normal, and the See quotes them',
+   r.readings.length === 2 && r.readings.every(x => x.ok && x.i === x.r) && r.readings.map(x => x.i).join() === '30,35'
+   && /i = 30°, r = 30°/.test(xSee('g9_reflect')) && /35° and 35°/.test(xSee('g9_reflect')), r.readings);
+ok('…its "from the mirror" card shows 90° − 60° = 30°', X.find(x => x.id === 'g9_reflect').steps[0].wrong['protractor:surface'].includes(`${L.fromSurface(30)}°`) && /90° − 60° = 30°/.test(X.find(x => x.id === 'g9_reflect').steps[0].wrong['protractor:surface']));
+r = xGo('g9_refract');
+ok('"Which way does light bend?": 40° → 25° and 45° → 28° in the glass, r < i both times, and the See quotes them',
+   r.readings.map(x => `${x.i}/${x.r}`).join() === `40/${L.readAngle(L.refractAngle(40))},45/${L.readAngle(L.refractAngle(45))}` && r.readings.every(x => x.r < x.i)
+   && /r = 25°/.test(xSee('g9_refract')) && /r = 28°/.test(xSee('g9_refract')), r.readings);
+r = xGo('g9_parallel');
+const mm = Math.round(L.lateralShift(40, L.BLOCK.thicknessMm));
+ok(`"Does the ray come out parallel?": leaves at 40°, trace parallel and shifted ${mm} mm - the See says so`,
+   r.readings[0] && r.readings[0].e === 40 && r.lifted && r.trace && Math.abs(r.trace.out[0] * r.trace.d[1] - r.trace.out[1] * r.trace.d[0]) < 1e-9
+   && xSee('g9_parallel').includes(`${mm} mm`) && /left the far side at 40°/.test(xSee('g9_parallel')), { e: r.readings[0] && r.readings[0].e, mm });
+r = xGo('g9_normal');
+ok('"Does a ray along the normal bend?": i = 0°, r = 0°, the trace is one straight line with no shift',
+   r.readings[0] && r.readings[0].i === 0 && r.readings[0].r === 0 && r.trace && near(r.trace.shift, 0, 1e-12) && /i = 0° and r = 0°/.test(xSee('g9_normal')), r.readings);
+// Words and papers.
+const xt = [];
+for (const e of X) {
+  const addx = (k, v) => { if (v) xt.push({ where: e.id + '.' + k, t: String(v), g: e.grades[0] }); };
+  addx('title', e.title); addx('aim', e.aim); addx('predict', e.predict.q); e.predict.options.forEach((o, i) => { addx('opt' + i, o.label); addx('sub' + i, o.sub); });
+  e.steps.forEach((s, i) => { addx('step' + i, s.say || s.ask); Object.values(s.wrong || {}).forEach((w, j) => addx(`wrong${i}.${j}`, w)); });
+  addx('saw', e.see.saw); addx('learn', e.see.learn); addx('exam', e.exam);
+  e.check.filter(c => typeof c === 'object').forEach((q, i) => { addx('q' + i, q.q); q.options.forEach(o => addx('qopt' + i, o)); addx('why' + i, q.why); });
+}
+const x4 = xt.filter(x => x.g === 4);
+const xlong = x4.flatMap(x => x.t.split(/(?<=[.!?…])\s+/).filter(y => words(y) > 18).map(y => x.where + ': ' + y));
+ok('Grade 4 experiments: every sentence is short (18 words at most)', xlong.length === 0, xlong);
+const xjar = x4.filter(x => /°|protractor|refract|\bnormal\b|angle/i.test(x.t)).map(x => x.where);
+ok('Grade 4 experiments: no Grade 9 ideas (angles, the normal, a protractor, refraction)', xjar.length === 0, xjar);
+ok('Grade 4 experiments quote no paper (there is no Grade 4 paper)', !x4.some(x => /PSAC 20\d\d/.test(x.t)), x4.filter(x => /PSAC 20\d\d/.test(x.t)).map(x => x.where));
+const q9dir = path.join(ROOT, 'subjects', 'grade9-physics', 'questions');
+const q9 = fs.readdirSync(q9dir).map(f => fs.readFileSync(path.join(q9dir, f), 'utf8')).join('\n');
+const xrefs = xt.filter(x => x.g === 9).flatMap(x => (x.t.match(/(?:Physics|NCE) 20\d\d(?: Q\d+[a-z()]*)?/g) || []).map(m => ({ where: x.where, ref: m })));
+ok(`Grade 9 experiments: every paper reference (${xrefs.length ? [...new Set(xrefs.map(r => r.ref))].join(', ') : 'none quoted'}) is in subjects/grade9-physics/questions`, xrefs.every(r => q9.includes(r.ref)), xrefs.filter(r => !q9.includes(r.ref)));
+ok('the bench exports the experiment adapter with every hook the runner drives',
+   /const experiment = \{/.test(bench) && ['list', 'question', 'reset', 'apply', 'guide', 'stop', 'evidence', 'focus', 'selector', 'hooks'].every(k => new RegExp('^\\s*' + k + ':', 'm').test(bench))
+   && /return \{ study, experiment,/.test(bench) && /experiment\.hooks\.token\(token, s\)/.test(bench) && /experiment\.hooks\.step\(_guide\.step\)/.test(bench) && /experiment\.hooks\.done\(\)/.test(bench) && /if \(!G\.exp\) _reset\(\);/.test(bench));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -129,9 +129,10 @@ const quit = code => {
   await sleep(500);
   ok('lab_circuit.css is linked and styles the palette', await ev("!!document.querySelector('link[data-lab-css=\"circuit\"]') && getComputedStyle(document.querySelector('.lab-circuit-palette')).display === 'grid'"));
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to the Circuit Board/.test(ov.text) && /Show me how/.test(ov.text), ov);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('circuit').intro === true"));
+  ok('first visit opens on a Grade 9 experiment Aim, with no overlay in the way',
+     await ev("typeof LabExperiment !== 'undefined' && LabExperiment._debug().phase === 'aim' && LabExperiment._debug().exp === 'g9_series' && !!document.querySelector('#lab-exp') && !document.querySelector('#lab-overlay')"));
+  await click('[data-exp="explore"]');
+  await ev('LabCircuit.experiment.reset(); true');
   ok('the top bar has back, the symbols/picture toggle and help', await ev("!!document.querySelector('.lab-circuit [data-act=\"hub\"]') && !!document.getElementById('lab-circuit-view') && !!document.querySelector('.lab-circuit [data-act=\"help\"]')"));
   ok('Grade 9: the eyebrow says “Physics · Grade 9”, with no read-aloud, no ⚠️ safety row and no things-to-test',
      await ev("document.querySelector('.lab-circuit .lab-eyebrow').textContent === 'Physics · Grade 9' && !document.querySelector('[data-act=\"say-coach\"]') && !document.querySelector('.lab-circuit-safety') && !document.querySelector('#lab-circuit-palette [data-tool=\"spoon\"]')"));
@@ -152,22 +153,22 @@ const quit = code => {
   ok('Light a bulb: step 1 of 5 lays out the circuit', gs.box && /Step 1 of 5/.test(gs.text) && /Lay out the circuit/.test(gs.text) && !gs.start, gs);
   await click('[data-guide-do]');
   gs = await guideState();
-  ok('step 2: the gap on the right glows, and so does the wire in the palette', /Step 2 of 5/.test(gs.text) && gs.next.includes('v31') && gs.next.includes('wire'), gs);
+  ok('step 2: the gap on the right glows, and the wire is already in the hand (one tap places it)', /Step 2 of 5/.test(gs.text) && gs.next.includes('v31') && await ev("document.querySelector('#lab-circuit-palette [data-tool=\"wire\"]').getAttribute('aria-pressed') === 'true'"), gs);
   d = await dbg();
   ok('…with the gap there is no current', d.cellI < 1e-6 && !d.layout.v31);
-  await click('[data-guide-do]');
+  await click('#lab-circuit-slots [data-slot="v31"]');
   gs = await guideState();
   ok('step 3: close the switch - and the switch glows', /Step 3 of 5/.test(gs.text) && gs.next.includes('v00'), gs);
-  await click('[data-guide-do]');
+  await click('#lab-circuit-slots [data-slot="v00"]');
   d = await dbg();
   ok('switch closed: the bulb lights at normal brightness with 0.50 A', d.bulbs.h12.lit && near(d.bulbs.h12.I, 0.5) && near(d.bulbs.h12.b, 1, 0.01), d.bulbs);
   gs = await guideState();
   ok('step 4: open it again', /Step 4 of 5/.test(gs.text), gs);
-  await click('[data-guide-do]');
+  await click('#lab-circuit-slots [data-slot="v00"]');
   ok('switch open: no current', (await dbg()).cellI < 1e-6);
   gs = await guideState();
-  ok('step 5: the ✏️ symbols toggle glows', /Step 5 of 5/.test(gs.text) && gs.next.includes('lab-circuit-view'), gs);
-  await click('[data-guide-do]');
+  ok('step 5: the ✏️ symbols toggle glows', /Step 5 of 5/.test(gs.text) && await ev("document.getElementById('lab-circuit-view').classList.contains('is-next')"), gs);
+  await click('#lab-circuit-view');
   ov = await overlay();
   ok('it completes, with “What you found out”', ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text) && /COMPLETE/.test(ov.text), ov);
   ok('…remembered, and offers the next one', await ev("!!Labs.store('circuit').guides.light") && /Next: Series or parallel/.test(ov.text));
@@ -176,7 +177,7 @@ const quit = code => {
   await click('#lab-overlay [data-guide="sp"]');
   const runGuide = () => ev(`(() => { for (let k = 0; k < 24 && LabCircuit._debug().guide; k++) {
       const c = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result'); if (c) return 'card: ' + c.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-      const b = document.querySelector('#lab-guide [data-guide-do]'); if (b) b.click(); else LabCircuit._tick(6); }
+      const b = document.querySelector('#lab-guide [data-guide-do]') || [...document.querySelectorAll('.is-next')].find(e => !e.matches('[data-tool]')); if (b) b.click(); else LabCircuit._tick(6); }
     const o = document.getElementById('lab-overlay'); return o ? o.textContent.replace(/\\s+/g, ' ') : 'no overlay'; })()`);
   let txt = await runGuide();
   ok('“Series or parallel?” runs to the end', /Experiment complete/.test(txt) && /SERIES/.test(txt) && /PARALLEL/.test(txt), txt.slice(0, 200));
@@ -212,7 +213,10 @@ const quit = code => {
   ok('🧽 Remove takes a wire off - the bulb goes out', !(await dbg()).layout.v31 && !(await dbg()).bulbs.h12.lit);
   await click('.lab-circuit-actions [data-act="undo"]');
   ok('↩️ Undo puts it back - lit again', (await dbg()).bulbs.h12.lit);
-  // mouse drag: a bulb from the palette onto a space
+  // mouse drag: a bulb from the palette onto a space. Drag is the mouse/pen path
+  // (tap is the one that always works), so measure it on a desktop-height frame:
+  // at 360x780 the palette sits a whole screen below the board.
+  await call('Emulation.setDeviceMetricsOverride', { width: 360, height: 1400, deviceScaleFactor: 2, mobile: true });
   const pos = await ev(`(() => { const a = document.querySelector('#lab-circuit-palette [data-tool="bulb"]').getBoundingClientRect();
     const s = document.querySelector('[data-slot="h11"]'); s.scrollIntoView({ block: 'center' }); const a2 = document.querySelector('#lab-circuit-palette [data-tool="bulb"]').getBoundingClientRect(); const b = s.getBoundingClientRect();
     return { ax: a2.left + a2.width / 2, ay: a2.top + a2.height / 2, bx: b.left + b.width / 2, by: b.top + b.height / 2 }; })()`);
@@ -221,6 +225,7 @@ const quit = code => {
   await call('Input.dispatchMouseEvent', { type: 'mouseMoved', x: pos.bx, y: pos.by, button: 'left', buttons: 1 });
   await call('Input.dispatchMouseEvent', { type: 'mouseReleased', x: pos.bx, y: pos.by, button: 'left', clickCount: 1 });
   ok('with a mouse, dragging a bulb from the palette onto a space places it', (await dbg()).layout.h11?.kind === 'bulb', { pos, layout: (await dbg()).layout.h11 });
+  await call('Emulation.setDeviceMetricsOverride', { width: 360, height: 780, deviceScaleFactor: 2, mobile: true });
 
   // ── Mistakes that teach ────────────────────────
   console.log('\n-- mistakes');
@@ -327,7 +332,7 @@ const quit = code => {
         for (let k = 0; k < 24 && LabCircuit._debug().guide; k++) {
           const hz = document.querySelector('#lab-overlay.is-hazard, #lab-overlay.is-result');
           if (hz) return 'card: ' + hz.textContent.replace(/\\s+/g, ' ').slice(0, 90);
-          const btn = document.querySelector('#lab-guide [data-guide-do]');
+          const btn = document.querySelector('#lab-guide [data-guide-do]') || [...document.querySelectorAll('.is-next')].find(e => !e.matches('[data-tool]'));
           if (btn) btn.click(); else LabCircuit._tick(6);
         }
         if (LabCircuit._debug().guide) return 'guide never finished at step ' + LabCircuit._debug().guide.step;
@@ -438,11 +443,14 @@ const quit = code => {
     ok(`Grade ${g}: the board opens at Grade ${g}`, (await dbg()).grade === g);
     ov = await overlay();
     const first = await ev(`LabCircuitData.forGrade(LabCircuitData.GUIDES, ${g})[0].id`);
-    ok(`Grade ${g}: its own first-visit welcome, whose “Show me how” starts its own first guide`,
-       ov && /Welcome to the Circuit Board/.test(ov.text) && /Test things/.test(ov.text) && await ev(`!!document.querySelector('#lab-overlay [data-guide="${first}"]')`), ov);
+    // Since 2026-09-19 the first screen at Grades 4 and 6 is an experiment's
+    // Aim (lab_experiment.js), not the welcome card; the old bench, start
+    // panel and guides are one tap away under "Explore the bench freely".
+    ok(`Grade ${g}: opens on an experiment Aim for Grade ${g}, with no welcome card in the way`,
+       !ov && await ev(`!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim' && LabExperiment._debug().list.every(id => id.startsWith('g${g}_'))`), { ov, first, dbg: await ev('LabExperiment._debug()') });
     ok(`Grade ${g}: nothing was read aloud on its own (no auto-play)`, (await speech()).spoken.length === sp0);
-    await closeOv();
-    ok(`Grade ${g}: the welcome is remembered for Grade ${g} only`, await ev(`Labs.store('circuit').intro${g} === true`));
+    await click('[data-exp="explore"]');
+    ok(`Grade ${g}: "Explore the bench freely" shows the old bench`, await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none'"));
     ok(`Grade ${g}: the eyebrow says “Science · Grade ${g}”`, (await ev("document.querySelector('.lab-circuit .lab-eyebrow').textContent")) === `Science · Grade ${g}`);
     ok(`Grade ${g}: the lab assistant has 🔊 read-aloud and 💡; the ⚠️ row has a wall socket, wet hands and a split cable`,
        await ev("!!document.querySelector('.lab-coach [data-act=\"say-coach\"]') && !!document.querySelector('.lab-coach [data-act=\"tip\"]') && ['mains','wet','cable'].every(a => document.querySelector('.lab-circuit-safety [data-act=\"' + a + '\"]'))"));
@@ -477,7 +485,7 @@ const quit = code => {
     let sp = await speech();
     ok(`Grade ${g}: 🔊 on the guide box reads the step aloud, in English`, sp.spoken.length === sp0 + 1 && sp.spoken[sp.spoken.length - 1].text === say0 && /^en/.test(sp.spoken[sp.spoken.length - 1].lang), sp.spoken.slice(-1));
     const cA = sp.cancels;
-    await click('[data-guide-do]');
+    await ev("(document.querySelector('#lab-guide [data-guide-do]') || [...document.querySelectorAll('.is-next')].find(e => !e.matches('[data-tool]'))).click(); true");
     ok(`Grade ${g}: …and the next step cancels the speech`, (await speech()).cancels > cA);
     txt = await runGuide();
     ok(`Grade ${g}: “${await ev(`LabCircuitData.GUIDES.find(x => x.id === '${first}').title`)}” runs to the end with “What you found out”`, /Experiment complete/.test(txt) && /What you found out/.test(txt), txt.slice(0, 160));

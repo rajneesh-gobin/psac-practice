@@ -38,15 +38,23 @@ const html = fs.readFileSync('index.html', 'utf8');
 const teacher = html.slice(html.indexOf('<div id="screen-teacher"'), html.indexOf('<!-- ══════════ ASSIGNMENT ENTRANCE'));
 const nav = teacher.slice(teacher.indexOf('class="teacher-navigation"'), teacher.indexOf('<!-- ── TAB: MY CLASSES'));
 const tabs = [...nav.matchAll(/class="ta-tab" data-tab="([a-z]+)"/g)].map(m => m[1]);
-// ⚠ ONE main destination. Set Work and Results are reached only from inside
-// the class they belong to - they used to sit here as well, beside a classroom
-// screen carrying the same two names, and a teacher could not tell the two
-// "Results" apart. Their PANELS must still exist: switchTab() still opens them.
-assert.deepEqual(tabs, ['home'], 'main navigation offers exactly one destination'); checks++;
+// ⚠ ONE main destination, then the tools. Set Work and Results are reached only
+// from inside the class they belong to - they used to sit here as well, beside a
+// classroom screen carrying the same two names, and a teacher could not tell the
+// two "Results" apart. Their PANELS must still exist: switchTab() still opens them.
+// ⚠ The seven tools were behind a '⋯ More' dropdown until 2026-09-19. The row is
+//   the parent dashboard's shape now. Asserting the FULL list in order is the
+//   point: the old assertion named five tools while the menu held seven, so
+//   papers and preview were added with nothing watching.
+assert.deepEqual(tabs, ['home', 'gradebook', 'materials', 'assignments', 'papers', 'preview', 'messages', 'settings'],
+  'one destination and seven tools, all on the row'); checks++;
 ok(!nav.includes('data-tab="create"') && !nav.includes('data-tab="results"') && !nav.includes('data-tab="classes"'),
   'Set Work, Results and Classrooms are not top-level tabs any more');
-const more = [...nav.matchAll(/data-more="([a-z]+)"/g)].map(m => m[1]);
-assert.deepEqual(more, ['gradebook', 'materials', 'assignments', 'messages', 'settings'], 'More holds the five secondary tools'); checks++;
+ok(!nav.includes('data-more=') && !nav.includes('ta-more-btn') && !nav.includes('ta-more-menu'),
+  'and nothing is hidden behind a More menu');
+// The <small> each menu item carried is the button's title now - losing it would
+// leave 'Past work' and 'My files' as two labels with nothing to tell them apart.
+ok((nav.match(/ title="/g) || []).length === 7, 'every tool tab still explains itself');
 for (const t of ['home', 'create', 'results', 'assignments', 'gradebook', 'materials', 'messages', 'settings']) ok(teacher.includes(`data-tab="${t}"`) && teacher.includes(`class="ta-tab-content${t === 'home' ? '' : ' hidden'}" data-tab="${t}"`), `panel for ${t} exists`);
 ok(!/class="ta-tab-content[^"]*" data-tab="classes"/.test(teacher), 'the classrooms panel is gone - its list lives on Home');
 const homePanel = teacher.slice(teacher.indexOf('class="ta-tab-content" data-tab="home"'), teacher.indexOf('<!-- ── TAB: SET WORK'));
@@ -86,10 +94,10 @@ for (const word of ['guest account', 'token', 'anonymous', 'access type', 'datab
 
 const overlay = html.slice(html.indexOf('<div id="tc-classroom-detail"'), html.indexOf('<!-- ══════════ ASSIGNMENT ENTRANCE'));
 const cdNav = [...overlay.matchAll(/class="tc-cd-nav-btn" role="tab" data-sec="([a-z]+)"/g)].map(m => m[1]);
-assert.deepEqual(cdNav, ['overview', 'work', 'pupils', 'materials'], 'classroom overlay has four primary sections, materials among them'); checks++;
+assert.deepEqual(cdNav, ['overview', 'work', 'pupils', 'materials', 'calendar'], 'classroom overlay has five primary sections, materials and calendar among them'); checks++;
 const cdMore = [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map(m => m[1]);
 assert.deepEqual(cdMore, ['settings'], 'classroom More holds classroom-wide settings only; results live with each activity'); checks++;
-for (const s of ['overview', 'work', 'pupils', 'materials', 'results', 'settings']) ok(overlay.includes(`id="tc-cd-${s}"`), `classroom section ${s} exists`);
+for (const s of ['overview', 'work', 'pupils', 'materials', 'calendar', 'results', 'settings']) ok(overlay.includes(`id="tc-cd-${s}"`), `classroom section ${s} exists`);
 ok(/id="ta-share-class"/.test(html) && /id="ta-share-due"/.test(html) && /id="ta-share-qr"/.test(html) && /id="ta-share-view"/.test(html) && /TeacherMode\.shareCopyLink\(\)/.test(html), 'success screen shows classroom, due date, copy, QR and View');
 // ⚠ NOT <script> TAGS AND NOT IN SHELL_FILES ANY MORE. The eight role
 //   modules are injected by RoleModules.ensure() when someone opens one of

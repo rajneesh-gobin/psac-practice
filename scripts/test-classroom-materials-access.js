@@ -43,10 +43,14 @@ const overlay = html.slice(html.indexOf('<div id="tc-classroom-detail"'), html.i
 ok('Materials is a primary nav section, not a More entry',
   /class="tc-cd-nav-btn" role="tab" data-sec="materials"/.test(overlay)
   && !/role="menuitem" data-sec="materials"/.test(overlay));
-ok('More keeps only results and settings',
-  [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map(m => m[1]).join() === 'results,settings');
-ok('the More button no longer lights up for materials',
-  /MORE_SECTIONS = \['results', 'settings'\]/.test(detail));
+// Results moved out of More (opened from each activity) and Calendar joined
+// the primary row on 2026-09-20, so More holds classroom-wide settings only.
+ok('More keeps only settings',
+  [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map(m => m[1]).join() === 'settings');
+ok('the More button no longer lights up for materials or the calendar',
+  /MORE_SECTIONS = \['settings'\]/.test(detail));
+ok('Calendar is a primary nav section beside Materials',
+  /data-sec="materials"[^]*?data-sec="calendar"/.test(overlay) && !/role="menuitem" data-sec="calendar"/.test(overlay));
 ok('the classroom header count for files is the route to them',
   /class="tc-cd-stat" onclick="TeacherClassroomDetail\.showSection\('materials'\)"[\s\S]{0,120}id="tc-cd-stat-materials"/.test(overlay));
 ok('the Work tab routes to Materials even with no files yet',

@@ -133,7 +133,7 @@ ok('the parent dashboard renders ChapterPreview',
 ok('the teacher screen renders the SAME module',
   /ChapterPreview\.render\('tc-preview-host', 'teacher'\)/.test(teacher));
 ok("'preview' is a parent dashboard panel", /_PD_PANELS = \[[^\]]*'preview'/.test(app));
-ok("'preview' is a teacher More tab", /MORE_TABS = \[[^\]]*'preview'/.test(teacher));
+ok("'preview' is a teacher tool tab", /TOOL_TABS = \[[^\]]*'preview'/.test(teacher));
 for (const id of ['pd-preview-host', 'tc-preview-host', 'pd-panel-preview', 'pd-tab-preview', 'practice-preview-note']) {
   ok(`index.html carries #${id}`, html.includes(`id="${id}"`));
 }

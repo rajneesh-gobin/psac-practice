@@ -298,6 +298,48 @@ function checkScreenNesting() {
   note(`checked ${checked} admin tab panels are nested inside their screen`);
 }
 
+
+// ⚠ The settings panel width lives in TWO files: the class _renderParentProfile()
+// writes and the rule in style.css that widens it inside the dashboard. The
+// override used to name a Tailwind utility (.max-w-2xl) the renderer had stopped
+// writing, so it matched nothing and Account & Settings rendered as a 512px strip
+// centred in a 1088px board - measured at 1440px, phone layout on a desktop.
+function checkSettingsPanelWidth() {
+  const app = read(path.join(ROOT, 'engine/app.js'));
+  const css = read(path.join(ROOT, 'style.css'));
+  if (!app || !css) { fail('engine/app.js or style.css not readable'); return; }
+  const CLASS = 'parent-settings-col';
+  if (!app.includes(CLASS))
+    fail('engine/app.js: the Account & Settings wrapper no longer carries .' + CLASS
+      + ' - style.css widens the panel through that class and nothing else');
+  if (!css.includes('#pd-panel-settings .' + CLASS))
+    fail('style.css: nothing widens #pd-panel-settings .' + CLASS
+      + ' - Settings goes back to a phone-width column in the middle of the board');
+  note('checked the Account & Settings width override still has a class to match');
+}
+
+// ⚠ A content harness that hard-codes its pack list goes blind the day a pack
+// goes live. audit-content-coverage.js did exactly that: grades 4-6 x five
+// subjects, written when that was all there was, so from 2026-09-16 it audited
+// 15 of 46 live packs and said nothing about the other 31 - including every NCE
+// pack. docs/nce-grade9/batch_plan.md had it recorded as V-6 and it still
+// survived, because nothing fails when an audit simply does not look.
+function checkAuditsReadTheIndex() {
+  for (const name of ['audit-content-coverage.js', 'audit-difficulty-labels.js',
+                      'test-live-pack-content.js', 'test-subsection-invariant.js']) {
+    const src = read(path.join(ROOT, 'scripts', name));
+    if (!src) { fail(`scripts/${name} is missing — it is one of the harnesses that must audit EVERY live pack`); continue; }
+    if (!src.includes("'_index.js'") && !src.includes('subjects/_index.js'))
+      fail(`scripts/${name} no longer derives its packs from the generated index — `
+        + 'it will silently skip whatever goes live next');
+    const literal = src.match(/for\s*\(\s*const\s+grade\s+of\s*\[[^\]]+\]/);
+    if (literal)
+      fail(`scripts/${name} hard-codes a grade list (${literal[0].slice(0, 40)}…) — `
+        + 'derive the live packs from subjects/_index.js instead');
+  }
+  note('checked the 4 content audits still derive their packs from the live index');
+}
+
 // ── run ───────────────────────────────────────────────────────────────────
 checkHtmlReferences();
 checkServiceWorker();
@@ -306,6 +348,8 @@ checkManifests();
 checkBadgeIds();
 checkSqlSearchPath();
 checkScreenNesting();
+checkSettingsPanelWidth();
+checkAuditsReadTheIndex();
 
 for (const n of notes) console.log('  ok  ' + n);
 if (problems.length) {

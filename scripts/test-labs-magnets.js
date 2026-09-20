@@ -2,13 +2,17 @@
 // Science Labs › Magnets, driven in a real browser.
 //
 // Opens the lab at Grade 4 and Grade 8, then proves:
-//  - Grade 4: start panel visible on mobile; tapping an object animates attract
-//    or bounce; sorting board works; guide runs with "Skip this step →" that
-//    does NOT auto-execute; read-aloud buttons are present; 🔊 on coach and
-//    guide box; discoveries unlock correctly.
-//  - Grade 8: poles attract/repel; iron filings mode toggles; induced mode;
-//    "Skip this step →" works; compass placed; drop event fires.
+//  - Both grades open on an experiment Aim (lab_experiment.js) with no overlay
+//    in the way; "Explore the bench" + experiment.reset() gives the old bench.
+//  - Grade 4: object shelf visible on mobile; tapping an object tests it
+//    (attract or fall) and unlocks discoveries; the sorting board is tappable
+//    (a wrong group gets a card, the right one sorts); a guide glows the
+//    control it wants (.is-next) and tapping it advances; 🔊 on coach and
+//    guide box.
+//  - Grade 8: poles attract/repel; iron filings; distance; compass; induced
+//    mode's touch buttons on the stage; a guide advances by tapping .is-next.
 //  - Both: Calm Mode; 360px phone; no JS errors; Lab opens and unmounts cleanly.
+// The experiments themselves are walked by scripts/test-labs-experiments.js.
 //
 // Run:  CHROME_PATH=<Chrome for Testing> node scripts/test-labs-magnets.js
 // ⚠ Port 9424 (LAB_DBG_PORT overrides). Served over file://.
@@ -93,6 +97,19 @@ function findChrome() {
   const overlay = () => ev(`(() => { const o = document.getElementById('lab-overlay'); if (!o) return null;
     return { cls: o.className, text: o.textContent.replace(/\\s+/g,' ').slice(0,2000), hidden: o.hidden }; })()`);
   const closeOv = () => click('#lab-overlay [data-ov-close]');
+  // A guide step is done by tapping the control that glows - never a skip button.
+  const next = () => ev("(() => { const el = document.querySelector('#labs-root .is-next'); if (!el) return 'no .is-next'; el.click(); return true; })()");
+  const nextIs = () => ev("(() => { const el = document.querySelector('#labs-root .is-next'); return el ? (el.dataset.obj || el.dataset.sortObj || el.dataset.act || el.tagName) : null; })()");
+  // The lab opens on an experiment Aim; Explore + reset gives the bare bench the rest of this file drives.
+  const aimThenExplore = async grade => {
+    const aim = await ev("(() => { const d = LabExperiment._debug(); const t = document.querySelector('#lab-exp-title'); const o = document.getElementById('lab-overlay');"
+      + " return { phase: d.phase, exp: d.exp, title: t ? t.textContent : null, overlay: !!(o && !o.hidden && o.textContent.trim()) }; })()");
+    ok(`Grade ${grade} opens on an experiment Aim, no overlay in the way`, aim.phase === 'aim' && !!aim.exp && !aim.overlay, aim);
+    ok(`Grade ${grade} Aim is a question a child can say back`, /\?$/.test(aim.title || ''), aim.title);
+    await click('[data-exp="explore"]'); await sleep(150);
+    await ev('LabMagnets.experiment.reset(); true'); await sleep(150);
+    ok(`Grade ${grade} Explore shows the bench (exp mode = explore, guide box hidden)`, await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && document.getElementById('lab-guide').hidden"));
+  };
 
   // Navigate to the app
   await call('Page.navigate', { url: PAGE });
@@ -129,10 +146,9 @@ function findChrome() {
   ok('fetches lab_magnets_data.js and lab_magnets.js after lab_core.js',
      /lab_core\.js/.test(labScripts) && /lab_magnets_data\.js/.test(labScripts) && /lab_magnets\.js/.test(labScripts), labScripts);
 
-  // Welcome overlay
-  let ov = await overlay();
-  ok('first visit shows a welcome card', ov && !ov.hidden && ov.text.length > 10, ov);
-  await closeOv();
+  // Experiments first: the Aim IS the welcome
+  ok('Grade 4 lists 3 experiments', await ev('LabMagnets.experiment.list().length') === 3, await ev('LabMagnets.experiment.list().map(e => e.id)'));
+  await aimThenExplore(4);
   ok('intro is remembered', await ev("Labs.store('magnets').intro === true"));
   await ev('LabMagnets._test({ instant: true }); true');
 
@@ -170,12 +186,26 @@ function findChrome() {
   ok('event drag:coin fired', d.events.includes('drag:coin'), d.events);
   ok('discovery copper_not unlocked', await ev("!!(Labs.store('magnets').disc || {}).copper_not"));
 
-  // Sort a tested object
+  ok('tested objects stay in the picture (nail on the magnet, coin on the bench)', d.g4.rest && d.g4.rest.nail && d.g4.rest.nail.type === 'attract' && d.g4.rest.coin && d.g4.rest.coin.type === 'bounce', d.g4.rest);
+  ok('the notebook wrote both tests down', await ev("LabMagnets.experiment.evidence().length") === 2, await ev("LabMagnets.experiment.evidence()"));
+
+  // Sort on the board (tap, never drag)
   console.log('\n-- sorting');
   await must('[data-panel="sandbox"]');
   await sleep(200);
-  const sortRow = await ev("!!document.querySelector('[data-sort-obj]')");
-  ok('sort row appears in sandbox panel after testing', sortRow);
+  const sortRow = await ev("!!document.querySelector('#lab-magnets-sort [data-sort-obj]')");
+  ok('the sorting board on the stage has tappable group buttons', sortRow);
+  await must('[data-sort-obj="nail:nonmagnetic"]');
+  await sleep(200);
+  const wrongOv = await overlay();
+  ok('the wrong group gets a card that explains', wrongOv && !wrongOv.hidden && /Wrong group/.test(wrongOv.text) && /MAGNETIC/.test(wrongOv.text), wrongOv);
+  await closeOv();
+  ok('…and the nail is not sorted', !(await dbg()).g4.sorted.nail);
+  await must('[data-sort-obj="nail:magnetic"]');
+  await sleep(200);
+  d = await dbg();
+  ok('the right group sorts it (sorted.nail = magnetic) and fires sort:nail', d.g4.sorted.nail === 'magnetic' && d.events.includes('sort:nail') && d.events.includes('sort:nail:magnetic'), d);
+  ok('the sorted nail shows in the Magnetic zone', /Iron nail/.test(await ev("document.getElementById('lab-sort-magnetic').textContent")));
 
   // Guide — what_sticks
   console.log('\n-- guided experiment: what_sticks');
@@ -187,25 +217,20 @@ function findChrome() {
   ok('guide box is visible', await ev("!document.getElementById('lab-guide').hidden"));
   const guideText = await ev("document.getElementById('lab-guide').textContent.replace(/\\s+/g, ' ')");
   ok('guide shows step 1 of', /Step 1 of/.test(guideText), guideText);
-  ok('guide has "Skip this step →" button', /Skip this step →/.test(guideText), guideText);
+  ok('guide has a 💡 Hint and no skip button', /Hint/.test(guideText) && !/Skip this step/.test(guideText) && !(await ev("!!document.querySelector('[data-guide-do]')")), guideText);
 
   // Read-aloud in guide box
   ok('🔊 button is in the guide box', await ev("!!document.querySelector('#lab-guide [data-act=\"say-guide\"]')"));
 
-  // The skip button should NOT auto-execute — just advance the step
+  // The step is done by the child tapping the control that glows
   const stepBefore = (await dbg()).guide.step;
-  await must('[data-guide-do]');
-  await sleep(100);
-  const stepAfter = (await dbg()).guide.step;
-  ok('skip button advances step (step before: ' + stepBefore + ', after: ' + stepAfter + ')', stepAfter > stepBefore, { stepBefore, stepAfter });
-  // Student does the action (tap nail while on drag:nail step)
-  d = await dbg();
-  const stepNow = d.guide.step;
-  // The guide might be on step 0 (drag:nail). Let's do it:
-  await must('[data-obj="nail"]');
+  ok('the iron nail glows (.is-next) for step 1', (await nextIs()) === 'nail', await nextIs());
+  const tapped = await next();
   await sleep(200);
   d = await dbg();
-  ok('tapping the object that the guide wants advances the guide step', true); // action fires _guideEvent
+  ok('tapping the glowing control advances the step (' + stepBefore + ' → ' + d.guide.step + ')', tapped === true && d.guide.step === stepBefore + 1, d.guide);
+  ok('the clip glows next', (await nextIs()) === 'clip', await nextIs());
+  ok('a wrong tap does not advance (coin while the clip is wanted)', await (async () => { await must('[data-obj="coin"]'); await sleep(150); return (await dbg()).guide.step === stepBefore + 1; })());
 
   // Tabs: missions
   console.log('\n-- missions tab (Grade 4)');
@@ -252,6 +277,8 @@ function findChrome() {
   ok('Grade 8 controls visible (flip-b, filings, induced)',
      await ev("!!document.querySelector('[data-act=\"flip-b\"]') && !!document.querySelector('[data-act=\"filings\"]') && !!document.querySelector('[data-act=\"induced\"]')"));
   ok('NO read-aloud buttons on Grade 8', !(await ev("!!document.querySelector('[data-act=\"say-coach\"]')")));
+  ok('Grade 8 lists 4 experiments', await ev('LabMagnets.experiment.list().length') === 4, await ev('LabMagnets.experiment.list().map(e => e.id)'));
+  await aimThenExplore(8);
   await ev('LabMagnets._test({ instant: true }); true');
 
   // Flip poles
@@ -313,8 +340,8 @@ function findChrome() {
   d = await dbg();
   ok('induced mode on', d.g8.induced === true, d.g8);
   ok('event induced:on fired', d.events.includes('induced:on'), d.events);
-  const inducedControls = await ev("!!document.querySelector('[data-act=\"touch-nail\"]')");
-  ok('induced mode shows touch-nail button in panel', inducedControls);
+  const inducedControls = await ev("!!document.querySelector('#lab-magnets-g8-controls [data-act=\"touch-nail\"]')");
+  ok('induced mode shows the touch-nail button on the stage, under the picture', inducedControls);
   // Touch nail
   await must('[data-act="touch-nail"]');
   await sleep(100);
@@ -344,23 +371,30 @@ function findChrome() {
   d = await dbg();
   ok('drop:magnet event fired', d.events.includes('drop:magnet'), d.events);
 
-  // Grade 8 guide with "Skip this step →"
+  // Grade 8 guide: the control glows, the tap advances
   console.log('\n-- guided experiment: poles (Grade 8)');
   await must('[data-panel="sandbox"]');
   await sleep(200);
   await must('[data-guide="poles"]');
   await sleep(200);
   d = await dbg();
-  ok('Grade 8 guide poles started', d.guide && d.guide.id === 'poles', d.guide);
+  ok('Grade 8 guide poles started on step 1 with a fresh bench (N faces S)', d.guide && d.guide.id === 'poles' && d.guide.step === 0 && d.g8.poleA === 'N' && d.g8.poleB === 'S', d);
   const g8GuideText = await ev("document.getElementById('lab-guide').textContent.replace(/\\s+/g, ' ')");
-  ok('Grade 8 guide has "Skip this step →"', /Skip this step →/.test(g8GuideText), g8GuideText);
+  ok('Grade 8 guide names its control ("Flip magnet B") and has no skip button', /Flip magnet B/.test(g8GuideText) && !/Skip this step/.test(g8GuideText), g8GuideText);
   ok('Grade 8 guide box has NO read-aloud button', !(await ev("!!document.querySelector('#lab-guide [data-act=\"say-guide\"]')")));
 
-  const g8StepBefore = (await dbg()).guide.step;
-  await must('[data-guide-do]');
-  await sleep(100);
-  const g8StepAfter = (await dbg()).guide.step;
-  ok('Grade 8 skip button advances step (does NOT auto-execute)', g8StepAfter > g8StepBefore, { g8StepBefore, g8StepAfter });
+  ok('the Flip magnet B button glows', (await nextIs()) === 'flip-b', await nextIs());
+  const g8Tapped = await next();
+  await sleep(150);
+  d = await dbg();
+  ok('tapping it flips B (N faces N) and advances to step 2', g8Tapped === true && d.g8.poleB === 'N' && d.guide && d.guide.step === 1, d);
+  ok('step 2 glows Flip magnet B again; step 3 will be Move close', (await nextIs()) === 'flip-b');
+  await next(); await sleep(150);
+  ok('the third step glows the distance button', (await nextIs()) === 'distance', await nextIs());
+  await next(); await sleep(300);
+  const g8Done = await overlay();
+  ok('finishing the guide shows "Experiment complete" with the lesson', g8Done && !g8Done.hidden && /Experiment complete/.test(g8Done.text) && /Unlike poles attract/.test(g8Done.text), g8Done);
+  await closeOv();
 
   // Missions (Grade 8)
   console.log('\n-- missions tab (Grade 8)');

@@ -267,10 +267,10 @@ STATIC_QUESTIONS.push(
     explanation:'The area is <b>6</b> square units.' }),
 
   makeMCQ({ id:'g3mth-geo-044', chapterId:'g3mth-geometry', difficulty:1, subsection:'perimeter_area',
-    question:'A rectangle is 4 cm × 3 cm. What is its area?',
+    question:'A rectangle is drawn on a grid of 1 cm squares. It covers 3 rows with 4 squares in each row. What is its area?',
     options:['12 cm²','14 cm²','7 cm²','10 cm²'], answer:'12 cm²',
-    hint:'Area = length × width.',
-    explanation:'Area = 4 × 3 = <b>12 cm²</b>.' }),
+    hint:'Count the squares: 3 rows of 4.',
+    explanation:'3 rows of 4 squares = 4 + 4 + 4 = <b>12</b> squares, so the area is <b>12 cm²</b>.' }),
 
   makeMCQ({ id:'g3mth-geo-045', chapterId:'g3mth-geometry', difficulty:1, subsection:'perimeter_area',
     question:'Find the perimeter of a square with sides of 7 cm.',
@@ -279,10 +279,10 @@ STATIC_QUESTIONS.push(
     explanation:'4 × 7 = <b>28 cm</b>.' }),
 
   makeMCQ({ id:'g3mth-geo-046', chapterId:'g3mth-geometry', difficulty:2, subsection:'perimeter_area',
-    question:'A rectangle has a length of 6 cm and a width of 4 cm. What is its area?',
+    question:'On a grid of 1 cm squares, a rectangle covers 4 rows with 6 squares in each row. What is its area?',
     options:['24 cm²','20 cm²','10 cm²','12 cm²'], answer:'24 cm²',
-    hint:'Area = 6 × 4.',
-    explanation:'Area = 6 × 4 = <b>24 cm²</b>.' }),
+    hint:'Count the squares: 4 rows of 6.',
+    explanation:'4 rows of 6 squares = <b>24</b> squares, so the area is <b>24 cm²</b>.' }),
 
   makeMCQ({ id:'g3mth-geo-047', chapterId:'g3mth-geometry', difficulty:2, subsection:'perimeter_area',
     question:'Rani\'s garden is a square with each side 9 m. What is the perimeter?',
@@ -297,10 +297,10 @@ STATIC_QUESTIONS.push(
     explanation:'20 = 2 × (6 + w) → 10 = 6 + w → w = <b>4 cm</b>.' }),
 
   makeMCQ({ id:'g3mth-geo-049', chapterId:'g3mth-geometry', difficulty:2, subsection:'perimeter_area',
-    question:'A rectangle is 10 cm long and 5 cm wide. What is its area?',
-    options:['50 cm²','30 cm²','15 cm²','25 cm²'], answer:'50 cm²',
-    hint:'Area = 10 × 5.',
-    explanation:'Area = 10 × 5 = <b>50 cm²</b>.' }),
+    question:'A rectangle on a grid of 1 cm squares has an area of 50 cm². It covers 5 equal rows. How many squares are in each row?',
+    options:['10','5','15','25'], answer:'10',
+    hint:'50 squares shared between 5 rows.',
+    explanation:'50 squares ÷ 5 rows = <b>10</b> squares in each row.' }),
 
   makeMCQ({ id:'g3mth-geo-050', chapterId:'g3mth-geometry', difficulty:2, subsection:'perimeter_area',
     question:'Dev counts 15 squares in a shape on a grid. What is the area of the shape?',
@@ -315,28 +315,28 @@ STATIC_QUESTIONS.push(
     explanation:'2 × (100 + 60) = 2 × 160 = <b>320 m</b>.' }),
 
   makeMCQ({ id:'g3mth-geo-052', chapterId:'g3mth-geometry', difficulty:2, subsection:'perimeter_area',
-    question:'A square has an area of 36 cm². What is the length of one side?',
-    options:['6 cm','9 cm','4 cm','12 cm'], answer:'6 cm',
-    hint:'Which number × itself = 36?',
-    explanation:'6 × 6 = 36, so each side is <b>6 cm</b>.' }),
+    question:'A shape on a grid covers 9 whole squares and 2 half squares. What is its area?',
+    options:['10 square units','9 square units','11 square units','13 square units'], answer:'10 square units',
+    hint:'Two half squares make one whole square.',
+    explanation:'The 2 half squares join to make 1 whole square. 9 + 1 = <b>10</b> square units.' }),
 
   makeMCQ({ id:'g3mth-geo-053', chapterId:'g3mth-geometry', difficulty:3, subsection:'perimeter_area',
-    question:'Nadia draws a rectangle with perimeter 28 m and width 4 m. What is the area?',
-    options:['40 m²','56 m²','28 m²','20 m²'], answer:'40 m²',
-    hint:'Perimeter 28 = 2×(l+4), so l=10. Area = 10 × 4.',
-    explanation:'28 = 2×(l+4) → 14 = l+4 → l=10. Area = 10 × 4 = <b>40 m²</b>.' }),
+    question:'Nadia draws a rectangle with a perimeter of 28 m. It is 4 m wide. How long is it?',
+    options:['10 m','24 m','14 m','12 m'], answer:'10 m',
+    hint:'Half the perimeter is one length plus one width: 28 ÷ 2 = 14.',
+    explanation:'Half of 28 is 14, and that is one length plus one width. 14 − 4 = <b>10 m</b> long.' }),
 
   makeMCQ({ id:'g3mth-geo-054', chapterId:'g3mth-geometry', difficulty:2, subsection:'perimeter_area',
-    question:'Which has a larger area: a rectangle 5 cm × 6 cm or a square with sides 5 cm?',
-    options:['rectangle (5 × 6)','square (5 × 5)','They are equal','Cannot tell'], answer:'rectangle (5 × 6)',
-    hint:'Rectangle: 5×6=30 cm². Square: 5×5=25 cm².',
-    explanation:'30 cm² > 25 cm², so the <b>rectangle</b> has a larger area.' }),
+    question:'On a grid, shape A covers 5 rows of 6 squares. Shape B covers 5 rows of 5 squares. Which has the larger area?',
+    options:['Shape A','Shape B','They are equal','Cannot tell'], answer:'Shape A',
+    hint:'Count the squares in each: 5 rows of 6, and 5 rows of 5.',
+    explanation:'Shape A covers 30 squares and shape B covers 25 squares, so <b>shape A</b> has the larger area.' }),
 
   makeMCQ({ id:'g3mth-geo-055', chapterId:'g3mth-geometry', difficulty:2, subsection:'perimeter_area',
-    question:'Priya tiles a floor with 8 × 5 cm square tiles. How many tiles cover a 40 cm × 20 cm floor?',
-    options:['20','10','40','16'], answer:'20',
-    hint:'Area of floor = 40 × 20 = 800 cm². Area of each tile = 8 × 5 = 40 cm². 800 ÷ 40 = ?',
-    explanation:'Floor = 800 cm². Tile = 40 cm². 800 ÷ 40 = <b>20</b> tiles.' })
+    question:'Priya covers a floor with square tiles. The floor fits 8 tiles across and 5 tiles down. How many tiles does she need?',
+    options:['40','13','26','45'], answer:'40',
+    hint:'Count the tiles: 5 rows of 8.',
+    explanation:'5 rows of 8 tiles = 8 × 5 = <b>40</b> tiles.' })
 );
 
 })();

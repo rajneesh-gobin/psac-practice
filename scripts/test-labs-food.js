@@ -62,6 +62,9 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     return r.result.value;
   };
   const click = sel => ev(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el) return 'missing: ' + ${JSON.stringify(sel)}; el.click(); return true; })()`);
+  // A guide advances on the bench action it asks for - there is no button that
+  // does the step. The test taps what glows, as a child would.
+  const next = () => must('.is-next');
   const must = async sel => { const r = await click(sel); if (r !== true) ok('clicked ' + sel, false, r); return r; };
   const dbg = () => ev('LabFood._debug()');
   const tick = s => ev(`LabFood._tick(${s}); true`);
@@ -99,17 +102,23 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   for (let i = 0; i < 60 && !open; i++) { await sleep(200); open = await ev("!!window.LabFood && !!document.querySelector('#labs-root .lab-food')"); }
   ok('Labs.openLab("food") loads the bench and it renders', open);
   const labScripts = await ev("[...document.scripts].map(s => s.src).filter(s => /engine\\/labs\\//.test(s)).map(s => s.split('/').pop()).join()");
-  ok('it fetches its own data and bench files, after the shell', labScripts === 'lab_core.js,lab_food_data.js,lab_food.js', labScripts);
+  ok('it fetches its own data and bench files, after the shell', /lab_core\.js,lab_food_data\.js,lab_food\.js$/.test(labScripts), labScripts);
   await sleep(500);
   ok('lab_food.css is linked and styles the bench',
      await ev("!!document.querySelector('link[data-lab-css=\"food\"]') && getComputedStyle(document.querySelector('.lab-food-slots')).display === 'grid'"));
   ok('Labs.grade() is 8 (the row is registered for Grade 8) and the bench runs at Grade 8',
      (await ev('Labs.grade()')) === 8 && (await dbg()).grade === 8);
   ok('the eyebrow says “Science · Grade 8”', (await ev("document.querySelector('.lab-eyebrow').textContent")) === 'Science · Grade 8');
+  // Since 2026-09-19 the first screen is an experiment's Aim
+  // (lab_experiment.js); the old bench sits behind "Explore the bench freely".
   let ov = await overlay();
-  ok('first visit shows the welcome card with “Show me how”', ov && /Welcome to Food Tests/.test(ov.text) && /Show me how/.test(ov.text), ov);
-  await closeOv();
-  ok('the welcome is remembered', await ev("Labs.store('food').intro === true"));
+  ok('first visit opens on an experiment Aim, with no welcome card in the way', !ov && await ev("!!document.querySelector('#lab-exp') && LabExperiment._debug().phase === 'aim'"), ov);
+  ok('the welcome is marked seen', await ev("Labs.store('food').intro === true"));
+  await click('[data-exp="explore"]');
+  ok('"Explore the bench freely" shows the old bench', await ev("document.getElementById('labs-root').dataset.expMode === 'explore' && getComputedStyle(document.querySelector('.lab-start')).display !== 'none'"));
+  // Explore keeps whatever the experiment set up (that is the point of it);
+  // these checks assume a clean rack, goggles off.
+  await ev('LabFood.experiment.reset(); true');
   await ev('LabFood._test({ instant: true }); true');
 
   // ── The start panel ─────────────────────────────
@@ -130,18 +139,18 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
     start: !!document.querySelector('.lab-start') })`);
   let g = await gs();
   ok('step 1 asks for goggles, and the goggles glow', !g.hidden && /Step 1 of 8/.test(g.text) && g.next === 'lab-goggles' && !g.start, g);
-  await must('[data-guide-do]');
+  await next();
   g = await gs();
   ok('tube 1 is already chosen, so the guide skips to the glucose, which glows on the shelf', /Step 3 of 8/.test(g.text) && g.next === 'food:glucose', g);
   await food('glucose');
   g = await gs();
   ok('tapping the glowing shelf item itself moves the guide on: Benedict’s glows next', g.next === 'test:benedicts', g);
-  await must('[data-guide-do]');
+  await next();
   g = await gs();
-  ok('then the water bath glows', g.next === 'lab-food-bath' &&/never heat it in the flame/i.test(g.text), g);
-  await must('[data-guide-do]');
+  ok('then the water bath glows', g.next === 'lab-food-bath' && /never heat/i.test(g.text), g);
+  await next();
   let d = await dbg();
-  ok('the tube is in the bath and the burner is lit', d.slots[0].bath && d.burner && /Keep watching/.test((await gs()).text), d);
+  ok('the tube is in the bath and the burner is lit', d.slots[0].bath && d.burner && /watch|heat/i.test((await gs()).text), d);
   const seen = [];
   for (let i = 0; i < 40 && !d.slots[0].finished; i++) { await tick(0.25); d = await dbg(); if (!seen.includes(d.slots[0].word)) seen.push(d.slots[0].word); }
   ok(`as it heats, Benedict’s climbs the ladder: ${seen.join(' → ')}`, seen.join() === 'blue,green,yellow,orange,brick-red', seen);
@@ -149,8 +158,8 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
   ok('the chip over the rack says the colour in words', /brick-red/.test(await ev("document.getElementById('lab-food-now').textContent")));
   g = await gs();
   ok('the guide asks to read it; Read result glows', g.next === 'read', g);
-  await must('[data-guide-do]');
-  await must('[data-guide-do]');
+  await next();
+  await next();
   ov = await overlay();
   d = await dbg();
   ok('read, burner off - “Experiment complete” with “What you found out”', !d.burner && ov && /Experiment complete/.test(ov.text) && /What you found out/.test(ov.text), ov);
@@ -285,7 +294,7 @@ const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' 
       for (let k = 0; k < 240 && LabFood._debug().guide; k++) {
         const ov = document.getElementById('lab-overlay');
         if (ov) { const b = ov.querySelector('[data-ov-close]'); if (b) b.click(); else ov.remove(); continue; }
-        const btn = document.querySelector('#lab-guide [data-guide-do]');
+        const btn = document.querySelector('.is-next');
         if (btn) btn.click();
         LabFood._tick(0.5);
       }

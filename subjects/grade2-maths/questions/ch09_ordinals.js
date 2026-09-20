@@ -384,10 +384,10 @@ STATIC_QUESTIONS.push(
     explanation:'After 11th (eleventh) comes 12th (<b>twelfth</b>).' }),
 
   makeMCQ({ id:'g2mth-ord-064', chapterId:'g2mth-ordinals', difficulty:1, subsection:'positions_7_12',
-    question:'How do you write "twelfth" as a numeral?',
-    options:['12th','11th','10th','13th'], answer:'12th',
-    hint:'Twelfth = 12th.',
-    explanation:'Twelfth = <b>12th</b>.' }),
+    question:'How do you write "ninth" as a numeral?',
+    options:['9th','8th','10th','11th'], answer:'9th',
+    hint:'Ninth = 9th.',
+    explanation:'Ninth = <b>9th</b>.' }),
 
   makeTF({ id:'g2mth-ord-065', chapterId:'g2mth-ordinals', difficulty:2, subsection:'positions_7_12',
     question:'The 7th month of the year is August.',

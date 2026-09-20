@@ -67,7 +67,7 @@
           a + b, 'Add the two days.',
           `${a} + ${b} = <b>${a + b}</b>.`, 2);
       } else if (s === 1) {
-        const a = 18 + n * 2, b = 15 + n, target = 60 + n * 5;
+        const a = 18 + n * 2, b = 15 + n, target = 60 + n * 4;
         add('g2mth-addition', 'addition_problems', 'add', n,
           `A class collects <b>${a}</b> tins, then <b>${b}</b> more. They want <b>${target}</b> tins. How many more are still needed?`,
           target - a - b, 'Add what they have, then see how far off the target it is.',

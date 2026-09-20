@@ -275,7 +275,7 @@ papers inherits whatever those years happened to omit.
 | V-3 | Option-length debt, Grades 4–6 — 8 packs, `grade4-french` next at 74 flagged | The other session is working these. Coordinate. |
 | V-4 | `LOCAL_FILES` sweep | ✅ **DONE and automated** — `node scripts/sync-local-files.js [--write]`. Append-only, because a name in the map with no file on disk is a deleted question file and that is a person's decision. `scripts/check.js` already fails on a missing entry, so it cannot ship stale. |
 | V-5 | **Decide which visual-share number the paper should print** | New, from §6a. Two numbers disagree for the same paper and one is printed on the cover. |
-| V-6 | **`audit-content-coverage.js` does not look at Grade 9 at all** | Found by the Chemistry batch: nothing would have reported these subsections as thin. It is the tool that calls a declared subsection under 20 "a permanent gap", and it is blind to eight live packs. |
+| V-6 | **`audit-content-coverage.js` does not look at Grade 9 at all** | ✅ **DONE 2026-09-19.** It derived its packs from `for (grade of [4,5,6]) for (subject of [english, french, history, maths, science])` — 15 of 46 live packs, so every NCE pack and every Grade 1–3 pack was invisible to it. It now reads the generated index like `test-live-pack-content.js` and `test-subsection-invariant.js`, prints a corpus total, and **names** undeclared tags instead of only counting them. First full run: **908 of 1,761 declared subsections below 20 (52%), 9,378 questions to reach the floor, 0 empty, 0 undeclared.** Worst: `grade9-social-modern-studies` 67/67 (+899), `grade7-maths` 66/72 (+740), `grade7-science` 43/43, `grade8-science` 39/39. |
 
 ---
 
