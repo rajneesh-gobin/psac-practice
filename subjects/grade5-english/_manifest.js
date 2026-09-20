@@ -52,6 +52,7 @@ const G5ENG_SYLLABUS = {
     { id:'authors_view',    name:'The Writer\'s Purpose & Tone' },  // 2
     { id:'inference',       name:'Reading Between the Lines' },  // 4
     { id:'retrieval',       name:'Finding the Answer in the Text' },  // 17
+    { id:'text_features',   name:'Text Features' },
   ]},
   'eng-writing': { subsections: [
     { id:'planning',        name:'Planning & Structure' },  // 18

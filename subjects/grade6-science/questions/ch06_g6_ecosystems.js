@@ -166,6 +166,13 @@ STATIC_QUESTIONS.push(
     options:['Evaporation','Condensation','Precipitation','Transpiration'],
     answer:'Condensation',
     hint:'Water vapour rising into the cooler upper atmosphere changes from gas to liquid droplets.',
-    explanation:'<b>Condensation</b> is the process by which water vapour cools and changes back into tiny liquid water droplets - forming clouds. The PSAC 2025 Q8a tested all four water cycle terms: <b>evaporation</b> (liquid→gas, from water bodies), <b>condensation</b> (gas→liquid droplets, forming clouds), <b>precipitation</b> (rain/snow falling), and the overall <b>water cycle</b>. Transpiration (water vapour released by plant leaves) also contributes water vapour to the atmosphere.' })
+    explanation:'<b>Condensation</b> is the process by which water vapour cools and changes back into tiny liquid water droplets - forming clouds. The PSAC 2025 Q8a tested all four water cycle terms: <b>evaporation</b> (liquid→gas, from water bodies), <b>condensation</b> (gas→liquid droplets, forming clouds), <b>precipitation</b> (rain/snow falling), and the overall <b>water cycle</b>. Transpiration (water vapour released by plant leaves) also contributes water vapour to the atmosphere.' }),
+
+  // Legacy ID deliberately preserved: progress and the report trail key on it.
+  makeMCQ({ id:'g3ssee-env-039', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:1,
+    question:'Which action is HARMFUL to the coral reef around Mauritius?',
+    options:['Throwing plastic into the sea','Snorkelling without touching','Using a reef-safe sunscreen','Watching fish from a distance'],
+    answer:'Throwing plastic into the sea',
+    explanation:'Throwing plastic into the sea harms the coral reef and the animals that live in it. Snorkelling carefully, using reef-safe sunscreen and watching from a distance do not damage the reef.' })
 
 );

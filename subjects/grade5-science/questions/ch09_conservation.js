@@ -217,6 +217,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Design the hotel away from the nesting areas and protect the turtles',
     hint:'Sustainable development = meeting TODAY\'s needs without destroying nature for FUTURE generations.',
-    explanation:'<b>Sustainable development</b> means meeting the needs of people today without permanently damaging the environment for future generations. The balanced solution earns <b>tourism income</b> for the village while <b>preserving turtle nesting sites</b>. Moving turtles to a zoo removes them from their natural habitat. Doing nothing ignores real human needs. Only careful planning - hotel positioned away from nests, combined with a protection programme - achieves both goals. This is the core principle of sustainable, conservation-friendly development.' })
+    explanation:'<b>Sustainable development</b> means meeting the needs of people today without permanently damaging the environment for future generations. The balanced solution earns <b>tourism income</b> for the village while <b>preserving turtle nesting sites</b>. Moving turtles to a zoo removes them from their natural habitat. Doing nothing ignores real human needs. Only careful planning - hotel positioned away from nests, combined with a protection programme - achieves both goals. This is the core principle of sustainable, conservation-friendly development.' }),
+
+  // Legacy ID deliberately preserved: progress and imports key on it.
+  makeMCQ({ id:'g3ssee-env-044', chapterId:'conservation', subsection:'recycling', difficulty:1,
+    question:'Which of these would you find in a COMPOST bin?',
+    options:['Fruit and vegetable peels','Old batteries and wires','Glass bottles and jars','Plastic bags and straws'],
+    answer:'Fruit and vegetable peels',
+    hint:'Compost is made from natural food waste.',
+    explanation:'Fruit and vegetable peels rot down in a compost bin and become natural fertiliser for plants. Batteries, glass and plastic do not rot and must never go into compost.' })
 
 );

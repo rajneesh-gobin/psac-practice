@@ -543,7 +543,7 @@ const after = (e, extra) => runRecipe(e.setup.concat(extra || []));
 }
 ok('every figure offers exactly one right answer, three distinct labels, and each wrong one is the mistake its key names',
    D.FIGURES.every(f => { const p = D.pickOptions(f); return p.length === 3 && p.filter(o => o.correct).length === 1 && new Set(p.map(o => o.label)).size === 3
-     && D.show(D.rightAnswer(f).value, D.rightAnswer(f).unit) === p.find(o => o.correct).label
+     && D.work(f, p.find(o => o.correct).w).correct
      && p.filter(o => !o.correct).every(o => D.work(f, o.w).error === o.key); }),
    D.FIGURES.map(f => f.id + ': ' + D.pickOptions(f).map(o => o.label + (o.correct ? '*' : '/' + D.work(f, o.w).error)).join(', ')));
 

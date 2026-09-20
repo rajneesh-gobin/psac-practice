@@ -639,12 +639,10 @@ const quit = code => {
     ok('Grade 7: the board opens at Grade 7', (await dbg()).grade === 7);
     const want = await ev(`({ guides: LabCircuitData.forGrade(LabCircuitData.GUIDES, 7).map(x => x.id), missions: LabCircuitData.forGrade(LabCircuitData.MISSIONS, 7).map(x => x.id),
       discs: LabCircuitData.forGrade(LabCircuitData.DISCOVERIES, 7).map(x => x.id) })`);
-    ov = await overlay();
-    ok('Grade 7: its own first-visit welcome (symbols, meters, safety), whose “Show me how” starts its own first guide',
-       ov && /Welcome to the Circuit Board/.test(ov.text) && /Read the symbols/.test(ov.text) && /voltmeter goes ACROSS/.test(ov.text) && !/Test things/.test(ov.text)
-       && await ev(`!!document.querySelector('#lab-overlay [data-guide="${want.guides[0]}"]')`), ov && ov.text.slice(0, 300));
-    await closeOv();
-    ok('Grade 7: the welcome is remembered for Grade 7 only', await ev("Labs.store('circuit').intro7 === true"));
+    ok('Grade 7: opens on its first experiment’s Aim, not the retired welcome screen',
+       await ev("LabExperiment._debug().phase === 'aim' && LabExperiment._debug().exp === 'g7_diagram' && !!document.querySelector('#lab-exp') && !document.getElementById('lab-overlay')"));
+    await click('[data-exp="explore"]');
+    await ev('LabCircuit.experiment.reset(); true');
     ok('Grade 7: the eyebrow says “Science · Grade 7”', (await ev("document.querySelector('.lab-circuit .lab-eyebrow').textContent")) === 'Science · Grade 7');
     ok('Grade 7: every component with its picture AND its symbol, the ✏️ view, 📝 Take a reading and the ⚠️ row - no things-to-test, no 🔊',
        await ev(`document.querySelectorAll('.lab-circuit-kind').length === 8 && [...document.querySelectorAll('.lab-circuit-kind')].every(b => b.querySelector('svg'))

@@ -4324,9 +4324,12 @@ html.dark select optgroup {
 .asyl-ch-prose { font-size:.86rem; line-height:1.6; white-space:pre-wrap; overflow-wrap:anywhere; }
 .asyl-empty { color:#475569; font-style:italic; }
 .asyl-note { font-size:.85rem; color:#475569; padding:.75rem 0; }
+.asyl-weight-note { display:grid; gap:.3rem; margin:1rem 0 .25rem; padding:.85rem 1rem; border:1px solid #a5b4fc; border-radius:.9rem; background:#eef2ff; color:#312e81; font-size:.84rem; line-height:1.45; }
+.asyl-weight-note strong { font-size:.88rem; }
 .dark .asyl-head, .dark .asyl-ch { color:#f1f5f9; }
 .dark .asyl-ch { background:#273449; border-color:#52647e; }
 .dark .asyl-head p, .dark .asyl-ch-meta, .dark .asyl-note { color:#cbd5e1; }
+.dark .asyl-weight-note { background:#312e5f; border-color:#6366f1; color:#e0e7ff; }
 .dark .asyl-head .asyl-src, .dark .asyl-empty { color:#a8b6c8; }
 @media (max-width:420px) { .asyl-controls { grid-template-columns:minmax(0,1fr); } }
 .coach-card { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; padding:1.25rem; margin:1rem 0; border:1px solid #a5b4fc; border-radius:1.25rem; background:linear-gradient(120deg,#eef2ff,#f0fdfa); color:#1e293b; }
@@ -7129,6 +7132,25 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
 /* Class calendar rows share the worksheet card; the left edge says what kind of date it is. */
 .tc-ev-card { border-left: 4px solid #a78bfa; }
 .tc-ev-exam { border-left-color: #f87171; } .tc-ev-due { border-left-color: #fbbf24; } .tc-ev-absent { border-left-color: #9ca3af; } .tc-ev-hw { border-left-color: #c4b5fd; } .tc-ev-ws { border-left-color: #5eead4; }
+
+/* A real month view makes the classroom's dates scannable at a glance. The
+   list below it is kept for the fuller descriptions and delete controls. */
+.tc-class-calendar { margin: 0 0 1rem; border: 1px solid rgba(240,236,220,.2); border-radius: .85rem; overflow: hidden; background: rgba(0,0,0,.12); }
+.tc-class-calendar-bar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .65rem .75rem; background: rgba(255,255,255,.06); }
+.tc-class-calendar-bar > div { display: flex; gap: .35rem; }
+.tc-class-calendar-weekdays, .tc-class-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.tc-class-calendar-weekdays { border-bottom: 1px solid rgba(240,236,220,.14); color: rgba(240,236,220,.62); font-size: .72rem; font-weight: 700; text-align: center; }
+.tc-class-calendar-weekdays span { padding: .38rem .15rem; }
+.tc-class-calendar-day { min-height: 96px; padding: .32rem; border-right: 1px solid rgba(240,236,220,.1); border-bottom: 1px solid rgba(240,236,220,.1); overflow: hidden; }
+.tc-class-calendar-day:nth-child(7n) { border-right: 0; }
+.tc-class-calendar-outside { background: rgba(0,0,0,.14); color: rgba(240,236,220,.35); }
+.tc-class-calendar-today { background: rgba(244,206,82,.14); box-shadow: inset 0 0 0 1px rgba(244,206,82,.7); }
+.tc-class-calendar-number { display: block; margin-bottom: .2rem; font-size: .78rem; font-weight: 800; }
+.tc-class-calendar-items { display: flex; flex-direction: column; gap: 2px; }
+.tc-class-calendar-item, .tc-class-calendar-more { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px; padding: 2px 3px; font-size: .66rem; line-height: 1.25; background: rgba(167,139,250,.18); }
+.tc-class-calendar-exam { background: rgba(248,113,113,.2); }.tc-class-calendar-due { background: rgba(251,191,36,.2); }.tc-class-calendar-absent { background: rgba(156,163,175,.2); }.tc-class-calendar-homework { background: rgba(196,181,253,.2); }.tc-class-calendar-worksheet { background: rgba(94,234,212,.17); }
+.tc-class-calendar-key { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin: 0; padding: .5rem .75rem; color: rgba(240,236,220,.66); font-size: .75rem; }
+@media (max-width: 620px) { .tc-class-calendar { overflow-x: auto; } .tc-class-calendar-bar, .tc-class-calendar-weekdays, .tc-class-calendar-grid, .tc-class-calendar-key { min-width: 560px; } .tc-class-calendar-day { min-height: 82px; } }
 
 /* ── Tip box - sticky-note yellow (matches teacher home) ─────────── */
 .tc-cd-tip {

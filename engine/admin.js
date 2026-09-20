@@ -132,9 +132,18 @@ const AdminPanel = (() => {
         <p class="asyl-src">${_esc(pack.curriculum || '')}${pack._src ? ` · ${_esc(pack._src)}` : ''}</p>
       </div>`;
 
-      body.innerHTML = head + (chs.length
+      const chapters = chs.length
         ? chs.map(_chapterHtml).join('')
-        : '<p class="asyl-note">This pack has no chapters.</p>');
+        : '<p class="asyl-note">This pack has no chapters.</p>';
+      // We show the raw number beside each chapter. Explain it once, after the
+      // list, so it does not look like a difficulty level or question mark.
+      const weightNote = chs.some(ch => ch.examWeight != null)
+        ? `<aside class="asyl-weight-note" aria-label="About chapter weights">
+            <strong>What does “weight” mean?</strong>
+            <span>A higher weight means this chapter is chosen more often in mock exams and weighted study plans. It does <b>not</b> mean the topic is harder or that one question is worth more marks.</span>
+          </aside>`
+        : '';
+      body.innerHTML = head + chapters + weightNote;
     }
 
     return { open, gradeChange, show };
@@ -3804,7 +3813,15 @@ const AdminPanel = (() => {
   const _REPORT_STATUS_WORD = { resolved: 'Marked resolved.', wont_fix: 'Closed as not a problem.', open: 'Reopened.', in_review: 'Marked in review.' };
 
   async function _afterReportAction() {
-    await Promise.all([loadReports(), _loadReportBadge(), _loadPendingReports()]);
+    await Promise.all([
+      loadReports(),
+      _loadReportBadge(),
+      _loadPendingReports(),
+      // The header Admin badge is maintained by Auth, not this tab's badge.
+      // Refresh both after a report changes so a resolved item disappears
+      // immediately instead of waiting for a reload or a fresh sign-in.
+      typeof Auth !== 'undefined' && Auth.refreshAdminBadge ? Auth.refreshAdminBadge() : Promise.resolve(),
+    ]);
   }
 
   async function resolveReport(id) {
@@ -3829,11 +3846,7 @@ const AdminPanel = (() => {
           return;
         }
         toast('Report and its conversation deleted.', 2200);
-        await Promise.all([
-          loadReports(),
-          _loadReportBadge(),
-          _loadPendingReports(),
-        ]);
+        await _afterReportAction();
       },
       { icon: '🗑️', okLabel: 'Delete report', danger: true }
     );

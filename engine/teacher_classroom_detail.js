@@ -26,6 +26,10 @@ const TeacherClassroomDetail = (() => {
   // days away, other events. Per classroom, never per teacher.
   let _events = [];
   let _eventsError = '';
+  // The month the teacher is looking at. This is presentation state only: it
+  // resets when another classroom opens, so one class never opens on another
+  // class's old month.
+  let _calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   let _physicalHomework = [];
   let _materials = [];
   // Per-material completion claims for the open classroom: { expected, materials }.
@@ -111,6 +115,7 @@ const TeacherClassroomDetail = (() => {
     _classGrade = null;
     _physicalHomework = [];
     _events = []; _eventsError = '';
+    _calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     _materials = [];
     _matSource = 'file';
     _libCode = null;
@@ -1873,6 +1878,69 @@ const TeacherClassroomDetail = (() => {
       </div>`;
   }
 
+  function _calendarDateKey(value) {
+    // Dates from the database may be a date-only value or an ISO timestamp.
+    // Keep date-only values intact so a deadline cannot move a day because of
+    // a browser timezone conversion.
+    if (/^\d{4}-\d{2}-\d{2}/.test(String(value || ''))) return String(value).slice(0, 10);
+    const d = new Date(value);
+    return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function _calendarEntries() {
+    const byDay = new Map();
+    const add = (date, entry) => {
+      if (!date) return;
+      const items = byDay.get(date) || [];
+      items.push(entry);
+      byDay.set(date, items);
+    };
+    _events.forEach(e => {
+      const start = _calendarDateKey(e.date), end = _calendarDateKey(e.end_date || e.date);
+      if (!start || !end) return;
+      // An away period can cover several days. The cap protects rendering if a
+      // malformed event has an unexpectedly large date range.
+      const cursor = new Date(start + 'T12:00:00'), last = new Date(end + 'T12:00:00');
+      for (let count = 0; cursor <= last && count < 370; count++, cursor.setDate(cursor.getDate() + 1)) {
+        add(_calendarDateKey(cursor), { kind: e.kind || 'event', icon: (EVENT_KIND[e.kind] || EVENT_KIND.event).icon, title: e.title || 'Class event' });
+      }
+    });
+    (_assignments || []).filter(a => !a.archived).forEach(a => add(_calendarDateKey(a.due_at || a.expires_at), { kind: 'homework', icon: '⏰', title: a.title || 'Homework due' }));
+    (_physicalHomework || []).forEach(w => add(_calendarDateKey(w.expires_at), { kind: 'worksheet', icon: '📄', title: w.title || 'Worksheet due' }));
+    return byDay;
+  }
+
+  function _calendarGrid() {
+    const month = _calendarMonth;
+    const year = month.getFullYear(), monthNo = month.getMonth();
+    const first = new Date(year, monthNo, 1);
+    const start = new Date(year, monthNo, 1 - ((first.getDay() + 6) % 7)); // Monday first
+    const today = _todayKey(), entries = _calendarEntries();
+    const cells = Array.from({ length: 42 }, (_, i) => {
+      const d = new Date(start); d.setDate(start.getDate() + i);
+      const key = _calendarDateKey(d), items = entries.get(key) || [];
+      const outside = d.getMonth() !== monthNo;
+      return `<div class="tc-class-calendar-day${outside ? ' tc-class-calendar-outside' : ''}${key === today ? ' tc-class-calendar-today' : ''}">
+        <span class="tc-class-calendar-number">${d.getDate()}</span>
+        <div class="tc-class-calendar-items">${items.slice(0, 3).map(item => `<span class="tc-class-calendar-item tc-class-calendar-${esc(item.kind)}" title="${esc(item.title)}">${item.icon} ${esc(item.title)}</span>`).join('')}${items.length > 3 ? `<span class="tc-class-calendar-more">+${items.length - 3} more</span>` : ''}</div>
+      </div>`;
+    }).join('');
+    return `<section class="tc-class-calendar" aria-label="${esc(month.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }))} class calendar">
+      <div class="tc-class-calendar-bar">
+        <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.calendarPrevious()" aria-label="Previous month">←</button>
+        <strong>${esc(month.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }))}</strong>
+        <div><button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.calendarToday()">Today</button><button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.calendarNext()" aria-label="Next month">→</button></div>
+      </div>
+      <div class="tc-class-calendar-weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+      <div class="tc-class-calendar-grid">${cells}</div>
+      <p class="tc-class-calendar-key"><span>📝 Test / event</span><span>⏰ Activity due</span><span>📄 Worksheet due</span></p>
+    </section>`;
+  }
+
+  function calendarPrevious() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() - 1, 1); _renderCalendar(); }
+  function calendarNext() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() + 1, 1); _renderCalendar(); }
+  function calendarToday() { _calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); _renderCalendar(); }
+
   function _renderCalendar() {
     const box = el('tc-cd-calendar');
     if (!box) return;
@@ -1895,6 +1963,7 @@ const TeacherClassroomDetail = (() => {
         <h3 class="tc-cd-section-title">🗓️ Class calendar</h3>
       </div>
       <p class="tc-cd-hint">Exams, hand-in dates, days you are away, and anything else the class should know. Pupils see it on the class page behind their PIN, next to their homework dates.</p>
+      ${_calendarGrid()}
       <div class="tc-cd-upload-panel" id="tc-cd-ev-form">
         <div class="tc-cd-upload-row">
           <select id="tc-cd-ev-kind" class="tc-cd-input" style="flex:2" onchange="TeacherClassroomDetail.setEventKind()" aria-label="What kind of date">
@@ -2325,7 +2394,7 @@ const TeacherClassroomDetail = (() => {
     uploadMaterial, _onMatFileChosen, setMaterialSort, setMatSource, shareMaterial, copyFileLink, openFile, deleteFile,
     createLibraryLink, shareLibraryLink, copyLibraryLink, rotateLibraryLink, disableLibraryLink,
     shareToClass,
-    addEvent, deleteEvent, setEventKind, setPhwDue,
+    addEvent, deleteEvent, setEventKind, setPhwDue, calendarPrevious, calendarNext, calendarToday,
     saveName, saveGrade, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
     openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },

@@ -254,12 +254,6 @@ STATIC_QUESTIONS.push(
     hint:'The prefix "re-" means again.',
     explanation:'To <b>recycle</b> means to collect used materials — paper, glass or plastic — and turn them into new products instead of throwing them away.'}),
 
-  makeMCQ({ id:'g3ssee-env-039', chapterId:'g3ssee-environment', difficulty:1, subsection:'caring_environment',
-    question:'Which action is HARMFUL to the coral reef around Mauritius?',
-    options:['Throwing plastic into the sea','Snorkelling without touching','Using a reef-safe sunscreen','Watching fish from a distance'],
-    answer:'Throwing plastic into the sea',
-    explanation:'Throwing plastic into the sea harms the coral reef and the animals that live in it. Snorkelling carefully, using reef-safe sunscreen and watching from a distance do not damage the reef.'}),
-
   makeMCQ({ id:'g3ssee-env-040', chapterId:'g3ssee-environment', difficulty:2, subsection:'caring_environment',
     question:'What is the 3R rule for protecting the environment?',
     options:['Reduce, Reuse, Recycle','Read, Repeat, Remember','Remove, Replace, Repair','Run, Rest, Relax'],
@@ -284,13 +278,6 @@ STATIC_QUESTIONS.push(
     answer:'It releases harmful gases',
     hint:'Think about what happens when plastic burns.',
     explanation:'Burning plastic releases <b>toxic gases</b> that pollute the air and harm the health of people and animals. It does not improve the soil, help plants or clean water.'}),
-
-  makeMCQ({ id:'g3ssee-env-044', chapterId:'g3ssee-environment', difficulty:1, subsection:'caring_environment',
-    question:'Which of these would you find in a COMPOST bin?',
-    options:['Fruit and vegetable peels','Old batteries and wires','Glass bottles and jars','Plastic bags and straws'],
-    answer:'Fruit and vegetable peels',
-    hint:'Compost is made from natural food waste.',
-    explanation:'Fruit and vegetable peels rot down in a compost bin and become natural fertiliser for plants. Batteries, glass and plastic do not rot and must never go into compost.'}),
 
   makeMCQ({ id:'g3ssee-env-045', chapterId:'g3ssee-environment', difficulty:3, subsection:'caring_environment',
     question:'Alisha wants to reduce her family\'s impact on the environment. Which action would help MOST?',

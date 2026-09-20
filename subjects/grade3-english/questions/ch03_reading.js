@@ -502,13 +502,6 @@ STATIC_QUESTIONS.push(
     hint:'This is the feature specifically designed to explain vocabulary.',
     explanation:'A <b>glossary</b> at the back of a non-fiction book defines the difficult or technical words used in the text.'}),
 
-  makeMCQ({ id:'g3eng-rdr-071', chapterId:'g3eng-reading', difficulty:2, subsection:'text_features',
-    question:'A text uses paragraphs with these headings: "What are bees?", "Where do bees live?", "Why are bees important?". What type of text is this MOST LIKELY to be?',
-    options:['A non-fiction information text','A fictional adventure story','A personal letter to a friend','A poem about the countryside'],
-    answer:'A non-fiction information text',
-    hint:'Information texts use question headings to organise facts by topic.',
-    explanation:'Question-style headings that organise facts by topic are typical of a <b>non-fiction information text</b>.'}),
-
   makeMCQ({ id:'g3eng-rdr-072', chapterId:'g3eng-reading', difficulty:1, subsection:'text_features',
     question:'Which part of a newspaper article tells you what the whole article is about IN JUST A FEW WORDS?',
     options:['The headline','The photograph','The last line','The first line'],

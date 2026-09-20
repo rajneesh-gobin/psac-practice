@@ -488,4 +488,13 @@ very strange to be asked to explain why it matters.</div>`;
     'Use the second half of the sentence.',
     'She had to serve herself, so the shop was <b>empty of people</b>.');
 
+  // Legacy ID deliberately preserved: progress and imports key on it.
+  STATIC_QUESTIONS.push(makeMCQ({
+    id: 'g3eng-rdr-071', chapterId: 'eng-comprehension', subsection: 'text_features', difficulty: 2,
+    question: 'A text uses paragraphs with these headings: "What are bees?", "Where do bees live?", "Why are bees important?". What type of text is this MOST LIKELY to be?',
+    options: ['A non-fiction information text', 'A fictional adventure story', 'A personal letter to a friend', 'A poem about the countryside'],
+    answer: 'A non-fiction information text',
+    hint: 'Information texts use question headings to organise facts by topic.',
+    explanation: 'Question-style headings that organise facts by topic are typical of a <b>non-fiction information text</b>.'
+  }));
 })();

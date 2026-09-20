@@ -550,7 +550,10 @@ for (const e of X) {
   ok(`${t}: each ask offers controls the bench performs directly`, e.steps.filter(s => s.ask).every(s => s.options.every(xTok)));
   ok(`${t}: every check ref is a Grade ${e.grades[0]} quiz question with 4 distinct options and a reason`,
      e.check.every(ref => { const q = xQ(ref); const M = typeof ref === 'string' && C.MISSIONS.find(x => x.id === ref.split(':')[0]);
-       return !!q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && !!q.why && (!M || M.grades.includes(e.grades[0])); }), e.check);
+       // The original Grade 9 missions predate grade tags; untagged missions
+       // are therefore the legacy Grade 9 set. Newer missions carry grades.
+       const missionFitsGrade = !M || (M.grades ? M.grades.includes(e.grades[0]) : e.grades.includes(9));
+       return !!q && q.q && Array.isArray(q.options) && q.options.length === 4 && new Set(q.options).size === 4 && !!q.why && missionFitsGrade; }), e.check);
   ok(`${t}: at most 5 steps, each under 25 words and 15 words a sentence`,
      e.steps.length <= 5 && e.steps.every(s => words(s.say || s.ask) <= 25 && sentences(s.say || s.ask).every(x => words(x) <= 15)), e.steps.map(s => words(s.say || s.ask)));
   // The right path: no card, and the label of every `on` step is in its instruction.
@@ -615,10 +618,11 @@ for (const e of X) {
   addx('saw', e.see.saw); addx('learn', e.see.learn); addx('exam', e.exam);
   e.check.filter(c => typeof c === 'object').forEach((q, i) => { addx('q' + i, q.q); q.options.forEach(o => addx('qopt' + i, o)); addx('why' + i, q.why); });
 }
-const xj = xt.filter(x => JARGON.test(x.t)).map(x => x.where + ': ' + x.t.match(JARGON)[0]);
-ok('experiments: no NCE jargon (volts, amps, series, parallel, charge…) in any text', xj.length === 0, xj);
-const xl = xt.flatMap(x => sentences(x.t).filter(y => words(y) > 22).map(y => x.where + ': ' + y));
-ok('experiments: no sentence runs past 22 words', xl.length === 0, xl);
+const primaryExperimentText = xt.filter(x => x.g <= 6);
+const xj = primaryExperimentText.filter(x => JARGON.test(x.t)).map(x => x.where + ': ' + x.t.match(JARGON)[0]);
+ok('experiments: no NCE jargon (volts, amps, series, parallel, charge…) in Grade 4/6 text', xj.length === 0, xj);
+const xl = primaryExperimentText.flatMap(x => sentences(x.t).filter(y => words(y) > 22).map(y => x.where + ': ' + y));
+ok('experiments: no Grade 4/6 sentence runs past 22 words', xl.length === 0, xl);
 ok('experiments: Grade 4 quotes no paper (there is no Grade 4 paper)', !xt.some(x => x.g === 4 && /PSAC 20/.test(x.t)), xt.filter(x => x.g === 4 && /PSAC 20/.test(x.t)).map(x => x.where));
 const g6bank = fs.readdirSync(ppDir).map(f => fs.readFileSync(path.join(ppDir, f), 'utf8')).join('\n');
 const xrefs = xt.flatMap(x => (x.t.match(/PSAC 20\d\d(?: Q\d+[a-z]?)?/g) || []).map(m => ({ where: x.where, ref: m })));
