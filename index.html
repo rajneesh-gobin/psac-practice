@@ -879,6 +879,11 @@
             <h3 class="font-bold text-white mb-2">Then the real thing</h3>
             <p class="text-sm text-indigo-100/75 leading-relaxed">Once the syllabus is understood, 194 genuine past-paper questions from 2016–2024 show a child exactly what the paper looks like - with mark schemes so they can check their own work.</p>
           </div>
+          <div class="bg-amber-400/10 border border-amber-400/25 rounded-2xl p-6">
+            <div class="text-3xl mb-3 select-none">🤝</div>
+            <h3 class="font-bold text-white mb-2">Better with you beside them</h3>
+            <p class="text-sm text-indigo-100/75 leading-relaxed">This app is a revision tool — it does not replace your time with your child. Children focus better and learn more when a parent sits with them, even for just a few minutes. We actively encourage you to join them at the screen whenever you can.</p>
+          </div>
         </div>
       </section>
 
@@ -2745,6 +2750,7 @@
 
     <!-- ══════════ PRACTICE HUB ══════════ -->
     <div id="screen-practice-hub" class="screen hidden">
+      <button class="back-btn mb-3" onclick="StudentHome.open()">← Home</button>
       <div class="prac-hub-outer">
         <div class="sh-header">
           <div>
@@ -2771,6 +2777,7 @@
 
     <!-- ══════════ SUBJECT HUB ══════════ -->
     <div id="screen-subject-hub" class="screen hidden">
+      <button class="back-btn mb-3" onclick="PracticeHub.open()">← Subjects</button>
       <div class="subj-hub-outer">
         <div class="sh-header">
           <div>
@@ -2800,6 +2807,7 @@
 
     <!-- ══════════ GRADE SELECTOR ══════════ -->
     <div id="screen-grade-select" class="screen hidden">
+      <button class="back-btn mb-3" onclick="StudentHome.open()">← Home</button>
       <div class="text-center mb-8 pt-4">
         <div class="text-5xl mb-3 select-none">🎓</div>
         <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Choose Your Grade</h2>
@@ -4960,6 +4968,12 @@
       <!-- ── Children grid ── -->
       <!-- Family overview: rendered by _renderFamilyOverview() in engine/app.js.
            Stays hidden with fewer than two children. -->
+      <!-- Parent engagement reminder - always visible in the children tab -->
+      <div class="flex items-start gap-3 rounded-2xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-600/30 px-4 py-3.5 mb-4">
+        <span class="text-xl shrink-0 mt-0.5" aria-hidden="true">💛</span>
+        <p class="text-sm text-amber-800 dark:text-amber-200 leading-relaxed"><strong>Sit with them when you can.</strong> Nou Klass is a revision tool — it doesn't replace your time. Children who practise with a parent nearby stay on task and remember more. Even five minutes together makes a real difference.</p>
+      </div>
+
       <h3 id="pd-children-heading" class="font-bold text-lg text-gray-800 dark:text-white mb-3">Your children · today at a glance</h3>
       <div id="pd-children-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
       <details id="pd-weekly-details" class="pd-weekly-details mb-6"><summary>Family weekly report - trends and activity</summary><div id="pd-family-overview" class="hidden mt-4"></div></details>
@@ -6635,7 +6649,7 @@
   </div>
 
   <!-- Onboarding hint callout (positioned by JS) -->
-  <div id="hint-callout" class="hint-hidden" role="tooltip">
+  <div id="hint-callout" class="hint-hidden" role="tooltip" onclick="_dismissHint()" style="cursor:pointer">
     <button class="hint-close" onclick="_dismissHint()" aria-label="Dismiss hint">✕</button>
     <span id="hint-callout-text"></span>
   </div>

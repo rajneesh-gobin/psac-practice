@@ -1920,7 +1920,7 @@ const TeacherClassroomDetail = (() => {
       const d = new Date(start); d.setDate(start.getDate() + i);
       const key = _calendarDateKey(d), items = entries.get(key) || [];
       const outside = d.getMonth() !== monthNo;
-      return `<div class="tc-class-calendar-day${outside ? ' tc-class-calendar-outside' : ''}${key === today ? ' tc-class-calendar-today' : ''}">
+      return `<div class="tc-class-calendar-day${outside ? ' tc-class-calendar-outside' : ''}${key === today ? ' tc-class-calendar-today' : ''} tc-class-calendar-day-clickable" onclick="TeacherClassroomDetail.calendarPickDate('${key}')" role="button" aria-label="Add event on ${d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}">
         <span class="tc-class-calendar-number">${d.getDate()}</span>
         <div class="tc-class-calendar-items">${items.slice(0, 3).map(item => `<span class="tc-class-calendar-item tc-class-calendar-${esc(item.kind)}" title="${esc(item.title)}">${item.icon} ${esc(item.title)}</span>`).join('')}${items.length > 3 ? `<span class="tc-class-calendar-more">+${items.length - 3} more</span>` : ''}</div>
       </div>`;
@@ -1940,6 +1940,14 @@ const TeacherClassroomDetail = (() => {
   function calendarPrevious() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() - 1, 1); _renderCalendar(); }
   function calendarNext() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() + 1, 1); _renderCalendar(); }
   function calendarToday() { _calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); _renderCalendar(); }
+
+  function calendarPickDate(key) {
+    const dateEl = el('tc-cd-ev-date');
+    if (dateEl) { dateEl.value = key; dateEl.removeAttribute('min'); }
+    const form = el('tc-cd-ev-form');
+    if (form) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    (el('tc-cd-ev-title') || el('tc-cd-ev-kind'))?.focus();
+  }
 
   function _renderCalendar() {
     const box = el('tc-cd-calendar');
@@ -1964,7 +1972,10 @@ const TeacherClassroomDetail = (() => {
       </div>
       <p class="tc-cd-hint">Exams, hand-in dates, days you are away, and anything else the class should know. Pupils see it on the class page behind their PIN, next to their homework dates.</p>
       ${_calendarGrid()}
-      <div class="tc-cd-upload-panel" id="tc-cd-ev-form">
+      ${(() => {
+        const others = (typeof TeacherGuestClasses !== 'undefined' ? TeacherGuestClasses.getClasses() : []).filter(c => c.active && c.id !== _classId);
+        const propagateHtml = others.length ? `<div class="tc-cd-upload-row" style="flex-wrap:wrap;align-items:center;gap:6px;padding-top:2px"><span style="font-size:0.82rem;color:rgba(240,236,220,.6);white-space:nowrap">Also add to:</span>${others.map(c => `<label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;color:rgba(240,236,220,.85)"><input type="checkbox" class="tc-cd-ev-propagate-check" value="${esc(c.id)}" style="accent-color:#a78bfa"> ${esc(c.name)}</label>`).join('')}</div>` : '';
+        return `<div class="tc-cd-upload-panel" id="tc-cd-ev-form">
         <div class="tc-cd-upload-row">
           <select id="tc-cd-ev-kind" class="tc-cd-input" style="flex:2" onchange="TeacherClassroomDetail.setEventKind()" aria-label="What kind of date">
             ${Object.entries(EVENT_KIND).map(([k, v]) => `<option value="${k}">${v.icon} ${esc(v.label)}</option>`).join('')}
@@ -1980,7 +1991,9 @@ const TeacherClassroomDetail = (() => {
           <button type="button" class="tc-cd-action-btn" onclick="TeacherClassroomDetail.addEvent(this)">＋ Add to calendar</button>
           <span id="tc-cd-ev-status" class="tc-cd-status-msg" role="status" aria-live="polite"></span>
         </div>
-      </div>
+        ${propagateHtml}
+      </div>`;
+      })()}
       ${_eventsError ? `<p class="tc-cd-err">${esc(_eventsError)}</p>` : ''}
       <h4 class="tc-work-subhead">Coming up</h4>
       <div id="tc-cd-ev-list">${merged.length ? merged.map(m => m.html).join('') : '<p class="tc-cd-empty">Nothing on the calendar yet. Add the next test, or the day you will be away.</p>'}</div>
@@ -2023,8 +2036,13 @@ const TeacherClassroomDetail = (() => {
       if (error) throw error;
       if (!data || !data.length) { say('Not allowed - this classroom is not yours, or your teacher access has lapsed.', true); return; }
       _events = [..._events, data[0]].sort((a, b) => a.date.localeCompare(b.date) || String(a.created_at).localeCompare(String(b.created_at)));
+      const propagateIds = Array.from(document.querySelectorAll('.tc-cd-ev-propagate-check:checked')).map(cb => cb.value);
+      for (const cid of propagateIds) {
+        await _sb.from('teacher_class_events').insert({ classroom_id: cid, teacher_id: uid, date, end_date: endIn || null, kind, title, notes: notes || null });
+      }
       _renderCalendar();
-      if (typeof toast === 'function') toast('Added to the class calendar 🗓️', 2000);
+      const extra = propagateIds.length ? ` (and ${propagateIds.length} other classroom${propagateIds.length > 1 ? 's' : ''})` : '';
+      if (typeof toast === 'function') toast('Added to the class calendar' + extra + ' 🗓️', 2500);
     } catch (e) {
       say('Could not save. ' + (e && e.message ? e.message : 'Please try again.'), true);
     } finally {
@@ -2394,7 +2412,7 @@ const TeacherClassroomDetail = (() => {
     uploadMaterial, _onMatFileChosen, setMaterialSort, setMatSource, shareMaterial, copyFileLink, openFile, deleteFile,
     createLibraryLink, shareLibraryLink, copyLibraryLink, rotateLibraryLink, disableLibraryLink,
     shareToClass,
-    addEvent, deleteEvent, setEventKind, setPhwDue, calendarPrevious, calendarNext, calendarToday,
+    addEvent, deleteEvent, setEventKind, setPhwDue, calendarPrevious, calendarNext, calendarToday, calendarPickDate,
     saveName, saveGrade, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
     openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },

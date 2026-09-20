@@ -1,5 +1,6 @@
 'use strict';
-(function(){const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`}));const rows=(p,c,s,d,o,h)=>d.forEach(([q,a],i)=>add(`g5e-cov-${p}-${i}`,c,s,q,o,a,h));
+(function(){
+const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`}));
 // Real explanations, keyed by id. Added because every question in this file
 // used to say only "<b>X</b> is correct.", which teaches nothing.
 const G5E_EXPL = {
@@ -31,9 +32,68 @@ const G5E_EXPL = {
   'g5e-cov-spellplural-3': "<i>City</i> ends in a consonant plus y, so the y becomes ies: <b>cities</b>.",
   'g5e-cov-spellplural-4': "<b>sheep</b> does not change in the plural: one sheep, ten sheep.",
 };
-rows('syn','eng-vocabulary','synonyms',[['Which word is a synonym for "brave"?','courageous'],['Which word is a synonym for "silent"?','quiet'],['Which word is a synonym for "generous"?','kind'],['Which word is a synonym for "examine"?','inspect'],['Which word is a synonym for "fragile"?','delicate']],['courageous','quiet','kind','inspect','delicate','careless'],'A synonym has a similar meaning.');
-rows('ant','eng-vocabulary','antonyms',[['Which word is an antonym of "narrow"?','wide'],['Which word is an antonym of "generous"?','selfish'],['Which word is an antonym of "arrive"?','depart'],['Which word is an antonym of "ancient"?','modern'],['Which word is an antonym of "victory"?','defeat']],['wide','selfish','depart','modern','defeat','success'],'An antonym has the opposite meaning.');
-rows('context','eng-vocabulary','context_clues',[['"The path was slippery after the rain, so we walked carefully." What does slippery mean?','easy to slide on'],['"The exhausted runner rested under a tree." What does exhausted mean?','very tired'],['"The tiny seedling pushed through the soil." What is a seedling?','a young plant'],['"The crowd cheered when the team won." What does cheered mean?','shouted happily'],['"The cautious swimmer stayed near the shore." What does cautious mean?','careful to avoid danger'],['"The ancient fort stood above the harbour." What does ancient mean?','very old']],['easy to slide on','very tired','a young plant','shouted happily','careful to avoid danger','very old'],'Use the surrounding words as clues.');
-rows('rule','eng-spelling','rules',[['Which spelling rule changes "carry" to "carried"?','change y to i before adding -ed'],['Which word correctly doubles its last letter before -ing?','swimming'],['Which word keeps its final e before adding -ly?','politely'],['Which word follows the "i before e except after c" rule?','receive'],['Which word correctly changes -y to -ies in the plural?','families'],['Which word correctly drops e before adding -ing?','making']],['change y to i before adding -ed','swimming','politely','receive','families','making'],'Look at the ending of the base word before adding a suffix.');
-rows('spellplural','eng-spelling','plurals',[['What is the correct plural of "wolf"?','wolves'],['What is the correct plural of "tomato"?','tomatoes'],['What is the correct plural of "mouse"?','mice'],['What is the correct plural of "city"?','cities'],['What is the correct plural of "sheep"?','sheep']],['wolves','tomatoes','mice','cities','sheep'],'Some plurals add -s or -es; others change spelling.');
+
+// synonyms — each gets its own 4 options (correct + 3 wrong adjectives/verbs)
+add('g5e-cov-syn-0','eng-vocabulary','synonyms','Which word is a synonym for "brave"?',
+  ['courageous','timid','clumsy','humble'],'courageous','A synonym has a similar meaning.');
+add('g5e-cov-syn-1','eng-vocabulary','synonyms','Which word is a synonym for "silent"?',
+  ['quiet','noisy','cheerful','strange'],'quiet','A synonym has a similar meaning.');
+add('g5e-cov-syn-2','eng-vocabulary','synonyms','Which word is a synonym for "generous"?',
+  ['kind','greedy','serious','careless'],'kind','A synonym has a similar meaning.');
+add('g5e-cov-syn-3','eng-vocabulary','synonyms','Which word is a synonym for "examine"?',
+  ['inspect','ignore','repair','collect'],'inspect','A synonym has a similar meaning.');
+add('g5e-cov-syn-4','eng-vocabulary','synonyms','Which word is a synonym for "fragile"?',
+  ['delicate','sturdy','ancient','curious'],'delicate','A synonym has a similar meaning.');
+
+// antonyms — each gets its own 4 options (correct opposite + 3 wrong words)
+add('g5e-cov-ant-0','eng-vocabulary','antonyms','Which word is an antonym of "narrow"?',
+  ['wide','thin','tall','deep'],'wide','An antonym has the opposite meaning.');
+add('g5e-cov-ant-1','eng-vocabulary','antonyms','Which word is an antonym of "generous"?',
+  ['selfish','cheerful','honest','polite'],'selfish','An antonym has the opposite meaning.');
+add('g5e-cov-ant-2','eng-vocabulary','antonyms','Which word is an antonym of "arrive"?',
+  ['depart','stay','enter','welcome'],'depart','An antonym has the opposite meaning.');
+add('g5e-cov-ant-3','eng-vocabulary','antonyms','Which word is an antonym of "ancient"?',
+  ['modern','distant','grand','common'],'modern','An antonym has the opposite meaning.');
+add('g5e-cov-ant-4','eng-vocabulary','antonyms','Which word is an antonym of "victory"?',
+  ['defeat','success','prize','glory'],'defeat','An antonym has the opposite meaning.');
+
+// context clues — each gets its own 4 options explaining the word differently
+add('g5e-cov-context-0','eng-vocabulary','context_clues','"The path was slippery after the rain, so we walked carefully." What does slippery mean?',
+  ['easy to slide on','very narrow','covered in mud','extremely cold'],'easy to slide on','Use the surrounding words as clues.');
+add('g5e-cov-context-1','eng-vocabulary','context_clues','"The exhausted runner rested under a tree." What does exhausted mean?',
+  ['very tired','very happy','extremely fast','badly injured'],'very tired','Use the surrounding words as clues.');
+add('g5e-cov-context-2','eng-vocabulary','context_clues','"The tiny seedling pushed through the soil." What is a seedling?',
+  ['a young plant','a type of soil','a garden tool','a small animal'],'a young plant','Use the surrounding words as clues.');
+add('g5e-cov-context-3','eng-vocabulary','context_clues','"The crowd cheered when the team won." What does cheered mean?',
+  ['shouted happily','clapped slowly','sat down quietly','left the stadium'],'shouted happily','Use the surrounding words as clues.');
+add('g5e-cov-context-4','eng-vocabulary','context_clues','"The cautious swimmer stayed near the shore." What does cautious mean?',
+  ['careful to avoid danger','very skilled','extremely fast','tired and cold'],'careful to avoid danger','Use the surrounding words as clues.');
+add('g5e-cov-context-5','eng-vocabulary','context_clues','"The ancient fort stood above the harbour." What does ancient mean?',
+  ['very old','very tall','brightly painted','recently repaired'],'very old','Use the surrounding words as clues.');
+
+// spelling rules — each gets its own 4 options (correct spelling + 3 plausible wrong forms)
+add('g5e-cov-rule-0','eng-spelling','rules','Which spelling rule changes "carry" to "carried"?',
+  ['change y to i before adding -ed','double the last consonant before -ed','drop the silent e before -ed','add -ed to the base word as it is'],'change y to i before adding -ed','Look at the ending of the base word before adding a suffix.');
+add('g5e-cov-rule-1','eng-spelling','rules','Which word correctly doubles its last letter before -ing?',
+  ['swimming','runing','jumpping','eatting'],'swimming','Look at the ending of the base word before adding a suffix.');
+add('g5e-cov-rule-2','eng-spelling','rules','Which word keeps its final e before adding -ly?',
+  ['politely','nicly','bravly','safty'],'politely','Look at the ending of the base word before adding a suffix.');
+add('g5e-cov-rule-3','eng-spelling','rules','Which word follows the "i before e except after c" rule?',
+  ['receive','beleive','freind','wierd'],'receive','Look at the ending of the base word before adding a suffix.');
+add('g5e-cov-rule-4','eng-spelling','rules','Which word correctly changes -y to -ies in the plural?',
+  ['families','storyes','cityes','babyes'],'families','Look at the ending of the base word before adding a suffix.');
+add('g5e-cov-rule-5','eng-spelling','rules','Which word correctly drops e before adding -ing?',
+  ['making','makeing','rideing','loveing'],'making','Look at the ending of the base word before adding a suffix.');
+
+// spelling plurals — each gets its own 4 options (correct plural + 3 plausible wrong forms)
+add('g5e-cov-spellplural-0','eng-spelling','plurals','What is the correct plural of "wolf"?',
+  ['wolves','wolfs','wolfes','wolvs'],'wolves','Some plurals add -s or -es; others change spelling.');
+add('g5e-cov-spellplural-1','eng-spelling','plurals','What is the correct plural of "tomato"?',
+  ['tomatoes','tomatos','tomates','tomatoies'],'tomatoes','Some plurals add -s or -es; others change spelling.');
+add('g5e-cov-spellplural-2','eng-spelling','plurals','What is the correct plural of "mouse"?',
+  ['mice','mouses','mices','mousse'],'mice','Some plurals add -s or -es; others change spelling.');
+add('g5e-cov-spellplural-3','eng-spelling','plurals','What is the correct plural of "city"?',
+  ['cities','citys','cityes','cityies'],'cities','Some plurals add -s or -es; others change spelling.');
+add('g5e-cov-spellplural-4','eng-spelling','plurals','What is the correct plural of "sheep"?',
+  ['sheep','sheeps','sheepes','sheepies'],'sheep','Some plurals add -s or -es; others change spelling.');
 })();
