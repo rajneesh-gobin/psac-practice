@@ -163,9 +163,27 @@ exports.handler = async () => {
       );
       const progById = new Map((progRows || []).map(r => [r.student_id, r.data || {}]));
 
+      const weekStartMs = Date.now() - 7 * 24 * 60 * 60 * 1000;
       const kids = students.map(s => {
         const data  = progById.get(s.id) || {};
         const daily = data.daily || {};
+        // Count science lab experiments done this week (from DB.labs[id].done[expId].at)
+        const labsDone = [];
+        for (const [labId, labData] of Object.entries(data.labs || {})) {
+          for (const exp of Object.values(labData.done || {})) {
+            if (exp && exp.at >= weekStartMs) { labsDone.push(labId); break; }
+          }
+        }
+        const uniqueLabNames = [...new Set(labsDone)].map(id => {
+          const names = { rusting: 'Rusting', circuit: 'Circuit', food: 'Food Tests',
+            water: 'Water & States', nutrition: 'Food Groups', air: 'Air & Burning',
+            heat: 'Heat Transfer', sunmoon: 'Sun, Earth & Moon', photo: 'Photosynthesis',
+            magnets: 'Magnets', materials: 'Materials', light: 'Light', measure: 'Measurement',
+            gastests: 'Gas Tests', forces: 'Forces', changes: 'Changes', energy: 'Energy',
+            separation: 'Separation', motion: 'Motion', mixing: 'Mixing Bench',
+            quadrat: 'Quadrat', microscope: 'Microscope' };
+          return names[id] || id;
+        });
         return {
           s,
           daily,
@@ -175,6 +193,8 @@ exports.handler = async () => {
           streak: (data.stats || {}).streak || 0,
           lifetime: (data.stats || {}).totalAttempted || 0,
           hasDated: Object.keys(daily).length > 0,
+          labsDone: labsDone.length,
+          labNames: uniqueLabNames,
         };
       });
 
@@ -211,6 +231,9 @@ exports.handler = async () => {
           </td>
           <td style="padding:10px 12px;text-align:center">${now.days}<span style="color:#9ca3af">/7</span></td>
           <td style="padding:10px 12px;text-align:center">${k.streak} 🔥</td>
+          <td style="padding:10px 12px;font-size:12px;color:#6b7280">
+            ${k.labsDone ? `🔬 ${k.labsDone} lab${k.labsDone > 1 ? 's' : ''}: ${_esc(k.labNames.join(', '))}` : '<span style="color:#d1d5db">&mdash;</span>'}
+          </td>
         </tr>`;
       });
 
@@ -297,6 +320,7 @@ exports.handler = async () => {
             <th style="padding:8px 12px;text-align:left">Accuracy</th>
             <th style="padding:8px 12px;text-align:center">Days</th>
             <th style="padding:8px 12px;text-align:center">Streak</th>
+            <th style="padding:8px 12px;text-align:left">Science Labs</th>
           </tr>
         </thead>
         <tbody>${rows.join('')}</tbody>

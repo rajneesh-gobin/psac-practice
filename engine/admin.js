@@ -2233,6 +2233,7 @@ const AdminPanel = (() => {
           ${toggle('examDisabled', 'Exam mode')}
           ${toggle('hintsDisabled', 'Hints')}
           ${toggle('minigamesDisabled', 'Game Zone')}
+          ${toggle('labsDisabled', 'Science Labs')}
           ${levelSel}
           ${gradeBoxes}
         </div>

@@ -7584,6 +7584,8 @@ function _renderParentControls(acct) {
   if (gamesToggle) gamesToggle.checked = !(DB.restrictions?.minigamesDisabled ?? false);
   const helpToggle = _el('pd-help-toggle');
   if (helpToggle) helpToggle.checked = !(DB.restrictions?.helpRequestsDisabled ?? false);
+  const labsToggle = _el('pd-labs-toggle');
+  if (labsToggle) labsToggle.checked = !(DB.restrictions?.labsDisabled ?? false);
   if (typeof GameSettings !== 'undefined') GameSettings.renderParentCard(acct);
 
   const chLocks = _el('pd-chapter-locks');
@@ -11073,6 +11075,32 @@ const _LAB_CHAPTERS = {
   'g7s-cells': 'microscope',
   'g9s-b1-circulatory': 'microscope',
 };
+// Per-lab experiment counts per grade, mirroring EXPERIMENTS_BY_LAB in lab_core.js.
+// ⚠ Must stay in sync — test-labs-experiments-data.js fails if they drift.
+const _LAB_EXP_COUNTS = {
+  rusting:    { 6: 4 },
+  circuit:    { 4: 4, 6: 3, 7: 4, 9: 4 },
+  food:       { 8: 5 },
+  water:      { 4: 5 },
+  nutrition:  { 6: 4 },
+  air:        { 4: 5, 6: 5 },
+  heat:       { 6: 5 },
+  sunmoon:    { 6: 4, 7: 4 },
+  photo:      { 4: 5, 6: 5, 9: 5 },
+  magnets:    { 4: 3, 8: 4 },
+  materials:  { 4: 5 },
+  light:      { 4: 4, 9: 4 },
+  measure:    { 4: 4, 7: 4, 8: 4, 9: 4 },
+  gastests:   { 7: 5 },
+  forces:     { 8: 4 },
+  changes:    { 7: 4, 8: 4 },
+  energy:     { 8: 4 },
+  separation: { 7: 4, 8: 4, 9: 4 },
+  motion:     { 9: 4 },
+  mixing:     { 8: 5, 9: 5 },
+  quadrat:    { 9: 4 },
+  microscope: { 7: 4, 9: 4 },
+};
 function _labsForChapter(chapterId) {
   const v = _LAB_CHAPTERS[chapterId];
   return v ? (Array.isArray(v) ? v : [v]) : [];
@@ -11081,9 +11109,18 @@ function _labForChapter(chapterId) {
   return _labsAvailable() ? (_labsForChapter(chapterId)[0] || null) : null;
 }
 function _labChip(chapterId) {
-  return _labForChapter(chapterId)
-    ? `<button type="button" class="ch-lab-chip" onclick="event.stopPropagation();openLabForChapter('${chapterId}')">🔬 Try the experiment</button>`
-    : '';
+  const labId = _labForChapter(chapterId);
+  if (!labId) return '';
+  const g = Number(typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 0;
+  const total = (_LAB_EXP_COUNTS[labId] || {})[g] || 0;
+  const done = (typeof DB !== 'undefined' && DB?.labs?.[labId]?.done)
+    ? Object.keys(DB.labs[labId].done).length : 0;
+  const label = total && done >= total
+    ? `🔬 All ${total} experiments done ✓`
+    : total && done > 0
+      ? `🔬 ${done} of ${total} experiments done · Next →`
+      : '🔬 Try the experiment';
+  return `<button type="button" class="ch-lab-chip" onclick="event.stopPropagation();openLabForChapter('${chapterId}')">${label}</button>`;
 }
 // Straight into that chapter's first unfinished experiment - not the hub.
 function openLabForChapter(chapterId) {
@@ -14901,7 +14938,7 @@ async function _renderParentProfile(container) {
   // so "apply to all" would be meaningless at best and would silently wipe a
   // parent's careful per-child locking at worst.
   const d = Object.assign(
-    { maxDifficulty: 4, examDisabled: false, hintsDisabled: false },
+    { maxDifficulty: 4, examDisabled: false, hintsDisabled: false, labsDisabled: false },
     (children[0] && children[0].settings) || {},
     _parentPrefs.child_defaults || {}
   );
@@ -14961,6 +14998,7 @@ async function _renderParentProfile(container) {
       ${defToggle('set-def-exam',  !d.examDisabled,        '📝 Exam mode',            'Allow timed exam papers')}
       ${defGrades(d)}
       ${defToggle('set-def-hints', !d.hintsDisabled,       '💡 In-app hints',         'First-time tip callouts')}
+      ${defToggle('set-def-labs', !d.labsDisabled,        '🔬 Science Labs',         'Interactive experiments')}
 
       <button data-label="Apply to all children" onclick="_applyDefaultsToAll(this)"
         class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors">Apply to all children</button>
@@ -15455,6 +15493,7 @@ async function _applyDefaultsToAll(btn) {
     allowedGrades:     [...document.querySelectorAll('[data-def-grade]')]
                          .filter(el => el.checked).map(el => Number(el.dataset.defGrade)).sort((a, b) => a - b),
     hintsDisabled:     !document.getElementById('set-def-hints')?.checked,
+    labsDisabled:      !document.getElementById('set-def-labs')?.checked,
   };
   // The two booleans this list replaced, kept in step so a device still running
   // the old shell reads the same permission. Derived, never authored.

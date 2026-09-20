@@ -4413,6 +4413,13 @@ const Auth = (() => {
     if (ok && typeof _renderGradeAccess === 'function') _renderGradeAccess(getActiveAccount() || {});
   }
 
+  async function toggleLabsDisabled() {
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.labsDisabled = !r.labsDisabled;
+    await _saveRestrictions(prev, r.labsDisabled ? '🔬 Science Labs locked.' : '🔬 Science Labs unlocked.');
+  }
+
   async function toggleMinigamesDisabled() {
     const r    = _ensureRestrictions();
     const prev = JSON.stringify(r);
@@ -4625,7 +4632,7 @@ const Auth = (() => {
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
     toggleGradeAccess, toggleHintsDisabled,
-    toggleMinigamesDisabled, saveGameSettings, toggleHelpRequestsDisabled,
+    toggleLabsDisabled, toggleMinigamesDisabled, saveGameSettings, toggleHelpRequestsDisabled,
     // Biometric lock
     attemptBiometricUnlock: _attemptBiometricUnlock, biometricUsePassword,
     enableBiometricLogin, disableBiometricLogin,
