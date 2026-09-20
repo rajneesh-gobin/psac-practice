@@ -11057,6 +11057,21 @@ const _LAB_CHAPTERS = {
   'g8s-inquiry': 'measure',
   'g9s-p1-measurements': 'measure',
   'g7s-air': 'gastests',
+  'g8s-forces': 'forces',
+  'g8s-pressure': 'forces',
+  'g7s-changes': 'changes',
+  'g8s-chem-language': 'changes',
+  'g8s-work-energy': 'energy',
+  'g7s-elements': 'separation',
+  'g8s-mixtures': 'separation',
+  'g9s-c2-mixtures': 'separation',
+  'g9s-p4-motion': 'motion',
+  'g8s-acids': 'mixing',
+  'g9s-c4-metals': 'mixing',
+  'g9s-c5-salts': 'mixing',
+  'g9s-b3-biodiversity': 'quadrat',
+  'g7s-cells': 'microscope',
+  'g9s-b1-circulatory': 'microscope',
 };
 function _labsForChapter(chapterId) {
   const v = _LAB_CHAPTERS[chapterId];

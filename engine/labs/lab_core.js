@@ -144,7 +144,15 @@ const Labs = (() => {
     materials: { 4: 5 },
     light:   { 4: 4, 9: 4 },
     measure: { 4: 4, 7: 4, 8: 4, 9: 4 },
-    gastests: { 7: 5 },
+    gastests:   { 7: 5 },
+    forces:     { 8: 4 },
+    changes:    { 7: 4, 8: 4 },
+    energy:     { 8: 4 },
+    separation: { 7: 4, 8: 4, 9: 4 },
+    motion:     { 9: 4 },
+    mixing:     { 8: 5, 9: 5 },
+    quadrat:    { 9: 4 },
+    microscope: { 7: 4, 9: 4 },
   };
   LABS.forEach(l => { l.chapters = CHAPTERS_BY_LAB[l.id] || {}; l.experiments = EXPERIMENTS_BY_LAB[l.id] || {}; });
   // ⚠ The app has no core Grade 5 science yet (docs/labs/PLAN.md), so a Grade 5
