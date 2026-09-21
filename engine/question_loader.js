@@ -497,6 +497,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-maths/questions/questions_challenge2.js',
       'subjects/grade5-maths/questions/questions_audit.js',
       'subjects/grade5-maths/questions/illustrated_diagrams.js',
+      'subjects/grade5-maths/questions/batch_g5_shapes_time.js',
       'subjects/grade5-maths/questions/reasoning_word_problems.js',
       'subjects/grade5-maths/questions/extended_reasoning_bank.js',
       'subjects/grade5-maths/questions/symmetry_line_drawing.js',
@@ -708,6 +709,9 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/reasoning_word_problems.js',
       'subjects/grade6-maths/questions/extended_reasoning_bank.js',
       'subjects/grade6-maths/questions/symmetry_line_drawing.js',
+      'subjects/grade6-maths/questions/batch2_g6_geometry.js',
+      'subjects/grade6-maths/questions/batch2_g6_time_speed.js',
+      'subjects/grade6-maths/questions/batch2_g6_measure.js',
     ],
     'grade6-english': [
       'subjects/grade6-english/questions/ch11_cloze.js',
@@ -959,7 +963,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 158;
+  const _CACHE_VERSION = 159;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
