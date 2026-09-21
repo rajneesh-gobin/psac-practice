@@ -195,6 +195,8 @@ exports.handler = async () => {
           hasDated: Object.keys(daily).length > 0,
           labsDone: labsDone.length,
           labNames: uniqueLabNames,
+          maxStreak: (data.stats || {}).maxStreak || 0,
+          dueMistakes: ((data.mistakes || []).filter(m => m && !m.due)).length,
         };
       });
 
@@ -230,7 +232,13 @@ exports.handler = async () => {
                  <div>${_delta(acc, prev.acc, '%')}</div>`}
           </td>
           <td style="padding:10px 12px;text-align:center">${now.days}<span style="color:#9ca3af">/7</span></td>
-          <td style="padding:10px 12px;text-align:center">${k.streak} 🔥</td>
+          <td style="padding:10px 12px;text-align:center">
+            ${k.streak} 🔥
+            ${k.maxStreak > k.streak ? `<div style="font-size:11px;color:#9ca3af">best: ${k.maxStreak}</div>` : ''}
+          </td>
+          <td style="padding:10px 12px;text-align:center">
+            ${k.dueMistakes ? `<span style="color:#ef4444;font-weight:600">🩹 ${k.dueMistakes}</span>` : '<span style="color:#d1d5db">&mdash;</span>'}
+          </td>
           <td style="padding:10px 12px;font-size:12px;color:#6b7280">
             ${k.labsDone ? `🔬 ${k.labsDone} lab${k.labsDone > 1 ? 's' : ''}: ${_esc(k.labNames.join(', '))}` : '<span style="color:#d1d5db">&mdash;</span>'}
           </td>
@@ -273,7 +281,8 @@ exports.handler = async () => {
           &nbsp;·&nbsp; <strong>${famAcc == null ? '&mdash;' : famAcc + '%'}</strong> correct
           &nbsp;·&nbsp; <strong>${fam.active} of ${kids.length}</strong> ${kids.length === 1 ? 'child' : 'children'} practised
           &nbsp;·&nbsp; revision on <strong>${famDays} of 7</strong> days${fam.e ? `
-          &nbsp;·&nbsp; <strong>${fam.e}</strong> exam${fam.e === 1 ? '' : 's'} taken` : ''}
+          &nbsp;·&nbsp; <strong>${fam.e}</strong> exam${fam.e === 1 ? '' : 's'} taken` : ''}${kids.some(k => k.dueMistakes) ? `
+          &nbsp;·&nbsp; 🩹 <strong>${kids.reduce((t, k) => t + k.dueMistakes, 0)}</strong> mistake${kids.reduce((t, k) => t + k.dueMistakes, 0) === 1 ? '' : 's'} due for review` : ''}
         </div>`;
 
       // Both ends of the reported window, on the Mauritius clock — the Lambda
@@ -320,6 +329,7 @@ exports.handler = async () => {
             <th style="padding:8px 12px;text-align:left">Accuracy</th>
             <th style="padding:8px 12px;text-align:center">Days</th>
             <th style="padding:8px 12px;text-align:center">Streak</th>
+            <th style="padding:8px 12px;text-align:center">Fixes Due</th>
             <th style="padding:8px 12px;text-align:left">Science Labs</th>
           </tr>
         </thead>
@@ -327,8 +337,9 @@ exports.handler = async () => {
       </table>
       <p style="margin:12px 0 0;color:#9ca3af;font-size:11px;line-height:1.5">
         Questions, accuracy and days cover the last seven days; arrows compare with the seven before.
-        Streak is the current run of consecutive days. Children in different grades answer different
-        questions, so their accuracy is not a like-for-like comparison.
+        Streak is the current run of consecutive days; best is the all-time record. Fixes Due counts
+        mistakes overdue for review. Children in different grades answer different questions, so their
+        accuracy is not a like-for-like comparison.
       </p>
       <div style="margin-top:24px;text-align:center">
         <a href="https://nouklass.com/"

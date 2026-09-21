@@ -5464,13 +5464,35 @@ async function renderParentDashboard() {
           ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">⚠️ Last active ${daysSince}d ago</span>`
           : '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">⏳ No activity yet today</span>';
       const chips = _subjectChips(prog, s.grade);
+      // Weak chapters: at least 10 attempts, sorted by accuracy ascending, top 3.
+      const today2 = _muDayKey();
+      const weakChapters = (() => {
+        const packs = Object.values(typeof SUBJECT_PACKS !== ‘undefined’ ? SUBJECT_PACKS : {})
+          .filter(p => !p.comingSoon && String(p.grade) === String(s.grade));
+        const chMap = {};
+        packs.forEach(p => (p._chapters || p.chapters || []).forEach(c => { chMap[c.id] = c.name; }));
+        return Object.entries(prog.chapters || {})
+          .map(([id, c]) => ({ name: chMap[id], att: c.attempted || 0, cor: c.correct || 0 }))
+          .filter(c => c.name && c.att >= 10)
+          .map(c => ({ ...c, acc: Math.round(c.cor / c.att * 100) }))
+          .sort((a, b) => a.acc - b.acc)
+          .slice(0, 3);
+      })();
+      const dueMistakes = (prog.mistakes || []).filter(m => m && (!m.due || m.due <= today2)).length;
+      const labsDone = Object.values(prog.labs || {}).reduce((n, l) => n + Object.keys(l.done || {}).length, 0);
+      const extraPills = [
+        dueMistakes ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">🩹 ${dueMistakes} mistake${dueMistakes > 1 ? ‘s’ : ‘’} to fix</span>` : ‘’,
+        labsDone ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">🔬 ${labsDone} experiment${labsDone > 1 ? ‘s’ : ‘’} done</span>` : ‘’,
+      ].filter(Boolean).join(‘’);
+      const weakHtml = weakChapters.length ? `<div class="mt-2 mb-1"><p class="text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1">Needs practice:</p><div class="flex flex-wrap gap-1">${weakChapters.map(c => `<span class="text-xs px-2 py-0.5 rounded-full bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700/40 text-orange-700 dark:text-orange-300">${_profEsc(c.name)} ${c.acc}%</span>`).join(‘’)}</div></div>` : ‘’;
       statsEl.innerHTML = `
-        <div class="flex items-center gap-2 mb-2">${activityPill}</div>
-        <div class="pd-child-today"><strong>Today</strong><p>${todayData.a ? `${todayData.a} answer attempts · ${todayData.c || 0} correct` : 'No practice recorded today yet.'}</p></div>
-        <p class="text-sm text-gray-700 dark:text-gray-200 my-3"><strong>Last 7 days:</strong> ${week.a} answer attempts · ${week.days}/7 days practised${week.a ? ` · ${week.c} correct` : ''}</p>
-        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">All time: ${st.totalAttempted || 0} answer attempts${st.totalAttempted ? ` · ${st.totalCorrect || 0} correct` : ''}. Repeats count as attempts, not completed work.</p>
-        ${chips ? `<div class="pd-child-subjects"><p class="text-xs font-semibold mb-2">Grade ${_profEsc(String(s.grade || '?'))} subjects · all-time attempts</p><div class="flex flex-wrap gap-2">${chips}</div></div>` : ''}
-        <p class="pd-child-next">${studiedToday ? 'See today’s work and choose what comes next.' : 'Open to choose a short practice task for today.'}</p>
+        <div class="flex items-center flex-wrap gap-2 mb-2">${activityPill}${extraPills}</div>
+        <div class="pd-child-today"><strong>Today</strong><p>${todayData.a ? `${todayData.a} answer attempts · ${todayData.c || 0} correct` : ‘No practice recorded today yet.’}</p></div>
+        <p class="text-sm text-gray-700 dark:text-gray-200 my-3"><strong>Last 7 days:</strong> ${week.a} answer attempts · ${week.days}/7 days practised${week.a ? ` · ${week.c} correct` : ‘’}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">All time: ${st.totalAttempted || 0} answer attempts${st.totalAttempted ? ` · ${st.totalCorrect || 0} correct` : ‘’}. Repeats count as attempts, not completed work.</p>
+        ${weakHtml}
+        ${chips ? `<div class="pd-child-subjects"><p class="text-xs font-semibold mb-2">Grade ${_profEsc(String(s.grade || ‘?’))} subjects · all-time attempts</p><div class="flex flex-wrap gap-2">${chips}</div></div>` : ‘’}
+        <p class="pd-child-next">${studiedToday ? ‘See today\’s work and choose what comes next.’ : ‘Open to choose a short practice task for today.’}</p>
         <span class="pd-child-open">View progress &amp; manage homework →</span>`;
     })(progressById[s.id]);
   }
