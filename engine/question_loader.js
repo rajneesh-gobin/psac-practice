@@ -418,6 +418,7 @@ const QuestionLoader = (() => {
                        'subjects/grade9-biology/questions/bio_diagram_patch.js',
                        'subjects/grade9-biology/questions/bio_diagram_multi.js',
                        'subjects/grade9-biology/questions/family_expansion.js',
+                       'subjects/grade9-biology/questions/challenge_hard_bio.js',
                        'subjects/grade9-biology/questions/b4_mineral_nutrition.js',
                        // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
                        'subjects/grade9-biology/questions/label_diagram.js'],
@@ -441,6 +442,7 @@ const QuestionLoader = (() => {
                          'subjects/grade9-chemistry/questions/chem_multi_year.js',
                          'subjects/grade9-chemistry/questions/chem_diagram_multi.js',
                          'subjects/grade9-chemistry/questions/family_expansion.js',
+                         'subjects/grade9-chemistry/questions/challenge_hard_chem.js',
                          'subjects/grade9-chemistry/questions/sts_evidence_ethics.js'],
     'grade9-physics': ['subjects/grade9-physics/questions/inquiry.js',
                        'subjects/grade9-physics/questions/p1_measurements.js',
@@ -462,6 +464,7 @@ const QuestionLoader = (() => {
                        'subjects/grade9-physics/questions/phy_multi_year.js',
                        'subjects/grade9-physics/questions/phy_diagram_multi.js',
                        'subjects/grade9-physics/questions/family_expansion.js',
+                       'subjects/grade9-physics/questions/challenge_hard_phys.js',
                        'subjects/grade9-physics/questions/p2_refraction.js',
                        'subjects/grade9-physics/questions/p3_thermal_expansion.js'],
     'grade9-social-modern-studies': ['subjects/grade9-social-modern-studies/questions/starter_bank.js',
@@ -585,6 +588,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-science/questions/past_paper_2016.js',
       // top-up
       'subjects/grade5-science/questions/topup_g5_science.js',
+      'subjects/grade5-science/questions/challenge_hard_g5sci.js',
       'subjects/grade5-science/questions/coverage_min5.js',
       'subjects/grade5-science/questions/batch2_g5sci-enr-energy.js',
       // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
@@ -650,6 +654,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-science/questions/past_paper_2019.js',
       // top-up
       'subjects/grade6-science/questions/topup_g6_science.js',
+      'subjects/grade6-science/questions/challenge_hard_g6sci.js',
     ],
     'grade6-history': [
       'subjects/grade6-history/questions/depth_hard.js',
@@ -963,7 +968,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 159;
+  const _CACHE_VERSION = 160;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
