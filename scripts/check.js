@@ -340,6 +340,33 @@ function checkAuditsReadTheIndex() {
   note('checked the 4 content audits still derive their packs from the live index');
 }
 
+// ── 10 · Every browser script must PARSE ─────────────────────────────────
+// ⚠ Written 2026-09-21 after engine/app.js shipped with curly quotes
+//   (typeof X !== ‘undefined’) in nine lines of one commit. A classic script
+//   that fails to parse defines NOTHING: showScreen, PracticeHub and every
+//   other global vanished, and the only symptom a parent saw was
+//   "No subjects available for Grade N yet" plus a ReferenceError in a
+//   console they never open. Nothing here executed the engine files, so the
+//   one failure that takes the whole app down at once was the one failure no
+//   check could see. vm.Script compiles without running - no DOM needed.
+function checkScriptsParse() {
+  const vm = require('vm');
+  const files = new Set(walk('engine'));
+  for (const f of ['sw.js', 'subjects/_index.js', 'guest.js']) if (exists(f)) files.add(f);
+  for (const html of fs.readdirSync(ROOT).filter(n => n.endsWith('.html'))) {
+    const src = read(path.join(ROOT, html)) || '';
+    for (const m of src.matchAll(/<script[^>]+src="([^"?]+)"/g)) if (exists(m[1])) files.add(m[1]);
+  }
+  let n = 0;
+  for (const f of [...files].sort()) {
+    const src = read(path.join(ROOT, f));
+    if (src === null) continue;
+    try { new vm.Script(src, { filename: f }); n++; }
+    catch (e) { fail(f + ' does not parse: ' + e.message + ' (' + String(e.stack || '').split(/\r?\n/)[0] + ')'); }
+  }
+  note('parsed ' + n + ' browser scripts (a syntax error in a classic script defines nothing)');
+}
+
 // ── run ───────────────────────────────────────────────────────────────────
 checkHtmlReferences();
 checkServiceWorker();
@@ -350,6 +377,7 @@ checkSqlSearchPath();
 checkScreenNesting();
 checkSettingsPanelWidth();
 checkAuditsReadTheIndex();
+checkScriptsParse();
 
 for (const n of notes) console.log('  ok  ' + n);
 if (problems.length) {

@@ -68,9 +68,13 @@ const SECURITY_HEADERS = {
     //   was not reaching any page. The QR ENCODER is already self-hosted
     //   (assets/vendor/qrcode.mjs); self-hosting the scanner too would let this
     //   line go, and that is the right end state.
-    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
+    // ⚠ static.cloudflareinsights.com is Cloudflare Web Analytics, auto-injected
+    //   by Cloudflare into every HTML response. With it missing here the console
+    //   of every page opened with a CSP violation, and the analytics silently
+    //   collected nothing. The beacon posts to cloudflareinsights.com (connect-src).
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; " +
     "style-src 'self' 'unsafe-inline'; " +
-    "connect-src 'self' https://*.supabase.co https://accounts.google.com; " +
+    "connect-src 'self' https://*.supabase.co https://accounts.google.com https://cloudflareinsights.com; " +
     "img-src 'self' data: https:; " +
     // ⚠ youtube-NOCOOKIE, not youtube.com. Same player, but it sets no tracking
     //   cookie until the child actually presses play, and it is the narrower
