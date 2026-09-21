@@ -10113,7 +10113,7 @@ function _printAnswerSpace(q, marks) {
 // and third download genuinely useful practice rather than a reshuffle which
 // happens to repeat the same memorable graph or diagram. This is local-only:
 // no student data or paper content is sent anywhere.
-const _PRINT_HISTORY_LIMIT = 3;
+const _PRINT_HISTORY_LIMIT = 8;
 function _printHistoryKey() {
   const subject = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.id) || 'unknown-subject';
   return `mm_print_history_${ACTIVE_STUDENT_ID || 'guest'}_${subject}`;
