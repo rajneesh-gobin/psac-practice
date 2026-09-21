@@ -174,3 +174,75 @@ STATIC_QUESTIONS.push(
     explanation:'Volume = 8 × 4 × 5 = <b>160 cm³</b>.' })
 
 );
+
+// ── Pathway / frame questions ─────────────────────────────────────────────────
+// A path of uniform width surrounds a rectangle. Area of path = outer area − inner area.
+// Outer dimensions = inner dimensions + 2 × path width on each side.
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-av-023', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:2,
+    question:'A rectangular garden is <b>10 m long</b> and <b>7 m wide</b>. A path <b>1 m wide</b> is built all around it. What is the <b>area of the path</b>?',
+    answer:'38', acceptableAnswers:['38','38 m²','38 m2'],
+    hint:'Outer rectangle = (10+2) m × (7+2) m. Area of path = outer area − inner area.',
+    explanation:'Outer rectangle: 12 m × 9 m = 108 m². Inner garden: 10 m × 7 m = 70 m². Path area = 108 − 70 = <b>38 m²</b>.' }),
+
+  makeNum({ id:'g6m-av-024', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:2,
+    question:'A square lawn has a side of <b>8 m</b>. A path <b>1 m wide</b> surrounds it on all sides. What is the <b>area of the path</b>?',
+    answer:'36', acceptableAnswers:['36','36 m²','36 m2'],
+    hint:'Outer square side = 8 + 1 + 1 = 10 m. Area of path = outer area − inner area.',
+    explanation:'Outer square: 10 × 10 = 100 m². Inner lawn: 8 × 8 = 64 m². Path area = 100 − 64 = <b>36 m²</b>.' }),
+
+  makeMCQ({ id:'g6m-av-025', chapterId:'g6-area-vol', subsection:'compound', difficulty:2,
+    question:'A rectangular picture is <b>20 cm long</b> and <b>12 cm wide</b>. A wooden frame <b>2 cm wide</b> surrounds it. What is the <b>area of the frame</b>?',
+    options:['144 cm²','240 cm²','384 cm²','96 cm²'],
+    answer:'144 cm²',
+    hint:'Outer rectangle = (20+4) cm × (12+4) cm. Frame area = outer area − picture area.',
+    explanation:'Outer rectangle: 24 × 16 = 384 cm². Picture area: 20 × 12 = 240 cm². Frame area = 384 − 240 = <b>144 cm²</b>.' }),
+
+  makeNum({ id:'g6m-av-026', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:3,
+    question:'A rectangular park is <b>20 m long</b> and <b>14 m wide</b>. A concrete path <b>2 m wide</b> is laid all around the outside of the park. What is the <b>area of the path</b>?',
+    answer:'152', acceptableAnswers:['152','152 m²','152 m2'],
+    hint:'Outer dimensions: length = 20 + 2 + 2 = 24 m, width = 14 + 2 + 2 = 18 m. Path = outer − inner.',
+    explanation:'Outer: 24 × 18 = 432 m². Inner park: 20 × 14 = 280 m². Path area = 432 − 280 = <b>152 m²</b>.' }),
+
+  makeMCQ({ id:'g6m-av-027', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:3,
+    question:'A square garden has a side of <b>10 m</b>. A path <b>2 m wide</b> is built all around it. What is the <b>area of the path</b>?',
+    options:['96 m²','56 m²','100 m²','196 m²'],
+    answer:'96 m²',
+    hint:'Outer square side = 10 + 2 + 2 = 14 m. Path = outer area − inner area.',
+    explanation:'Outer square: 14 × 14 = 196 m². Inner garden: 10 × 10 = 100 m². Path area = 196 − 100 = <b>96 m²</b>.' }),
+
+  makeNum({ id:'g6m-av-028', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:3,
+    question:'A rectangular garden is <b>16 m long</b> and <b>11 m wide</b>. A path <b>2 m wide</b> surrounds it. What is the <b>perimeter of the outer edge</b> of the path?',
+    answer:'70', acceptableAnswers:['70','70 m'],
+    hint:'Outer length = 16 + 4 = 20 m. Outer width = 11 + 4 = 15 m. Perimeter = 2 × (length + width).',
+    explanation:'Outer dimensions: 20 m × 15 m. Perimeter = 2 × (20 + 15) = 2 × 35 = <b>70 m</b>.' }),
+
+  makeMCQ({ id:'g6m-av-029', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:3,
+    question:'A path <b>3 m wide</b> surrounds a rectangular garden. The <b>outer boundary</b> of the path measures <b>26 m × 18 m</b>. What is the <b>perimeter of the garden</b> (inside the path)?',
+    options:['64 m','88 m','240 m','44 m'],
+    answer:'64 m',
+    hint:'Inner length = 26 − 3 − 3 = 20 m. Inner width = 18 − 3 − 3 = 12 m. Perimeter = 2 × (20 + 12).',
+    explanation:'Inner garden: length = 26 − 6 = 20 m, width = 18 − 6 = 12 m. Perimeter = 2 × (20 + 12) = 2 × 32 = <b>64 m</b>.' }),
+
+  makeNum({ id:'g6m-av-030', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:4,
+    question:'A rectangular garden is <b>14 m long</b> and <b>9 m wide</b>. A path <b>2 m wide</b> surrounds it. The path is paved at <b>Rs 350 per m²</b>. What is the <b>total cost</b> of paving the path?',
+    answer:'37800', acceptableAnswers:['37800','37,800','Rs 37800','Rs 37,800'],
+    hint:'Find the path area first: outer (18 × 13) − inner (14 × 9). Then multiply by Rs 350.',
+    explanation:'Outer: 18 × 13 = 234 m². Inner: 14 × 9 = 126 m². Path area = 234 − 126 = 108 m². Cost = 108 × 350 = <b>Rs 37,800</b>.' }),
+
+  makeNum({ id:'g6m-av-031', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:4,
+    question:'A rectangular lawn is <b>18 m long</b> and <b>12 m wide</b>. A path <b>1 m wide</b> surrounds it. Square tiles of side <b>1 m</b> are used to pave the path. How many tiles are needed?',
+    answer:'64', acceptableAnswers:['64'],
+    hint:'Number of tiles = area of path (each tile covers 1 m²). Outer = 20 × 14, inner = 18 × 12.',
+    explanation:'Outer: 20 × 14 = 280 m². Inner lawn: 18 × 12 = 216 m². Path area = 280 − 216 = 64 m². Each tile is 1 m², so <b>64 tiles</b> are needed.' }),
+
+  makeMCQ({ id:'g6m-av-032', chapterId:'g6-area-vol', subsection:'word_probs', difficulty:4,
+    question:'A rectangular garden is surrounded by a path of <b>uniform width</b>. The outer boundary measures <b>20 m × 14 m</b> and the inner garden measures <b>12 m × 6 m</b>. What is the <b>width of the path</b>?',
+    options:['4 m','3 m','2 m','8 m'],
+    answer:'4 m',
+    hint:'The path adds the same width on both sides of each dimension. Width = (outer length − inner length) ÷ 2.',
+    explanation:'Length: (20 − 12) ÷ 2 = 8 ÷ 2 = 4 m. Check with width: (14 − 6) ÷ 2 = 8 ÷ 2 = 4 m ✓. The path is <b>4 m wide</b>.' })
+
+);
