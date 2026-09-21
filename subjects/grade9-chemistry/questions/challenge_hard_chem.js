@@ -6,6 +6,9 @@ const C2 = 'g9s-c2-mixtures';
 const C3 = 'g9s-c3-language';
 const C4 = 'g9s-c4-metals';
 const C5 = 'g9s-c5-salts';
+// Standard laboratory gas tests belong with the inquiry chapter's
+// `interpreting_results`, not with C1, whose syllabus is pollution only.
+const INQ = 'g9s-inquiry';
 
 STATIC_QUESTIONS.push(
 
@@ -172,7 +175,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g9s-chard-013', chapterId: C1, subsection: 'composition', difficulty: 3,
+    id: 'g9s-chard-013', chapterId: INQ, subsection: 'interpreting_results', difficulty: 3,
     question: 'A glowing (not burning) wooden splint is inserted into a test tube containing an unknown colourless gas. The splint immediately bursts back into flame. Which gas is present in the test tube?',
     options: [
       'Carbon dioxide — it supports combustion of glowing materials',
@@ -186,7 +189,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g9s-chard-014', chapterId: C1, subsection: 'pollution', difficulty: 4,
+    id: 'g9s-chard-014', chapterId: C1, subsection: 'acid_rain', difficulty: 4,
     question: 'Burning fossil fuels releases sulfur dioxide (SO₂) into the atmosphere. This SO₂ dissolves in cloud droplets, forming sulfurous and sulfuric acid, which falls as acid rain. What is the most serious environmental effect of acid rain on freshwater lakes and rivers in Mauritius?',
     options: [
       'It increases biodiversity by supplying sulfur as a plant nutrient',
@@ -200,7 +203,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g9s-chard-015', chapterId: C1, subsection: 'composition', difficulty: 3,
+    id: 'g9s-chard-015', chapterId: INQ, subsection: 'interpreting_results', difficulty: 3,
     question: 'A student passes an unknown gas through a test tube of clear limewater (calcium hydroxide solution). The limewater turns milky white. What does this confirm?',
     options: [
       'The gas is oxygen, which oxidises the calcium hydroxide to form a white solid',

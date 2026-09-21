@@ -113,12 +113,20 @@ const PracticeJourney = (() => {
   // thing, rather than leaving a button that does nothing.
   function showEmpty(chapterId, reason) {
     const body = document.getElementById('pj-sheet-body');
+    // ⚠ ONLY IF THE SHEET IS ACTUALLY OPEN. Every caller here opens it first,
+    //   so writing the explanation into its body was right — until a NEW
+    //   caller (the certificates screen's "Fix N →") started a set with the
+    //   sheet closed. The message was written correctly into a hidden element
+    //   and the button read as dead. A caller that cannot show this panel gets
+    //   a toast instead.
+    const sheet = document.getElementById('modal-practice-options');
+    const sheetOpen = !!sheet && !sheet.classList.contains('hidden');
     const msg = reason === 'no_mistakes'
       ? { t: 'Great work - there are no mistakes waiting.', b: 'Try some new questions', m: 'new' }
       : reason === 'no_unseen'
       ? { t: 'You have explored every question in this chapter. Revision still helps.', b: 'Start revision', m: 'smart' }
       : { t: 'There are no questions here yet.', b: 'Back to chapters', m: null };
-    if (!body) { toast(msg.t, 3000); return; }
+    if (!body || !sheetOpen) { toast(msg.t, 3500); return; }
     body.innerHTML = `<div class="pj-empty">
         <p class="pj-empty-t">${esc(msg.t)}</p>
         ${msg.m ? `<button class="pj-opt pj-opt-primary" onclick="PracticeJourney.start('${esc(chapterId)}','${msg.m}')">${esc(msg.b)}</button>`

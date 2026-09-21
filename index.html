@@ -2899,6 +2899,12 @@
               <div class="sh-note-title">Dashboard</div>
               <div class="sh-note-desc">Stats overview, assignments and chapter mastery</div>
             </button>
+            <button class="sh-note sh-note-blue" onclick="Certificates.open()">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">🎓</div>
+              <div class="sh-note-title">My Certificates</div>
+              <div class="sh-note-desc">One per subject - it grows every time you master more questions</div>
+            </button>
             <button class="sh-note sh-note-yellow" onclick="surpriseMe()">
               <div class="sh-note-tape"></div>
               <div class="sh-note-icon">🎲</div>
@@ -2945,6 +2951,11 @@
           <button onclick="showScreen('syllabus')" class="sh-link-card">
             <span class="sh-link-ico">📋</span>
             <div><strong>Syllabus Browser</strong><span>Progress by topic and subsection</span></div>
+            <span class="sh-link-arrow">›</span>
+          </button>
+          <button onclick="Certificates.open()" class="sh-link-card">
+            <span class="sh-link-ico">🎓</span>
+            <div><strong>My Certificates</strong><span>One per subject, from Starter to Subject Master</span></div>
             <span class="sh-link-arrow">›</span>
           </button>
         </div>
@@ -4889,6 +4900,12 @@
           <button onclick="Auth.addStudent()" class="pd-action is-primary"><span class="ico">➕</span><span>Add child</span></button>
           <button id="pd-add-parent-btn" onclick="PD.mainTab('settings','coparent-card')" class="pd-action" title="Invite another parent to this family">
             <span class="ico">👨‍👩‍👦</span><span>Add parent</span></button>
+        <!-- ⚠ A BUTTON, NOT A TAB. It opens a modal and selects no panel, so it
+             never belonged in the tablist beside My Children and Settings —
+             and as the eighth item it was what tipped that strip onto a
+             second line. Same handler, same modal; only its home changed. -->
+        <button id="pd-invite-btn" onclick="Auth.openInviteModal()" class="pd-action" title="Invite a friend to Nou Klass">
+          <span class="ico">🎁</span><span>Invite</span></button>
         </div>
       </div>
 
@@ -4913,7 +4930,7 @@
       <div class="teacher-navigation" role="tablist" aria-label="Parent dashboard">
         <button id="pd-tab-children" role="tab" aria-selected="true"  class="ta-tab" onclick="PD.mainTab('children')"><strong>👨‍👩‍👧 My Children</strong></button>
         <button id="pd-tab-calendar" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('calendar')"><strong>📅 Timetable</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" onclick="Auth.openInviteModal()"><strong>🎁 Invite</strong></button>
+        <button id="pd-tab-certificates" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('certificates')"><strong>🎓 Certificates</strong></button>
         <button id="pd-tab-papers" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('papers')"><strong>📝 Test Papers</strong></button>
         <button id="pd-tab-preview" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('preview')"><strong>👀 Chapter Preview</strong></button>
         <button id="pd-tab-shop" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('shop')"><strong>🛒 Shop</strong><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
@@ -5270,6 +5287,36 @@
       <!-- ── Calendar panel (shown when Calendar tab is active) ── -->
       <div id="pd-panel-calendar" class="hidden"></div>
 
+      <!-- ── Certificates panel ──
+           ⚠ Its OWN markup, deliberately not PD._mountPanel('certificates',
+             'screen-certificates') the way the shop and the calendar panels
+             work. _mountPanel MOVES the screen's nodes in here permanently,
+             and a parent who opens this tab and then hands the phone over
+             (Auth.switchToStudentSelect() never reloads the page) would leave
+             the child's own My Certificates screen empty with nothing to
+             explain it. Certificates.render(id, 'pd-cert-body') paints here.
+           ⚠ The warning is repeated in full. It is the one thing on this
+             feature that must appear wherever a certificate does. -->
+      <div id="pd-panel-certificates" class="hidden">
+        <div class="cert-head">
+          <div>
+            <h2 class="cert-title">🎓 Certificates</h2>
+            <p class="cert-sub">What each child has earned so far, one certificate per subject.
+              It is rebuilt from their own practice every time you open this tab.</p>
+          </div>
+          <button class="cert-btn" onclick="Certificates.render(PD.activeId(),'pd-cert-body')">↻ Refresh</button>
+        </div>
+        <div class="cert-warn" role="note">
+          <span class="cert-warn-ico" aria-hidden="true">⚠️</span>
+          <p><strong>These certificates are awarded by nouklass.com and by nobody else.</strong>
+            They are generated automatically from your child's own practice on this site. They are
+            <strong>not</strong> examination results and are <strong>not</strong> recognised by the
+            Mauritius Examinations Syndicate, the MIE, the Ministry of Education or any other official
+            body. The level shown describes progress against our own practice standards only.</p>
+        </div>
+        <div id="pd-cert-body"></div>
+      </div>
+
       <!-- ── Shop panel ── -->      <!-- ⚠ Adult-facing test-paper generator. Renders through
            PaperBuilder.render() (engine/paper_builder.js), which is shared with the
            teacher screen so the two pickers cannot drift. -->
@@ -5509,6 +5556,45 @@
       <div id="profile-content" class="py-4">
         <!-- Rendered by showProfile() -->
       </div>
+    </div>
+
+    <!-- ══════════ MY CERTIFICATES ══════════
+         One certificate per SUBJECT, rebuilt from the child's own per-question
+         record every time this screen opens. Reaching a new level REPLACES the
+         old certificate — it never adds a second one.
+
+         ⚠ Shared with the parent dashboard. PD._mountPanel('certificates', …)
+           MOVES this markup into #pd-panel-certificates the first time a parent
+           opens that tab, exactly as it already does with the shop and the
+           calendar. Nothing here may assume it is still a direct child of the
+           screen, and everything is addressed by id.
+
+         ⚠ The warning below is NOT decoration and must not be collapsed behind
+           a "read more". A certificate that looks official and is not is the
+           one way this feature can do harm, so the page says what it is before
+           it shows a single award. Certificates.DISCLAIMER carries the same
+           words onto the artwork, the PDF and the share message. -->
+    <div id="screen-certificates" class="screen hidden">
+      <div class="cert-head">
+        <div>
+          <h2 class="cert-title">🎓 My Certificates</h2>
+          <p class="cert-sub">One certificate for each subject. It grows as more questions are mastered,
+            and the newest one always replaces the old.</p>
+        </div>
+        <button class="cert-btn" onclick="Certificates.render()">↻ Refresh</button>
+      </div>
+
+      <div class="cert-warn" role="note">
+        <span class="cert-warn-ico" aria-hidden="true">⚠️</span>
+        <p><strong>These certificates are awarded by nouklass.com and by nobody else.</strong>
+          They are generated automatically from your own practice on this site so that you and your
+          family can see how far you have come. They are <strong>not</strong> examination results and
+          are <strong>not</strong> recognised by the Mauritius Examinations Syndicate, the MIE, the
+          Ministry of Education or any other official body. The level shown describes progress against
+          our own practice standards only.</p>
+      </div>
+
+      <div id="cert-body"></div>
     </div>
 
     <!-- ── My Reports inbox ───────────────────────────────────────────────── -->
@@ -6333,6 +6419,7 @@
   <script src="engine/cloze.js"></script>
   <script src="engine/errorhunt.js"></script>
   <script src="engine/learning_coach.js"></script>
+  <script src="engine/certificates.js"></script>
 
   <!-- ── Exam review sheet ──
        Reached from "Review →", the label the Next button takes on the last
@@ -6442,6 +6529,34 @@
         <button class="pj-x" onclick="PracticeJourney.close()" aria-label="Close question map">✕</button>
       </div>
       <div id="pj-map-body" class="pj-sheet-body"></div>
+    </div>
+  </div>
+
+  <!-- ── Certificate viewer ──
+       The artwork is one inline <svg> built by Certificates.svg(). It embeds no
+       image and no webfont ON PURPOSE: the same markup is rasterised through an
+       <img> with a data: URL for the shared PNG, and anything fetched from
+       outside would silently vanish from the picture a parent forwards. -->
+  <div id="modal-certificate" class="hidden fixed inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm overflow-y-auto"
+       onclick="if(event.target===this)Certificates.close()">
+    <div class="cert-modal bg-white dark:bg-gray-900 w-full max-w-3xl my-0 sm:my-auto">
+      <div class="cert-modal-head">
+        <h3 id="cert-view-title" class="cert-modal-title">Certificate</h3>
+        <button class="cert-x" onclick="Certificates.close()" aria-label="Close certificate">✕</button>
+      </div>
+      <div id="cert-view-body" class="cert-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ── "More info": what has been done, and what is left to do ── -->
+  <div id="modal-certificate-info" class="hidden fixed inset-0 z-[120] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm overflow-y-auto"
+       onclick="if(event.target===this)Certificates.closeInfo()">
+    <div class="cert-modal bg-white dark:bg-gray-900 w-full max-w-2xl my-0 sm:my-auto">
+      <div class="cert-modal-head">
+        <h3 id="cert-info-title" class="cert-modal-title">Subject</h3>
+        <button class="cert-x" onclick="Certificates.closeInfo()" aria-label="Close details">✕</button>
+      </div>
+      <div id="cert-info-body" class="cert-modal-body"></div>
     </div>
   </div>
 

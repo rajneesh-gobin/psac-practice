@@ -129,7 +129,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeNum({
-    id: 'g9s-phard-013', chapterId: P3, subsection: 'work_energy', difficulty: 3,
+    id: 'g9s-phard-013', chapterId: P3, subsection: 'energy_problems', difficulty: 3,
     question: 'A worker pushes a heavy crate with a constant force of 250 N along a horizontal floor for a distance of 8 m. Calculate the work done by the worker in joules.',
     answer: 2000, acceptableAnswers: ['2000', '2000 J'],
     hint: 'Work done = force × distance in the direction of the force (W = F × d).',
@@ -137,7 +137,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeNum({
-    id: 'g9s-phard-014', chapterId: P3, subsection: 'work_energy', difficulty: 4,
+    id: 'g9s-phard-014', chapterId: P3, subsection: 'energy_problems', difficulty: 4,
     question: 'A machine receives an input power of 500 W. In 6 seconds it produces 1800 J of useful work output. Calculate the efficiency of the machine as a percentage.',
     answer: 60, acceptableAnswers: ['60', '60%'],
     hint: 'Efficiency = (useful power output ÷ power input) × 100. Find useful output power from W ÷ t.',

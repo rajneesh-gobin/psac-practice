@@ -70,6 +70,10 @@ const SUMMARY = {
 
   index: out => grab(out, /_index\.js\s+—\s+(.+)$/m),
 
+  counts: out => grab(out, /_counts\.js\s+—\s+(.+)$/m),
+
+  certificates: out => grab(out, /^certificates: (.+)$/m),
+
   tests: out => {
     const m = out.match(/(\d+) passed, (\d+) failed/g);
     return m ? m[m.length - 1] : '';
@@ -105,6 +109,12 @@ const STEPS = [
   //   it validated stale data. Found 2026-09-17 by adding a new chapter: the
   //   invariant failed it as "declared but EMPTY" while the questions existed
   //   and the very next step was about to build them.
+  // ⚠ BEFORE check.js, which FAILS when the table has drifted from the
+  //   question files. It is the denominator of every subject certificate, so a
+  //   content batch that does not rebuild it awards Subject Master while the
+  //   questions it just added sit unanswered.
+  { script: 'scripts/build-subject-counts.js',      label: 'regenerate subjects/_counts.js',
+    summary: SUMMARY.counts, watch: 'subjects/_counts.js' },
   { script: 'netlify/build-questions.js',           label: 'rebuild the question bundles',
     summary: SUMMARY.bundles },
   { script: 'scripts/test-subsection-invariant.js', label: 'declared subsections == tagged subsections',
@@ -123,6 +133,8 @@ const STEPS = [
   //   measures characters. 46 items across twelve packs, found 2026-09-18.
   { script: 'scripts/test-option-synonyms.js',      label: 'no two options mean the same thing',
     summary: SUMMARY.synonyms },
+  { script: 'scripts/test-certificates.js',         label: 'certificate levels, artwork and disclaimer',
+    summary: SUMMARY.certificates },
   { script: 'scripts/check.js',                     label: 'static checks (index drift, sw shell, LOCAL_FILES)',
     summary: SUMMARY.checks },
 ];

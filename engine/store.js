@@ -87,6 +87,18 @@ const Store = (() => {
       // truncated question: this rides in the same blob as everything else and
       // is rewritten on every wrong answer.
       mistakes:     [],
+      // ── Subject certificates (engine/certificates.js) ──────────────────
+      // packId -> { tier, tierIdx, mastered, total, pct, chaptersComplete,
+      //             chaptersTotal, serial, firstIssued, issued, updated }.
+      // ⚠ A SNAPSHOT, NOT THE SOURCE. The numbers are rebuilt every time the
+      //   screen opens, from student_subject_progress() against the generated
+      //   count table; this row exists so the certificate keeps a stable
+      //   number and a stable issue date, and so an offline visit has
+      //   something true to show instead of zeros. ONE ROW PER SUBJECT: a new
+      //   level overwrites it rather than adding a second certificate.
+      // ⚠ Written only by the CHILD's own session. A parent viewing a child
+      //   must not mint that child's issue date.
+      certificates: {},
     };
   }
 

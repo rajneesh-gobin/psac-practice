@@ -31,7 +31,7 @@ you know it exists. The area file carries the rule, its bound and its test.
 | SQL, RLS, a policy, a grant, `supabase-schema.sql` | [`database.md`](docs/claude/database.md) |
 | `style.css`, `index.html`, any screen, modal, layout or the map | [`ui-css.md`](docs/claude/ui-css.md) |
 | `sw.js`, `netlify.toml`, a deploy, or a headless-Chrome harness | [`deploy-and-verification.md`](docs/claude/deploy-and-verification.md) |
-| minigames, teacher mode, the landing page, timetable, materials, contact form, sharing | [`features.md`](docs/claude/features.md) |
+| minigames, teacher mode, the landing page, timetable, materials, contact form, sharing, **subject certificates** | [`features.md`](docs/claude/features.md) |
 | what to do next, or anything reported as outstanding | [`pending.md`](docs/claude/pending.md) |
 | **building the Android app** — keystore, Bubblewrap, assetlinks | [`docs/android-build.md`](docs/android-build.md) |
 | **the Android app / Google Play** — what must change in the web app first | [`docs/android-readiness.md`](docs/android-readiness.md) |
@@ -59,6 +59,10 @@ netlify/
 subjects/
   _index.js               ← GENERATED eager pack index — the ONLY subject script
                              index.html loads. node scripts/build-subject-index.js
+  _counts.js              ← GENERATED per-pack/per-chapter/per-difficulty question
+                             counts — the DENOMINATOR of a subject certificate.
+                             Injected ON DEMAND, never from a <script> tag.
+                             node scripts/build-subject-counts.js
   grade[1-9]-[subject]/
     _manifest.js          ← registerSubject() + chapters + SYLLABUS + generators.
                              LAZY: fetched by PackLoader.ensure() on demand
@@ -82,6 +86,7 @@ subjects/
 | Minigames · their data · parent game settings | `engine/minigame.js` · `minigame_{gk,words,geo,time}.js` · `game_settings.js` |
 | **Learning Coach** — one spaced-retrieval mission a day from any live pack of the child's grade (`DB.learningCoach`) | `engine/learning_coach.js` · hooks in `app.js`: `recordAnswer` → `LearningCoach.record`, `renderDashboard`/`renderSubjectSelect` → `renderChild`, parent dashboard → `renderParent` |
 | Fix My Mistakes — the spaced mistake drill (`DB.mistakes`, `_dueMistakes()`, `_FIX_GAP_DAYS`) | `engine/app.js` |
+| **Subject certificates** — one per subject, nine levels, overwritten in place; the showcase screen, the artwork, the PDF and the share | `engine/certificates.js` · `subjects/_counts.js` (GENERATED) · `student_subject_progress()` |
 | Credits + entitlement model, `sellableChapters/Subjects` | `engine/shop.js` (the shop *screen*, `renderShop()`, is in `app.js`) |
 | Admin panel, shop settings, security log | `engine/admin.js` |
 | Server-side entitlement enforcement | `netlify/functions/questions.js` |
@@ -285,10 +290,17 @@ papers · the importer's flags and fail-closed preflight. Headlines:
 6. ⚠ If you added/removed/renamed/reordered a **chapter** — or added a pack —
    re-run `node scripts/build-subject-index.js`. `scripts/check.js` fails on
    drift, so this cannot ship stale, but it will stop the build until you do.
-7. **`node scripts/preflight.js`** runs the six local steps that must pass after
-   any content or chapter change — rebuild the index, subsection invariant,
-   rebuild the bundles, live-pack content, **syllabus facts**, `check.js` — in
-   the one order that works. ⚠ Read the step list from `--list`, not from here.
+   ⚠ And any change to the question COUNT re-runs
+   `node scripts/build-subject-counts.js`. It is the denominator of every
+   subject certificate, `check.js` fails on drift too, and a stale table does
+   not throw — it awards Subject Master while the questions you just added sit
+   unanswered. `preflight.js` does it as step 2.
+7. **`node scripts/preflight.js`** runs the local steps that must pass after any
+   content or chapter change — rebuild the index, rebuild the counts, rebuild
+   the bundles, subsection invariant, live-pack content, **syllabus facts**,
+   option synonyms, certificates, `check.js` — in the one order that works.
+   ⚠ Read the step list from `--list`, not from here: it was "the six local
+   steps" long after it had nine.
    ⚠ It writes NOTHING to the database. Add `--import-dry-run` to see
    what would change, `--import` to actually upsert; the import step is opt-in
    and is skipped if any earlier step failed, `--keep-going` included.
@@ -480,9 +492,47 @@ exactly like a farm for the first few hours.
 
 ---
 
+## Subject certificates → [`features.md`](docs/claude/features.md)
+One certificate per **subject** (never per chapter), nine levels from Starter to
+**Subject Master**, rebuilt from the child's own per-question record and
+**overwritten in place** — a new level replaces the old certificate rather than
+adding a second one. Shown to the child (`#screen-certificates`) and to the
+parent (PD tab 🎓 Certificates). Headlines:
+- ⚠ **"Mastered" is `state = 'secure'` and nothing else** — right first time, or
+  right twice running after a miss. `improved` does not count.
+- ⚠ **The gate is the percentage of the subject and only that.** Absolute
+  question floors were tried and thrown out: the same floor is 20% of a
+  252-question pack and 2% of a 2,164-question one.
+- ⚠ **Level 9 is EXACT and every percentage is FLOORED** — 3,999 of 4,000 is
+  Distinction, and prints as 99%.
+- ⚠ **A parent difficulty cap never shrinks the denominator**, or a tighter cap
+  would buy an easier mastery. It is reported instead.
+- ⚠ **The denominator is `subjects/_counts.js`, GENERATED**, and `check.js` fails
+  on drift. The numerator is ONE rpc, `student_subject_progress()`.
+- ⚠ **The disclaimer is IN THE ARTWORK**, not only beside it — the image is what
+  gets forwarded. One string (`Certificates.DISCLAIMER`), five surfaces.
+- ⚠⚠ **Every gradient id in the SVG is unique per render.** `<defs>` ids are
+  document-wide, so nine certificates all carrying `id="cg"` paint with the
+  first one's paper — measured: Subject Master rendered on the Expert design's
+  pale ground, gold on cream, unreadable, with nothing reporting it.
+- ⚠ **The parent panel has its OWN markup**, not `PD._mountPanel()`, which moves
+  a screen's nodes for good and would empty the child's screen after a handover.
+- ⚠ **A child can practise other grades** (`GradeAccess`), so a subject can
+  appear twice under the same NAME — other-grade cards carry a grade chip and
+  sit under their own heading, and the summary counts the child's own grade.
+- ⚠⚠ **`open()` must not render.** `showScreen('certificates')` already does;
+  calling both drew every subject twice, silently and intermittently. `load()`
+  also carries a generation counter and publishes atomically.
+- Tests: `scripts/test-certificates.js` (no browser) and
+  `scripts/test-certificate-render.js` (real Chrome — the PNG, the text bounding
+  boxes, the shared-page id collision, cross-grade labelling and the
+  double-render).
+
 ## Data & storage → [`data-storage.md`](docs/claude/data-storage.md)
 The progress blob (`DB` → `student_progress.data`), the save throttle, and the
 owner-scoped 7-day question cache. Headlines:
+- `DB.certificates[packId]` is a **snapshot** of a subject certificate (serial,
+  first issue date, level, numbers), not its source — see above.
 - New `DB` keys go in `Store._defaultStudent()` — the key-merge backfills every
   existing child for free, and there is no new column-level GRANT to forget.
 - ⚠ **Day keys are Mauritius days (`_muDayKey`), never the device clock.**

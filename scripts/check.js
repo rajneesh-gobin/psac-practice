@@ -208,6 +208,48 @@ function checkManifests() {
   note(`checked subjects/_index.js against ${onDisk.length} lazily-loaded manifests`);
 }
 
+// ── 4b · subjects/_counts.js must match the question files on disk ────────
+// The DENOMINATOR of every subject certificate. A stale table does not throw:
+// it quietly reports "1,412 of 1,419 mastered" for a child who has finished
+// the subject, or awards Subject Master while seven new questions sit
+// unanswered. Both are worse than an error, so this is a build failure.
+//
+// ⚠ Rebuilt and compared, not regex-read. The builder is the only definition
+//   of what counts, and reproducing its rules here would be a third copy.
+function checkSubjectCounts() {
+  const rel = 'subjects/_counts.js';
+  if (!exists(rel)) {
+    fail(rel + ' is missing — run: node scripts/build-subject-counts.js');
+    return;
+  }
+  let shipped, fresh;
+  try {
+    shipped = require(path.join(ROOT, rel));
+  } catch (e) {
+    fail(rel + ' does not execute: ' + e.message);
+    return;
+  }
+  try {
+    fresh = require(path.join(ROOT, 'scripts', 'build-subject-counts.js')).build().packs;
+  } catch (e) {
+    fail('scripts/build-subject-counts.js does not run: ' + e.message);
+    return;
+  }
+  const REGEN = 'run: node scripts/build-subject-counts.js';
+  const a = Object.keys(shipped).sort(), b = Object.keys(fresh).sort();
+  for (const id of b) if (!shipped[id]) fail('pack ' + id + ' is missing from ' + rel + ' — ' + REGEN);
+  for (const id of a) if (!fresh[id])   fail(rel + ' lists ' + id + ', which has no questions on disk — ' + REGEN);
+  let drift = 0;
+  for (const id of b) {
+    if (!shipped[id]) continue;
+    if (JSON.stringify(shipped[id]) !== JSON.stringify(fresh[id])) { drift++; }
+  }
+  if (drift) fail(drift + ' pack(s) in ' + rel + ' no longer match their question files — ' + REGEN);
+  const n = Object.values(fresh).reduce((t, p) =>
+    t + Object.values(p).reduce((x, r) => x + r[0] + r[1] + r[2] + r[3], 0), 0);
+  note('checked subjects/_counts.js against ' + b.length + ' packs (' + n + ' practisable questions)');
+}
+
 // ── 5 · Badge ids must be unique and never reused ─────────────────────────
 // They are persisted in DB.badges; a collision silently awards the wrong badge.
 function checkBadgeIds() {
@@ -372,6 +414,7 @@ checkHtmlReferences();
 checkServiceWorker();
 checkLocalFiles();
 checkManifests();
+checkSubjectCounts();
 checkBadgeIds();
 checkSqlSearchPath();
 checkScreenNesting();

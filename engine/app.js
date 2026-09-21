@@ -2907,7 +2907,8 @@ function showScreen(id) {
   // instead of navigating away. showScreen('parent') is the reset path - let it
   // through so renderParentDashboard() can restore the children panel.
   if (id !== 'parent' && typeof PD !== 'undefined') {
-    const _pdInlineMap = { 'shop': 'shop', 'calendar': 'calendar', 'parent-messages': 'messages' };
+    const _pdInlineMap = { 'shop': 'shop', 'calendar': 'calendar', 'parent-messages': 'messages',
+                           'certificates': 'certificates' };
     if (_pdInlineMap[id] && !document.getElementById('screen-parent')?.classList.contains('hidden')) {
       PD.mainTab(_pdInlineMap[id]);
       return;
@@ -3080,6 +3081,9 @@ function showScreen(id) {
   if (id === 'parent')          _withRouteBusy('Opening parent view', 'Loading your family dashboard', () => renderParentDashboard());
   if (id === 'parent-messages') renderParentMessages();
   if (id === 'shop')            renderShop();
+  // Not awaited: the screen paints its warning and its own "building…" state
+  // at once, and the cards arrive when the aggregate does.
+  if (id === 'certificates' && typeof Certificates !== 'undefined') Certificates.render();
   if (id === 'subject-select')  renderSubjectSelect();
   if (id === 'student-select')  renderStudentSelect();
   if (id === 'grade-select')    renderGradeSelect();
@@ -6903,7 +6907,7 @@ const PD = (() => {
 
   // Load reminder when detail panel opens
   const _mounted = {};
-  const _PD_PANELS = ['children', 'calendar', 'papers', 'preview', 'shop', 'messages', 'settings'];
+  const _PD_PANELS = ['children', 'calendar', 'certificates', 'papers', 'preview', 'shop', 'messages', 'settings'];
 
   function _mountPanel(name, srcId) {
     if (_mounted[name]) return;
@@ -6930,6 +6934,19 @@ const PD = (() => {
         // Same one-shot-guard reasoning as 'papers' above: the pack list grows
         // as packs register, so this renders on every activation.
         if (typeof ChapterPreview !== 'undefined') ChapterPreview.render('pd-preview-host', 'parent');
+        break;
+      case 'certificates':
+        // ⚠ Rendered on EVERY activation, not once. The numbers come from the
+        //   database, the child in focus can change between two taps of this
+        //   tab, and a certificate showing the previous child's subject is
+        //   worse than a spinner. Certificates.render() resolves the child
+        //   itself — see _resolveSubject().
+        // ⚠ NOT _mountPanel(). That MOVES a screen's markup in here for good, and
+        //   a parent who opens this tab and then hands the device over would
+        //   leave the child's own My Certificates screen empty. The panel has
+        //   its own markup and its own body element; the module paints into
+        //   whichever host asked for it.
+        if (typeof Certificates !== 'undefined') Certificates.render(PD.activeId(), 'pd-cert-body');
         break;
       case 'shop':
         _mountPanel('shop', 'screen-shop');

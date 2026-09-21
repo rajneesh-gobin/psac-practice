@@ -61,7 +61,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g9s-bhard-005', chapterId: B1, subsection: 'oxyhaemoglobin', difficulty: 3,
+    id: 'g9s-bhard-005', chapterId: B1, subsection: 'components_of_blood', difficulty: 3,
     question: 'Haemoglobin picks up oxygen in the lungs to form oxyhaemoglobin. In the body tissues, oxyhaemoglobin releases the oxygen. Which conditions in body tissues trigger this release?',
     options: [
       'High CO₂ concentration and low oxygen concentration',

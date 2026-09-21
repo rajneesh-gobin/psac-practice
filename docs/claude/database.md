@@ -89,6 +89,44 @@ defaults found via `pg_depend`, `check_function_bodies`, the pinned
    drops the `=X` PUBLIC entry. Check `proacl`, not the migration text, after any
    `CREATE FUNCTION`.
 
+### Subject certificates — one aggregate read (2026-09-21, APPLIED)
+`migrations/20260921_subject_certificates.sql` — applied to production
+2026-09-21 and verified by reading `pg_proc`/`proacl`, not the migration text:
+exactly one overload, `provolatile = 's'`, `prosecdef = true`, and
+`{postgres=X,service_role=X,anon=X,authenticated=X}` with **no `=X` PUBLIC
+entry**.
+- **Read only.** No table, no column, no index, no write path.
+  `record_question_progress()` is still the single writer of
+  `student_question_progress`.
+- ⚠ **WHY A FUNCTION AND NOT A POSTGREST QUERY.** Everything that reads
+  `student_question_progress` today reads ONE chapter at a time, which is right
+  for a Question Map and useless for a per-SUBJECT certificate: the My
+  Certificates screen shows every live subject of the child's grade at once,
+  eight packs and ~120 chapters for Grade 9. That is 120 round trips, or every
+  row the child owns — a single child who finishes one French pack owns 2,200 of
+  them, ~90 KB of JSON to produce two integers. **PostgREST cannot GROUP BY.**
+- ⚠ **GROUPED BY (subject_pack_id, chapter_id), NOT BY chapter_id ALONE.**
+  Chapter ids are **not** globally unique: `g9s-inquiry` and `g9s-sts` are each
+  declared by grade9-biology, grade9-chemistry **and** grade9-physics (the NCE
+  science split divided those two by subject affinity rather than duplicating
+  them). Measured on the manifests: 464 chapters, 4 duplicate declarations, all
+  of them those two ids. Collapsing on chapter alone credits one pack's answers
+  to another pack's certificate.
+- ⚠ **`subject_pack_id` can be NULL and comes back as `''`.**
+  `backfill_question_progress()` inserts `legacy_seen` rows with no pack.
+  Production held 0 of them on 2026-09-21, but the function that makes them is
+  still callable, so the client maps an empty pack back through the chapter it
+  knows. Those rows are `attempts 0` and can never change a level.
+- ⚠ **It RAISES rather than returning no rows** when the caller is not allowed
+  (`28000` no_student, `42501` not_authorized). "No rows" is an ordinary answer
+  here — a child who has not practised yet — so a silent empty result would
+  render as a brand-new account instead of as a refusal. Probed as `anon` with
+  no token on production: `403 {"code":"28000","message":"no_student"}`.
+- A child's own token wins through `current_student_id()`; `p_student` is
+  honoured only for an adult who `owns_student()` or `is_admin()`, and a student
+  token naming anyone else is refused — the same shape as
+  `record_question_progress()`.
+
 ### Guest device cap and the class hub (2026-09-10, APPLIED)
 `migrations/20260910_guest_device_cap.sql` and
 `migrations/20260910_classroom_materials_library.sql` — applied to production

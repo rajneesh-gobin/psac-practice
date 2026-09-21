@@ -226,7 +226,9 @@ const QuestionLoader = (() => {
                        'subjects/grade7-science/questions/batch2_g7s-solar-system.js',
                        'subjects/grade7-science/questions/batch2_g7s-sts.js',
                        // @enrichment - label-the-diagram, see docs/label-diagrams/PLAN.md
-                       'subjects/grade7-science/questions/label_diagram.js'],
+                       'subjects/grade7-science/questions/label_diagram.js',
+                       'subjects/grade7-science/questions/batch3_g7s-changes.js',
+                       'subjects/grade7-science/questions/batch3_g7s-food-chains.js'],
     'grade7-social-modern-studies': ['subjects/grade7-social-modern-studies/questions/depth_hard.js',
                                     'subjects/grade7-social-modern-studies/questions/ch01_core.js',
                                      'subjects/grade7-social-modern-studies/questions/ch02_expanded.js',
@@ -294,14 +296,19 @@ const QuestionLoader = (() => {
                        'subjects/grade8-science/questions/batch2_pressure.js',
                        'subjects/grade8-science/questions/batch2_respiratory.js',
                        'subjects/grade8-science/questions/batch2_sts.js',
-                       'subjects/grade8-science/questions/batch2_work_energy.js'],
+                       'subjects/grade8-science/questions/batch2_work_energy.js',
+                       'subjects/grade8-science/questions/batch3_chem_language.js',
+                       'subjects/grade8-science/questions/batch3_pressure.js',
+                       'subjects/grade8-science/questions/batch3_work_energy.js'],
     'grade8-social-modern-studies': [
       'subjects/grade8-social-modern-studies/questions/depth_hard.js','subjects/grade8-social-modern-studies/questions/ch01_core.js',
                                      'subjects/grade8-social-modern-studies/questions/ch02_expanded.js',
                                      'subjects/grade8-social-modern-studies/questions/reclaimed_sample.js',
                                      'subjects/grade8-social-modern-studies/questions/batch2_democracy.js',
                                      'subjects/grade8-social-modern-studies/questions/batch2_independence.js',
-                                     'subjects/grade8-social-modern-studies/questions/batch2_society.js'],
+                                     'subjects/grade8-social-modern-studies/questions/batch2_society.js',
+      'subjects/grade8-social-modern-studies/questions/batch3_independence.js',
+      'subjects/grade8-social-modern-studies/questions/batch3_society.js'],
     'grade9-ict':   ['subjects/grade9-ict/questions/ch01_computer_systems.js',
                      'subjects/grade9-ict/questions/ch02_word_processing.js',
                      'subjects/grade9-ict/questions/ch03_spreadsheets.js',
@@ -968,7 +975,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 160;
+  const _CACHE_VERSION = 161;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

@@ -18,7 +18,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-002', chapterId: 'plants', subsection: 'plant_adaptation', difficulty: 3,
+    id: 'g5sc-hard-002', chapterId: 'plants', subsection: 'parts', difficulty: 3,
     question: 'Water lily leaves float on the surface of a pond and have waxy upper surfaces. What is the main advantage of the waxy coating?',
     options: [
       'It repels water so the leaf does not become waterlogged and can still absorb sunlight',
@@ -32,7 +32,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-003', chapterId: 'plants', subsection: 'plant_adaptation', difficulty: 4,
+    id: 'g5sc-hard-003', chapterId: 'plants', subsection: 'parts', difficulty: 4,
     question: 'A desert plant has small thick leaves coated in wax, a very long taproot, and a thick fleshy stem. Which statement about these adaptations is INCORRECT?',
     options: [
       'Waxy leaves increase water absorption from the dry air',
@@ -46,7 +46,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-004', chapterId: 'plants', subsection: 'transport', difficulty: 3,
+    id: 'g5sc-hard-004', chapterId: 'plants', subsection: 'parts', difficulty: 3,
     question: 'A white carnation flower is placed in red-dyed water. After a few hours the petals turn pink. What does this demonstrate?',
     options: [
       'Water moves up through the stem carrying the dye, showing upward transport of water in plants',
@@ -60,7 +60,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-005', chapterId: 'animals', subsection: 'adaptation', difficulty: 3,
+    id: 'g5sc-hard-005', chapterId: 'animals', subsection: 'habitats', difficulty: 3,
     question: 'A polar bear has thick fur, a thick layer of fat (blubber) under its skin, and white colouring. Which adaptation is MOST important for keeping the bear warm in freezing temperatures?',
     options: [
       'The thick fat layer, which insulates the body and reduces heat loss',
@@ -102,7 +102,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-008', chapterId: 'water_matter', subsection: 'states_of_matter', difficulty: 3,
+    id: 'g5sc-hard-008', chapterId: 'water-matter', subsection: 'states', difficulty: 3,
     question: 'When water evaporates from a puddle, the water molecules:',
     options: [
       'Gain enough energy to escape from the liquid surface and move freely as an invisible gas',
@@ -116,7 +116,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-009', chapterId: 'water_matter', subsection: 'water_cycle', difficulty: 4,
+    id: 'g5sc-hard-009', chapterId: 'water-matter', subsection: 'water_cycle', difficulty: 4,
     question: 'In the water cycle, water evaporates from oceans and lakes, rises into the atmosphere, cools, condenses into clouds, and falls as rain. What provides the energy that drives evaporation?',
     options: [
       'The Sun\'s heat energy, which warms water at the surface until molecules can escape as vapour',
@@ -130,7 +130,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-010', chapterId: 'water_matter', subsection: 'states_of_matter', difficulty: 3,
+    id: 'g5sc-hard-010', chapterId: 'water-matter', subsection: 'states', difficulty: 3,
     question: 'Ice floats on liquid water. For most substances, the solid sinks in its own liquid. Why is ice different?',
     options: [
       'Ice has a lower density than liquid water because its molecules form a regular open structure with more space between them',
@@ -144,7 +144,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-011', chapterId: 'water_matter', subsection: 'properties', difficulty: 3,
+    id: 'g5sc-hard-011', chapterId: 'water-matter', subsection: 'properties', difficulty: 3,
     question: 'A student dissolves salt in water to make a solution, then heats the solution gently until all the water evaporates. What will they find in the dish?',
     options: [
       'The original salt, showing that dissolving is a reversible physical change',
@@ -172,7 +172,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-013', chapterId: 'energy', subsection: 'conservation_of_energy', difficulty: 4,
+    id: 'g5sc-hard-013', chapterId: 'energy', subsection: 'transfer', difficulty: 4,
     question: 'A student says: "Energy is used up when a light bulb shines." Why is this statement scientifically incorrect?',
     options: [
       'Energy cannot be created or destroyed — it is transformed from electrical energy into light and heat, and the total amount stays the same',
@@ -200,7 +200,7 @@ STATIC_QUESTIONS.push(
   }),
 
   makeMCQ({
-    id: 'g5sc-hard-015', chapterId: 'electricity', subsection: 'conductors_insulators', difficulty: 3,
+    id: 'g5sc-hard-015', chapterId: 'electricity', subsection: 'conductors', difficulty: 3,
     question: 'A student tests five materials in a circuit with a bulb and battery. The bulb glows for: copper wire (YES), plastic ruler (NO), graphite pencil lead (YES), rubber eraser (NO), iron nail (YES). What conclusion is best supported by these results?',
     options: [
       'Metals and graphite conduct electricity; plastic and rubber do not',

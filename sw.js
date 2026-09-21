@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v376';
+const SHELL_VERSION = 'shell-v377';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -104,6 +104,11 @@ const SHELL_FILES = [
   '/engine/cloze.js',
   '/engine/errorhunt.js',
   '/engine/learning_coach.js',
+  '/engine/certificates.js',
+  // ⚠ subjects/_counts.js is deliberately ABSENT, exactly like the pack
+  //   manifests above it: Certificates injects it the first time the screen is
+  //   opened, and the default fetch branch caches it from that moment on, so a
+  //   child who has looked at their certificates once still has them offline.
 ];
 
 // ── Install: pre-cache the shell ─────────────────────────────────────────────

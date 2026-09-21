@@ -49,6 +49,28 @@ New keys go in `Store._defaultStudent()` so the key-merge in
   every `en-GB` browser, i.e. exactly the devices this app targets. Legacy rows
   are shown as-is, never round-tripped, and get no calendar square.
 
+### `DB.certificates` — a snapshot, not the source (2026-09-21)
+`packId -> { tier, tierIdx, mastered, total, pct, chaptersComplete,
+chaptersTotal, serial, firstIssued, issued, updated }`. One row per subject; a
+new level **overwrites** it rather than adding a second certificate.
+- ⚠ **It is not the source of a certificate.** The numbers are rebuilt on every
+  open from `student_subject_progress()` against the generated
+  `subjects/_counts.js`. This row exists so the certificate keeps a stable
+  number and issue date across devices, and so an offline visit and the parent's
+  card have something true to show instead of zeros.
+- ⚠ **Written only by the CHILD's own session** (`ACTIVE_STUDENT_ID` equals the
+  subject, not a parent preview, and the aggregate was fresh rather than read
+  back from the cache). A parent must not mint their child's issue date.
+- ⚠ **An untouched subject is not stored.** Every live pack of the grade passes
+  through the builder on every open; writing a "nothing yet" row for each would
+  put eight rows of zeros in the blob and mint a certificate number for a
+  certificate that does not exist. The card is drawn from the record, not from
+  this row.
+- ⚠ **Nothing is written when nothing changed.** An identical row would mark the
+  blob dirty and buy a server write for no change.
+- The aggregate itself is cached separately in `localStorage` under
+  `psac_cert_prog_v1_<studentId>`, and the screen says so when it is showing it.
+
 ### Saving
 > ⚠ **`xp` and `level` in the blob are now a CACHE, not the score.** The total
 > lives in `student_points` and is minted by `_award_points()`; `gainPoints()`
