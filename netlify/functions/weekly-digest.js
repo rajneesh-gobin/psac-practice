@@ -196,7 +196,7 @@ exports.handler = async () => {
           labsDone: labsDone.length,
           labNames: uniqueLabNames,
           maxStreak: (data.stats || {}).maxStreak || 0,
-          dueMistakes: ((data.mistakes || []).filter(m => m && !m.due)).length,
+          dueMistakes: ((data.mistakes || []).filter(m => m && (!m.due || m.due <= Date.now()))).length,
         };
       });
 
