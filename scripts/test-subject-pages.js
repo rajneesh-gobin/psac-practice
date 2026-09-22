@@ -43,6 +43,17 @@ for (const dir of ['psac', 'nce']) {
 }
 ok('found at least one generated subject page', pages.length > 0);
 
+// ⚠ /faq comes out of the SAME generator and is published the same way, so it
+//   gets the same crawlability and no-price guarantees rather than a second,
+//   near-identical test file of its own. It maps to no pack, so section 2 skips
+//   it — that is what `standalone` marks, and nothing else.
+const faqPath = path.join(ROOT, 'faq.html');
+ok('the generated /faq page exists', fs.existsSync(faqPath),
+  'run: node scripts/build-subject-pages.js');
+if (fs.existsSync(faqPath)) {
+  pages.push({ rel: 'faq.html', html: fs.readFileSync(faqPath, 'utf8'), standalone: true });
+}
+
 // ── 1. Generated output is not stale ───────────────────────────────────────
 // ⚠ The generator is the only writer. If someone hand-edits a page, or renames a
 //   chapter without re-running it, this is what says so.
@@ -60,6 +71,7 @@ ok('generated pages and sitemap.xml are up to date',
 //   the app will not serve — the same failure as a share message naming a
 //   subject that opens empty.
 for (const p of pages) {
+  if (p.standalone) continue;
   const slug = path.basename(p.rel, '.html');           // grade-6-maths
   const packId = slug.replace(/^grade-(\d)-/, 'grade$1-');
   const pack = packs.find((x) => x.id === packId);
@@ -79,7 +91,9 @@ for (const p of pages) {
   ok(`${p.rel} — loads no external script`, !/<script[^>]+src=/i.test(p.html),
     'the whole point of these pages is that they render with nothing running');
   ok(`${p.rel} — has exactly one <h1>`, (p.html.match(/<h1[\s>]/g) || []).length === 1);
-  ok(`${p.rel} — declares a canonical url`, /<link rel="canonical" href="https:\/\/nouklass\.com\/(psac|nce)\//.test(p.html));
+  ok(`${p.rel} — declares a canonical url`,
+    new RegExp('<link rel="canonical" href="https://nouklass\\.com/'
+      + (p.standalone ? 'faq"' : '(psac|nce)/')).test(p.html));
   const desc = (p.html.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1];
   ok(`${p.rel} — meta description present and <= 160 chars`,
     !!desc && desc.replace(/&amp;/g, '&').length <= 160,
@@ -223,6 +237,65 @@ const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
 const shell = (sw.match(/const SHELL_FILES = \[([\s\S]*?)\n\];/) || [, ''])[1];
 ok('subject pages are NOT in the service-worker shell',
   !/\/(psac|nce)\//.test(shell));
+ok('/faq is NOT in the service-worker shell either', !/faq\.html/.test(shell));
+
+// ── 7. /faq is DERIVED from the landing FAQ, not a second copy of it ───────
+// ⚠ The whole reason /faq can exist without becoming a duplicate-content problem
+//   is that its first six answers ARE the landing answers — the same words, one
+//   authored source, two URLs. The moment they differ, the site answers the same
+//   question two ways and an answer engine picks one at random.
+{
+  const FAQ_COPY = require('./faq-copy.js');
+  const faq = pages.find((p) => p.standalone);
+  const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const norm = (s) => s.replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+    .replace(/\s+/g, ' ').trim();
+
+  const landingLd = (indexHtml.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [])
+    .find((s) => s.includes('"FAQPage"'));
+  ok('index.html still carries the FAQPage block /faq is built from', !!landingLd);
+
+  if (landingLd && faq) {
+    const obj = JSON.parse(landingLd.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, ''));
+    const core = ((obj['@graph'] || [obj]).find((n) => n['@type'] === 'FAQPage') || {}).mainEntity || [];
+    const visible = norm(faq.html);
+    for (const qa of core) {
+      ok('/faq carries the landing answer verbatim: ' + qa.name.slice(0, 44),
+        visible.includes(norm(qa.acceptedAnswer.text)),
+        'regenerate: node scripts/build-subject-pages.js');
+    }
+    // ⚠ And the extras must be EXTRA. A near-duplicate of a core answer is the
+    //   doorway pattern inside a single page.
+    const coreQs = new Set(core.map((q) => norm(q.name).toLowerCase()));
+    for (const e of FAQ_COPY.extra) {
+      ok('extra question is not already answered on the landing page: ' + e.q.slice(0, 44),
+        !coreQs.has(norm(e.q).toLowerCase()));
+    }
+    ok('/faq answers every core question plus the extras',
+      (faq.html.match(/<div class="qa">/g) || []).length === core.length + FAQ_COPY.extra.length,
+      (faq.html.match(/<div class="qa">/g) || []).length + ' blocks');
+  }
+
+  // The same three promise rules the subject copy has, on the FAQ prose.
+  const prose = [FAQ_COPY.lede, ...FAQ_COPY.intro,
+    ...FAQ_COPY.extra.flatMap((e) => [e.q, e.a])].join(' ');
+  ok('faq-copy.js states no price', !PRICE.test(prose), prose.match(PRICE)?.[0]);
+  ok('faq-copy.js makes no subscription claim',
+    !SUB_WORDS.test(prose) && !(PRICE.test(prose) && PERIOD.test(prose)));
+  ok('faq-copy.js promises no deadline for "free"', !/free\s+(until|till|through)\b/i.test(prose));
+  ok('faq-copy.js claims no "free forever"', !/free\s+forever/i.test(prose));
+  ok('the FAQ lede is <= 160 chars (it is the search result)',
+    FAQ_COPY.lede.length <= 160, 'length: ' + FAQ_COPY.lede.length);
+
+  // ⚠ A sitemap entry pointing at a file prepare-deploy.js does not ship is a
+  //   404 advertised to Google. The psac/ and nce/ DIRS are covered above; this
+  //   one is a root file and had to be named.
+  const prep = fs.readFileSync(path.join(ROOT, 'scripts/prepare-deploy.js'), 'utf8');
+  ok('prepare-deploy.js ships faq.html', /'faq\.html'/.test(prep));
+  ok('sitemap.xml lists /faq',
+    /<loc>https:\/\/nouklass\.com\/faq<\/loc>/.test(fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8')));
+}
 
 console.log(fails
   ? `\n  ${checks - fails}/${checks} subject-page checks passed, ${fails} FAILED`

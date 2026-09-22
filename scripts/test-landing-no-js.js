@@ -159,6 +159,52 @@ ok('JSON-LD declares an EducationalOrganization',
 //   ones that exist.
 ok('JSON-LD states no grade range', !!ldObj && !/Grades?\s+\d/.test(JSON.stringify(ldObj)));
 
+// ── 6. The FAQ, and its schema, which must be the SAME WORDS ───────────────
+// ⚠ WHY THIS IS A CHECK AND NOT A COMMENT. Google requires FAQPage schema to
+//   match the answer a visitor can actually see, and an answer engine quoting a
+//   sentence this page no longer contains is a promise nobody can trace back.
+//   The two are edited by hand in two places 600 lines apart; that is exactly
+//   the shape of every drift this repo has already paid for.
+// ⚠ Compared with entities decoded and whitespace collapsed, because the HTML
+//   copy carries &amp; and line wrapping the JSON copy cannot.
+const faqLdRaw = (index.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g) || [])
+  .find((s) => s.includes('"FAQPage"')) || '';
+let faqObj = null;
+try {
+  faqObj = JSON.parse(faqLdRaw.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, ''));
+} catch (_) {}
+const faqNode = faqObj && (faqObj['@graph'] || []).find((n) => n['@type'] === 'FAQPage');
+ok('a FAQPage JSON-LD block is present and parses', !!faqNode);
+
+const faqSection = (index.match(/<section id="landing-faq"[\s\S]*?<\/section>/) || [''])[0];
+ok('the visible FAQ section is in the landing markup', !!faqSection);
+
+const norm = (s) => s
+  .replace(/<[^>]*>/g, '')
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+  .replace(/\s+/g, ' ').trim();
+
+if (faqNode && faqSection) {
+  const visible = norm(faqSection);
+  const pairs = faqNode.mainEntity || [];
+  ok('the FAQ has at least 5 question/answer pairs', pairs.length >= 5, 'found ' + pairs.length);
+  for (const qa of pairs) {
+    const q = norm(qa.name || '');
+    const a = norm((qa.acceptedAnswer || {}).text || '');
+    ok('schema question is visible on the page: ' + q.slice(0, 48),
+      !!q && visible.includes(q));
+    ok('schema answer matches the visible text: ' + q.slice(0, 48),
+      !!a && visible.includes(a),
+      'the page does not contain this answer verbatim');
+  }
+  // ⚠ The opposite direction: an answer added to the page and not to the schema
+  //   is invisible to every engine this block exists for.
+  const visibleAnswers = (faqSection.match(/<p class="text-sm[^"]*">([\s\S]*?)<\/p>/g) || []).length;
+  ok('every visible answer is also in the schema',
+    visibleAnswers === pairs.length,
+    visibleAnswers + ' on the page, ' + pairs.length + ' in the schema');
+}
+
 console.log(fails
   ? `\n  ${checks - fails}/${checks} landing-no-js checks passed, ${fails} FAILED`
   : `\n  ${checks}/${checks} landing-no-js checks passed`);

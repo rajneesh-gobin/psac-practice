@@ -185,32 +185,151 @@
     }
   </script>
   <!-- Structured data. ⚠ Deliberately states no grade range and no price: both
-       already live on six other surfaces, and a seventh that nobody updates is
-       how a search result ends up promising something the app stopped doing. -->
+       already live on several other surfaces, and one more that nobody updates
+       is how a search result ends up promising something the app stopped doing.
+     ⚠ THIS BLOCK MUST STAY FIRST. scripts/test-landing-no-js.js reads the FIRST
+       ld+json in this file and asserts both of the above; the FAQ block below
+       does state a range, by design, and is governed by the parity test instead.
+     ⚠ Keep @id stable — the generated subject pages and the FAQ block below
+       reference https://nouklass.com/#organization rather than repeating it. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
+    "@id": "https://nouklass.com/#organization",
     "name": "Nou Klass",
+    "alternateName": "NouKlass",
     "url": "https://nouklass.com/",
-    "logo": "https://nouklass.com/icons/icon-512.png",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://nouklass.com/icons/icon-512.png",
+      "width": 512,
+      "height": 512
+    },
     "image": "https://nouklass.com/assets/og-banner.jpg",
-    "description": "Exam practice for Mauritian primary and lower-secondary pupils, aligned with the MIE curriculum.",
-    "inLanguage": "en-GB",
+    "description": "Online exam practice and revision for Mauritian primary and lower-secondary pupils, aligned with the MIE curriculum, covering PSAC and NCE preparation in Mathematics, English, French, Science and History & Geography.",
+    "slogan": "Exam practice for Mauritius",
+    "inLanguage": [
+      "en-GB",
+      "fr-FR"
+    ],
+    "knowsLanguage": [
+      "en",
+      "fr"
+    ],
     "areaServed": {
       "@type": "Country",
       "name": "Mauritius"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "MU"
+    },
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": [
+        "student",
+        "parent",
+        "teacher"
+      ]
     },
     "knowsAbout": [
       "PSAC",
       "Primary School Achievement Certificate",
       "NCE",
       "National Certificate of Education",
+      "Mauritius Institute of Education curriculum",
       "Mathematics",
       "English",
       "French",
       "Science",
-      "History and Geography"
+      "History and Geography",
+      "Biology",
+      "Chemistry",
+      "Physics",
+      "ICT"
+    ]
+  }
+  </script>
+  <!-- ⚠ GENERATED-SHAPED, HAND-MAINTAINED: every answer below is a character-for-
+       character copy of the matching <p> in #landing-faq. Google requires the
+       schema to match the visible text, and test-landing-no-js.js fails if they
+       drift. Edit the section, then edit this — or neither. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://nouklass.com/#website",
+        "url": "https://nouklass.com/",
+        "name": "Nou Klass",
+        "inLanguage": "en-GB",
+        "publisher": {
+          "@id": "https://nouklass.com/#organization"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://nouklass.com/#faq",
+        "inLanguage": "en-GB",
+        "isPartOf": {
+          "@id": "https://nouklass.com/#website"
+        },
+        "publisher": {
+          "@id": "https://nouklass.com/#organization"
+        },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Nou Klass?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nou Klass is a free online practice and revision platform for pupils in Mauritius, covering Grades 1–6 (PSAC) and Grades 7–9 (NCE). It provides over 34,000 bite-sized practice questions with instant feedback and diagnostic progress tracking, aligned with the Mauritius Institute of Education (MIE) curriculum. It runs in any web browser at nouklass.com, with nothing to install."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Nou Klass aligned with the MIE curriculum used in Mauritian schools?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Every question on Nou Klass is written against the Mauritius Institute of Education (MIE) curriculum and organised by the same chapters and topics pupils follow in class — more than 450 chapters, each split into named sub-topics. Grades 1–6 follow the PSAC syllabus and Grades 7–9 follow the NCE syllabus, and practice includes questions from real past examination papers. Nou Klass is an independent platform and is not affiliated with the MIE or the Ministry of Education."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which grades and subjects does Nou Klass cover?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nou Klass covers Grades 1–6 (PSAC) and Grades 7–9 (NCE) in Mauritius. Grades 1–3 offer Mathematics, English, French and Health Education; Grades 4–6 offer Mathematics, English, French, Science and History & Geography; Grades 7–9 offer Mathematics, English, Français, Science and Social & Modern Studies, with Grade 9 adding Biology, Chemistry, Physics and ICT as separate subjects."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can my child practise for the PSAC exam online?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "On Nou Klass, a pupil picks their grade and subject, then practises chapter by chapter in short sets graded from basic recall to full word problems. Every answer is marked instantly with a hint and a worked explanation, wrong answers come back automatically in a spaced Fix My Mistakes drill, and timed mock papers rehearse the real PSAC or NCE exam format from start to finish."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Nou Klass free to use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Nou Klass is completely free for every account while the platform is being built — every grade, every subject and every practice question, with no card required, no trial and nothing to cancel. Parents will be notified well in advance before anything about access changes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do parents need to install an app, and does it work offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No installation is required. Nou Klass runs in any mobile or desktop browser at nouklass.com and can be added to a phone’s home screen as an app. Practice questions are cached on the device, so a pupil can keep revising without a data connection and their progress syncs once they are back online. Parents follow mastery, streaks and weak chapters from their own dashboard."
+            }
+          }
+        ]
+      }
     ]
   }
   </script>
@@ -1315,6 +1434,52 @@
             class="bg-green-500 hover:bg-green-400 active:scale-95 text-green-950 font-bold px-7 py-3.5 rounded-2xl text-sm shadow-xl transition-all hover:scale-105">
             Apply for a teacher account →
           </button>
+        </div>
+      </section>
+
+      <!-- ══ FAQ ══════════════════════════════════════════════════════════
+           ⚠ THIS IS A COPY SURFACE, and it is now in the SURFACES map of
+             scripts/test-share-copy-parity.js with the other seven. It states
+             the grade range and the "free right now" promise; both already
+             drift across surfaces when nobody checks.
+           ⚠ EVERY ANSWER IS MIRRORED VERBATIM in the FAQPage JSON-LD in
+             <head>. Google requires the schema text to match the visible text,
+             and an LLM that quotes one while the page shows the other is worse
+             than having neither. scripts/test-landing-no-js.js compares them
+             character for character — change one, change both.
+           ⚠ Plain always-visible text, NOT <details>: the whole reason this
+             page was made static is that a crawler must read it with nothing
+             running. Never move it into an innerHTML render either — the
+             Tailwind Play CDN only generates rules for classes present at its
+             initial scan. -->
+      <section id="landing-faq" aria-labelledby="faq-heading" class="px-4 pb-16 max-w-3xl mx-auto w-full">
+        <h2 id="faq-heading" class="text-2xl sm:text-3xl font-black text-white mb-2 text-center">Frequently asked questions</h2>
+        <p class="text-indigo-200/70 text-sm mb-8 text-center">PSAC and NCE revision in Mauritius — what Nou Klass covers and how it works.</p>
+        <div class="space-y-4">
+          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-2">What is Nou Klass?</h3>
+            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Nou Klass is a free online practice and revision platform for pupils in Mauritius, covering Grades 1–6 (PSAC) and Grades 7–9 (NCE). It provides over 34,000 bite-sized practice questions with instant feedback and diagnostic progress tracking, aligned with the Mauritius Institute of Education (MIE) curriculum. It runs in any web browser at nouklass.com, with nothing to install.</p>
+          </article>
+          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Is Nou Klass aligned with the MIE curriculum used in Mauritian schools?</h3>
+            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Yes. Every question on Nou Klass is written against the Mauritius Institute of Education (MIE) curriculum and organised by the same chapters and topics pupils follow in class — more than 450 chapters, each split into named sub-topics. Grades 1–6 follow the PSAC syllabus and Grades 7–9 follow the NCE syllabus, and practice includes questions from real past examination papers. Nou Klass is an independent platform and is not affiliated with the MIE or the Ministry of Education.</p>
+          </article>
+          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Which grades and subjects does Nou Klass cover?</h3>
+            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Nou Klass covers Grades 1–6 (PSAC) and Grades 7–9 (NCE) in Mauritius. Grades 1–3 offer Mathematics, English, French and Health Education; Grades 4–6 offer Mathematics, English, French, Science and History &amp; Geography; Grades 7–9 offer Mathematics, English, Français, Science and Social &amp; Modern Studies, with Grade 9 adding Biology, Chemistry, Physics and ICT as separate subjects.</p>
+          </article>
+          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-2">How can my child practise for the PSAC exam online?</h3>
+            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">On Nou Klass, a pupil picks their grade and subject, then practises chapter by chapter in short sets graded from basic recall to full word problems. Every answer is marked instantly with a hint and a worked explanation, wrong answers come back automatically in a spaced Fix My Mistakes drill, and timed mock papers rehearse the real PSAC or NCE exam format from start to finish.</p>
+          </article>
+          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Is Nou Klass free to use?</h3>
+            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Yes. Nou Klass is completely free for every account while the platform is being built — every grade, every subject and every practice question, with no card required, no trial and nothing to cancel. Parents will be notified well in advance before anything about access changes.</p>
+          </article>
+          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Do parents need to install an app, and does it work offline?</h3>
+            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">No installation is required. Nou Klass runs in any mobile or desktop browser at nouklass.com and can be added to a phone’s home screen as an app. Practice questions are cached on the device, so a pupil can keep revising without a data connection and their progress syncs once they are back online. Parents follow mastery, streaks and weak chapters from their own dashboard.</p>
+          </article>
         </div>
       </section>
 
