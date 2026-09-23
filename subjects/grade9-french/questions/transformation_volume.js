@@ -42,7 +42,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-006', chapterId:'g9fr-transformation', subsection:'ponctuation', difficulty:3,
     question:'Quel rôle jouent les points de suspension dans ce passage : « Elle hésita, regarda autour d\'elle... » ?',
-    options:['Ils expriment une phrase inachevée ou une hésitation','Ils remplacent un mot inconnu','Ils introduisent une liste','Ils terminent une question'],
+    options:["Ils expriment une phrase inachevée ou une hésitation","Ils remplacent un mot inconnu de l'auteur","Ils terminent une question posée au lecteur","Ils introduisent une liste d'éléments à énumérer"],
     answer:'Ils expriment une phrase inachevée ou une hésitation',
     hint:'Les points de suspension laissent le lecteur imaginer la suite.',
     explanation:'Les <b>points de suspension</b> (…) indiquent une interruption, une hésitation ou un sous-entendu. Ils ne terminent pas une question.' }),
@@ -56,7 +56,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-008', chapterId:'g9fr-transformation', subsection:'ponctuation', difficulty:2,
     question:'Quelle virgule est INUTILE ? « Mon frère, qui joue au football, est champion. »',
-    options:['Aucune — les deux virgules sont nécessaires','La première seulement','La deuxième seulement','Les deux sont inutiles'],
+    options:["Aucune — les deux virgules sont nécessaires","La première virgule seulement est inutile","La deuxième virgule seulement est inutile","Les deux virgules sont inutiles ici"],
     answer:'Aucune — les deux virgules sont nécessaires',
     hint:'Une relative explicative (non restrictive) est encadrée par des virgules.',
     explanation:'La proposition relative <b>explicative</b> « qui joue au football » donne une information supplémentaire ; elle doit être encadrée par deux virgules.' }),
@@ -133,7 +133,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-019', chapterId:'g9fr-transformation', subsection:'ponctuation', difficulty:3,
     question:'Laquelle de ces phrases utilise le deux-points correctement ?',
-    options:['Elle a trois passions : la lecture, la musique et le sport.','Elle aime : la lecture et la musique.','Elle aime la lecture : et la musique.','Elle lit : beaucoup.'],
+    options:["Elle a trois passions : la lecture, la musique et le sport.","Elle aime la lecture : et la musique ainsi que le sport.","Elle aime : la lecture, la musique et aussi le sport.","Elle lit : beaucoup, surtout pendant les vacances."],
     answer:'Elle a trois passions : la lecture, la musique et le sport.',
     hint:'Le deux-points introduit une liste ou une explication après un terme général.',
     explanation:'Le <b>deux-points</b> annonce une énumération après un terme résumant (« trois passions »). Il ne s\'emploie pas avant une liste qui complète directement le verbe.' }),
@@ -268,7 +268,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-038', chapterId:'g9fr-transformation', subsection:'negation', difficulty:3,
     question:'Mets à la négative totale : « Elle fait quelque chose et voit quelqu\'un chaque jour. »',
-    options:['Elle ne fait rien et ne voit personne chaque jour.','Elle ne fait rien et ne voit rien.','Elle ne fait personne et ne voit rien.','Elle ne rien fait et ne personne voit.'],
+    options:["Elle ne fait rien et ne voit personne chaque jour.","Elle ne fait personne et ne voit rien chaque jour.","Elle ne fait rien et ne voit rien chaque jour.","Elle ne rien fait et ne personne voit chaque jour."],
     answer:'Elle ne fait rien et ne voit personne chaque jour.',
     hint:'Nier séparément le COD inanimé et le COD animé.',
     explanation:'<b>Rien</b> nie le COD inanimé (quelque chose → rien) et <b>personne</b> nie le COD animé (quelqu\'un → personne). Chaque verbe a sa propre négation.' }),
@@ -298,7 +298,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-042', chapterId:'g9fr-transformation', subsection:'place_adjectif', difficulty:3,
     question:'Quelle est la différence entre « ma propre chambre » et « une chambre propre » ?',
-    options:['Avant : la mienne en particulier ; après : une chambre nette, non sale','Avant : nette ; après : à moi','Les deux signifient la même chose','« Propre » ne peut pas se placer avant le nom'],
+    options:["Avant : la mienne en particulier ; après : une chambre nette, non sale","Avant : une chambre nette, non sale ; après : la mienne en particulier","Les deux expressions ont exactement le même sens en français","« Propre » ne peut jamais se placer avant le nom en français"],
     answer:'Avant : la mienne en particulier ; après : une chambre nette, non sale',
     hint:'Comme « ancien », « propre » change de sens selon sa position.',
     explanation:'<b>Propre</b> avant le nom = « qui m\'appartient » (ma <b>propre</b> chambre). Après le nom = non sale (une chambre <b>propre</b>).' }),
@@ -326,7 +326,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-046', chapterId:'g9fr-transformation', subsection:'place_adjectif', difficulty:3,
     question:'Quel est le sens de « un certain homme » vs « un homme certain » ?',
-    options:['Avant : un homme indéfini ; après : un homme sûr de lui','Avant : sûr ; après : indéfini','Les deux ont le même sens','Aucune des deux n\'est correcte'],
+    options:["Avant : un homme indéfini ; après : un homme sûr de lui","Avant : un homme sûr de lui ; après : un homme indéfini","Aucune des deux expressions n'est correcte en français","Les deux expressions ont exactement le même sens"],
     answer:'Avant : un homme indéfini ; après : un homme sûr de lui',
     hint:'Position de « certain » change son sens comme pour « propre » et « ancien ».',
     explanation:'<b>Certain</b> avant le nom = imprécis, non identifié (un <b>certain</b> homme). Après le nom = sûr, assuré (un homme <b>certain</b>).' }),
@@ -389,7 +389,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-055', chapterId:'g9fr-transformation', subsection:'place_adjectif', difficulty:3,
     question:'Explique la différence : « le prochain train » vs « la semaine prochaine ».',
-    options:['Avant le nom : le suivant immédiat ; après le nom : celui qui vient chronologiquement','Les deux ont le même sens','« Prochain » ne peut se placer que devant le nom','« Prochain » ne peut se placer qu\'après le nom'],
+    options:["Avant le nom : le suivant immédiat ; après le nom : celui qui vient chronologiquement","Avant le nom : celui qui vient chronologiquement ; après le nom : le suivant immédiat","Les deux expressions ont exactement le même sens dans tous les contextes","« Prochain » ne peut se placer que devant le nom, jamais après"],
     answer:'Avant le nom : le suivant immédiat ; après le nom : celui qui vient chronologiquement',
     hint:'Position de « prochain » exprime deux nuances temporelles.',
     explanation:'<b>Prochain</b> avant le nom = immédiat (le <b>prochain</b> train = celui qui part bientôt). Après le nom avec les unités de temps = le suivant dans la série (la semaine <b>prochaine</b>).' }),
@@ -712,7 +712,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-100', chapterId:'g9fr-transformation', subsection:'temps_verbaux', difficulty:3,
     question:'Mets au plus-que-parfait : « Il avait mangé avant que nous arrivions. » → l\'action encore plus passée était :',
-    options:['Il avait mangé (plus-que-parfait déjà correct)','Il a mangé','Il mangeait','Il mangera'],
+    options:["Il avait mangé (plus-que-parfait déjà correct)","Il mangeait (imparfait, action en cours)","Il mangera (futur simple, action à venir)","Il a mangé (passé composé, action achevée)"],
     answer:'Il avait mangé (plus-que-parfait déjà correct)',
     hint:'Le plus-que-parfait = auxiliaire à l\'imparfait + participe passé.',
     explanation:'Le <b>plus-que-parfait</b> (avait + pp) exprime une action antérieure à un autre passé. « Il <b>avait mangé</b> » est déjà correct ici.' }),
@@ -775,7 +775,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-trv-109', chapterId:'g9fr-transformation', subsection:'temps_verbaux', difficulty:3,
     question:'Mets à l\'imparfait : « Il est en train de pleuvoir. »',
-    options:['Il était en train de pleuvoir.','Il avait plu.','Il pleuvra.','Il a plu.'],
+    options:["Il était en train de pleuvoir.","Il pleuvra demain matin.","Il a plu toute la nuit.","Il avait plu la veille."],
     answer:'Il était en train de pleuvoir.',
     hint:'La périphrase « être en train de » se transpose à l\'imparfait.',
     explanation:'« Être en train de » à l\'<b>imparfait</b> → « était en train de » : « Il <b>était en train de</b> pleuvoir. » Cela souligne le déroulement de l\'action.' }),

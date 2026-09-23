@@ -689,7 +689,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-097', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne le concept de « solidarité » ?',
-    options:['Le sentiment d\'appartenir à un groupe et de s\'entraider','La capacité à rester seul','Le goût du luxe et de la richesse','L\'indifférence aux autres'],
+    options:["Le sentiment d'appartenir à un groupe et de s'entraider","La capacité à rester seul sans aide extérieure","L'indifférence totale au sort des autres personnes","Le goût du luxe et de la richesse personnelle"],
     answer:'Le sentiment d\'appartenir à un groupe et de s\'entraider',
     hint:'Solidaire = qui aide les autres membres d\'un groupe.',
     explanation:'La <b>solidarité</b> est le sentiment d\'une responsabilité mutuelle unissant les membres d\'un groupe et les incitant à s\'entraider.' }),
@@ -717,7 +717,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-101', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne le mot « équité » ?',
-    options:['La justice qui tient compte des situations particulières','L\'égalité stricte de traitement pour tous','La richesse répartie entre tous','La loi qui s\'applique sans exception'],
+    options:["La justice qui tient compte des situations particulières","L'égalité stricte de traitement pour tous les citoyens","La richesse répartie entre tous de façon égale","La loi qui s'applique sans aucune exception possible"],
     answer:'La justice qui tient compte des situations particulières',
     hint:'L\'équité va au-delà de l\'égalité en tenant compte des différences.',
     explanation:'L\'<b>équité</b> est une forme de justice qui tient compte des situations individuelles pour traiter chacun selon ses besoins. Elle diffère de l\'égalité stricte.' }),
@@ -731,7 +731,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-103', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne le terme « la résilience » ?',
-    options:['La capacité à surmonter les épreuves et à se reconstruire','La tendance à éviter tous les risques','L\'incapacité à faire face aux difficultés','La recherche du confort à tout prix'],
+    options:["La capacité à surmonter les épreuves et à se reconstruire","La tendance à éviter tous les risques de la vie","La recherche du confort à tout prix et sans effort","L'incapacité à faire face aux difficultés de la vie"],
     answer:'La capacité à surmonter les épreuves et à se reconstruire',
     hint:'Terme emprunté à la physique (les matériaux qui reprennent leur forme).',
     explanation:'La <b>résilience</b> : capacité à faire face aux traumatismes et à se reconstruire après eux. Terme utilisé en psychologie depuis les années 1990.' }),
@@ -745,7 +745,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-105', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne le terme « la quiétude » ?',
-    options:['Un état de calme et de tranquillité profonde','Une agitation intérieure intense','Un sentiment de peur diffuse','Une excitation joyeuse'],
+    options:["Un état de calme et de tranquillité profonde","Une agitation intérieure très intense","Une excitation joyeuse et bruyante","Un sentiment de peur diffuse et constante"],
     answer:'Un état de calme et de tranquillité profonde',
     hint:'De « quiet » = calme en latin.',
     explanation:'La <b>quiétude</b> est un état de paix intérieure et de tranquillité. Synonymes : sérénité, paix. Contraires : agitation, inquiétude.' }),
@@ -759,7 +759,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-107', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne le terme « l\'empathie » ?',
-    options:['La capacité à se mettre à la place des autres et à ressentir leurs émotions','L\'indifférence aux sentiments d\'autrui','Le désir de dominer les autres','La difficulté à exprimer ses propres émotions'],
+    options:["La capacité à se mettre à la place des autres et à ressentir leurs émotions","Le désir de dominer les autres et de leur imposer sa propre volonté","La difficulté à exprimer ses propres émotions devant les autres","L'indifférence complète aux sentiments et aux peines d'autrui"],
     answer:'La capacité à se mettre à la place des autres et à ressentir leurs émotions',
     hint:'Du grec « en » (dans) + « pathos » (sentiment).',
     explanation:'L\'<b>empathie</b> : faculté de s\'identifier à autrui, de ressentir ce qu\'il ressent. Contraire : l\'indifférence, l\'insensibilité.' }),
@@ -773,7 +773,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-109', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne le concept de « l\'intégrité » dans le domaine moral ?',
-    options:['La droiture morale, le fait d\'agir conformément à ses valeurs','La perfection physique du corps','La richesse accumulée honnêtement','L\'ensemble des lois d\'un pays'],
+    options:["La droiture morale, le fait d'agir conformément à ses valeurs","La perfection physique du corps et la beauté du visage","L'ensemble des lois écrites qui régissent un pays","La richesse accumulée honnêtement au fil des années"],
     answer:'La droiture morale, le fait d\'agir conformément à ses valeurs',
     hint:'De « integer » = entier, intact en latin.',
     explanation:'L\'<b>intégrité</b> : qualité de quelqu\'un qui respecte strictement ses principes moraux. Synonymes : honnêteté, droiture, probité.' }),
@@ -787,7 +787,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-111', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne « la lucidité » ?',
-    options:['La capacité à voir la réalité clairement, sans illusion','La tendance à idéaliser les situations','L\'aveuglement face à ses propres défauts','Le refus d\'accepter les mauvaises nouvelles'],
+    options:["La capacité à voir la réalité clairement, sans illusion","Le refus d'accepter les mauvaises nouvelles reçues","L'aveuglement total face à ses propres défauts","La tendance à idéaliser toutes les situations"],
     answer:'La capacité à voir la réalité clairement, sans illusion',
     hint:'De « lucide » = clair, qui voit clairement.',
     explanation:'La <b>lucidité</b> : qualité de quelqu\'un qui perçoit la réalité avec clarté et sans se faire d\'illusions. Contraire : aveuglement, naïveté.' }),
@@ -801,7 +801,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-vocv-113', chapterId:'g9fr-vocabulaire', subsection:'notions_abstraites', difficulty:3,
     question:'Que désigne « la bienveillance » ?',
-    options:['La disposition à vouloir du bien aux autres, la gentillesse','La méfiance envers les intentions d\'autrui','L\'indifférence à la souffrance d\'autrui','La tendance à critiquer les autres'],
+    options:["La disposition à vouloir du bien aux autres, la gentillesse","L'indifférence complète à la souffrance d'autrui","La méfiance constante envers les intentions d'autrui","La tendance à critiquer les autres sans indulgence"],
     answer:'La disposition à vouloir du bien aux autres, la gentillesse',
     hint:'« Bien » + « vouloir » (vouloir le bien).',
     explanation:'La <b>bienveillance</b> : disposition à vouloir du bien à autrui, à le traiter avec bonté. Synonymes : bonté, gentillesse. Contraire : malveillance.' }),

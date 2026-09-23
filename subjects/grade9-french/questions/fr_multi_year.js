@@ -358,12 +358,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9fr-my-035', chapterId: 'g9fr-correction', difficulty: 3,
   subsection: 'orthographe_accents',
   question: 'Quelle phrase contient une erreur d\'accent ?',
-  options: [
-    '"Il mange a la cantine." (manque un accent sur à)',
-    '"Elle est arrivée hier." (correct)',
-    '"Où est-il allé ?" (correct)',
-    '"Il préfère le chocolat." (correct)'
-  ],
+  options: ["\"Il mange a la cantine.\" (manque un accent sur à)","\"Où est-il allé ?\" (correct, accents en place)","\"Elle est arrivée hier.\" (rien à corriger)","\"Il préfère le chocolat.\" (accents corrects)"],
   answer: '"Il mange a la cantine." (manque un accent sur à)',
   explanation: '"À" (préposition) prend un accent grave pour le distinguer de "a" (verbe avoir).'
 }));

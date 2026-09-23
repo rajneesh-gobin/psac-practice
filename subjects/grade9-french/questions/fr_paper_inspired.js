@@ -262,7 +262,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-pi-032', chapterId:'g9fr-vocabulaire', subsection:'traits_caractere', difficulty:2,
     question:'Laquelle de ces phrases décrit quelqu\'un de <b>généreux</b> ?',
-    options:['Il partage ses affaires sans hésitation.','Il garde tout pour lui.','Il ne sourit jamais.','Il oublie toujours ses affaires.'],
+    options:["Il partage ses affaires sans hésitation.","Il oublie toujours ses affaires chez lui.","Il garde tout pour lui, sans rien prêter.","Il ne sourit jamais à ses camarades."],
     answer:'Il partage ses affaires sans hésitation.',
     hint:'La générosité, c\'est donner librement.',
     explanation:'<b>Généreux</b> → qui donne volontiers, partage avec les autres sans attendre de retour. Les autres options décrivent l\'avarice, la froideur ou l\'étourderie.' }),
@@ -344,7 +344,7 @@ Dans l'attente de votre réponse, veuillez agréer mes cordiales salutations.<br
 <i>Priya Ramsamy, enseignante de Sciences</i>
 </blockquote><br>
 Qui est l'expéditeur de ce courriel ?`,
-    options:['Priya Ramsamy, enseignante de Sciences','Le directeur de l\'école','Un élève de 9e','Le chauffeur du car scolaire'],
+    options:["Priya Ramsamy, enseignante de Sciences","Le directeur de l'école Phoenix","Le chauffeur du car scolaire réservé","Un élève de 9e parti en sortie"],
     answer:'Priya Ramsamy, enseignante de Sciences',
     hint:'L\'expéditeur figure dans le champ « De ».',
     explanation:'Le champ <b>De</b> indique l\'expéditeur : <i>priya.ramsamy@ecole-phoenix.mu</i>, identifiée en signature comme <b>Priya Ramsamy, enseignante de Sciences</b>.' }),
@@ -352,7 +352,7 @@ Qui est l'expéditeur de ce courriel ?`,
   makeMCQ({ id:'g9fr-pi-042', chapterId:'g9fr-doc-authentique', subsection:'role_emetteur_destinataire', difficulty:1,
     question:`Lis le même courriel (voir ci-dessus, question 41), puis réponds.<br><br>
 Quel est l'objet principal de ce courriel ?`,
-    options:['Demander l\'autorisation pour une sortie pédagogique','Commander des livres scolaires','Annoncer les résultats d\'un examen','Réserver une salle de classe'],
+    options:["Demander l'autorisation pour une sortie pédagogique","Commander des livres scolaires pour la classe","Réserver une salle de classe pour un examen","Annoncer les résultats d'un examen aux parents"],
     answer:'Demander l\'autorisation pour une sortie pédagogique',
     hint:'L\'objet du courriel est indiqué explicitement dans le champ « Objet ».',
     explanation:'Le champ <b>Objet</b> l\'indique clairement : <i>Demande d\'autorisation — sortie pédagogique</i>. La demande porte sur la sortie au Jardin Botanique.' }),
@@ -379,7 +379,7 @@ Combien d'élèves sont attendus pour la sortie ?`,
 <i>Entrée libre pour tous les élèves.</i>
 </blockquote><br>
 Quel événement a lieu le mercredi ?`,
-    options:['La projection d\'un documentaire','La plantation d\'arbres','Le marché vert','Le concours de dessin'],
+    options:["La projection d'un documentaire","Le concours de dessin de l'école","La plantation d'arbres dans la cour","Le marché vert de produits locaux"],
     answer:'La projection d\'un documentaire',
     hint:'Repère le jour de la semaine dans la fiche.',
     explanation:'La fiche indique clairement : <b>Mercredi</b> : Projection du documentaire <i>Notre Planète</i> — 14h00.' }),
@@ -504,11 +504,11 @@ Quel est le montant total de la commande ?`,
     explanation:'<b>Modernisation → moderniser</b> (verbe en <i>-iser</i>). La modernisation est l\'action de moderniser.' }),
 
   makeMCQ({ id:'g9fr-pi-060', chapterId:'g9fr-formation-mots', subsection:'formation_verbe', difficulty:2,
-    question:'Quel verbe peut être formé à partir de l\'adjectif « propre » ?',
-    options:['nettoyer / propre → propreté mais le verbe est : nettoyer','proprier','proprifier','proprement'],
-    answer:'nettoyer / propre → propreté mais le verbe est : nettoyer',
+    question:'Quel verbe exprime l\'action de rendre « propre » ?',
+    options:['nettoyer','proprier','proprifier','proprement'],
+    answer:'nettoyer',
     hint:'On cherche l\'action liée à la propreté.',
-    explanation:'En français, <i>propre</i> → <b>nettoyer</b> est la relation verbale courante (rendre propre). « Proprement » est un adverbe ; les autres formes n\'existent pas.' }),
+    explanation:'L\'adjectif <i>propre</i> donne le nom <b>propreté</b> et l\'adverbe <b>proprement</b>, mais il ne donne pas de verbe : l\'action de rendre propre se dit <b>nettoyer</b>. « Proprier » et « proprifier » n\'existent pas.' }),
 
   // ── g9fr-correction (10) ─────────────────────────────────────────────────
 
@@ -528,7 +528,7 @@ Quel est le montant total de la commande ?`,
 
   makeMCQ({ id:'g9fr-pi-063', chapterId:'g9fr-correction', subsection:'accords', difficulty:2,
     question:'Dans la phrase suivante, quel mot contient une erreur d\'accord ?\n« Les professeurs que nous avons rencontrés hier étaient très sympathiques. »',
-    options:['Aucune erreur — la phrase est correcte.','rencontrés','sympathiques','professeurs'],
+    options:["Aucune erreur — la phrase est correcte.","Le mot « professeurs » est fautif","Le mot « rencontrés » est fautif","Le mot « sympathiques » est fautif"],
     answer:'Aucune erreur — la phrase est correcte.',
     hint:'Vérifie l\'accord du participe passé et des adjectifs.',
     explanation:'<i>Rencontrés</i> : COD « les professeurs » (masculin pluriel) placé avant → accord <i>-és</i> correct. <i>Sympathiques</i> s\'accorde avec <i>professeurs</i> (masculin pluriel) → correct. La phrase est bien construite.' }),
