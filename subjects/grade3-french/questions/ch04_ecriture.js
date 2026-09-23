@@ -68,7 +68,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-ecr-009', chapterId:CH, difficulty:1, subsection:'majuscule_minuscule',
     question:'Quel jour de la semaine prend une majuscule en français ?',
-    options:['Aucun, les jours s\'écrivent en minuscule','Lundi','Dimanche','Tous les jours'],
+    options:["Aucun, les jours s'écrivent en minuscule","Tous les jours de la semaine","Lundi, le premier jour de la semaine","Dimanche, le jour du repos"],
     answer:'Aucun, les jours s\'écrivent en minuscule',
     hint:'En français, les jours de la semaine s\'écrivent en minuscule (sauf en début de phrase).',
     explanation:'En français, les jours de la semaine (<b>lundi, mardi, mercredi...</b>) s\'écrivent en <b>minuscule</b>, contrairement à l\'anglais.' }),
@@ -82,7 +82,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-ecr-011', chapterId:CH, difficulty:1, subsection:'majuscule_minuscule',
     question:'Quand met-on une majuscule à un mot (règle générale) ?',
-    options:['Au début d\'une phrase et pour les noms propres','Seulement au début d\'une phrase','Pour tous les mots importants','Pour les mots longs uniquement'],
+    options:["Au début d'une phrase et pour les noms propres","Seulement au tout début d'une phrase","Pour tous les mots vraiment importants","Pour les mots les plus longs uniquement"],
     answer:'Au début d\'une phrase et pour les noms propres',
     hint:'Il y a deux règles principales pour les majuscules.',
     explanation:'On met une majuscule <b>au début d\'une phrase</b> et pour <b>les noms propres</b> (prénoms, noms de pays, de villes, etc.).' }),
@@ -145,7 +145,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-ecr-020', chapterId:CH, difficulty:1, subsection:'majuscule_minuscule',
     question:'Quel est le rôle d\'une majuscule dans un texte ?',
-    options:['Signaler le début d\'une phrase ou un nom propre','Montrer qu\'un mot est important','Indiquer un mot long','Marquer les verbes'],
+    options:["Signaler le début d'une phrase ou un nom propre","Marquer les verbes et les adjectifs","Montrer qu'un mot est vraiment important","Indiquer un mot long et difficile"],
     answer:'Signaler le début d\'une phrase ou un nom propre',
     hint:'Il n\'y a que deux raisons principales d\'utiliser une majuscule.',
     explanation:'La majuscule sert à <b>signaler le début d\'une phrase ou un nom propre</b>. Elle aide le lecteur à repérer la structure du texte.' }),
@@ -471,7 +471,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-ecr-066', chapterId:CH, difficulty:1, subsection:'orthographe_accents',
     question:'Quelle est la différence entre "a" et "à" ?',
-    options:['"a" = verbe avoir, "à" = préposition de lieu','Aucune différence','les deux sont des articles','les deux sont des verbes'],
+    options:["\"a\" = verbe avoir, \"à\" = préposition de lieu","Aucune différence entre les deux mots","les deux sont des verbes du présent","les deux sont des articles définis"],
     answer:'"a" = verbe avoir, "à" = préposition de lieu',
     hint:'"Il a un livre" (verbe) vs "Il va à l\'école" (préposition).',
     explanation:'"<b>a</b>" (sans accent) = verbe avoir : "Il <b>a</b> faim." "<b>à</b>" (avec accent grave) = préposition : "Je vais <b>à</b> l\'école."' }),

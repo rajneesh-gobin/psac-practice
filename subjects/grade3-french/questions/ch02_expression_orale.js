@@ -203,7 +203,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-028', chapterId:CH, difficulty:1, subsection:'recit_oral',
     question:'Continue l\'histoire de façon logique : "D\'abord, le bébé pleure. Ensuite, ___."',
-    options:['sa maman le prend dans ses bras','il s\'endort tout seul','il joue dehors','il mange une glace'],
+    options:["sa maman le prend dans ses bras","il joue dehors avec son ballon","il s'endort tout seul sans pleurer","il mange une glace au chocolat"],
     answer:'sa maman le prend dans ses bras',
     hint:'Que fait une maman quand son bébé pleure ?',
     explanation:'La suite logique est que <b>sa maman le prend dans ses bras</b> pour le consoler.' }),
@@ -231,14 +231,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-032', chapterId:CH, difficulty:1, subsection:'recit_oral',
     question:'Continue l\'histoire : "Tom a perdu son chat. Il le cherche partout. Enfin, ___."',
-    options:['il retrouve son chat sous le lit','il va à l\'école','il achète un chien','il mange son dîner'],
+    options:["il retrouve son chat sous le lit","il va à l'école avec son sac","il achète un chien au marché","il mange son dîner à la maison"],
     answer:'il retrouve son chat sous le lit',
     hint:'"Enfin" annonce la conclusion. Qu\'est-ce qui résoudrait le problème de Tom ?',
     explanation:'La fin logique est qu\'<b>il retrouve son chat sous le lit</b>. Le mot "enfin" annonce la résolution du problème.' }),
 
   makeMCQ({ id:'g3fr-eo-033', chapterId:CH, difficulty:1, subsection:'recit_oral',
     question:'Quelle phrase est la meilleure INTRODUCTION pour commencer une histoire ?',
-    options:['Il était une fois un petit garçon nommé Jules.','Enfin, Jules rentra chez lui.','Puis, Jules traversa la forêt.','Jules dit au revoir à ses amis.'],
+    options:["Il était une fois un petit garçon nommé Jules.","Enfin, Jules rentra chez lui très content.","Puis, Jules traversa la grande forêt noire.","Jules dit au revoir à tous ses amis."],
     answer:'Il était une fois un petit garçon nommé Jules.',
     hint:'Une introduction présente les personnages au début de l\'histoire.',
     explanation:'"<b>Il était une fois un petit garçon nommé Jules.</b>" est une introduction classique qui présente le personnage principal.' }),
@@ -287,7 +287,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-040', chapterId:CH, difficulty:1, subsection:'recit_oral',
     question:'Quelle expression utilise-t-on souvent pour finir un conte ?',
-    options:['Ils vécurent heureux et eurent beaucoup d\'enfants.','Il était une fois…','Un jour, dans un pays lointain…','Et le lendemain…'],
+    options:["Ils vécurent heureux et eurent beaucoup d'enfants.","Un jour, dans un pays lointain, il y a longtemps…","Et le lendemain matin, très tôt…","Il était une fois, il y a très longtemps…"],
     answer:'Ils vécurent heureux et eurent beaucoup d\'enfants.',
     hint:'C\'est une formule de fin de conte très connue en français.',
     explanation:'"<b>Ils vécurent heureux et eurent beaucoup d\'enfants.</b>" est la formule finale classique des contes français, l\'équivalent de "happily ever after" en anglais.' }),
@@ -492,14 +492,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-069', chapterId:CH, difficulty:1, subsection:'questions_reponses',
     question:'Laquelle de ces phrases est une QUESTION correctement formée ?',
-    options:['Est-ce que tu aimes le sport ?','Tu aimes le sport.','Le sport tu aimes.','Sport le aimes tu ?'],
+    options:["Est-ce que tu aimes le sport ?","Tu aimes beaucoup le sport.","Le sport tu aimes beaucoup.","Sport le aimes tu beaucoup ?"],
     answer:'Est-ce que tu aimes le sport ?',
     hint:'Une question en français peut commencer par "Est-ce que..." ou utiliser l\'inversion.',
     explanation:'"<b>Est-ce que tu aimes le sport ?</b>" est une question bien formée. Elle commence par "Est-ce que" et se termine par "?".' }),
 
   makeMCQ({ id:'g3fr-eo-070', chapterId:CH, difficulty:1, subsection:'questions_reponses',
     question:'"As-tu des frères et sœurs ?" — Quelle est la meilleure réponse ?',
-    options:['Oui, j\'ai un frère et deux sœurs.','Je m\'appelle Kevin.','J\'habite à Beau-Bassin.','Il fait beau.'],
+    options:["Oui, j'ai un frère et deux sœurs.","Il fait beau et chaud aujourd'hui.","J'habite à Beau-Bassin avec eux.","Je m'appelle Kevin Ramdhun."],
     answer:'Oui, j\'ai un frère et deux sœurs.',
     hint:'La question demande si on a des frères et sœurs. La réponse doit répondre à ça.',
     explanation:'La question demande le nombre de frères et sœurs. La meilleure réponse est "<b>Oui, j\'ai un frère et deux sœurs.</b>"' }),
@@ -520,7 +520,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-073', chapterId:CH, difficulty:1, subsection:'questions_reponses',
     question:'"Aimes-tu les mathématiques ?" — Quelle est la meilleure réponse ?',
-    options:['Oui, j\'aime beaucoup les mathématiques.','Je m\'appelle Divya.','Il fait 30 degrés.','Mon école est grande.'],
+    options:["Oui, j'aime beaucoup les mathématiques.","Mon école est grande et très jolie.","Je m'appelle Divya et j'ai neuf ans.","Il fait 30 degrés dehors aujourd'hui."],
     answer:'Oui, j\'aime beaucoup les mathématiques.',
     hint:'La question demande si on aime les maths. La réponse doit répondre directement.',
     explanation:'"<b>Oui, j\'aime beaucoup les mathématiques.</b>" répond directement à la question "Aimes-tu les mathématiques ?"' }),
@@ -534,7 +534,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-eo-075', chapterId:CH, difficulty:1, subsection:'questions_reponses',
     question:'La réponse est "parce que j\'adore les animaux". Quelle était la question ?',
-    options:['Pourquoi veux-tu devenir vétérinaire ?','Où travailles-tu ?','Quand commences-tu ?','Qui est ton docteur ?'],
+    options:["Pourquoi veux-tu devenir vétérinaire ?","Qui est ton docteur à l'hôpital ?","Où travailles-tu avec les animaux ?","Quand commences-tu ton nouveau travail ?"],
     answer:'Pourquoi veux-tu devenir vétérinaire ?',
     hint:'"Parce que" répond toujours à "Pourquoi".',
     explanation:'"<b>Pourquoi</b>" demande la raison. "Parce que j\'adore les animaux" répond à "Pourquoi veux-tu devenir vétérinaire ?"' })

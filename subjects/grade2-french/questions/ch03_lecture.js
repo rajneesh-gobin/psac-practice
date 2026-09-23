@@ -280,7 +280,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-039', chapterId:CH, difficulty:1, subsection:'lecture_comprehension',
     question:'Lis : « Ce soir, il y a une belle lune. Les enfants regardent les étoiles. » Que font les enfants ?',
-    options:['Ils regardent les étoiles','Ils dorment','Ils jouent dehors','Ils lisent'],
+    options:["Ils regardent les étoiles","Ils dorment dans leur lit","Ils jouent dehors avec le chien","Ils lisent un livre le soir"],
     answer:'Ils regardent les étoiles',
     hint:'L\'action des enfants est dans la deuxième phrase. (The children\'s action is in the second sentence.)',
     explanation:'Les enfants <b>regardent les étoiles</b>. (The children look at the stars.)' }),
@@ -294,7 +294,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-041', chapterId:CH, difficulty:1, subsection:'lecture_comprehension',
     question:'Lis : « Sita aide sa maman à faire la vaisselle. Sa maman est contente. » Pourquoi la maman est-elle contente ?',
-    options:['Sita l\'aide à faire la vaisselle','Sita joue dehors','Sita mange son repas','Sita dort tôt'],
+    options:["Sita l'aide à faire la vaisselle","Sita joue dehors avec ses amies","Sita mange son repas très vite","Sita dort tôt tous les soirs"],
     answer:'Sita l\'aide à faire la vaisselle',
     hint:'La raison de la joie de maman est dans la première phrase. (The reason for Mum\'s happiness is in the first sentence.)',
     explanation:'La maman est contente parce que <b>Sita l\'aide à faire la vaisselle</b>. (Mum is happy because Sita helps her with the washing up.)' }),
@@ -422,7 +422,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-059', chapterId:CH, difficulty:1, subsection:'type_texte',
     question:'Pour trouver le type d\'un texte, quelle est la première chose à regarder ?',
-    options:['La présentation et le début du texte','La couleur de la page','Le nombre de mots','Le titre du livre'],
+    options:["La présentation et le début du texte","La couleur de la page de garde","Le nombre de mots dans le texte","Le titre du livre et de l'auteur"],
     answer:'La présentation et le début du texte',
     hint:'La forme du texte donne souvent un indice. (The layout of the text often gives a clue.)',
     explanation:'La <b>présentation</b> (mise en page) et les <b>premiers mots</b> aident à identifier le type de texte. (The layout and the first words help identify the type of text.)' }),
@@ -443,7 +443,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-062', chapterId:CH, difficulty:1, subsection:'type_texte',
     question:'Lis : « Exercice : Souligne les noms dans le texte. Réponds aux questions. » Quel type de texte est-ce ?',
-    options:['Un texte de manuel scolaire (consignes)','Un conte','Une recette','Un poème'],
+    options:["Un texte de manuel scolaire (consignes)","Une recette de gâteau au chocolat","Un conte avec une fée et un roi","Un poème avec des rimes jolies"],
     answer:'Un texte de manuel scolaire (consignes)',
     hint:'Ce texte donne des instructions à faire dans un exercice. (This text gives instructions to follow in an exercise.)',
     explanation:'Ce texte donne des <b>consignes</b> — des instructions pour faire un exercice. (This text gives instructions — directions for completing an exercise.)' }),
@@ -457,7 +457,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-064', chapterId:CH, difficulty:1, subsection:'type_texte',
     question:'Un journal d\'enfant contient des nouvelles sur ce qui se passe dans le monde. Quel type de texte est-ce ?',
-    options:['Un texte informatif / article','Un conte','Une recette','Un poème'],
+    options:["Un texte informatif / article","Une recette de gâteau au miel","Un conte avec une jolie fée","Un poème avec de très belles rimes"],
     answer:'Un texte informatif / article',
     hint:'Les journaux donnent des informations. (Newspapers give information.)',
     explanation:'Un journal contient des <b>articles informatifs</b> sur le monde. (A newspaper contains informative articles about the world.)' }),
@@ -520,7 +520,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-073', chapterId:CH, difficulty:1, subsection:'type_texte',
     question:'Dans un texte narratif, les actions se passent dans quel ordre ?',
-    options:['Dans l\'ordre chronologique (début, milieu, fin)','Dans n\'importe quel ordre','Du plus important au moins important','Du plus long au plus court'],
+    options:["Dans l'ordre chronologique (début, milieu, fin)","Du texte le plus long au plus court","Du plus important vers le moins important","Dans n'importe quel ordre, au hasard"],
     answer:'Dans l\'ordre chronologique (début, milieu, fin)',
     hint:'Un récit suit un ordre logique dans le temps. (A story follows a logical order in time.)',
     explanation:'Un texte narratif suit l\'<b>ordre chronologique</b> : début, milieu, fin. (A narrative text follows chronological order: beginning, middle, end.)' }),
@@ -534,7 +534,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-lec-075', chapterId:CH, difficulty:1, subsection:'type_texte',
     question:'Lis : « 1. Prends ton sac. 2. Mets tes chaussures. 3. Sors de la maison. » Quel type de texte est-ce ?',
-    options:['Un texte instructif (consignes)','Un conte','Un poème','Une lettre'],
+    options:["Un texte instructif (consignes)","Un conte de fées avec un beau prince","Un poème court avec des rimes","Une lettre pour sa grand-mère"],
     answer:'Un texte instructif (consignes)',
     hint:'Des étapes numérotées pour faire quelque chose. (Numbered steps to do something.)',
     explanation:'Les étapes numérotées forment <b>un texte instructif</b>. (Numbered steps form an instructive text.)' })

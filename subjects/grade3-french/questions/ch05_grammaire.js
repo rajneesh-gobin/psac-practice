@@ -124,7 +124,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-grm-017', chapterId:CH, difficulty:1, subsection:'types_phrases',
     question:'Quelle phrase EST une question indirecte (déclarative qui contient une question) ?',
-    options:['Je me demande où elle est.','Où est-elle ?','Elle est là.','Elle n\'est pas là.'],
+    options:["Je me demande où elle est.","Elle n'est pas là aujourd'hui.","Elle est là dans la classe.","Où est-elle en ce moment ?"],
     answer:'Je me demande où elle est.',
     hint:'Une question indirecte ne se termine pas par "?" et commence par "je me demande", "je veux savoir", etc.',
     explanation:'"<b>Je me demande où elle est.</b>" est une question indirecte : elle contient une question mais est formulée comme une affirmation.' }),
@@ -159,7 +159,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-grm-022', chapterId:CH, difficulty:1, subsection:'types_phrases',
     question:'Identifie le type de phrase : "Ne cours pas dans le couloir !"',
-    options:['Impérative négative (interdiction)','Déclarative négative','Interrogative négative','Exclamative'],
+    options:["Impérative négative (interdiction)","Exclamative (émotion forte)","Interrogative négative (question)","Déclarative négative (une information)"],
     answer:'Impérative négative (interdiction)',
     hint:'Cette phrase donne un ordre à la forme négative.',
     explanation:'"Ne cours pas dans le couloir !" est une phrase <b>impérative négative</b> (interdiction). Elle donne un ordre sous forme négative.' }),
@@ -329,7 +329,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-grm-046', chapterId:CH, difficulty:1, subsection:'accord_nom_adj',
     question:'Quelle phrase a un accord INCORRECT ?',
-    options:['Les filles sont contentes. Mais ce garçon est contents.','Les filles sont contentes.','Ce garçon est content.','Ces garçons sont contents.'],
+    options:["Les filles sont contentes. Mais ce garçon est contents.","Ces garçons sont contents de leur nouveau jeu.","Ce garçon est content de son beau cadeau.","Les filles sont contentes de leur belle journée."],
     answer:'Les filles sont contentes. Mais ce garçon est contents.',
     hint:'"Garçon" est masculin singulier → "content" sans "s" ni "e".',
     explanation:'"Ce garçon est contents" est incorrect. "Garçon" est <b>masculin singulier</b> → "content" (sans "s") : "Ce garçon est <b>content</b>."' }),
@@ -408,7 +408,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-grm-057', chapterId:CH, difficulty:1, subsection:'temps_verbes',
     question:'Comment forme-t-on le passé composé de "manger" (j\'ai mangé) ?',
-    options:['auxiliaire "avoir" + participe passé','auxiliaire "être" + participe passé','verbe seul + -é','verbe seul + -is'],
+    options:["auxiliaire \"avoir\" + participe passé","auxiliaire \"être\" + participe passé","verbe seul + terminaison -é","verbe seul + terminaison -is"],
     answer:'auxiliaire "avoir" + participe passé',
     hint:'"Manger" utilise "avoir" comme auxiliaire. Participe passé de "manger" = "mangé".',
     explanation:'Le passé composé de "manger" : <b>avoir + mangé</b> = "j\'<b>ai mangé</b>". La plupart des verbes utilisent "avoir" comme auxiliaire.' }),

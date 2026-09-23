@@ -273,7 +273,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-lec-038', chapterId:CH, difficulty:1, subsection:'lecture_comprehension',
     question:'Lis : "Il fait beau. Ana et son frère vont à la plage. Ils nagent et construisent un château de sable." Qu\'est-ce qu\'Ana et son frère font à la plage ?',
-    options:['Ils nagent et construisent un château de sable','Ils mangent une glace','Ils lisent un livre','Ils jouent au football'],
+    options:["Ils nagent et construisent un château de sable","Ils mangent une glace et boivent du jus","Ils lisent un livre sous un grand arbre","Ils jouent au football avec leurs amis"],
     answer:'Ils nagent et construisent un château de sable',
     hint:'Lis la dernière phrase du texte.',
     explanation:'Le texte dit : "Ils <b>nagent et construisent un château de sable</b>."' }),
@@ -350,7 +350,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-lec-049', chapterId:CH, difficulty:1, subsection:'lecture_comprehension',
     question:'Lis : "L\'eau est précieuse. Sans eau, les plantes meurent. Les animaux ont besoin d\'eau pour vivre. Nous devons économiser l\'eau." Pourquoi doit-on économiser l\'eau ?',
-    options:['Parce qu\'elle est précieuse et nécessaire à la vie','Parce qu\'elle est trop chaude','Parce qu\'elle est gratuite','Parce que c\'est la mode'],
+    options:["Parce qu'elle est précieuse et nécessaire à la vie","Parce qu'elle est gratuite pour tout le monde","Parce qu'elle est trop chaude en été","Parce que c'est la mode chez les enfants"],
     answer:'Parce qu\'elle est précieuse et nécessaire à la vie',
     hint:'Le texte explique pourquoi l\'eau est importante.',
     explanation:'Le texte dit : "L\'eau est précieuse" et montre que plantes et animaux en ont besoin. Elle est <b>précieuse et nécessaire à la vie</b>.' }),
@@ -401,7 +401,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-lec-056', chapterId:CH, difficulty:1, subsection:'ponctuation_sens',
     question:'Quel est le rôle du point (.) à la fin d\'une phrase ?',
-    options:['Il indique la fin d\'une phrase déclarative','Il indique une question','Il indique une émotion forte','Il sépare une liste'],
+    options:["Il indique la fin d'une phrase déclarative","Il indique une question posée à quelqu'un","Il sépare les mots d'une liste","Il indique une émotion très forte"],
     answer:'Il indique la fin d\'une phrase déclarative',
     hint:'Le point (.) termine les phrases qui donnent des informations.',
     explanation:'Le <b>point (.)</b> marque la fin d\'une phrase déclarative (qui donne une information). Après le point, on commence une nouvelle phrase avec une majuscule.' }),
@@ -436,7 +436,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-lec-061', chapterId:CH, difficulty:1, subsection:'ponctuation_sens',
     question:'Que signifie une majuscule au début d\'un mot dans une phrase (qui n\'est pas un nom propre) ?',
-    options:['C\'est le début d\'une nouvelle phrase','C\'est un mot important','C\'est un prénom','C\'est un pays'],
+    options:["C'est le début d'une nouvelle phrase","C'est un mot très important du texte","C'est un prénom de garçon ou de fille","C'est un pays comme l'Inde ou la France"],
     answer:'C\'est le début d\'une nouvelle phrase',
     hint:'Chaque phrase commence par une majuscule.',
     explanation:'Une majuscule au début d\'un mot (qui n\'est pas un nom propre) indique le <b>début d\'une nouvelle phrase</b>.' }),
@@ -450,7 +450,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-lec-063', chapterId:CH, difficulty:1, subsection:'ponctuation_sens',
     question:'Pourquoi est-il important de bien lire la ponctuation ?',
-    options:['Elle aide à comprendre le sens et à bien lire à voix haute','Elle donne la couleur des mots','Elle indique la longueur de la phrase','Elle montre le nombre de personnages'],
+    options:["Elle aide à comprendre le sens et à bien lire à voix haute","Elle indique la longueur exacte de chaque phrase","Elle donne la couleur et la forme des mots","Elle montre le nombre de personnages du récit"],
     answer:'Elle aide à comprendre le sens et à bien lire à voix haute',
     hint:'La ponctuation guide la voix et le sens.',
     explanation:'La ponctuation est importante car <b>elle aide à comprendre le sens et à bien lire à voix haute</b>. Elle indique où faire des pauses et comment moduler la voix.' }),
@@ -513,21 +513,21 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-lec-072', chapterId:CH, difficulty:1, subsection:'ponctuation_sens',
     question:'Quelle ponctuation vient APRÈS les deux points (:) dans une liste ?',
-    options:['Les éléments séparés par des virgules','Une seule phrase','Un point d\'interrogation','Un point d\'exclamation'],
+    options:["Les éléments séparés par des virgules","Un point d'interrogation à la fin","Une seule phrase très courte","Un point d'exclamation très fort"],
     answer:'Les éléments séparés par des virgules',
     hint:'Ex : "Dans mon sac, il y a : un livre, un stylo et une règle."',
     explanation:'Après les deux points (:), on liste les éléments séparés par des <b>virgules</b>. Ex : "J\'ai besoin de : eau, nourriture et abri."' }),
 
   makeMCQ({ id:'g3fr-lec-073', chapterId:CH, difficulty:1, subsection:'ponctuation_sens',
     question:'Que fait-on après le point (.) quand on écrit ?',
-    options:['On commence une nouvelle phrase avec une majuscule','On continue à écrire en minuscule','On saute deux lignes','On met un espace avant le prochain point'],
+    options:["On commence une nouvelle phrase avec une majuscule","On continue à écrire en minuscule sans arrêt","On saute deux lignes dans le cahier","On met un espace avant le prochain point"],
     answer:'On commence une nouvelle phrase avec une majuscule',
     hint:'Le point finit une phrase et la suivante doit recommencer.',
     explanation:'Après le point (.), on <b>commence une nouvelle phrase avec une majuscule</b>. Ex : "Le chat dort. Il rêve de souris."' }),
 
   makeMCQ({ id:'g3fr-lec-074', chapterId:CH, difficulty:1, subsection:'ponctuation_sens',
     question:'Lis : "Attention ! Le sol est glissant." Quel est l\'effet du "!" dans ce texte ?',
-    options:['Il attire l\'attention et montre l\'urgence','Il pose une question','Il termine une liste','Il donne une information calme'],
+    options:["Il attire l'attention et montre l'urgence","Il termine une liste de plusieurs mots","Il donne une information calme et simple","Il pose une question à la maîtresse"],
     answer:'Il attire l\'attention et montre l\'urgence',
     hint:'Le ! dans "Attention !" montre quelque chose d\'important.',
     explanation:'Le "!" dans "Attention !" <b>attire l\'attention et montre l\'urgence</b>. C\'est un avertissement important.' }),

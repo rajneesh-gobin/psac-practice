@@ -217,7 +217,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-co-030', chapterId:CH, difficulty:1, subsection:'idee_globale',
     question:'Lis : "D\'abord, Léa range sa chambre. Ensuite, elle fait ses devoirs. Enfin, elle lit un livre." Quelle est l\'idée globale ?',
-    options:['Les activités de Léa après l\'école','La chambre de Léa','Les devoirs difficiles','Le livre préféré de Léa'],
+    options:["Les activités de Léa après l'école","Le livre préféré de Léa le soir","La chambre bien rangée de Léa","Les devoirs difficiles de la classe"],
     answer:'Les activités de Léa après l\'école',
     hint:'Les mots "d\'abord, ensuite, enfin" montrent une liste d\'activités dans l\'ordre.',
     explanation:'Le texte présente les <b>activités de Léa après l\'école</b> dans l\'ordre grâce aux mots "d\'abord, ensuite, enfin".' }),
@@ -252,7 +252,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-co-035', chapterId:CH, difficulty:1, subsection:'idee_globale',
     question:'"La tortue marche lentement. Le lièvre court vite. À la fin, la tortue arrive la première." Quel est le sujet ?',
-    options:['La course entre la tortue et le lièvre','La lenteur de la tortue','La vitesse du lièvre','L\'arrivée de la course'],
+    options:["La course entre la tortue et le lièvre","L'arrivée de la course au village","La grande vitesse du lièvre rapide","La lenteur de la tortue fatiguée"],
     answer:'La course entre la tortue et le lièvre',
     hint:'C\'est une histoire célèbre avec deux personnages principaux.',
     explanation:'Le texte raconte <b>la course entre la tortue et le lièvre</b>. Les deux personnages sont également importants.' }),
@@ -294,7 +294,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-co-041', chapterId:CH, difficulty:1, subsection:'idee_globale',
     question:'Quelle phrase introduit une suite logique : "D\'abord, il fait beau. Ensuite, ___."',
-    options:['les enfants jouent dehors','il a plu hier','la nuit tombe','il neige fort'],
+    options:["les enfants jouent dehors","il a beaucoup plu hier soir","il neige très fort partout","la nuit tombe tout de suite"],
     answer:'les enfants jouent dehors',
     hint:'"Ensuite" introduit ce qui se passe après. Quel événement suit naturellement un beau temps ?',
     explanation:'Après un beau temps, il est logique que <b>les enfants jouent dehors</b>. "Ensuite" indique ce qui suit.' }),
@@ -464,7 +464,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-co-065', chapterId:CH, difficulty:1, subsection:'type_message',
     question:'Comment reconnaît-on un ordre ?',
-    options:['Il utilise le verbe à l\'impératif et souvent "!"','Il se termine toujours par "?"','Il commence par "peut-être"','Il donne un fait précis'],
+    options:["Il utilise le verbe à l'impératif et souvent \"!\"","Il se termine toujours par le signe \"?\"","Il commence toujours par le mot \"peut-être\"","Il donne un fait précis sans émotion"],
     answer:'Il utilise le verbe à l\'impératif et souvent "!"',
     hint:'L\'impératif en français n\'a pas de sujet : "Viens ici !" au lieu de "Tu viens ici."',
     explanation:'Un <b>ordre</b> utilise le verbe à l\'<b>impératif</b> (sans sujet) et se termine souvent par "!" : "Mange !", "Viens !", "Arrête !"' }),
@@ -520,7 +520,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3fr-co-073', chapterId:CH, difficulty:1, subsection:'type_message',
     question:'Une phrase qui commence par "Ne pas..." est souvent ___.',
-    options:['Une interdiction (ordre négatif)','Une suggestion','Une question','Une information positive'],
+    options:["Une interdiction (ordre négatif)","Une suggestion polie et gentille","Une information positive et utile","Une question posée à un ami"],
     answer:'Une interdiction (ordre négatif)',
     hint:'Une interdiction dit ce qu\'on ne doit PAS faire.',
     explanation:'"Ne pas courir dans les couloirs" est une <b>interdiction</b>, qui est un ordre négatif.' }),

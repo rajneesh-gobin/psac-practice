@@ -273,7 +273,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2fr-ecr-038', chapterId:CH, difficulty:1, subsection:'ponctuation_de_base',
     question:'Laquelle de ces phrases utilise correctement le point d\'exclamation ?',
-    options:['Attention, le sol est glissant !','Où habitez-vous !','Je mange une pomme !','Le ciel est bleu !'],
+    options:["Attention, le sol est glissant !","Le ciel est bleu au-dessus de nous !","Où habitez-vous avec votre famille !","Je mange une pomme et une banane !"],
     answer:'Attention, le sol est glissant !',
     hint:'Le point d\'exclamation convient pour les avertissements et les expressions fortes. (The exclamation mark is used for warnings and strong expressions.)',
     explanation:'<b>Attention, le sol est glissant !</b> — le point d\'exclamation convient pour un avertissement. (Watch out, the floor is slippery! — exclamation mark for a warning.)' }),
