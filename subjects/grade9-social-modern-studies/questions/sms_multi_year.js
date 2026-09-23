@@ -39,13 +39,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my006', chapterId:'g9sms-living-conditions', subsection:'strike_1975', difficulty:2,
     question:'What was the main outcome of the student strike of 1975 in Mauritius?',
-    options:['Free bus transport for students was introduced','Sugar prices were regulated','A new university was founded','School fees were doubled'], answer:'Free bus transport for students was introduced',
+    options:["Free bus transport for students was introduced","Secondary school fees were doubled nationwide","The price of sugar exports was fixed by law","A new national university was founded"], answer:'Free bus transport for students was introduced',
     hint:'It was a practical benefit that students demanded.',
     explanation:'Following the <b>1975 student strike</b>, the government introduced <b>free bus transport</b> for students, which remains in place today.' }),
 
   makeMCQ({ id:'g9sms-my007', chapterId:'g9sms-living-conditions', subsection:'education_before_reform', difficulty:2,
     question:'Before education reforms in Mauritius, primary schooling was mainly available to which group?',
-    options:['Children of wealthy families and the elite','All children regardless of income','Only children in Port Louis','Only boys'], answer:'Children of wealthy families and the elite',
+    options:["Children of wealthy families and the elite","Only boys, since girls were kept at home","Only children living in Port Louis district","All children regardless of family income"], answer:'Children of wealthy families and the elite',
     hint:'Access depended on the ability to pay.',
     explanation:'Before reforms, education was not free and was largely accessible only to <b>wealthy families and the elite</b>. Post-independence reforms extended free primary then secondary education to all.' }),
 
@@ -85,7 +85,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my013', chapterId:'g9sms-industrialisation', subsection:'mauritian_miracle', difficulty:3,
     question:'Why is the economic development of Mauritius sometimes called the "Mauritian Miracle"?',
-    options:['It transformed from one of the world\'s poorest countries to a high-income economy within decades','It discovered oil and became wealthy overnight','It received the most foreign aid in Africa','It had the largest EPZ in the world'], answer:'It transformed from one of the world\'s poorest countries to a high-income economy within decades',
+    options:["It transformed from one of the world's poorest countries to a high-income economy within decades","It had the largest export processing zone anywhere in the world for over thirty years","It received more foreign aid per person than any other country in Africa after 1968","It discovered offshore oil and became wealthy almost overnight in the 1970s"], answer:'It transformed from one of the world\'s poorest countries to a high-income economy within decades',
     hint:'Think about the speed and scale of the change.',
     explanation:'The <b>"Mauritian Miracle"</b> refers to how Mauritius moved from a low-income, sugar-dependent economy at independence to an upper-middle-income economy with diversified industries in just a few decades — defying early predictions of poverty and instability.' }),
 
@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my018', chapterId:'g9sms-chagos-tromelin', subsection:'expulsion_and_icj', difficulty:3,
     question:'What did the 2019 International Court of Justice (ICJ) advisory opinion state about the Chagos Archipelago?',
-    options:['The UK\'s administration of Chagos is unlawful and it should be returned to Mauritius','Mauritius has no legal claim over Chagos','The Chagossians should be compensated but the island stays British','The US military base is legal under international law'], answer:'The UK\'s administration of Chagos is unlawful and it should be returned to Mauritius',
+    options:["The UK's administration of Chagos is unlawful and it should be returned to Mauritius","Mauritius has no legal claim over Chagos and the islands belong to Britain","The United States military base on Diego Garcia is legal under international law","The Chagossians should be compensated but the islands stay British"], answer:'The UK\'s administration of Chagos is unlawful and it should be returned to Mauritius',
     hint:'The ICJ sided with Mauritius.',
     explanation:'In 2019, the <b>ICJ issued an advisory opinion</b> that the UK\'s continued administration of the Chagos Archipelago was unlawful, and that it should be handed back to Mauritius.' }),
 
@@ -155,7 +155,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my023', chapterId:'g9sms-population', subsection:'ageing', difficulty:2,
     question:'Which of the following is a consequence of an ageing population in Mauritius?',
-    options:['Greater demand for healthcare and pension services','A rise in birth rates','A decrease in school enrolment only','Lower government spending'], answer:'Greater demand for healthcare and pension services',
+    options:["Greater demand for healthcare and pension services","A fall in school enrolment and nothing else","A sharp rise in the national birth rate each year","Lower total government spending on social welfare"], answer:'Greater demand for healthcare and pension services',
     hint:'Older people need specific services.',
     explanation:'An ageing population creates <b>greater demand for healthcare and pensions</b>, and can place strain on the working-age population who must support the elderly through taxation.' }),
 
@@ -169,7 +169,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my025', chapterId:'g9sms-migration', subsection:'internal_international', difficulty:1,
     question:'What is meant by <b>internal migration</b>?',
-    options:['Moving from one place to another within the same country','Moving from one country to another','Moving from a rural area to a foreign city','Forced movement due to war'], answer:'Moving from one place to another within the same country',
+    options:["Moving from one place to another within the same country","Forced movement caused by war or political persecution","Moving from one country to another to settle there","Moving from a rural area to a city in a foreign country"], answer:'Moving from one place to another within the same country',
     hint:'Internal means within the same borders.',
     explanation:'<b>Internal migration</b> is movement within the same country (e.g. rural-to-urban migration). <b>International migration</b> crosses national borders.' }),
 
@@ -183,7 +183,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my027', chapterId:'g9sms-outer-islands', subsection:'rodrigues', difficulty:2,
     question:'Rodrigues is described as an autonomous region of Mauritius. What does this mean?',
-    options:['It has its own regional assembly and manages many of its own affairs','It is fully independent from Mauritius','It is administered directly by the Prime Minister\'s office','It has no elected government'], answer:'It has its own regional assembly and manages many of its own affairs',
+    options:["It has its own regional assembly and manages many of its own affairs","It is administered directly from the Prime Minister's office","It has no elected government and is run by a British governor","It is a fully independent country separate from Mauritius"], answer:'It has its own regional assembly and manages many of its own affairs',
     hint:'Autonomous means some degree of self-governance.',
     explanation:'Rodrigues is an <b>autonomous region</b> of Mauritius with its own <b>Rodrigues Regional Assembly</b>, which manages local affairs such as agriculture, fisheries and the environment.' }),
 
@@ -205,7 +205,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my030', chapterId:'g9sms-government-welfare', subsection:'taxes_and_mra', difficulty:1,
     question:'Which government body in Mauritius is responsible for collecting taxes?',
-    options:['Mauritius Revenue Authority (MRA)','Bank of Mauritius','Central Statistics Office','Ministry of Finance'], answer:'Mauritius Revenue Authority (MRA)',
+    options:["Mauritius Revenue Authority (MRA)","Ministry of Finance and Planning","Bank of Mauritius (central bank)","Statistics Mauritius (CSO)"], answer:'Mauritius Revenue Authority (MRA)',
     hint:'Its initials are MRA.',
     explanation:'The <b>Mauritius Revenue Authority (MRA)</b> collects taxes including income tax, VAT and customs duties on behalf of the government.' }),
 
@@ -217,7 +217,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my032', chapterId:'g9sms-government-welfare', subsection:'welfare_measures', difficulty:2,
     question:'Which of the following is an example of a welfare measure provided by the Mauritian government?',
-    options:['Basic Retirement Pension for all citizens over 60','Free meals for government officials','Tax-free status for all workers','Free housing for all civil servants'], answer:'Basic Retirement Pension for all citizens over 60',
+    options:["Basic Retirement Pension for all citizens over 60","Free hot meals for all government officials","Complete tax-free status for every working adult","Free housing for all civil servants and teachers"], answer:'Basic Retirement Pension for all citizens over 60',
     hint:'It supports elderly citizens who can no longer work.',
     explanation:'Mauritius has a <b>Basic Retirement Pension</b> paid to all citizens aged 60 and above regardless of their working history. This is part of the government\'s welfare state measures.' }),
 
@@ -231,7 +231,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my034', chapterId:'g9sms-media', subsection:'roles_of_media', difficulty:2,
     question:'What is one of the main roles of the media in a democratic society?',
-    options:['To hold the government accountable by informing the public','To set tax rates on behalf of the government','To elect the President','To control the school curriculum'], answer:'To hold the government accountable by informing the public',
+    options:["To hold the government accountable by informing the public","To decide the school curriculum used in every college","To set tax rates on behalf of the elected government","To elect the President and appoint the Prime Minister"], answer:'To hold the government accountable by informing the public',
     hint:'The media is sometimes called the "fourth estate."',
     explanation:'In a democracy, a free media <b>holds the government accountable</b> by informing citizens about political decisions, investigating corruption and giving voice to different perspectives.' }),
 
@@ -253,7 +253,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-my037', chapterId:'g9sms-social-change', subsection:'deviance_and_norms', difficulty:2,
     question:'In sociology, what is meant by <b>deviance</b>?',
-    options:['Behaviour that breaks the accepted norms of a society','Behaviour that follows all social rules','A form of artistic expression','Extreme religious observance'], answer:'Behaviour that breaks the accepted norms of a society',
+    options:["Behaviour that breaks the accepted norms of a society","Behaviour that follows every social rule exactly","An unusually strict form of religious observance","A recognised style of artistic self-expression"], answer:'Behaviour that breaks the accepted norms of a society',
     hint:'Norms are the accepted rules; deviance breaks them.',
     explanation:'<b>Deviance</b> refers to any behaviour that violates the social norms of a group or society. It can be minor (e.g. queue-jumping) or serious (e.g. crime), and what counts as deviant varies between cultures.' }),
 

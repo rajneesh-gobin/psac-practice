@@ -35,7 +35,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi004', chapterId:'g9sms-government-welfare', subsection:'taxes_and_mra', difficulty:2,
     question:'What is the main function of the Mauritius Revenue Authority (MRA)?',
-    options:['To collect taxes on behalf of the government','To manage the national budget','To print and issue currency','To audit government spending'],
+    options:["To collect taxes on behalf of the government","To audit all government spending each year","To print and issue the country's currency","To prepare and manage the national budget"],
     answer:'To collect taxes on behalf of the government',
     hint:'The MRA is a revenue-collection body.',
     explanation:'The <b>MRA</b> is responsible for the assessment and collection of taxes and other levies on behalf of the Government of Mauritius, including income tax, VAT and customs duties.' }),
@@ -56,7 +56,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi007', chapterId:'g9sms-government-welfare', subsection:'constitution', difficulty:2,
     question:'Which branch of government is responsible for making laws in Mauritius?',
-    options:['The Legislature (National Assembly)','The Executive (Cabinet)','The Judiciary (Courts)','The President\'s Office'],
+    options:["The Legislature (National Assembly)","The Judiciary (the Supreme Court)","The Executive (Cabinet of Ministers)","The President's Office (head of state)"],
     answer:'The Legislature (National Assembly)',
     hint:'This branch debates and votes on bills.',
     explanation:'The <b>Legislature</b> — the National Assembly — debates and passes laws. The Executive implements them and the Judiciary interprets them. This separation of powers prevents any one branch from having too much authority.' }),
@@ -77,7 +77,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi010', chapterId:'g9sms-chagos-tromelin', subsection:'diego_garcia', difficulty:3,
     question:'Diego Garcia is an island that Mauritius claims sovereignty over. Which country currently operates a military base there?',
-    options:['The United States of America','The United Kingdom','France','China'],
+    options:["The United States of America","The Republic of India (New Delhi)","The People's Republic of China","The French Republic (France)"],
     answer:'The United States of America',
     hint:'The UK leased the island to an ally.',
     explanation:'The <b>USA</b> operates a major military base on Diego Garcia. The UK leased it to the USA, but Mauritius maintains that the Chagos Archipelago — of which Diego Garcia is part — was illegally detached from Mauritius before independence. The ICJ issued an advisory opinion in 2019 supporting Mauritius\'s position.' }),
@@ -198,7 +198,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi027', chapterId:'g9sms-economy-1960s', subsection:'obstacles', difficulty:3,
     question:'The main reason for the rapid population increase in Mauritius in the 1950s was:',
-    options:['The eradication of malaria sharply reducing the death rate','A large influx of immigrants from India','Improved food supply from new farming methods','The end of World War II bringing men home'],
+    options:["The eradication of malaria sharply reducing the death rate","Improved food supply from new farming methods on estates","A large new influx of indentured immigrants from India","The end of World War II bringing many soldiers home"],
     answer:'The eradication of malaria sharply reducing the death rate',
     hint:'The birth rate stayed the same; it was the death rate that changed dramatically.',
     explanation:'The malaria eradication campaign (1948–1950) dramatically reduced the death rate. With the birth rate remaining high but deaths falling sharply, the population grew rapidly — creating the large, young workforce that led to <b>mass unemployment</b> in the 1960s.' }),
@@ -277,7 +277,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi038', chapterId:'g9sms-industrialisation', subsection:'sectors_over_time', difficulty:3,
     question:'Which list places the main pillars of the Mauritian economy in the correct CHRONOLOGICAL ORDER from oldest to most recent?',
-    options:['Sugar cane → Manufacturing (EPZ) → Tourism → Banking & Finance → ICT/BPO','Tourism → Sugar cane → Manufacturing → ICT/BPO → Banking','Manufacturing → Sugar cane → Banking → Tourism → ICT/BPO','ICT/BPO → Banking → Tourism → Manufacturing → Sugar cane'],
+    options:["Sugar cane → Manufacturing (EPZ) → Tourism → Banking & Finance → ICT/BPO","ICT/BPO → Banking & Finance → Tourism → Manufacturing → Sugar cane","Manufacturing (EPZ) → Sugar cane → Banking → Tourism → ICT/BPO","Tourism → Sugar cane → Manufacturing (EPZ) → ICT/BPO → Banking"],
     answer:'Sugar cane → Manufacturing (EPZ) → Tourism → Banking & Finance → ICT/BPO',
     hint:'Each sector was added without removing the previous ones.',
     explanation:'Sugar cane dominated from colonial times; the EPZ and manufacturing took off in the <b>1970s</b>; tourism boomed in the <b>1980s</b>; banking and financial services grew through the <b>1990s</b>; ICT and BPO became a major sector from <b>2000</b> onwards. This diversification is the core of the Mauritian Miracle.' }),
@@ -377,7 +377,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi052', chapterId:'g9sms-family', subsection:'family_types', difficulty:1,
     question:'What is a reconstituted (or blended) family?',
-    options:['A family formed when one or both partners bring children from a previous relationship','A family where divorced parents live near each other to share childcare','A family consisting entirely of adopted children','A family where grandparents are the sole primary carers'],
+    options:["A family formed when one or both partners bring children from a previous relationship","A family where grandparents alone are the sole primary carers of the children","A family where divorced parents live near each other to share childcare","A family consisting entirely of adopted children and no birth children"],
     answer:'A family formed when one or both partners bring children from a previous relationship',
     hint:'It is "blended" because children from different families are combined.',
     explanation:'A <b>reconstituted or blended family</b> is formed when two people come together in a new relationship, and one or both bring children from a previous relationship. The children may become step-siblings within the new household.' }),
@@ -447,7 +447,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi062', chapterId:'g9sms-social-change', subsection:'deviance_and_norms', difficulty:3,
     question:'A student argues that exceeding the speed limit is only deviant, not criminal, because no one was hurt. Is this argument correct?',
-    options:['No — exceeding the speed limit is both deviant AND criminal, regardless of whether harm occurred','Yes — an act is only criminal if it causes direct harm to another person','Yes — traffic violations are matters of social norms, not law','No — speeding is only criminal if it leads to an accident'],
+    options:["No — exceeding the speed limit is both deviant AND criminal, regardless of whether harm occurred","Yes — traffic violations are matters of social norms only, and never a matter of criminal law","No — speeding is only criminal if it actually leads to an accident causing injury","Yes — an act is only criminal if it causes direct harm to another identified person"],
     answer:'No — exceeding the speed limit is both deviant AND criminal, regardless of whether harm occurred',
     hint:'Breaking a law is a crime regardless of the outcome.',
     explanation:'Speeding breaks both a social norm (safe driving) and a specific law (the Road Traffic Act). A crime is defined by <b>breaking a law</b>, not by whether harm results. The student confuses the legal definition of crime with the civil concept of harm or negligence.' }),
@@ -456,7 +456,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi063', chapterId:'g9sms-outer-islands', subsection:'services_and_access', difficulty:1,
     question:'What is the name of the highest mountain peak in Mauritius, reaching approximately 828 metres above sea level?',
-    options:['Piton de la Petite Rivière Noire','Le Pouce','Corps de Garde','Piton du Milieu'],
+    options:["Piton de la Petite Rivière Noire","Corps de Garde, above Quatre Bornes","Le Pouce, above Port Louis","Piton du Milieu, in the centre"],
     answer:'Piton de la Petite Rivière Noire',
     hint:'It is located in the Black River Gorges National Park in the south-west.',
     explanation:'<b>Piton de la Petite Rivière Noire</b>, located in the Black River Gorges National Park, is the highest peak in Mauritius at approximately <b>828 metres</b> above sea level.' }),
@@ -477,7 +477,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi066', chapterId:'g9sms-hazards-environment', subsection:'environmental_damage', difficulty:2,
     question:'What is the main function of the coral reef surrounding Mauritius?',
-    options:['It acts as a natural barrier, protecting the coastline from the full force of ocean waves','It provides deep-sea fishing grounds for commercial trawlers','It prevents foreign ships from sailing into Mauritian territorial waters','It filters seawater to make it suitable for drinking'],
+    options:["It acts as a natural barrier, protecting the coastline from the full force of ocean waves","It prevents foreign ships from entering Mauritian territorial waters at any point","It provides deep-sea fishing grounds for large commercial trawlers offshore","It filters seawater to make it suitable for drinking and for irrigation"],
     answer:'It acts as a natural barrier, protecting the coastline from the full force of ocean waves',
     hint:'The lagoon it creates is calm because the reef breaks the incoming swells.',
     explanation:'The coral reef creates a sheltered <b>lagoon</b> around much of Mauritius that acts as a natural barrier, breaking the force of ocean waves before they reach the shore. This protects the beaches and coastline from erosion and storm damage, and supports the tourism industry.' }),
@@ -556,14 +556,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi077', chapterId:'g9sms-media', subsection:'roles_of_media', difficulty:2,
     question:'What does "freedom of the press" mean?',
-    options:['The right of journalists and media organisations to publish information without government censorship','The right of all citizens to receive free printed newspapers','The right of the government to approve or block what is published','The right of journalists to enter any private property to gather news'],
+    options:["The right of journalists and media organisations to publish information without government censorship","The right of the government to approve or block anything before it is published in a newspaper","The right of all citizens to receive printed newspapers free of charge each day","The right of journalists to enter any private property in order to gather news"],
     answer:'The right of journalists and media organisations to publish information without government censorship',
     hint:'Freedom of the press is a fundamental democratic right.',
     explanation:'<b>Freedom of the press</b> means that journalists, editors and media organisations can report, comment and publish information without prior restraint or censorship by the government. It is a cornerstone of democratic societies and is protected in constitutions and charters of rights.' }),
 
   makeMCQ({ id:'g9sms-pi078', chapterId:'g9sms-media', subsection:'types_of_media', difficulty:3,
     question:'A student classifies a mobile phone as "print media" because it can display text messages. Is this classification correct?',
-    options:['No — a mobile phone is electronic media because it transmits information electronically','Yes — because it displays text, it is a form of print media','No — a mobile phone is New Age Digital media only, not electronic media','Yes — any device that displays written text belongs to print media'],
+    options:["No — a mobile phone is electronic media because it transmits information electronically","Yes — any device that displays written text belongs to the print media category","No — a mobile phone is New Age Digital media only and never electronic media","Yes — because it can display written text it is a form of print media"],
     answer:'No — a mobile phone is electronic media because it transmits information electronically',
     hint:'The medium of transmission, not the content type, determines the category.',
     explanation:'A mobile phone is classified as <b>electronic media</b> because it transmits and receives information using electronic signals. <b>Print media</b> refers specifically to physically printed materials (newspapers, books, magazines). A mobile phone can also access New Age Digital media through apps and the internet, but its core classification is electronic.' }),
@@ -577,7 +577,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-pi080', chapterId:'g9sms-media', subsection:'roles_of_media', difficulty:2,
     question:'In what way can the media influence public opinion in a democratic society?',
-    options:['By shaping how people perceive events through the stories it chooses to cover and how it frames them','By directly instructing citizens on how to vote in elections','By enforcing laws and punishing those who break social norms','By setting official government policy on national issues'],
+    options:["By shaping how people perceive events through the stories it chooses to cover and how it frames them","By directly instructing citizens which political party they must vote for at a general election","By enforcing the law and punishing those who break accepted social norms","By setting official government policy on the major national issues of the day"],
     answer:'By shaping how people perceive events through the stories it chooses to cover and how it frames them',
     hint:'The media does not have legal power — its influence works through ideas.',
     explanation:'The media influences public opinion through <b>agenda-setting</b> (choosing which stories to cover) and <b>framing</b> (deciding how to present them). This shapes what people think about and how they think about it. However, the media does not have the power to enforce laws or set government policy directly.' })

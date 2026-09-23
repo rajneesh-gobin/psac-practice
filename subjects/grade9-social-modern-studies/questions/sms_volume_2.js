@@ -91,7 +91,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v113', chapterId:'g9sms-population', subsection:'ageing', difficulty:3,
     question:'Which economic challenge is directly linked to an ageing population in Mauritius?',
-    options:['Funding pension and healthcare costs from a proportionally smaller working-age tax base','Building more primary schools to accommodate the rising number of children','Recruiting more young immigrants to fill unskilled manufacturing jobs','Expanding sugar production to feed a growing elderly rural population'],
+    options:["Funding pension and healthcare costs from a proportionally smaller working-age tax base","Recruiting many more young immigrants to fill unskilled manufacturing jobs each year","Building many more primary schools for the rising number of young children","Expanding sugar production in order to feed a growing elderly rural population"],
     answer:'Funding pension and healthcare costs from a proportionally smaller working-age tax base',
     hint:'More old people need more support; fewer working people pay the taxes for it.',
     explanation:'As more Mauritians live into old age, the cost of <b>pensions and public healthcare</b> rises. But the working-age population that pays taxes to fund these services is proportionally shrinking, creating fiscal pressure.' }),
@@ -121,21 +121,21 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v117', chapterId:'g9sms-migration', subsection:'push_pull', difficulty:3,
     question:'Which combination correctly pairs a push and a pull factor?',
-    options:['Push: political persecution at home — Pull: democratic safety in the destination','Push: high wages in the destination — Pull: unemployment at home','Push: better climate in the destination — Pull: war at home','Push: family reunion in the destination — Pull: low wages at home'],
+    options:["Push: political persecution at home — Pull: democratic safety in the destination","Push: high wages in the destination — Pull: unemployment in the home country","Push: family reunion in the destination — Pull: low wages in the home area","Push: a better climate in the destination — Pull: war in the home country"],
     answer:'Push: political persecution at home — Pull: democratic safety in the destination',
     hint:'Pushes are negative conditions at home; pulls are positive conditions at the destination.',
     explanation:'<b>Political persecution</b> (push) drives people away from home; <b>democratic safety</b> (pull) draws them to the destination. The other options have the push/pull labels reversed.' }),
 
   makeMCQ({ id:'g9sms-v118', chapterId:'g9sms-migration', subsection:'refugees_displacement', difficulty:2,
     question:'Under international law, which organisation is responsible for protecting refugees?',
-    options:['The United Nations High Commissioner for Refugees (UNHCR)','The World Trade Organisation','Interpol, the international police agency','The International Monetary Fund'],
+    options:["The United Nations High Commissioner for Refugees (UNHCR)","Interpol, the international criminal police organisation","The International Monetary Fund (IMF) in Washington","The World Trade Organisation (WTO) in Geneva"],
     answer:'The United Nations High Commissioner for Refugees (UNHCR)',
     hint:'The clue is in the title — it names refugees directly.',
     explanation:'The <b>UNHCR</b> (United Nations High Commissioner for Refugees) is the international body mandated to protect refugees and find durable solutions — repatriation, local integration or resettlement.' }),
 
   makeMCQ({ id:'g9sms-v119', chapterId:'g9sms-migration', subsection:'refugees_displacement', difficulty:3,
     question:'The 1951 Refugee Convention defines a refugee as a person who has fled their country due to a well-founded fear of persecution based on which grounds?',
-    options:['Race, religion, nationality, political opinion or membership of a particular social group','Poverty alone, or the desire for a better-paid job in another country','Natural disaster such as a cyclone or earthquake in their home country','Failure to obtain a valid passport or travel document'],
+    options:["Race, religion, nationality, political opinion or membership of a particular social group","A natural disaster such as a cyclone, a flood or an earthquake in their home country","Failure to obtain a valid passport, identity card or other travel document","Poverty alone, or simply the desire for a better-paid job in another country"],
     answer:'Race, religion, nationality, political opinion or membership of a particular social group',
     hint:'The Convention is specific about the grounds — economic hardship is not enough.',
     explanation:'The 1951 Convention protects people fleeing persecution for <b>race, religion, nationality, political opinion or membership of a particular social group</b>. Economic migrants and disaster-displaced people are not automatically covered.' }),
@@ -188,7 +188,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v126', chapterId:'g9sms-hazards-environment', subsection:'cyclones', difficulty:3,
     question:'Why are cyclones particularly damaging to small island nations like Mauritius?',
-    options:['A small island has no large land mass to weaken a cyclone before it reaches settled areas','Small islands always produce stronger cyclones than large countries','Cyclones only ever form directly above small islands in the Indian Ocean','Mauritius lacks a meteorological service capable of tracking cyclones'],
+    options:["A small island has no large land mass to weaken a cyclone before it reaches settled areas","Cyclones only ever form directly above small islands in the south-west Indian Ocean","Small islands always produce much stronger cyclones than larger countries do","Mauritius lacks any meteorological service capable of tracking cyclones properly"],
     answer:'A small island has no large land mass to weaken a cyclone before it reaches settled areas',
     hint:'Think about how cyclones weaken when they cross land.',
     explanation:'Cyclones weaken when they move over land. A <b>small island</b> offers no large land mass to dissipate a storm\'s energy, so it hits settled areas close to full strength. The whole island is within the damage radius.' }),
@@ -209,21 +209,21 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v129', chapterId:'g9sms-hazards-environment', subsection:'climate_change', difficulty:2,
     question:'Which commitment has Mauritius made under international climate agreements?',
-    options:['To reduce greenhouse gas emissions and transition toward renewable energy','To increase coal production to diversify its energy supply','To ban all tourism as it produces too much carbon dioxide','To build a nuclear power station with French assistance'],
+    options:["To reduce greenhouse gas emissions and transition toward renewable energy","To ban all tourism, because it produces far too much carbon dioxide","To increase coal production in order to diversify the energy supply","To build a large nuclear power station with French assistance"],
     answer:'To reduce greenhouse gas emissions and transition toward renewable energy',
     hint:'Small island states are among the most vulnerable to climate change and most vocal advocates for action.',
     explanation:'Mauritius is a signatory to the Paris Agreement and has committed to <b>reducing emissions</b> and expanding <b>renewable energy</b> (solar, wind) to reduce its dependence on imported fossil fuels.' }),
 
   makeMCQ({ id:'g9sms-v130', chapterId:'g9sms-hazards-environment', subsection:'environmental_damage', difficulty:2,
     question:'What is one measure individuals can take to reduce environmental damage in Mauritius?',
-    options:['Reducing single-use plastic waste and recycling where facilities exist','Increasing car use to avoid public transport congestion','Cutting down native forest to plant more sugar cane','Releasing treated sewage directly into coastal lagoons'],
+    options:["Reducing single-use plastic waste and recycling where facilities exist","Releasing treated sewage directly into the coastal lagoons at night","Cutting down native forest in order to plant more sugar cane","Increasing car use in order to avoid public transport congestion"],
     answer:'Reducing single-use plastic waste and recycling where facilities exist',
     hint:'Individual action targets consumption choices.',
     explanation:'<b>Reducing single-use plastic</b> prevents litter from entering the ocean and harming marine life. Mauritius has introduced regulations on plastic bags as part of broader environmental policy.' }),
 
   makeMCQ({ id:'g9sms-v131', chapterId:'g9sms-hazards-environment', subsection:'environmental_damage', difficulty:3,
     question:'The MV Wakashio ran aground off Mauritius in 2020, causing an oil spill. What did this event highlight about the island\'s vulnerability?',
-    options:['A single incident can cause catastrophic damage to a small island\'s fragile marine ecosystem','Oil spills are beneficial because they fertilise coral growth','Mauritius has such a large coastline that a spill affects very little of it','The incident proved that coral reefs are entirely immune to oil pollution'],
+    options:["A single incident can cause catastrophic damage to a small island's fragile marine ecosystem","Mauritius has such a long coastline that any spill affects only a very small part of it","Oil spills are beneficial, because the oil fertilises the growth of new coral","The incident proved that coral reefs are entirely immune to any oil pollution"],
     answer:'A single incident can cause catastrophic damage to a small island\'s fragile marine ecosystem',
     hint:'Small places have less capacity to absorb large shocks.',
     explanation:'The Wakashio spill demonstrated that a <b>single environmental incident</b> can affect a significant proportion of a small island\'s coastline, damaging tourism, fisheries and biodiversity in ways that take years to recover.' }),
@@ -253,7 +253,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v135', chapterId:'g9sms-government-welfare', subsection:'constitution', difficulty:2,
     question:'Which chapter of the Mauritian Constitution protects fundamental rights such as freedom of speech and religion?',
-    options:['The Chapter on the Protection of Fundamental Rights and Freedoms','The Chapter on Public Finance and Taxation','The Chapter on the Appointment of Judges','The Chapter on Foreign Affairs and Trade Treaties'],
+    options:["The Chapter on the Protection of Fundamental Rights and Freedoms","The Chapter on Public Finance and the Raising of Taxation","The Chapter on Foreign Affairs and International Trade Treaties","The Chapter on the Appointment and Removal of Judges"],
     answer:'The Chapter on the Protection of Fundamental Rights and Freedoms',
     hint:'The Constitution protects rights in a dedicated section.',
     explanation:'The <b>Chapter on the Protection of Fundamental Rights and Freedoms</b> guarantees rights including freedom of expression, freedom of religion and the right to a fair trial — enforceable through the courts.' }),
@@ -281,7 +281,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v139', chapterId:'g9sms-government-welfare', subsection:'taxes_and_mra', difficulty:3,
     question:'Why is paying taxes a civic responsibility rather than just a legal obligation?',
-    options:['Taxes fund the public services — schools, hospitals, roads — that benefit everyone','Taxes are paid only by the wealthy and do not affect ordinary citizens','Tax revenue goes directly to the President\'s personal account','Taxes are completely voluntary and no one is compelled to pay them'],
+    options:["Taxes fund the public services — schools, hospitals, roads — that benefit everyone","Taxes are paid only by the very wealthy and do not affect ordinary citizens","Tax revenue goes directly into the personal account of the President","Taxes are completely voluntary and nobody can be compelled to pay them"],
     answer:'Taxes fund the public services — schools, hospitals, roads — that benefit everyone',
     hint:'Think about where public services come from.',
     explanation:'Taxes are the means by which citizens collectively fund <b>public goods</b> — education, healthcare, infrastructure — that would not exist if everyone only paid for what they personally used.' }),
@@ -309,7 +309,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v143', chapterId:'g9sms-government-welfare', subsection:'rights_and_law', difficulty:3,
     question:'What is the role of an independent judiciary in a democratic state like Mauritius?',
-    options:['To apply the law impartially, without influence from the government or any other party','To implement the policies of whichever political party wins the election','To advise the Prime Minister on which laws to introduce to Parliament','To collect taxes on behalf of the Mauritius Revenue Authority'],
+    options:["To apply the law impartially, without influence from the government or any other party","To collect taxes and customs duties on behalf of the Mauritius Revenue Authority","To implement the policies of whichever political party wins the general election","To advise the Prime Minister on which new laws to introduce to Parliament"],
     answer:'To apply the law impartially, without influence from the government or any other party',
     hint:'Independence means judges follow the law, not politicians.',
     explanation:'An <b>independent judiciary</b> applies the law impartially: judges cannot be removed for their decisions, ensuring that even government actions can be challenged legally.' }),
@@ -325,7 +325,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v145', chapterId:'g9sms-media', subsection:'types_of_media', difficulty:2,
     question:'What distinguishes social media from traditional broadcast media?',
-    options:['Social media allows users to both receive and produce content; traditional media is one-way','Social media is only available in printed form','Traditional media has been entirely replaced by social media since 2010','Social media is regulated more strictly than any other type of media'],
+    options:["Social media allows users to both receive and produce content; traditional media is one-way","Social media is regulated far more strictly than any other type of media in Mauritius","Traditional media has been entirely replaced by social media everywhere since 2010","Social media is only ever available in printed form, never electronically"],
     answer:'Social media allows users to both receive and produce content; traditional media is one-way',
     hint:'Think about who can speak in each model.',
     explanation:'Traditional broadcast media is <b>one-to-many</b> (one source, many readers/viewers); social media is <b>many-to-many</b>, allowing any user to produce and share content as well as consume it.' }),
@@ -339,7 +339,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v147', chapterId:'g9sms-media', subsection:'roles_of_media', difficulty:3,
     question:'What is the risk of "media concentration" — when one owner controls most of the media?',
-    options:['News may reflect the owner\'s interests rather than the public interest, reducing scrutiny of power','Competition between outlets always increases when one owner controls them all','Audiences gain access to a wider range of viewpoints and perspectives','Media concentration increases journalistic independence and reduces censorship'],
+    options:["News may reflect the owner's interests rather than the public interest, reducing scrutiny of power","Audiences gain access to a much wider range of viewpoints and many different perspectives","Media concentration increases journalistic independence and reduces all censorship","Competition between outlets always increases when one owner controls them all"],
     answer:'News may reflect the owner\'s interests rather than the public interest, reducing scrutiny of power',
     hint:'An owner with business interests may not want those interests reported critically.',
     explanation:'When one owner controls multiple outlets, editorial decisions may favour the <b>owner\'s interests</b>, suppressing coverage critical of them and narrowing the range of views the public hears.' }),
@@ -353,7 +353,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v149', chapterId:'g9sms-media', subsection:'media_and_lifestyle', difficulty:3,
     question:'Research shows a link between heavy social media use and lower self-esteem among teenagers. What mechanism best explains this?',
-    options:['Comparing oneself to the idealised images others post online can create unrealistic standards','Social media physically damages the brain cells responsible for self-confidence','Low self-esteem is caused entirely by a lack of physical exercise, not by screens','Teenagers who use social media are simply less intelligent than those who do not'],
+    options:["Comparing oneself to the idealised images others post online can create unrealistic standards","Social media physically damages the brain cells that are responsible for self-confidence","Low self-esteem is caused entirely by a lack of physical exercise, not by screens","Teenagers who use social media are simply less intelligent than those who do not"],
     answer:'Comparing oneself to the idealised images others post online can create unrealistic standards',
     hint:'Social media shows curated highlight reels, not everyday reality.',
     explanation:'People share their <b>best moments</b> on social media; comparing one\'s ordinary life with others\' curated highlights creates unrealistic expectations and can lower <b>self-esteem</b>.' }),
@@ -369,7 +369,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v151', chapterId:'g9sms-family', subsection:'family_types', difficulty:3,
     question:'What is a "reconstituted" family?',
-    options:['A family formed when two adults with children from previous relationships combine into one household','A family in which both parents work full-time outside the home','A traditional family where both parents were born on the same island','A family consisting of grandparents raising their grandchildren only'],
+    options:["A family formed when two adults with children from previous relationships combine into one household","A family in which both of the parents work full-time outside the family home","A traditional family in which both parents happen to have been born on the same small island","A family consisting of grandparents raising their grandchildren with no parents present"],
     answer:'A family formed when two adults with children from previous relationships combine into one household',
     hint:'Think of the prefix "re-" meaning again — a new family assembled from existing ones.',
     explanation:'A <b>reconstituted family</b> (also called blended or step-family) forms when partners who each have children from earlier relationships join together, creating a new household with step-siblings and step-parents.' }),
@@ -420,14 +420,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v158', chapterId:'g9sms-social-change', subsection:'social_movements', difficulty:2,
     question:'What makes a social movement different from a political party?',
-    options:['A social movement seeks to change society without necessarily seeking to hold government office','A social movement is only allowed to operate during election campaigns','A social movement must be registered with the electoral commission','There is no difference — social movements and political parties are the same thing'],
+    options:["A social movement seeks to change society without necessarily seeking to hold government office","A social movement must be registered with the Electoral Commission before it can act","There is no difference at all — social movements and political parties are the same thing","A social movement is only allowed to operate during an official election campaign"],
     answer:'A social movement seeks to change society without necessarily seeking to hold government office',
     hint:'Environmental groups, student movements and labour unions are social movements, not parties.',
     explanation:'A <b>social movement</b> organises citizens around a cause — environmental protection, education rights, workers\' rights — without the primary aim of winning government power, which distinguishes it from a political party.' }),
 
   makeMCQ({ id:'g9sms-v159', chapterId:'g9sms-social-change', subsection:'deviance_and_norms', difficulty:2,
     question:'Which of the following is an example of informal social control?',
-    options:['Friends and family expressing disapproval of someone\'s behaviour','A police officer arresting a person for speeding','A judge sentencing someone to community service','Parliament passing a new law against littering'],
+    options:["Friends and family expressing disapproval of someone's behaviour","A judge sentencing an offender to do community service","A police officer arresting a driver for speeding in town","Parliament passing a new law against littering in public"],
     answer:'Friends and family expressing disapproval of someone\'s behaviour',
     hint:'Informal control uses social pressure, not law.',
     explanation:'<b>Informal social control</b> operates through social pressure — the disapproval of peers, family or community. It does not involve the formal legal system and is often more immediately powerful than the law.' }),
@@ -464,7 +464,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v164', chapterId:'g9sms-links', subsection:'links_india_africa', difficulty:3,
     question:'How does the African diaspora maintain cultural links with Mauritius today?',
-    options:['Through Creole language, Sega music and shared cultural practices rooted in the African slave experience','Through formal political unions between African states and Mauritius','Through compulsory African history lessons taught in every Mauritian school by law','Mauritius has no cultural links with Africa because all African cultural practices were lost'],
+    options:["Through Creole language, Sega music and shared cultural practices rooted in the African slave experience","Mauritius has no cultural links at all with Africa, because every African cultural practice was lost","Through compulsory African history lessons taught in every Mauritian primary school by law","Through formal political unions between Mauritius and several mainland African states"],
     answer:'Through Creole language, Sega music and shared cultural practices rooted in the African slave experience',
     hint:'Culture survived even when people were separated from their origins.',
     explanation:'<b>Mauritian Creole</b> and <b>Sega music</b> are rooted in the experience of enslaved Africans and Malagasy people, preserved and developed over generations as living links to African cultural heritage.' }),
@@ -478,7 +478,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v166', chapterId:'g9sms-links', subsection:'links_europe_france', difficulty:3,
     question:'How do Mauritius\'s legal and educational systems reflect both French and British colonial legacies?',
-    options:['Civil law follows the French Napoleonic Code while government and examinations follow British parliamentary and educational traditions','All laws are entirely French and all education is entirely British with no overlap','The French legacy is limited to cuisine; the British legacy covers everything else','Both systems were abolished at independence and replaced with a unique Mauritian system'],
+    options:["Civil law follows the French Napoleonic Code while government and examinations follow British parliamentary and educational traditions","The French legacy is limited entirely to cuisine and place names, while the British legacy covers absolutely everything else","All the laws of Mauritius are entirely French and all of its education is entirely British, with no overlap at all","Both systems were abolished at independence in 1968 and replaced with a completely new and unique Mauritian system"],
     answer:'Civil law follows the French Napoleonic Code while government and examinations follow British parliamentary and educational traditions',
     hint:'France ruled first (law); Britain ruled second (government and schools).',
     explanation:'Mauritius has a <b>hybrid legal system</b>: civil law (property, family, contracts) follows the <b>Napoleonic Code</b> from French rule, while the <b>parliamentary system, public examinations (Cambridge) and use of English</b> reflect British rule.' }),
@@ -499,14 +499,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v169', chapterId:'g9sms-links', subsection:'benefits_of_membership', difficulty:2,
     question:'How does membership of the Indian Ocean Commission (IOC) benefit Mauritius?',
-    options:['It enables cooperation with neighbouring island states on environmental, economic and security issues','It gives Mauritius the right to claim all ocean resources within 5 000 km','It automatically settles all maritime sovereignty disputes in Mauritius\'s favour','It requires France to pay compensation for its former colonial rule'],
+    options:["It enables cooperation with neighbouring island states on environmental, economic and security issues","It automatically settles every maritime sovereignty dispute in Mauritius's favour straight away","It gives Mauritius the right to claim all the ocean resources within 5,000 km of its coast","It requires France to pay financial compensation for its former colonial rule"],
     answer:'It enables cooperation with neighbouring island states on environmental, economic and security issues',
     hint:'Regional bodies are about cooperation, not unilateral rights.',
     explanation:'The <b>Indian Ocean Commission</b> brings Mauritius, Réunion, Comoros, Madagascar and Seychelles together for <b>joint management</b> of environmental challenges, economic opportunities and regional security.' }),
 
   makeMCQ({ id:'g9sms-v170', chapterId:'g9sms-links', subsection:'benefits_of_membership', difficulty:3,
     question:'What is a preferential trade agreement and how does Mauritius benefit from having one with the European Union?',
-    options:['It allows Mauritian goods to enter the EU market with lower or zero tariffs, making them more competitive than non-member exports','It requires Mauritius to buy all its imports exclusively from EU member states','It means EU countries automatically invest in Mauritian infrastructure projects','It gives Mauritius the right to set all tariff rates for goods entering the EU from any country'],
+    options:["It allows Mauritian goods to enter the EU market with lower or zero tariffs, making them more competitive than non-member exports","It requires Mauritius to buy all of its imports exclusively from European Union member states and from nowhere else at all","It gives Mauritius the right to set all the tariff rates for goods entering the EU from any country in the world","It means that EU countries must automatically invest in Mauritian infrastructure projects each year"],
     answer:'It allows Mauritian goods to enter the EU market with lower or zero tariffs, making them more competitive than non-member exports',
     hint:'Preferential = better than the standard terms.',
     explanation:'A <b>preferential trade agreement</b> reduces tariff barriers for Mauritian exports — sugar, textiles, seafood — giving them a <b>price advantage</b> over competitors from outside the agreement in the EU market.' }),
@@ -522,7 +522,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v172', chapterId:'g9sms-economy-today', subsection:'sectors', difficulty:3,
     question:'The quaternary sector is sometimes listed as a fourth economic sector. Which activity belongs to it?',
-    options:['Research and development, information technology and knowledge-based services','Mining minerals from the seabed','Assembling mobile phones in a factory','Selling those phones in a retail shop'],
+    options:["Research and development, information technology and knowledge-based services","Selling finished mobile phones to customers in a retail shop or market","Assembling mobile phones from parts in a factory on an estate","Mining minerals from the seabed of the Indian Ocean"],
     answer:'Research and development, information technology and knowledge-based services',
     hint:'The quaternary sector deals in knowledge and innovation, not goods.',
     explanation:'The <b>quaternary sector</b> covers knowledge-intensive activities — ICT, research, consulting, finance. As Mauritius moves up the value chain, this sector is becoming increasingly important.' }),
@@ -536,7 +536,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9sms-v174', chapterId:'g9sms-economy-today', subsection:'factors_of_production', difficulty:3,
     question:'A new technology company sets up in Mauritius. Which factor of production does the company\'s founding entrepreneur represent?',
-    options:['Enterprise — organising the other factors and taking the risk of the venture','Labour — since the entrepreneur also works in the company','Capital — since the entrepreneur provides the startup funding','Land — since the entrepreneur owns the office building'],
+    options:["Enterprise — organising the other factors and taking the risk of the venture","Land — since the entrepreneur owns the office building in which it operates","Capital — since the entrepreneur provides the money to start the company","Labour — since the entrepreneur also works in the company every day"],
     answer:'Enterprise — organising the other factors and taking the risk of the venture',
     hint:'Enterprise is the factor that brings the others together.',
     explanation:'The <b>enterprise</b> factor is provided by the entrepreneur who organises land, labour and capital, makes strategic decisions and accepts the financial risk of starting the business.' }),
