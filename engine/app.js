@@ -6010,7 +6010,7 @@ function _buildHeaderMenu() {
     return `<button type="button" class="hdr-menu-item${danger ? ' is-danger' : ''}" data-menu-idx="${i}">
       <span class="mi-ico" aria-hidden="true">${_profEsc(icon)}</span>
       <span class="flex-1 min-w-0">
-        <span class="mi-label block truncate">${_profEsc(label)}${btn.dataset.menuNew ? '<span class="mi-new">New</span>' : ''}</span>
+        <span class="mi-label block truncate">${_profEsc(label)}</span>
         ${desc ? `<span class="mi-desc block">${_profEsc(desc)}</span>` : ''}
       </span>
     </button>`;
@@ -6904,24 +6904,62 @@ const PD = (() => {
     _renderAssignments();
   }
 
+  // ⚠ THE PARENT'S OWN LIST HAD THE SAME DEFECT AS THE CHILD'S and outlived the
+  //   fix by one round: an assigned paper rendered as "Any Chapter - All Levels"
+  //   with no due date, because this list only ever knew how to describe chapter
+  //   practice. A parent could set a paper, be told it worked, and then see no
+  //   trace of what they had actually set.
   async function _renderAssignments() {
     const listEl = document.getElementById('pd-asgn-list');
     if (!listEl || !_activeId) return;
     listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">Loading…</p>';
-    const asgns  = await Store.loadAssignments(_activeId);
+    const raw = await Store.loadAssignments(_activeId);
+    // Soonest first, undated last — the same order the child sees, so the two
+    // screens describe the same list in the same sequence.
+    const asgns = Store.sortAssignments ? Store.sortAssignments(raw) : raw;
     const DLABELS = ['🎲 Random','Basic','Medium','Hard','Challenge'];
     const allChs  = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
       .flatMap(p => p._chapters || p.chapters || []);
+
+    const DUE_CHIP = {
+      overdue:  ['bg-rose-500 text-white', 'Overdue'],
+      today:    ['bg-amber-500 text-white', 'Due today'],
+      upcoming: ['bg-blue-500 text-white', ''],
+    };
+    const dueChip = (a) => {
+      const state = Store.assignmentDueState ? Store.assignmentDueState(a) : 'anytime';
+      if (state === 'anytime') return '';
+      const [cls, fixed] = DUE_CHIP[state] || ['bg-blue-500 text-white', ''];
+      return `<span class="${cls} text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">${fixed || 'Due ' + _dueDayLabel(a.due_date)}</span>`;
+    };
+
     listEl.innerHTML = asgns.length ? asgns.map(a => {
-      const ch  = allChs.find(c => c.id === a.chapter_id) || CHAPTERS.find(c => c.id === a.chapter_id);
-      const dlv = a.difficulty ? (DLABELS[a.difficulty] || `L${a.difficulty}`) : 'All Levels';
-      return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-        <span class="text-xl select-none">${ch?.icon || '📚'}</span>
+      const doc = a.document || a.library_documents || null;
+      const isPaper = !!a.library_document_id;
+      // ⚠ A paper the admin has since withdrawn still has a row here. Say so,
+      //   rather than printing an empty title the parent cannot account for.
+      const title = isPaper
+        ? (doc ? doc.title : 'This paper is no longer available')
+        : `${(allChs.find(c => c.id === a.chapter_id) || CHAPTERS.find(c => c.id === a.chapter_id))?.name || a.chapter_id || 'Any Chapter'} - ${a.difficulty ? (DLABELS[a.difficulty] || 'L' + a.difficulty) : 'All Levels'}`;
+      const icon = isPaper ? '📄'
+        : ((allChs.find(c => c.id === a.chapter_id) || CHAPTERS.find(c => c.id === a.chapter_id))?.icon || '📚');
+      const bits = isPaper && doc
+        ? [(typeof Library !== 'undefined' && Library.typeLabel ? Library.typeLabel(doc.doc_type) : ''),
+           doc.year || '', doc.pages ? doc.pages + ' pages' : ''].filter(Boolean).join(' · ')
+        : '';
+      const href = (isPaper && doc && typeof Library !== 'undefined' && Library.hrefFor) ? Library.hrefFor(doc) : '';
+      return `<div class="flex items-center gap-3 p-3 ${isPaper ? 'bg-violet-50 dark:bg-violet-900/20' : 'bg-gray-50 dark:bg-gray-700/50'} rounded-xl">
+        <span class="text-xl select-none">${icon}</span>
         <div class="flex-1 min-w-0">
-          <div class="font-semibold text-sm text-gray-800 dark:text-white">${ch?.name || a.chapter_id || 'Any Chapter'} - ${dlv}</div>
-          ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic">"${a.note}"</div>` : ''}
+          <div class="flex items-start gap-2">
+            <div class="font-semibold text-sm text-gray-800 dark:text-white flex-1 min-w-0">${_attr(title)}</div>
+            ${dueChip(a)}
+          </div>
+          ${bits ? `<div class="text-xs text-violet-600 dark:text-violet-400 font-medium">${_attr(bits)}</div>` : ''}
+          ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic">"${_attr(a.note)}"</div>` : ''}
           <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2 flex-wrap">
             <span>${new Date(a.created_at).toLocaleDateString()}</span>
+            ${href ? `<a href="${_attr(href)}" target="_blank" rel="noopener" class="text-violet-600 dark:text-violet-400 font-semibold underline">Open</a>` : ''}
             ${a.show_hints === false ? '<span class="text-amber-600 dark:text-amber-400 font-semibold">🚫 No hints</span>' : ''}
             ${a.show_answers === false ? '<span class="text-amber-600 dark:text-amber-400 font-semibold">🙈 Answers hidden</span>' : ''}
           </div>
@@ -6931,7 +6969,6 @@ const PD = (() => {
       </div>`;
     }).join('') : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No assignments yet. Add one above.</p>';
   }
-
   // ── Study reminder ─────────────────────────────
   async function _loadReminder() {
     if (!_activeId) return;
@@ -7792,16 +7829,80 @@ function _pdFillAssignChapters(pack) {
 }
 
 // ── STUDENT ASSIGNMENTS (dashboard view) ──────
+// ⚠ AN ASSIGNMENT IS NOW ONE OF TWO THINGS and this is the only place a child
+//   sees either: chapter practice, or a library paper to work on paper. A paper
+//   has no subject_id and no chapter_id, so before this it rendered as
+//   "Subject - Any Chapter" with no way to open it — the row carried a document
+//   id and nothing a child could read or act on.
+// ⚠ DUE DATES ARE REAL HERE FOR THE FIRST TIME. due_date has existed on this
+//   table for months and was referenced nowhere in engine/ or workers/; both
+//   live rows had it NULL. Store.assignmentDueState() is the single definition
+//   of what "overdue" means, in Mauritius days, so this screen and the calendar
+//   cannot drift apart by a day around midnight.
 async function _renderStudentAssignments(studentId) {
   const banner = document.getElementById('dash-assignments');
   const listEl = document.getElementById('dash-assignments-list');
   if (!banner || !listEl || !studentId) return;
-  const asgns = await Store.loadAssignments(studentId);
-  if (!asgns.length) { banner.classList.add('hidden'); return; }
+  const raw = await Store.loadAssignments(studentId);
+  if (!raw.length) { banner.classList.add('hidden'); return; }
+  // ⚠ Soonest first, undated last. Newest-first by creation put a paper due
+  //   tomorrow underneath one with no date at all.
+  const asgns = Store.sortAssignments ? Store.sortAssignments(raw) : raw;
   banner.classList.remove('hidden');
   const packs  = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
   const allChs = packs.flatMap(p => p._chapters || p.chapters || []);
+
+  const DUE_CHIP = {
+    overdue:  ['bg-rose-500 text-white', 'Overdue'],
+    today:    ['bg-amber-500 text-white', 'Due today'],
+    upcoming: ['bg-blue-500 text-white', ''],
+  };
+  const dueChip = (a) => {
+    const state = Store.assignmentDueState ? Store.assignmentDueState(a) : 'anytime';
+    if (state === 'anytime') return '';
+    const [cls, fixed] = DUE_CHIP[state] || ['bg-blue-500 text-white', ''];
+    return `<span class="${cls} text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">${fixed || 'Due ' + _dueDayLabel(a.due_date)}</span>`;
+  };
+
   listEl.innerHTML = asgns.map(a => {
+    // ── A library paper ──────────────────────────────────────────────────
+    const doc = a.document || a.library_documents || null;
+    if (a.library_document_id) {
+      // ⚠ The embed can be absent on an older column tier, or the document can
+      //   have been taken down. Say so plainly rather than rendering a card
+      //   whose button goes nowhere.
+      const gone = !doc;
+      const bits = [
+        (typeof Library !== 'undefined' && Library.typeLabel ? Library.typeLabel(doc?.doc_type) : ''),
+        doc?.year || '', doc?.pages ? doc.pages + ' pages' : '',
+      ].filter(Boolean).join(' · ');
+      const href = (!gone && typeof Library !== 'undefined' && Library.hrefFor) ? Library.hrefFor(doc) : '';
+      return `<div class="p-4 bg-violet-50 dark:bg-violet-900/20 rounded-xl border-2 border-violet-300 dark:border-violet-600 shadow-sm">
+        <div class="flex items-start gap-3">
+          <span class="text-2xl select-none mt-0.5">📄</span>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start gap-2">
+              <div class="text-sm font-bold text-gray-800 dark:text-white flex-1 min-w-0">${_attr(gone ? 'This paper is no longer available' : doc.title)}</div>
+              ${dueChip(a)}
+            </div>
+            ${bits ? `<div class="text-xs text-violet-600 dark:text-violet-400 font-medium mt-0.5">${_attr(bits)}</div>` : ''}
+            ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${_attr(a.note)}"</div>` : ''}
+          </div>
+        </div>
+        <div class="flex gap-2 mt-3">
+          ${href ? `<a href="${_attr(href)}" target="_blank" rel="noopener"
+            class="flex-1 bg-violet-500 hover:bg-violet-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-colors shadow text-center">
+            📄 Open the paper
+          </a>` : ''}
+          <button onclick="_markAssignmentDone('${a.id}', this)"
+            class="${href ? 'shrink-0 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300' : 'flex-1 bg-green-500 hover:bg-green-600 text-white'} px-3 py-2 rounded-xl transition-colors text-xs font-semibold">
+            ✓ Mark Complete
+          </button>
+        </div>
+      </div>`;
+    }
+
+    // ── Chapter practice, as before ──────────────────────────────────────
     const pack = packs.find(p => p.id === a.subject_id);
     const ch   = allChs.find(c => c.id === a.chapter_id) || CHAPTERS.find(c => c.id === a.chapter_id);
     const subjectName = pack?.subject || a.subject_id || 'Subject';
@@ -7812,7 +7913,10 @@ async function _renderStudentAssignments(studentId) {
       <div class="flex items-start gap-3">
         <span class="text-2xl select-none mt-0.5">${ch?.icon || '📚'}</span>
         <div class="flex-1 min-w-0">
-          <div class="text-sm font-bold text-gray-800 dark:text-white">${subjectName} - ${chName}</div>
+          <div class="flex items-start gap-2">
+            <div class="text-sm font-bold text-gray-800 dark:text-white flex-1 min-w-0">${subjectName} - ${chName}</div>
+            ${dueChip(a)}
+          </div>
           <div class="text-xs text-blue-600 dark:text-blue-400 font-medium mt-0.5">${dlv}</div>
           ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${a.note}"</div>` : ''}
         </div>
@@ -7831,6 +7935,15 @@ async function _renderStudentAssignments(studentId) {
   }).join('');
 }
 
+// "Due Fri 3 Oct". ⚠ Parsed and formatted in UTC from the plain YYYY-MM-DD the
+// column stores — building a local Date from it shifts the day backwards for
+// anyone whose device is set west of Greenwich.
+function _dueDayLabel(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00Z');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+}
 async function _markAssignmentDone(id, btn) {
   if (btn) { btn.disabled = true; btn.textContent = '…'; }
   await Store.completeAssignment(id);

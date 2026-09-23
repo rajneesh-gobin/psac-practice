@@ -107,18 +107,28 @@ const ok = (label, cond, detail) => {
     // ⚠ REACHABLE, not merely present. The first entry point was a link card
     //   inside the student-home "Progress" tab, which starts hidden — so the
     //   library was built, worked, and could not be found from anywhere a
-    //   person actually looks. A header button is what makes it a door.
+    //   person actually looks.
+    // ⚠ IT IS A TAB NOW, NOT A HEADER BUTTON, and these two checks used to
+    //   assert #btn-open-library. That button was deliberately removed when the
+    //   library became a tab on each board — jumping to a separate screen and
+    //   needing Back to return was the reported complaint. The assertions
+    //   outlived the button and failed for weeks against working code, which is
+    //   worse than no test: a suite with known-red lines stops being read.
+    //   What must hold now is that every board a person can stand on offers the
+    //   shelf without leaving the board.
     const reach = await ev(`(() => {
-      const hdr = document.querySelector('#hdr-actions #btn-open-library');
+      const tabs = [...document.querySelectorAll('[data-tab="library"], #pd-tab-library')]
+        .filter(el => el.tagName === 'BUTTON');
       return {
-        inHeader: !!hdr,
-        headerVisible: !!hdr && !hdr.classList.contains('hidden'),
-        inMenu: typeof _headerMenuButtons === 'function'
-          && _headerMenuButtons().some(b => b.id === 'btn-open-library'),
+        boards: tabs.map(b => (b.getAttribute('onclick') || '').replace(/\\(.*/, '')),
+        count: tabs.length,
+        allLabelled: tabs.every(b => b.textContent.trim().length > 3),
       };
     })()`);
-    ok('the library has a header button', reach.inHeader && reach.headerVisible, reach);
-    ok('and therefore appears in the ☰ menu', reach.inMenu, reach);
+    // StudentHome, TeacherMode, PD and AdminPanel — four boards, four tabs.
+    ok('the library is a tab on every board, not a screen you jump to',
+      reach.count >= 4, reach);
+    ok('and each of those tabs is labelled', reach.allLabelled, reach);
 
     // ── Open it the way a child would ───────────────────────────────────
     // ⚠ WAIT FOR BOOT FIRST. Auth.init() decides which screen to show at the
@@ -444,6 +454,42 @@ const ok = (label, cond, detail) => {
       return n;
     })()`);
     ok('choosing a year does not remove the other years', stranded > 2, { options: stranded });
+
+    // ⚠ A FILTERED SHELF MUST NOT BE MOSTLY BLANK. "past papers, 2006" leaves
+    //   most subjects holding one document, and each still cost a heading, a
+    //   ledge and a full-width scrolling row for one 112px card. Measured as
+    //   pixels per document, because "looks empty" is not something a source
+    //   read can catch.
+    const density = await ev(`(async () => {
+      const wait = () => new Promise(r => setTimeout(r, 350));
+      const measure = () => {
+        const body = document.querySelector('#library-body .lb-grade-body') || document.getElementById('library-body');
+        const n = document.querySelectorAll('#library-body .lb-book').length;
+        return { n, height: Math.round(body.getBoundingClientRect().height),
+                 headings: document.querySelectorAll('#library-body .lb-shelf-title').length };
+      };
+      Library.setType(''); Library.setYear(''); await wait();
+      const browsing = measure();
+      const yearSel = [...document.querySelectorAll('#library-body .lb-ctl')]
+        .find(s => [...s.options].some(o => /^\\d{4}$/.test(o.value)));
+      const y = yearSel ? [...yearSel.options].find(o => /^\\d{4}$/.test(o.value)).value : null;
+      Library.setYear(y); await wait();
+      const filtered = measure();
+      window.scrollTo(0, 0);
+      return { browsing, filtered, year: y };
+    })()`);
+    // A picture of the filtered shelf — "looks empty" is a judgement the numbers
+    // support but do not settle.
+    await sleep(250);
+    const filteredShot = await call('Page.captureScreenshot', { format: 'png' });
+    fs.writeFileSync(path.join(os.tmpdir(), 'library-filtered.png'), Buffer.from(filteredShot.data, 'base64'));
+    await ev(`Library.setYear('')`);
+    await sleep(300);
+    const perDoc = density.filtered.n ? density.filtered.height / density.filtered.n : Infinity;
+    ok('a filtered shelf drops the per-subject headings',
+      density.filtered.headings === 0 && density.browsing.headings > 0, density);
+    ok('and packs documents instead of stacking near-empty rows',
+      perDoc < 260, { perDocPx: Math.round(perDoc), ...density });
 
     // ── The practice-engine bridge and the PII hint ──────────────────────
     // ⚠ The count must work WITHOUT the library being loaded — a chapter screen

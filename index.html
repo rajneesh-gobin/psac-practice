@@ -717,20 +717,14 @@
         <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hdr-btn is-teacher hidden" data-hdr-pri="high" title="Teacher Dashboard" aria-label="Teacher dashboard"
           data-menu-desc="Your classes, assignments and pupils">
           <span class="hdr-ico" aria-hidden="true">👩‍🏫</span><span class="hdr-word">Teacher</span></button>
-        <!-- ⚠ A WHOLE SECTION NEEDS A DOOR ON EVERY SCREEN. The first entry point
-             was a link card inside the student-home Progress tab, which starts
-             hidden - so the library existed and could not be found. A .hdr-btn in
-             #hdr-actions is picked up by _headerMenuButtons() automatically, so
-             this one row also becomes a ☰ Menu entry with no extra wiring. -->
-        <!-- ⚠ TEMPORARY "New" BADGE - remove the two data-menu-new/.hdr-new bits
-             below, the .hdr-new/.mi-new rules in style.css and the menu branch in
-             _renderHeaderMenu() together when the Library is no longer new.
-             ⚠ The badge sits OUTSIDE .hdr-word on purpose: _renderHeaderMenu()
-             builds its row label from that span's textContent, so a badge inside
-             it would render the mobile menu entry as "LibraryNew". -->
-        <button id="btn-open-library" onclick="Library.open()" class="hdr-btn is-papers" data-hdr-pri="low" title="Past Exam Papers" aria-label="Past Exam Papers (new)"
-          data-menu-desc="Past papers and worksheets, by grade and subject" data-menu-new="1">
-          <span class="hdr-ico" aria-hidden="true">📚</span><span class="hdr-word">Past Exam Papers</span><span class="hdr-new">New</span></button>
+        <!-- ⚠ NO Past Exam Papers BUTTON HERE. It was added when the section's
+             only door was a link card inside the student-home Progress tab,
+             which starts hidden — so the section existed and could not be
+             found. Every role now has its own visible tab (student home, the
+             parent dashboard, the teacher workspace and the admin panel), so a
+             header button was a fourth route to the same place and was removed
+             as duplication. If the tabs ever go away, this is the door that has
+             to come back. -->
         <button id="search-btn" onclick="Search.open()" class="hdr-btn hidden" data-hdr-pri="low" title="Search Questions" aria-label="Search questions"
           data-menu-desc="Find a question in any subject or chapter">
           <span class="hdr-ico" aria-hidden="true">🔍</span><span class="hdr-word">Search</span></button>
@@ -3026,7 +3020,12 @@
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="inbox"    onclick="StudentHome.tab('inbox')"   ><strong>📬 Messages</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="missions" onclick="StudentHome.tab('missions')"><strong>🎯 Missions</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="badges"   onclick="StudentHome.tab('badges')"  ><strong>🏅 Badges</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="library" onclick="StudentHome.tab('library')"><strong>📚 Past Exam Papers</strong></button>
+        <!-- ⚠ TEMPORARY "New" badge — remove the <span class="hdr-new"> below and
+             the .hdr-new rules in style.css together when Past Exam
+             Papers is no longer a new feature. It moved here from the header
+             button when that button was removed as duplication; this tab is the
+             child's door to the section, so it is where the signal belongs. -->
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="library" onclick="StudentHome.tab('library')"><strong>📚 Past Exam Papers<span class="hdr-new">New</span></strong></button>
       </div>
 
       <!-- Board tab: sticky notes grid -->
@@ -5927,6 +5926,48 @@
       <div class="flex flex-wrap gap-2 justify-end">
         <button onclick="Library.closeShare()" class="text-sm font-semibold px-4 py-2 rounded-xl text-gray-500 dark:text-gray-400">Cancel</button>
         <button onclick="Library.confirmShare()" class="text-sm font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">Share</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⚠ AN ORDINARY WHITE/DARK SHEET, not a chalkboard, and deliberately. The
+       rule is written in style.css beside .lb-btn-primary: what sits ON the
+       board is chalk, a dialog that opens over it is a normal sheet. Every other
+       library modal follows it and this one matches them exactly.
+       ⚠ ONE SHEET FOR BOTH HALVES. The person assigning never learns that a
+       child and a class are stored in two different tables. -->
+  <div id="modal-library-assign" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md p-5 my-auto relative">
+      <button onclick="Library.closeAssign()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">📅 Set this as work</h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3"><b id="lb-as-title"></b></p>
+
+      <p class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Who is it for?</p>
+      <div id="lb-as-who" class="mb-3 max-h-48 overflow-y-auto"></div>
+
+      <p class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">When is it for?</p>
+      <div id="lb-as-when" class="flex flex-wrap gap-2 mb-2">
+        <button type="button" class="lb-when" data-when="today"    aria-pressed="false" onclick="Library.setAssignWhen('today')">Today</button>
+        <button type="button" class="lb-when" data-when="tomorrow" aria-pressed="true"  onclick="Library.setAssignWhen('tomorrow')">Tomorrow</button>
+        <button type="button" class="lb-when" data-when="pick"     aria-pressed="false" onclick="Library.setAssignWhen('pick')">Pick a day</button>
+        <button type="button" class="lb-when" data-when="anytime"  aria-pressed="false" onclick="Library.setAssignWhen('anytime')">Any time</button>
+      </div>
+      <div id="lb-as-date-row" class="hidden mb-3">
+        <label for="lb-as-date" class="sr-only">Day the work is for</label>
+        <input id="lb-as-date" type="date"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+      </div>
+
+      <label for="lb-as-note" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mt-3 mb-1">Add a note <span class="font-normal opacity-60">(optional)</span></label>
+      <input id="lb-as-note" type="text" maxlength="200" placeholder="Do Section A only"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-2 mb-3">Children see it on their dashboard and can open the paper straight from there. Classes get it on the class page, on the day you chose. The file stays in the library — nothing is copied.</p>
+      <p id="lb-as-status" role="status" aria-live="polite" class="text-xs text-gray-600 dark:text-gray-300 mb-3 min-h-[1.2em]"></p>
+      <div class="flex flex-wrap gap-2 justify-end">
+        <button onclick="Library.closeAssign()" class="text-sm font-semibold px-4 py-2 rounded-xl text-gray-500 dark:text-gray-400">Cancel</button>
+        <button id="lb-as-send" onclick="Library.confirmAssign()" class="text-sm font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">Set work</button>
       </div>
     </div>
   </div>

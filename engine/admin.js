@@ -908,6 +908,11 @@ const AdminPanel = (() => {
             class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30">
             📋 Copy email
           </button>
+          <button type="button" onclick="AdminPanel.sendMailTo('${r.id}')"
+            title="Write to this person on their own"
+            class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">
+            ✉️ Send mail
+          </button>
           ${setup ? '' : `<button id="pending-act-${_esc(r.id)}" onclick="AdminPanel.activatePendingRegistration('${r.id}')"
             class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white disabled:opacity-60">
             ✅ Activate manually
@@ -1027,6 +1032,30 @@ const AdminPanel = (() => {
   // email address. Copy it directly from that already-visible row: it is
   // instant, works even if the bulk-email endpoint is temporarily unavailable,
   // and avoids asking an admin to open a separate detail screen just to reply.
+  // ── Write to ONE person, straight from their row ────────────────────────
+  //
+  // ⚠ OPENS THE APP'S OWN COMPOSE FORM, NOT A mailto: LINK. admin@nouklass.com
+  //   is a Cloudflare Email Routing forwarder with no mailbox, so no mail
+  //   client can send as it — a mailto: would go out from whatever personal
+  //   account the admin happens to have configured, which is precisely the
+  //   problem openCompose() was built to fix (see its header).
+  // ⚠ An activated member's address is NOT on the row to begin with: it is
+  //   fetched lazily by _loadMemberEmails() and painted in afterwards. Fetch it
+  //   before concluding there isn't one, or the button fails for any row the
+  //   admin clicks before that request lands.
+  // ⚠ _memberEmails caches a MISS as null, so read it through `|| ''` —
+  //   String(null) is "null", which would prefill the form with that word.
+  async function sendMailTo(userId) {
+    let email = String(_memberEmails[userId] || '').trim();
+    if (!email) email = String(_pendingRegistrations.find(r => r.id === userId)?.email || '').trim();
+    if (!email) {
+      await _loadMemberEmails([userId]);
+      email = String(_memberEmails[userId] || '').trim();
+    }
+    if (!email) { toast('No email address on file for this account.', 3000); return; }
+    openCompose(email);
+  }
+
   async function copyPendingEmail(userId) {
     const email = String(_pendingRegistrations.find(r => r.id === userId)?.email || '').trim();
     if (!email) { toast('That email address is not available. Refresh and try again.', 3000); return; }
@@ -1877,6 +1906,14 @@ const AdminPanel = (() => {
           <div class="flex flex-wrap items-center gap-2">
             <span class="text-xs text-gray-500 dark:text-gray-400">Account type</span>
             ${roleSelect()}
+            <!-- ⚠ Writes to this ONE person through the app's own compose form.
+                 Not a mailto: — admin@nouklass.com has no mailbox to send from;
+                 see sendMailTo(). -->
+            <button onclick="AdminPanel.sendMailTo('${m.id}')"
+              title="Write to this person on their own"
+              class="text-xs px-3 py-1 rounded-lg font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition-colors">
+              ✉️ Send mail
+            </button>
             <button onclick="AdminPanel.toggleDisable('${m.id}', ${!m.disabled})"
               class="text-xs px-3 py-1 rounded-lg font-semibold transition-colors ${m.disabled
                 ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200'
@@ -6422,7 +6459,7 @@ const AdminPanel = (() => {
   return { render, showTab, loadMembers, membersPage, filterMembers, copyMemberEmails, copyPendingEmail, setMemberStatusFilter, setMemberVisibilityFilters,
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
     toggleMemberPick, toggleSelectAllMembers, clearMemberPicks, openBroadcast, closeBroadcast,
-    openCompose, closeCompose, composePreview, sendCompose,
+    openCompose, closeCompose, composePreview, sendCompose, sendMailTo,
     loadLibraryQueue, libraryDecide, loadLibraryReports, dismissLibraryReport,
     loadLibraryShelves, addLibrarySection, setLibrarySectionStatus, renameLibrarySection,
     toggleTeacherRow, toggleSelectAllTeachers, emailOneMember,

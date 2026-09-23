@@ -1932,3 +1932,62 @@ member's **👶 Children** list, each child has **⚙️ Settings**:
   nothing. A parent previewing a child is excluded. *Apply now* = Force Logout.
 - Tests: `scripts/test-support-settings.js` (49), `run-admin-support-tests.sh`
   (37, real postgres), `scripts/test-admin-child-settings.js` (real Chrome, 360px).
+
+## Assigning a library paper — for a child, or for a class (2026-09-23)
+
+One 📅 Assign button on every paper card, adults only (`Library.canAssign()` →
+`Auth.getParentProfile()`), opening one sheet: **who** (checkboxes), **when**
+(Today · Tomorrow · Pick a day · Any time), an optional note.
+
+⚠⚠ **THE TWO HALVES ARE DIFFERENT TABLES AND RLS FORCES THAT.** The INSERT
+policy on `student_assignments` is `owns_student_txt(student_id) OR is_admin()`
+— the row belongs to the FAMILY. A teacher cannot write one for a pupil: the
+pupil is not in their family, and in a guest classroom is not a `students` row
+at all. So:
+
+| assigned to | stored as |
+|---|---|
+| a child | `student_assignments.library_document_id` + `due_date` |
+| a class | a `learning_materials` + `classroom_materials` row, **plus** a `teacher_class_events` row with `kind='due'`, the date, and `library_document_id` |
+
+Both mean "this paper, on this day"; only the storage differs, and the person
+assigning never learns that.
+
+- ⚠ **`guest_assignments` is the WRONG table** and was checked before this was
+  built: it is a QUESTION SET (`question_ids`, `question_count`, `pin_hash`,
+  `duration_mins`) marked automatically in the app. A PDF has none of that.
+- ⚠⚠ **`due_date` had existed for months and was referenced NOWHERE** — zero hits
+  across `engine/` and `workers/`, both live rows NULL. `createAssignment()`
+  never accepted a date and never wrote one, so *"assign it for Tuesday"* did not
+  work for ordinary chapter practice either. Dating chapter work is half of what
+  this change fixed, not a side effect.
+- ⚠ **`Store.assignmentDueState()` is the ONE definition of "overdue"**, in
+  Mauritius days. The child's list and the calendar would otherwise disagree by a
+  day around midnight. Its fallback (before `app.js` defines `_muDayKey`) is
+  UTC+4, never UTC — a UTC fallback calls work overdue every evening from 20:00.
+- ⚠ **A request naming a paper, or a date, REFUSES rather than degrades.** The
+  older tier-fallback would have written a row with no paper in it and returned
+  success: the parent sees "assigned", the child gets nothing.
+- ⚠ **`Library.hrefFor(doc)` is the ONE place a document becomes a URL** and is
+  exported for that reason — static → `/library/<filename>`, contributed →
+  `/api/library-file?id=…`, which re-checks it is still published. Three copies
+  were about to exist. A copy that forgets serves an unpublished file.
+- ⚠ **`closeAssign(force)` — the `_assigning` guard is for the CANCEL button.**
+  Without the flag it made `confirmAssign()`'s own close a no-op: the sheet
+  stayed open behind a success toast and the paper could be assigned twice.
+  Found by the browser test, invisible in the source.
+- ⚠ **The calendar keeps `_due` in its OWN array, not a fourth kind in
+  `_activity`.** `_activity` means "what HAPPENED", and
+  `_renderTodayActivity()`, `getRecentActivity()` and `doneTodayChapterIds()`
+  all read it on that promise. Merging due work in would make all three count
+  unstarted work as done. They are merged only at display, in `_activityFor()`,
+  and a due dot is **hollow** like a planned one.
+- ⚠ **`.lb-assign` and `.lb-when` are real CSS, not Tailwind** — the Play CDN
+  only generates for classes present at its initial scan and cards are injected
+  by `innerHTML`.
+- ⚠ **Default day is TOMORROW.** Work set for today is overdue the moment it
+  exists.
+- Migrations: `20260923_assign_a_paper.sql`, `20260923_assign_a_paper_class.sql`
+  (both applied). Tests: `test-assign-a-paper.js` (Store),
+  `test-assign-a-paper-ui.js` (static), `test-assign-a-paper-browser.js` (real
+  Chrome, 36 checks).

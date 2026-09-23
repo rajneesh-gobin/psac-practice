@@ -152,6 +152,7 @@ const Calendar = (() => {
 
     await _loadEntries();
     await _loadActivity();
+    await _loadDue();
     _renderFilters();
     _renderCalendar();
     _syncPlanFirst();
@@ -167,6 +168,7 @@ const Calendar = (() => {
     _entries      = [];
     await _loadEntries();
     await _loadActivity();
+    await _loadDue();
     _renderFilters();
     _renderCalendar();
     _syncPlanFirst();
@@ -363,17 +365,31 @@ const Calendar = (() => {
   //   assignment  student_assignments.completed_at
   let _activity = [];
 
+  // ⚠⚠ DUE WORK IS A SEPARATE ARRAY, NOT A FOURTH KIND IN _activity, and the
+  //    reason is semantic rather than stylistic: _activity means "what
+  //    HAPPENED". Three consumers read it on exactly that promise —
+  //    _renderTodayActivity() ("what did my child do today?"), recentActivity()
+  //    (the last N days) and doneTodayChapterIds() (which chapters can be
+  //    ticked off the plan). Pushing work that is merely DUE into it would make
+  //    all three quietly count unstarted work as done, and the next consumer
+  //    written against the same promise would do it again.
+  //    Due work is closer to _entries: dated intent, not a record.
+  let _due = [];
+
   const ACT_META = {
     practice:   { icon: '✅', label: 'Practice',    dot: 'bg-emerald-500', tint: 'bg-emerald-50 dark:bg-emerald-900/20' },
     exam:       { icon: '🏁', label: 'Exam',        dot: 'bg-rose-500',    tint: 'bg-rose-50 dark:bg-rose-900/20'       },
     assignment: { icon: '📋', label: 'Assignment',  dot: 'bg-amber-500',   tint: 'bg-amber-50 dark:bg-amber-900/20'     },
+    // Set, not yet done. Shares the day panel's shape with the three above so
+    // the renderer needs no special case.
+    due:        { icon: '📅', label: 'Due',         dot: 'bg-violet-500',  tint: 'bg-violet-50 dark:bg-violet-900/20'   },
   };
 
   // Which layers are on. Persisted per browser, not per student: a parent who
   // switched the plan off to read the actuals means that for the calendar, not
   // for one child.
   const _FILTER_KEY = 'mm_cal_filters';
-  let _filters = { planned: true, practice: true, exam: true, assignment: true };
+  let _filters = { planned: true, practice: true, exam: true, assignment: true, due: true };
   try {
     const saved = JSON.parse(localStorage.getItem(_FILTER_KEY) || 'null');
     if (saved && typeof saved === 'object') _filters = { ..._filters, ...saved };
@@ -406,7 +422,8 @@ const Calendar = (() => {
       chip('planned',    '📚', 'Planned',     'bg-indigo-500') +
       chip('practice',   '✅', 'Practice',    ACT_META.practice.dot) +
       chip('exam',       '🏁', 'Exams',       ACT_META.exam.dot) +
-      chip('assignment', '📋', 'Assignments', ACT_META.assignment.dot);
+      chip('assignment', '📋', 'Assignments', ACT_META.assignment.dot) +
+      chip('due',        '📅', 'Due',         ACT_META.due.dot);
   }
 
   // Local calendar date for a timestamp. The calendar grid is built from local
@@ -534,8 +551,37 @@ const Calendar = (() => {
     return { pack: packs.find(p => p.id === subjectId) || null, chapter: null };
   }
 
+  // ⚠ Due work is merged in HERE, at the point of display, rather than being
+  //   stored alongside the actuals — see the note on _due. The day panel and the
+  //   grid dots are the only two places that should see both at once.
   function _activityFor(dateStr) {
-    return _activity.filter(a => a.date === dateStr && _filters[a.kind]);
+    return [..._activity, ..._due].filter(a => a.date === dateStr && _filters[a.kind]);
+  }
+
+  // ⚠ NOT COMPLETED, AND DATED. An assignment with no due_date is real work but
+  //   belongs on no square — putting it on the day it was created would tell a
+  //   parent their child has something due on a day nobody chose.
+  async function _loadDue() {
+    _due = [];
+    if (!_studentId || typeof Store === 'undefined' || !Store.loadAssignments) return;
+    try {
+      const rows = await Store.loadAssignments(_studentId);
+      for (const a of rows || []) {
+        if (!a.due_date) continue;
+        const doc = a.document || a.library_documents || null;
+        const { pack, chapter } = _resolveChapterById(a.chapter_id, a.subject_id);
+        const state = Store.assignmentDueState ? Store.assignmentDueState(a) : 'upcoming';
+        _due.push({
+          kind: 'due', date: a.due_date, chapterId: a.chapter_id || null,
+          title: doc ? doc.title : (chapter ? chapter.name : (a.chapter_id || 'Assignment')),
+          subject: doc ? null : (pack || null),
+          // ⚠ The wording carries the STATE, because the dot colour cannot: a
+          //   parent scanning the month needs "late" to read as late.
+          detail: state === 'overdue' ? 'not done yet — was due' : (doc ? 'paper to work on' : 'to do'),
+          pct: null,
+        });
+      }
+    } catch (_) { /* due work is an overlay; it must never empty the calendar */ }
   }
   function _plannedFor(dateStr) {
     return _filters.planned ? _entries.filter(e => e.date === dateStr) : [];
@@ -642,7 +688,10 @@ const Calendar = (() => {
       // its neighbours and the month stops reading as a grid.
       const marks = [
         ...planned.map(e => ({ dot: (TYPE_META[e.entry_type] || TYPE_META.other).dot, done: false })),
-        ...actual.map(a => ({ dot: ACT_META[a.kind].dot, done: true })),
+        // ⚠ A DUE item is NOT done, so it gets the hollow dot the planned rows
+        //   use. Painting it solid would tell a parent scanning the month that
+        //   work nobody has started is finished.
+        ...actual.map(a => ({ dot: (ACT_META[a.kind] || ACT_META.practice).dot, done: a.kind !== 'due' })),
       ];
       const dots = marks.slice(0, 4).map(m =>
         `<span class="cal-dot ${m.dot} ${m.done ? '' : 'is-plan'}"></span>`).join('')

@@ -323,13 +323,13 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
    code in auth.js and app.js adds alongside `.hidden`. Without this the Teacher
    and Admin buttons would be visible to every account. */
 .hdr-btn.hidden { display: none !important; }
-/* ── TEMPORARY: "New" badge on the Library button ─────────────────────────
-   Remove this block, the badge markup in index.html and the menu branch in
-   _renderHeaderMenu() together when the Library stops being a new feature.
-   ⚠ INLINE, never position:absolute — .hdr-btn is not position:relative, so an
-     absolutely positioned badge would anchor to the nearest positioned
-     ancestor (the page) and land somewhere else entirely. */
-.hdr-new, .mi-new {
+/* ── TEMPORARY: "New" badge on the Past Exam Papers tab ───────────────────
+   Remove this block and the <span class="hdr-new"> in index.html together when
+   the section stops being a new feature.
+   ⚠ INLINE, never position:absolute — neither .hdr-btn nor .ta-tab is
+     position:relative, so an absolutely positioned badge would anchor to the
+     nearest positioned ancestor (the page) and land somewhere else entirely. */
+.hdr-new {
   display: inline-block; flex: 0 0 auto;
   margin-left: 0.3rem; padding: 0.1rem 0.3rem;
   border-radius: 999px;
@@ -338,7 +338,7 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
   letter-spacing: 0.02em; text-transform: uppercase;
   vertical-align: middle;
 }
-.dark .hdr-new, .dark .mi-new { background: #f87171; color: #431407; }
+.dark .hdr-new { background: #f87171; color: #431407; }
 .hdr-btn .hdr-ico { font-size: 1rem; line-height: 1; flex: 0 0 auto; }
 .hdr-btn .hdr-word { max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.5; }
 /* Leave room for descenders (g, p, y). Only variable-length labels need clipping. */
@@ -4455,6 +4455,18 @@ html.dark select optgroup {
 #screen-student-home .ta-tab span,
 #screen-subject-hub .ta-tab span,
 #screen-parent .ta-tab span { display: none; }
+/* ⚠ …EXCEPT the "New" badge. The rule above hides EVERY span inside a tab — it
+   exists to suppress the descriptions tabs used to carry — and it is
+   (1-1-1), so a bare `.hdr-new { display:inline-block }` loses to it and the
+   badge renders at 0x0 with its colours computed and nothing painted. That is
+   indistinguishable from a working badge in the markup; only a measured width
+   catches it. Listed for all four screens so the badge cannot silently vanish
+   if it is ever put on the parent or teacher tab too.
+   ⚠ TEMPORARY, like the .hdr-new block itself — remove both together. */
+#screen-teacher .ta-tab span.hdr-new,
+#screen-student-home .ta-tab span.hdr-new,
+#screen-subject-hub .ta-tab span.hdr-new,
+#screen-parent .ta-tab span.hdr-new { display: inline-block; }
 #screen-teacher .ta-tab:hover,
 #screen-student-home .ta-tab:hover,
 #screen-subject-hub .ta-tab:hover,
@@ -7575,6 +7587,12 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
 .tc-phw-title { font-size: .95rem; font-weight: 700; color: #f0ece0; margin: 0 0 2px; }
 .tc-phw-meta  { font-size: .78rem; color: rgba(240,236,220,.55); margin: 0; }
 .tc-phw-desc  { font-size: .82rem; color: rgba(240,236,220,.65); margin: 3px 0 0; }
+/* ⚠ The classroom detail overlay is a CHALKBOARD, so this is pale indigo on
+   dark — the #4f46e5 the class page uses would sink into the board. Same link,
+   two surfaces, two palettes. */
+.tc-ev-paper  { color: #c7d2fe; font-weight: 700; text-decoration: underline;
+                display: inline-block; padding: 4px 0; }
+.tc-ev-paper:hover { color: #e0e7ff; }
 .tc-phw-due   { font-size: .78rem; color: #68d391; margin: 4px 0 0; font-weight: 700; }
 .tc-phw-due-expired { color: rgba(240,236,220,.4); }
 .tc-phw-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
@@ -10981,6 +10999,29 @@ div[id^="modal-"].fixed select option { background: #1e1e1e; color: #f0ece8; }
 .lb-share{align-self:flex-start;border:0;background:none;padding:.15rem .1rem;font-size:.66rem;
   color:rgba(165,180,252,.85);cursor:pointer;font-weight:600}
 .lb-share:hover,.lb-share:focus-visible{color:#c7d2fe;text-decoration:underline}
+
+/* ⚠ REAL CSS, NOT TAILWIND, and that is the rule for everything on a card: the
+   Play CDN only generates rules for classes present at its INITIAL scan, and
+   every card here is injected by innerHTML long afterwards. A Tailwind class
+   here would be applied to the element and styled by nothing at all.
+   ⚠ Adults only — canAssign() gates it. It is the strongest of the three card
+   actions, so it reads slightly brighter than Share and Report without
+   becoming a filled button on a chalk shelf. */
+.lb-assign{align-self:flex-start;border:0;background:none;padding:.15rem .1rem;font-size:.66rem;
+  color:rgba(196,181,253,.92);cursor:pointer;font-weight:700}
+.lb-assign:hover,.lb-assign:focus-visible{color:#ddd6fe;text-decoration:underline}
+
+/* ⚠ The "when" chips live INSIDE a modal, which is an ordinary white/dark sheet
+   rather than a chalkboard — so these carry both palettes, unlike everything
+   else prefixed .lb- on this screen. */
+.lb-when{border:1.5px solid #d1d5db;background:#fff;color:#374151;
+  border-radius:9999px;padding:.35rem .85rem;font-size:.78rem;font-weight:600;cursor:pointer;
+  transition:background .12s,border-color .12s,color .12s}
+.lb-when:hover{background:#f3f4f6}
+.lb-when.is-on{background:#4f46e5;border-color:#4f46e5;color:#fff}
+html.dark .lb-when{border-color:#4b5563;background:#374151;color:#e5e7eb}
+html.dark .lb-when:hover{background:#4b5563}
+html.dark .lb-when.is-on{background:#6366f1;border-color:#6366f1;color:#fff}
 .lb-book-credit{font-size:.64rem;color:rgba(240,236,220,.5);font-style:italic}
 
 /* Library search. Across the whole library, not the shelf you are standing on. */
@@ -11008,3 +11049,30 @@ div[id^="modal-"].fixed select option { background: #1e1e1e; color: #f0ece8; }
   background:rgba(240,236,220,.08);color:#f0ece8;border:1px solid rgba(240,236,220,.28)}
 .lb-ctl:focus{outline:none;border-color:#a5b4fc;box-shadow:0 0 0 2px rgba(165,180,252,.28)}
 .lb-ctl option{background:#1e1e1e;color:#f0ece8}
+
+/* ⚠ DENSITY. Measured on the filtered view: a heading, a ledge and a full-width
+   scrolling row for one 112px card, repeated per subject. The grid above removes
+   the headings; these trim what is left so a phone shows papers rather than gaps. */
+.lb-row-wrap{gap:.6rem;row-gap:.9rem;padding-bottom:.2rem}
+.lb-shelf{padding:.15rem .6rem 0}
+.lb-shelf-title{margin:.35rem 0 .35rem}
+.lb-row{padding:.2rem .1rem .45rem}
+.lb-ledge{margin:0 .1rem .35rem}
+.lb-book-wrap{gap:.25rem}
+.lb-hits{padding:.1rem 0 .45rem}
+/* The notice is long and read once. It stays, but it stops dominating the fold. */
+.lb-warn{padding:.6rem .75rem;margin-bottom:.9rem}
+.lb-warn p{font-size:.74rem;line-height:1.45}
+
+/* ⚠ THE WRAPPED GRID MUST FILL THE ROW. With a fixed 112px card, three cards
+   plus two gaps came to 355.2px in a 355px container — so it wrapped to TWO per
+   row and left a card's worth of blank space on the right. A fixed width can
+   only ever be right at one viewport; auto-fill columns are right at all of
+   them. Applies to search results and the filtered shelf, not to the browsing
+   rows, which scroll sideways on purpose. */
+.lb-row-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));
+  gap:.55rem;overflow:visible;scroll-snap-type:none}
+.lb-row-wrap .lb-book-wrap{width:auto}
+.lb-row-wrap .lb-book{width:100%}
+/* ⚠ An aspect-ratio box needs max-width or it can push the page sideways. */
+.lb-row-wrap .lb-cover{width:100%;height:auto;max-width:100%;aspect-ratio:120/160}

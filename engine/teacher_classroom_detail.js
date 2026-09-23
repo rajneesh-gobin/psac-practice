@@ -1832,7 +1832,13 @@ const TeacherClassroomDetail = (() => {
     _eventsError = '';
     try {
       const { data, error } = await _sb.from('teacher_class_events')
-        .select('id, date, end_date, kind, title, notes, created_at')
+        // ⚠ library_document_id CAME LAST AND IS WHY A DATED PAPER WAS NOT
+        //   TAPPABLE. Library.confirmAssign() wrote the row correctly and it
+        //   rendered correctly as a title and a date — but without this column
+        //   the entry could not link to the paper it is about, so a teacher read
+        //   "PSAC 2019 Mathematics · Due · 25 Sep" and then had to go hunting
+        //   for the file in the materials list.
+        .select('id, date, end_date, kind, title, notes, created_at, library_document_id, library_documents(id,title,filename,storage)')
         .eq('classroom_id', classId)
         .order('date', { ascending: true });
       if (error) throw error;
@@ -1848,6 +1854,22 @@ const TeacherClassroomDetail = (() => {
     if (_activeSection === 'calendar') _renderCalendar();
   }
 
+  // ⚠ ONE LINE, AND ONLY WHEN THE DOCUMENT IS STILL THERE. A calendar entry for
+  //   a paper that has since been unpublished must not offer a link into
+  //   nothing — the row survives because the FK cascades on DELETE, not on
+  //   unpublish.
+  // ⚠ Library.hrefFor() is the single definition of where a document lives:
+  //   seeded → /library/<filename>, contributed → the worker, which re-checks
+  //   the document is still published. Never rebuild that rule here.
+  function _eventPaperLink(e) {
+    const doc = e.library_documents || null;
+    if (!doc || typeof Library === 'undefined' || !Library.hrefFor) return '';
+    const href = Library.hrefFor(doc);
+    if (!href) return '';
+    return `<p class="tc-phw-desc"><a href="${esc(href)}" target="_blank" rel="noopener"
+      class="tc-ev-paper">📄 Open the paper</a></p>`;
+  }
+
   function _eventRow(e, past) {
     const k = EVENT_KIND[e.kind] ? e.kind : 'event';
     return `<div class="tc-phw-card tc-ev-card tc-ev-${k}${past ? ' tc-phw-expired' : ''}">
@@ -1856,6 +1878,7 @@ const TeacherClassroomDetail = (() => {
           <p class="tc-phw-title">${esc(e.title)}</p>
           <p class="tc-phw-due">📅 ${esc(_spanText(e))}</p>
           ${e.notes ? `<p class="tc-phw-desc">${esc(e.notes)}</p>` : ''}
+          ${_eventPaperLink(e)}
         </div>
         <div class="tc-phw-actions">
           <button onclick="TeacherClassroomDetail.deleteEvent('${esc(e.id)}')" class="tc-cd-pill tc-cd-pill-red">Delete</button>

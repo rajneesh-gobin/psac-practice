@@ -53,6 +53,11 @@ const Library = (() => {
   let _typeFilter = '';
   let _yearFilter = '';
   let _sort = 'year-desc';
+  // ⚠ The documents the visible pickers were built from, recorded by render()
+  //   so setType/setYear can tell whether the pair they are about to produce
+  //   holds anything. Without it the setters cannot see the shelf: the only
+  //   place that knows the scope is a render that has already happened.
+  let _lastScope = [];
 
   const _esc = (s) => String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -65,7 +70,15 @@ const Library = (() => {
   //   community upload lives in a private bucket and needs a signed URL minted
   //   per view, which is also what makes revoking one immediate: the Worker
   //   re-reads the row every time and stops signing the moment it changes.
+  // ⚠ THE ONE PLACE A DOCUMENT BECOMES A URL, and it is exported for that
+  //   reason. There were about to be three copies — the card, the class-material
+  //   share, and the child's dashboard card in app.js — and the rule they encode
+  //   is not obvious: a SEEDED document is a static asset under /library/, while
+  //   a CONTRIBUTED one is served by a worker that checks it is still published.
+  //   A copy that forgets the difference serves an unpublished file, or 404s a
+  //   seeded one.
   function _hrefFor(doc) {
+    if (!doc) return '';
     if (doc.storage === 'static') return '/library/' + doc.filename;
     return '/api/library-file?id=' + encodeURIComponent(doc.id);
   }
@@ -242,6 +255,8 @@ const Library = (() => {
         <span class="lb-book-meta">${_esc(meta)}</span>
         ${credit}
       </a>
+      ${canAssign() ? `<button class="lb-assign" onclick="Library.assign('${_esc(doc.id)}')"
+        title="Set this paper as work for a day">📅 Assign</button>` : ''}
       ${canShareToClass() ? `<button class="lb-share" onclick="Library.shareToClass('${_esc(doc.id)}')"
         title="Share this with one of your classes">➕ Share to class</button>` : ''}
       <button class="lb-report" onclick="Library.report('${_esc(doc.id)}')"
@@ -273,17 +288,31 @@ const Library = (() => {
 
   // ⚠ Options come from the SCOPE BEFORE filtering, or choosing "2019" would
   //   remove every other year from the list and strand the reader on it.
+  // ⚠ THE TWO PICKERS MUST SEE EACH OTHER. They were built independently from
+  //   the whole shelf, so every kind was offered against every year even when
+  //   that pairing held nothing: Grade 5 → "Examiners' report" → "2024" gave
+  //   "Nothing on this shelf matches those choices", and the reader had no way
+  //   to know which of their two choices was the dead one. Each list is now
+  //   drawn from the documents the OTHER filter still allows, so an option that
+  //   leads nowhere is never offered.
+  // ⚠ An ACTIVE filter's own select is always rendered, even when faceting
+  //   leaves it a single option. Hiding it would strand the reader with a
+  //   filter applied and no control to clear it.
   function _controls(scope) {
-    const types = [...new Set(scope.map(d => d.doc_type).filter(Boolean))]
+    const typePool = scope.filter(d => !_yearFilter || String(d.year || '') === _yearFilter);
+    const yearPool = scope.filter(d => !_typeFilter || d.doc_type === _typeFilter);
+    const types = [...new Set(typePool.map(d => d.doc_type).filter(Boolean))]
       .sort((a, b) => (TYPE_LABEL[a] || a).localeCompare(TYPE_LABEL[b] || b));
-    const years = [...new Set(scope.map(d => d.year).filter(Boolean))].sort((a, b) => b - a);
-    if (types.length < 2 && years.length < 2) return '';   // nothing to choose between
+    const years = [...new Set(yearPool.map(d => d.year).filter(Boolean))].sort((a, b) => b - a);
+    const showTypes = types.length > 1 || !!_typeFilter;
+    const showYears = years.length > 1 || !!_yearFilter;
+    if (!showTypes && !showYears) return '';               // nothing to choose between
     const opt = (v, label, cur) => `<option value="${_esc(v)}" ${String(cur) === String(v) ? 'selected' : ''}>${_esc(label)}</option>`;
     return `<div class="lb-controls">
-      ${types.length > 1 ? `<select class="lb-ctl" aria-label="Kind of document" onchange="Library.setType(this.value)">
+      ${showTypes ? `<select class="lb-ctl" aria-label="Kind of document" onchange="Library.setType(this.value)">
         ${opt('', 'All kinds', _typeFilter)}${types.map(t => opt(t, TYPE_LABEL[t] || t, _typeFilter)).join('')}
       </select>` : ''}
-      ${years.length > 1 ? `<select class="lb-ctl" aria-label="Year" onchange="Library.setYear(this.value)">
+      ${showYears ? `<select class="lb-ctl" aria-label="Year" onchange="Library.setYear(this.value)">
         ${opt('', 'All years', _yearFilter)}${years.map(y => opt(y, y, _yearFilter)).join('')}
       </select>` : ''}
       <select class="lb-ctl" aria-label="Order" onchange="Library.setSort(this.value)">
@@ -292,8 +321,24 @@ const Library = (() => {
     </div>`;
   }
 
-  function setType(v) { _typeFilter = v || ''; render(); }
-  function setYear(v) { _yearFilter = v || ''; render(); }
+  // ⚠ THE NEWEST CHOICE WINS. Faceting stops a dead pairing being OFFERED, but
+  //   the reader can still reach one from the other direction: pick 2024, then
+  //   pick a kind that has nothing in 2024. Rather than show "nothing matches",
+  //   the filter the new choice contradicts gives way — they asked for that
+  //   kind most recently, so the year is the one to drop.
+  const _hasAny = (type, year) => _lastScope.some(d =>
+    (!type || d.doc_type === type) && (!year || String(d.year || '') === year));
+
+  function setType(v) {
+    _typeFilter = v || '';
+    if (_yearFilter && !_hasAny(_typeFilter, _yearFilter)) _yearFilter = '';
+    render();
+  }
+  function setYear(v) {
+    _yearFilter = v || '';
+    if (_typeFilter && !_hasAny(_typeFilter, _yearFilter)) _typeFilter = '';
+    render();
+  }
   function setSort(v) { _sort = v || 'year-desc'; render(); }
 
   function _shelf(section) {
@@ -388,6 +433,7 @@ const Library = (() => {
         ? `<p class="lb-note lb-hits">Papers for this subject.
              <button class="lb-clearfilter" onclick="Library.clearPackFilter()">Show the whole library</button></p>`
         : '';
+      _lastScope = hits.map(h => h.doc);
       const scoped = _applyFilters(hits.map(h => h.doc));
       const byId = new Map(hits.map(h => [h.doc.id, h.label]));
       const shown = scoped.map(d => ({ doc: d, label: byId.get(d.id) }));
@@ -418,10 +464,32 @@ const Library = (() => {
     // The scope for the controls is everything on this shelf, unfiltered.
     const scope = [chosen, ...chosen.children]
       .flatMap(sec => _docsBySection.get(sec.id) || []);
-    const body = (_shelf(chosen) + chosen.children.map(_shelf).join(''))
-      || `<p class="lb-note">${(_typeFilter || _yearFilter)
-          ? 'Nothing on this shelf matches those choices.'
-          : 'Nothing on this shelf yet.'}</p>`;
+    // ⚠ Recorded for setType/setYear — see _hasAny. Without this the setters
+    //   would prune against whatever the last SEARCH left behind, so a shelf
+    //   opened after a search would judge its pairings by the wrong documents.
+    _lastScope = scope;
+    // ⚠ A FILTER TURNS THE SHELVES INTO A GRID. Browsing by subject wants one
+    //   row per subject; FILTERING does not — "past papers, 2006" leaves most
+    //   subjects holding a single document, and each still cost a heading, a
+    //   ledge and a full-width scrolling row for one 112px card. Fourteen
+    //   subjects of that is a screen of mostly blank space, which is what this
+    //   looked like in use and what was reported from the live site.
+    // ⚠ Nothing is lost by dropping the headings: the subject is on the cover
+    //   and in the title beneath it, which is how search results have always
+    //   read.
+    const filtering = !!(_typeFilter || _yearFilter);
+    let body;
+    if (filtering) {
+      const hits = [chosen, ...chosen.children].flatMap(sec =>
+        _applyFilters(_docsBySection.get(sec.id) || []).map(d => ({ doc: d, label: sec.name })));
+      body = hits.length
+        ? `<p class="lb-note lb-hits">${hits.length} document${hits.length === 1 ? '' : 's'} on this shelf</p>
+           <div class="lb-row lb-row-wrap">${hits.map(h => _card(h.doc, h.label)).join('')}</div>`
+        : '<p class="lb-note">Nothing on this shelf matches those choices.</p>';
+    } else {
+      body = (_shelf(chosen) + chosen.children.map(_shelf).join(''))
+        || '<p class="lb-note">Nothing on this shelf yet.</p>';
+    }
 
     el.innerHTML = _chrome() + picker + _controls(scope) + `<div class="lb-grade-body">${body}</div>`;
   }
@@ -756,33 +824,286 @@ const Library = (() => {
     if (!picked.length) return say('⚠ Tick at least one class.');
     say('Sharing…');
     try {
-      const { data: sess } = await _sb.auth.getSession();
-      const uid = sess?.session?.user?.id;
-      if (!uid) throw new Error('Your sign-in session has expired.');
-      // The absolute URL, because the 'link' CHECK constraint requires
-      // ^https?:// — a relative path would be refused by the database.
-      const href = location.origin + (_shareDoc.storage === 'static'
-        ? '/library/' + _shareDoc.filename
-        : '/api/library-file?id=' + encodeURIComponent(_shareDoc.id));
-      const { data: mat, error: mErr } = await _sb.from('learning_materials').insert({
-        teacher_id: uid,
-        title: _shareDoc.title,
-        subject: _shareDoc.subject || null,
-        grade: _shareDoc.grade || null,
-        description: 'From the Nou Klass library',
-        source_type: 'link',
-        external_url: href,
-        library_document_id: _shareDoc.id,
-      }).select('id').single();
-      if (mErr) throw new Error(mErr.message);
-      const rows = picked.map(cid => ({ material_id: mat.id, classroom_id: cid }));
-      const { error: cErr } = await _sb.from('classroom_materials').insert(rows);
-      if (cErr) throw new Error(cErr.message);
+      await _placeInClasses(_shareDoc, picked, await _requireUid());
       closeShare();
       toast(`Shared with ${picked.length} class${picked.length === 1 ? '' : 'es'} ✓`, 3000);
     } catch (e) {
       say('⚠ ' + (e.message || e));
     }
+  }
+
+  // ══ Assigning a paper as work ═════════════════════════════════════════════
+  // ⚠⚠ THE TWO HALVES ARE DIFFERENT TABLES AND RLS FORCES THAT — it is not a
+  //    shortcut and it cannot be unified. The INSERT policy on
+  //    student_assignments is `owns_student_txt(student_id) OR is_admin()`: the
+  //    row belongs to the FAMILY. A teacher cannot write one for a pupil,
+  //    because the pupil is not in their family, and in a guest classroom is not
+  //    a `students` row at all. So:
+  //        a child  →  student_assignments.library_document_id + due_date
+  //        a class  →  a class material, plus a dated kind='due' class event
+  //    Both mean "this paper, on this day". Only the storage differs, and the
+  //    person assigning never has to know that.
+  // ⚠ guest_assignments was checked and is the WRONG table: it is a question set
+  //   (question_ids, question_count, pin_hash, duration_mins) marked
+  //   automatically inside the app. A PDF has none of that and is worked on
+  //   paper.
+  // ⚠ ONE BUTTON, ONE SHEET. The sheet offers whatever the person actually has —
+  //   children, classes, or both under two headings — instead of making them
+  //   choose a flow first. A parent who also teaches is one person with one
+  //   Assign button.
+  function canAssign() { return _isAdult(); }
+
+  let _assignDoc = null;
+  let _assigning = false;
+
+  async function _requireUid() {
+    const { data: sess } = await _sb.auth.getSession();
+    const uid = sess?.session?.user?.id;
+    if (!uid) throw new Error('Your sign-in session has expired.');
+    return uid;
+  }
+
+  // ⚠ ONE PLACE PUTS A LIBRARY DOCUMENT ON A CLASS PAGE, called by "Share to
+  //   class" AND by "Assign". Two copies is how one of them ends up writing a
+  //   RELATIVE external_url, which the `link` CHECK constraint (^https?://)
+  //   refuses — and the failure would only ever show on one of the two buttons.
+  async function _placeInClasses(doc, classroomIds, uid) {
+    // ⚠ ABSOLUTE, because learning_materials' `link` CHECK requires ^https?://
+    //   — a relative path is refused by the database.
+    const href = location.origin + _hrefFor(doc);
+    const { data: mat, error: mErr } = await _sb.from('learning_materials').insert({
+      teacher_id: uid,
+      title: doc.title,
+      subject: doc.subject || null,
+      grade: doc.grade || null,
+      description: 'From the Nou Klass library',
+      source_type: 'link',
+      external_url: href,
+      library_document_id: doc.id,
+    }).select('id').single();
+    if (mErr) throw new Error(mErr.message);
+    const rows = classroomIds.map(cid => ({ material_id: mat.id, classroom_id: cid }));
+    const { error: cErr } = await _sb.from('classroom_materials').insert(rows);
+    if (cErr) throw new Error(cErr.message);
+    return mat.id;
+  }
+
+  // ⚠ MAURITIUS DAYS, never the device clock — the rule every other date in this
+  //   app follows. A parent in Mauritius picking "Tomorrow" at 21:00 must not
+  //   get today's date because the device is reporting a UTC day that has not
+  //   turned over yet.
+  function _muToday() {
+    if (typeof _muDayKey === 'function') return _muDayKey();
+    return new Date(Date.now() + 4 * 3600 * 1000).toISOString().slice(0, 10);
+  }
+  // ⚠ Walk the date in UTC from the Mauritius day key, never with local
+  //   getDate()/setDate(). Adding a day to a local Date around a month end on a
+  //   device set to another timezone lands on the wrong day.
+  function _dayPlus(n) {
+    const d = new Date(_muToday() + 'T00:00:00Z');
+    d.setUTCDate(d.getUTCDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function _prettyDay(iso) {
+    if (!iso) return 'any time';
+    const today = _muToday();
+    if (iso === today) return 'today';
+    if (iso === _dayPlus(1)) return 'tomorrow';
+    const d = new Date(iso + 'T00:00:00Z');
+    return d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+  }
+
+  async function assign(id) {
+    if (!canAssign()) {
+      if (typeof toast === 'function') toast('Sign in as a parent or teacher to assign a paper.', 3000);
+      return;
+    }
+    const doc = [...(_docsBySection ? _docsBySection.values() : [])].flat().find(d => d.id === id);
+    if (!doc) { if (typeof toast === 'function') toast('That document is no longer on the shelf.', 3000); return; }
+    _assignDoc = doc;
+    const f = (x) => document.getElementById(x);
+
+    if (f('lb-as-title')) f('lb-as-title').textContent = doc.title;
+    if (f('lb-as-note')) f('lb-as-note').value = '';
+    if (f('lb-as-status')) f('lb-as-status').textContent = '';
+    // ⚠ TOMORROW, not today. Homework set now for today is overdue the moment it
+    //   is created, and an app that greets a child with work already late is
+    //   doing the opposite of what the parent meant.
+    _assignWhen = 'tomorrow';
+    if (f('lb-as-date')) f('lb-as-date').value = _dayPlus(1);
+    _paintWhen();
+
+    const host = f('lb-as-who');
+    if (host) host.innerHTML = '<p class="text-xs text-gray-400">Loading…</p>';
+    f('modal-library-assign')?.classList.remove('hidden');
+
+    // Children and classes are fetched together — a parent who also teaches
+    // should not watch two spinners resolve one after the other.
+    const [kids, classes] = await Promise.all([_myChildren(), _myClasses()]);
+    _assignKids = kids; _assignClasses = classes;
+    if (!host) return;
+    if (!kids.length && !classes.length) {
+      host.innerHTML = `<p class="text-xs text-amber-600 dark:text-amber-400">Add a child, or make a classroom, and this paper can be set as work for them.</p>`;
+      return;
+    }
+    const group = (label, rows, kind) => rows.length ? `
+      <p class="text-[11px] font-bold uppercase tracking-wide text-gray-400 dark:text-gray-500 mt-2 mb-1">${label}</p>
+      ${rows.map(r => `<label class="flex items-center gap-2 py-1.5 cursor-pointer">
+        <input type="checkbox" value="${_esc(r.id)}" data-kind="${kind}" class="accent-indigo-600">
+        <span class="text-sm">${_esc(r.label)}</span>
+      </label>`).join('')}` : '';
+    host.innerHTML = group('My children', kids, 'child') + group('My classes', classes, 'class');
+    // ⚠ One child and no classes is the common case for a parent: tick it for
+    //   them rather than making them tick the only option there is.
+    if (kids.length === 1 && !classes.length) {
+      const only = host.querySelector('input[data-kind="child"]');
+      if (only) only.checked = true;
+    }
+  }
+
+  let _assignKids = [];
+  let _assignClasses = [];
+  let _assignWhen = 'tomorrow';
+
+  async function _myChildren() {
+    try {
+      const fam = typeof Auth !== 'undefined' && Auth.getFamily ? Auth.getFamily() : null;
+      if (!fam?.id || typeof Store === 'undefined' || !Store.getFamilyStudents) return [];
+      const rows = await Store.getFamilyStudents(fam.id);
+      return (rows || []).map(s => ({
+        id: s.id,
+        label: (s.avatar ? s.avatar + ' ' : '') + (s.display_name || s.name || 'Child')
+          + (s.grade ? ' · Grade ' + s.grade : ''),
+      }));
+    } catch (_) { return []; }
+  }
+
+  // ⚠ Classes only where the library is mounted on the TEACHER board. On a
+  //   parent's own dashboard a classroom list is noise, and the `classrooms`
+  //   read would be a wasted round trip for every parent who opens this.
+  async function _myClasses() {
+    if (!canShareToClass()) return [];
+    try {
+      const { data, error } = await _sb.from('classrooms')
+        .select('id,name,grade_level').eq('is_active', true).order('name');
+      if (error) return [];
+      return (data || []).map(c => ({
+        id: c.id, label: c.name + (c.grade_level ? ' · Grade ' + c.grade_level : ''),
+      }));
+    } catch (_) { return []; }
+  }
+
+  function _paintWhen() {
+    const wrap = document.getElementById('lb-as-when');
+    if (!wrap) return;
+    wrap.querySelectorAll('[data-when]').forEach(b => {
+      const on = b.dataset.when === _assignWhen;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.classList.toggle('is-on', on);
+    });
+    // The date input is only meaningful for "Pick a day" — showing it beside
+    // Today/Tomorrow invites a reader to set two different days at once.
+    document.getElementById('lb-as-date-row')?.classList.toggle('hidden', _assignWhen !== 'pick');
+  }
+
+  function setAssignWhen(v) {
+    _assignWhen = v || 'tomorrow';
+    const d = document.getElementById('lb-as-date');
+    if (_assignWhen === 'pick' && d && !d.value) d.value = _dayPlus(1);
+    _paintWhen();
+    if (_assignWhen === 'pick') setTimeout(() => d?.focus(), 30);
+  }
+
+  function _chosenDate() {
+    if (_assignWhen === 'anytime') return null;
+    if (_assignWhen === 'today') return _muToday();
+    if (_assignWhen === 'tomorrow') return _dayPlus(1);
+    const v = (document.getElementById('lb-as-date')?.value || '').trim();
+    return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+  }
+
+  // ⚠ _assigning GUARDS THE CANCEL BUTTON, NOT THE SUCCESS PATH, and the
+  //   distinction is the whole bug this comment records: the guard made
+  //   confirmAssign()'s own closeAssign() a no-op, because the flag it checks is
+  //   still set while the work is in flight. The sheet stayed open behind a
+  //   "Set for 2 people ✓" toast, so the parent could press Set work again and
+  //   assign the paper twice. Found by the browser test, invisible in the source.
+  function closeAssign(force) {
+    if (_assigning && !force) return;
+    document.getElementById('modal-library-assign')?.classList.add('hidden');
+  }
+
+  async function confirmAssign() {
+    if (_assigning || !_assignDoc) return;
+    const f = (x) => document.getElementById(x);
+    const say = (m) => { const s = f('lb-as-status'); if (s) s.textContent = m; };
+    const boxes = [...document.querySelectorAll('#lb-as-who input:checked')];
+    const kids = boxes.filter(b => b.dataset.kind === 'child').map(b => b.value);
+    const classes = boxes.filter(b => b.dataset.kind === 'class').map(b => b.value);
+    if (!kids.length && !classes.length) return say('⚠ Tick at least one child or class.');
+    // ⚠ "Pick a day" with an empty or half-typed date must not fall through to
+    //   "any time" — the reader asked for a specific day and would be told the
+    //   work was set without one.
+    const due = _chosenDate();
+    if (_assignWhen === 'pick' && !due) return say('⚠ Choose a day, or pick "Any time".');
+    const note = (f('lb-as-note')?.value || '').trim().slice(0, 200);
+
+    _assigning = true;
+    f('lb-as-send')?.setAttribute('disabled', 'disabled');
+    say('Setting the work…');
+    try {
+      let done = 0;
+      if (kids.length) {
+        const profile = typeof Auth !== 'undefined' && Auth.getParentProfile ? Auth.getParentProfile() : null;
+        const res = await Store.createAssignments(kids, profile?.id, {
+          libraryDocumentId: _assignDoc.id, dueDate: due, note: note || null,
+        });
+        // ⚠ PARTIAL SUCCESS IS REPORTED, not rounded up to "done". If two of
+        //   three children got the paper, saying "Assigned ✓" leaves a parent
+        //   believing a child has work they will never see.
+        if (!res.ok) throw new Error(
+          res.assigned
+            ? `Only ${res.assigned} of ${kids.length} children could be set this paper. Please try the rest again.`
+            : 'The paper could not be set as work. Please try again.');
+        done += res.assigned;
+      }
+      if (classes.length) {
+        const uid = await _requireUid();
+        await _placeInClasses(_assignDoc, classes, uid);
+        if (due) {
+          // ⚠ The title CHECK on teacher_class_events is 1..120 characters and
+          //   notes is <= 500. A long paper title would fail the whole insert
+          //   with a constraint error the teacher cannot act on.
+          const rows = classes.map(cid => ({
+            classroom_id: cid, teacher_id: uid, date: due, kind: 'due',
+            title: String(_assignDoc.title || 'Paper').slice(0, 120),
+            notes: note ? note.slice(0, 500) : null,
+            library_document_id: _assignDoc.id,
+          }));
+          const { error } = await _sb.from('teacher_class_events').insert(rows);
+          // ⚠ The material IS already on the class page at this point. Losing
+          //   the date is a smaller failure than claiming the whole thing
+          //   failed, so say exactly what happened rather than rolling back
+          //   something the class can already use.
+          if (error) throw new Error('The paper is on the class page, but the date could not be saved: ' + error.message);
+        }
+        done += classes.length;
+      }
+      closeAssign(true);
+      if (typeof toast === 'function') {
+        toast(`Set for ${done} ${done === 1 ? 'person' : 'people'} · due ${_prettyDay(due)} ✓`, 3200);
+      }
+      // A parent watching their own dashboard should see it appear without a
+      // reload; on any other screen this is a no-op.
+      if (typeof _renderStudentAssignments === 'function' && typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID) {
+        _renderStudentAssignments(ACTIVE_STUDENT_ID);
+      }
+    } catch (e) {
+      say('⚠ ' + (e.message || e));
+    }
+    _assigning = false;
+    f('lb-as-send')?.removeAttribute('disabled');
   }
 
   // ══ Reporting a document ══════════════════════════════════════════════════
@@ -870,5 +1191,7 @@ const Library = (() => {
   }
 
   return { render, load, refresh, toggle, open, back, mountInto, search, countForPack, openForPack, clearPackFilter, packCount, mountPackLink, setType, setYear, setSort, canContribute, openUpload, closeUpload, submitUpload, uploadSubjectChanged,
-    report, closeReport, sendReport, shareToClass, closeShare, confirmShare };
+    report, closeReport, sendReport, shareToClass, closeShare, confirmShare,
+    canAssign, assign, closeAssign, confirmAssign, setAssignWhen,
+    hrefFor: _hrefFor, typeLabel: (t) => TYPE_LABEL[t] || '' };
 })();

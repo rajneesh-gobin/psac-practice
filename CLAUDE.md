@@ -328,6 +328,7 @@ bitten this project at least once:
 | `REWARD_SLOTS` | app.js ↔ functions/questions.js |
 | Kid vibe list | `KID_VIBES` (app.js) ↔ `:root[data-kid-vibe=…]` (style.css) |
 | Materials sort comparator | `engine/helpers.js` ↔ `guest.js` (that page loads no engine file, by design) |
+| **Where a library document lives** (seeded → `/library/<filename>`; contributed → `/api/library-file?id=`, which re-checks it is still published) | `Library.hrefFor()` (engine/library.js — the single definition for every engine surface) ↔ `eventPaperHref()` (`materials.js`, which loads no engine file, same reason as the row above). ⚠ A copy that forgets the split either serves an UNPUBLISHED file or 404s a seeded one. |
 | **Email preference rules** (defaults, the legacy `weekly_digest` fallback, unknown-frequency → off) | `emailPrefs()`/`wantsEmail()` in `workers/lib/mailer.js` (decides what is SENT) ↔ `_emailPrefs()` in `engine/app.js` (decides what the parent is SHOWN). ⚠ A parent reading one answer and receiving the other is worse than either being wrong alone. `scripts/test-email-preferences.js` runs both on the same inputs. |
 | Share copy — now **four** surfaces | `_appShareText()` (app.js) ↔ `_inviteText()` (auth.js) ↔ the landing page ↔ the `og:` block in `index.html` head. ⚠ Facebook caches a scrape far longer than a WhatsApp message survives. |
 

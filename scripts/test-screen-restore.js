@@ -134,9 +134,18 @@ function finish() {
     ck('…from ACTIVE_STUDENT_ID', /ACTIVE_STUDENT_ID/.test(near));
 
     // Entry/lock screens must stay excluded, or a restore could bypass sign-in.
-    const guard = app.slice(Math.max(0, i - 400), i);
+    // ⚠ READ THE SET, NOT THE 400 CHARACTERS ABOVE THE WRITE. This used to slice
+    //   a window before sessionStorage.setItem and look for the five ids as
+    //   literals. The inline list was then refactored into the named
+    //   _NO_HISTORY_SCREENS set — which the history recorder shares deliberately
+    //   — and these five checks went red against code that still excludes all
+    //   five, because the literals had moved 2,000 lines away. A proximity
+    //   assertion fails on a refactor and passes on a rename, which is backwards.
+    const guardUsed = /if \(!_NO_HISTORY_SCREENS\.has\(id\)\)/.test(app.slice(Math.max(0, i - 400), i));
+    ck('the write is still gated by _NO_HISTORY_SCREENS', guardUsed);
+    const setSrc = (app.match(/const _NO_HISTORY_SCREENS = new Set\(\[([\s\S]*?)\]\)/) || [])[1] || '';
     for (const id of ['landing', 'auth', 'verify-email', 'reset-password', 'biometric-lock']) {
-      ck('the recorder still excludes ' + id, guard.includes("'" + id + "'"), guard.slice(-160));
+      ck('the recorder still excludes ' + id, setSrc.includes("'" + id + "'"), setSrc.trim().slice(0, 160));
     }
   }
 

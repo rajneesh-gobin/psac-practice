@@ -683,13 +683,30 @@ function spanText(e) {
   if (!e.end_date || e.end_date === e.date) return dayText(e.date);
   return dayText(e.date, { weekday: 'short', day: 'numeric', month: 'short' }) + ' – ' + dayText(e.end_date, { weekday: 'short', day: 'numeric', month: 'short' });
 }
+// ⚠⚠ A FOURTH COPY OF "WHERE A LIBRARY DOCUMENT LIVES", AND IT HAS TO BE.
+//    This page deliberately loads no engine file, so Library.hrefFor() — the
+//    single definition everywhere else — is not reachable here. The rule is the
+//    same one and is recorded in CLAUDE.md's duplication table: a SEEDED
+//    document is a static asset under /library/, a CONTRIBUTED one is served by
+//    a worker that re-checks it is still published. Change both together.
+// ⚠ doc_filename / doc_storage arrive from materials_library_open(), whose
+//   LEFT JOIN is filtered to status='published' — so an unpublished paper
+//   arrives with them null and simply gets no link, rather than a link to a
+//   withdrawn file.
+function eventPaperHref(e) {
+  if (!e || !e.library_document_id) return '';
+  if (e.doc_storage === 'static') return e.doc_filename ? '/library/' + e.doc_filename : '';
+  return '/api/library-file?id=' + encodeURIComponent(e.library_document_id);
+}
 function eventHTML(e) {
   const k = kindOf(e);
+  const href = eventPaperHref(e);
   return '<div class="ev ev-' + k + '">'
     + '<div class="ev-ico" aria-hidden="true">' + KIND[k].icon + '</div>'
     + '<div><div class="ev-title">' + esc(e.title || KIND[k].label) + '</div>'
     + '<div class="ev-meta">' + esc(KIND[k].label) + ' · ' + esc(spanText(e)) + '</div>'
     + (e.notes ? '<div class="ev-notes">' + esc(e.notes) + '</div>' : '')
+    + (href ? '<a class="ev-paper" href="' + esc(href) + '" target="_blank" rel="noopener">📄 Open the paper</a>' : '')
     + '</div></div>';
 }
 // Every dated thing, keyed by local day. An absence spanning days lands on

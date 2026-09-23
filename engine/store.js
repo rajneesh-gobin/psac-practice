@@ -1332,6 +1332,24 @@ const Store = (() => {
   // sees "no assignments" for work that exists.
   const _ASGN_COLS     = 'id, subject_id, chapter_id, difficulty, note, show_answers, created_at';
   const _ASGN_COLS_NEW = _ASGN_COLS + ', show_hints';
+  // ⚠ A THIRD TIER, for the same reason the second exists: a database that has
+  //   not run 20260923_assign_a_paper.sql must still be able to assign a
+  //   chapter. Each tier falls back to the one below on error, so the feature
+  //   degrades rather than the screen breaking.
+  const _ASGN_COLS_DUE = _ASGN_COLS_NEW + ', due_date, library_document_id';
+  // ⚠ READING needs the document EMBEDDED; writing must not ask for it. A child
+  //   list showing "Subject - Any Chapter" for an assigned paper is the whole
+  //   defect — the row carries an id and nothing a person can read. PostgREST
+  //   resolves this through student_assignments_library_document_id_fkey.
+  // ⚠ Verified against production with the browser's own publishable key: the
+  //   embed returns [] (RLS, correctly, for an anon caller with no student
+  //   token) while a deliberately wrong embed returns PGRST200. So the
+  //   relationship is real and this is not silently selecting nothing.
+  // ⚠ Published library rows are readable by anon, which is what a child's
+  //   session is — anon plus x-student-token. A child can therefore read the
+  //   title of the paper they were set, and nothing else about the library.
+  const _ASGN_COLS_READ = _ASGN_COLS_DUE
+    + ', library_documents(id,title,filename,storage,doc_type,year,subject,pages,bytes)';
 
   async function loadAssignments(studentId) {
     if (!_sb) return [];
@@ -1339,13 +1357,67 @@ const Store = (() => {
       .select(cols).eq('student_id', studentId)
       .is('completed_at', null)
       .order('created_at', { ascending: false });
-    let { data, error } = await q(_ASGN_COLS_NEW);
+    let { data, error } = await q(_ASGN_COLS_READ);
+    if (error) ({ data, error } = await q(_ASGN_COLS_NEW));
     if (error) ({ data } = await q(_ASGN_COLS));
-    return data || [];
+    // ⚠ FLATTEN THE EMBED to a plain `document` field so every caller reads one
+    //   shape. The fallback tiers return rows with no embed at all, and a screen
+    //   that has to know which tier answered is a screen that will get it wrong.
+    return (data || []).map(a => a && a.library_documents
+      ? { ...a, document: a.library_documents }
+      : a);
   }
 
-  async function createAssignment(studentId, parentId, { subjectId, chapterId, difficulty, note, showAnswers, showHints }) {
+  // ⚠ ONE HELPER, SO EVERY SCREEN AGREES WHAT "DUE" MEANS. The child's list, the
+  //   calendar and the parent view would otherwise each decide for themselves
+  //   whether yesterday counts as overdue, and disagree by a day around
+  //   midnight.
+  // ⚠ Mauritius days, never the device clock — the rule this codebase applies
+  //   to every other date. _muDayKey() is the shared definition.
+  function assignmentDueState(assignment, todayKey) {
+    const due = assignment && assignment.due_date;
+    if (!due) return 'anytime';
+    // ⚠ THE FALLBACK IS MAURITIUS TIME TOO, not UTC. store.js loads BEFORE
+    //   app.js, where _muDayKey() is declared, so the guard is real — and a UTC
+    //   fallback would call work "overdue" between 20:00 and midnight local,
+    //   every single evening. Mauritius is UTC+4 all year, no DST.
+    const today = todayKey
+      || (typeof _muDayKey === 'function'
+        ? _muDayKey()
+        : new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString().slice(0, 10));
+    if (due < today) return 'overdue';
+    if (due === today) return 'today';
+    return 'upcoming';
+  }
+
+  // Soonest first, undated last, newest of the undated first. This is the order
+  // every list of work wants and none of them could ask for before.
+  function sortAssignments(list) {
+    return (list || []).slice().sort((a, b) => {
+      const ad = a.due_date || '9999-99-99', bd = b.due_date || '9999-99-99';
+      if (ad !== bd) return ad < bd ? -1 : 1;
+      return String(b.created_at || '').localeCompare(String(a.created_at || ''));
+    });
+  }
+
+  // ⚠ ONE CALL ASSIGNS EITHER KIND OF WORK. Give it a chapterId for practice or
+  //   a libraryDocumentId for a paper — never both, which the database refuses.
+  //   Keeping it to a single function is what lets the screens stay simple: an
+  //   Assign button needs a child, a thing, and optionally a day.
+  // ⚠ dueDate is OPTIONAL and null means "any time". A required date would force
+  //   a parent to invent one for work that genuinely has no deadline, and an
+  //   invented deadline is worse than none — it goes overdue and nags.
+  // ⚠ It expects a plain YYYY-MM-DD, which is what <input type="date"> gives and
+  //   what a `date` column stores. Never an ISO timestamp: that reintroduces the
+  //   timezone question this column exists to avoid.
+  async function createAssignment(studentId, parentId, opts) {
     if (!_sb) return null;
+    const { subjectId, chapterId, difficulty, note, showAnswers, showHints,
+            dueDate, libraryDocumentId } = opts || {};
+    if (chapterId && libraryDocumentId) {
+      console.error('[Store.createAssignment] a chapter and a paper cannot be the same assignment');
+      return null;
+    }
     const base = {
       student_id: studentId, parent_id: parentId || null,
       subject_id: subjectId || null, chapter_id: chapterId || null,
@@ -1353,16 +1425,42 @@ const Store = (() => {
       note: note || null,
       show_answers: showAnswers !== false,
     };
-    // Same un-migrated-database fallback as loadAssignments: assigning work must
-    // not fail outright just because the hint switch has nowhere to be stored.
+    // ⚠ THREE TIERS, NEWEST FIRST, each falling back to the one below. Assigning
+    //   work must not fail outright because a column it would like has nowhere
+    //   to be stored — but a request that NAMES a paper cannot silently degrade
+    //   into a row with no paper in it, so that one is refused instead.
     let { data, error } = await _sb.from('student_assignments')
-      .insert({ ...base, show_hints: showHints !== false })
-      .select(_ASGN_COLS_NEW).single();
+      .insert({ ...base, show_hints: showHints !== false,
+                due_date: dueDate || null, library_document_id: libraryDocumentId || null })
+      .select(_ASGN_COLS_DUE).single();
+    if (error && (dueDate || libraryDocumentId)) {
+      console.error('[Store.createAssignment] the database cannot store a dated or library assignment:', error.message);
+      return null;
+    }
+    if (error) {
+      ({ data, error } = await _sb.from('student_assignments')
+        .insert({ ...base, show_hints: showHints !== false })
+        .select(_ASGN_COLS_NEW).single());
+    }
     if (error) {
       ({ data, error } = await _sb.from('student_assignments')
         .insert(base).select(_ASGN_COLS).single());
     }
     return error ? null : data;
+  }
+
+  // ⚠ ASSIGN THE SAME THING TO SEVERAL CHILDREN IN ONE GO. A teacher setting a
+  //   paper for a class, or a parent with three children, must not be made to
+  //   repeat the form once per child — that is the "complicated screen" this
+  //   exists to avoid. Reports per-child so one failure names who.
+  async function createAssignments(studentIds, parentId, opts) {
+    const ids = [...new Set((studentIds || []).filter(Boolean))];
+    const results = [];
+    for (const id of ids) {
+      const row = await createAssignment(id, parentId, opts);
+      results.push({ studentId: id, ok: !!row, id: row ? row.id : null });
+    }
+    return { ok: results.every(r => r.ok), assigned: results.filter(r => r.ok).length, results };
   }
 
   async function deleteAssignment(id) {
@@ -1576,7 +1674,8 @@ const Store = (() => {
     replyToReport, loadReportMessages, loadStudentReports, loadStudentReportThread, sendReportFollowup, markReportSeen,
     loadParentReports, submitParentReport,
     // Assignments
-    loadAssignments, createAssignment, deleteAssignment, completeAssignment,
+    loadAssignments, createAssignment, createAssignments, deleteAssignment, completeAssignment,
+    assignmentDueState, sortAssignments,
     // Friends
     getFriends, getMyFriendCode, removeFriend,
     // Points & leaderboard
