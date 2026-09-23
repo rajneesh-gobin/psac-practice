@@ -548,10 +548,15 @@ const TeacherClassroomDetail = (() => {
             <strong>Worksheet or paper homework</strong>
             <small>PDF or photo - pupils work on paper and hand it in</small>
           </button>
+          <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._choosePaper()">
+            <span class="tc-hw-card-icon">📚</span>
+            <strong>A past exam paper</strong>
+            <small>From the library - pick a paper and the day it is for, without leaving this class</small>
+          </button>
           <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._chooseResource()">
             <span class="tc-hw-card-icon">📁</span>
             <strong>Resource for pupils</strong>
-            <small>Share a file, video, website or past paper without creating a marked activity</small>
+            <small>Share a file, video or website without creating a marked activity</small>
           </button>
         </div>
       </div>`;
@@ -572,6 +577,159 @@ const TeacherClassroomDetail = (() => {
   function _chooseResource() {
     document.getElementById('tc-hw-choice')?.remove();
     showSection('materials');
+  }
+
+  // ══ A past paper, set from inside the class ═══════════════════════════════
+  // ⚠ THE WHOLE POINT IS THAT THE CLASS IS NEVER CHOSEN TWICE. Before this, a
+  //   teacher planning for a class had to leave it, cross the board to the
+  //   Past Exam Papers tab, find a paper, press Assign, and then pick that
+  //   same class out of a list. Everything here already knows _classId,
+  //   _className and _classGrade, so the only questions left are WHICH paper
+  //   and WHICH day.
+  // ⚠ TWO STEPS, NOT A FORM. Choosing a paper is browsing — a shelf, a grade,
+  //   a scroll — and picking a day is one tap. Putting both in one panel makes
+  //   a date field sit unused under a shelf for as long as it takes to find
+  //   something.
+  let _paperPick = null;
+
+  function _choosePaper() {
+    document.getElementById('tc-hw-choice')?.remove();
+    if (typeof Library === 'undefined' || !Library.openPicker) {
+      toast('The library is still loading. Try again in a moment.', 3000);
+      return;
+    }
+    _paperPick = null;
+    document.getElementById('tc-paper-pick')?.remove();
+    const overlay = document.createElement('div');
+    overlay.id = 'tc-paper-pick';
+    overlay.className = 'tc-hw-overlay';
+    overlay.innerHTML = `
+      <div class="tc-paper-panel" role="dialog" aria-modal="true" aria-label="Choose a past paper">
+        <div class="tc-hw-choice-header">
+          <!-- ⚠ The class name is loaded asynchronously and is empty for the
+               first moments after a classroom opens. "Set a past paper for"
+               ending mid-sentence is worse than not naming the class at all. -->
+          <span>Set a past paper${_className ? ' for ' + esc(_className) : ''}</span>
+          <button onclick="TeacherClassroomDetail.closePaperPick()" class="tc-hw-close" aria-label="Close">&#x2715;</button>
+        </div>
+        <div id="tc-paper-step1">
+          <p class="tc-paper-hint">${_classGrade ? 'Showing Grade ' + esc(_classGrade) + ' first. ' : ''}Tap a paper to read it, or choose it to set as work.</p>
+          <div id="tc-paper-shelf" class="lb-body tc-paper-shelf"></div>
+        </div>
+        <div id="tc-paper-step2" class="hidden"></div>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closePaperPick(); });
+    Library.openPicker({
+      hostId: 'tc-paper-shelf',
+      grade: _classGrade,
+      forLabel: _className,
+      onPick: _paperChosen,
+    });
+  }
+
+  function closePaperPick() {
+    // ⚠ Hand the library's browsing position back BEFORE the DOM goes, or the
+    //   teacher's own Past Exam Papers tab stays filtered to this class's grade
+    //   with nothing on screen explaining why.
+    if (typeof Library !== 'undefined' && Library.closePicker) Library.closePicker();
+    document.getElementById('tc-paper-pick')?.remove();
+    _paperPick = null;
+  }
+
+  function _paperChosen(doc) {
+    _paperPick = doc;
+    const s1 = document.getElementById('tc-paper-step1');
+    const s2 = document.getElementById('tc-paper-step2');
+    if (!s2) return;
+    s1?.classList.add('hidden');
+    s2.classList.remove('hidden');
+    // ⚠ TOMORROW IS THE DEFAULT. Work set for today is already due when it is
+    //   created, and a class that opens the page to something marked late is
+    //   the opposite of what the teacher meant.
+    s2.innerHTML = `
+      <div class="tc-paper-chosen">
+        <span class="tc-paper-chosen-ico" aria-hidden="true">📄</span>
+        <div><strong>${esc(doc.title)}</strong>
+          <p>${esc([Library.typeLabel ? Library.typeLabel(doc.doc_type) : '', doc.year || '', doc.pages ? doc.pages + ' pages' : ''].filter(Boolean).join(' · '))}</p></div>
+        <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.paperBack()">Change</button>
+      </div>
+      <p class="tc-paper-label">When is it for?</p>
+      <div class="tc-paper-when" id="tc-paper-when">
+        <button type="button" class="lb-when" data-when="today" onclick="TeacherClassroomDetail.setPaperWhen('today')">Today</button>
+        <button type="button" class="lb-when is-on" data-when="tomorrow" onclick="TeacherClassroomDetail.setPaperWhen('tomorrow')">Tomorrow</button>
+        <button type="button" class="lb-when" data-when="week" onclick="TeacherClassroomDetail.setPaperWhen('week')">In a week</button>
+        <button type="button" class="lb-when" data-when="pick" onclick="TeacherClassroomDetail.setPaperWhen('pick')">Pick a day</button>
+        <button type="button" class="lb-when" data-when="anytime" onclick="TeacherClassroomDetail.setPaperWhen('anytime')">No date</button>
+      </div>
+      <div id="tc-paper-date-row" class="hidden">
+        <label for="tc-paper-date" class="tc-paper-label">Day</label>
+        <input id="tc-paper-date" type="date" class="ncf-input" min="${_todayKey()}" value="${_dayKeyPlus(1)}">
+      </div>
+      <label for="tc-paper-note" class="tc-paper-label">Note for pupils <span style="font-weight:400;opacity:.7">(optional)</span></label>
+      <input id="tc-paper-note" type="text" maxlength="200" class="ncf-input" placeholder="Do Section A only">
+      <p class="tc-paper-hint">Pupils see it on the class page with the rest of your resources, and on the date you choose. The file stays in the library — nothing is copied.</p>
+      <p id="tc-paper-status" class="tc-cd-status-msg" role="status" aria-live="polite"></p>
+      <div class="tc-paper-actions">
+        <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.closePaperPick()">Cancel</button>
+        <button type="button" class="tc-cd-action-btn" id="tc-paper-save" onclick="TeacherClassroomDetail.savePaper()">Set work</button>
+      </div>`;
+    _paperWhen = 'tomorrow';
+  }
+
+  let _paperWhen = 'tomorrow';
+  let _paperSaving = false;
+
+  function paperBack() {
+    document.getElementById('tc-paper-step2')?.classList.add('hidden');
+    document.getElementById('tc-paper-step1')?.classList.remove('hidden');
+    _paperPick = null;
+  }
+
+  function setPaperWhen(v) {
+    _paperWhen = v || 'tomorrow';
+    document.querySelectorAll('#tc-paper-when [data-when]').forEach(b =>
+      b.classList.toggle('is-on', b.dataset.when === _paperWhen));
+    document.getElementById('tc-paper-date-row')?.classList.toggle('hidden', _paperWhen !== 'pick');
+    if (_paperWhen === 'pick') setTimeout(() => document.getElementById('tc-paper-date')?.focus(), 30);
+  }
+
+  function _paperDate() {
+    if (_paperWhen === 'anytime') return null;
+    if (_paperWhen === 'today') return _todayKey();
+    if (_paperWhen === 'tomorrow') return _dayKeyPlus(1);
+    if (_paperWhen === 'week') return _dayKeyPlus(7);
+    const v = (document.getElementById('tc-paper-date')?.value || '').trim();
+    return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+  }
+
+  async function savePaper() {
+    if (_paperSaving || !_paperPick) return;
+    const say = (m) => { const s = document.getElementById('tc-paper-status'); if (s) s.textContent = m; };
+    const due = _paperDate();
+    // ⚠ "Pick a day" with the field cleared must NOT fall through to "no date".
+    //   The teacher asked for a specific day and would be told it was set
+    //   without one.
+    if (_paperWhen === 'pick' && !due) { say('⚠ Choose a day, or pick "No date".'); return; }
+    const note = (document.getElementById('tc-paper-note')?.value || '').trim();
+    _paperSaving = true;
+    document.getElementById('tc-paper-save')?.setAttribute('disabled', 'disabled');
+    say('Setting the work…');
+    try {
+      await Library.setForClass({ classroomId: _classId, doc: _paperPick, dueDate: due, note });
+      const title = _paperPick.title;
+      closePaperPick();
+      toast(due ? `“${title}” set for ${_dayText(due)} ✓`
+                : `“${title}” shared with ${_className || 'the class'} ✓`, 3500);
+      // The two lists that just changed. Without this the teacher sets a paper
+      // and the screen behind the panel still shows the class as it was.
+      await Promise.all([_loadEvents(), _loadMaterials()]);
+      showSection(due ? 'calendar' : 'materials');
+    } catch (e) {
+      say('⚠ ' + (e.message || e));
+    }
+    _paperSaving = false;
+    document.getElementById('tc-paper-save')?.removeAttribute('disabled');
   }
 
   function _openPhysicalForm() {
@@ -2430,6 +2588,7 @@ const TeacherClassroomDetail = (() => {
   return {
     open, close, showSection, isOpen, toggleMore, setWorkFilter, retryWork, retryPupils, retrySignals, doTodo, showSetupGuide, dismissSetupGuide, openPupil, closePupil,
     showHomeworkChoice, _chooseDigital, _chooseWorksheet, _chooseResource,
+    _choosePaper, closePaperPick, paperBack, setPaperWhen, savePaper,
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,
     uploadMaterial, _onMatFileChosen, setMaterialSort, setMatSource, shareMaterial, copyFileLink, openFile, deleteFile,

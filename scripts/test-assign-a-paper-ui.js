@@ -191,12 +191,27 @@ console.log('\nWhat the sheet refuses to get wrong');
     '⚠ "Pick a day" with no date does NOT silently become "any time"');
   check(/Only \$\{res\.assigned\} of/.test(confirm),
     '⚠ a partial failure names how many children actually got it');
-  check(/slice\(0, 120\)/.test(confirm),
+  // ⚠ THESE THREE LIVE IN setForClass() NOW, NOT IN confirmAssign(), and they
+  //   are checked there. The classroom's own "Set work" flow needed exactly the
+  //   same write, so the logic moved into one shared function rather than being
+  //   copied — two copies of "material plus dated event" is how one of them
+  //   ends up writing the material and forgetting the date.
+  // ⚠ They failed here first, against working code, because they named a
+  //   FUNCTION rather than a behaviour. That is the same blindness that kept a
+  //   header-button assertion alive for weeks after the button was removed:
+  //   assert what must be true, then point it at wherever that lives today.
+  const setForClass = fnBody(lib, '  async function setForClass(opts) {');
+  check(/slice\(0, 120\)/.test(setForClass),
     'the class-event title is clamped to the 120-char CHECK constraint');
-  check(/slice\(0, 500\)/.test(confirm),
+  check(/slice\(0, 500\)/.test(setForClass),
     'and notes to 500');
-  check(/is on the class page, but the date could not be saved/.test(confirm),
+  check(/is on the class page, but the date could not be saved/.test(setForClass),
     'a saved material with a failed date says exactly that, rather than claiming total failure');
+  // ⚠ And the sheet must DELEGATE, not keep a second copy.
+  check(/setForClass\(\{ classroomId: cid/.test(confirm),
+    '⚠ the Assign sheet delegates its class branch to the one shared write');
+  check(!/teacher_class_events/.test(confirm),
+    '…and holds no class-event insert of its own');
 
   const open = fnBody(lib, '  async function assign(id) {');
   check(/_assignWhen = 'tomorrow'/.test(open),
@@ -218,6 +233,16 @@ console.log('\nShipping');
   for (const f of ['/engine/library.js', '/engine/calendar.js', '/engine/store.js', '/engine/app.js']) {
     check(sw.includes(`'${f}'`), `${f} is precached, so the bump reaches it`);
   }
+  // ⚠ teacher_classroom_detail.js is a ROLE MODULE and is deliberately NOT
+  //   precached — pre-caching the eight of them put 0.48 MB into every child's
+  //   first load for screens they can never open. It still rides the version
+  //   bump, because the default fetch branch caches it into SHELL_CACHE, and
+  //   SHELL_CACHE is keyed by SHELL_VERSION. Adding it to SHELL_FILES to "make
+  //   the bump reach it" would undo a measured decision for no gain.
+  check(!sw.includes("'/engine/teacher_classroom_detail.js'"),
+    '⚠ the classroom module stays OUT of SHELL_FILES — it rides SHELL_CACHE instead');
+  check(/SHELL_CACHE\s*=\s*`psac-shell-\$\{SHELL_VERSION\}`/.test(sw),
+    '…and SHELL_CACHE is keyed by the version, which is what makes that work');
 }
 
 console.log(failures ? `\n✗ ${failures} failure(s)` : '\n✓ all checks passed');

@@ -185,14 +185,46 @@ rewrite**, which matters: `teacher_classroom_detail.js` is 2,444 lines and
 `_renderPupils` alone is 601. A single-pass rewrite of this file is how the
 classroom gets worse before it gets better.
 
-### Stage 1 — Set work, from inside the class *(the reported complaint)*
+### Stage 1 — ✅ DONE 2026-09-23 — a past paper, set from inside the class
 Add the **Set work** sheet to the classroom's Work section, with the library as a
 source, defaulted to the class's grade. Reuse `Library` — mount it into a picker
 target and let `canShareToClass()` answer true there too.
-*Touches:* `teacher_classroom_detail.js` (new section), `library.js` (a picker
-mode), `index.html`, `style.css`.
-*Does not touch:* any existing tab, any table.
-**After this, the teacher never crosses the board to set a paper.**
+⚠ **The shell for this already existed and the plan had not noticed.**
+`showHomeworkChoice()` was already the front door, offering three sources —
+questions on screen, a worksheet, a resource. What was missing was the fourth,
+and the Resource card’s own copy said *“a file, video, website or past
+paper”*, which is how a teacher ended up in a file list hunting for one. So
+Stage 1 became **one more card**, not a new sheet: no parallel flow, no second
+front door.
+
+What shipped:
+- A fourth card, **“A past exam paper”**, opening a two-step panel inside the
+  class: pick from a real shelf, then pick the day.
+- `Library.openPicker({hostId, grade, forLabel, onPick})` — picker mode. Cards
+  show **Choose this paper** *instead of* Assign/Share/Report, and the cover
+  stays a link so the paper can be read before it is set.
+- The shelf **opens on the class’s own grade** (`_classGrade`).
+- `Library.setForClass()` — one shared write (material + dated `kind='due'`
+  event). The Assign sheet’s class branch now delegates to it rather than
+  keeping a copy.
+
+⚠ **Picker mode borrows module state and hands it back.** `_target`,
+`_openShelf`, `_query` and the three filters are one shared browsing position;
+not restoring them left the teacher’s own Past Exam Papers tab filtered to a
+class’s grade with nothing on screen explaining why. `closePicker()` restores
+all seven, and the browser test types a search, round-trips a picker and checks
+the search survives.
+
+⚠ **The shelf is bounded and scrolls itself** (`max-height:52vh`). Unbounded, the
+panel grows to the height of the whole library and the Choose buttons sit below
+the fold of a dialog that cannot be scrolled to.
+
+*Touched:* `teacher_classroom_detail.js`, `library.js`, `style.css`.
+*Did not touch:* any board tab, any table, any migration.
+
+Test: `scripts/test-set-paper-in-class.js` — 24 checks in real Chrome at
+390×844. The one that matters: **the class is never chosen twice** (zero
+selects or checkboxes in the whole flow).
 
 ### Stage 2 — one timeline
 Merge Activities into Calendar. `_renderCalendar()` already merges the three

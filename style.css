@@ -11076,3 +11076,60 @@ html.dark .lb-when.is-on{background:#6366f1;border-color:#6366f1;color:#fff}
 .lb-row-wrap .lb-book{width:100%}
 /* ⚠ An aspect-ratio box needs max-width or it can push the page sideways. */
 .lb-row-wrap .lb-cover{width:100%;height:auto;max-width:100%;aspect-ratio:120/160}
+
+/* ══ Set a past paper, from inside the class ═══════════════════════════════
+   ⚠ A CHALKBOARD PANEL, matching .tc-hw-choice-panel it opens from — this one
+   sits INSIDE the classroom overlay, which is a board, unlike the library's
+   own modals which open over an ordinary screen and stay white sheets.
+   ⚠ Wider than its siblings on purpose: it hosts a shelf of book covers, and
+   at 480px the cards wrap to two per row and the grade picker crowds. */
+.tc-paper-panel {
+  background: #1a2a1a;
+  border: 1.5px solid rgba(240,236,220,.18);
+  border-radius: 1.1rem;
+  padding: 1.2rem 1.3rem;
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 40px rgba(0,0,0,.55);
+  color: #f0ece8;
+}
+/* ⚠ The shelf scrolls INSIDE the panel, not the page. Without a bound the
+   panel grows to the height of the whole library and the "Choose" buttons sit
+   below the fold of a dialog that cannot itself be scrolled to. */
+.tc-paper-shelf { max-height: 52vh; overflow-y: auto; margin-top: .4rem; }
+.tc-paper-hint { font-size: .82rem; color: rgba(240,236,220,.62); margin: .3rem 0 .6rem; }
+.tc-paper-label { font-size: .82rem; font-weight: 700; color: rgba(240,236,220,.85); margin: .9rem 0 .35rem; }
+.tc-paper-chosen {
+  display: flex; align-items: center; gap: .7rem;
+  background: rgba(240,236,220,.06);
+  border: 1px solid rgba(240,236,220,.18);
+  border-radius: .8rem; padding: .7rem .85rem;
+}
+.tc-paper-chosen-ico { font-size: 1.6rem; line-height: 1 }
+.tc-paper-chosen strong { display: block; font-size: .92rem; color: #f0ece8 }
+.tc-paper-chosen p { margin: .15rem 0 0; font-size: .78rem; color: rgba(240,236,220,.6) }
+.tc-paper-chosen button { margin-left: auto; white-space: nowrap }
+.tc-paper-when { display: flex; flex-wrap: wrap; gap: .45rem }
+/* ⚠ .lb-when carries BOTH palettes because it normally lives in a white sheet.
+   On this board the light half is wrong, so it is restated here — same control,
+   third surface. */
+.tc-paper-when .lb-when {
+  background: rgba(240,236,220,.08); border-color: rgba(240,236,220,.28); color: #f0ece8;
+}
+.tc-paper-when .lb-when:hover { background: rgba(240,236,220,.16) }
+.tc-paper-when .lb-when.is-on { background: rgba(99,102,241,.42); border-color: #a5b4fc; color: #e0e7ff }
+.tc-paper-actions { display: flex; align-items: center; justify-content: flex-end; gap: .6rem; margin-top: 1rem }
+/* The pick-mode action on a card. Brighter than Assign/Share: in a picker it is
+   the only thing to do. */
+.lb-choose {
+  align-self: flex-start; border: 1px solid #a5b4fc; background: rgba(99,102,241,.32);
+  color: #e0e7ff; border-radius: 999px; padding: .2rem .6rem; font-size: .66rem;
+  font-weight: 700; cursor: pointer;
+}
+.lb-choose:hover, .lb-choose:focus-visible { background: rgba(99,102,241,.5) }
+@media (max-width: 520px) {
+  .tc-paper-panel { padding: 1rem .9rem; max-height: 92vh }
+  .tc-paper-shelf { max-height: 46vh }
+}

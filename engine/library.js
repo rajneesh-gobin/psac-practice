@@ -255,13 +255,22 @@ const Library = (() => {
         <span class="lb-book-meta">${_esc(meta)}</span>
         ${credit}
       </a>
-      ${canAssign() ? `<button class="lb-assign" onclick="Library.assign('${_esc(doc.id)}')"
-        title="Set this paper as work for a day">📅 Assign</button>` : ''}
+      ${_pickMode
+        // ⚠ PICK MODE REPLACES THE ACTIONS, IT DOES NOT ADD TO THEM. The caller
+        //   already knows the class and the reason — offering "Assign", "Share
+        //   to class" and "Choose" side by side would be three buttons for one
+        //   job, which is the confusion this whole mode exists to remove.
+        // ⚠ The cover stays a LINK. A teacher setting a paper wants to read it
+        //   first, and taking that away would make them choose blind.
+        ? `<button class="lb-choose" onclick="Library.pick('${_esc(doc.id)}')"
+            title="Set this paper as work for ${_esc(_pickMode.forLabel || 'this class')}">✓ Choose this paper</button>`
+        : `${canAssign() ? `<button class="lb-assign" onclick="Library.assign('${_esc(doc.id)}')"
+            title="Set this paper as work for a day">📅 Assign</button>` : ''}
       ${canShareToClass() ? `<button class="lb-share" onclick="Library.shareToClass('${_esc(doc.id)}')"
         title="Share this with one of your classes">➕ Share to class</button>` : ''}
       <button class="lb-report" onclick="Library.report('${_esc(doc.id)}')"
         aria-label="Report a problem with ${_esc(doc.title)}"
-        title="Report a problem with this document">⚑ Report</button>
+        title="Report a problem with this document">⚑ Report</button>`}
     </div>`;
   }
 
@@ -832,6 +841,91 @@ const Library = (() => {
     }
   }
 
+  // ══ Picker mode — the library, opened from somewhere that already knows why ══
+  // ⚠ THE FAULT THIS FIXES IS STRUCTURAL, not cosmetic. The library is mounted
+  //   on the teacher BOARD; the classroom is a separate overlay that cannot
+  //   reach it. So a teacher planning for a class had to leave the class, cross
+  //   the board, find a paper, and then choose that same class again from a
+  //   list. Picker mode lets the shelf open *inside* the place that already
+  //   knows the class, so nothing is chosen twice.
+  // ⚠ IT BORROWS MODULE STATE AND MUST HAND IT BACK. _target, _openShelf,
+  //   _query and the three filters are one shared browsing position. Opening a
+  //   picker scoped to Grade 6 and not restoring would leave the teacher's own
+  //   "Past Exam Papers" tab filtered to Grade 6 with no memory of why.
+  let _pickMode = null;
+  let _pickSaved = null;
+
+  function openPicker(opts) {
+    const o = opts || {};
+    if (!o.hostId || typeof o.onPick !== 'function') return;
+    _pickSaved = {
+      target: _target, openShelf: _openShelf, query: _query,
+      type: _typeFilter, year: _yearFilter, sort: _sort, pack: _packFilter,
+    };
+    _pickMode = { onPick: o.onPick, forLabel: o.forLabel || '' };
+    _target = o.hostId;
+    // A picker starts clean: a filter left over from the last visit is not a
+    // choice this reader made.
+    _query = ''; _typeFilter = ''; _yearFilter = ''; _packFilter = null; _sort = 'year-desc';
+    if (!_sections) { load().then(() => { _openOnGrade(o.grade); render(); }); return; }
+    _openOnGrade(o.grade);
+    render();
+  }
+
+  // ⚠ DEFAULT TO THE CLASS'S OWN GRADE. A Grade 6 teacher should not scroll
+  //   past eight other grades every time; the caller knows the grade, so use it.
+  //   An unknown or empty grade falls through to whatever shelf has documents,
+  //   never to an empty one.
+  function _openOnGrade(grade) {
+    if (grade == null || !_sections) return;
+    const want = Number(grade);
+    const hit = _sections.find(s => Number(s.grade) === want
+      && ((_docsBySection.get(s.id) || []).length
+        || s.children.some(c => (_docsBySection.get(c.id) || []).length)));
+    if (hit) _openShelf = hit.id;
+  }
+
+  function pick(id) {
+    if (!_pickMode) return;
+    const doc = [...(_docsBySection ? _docsBySection.values() : [])].flat().find(d => d.id === id);
+    if (!doc) { if (typeof toast === 'function') toast('That document is no longer on the shelf.', 3000); return; }
+    _pickMode.onPick(doc);
+  }
+
+  function closePicker() {
+    if (!_pickSaved) { _pickMode = null; return; }
+    _target = _pickSaved.target; _openShelf = _pickSaved.openShelf; _query = _pickSaved.query;
+    _typeFilter = _pickSaved.type; _yearFilter = _pickSaved.year; _sort = _pickSaved.sort;
+    _packFilter = _pickSaved.pack;
+    _pickMode = null; _pickSaved = null;
+  }
+
+  // ⚠ ONE PLACE SETS A PAPER FOR A CLASS, called by the Assign sheet's class
+  //   branch AND by the classroom's own "Set work" flow. Two copies is how one
+  //   of them ends up writing the material and forgetting the date, which is a
+  //   difference nobody would notice until a class had no deadline.
+  async function setForClass(opts) {
+    const { classroomId, doc, dueDate, note } = opts || {};
+    if (!classroomId || !doc) throw new Error('Nothing to set.');
+    const uid = await _requireUid();
+    await _placeInClasses(doc, [classroomId], uid);
+    if (!dueDate) return { dated: false };
+    // ⚠ teacher_class_events.title is CHECKed at 1..120 characters and notes at
+    //   500. A long paper title would fail the whole insert with a constraint
+    //   error the teacher cannot act on.
+    const { error } = await _sb.from('teacher_class_events').insert({
+      classroom_id: classroomId, teacher_id: uid, date: dueDate, kind: 'due',
+      title: String(doc.title || 'Paper').slice(0, 120),
+      notes: note ? String(note).slice(0, 500) : null,
+      library_document_id: doc.id,
+    });
+    // ⚠ The material IS already on the class page here. Losing the date is a
+    //   smaller failure than claiming the whole thing failed, so say what
+    //   actually happened rather than rolling back something usable.
+    if (error) throw new Error('The paper is on the class page, but the date could not be saved: ' + error.message);
+    return { dated: true };
+  }
+
   // ══ Assigning a paper as work ═════════════════════════════════════════════
   // ⚠⚠ THE TWO HALVES ARE DIFFERENT TABLES AND RLS FORCES THAT — it is not a
   //    shortcut and it cannot be unified. The INSERT policy on
@@ -1068,27 +1162,12 @@ const Library = (() => {
             : 'The paper could not be set as work. Please try again.');
         done += res.assigned;
       }
-      if (classes.length) {
-        const uid = await _requireUid();
-        await _placeInClasses(_assignDoc, classes, uid);
-        if (due) {
-          // ⚠ The title CHECK on teacher_class_events is 1..120 characters and
-          //   notes is <= 500. A long paper title would fail the whole insert
-          //   with a constraint error the teacher cannot act on.
-          const rows = classes.map(cid => ({
-            classroom_id: cid, teacher_id: uid, date: due, kind: 'due',
-            title: String(_assignDoc.title || 'Paper').slice(0, 120),
-            notes: note ? note.slice(0, 500) : null,
-            library_document_id: _assignDoc.id,
-          }));
-          const { error } = await _sb.from('teacher_class_events').insert(rows);
-          // ⚠ The material IS already on the class page at this point. Losing
-          //   the date is a smaller failure than claiming the whole thing
-          //   failed, so say exactly what happened rather than rolling back
-          //   something the class can already use.
-          if (error) throw new Error('The paper is on the class page, but the date could not be saved: ' + error.message);
-        }
-        done += classes.length;
+      // ⚠ THE SAME setForClass() THE CLASSROOM'S OWN "Set work" USES. Two
+      //   copies of "material plus dated event" is how one of them ends up
+      //   writing the material and forgetting the date.
+      for (const cid of classes) {
+        await setForClass({ classroomId: cid, doc: _assignDoc, dueDate: due, note });
+        done += 1;
       }
       closeAssign(true);
       if (typeof toast === 'function') {
@@ -1193,5 +1272,6 @@ const Library = (() => {
   return { render, load, refresh, toggle, open, back, mountInto, search, countForPack, openForPack, clearPackFilter, packCount, mountPackLink, setType, setYear, setSort, canContribute, openUpload, closeUpload, submitUpload, uploadSubjectChanged,
     report, closeReport, sendReport, shareToClass, closeShare, confirmShare,
     canAssign, assign, closeAssign, confirmAssign, setAssignWhen,
+    openPicker, closePicker, pick, setForClass,
     hrefFor: _hrefFor, typeLabel: (t) => TYPE_LABEL[t] || '' };
 })();
