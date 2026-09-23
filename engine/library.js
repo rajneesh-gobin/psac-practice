@@ -358,9 +358,42 @@ const Library = (() => {
     return `<section class="lb-shelf">
       <h4 class="lb-shelf-title">${_esc(section.name)}
         <span class="lb-count">${docs.length}</span></h4>
-      <div class="lb-row">${docs.map(d => _card(d, section.name)).join('')}</div>
+      <!-- ⚠ A SWIPE ROW IS A MOUSE TRAP. The row scrolls horizontally, which is
+           effortless on a phone and awkward on a PC: a wheel scrolls the page,
+           not the row, and shift+wheel is a trick most people do not know.
+           These arrows are the pointer equivalent of a swipe. They are hidden
+           on touch (where they would be clutter) and on rows short enough not
+           to scroll — see _syncShelfArrows(). -->
+      <div class="lb-rowbox">
+        <button type="button" class="lb-arrow lb-arrow-l" aria-label="Scroll ${_esc(section.name)} left"
+          onclick="Library.scrollShelf(this, -1)">‹</button>
+        <div class="lb-row">${docs.map(d => _card(d, section.name)).join('')}</div>
+        <button type="button" class="lb-arrow lb-arrow-r" aria-label="Scroll ${_esc(section.name)} right"
+          onclick="Library.scrollShelf(this, 1)">›</button>
+      </div>
       <div class="lb-ledge" aria-hidden="true"></div>
     </section>`;
+  }
+
+  // ⚠ Scrolls by most of a screenful, not all of it: leaving a card visible
+  //   keeps the reader's place, the way a page-down that overlaps a line does.
+  function scrollShelf(btn, dir) {
+    const row = btn?.parentElement?.querySelector('.lb-row');
+    if (!row) return;
+    row.scrollBy({ left: dir * Math.max(200, row.clientWidth * 0.8), behavior: 'smooth' });
+  }
+
+  // ⚠ Arrows on a row that cannot scroll are furniture that does nothing, and a
+  //   shelf holding two papers is common. Hide them per row, after paint, when
+  //   there is nothing to scroll to.
+  function _syncShelfArrows() {
+    const host = document.getElementById(_target);
+    if (!host) return;
+    host.querySelectorAll('.lb-rowbox').forEach(box => {
+      const row = box.querySelector('.lb-row');
+      if (!row) return;
+      box.classList.toggle('is-static', row.scrollWidth <= row.clientWidth + 4);
+    });
   }
 
   // ⚠ THE DISCLAIMER AND THE CONTRIBUTE BUTTON ARE RENDERED, not written into
@@ -501,6 +534,7 @@ const Library = (() => {
     }
 
     el.innerHTML = _chrome() + picker + _controls(scope) + `<div class="lb-grade-body">${body}</div>`;
+    _syncShelfArrows();
   }
 
   // Named toggle() when the shelves were an accordion; it now chooses which
@@ -1269,7 +1303,7 @@ const Library = (() => {
     f('lb-rep-send')?.removeAttribute('disabled');
   }
 
-  return { render, load, refresh, toggle, open, back, mountInto, search, countForPack, openForPack, clearPackFilter, packCount, mountPackLink, setType, setYear, setSort, canContribute, openUpload, closeUpload, submitUpload, uploadSubjectChanged,
+  return { render, load, refresh, toggle, open, back, mountInto, search, scrollShelf, countForPack, openForPack, clearPackFilter, packCount, mountPackLink, setType, setYear, setSort, canContribute, openUpload, closeUpload, submitUpload, uploadSubjectChanged,
     report, closeReport, sendReport, shareToClass, closeShare, confirmShare,
     canAssign, assign, closeAssign, confirmAssign, setAssignWhen,
     openPicker, closePicker, pick, setForClass,

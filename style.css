@@ -10855,6 +10855,37 @@ html.dark .cert-gradetab-n { background: rgba(255, 255, 255, .12); }
 .lb-row{display:flex;gap:.85rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.25rem .1rem .6rem;-webkit-overflow-scrolling:touch}
 .lb-row::-webkit-scrollbar{height:6px}
 .lb-row::-webkit-scrollbar-thumb{background:rgba(128,128,128,.35);border-radius:3px}
+/* ── Shelf scroll arrows: the pointer equivalent of a swipe ───────────────
+   ⚠ A horizontal scroll row is effortless with a thumb and awkward with a
+     mouse — the wheel scrolls the PAGE, and shift+wheel is a trick most people
+     never learn. These appear only where there is a fine pointer, and only on
+     rows long enough to scroll (.is-static is set by _syncShelfArrows()).
+   ⚠ position:relative, never transform — a transformed ancestor becomes the
+     containing block for every position:fixed descendant, which is a bug this
+     project has already been bitten by. relative does not do that. */
+.lb-rowbox{position:relative}
+.lb-arrow{display:none}
+@media (hover:hover) and (pointer:fine){
+  .lb-rowbox:not(.is-static) .lb-arrow{
+    display:flex;align-items:center;justify-content:center;
+    position:absolute;top:calc(50% - 1.1rem);z-index:2;
+    width:2.2rem;height:2.2rem;border-radius:999px;
+    border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.92);
+    color:#334155;font-size:1.25rem;line-height:1;cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.18);transition:background-color .15s,opacity .15s;
+    opacity:0;
+  }
+  .lb-rowbox:hover .lb-arrow,.lb-arrow:focus-visible{opacity:1}
+  .lb-arrow-l{left:-.35rem}
+  .lb-arrow-r{right:-.35rem}
+  .lb-arrow:hover{background:#fff}
+  /* A row a mouse must drive deserves a grabbable scrollbar. */
+  .lb-row::-webkit-scrollbar{height:10px}
+  .lb-row::-webkit-scrollbar-thumb{background:rgba(100,116,139,.55)}
+  .lb-row:hover::-webkit-scrollbar-thumb{background:rgba(71,85,105,.75)}
+}
+.dark .lb-arrow{background:rgba(31,41,55,.94);color:#e5e7eb;border-color:rgba(255,255,255,.12)}
+.dark .lb-arrow:hover{background:#374151}
 /* The ledge is what makes a row read as a shelf — cheaper than wood, and it
    survives dark mode. */
 .lb-ledge{height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(128,128,128,.35),transparent);margin:0 .1rem .5rem}

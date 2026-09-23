@@ -54,10 +54,22 @@ ok(calls >= 3, 'the loader expands on every entry path (' + calls + ' call sites
 // Three paths put questions into the pool and ALL must expand: file:// dev
 // injection, the network fetch, and the 7-day cache hit. Missing the cache one
 // would make a pack work on first load and vanish for a week.
-const cacheBlock = /const cached = _readCache\(subjectId\);[\s\S]{0,700}?return true;/.exec(loader);
-ok(!!cacheBlock && /_expandTasks\(\)/.test(cacheBlock[0]), 'the cache-hit path expands');
-const apiBlock = /const incoming = await resp\.json\(\);[\s\S]{0,700}?return true;/.exec(loader);
-ok(!!apiBlock && /_expandTasks\(\)/.test(apiBlock[0]), 'the network path expands');
+// ⚠⚠ MEASURE THE BLOCK, NOT A CHARACTER BUDGET. These were
+//    /…[\s\S]{0,700}?return true;/ — and the network one went red when a
+//    COMMENT was added inside the block, pushing `return true;` past 700
+//    characters. Nothing was broken: _expandTasks() is called there, directly
+//    under the push. An arbitrary distance cap turns any edit near the code
+//    into a failure, and says nothing about whether the call is still made.
+const between = (startNeedle) => {
+  const a = loader.indexOf(startNeedle);
+  if (a < 0) return null;
+  const b = loader.indexOf('return true;', a);
+  return b > a ? loader.slice(a, b) : null;
+};
+const cacheBlock = between('const cached = _readCache(subjectId);');
+ok(!!cacheBlock && /_expandTasks\(\)/.test(cacheBlock), 'the cache-hit path expands');
+const apiBlock = between('const incoming = await resp.json();');
+ok(!!apiBlock && /_expandTasks\(\)/.test(apiBlock), 'the network path expands');
 
 // ── 2. The real engine, the real bundle ───────────────────────────────────
 const ctx = { console, Math, JSON, Date, window: {}, navigator: { language: 'en' } };

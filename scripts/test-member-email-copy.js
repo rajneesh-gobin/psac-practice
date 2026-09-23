@@ -1,7 +1,23 @@
 'use strict';
 const fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');
 const source = fs.readFileSync('engine/admin.js', 'utf8');
-const fn = source.slice(source.indexOf('  async function copyMemberEmails()'), source.indexOf('  function _memberStatusBadge'));
+// ⚠⚠ THE WALK MOVED INTO A HELPER AND THIS SLICE DID NOT FOLLOW IT.
+//    copyMemberEmails() now delegates to _collectMemberEmails(), extracted when
+//    a second button ("Email this group") started needing the same list — the
+//    point being that a copy button and a mail button must never name different
+//    groups. Extracting only the caller left the helper undefined, so the call
+//    threw, copyMemberEmails()'s own catch swallowed it, and the output stayed
+//    empty — which the assertion read as "1 email, expected 101". A refactor
+//    looked like a broken feature.
+// ⚠ Take BOTH, and fail loudly if either anchor moves rather than silently
+//   slicing nothing.
+const grab = (from, to) => {
+  const a = source.indexOf(from), b = source.indexOf(to, a);
+  if (a < 0 || b <= a) throw new Error('admin.js anchor moved: ' + from);
+  return source.slice(a, b);
+};
+const fn = grab('  async function _collectMemberEmails(', '  async function copyMemberEmails()')
+  + grab('  async function copyMemberEmails()', '  function _memberStatusBadge');
 async function test(status, blocked = false) {
   const nodes = {};
   for (const id of ['admin-copy-emails','admin-member-search','admin-copy-emails-output','admin-copy-emails-status']) {

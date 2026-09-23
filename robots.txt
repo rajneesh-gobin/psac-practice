@@ -17,7 +17,17 @@ User-agent: *
 # line like this one that preamble says nothing at all. search=yes because the
 # landing page is how a parent in Mauritius finds this at all; ai-train=no
 # reserves rights over an original question bank. Drop this line to say neither.
-Content-Signal: search=yes, ai-train=no
+#
+# ⚠ THE THREE SIGNALS ARE DIFFERENT THINGS, and omitting one is not a refusal —
+#   it states no preference. ai-input governs being used as a SOURCE when an
+#   assistant answers a question; ai-train governs being used as TRAINING DATA.
+#   ai-input=yes was added deliberately: a parent asking ChatGPT or Perplexity
+#   "where can my child practise for the PSAC" is exactly how this site should
+#   be found, and that is a different ask from letting the question bank be
+#   absorbed into a model. Cite us, do not train on us.
+# ⚠ A PREFERENCE, NOT ENFORCEMENT. Content Signals is a 2025 convention and
+#   adherence varies by company; nothing here compels anyone.
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # ── Share links ────────────────────────────────────────────────────────────
 # /a/<CODE> guest homework is OPEN-LINK by design — no PIN, and identity is a

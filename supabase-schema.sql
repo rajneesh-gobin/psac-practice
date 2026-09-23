@@ -609,7 +609,8 @@ CREATE TABLE IF NOT EXISTS public.learning_materials (
   created_at timestamp with time zone DEFAULT now(),
   link_expiry_seconds integer DEFAULT 3600 NOT NULL,
   source_type text DEFAULT 'file'::text NOT NULL,
-  external_url text
+  external_url text,
+  library_document_id uuid
 );
 ALTER TABLE public.learning_materials ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
 ALTER TABLE public.learning_materials ADD COLUMN IF NOT EXISTS teacher_id uuid;
@@ -624,6 +625,7 @@ ALTER TABLE public.learning_materials ADD COLUMN IF NOT EXISTS created_at timest
 ALTER TABLE public.learning_materials ADD COLUMN IF NOT EXISTS link_expiry_seconds integer DEFAULT 3600;
 ALTER TABLE public.learning_materials ADD COLUMN IF NOT EXISTS source_type text DEFAULT 'file'::text;
 ALTER TABLE public.learning_materials ADD COLUMN IF NOT EXISTS external_url text;
+ALTER TABLE public.learning_materials ADD COLUMN IF NOT EXISTS library_document_id uuid;
 ALTER TABLE public.learning_materials ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.learning_materials ALTER COLUMN title SET NOT NULL;
 ALTER TABLE public.learning_materials ALTER COLUMN link_expiry_seconds SET NOT NULL;
@@ -664,7 +666,8 @@ CREATE TABLE IF NOT EXISTS public.library_documents (
   download_count integer DEFAULT 0 NOT NULL,
   report_count integer DEFAULT 0 NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
-  updated_at timestamp with time zone DEFAULT now() NOT NULL
+  updated_at timestamp with time zone DEFAULT now() NOT NULL,
+  pii_flags text[] DEFAULT '{}'::text[] NOT NULL
 );
 ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
 ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS sha256 text;
@@ -701,6 +704,7 @@ ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS download_count int
 ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS report_count integer DEFAULT 0;
 ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
 ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS pii_flags text[] DEFAULT '{}'::text[];
 ALTER TABLE public.library_documents ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.library_documents ALTER COLUMN sha256 SET NOT NULL;
 ALTER TABLE public.library_documents ALTER COLUMN filename SET NOT NULL;
@@ -714,6 +718,7 @@ ALTER TABLE public.library_documents ALTER COLUMN download_count SET NOT NULL;
 ALTER TABLE public.library_documents ALTER COLUMN report_count SET NOT NULL;
 ALTER TABLE public.library_documents ALTER COLUMN created_at SET NOT NULL;
 ALTER TABLE public.library_documents ALTER COLUMN updated_at SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN pii_flags SET NOT NULL;
 
 CREATE TABLE IF NOT EXISTS public.library_reports (
   id uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -1193,7 +1198,8 @@ CREATE TABLE IF NOT EXISTS public.student_assignments (
   source_type text DEFAULT 'parent'::text,
   classroom_id uuid,
   due_date date,
-  show_hints boolean DEFAULT true NOT NULL
+  show_hints boolean DEFAULT true NOT NULL,
+  library_document_id uuid
 );
 ALTER TABLE public.student_assignments ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
 ALTER TABLE public.student_assignments ADD COLUMN IF NOT EXISTS student_id text;
@@ -1209,6 +1215,7 @@ ALTER TABLE public.student_assignments ADD COLUMN IF NOT EXISTS source_type text
 ALTER TABLE public.student_assignments ADD COLUMN IF NOT EXISTS classroom_id uuid;
 ALTER TABLE public.student_assignments ADD COLUMN IF NOT EXISTS due_date date;
 ALTER TABLE public.student_assignments ADD COLUMN IF NOT EXISTS show_hints boolean DEFAULT true;
+ALTER TABLE public.student_assignments ADD COLUMN IF NOT EXISTS library_document_id uuid;
 ALTER TABLE public.student_assignments ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.student_assignments ALTER COLUMN student_id SET NOT NULL;
 ALTER TABLE public.student_assignments ALTER COLUMN created_at SET NOT NULL;
@@ -1457,7 +1464,8 @@ CREATE TABLE IF NOT EXISTS public.teacher_class_events (
   kind text DEFAULT 'event'::text NOT NULL,
   title text NOT NULL,
   notes text,
-  created_at timestamp with time zone DEFAULT now() NOT NULL
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  library_document_id uuid
 );
 ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
 ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS classroom_id uuid;
@@ -1468,6 +1476,7 @@ ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS kind text DEFAU
 ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS title text;
 ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS notes text;
 ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.teacher_class_events ADD COLUMN IF NOT EXISTS library_document_id uuid;
 ALTER TABLE public.teacher_class_events ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.teacher_class_events ALTER COLUMN classroom_id SET NOT NULL;
 ALTER TABLE public.teacher_class_events ALTER COLUMN teacher_id SET NOT NULL;
@@ -2352,7 +2361,7 @@ DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'learning_materials_source_ck'
                     AND conrelid = 'learning_materials'::regclass) THEN
-    ALTER TABLE learning_materials ADD CONSTRAINT learning_materials_source_ck CHECK ((((source_type = 'file'::text) AND (file_path IS NOT NULL) AND (file_name IS NOT NULL)) OR ((source_type = 'link'::text) AND (external_url IS NOT NULL) AND (external_url ~* '^https?://[^[:space:]]+$'::text))));
+    ALTER TABLE learning_materials ADD CONSTRAINT learning_materials_source_ck CHECK ((((source_type = 'file'::text) AND (file_path IS NOT NULL) AND (file_name IS NOT NULL)) OR ((source_type = 'link'::text) AND (external_url IS NOT NULL) AND (external_url ~* '^https?://[^[:space:]]+$'::text)) OR ((source_type = 'library'::text) AND (library_document_id IS NOT NULL))));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2535,6 +2544,13 @@ DO $$ BEGIN
                   WHERE conname = 'schedule_entries_notes_len_ck'
                     AND conrelid = 'schedule_entries'::regclass) THEN
     ALTER TABLE schedule_entries ADD CONSTRAINT schedule_entries_notes_len_ck CHECK (((notes IS NULL) OR (length(notes) <= 1000)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'student_assignments_one_kind_chk'
+                    AND conrelid = 'student_assignments'::regclass) THEN
+    ALTER TABLE student_assignments ADD CONSTRAINT student_assignments_one_kind_chk CHECK ((NOT ((chapter_id IS NOT NULL) AND (library_document_id IS NOT NULL))));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2905,6 +2921,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'learning_materials_library_document_id_fkey'
+                    AND conrelid = 'learning_materials'::regclass) THEN
+    ALTER TABLE learning_materials ADD CONSTRAINT learning_materials_library_document_id_fkey FOREIGN KEY (library_document_id) REFERENCES library_documents(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'learning_materials_teacher_id_fkey'
                     AND conrelid = 'learning_materials'::regclass) THEN
     ALTER TABLE learning_materials ADD CONSTRAINT learning_materials_teacher_id_fkey FOREIGN KEY (teacher_id) REFERENCES profiles(id) ON DELETE CASCADE;
@@ -3073,6 +3096,13 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'student_assignments_library_document_id_fkey'
+                    AND conrelid = 'student_assignments'::regclass) THEN
+    ALTER TABLE student_assignments ADD CONSTRAINT student_assignments_library_document_id_fkey FOREIGN KEY (library_document_id) REFERENCES library_documents(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'student_assignments_parent_id_fkey'
                     AND conrelid = 'student_assignments'::regclass) THEN
     ALTER TABLE student_assignments ADD CONSTRAINT student_assignments_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES auth.users(id) ON DELETE SET NULL;
@@ -3160,6 +3190,13 @@ DO $$ BEGIN
                   WHERE conname = 'teacher_class_events_classroom_id_fkey'
                     AND conrelid = 'teacher_class_events'::regclass) THEN
     ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_classroom_id_fkey FOREIGN KEY (classroom_id) REFERENCES teacher_guest_classes(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'teacher_class_events_library_document_id_fkey'
+                    AND conrelid = 'teacher_class_events'::regclass) THEN
+    ALTER TABLE teacher_class_events ADD CONSTRAINT teacher_class_events_library_document_id_fkey FOREIGN KEY (library_document_id) REFERENCES library_documents(id) ON DELETE CASCADE;
   END IF;
 END $$;
 DO $$ BEGIN
@@ -3597,8 +3634,8 @@ $function$;
 CREATE OR REPLACE FUNCTION public.admin_family_points(p_parents uuid[])
  RETURNS jsonb
  LANGUAGE plpgsql
- STABLE SECURITY DEFINER
- SET search_path TO 'public', 'extensions'
+ SECURITY DEFINER
+ SET search_path TO 'public'
 AS $function$
 DECLARE v jsonb;
 BEGIN
@@ -3627,7 +3664,8 @@ BEGIN
              coalesce(sum(qa.n), 0)::bigint            AS questions,
              coalesce(sum(qa.earned), 0)::bigint       AS earned,
              count(DISTINCT s.id)                      AS children,
-             max(sp.updated_at)                        AS last_seen
+             -- ⚠ the fix: the later of "earned a point" and "answered anything"
+             max(GREATEST(sp.updated_at, qa.seen))     AS last_seen
         FROM public.families f
         -- ⚠ LEFT JOIN throughout. A family with no children, or children who
         --   have never answered anything, must come back as 0 — not be absent,
@@ -3637,7 +3675,10 @@ BEGIN
         LEFT JOIN public.student_points sp ON sp.student_id = s.id
         LEFT JOIN LATERAL (
                SELECT count(*) FILTER (WHERE e.kind = 'question') AS n,
-                      coalesce(sum(e.points) FILTER (WHERE e.kind <> 'legacy'), 0) AS earned
+                      coalesce(sum(e.points) FILTER (WHERE e.kind <> 'legacy'), 0) AS earned,
+                      (SELECT max(pr.last_seen_at)
+                         FROM public.student_question_progress pr
+                        WHERE pr.student_id = s.id)                AS seen
                  FROM public.student_point_events e
                 WHERE e.student_id = s.id
              ) qa ON true
@@ -3646,7 +3687,8 @@ BEGIN
     ) x;
 
   RETURN jsonb_build_object('ok', true, 'families', coalesce(v, '{}'::jsonb));
-END $function$;
+END
+$function$;
 
 -- ── admin_log_action(p_action text, p_target_user uuid, p_target_student uuid, p_detail jsonb)
 CREATE OR REPLACE FUNCTION public.admin_log_action(p_action text, p_target_user uuid DEFAULT NULL::uuid, p_target_student uuid DEFAULT NULL::uuid, p_detail jsonb DEFAULT '{}'::jsonb)
@@ -6341,16 +6383,33 @@ BEGIN
   -- teacher wrote on this classroom's calendar. Read-only for the pupil; the
   -- teacher writes through RLS on teacher_class_events. The last 60 days are
   -- kept so a child can still see what they missed; nothing older is sent.
+  -- ⚠ A jsonb_build_object NEVER PICKS UP A NEW COLUMN FOR FREE, and that is
+  --   why a dated paper was not tappable on the class page: the column existed
+  --   on the table and was written correctly, this function simply never
+  --   mentioned it, and the omission is invisible — nothing errors, the field
+  --   is just absent.
+  -- ⚠ AN ID AND A FILENAME, NEVER A URL. The page builds the link the same way
+  --   every other surface does (seeded → /library/<filename>, contributed → the
+  --   worker, which re-checks the document is still published). A URL baked in
+  --   here would be a second definition of where a document lives.
+  -- ⚠ The LEFT JOIN is filtered to status='published', so an unpublished paper
+  --   leaves the date on the calendar with nothing to open rather than handing
+  --   out a link to a withdrawn file.
   SELECT coalesce(jsonb_agg(jsonb_build_object(
            'id',       e.id,
            'date',     e.date,
            'end_date', e.end_date,
            'kind',     e.kind,
            'title',    e.title,
-           'notes',    e.notes
+           'notes',    e.notes,
+           'library_document_id', e.library_document_id,
+           'doc_filename', d.filename,
+           'doc_storage',  d.storage
          ) ORDER BY e.date, e.created_at), '[]'::jsonb)
     INTO v_events
     FROM public.teacher_class_events e
+    LEFT JOIN public.library_documents d
+           ON d.id = e.library_document_id AND d.status = 'published'
    WHERE e.classroom_id = c.id
      AND coalesce(e.end_date, e.date) >= current_date - 60;
 
@@ -8984,7 +9043,7 @@ ALTER TABLE public.forum_replies ALTER COLUMN author_student_id SET DEFAULT curr
 
 -- ═══ 6 · INDEXES ══════════════════════════════════════════════════════════════
 -- Indexes that back a constraint are omitted — §3 creates those with the
--- constraint itself. 87 standalone indexes.
+-- constraint itself. 91 standalone indexes.
 CREATE INDEX IF NOT EXISTS admin_actions_student_idx ON public.admin_actions USING btree (target_student, created_at DESC);
 CREATE INDEX IF NOT EXISTS admin_actions_user_idx ON public.admin_actions USING btree (target_user, created_at DESC);
 CREATE INDEX IF NOT EXISTS submissions_assignment_idx ON public.assignment_submissions USING btree (assignment_id);
@@ -9013,6 +9072,7 @@ CREATE INDEX IF NOT EXISTS idx_ga_deleted_at ON public.guest_assignments USING b
 CREATE INDEX IF NOT EXISTS guest_material_completions_class_idx ON public.guest_material_completions USING btree (classroom_id, done_at DESC);
 CREATE INDEX IF NOT EXISTS guest_submissions_assignment_idx ON public.guest_submissions USING btree (assignment_id);
 CREATE INDEX IF NOT EXISTS guest_submissions_device_idx ON public.guest_submissions USING btree (assignment_id, device_code) WHERE (device_code IS NOT NULL);
+CREATE INDEX IF NOT EXISTS learning_materials_library_doc_idx ON public.learning_materials USING btree (library_document_id) WHERE (library_document_id IS NOT NULL);
 CREATE INDEX IF NOT EXISTS learning_materials_teacher_created_idx ON public.learning_materials USING btree (teacher_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS library_documents_pack_idx ON public.library_documents USING btree (pack_id) WHERE (pack_id IS NOT NULL);
 CREATE INDEX IF NOT EXISTS library_documents_shelf_idx ON public.library_documents USING btree (section_id, status, year DESC NULLS LAST);
@@ -9053,6 +9113,8 @@ CREATE INDEX IF NOT EXISTS security_events_user_idx ON public.security_events US
 CREATE INDEX IF NOT EXISTS assignments_classroom_idx ON public.student_assignments USING btree (classroom_id);
 CREATE INDEX IF NOT EXISTS assignments_source_idx ON public.student_assignments USING btree (source_type);
 CREATE INDEX IF NOT EXISTS student_assignments_completed_idx ON public.student_assignments USING btree (student_id, completed_at DESC) WHERE (completed_at IS NOT NULL);
+CREATE INDEX IF NOT EXISTS student_assignments_due_idx ON public.student_assignments USING btree (student_id, due_date) WHERE (completed_at IS NULL);
+CREATE INDEX IF NOT EXISTS student_assignments_library_idx ON public.student_assignments USING btree (library_document_id) WHERE (library_document_id IS NOT NULL);
 CREATE INDEX IF NOT EXISTS student_assignments_parent_idx ON public.student_assignments USING btree (parent_id);
 CREATE INDEX IF NOT EXISTS student_assignments_student_created_idx ON public.student_assignments USING btree (student_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS student_friends_b_idx ON public.student_friends USING btree (student_id_b);
@@ -9067,6 +9129,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS students_live_username_key ON public.students 
 CREATE INDEX IF NOT EXISTS subscriptions_plan_idx ON public.subscriptions USING btree (plan_id);
 CREATE INDEX IF NOT EXISTS subscriptions_user_status_idx ON public.subscriptions USING btree (user_id, status, started_at DESC);
 CREATE INDEX IF NOT EXISTS teacher_class_events_class_date_idx ON public.teacher_class_events USING btree (classroom_id, date);
+CREATE INDEX IF NOT EXISTS teacher_class_events_library_idx ON public.teacher_class_events USING btree (library_document_id) WHERE (library_document_id IS NOT NULL);
 CREATE INDEX IF NOT EXISTS idx_tgc_deleted_at ON public.teacher_guest_classes USING btree (deleted_at) WHERE (deleted_at IS NOT NULL);
 CREATE UNIQUE INDEX IF NOT EXISTS teacher_guest_classes_materials_code_uq ON public.teacher_guest_classes USING btree (materials_code) WHERE (materials_code IS NOT NULL);
 CREATE UNIQUE INDEX IF NOT EXISTS tgc_teacher_name_unique ON public.teacher_guest_classes USING btree (teacher_id, name) WHERE (deleted_at IS NULL);
@@ -10034,7 +10097,7 @@ GRANT EXECUTE ON FUNCTION public.mail_quota_record(p_n integer) TO service_role;
 GRANT EXECUTE ON FUNCTION public.mail_quota_release(p_n integer) TO service_role;
 GRANT EXECUTE ON FUNCTION public.mail_quota_take(p_want integer, p_cap integer, p_reserve integer) TO service_role;
 GRANT EXECUTE ON FUNCTION public.mark_report_seen(p_report_id uuid) TO anon, authenticated, service_role;
-GRANT EXECUTE ON FUNCTION public.materials_library_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean) TO service_role;
+GRANT EXECUTE ON FUNCTION public.materials_library_open(p_code text, p_name text, p_pin text, p_ip text, p_info boolean) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_create(p_question text, p_options jsonb) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_results(p_code text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.minigame_poll_vote(p_code text, p_option integer) TO anon, authenticated, service_role;
@@ -10107,6 +10170,9 @@ GRANT EXECUTE ON FUNCTION public.verify_student_pin_core(p_username text, p_pin 
 -- is learning_materials.link_expiry_seconds.
 INSERT INTO storage.buckets (id, name, public, file_size_limit)
   VALUES ('learning-materials', 'learning-materials', false, 10485760)
+  ON CONFLICT (id) DO NOTHING;
+INSERT INTO storage.buckets (id, name, public, file_size_limit)
+  VALUES ('library-uploads', 'library-uploads', false, 6291456)
   ON CONFLICT (id) DO NOTHING;
 INSERT INTO storage.buckets (id, name, public)
   VALUES ('question-images', 'question-images', true)

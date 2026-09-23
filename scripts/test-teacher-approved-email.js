@@ -87,7 +87,16 @@ const bodyOf = r => JSON.parse(r.body || '{}');
   const m = sent[0] || {};
   check('an approved teacher is mailed once', r.statusCode === 200 && bodyOf(r).sent === true && sent.length === 1);
   check('...to the address on the ACCOUNT, not one in the request', m.to === 'tara@example.test');
-  check('...with the fixed subject, ignoring the request', m.subject === 'Your PSAC Exam Practice teacher account is approved');
+  // ⚠ THE POINT IS THAT THE SUBJECT IS FIXED, not what the brand is. This
+  //   froze "Your PSAC Exam Practice teacher account is approved" and went red
+  //   on the rename to Nou Klass — reporting a working, correctly-guarded
+  //   endpoint as broken. What must hold: the caller cannot choose the subject.
+  //   The expected text is READ FROM THE WORKER so a rename never fails this
+  //   again, while a caller-supplied subject still does.
+  const realSubject = (fs.readFileSync('workers/api/teacher-approved-email.js', 'utf8')
+    .match(/const subject = '([^']+)'/) || [])[1];
+  check('...with the fixed subject, ignoring the request',
+    !!realSubject && m.subject === realSubject && m.subject !== 'INJECTED');
   check('...and nothing from the request body in the html', !/INJECTED/.test(m.html || '') && !/INJECTED/.test(m.text || ''));
   check('the display name is escaped in the html', /Hello Tara,/.test(m.html || '') && !/<b>Ramen/.test(m.html || ''));
 
