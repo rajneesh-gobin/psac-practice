@@ -63,7 +63,7 @@ function makeCtx({ replyOk = true, statusOk = true, boxes = {} } = {}) {
   for (const [id, value] of Object.entries(boxes)) els[id] = { value };
   const ctx = vm.createContext({
     console,
-    document: { getElementById: id => els[id] || null },
+    document: { getElementById: id => els[id] || null, querySelectorAll: () => [] },
     toast: m => toasts.push(String(m)),
     Store: {
       replyToReport: async (id, msg) => { calls.push(['reply', id, msg]); return { ok: replyOk }; },
@@ -161,7 +161,10 @@ function makeCtx({ replyOk = true, statusOk = true, boxes = {} } = {}) {
     const ctx = vm.createContext({
       console,
       _sb: { from: () => q },
-      document: { getElementById: id => (id === 'qm-reports-section' ? el : null) },
+      // ⚠ An empty document still answers querySelectorAll: the panel paints family
+      //   names onto [data-report-family] nodes now, and a stub missing that method
+      //   throws inside the module, which reads as the module being broken.
+      document: { getElementById: id => (id === 'qm-reports-section' ? el : null), querySelectorAll: () => [] },
       STATIC_QUESTIONS: [], SUBJECT_PACKS: [], QM: { qmOpenForm() {} },
     });
     vm.runInContext([LABELS, BADGE, ESC, PANEL].join('\n'), ctx, { filename: 'admin.js (panel)' });

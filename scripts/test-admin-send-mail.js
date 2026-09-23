@@ -149,6 +149,50 @@ function run({ emails = {}, pending = [], fetches = {} } = {}) {
   ok('the only mailto: left is the account-less contact-form guest',
     mailtos === 1 && /Sent from the contact form - no account/.test(SRC), mailtos);
 
+  // ── 7 · emailing the whole filtered group without the clipboard ────────
+  {
+    const got2 = (() => {
+      const needle = '\n  async function emailMemberGroup(';
+      const at = SRC.indexOf(needle);
+      if (at === -1) return null;
+      let i = SRC.indexOf('{', at + needle.length), depth = 0, end = -1;
+      for (let j = i; j < SRC.length; j++) {
+        const c = SRC[j];
+        if (c === '{') depth++;
+        else if (c === '}') { depth--; if (depth === 0) { end = j; break; } }
+      }
+      return SRC.slice(at + 1, end + 1);
+    })();
+    ok('emailMemberGroup() exists', !!got2);
+    ok('it is exported on AdminPanel', /\bemailMemberGroup,/.test(SRC));
+    // ⚠ This button is in index.html, not admin.js — the member ROWS are built
+    //   by admin.js but the toolbar above them is static markup.
+    const HTML = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+    ok('the toolbar has a button for it', /AdminPanel\.emailMemberGroup\(\)/.test(HTML));
+    ok('and admin.js relabels it with the filter',
+      /admin-email-group/.test(SRC) && /Email the unfinished setups/.test(SRC));
+    // ⚠ BOTH buttons must walk the same list, including unloaded pages. Two
+    //   collectors would let an admin copy one set of people and email another.
+    ok('copy and email share one collector',
+      (SRC.match(/_collectMemberEmails\(/g) || []).length >= 3,
+      (SRC.match(/_collectMemberEmails\(/g) || []).length);
+    if (got2) {
+      // ⚠ /api/admin-compose caps at MAX_TO = 20 and rejects the whole send
+      //   above it. Prefilling the first 20 of a longer list looks like it
+      //   worked and quietly leaves people out.
+      ok('it refuses above the compose cap instead of truncating',
+        /MAX_COMPOSE_TO/.test(got2) && !/\.slice\(0,\s*MAX_COMPOSE_TO\)/.test(got2), got2.slice(0, 200));
+      ok('and it opens the compose form with the addresses',
+        /openCompose\(list\.join/.test(got2));
+    }
+    // the cap must match the server's, or the form accepts what the API refuses
+    const serverCap = (fs.readFileSync(path.resolve(__dirname, '../workers/api/admin-compose.js'), 'utf8')
+      .match(/const MAX_TO\s*=\s*(\d+)/) || [])[1];
+    const clientCap = (SRC.match(/const MAX_COMPOSE_TO\s*=\s*(\d+)/) || [])[1];
+    ok('the client cap matches the server MAX_TO', serverCap && clientCap && serverCap === clientCap,
+      { server: serverCap, client: clientCap });
+  }
+
   console.log(`\nAdmin send mail: ${pass} passed, ${fail} failed.`);
   process.exit(fail ? 1 : 0);
 })();

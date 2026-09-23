@@ -121,6 +121,12 @@ console.log('guard 2 — renderAnswerArea()');
     // The MCQ branch now measures option length to decide a two-column layout.
     _plainText: s => String(s == null ? '' : s).replace(/<[^>]+>/g, ''),
     SYMBOL_KEYS: {},
+    // ⚠ A LATER ADDITION renderAnswerArea() consults before drawing a typed
+    //   field. In app.js it is `function _shouldShowAsBlank(_q) { return false; }`
+    //   — a switched-off experiment — so false is not a convenient stub, it is
+    //   what the app does. Left undefined it threw, and this file reported
+    //   nothing about unsupported types for as long as it was red.
+    _shouldShowAsBlank: () => false,
   };
   vm.createContext(sandbox);
   vm.runInContext(fn, sandbox);

@@ -832,6 +832,12 @@ const AdminPanel = (() => {
     if (button) button.textContent = pending ? '📋 Copy unactivated emails'
       : setup ? '📋 Copy unfinished-setup emails'
       : all ? '📋 Copy all matching emails' : '📋 Copy activated emails';
+    // ⚠ Tracks the same filter as the copy button. If the two ever named
+    //   different groups, an admin would copy one set and email another.
+    const mailBtn = document.getElementById('admin-email-group');
+    if (mailBtn) mailBtn.textContent = pending ? '✉️ Email the unactivated'
+      : setup ? '✉️ Email the unfinished setups'
+      : all ? '✉️ Email all matching' : '✉️ Email the activated';
     if (help) help.textContent = pending
       ? 'Copies everyone who has registered but has not confirmed their email yet, including unloaded pages. Use Bcc when emailing a group.'
       : setup
@@ -1564,18 +1570,16 @@ const AdminPanel = (() => {
     }
   }
 
-  async function copyMemberEmails() {
-    const button = document.getElementById('admin-copy-emails');
-    if (!_sb || button?.disabled) return;
-    const status = _memberStatusFilter;
-    const visibility = _memberVisibility();
-    const search = (document.getElementById('admin-member-search')?.value || '').trim();
-    const output = document.getElementById('admin-copy-emails-output');
-    const message = document.getElementById('admin-copy-emails-status');
-    if (button) button.disabled = true;
-    if (output) { output.value = ''; output.classList.add('hidden'); }
-    if (message) message.textContent = 'Collecting all matching emails…';
-    try {
+  // ⚠ ONE COLLECTOR, TWO BUTTONS. Copy and "Email them all" must agree about
+  //   who is in the group — including the pages that were never scrolled into
+  //   view — or an admin copies fifteen addresses and emails a different twelve.
+  //   Extracted from copyMemberEmails() when the second button was added; it is
+  //   the same walk over profiles and pending registrations, unchanged.
+  async function _collectMemberEmails(progress = () => {}) {
+      const status = _memberStatusFilter;
+      const visibility = _memberVisibility();
+      const search = (document.getElementById('admin-member-search')?.value || '').trim();
+      const message = { set textContent(v) { progress(v); } };
       const emails = new Map();
       let missing = 0;
       const add = value => {
@@ -1621,6 +1625,65 @@ const AdminPanel = (() => {
           cursor = next;
         } while (cursor);
       }
+      return { emails, missing };
+  }
+
+  // ── Email this whole filtered group, without the clipboard round trip ────
+  //
+  // ⚠ NEVER TRUNCATE TO FIT. /api/admin-compose caps at MAX_TO = 20 and rejects
+  //   the whole send above it. Prefilling the first 20 of a longer list would
+  //   look like it worked and quietly leave people out — the exact failure the
+  //   compose endpoint refuses to make ("one bad address fails the whole send").
+  //   Over the cap we say so and leave the list on screen to copy instead.
+  // ⚠ This is the CORRESPONDENCE form: no opt-out check, no unsubscribe link.
+  //   Right for a reply to someone who wrote in; for a nudge to people who have
+  //   not asked to hear from us, the ticked "Email selected" path is the honest
+  //   one, and the note under the button says so.
+  const MAX_COMPOSE_TO = 20;
+
+  async function emailMemberGroup() {
+    const button = document.getElementById('admin-email-group');
+    if (!_sb || button?.disabled) return;
+    const output = document.getElementById('admin-copy-emails-output');
+    const message = document.getElementById('admin-copy-emails-status');
+    if (button) button.disabled = true;
+    if (output) { output.value = ''; output.classList.add('hidden'); }
+    if (message) message.textContent = 'Collecting all matching emails…';
+    try {
+      const { emails, missing } = await _collectMemberEmails(t => { if (message) message.textContent = t; });
+      const list = [...emails.values()];
+      if (!list.length) {
+        if (message) message.textContent = missing
+          ? `No emails available; ${missing} matching accounts had no retrievable email.`
+          : 'No emails match these filters.';
+        return;
+      }
+      if (list.length > MAX_COMPOSE_TO) {
+        if (output) { output.value = list.join(', '); output.classList.remove('hidden'); }
+        if (message) message.textContent = `${list.length} addresses is more than one message can take `
+          + `(${MAX_COMPOSE_TO}). Tick the people you want and use the group email, or copy the list below.`;
+        return;
+      }
+      openCompose(list.join(', '));
+      if (message) message.textContent = `${list.length} address${list.length === 1 ? '' : 'es'} loaded into a new email`
+        + `${missing ? `; ${missing} accounts had no retrievable email` : ''}. Two or more go out as Bcc.`;
+    } catch (error) {
+      if (message) message.textContent = error.message || 'Could not collect emails. Please try again.';
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
+
+  async function copyMemberEmails() {
+    const button = document.getElementById('admin-copy-emails');
+    if (!_sb || button?.disabled) return;
+    const output = document.getElementById('admin-copy-emails-output');
+    const message = document.getElementById('admin-copy-emails-status');
+    if (button) button.disabled = true;
+    if (output) { output.value = ''; output.classList.add('hidden'); }
+    if (message) message.textContent = 'Collecting all matching emails…';
+    try {
+      const { emails, missing } = await _collectMemberEmails(t => { if (message) message.textContent = t; });
       const text = [...emails.values()].join(', ');
       if (!text) {
         if (message) message.textContent = missing ? `No emails available; ${missing} matching accounts had no retrievable email.` : 'No emails match these filters.';
@@ -6479,7 +6542,7 @@ const AdminPanel = (() => {
   return { render, showTab, loadMembers, membersPage, filterMembers, copyMemberEmails, copyPendingEmail, setMemberStatusFilter, setMemberVisibilityFilters,
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
     toggleMemberPick, toggleSelectAllMembers, clearMemberPicks, openBroadcast, closeBroadcast,
-    openCompose, closeCompose, composePreview, sendCompose, sendMailTo,
+    openCompose, closeCompose, composePreview, sendCompose, sendMailTo, emailMemberGroup,
     loadLibraryQueue, libraryDecide, loadLibraryReports, dismissLibraryReport,
     loadLibraryShelves, addLibrarySection, setLibrarySectionStatus, renameLibrarySection,
     toggleTeacherRow, toggleSelectAllTeachers, emailOneMember,

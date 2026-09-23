@@ -71,6 +71,15 @@ function load({ storage, studentSession = null, parentToken = null, activeStuden
     SUBJECT_PACKS: [],
     Store: { getStudentSession: () => sandbox._sess },
     _sb: { auth: { getSession: async () => ({ data: { session: parentToken ? { access_token: parentToken } : null } }) } },
+    // ⚠ QuestionLoader announces a successful load by dispatching
+    //   'ql-questions-ready' on the document. That line was added after this
+    //   harness was written and, with no document here, it threw — so the file
+    //   crashed midway and stopped reporting on cache ISOLATION BETWEEN
+    //   CHILDREN, which is the thing it exists to guard. Counting the events
+    //   rather than swallowing them: a load that goes quiet is its own defect.
+    _events: [],
+    CustomEvent: class { constructor(type) { this.type = type; } },
+    document: { dispatchEvent(e) { sandbox._events.push(e && e.type); return true; } },
   };
   sandbox.window = sandbox;
   vm.createContext(sandbox);

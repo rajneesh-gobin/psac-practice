@@ -92,19 +92,37 @@ const ROWS = [
 ];
 
 function run(rows) {
-  let selected = null;
+  // ⚠⚠ RECORD PER TABLE. One shared query object meant the LAST select() won,
+  //    and the panel grew a second query — students(id,family_id), to name the
+  //    family behind a report. So `selected` became "id,family_id" and six
+  //    assertions about the REPORT columns failed, describing a panel that
+  //    fetches nothing it needs. It fetches all of them. The stub was lying.
+  const selectedBy = Object.create(null);
   const filters = [];
-  const q = {
-    select(cols, opts) { selected = cols; this._opts = opts; return this; },
-    eq(col, val) { filters.push(['eq', col, val]); return this; },
-    in(col, vals) { filters.push(['in', col, vals.slice().sort().join('|')]); return this; },
+  const makeQ = (table) => ({
+    select(cols, opts) { selectedBy[table] = cols; this._opts = opts; return this; },
+    eq(col, val) { if (table === 'question_reports') filters.push(['eq', col, val]); return this; },
+    in(col, vals) { if (table === 'question_reports') filters.push(['in', col, vals.slice().sort().join('|')]); return this; },
     order() { return this; },
     limit() { return Promise.resolve({ data: rows, error: null, count: rows.length }); },
-  };
+    then(resolve) { resolve({ data: [], error: null }); },
+  });
   const el = { id: 'qm-reports-section', innerHTML: '', querySelectorAll: () => [] };
   const ctx = vm.createContext({
-    _sb: { from: () => q },
-    document: { getElementById: id => (id === 'qm-reports-section' ? el : null) },
+    _sb: { from: (table) => makeQ(table) },
+    // ⚠ A later addition that fetches parent addresses for the family panel.
+    //   Not what this file tests, and left undefined it threw.
+    _loadMemberEmails: async () => {},
+    // ⚠ AN EMPTY DOCUMENT STILL ANSWERS querySelectorAll. The panel gained a
+    //   pass that paints family names onto [data-report-family] nodes, and a
+    //   stub missing that method threw inside the module — which reads as the
+    //   module being broken rather than the stub being thin. Returning [] is
+    //   the truth here: this harness renders into one detached element, so
+    //   there are no such nodes.
+    document: {
+      getElementById: id => (id === 'qm-reports-section' ? el : null),
+      querySelectorAll: () => [],
+    },
     // The stem is innerHTML and, since the Grade 1-2 visual banks, can be a
     // whole inline <svg>. The panel must not print that markup at the admin.
     STATIC_QUESTIONS: [{
@@ -114,10 +132,25 @@ function run(rows) {
     }],
     SUBJECT_PACKS: [{ id: 'grade5-english', name: 'English', grade: 5, chapters: [{ id: 'g5eng-passages', name: 'Passages & Text Types' }] }],
     QM: { qmOpenForm() {} },
+    // ⚠ THE REAL ESCAPER, READ FROM admin.js, NOT A LOOKALIKE. The panel
+    //   started calling _esc() and this harness crashed on the missing symbol,
+    //   so it reported nothing about the report queue for as long as it was
+    //   red. A hand-written stub here would be worse than the crash: half this
+    //   file is about whether a report's text is ESCAPED before an admin sees
+    //   it, and a stub that escaped differently would pass while the app let
+    //   markup through.
+    _esc: (() => {
+      const at = src.indexOf('  function _esc(str) {');
+      if (at < 0) throw new Error('admin.js _esc moved or was renamed');
+      const box = {};
+      vm.runInContext(src.slice(at, src.indexOf('\n  }', at) + 4) + '; this.fn = _esc;',
+        vm.createContext(box));
+      return box.fn;
+    })(),
     console,
   });
   vm.runInContext(blocks, ctx, { filename: 'admin.js (pending-report panel)' });
-  return { ctx, el, filters, run: ctx._loadPendingReports().then(() => ({ html: el.innerHTML, selected, filters })) };
+  return { ctx, el, filters, run: ctx._loadPendingReports().then(() => ({ html: el.innerHTML, selected: selectedBy['question_reports'], filters })) };
 }
 
 // The badge is a second query against the same idea. It gets the same stub, so
@@ -147,6 +180,7 @@ const ok = (cond, msg) => { if (cond) pass++; else { fail++; console.log('  FAIL
 (async () => {
   const { run: pending } = run(ROWS);
   const { html, selected, filters } = await pending;
+  console.log('DEBUG selected =', JSON.stringify(selected));
 
   console.log('\nthe queue is open AND in_review, in both places');
   const statusFilter = filters.find(f => f[1] === 'status');
