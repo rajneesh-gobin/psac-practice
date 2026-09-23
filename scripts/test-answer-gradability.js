@@ -58,8 +58,20 @@ const NONSENSE = 'zzqqxx nonsense answer 9137';
 //   grade5-maths items were reported as broken by an earlier version of this
 //   file for exactly that reason — the harness was wrong, not the questions.
 //   Probe each type the way the app actually submits it.
-const probeFor = q => q.type === 'symmetry' ? JSON.stringify(q.answer) : q.answer;
-const nonsenseFor = q => q.type === 'symmetry' ? JSON.stringify([[97, 98], [98, 97]]) : NONSENSE;
+// ⚠⚠ AND THE SAME WAS TRUE OF `multi`, WHICH THIS MISSED FOR MONTHS. A multi
+//    answer is an ARRAY of option labels and the app submits
+//    JSON.stringify([...selected]) — verified in app.js's answer reader, and
+//    both copies of checkAnswer() JSON.parse it identically. Handing it the raw
+//    array coerced to "a,b,c", failed JSON.parse, and reported all 12 `multi`
+//    questions in the corpus as "a child who answers perfectly is told they are
+//    wrong". They are fine. The lesson above was learned for one array type and
+//    not applied to the other.
+// ⚠ A SET, not two special cases, so the third array type gets it for free.
+const JSON_SUBMITTED = new Set(['symmetry', 'multi']);
+const probeFor = q => JSON_SUBMITTED.has(q.type) ? JSON.stringify(q.answer) : q.answer;
+const nonsenseFor = q => q.type === 'symmetry' ? JSON.stringify([[97, 98], [98, 97]])
+  : q.type === 'multi' ? JSON.stringify([NONSENSE])
+  : NONSENSE;
 // `symmetry-line` is marked by SymmetryLine.checkAnswer against a stored line
 // spec rather than a submitted value; it has its own harness
 // (scripts/test-symmetry-line.js) and is not gradable through this probe.

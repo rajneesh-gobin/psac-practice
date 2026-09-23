@@ -735,10 +735,19 @@ const GameSettings = (() => {
     const own = childGrade();
     const g = Number(grade);
     const choices = (typeof GradeAccess !== 'undefined') ? GradeAccess.childChoices(own) : [own];
-    if (g === own || !choices.includes(g) || _gradeLoading.has(g)) return;
+    if (g === own || !choices.includes(g)) return;
     DB.games = DB.games || {};
     const cur = new Set((Array.isArray(DB.games.sourceGrades) ? DB.games.sourceGrades : []).map(Number));
     const adding = !cur.has(g);
+    // ⚠⚠ THE LOADING GUARD IS FOR ADDING ONLY. It used to sit in the line above
+    //    and refuse the toggle outright — but the spinner is held for at least
+    //    10 seconds after a grade is switched ON, so a child who tapped a chip
+    //    on and immediately changed their mind could not turn it OFF again for
+    //    ten seconds, with the chip still showing as chosen and nothing saying
+    //    why. The guard exists to give the server breathing room between
+    //    question FETCHES; removing a grade fetches nothing, so it has no
+    //    business being stopped.
+    if (adding && _gradeLoading.has(g)) return;
     if (adding) cur.add(g); else cur.delete(g);
     DB.games.sourceGrades = [...cur].filter(x => x !== own && choices.includes(x)).sort((a, b) => a - b);
     // ⚠ `save` inside this module is the parent card's own save(); the blob
