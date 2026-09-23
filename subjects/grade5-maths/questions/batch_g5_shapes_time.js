@@ -50,12 +50,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'G5SH07', chapterId:'geometry', subsection:'2d_shapes', difficulty:1,
     question:'The DIAMETER of a circle is — ',
-    options:[
-      'the distance from the centre to the edge',
-      'the distance all the way around the outside',
-      'a line from one side to the other passing through the centre',
-      'half the radius'
-    ],
+    options:["a line from one side to the other passing through the centre","the distance from the centre of the circle to its edge","half of the radius, measured from the centre point","the distance all the way around the outside edge"],
     answer:'a line from one side to the other passing through the centre',
     hint:'Diameter goes all the way across. Radius only goes halfway.',
     explanation:'The <b>diameter</b> passes through the centre from one side of the circle to the other. Diameter = 2 × radius. The distance from the centre to the edge is the <b>radius</b>, and the distance all the way round is the <b>circumference</b>.' }),
@@ -81,12 +76,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'G5SH11', chapterId:'geometry', subsection:'2d_shapes', difficulty:2,
     question:'Which statement about a PARALLELOGRAM is correct?',
-    options:[
-      'All four angles are right angles',
-      'Opposite sides are equal and parallel, opposite angles are equal',
-      'All four sides are equal',
-      'It has 4 lines of symmetry'
-    ],
+    options:["Opposite sides are equal and parallel, opposite angles are equal","It has four lines of symmetry and four equal angles too","All four angles are right angles and all four sides equal","All four sides are equal in length and all angles equal"],
     answer:'Opposite sides are equal and parallel, opposite angles are equal',
     hint:'A parallelogram is like a pushed-over rectangle.',
     explanation:'A <b>parallelogram</b> has opposite sides that are equal and parallel, and opposite angles that are equal. Unlike a rectangle, its angles are not 90° (unless it is a rectangle). A rhombus is a parallelogram with all 4 sides equal.' }),

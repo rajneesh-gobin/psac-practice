@@ -163,7 +163,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5m-syl-022', chapterId:'graphs', subsection:'pictogram', difficulty:3,
     question:'You must <b>draw</b> a <b>pictogram</b> for 45 mangoes and 1 symbol stands for 10 mangoes. What will you draw?',
-    options:['Four symbols and a half symbol','Four symbols only','Five symbols only','Forty-five symbols'], answer:'Four symbols and a half symbol',
+    options:["Four symbols and a half symbol","Five whole symbols only","Four whole symbols only","Forty-five small symbols"], answer:'Four symbols and a half symbol',
     hint:'45 is not a whole number of tens.',
     explanation:'45 &divide; 10 = 4.5, so you draw <b>four whole symbols and a half one</b>. Half symbols are how a pictogram shows a part.' }),
 

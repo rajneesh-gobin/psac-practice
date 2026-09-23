@@ -65,12 +65,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6m-geo-005', chapterId:'g6-geometry', subsection:'2d_shapes', difficulty:2,
     question:'Two lines are PARALLEL. What does this mean?',
-    options:[
-      'They cross at a right angle',
-      'They are the same line',
-      'They never meet and stay the same distance apart',
-      'They cross at an acute angle'
-    ],
+    options:["They never meet and stay the same distance apart","They are really the same line drawn twice","They cross each other at a right angle","They cross each other at an acute angle"],
     answer:'They never meet and stay the same distance apart',
     hint:'Think of railway tracks - they go in the same direction forever without crossing.',
     explanation:'<b>Parallel lines</b> always remain the same distance apart and <b>never intersect</b>, no matter how far they are extended. They are marked with arrows (→→) on diagrams.' }),

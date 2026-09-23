@@ -29,12 +29,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6m-hcf-001', chapterId:'g6-factors-hcf', subsection:'primes', difficulty:1,
     question:'What is a PRIME NUMBER?',
-    options:[
-      'A number divisible by itself only',
-      'A number that has exactly two factors: 1 and itself',
-      'An even number greater than 2',
-      'A number divisible by 2 and 3'
-    ],
+    options:["A number that has exactly two factors: 1 and itself","A number that can be divided by itself only","Any even number that is greater than two","A number that can be divided by both 2 and 3"],
     answer:'A number that has exactly two factors: 1 and itself',
     hint:'Examples: 2, 3, 5, 7, 11, 13... Is 1 prime?',
     explanation:'A <b>prime number</b> has exactly <b>two factors</b>: 1 and itself. Examples: 2, 3, 5, 7, 11. Note: 1 is NOT prime (it has only one factor). 2 is the only even prime number.' }),

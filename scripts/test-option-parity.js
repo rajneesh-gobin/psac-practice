@@ -109,11 +109,13 @@ const BASELINE = {
   'grade5-english': { leaks: 38 },
   'grade5-french':  { leaks: 57 },
   // grade5-history cleared 2026-09-08 by a parallel pass - entry deleted, not relaxed.
-  'grade5-maths':   { leaks: 1 },
+  // grade5-maths cleared 2026-09-23 - entry deleted, not relaxed. Its leaks were new,
+  // arrived with a batch of added questions, and were worked off the same day.
   // grade5-science cleared 2026-09-08 by a parallel pass - entry deleted, not relaxed.
   // grade6-english cleared 2026-09-08 by a parallel pass - entry deleted, not relaxed.
   'grade6-french':  { leaks: 66 },
-  'grade6-maths':   { leaks: 2 },
+  // grade6-maths cleared 2026-09-23 - entry deleted, not relaxed. Its leaks were new,
+  // arrived with a batch of added questions, and were worked off the same day.
 };
 
 let failures = 0;
@@ -303,9 +305,30 @@ for (const pack of PACKS) {
   //   `/MIE/i` matches inside ordinary French: le mieux, premiers, amies,
   //   ennemie - it reported 41 items in grade4-french and 114 in grade5-french,
   //   every one a false positive, the first time this harness saw those packs.
+  // ⚠⚠ `textbook` AS A BARE WORD IS A FALSE-POSITIVE GENERATOR. Measured
+  //    2026-09-23 across every live pack: it fired on exactly two items and
+  //    neither was genuine - how many chapters "a history textbook" has (a
+  //    Roman-numeral question, g3mth-rom-056) and at which level Mauritius
+  //    gives textbooks free of charge (a policy fact, g9sms-pi054). Both
+  //    blocked the build while the check caught nothing real.
+  // ⚠ What it is FOR is a question that cannot be answered without the book
+  //   in hand - a SELF-reference - so that is what it matches now. `MIE` and
+  //   `Pupil's Book` were already correct and are unchanged.
+  const isMetaRef = t =>
+    /\bMIE\b/.test(t) || /Pupil.s Book/i.test(t) ||
+    /\byour textbook\b/i.test(t) ||
+    /\b(?:in|from|on|according to|refer to|consult|see|as shown in)\s+(?:your|the)\s+textbook\b/i.test(t);
+  // ⚠ It matches NOTHING in the corpus today, so assert it both ways or it
+  //   can rot into a no-op that always passes with nothing saying so.
+  for (const bad of ['Look at your textbook and answer', 'According to the textbook, which',
+                     'See the Pupil\u2019s Book table', 'The MIE syllabus lists which topic'])
+    if (!isMetaRef(bad)) fail('the textbook check stopped catching: ' + bad);
+  for (const good of ['A history textbook has XX chapters', 'textbooks are given free of charge',
+                      'You drop your book. What do you say?'])
+    if (isMetaRef(good)) fail('the textbook check false-positives on: ' + good);
   const meta = qs.filter(q => {
     const t = deUrl(strip(q.question));
-    return /MIE/.test(t) || /Pupil.s Book|textbook/i.test(t);
+    return isMetaRef(t);
   });
   if (meta.length) fail(meta.length + ' question(s) reference the textbook in the question text: ' +
     meta.map(q => q.id).join(' '));

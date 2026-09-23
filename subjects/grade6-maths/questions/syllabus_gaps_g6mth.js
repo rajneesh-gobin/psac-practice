@@ -100,7 +100,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6m-syl-013', chapterId:'g6-four-ops', subsection:'mixed_ops', difficulty:3,
     question:'A shopkeeper works out 8 &times; 250 in his head as 4 &times; 500. Why does that work?',
-    options:['Halving one factor and doubling the other keeps the product','He has changed the answer slightly','It only works with the number 8','He should have used 2 &times; 1000 instead'], answer:'Halving one factor and doubling the other keeps the product',
+    options:["Halving one factor and doubling the other keeps the product","He should have used 2 &times; 1000 instead of changing it","He has changed the answer slightly by doing this","It only works when one factor is the number 8"], answer:'Halving one factor and doubling the other keeps the product',
     hint:'Check both: 8 × 250 and 4 × 500.',
     explanation:'Halving one factor while doubling the other <b>leaves the product unchanged</b>, so 8 &times; 250 = 4 &times; 500 = 2 000. Explaining why a mental method works is the Grade 6 outcome.' }),
 

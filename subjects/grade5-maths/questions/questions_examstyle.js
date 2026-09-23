@@ -182,7 +182,7 @@ const EX = [
 
   makeMCQ({ id:'EG05', chapterId:'geometry', subsection:'angles', difficulty:3,
     question:'Which angles are <b>equal</b> in a kite?',
-    options:['The two angles between unequal sides','The top and bottom angles','All four angles','None of the angles'],
+    options:["The two angles between unequal sides","The top and the bottom angles only","All four of the angles are equal","None of the angles are equal"],
     answer:'The two angles between unequal sides',
     hint:'In a kite, the angles between the unequal sides are equal.',
     explanation:'A kite has one pair of equal angles - the angles between the pairs of unequal sides.' }),

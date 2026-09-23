@@ -367,11 +367,11 @@ STATIC_QUESTIONS.push(
     explanation:'La description d\'une personne comporte deux volets : la <b>description physique</b> (apparence) et la <b>description morale</b> (caractère, personnalité, qualités). Les élèves oublient souvent le portrait moral.' }),
 
   makeMCQ({ id:'g9fr-egv-052', chapterId:'g9fr-ecrit-guide', subsection:'points_imposes', difficulty:3,
-    question:'Le point imposé est de « réagir à une nouvelle inattendue ». Laquelle de ces réponses est la plus développée ?',
-    options:['Quelle surprise ! Je n\'aurais jamais imaginé que tu remporterais ce concours. Tu mérites vraiment cette récompense après tous tes efforts.','Oh !','Super.','C\'est bien.'],
+    question:'Le point imposé est de « réagir à une nouvelle inattendue ». Laquelle de ces réponses développe le mieux ce point ?',
+    options:["Quelle surprise ! Je n'aurais jamais imaginé que tu remporterais ce concours. Tu mérites vraiment cette récompense après tous tes efforts.","Super. C'est vraiment super. Je trouve ça super et je te le redis encore une fois : c'est super, franchement super pour toi.","C'est bien. Oui, c'est bien, je trouve que c'est bien. Je pense vraiment que c'est bien et je te dis que c'est très bien.","Au fait, sais-tu que le match de samedi a été reporté ? Je voulais aussi te demander si tu avais rendu le livre à la bibliothèque."],
     answer:'Quelle surprise ! Je n\'aurais jamais imaginé que tu remporterais ce concours. Tu mérites vraiment cette récompense après tous tes efforts.',
-    hint:'Un point bien développé contient plusieurs phrases avec des détails.',
-    explanation:'La première option est la plus développée : elle exprime <b>la surprise</b> (Quelle surprise !), <b>l\'incrédulité</b> (je n\'aurais jamais imaginé), et <b>la valorisation</b> (tu mérites cette récompense). C\'est un développement complet du point imposé.' }),
+    hint:'Développer, c’est apporter plusieurs idées différentes, pas seulement plus de mots.',
+    explanation:'La bonne réponse enchaîne trois idées distinctes : <b>la surprise</b> (Quelle surprise !), <b>l’incrédulité</b> (je n’aurais jamais imaginé) et <b>la valorisation</b> (tu mérites cette récompense). Les deux premières propositions sont longues mais répètent une seule idée ; la dernière est développée mais ne réagit pas à la nouvelle. <b>La longueur n’est pas le développement.</b>' }),
 
   makeMCQ({ id:'g9fr-egv-053', chapterId:'g9fr-ecrit-guide', subsection:'points_imposes', difficulty:2,
     question:'Quel est l\'impact d\'un point imposé traité hors contexte (sans lien logique avec le reste du texte) ?',
