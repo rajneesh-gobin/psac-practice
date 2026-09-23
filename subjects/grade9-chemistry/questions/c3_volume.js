@@ -80,11 +80,7 @@ STATIC_QUESTIONS.push(makeMCQ({
 STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-c3-v007', chapterId: CH, subsection: 'rearrangement_of_atoms', difficulty: 3,
   question: 'When wood burns in air it seems to lose mass. What is the correct explanation?',
-  options: [
-    'Gaseous products (CO₂ and H₂O vapour) escape into the air; the mass of solid ash left is less than wood plus oxygen consumed',
-    'Atoms in the wood are destroyed by the energy of combustion',
-    'The carbon in the wood is converted to energy, reducing the mass',
-    'Mass is lost as heat energy radiates from the fire'],
+  options: ["Gaseous products (CO₂ and H₂O vapour) escape into the air; the mass of solid ash left is less than wood plus oxygen consumed","The carbon in the wood is converted directly into pure energy, and that conversion is what reduces the total mass present","Mass is lost as heat energy radiates away from the burning fire into the surrounding air of the room and is carried off","Atoms in the wood are destroyed by the energy of the combustion, so far fewer atoms remain once the burning is over"],
   answer: 'Gaseous products (CO₂ and H₂O vapour) escape into the air; the mass of solid ash left is less than wood plus oxygen consumed',
   hint: 'The system is open — gases escape.',
   explanation: 'In an open system, CO₂ and water vapour escape; weighed correctly (closed system), the total mass of products equals wood mass plus oxygen consumed. The apparent loss is because the gaseous products are not collected.'
@@ -139,7 +135,7 @@ STATIC_QUESTIONS.push(makeMCQ({
 STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-c3-v013', chapterId: CH, subsection: 'formulae_of_compounds', difficulty: 2,
   question: 'What does the small number 2 represent in the formula H₂SO₄?',
-  options: ['Two hydrogen atoms in one molecule of sulfuric acid', 'Two molecules of sulfuric acid', 'The valency of sulfur', 'Two atoms of sulfur'],
+  options: ["Two hydrogen atoms in one molecule of sulfuric acid","Two atoms of sulfur in one molecule of the acid","The valency of the sulfur atom in the acid","Two whole molecules of sulfuric acid"],
   answer: 'Two hydrogen atoms in one molecule of sulfuric acid',
   hint: 'A subscript after a symbol refers to that element only.',
   explanation: 'In H₂SO₄, the subscript 2 after H means there are 2 hydrogen atoms in each molecule; S appears once (1 atom) and O appears 4 times.'
@@ -339,11 +335,7 @@ STATIC_QUESTIONS.push(makeNum({
 STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-c3-v031', chapterId: CH, subsection: 'balancing_equations', difficulty: 2,
   question: 'What does a large number placed in FRONT of a formula in a balanced equation represent?',
-  options: [
-    'The number of formula units (molecules or moles) of that substance',
-    'The number of atoms in one molecule of the substance',
-    'The valency of the substance',
-    'The number of electrons transferred in the reaction'],
+  options: ["The number of formula units (molecules or moles) of that substance","The number of atoms present in one molecule of the substance","The valency of the substance in the reaction being shown","The number of electrons transferred during the reaction"],
   answer: 'The number of formula units (molecules or moles) of that substance',
   hint: 'In 3H₂O, the 3 is in front, not a subscript.',
   explanation: 'A large number (coefficient) in front of a formula multiplies the entire formula unit; it is the number of molecules (or moles) of that substance involved in the reaction, not a change to the formula itself.'
@@ -383,11 +375,7 @@ STATIC_QUESTIONS.push(makeNum({
 STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-c3-v035', chapterId: CH, subsection: 'balancing_equations', difficulty: 3,
   question: 'A student writes: 2H₂ + 2O₂ → 2H₂O. Why is this equation incorrect even though atoms appear balanced?',
-  options: [
-    'The coefficients are not in the simplest whole-number ratio; the correct equation is 2H₂ + O₂ → 2H₂O',
-    'Hydrogen and oxygen cannot react at room temperature so the equation is physically wrong',
-    'The arrow should point both ways because the reaction is reversible',
-    'The product should be H₂O₂ not H₂O because two oxygen atoms react'],
+  options: ["The coefficients are not in the simplest whole-number ratio; the correct equation is 2H₂ + O₂ → 2H₂O","The product should be H₂O₂ and not H₂O, because two oxygen atoms take part in the reaction","Hydrogen and oxygen cannot react at room temperature, so the equation is physically impossible","The arrow should point both ways because the reaction between hydrogen and oxygen is reversible"],
   answer: 'The coefficients are not in the simplest whole-number ratio; the correct equation is 2H₂ + O₂ → 2H₂O',
   hint: 'A balanced equation should use the simplest whole-number ratios.',
   explanation: '2H₂ + 2O₂ → 2H₂O has all coefficients divisible by 2; dividing through gives 2H₂ + O₂ → 2H₂O, the conventional balanced equation. An equation with non-simplest ratios is technically not wrong for atom count but is not the standard form.'

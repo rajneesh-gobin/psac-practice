@@ -295,7 +295,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-cmy-032', chapterId: 'g9s-c4-metals', difficulty: 3,
   subsection: 'reactivity_series',
   question: 'A student adds iron to a solution of copper sulfate. A reddish-brown solid coats the iron. What does this demonstrate?',
-  options: ['Iron is more reactive than copper and displaces it from its salt', 'Copper is more reactive than iron', 'Iron and copper have the same reactivity', 'Copper is too reactive to be displaced by iron'],
+  options: ["Iron is more reactive than copper and displaces it from its salt","Copper is more reactive than iron and so coats the iron","Copper is far too reactive to be displaced by iron","Iron and copper have exactly the same reactivity"],
   answer: 'Iron is more reactive than copper and displaces it from its salt',
   explanation: 'Iron displaces copper from copper sulfate solution: Fe + CuSO₄ → FeSO₄ + Cu. The reddish-brown deposit is copper metal. This demonstrates iron is higher than copper in the reactivity series.'
 }));
@@ -344,7 +344,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-cmy-037', chapterId: 'g9s-inquiry', difficulty: 2,
   subsection: 'recording_data',
   question: 'A student investigates how the volume of gas produced changes with temperature when zinc reacts with hydrochloric acid. Which graph is most suitable?',
-  options: ['A line graph with temperature on the x-axis and volume of gas on the y-axis', 'A bar chart with gas type on the x-axis', 'A pie chart showing percentages of gases', 'A scatter graph with time on both axes'],
+  options: ["A line graph with temperature on the x-axis and volume of gas on the y-axis","A scatter graph with time plotted on both of the axes of the grid","A bar chart with the type of gas produced plotted on the x-axis","A pie chart showing the percentages of each of the gases made"],
   answer: 'A line graph with temperature on the x-axis and volume of gas on the y-axis',
   explanation: 'A line graph is used when both variables are continuous (temperature and volume). The independent variable (temperature) goes on the x-axis and the dependent variable (volume of gas) on the y-axis.'
 }));
@@ -364,7 +364,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-cmy-039', chapterId: 'g9s-sts', difficulty: 2,
   subsection: 'evaluating_information',
   question: 'A company claims its product removes all pollutants from water instantly. How should a scientist evaluate this claim?',
-  options: ['By demanding peer-reviewed experimental evidence and independent testing', 'By accepting it because it is printed on the packaging', 'By assuming it is true if the product is expensive', 'By asking friends if the product works'],
+  options: ["By demanding peer-reviewed experimental evidence and independent testing","By accepting it because it is printed clearly on the packaging","By asking friends and neighbours whether the product works well","By assuming that it is true if the product is expensive to buy"],
   answer: 'By demanding peer-reviewed experimental evidence and independent testing',
   explanation: 'Scientific claims must be backed by reproducible experimental evidence evaluated by independent experts (peer review). Commercial packaging is not a reliable source of scientific evidence.'
 }));
@@ -373,7 +373,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-cmy-040', chapterId: 'g9s-sts', difficulty: 3,
   subsection: 'ethics_of_science',
   question: 'Some scientists argue that carbon capture technology should be developed to reduce climate change. Which is the strongest ethical argument IN FAVOUR?',
-  options: ['It may prevent harm to future generations who cannot consent to the consequences of current pollution', 'It is cheaper than reducing fossil fuel use', 'It allows countries to continue burning coal without any changes', 'Scientists have a right to develop any technology they choose'],
+  options: ["It may prevent harm to future generations who cannot consent to the consequences of current pollution","It is a very great deal cheaper to develop than reducing the use of fossil fuels would ever be","Scientists have a clear moral right to develop any technology that they choose to work on","It allows countries to carry on burning their coal without making any other changes at all"],
   answer: 'It may prevent harm to future generations who cannot consent to the consequences of current pollution',
   explanation: 'The ethical principle of intergenerational justice argues that current generations must not impose irreversible harm on future generations. Carbon capture technology directly addresses this by reducing greenhouse gas concentrations.'
 }));

@@ -40,12 +40,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   subsection: 'air_pollutants',
   difficulty: 1,
   question: 'What is the main harmful effect of CFCs released into the upper atmosphere?',
-  options: [
-    'They deplete the ozone layer, allowing more UV radiation to reach Earth',
-    'They dissolve in rainwater to form acid rain',
-    'They trap heat and cause the greenhouse effect',
-    'They are directly poisonous to fish and other aquatic life',
-  ],
+  options: ["They deplete the ozone layer, allowing more UV radiation to reach Earth","They dissolve in rainwater and form the acid rain that damages trees","They are directly poisonous to fish and other forms of aquatic life","They trap heat near the surface and cause the greenhouse effect"],
   answer: 'They deplete the ozone layer, allowing more UV radiation to reach Earth',
   explanation: 'CFCs break down ozone (O₃) molecules in the stratosphere, thinning the ozone layer that shields Earth from harmful ultraviolet radiation.',
 }));
@@ -378,12 +373,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   subsection: 'metals_with_water_steam',
   difficulty: 2,
   question: 'Which statement correctly describes how magnesium reacts with water?',
-  options: [
-    'It reacts very slowly with cold water but reacts vigorously with steam',
-    'It reacts explosively with cold water, like sodium',
-    'It does not react with water or steam under any conditions',
-    'It reacts at the same rate with both cold water and steam',
-  ],
+  options: ["It reacts very slowly with cold water but reacts vigorously with steam","It reacts explosively with cold water, in the same way that sodium does","It reacts at exactly the same rate with cold water and with steam","It does not react with water or with steam under any conditions"],
   answer: 'It reacts very slowly with cold water but reacts vigorously with steam',
   explanation: 'Magnesium barely reacts with cold water. With steam it reacts well: Mg + H₂O(g) → MgO + H₂. This shows it is less reactive than calcium but more than iron.',
 }));
@@ -538,12 +528,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   subsection: 'predicting_reactions',
   difficulty: 3,
   question: 'Iron filings are stirred into a blue solution of copper(II) sulfate. A student notices the blue colour gradually fades and a reddish-brown solid forms. Which statement correctly explains BOTH observations?',
-  options: [
-    'Iron displaces copper from the solution; Fe²⁺ ions replace Cu²⁺ ions, removing the blue colour and depositing copper metal',
-    'Copper displaces iron from the solution because copper is more reactive than iron',
-    'The iron reacts with oxygen in the water to form rust, which turns the solution brown',
-    'Iron and copper react together in solution to form a new alloy, which is reddish-brown',
-  ],
+  options: ["Iron displaces copper from the solution; Fe²⁺ ions replace Cu²⁺ ions, removing the blue colour and depositing copper metal","Copper displaces the iron from the solution, because copper is more reactive than iron is in the reactivity series","The iron reacts with the oxygen dissolved in the water to form rust, which is what turns the whole solution brown","The iron and the copper react together in the solution to form a completely new alloy, which is reddish-brown"],
   answer: 'Iron displaces copper from the solution; Fe²⁺ ions replace Cu²⁺ ions, removing the blue colour and depositing copper metal',
   explanation: 'Fe + CuSO₄ → FeSO₄ + Cu. Iron (more reactive) displaces copper. Cu²⁺ (blue) is removed from solution and replaced by Fe²⁺ (pale green/colourless), while copper metal deposits.',
 }));
@@ -764,12 +749,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   subsection: 'neutralisation',
   difficulty: 2,
   question: 'Sodium hydroxide solution is added gradually to hydrochloric acid containing a pH indicator. What happens to the pH as the NaOH is added?',
-  options: [
-    'The pH starts below 7 and rises towards 7, then continues above 7 as excess NaOH is added',
-    'The pH starts above 7 and falls steadily to 7 at neutralisation',
-    'The pH stays at 7 throughout because a salt forms',
-    'The pH falls from above 7 to below 7 as the NaOH is consumed',
-  ],
+  options: ["The pH starts below 7 and rises towards 7, then continues above 7 as excess NaOH is added","The pH stays at exactly 7 all the way through, because a neutral salt is being formed","The pH falls from above 7 to below 7 as the NaOH that is added is used up by the acid","The pH starts above 7 and falls steadily until it reaches 7 at the neutralisation point"],
   answer: 'The pH starts below 7 and rises towards 7, then continues above 7 as excess NaOH is added',
   explanation: 'HCl is acidic (pH < 7). NaOH neutralises it: HCl + NaOH → NaCl + H₂O. At the exact neutralisation point pH = 7; further NaOH makes the solution alkaline (pH > 7).',
 }));
@@ -796,12 +776,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   subsection: 'uses_of_salts',
   difficulty: 1,
   question: 'Potassium nitrate (KNO₃) is used as a fertiliser. Why is it particularly valuable for plant growth?',
-  options: [
-    'It supplies both potassium and nitrogen, which are essential nutrients for plants',
-    'It makes the soil more acidic, which benefits most crops',
-    'It provides calcium and phosphorus for strong root development',
-    'It is the only salt soluble enough to be absorbed by plant roots',
-  ],
+  options: ["It supplies both potassium and nitrogen, which are essential nutrients for plants","It is the only salt soluble enough to be taken in by the roots of a plant","It provides calcium and phosphorus for the strong development of the roots","It makes the soil much more acidic, which is a benefit to most farm crops"],
   answer: 'It supplies both potassium and nitrogen, which are essential nutrients for plants',
   explanation: 'KNO₃ is a dual-nutrient fertiliser. Potassium (K⁺) aids enzyme function and disease resistance; nitrogen (as NO₃⁻) is needed for protein and chlorophyll synthesis.',
 }));
