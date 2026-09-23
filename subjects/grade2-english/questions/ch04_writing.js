@@ -10,7 +10,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-001', chapterId:'g2eng-writing', difficulty:1, subsection:'sentence_writing',
     question:'Which of these is a COMPLETE sentence?',
-    options:['The big dog barked loudly.','The big dog.','Barked loudly.','Big dog loudly.'],
+    options:["The big dog barked loudly.","Barked loudly at the gate.","The big dog with black spots.","Big dog loudly barked the."],
     answer:'The big dog barked loudly.',
     hint:'A complete sentence has a subject (who/what) AND a verb (action). Which option has both?',
     explanation:'"<b>The big dog barked loudly.</b>" is complete — it has a subject (the big dog) and a verb (barked). The others are just fragments (pieces, not full sentences).' }),
@@ -31,7 +31,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-004', chapterId:'g2eng-writing', difficulty:1, subsection:'sentence_writing',
     question:'Which is the BEST sentence about a cat sleeping?',
-    options:['The fluffy white cat is sleeping on the warm mat.','Cat sleeping.','A cat.','Sleeping fluffy cat white mat warm.'],
+    options:["The fluffy white cat is sleeping on the warm mat.","Sleeping fluffy cat white mat warm on the.","A cat on the warm mat in the house.","Cat sleeping on mat white and fluffy."],
     answer:'The fluffy white cat is sleeping on the warm mat.',
     hint:'A good sentence is complete, uses describing words and gives clear information.',
     explanation:'"<b>The fluffy white cat is sleeping on the warm mat.</b>" — it has a subject (cat), a verb (is sleeping), adjectives (fluffy, white, warm) and tells us WHERE. Excellent!' }),
@@ -59,7 +59,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-008', chapterId:'g2eng-writing', difficulty:1, subsection:'sentence_writing',
     question:'Which sentence gives information about WHERE something happened?',
-    options:['The children played in the garden.','The children played.','The children were happy.','The happy children.'],
+    options:["The children played in the garden.","The children were happy and loud.","The happy and noisy children.","The children played and laughed."],
     answer:'The children played in the garden.',
     hint:'A sentence that tells WHERE includes a place phrase. Look for the sentence with a location.',
     explanation:'"<b>The children played in the garden.</b>" — "in the garden" tells us WHERE. Adding where, when and how makes sentences more interesting and informative.' }),
@@ -94,14 +94,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-013', chapterId:'g2eng-writing', difficulty:1, subsection:'sentence_writing',
     question:'Which sentence tells us HOW something happened?',
-    options:['The girl sang beautifully.','The girl sang.','The girl is happy.','The happy girl.'],
+    options:["The girl sang beautifully.","The girl sang a song.","The girl is very happy.","The happy little girl."],
     answer:'The girl sang beautifully.',
     hint:'"How" is described by an adverb — a word that describes the action.',
     explanation:'"<b>The girl sang beautifully.</b>" — "beautifully" is an adverb that tells us HOW she sang. Adding adverbs makes sentences more vivid and interesting.' }),
 
   makeMCQ({ id:'g2eng-wrt-014', chapterId:'g2eng-writing', difficulty:1, subsection:'sentence_writing',
     question:'Which is the MOST INTERESTING sentence about a bird?',
-    options:['A tiny colourful bird sang a sweet song in the tall tree.','A bird sang.','Bird in tree.','The bird is in the tree.'],
+    options:["A tiny colourful bird sang a sweet song in the tall tree.","The bird is in the tree next to the big house.","A bird sang a song and then it flew away.","Bird in the tree singing a song in the day."],
     answer:'A tiny colourful bird sang a sweet song in the tall tree.',
     hint:'More adjectives and detail make a sentence more interesting.',
     explanation:'"<b>A tiny colourful bird sang a sweet song in the tall tree.</b>" — two adjectives (tiny, colourful), adjectival noun phrase (sweet song) and location (in the tall tree). Rich and vivid!' }),
@@ -164,7 +164,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-023', chapterId:'g2eng-writing', difficulty:1, subsection:'sentence_writing',
     question:'Which sentence describes an EMOTION (feeling)?',
-    options:['Sara was so happy that she jumped for joy.','Sara jumped.','Sara was Sara.','Jump Sara happy.'],
+    options:["Sara was so happy that she jumped for joy.","Sara jumped up and down on the bed.","Jump Sara happy joy for she was.","Sara was Sara and she was there."],
     answer:'Sara was so happy that she jumped for joy.',
     hint:'Emotional sentences tell us HOW a character feels and often what they did because of that feeling.',
     explanation:'"<b>Sara was so happy that she jumped for joy.</b>" — it tells us her emotion (happy) and what she did because of it (jumped for joy). Vivid writing!' }),
@@ -243,7 +243,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-034', chapterId:'g2eng-writing', difficulty:1, subsection:'punctuation',
     question:'What are INVERTED COMMAS (speech marks) used for?',
-    options:['To show the exact words someone said','To end a sentence','To separate items in a list','To show ownership'],
+    options:["To show the exact words someone said","To show where a sentence ends","To separate items in a long list","To show who something belongs to"],
     answer:'To show the exact words someone said',
     hint:'When we write what someone said out loud, we put their exact words inside special marks.',
     explanation:'Inverted commas (" ") are used <b>to show the exact words someone said</b>. She said, "Come here!" — the words inside the marks are the exact words spoken.' }),
@@ -285,7 +285,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-040', chapterId:'g2eng-writing', difficulty:1, subsection:'punctuation',
     question:'What type of sentence ends with an exclamation mark?',
-    options:['A sentence showing strong feeling or surprise','A question','A simple statement','A list'],
+    options:["A sentence showing strong feeling or surprise","A sentence that gives a simple fact","A sentence that makes a shopping list","A sentence that asks a question"],
     answer:'A sentence showing strong feeling or surprise',
     hint:'The exclamation mark (!) expresses strong emotion.',
     explanation:'An exclamation mark (!) ends <b>a sentence showing strong feeling or surprise</b>: "Wow, that is amazing!" "Stop right now!" "What a great day!"' }),
@@ -448,7 +448,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-063', chapterId:'g2eng-writing', difficulty:1, subsection:'word_choice',
     question:'Which is the MOST SPECIFIC way to say how something smelled?',
-    options:['The flowers smelled sweet and fragrant like honey.','The flowers smelled nice.','The flowers smelled good.','The flowers smelled okay.'],
+    options:["The flowers smelled sweet and fragrant like honey.","The flowers smelled okay to me and my mum.","The flowers smelled good when I walked past.","The flowers smelled very nice in the garden."],
     answer:'The flowers smelled sweet and fragrant like honey.',
     hint:'Specific writing tells the reader exactly what something is like.',
     explanation:'"<b>The flowers smelled sweet and fragrant like honey.</b>" — it uses two adjectives (sweet, fragrant) AND a comparison (like honey). So much more vivid than "smelled nice"!' }),
@@ -483,7 +483,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-068', chapterId:'g2eng-writing', difficulty:1, subsection:'word_choice',
     question:'Which phrase is more DESCRIPTIVE than "the cat moved quickly"?',
-    options:['The cat darted like lightning across the room.','The cat went fast.','The cat moved.','The fast cat moved quickly.'],
+    options:["The cat darted like lightning across the room.","The cat went very fast across the room.","The fast cat moved quickly in the room.","The cat moved along the floor quickly."],
     answer:'The cat darted like lightning across the room.',
     hint:'The best description uses a strong verb AND a comparison to paint a vivid picture.',
     explanation:'"<b>The cat darted like lightning across the room.</b>" — "darted" is a strong verb and "like lightning" is a comparison (simile) that shows just how fast it moved. Vivid writing!' }),
@@ -532,7 +532,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-wrt-075', chapterId:'g2eng-writing', difficulty:1, subsection:'word_choice',
     question:'Which sentence uses word choice BEST to create a vivid picture?',
-    options:['The icy wind howled through the bare branches of the ancient tree.','The cold wind blew through the tree.','It was windy.','The wind was cold and blew hard.'],
+    options:["The icy wind howled through the bare branches of the ancient tree.","The cold wind blew through the tree in the garden today.","The wind was cold and it blew very hard on the tree.","It was windy and the tree moved a lot in the wind."],
     answer:'The icy wind howled through the bare branches of the ancient tree.',
     hint:'Look for the sentence with the most specific adjectives and strongest verbs.',
     explanation:'"<b>The icy wind howled through the bare branches of the ancient tree.</b>" — icy (adjective), howled (strong verb), bare (adjective), ancient (adjective). Every word is carefully chosen for maximum effect!' })

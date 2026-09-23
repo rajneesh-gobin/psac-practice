@@ -17,7 +17,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-rdr-002', chapterId:'g2eng-reading', difficulty:1, subsection:'phonics_decoding',
     question:'What is the difference between "bit" and "bite"?',
-    options:['"Bite" has a silent e that makes the vowel say its name','They are the same word','Bit has more letters','Bite ends with a t'],
+    options:["\"Bite\" has a silent e that makes the vowel say its name","Bit has more letters than bite, so it sounds longer","The silent e at the end changes the b sound","They are the same word, just spelled two ways"],
     answer:'"Bite" has a silent e that makes the vowel say its name',
     hint:'The magic-e rule: adding "e" at the end makes the vowel say its letter name (long vowel).',
     explanation:'<b>"Bite" has a silent e</b> — the "e" at the end is silent but makes the "i" say its name (long /ī/ sound). Bit = short /i/. Bite = long /ī/.' }),
@@ -59,7 +59,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-rdr-008', chapterId:'g2eng-reading', difficulty:1, subsection:'phonics_decoding',
     question:'What does the magic-e (silent e) do in the word "hope"?',
-    options:['It makes the "o" say its name (long /ō/)','It adds a syllable','It changes h to sh','Nothing — it is just there'],
+    options:["It makes the \"o\" say its name (long /ō/)","Nothing at all, it is just sitting there","It adds one more syllable to the word","It changes the h sound into sh"],
     answer:'It makes the "o" say its name (long /ō/)',
     hint:'The "e" at the end is silent — but it changes the vowel sound in the middle.',
     explanation:'The silent e in <b>hope</b> makes the "o" say its name — long /ō/. Without the e, "hop" has a short /o/. Hop → hope!' }),
@@ -371,7 +371,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-rdr-052', chapterId:'g2eng-reading', difficulty:1, subsection:'reading_comprehension',
     question:'"Ravi saw a puppy shivering in the rain. He picked it up and carried it home. His mum dried it with a towel." Why was the puppy shivering?',
-    options:['It was wet and cold in the rain','It was scared of Ravi','It was hungry','It was playing a game'],
+    options:["It was wet and cold in the rain","It was hungry and had no food","It was scared of the boy Ravi","It was playing a fun game"],
     answer:'It was wet and cold in the rain',
     hint:'The story says the puppy was in the rain. What does rain make you feel?',
     explanation:'The puppy was shivering because it was <b>wet and cold in the rain</b>. Rain makes things cold and wet — that is why the puppy was shivering.' }),
@@ -420,7 +420,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-rdr-059', chapterId:'g2eng-reading', difficulty:1, subsection:'reading_comprehension',
     question:'"Mark could not sleep. He kept thinking about his birthday party the next day. He was so excited he counted sheep." Why could Mark not sleep?',
-    options:['He was excited about his birthday party','He was worried about school','He heard a loud noise','He was not tired'],
+    options:["He was excited about his birthday party","He was not tired at all that night","He heard a very loud noise outside","He was worried about his school test"],
     answer:'He was excited about his birthday party',
     hint:'The passage tells you exactly why Mark could not sleep.',
     explanation:'Mark could not sleep because <b>he was excited about his birthday party</b> the next day. Being too excited makes it hard to fall asleep!' }),
@@ -434,7 +434,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-rdr-061', chapterId:'g2eng-reading', difficulty:1, subsection:'reading_comprehension',
     question:'"The supermarket was very busy on Saturday. There were long queues at every till. Mum said it was because everyone was shopping for the weekend." Why were there long queues?',
-    options:['Everyone was shopping for the weekend','There were too few tills','The supermarket was small','It was raining outside'],
+    options:["Everyone was shopping for the weekend","There were too few tills that day","The supermarket was much too small","It was raining hard outside the shop"],
     answer:'Everyone was shopping for the weekend',
     hint:'Mum explains the reason in the passage.',
     explanation:'The queues were long because <b>everyone was shopping for the weekend</b> — Mum explains this. Saturdays are busy shopping days!' }),
@@ -448,7 +448,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-rdr-063', chapterId:'g2eng-reading', difficulty:1, subsection:'reading_comprehension',
     question:'"Tortoises are slow animals. They carry their house on their back — a hard shell. When danger comes, they pull their head inside the shell." What does the tortoise do when there is danger?',
-    options:['Pulls its head inside the shell','Runs away very fast','Bites the enemy','Hides in the ground'],
+    options:["Pulls its head inside the shell","Bites the enemy with its teeth","Runs away very fast to hide","Hides in a hole in the ground"],
     answer:'Pulls its head inside the shell',
     hint:'The last sentence tells you how the tortoise protects itself.',
     explanation:'When there is danger, the tortoise <b>pulls its head inside the shell</b>. The hard shell acts like a protective home — how clever!' }),
@@ -490,14 +490,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-rdr-069', chapterId:'g2eng-reading', difficulty:1, subsection:'reading_comprehension',
     question:'"Each morning, Dad makes breakfast. He cuts fruit, boils eggs and toasts bread. He says breakfast is the most important meal of the day." According to Dad, why is breakfast important?',
-    options:['Because it is the most important meal of the day','Because it is delicious','Because it is made with fruit','Because it takes a long time'],
+    options:["Because it is the most important meal of the day","Because it is always made with fresh fruit","Because it takes Dad a long time to make","Because it is delicious and tastes nice"],
     answer:'Because it is the most important meal of the day',
     hint:'Dad gives a reason. Look for what he says about breakfast.',
     explanation:'Dad says breakfast is important <b>because it is the most important meal of the day</b>. Breakfast gives us energy for the whole morning!' }),
 
   makeMCQ({ id:'g2eng-rdr-070', chapterId:'g2eng-reading', difficulty:1, subsection:'reading_comprehension',
     question:'"The little mouse found a big piece of cheese. It was too heavy to carry alone. The mouse asked its friend to help, and together they rolled it home." Why did the mouse ask for help?',
-    options:['The cheese was too heavy to carry alone','The mouse was tired','The cheese was too far away','The mouse wanted company'],
+    options:["The cheese was too heavy to carry alone","The mouse wanted a friend to talk to","The mouse was tired after walking","The cheese was too far away to see"],
     answer:'The cheese was too heavy to carry alone',
     hint:'The passage gives the reason the mouse needed help.',
     explanation:'The mouse asked for help because <b>the cheese was too heavy to carry alone</b>. Working together made it possible!' }),

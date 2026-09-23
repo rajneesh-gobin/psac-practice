@@ -24,7 +24,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-pho-003', chapterId:'g2eng-phonics', difficulty:1, subsection:'blends_digraphs',
     question:'What is a CONSONANT BLEND?',
-    options:['Two (or more) consonants where you hear BOTH sounds','Two letters making one new sound','A vowel and a consonant together','A silent consonant'],
+    options:["Two (or more) consonants where you hear BOTH sounds","Two letters that make one single new sound","A consonant that is silent in the word","A vowel and a consonant put together"],
     answer:'Two (or more) consonants where you hear BOTH sounds',
     hint:'In a blend, each consonant keeps its own sound. In "stop", you can hear both /s/ and /t/.',
     explanation:'A <b>consonant blend</b> is two or more consonants where you hear BOTH sounds: /bl/ in blue, /tr/ in train, /st/ in stop. Compare with digraphs where you hear just one new sound.' }),

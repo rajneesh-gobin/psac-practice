@@ -278,7 +278,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-grm-039', chapterId:'g2eng-grammar', difficulty:1, subsection:'verbs_action',
     question:'Which sentence uses "was" correctly?',
-    options:['She was tired after the race.','They was happy.','We was hungry.','I was be happy.'],
+    options:["She was tired after the race.","They was happy at the party.","I was be happy at school.","We was hungry after school."],
     answer:'She was tired after the race.',
     hint:'"Was" is past tense for I, he, she, it. "Were" is past tense for you, we, they.',
     explanation:'"<b>She was tired after the race.</b>" — "was" goes with she (singular past). "They were" not "they was".' }),
@@ -334,14 +334,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-grm-047', chapterId:'g2eng-grammar', difficulty:1, subsection:'verbs_action',
     question:'Which sentence uses "were" correctly?',
-    options:['We were very happy at the party.','She were happy.','He were at school.','I were hungry.'],
+    options:["We were very happy at the party.","I were hungry after the game.","She were happy at the party.","He were at school this morning."],
     answer:'We were very happy at the party.',
     hint:'"Were" = past tense of "are". It is used with you, we, they.',
     explanation:'"<b>We were very happy at the party.</b>" — "were" goes with we (plural past). She/He/I use "was". You/We/They use "were".' }),
 
   makeMCQ({ id:'g2eng-grm-048', chapterId:'g2eng-grammar', difficulty:1, subsection:'verbs_action',
     question:'What does a VERB do in a sentence?',
-    options:['Shows the action or state of being','Names a person or thing','Describes a noun','Joins two sentences'],
+    options:["Shows the action or state of being","Describes a noun or a pronoun","Names a person, place or thing","Joins two sentences together"],
     answer:'Shows the action or state of being',
     hint:'Think about what a verb tells us — what someone does or what something is.',
     explanation:'A verb <b>shows the action or state of being</b>. Action verbs: run, eat, sleep. State of being verbs: is, am, are, was, were, seems.' }),
@@ -420,7 +420,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-grm-059', chapterId:'g2eng-grammar', difficulty:1, subsection:'adjectives_describing',
     question:'Which sentence correctly compares THREE things using a superlative?',
-    options:['Mount Everest is the tallest mountain in the world.','Mount Everest is taller than Mount Blanc.','Mount Everest is tall.','Mount Everest is very tall.'],
+    options:["Mount Everest is the tallest mountain in the world.","Mount Everest is a very tall mountain indeed.","Mount Everest is taller than Mont Blanc is.","Mount Everest is tall and it is very big."],
     answer:'Mount Everest is the tallest mountain in the world.',
     hint:'A superlative compares something against all others — "the most" or "-est" with "in the world".',
     explanation:'"<b>Mount Everest is the tallest mountain in the world.</b>" — "tallest" compares Everest against ALL mountains. Superlatives use "the" and -est (or most + adjective).' }),
@@ -455,7 +455,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-grm-064', chapterId:'g2eng-grammar', difficulty:1, subsection:'adjectives_describing',
     question:'Which sentence uses a SUPERLATIVE correctly?',
-    options:['She is the most intelligent student in the class.','She is more intelligent than Anna.','She is intelligent.','She is very intelligent.'],
+    options:["She is the most intelligent student in the class.","She is more intelligent than Anna and Ben.","She is very intelligent and works hard.","She is intelligent at school every day."],
     answer:'She is the most intelligent student in the class.',
     hint:'A superlative compares against ALL others and uses "the most" or "-est".',
     explanation:'"<b>She is the most intelligent student in the class.</b>" — "most intelligent" is a superlative comparing her against all classmates. Long adjectives use "most": most intelligent, most beautiful.' }),
@@ -476,7 +476,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-grm-067', chapterId:'g2eng-grammar', difficulty:1, subsection:'adjectives_describing',
     question:'Which sentence uses the adjective "ancient" correctly?',
-    options:['The ancient temple was built hundreds of years ago.','The ancient ran quickly.','She ancient the book.','Ancient, the dog slept.'],
+    options:["The ancient temple was built hundreds of years ago.","The ancient ran quickly down the long road.","Ancient, the dog slept under the big tree.","She ancient the book on the table today."],
     answer:'The ancient temple was built hundreds of years ago.',
     hint:'An adjective describes a noun and usually goes before it.',
     explanation:'"<b>The ancient temple was built hundreds of years ago.</b>" — "ancient" describes "temple" (a noun). Ancient = very, very old.' }),
@@ -518,7 +518,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2eng-grm-073', chapterId:'g2eng-grammar', difficulty:1, subsection:'adjectives_describing',
     question:'Which sentence uses an adjective to describe an EMOTION?',
-    options:['The excited children cheered for their team.','The children ran quickly.','She read the book.','The dog slept.'],
+    options:["The excited children cheered for their team.","She read the book about a lost dog.","The children ran quickly to the gate.","The big brown dog slept under the chair."],
     answer:'The excited children cheered for their team.',
     hint:'"Excited" is an adjective describing how the children felt — it describes the noun "children".',
     explanation:'"<b>The excited children cheered for their team.</b>" — "excited" is an adjective describing the children\'s emotion. Emotional adjectives: excited, nervous, thrilled, upset, proud.' }),
