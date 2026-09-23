@@ -434,6 +434,23 @@ const Calendar = (() => {
     return isNaN(d) ? null : _toDateStr(d);
   }
 
+  // ⚠⚠ _activity AND _due ARE ONE PER-STUDENT CACHE AND MUST BE SWITCHED
+  //    TOGETHER. They were not: two callers below set _studentId and cleared
+  //    only _activity, so _due went on holding the PREVIOUS child's homework —
+  //    and _activityFor() merges the two at display, which is one child's work
+  //    appearing on a sibling's calendar. render() and setStudent() reload both
+  //    and were always fine; the dashboard paths were not.
+  // ⚠ This exists so the two cannot drift again. Anything that changes which
+  //   student the calendar is about goes through here, and a future reader
+  //   cannot reset one half and forget the other.
+  function _useStudent(id) {
+    if (_studentId === id) return false;
+    _studentId = id;
+    _activity = [];
+    _due = [];
+    return true;
+  }
+
   async function _loadActivity() {
     _activity = [];
     if (!_studentId) return;
@@ -1639,8 +1656,8 @@ const Calendar = (() => {
   async function getRecentActivity(studentId, days = 14) {
     if (!studentId) return [];
     try {
-      if (_studentId !== studentId) { _studentId = studentId; _activity = []; }
-      if (!_activity.length) await _loadActivity();
+      _useStudent(studentId);
+      if (!_activity.length) { await _loadActivity(); await _loadDue(); }
     } catch (_) { return []; }
 
     const from = new Date();
@@ -1879,8 +1896,8 @@ const Calendar = (() => {
     // this runs on the dashboard, where nothing else has touched _activity.
     let doneToday = new Set();
     try {
-      if (_studentId !== studentId) { _studentId = studentId; _activity = []; }
-      if (!_activity.length) await _loadActivity();
+      _useStudent(studentId);
+      if (!_activity.length) { await _loadActivity(); await _loadDue(); }
       doneToday = doneTodayChapterIds();
     } catch (_) { /* the plan must still render if history is unavailable */ }
 

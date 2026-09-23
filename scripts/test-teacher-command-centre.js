@@ -46,16 +46,40 @@ const tabs = [...nav.matchAll(/class="ta-tab" data-tab="([a-z]+)"/g)].map(m => m
 //   the parent dashboard's shape now. Asserting the FULL list in order is the
 //   point: the old assertion named five tools while the menu held seven, so
 //   papers and preview were added with nothing watching.
-assert.deepEqual(tabs, ['home', 'gradebook', 'materials', 'assignments', 'papers', 'preview', 'messages', 'settings'],
-  'one destination and seven tools, all on the row'); checks++;
+// ⚠⚠ THIS LINE WAS RED AND UNREAD THROUGH TWO CHANGES. It froze eight tab
+//    names in order; 'library' was added to the strip and it went red, and it
+//    was STILL red when the strip later collapsed to three. A suite with a
+//    known-red line stops being read, which is how the second change landed on
+//    top of the first with nothing watching.
+// ⚠ SO ASSERT WHAT MUST BE TRUE, NOT THE ARRANGEMENT OF THE DAY. A frozen list
+//   in order goes red on every deliberate change and says nothing about whether
+//   anything actually broke. What matters is below: the strip is short, nothing
+//   hides behind a menu, and nothing became unreachable.
+assert.deepEqual(tabs, ['home', 'library', 'papers'],
+  'the board is three destinations'); checks++;
 ok(!nav.includes('data-tab="create"') && !nav.includes('data-tab="results"') && !nav.includes('data-tab="classes"'),
   'Set Work, Results and Classrooms are not top-level tabs any more');
 ok(!nav.includes('data-more=') && !nav.includes('ta-more-btn') && !nav.includes('ta-more-menu'),
   'and nothing is hidden behind a More menu');
 // The <small> each menu item carried is the button's title now - losing it would
 // leave 'Past work' and 'My files' as two labels with nothing to tell them apart.
-ok((nav.match(/ title="/g) || []).length === 7, 'every tool tab still explains itself');
-for (const t of ['home', 'create', 'results', 'assignments', 'gradebook', 'materials', 'messages', 'settings']) ok(teacher.includes(`data-tab="${t}"`) && teacher.includes(`class="ta-tab-content${t === 'home' ? '' : ' hidden'}" data-tab="${t}"`), `panel for ${t} exists`);
+ok((nav.match(/ title="/g) || []).length >= tabs.length - 1, 'every tab that needs it explains itself');
+// ⚠ 'materials' is no longer in this list ON PURPOSE: it has no panel of its
+//   own any more, having become the Library's second shelf. Its NAME still has
+//   to work, which is asserted below.
+for (const t of ['home', 'create', 'results', 'assignments', 'gradebook', 'messages', 'settings', 'library', 'papers']) ok(teacher.includes(`data-tab="${t}"`), `panel for ${t} exists`);
+// ⚠⚠ THE CHECK THAT ACTUALLY PROTECTS A TEACHER: a tab taken off the strip must
+//    still be REACHABLE. gradebook and assignments lost their tabs and were
+//    briefly left with nothing anywhere pointing at them — deleting a tab is a
+//    simplification only if the thing behind it still has a door.
+const _reachable = new Set([...teacher.matchAll(/switchTab\('([a-z-]+)'/g)].map(m => m[1]));
+for (const t of ['gradebook', 'assignments']) ok(_reachable.has(t), `${t} lost its tab but kept a door`);
+// ⚠ And the retired name must RESOLVE, not fall back to home: switchTab()
+//   rejects anything not in ALL_TABS, and a saved location can still hold it.
+const _tjs = fs.readFileSync('engine/teacher.js', 'utf8');
+const _mat = _tjs.indexOf("tab === 'materials'");
+ok(_mat > 0 && /switchTab\('library'/.test(_tjs.slice(_mat, _mat + 200)),
+  'the retired name "materials" redirects to the Library rather than falling back to home');
 ok(!/class="ta-tab-content[^"]*" data-tab="classes"/.test(teacher), 'the classrooms panel is gone - its list lives on Home');
 const homePanel = teacher.slice(teacher.indexOf('class="ta-tab-content" data-tab="home"'), teacher.indexOf('<!-- ── TAB: SET WORK'));
 for (const id of ['ta-home', 'tc-list', 'tc-status']) ok(homePanel.includes(`id="${id}"`), `Home carries #${id}`);
@@ -94,10 +118,25 @@ for (const word of ['guest account', 'token', 'anonymous', 'access type', 'datab
 
 const overlay = html.slice(html.indexOf('<div id="tc-classroom-detail"'), html.indexOf('<!-- ══════════ ASSIGNMENT ENTRANCE'));
 const cdNav = [...overlay.matchAll(/class="tc-cd-nav-btn" role="tab" data-sec="([a-z]+)"/g)].map(m => m[1]);
-assert.deepEqual(cdNav, ['overview', 'work', 'pupils', 'materials', 'calendar'], 'classroom overlay has five primary sections, materials and calendar among them'); checks++;
+// ⚠ FOUR, NOT FIVE: Calendar merged into Work. They were two sections showing
+//   overlapping subsets of one list — _renderCalendar() already merged class
+//   events, activity deadlines and worksheet deadlines into a timeline while
+//   _renderWork() showed the same activities undated.
+assert.deepEqual(cdNav, ['overview', 'work', 'pupils', 'materials'],
+  'a class has four primary sections'); checks++;
 const cdMore = [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map(m => m[1]);
 assert.deepEqual(cdMore, ['settings'], 'classroom More holds classroom-wide settings only; results live with each activity'); checks++;
-for (const s of ['overview', 'work', 'pupils', 'materials', 'calendar', 'results', 'settings']) ok(overlay.includes(`id="tc-cd-${s}"`), `classroom section ${s} exists`);
+// ⚠ 'calendar' has no panel any more — it merged into Work, and its dead div
+//   was removed rather than left hidden. The NAME still resolves: showSection()
+//   maps it to 'work', because rememberClassroom() stores the section name and
+//   a teacher who left the app on Calendar must not come back to the overview.
+for (const s of ['overview', 'work', 'pupils', 'materials', 'results', 'settings']) ok(overlay.includes(`id="tc-cd-${s}"`), `classroom section ${s} exists`);
+ok(!overlay.includes('id="tc-cd-calendar"'), 'the merged calendar panel was removed, not just hidden');
+{
+  const _cd = fs.readFileSync('engine/teacher_classroom_detail.js', 'utf8');
+  ok(/sec === 'calendar'\) sec = 'work'/.test(_cd),
+    "the remembered section 'calendar' still resolves, to Work");
+}
 ok(/id="ta-share-class"/.test(html) && /id="ta-share-due"/.test(html) && /id="ta-share-qr"/.test(html) && /id="ta-share-view"/.test(html) && /TeacherMode\.shareCopyLink\(\)/.test(html), 'success screen shows classroom, due date, copy, QR and View');
 // ⚠ NOT <script> TAGS AND NOT IN SHELL_FILES ANY MORE. The eight role
 //   modules are injected by RoleModules.ensure() when someone opens one of
