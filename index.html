@@ -4691,11 +4691,11 @@
           <div id="tc-library-body" class="lb-body"></div>
         </div>
             <div data-shelf-panel="files" class="hidden">
-          <h3 class="font-bold text-lg mb-1">📂 Learning Materials</h3>
-          <p class="teacher-intro mb-4">Share PDFs, photos, or a link to a video or website. Uploads are private - only teachers can add them.</p>
+          <h3 class="font-bold text-lg mb-1">📂 My files</h3>
+          <p class="teacher-intro mb-4">Your own worksheets, notes and links. Only teachers can add them - pupils just see what you share.</p>
   
           <div class="rounded-xl p-4 mb-5" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15)">
-            <h4 class="font-semibold text-sm mb-3">Add a material</h4>
+            <h4 class="font-semibold text-sm mb-3">Add a file or link</h4>
             <!-- File or link. One form, one Add button: the only thing that
                  changes is which source row is shown, so the title/subject/grade
                  a teacher has already typed survives switching between them. -->
@@ -4760,17 +4760,17 @@
               </div>
               <p id="tm-upload-status" role="status" class="text-xs text-gray-500 dark:text-gray-400 min-h-[1.2em]"></p>
               <button id="tm-add-btn" onclick="TeacherMaterials.upload()" class="ta-btn-pencil w-full justify-center">
-                📎 Pin to board
+                📎 Add it
               </button>
             </div>
           </div>
   
           <div class="flex justify-between items-center mb-2">
-            <h4 class="font-semibold text-sm text-gray-700 dark:text-gray-300">Your materials</h4>
+            <h4 class="font-semibold text-sm text-gray-700 dark:text-gray-300">Your files</h4>
             <button onclick="TeacherMaterials.load()" class="text-xs text-blue-600 dark:text-blue-400">Refresh</button>
           </div>
           <div class="tm-find-row">
-            <label for="tm-search" class="sr-only">Search your materials</label>
+            <label for="tm-search" class="sr-only">Search your files</label>
             <input id="tm-search" type="search" inputmode="search" maxlength="80"
               placeholder="🔍 Search by name, subject or type…"
               oninput="TeacherMaterials.setSearch(this.value)"
@@ -4822,9 +4822,9 @@
         <div id="ta-no-classroom" class="ta-no-classroom-notice hidden">
           <div class="ta-thumbtack"></div>
           <div class="ta-notice-pin-icon">📌</div>
-          <p class="ta-notice-title">Create your first classroom</p>
-          <p class="ta-notice-body">Before setting work, set up a classroom so you can assign homework to your pupils. It only takes a moment.</p>
-          <button onclick="TeacherMode.switchTab('classes')" class="ta-notice-btn">🏫 Create a classroom →</button>
+          <p class="ta-notice-title">Create your first class</p>
+          <p class="ta-notice-body">Before setting work, make a class so you can give your pupils homework. It only takes a moment.</p>
+          <button onclick="TeacherMode.switchTab('classes')" class="ta-notice-btn">🏫 Create a class →</button>
         </div>
 
         <div id="ta-create-form" class="hidden ta-form ta-wizard">
@@ -4871,12 +4871,12 @@
             <!-- Hidden selects kept for backwards-compat with buildAssignment() and older tests -->
             <select id="ta-access" aria-label="Access type" onchange="TeacherGuestClasses.accessChanged()" style="display:none">
               <option value="nickname">Open link - nickname, no PIN</option>
-              <option value="classroom_pin">My classroom - each pupil's private PIN</option>
-              <option value="legacy">Shared assignment PIN + name (legacy)</option>
+              <option value="classroom_pin">My class - each pupil's own PIN</option>
+              <option value="legacy">One PIN everyone shares, plus a name (the older way)</option>
             </select>
             <div id="ta-classroom-wrap" style="display:none">
-              <select id="ta-classroom" aria-label="Classroom" class="w-full border rounded p-2 dark:bg-gray-700 dark:text-white">
-                <option value="">Standalone - not tied to a classroom</option>
+              <select id="ta-classroom" aria-label="Which class" class="w-full border rounded p-2 dark:bg-gray-700 dark:text-white">
+                <option value="">On its own - not tied to a class</option>
               </select>
             </div>
             <p id="ta-access-help" class="hidden"></p>
@@ -5021,7 +5021,7 @@
           <button onclick="TeacherWorkspace.refresh()" class="ta-btn-eraser">↻ Refresh</button>
         </div>
         <div class="ta-field ta-field-wide">
-          <label for="ta-results-assign-sel">Assignment</label>
+          <label for="ta-results-assign-sel">Which work?</label>
           <select id="ta-results-assign-sel" onchange="taSelectResultsAssign(this)">
             <option value="">Select homework or a test…</option>
           </select>
@@ -5138,30 +5138,30 @@
         <button class="tc-cd-back" onclick="TeacherClassroomDetail.close()">← All classes</button>
         <div class="tc-cd-title">
           <span id="tc-cd-emoji">🏫</span>
-          <span id="tc-cd-name">Classroom</span>
-          <span id="tc-cd-loading-indicator" class="tc-cd-loading-indicator hidden" role="status"><i aria-hidden="true"></i><span>Loading classroom</span></span>
+          <span id="tc-cd-name">Class</span>
+          <span id="tc-cd-loading-indicator" class="tc-cd-loading-indicator hidden" role="status"><i aria-hidden="true"></i><span>Loading your class</span></span>
         </div>
-        <button class="tc-cd-share-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()" title="Create an activity for this classroom">＋ Create activity</button>
+        <button class="tc-cd-share-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()" title="Create an activity for this class">＋ Create activity</button>
       </div>
       <!-- ⚠ The ONE place this classroom's numbers are counted. There used to
            be a second grid on the Today screen counting three of the same
            things in different words, and disagreeing about one of them. Each
            number is now the button that takes you to what it counts. -->
-      <div class="tc-cd-stats" aria-label="Classroom at a glance">
+      <div class="tc-cd-stats" aria-label="This class at a glance">
         <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('pupils')"><strong id="tc-cd-stat-pupils">-</strong><span>pupils</span></button>
-        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('work')"><strong id="tc-cd-stat-assignments">-</strong><span>activities running</span></button>
-        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('materials')"><strong id="tc-cd-stat-materials">-</strong><span>resources</span></button>
-        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('results')"><strong id="tc-cd-stat-results">-</strong><span>completed</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('work')"><strong id="tc-cd-stat-assignments">-</strong><span>work running</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('materials')"><strong id="tc-cd-stat-materials">-</strong><span>files</span></button>
+        <button type="button" class="tc-cd-stat" onclick="TeacherClassroomDetail.showSection('results')"><strong id="tc-cd-stat-results">-</strong><span>handed in</span></button>
       </div>
       <div class="tc-cd-body">
-        <nav class="tc-cd-nav" role="tablist" aria-label="Classroom sections">
+        <nav class="tc-cd-nav" role="tablist" aria-label="Class sections">
           <button class="tc-cd-nav-btn" role="tab" data-sec="overview" title="What needs your attention right now" onclick="TeacherClassroomDetail.showSection('overview')">🏠<span>Today</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="work"     title="Everything you have set, on the day it is for" onclick="TeacherClassroomDetail.showSection('work')">📅<span>Work</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="pupils"   title="Your class list and their PINs" onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="materials" title="Files, links and videos you have shared" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Files</span></button>
           <div class="tc-cd-nav-more">
             <button class="tc-cd-nav-btn" id="tc-cd-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="tc-cd-more-menu" onclick="TeacherClassroomDetail.toggleMore()">⋯<span>More</span></button>
-            <div id="tc-cd-more-menu" class="tc-cd-more-menu hidden" role="menu" aria-label="More classroom tools">
+            <div id="tc-cd-more-menu" class="tc-cd-more-menu hidden" role="menu" aria-label="More for this class">
               <button type="button" role="menuitem" data-sec="settings"  onclick="TeacherClassroomDetail.showSection('settings')">⚙️ Settings</button>
             </div>
           </div>
@@ -6792,7 +6792,7 @@
       <div id="ta-share-title" class="text-base font-semibold text-gray-800 dark:text-white"></div>
       <div id="ta-share-meta" class="text-xs text-gray-500 dark:text-gray-400 mb-3"></div>
       <div class="ta-share-facts">
-        <div><small>Classroom</small><strong id="ta-share-class">-</strong></div>
+        <div><small>Class</small><strong id="ta-share-class">-</strong></div>
         <div><small>Due</small><strong id="ta-share-due">-</strong></div>
       </div>
       <p id="ta-share-warning" class="hidden ta-share-warning" role="alert"></p>

@@ -961,7 +961,7 @@ const TeacherMode = (() => {
     const classroom  = _el('ta-classroom')?.value || null;
     const dueAt      = _dueDateValue();
     const pupilIds   = access === 'classroom_pin' ? _chosenPupils() : null;
-    if (access === 'classroom_pin' && !classroom) { toast('Choose a classroom, or share an open link instead.', 3500); return; }
+    if (access === 'classroom_pin' && !classroom) { toast('Choose a class, or share an open link instead.', 3500); return; }
     if (pupilIds && !pupilIds.length) { toast('Tick at least one pupil, or tick everyone for the whole class.', 3500); return; }
     if (_el('ta-due')?.value && !dueAt) { toast('Choose a due date that is today or later.', 3000); return; }
 
@@ -1193,7 +1193,7 @@ const TeacherMode = (() => {
     // shared - and saying so is better than copying a link that goes nowhere,
     // which is exactly what this feature used to do.
     if (!a.code) {
-      toast('This assignment was created before sharing worked - please create a new one.', 4500);
+      toast('This work was made before sharing worked - please set it again.', 4500);
       return;
     }
     _shareId = id;
@@ -1328,12 +1328,12 @@ const TeacherMode = (() => {
 
   // ── Delete a saved assignment ──────────────────
   function deleteAssignment(id) {
-    if (!confirm('Delete this assignment? Students with the link can still use it.')) return;
+    if (!confirm('Delete this work? Pupils with the link can still use it.')) return;
     const data = _getData();
     data.assignments = (data.assignments || []).filter(a => a.id !== id);
     _saveData(data);
     _renderAssignmentList();
-    toast('Assignment deleted.', 1500);
+    toast('Work deleted.', 1500);
   }
 
   // ── Gradebook ──────────────────────────────────
@@ -1460,7 +1460,7 @@ const TeacherMode = (() => {
       `;
     } catch (e) {
       console.error('[gradebook] ERROR:', e?.message || e, e?.code, e?.details, e);
-      box.innerHTML = '<p class="ta-gb-msg ta-gb-err">Could not load gradebook. Check your connection.</p>';
+      box.innerHTML = '<p class="ta-gb-msg ta-gb-err">Could not load the marks book. Check your connection.</p>';
     } finally {
       _gbLoading = false;
     }
@@ -1474,7 +1474,7 @@ const TeacherMode = (() => {
   }
 
   function _exportGradebookCsv() {
-    if (!_gbLastData) { toast('Load the gradebook first.', 2000); return; }
+    if (!_gbLastData) { toast('Open the marks book first.', 2000); return; }
     const { names, assignments, students, colAvg, className } = _gbLastData;
     const header = ['Pupil', ...assignments.map(a => a.title || a.label || a.id), 'Average'];
     const rows = [header];
@@ -1488,7 +1488,7 @@ const TeacherMode = (() => {
     const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
     const a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = className.replace(/[^a-z0-9\-_.]/gi, '_') + '-gradebook.csv';
+    a.download = className.replace(/[^a-z0-9\-_.]/gi, '_') + '-marks.csv';
     a.click();
   }
 
@@ -2039,17 +2039,17 @@ const TeacherMaterials = (() => {
       const { error } = await _sb.from('classroom_materials')
         .insert({ material_id: materialId, classroom_id: classroomId });
       if (error) { toast('Could not assign: ' + error.message, 2500); }
-      else toast('Assigned to classroom ✓', 1500);
+      else toast('Assigned to the class ✓', 1500);
     } else {
       // ⚠ Zero rows is a refusal — RLS answers a non-matching DELETE with no
-      //   error and no rows, so "Removed from classroom" would be a lie the
+      //   error and no rows, so "Removed from the class" would be a lie the
       //   teacher only discovers when the list reloads unchanged.
       const { data, error } = await _sb.from('classroom_materials')
         .delete().eq('material_id', materialId).eq('classroom_id', classroomId)
         .select('material_id');
       if (error) toast('Could not remove: ' + error.message, 2500);
-      else if (!data?.length) toast('Could not remove that material from the classroom.', 3000);
-      else toast('Removed from classroom', 1500);
+      else if (!data?.length) toast('Could not remove that file from the class.', 3000);
+      else toast('Removed from the class', 1500);
     }
     await load();
   }

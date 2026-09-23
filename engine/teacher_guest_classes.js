@@ -32,7 +32,7 @@ const TeacherGuestClasses = (() => {
 
   async function _refresh() {
     const token = ++epoch;
-    notice('Loading classrooms...');
+    notice('Loading your classes…');
     try {
       const session = await _sb.auth.getSession();
       if (token !== epoch) return;
@@ -61,7 +61,7 @@ const TeacherGuestClasses = (() => {
       notice('');
       const list = el('tc-list');
       if (list && !classes.length) list.innerHTML = '<div class="tc-cd-inline-error"><p>Could not load your classrooms. Check your connection - nothing has been deleted.</p><button type="button" onclick="TeacherGuestClasses.refresh()">Try again</button></div>';
-      else if (typeof toast === 'function') toast('Could not refresh classrooms. Showing what was loaded before.', 3000);
+      else if (typeof toast === 'function') toast('Could not refresh your classes. Showing what was loaded before.', 3000);
     }
   }
 
@@ -192,7 +192,7 @@ const TeacherGuestClasses = (() => {
 
   function createAssignment(id) {
     const c = classes.find(function(cl) { return cl.id === id; });
-    if (!c || !c.active) { notice('Restore this classroom before creating homework.'); return; }
+    if (!c || !c.active) { notice('Restore this class before setting work.'); return; }
     if (typeof TeacherMode !== 'undefined') TeacherMode.switchTab('create');
     const sel = el('ta-classroom');
     if (sel) sel.value = id;

@@ -2398,7 +2398,7 @@ const TeacherClassroomDetail = (() => {
         .insert({ classroom_id: _classId, teacher_id: uid, date, end_date: endIn || null, kind, title, notes: notes || null })
         .select('id, date, end_date, kind, title, notes, created_at');
       if (error) throw error;
-      if (!data || !data.length) { say('Not allowed - this classroom is not yours, or your teacher access has lapsed.', true); return; }
+      if (!data || !data.length) { say('Not allowed - this class is not yours, or your teacher access has lapsed.', true); return; }
       _events = [..._events, data[0]].sort((a, b) => a.date.localeCompare(b.date) || String(a.created_at).localeCompare(String(b.created_at)));
       const propagateIds = Array.from(document.querySelectorAll('.tc-cd-ev-propagate-check:checked')).map(cb => cb.value);
       for (const cid of propagateIds) {
@@ -2690,7 +2690,7 @@ const TeacherClassroomDetail = (() => {
   async function _archiveClassNow() {
     try {
       await _sb.rpc('teacher_guest_manage', {p_action: 'toggle_class', p_classroom: _classId});
-      toast('Classroom archived.', 2000);
+      toast('Class archived.', 2000);
       close();
       if (typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.refresh();
     } catch(_e) { toast('Could not archive.', 2000); }
@@ -2713,11 +2713,11 @@ const TeacherClassroomDetail = (() => {
         p_classroom: _classId,
       });
       if (error) throw error;
-      toast('Classroom deleted. An admin can recover it for 10 days.', 3500);
+      toast('Class deleted. An admin can recover it for 10 days.', 3500);
       close();
       if (typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.refresh();
     } catch (_e) {
-      toast('Could not delete classroom. Please try again.', 2500);
+      toast('Could not delete the class. Please try again.', 2500);
       if (btn) { btn.disabled = false; btn.textContent = '🗑️ Delete classroom'; }
     }
   }

@@ -630,10 +630,48 @@ where the list would have been, with a Retry.
 
 Test: `scripts/test-teacher-board.js` — 24 checks in real Chrome.
 
-### Stage 5 — say it in a teacher's words
-Rename against what a teacher would say out loud, and fix the two dead
-"Classrooms tab" strings. A copy pass is cheap and it is half of what "hard to
-use" means.
+### Stage 5 — ✅ DONE 2026-09-23 — the teacher’s words
+
+⚠⚠ **EXACT FULL STRINGS, NEVER A WORD SWAP.** “classroom” appears hundreds of
+times across these files and almost every one is an IDENTIFIER —
+`classroom_id`, `p_classroom`, `tc-classroom-detail`, the `classrooms` table,
+element ids. A global replace would take the app down. Every change was a
+complete visible string, and the script failed loudly on any it could not find
+rather than quietly doing less than it claimed.
+
+**One word per thing**
+
+| was | now |
+|---|---|
+| classroom | **class** — the strip already said “My classes” while the button under it said “Create your first classroom” |
+| assignment | **work** |
+| gradebook | **marks book** |
+| Learning Materials | **My files** — matching the shelf it lives on |
+| Students (on a teacher screen) | **pupils** |
+| “Pin to board” | **“Add it”** — a metaphor the button never explained |
+| “legacy” / “Standalone” | **“the older way” / “On its own”** |
+
+**The counters name the places they open.** The four numbers above the class
+nav are also its four doors, so a counter reading “resources” above a section
+called “Files” read as a fifth place that does not exist. They are now
+**pupils · work running · files · handed in**.
+
+**What the test caught that the pass missed**
+
+Three stragglers, found only because the test reads what is VISIBLE rather than
+grepping for a word: a setup notice still saying *“set up a classroom”*, a
+confirm saying *“Delete this assignment? Students with the link…”* (two retired
+words in one sentence), and an **`aria-label="Classroom"`** — invisible on
+screen, read aloud to anyone using a screen reader.
+
+⚠ **The test must not read identifiers**, or it becomes noise and gets deleted.
+It extracts text between tags, the three attributes a person actually reads,
+and the arguments of the functions that put words on screen — nothing else.
+
+*Touched:* `index.html`, `teacher.js`, `teacher_guest_classes.js`,
+`teacher_classroom_detail.js`, `teacher_workspace.js`. No logic, no data.
+
+Test: `scripts/test-teacher-words.js` — 19 checks, no browser needed.
 
 ---
 

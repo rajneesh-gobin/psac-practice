@@ -119,7 +119,7 @@ const TeacherWorkspace = (() => {
         message(el('ta-results-picker'), 'Could not load assignments. Check your connection and try again.', refresh, 'error');
         message(el('ta-results-list'), 'Results are unavailable until assignments load.', null, 'error');
         if (classroom) message(el('tc-workspace'), 'Could not load classroom assignments. Your work has not been deleted.', refresh, 'error');
-      } else if (typeof toast === 'function') toast('Could not refresh assignments. Showing what was loaded before.', 3500);
+      } else if (typeof toast === 'function') toast('Could not refresh your work. Showing what was loaded before.', 3500);
       return false;
     }
     return true;
@@ -393,7 +393,7 @@ const TeacherWorkspace = (() => {
     const a = typeof idOrAssignment === 'object' && idOrAssignment
       ? idOrAssignment
       : assignments.find(row => row.id === idOrAssignment);
-    if (!a) { toast('This assignment could not be found. Refresh and try again.', 3000); return; }
+    if (!a) { toast('That work could not be found. Refresh and try again.', 3000); return; }
     closeDetails();
     const overlay = document.createElement('div');
     overlay.id = 'ta-assignment-detail';
@@ -445,7 +445,7 @@ const TeacherWorkspace = (() => {
         if (typeof TeacherHome !== 'undefined') TeacherHome.invalidate();
         if (token === generation) await refresh();
         if (after) after();
-      } catch (_) { if (token === generation) { if (button) button.disabled=false; toast('Could not update the assignment. Please try again.',3000); } }
+      } catch (_) { if (token === generation) { if (button) button.disabled=false; toast('Could not update that work. Please try again.',3000); } }
     };
     const msg = a.archived ? 'Restore this assignment? It reopens only if it was active and has not expired.' : 'Archive this assignment? Pupils can no longer open it. Results are kept.';
     if (typeof _confirmModal === 'function') _confirmModal(msg, go, { icon: a.archived ? '♻️' : '📦', okLabel: a.archived ? 'Restore' : 'Archive', danger: !a.archived });
