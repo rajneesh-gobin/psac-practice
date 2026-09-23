@@ -68,7 +68,7 @@ const TeacherClassroomDetail = (() => {
   let _signalGroups = [];
   let _todos = [];
   let _rollup = new Map();
-  let _workFilter = 'active';
+  let _workFilter = 'coming';
   let _pupilQuery = '';
   let _workError = '';
   let _pupilError = '';
@@ -128,7 +128,7 @@ const TeacherClassroomDetail = (() => {
     _assignments = [];
     _signals = { loading: true, sampled: 0, failed: 0 };
     _signalGroups = []; _rollup = new Map(); _todos = [];
-    _workFilter = 'active'; _pupilQuery = ''; _workError = ''; _pupilError = ''; _openPupilId = null;
+    _workFilter = 'coming'; _pupilQuery = ''; _workError = ''; _pupilError = ''; _openPupilId = null;
     _workLoaded = false; _pupilsLoaded = false; _setupGuideForced = false;
     _signalEpoch++;
 
@@ -165,6 +165,10 @@ const TeacherClassroomDetail = (() => {
   }
 
   function showSection(sec) {
+    // ⚠ 'calendar' WAS ITS OWN SECTION until Activities and Calendar merged.
+    //   Remembered locations and older callers still name it; mapping it here
+    //   is what stops a returning teacher landing on the overview instead.
+    if (sec === 'calendar') sec = 'work';
     if (!SECTIONS.includes(sec)) sec = 'overview';
     const changed = _activeSection !== sec;
     _activeSection = sec;
@@ -191,7 +195,6 @@ const TeacherClassroomDetail = (() => {
     if (sec === 'work')     _renderWork();
     if (sec === 'pupils')   _renderPupils();
     if (sec === 'settings') { _renderSettings(); _paintGradeSelect(); }
-    if (sec === 'calendar') _renderCalendar();
     if (sec === 'results')  _renderResults(_resultsAssignId);
     if (_classId && typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(_classId, _className, sec);
   }
@@ -425,37 +428,183 @@ const TeacherClassroomDetail = (() => {
   // ── Work list: digital assignments + worksheets + materials ──────
   function setWorkFilter(f) { _workFilter = f; _renderWork(); }
 
+  // ⚠⚠ ONE TIMELINE. "Activities" and "Calendar" were two sections showing
+  //    overlapping subsets of one list: _renderCalendar() already merged class
+  //    events, activity deadlines and worksheet deadlines into a sorted list,
+  //    while _renderWork() showed the same activities and worksheets again with
+  //    no dates on them. A teacher asking "what is my class doing on Friday" and
+  //    "what have I set" had to visit two places and reconcile them.
+  //
+  // ⚠ THE RICH CARDS HAD TO SURVIVE THE MERGE, and that is the whole difficulty.
+  //   The calendar's own rows (_dueRow) are read-only — a title and a date, with
+  //   "set on the activity" where the buttons would be. The real Share, Results
+  //   and Archive actions come from TeacherWorkspace.drawCards(), which OWNS its
+  //   container and wires handlers by INDEX into the array it was given. So the
+  //   cards cannot be interleaved as HTML strings: each day gets its own
+  //   container and its own drawCards() call, with that day's rows.
+  //
+  // ⚠ "NOT YET DATED" IS NOT A GROUP, BECAUSE IT CANNOT HAPPEN. The plan
+  //   assumed undated work existed; measured on the live database,
+  //   guest_assignments.expires_at and physical_homework.expires_at are both
+  //   NOT NULL, so everything has an effective date. A permanently empty
+  //   heading is dead furniture. The undated branch below is a SAFETY NET only
+  //   — it renders nothing unless a row really does arrive without a date,
+  //   which is better than the current behaviour, where _dueRow() returns ''
+  //   and such a row vanishes from the calendar without trace.
   function _renderWork() {
     const box = el('tc-cd-work');
     if (!box) return;
-    const filtered = _assignments.filter(a => _workFilter === 'active' ? _isActive(a) : _workFilter === 'closed' ? (!a.archived && !_isActive(a)) : a.archived);
-    const counts = { active: _assignments.filter(_isActive).length, closed: _assignments.filter(a => !a.archived && !_isActive(a)).length, archived: _assignments.filter(a => a.archived).length };
-    const expired = hw => hw.expires_at && Date.parse(hw.expires_at) <= Date.now();
-    const sheets = _physicalHomework.filter(hw => _workFilter === 'active' ? !expired(hw) : _workFilter === 'closed' ? expired(hw) : false);
-    const hasAnything = _assignments.length || _physicalHomework.length || _materials.length;
+    const today = _todayKey();
+    const dayOf = _dayKeyOf;
+
+    // ── Everything dated, in one pile ────────────────────────────────────
+    const liveAsgns = (_assignments || []).filter(a => !a.archived);
+    const items = [];
+    for (const e of (_events || [])) items.push({ day: dayOf(e.date), last: dayOf(e.end_date || e.date), kind: 'event', row: e });
+    // ⚠ GROUP BY expires_at, THE DATE THE CARD ITSELF PRINTS. TeacherWorkspace
+    //   labels expires_at as "Due" and "Closes" everywhere, and status is
+    //   computed from it too. The old _dueRow() keyed on `due_at || expires_at`,
+    //   so a day heading could say Tomorrow above a card reading "Due Sat 26
+    //   Sept" — two places disagreeing about one assignment, which is the exact
+    //   fault this merge exists to remove.
+    // ⚠ Measured before changing it: of 8 live assignments 4 carry due_at, and
+    //   in ZERO cases does its date differ from expires_at — teacher.js computes
+    //   p_expires_hours FROM the due date, so they are the same day by
+    //   construction. This is therefore a correctness fix with no visible change
+    //   to existing data, not a behaviour change dressed up as one.
+    for (const a of liveAsgns) items.push({ day: dayOf(a.expires_at || a.due_at), last: dayOf(a.expires_at || a.due_at), kind: 'asgn', row: a });
+    for (const w of (_physicalHomework || [])) items.push({ day: dayOf(w.expires_at), last: dayOf(w.expires_at), kind: 'sheet', row: w });
+
+    const undated = items.filter(i => !i.day);
+    const dated = items.filter(i => i.day);
+    const coming = dated.filter(i => i.last >= today);
+    const past = dated.filter(i => i.last < today);
+    const archived = (_assignments || []).filter(a => a.archived);
+    const counts = { coming: coming.length, past: past.length, archived: archived.length };
+
+    // ⚠ Accept the OLD filter names. _workFilter is module state that other
+    //   code still sets, and an unrecognised value silently showed an empty
+    //   list rather than falling back.
+    if (_workFilter === 'active') _workFilter = 'coming';
+    if (_workFilter === 'closed') _workFilter = 'past';
+    if (!['coming', 'past', 'archived'].includes(_workFilter)) _workFilter = 'coming';
+
+    const shown = _workFilter === 'coming' ? coming
+      : _workFilter === 'past' ? past.slice(-40)
+      : archived.map(a => ({ day: dayOf(a.expires_at || a.due_at), kind: 'asgn', row: a }));
+
+    // ── Group by day, newest-last for coming, newest-first for past ──────
+    const byDay = new Map();
+    for (const it of shown) {
+      if (!byDay.has(it.day)) byDay.set(it.day, []);
+      byDay.get(it.day).push(it);
+    }
+    const days = [...byDay.keys()].sort();
+    if (_workFilter !== 'coming') days.reverse();
+
+    const chip = (k, label) => `<button type="button" role="tab" aria-selected="${_workFilter === k}" class="tc-work-filter ${_workFilter === k ? 'on' : ''}" onclick="TeacherClassroomDetail.setWorkFilter('${k}')">${label} <span>${counts[k]}</span></button>`;
+
+    const dayBlock = (key, list) => {
+      const asgns = list.filter(i => i.kind === 'asgn');
+      const rest = list.filter(i => i.kind !== 'asgn');
+      const when = key === today ? 'Today' : key === _dayKeyPlus(1) ? 'Tomorrow' : _dayText(key, { weekday: 'long', day: 'numeric', month: 'short' });
+      return `<div class="tc-day">
+        <h4 class="tc-day-head${key === today ? ' is-today' : ''}">${esc(when)}</h4>
+        ${rest.map(i => i.kind === 'event' ? _eventRow(i.row, key < today) : _sheetRow(i.row)).join('')}
+        ${asgns.length ? `<div class="tc-day-asgn" data-day="${esc(key)}"></div>` : ''}
+      </div>`;
+    };
+
+    const emptyText = _workFilter === 'coming'
+      ? 'Nothing is coming up. Create an activity, or add the next test to the calendar.'
+      : _workFilter === 'past' ? 'Nothing has happened yet.' : 'Nothing is archived.';
+
     box.innerHTML = `
       <div class="tc-cd-section-header tc-work-heading">
-        <div><h3 class="tc-cd-section-title">Activities</h3><p>Online quizzes and worksheets for ${esc(_className)}.</p></div>
+        <div><h3 class="tc-cd-section-title">Work</h3><p>Everything set for ${esc(_className || 'this class')}, on the day it is for.</p></div>
         <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()">＋ Create activity</button>
       </div>
       ${_workError ? `<div class="tc-cd-inline-error"><p>${esc(_workError)}</p><button type="button" onclick="TeacherClassroomDetail.retryWork()">Try again</button></div>` : ''}
+      ${_eventsError ? `<p class="tc-cd-err">${esc(_eventsError)}</p>` : ''}
       <div class="tc-work-filters" role="tablist" aria-label="Filter work">
-        ${[['active', 'Active'], ['closed', 'Closed'], ['archived', 'Archived']].map(([k, label]) => `<button type="button" role="tab" aria-selected="${_workFilter === k}" class="tc-work-filter ${_workFilter === k ? 'on' : ''}" onclick="TeacherClassroomDetail.setWorkFilter('${k}')">${label} <span>${counts[k] + (k === 'active' ? _physicalHomework.filter(h => !expired(h)).length : k === 'closed' ? _physicalHomework.filter(expired).length : 0)}</span></button>`).join('')}
+        ${chip('coming', 'Coming up')}${chip('past', 'Past')}${chip('archived', 'Archived')}
       </div>
-      ${!hasAnything && !_workError ? '<div class="tc-work-empty"><span>📚</span><strong>No activities yet</strong><p>Create an online quiz or assign a worksheet. Pupil progress will appear here automatically.</p><button type="button" onclick="TeacherClassroomDetail.showHomeworkChoice()">Create first activity →</button></div>' : ''}
-      <div id="tc-cd-work-cards"></div>
-      ${sheets.length ? '<h4 class="tc-work-subhead">📄 Worksheets</h4><div id="tc-cd-phw-list"></div>' : ''}
-      ${_workFilter === 'active' ? `<p class="tc-work-resource-link">Need to share a file, link, video or past paper? <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">Open Resources →</button></p>` : ''}
+      ${undated.length ? `<h4 class="tc-work-subhead">⚠ No date yet</h4>
+        <div class="tc-day"><div class="tc-day-asgn" data-day="__undated"></div>
+        ${undated.filter(i => i.kind !== 'asgn').map(i => i.kind === 'event' ? _eventRow(i.row, false) : _sheetRow(i.row)).join('')}</div>` : ''}
+      <div id="tc-cd-work-days">${days.length ? days.map(k => dayBlock(k, byDay.get(k))).join('') : `<div class="tc-work-empty"><span>📚</span><strong>${esc(emptyText)}</strong></div>`}</div>
+      ${_workFilter === 'coming' ? `<h4 class="tc-work-subhead">The month</h4>${_calendarGrid()}` : ''}
+      ${_workFilter === 'coming' ? _eventForm(today) : ''}
+      ${_workFilter === 'coming' ? `<p class="tc-work-resource-link">Need to share a file, link or video? <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">Open Resources →</button></p>` : ''}
     `;
-    const cards = el('tc-cd-work-cards');
-    if (hasAnything && cards) {
-      if (typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.drawCards) {
-        TeacherWorkspace.drawCards(cards, filtered, true,
-          _workFilter === 'active' ? 'No active work. Everything set for this class is finished or archived.' : _workFilter === 'closed' ? 'Nothing has closed yet.' : 'Nothing is archived.',
-          { onResults: a => { _loadResultsFor(a.id); showSection('results'); }, onArchived: () => _loadWork() });
-      }
-    }
-    _renderPhysicalHomework(sheets);
+
+    // ⚠ THE LIST COMES BEFORE THE MONTH GRID, and on a phone that is the whole
+    //   difference between usable and not: the grid is ~700px tall at 390px
+    //   wide, so putting it first pushed every actual piece of work below the
+    //   fold. The question a teacher opens this with is "what is next", which
+    //   the list answers; "what does the month look like" is the second
+    //   question, so it is the second thing.
+    // ⚠ ONE drawCards() CALL PER DAY, after the shell exists. It wires click
+    //   handlers by index into the array it is handed, so each container must
+    //   get exactly the rows it is showing — a single call for everything would
+    //   put every day's cards in one block and lose the dates entirely.
+    const paint = (sel, rows) => {
+      const host = box.querySelector(sel);
+      if (!host || !rows.length) return;
+      if (typeof TeacherWorkspace === 'undefined' || !TeacherWorkspace.drawCards) return;
+      TeacherWorkspace.drawCards(host, rows, true, '', {
+        onResults: a => { _loadResultsFor(a.id); showSection('results'); },
+        onArchived: () => _loadWork(),
+      });
+    };
+    for (const k of days) paint(`.tc-day-asgn[data-day="${k}"]`, byDay.get(k).filter(i => i.kind === 'asgn').map(i => i.row));
+    paint('.tc-day-asgn[data-day="__undated"]', undated.filter(i => i.kind === 'asgn').map(i => i.row));
+
+    const dateEl = el('tc-cd-ev-date');
+    if (dateEl && !dateEl.value) dateEl.value = today;
+  }
+
+  // The add-a-date form, lifted out of the old Calendar section unchanged so
+  // the merge did not quietly rewrite it.
+  function _eventForm(today) {
+    const others = (typeof TeacherGuestClasses !== 'undefined' ? TeacherGuestClasses.getClasses() : []).filter(c => c.active && c.id !== _classId);
+    const propagateHtml = others.length ? `<div class="tc-cd-upload-row" style="flex-wrap:wrap;align-items:center;gap:6px;padding-top:2px"><span style="font-size:0.82rem;color:rgba(240,236,220,.6);white-space:nowrap">Also add to:</span>${others.map(c => `<label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;color:rgba(240,236,220,.85)"><input type="checkbox" class="tc-cd-ev-propagate-check" value="${esc(c.id)}" style="accent-color:#a78bfa"> ${esc(c.name)}</label>`).join('')}</div>` : '';
+    return `<h4 class="tc-work-subhead">Add a date</h4>
+      <p class="tc-cd-hint">Tests, hand-in dates, days you are away. Pupils see these on the class page behind their PIN.</p>
+      <div class="tc-cd-upload-panel" id="tc-cd-ev-form">
+        <div class="tc-cd-upload-row">
+          <select id="tc-cd-ev-kind" class="tc-cd-input" style="flex:2" onchange="TeacherClassroomDetail.setEventKind()" aria-label="What kind of date">
+            ${Object.entries(EVENT_KIND).map(([k, v]) => `<option value="${k}">${v.icon} ${esc(v.label)}</option>`).join('')}
+          </select>
+          <input id="tc-cd-ev-date" type="date" class="tc-cd-input" style="flex:2" aria-label="Date" min="${today}">
+          <input id="tc-cd-ev-end" type="date" class="tc-cd-input hidden" style="flex:2" aria-label="Until (last day away)">
+        </div>
+        <div class="tc-cd-upload-row">
+          <input id="tc-cd-ev-title" type="text" maxlength="120" placeholder="What is it? e.g. Maths test, Project due" class="tc-cd-input" style="flex:3">
+          <input id="tc-cd-ev-notes" type="text" maxlength="500" placeholder="Note for pupils (optional)" class="tc-cd-input" style="flex:3">
+        </div>
+        <div class="tc-cd-upload-row">
+          <button type="button" class="tc-cd-action-btn" onclick="TeacherClassroomDetail.addEvent(this)">＋ Add to calendar</button>
+          <span id="tc-cd-ev-status" class="tc-cd-status-msg" role="status" aria-live="polite"></span>
+        </div>
+        ${propagateHtml}
+      </div>`;
+  }
+
+  // A worksheet on the timeline. The full card with its actions still lives in
+  // _renderPhysicalHomework(); this is the dated one-liner.
+  function _sheetRow(hw) {
+    const expired = hw.expires_at && Date.parse(hw.expires_at) <= Date.now();
+    return `<div class="tc-phw-card tc-ev-card tc-ev-ws${expired ? ' tc-phw-expired' : ''}">
+        <div class="tc-phw-badge">📄 Worksheet due</div>
+        <div class="tc-phw-body">
+          <p class="tc-phw-title">${esc(hw.title || 'Worksheet')}</p>
+          ${hw.description ? `<p class="tc-phw-desc">${esc(hw.description)}</p>` : ''}
+        </div>
+        <div class="tc-phw-actions">
+          <button onclick="TeacherClassroomDetail.deletePhysical('${esc(hw.id)}')" class="tc-cd-pill tc-cd-pill-red">Delete</button>
+        </div>
+      </div>`;
   }
 
   function _renderPhysicalHomework(list) {
@@ -724,7 +873,7 @@ const TeacherClassroomDetail = (() => {
       // The two lists that just changed. Without this the teacher sets a paper
       // and the screen behind the panel still shows the class as it was.
       await Promise.all([_loadEvents(), _loadMaterials()]);
-      showSection(due ? 'calendar' : 'materials');
+      showSection(due ? 'work' : 'materials');
     } catch (e) {
       say('⚠ ' + (e.message || e));
     }
@@ -2009,7 +2158,7 @@ const TeacherClassroomDetail = (() => {
       // the teacher can do something about.
       _eventsError = (e && (e.code === '42P01' || /does not exist/.test(e.message || ''))) ? '' : 'Could not load the calendar.';
     }
-    if (_activeSection === 'calendar') _renderCalendar();
+    if (_activeSection === 'work') _renderWork();
   }
 
   // ⚠ ONE LINE, AND ONLY WHEN THE DOCUMENT IS STILL THERE. A calendar entry for
@@ -2059,11 +2208,29 @@ const TeacherClassroomDetail = (() => {
       </div>`;
   }
 
+  // ⚠⚠ ANCHOR THE DATE-ONLY TEST, OR A TIMESTAMP TAKES THE UTC DAY. The old
+  //    regex was `/^\d{4}-\d{2}-\d{2}/` with no `$`, so it matched
+  //    "2026-09-27T23:59:00Z" too and sliced off "2026-09-27" — the UTC day.
+  //    Every card beside it prints the LOCAL day (TeacherWorkspace formats
+  //    expires_at with toLocaleDateString), so an evening deadline could be
+  //    filed under one day and labelled another. Caught by the Work timeline
+  //    test, which compares the day heading against the date on the card.
+  // ⚠ The date-only branch must stay: teacher_class_events.date is a `date`
+  //   column, and putting a bare "2026-09-27" through new Date() reads it as
+  //   midnight UTC and shifts it a day back for anyone west of Greenwich.
+  function _dayKeyOf(value) {
+    const v = String(value == null ? '' : value);
+    if (!v) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+    const d = new Date(v);
+    return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
   function _calendarDateKey(value) {
     // Dates from the database may be a date-only value or an ISO timestamp.
     // Keep date-only values intact so a deadline cannot move a day because of
     // a browser timezone conversion.
-    if (/^\d{4}-\d{2}-\d{2}/.test(String(value || ''))) return String(value).slice(0, 10);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return String(value).slice(0, 10);
     const d = new Date(value);
     return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
@@ -2118,9 +2285,9 @@ const TeacherClassroomDetail = (() => {
     </section>`;
   }
 
-  function calendarPrevious() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() - 1, 1); _renderCalendar(); }
-  function calendarNext() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() + 1, 1); _renderCalendar(); }
-  function calendarToday() { _calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); _renderCalendar(); }
+  function calendarPrevious() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() - 1, 1); _renderWork(); }
+  function calendarNext() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() + 1, 1); _renderWork(); }
+  function calendarToday() { _calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); _renderWork(); }
 
   function calendarPickDate(key) {
     const dateEl = el('tc-cd-ev-date');
@@ -2130,58 +2297,12 @@ const TeacherClassroomDetail = (() => {
     (el('tc-cd-ev-title') || el('tc-cd-ev-kind'))?.focus();
   }
 
-  function _renderCalendar() {
-    const box = el('tc-cd-calendar');
-    if (!box) return;
-    const today = _todayKey();
-    const upcoming = _events.filter(e => (e.end_date || e.date) >= today);
-    const past = _events.filter(e => (e.end_date || e.date) < today).slice(-12).reverse();
-    const dueSoon = (_assignments || []).filter(a => !a.archived && (a.due_at || a.expires_at) && new Date(a.due_at || a.expires_at) >= new Date(today + 'T00:00:00'))
-      .sort((a, b) => new Date(a.due_at || a.expires_at) - new Date(b.due_at || b.expires_at));
-    // Merge events and due dates by day for the upcoming list.
-    const dayOf = iso => { const d = new Date(iso); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
-    const sheetsSoon = (_physicalHomework || []).filter(w => w.expires_at && new Date(w.expires_at) >= new Date(today + 'T00:00:00'));
-    const merged = [
-      ...upcoming.map(e => ({ k: e.date, html: _eventRow(e, false) })),
-      ...dueSoon.map(a => ({ k: dayOf(a.due_at || a.expires_at), html: _dueRow(a) })),
-      ...sheetsSoon.map(w => ({ k: dayOf(w.expires_at), html: _dueRow(w, '📄 Worksheet due') })),
-    ].sort((a, b) => a.k.localeCompare(b.k));
-
-    box.innerHTML = `
-      <div class="tc-cd-section-header">
-        <h3 class="tc-cd-section-title">🗓️ Class calendar</h3>
-      </div>
-      <p class="tc-cd-hint">Exams, hand-in dates, days you are away, and anything else the class should know. Pupils see it on the class page behind their PIN, next to their homework dates.</p>
-      ${_calendarGrid()}
-      ${(() => {
-        const others = (typeof TeacherGuestClasses !== 'undefined' ? TeacherGuestClasses.getClasses() : []).filter(c => c.active && c.id !== _classId);
-        const propagateHtml = others.length ? `<div class="tc-cd-upload-row" style="flex-wrap:wrap;align-items:center;gap:6px;padding-top:2px"><span style="font-size:0.82rem;color:rgba(240,236,220,.6);white-space:nowrap">Also add to:</span>${others.map(c => `<label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;color:rgba(240,236,220,.85)"><input type="checkbox" class="tc-cd-ev-propagate-check" value="${esc(c.id)}" style="accent-color:#a78bfa"> ${esc(c.name)}</label>`).join('')}</div>` : '';
-        return `<div class="tc-cd-upload-panel" id="tc-cd-ev-form">
-        <div class="tc-cd-upload-row">
-          <select id="tc-cd-ev-kind" class="tc-cd-input" style="flex:2" onchange="TeacherClassroomDetail.setEventKind()" aria-label="What kind of date">
-            ${Object.entries(EVENT_KIND).map(([k, v]) => `<option value="${k}">${v.icon} ${esc(v.label)}</option>`).join('')}
-          </select>
-          <input id="tc-cd-ev-date" type="date" class="tc-cd-input" style="flex:2" aria-label="Date" min="${today}">
-          <input id="tc-cd-ev-end" type="date" class="tc-cd-input hidden" style="flex:2" aria-label="Until (last day away)">
-        </div>
-        <div class="tc-cd-upload-row">
-          <input id="tc-cd-ev-title" type="text" maxlength="120" placeholder="What is it? e.g. Maths test, Project due" class="tc-cd-input" style="flex:3">
-          <input id="tc-cd-ev-notes" type="text" maxlength="500" placeholder="Note for pupils (optional)" class="tc-cd-input" style="flex:3">
-        </div>
-        <div class="tc-cd-upload-row">
-          <button type="button" class="tc-cd-action-btn" onclick="TeacherClassroomDetail.addEvent(this)">＋ Add to calendar</button>
-          <span id="tc-cd-ev-status" class="tc-cd-status-msg" role="status" aria-live="polite"></span>
-        </div>
-        ${propagateHtml}
-      </div>`;
-      })()}
-      ${_eventsError ? `<p class="tc-cd-err">${esc(_eventsError)}</p>` : ''}
-      <h4 class="tc-work-subhead">Coming up</h4>
-      <div id="tc-cd-ev-list">${merged.length ? merged.map(m => m.html).join('') : '<p class="tc-cd-empty">Nothing on the calendar yet. Add the next test, or the day you will be away.</p>'}</div>
-      ${past.length ? `<h4 class="tc-work-subhead" style="margin-top:14px">Past</h4><div>${past.map(e => _eventRow(e, true)).join('')}</div>` : ''}`;
-    const dateEl = el('tc-cd-ev-date');
-    if (dateEl && !dateEl.value) dateEl.value = today;
-  }
+  // ⚠ KEPT AS AN ALIAS, NOT DELETED. Activities and Calendar merged into one
+  //   Work timeline, but 'calendar' is still a remembered location
+  //   (TeacherMode.rememberClassroom) and is still named by callers. Deleting
+  //   the name would send a returning teacher to the overview with no
+  //   explanation — the same trap 'classes' → 'home' left behind on the board.
+  function _renderCalendar() { _renderWork(); }
 
   function setEventKind() {
     const kind = el('tc-cd-ev-kind')?.value;
@@ -2598,6 +2719,37 @@ const TeacherClassroomDetail = (() => {
     saveName, saveGrade, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
     openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },
-    refreshResults: () => { if (_resultsAssignId) _loadResultsFor(_resultsAssignId); }
+    refreshResults: () => { if (_resultsAssignId) _loadResultsFor(_resultsAssignId); },
+    // ⚠ LOCALHOST ONLY, the same discipline auth.js applies to __testSetup, and
+    //   for the same reason: on the live site these keys are not merely
+    //   disabled, they are never added to the object at all. Seeding a
+    //   classroom's rows from page script is not an account-takeover primitive
+    //   the way setting _parentUser is, but a seam that lets a page put
+    //   arbitrary work in front of a teacher is not one worth shipping either.
+    // ⚠ These exist because the Work timeline cannot otherwise be exercised
+    //   without a signed-in approved teacher AND a real classroom, which would
+    //   make the test depend on production data and write to it.
+    ...(/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ? {
+      __seed(o) {
+        const d = o || {};
+        _classId = d.classId || 'test-class';
+        _className = d.className || '';
+        _classGrade = d.classGrade != null ? d.classGrade : null;
+        _assignments = d.assignments || [];
+        _events = d.events || [];
+        _physicalHomework = d.physicalHomework || [];
+        _materials = d.materials || [];
+        _workLoaded = true; _pupilsLoaded = true;
+        _workError = ''; _eventsError = '';
+        // ⚠ ACTUALLY OPEN THE OVERLAY. Seeding the arrays and calling
+        //   showSection() paints into a panel inside a container that is still
+        //   .hidden — every structural assertion passes against DOM nobody can
+        //   see. "Ask the DOM, not the indentation" applies to the test too.
+        el('tc-classroom-detail')?.classList.remove('hidden');
+        const nameEl = el('tc-cd-name');
+        if (nameEl) nameEl.textContent = _className;
+      },
+      __section: () => _activeSection,
+    } : {}),
   };
 })();

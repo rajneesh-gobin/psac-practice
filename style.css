@@ -11133,3 +11133,20 @@ html.dark .lb-when.is-on{background:#6366f1;border-color:#6366f1;color:#fff}
   .tc-paper-panel { padding: 1rem .9rem; max-height: 92vh }
   .tc-paper-shelf { max-height: 46vh }
 }
+
+/* ══ The class Work timeline (Activities + Calendar, merged) ═══════════════
+   ⚠ One day = one block. The heading carries the date so the rows beneath it
+   do not each have to repeat it, which is what made the old two-section split
+   read as two different lists of the same things. */
+.tc-day { margin-bottom: 1.1rem }
+.tc-day-head {
+  font-size: .82rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  color: rgba(240,236,220,.62); margin: 0 0 .45rem;
+  padding-bottom: .3rem; border-bottom: 1px solid rgba(240,236,220,.14);
+}
+/* Today is the line a teacher looks for first. */
+.tc-day-head.is-today { color: #fcd34d; border-bottom-color: rgba(252,211,77,.4) }
+/* ⚠ TeacherWorkspace.drawCards() owns this container and paints a .tw-grid
+   into it. Give it spacing but never a layout that fights the grid inside. */
+.tc-day-asgn { margin-top: .4rem }
+.tc-day-asgn:empty { display: none }

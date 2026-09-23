@@ -5095,10 +5095,9 @@
       <div class="tc-cd-body">
         <nav class="tc-cd-nav" role="tablist" aria-label="Classroom sections">
           <button class="tc-cd-nav-btn" role="tab" data-sec="overview" onclick="TeacherClassroomDetail.showSection('overview')">🏠<span>Dashboard</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="work"     onclick="TeacherClassroomDetail.showSection('work')">📋<span>Activities</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="work"     onclick="TeacherClassroomDetail.showSection('work')">📅<span>Work</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="pupils"   onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
           <button class="tc-cd-nav-btn" role="tab" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Resources</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="calendar" onclick="TeacherClassroomDetail.showSection('calendar')">🗓️<span>Calendar</span></button>
           <div class="tc-cd-nav-more">
             <button class="tc-cd-nav-btn" id="tc-cd-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="tc-cd-more-menu" onclick="TeacherClassroomDetail.toggleMore()">⋯<span>More</span></button>
             <div id="tc-cd-more-menu" class="tc-cd-more-menu hidden" role="menu" aria-label="More classroom tools">
@@ -5111,10 +5110,6 @@
           <div id="tc-cd-work"      class="tc-cd-section hidden"></div>
           <div id="tc-cd-pupils"    class="tc-cd-section hidden"></div>
           <div id="tc-cd-materials" class="tc-cd-section hidden"></div>
-          <!-- The classroom calendar: exams, hand-in dates, days away, other
-               events - per classroom (teacher_class_events). Pupils see it on
-               the class page. Filled by TeacherClassroomDetail._renderCalendar(). -->
-          <div id="tc-cd-calendar"  class="tc-cd-section hidden"></div>
           <div id="tc-cd-results"   class="tc-cd-section hidden"></div>
           <div id="tc-cd-settings"  class="tc-cd-section hidden"></div>
         </div>
