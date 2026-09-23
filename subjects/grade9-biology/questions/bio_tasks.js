@@ -45,9 +45,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'They carry oxygen using haemoglobin; the biconcave disc shape maximises surface area for oxygen absorption',
-          'They defend the body against infection; they engulf and destroy bacteria by phagocytosis',
-          'They help blood to clot at wounds; they release chemicals that trigger fibrin formation',
-          'They carry dissolved nutrients to cells; their thin membrane allows rapid diffusion of glucose'
+          'They help the blood to clot at a wound; they release the chemicals that trigger fibrin threads to form',
+          'They defend the body against infection; they engulf and then destroy invading bacteria by phagocytosis',
+          'They carry dissolved nutrients to the cells; their very thin membrane allows rapid diffusion of glucose'
         ],
         answer: 'They carry oxygen using haemoglobin; the biconcave disc shape maximises surface area for oxygen absorption'
       }
@@ -109,9 +109,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Capillary; the thin wall minimises diffusion distance so substances move rapidly between blood and cells',
-          'Venule; the thin wall allows high blood pressure to be maintained across the capillary bed',
-          'Capillary; the thin wall prevents any white blood cells from leaving the bloodstream',
-          'Arteriole; the thin wall allows the vessel to stretch when blood pressure increases'
+          'Arteriole; the thin wall allows the vessel to stretch each time the blood pressure suddenly increases',
+          'Venule; the thin wall allows a high blood pressure to be maintained right across the whole capillary bed',
+          'Capillary; the thin wall prevents any of the white blood cells from ever leaving the bloodstream'
         ],
         answer: 'Capillary; the thin wall minimises diffusion distance so substances move rapidly between blood and cells'
       }
@@ -271,9 +271,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Fatty plaques narrow the coronary arteries; a clot may then block them completely, cutting off oxygen to heart muscle, which dies',
-          'Fatty deposits thicken the heart muscle wall so it cannot contract, causing the heart to stop pumping',
-          'Cholesterol dissolves into the blood and makes it too thick to flow through the fine capillaries of the heart',
-          'Fatty deposits cause the coronary veins to swell, increasing pressure until the heart wall ruptures'
+          'Cholesterol dissolves into the blood and makes it far too thick to flow through the fine capillaries of the heart muscle itself',
+          'Fatty deposits make the coronary veins swell up, so the pressure inside them rises until the wall of the heart finally ruptures',
+          'Fatty deposits thicken the wall of the heart muscle so that it can no longer contract, and the heart then stops pumping blood'
         ],
         answer: 'Fatty plaques narrow the coronary arteries; a clot may then block them completely, cutting off oxygen to heart muscle, which dies'
       }
@@ -319,9 +319,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Sexual reproduction involves two parents and produces offspring with genetic variation; asexual uses only one parent',
-          'Sexual reproduction is always faster than asexual reproduction in all organisms',
-          'Sexual reproduction never produces more than two offspring at a time; asexual can produce hundreds',
-          'Sexual reproduction requires less energy than asexual reproduction in most organisms'
+          'Sexual reproduction never produces more than two offspring at a time, while asexual can produce many hundreds',
+          'Sexual reproduction always requires far less energy than asexual reproduction does in most living organisms',
+          'Sexual reproduction is always very much faster than asexual reproduction in every kind of plant and animal'
         ],
         answer: 'Sexual reproduction involves two parents and produces offspring with genetic variation; asexual uses only one parent'
       }
@@ -419,9 +419,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'The scrotum keeps the testes 2–3 °C cooler than body temperature, which is needed for healthy sperm production',
-          'The testes are located outside to protect them from infection by bacteria inside the body',
-          'Being outside the body allows the testes to receive more oxygen from the surrounding air',
-          'The external position allows sperm to be released directly without passing through body organs'
+          'The testes are held outside the body to protect them from the bacteria that live inside the abdomen',
+          'Being outside the body allows the testes to take in extra oxygen directly from the surrounding air',
+          'The external position lets sperm be released directly without having to pass through any body organs'
         ],
         answer: 'The scrotum keeps the testes 2–3 °C cooler than body temperature, which is needed for healthy sperm production'
       }
@@ -465,9 +465,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'In the oviduct (fallopian tube)',
-          'In the uterus (womb)',
-          'In the ovary',
-          'At the cervix'
+          'In the ovary (inside the follicle)',
+          'At the cervix (neck of the womb)',
+          'In the uterus (womb lining)'
         ],
         answer: 'In the oviduct (fallopian tube)'
       }
@@ -483,9 +483,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Ovary → oviduct (where fertilisation may occur) → uterus, where the fertilised egg implants in the endometrium',
-          'Ovary → cervix → oviduct → uterus, where the egg waits to be fertilised by sperm',
-          'Ovary → uterus → oviduct → cervix, with fertilisation occurring inside the uterus',
-          'Ovary → vagina → oviduct → uterus, with implantation occurring in the oviduct wall'
+          'Ovary → cervix → oviduct → uterus, where the unfertilised egg waits for sperm to arrive and fertilise it',
+          'Ovary → vagina → oviduct → uterus, with implantation taking place in the wall of the oviduct itself',
+          'Ovary → uterus → oviduct → cervix, with fertilisation taking place inside the uterus on the way past'
         ],
         answer: 'Ovary → oviduct (where fertilisation may occur) → uterus, where the fertilised egg implants in the endometrium'
       }
@@ -529,9 +529,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'No — HIV is not present in saliva in amounts that transmit infection; it requires direct blood-to-blood or sexual contact',
-          'Yes — saliva contains HIV in high concentrations, so sharing food always carries a risk of transmission',
-          'No — HIV is only transmitted at night when the immune system is weakest, not during mealtimes',
-          'Yes — food contaminated by an infected cook can carry the virus into the digestive system'
+          'Yes — food that has been contaminated by an infected cook can carry the virus into the digestive system of the eater',
+          'Yes — saliva contains HIV in very high concentrations, so sharing any food always carries a real risk of infection',
+          'No — HIV is only transmitted at night, when the immune system is at its weakest, and never during a shared meal'
         ],
         answer: 'No — HIV is not present in saliva in amounts that transmit infection; it requires direct blood-to-blood or sexual contact'
       }
@@ -577,9 +577,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'The variety of all living organisms, including species diversity, genetic variation, and diversity of ecosystems',
-          'The total number of individual organisms living in a particular habitat at one time',
-          'The number of different species of plants found in a given area of forest or grassland',
-          'The study of living organisms and how they interact with their natural environment'
+          'The number of different species of plant and tree that are found within a given area of forest, scrub or grassland',
+          'The scientific study of all living organisms and of the ways in which they interact with their own environment',
+          'The total number of individual organisms of every kind that are living in one particular habitat at any one time'
         ],
         answer: 'The variety of all living organisms, including species diversity, genetic variation, and diversity of ecosystems'
       }
@@ -613,9 +613,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Species are connected in food webs; losing one affects what eats it and what it eats, potentially destabilising the ecosystem',
-          'Each species occupies exactly one habitat; losing it frees space for invasive species to take over immediately',
-          'Every species produces oxygen; removing one species reduces the total oxygen available to other organisms',
-          'Losing a species increases biodiversity because the remaining species have more resources to share'
+          'Each species occupies exactly one habitat, so losing it frees space for invasive species to take over almost immediately',
+          'Every species produces oxygen, so removing any one of them reduces the total oxygen available to all of the others',
+          'Losing a species increases biodiversity, because the species that remain then have far more resources to share out'
         ],
         answer: 'Species are connected in food webs; losing one affects what eats it and what it eats, potentially destabilising the ecosystem'
       }
@@ -681,9 +681,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Deforestation and pollution (e.g. of waterways with pesticides or industrial waste)',
-          'Ecotourism and nature conservation programmes in national parks',
-          'Building wildlife corridors and captive breeding of endangered species',
-          'Seasonal migration of large animals and natural forest fires'
+          'Seasonal migration of large animals and naturally occurring forest fires',
+          'Nature conservation programmes and the replanting of native forest trees',
+          'Building wildlife corridors and captive breeding of endangered animals'
         ],
         answer: 'Deforestation and pollution (e.g. of waterways with pesticides or industrial waste)'
       }
@@ -699,9 +699,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Trees provide habitat and food for many species; removing them causes population decline, local extinction and food web collapse',
-          'Removing trees increases sunlight, which benefits ground plants and increases total species diversity',
-          'Deforestation cools the local climate, which suits cold-adapted species but harms tropical ones only',
-          'Fewer trees means less oxygen, which directly suffocates large animals before they can migrate'
+          'Fewer trees means less oxygen in the air, which directly suffocates the larger animals before they can migrate somewhere else',
+          'Removing the trees lets in far more sunlight, which benefits the ground plants and so increases the total species diversity',
+          'Deforestation cools the local climate, which suits the cold-adapted species but harms only the tropical ones living there'
         ],
         answer: 'Trees provide habitat and food for many species; removing them causes population decline, local extinction and food web collapse'
       }
@@ -775,9 +775,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Carbon dioxide + water → glucose + oxygen (using light energy and chlorophyll)',
-          'Glucose + oxygen → carbon dioxide + water (releasing energy)',
-          'Water + minerals → starch + carbon dioxide (using sunlight)',
-          'Carbon dioxide + glucose → oxygen + starch (using chlorophyll)'
+          'Glucose + oxygen → carbon dioxide + water (releasing stored energy and heat)',
+          'Water + minerals → starch + carbon dioxide (using light energy and chlorophyll)',
+          'Carbon dioxide + glucose → oxygen + starch (using sunlight and green chlorophyll)'
         ],
         answer: 'Carbon dioxide + water → glucose + oxygen (using light energy and chlorophyll)'
       }
@@ -857,9 +857,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'The palisade layer is at the top of the leaf, close to the light, and its cells are densely packed with chloroplasts to absorb maximum light',
-          'The palisade cells are at the bottom of the leaf to absorb light reflected from the ground surface',
-          'The palisade layer contains large air spaces that allow light to scatter throughout the leaf equally',
-          'Palisade cells are thin and transparent so that light passes through them without being absorbed'
+          'The palisade layer contains very large air spaces that allow the light to scatter evenly right through the whole of the leaf tissue',
+          'The palisade cells lie at the bottom of the leaf, where they absorb the light that is reflected upwards from the ground surface',
+          'The palisade cells are thin and transparent, so that the light passes straight through them without ever being absorbed at all'
         ],
         answer: 'The palisade layer is at the top of the leaf, close to the light, and its cells are densely packed with chloroplasts to absorb maximum light'
       }
@@ -885,9 +885,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Light is no longer the limiting factor; another factor such as CO₂ concentration or temperature is now limiting the rate',
-          'The plant has produced as much glucose as it can store, so photosynthesis stops automatically',
-          'The chlorophyll has been bleached by too much light, so the rate cannot rise any further',
-          'The stomata close when light is very bright, preventing CO₂ from entering and stopping further increases'
+          'The chlorophyll has been bleached by the very bright light, so the rate of photosynthesis cannot rise any further at all',
+          'The stomata close when the light is very bright, which prevents CO₂ from entering and stops any further increase in rate',
+          'The plant has produced as much glucose as it is able to store, so photosynthesis stops automatically at that point'
         ],
         answer: 'Light is no longer the limiting factor; another factor such as CO₂ concentration or temperature is now limiting the rate'
       }
@@ -995,9 +995,9 @@ STATIC_QUESTIONS.push(makeTask({
         variant: 'options',
         options: [
           'Move the lamp to different distances from the plant; use a water bath to control temperature and sodium hydrogencarbonate to maintain CO₂',
-          'Use bulbs of different colours at the same distance; add ice to cool the water after each colour change',
-          'Change the concentration of CO₂ in the water by adding different amounts of acid to the tank',
-          'Place the plant at different depths in the water to change the amount of light reaching it'
+          'Use bulbs of several different colours all at the same distance; add ice to the water to cool it down again after each colour change',
+          'Place the plant at several different depths in the water; stir the tank between readings and keep the room temperature constant throughout',
+          'Change the CO₂ concentration by adding different amounts of acid to the water; keep the lamp at one fixed distance from the tank throughout'
         ],
         answer: 'Move the lamp to different distances from the plant; use a water bath to control temperature and sodium hydrogencarbonate to maintain CO₂'
       }

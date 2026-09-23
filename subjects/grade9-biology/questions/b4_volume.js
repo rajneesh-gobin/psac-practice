@@ -85,7 +85,7 @@ const MCQ = [
 
   ['g9s-b4-v011', 'photosynthesis', 3,
    'A plant is placed in a sealed dark container. What would you expect to happen to the O₂ concentration over time?',
-   ['It falls, because the plant consumes oxygen in respiration without replacing it by photosynthesis', 'It rises, because plants always produce oxygen regardless of light conditions', 'It stays the same, because dark conditions switch off all gas exchange completely', 'It rises sharply, because darkness triggers an increase in the rate of photosynthesis'],
+   ["It falls, because the plant consumes oxygen in respiration without replacing it by photosynthesis","It stays the same, because dark conditions switch off all gas exchange in the leaf completely","It rises, because green plants always produce oxygen whatever the light conditions around them","It rises sharply, because darkness triggers a large increase in the rate of photosynthesis"],
    'It falls, because the plant consumes oxygen in respiration without replacing it by photosynthesis',
    'Plants respire continuously but only photosynthesise in light.',
    'All living cells, including plant cells, carry out aerobic respiration at all times and consume oxygen; in darkness, photosynthesis (which produces oxygen) stops, so the O₂ concentration falls.'],
@@ -297,7 +297,7 @@ const MCQ = [
 
   ['g9s-b4-v045', 'factors_for_photosynthesis', 2,
    'At which temperature would the rate of photosynthesis generally be higher, and why?',
-   ['30 °C, because enzymes controlling photosynthesis work faster at higher temperatures (up to their optimum)', '10 °C, because cold temperatures reduce water loss and keep stomata open longer', '30 °C, because heat provides the activation energy that directly splits water molecules', '10 °C, because photosynthesis does not involve enzymes and benefits from stable conditions'],
+   ["30 °C, because enzymes controlling photosynthesis work faster at higher temperatures (up to their optimum)","10 °C, because cool conditions reduce water loss and keep the stomata open for very much longer","10 °C, because photosynthesis does not involve enzymes at all and benefits from stable cool conditions","30 °C, because the heat provides the activation energy that directly splits the water molecules apart"],
    '30 °C, because enzymes controlling photosynthesis work faster at higher temperatures (up to their optimum)',
    'Photosynthesis is controlled by enzymes — how does temperature affect enzymes?',
    'The reactions of photosynthesis are enzyme-controlled; as temperature rises toward the enzyme\'s optimum (typically around 30–40 °C for many plants), the rate of enzyme activity — and therefore photosynthesis — increases.'],

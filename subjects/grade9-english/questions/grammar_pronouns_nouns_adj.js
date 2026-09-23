@@ -47,7 +47,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-007', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:2,
     question:'In <i>"My favourite author, J. K. Rowling, wrote the Harry Potter series,"</i> what role does <b>J. K. Rowling</b> play?',
-    options:['Appositive — it renames "My favourite author"','Subject — it performs the action','Object — it receives the action','Adverbial — it tells us when'],
+    options:["Appositive — it renames \"My favourite author\"","Object — it receives the action of the verb","Adverbial — it tells us when the writing happened","Subject — it performs the action of the verb"],
     answer:'Appositive — it renames "My favourite author"',
     hint:'Does it do something, receive something, or just tell you more about the noun before it?',
     explanation:'"J. K. Rowling" renames "My favourite author" and is therefore an <b>appositive</b>. The actual subject of the verb is the whole noun phrase including the appositive.' }),
@@ -61,14 +61,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-009', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:2,
     question:'What is the main purpose of an appositive in a sentence?',
-    options:['To identify or give extra information about the noun beside it','To describe how an action is performed','To connect two clauses of equal weight','To show who receives the action of the verb'],
+    options:["To identify or give extra information about the noun beside it","To show who receives the action of the verb in the clause","To connect two clauses of equal weight within one sentence","To describe how or when an action is performed by someone"],
     answer:'To identify or give extra information about the noun beside it',
     hint:'Think about what extra detail the appositive adds and where it sits.',
     explanation:'An appositive <b>identifies or adds information</b> about the noun beside it without starting a new clause. It is always a noun phrase, never a verb form.' }),
 
   makeMCQ({ id:'g9eng-grv-010', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:3,
     question:'A student writes: <i>"Our coach Mr Persand, led the team to victory."</i> What is wrong?',
-    options:['The comma after "Persand" should not be there if no comma precedes "Mr"','The name "Mr Persand" needs to be removed entirely','The verb should be "leads" not "led"','There is no error'],
+    options:["The comma after \"Persand\" should not be there if no comma precedes \"Mr\"","There is no error at all in the way that this sentence is punctuated","The name \"Mr Persand\" needs to be removed from the sentence entirely","The verb should be \"leads\" rather than \"led\" to match the subject"],
     answer:'The comma after "Persand" should not be there if no comma precedes "Mr"',
     hint:'Either both commas are present or neither is — a single comma beside an appositive is wrong.',
     explanation:'"Mr Persand" is an appositive for "Our coach". It should either have <b>no commas</b> (when tightly identifying the person) or <b>both commas</b> (one before "Mr" and one after "Persand"). One comma alone misplaces the boundary.' }),
@@ -189,7 +189,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-028', chapterId:'g9eng-gr-pronouns', subsection:'emphasising', difficulty:1,
     question:'What does an <b>emphasising pronoun</b> do?',
-    options:['It stresses that the named person did the action personally','It shows the subject acts on itself','It replaces a noun already mentioned','It asks a question about the subject'],
+    options:["It stresses that the named person did the action personally","It shows that the subject acts upon itself in the sentence","It asks a question about the subject of the main clause","It replaces a noun that has already been mentioned before"],
     answer:'It stresses that the named person did the action personally',
     hint:'Think about what changes when you add "himself" after a name.',
     explanation:'An emphasising pronoun draws attention to the fact that a particular person — and no one else — did something. It adds stress, not new information.' }),
@@ -210,7 +210,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-031', chapterId:'g9eng-gr-pronouns', subsection:'emphasising', difficulty:3,
     question:'A student writes: <i>"The minister himself is blamed himself for the failure."</i> What is the error?',
-    options:['Two pronouns with different functions are used — only one is needed here','The subject should be "the ministers"','Both uses of "himself" are correct','Neither use of "himself" is correct'],
+    options:["Two pronouns with different functions are used — only one is needed here","Neither use of the word \"himself\" is correct in a sentence like this","Both uses of the word \"himself\" are correct and should be left alone","The subject should be \"the ministers\" to agree with the two pronouns"],
     answer:'Two pronouns with different functions are used — only one is needed here',
     hint:'One "himself" emphasises; the other is reflexive. Can they both appear?',
     explanation:'The sentence uses "himself" as an emphasising pronoun AND as a reflexive object in the same clause, which doubles up awkwardly. Either "The minister himself is blamed" or "The minister blames himself" — not both.' }),
@@ -223,7 +223,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-033', chapterId:'g9eng-gr-pronouns', subsection:'emphasising', difficulty:3,
     question:'Which two positions can an emphasising pronoun occupy?',
-    options:['Immediately after the noun it emphasises, or at the end of the clause','Before the subject, or before the verb','Between two objects, or before the object','Only after a linking verb'],
+    options:["Immediately after the noun it emphasises, or at the end of the clause","Between the two objects of the verb, or directly before the object","Only after a linking verb such as \"be\", and never in any other place","Before the subject of the sentence, or immediately before the verb"],
     answer:'Immediately after the noun it emphasises, or at the end of the clause',
     hint:'Compare "He himself fixed the problem" with "He fixed the problem himself."',
     explanation:'An emphasising pronoun can follow its noun (<i>"He himself fixed it"</i>) or move to the end of the clause (<i>"He fixed it himself"</i>) — both positions are correct and both carry emphasis.' }),
@@ -250,7 +250,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-037', chapterId:'g9eng-gr-pronouns', subsection:'emphasising', difficulty:3,
     question:'Identify the error: <i>"The principal himself, he delivered the speech."</i>',
-    options:['The pronoun "he" is redundant alongside "The principal himself"','The word "himself" should be "herself"','"Himself" cannot follow "principal"','There is no error'],
+    options:["The pronoun \"he\" is redundant alongside \"The principal himself\"","The word \"himself\" cannot follow the noun \"principal\" at all","There is no error in this sentence as it has been written here","The word \"himself\" should be \"herself\" to match the principal"],
     answer:'The pronoun "he" is redundant alongside "The principal himself"',
     hint:'The subject is already stated twice — once as a noun and once as a pronoun.',
     explanation:'When "himself" follows a noun, adding a second subject pronoun ("he") creates a double subject. The correct form is either "The principal himself delivered…" or "He himself delivered…" — not both.' }),
@@ -264,7 +264,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-039', chapterId:'g9eng-gr-pronouns', subsection:'emphasising', difficulty:3,
     question:'A student removes <b>ourselves</b> from: <i>"We built the community garden ourselves."</i> What changes?',
-    options:['The sentence is still grammatical but the personal effort is no longer stressed','The sentence becomes ungrammatical','The meaning reverses completely','The subject changes from "we" to "they"'],
+    options:["The sentence is still grammatical but the personal effort is no longer stressed","The meaning of the sentence reverses completely and becomes the opposite","The subject changes from \"we\" to \"they\" without any other alteration","The sentence becomes ungrammatical and can no longer be understood at all"],
     answer:'The sentence is still grammatical but the personal effort is no longer stressed',
     hint:'Test it: "We built the community garden." Is it grammatical?',
     explanation:'"We built the community garden" is perfectly grammatical. Removing "ourselves" loses only the <b>emphasis</b> that the group — and no one else — did the work. This removability is the definition of an emphasising pronoun.' }),
@@ -340,7 +340,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-051', chapterId:'g9eng-gr-pronouns', subsection:'relative', difficulty:3,
     question:'Identify the error: <i>"The man which I spoke to was very helpful."</i>',
-    options:['Which should be whom, because the pronoun refers to a person who is the object','Which should be who, because the pronoun refers to a person','Which is correct as the object of the verb','Which should be whose'],
+    options:["Which should be whom, because the pronoun refers to a person who is the object","Which should be whose, because the pronoun shows possession by a person","Which should be who, because the pronoun refers to a person and not a thing","Which is correct as it is, because it acts as the object of the verb here"],
     answer:'Which should be whom, because the pronoun refers to a person who is the object',
     hint:'"Which" is for things. The man is a person, and he is the object of "spoke to".',
     explanation:'"Which" cannot refer to a person. The correct form is <b>whom</b> (object), because the man received the action "spoke to". "Who" would be used if the man were the subject.' }),
@@ -353,7 +353,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-053', chapterId:'g9eng-gr-pronouns', subsection:'relative', difficulty:3,
     question:'Why is <b>that</b> <b>not</b> used in: <i>"The president, _______ visited last year, opened the bridge."</i>?',
-    options:['Because "that" cannot begin a non-defining relative clause','Because "that" is only used for animals','Because "that" needs a comma after the subject','Because "that" must follow a plural noun'],
+    options:["Because \"that\" cannot begin a non-defining relative clause","Because \"that\" must always follow a plural noun in English","Because \"that\" needs a comma placed after the subject noun","Because \"that\" is only ever used when referring to animals"],
     answer:'Because "that" cannot begin a non-defining relative clause',
     hint:'The commas signal a non-defining clause. Which pronoun is banned there?',
     explanation:'"That" is restricted to <b>defining</b> relative clauses. When commas enclose the clause (making it non-defining), "which" or "who" must be used instead.' }),

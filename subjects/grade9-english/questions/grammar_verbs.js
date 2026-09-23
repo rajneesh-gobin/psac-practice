@@ -211,7 +211,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-090', chapterId:'g9eng-gr-verbs', subsection:'future_perfect_continuous', difficulty:1,
     question:'Identify the future perfect continuous verb phrase: "By July, the research team will have been collecting data for five years."',
-    options:['will have been collecting','will have','collecting data','for five years'],
+    options:["will have been collecting","have been collecting","been collecting data","collecting data for five years"],
     answer:'will have been collecting',
     hint:'The whole verb phrase, not just part of it, is the answer.',
     explanation:'The future perfect continuous is the full verb phrase <b>will have been collecting</b>. "For five years" is the time expression showing duration, not part of the tense.' }),
@@ -225,7 +225,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-092', chapterId:'g9eng-gr-verbs', subsection:'future_perfect_continuous', difficulty:3,
     question:'Which sentence best expresses a tiresome duration leading to a future point?',
-    options:['By midnight, I will have been marking papers for six hours.','By midnight, I will have marked papers.','By midnight, I will mark papers.','By midnight, I marked papers.'],
+    options:["By midnight, I will have been marking papers for six hours.","By midnight, I will have marked all of the papers in the pile.","By midnight, I will mark the papers that are still left to do.","By midnight, I marked the whole pile of papers in my bag."],
     answer:'By midnight, I will have been marking papers for six hours.',
     hint:'Which option makes the reader feel the length of the effort?',
     explanation:'<b>Will have been marking</b> with "for six hours" communicates the exhausting stretch of effort. The simple future perfect only records that marking happened.' }),
@@ -246,21 +246,21 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-095', chapterId:'g9eng-gr-verbs', subsection:'future_perfect_continuous', difficulty:3,
     question:'When I meet her at the airport next Sunday, she _____ non-stop for twenty hours.',
-    options:['will have been travelling','will have travelled','travels','is travelling'],
+    options:["will have been travelling","will be travelling","has been travelling","will have travelled"],
     answer:'will have been travelling',
     hint:'"Non-stop" and "twenty hours" together emphasise a continuous stretch of effort.',
     explanation:'"Non-stop" and "twenty hours" point to the future perfect continuous <b>will have been travelling</b>, which stresses the continuous effort rather than just its completion.' }),
 
   makeMCQ({ id:'g9eng-grv-096', chapterId:'g9eng-gr-verbs', subsection:'future_perfect_continuous', difficulty:3,
     question:'Choose the sentence that uses the future perfect continuous to highlight a lifelong, continuous effort.',
-    options:['By her sixtieth birthday, she will have been painting for forty years.','By her sixtieth birthday, she will paint.','By her sixtieth birthday, she has painted.','By her sixtieth birthday, she had been painting.'],
+    options:["By her sixtieth birthday, she will have been painting for forty years.","By her sixtieth birthday, she has painted for forty years already.","By her sixtieth birthday, she will paint for another forty years.","By her sixtieth birthday, she had been painting for forty years."],
     answer:'By her sixtieth birthday, she will have been painting for forty years.',
     hint:'Which sentence captures forty years of unbroken dedication?',
     explanation:'<b>Will have been painting</b> stresses forty years of continuous creative work. The simple forms in the other options lose the sense of ongoing dedication.' }),
 
   makeMCQ({ id:'g9eng-grv-097', chapterId:'g9eng-gr-verbs', subsection:'future_perfect_continuous', difficulty:2,
     question:'"They will have been rehearsing for three months by opening night." What does this tell us?',
-    options:['They rehearse continuously in the lead-up to opening night.','They rehearsed once, three months ago.','They will begin rehearsing on opening night.','They have never rehearsed before.'],
+    options:["They rehearse continuously in the lead-up to opening night.","They will begin rehearsing on the evening of opening night.","They rehearsed only once, about three months ago in total.","They have never rehearsed together before opening night."],
     answer:'They rehearse continuously in the lead-up to opening night.',
     hint:'The future perfect continuous stresses an ongoing process up to a future point.',
     explanation:'The sentence pictures <b>continuous rehearsal</b> across three months, arriving at opening night — that is what the future perfect continuous communicates.' }),
@@ -281,7 +281,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-100', chapterId:'g9eng-gr-verbs', subsection:'future_perfect_continuous', difficulty:3,
     question:'"By nine tomorrow morning, the bakers will have been making bread for five hours." What does the future perfect continuous add here?',
-    options:['It shows the baking is a continuous process ending at nine tomorrow.','It shows the baking happened only once.','It shows the baking finished yesterday.','It shows the baking has not started yet.'],
+    options:["It shows the baking is a continuous process ending at nine tomorrow.","It shows the baking was finished yesterday and will not resume.","It shows the baking has not started yet and will begin at nine.","It shows the baking happened only once, early yesterday morning."],
     answer:'It shows the baking is a continuous process ending at nine tomorrow.',
     hint:'Five hours of sustained work — the continuous form shows the process, not just the result.',
     explanation:'<b>Will have been making</b> pictures a five-hour stretch of continuous work. It stresses the activity itself rather than just the loaves produced — the main function of the future perfect continuous.' }),
@@ -353,7 +353,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-110', chapterId:'g9eng-gr-verbs', subsection:'tense_consistency', difficulty:1,
     question:'Why is tense consistency important in written English?',
-    options:['It tells the reader clearly when events happen relative to each other.','It makes sentences shorter and easier to punctuate.','It limits the writer to one verb per sentence.','It is only important in formal letters, not in stories.'],
+    options:["It tells the reader clearly when events happen relative to each other.","It makes sentences shorter and much easier for a writer to punctuate.","It limits the writer to using only one verb in any given sentence.","It matters only in formal letters and never in stories or reports."],
     answer:'It tells the reader clearly when events happen relative to each other.',
     hint:'Think about what a reader does with tense information.',
     explanation:'Tense signals time. Keeping the tense consistent means the reader always knows <b>when</b> events occur — past, present or future — without confusion from unexpected switches.' }),
@@ -416,14 +416,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-119', chapterId:'g9eng-gr-verbs', subsection:'tense_consistency', difficulty:4,
     question:'A writer begins in the simple past and shifts to the present for dramatic effect. Which example does this deliberately and correctly?',
-    options:['He reached the summit. Suddenly, everything changes — the cloud lifts and the valley appears below.','He reached the summit. Suddenly, everything had changed.','He reached the summit. Suddenly, everything will change.','He reached the summit. Suddenly, everything changed.'],
+    options:["He reached the summit. Suddenly, everything changes — the cloud lifts and the valley appears below.","He reached the summit. Suddenly, everything changed as the cloud lifted and the valley appeared below.","He reached the summit. Suddenly, everything will change once the cloud lifts and the valley appears.","He reached the summit. Suddenly, everything had changed, for the cloud had lifted and the valley showed."],
     answer:'He reached the summit. Suddenly, everything changes — the cloud lifts and the valley appears below.',
     hint:'The historical present uses the present tense for vividness at a key moment — it is deliberate, not an error.',
     explanation:'Writers sometimes shift to the present at a dramatic moment — this is the <b>historical present</b>. The pattern "Suddenly…" signals intent. The plain past ("everything changed") is consistent but less vivid; the future and past-perfect versions are ungrammatical here.' }),
 
   makeMCQ({ id:'g9eng-grv-120', chapterId:'g9eng-gr-verbs', subsection:'tense_consistency', difficulty:3,
     question:'Which best describes "maintaining tense consistency across a whole text"?',
-    options:['Choosing one time frame and keeping all verbs in that frame unless there is a clear reason to shift.','Using the present tense in every sentence regardless of the subject.','Alternating between past and present to keep the reader interested.','Avoiding all forms of the verb "to be" throughout the text.'],
+    options:["Choosing one time frame and keeping all verbs in that frame unless there is a clear reason to shift.","Using the present tense in every single sentence regardless of the subject or the time described.","Alternating between the past and the present throughout the text in order to keep the reader interested.","Avoiding all forms of the verb \"to be\" throughout the text so that the writing stays lively and varied."],
     answer:'Choosing one time frame and keeping all verbs in that frame unless there is a clear reason to shift.',
     hint:'Consistency allows exceptions — but those exceptions need to be deliberate.',
     explanation:'Tense consistency means anchoring the text in <b>one time frame</b> and only departing from it when there is a clear purpose. Random shifts without reason undermine the writing.' })

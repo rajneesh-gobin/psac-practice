@@ -1016,12 +1016,7 @@
     subsection: 'evidence',
     difficulty: 3,
     question: 'A student claims: "The digital literacy passage presents social media as harmful to young people\'s education." Which statement best evaluates this claim using evidence from the passage?',
-    options: [
-      'The claim is partially supported — critics describe harm, but the passage also presents a counter-argument from proponents.',
-      'The claim is fully supported — the passage consistently argues that social media harms academic reading skills.',
-      'The claim is unsupported — the passage only presents the benefits of digital literacy.',
-      'The claim cannot be evaluated because the passage contains no direct evidence for or against it.'
-    ],
+    options: ["The claim is partially supported — critics describe harm, but the passage also presents a counter-argument from proponents.","The claim is unsupported — the passage only presents the benefits of digital literacy and never reports any criticism.","The claim is fully supported — the passage argues throughout that social media harms the reading skills of the young.","The claim cannot be evaluated — the passage offers no direct evidence either for or against the effect on education."],
     answer: 'The claim is partially supported — critics describe harm, but the passage also presents a counter-argument from proponents.',
     hint: 'Does the passage present only one viewpoint, or does it present both sides?',
     explanation: 'The passage presents both critics (who argue social media reduces sustained reading skills) and proponents (who argue it develops a different literacy). A claim that the passage as a whole presents social media as harmful ignores the proponents\' counter-argument, so the claim is only partially supported by the evidence.'
@@ -1085,12 +1080,7 @@
     subsection: 'effect_of_device',
     difficulty: 3,
     question: 'In the same poem, the line "The weeds have claimed the fallen columns" uses personification. What is the most effective description of the purpose of this device in context?',
-    options: [
-      'It suggests that nature is actively reclaiming what humans built, reinforcing the poem\'s theme of decay and the passage of time.',
-      'It implies that the weeds are behaving aggressively and pose a deliberate threat to the ruins.',
-      'It creates a comic effect by comparing plants to ambitious landowners seeking legal ownership.',
-      'It highlights the physical strength of the weeds in contrast to the structural weakness of the columns.'
-    ],
+    options: ["It suggests that nature is actively reclaiming what humans built, reinforcing the poem's theme of decay and the passage of time.","It creates a comic effect by comparing the plants to ambitious landowners who are seeking legal ownership of the ruined site.","It highlights the physical strength of the weeds in contrast with the structural weakness of the old and crumbling columns.","It implies that the weeds are behaving aggressively and that they pose a deliberate, calculated threat to the standing ruins."],
     answer: 'It suggests that nature is actively reclaiming what humans built, reinforcing the poem\'s theme of decay and the passage of time.',
     hint: 'Consider the broader context of the poem — it features ruins, forgotten names, and silence. What theme does this line serve?',
     explanation: 'The personification of the weeds "claiming" the columns reinforces the poem\'s elegiac theme: what humans built has been reclaimed by nature over time. This contributes to the mood of decay and loss. The tone of the poem is mournful, not comic, and "claimed" implies conquest of time rather than a physical contest of strength.'
@@ -1136,12 +1126,7 @@
     subsection: 'line_explication',
     difficulty: 3,
     question: 'Read the following line from a prose extract:<br><br><em>"…Miriam moved through it all as though she were its beating heart — greeting vendors by name, pausing to admire the geometry of stacked mangoes, absorbing the chaos into a private harmony only she understood."</em><br><br>What does the phrase "absorbing the chaos into a private harmony" most effectively suggest about Miriam?',
-    options: [
-      'She possesses an inner calm that allows her to find personal order and meaning within the disorder of the market.',
-      'She is deliberately trying to ignore the noise and confusion of the market around her.',
-      'She is overwhelmed by the market\'s activity and struggles to maintain her composure.',
-      'She controls the vendors and imposes her own sense of order on the market\'s activity.'
-    ],
+    options: ["She possesses an inner calm that allows her to find personal order and meaning within the disorder of the market.","She is overwhelmed by the market's activity and struggles to keep her composure among the competing voices.","She controls the vendors and imposes her own sense of order on the noisy activity going on in the market.","She is deliberately trying to ignore the noise and the confusion of the market pressing in all around her."],
     answer: 'She possesses an inner calm that allows her to find personal order and meaning within the disorder of the market.',
     hint: 'Notice "absorbing" (taking in) and "private harmony" (internal peace). What does this suggest about her inner state?',
     explanation: '"Absorbing" suggests she takes the chaos in rather than fighting it or being overwhelmed by it. "Private harmony" (known only to herself) implies an inner state of peace or understanding rather than external control. She is not imposing order on others — the harmony is internal and personal. This contrasts with the "chaos" to show her unique ability to find beauty and meaning in disorder.'
@@ -1153,12 +1138,7 @@
     subsection: 'supported_response',
     difficulty: 3,
     question: 'In the prose extract (see question 079), the author opens with the statement "The market was a living thing." Which answer best explains how the rest of the extract supports this description?',
-    options: [
-      'The extract describes competing voices, vivid sensory details (spices, light), and Miriam\'s vibrant interaction with the market, giving it the qualities of something alive.',
-      'The extract focuses on biological processes occurring within the market, such as the ripening of mangoes in the morning light.',
-      'The word "living" is supported only by the reference to vendors and Miriam, who are living people.',
-      'The extract contradicts the metaphor by presenting the market as chaotic and therefore disorganised rather than alive.'
-    ],
+    options: ["The extract describes competing voices, vivid sensory details (spices, light), and Miriam's vibrant interaction with the market, giving it the qualities of something alive.","The extract contradicts the metaphor by presenting the market as chaotic and therefore disorganised rather than alive, since anything truly living must be orderly.","The word \"living\" is supported only by the reference to the vendors and to Miriam, who are living people, and by nothing that is said about the market itself.","The extract focuses on biological processes occurring within the market, such as the ripening of the stacked mangoes in the morning light and the decay of spices."],
     answer: 'The extract describes competing voices, vivid sensory details (spices, light), and Miriam\'s vibrant interaction with the market, giving it the qualities of something alive.',
     hint: 'Think about what features of living things the extract shows — movement, energy, sensory richness, interaction.',
     explanation: 'The extract supports "a living thing" through: sound ("voices competed"), colour and light ("spices bled their colours into the morning light"), movement (Miriam moving, pausing, absorbing), and the human energy of relationships (greeting vendors by name). These details collectively give the market the energy and dynamism of a living organism. The market\'s chaos is part of its vitality, not a contradiction of it.'

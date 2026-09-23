@@ -81,11 +81,17 @@ function leaksIn(pack) {
 //    `options:` key at all. Anchoring on "id:'" found none of the last two and
 //    reported them as missing, which looks like a stale id rather than a
 //    limited tool.
+// ⚠⚠ AND BOTH QUOTE STYLES. 24 files across 23 packs write `id: "x"` with
+//    double quotes — one reclaimed-sample file per pack. Anchoring on `'`
+//    alone made every one of them unreachable, and --apply reported it as
+//    "not found in <pack>", which reads as a stale id rather than as a limit
+//    of the tool. Six packs had already been signed off as clean that way.
 const idAt = (src, id) => {
-  const m = new RegExp("id:\\s*'" + id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "'").exec(src);
+  const e = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const m = new RegExp("id:\\s*['\"]" + e + "['\"]").exec(src);
   if (m) return m.index;
-  const q = src.indexOf("'" + id + "'");     // positional helper form
-  return q >= 0 ? q : -1;
+  const q = src.search(new RegExp("['\"]" + e + "['\"]"));   // positional helper form
+  return q;
 };
 
 // The next array literal after `at`, quote-aware so a bracket inside an option
@@ -163,7 +169,7 @@ if (mode === '--apply') {
       //   doubt is refused and reported — a skipped question costs a minute, a
       //   silently corrupted file costs trust in every other rewrite.
       const occurrences = [];
-      { const re = new RegExp("(?:id:\\s*)?'" + qid.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "'", 'g');
+      { const re = new RegExp("(?:id:\\s*)?['\"]" + qid.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "['\"]", 'g');
         let m; while ((m = re.exec(s))) occurrences.push(m.index); }
       const candidates = [];
       for (const at of occurrences) {
@@ -193,10 +199,16 @@ if (mode === '--apply') {
       // ⚠ THE ANSWER MUST SURVIVE VERBATIM, accents and apostrophes included.
       //   In the positional helper form the answer is the quoted string
       //   immediately after the array; in the object form it is `answer:`.
+      // ⚠ BOTH QUOTE STYLES HERE TOO, and this one is the dangerous half: a
+      //   double-quoted `answer: "…"` simply did not match, `answer` stayed
+      //   null, and the verbatim-answer guard below was skipped rather than
+      //   failed. A rewrite could then have silently orphaned the answer.
       const after = s.slice(oEnd, oEnd + 400);
       const ansM = /answer:\s*'((?:\\'|[^'])*)'/.exec(after)
-        || /^\s*,\s*'((?:\\'|[^'])*)'/.exec(after);
-      const answer = ansM ? ansM[1].replace(/\\'/g, "'") : null;
+        || /answer:\s*"((?:\\"|[^"])*)"/.exec(after)
+        || /^\s*,\s*'((?:\\'|[^'])*)'/.exec(after)
+        || /^\s*,\s*"((?:\\"|[^"])*)"/.exec(after);
+      const answer = ansM ? ansM[1].replace(/\\(['"])/g, '$1') : null;
       if (answer && !opts.includes(answer)) {
         refused.push(qid + ' — the answer is no longer among the options: ' + JSON.stringify(answer));
         continue;

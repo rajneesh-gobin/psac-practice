@@ -132,12 +132,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g9s-bhard-010', chapterId: B4, subsection: 'photosynthesis', difficulty: 3,
     question: 'A potted plant is kept in complete darkness for 48 hours. A leaf is then removed and tested with iodine solution. What result is expected, and why?',
-    options: [
-      'Yellow-brown — the leaf contains no starch because it was used up in respiration during the dark period',
-      'Blue-black — photosynthesis continued slowly in the dark, producing starch',
-      'Blue-black — starch stored before the experiment remains in the leaf',
-      'Green — chlorophyll reacts with iodine to give a green colour'
-    ],
+    options: ["Yellow-brown — the leaf contains no starch because it was used up in respiration during the dark period","Blue-black — photosynthesis continued slowly in the dark, so the leaf carried on producing fresh starch","Green — the chlorophyll in the leaf reacts with the iodine solution to give a bright green colour","Blue-black — the starch stored in the leaf before the experiment began is still present inside it"],
     answer: 'Yellow-brown — the leaf contains no starch because it was used up in respiration during the dark period',
     hint: 'Photosynthesis requires light. What happens to stored starch when a plant cannot make more?',
     explanation: 'In darkness, photosynthesis cannot occur. The plant continues to respire, using the starch already stored in the leaf for energy. After 48 hours, the starch is depleted. Iodine solution stays <b>yellow-brown</b> in the absence of starch. A blue-black colour would only appear if starch were present. This procedure (de-starching) is the first step in many classic leaf experiments to ensure any starch detected afterwards was made during the experiment.'
@@ -146,12 +141,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g9s-bhard-011', chapterId: B4, subsection: 'leaf_adaptation', difficulty: 4,
     question: 'A leaf has a thick waxy cuticle covering its upper surface and the majority of its stomata on the lower surface. Which statement best explains the advantage of this arrangement?',
-    options: [
-      'It reduces water loss through the exposed upper surface while allowing gas exchange through the shaded lower surface',
-      'It maximises light absorption on top and reflects excess heat from the bottom',
-      'It increases the rate of photosynthesis on both surfaces simultaneously',
-      'It prevents insects from landing on the upper surface where chlorophyll is concentrated'
-    ],
+    options: ["It reduces water loss through the exposed upper surface while allowing gas exchange through the shaded lower surface","It prevents insects from landing on the upper surface, where most of the leaf's chlorophyll is concentrated","It increases the rate of photosynthesis on the upper and the lower surfaces of the leaf at the same time","It maximises light absorption on the top of the leaf and reflects the excess heat away from the bottom"],
     answer: 'It reduces water loss through the exposed upper surface while allowing gas exchange through the shaded lower surface',
     hint: 'The waxy cuticle is waterproof. Stomata allow both gas exchange and water vapour to escape.',
     explanation: 'The <b>waxy cuticle</b> on the upper surface is waterproof, preventing evaporation from the side exposed to direct sunlight and wind. Placing most <b>stomata on the cooler, shaded lower surface</b> allows the necessary CO₂ in and O₂ out for photosynthesis, while reducing the rate of water loss by transpiration. This is a key adaptation for plants living in warm, sunny or dry environments.'

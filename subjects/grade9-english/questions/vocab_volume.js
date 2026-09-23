@@ -275,7 +275,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-vocv-045', chapterId:'g9eng-vocabulary', subsection:'vocabulary_in_context', difficulty:2,
     question:'<i>"The law was <b>abolished</b> after years of protest."</i> What does <b>abolished</b> mean?',
-    options:['done away with completely','changed slightly','extended further','debated again'], answer:'done away with completely',
+    options:["done away with completely","changed only very slightly","debated in public again","extended a little further"], answer:'done away with completely',
     hint:'"After years of protest" suggests the people wanted it gone entirely.',
     explanation:'"<b>Abolished</b>" means officially ended or put out of existence. Protest aimed at removal, not minor changes.' }),
 
@@ -311,7 +311,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-vocv-051', chapterId:'g9eng-vocabulary', subsection:'vocabulary_in_context', difficulty:2,
     question:'<i>"The old building was <b>dilapidated</b>, with broken windows and crumbling walls."</i> What does <b>dilapidated</b> mean?',
-    options:['in poor condition through neglect','recently renovated','protected by the government','empty and unused'], answer:'in poor condition through neglect',
+    options:["in poor condition through neglect","empty and no longer in use","recently renovated and repainted","protected by the government"], answer:'in poor condition through neglect',
     hint:'Broken windows and crumbling walls describe the condition.',
     explanation:'"<b>Dilapidated</b>" means fallen into a poor state through lack of care. The details of broken windows and crumbling walls confirm this.' }),
 
@@ -323,7 +323,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-vocv-053', chapterId:'g9eng-vocabulary', subsection:'vocabulary_in_context', difficulty:2,
     question:'<i>"She was <b>adamant</b> that she had locked the door, even though it was found open."</i> What does <b>adamant</b> mean?',
-    options:['completely certain and refusing to change her mind','confused and unsure','willing to admit a mistake','easily persuaded'], answer:'completely certain and refusing to change her mind',
+    options:["completely certain and refusing to change her mind","quite willing to admit that she had made a mistake","easily persuaded to change her account of events","confused and unsure about what she had really done"], answer:'completely certain and refusing to change her mind',
     hint:'"Even though" signals a contrast with reality — she still maintained her position.',
     explanation:'"<b>Adamant</b>" means absolutely determined, refusing to waver. Even contradictory evidence did not change her view.' }),
 
@@ -353,7 +353,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-vocv-058', chapterId:'g9eng-vocabulary', subsection:'vocabulary_in_context', difficulty:2,
     question:'<i>"The road was <b>treacherous</b> after the rain — three cars had already skidded off it."</i> What does <b>treacherous</b> mean?',
-    options:['extremely dangerous and unpredictable','slightly wet and muddy','under repair','very busy with traffic'], answer:'extremely dangerous and unpredictable',
+    options:["extremely dangerous and unpredictable","very busy with heavy passing traffic","slightly wet and a little muddy","closed while under repair work"], answer:'extremely dangerous and unpredictable',
     hint:'Three skidding accidents tell you the road is more than just wet.',
     explanation:'"<b>Treacherous</b>" means dangerously unreliable, likely to cause harm without warning. Three accidents confirm the hidden danger.' }),
 

@@ -14,7 +14,7 @@ STATIC_QUESTIONS.push(
     chapterId: "g9eng-listening",
     difficulty: 2,
     question: "A speaker begins: <i>\"There are three points I want to make, and the last one matters most.\"</i><br>What should a listener do with this information?",
-    options: ["Expect three points and listen hardest for the third","Write down only the first point","Assume the talk has finished","Ignore the order the points come in"],
+    options: ["Expect three points and listen hardest for the third","Write down only the first of the three points made","Assume that the talk has already finished completely","Ignore the order in which the three points come"],
     answer: "Expect three points and listen hardest for the third",
     hint: "The speaker has just told you how the talk is organised.",
     explanation: "A signpost like this tells you the structure in advance: three points are coming, and the speaker has flagged the third as the important one. Knowing that lets you listen and take notes with the right emphasis."

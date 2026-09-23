@@ -94,7 +94,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-134', chapterId:'g9eng-gr-adverbs', subsection:'attitude_adverbs', difficulty:3,
     question:'What makes <b>Crucially</b> an attitude adverb in <i>"Crucially, the contract was signed before the deadline."</i>?',
-    options:['It tells us the speaker regards this fact as the most important one','It tells us the signing happened in a crucial way','It connects this sentence to the next one','It describes the speed of the signing'],
+    options:["It tells us the speaker regards this fact as the most important one","It connects this sentence to the one that comes immediately after it","It tells us that the signing was carried out in a crucial manner","It describes the speed at which the contract was actually signed"],
     answer:'It tells us the speaker regards this fact as the most important one',
     hint:'Remove the adverb. Does the rest of the sentence change in meaning?',
     explanation:'<b>Crucially</b> adds the speaker\'s <b>evaluation</b> — this fact matters most — not a description of how the signing was done. The signing itself is unchanged; the adverb is the speaker\'s judgement on it.' }),
@@ -174,7 +174,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-145', chapterId:'g9eng-gr-sentence', subsection:'perfect_conditional', difficulty:3,
     question:'"If it had rained, we would have stayed indoors." This sentence describes:',
-    options:['An imaginary past situation that did not happen','A real future possibility','A habitual past action','A certain future outcome'],
+    options:["An imaginary past situation that did not happen","A real future possibility that may still happen","A habitual past action repeated many times","A certain future outcome that is expected"],
     answer:'An imaginary past situation that did not happen',
     hint:'The condition uses the past perfect. Did the rain actually happen?',
     explanation:'The third conditional (<i>if + past perfect, would have + participle</i>) describes a situation that <b>did not happen in the past</b>. We know it did not rain; the outcome is imaginary.' }),
@@ -295,7 +295,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-163', chapterId:'g9eng-gr-prepositions', subsection:'phrasal_verbs', difficulty:2,
     question:'What does the <b>phrasal verb</b> mean? <i>"The new café really took off after the review was published."</i>',
-    options:['Became very successful quickly','Closed down','Moved to a new location','Lost its customers'],
+    options:["Became very successful quickly","Lost most of its regular customers","Moved to a new location in town","Closed down soon afterwards"],
     answer:'Became very successful quickly',
     hint:'"Take off" describes an aircraft rising sharply — the same idea applies in business.',
     explanation:'"Take off" in a business context means to <b>become very successful rapidly</b>. The review gave the café a sudden boost.' }),
@@ -364,14 +364,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-172', chapterId:'g9eng-gr-punctuation', subsection:'quotation_marks', difficulty:3,
     question:'In which sentence are quotation marks used to signal an <b>ironic or questioned meaning</b>?',
-    options:['The so-called "hero" abandoned everyone at the crisis point.','She said, "I will be there by noon."','He shouted, "Help!" from the window.','The article is called "The Road to Recovery".'],
+    options:["The so-called \"hero\" abandoned everyone at the crisis point.","She said, \"I will be there by noon,\" before leaving the hall.","He shouted, \"Help!\" from the window of the burning building.","The front-page article is called \"The Road to Recovery\"."],
     answer:'The so-called "hero" abandoned everyone at the crisis point.',
     hint:'Quotation marks around a word can signal that the writer does not mean it literally.',
     explanation:'When a writer puts quotation marks around a word to question or mock it, this is a <b>scare-quote</b> use. Here "hero" is ironic — the person behaved in the opposite way.' }),
 
   makeMCQ({ id:'g9eng-grv-173', chapterId:'g9eng-gr-punctuation', subsection:'quotation_marks', difficulty:3,
     question:'Which statement about <b>quotation marks</b> in written English is correct?',
-    options:['Double marks are used for direct speech; single marks for titles of short works','Single marks are always used for direct speech','Both types are fully interchangeable in all contexts','Double marks are used only around single words'],
+    options:["Double marks are used for direct speech; single marks for titles of short works","Both types are fully interchangeable in every context a writer might meet","Double marks are used only around single words that a writer wishes to define","Single marks are always used for direct speech, whatever the writer prefers"],
     answer:'Double marks are used for direct speech; single marks for titles of short works',
     hint:'Think about the two different purposes you have seen in this chapter.',
     explanation:'The convention is: <b>double marks</b> for direct speech and <b>single marks</b> for titles of shorter works (poems, articles) and for a quotation or title embedded within speech.' }),
@@ -399,7 +399,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-177', chapterId:'g9eng-gr-punctuation', subsection:'dash', difficulty:3,
     question:'How does a <b>dash</b> differ from a <b>colon</b> when introducing an elaboration?',
-    options:['A dash is more informal and dramatic; a colon is more formal','A colon always follows a verb; a dash never does','A dash can only appear at the end of a sentence','A colon must be followed by three or more items'],
+    options:["A dash is more informal and dramatic; a colon is more formal","A colon always follows a verb, but a dash never follows one","A dash can appear only at the very end of a written sentence","A colon must be followed by a list of three or more items"],
     answer:'A dash is more informal and dramatic; a colon is more formal',
     hint:'Think about the tone and register each mark carries.',
     explanation:'Both a dash and a colon can introduce an elaboration, but the <b>dash</b> is more conversational and dramatic, while the <b>colon</b> is more formal and expected in academic writing.' }),
@@ -420,7 +420,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-grv-180', chapterId:'g9eng-gr-punctuation', subsection:'semicolon', difficulty:3,
     question:'Which error is present in <i>"The hall was full, the ceremony had already begun."</i>?',
-    options:['A comma splice: two complete sentences joined by only a comma','A missing full stop at the end','An incorrect use of the passive voice','The tenses are inconsistent'],
+    options:["A comma splice: two complete sentences joined by only a comma","An incorrect use of the passive voice in the opening clause","The tenses of the two clauses are inconsistent with each other","A missing full stop at the very end of the whole sentence"],
     answer:'A comma splice: two complete sentences joined by only a comma',
     hint:'Can a comma alone join two independent clauses?',
     explanation:'"The hall was full" and "the ceremony had already begun" are both complete sentences. Joining them with only a comma is a <b>comma splice</b>. A semicolon, a conjunction, or a full stop would correct it.' })

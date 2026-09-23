@@ -25,7 +25,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-004', chapterId:'g9eng-literature', subsection:'narrative_voice', difficulty:2,
     question:'Which sentence is evidence that a narrator is <b>unreliable</b>?',
-    options:['"I remember it perfectly, though everyone else says I was not there"','"The sun rose at six"','"She walked quickly to the gate"','"The building was tall and grey"'], answer:'"I remember it perfectly, though everyone else says I was not there"',
+    options:["\"I remember it perfectly, though everyone else says I was not there\"","\"The sun rose at six and the light spread across the quiet fields\"","\"She walked quickly to the gate and waited there for the bus\"","\"The building was tall and grey, with narrow windows on each floor\""], answer:'"I remember it perfectly, though everyone else says I was not there"',
     hint:'Look for a contradiction between what the narrator claims and what others say.',
     explanation:'An <b>unreliable narrator</b> gives an account that the reader has reason to doubt. The contradiction — remembering something they could not have witnessed — is the evidence.' }),
 
@@ -73,7 +73,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-012', chapterId:'g9eng-literature', subsection:'narrative_voice', difficulty:2,
     question:'Which sentence provides evidence that the narrator is telling the story from memory?',
-    options:['"Looking back now, I understand what she meant"','"She walked into the room"','"The door was painted blue"','"It rained every day that week"'], answer:'"Looking back now, I understand what she meant"',
+    options:["\"Looking back now, I understand what she meant\"","\"The door was painted a bright shade of blue\"","\"It rained every single day of that long week\"","\"She walked into the room and sat down again\""], answer:'"Looking back now, I understand what she meant"',
     hint:'"Looking back now" signals retrospective narration.',
     explanation:'"<b>Looking back now</b>" places the narrator in the present, reflecting on a past event. This is retrospective narration — the story is recounted from memory.' }),
 
@@ -91,7 +91,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-015', chapterId:'g9eng-literature', subsection:'narrative_voice', difficulty:3,
     question:'Read: <i>"She smiled at him, though inside her heart was breaking."</i> Which narrative technique does this use?',
-    options:['Access to inner thoughts (third person limited)','Pure dialogue','Stream of consciousness','Second person address'], answer:'Access to inner thoughts (third person limited)',
+    options:["Access to inner thoughts (third person limited)","Second person address to the reader directly","Pure dialogue with no narration of any kind","Stream of consciousness (unfiltered thought)"], answer:'Access to inner thoughts (third person limited)',
     hint:'The narrator tells us what she feels inside, not just what she shows.',
     explanation:'The narrator knows something the other character cannot — what is happening "inside her heart". This access to private feeling is the mark of a <b>third person limited</b> narrator.' }),
 
@@ -103,7 +103,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-017', chapterId:'g9eng-literature', subsection:'narrative_voice', difficulty:3,
     question:'An author chooses <b>third person omniscient</b>. What is the main advantage over first person?',
-    options:['The narrator can show events and thoughts of multiple characters','The narrator sounds more personal and trustworthy','The reader cannot question the narrator\'s version','The story can only focus on one character'], answer:'The narrator can show events and thoughts of multiple characters',
+    options:["The narrator can show events and thoughts of multiple characters","The reader is unable to question the narrator's version of events","The story can only ever focus on one character at a time","The narrator sounds more personal and more trustworthy to us"], answer:'The narrator can show events and thoughts of multiple characters',
     hint:'"Omniscient" means all-knowing.',
     explanation:'An <b>omniscient narrator</b> can move freely between characters and scenes, revealing any thought or event. This flexibility is its main advantage over the limited view of a first person narrator.' }),
 
@@ -207,7 +207,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-034', chapterId:'g9eng-literature', subsection:'rhyme', difficulty:3,
     question:'A poem\'s final couplet reads: <i>"And so we stand where fathers stood, / And find the world is mostly good."</i> What is the effect of ending with a couplet?',
-    options:['It gives the poem a sense of conclusion and resolution','It introduces a new and unexpected idea','It makes the poem feel unfinished','It changes the poem\'s subject entirely'], answer:'It gives the poem a sense of conclusion and resolution',
+    options:["It gives the poem a sense of conclusion and resolution","It introduces a new and completely unexpected idea","It changes the subject of the poem entirely at the end","It makes the poem feel unfinished and incomplete"], answer:'It gives the poem a sense of conclusion and resolution',
     hint:'A rhyming pair at the end "closes" the poem.',
     explanation:'A closing couplet creates a sense of <b>completion</b> — the rhyme locks the ideas together and signals that the poem is finished and its argument settled.' }),
 
@@ -293,7 +293,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-048', chapterId:'g9eng-literature', subsection:'figurative_devices', difficulty:3,
     question:'Which sentence uses <b>irony</b>?',
-    options:['"Oh, wonderful — another Monday morning," she muttered','She was happy to see Monday arrive','The week began on a cheerful note','Monday was her favourite day'], answer:'"Oh, wonderful — another Monday morning," she muttered',
+    options:["\"Oh, wonderful — another Monday morning,\" she muttered","Monday was always her favourite day of the week","She was genuinely happy to see Monday arrive again","The week began on a cheerful and hopeful note"], answer:'"Oh, wonderful — another Monday morning," she muttered',
     hint:'The words say one thing but the tone means the opposite.',
     explanation:'The exclamation "wonderful" is ironic because the muttering and the word "another" signal she does not mean it. <b>Irony</b> says the opposite of what is meant, often to show displeasure or humour.' }),
 
@@ -331,7 +331,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-054', chapterId:'g9eng-literature', subsection:'effect_of_device', difficulty:3,
     question:'A poem uses alliteration: <i>"The lazy, lapping lake."</i> What is the <b>effect</b>?',
-    options:['The repeated "l" sound mimics the slow movement of gentle water','The repeated "l" suggests rapid violent movement','The alliteration shows the lake is dangerous','The sound emphasises the colour of the lake'], answer:'The repeated "l" sound mimics the slow movement of gentle water',
+    options:["The repeated \"l\" sound mimics the slow movement of gentle water","The sound of the words emphasises the colour of the still lake","The alliteration shows that the lake is dangerous to swimmers","The repeated \"l\" suggests rapid and violent movement of waves"], answer:'The repeated "l" sound mimics the slow movement of gentle water',
     hint:'Say "lazy, lapping lake" slowly — what does it feel like?',
     explanation:'The soft, slow /l/ sound, repeated three times, echoes the gentle, unhurried movement of <b>lapping water</b>. Alliteration here is both decorative and meaningful.' }),
 
@@ -355,13 +355,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-058', chapterId:'g9eng-literature', subsection:'effect_of_device', difficulty:3,
     question:'A writer uses a metaphor: <i>"The mind is an ocean — sometimes still, sometimes stormy."</i> What is the effect?',
-    options:['It captures how the mind can shift between calm and turmoil','It says the mind is actually under the sea','It compares the mind to a weather forecast','It suggests the mind is empty and vast'], answer:'It captures how the mind can shift between calm and turmoil',
+    options:["It captures how the mind can shift between calm and turmoil","It suggests that the mind is empty and vast like open water","It compares the mind to a weather forecast for the coming week","It says that the mind is actually located under the sea"], answer:'It captures how the mind can shift between calm and turmoil',
     hint:'An ocean has many states — what does each one suggest about the mind?',
     explanation:'A still ocean suggests peace; a stormy one suggests distress. The metaphor captures the <b>range of emotional states</b> the mind can experience, more vividly than abstract language could.' }),
 
   makeMCQ({ id:'g9eng-litv-059', chapterId:'g9eng-literature', subsection:'effect_of_device', difficulty:3,
     question:'A writer uses irony: <i>"After six hours in the waiting room, he finally declared the service \'excellent\'."</i> What is the effect?',
-    options:['It highlights the gap between the claim and the reality','It shows the man was genuinely satisfied','It suggests the wait was expected','It shows the writer agrees with the man'], answer:'It highlights the gap between the claim and the reality',
+    options:["It highlights the gap between the claim and the reality","It shows that the man was genuinely satisfied at last","It shows that the writer agrees with the man's verdict","It suggests that such a long wait was to be expected"], answer:'It highlights the gap between the claim and the reality',
     hint:'Six hours in a waiting room — is "excellent" a sincere word here?',
     explanation:'"Excellent" after a six-hour wait creates <b>irony</b>: the word says one thing, but the reality contradicts it. The gap between the claim and the experience is the source of the criticism or humour.' }),
 
@@ -403,13 +403,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-066', chapterId:'g9eng-literature', subsection:'effect_of_device', difficulty:3,
     question:'A story uses the phrase: <i>"The city never sleeps."</i> What is the <b>effect</b>?',
-    options:['It suggests constant, non-stop activity at all hours','It says the city is full of insomniacs','It says the city has no night-time','It describes the city\'s geography'], answer:'It suggests constant, non-stop activity at all hours',
+    options:["It suggests constant, non-stop activity at all hours","It describes the geography of the city's streets","It says the city literally has no night-time hours","It says the city is full of people who cannot sleep"], answer:'It suggests constant, non-stop activity at all hours',
     hint:'Only living things sleep — what does it mean that the city does not?',
     explanation:'Personifying the city with the ability to sleep (but refusing to) creates the image of a place that is <b>alive and restless around the clock</b>. It suggests energy and relentless activity.' }),
 
   makeMCQ({ id:'g9eng-litv-067', chapterId:'g9eng-literature', subsection:'effect_of_device', difficulty:3,
     question:'A poem repeats the phrase "We will not forget" at the start of three stanzas. What device is this, and what is its effect?',
-    options:['Repetition — it reinforces the theme of memory and determination','Alliteration — it emphasises the "w" sound','Onomatopoeia — the words sound like what they mean','Simile — it compares memory to forgetting'], answer:'Repetition — it reinforces the theme of memory and determination',
+    options:["Repetition — it reinforces the theme of memory and determination","Alliteration — it emphasises the repeated \"w\" sound in the line","Onomatopoeia — the words sound like the thing they describe","Simile — it compares the act of memory to the act of forgetting"], answer:'Repetition — it reinforces the theme of memory and determination',
     hint:'"At the start of three stanzas" is the key — that is a deliberate structural choice.',
     explanation:'Repeating a phrase at the start of successive stanzas is called <b>anaphora</b>, a form of repetition. It hammers home the resolve not to forget, building emotional momentum.' }),
 
@@ -423,19 +423,19 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-069', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"She wore her grief like a coat she could not take off."</i> What does it mean?',
-    options:['Her grief was always with her and impossible to escape','She dressed in black every day','She felt cold because of her sadness','She refused to remove her coat in public'], answer:'Her grief was always with her and impossible to escape',
+    options:["Her grief was always with her and impossible to escape","She refused to remove her coat even when in public","She dressed in black clothing every single day","She felt cold all the time because of her sadness"], answer:'Her grief was always with her and impossible to escape',
     hint:'A coat you cannot take off stays with you everywhere.',
     explanation:'The simile compares grief to a coat that cannot be removed — always present, weighing her down. The line expresses that her <b>sadness was constant and inescapable</b>.' }),
 
   makeMCQ({ id:'g9eng-litv-070', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"The years behind him were a closed book."</i> What does it most likely mean?',
-    options:['He had made peace with his past and was no longer troubled by it','He had forgotten everything that had happened','He had written a book about his past','He refused to read books about history'], answer:'He had made peace with his past and was no longer troubled by it',
+    options:["He had made peace with his past and was no longer troubled by it","He refused to read any books about the history of his family","He had written and published a whole book about his own past","He had forgotten everything that had ever happened to him"], answer:'He had made peace with his past and was no longer troubled by it',
     hint:'A closed book has been finished — you do not need to re-read it.',
     explanation:'A "closed book" is one that is done, finished, not being re-examined. The metaphor suggests he has <b>come to terms with his past</b> and moved on.' }),
 
   makeMCQ({ id:'g9eng-litv-071', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"Even in silence, her presence filled every room."</i> What does this suggest?',
-    options:['She had a powerful personality that others felt even without words','She was very loud even when she was trying to be quiet','She physically occupied a lot of space','She spoke in a very quiet voice'], answer:'She had a powerful personality that others felt even without words',
+    options:["She had a powerful personality that others felt even without words","She physically occupied a great deal of the space in every room","She was very loud even when she was trying hard to be quiet","She spoke in a very quiet voice that nobody could quite hear"], answer:'She had a powerful personality that others felt even without words',
     hint:'"In silence" rules out noise — what else could fill a room?',
     explanation:'The line uses hyperbole and metaphor to convey that her <b>personality and character</b> made itself felt even without any action or speech. "Filled every room" suggests a commanding presence.' }),
 
@@ -447,73 +447,73 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-073', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"He was the last candle in a dark house."</i>',
-    options:['He was the only source of hope or light in a desperate situation','He enjoyed candles very much','He was the last person to leave','He was afraid of the dark'], answer:'He was the only source of hope or light in a desperate situation',
+    options:["He was the only source of hope or light in a desperate situation","He enjoyed candles very much and collected them for years","He was afraid of the dark and always slept with a light on","He was the last person to leave the dark house that evening"], answer:'He was the only source of hope or light in a desperate situation',
     hint:'A candle is a small but essential source of light.',
     explanation:'The metaphor equates him with a candle — fragile, small, but essential. "Last candle in a dark house" means he was the <b>only remaining source of hope</b> in a hopeless situation.' }),
 
   makeMCQ({ id:'g9eng-litv-074', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:4,
     question:'Explain the line: <i>"Words are loaded pistols."</i> (Jean-Paul Sartre)',
-    options:['Words have power and can cause serious harm when used','Words are dangerous only in wartime','Pistols are as useful as words','Writers should be armed'], answer:'Words have power and can cause serious harm when used',
+    options:["Words have power and can cause serious harm when used","Words are dangerous only in times of open warfare","Writers should always be armed for their own safety","Pistols are quite as useful to a writer as words are"], answer:'Words have power and can cause serious harm when used',
     hint:'A loaded pistol is ready to fire — it can injure or kill.',
     explanation:'The metaphor compares words to loaded weapons: ready for use, and capable of causing great harm. The line argues that language carries <b>power and responsibility</b> — it cannot be called back once fired.' }),
 
   makeMCQ({ id:'g9eng-litv-075', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"She built walls around herself so high that no one could reach her."</i>',
-    options:['She isolated herself emotionally and refused connection','She built a house with high walls for privacy','She became very tall','She moved to a gated community'], answer:'She isolated herself emotionally and refused connection',
+    options:["She isolated herself emotionally and refused connection","She moved into a gated community for her own safety","She built herself a very tall tower and lived in it","She built a house with high walls around it for privacy"], answer:'She isolated herself emotionally and refused connection',
     hint:'"Walls" here are emotional barriers, not physical ones.',
     explanation:'"<b>Built walls</b>" is a metaphor for emotional isolation. Very high walls keep others out — the line describes a person who has cut herself off from <b>emotional connection</b>.' }),
 
   makeMCQ({ id:'g9eng-litv-076', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line from a nature poem: <i>"The tree held on to its last leaf like a secret."</i>',
-    options:['Something small and precious was being kept, almost hidden','The tree was growing new leaves in winter','The tree had only one branch left','The leaf was shaped like a secret note'], answer:'Something small and precious was being kept, almost hidden',
+    options:["Something small and precious was being kept, almost hidden","The tree had only one branch left on it by the winter","The tree was growing new leaves in the middle of winter","The leaf was shaped exactly like a folded secret note"], answer:'Something small and precious was being kept, almost hidden',
     hint:'A secret is held close and reluctantly shared.',
     explanation:'The simile compares the last leaf to a secret — something <b>precious and privately kept</b>. The tree "holds on" suggests reluctance to let it go, as one holds on to something cherished.' }),
 
   makeMCQ({ id:'g9eng-litv-077', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:4,
     question:'Explain the line: <i>"The empty chair at the table spoke louder than any words."</i>',
-    options:['The absence of someone was felt more powerfully than speech','Chairs can literally make sounds','The family argued very loudly at dinner','No one sat down for the meal'], answer:'The absence of someone was felt more powerfully than speech',
+    options:["The absence of someone was felt more powerfully than speech","No one at all sat down at the table for the evening meal","Chairs are able to make literal sounds when they move","The family argued very loudly around the dinner table"], answer:'The absence of someone was felt more powerfully than speech',
     hint:'An empty chair means someone is missing — and it "spoke", which is personification.',
     explanation:'The personification gives the chair a voice, but what it "says" is an <b>absence</b> — someone who should be there is gone. The line conveys that <b>loss can be felt more keenly than it can be expressed in words</b>.' }),
 
   makeMCQ({ id:'g9eng-litv-078', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"Her laugh was the only light in the room."</i>',
-    options:['Her laughter brought joy and warmth to everyone present','The electricity had failed','She was the only one who was happy','She carried a torch into the room'], answer:'Her laughter brought joy and warmth to everyone present',
+    options:["Her laughter brought joy and warmth to everyone present","She carried a lighted torch into the darkened room","The electricity in the house had failed that evening","She was the only person in the room who was happy"], answer:'Her laughter brought joy and warmth to everyone present',
     hint:'Light in a dark room is welcoming and warming.',
     explanation:'The metaphor compares the laugh to light — something that <b>brightens and warms</b> the surrounding environment. Everyone benefited from it, as they would from light in darkness.' }),
 
   makeMCQ({ id:'g9eng-litv-079', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"He swallowed his pride and asked for help."</i>',
-    options:['He overcame his reluctance and accepted he needed assistance','He ate food before calling for help','He was choking during the conversation','He was very hungry before the meeting'], answer:'He overcame his reluctance and accepted he needed assistance',
+    options:["He overcame his reluctance and accepted he needed assistance","He was extremely hungry just before the meeting began","He was choking on his food in the middle of the conversation","He ate a large meal before he called out to anyone for help"], answer:'He overcame his reluctance and accepted he needed assistance',
     hint:'"Swallowed" something unpleasant — what does that suggest?',
     explanation:'"<b>Swallowed his pride</b>" is an idiom/metaphor meaning he suppressed his ego and <b>admitted vulnerability</b>. The verb "swallowed" implies the pride was hard to push down, like something bitter.' }),
 
   makeMCQ({ id:'g9eng-litv-080', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:4,
     question:'Explain the line from a poem about growing up: <i>"Each birthday was a door closing behind me."</i>',
-    options:['Each year taken away some part of childhood that could not be recovered','Birthdays made the poet sad about doors','The poet always had parties in rooms with many doors','The poet was afraid of celebrations'], answer:'Each year taken away some part of childhood that could not be recovered',
+    options:["Each year taken away some part of childhood that could not be recovered","The poet was afraid of celebrations and avoided them every single year","The poet always had his birthday parties in rooms with many doors","Birthdays always made the poet feel sad about doors and doorways"], answer:'Each year taken away some part of childhood that could not be recovered',
     hint:'A door closing behind you means you cannot go back through it.',
     explanation:'The metaphor compares each birthday to a <b>closed door</b> — once passed, that stage of life cannot be re-entered. The line expresses the irreversible nature of growing up and the loss of childhood.' }),
 
   makeMCQ({ id:'g9eng-litv-081', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"He carried the weight of his family\'s expectations on his shoulders."</i>',
-    options:['He felt pressured by what his family wanted him to achieve','He physically carried his family','His family were physically very heavy','He worked as a porter for his family'], answer:'He felt pressured by what his family wanted him to achieve',
+    options:["He felt pressured by what his family wanted him to achieve","He physically carried members of his family on his back","The members of his family were physically very heavy","He worked as a porter carrying loads for his family"], answer:'He felt pressured by what his family wanted him to achieve',
     hint:'"Carried on his shoulders" is a metaphor for a burden.',
     explanation:'"<b>Weight on his shoulders</b>" is a metaphor for <b>emotional or social pressure</b>. Expectations are abstract, but the physical image of carrying weight makes the burden felt.' }),
 
   makeMCQ({ id:'g9eng-litv-082', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"The forest swallowed the path, leaving no trace of where we had come from."</i>',
-    options:['The vegetation had grown so densely that the path disappeared','An animal ate the path','The forest was a dangerous place to walk','The travellers deliberately hid the path'], answer:'The vegetation had grown so densely that the path disappeared',
+    options:["The vegetation had grown so densely that the path disappeared","The travellers had deliberately hidden the path behind them","The forest was a dangerous place for anyone to walk in","A large animal came and ate the path they had walked on"], answer:'The vegetation had grown so densely that the path disappeared',
     hint:'"Swallowed" means taken in entirely — what happens when a forest swallows something?',
     explanation:'The personification of the forest "swallowing" the path creates the image of vegetation <b>closing in and erasing</b> the route. It also creates a sense of being lost and cut off from the past.' }),
 
   makeMCQ({ id:'g9eng-litv-083', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:4,
     question:'Explain the line: <i>"Hope was a small fire we kept alive through the long night."</i>',
-    options:['Hope required constant effort to maintain during a difficult time','The campers kept a fire burning for warmth','The poem is set during a power cut','Hope appeared at the end of the night'], answer:'Hope required constant effort to maintain during a difficult time',
+    options:["Hope required constant effort to maintain during a difficult time","The campers kept a small fire burning all night for warmth","The poem is set during a long power cut in the countryside","Hope only appeared right at the very end of the long night"], answer:'Hope required constant effort to maintain during a difficult time',
     hint:'A fire needs feeding or it goes out — what does that suggest about hope?',
     explanation:'A fire must be tended or it dies — the metaphor suggests that <b>hope in difficult times is fragile</b> and requires active, constant effort to sustain. "Long night" suggests a prolonged period of suffering.' }),
 
   makeMCQ({ id:'g9eng-litv-084', chapterId:'g9eng-literature', subsection:'line_explication', difficulty:3,
     question:'Explain the line: <i>"The city was a machine that never rested."</i>',
-    options:['The city operated continuously, without pause, like a mechanical system','The city had many factories','The city was built from metal','The city was very noisy'], answer:'The city operated continuously, without pause, like a mechanical system',
+    options:["The city operated continuously, without pause, like a mechanical system","The city was extremely noisy at every hour of the day and night","The city was built almost entirely out of metal and glass sheets","The city contained a very large number of busy working factories"], answer:'The city operated continuously, without pause, like a mechanical system',
     hint:'A machine is designed to work — and this one never rests.',
     explanation:'The metaphor compares the city to a machine — impersonal, driven by function, <b>relentlessly active</b>. "Never rested" reinforces the idea of unstoppable, mechanical activity.' }),
 
@@ -521,7 +521,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-085', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'Which is the strongest supported statement about the mood of a poem describing an abandoned village?',
-    options:['"The poem has a melancholy mood: the phrase \'empty windows stared\' personifies the village as hollow and abandoned"','"The poem is sad"','"The poem makes you feel things"','"The poem is about an abandoned village which is sad"'], answer:'"The poem has a melancholy mood: the phrase \'empty windows stared\' personifies the village as hollow and abandoned"',
+    options:["\"The poem has a melancholy mood: the phrase 'empty windows stared' personifies the village as hollow and abandoned\"","\"The poem is about an abandoned village which is very sad, and reading it makes the reader feel quite sad as well\"","\"The poem makes you feel things, and the feelings that it gives you are strong ones which stay with you afterwards\"","\"The poem is sad, and it is sad from the very first line right through to the very last line of the whole poem\""], answer:'"The poem has a melancholy mood: the phrase \'empty windows stared\' personifies the village as hollow and abandoned"',
     hint:'A strong response names the mood, quotes the text, and identifies the technique.',
     explanation:'The best response states the mood, quotes the evidence, and explains the technique. The others assert the mood without any support from the text.' }),
 
@@ -533,25 +533,25 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-087', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'Which response best supports the idea that a character is determined?',
-    options:['"She is determined: despite three failures, she \'stood up each time and tried again\'"','"She tries again"','"She is determined"','"The character does not give up easily in the story"'], answer:'"She is determined: despite three failures, she \'stood up each time and tried again\'"',
+    options:["\"She is determined: despite three failures, she 'stood up each time and tried again'\"","\"She is determined, and the writer shows us this determination clearly in the story\"","\"She tries again and again, which is the sort of thing a determined person does\"","\"The character does not give up easily at any point anywhere in the whole story\""], answer:'"She is determined: despite three failures, she \'stood up each time and tried again\'"',
     hint:'A point + quotation + explanation = a supported response.',
     explanation:'The best answer makes a point, provides a quotation, and the quotation directly proves the point. "Despite three failures" adds context that makes the determination more evident.' }),
 
   makeMCQ({ id:'g9eng-litv-088', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:4,
     question:'A student writes: "The writer creates a threatening atmosphere." Which addition makes it a <b>supported</b> response?',
-    options:['Adding the quotation "darkness pressed against the windows like a living thing" and explaining the personification','Adding "the story was scary"','Adding "many readers find it frightening"','Adding "this is shown throughout the story"'], answer:'Adding the quotation "darkness pressed against the windows like a living thing" and explaining the personification',
+    options:["Adding the quotation \"darkness pressed against the windows like a living thing\" and explaining the personification","Adding the comment \"the story was very scary indeed\" and saying that most readers would surely agree with that","Adding \"this is shown throughout the whole of the story\" without naming any particular moment or any phrase","Adding \"many readers find this story frightening\" and noting that it has frightened readers for many years"], answer:'Adding the quotation "darkness pressed against the windows like a living thing" and explaining the personification',
     hint:'A supported response needs a quotation AND an explanation of how it proves the point.',
     explanation:'Quoting "darkness pressed against the windows like a living thing" and explaining the personification proves the atmosphere is threatening. Vague references to "throughout" or audience reaction are not text evidence.' }),
 
   makeMCQ({ id:'g9eng-litv-089', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'A student says: "The poem presents nature as powerful." Which quotation best supports this?',
-    options:['"The storm tore the ancient trees from the earth as easily as weeds"','"There were many trees near the village"','"The poet liked walking in the countryside"','"Leaves fell in October"'], answer:'"The storm tore the ancient trees from the earth as easily as weeds"',
+    options:["\"The storm tore the ancient trees from the earth as easily as weeds\"","\"There were many tall trees growing near the edge of the village\"","\"The poet liked walking in the countryside in the early morning\"","\"Leaves fell in October and lay in drifts along the quiet lane\""], answer:'"The storm tore the ancient trees from the earth as easily as weeds"',
     hint:'The quotation must show nature doing something powerful.',
     explanation:'Tearing ancient trees out as easily as weeds shows overwhelming force. The simile "as easily as weeds" emphasises how effortless the power is — the strongest textual support for the claim.' }),
 
   makeMCQ({ id:'g9eng-litv-090', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'Which response gives the best judgement about a poem\'s <b>overall meaning</b>?',
-    options:['"The poem suggests that memories, however painful, shape who we become, as the speaker describes carrying the past \'like a scar that reminds you you survived\'"','"The poem is about memories"','"I think the poem means something important"','"The poem was interesting and made me think"'], answer:'"The poem suggests that memories, however painful, shape who we become, as the speaker describes carrying the past \'like a scar that reminds you you survived\'"',
+    options:["\"The poem suggests that memories, however painful, shape who we become, as the speaker describes carrying the past 'like a scar that reminds you you survived'\"","\"I think the poem means something important, and it is the sort of poem that stays in your mind for a good while after you have finished reading it\"","\"The poem is about memories, and about the way that people remember things from long ago, and it is written in a style that many readers will enjoy\"","\"The poem was interesting and it made me think about my own life, and I would certainly recommend it to anybody who has not yet had a chance to read it\""], answer:'"The poem suggests that memories, however painful, shape who we become, as the speaker describes carrying the past \'like a scar that reminds you you survived\'"',
     hint:'A judgement about meaning includes what the poem argues, not just what it is about.',
     explanation:'This response makes an interpretive claim about the poem\'s argument, supports it with a quotation, and explains the image. The others identify a topic but not a meaning.' }),
 
@@ -563,55 +563,55 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9eng-litv-092', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'Which is the best supported response about tone?',
-    options:['"The tone is bittersweet: the poet recalls joy in \'those golden afternoons\' but the word \'gone\' reminds us they are lost"','"The tone is happy and sad at the same time"','"The poem has a sad tone"','"There is a tone of nostalgia in this poem"'], answer:'"The tone is bittersweet: the poet recalls joy in \'those golden afternoons\' but the word \'gone\' reminds us they are lost"',
+    options:["\"The tone is bittersweet: the poet recalls joy in 'those golden afternoons' but the word 'gone' reminds us they are lost\"","\"The poem has a sad tone, and that sad tone can be felt from the opening line right the way through to the closing one\"","\"There is a tone of nostalgia in this poem, and the nostalgia is something the reader notices in very nearly every stanza\"","\"The tone is happy and sad at the same time, which is a difficult thing for any poet to manage in such a short poem\""], answer:'"The tone is bittersweet: the poet recalls joy in \'those golden afternoons\' but the word \'gone\' reminds us they are lost"',
     hint:'Name the tone, quote the text, and explain how it works.',
     explanation:'This response names the tone, quotes two pieces of evidence, and explains the contrast. Simply naming "nostalgia" without text proof is not yet a supported response.' }),
 
   makeMCQ({ id:'g9eng-litv-093', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'A student writes a supported response about a poem. What must they include?',
-    options:['A point, a quotation, and an explanation of the quotation','Only their opinion about the poem','A summary of every stanza','A list of every literary device used'], answer:'A point, a quotation, and an explanation of the quotation',
+    options:["A point, a quotation, and an explanation of the quotation","Only their own personal opinion about the whole poem","A complete list of every literary device the poem uses","A short summary of every stanza in the poem in order"], answer:'A point, a quotation, and an explanation of the quotation',
     hint:'P-E-E: Point, Evidence, Explanation.',
     explanation:'A supported response has three parts: the <b>point</b> (the claim), the <b>evidence</b> (quotation), and the <b>explanation</b> of how the evidence proves the claim.' }),
 
   makeMCQ({ id:'g9eng-litv-094', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:4,
     question:'Two students comment on a poem about exile. Student A says: "The poem is very sad." Student B says: "The poem conveys deep longing: the speaker \'turns his face toward the home he cannot see\', suggesting exile has not erased his emotional ties." Which response is better and why?',
-    options:['Student B — it makes a specific claim and supports it with textual evidence','Student A — it is honest and direct','Student A — simplicity is always better','Student B — it is longer'], answer:'Student B — it makes a specific claim and supports it with textual evidence',
+    options:["Student B — it makes a specific claim and supports it with textual evidence","Student A — it is honest and direct, and says plainly how the poem feels","Student A — simplicity is always better than quoting from the poem itself","Student B — it is longer, and a longer answer always earns more marks"], answer:'Student B — it makes a specific claim and supports it with textual evidence',
     hint:'Length is not the measure — evidence is.',
     explanation:'Student B names the specific emotion (longing), quotes the text, and explains what the image suggests. "Sad" is accurate but unproved. A supported response proves its claim from the text.' }),
 
   makeMCQ({ id:'g9eng-litv-095', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'A student says: "The setting creates tension." Which quotation best supports this claim?',
-    options:['"The corridor was narrow and the only light swung slowly overhead"','"The house was large and belonged to the family"','"It was autumn and the leaves were falling"','"She had lived in that town all her life"'], answer:'"The corridor was narrow and the only light swung slowly overhead"',
+    options:["\"The corridor was narrow and the only light swung slowly overhead\"","\"She had lived in that same small town for the whole of her life\"","\"It was autumn and the leaves were falling steadily in the lane\"","\"The house was large and had belonged to the family for years\""], answer:'"The corridor was narrow and the only light swung slowly overhead"',
     hint:'Tension comes from confined space and unstable light — look for those details.',
     explanation:'A narrow corridor and a swinging light combine physical confinement with uncertainty and movement — both create tension. The other quotations are neutral descriptions with no tension-building features.' }),
 
   makeMCQ({ id:'g9eng-litv-096', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'A student supports a claim about theme with a quotation but then writes: "This shows the theme." What is missing?',
-    options:['An explanation of how or why the quotation shows the theme','A second quotation','A different theme','A longer quotation'], answer:'An explanation of how or why the quotation shows the theme',
+    options:["An explanation of how or why the quotation shows the theme","A completely different theme taken from elsewhere in the text","A second quotation taken from a later part of the same text","A longer quotation containing more of the surrounding lines"], answer:'An explanation of how or why the quotation shows the theme',
     hint:'Quoting is not enough — the reader needs to be told what the quotation proves.',
     explanation:'Saying "this shows the theme" repeats the claim without explaining how. The <b>explanation</b> is the third and essential part: it must spell out the connection between quotation and point.' }),
 
   makeMCQ({ id:'g9eng-litv-097', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:4,
     question:'Which response about an author\'s purpose is most convincing?',
-    options:['"The author wants to challenge complacency: the statistic \'one in four\' appears three times, hammering the scale of the problem"','"The author wants to make the reader think"','"The author has a clear purpose in this text"','"The author is trying to persuade the reader"'], answer:'"The author wants to challenge complacency: the statistic \'one in four\' appears three times, hammering the scale of the problem"',
+    options:["\"The author wants to challenge complacency: the statistic 'one in four' appears three times, hammering the scale of the problem\"","\"The author has a very clear purpose in writing this text, and that purpose is obvious to any reader who reads it carefully\"","\"The author is trying to persuade the reader of something, and the writing is persuasive from the beginning right to the end\"","\"The author wants to make the reader think hard about things, and the text certainly succeeds in making its readers think\""], answer:'"The author wants to challenge complacency: the statistic \'one in four\' appears three times, hammering the scale of the problem"',
     hint:'A convincing response names the specific purpose AND shows how the technique achieves it.',
     explanation:'This response names a specific purpose (challenge complacency), identifies a technique (repetition of a statistic), and explains the effect ("hammering the scale"). The other responses are too vague to be convincing.' }),
 
   makeMCQ({ id:'g9eng-litv-098', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:3,
     question:'A student is asked whether a poem ends hopefully or despairingly. What should their response include?',
-    options:['A judgement, a quotation from the ending, and an explanation','Only a quotation from the ending','Only a personal opinion','A retelling of the whole poem'], answer:'A judgement, a quotation from the ending, and an explanation',
+    options:["A judgement, a quotation from the ending, and an explanation","Only a quotation taken from the final lines of the poem","A full retelling of the whole poem from beginning to end","Only a personal opinion about how the poem made them feel"], answer:'A judgement, a quotation from the ending, and an explanation',
     hint:'The question asks you to judge AND prove.',
     explanation:'A judgement question requires: a <b>judgement</b> (hopeful or despairing), <b>evidence</b> from the text (quotation from the ending), and an <b>explanation</b> of what the evidence shows.' }),
 
   makeMCQ({ id:'g9eng-litv-099', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:4,
     question:'Which response about a character\'s relationship is best supported?',
-    options:['"Their relationship is strained: when they meet, \'neither spoke\' and the character \'looked at the floor\', suggesting they cannot face each other"','"They do not get on well"','"The characters have a difficult relationship that is shown in how they behave"','"Their relationship is complicated, as in many stories"'], answer:'"Their relationship is strained: when they meet, \'neither spoke\' and the character \'looked at the floor\', suggesting they cannot face each other"',
+    options:["\"Their relationship is strained: when they meet, 'neither spoke' and the character 'looked at the floor', suggesting they cannot face each other\"","\"They do not get on at all well with each other, and anybody reading the story would be able to see that for themselves quite easily\"","\"Their relationship is complicated, as in many stories, and complicated relationships are one of the things that make stories interesting\"","\"The characters have a difficult relationship that is shown in the way they behave towards each other whenever they are together\""], answer:'"Their relationship is strained: when they meet, \'neither spoke\' and the character \'looked at the floor\', suggesting they cannot face each other"',
     hint:'Two specific quotations and an inference = strong support.',
     explanation:'The best response quotes two specific details — silence and avoidance of eye contact — and infers from them that the relationship is strained. The others claim difficulty without proving it from the text.' }),
 
   makeMCQ({ id:'g9eng-litv-100', chapterId:'g9eng-literature', subsection:'supported_response', difficulty:4,
     question:'A student gives a "whole-text judgement" about a short story\'s message. Which response is strongest?',
-    options:['"The story argues that belonging matters more than achievement: despite success, the protagonist \'could not celebrate alone\' and returns to his roots"','"The story has a message about life"','"The story is about success and loneliness"','"The story made me think about what really matters in life"'], answer:'"The story argues that belonging matters more than achievement: despite success, the protagonist \'could not celebrate alone\' and returns to his roots"',
+    options:["\"The story argues that belonging matters more than achievement: despite success, the protagonist 'could not celebrate alone' and returns to his roots\"","\"The story made me think about what really matters in life, and I found myself thinking about it for a long while after I had finished reading it\"","\"The story is about success and about loneliness, and both of those things are important ideas that come up again and again in the writing here\"","\"The story has a message about life, and it is a message that the writer clearly wanted the reader to take away at the end of the whole story\""], answer:'"The story argues that belonging matters more than achievement: despite success, the protagonist \'could not celebrate alone\' and returns to his roots"',
     hint:'A whole-text judgement says what the story argues, not just what it is about.',
     explanation:'This response makes a thematic claim (belonging over achievement), quotes the pivotal action, and shows how it proves the argument. It is a <b>whole-text judgement supported by textual evidence</b>.' })
 
