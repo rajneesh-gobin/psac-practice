@@ -256,7 +256,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3mth-tim-042', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
     question:'Which months have 31 days?',
-    options:['January, March, May, July, August, October, December','All months','February, April, June, September, November','Only January'], answer:'January, March, May, July, August, October, December',
+    options:["January, March, May, July, August, October, December","February, April, June, September, November, December","January, February, March, April, May, June, July","June, July, August, September, October, November"], answer:'January, March, May, July, August, October, December',
     hint:'Use the knuckle trick! Seven months have 31 days.',
     explanation:'<b>January, March, May, July, August, October and December</b> each have 31 days.' }),
 
@@ -352,7 +352,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3mth-tim-058', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
     question:'In which season does Mauritius typically experience cyclones?',
-    options:['Summer (November to April)','Winter (May to October)','Spring','Year-round equally'], answer:'Summer (November to April)',
+    options:["Summer (November to April)","Winter (May to October)","Spring (August to October)","Autumn (March to May)"], answer:'Summer (November to April)',
     hint:'Cyclones hit during the hot wet season.',
     explanation:'Cyclones in Mauritius mainly occur during <b>summer (November to April)</b>.' }),
 

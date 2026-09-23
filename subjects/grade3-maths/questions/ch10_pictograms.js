@@ -654,7 +654,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3mth-pic-058', chapterId:'g3mth-pictograms', difficulty:2, subsection:'interpreting_data',
     question:'What does the KEY in a pictogram tell us?',
-    options:['The title of the pictogram','How many items each symbol represents','The names of rows','The colours used'],
+    options:["How many items each symbol represents","The title written above the pictogram","The names written down the left side","Which colours to shade the symbols in"],
     answer:'How many items each symbol represents',
     hint:'The key is usually at the bottom of a pictogram.',
     explanation:'The key tells you what each symbol stands for — for example "each 🌟 = 5 children".' }),

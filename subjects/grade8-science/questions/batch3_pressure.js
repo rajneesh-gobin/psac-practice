@@ -51,7 +51,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8s-pressure-026', chapterId: CH, difficulty: 2, subsection: 'pressure_in_fluids',
     question: 'A tractor has very wide, broad tyres. What is the main reason for this design?',
-    options: ['To spread the tractor\'s weight over a large area and reduce pressure on soft ground', 'To make the tractor go faster on muddy fields', 'To hold more air so the ride is smoother', 'To look bigger and more powerful'],
+    options: ["To spread the tractor's weight over a large area and reduce pressure on soft ground","To raise the tractor higher so the engine stays clear of mud and water on soft ground","To make the tractor travel faster across muddy fields without the engine working harder","To hold much more air inside so the ride over rough ground is smoother for the driver"],
     answer: 'To spread the tractor\'s weight over a large area and reduce pressure on soft ground',
     hint: 'Think about what happens to soft soil when a large weight is concentrated on a small area.',
     explanation: 'A wider tyre increases the contact area, so the same weight (force) produces lower pressure on the soil — the tractor sinks in less and does less damage. Speed, ride comfort and appearance are not the engineering reason for the width.'
@@ -103,7 +103,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8s-pressure-032', chapterId: CH, difficulty: 3, subsection: 'pressure_definition',
     question: 'Atmospheric pressure at sea level is approximately 100 000 Pa. Which statement correctly describes this pressure?',
-    options: ['A force of 100 000 N presses on every square metre of surface at sea level', 'A mass of 100 000 kg rests on every square metre', 'The speed of air is 100 000 m/s at sea level', 'There are 100 000 gas molecules per litre of air'],
+    options: ["A force of 100 000 N presses on every square metre of surface at sea level","There are 100 000 gas molecules pressing inside every litre of air at sea level","A mass of 100 000 kg rests on every square metre of ground at sea level","The air moves at a speed of 100 000 metres every second at sea level"],
     answer: 'A force of 100 000 N presses on every square metre of surface at sea level',
     hint: 'Use the definition: pressure = force per unit area.',
     explanation: '100 000 Pa means 100 000 N/m², so a column of air above every square metre of the Earth\'s surface weighs about 100 000 N. Mass and force are different quantities, and pressure has nothing to do with speed or counting molecules directly.'
