@@ -570,13 +570,65 @@ not existed since the list moved onto Home.
 Test: `scripts/test-classroom-screen.js` — 26 checks in real Chrome at both
 390×844 and 1280×900, including the full Back sequence and both guards.
 
-### Stage 4 — collapse the board
-Board goes to **My classes · Library · Account**. `materials` folds into Library
-as "my files"; `gradebook` becomes "all classes" reached from My classes;
-`assignments`, `papers`, `preview` become sources inside Set work.
-⚠ `switchTab()` **rejects any tab not in `ALL_TABS` and silently falls back to
-home** — retiring a tab means retiring its name there, and any saved location
-holding it. Check `_readLoc()` before deleting anything.
+### Stage 4 — ✅ DONE 2026-09-23 — three destinations, by merging
+
+The strip goes **6 → 3**: 🏫 My classes · 📚 Library · 📝 Test papers.
+
+⚠⚠ **NOT BY HIDING.** index.html records that these tools were deliberately
+promoted OUT of a “⋯ More” menu, because that was *“one tap and one guess in
+front of every one of them”*. Putting them back would undo a decision someone
+made for a stated reason. The count came down by **merging destinations** and by
+**moving things to the level they belong to**.
+
+| was | now |
+|---|---|
+| 📂 My files | the Library’s second **shelf** |
+| 📋 Marks book | “Across all your classes” on My classes |
+| 📦 Past work | “Across all your classes” on My classes |
+| 📚 Past Exam Papers | renamed **Library**, now holding both kinds |
+
+**One destination for documents.** “Past Exam Papers” and “My files” were two
+tabs answering one question — *where are my documents* — and a teacher had to
+know which KIND a thing was before they could look for it. Two shelves of one
+Library now, behind a segmented control.
+⚠ **Not a data merge**: the public shelf is `library_documents`, a teacher’s
+uploads are `learning_materials`, and each keeps its own module. What merged is
+the destination.
+⚠ **Which shelf is showing is not a history step** — it is a filter on one
+place, like the Coming up / Past / Archived chips inside a class.
+
+⚠⚠ **RETIRED NAMES STILL RESOLVE.** `switchTab()` rejects anything not in
+`ALL_TABS` and falls back to `home`, and a saved location
+(`psac_teacher_loc_v1`) can still hold `materials`. It now redirects to the
+Library’s files shelf. `classes` → `home` is the same pattern from an earlier
+change; both are tested by name.
+
+**The mistake this stage made, and what caught it**
+
+⚠⚠ Removing two tabs left their panels **with nothing anywhere pointing at
+them** — and the first version of the test passed, because it only checked
+button → panel. Deleting a tab is a simplification only if the thing behind it
+still has a door; otherwise it is hiding a feature, which is the very thing the
+“⋯ More” removal was meant to stop. Both now live under **“Across all your
+classes”** on My classes — which is where you ask that question — each with its
+own “← My classes” button, since neither has a tab to click any more.
+The test checks **reachability in both directions**.
+
+⚠ The heading says *which level* they are, so neither collides with the class
+section doing the same job — Fault 2 of this document.
+
+**A real defect found on the way**
+
+⚠ `TeacherWorkspace.ensureLoaded()` THROWS when nothing loaded, and two call
+sites fired it and walked away. A failed load became an uncaught promise
+rejection and the teacher was left on “Loading…” for good, with the only
+explanation in a console they will never open. Both now catch it and say so
+where the list would have been, with a Retry.
+
+*Touched:* `index.html`, `teacher.js`, `teacher_workspace.js`, `style.css`.
+*Did not touch:* any table, any migration, any class-level screen.
+
+Test: `scripts/test-teacher-board.js` — 24 checks in real Chrome.
 
 ### Stage 5 — say it in a teacher's words
 Rename against what a teacher would say out loud, and fix the two dead

@@ -144,10 +144,20 @@ const TeacherWorkspace = (() => {
   }
 
   // ── The "All work" list (Archived work in the More menu) ──────────
+  // ⚠ ensureLoaded() THROWS when nothing loaded, and these two call sites used
+  //   to fire it and walk away — so a failed load became an uncaught promise
+  //   rejection and the teacher was left looking at "Loading…" for good, with
+  //   the only explanation in a console they will never open. Catch it and say
+  //   so where the list would have been, with a Retry.
+  function _loadOrSay(container) {
+    ensureLoaded().then(() => { if (listFilter) drawAssignments(); })
+      .catch(err => message(el(container), err && err.message ? err.message : "Could not load your work.",
+        () => _loadOrSay(container), "error"));
+  }
   function showList(filter) {
     if (filter) listFilter = filter;
     if (typeof TeacherMode !== 'undefined' && TeacherMode.saveLocation) TeacherMode.saveLocation({ listFilter });
-    if (!loaded) { ensureLoaded(); return; }
+    if (!loaded) { _loadOrSay('ta-asgn-list'); return; }
     drawAssignments();
   }
 
@@ -419,7 +429,7 @@ const TeacherWorkspace = (() => {
   }
 
   function showResults(id) {
-    if (!loaded) { selected = id || ''; ensureLoaded(); return; }
+    if (!loaded) { selected = id || ''; _loadOrSay('ta-results-picker'); return; }
     const select = el('ta-results-assign-sel');
     if (select) select.value = assignments.some(a => a.id === id) ? id : '';
     results(select ? select.value : (id || ''));

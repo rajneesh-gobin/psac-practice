@@ -763,6 +763,28 @@ const TeacherMode = (() => {
     if (loc.classId) { _restoredClass = ''; _restoreClassroom(loc); }
   }
 
+  // ── The Library's two shelves ──────────────────
+  // ⚠ Which shelf is showing is NOT a history step. It is a filter on one
+  //   destination, like the Coming up / Past / Archived chips inside a class —
+  //   making it one would mean Back walked a teacher's glances between two
+  //   lists before it did anything they would call navigation.
+  let _shelf = 'papers';
+  function shelf(which, opts = {}) {
+    _shelf = which === 'files' ? 'files' : 'papers';
+    const scope = document.getElementById('screen-teacher') || document;
+    scope.querySelectorAll('.ta-shelf-btn').forEach(b => {
+      const on = b.dataset.shelf === _shelf;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+    scope.querySelectorAll('[data-shelf-panel]').forEach(p =>
+      p.classList.toggle('hidden', p.dataset.shelfPanel !== _shelf));
+    // ⚠ Loaded on demand, and only once the shelf is actually looked at: the
+    //   materials list is a network round trip nobody browsing past papers
+    //   asked for.
+    if (_shelf === 'files' && typeof TeacherMaterials !== 'undefined') TeacherMaterials.load();
+  }
+
   // ── Tab switching ──────────────────────────────
   function switchTab(tab, opts = {}) {
     // ⚠ Recorded so Back walks the tabs instead of leaping off the board.
@@ -776,8 +798,17 @@ const TeacherMode = (() => {
       if (typeof TeacherHome !== 'undefined') TeacherHome.render({ silent: true });
       if (typeof TeacherGuestClasses !== 'undefined' && !opts.restoring) TeacherGuestClasses.refresh();
     }
-    if (tab === 'materials') TeacherMaterials.load();
-    if (tab === 'library' && typeof Library !== 'undefined') Library.mountInto('tc-library-body');
+    // ⚠⚠ 'materials' IS NO LONGER A TAB — it is the second shelf of the
+    //    Library. The NAME must keep working: switchTab() rejects anything not
+    //    in ALL_TABS and falls back to home, and a teacher's saved location
+    //    (psac_teacher_loc_v1) can still hold 'materials' from before this
+    //    change. Redirecting rather than deleting is what stops them landing
+    //    somewhere they did not choose, with nothing explaining why.
+    if (tab === 'materials') { switchTab('library', { ...opts, shelf: 'files' }); return; }
+    if (tab === 'library') {
+      if (typeof Library !== 'undefined') Library.mountInto('tc-library-body');
+      shelf(opts.shelf || _shelf, { silent: true });
+    }
     if (tab === 'create')    { _renderClassPicker(); modeChanged(); _applyLevelWords(); if (!opts.keepStep) gotoStep(1, { silent: true }); }
     if (tab === 'results' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showResults(_readLoc().resultsId || '');
     if (tab === 'assignments' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showList(opts.filter || _readLoc().listFilter || 'archived');
@@ -1563,6 +1594,7 @@ const TeacherMode = (() => {
     shareAssignment, closeShare, shareCopy, shareWhatsApp, shareNative, shareCopyLink, shareView,
     getLocation, gotoStep, currentStep, wizardNext, wizardBack, leaveSetWork,
     scopeChanged, chaptersChanged, countChanged, difficultyChanged, refreshSummary,
+    shelf,
     saveLocation: _saveLoc, rememberClassroom, chooseClassroom, setShareMode,
     shareChoiceChanged, setDueInDays, dueChanged, modeChanged, reloadPupils, tickPupils, pupilsChanged,
     prefillPractice, chapterName, packLabel,

@@ -11209,3 +11209,44 @@ html.dark .lb-when.is-on{background:#6366f1;border-color:#6366f1;color:#fff}
    into it. Give it spacing but never a layout that fights the grid inside. */
 .tc-day-asgn { margin-top: .4rem }
 .tc-day-asgn:empty { display: none }
+
+/* ══ The Library's two shelves (teacher board) ═════════════════════════════
+   ⚠ A FILTER, NOT NAVIGATION. Past papers and My files are two shelves of one
+   destination, so this reads as a segmented control rather than another row of
+   tabs — a teacher should not have to work out whether they have changed page. */
+.ta-shelf-switch {
+  display: flex; gap: .4rem; margin: 0 0 .9rem; flex-wrap: wrap;
+}
+.ta-shelf-btn {
+  border: 1.5px solid rgba(240,236,220,.28); background: rgba(240,236,220,.06);
+  color: rgba(240,236,220,.82); border-radius: 999px;
+  padding: .38rem .9rem; font-size: .85rem; font-weight: 700; cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+}
+.ta-shelf-btn:hover { background: rgba(240,236,220,.13) }
+.ta-shelf-btn.is-on {
+  background: rgba(252,211,77,.2); border-color: #fcd34d; color: #fde68a;
+}
+
+/* ══ "Across all your classes" — the two views that lost their tabs ════════
+   ⚠ Marks book and Past work came off the strip because each is the
+   ACROSS-ALL-CLASSES version of something a class now answers for itself.
+   Taking the tab away without putting the door somewhere would be hiding a
+   feature, which is what removing the old "⋯ More" menu was meant to stop.
+   ⚠ Deliberately quieter than a tab: these are occasional, and a teacher
+   looking at their class list should read the list first. */
+.ta-across-row { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid rgba(240,236,220,.14) }
+.ta-across-head {
+  font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+  color: rgba(240,236,220,.5); margin: 0 0 .5rem;
+}
+.ta-across-btn {
+  display: flex; align-items: center; gap: .7rem; width: 100%; text-align: left;
+  border: 1px solid rgba(240,236,220,.2); background: rgba(240,236,220,.05);
+  color: #f0ece8; border-radius: .7rem; padding: .6rem .8rem; margin-bottom: .45rem;
+  cursor: pointer; font-size: .9rem;
+}
+.ta-across-btn:hover { background: rgba(240,236,220,.11) }
+.ta-across-btn > span:first-child { font-size: 1.2rem; line-height: 1 }
+.ta-across-btn strong { display: block; font-weight: 700 }
+.ta-across-btn small { display: block; font-size: .74rem; color: rgba(240,236,220,.6); margin-top: .1rem }

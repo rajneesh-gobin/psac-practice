@@ -4667,15 +4667,122 @@
            description each had in the menu lives on as the button's title. -->
       <div class="teacher-navigation" role="tablist" aria-label="Teaching workspace">
         <button role="tab" aria-selected="true" class="ta-tab" data-tab="home" onclick="TeacherMode.switchTab('home')"><strong>🏫 My classes</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="gradebook" title="Every score in one table, class by class" onclick="TeacherMode.switchTab('gradebook')"><strong>📋 Marks book</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="materials" title="Every worksheet and note you have uploaded" onclick="TeacherMode.switchTab('materials')"><strong>📂 My files</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="assignments" title="Work that has closed or been put away" onclick="TeacherMode.switchTab('assignments')"><strong>📦 Past work</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="library" title="Past papers everyone shares, and the files you have uploaded" onclick="TeacherMode.switchTab('library')"><strong>📚 Library</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="papers" title="Build a printable paper with its answer sheet" onclick="TeacherMode.switchTab('papers')"><strong>📝 Test papers</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="library" title="Past papers and worksheets you can share with a class" onclick="TeacherMode.switchTab('library')"><strong>📚 Past Exam Papers</strong></button>
       </div>
 
+      <!-- ⚠⚠ ONE DESTINATION FOR DOCUMENTS. "📚 Past Exam Papers" and "📂 My
+           files" were two tabs answering one question — where are my documents
+           — and a teacher had to know which kind a thing was before they could
+           look for it. They are two shelves of one Library now.
+           ⚠ NOT a data merge: the public shelf is library_documents, a
+           teacher's uploads are learning_materials, and each keeps its own
+           module. What merged is the destination. -->
       <div class="ta-tab-content hidden" data-tab="library">
-        <div id="tc-library-body" class="lb-body"></div>
+        <div class="ta-shelf-switch" role="tablist" aria-label="Which documents">
+          <button role="tab" aria-selected="true" class="ta-shelf-btn is-on" data-shelf="papers"
+            title="Past papers, specimen papers and examiners' reports, shared by everyone"
+            onclick="TeacherMode.shelf('papers')">📚 Past papers</button>
+          <button role="tab" aria-selected="false" class="ta-shelf-btn" data-shelf="files"
+            title="Worksheets, notes and links you have uploaded yourself"
+            onclick="TeacherMode.shelf('files')">📂 My files</button>
+        </div>
+        <div data-shelf-panel="papers">
+          <div id="tc-library-body" class="lb-body"></div>
+        </div>
+            <div data-shelf-panel="files" class="hidden">
+          <h3 class="font-bold text-lg mb-1">📂 Learning Materials</h3>
+          <p class="teacher-intro mb-4">Share PDFs, photos, or a link to a video or website. Uploads are private - only teachers can add them.</p>
+  
+          <div class="rounded-xl p-4 mb-5" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15)">
+            <h4 class="font-semibold text-sm mb-3">Add a material</h4>
+            <!-- File or link. One form, one Add button: the only thing that
+                 changes is which source row is shown, so the title/subject/grade
+                 a teacher has already typed survives switching between them. -->
+            <div class="tm-source-row" role="group" aria-label="What are you adding?">
+              <button type="button" id="tm-src-file" class="tm-source-btn is-on" aria-pressed="true"
+                onclick="TeacherMaterials.setSource('file')">📎 Upload a file</button>
+              <button type="button" id="tm-src-link" class="tm-source-btn" aria-pressed="false"
+                onclick="TeacherMaterials.setSource('link')">🔗 Paste a link</button>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Title</label>
+                <input id="tm-title" type="text" maxlength="80" placeholder="e.g. Chapter 3 Notes"
+                  class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Description (optional)</label>
+                <input id="tm-description" type="text" maxlength="160" placeholder="e.g. Revision notes for the test"
+                  class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
+                  <select id="tm-grade" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
+                    <option value="">All grades</option>
+                    <option value="4">Grade 4</option>
+                    <option value="5">Grade 5</option>
+                    <option value="6">Grade 6</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
+                  <select id="tm-subject" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
+                    <option value="">All subjects</option>
+                    <option value="maths">Maths</option>
+                    <option value="english">English</option>
+                    <option value="french">French</option>
+                    <option value="science">Science</option>
+                    <option value="history">History &amp; Geography</option>
+                  </select>
+                </div>
+              </div>
+              <div id="tm-file-row">
+                <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">File (PDF or image, max 10 MB)</label>
+                <input id="tm-file"   type="file" accept="application/pdf,image/*" class="hidden"
+                  onchange="TeacherMaterials._onFileChosen('file')">
+                <input id="tm-camera" type="file" accept="image/*" capture="environment" aria-label="Take a photo" class="hidden"
+                  onchange="TeacherMaterials._onFileChosen('camera')">
+                <div class="tm-pick-row">
+                  <label for="tm-file" class="tm-pick-btn">📎 Choose file</label>
+                  <button type="button" class="tm-pick-btn tm-pick-camera"
+                    onclick="document.getElementById('tm-camera').click()">📷 Camera</button>
+                  <span id="tm-filename" class="tm-filename-hint">No file chosen</span>
+                </div>
+              </div>
+              <div id="tm-link-row" class="hidden">
+                <label for="tm-url" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Link (YouTube video, or a PDF on another site)</label>
+                <input id="tm-url" type="url" inputmode="url" maxlength="600" placeholder="https://www.youtube.com/watch?v=…"
+                  spellcheck="false" autocapitalize="off" autocorrect="off"
+                  class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <p class="tm-filename-hint mt-1">A link never expires, so students can open it any time.</p>
+              </div>
+              <p id="tm-upload-status" role="status" class="text-xs text-gray-500 dark:text-gray-400 min-h-[1.2em]"></p>
+              <button id="tm-add-btn" onclick="TeacherMaterials.upload()" class="ta-btn-pencil w-full justify-center">
+                📎 Pin to board
+              </button>
+            </div>
+          </div>
+  
+          <div class="flex justify-between items-center mb-2">
+            <h4 class="font-semibold text-sm text-gray-700 dark:text-gray-300">Your materials</h4>
+            <button onclick="TeacherMaterials.load()" class="text-xs text-blue-600 dark:text-blue-400">Refresh</button>
+          </div>
+          <div class="tm-find-row">
+            <label for="tm-search" class="sr-only">Search your materials</label>
+            <input id="tm-search" type="search" inputmode="search" maxlength="80"
+              placeholder="🔍 Search by name, subject or type…"
+              oninput="TeacherMaterials.setSearch(this.value)"
+              class="tm-search-input">
+            <button type="button" id="tm-search-clear" class="tm-search-clear hidden"
+              onclick="TeacherMaterials.clearSearch()" aria-label="Clear search">✕</button>
+          </div>
+          <div id="tm-controls"></div>
+          <div id="tm-list" class="space-y-2">
+            <p class="text-sm text-gray-400 dark:text-gray-500">Loading…</p>
+          </div>
+        </div>
       </div>
 
       <!-- ── TAB: MY CLASSES ──
@@ -4686,6 +4793,27 @@
         <div id="ta-home" class="th-root" aria-live="polite"><p class="ta-loading">Loading your classes…</p></div>
         <p id="tc-status" role="status" class="text-sm my-3"></p>
         <div id="tc-list"></div><div id="tc-workspace"></div><div id="tc-roster"></div>
+        <!-- ⚠⚠ THESE TWO LOST THEIR TABS AND MUST NOT LOSE THEIR DOOR.
+             "Marks book" and "Past work" came off the strip because each is the
+             ACROSS-ALL-CLASSES version of something a class now answers for
+             itself — Marks by class, and Work → Archived. Taking the tab away
+             without putting the door somewhere would be hiding a feature, which
+             is exactly what removing the old "⋯ More" menu was meant to stop.
+             They live here, on My classes, because "across all my classes" is a
+             question you ask while looking at the list of them.
+             ⚠ The words say WHICH LEVEL they are, so neither collides with the
+             section of the same job inside a class. -->
+        <div class="ta-across-row">
+          <p class="ta-across-head">Across all your classes</p>
+          <button type="button" class="ta-across-btn" onclick="TeacherMode.switchTab('gradebook')">
+            <span aria-hidden="true">📋</span>
+            <span><strong>Marks book</strong><small>Every score in one table, class by class</small></span>
+          </button>
+          <button type="button" class="ta-across-btn" onclick="TeacherMode.switchTab('assignments')">
+            <span aria-hidden="true">📦</span>
+            <span><strong>Past work</strong><small>Work that has closed or been put away</small></span>
+          </button>
+        </div>
       </div>
 
       <!-- ── TAB: SET WORK ── -->
@@ -4912,9 +5040,11 @@
       </div>
 
       <!-- ── TAB: ALL / ARCHIVED WORK (via More) ── -->
+      <!-- ⚠ NO TAB, SO IT NEEDS ITS OWN WAY BACK — see the gradebook above. -->
       <div class="ta-tab-content hidden" data-tab="assignments">
+        <button type="button" class="tr-back" onclick="TeacherMode.switchTab('home')">← My classes</button>
         <div class="ta-results-head">
-          <div><h3 class="font-bold">📦 All work</h3><p class="ta-form-help">Closed and archived work stays here. Restore anything you need again.</p></div>
+          <div><h3 class="font-bold">📦 Past work, all classes</h3><p class="ta-form-help">Closed and archived work stays here. Restore anything you need again.</p></div>
           <button onclick="TeacherWorkspace.refresh()" class="ta-btn-eraser">↻ Refresh</button>
         </div>
         <div id="ta-asgn-list" class="space-y-2"></div>
@@ -4929,106 +5059,17 @@
         <p class="teacher-intro mb-3">Pick a grade, a subject, the chapters and the levels, then print or save as PDF.</p>
         <div id="tc-papers-host"></div>
       </div>
+      <!-- ⚠ NO TAB, SO IT NEEDS ITS OWN WAY BACK. Reached from the
+           "Across all your classes" row on My classes; without this button a
+           teacher arrives and has nothing to click to leave. -->
       <div class="ta-tab-content hidden" data-tab="gradebook">
-        <h3 class="font-bold text-lg mb-1">📋 Gradebook</h3>
-        <p class="teacher-intro mb-4">Cross-assignment scores for each classroom. Select a classroom to view.</p>
+        <button type="button" class="tr-back" onclick="TeacherMode.switchTab('home')">← My classes</button>
+        <h3 class="font-bold text-lg mb-1">📋 Marks book</h3>
+        <p class="teacher-intro mb-4">Every score in one table. Pick a class to see it — each class also has its own marks inside it.</p>
         <div id="ta-gradebook-root"></div>
       </div>
 
       <!-- ── TAB: MATERIALS (via More) ── -->
-      <div class="ta-tab-content hidden" data-tab="materials">
-        <h3 class="font-bold text-lg mb-1">📂 Learning Materials</h3>
-        <p class="teacher-intro mb-4">Share PDFs, photos, or a link to a video or website. Uploads are private - only teachers can add them.</p>
-
-        <div class="rounded-xl p-4 mb-5" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15)">
-          <h4 class="font-semibold text-sm mb-3">Add a material</h4>
-          <!-- File or link. One form, one Add button: the only thing that
-               changes is which source row is shown, so the title/subject/grade
-               a teacher has already typed survives switching between them. -->
-          <div class="tm-source-row" role="group" aria-label="What are you adding?">
-            <button type="button" id="tm-src-file" class="tm-source-btn is-on" aria-pressed="true"
-              onclick="TeacherMaterials.setSource('file')">📎 Upload a file</button>
-            <button type="button" id="tm-src-link" class="tm-source-btn" aria-pressed="false"
-              onclick="TeacherMaterials.setSource('link')">🔗 Paste a link</button>
-          </div>
-          <div class="space-y-3">
-            <div>
-              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Title</label>
-              <input id="tm-title" type="text" maxlength="80" placeholder="e.g. Chapter 3 Notes"
-                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Description (optional)</label>
-              <input id="tm-description" type="text" maxlength="160" placeholder="e.g. Revision notes for the test"
-                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
-                <select id="tm-grade" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
-                  <option value="">All grades</option>
-                  <option value="4">Grade 4</option>
-                  <option value="5">Grade 5</option>
-                  <option value="6">Grade 6</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
-                <select id="tm-subject" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
-                  <option value="">All subjects</option>
-                  <option value="maths">Maths</option>
-                  <option value="english">English</option>
-                  <option value="french">French</option>
-                  <option value="science">Science</option>
-                  <option value="history">History &amp; Geography</option>
-                </select>
-              </div>
-            </div>
-            <div id="tm-file-row">
-              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">File (PDF or image, max 10 MB)</label>
-              <input id="tm-file"   type="file" accept="application/pdf,image/*" class="hidden"
-                onchange="TeacherMaterials._onFileChosen('file')">
-              <input id="tm-camera" type="file" accept="image/*" capture="environment" aria-label="Take a photo" class="hidden"
-                onchange="TeacherMaterials._onFileChosen('camera')">
-              <div class="tm-pick-row">
-                <label for="tm-file" class="tm-pick-btn">📎 Choose file</label>
-                <button type="button" class="tm-pick-btn tm-pick-camera"
-                  onclick="document.getElementById('tm-camera').click()">📷 Camera</button>
-                <span id="tm-filename" class="tm-filename-hint">No file chosen</span>
-              </div>
-            </div>
-            <div id="tm-link-row" class="hidden">
-              <label for="tm-url" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Link (YouTube video, or a PDF on another site)</label>
-              <input id="tm-url" type="url" inputmode="url" maxlength="600" placeholder="https://www.youtube.com/watch?v=…"
-                spellcheck="false" autocapitalize="off" autocorrect="off"
-                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-              <p class="tm-filename-hint mt-1">A link never expires, so students can open it any time.</p>
-            </div>
-            <p id="tm-upload-status" role="status" class="text-xs text-gray-500 dark:text-gray-400 min-h-[1.2em]"></p>
-            <button id="tm-add-btn" onclick="TeacherMaterials.upload()" class="ta-btn-pencil w-full justify-center">
-              📎 Pin to board
-            </button>
-          </div>
-        </div>
-
-        <div class="flex justify-between items-center mb-2">
-          <h4 class="font-semibold text-sm text-gray-700 dark:text-gray-300">Your materials</h4>
-          <button onclick="TeacherMaterials.load()" class="text-xs text-blue-600 dark:text-blue-400">Refresh</button>
-        </div>
-        <div class="tm-find-row">
-          <label for="tm-search" class="sr-only">Search your materials</label>
-          <input id="tm-search" type="search" inputmode="search" maxlength="80"
-            placeholder="🔍 Search by name, subject or type…"
-            oninput="TeacherMaterials.setSearch(this.value)"
-            class="tm-search-input">
-          <button type="button" id="tm-search-clear" class="tm-search-clear hidden"
-            onclick="TeacherMaterials.clearSearch()" aria-label="Clear search">✕</button>
-        </div>
-        <div id="tm-controls"></div>
-        <div id="tm-list" class="space-y-2">
-          <p class="text-sm text-gray-400 dark:text-gray-500">Loading…</p>
-        </div>
-      </div>
 
       <!-- ── TAB: MESSAGES (via More) ── -->
       <div class="ta-tab-content hidden" data-tab="messages">
