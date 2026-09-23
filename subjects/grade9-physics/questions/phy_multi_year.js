@@ -217,12 +217,7 @@ STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-pmy-022', chapterId: 'g9s-p3-energy', subsection: 'conservation_of_energy',
   difficulty: 2,
   question: 'A glass jar has a tight metal lid. To open it, a student places the <b>lid</b> under warm running water. Why does this method work?',
-  options: [
-    'The metal lid expands more than the glass when heated, loosening the seal',
-    'The warm water lubricates the lid',
-    'Glass contracts when warm water is poured on it',
-    'Water reduces friction between the lid and jar'
-  ],
+  options: ["The metal lid expands more than the glass when heated, loosening the seal","The warm water reduces the friction between the metal lid and the glass jar","The glass of the jar contracts when warm water is poured over the outside","The warm water acts as a lubricant between the lid and the jar&rsquo;s thread"],
   answer: 'The metal lid expands more than the glass when heated, loosening the seal',
   explanation: 'Metals have higher coefficients of thermal expansion than glass. The lid expands slightly when warmed, breaking the tight seal and making it easier to twist off.'
 }));
