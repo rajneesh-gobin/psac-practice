@@ -128,7 +128,12 @@ const ok = (label, cond, detail) => {
       return { n: c.length, titles: c.map(b => b.querySelector('strong')?.textContent.trim()),
                handlers: c.map(b => (b.getAttribute('onclick')||'')) };
     })()`);
-    ok('the create-activity chooser now offers four sources', cards.n === 4, cards);
+    // ⚠ FIVE since tapping a calendar day started opening this same chooser:
+    //   a plain calendar note joined the four kinds of work. Pinning the count
+    //   at four made a later, deliberate addition look like a regression — so
+    //   what matters is that a past paper is among them, which the next check
+    //   asserts by name.
+    ok('the create-activity chooser offers every kind of thing', cards.n === 5, cards);
     ok('one of them is a past exam paper',
       cards.titles.some(t => /past exam paper/i.test(t || '')), cards.titles);
     ok('and it goes to the new flow, not to Resources',

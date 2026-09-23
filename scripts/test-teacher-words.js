@@ -128,6 +128,23 @@ console.log('\nNothing points somewhere that no longer exists');
   check(!all.some(t => /More menu/i.test(t)), 'nothing sends you to a "More menu"');
   // The Library absorbed My files; no copy should still call it a tab.
   check(!all.some(t => /My files tab/i.test(t)), 'nothing calls My files a tab');
+
+  // ⚠ A SECTION RENAME LEAVES LINKS BEHIND. "Open Resources →" sat in the Work
+  //   timeline pointing at a section that had been called Files since Stage 3 —
+  //   the button worked, it just named somewhere that no longer existed. Only
+  //   the screenshot showed it. This reads the copy the modules RENDER, not
+  //   just the copy they toast.
+  const rendered = [];
+  for (const f of MODULES) {
+    const src = fs.readFileSync(path.join(ROOT, 'engine', f), 'utf8');
+    for (const m of src.matchAll(/>([A-Z][^<>{}$]{3,60})</g)) rendered.push(m[1].trim());
+  }
+  const navWords = [...teacherHtml.matchAll(/data-sec="\w+"[^>]*>[^<]*<span>([^<]+)</g)].map(m => m[1]);
+  const stale = rendered.filter(t => /\bResources\b/.test(t));
+  check(stale.length === 0,
+    'no rendered link points at a section called "Resources"',
+    stale.map(x => '"' + x + '"').join('\n      '));
+  check(navWords.includes('Files'), 'the section it means is called "Files"', JSON.stringify(navWords));
 }
 
 console.log(failures ? `\n✗ ${failures} failure(s)` : '\n✓ all checks passed');

@@ -6914,7 +6914,20 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
   font-size: .9rem;
   transition: background .12s, color .12s, border-color .12s;
 }
-.tc-cd-nav-btn span { font-size: .7rem; line-height: 1; font-family: 'Caveat', cursive; }
+/* ⚠⚠ THE ONE PLACE THE CHALK FONT WAS UNREADABLE. Caveat is this app's
+   identity and is used everywhere — but everywhere ELSE at 1rem and above
+   (1.1 on the board tabs, 1.2 on card titles, 1.9 on the practice hub). Here
+   it was .7rem, and .62rem on a narrow phone: a joined handwriting face at
+   ten pixels, which is not a style choice, it is illegible. Reported from the
+   live app.
+   ⚠ AND THESE ARE NAVIGATION LABELS, not decoration. Today / Work / Pupils /
+   Files are scanned, not read — the four words a teacher uses to find their
+   way. Functional text gets the UI face; the chalk face keeps the headings,
+   where it has the size to work. */
+.tc-cd-nav-btn span {
+  font-size: .78rem; line-height: 1.15; font-weight: 700; letter-spacing: .01em;
+  font-family: inherit;
+}
 .tc-cd-nav-btn:hover { background: rgba(255,255,255,.1); color: #f0ece0; border-color: rgba(240,236,220,.2); }
 .tc-cd-nav-active { background: #f4ce52 !important; color: #2d270e !important; border-color: #ffe68c !important; box-shadow: 0 5px 13px rgba(0,0,0,.2); }
 
@@ -6936,7 +6949,8 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
 @media (max-width: 430px) {
   .tc-cd-nav { padding: .5rem .3rem; gap: 1px; }
   .tc-cd-nav .tc-cd-nav-btn { flex-direction: column; gap: 2px; padding: .42rem .3rem; }
-  .tc-cd-nav .tc-cd-nav-btn span { font-size: .62rem; }
+  /* ⚠ .62rem was the worst of it. Never below .7rem for a label. */
+  .tc-cd-nav .tc-cd-nav-btn span { font-size: .7rem; }
   .tc-cd-content { padding: .75rem .8rem; }
 }
 
@@ -7987,7 +8001,7 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
     gap: 2px;
   }
   .tc-cd-nav-btn { flex-direction: row; gap: 4px; padding: .4rem .6rem; white-space: nowrap; }
-  .tc-cd-nav-btn span { font-size: .8rem; }
+  .tc-cd-nav-btn span { font-size: .84rem; }
   .tc-cd-content { padding: .8rem; }
   .tc-cd-grade-header, .tc-cd-grade-row { grid-template-columns: 2fr 1fr 1fr 1.5fr; font-size: .85rem; }
 }
@@ -10304,9 +10318,9 @@ button.tc-cd-stat:hover { background: rgba(255,255,255,.12); border-color: rgba(
 button.tc-cd-stat:focus-visible { outline: 3px solid #f4ce52; outline-offset: 2px; }
 /* The rail labels are the whole navigation for a teacher who is not sure
    what the icons mean, so they are readable rather than decorative. */
-.tc-cd-nav-btn span { font-size: .82rem; }
+.tc-cd-nav-btn span { font-size: .84rem; }
 @media (max-width: 430px) {
-  .tc-cd-nav .tc-cd-nav-btn span { font-size: .72rem; }
+  .tc-cd-nav .tc-cd-nav-btn span { font-size: .76rem; }
 }
 
 /* ══ Memory Reef ═══════════════════════════════════════════════════════════

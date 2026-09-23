@@ -597,7 +597,7 @@ const TeacherClassroomDetail = (() => {
       <div id="tc-cd-work-days">${days.length ? days.map(k => dayBlock(k, byDay.get(k))).join('') : `<div class="tc-work-empty"><span>📚</span><strong>${esc(emptyText)}</strong></div>`}</div>
       ${_workFilter === 'coming' ? `<h4 class="tc-work-subhead">The month</h4>${_calendarGrid()}` : ''}
       ${_workFilter === 'coming' ? _eventForm(today) : ''}
-      ${_workFilter === 'coming' ? `<p class="tc-work-resource-link">Need to share a file, link or video? <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">Open Resources →</button></p>` : ''}
+      ${_workFilter === 'coming' ? `<p class="tc-work-resource-link">Need to share a file, link or video? <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">Open Files →</button></p>` : ''}
     `;
 
     // ⚠ THE LIST COMES BEFORE THE MONTH GRID, and on a phone that is the whole
@@ -737,15 +737,21 @@ const TeacherClassroomDetail = (() => {
   }
 
   // ── Homework type choice ──────────────────────────────────────────
-  function showHomeworkChoice() {
+  // ⚠ THE DAY TRAVELS WITH THE CHOICE. Whatever the teacher picks lands on the
+  //   day they tapped, instead of opening a second date field for them to fill
+  //   in again — which is where the two could disagree.
+  let _choiceDate = null;
+
+  function showHomeworkChoice(opts) {
+    _choiceDate = (opts && /^\d{4}-\d{2}-\d{2}$/.test(opts.date)) ? opts.date : null;
     document.getElementById('tc-hw-choice')?.remove();
     const overlay = document.createElement('div');
     overlay.id = 'tc-hw-choice';
     overlay.className = 'tc-hw-overlay';
     overlay.innerHTML = `
-      <div class="tc-hw-choice-panel" role="dialog" aria-modal="true" aria-label="Create activity">
+      <div class="tc-hw-choice-panel" role="dialog" aria-modal="true" aria-label="Add something to this class">
         <div class="tc-hw-choice-header">
-          <span>Create an activity</span>
+          <span>${_choiceDate ? 'What is happening on ' + esc(_dayText(_choiceDate, { weekday: 'long', day: 'numeric', month: 'long' })) + '?' : 'Add something for this class'}</span>
           <button onclick="document.getElementById('tc-hw-choice').remove()" class="tc-hw-close" aria-label="Close">&#x2715;</button>
         </div>
         <div class="tc-hw-choice-cards">
@@ -766,8 +772,18 @@ const TeacherClassroomDetail = (() => {
           </button>
           <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._chooseResource()">
             <span class="tc-hw-card-icon">📁</span>
-            <strong>Resource for pupils</strong>
-            <small>Share a file, video or website without creating a marked activity</small>
+            <strong>Share a file or link</strong>
+            <small>A PDF, photo, video or website - pupils can open it, nothing to hand in</small>
+          </button>
+          <!-- ⚠ THE FIFTH CARD IS THE OLD BEHAVIOUR OF TAPPING A DAY. Before,
+               a tap on the calendar could ONLY produce this, and the other four
+               were a section away. Now it is one of five, and it is last
+               because a test or a day away is the least of what a teacher puts
+               on a day. -->
+          <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._chooseNote()">
+            <span class="tc-hw-card-icon">📌</span>
+            <strong>Just a note on the calendar</strong>
+            <small>A test, a trip, a day you are away - pupils see it, there is nothing to do</small>
           </button>
         </div>
       </div>`;
@@ -776,8 +792,16 @@ const TeacherClassroomDetail = (() => {
   }
 
   function _chooseDigital() {
+    const day = _choiceDate;
     document.getElementById('tc-hw-choice')?.remove();
     createWork();
+    // ⚠ createWork() leaves the class for the board's Set Work flow, which
+    //   rebuilds its own form — so the date has to be applied AFTER that, not
+    //   before. One frame is enough; the form is built synchronously by
+    //   switchTab('create').
+    if (day && typeof TeacherMode !== 'undefined' && TeacherMode.setDueDate) {
+      setTimeout(() => TeacherMode.setDueDate(day), 0);
+    }
   }
 
   function _chooseWorksheet() {
@@ -788,6 +812,19 @@ const TeacherClassroomDetail = (() => {
   function _chooseResource() {
     document.getElementById('tc-hw-choice')?.remove();
     showSection('materials');
+  }
+
+  // The plain calendar note — what tapping a day used to do on its own.
+  function _chooseNote() {
+    const day = _choiceDate;
+    document.getElementById('tc-hw-choice')?.remove();
+    showSection('work');
+    setTimeout(() => {
+      const dateEl = el('tc-cd-ev-date');
+      if (dateEl && day) { dateEl.value = day; dateEl.removeAttribute('min'); }
+      el('tc-cd-ev-form')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      (el('tc-cd-ev-title') || el('tc-cd-ev-kind'))?.focus();
+    }, 60);
   }
 
   // ══ A past paper, set from inside the class ═══════════════════════════════
@@ -885,7 +922,17 @@ const TeacherClassroomDetail = (() => {
         <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.closePaperPick()">Cancel</button>
         <button type="button" class="tc-cd-action-btn" id="tc-paper-save" onclick="TeacherClassroomDetail.savePaper()">Set work</button>
       </div>`;
-    _paperWhen = 'tomorrow';
+    // ⚠ A DAY ALREADY CHOSEN WINS OVER THE DEFAULT. Arriving here from a tap
+    //   on Friday and being shown "Tomorrow" pre-selected is the app forgetting
+    //   what it was just told.
+    if (_choiceDate) {
+      _paperWhen = 'pick';
+      const d = document.getElementById('tc-paper-date');
+      if (d) { d.value = _choiceDate; d.removeAttribute('min'); }
+      setPaperWhen('pick');
+    } else {
+      _paperWhen = 'tomorrow';
+    }
   }
 
   let _paperWhen = 'tomorrow';
@@ -991,7 +1038,7 @@ const TeacherClassroomDetail = (() => {
           </div>
           <div class="ncf-field">
             <label for="phw-due">Due on</label>
-            <input id="phw-due" type="date" class="ncf-input" min="${_todayKey()}" value="${_dayKeyPlus(7)}">
+            <input id="phw-due" type="date" class="ncf-input" min="${_todayKey()}" value="${_choiceDate || _dayKeyPlus(7)}">
             <div class="ta-due-chips" role="group" aria-label="Quick due dates" style="margin-top:.4rem">
               <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.setPhwDue(1)">Tomorrow</button>
               <button type="button" class="tc-cd-pill" onclick="TeacherClassroomDetail.setPhwDue(3)">In 3 days</button>
@@ -2351,12 +2398,15 @@ const TeacherClassroomDetail = (() => {
   function calendarNext() { _calendarMonth = new Date(_calendarMonth.getFullYear(), _calendarMonth.getMonth() + 1, 1); _renderWork(); }
   function calendarToday() { _calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); _renderWork(); }
 
+  // ⚠⚠ A DAY IS A QUESTION, NOT A FORM. This used to fill the event form's date
+  //    box and scroll to it, so tapping Friday could produce a calendar note
+  //    and nothing else — while a worksheet, a past paper, questions on screen
+  //    and a shared file were all one section away behind "＋ Create activity",
+  //    each with its own date field to fill in again. Reported from the live
+  //    app. Tapping a day now asks what is happening on it, and whatever the
+  //    teacher picks lands on that day.
   function calendarPickDate(key) {
-    const dateEl = el('tc-cd-ev-date');
-    if (dateEl) { dateEl.value = key; dateEl.removeAttribute('min'); }
-    const form = el('tc-cd-ev-form');
-    if (form) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    (el('tc-cd-ev-title') || el('tc-cd-ev-kind'))?.focus();
+    showHomeworkChoice({ date: key });
   }
 
   // ⚠ KEPT AS AN ALIAS, NOT DELETED. Activities and Calendar merged into one
@@ -2770,7 +2820,7 @@ const TeacherClassroomDetail = (() => {
 
   return {
     open, close, showSection, isOpen, toggleMore, setWorkFilter, retryWork, retryPupils, retrySignals, doTodo, showSetupGuide, dismissSetupGuide, openPupil, closePupil,
-    showHomeworkChoice, _chooseDigital, _chooseWorksheet, _chooseResource,
+    showHomeworkChoice, _chooseDigital, _chooseWorksheet, _chooseResource, _chooseNote,
     _choosePaper, closePaperPick, paperBack, setPaperWhen, savePaper,
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,

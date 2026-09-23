@@ -533,6 +533,19 @@ const TeacherMode = (() => {
     if (!due.value || due.value < due.min) setDueInDays(7);
     else dueChanged();
   }
+  // ⚠ Set the due date to an EXACT day, not an offset. Tapping Friday on a
+  //   class calendar and choosing "questions on screen" has to land on Friday;
+  //   setDueInDays() can only count forward from today.
+  function setDueDate(key) {
+    const due = _el('ta-due');
+    if (!due || !/^\d{4}-\d{2}-\d{2}$/.test(key || '')) return;
+    // ⚠ Never backdate. A teacher can tap a past day on the calendar to look at
+    //   it; setting work due before today would produce homework that is
+    //   already late the moment it exists.
+    if (key < _ymd(new Date())) return;
+    due.value = key;
+    dueChanged();
+  }
   function setDueInDays(n) {
     const due = _el('ta-due');
     if (!due) return;
@@ -1595,6 +1608,7 @@ const TeacherMode = (() => {
     getLocation, gotoStep, currentStep, wizardNext, wizardBack, leaveSetWork,
     scopeChanged, chaptersChanged, countChanged, difficultyChanged, refreshSummary,
     shelf,
+    setDueDate,
     saveLocation: _saveLoc, rememberClassroom, chooseClassroom, setShareMode,
     shareChoiceChanged, setDueInDays, dueChanged, modeChanged, reloadPupils, tickPupils, pupilsChanged,
     prefillPractice, chapterName, packLabel,
