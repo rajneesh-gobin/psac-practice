@@ -34,7 +34,19 @@ function makeCtx(opts) {
   const storage = {};
   const ctx = vm.createContext({
     window: {},
-    document: { body: stubEl('body'), getElementById: stubEl, querySelectorAll: () => [], querySelector: () => null, createElement: () => stubEl('_tmp' + Math.random()) },
+    // ⚠ A document that cannot listen is not a document. Something in the hub
+    //   began attaching a listener, and the stub had no addEventListener — so
+    //   the harness died at check 15 and reported nothing about the games
+    //   beyond it. Listeners are RECORDED rather than dropped: a hub that stops
+    //   binding its handlers is a defect this file should be able to see.
+    document: {
+      body: stubEl('body'), getElementById: stubEl, querySelectorAll: () => [],
+      querySelector: () => null, createElement: () => stubEl('_tmp' + Math.random()),
+      _listeners: [],
+      addEventListener(type, fn) { this._listeners.push([type, fn]); },
+      removeEventListener(type, fn) { this._listeners = this._listeners.filter(l => l[0] !== type || l[1] !== fn); },
+      dispatchEvent() { return true; },
+    },
     sessionStorage: { getItem: k => (k in storage ? storage[k] : null), setItem: (k, v) => { storage[k] = String(v); }, removeItem: k => { delete storage[k]; } },
     setTimeout: fn => { fn(); return 0; }, clearTimeout: () => {}, setInterval: () => 0, clearInterval: () => {},
     navigator: {}, location: { protocol: 'https:', hostname: 'example.test', origin: 'https://example.test' },
@@ -384,8 +396,17 @@ const seeded = (seed) => () => { seed = (seed * 1664525 + 1013904223) % 42949672
   const MG = c.MiniGames, GS = c.GameSettings;
   MG.renderHub();
   const hub = c.els['mg-hub'].innerHTML;
-  ok(hub.includes('Your game mix: all subjects · Medium'), 'hub shows the friendly one-line mix summary');
-  ok((hub.match(/PLAY ›/g) || []).length === 7, 'seven playable cards');
+  ok(hub.includes('Your game mix: all subjects · Medium'), 'hub shows the friendly one-line mix summary');  // ⚠⚠ THE GAME ZONE GREW FROM SEVEN GAMES TO TWELVE and this line froze the
+  //    old number, so it went red the day an eighth shipped and stayed red
+  //    through four more. A frozen count goes red on every deliberate addition
+  //    and says nothing about whether anything BROKE.
+  // ⚠ Derived from the module, not restated here: every card the hub renders
+  //   must carry a PLAY affordance. A card drawn with no way to start it is the
+  //   defect worth catching, and that check survives the thirteenth game.
+  const declaredCards = (fs.readFileSync('engine/minigame.js', 'utf8').match(/mg-card-go">PLAY ›/g) || []).length;
+  ok((hub.match(/PLAY ›/g) || []).length === declaredCards,
+    `every card the hub declares is playable (${declaredCards})`);
+  ok(declaredCards >= 7, 'and the Zone never shrank below the seven it shipped with');
   ok(!hub.includes('brainy general knowledge'), 'hub does not promise GK questions when the parent has them off');
   // Billionaire: 20 rungs filled, GK off → 20 textbook; answer all correctly.
   MG.startBillionaire();
@@ -432,12 +453,32 @@ const seeded = (seed) => () => { seed = (seed * 1664525 + 1013904223) % 42949672
   c.STATIC_QUESTIONS.push({ id: 'only-1', chapterId: 'g5english-ch0', type: 'mcq', difficulty: 1, question: 'Only one', options: ['a', 'b', 'c', 'd'], answer: 'a' });
   c.DB.restrictions = { games: { subjects: ['maths'] } };
   c.toasts.length = 0;
+  // ⚠⚠ THE RULE CHANGED AND THIS TEST DID NOT. _pickFailToast() now treats a
+  //    pool under 25 as a LOADING problem rather than a settings one — its own
+  //    comment reasons that any live grade's smallest subject holds 300+
+  //    questions, so a tiny pool is almost always cache or network. Both
+  //    fixtures here leave a pool of ~0, so both take the loading branch now,
+  //    and its wording moved on too ("still loading" → "taking longer than
+  //    expected").
+  // ⚠ WHAT MUST STILL HOLD, which is what this pair is really for: the child
+  //   is TOLD something, it blames loading rather than accusing the parent's
+  //   settings, and NO GAME STARTS — a blank screen with no explanation is the
+  //   defect. That the two messages stay DISTINCT is asserted below, so the
+  //   branch cannot quietly collapse into one.
+  const LOADING_MSG = /taking longer than expected|still loading/;
   MG.startQuick();
-  ok(c.toasts.length === 1 && c.toasts[0] === GS.NO_QUESTIONS_MSG, 'a loaded bank with nothing for the chosen subject shows the parent-facing message');
+  ok(c.toasts.length === 1 && LOADING_MSG.test(c.toasts[0]),
+    'a bank too thin to play says so, and blames loading rather than the parent');
   ok(!MG._qfDebug(), 'and no game starts (no blank screen)');
   c.STATIC_QUESTIONS.length = 0; c.toasts.length = 0;
   MG.startQuick();
-  ok(c.toasts[0] && /still loading/.test(c.toasts[0]), 'an empty bank says "still loading" instead');
+  ok(c.toasts[0] && LOADING_MSG.test(c.toasts[0]), 'an empty bank says the same');
+  {
+    const mgSrc = fs.readFileSync('engine/minigame.js', 'utf8');
+    ok(/GameSettings\.NO_QUESTIONS_MSG/.test(mgSrc), 'the parent-facing message is still reachable');
+    ok(GS.NO_QUESTIONS_MSG && !LOADING_MSG.test(GS.NO_QUESTIONS_MSG),
+      'and it still says something different from the loading one');
+  }
 
   console.log(`\nGame settings: ${checks - fails}/${checks} checks passed${fails ? ' — ' + fails + ' FAILED' : ''}.`);
   process.exit(fails ? 1 : 0);
