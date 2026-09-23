@@ -35,6 +35,7 @@ you know it exists. The area file carries the rule, its bound and its test.
 | what to do next, or anything reported as outstanding | [`pending.md`](docs/claude/pending.md) |
 | **building the Android app** — keystore, Bubblewrap, assetlinks | [`docs/android-build.md`](docs/android-build.md) |
 | **the Android app / Google Play** — what must change in the web app first | [`docs/android-readiness.md`](docs/android-readiness.md) |
+| **the teacher board or the classroom section** — before changing either | [`teacher-redesign-plan.md`](docs/claude/teacher-redesign-plan.md) |
 | **Science Labs** (`engine/labs/` — per grade: Grades 4-9, Grade 5 borrows 4 and 6; build contract in `docs/labs/LAB_SPEC.md`) | [`docs/labs/PLAN.md`](docs/labs/PLAN.md) |
 
 ⚠ Nothing in any `.md` outranks the code or the live database. **Verify before
