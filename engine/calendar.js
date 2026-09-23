@@ -801,9 +801,7 @@ const Calendar = (() => {
       const anyFilterOff = Object.values(_filters).some(v => !v);
       list.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">${
         anyFilterOff ? 'Nothing on this day in the layers you have showing.' : 'No events on this day.'}</p>
-        <button onclick="Calendar.showAddEvent('${dateStr}')"
-          class="w-full text-sm text-indigo-500 font-medium py-2 border-2 border-dashed border-indigo-200 dark:border-indigo-800 rounded-xl">
-          + Add Event</button>`;
+        ${_dayActionsHtml(dateStr)}`;
     } else {
       list.innerHTML = actHtml + events.map(e => {
         const meta = TYPE_META[e.entry_type] || TYPE_META.other;
@@ -825,11 +823,82 @@ const Calendar = (() => {
             </div>
           </div>`;
       }).join('') + `
-        <button onclick="Calendar.showAddEvent('${dateStr}')"
-          class="w-full mt-1 text-sm text-indigo-500 font-medium py-2 border-2 border-dashed border-indigo-200 dark:border-indigo-800 rounded-xl">
-          + Add Event</button>`;
+        ${_dayActionsHtml(dateStr)}`;
     }
     m.classList.remove('hidden');
+  }
+
+  // ⚠ A CHILD OPENS THIS MODAL TOO — the calendar screen is theirs as well as
+  //   the parent's. Library.canAssign() is the same adult check the library's
+  //   own Assign button uses; without it a child would be offered a button that
+  //   sets their own homework.
+  function _dayActionsHtml(dateStr) {
+    const canPaper = typeof Library !== 'undefined'
+      && typeof Library.canAssign === 'function' && Library.canAssign();
+    const cls = 'w-full text-sm text-indigo-500 font-medium py-2 border-2 border-dashed border-indigo-200 dark:border-indigo-800 rounded-xl';
+    return `
+      <button onclick="Calendar.showAddEvent('${dateStr}')" class="${cls}">+ Add Event</button>
+      ${canPaper ? `<button onclick="Calendar.setPaper('${dateStr}')" class="${cls} mt-2">📄 Set a past paper</button>` : ''}`;
+  }
+
+  function _dayLabel(dateStr) {
+    const d = _parseDate(dateStr);
+    return d ? d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : dateStr;
+  }
+
+  // ══ Setting a past paper for this child, on this day ═══════════════════════
+  // ⚠⚠ NO SECOND ASSIGN FLOW. The shelf is Library.openPicker() and the confirm
+  //    is Library.assign() — the same sheet the Past Exam Papers tab uses. That
+  //    sheet already reports partial failure per child, refuses "Pick a day"
+  //    with no day, and guards a double press of Set work. A parallel copy here
+  //    would have to relearn all three, and would drift from the teacher's.
+  // ⚠ The teacher's equivalent lives in teacher_classroom_detail.js, a ROLE
+  //   MODULE a parent never loads — which is why this is not a call into it.
+  let _paperDate = null;
+
+  function setPaper(dateStr) {
+    if (typeof Library === 'undefined' || !Library.openPicker) {
+      if (typeof toast !== 'undefined') toast('The library is still loading. Try again in a moment.', 3000);
+      return;
+    }
+    if (!_studentId) return;
+    const m = _el('modal-cal-paper');
+    if (!m) return;
+    closeDayModal();
+    _paperDate = dateStr;
+    const t = _el('cal-paper-title');
+    if (t) t.textContent = `Set a paper for ${_studentName || 'your child'}`;
+    const h = _el('cal-paper-hint');
+    if (h) h.textContent = `Due ${_dayLabel(dateStr)}. Tap a paper to read it, or choose it to set as work.`;
+    m.classList.remove('hidden');
+    Library.openPicker({
+      hostId: 'cal-paper-shelf',
+      grade: _studentGrade,
+      forLabel: _studentName || '',
+      onPick: _paperPicked,
+    });
+  }
+
+  function closePaper() {
+    // ⚠ Hand the library's browsing position back BEFORE the host goes, or the
+    //   parent's own Past Exam Papers tab reopens filtered to this child's
+    //   grade with nothing on screen explaining why.
+    if (typeof Library !== 'undefined' && Library.closePicker) Library.closePicker();
+    _el('modal-cal-paper')?.classList.add('hidden');
+    const host = _el('cal-paper-shelf');
+    if (host) host.innerHTML = '';
+  }
+
+  function _paperPicked(doc) {
+    const date = _paperDate;
+    closePaper();
+    // The child and the day are both already known, so the sheet opens with
+    // them filled in — it is a confirmation, not a second set of questions.
+    Library.assign(doc.id, {
+      date,
+      studentId: _studentId,
+      onDone: async () => { await _loadDue(); _renderCalendar(); },
+    });
   }
 
   function closeDayModal() { _el('modal-day-events')?.classList.add('hidden'); }
@@ -2002,7 +2071,7 @@ const Calendar = (() => {
   return {
     render, setStudent, getUpcoming, getBacklog,
     prevMonth, nextMonth,
-    openDay, closeDayModal,
+    openDay, closeDayModal, setPaper, closePaper,
     showAddEvent, closeAddEvent, saveEvent, onTypeChange, onSubjectChange, onRepeatChange,
     _genEntries, _repeatDates,
     editEntry, deleteEntry,

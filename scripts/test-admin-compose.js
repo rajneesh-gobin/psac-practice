@@ -231,6 +231,40 @@ async function post(ctx, body) {
   check(/not verified/.test(r.body.error || ''), 'and passes the provider’s own words through');
   check(AUDITS[0]?.detail?.ok === false, 'a failed send is still audited');
 
+  // ── A long list is REFUSED, never trimmed ────────────────────────────────
+  // ⚠ WHY THIS IS HERE. The send used to read
+  //   `bcc: recipients.slice(0, MAX_RECIPIENTS_PER_MESSAGE)`. That slice was
+  //   unreachable — the MAX_TO check above refuses a longer list first — but it
+  //   is the wrong failure to leave armed: if the form's cap were ever raised
+  //   past the per-message cap, the slice would DROP the surplus silently while
+  //   `recipients.length` kept feeding the budget, the audit row, the panel's
+  //   "sent" count and the operator's own copy, which names every address as
+  //   having received it. An admin would be told in writing that people had been
+  //   emailed who had not been.
+  //
+  //   Two things keep that impossible: the cap is derived from the per-message
+  //   limit, and the send passes the WHOLE list so sendMail refuses rather than
+  //   trims. Assert both — a comment saying "cannot happen" is not a test.
+  {
+    reset();
+    const many = Array.from({ length: 21 }, (_, i) => `p${i}@example.com`);
+    const r2 = await post(ctx, { ...GOOD, to: many.join(', ') });
+    check(r2.status === 400 && !r2.body.ok, '21 addresses is refused, not trimmed to 20');
+    check(SENT.length === 0, '⚠ and NOTHING is sent — not one message, not a partial list');
+    check(/more than this form allows/.test(r2.body.error || ''),
+      'the refusal names the cap and points at the bulk sender');
+  }
+
+  {
+    const src = fs.readFileSync(path.join(ROOT, 'workers', 'api', 'admin-compose.js'), 'utf8');
+    check(!/bcc:\s*recipients\.slice\(/.test(src),
+      '⚠ the send passes the WHOLE list, so an over-long one fails loudly rather than being trimmed');
+    check(/const MAX_PER_SEND = Math\.min\(MAX_TO, MAX_RECIPIENTS_PER_MESSAGE\)/.test(src),
+      'the form cap is derived from what one message can carry, not written twice');
+    check(/valid\.length > MAX_PER_SEND/.test(src),
+      'and it is the derived cap that gates the send');
+  }
+
   console.log(failures ? `\n✗ ${failures} failure(s)` : '\n✓ all checks passed');
   process.exit(failures ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });

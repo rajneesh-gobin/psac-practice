@@ -6566,6 +6566,24 @@
     </div>
   </div>
 
+  <!-- ══ CALENDAR: SET A PAST PAPER ══
+       ⚠ The shelf inside is the LIBRARY'S OWN, rendered by Library.openPicker()
+         into #cal-paper-shelf. A second shelf renderer here would drift from
+         the one on the Past Exam Papers tab within a release.
+       ⚠ z-[110], above #modal-day-events (z-[100]) — but the day modal is
+         closed before this opens, so the stack is one deep either way. -->
+  <div id="modal-cal-paper" class="hidden fixed inset-0 z-[110] flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 w-full max-w-lg shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between mb-2">
+        <h3 id="cal-paper-title" class="font-bold text-gray-800 dark:text-white text-base">Set a past paper</h3>
+        <button onclick="Calendar.closePaper()" aria-label="Close"
+          class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+      </div>
+      <p id="cal-paper-hint" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
+      <div id="cal-paper-shelf" class="lb-body overflow-y-auto flex-1"></div>
+    </div>
+  </div>
+
   <!-- ══ CALENDAR: ADD EVENT MODAL ══ -->
   <div id="modal-add-event" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">

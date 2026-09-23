@@ -15273,20 +15273,30 @@ async function _renderParentProfile(container) {
       </div>` : ''}
     </div>`;
 
-  // ── Defaults applied to every child at once ──
-  // Chapter locks are deliberately NOT here: they are per-grade and per-child,
-  // so "apply to all" would be meaningless at best and would silently wipe a
-  // parent's careful per-child locking at worst.
+  // ── Settings that are the same for every child, applied at once ──
+  // ⚠ ONLY SETTINGS THAT DO NOT DEPEND ON A CHILD'S AGE BELONG HERE. Hints and
+  //   Science Labs are "do we want this feature", which is a family answer. The
+  //   three that used to sit here — difficulty cap, exam mode, grade access —
+  //   are age-relative, and one shared value is wrong for at least two children
+  //   in any family whose children are in different grades:
+  //     - a cap of Basic set for a Grade 1 also caps the Grade 6, and a cap
+  //       NEVER shrinks a certificate's denominator (see Certificates), so that
+  //       child silently becomes unable to reach Subject Master;
+  //     - timed exam papers suit a Grade 6 revising for PSAC, not a Grade 1;
+  //     - grade access is an ABSOLUTE list, so ticking Grade 6 grants it to the
+  //       Grade 4 child and is a no-op for the Grade 6 one. What a parent means
+  //       is "one either side", which one shared list cannot express.
+  //   All three already have per-child controls in the Controls tab, which is
+  //   now the only place they can be set.
+  //
+  // ⚠ Chapter locks were kept out for the same reason from the start: applying
+  //   them to everyone would silently wipe a parent's careful per-child locking.
+  //   That argument was always true of the difficulty cap too.
   const d = Object.assign(
-    { maxDifficulty: 4, examDisabled: false, hintsDisabled: false, labsDisabled: false },
+    { hintsDisabled: false, labsDisabled: false },
     (children[0] && children[0].settings) || {},
     _parentPrefs.child_defaults || {}
   );
-  const diffOpt = (v, label) => `
-    <label class="flex items-center gap-1.5 cursor-pointer">
-      <input type="radio" name="set-def-diff" value="${v}" ${Number(d.maxDifficulty) === v ? 'checked' : ''} class="accent-blue-500">
-      <span class="text-sm text-gray-700 dark:text-gray-300">${label}</span>
-    </label>`;
   const defToggle = (id, checked, title, sub) => `
     <div class="flex items-center justify-between gap-3">
       <div>
@@ -15298,51 +15308,26 @@ async function _renderParentProfile(container) {
         <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-checked:bg-blue-500 rounded-full peer transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
       </label>
     </div>`;
-  // ⚠ Applied to every child at once, so these are ABSOLUTE grade numbers, not
-  //   "one above". Each child's own grade is always open and is never in the
-  //   list, so ticking Grade 6 grants it to the Grade 4 child and is a no-op for
-  //   the Grade 6 one.
-  const defGrades = d => {
-    const live = (typeof GradeAccess !== 'undefined') ? GradeAccess.liveGrades() : [];
-    if (!live.length) return '';
-    // ⚠ Through granted(), not d.allowedGrades: a family still carrying the old
-    //   crossGrade* booleans has no list yet, and reading the raw field would show
-    //   nothing ticked and then REVOKE every grade the moment Apply is pressed.
-    const on = new Set(GradeAccess.granted(d));
-    return `
-    <div>
-      <div class="font-semibold text-gray-800 dark:text-white text-sm mb-1">🎓 Grade access</div>
-      <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">Extra grades every child may search and revise. Their own grade is always open.</div>
-      <div class="flex gap-3 flex-wrap">${live.map(g => `
-        <label class="flex items-center gap-1.5 cursor-pointer">
-          <input type="checkbox" class="accent-blue-500" data-def-grade="${g}"${on.has(g) ? ' checked' : ''}>
-          <span class="text-sm text-gray-700 dark:text-gray-300">Grade ${g}</span>
-        </label>`).join('')}</div>
-    </div>`;
-  };
-
+  const kids = children.length === 1 ? 'child' : 'children';
   const defaultsHtml = children.length ? `
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
       <div>
-        <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Defaults For All Children</h3>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Set these once and apply them to all ${children.length} ${children.length === 1 ? 'child' : 'children'}. Chapter locks are left untouched.</p>
+        <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Settings For The Whole Family</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">These work the same way whatever a child's age, so set them once for all ${children.length} ${kids}.</p>
       </div>
 
-      <div>
-        <div class="font-semibold text-gray-800 dark:text-white text-sm mb-2">🎯 Question difficulty cap</div>
-        <div class="flex gap-3 flex-wrap">
-          ${diffOpt(1, '⭐ Basic')}${diffOpt(2, '⭐⭐ Medium')}${diffOpt(3, '⭐⭐⭐ Hard')}${diffOpt(4, '🏆 All')}
-        </div>
-      </div>
-
-      ${defToggle('set-def-exam',  !d.examDisabled,        '📝 Exam mode',            'Allow timed exam papers')}
-      ${defGrades(d)}
-      ${defToggle('set-def-hints', !d.hintsDisabled,       '💡 In-app hints',         'First-time tip callouts')}
-      ${defToggle('set-def-labs', !d.labsDisabled,        '🔬 Science Labs',         'Interactive experiments')}
+      ${defToggle('set-def-hints', !d.hintsDisabled, '💡 In-app hints',   'First-time tip callouts')}
+      ${defToggle('set-def-labs',  !d.labsDisabled,  '🔬 Science Labs',   'Interactive experiments')}
 
       <button data-label="Apply to all children" onclick="_applyDefaultsToAll(this)"
-        class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors">Apply to all children</button>
+        class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors">Apply to all ${children.length} ${kids}</button>
       <p id="set-defaults-status" class="text-xs text-gray-500 dark:text-gray-400 text-center"></p>
+
+      <p class="text-xs text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-3">
+        Difficulty cap, exam mode and grade access are set <b>per child</b> - open a child and use the
+        <b>Controls</b> tab. The right level for a Grade 1 is the wrong one for a Grade 6, so there is
+        no single answer to apply to everyone.
+      </p>
     </div>` : '';
 
   // ── Danger zone ──
@@ -15826,18 +15811,17 @@ async function _applyDefaultsToAll(btn) {
   if (!children.length) return;
   const statusEl = document.getElementById('set-defaults-status');
 
-  const picked = document.querySelector('input[name="set-def-diff"]:checked');
+  // ⚠ TWO KEYS, AND NO MORE. This used to also write maxDifficulty, examDisabled
+  //   and allowedGrades, which meant a parent who had tuned each child
+  //   separately and then pressed this button lost all of it — the form is
+  //   prefilled from the FIRST child, so child 1's answers silently became
+  //   everyone's. Those three are age-relative and now live only in the
+  //   per-child Controls tab. Anything added here must pass the same test: is
+  //   the right answer the same for a Grade 1 and a Grade 9?
   const defaults = {
-    maxDifficulty:      picked ? parseInt(picked.value) : 4,
-    examDisabled:      !document.getElementById('set-def-exam')?.checked,
-    allowedGrades:     [...document.querySelectorAll('[data-def-grade]')]
-                         .filter(el => el.checked).map(el => Number(el.dataset.defGrade)).sort((a, b) => a - b),
-    hintsDisabled:     !document.getElementById('set-def-hints')?.checked,
-    labsDisabled:      !document.getElementById('set-def-labs')?.checked,
+    hintsDisabled: !document.getElementById('set-def-hints')?.checked,
+    labsDisabled:  !document.getElementById('set-def-labs')?.checked,
   };
-  // The two booleans this list replaced, kept in step so a device still running
-  // the old shell reads the same permission. Derived, never authored.
-  if (typeof GradeAccess !== 'undefined') Object.assign(defaults, GradeAccess.flagsFor(defaults.allowedGrades));
 
   if (statusEl) statusEl.textContent = 'Applying…';
   const failed = [];

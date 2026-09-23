@@ -1791,7 +1791,22 @@ const AdminPanel = (() => {
     if (!m.usage) return '';
     const q = Number(m.usage.questions || 0);
     const earned = Number(m.usage.earned || 0);
-    if (!q && !earned) return `<span class="text-xs text-gray-400 dark:text-gray-500" title="Nobody in this family has answered a question correctly yet. They may still have practised - see the child panel.">✏️ none correct yet</span>`;
+    // ⚠ "NOT STARTED" AND "GOT NOTHING RIGHT" ARE DIFFERENT FAMILIES and one
+    //   label cannot carry both. This chip said "not started" (wrong for a
+    //   child who practised and missed everything - points-derived counts are
+    //   0 for them), was renamed to "none correct yet", and that was then wrong
+    //   for every family who really had not begun: the row read "none correct
+    //   yet" three lines above the child's own "Has not practised yet."
+    //   `attempted` exists to separate them - see migrations/20260923_family_attempted.sql.
+    const tried = m.usage.attempted == null ? null : Number(m.usage.attempted);
+    if (!q && !earned) {
+      // ⚠ Unknown, not zero. An older admin_family_points() returns no
+      //   `attempted`, and guessing "not started" there would reintroduce
+      //   exactly the wrong claim this fix removes.
+      if (tried == null) return `<span class="text-xs text-gray-400 dark:text-gray-500" title="Nobody in this family has answered a question correctly yet. They may still have practised - see the child panel.">✏️ none correct yet</span>`;
+      if (tried > 0) return `<span class="text-xs font-semibold text-amber-600 dark:text-amber-400" title="This family has attempted ${_num(tried)} question(s) and has not answered any of them correctly yet.">✏️ ${_num(tried)} tried, none right yet</span>`;
+      return `<span class="text-xs text-gray-400 dark:text-gray-500" title="Nobody in this family has opened a question yet.">✏️ not started</span>`;
+    }
     return `<span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400" title="Questions answered correctly for the first time, across every child in this family">✏️ ${_num(q)} answered</span>`
       + `<span class="text-xs text-gray-500 dark:text-gray-400" title="Points earned by real activity. Carried-forward legacy XP is excluded.">⭐ ${_num(earned)}</span>`;
   }
@@ -1806,15 +1821,22 @@ const AdminPanel = (() => {
     const u = m.usage;
     const legacy = Number(u.points || 0) - Number(u.earned || 0);
     const seen = u.last_seen ? new Date(u.last_seen).toLocaleDateString() : 'never';
+    const tried = u.attempted == null ? null : Number(u.attempted);
     return `
       <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">📊 Usage:</span>
       <!-- ⚠ SAY WHICH "answered" THIS IS. It counts question point events, so a
            child who practised and got everything WRONG scores 0 here while their
            own panel below reports "1 answered" (attempts). Both numbers were
            right and the pair read as a contradiction; the summary badge already
-           carried this qualifier in a tooltip, this line did not. -->
+           carried this qualifier in a tooltip, this line did not.
+           ⚠ A tooltip was not enough - nobody hovers a number that looks
+           settled. Printing "0 of 3" puts the denominator ON the line, so the
+           two counts explain each other instead of disagreeing. -->
       <span class="text-xs text-gray-700 dark:text-gray-200"
-        title="Questions answered correctly for the first time, across every child in this family. A question attempted but not yet answered correctly is not counted here."><b>${_num(u.questions)}</b> answered correctly</span>
+        title="Questions answered correctly for the first time, across every child in this family. A question attempted but not yet answered correctly is not counted here.">${
+          tried === 0 ? 'nothing attempted yet'
+        : tried == null ? `<b>${_num(u.questions)}</b> answered correctly`
+        : `<b>${_num(u.questions)}</b> of <b>${_num(tried)}</b> tried answered correctly`}</span>
       <span class="text-xs text-gray-700 dark:text-gray-200">· <b>${_num(u.earned)}</b> points earned</span>
       ${legacy > 0 ? `<span class="text-xs text-gray-400 dark:text-gray-500">· ${_num(legacy)} carried forward (legacy XP, not activity)</span>` : ''}
       <span class="text-xs text-gray-400 dark:text-gray-500">· last active ${_esc(seen)}</span>`;

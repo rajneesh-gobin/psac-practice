@@ -35,6 +35,12 @@ import {
 //   is a broadcast and belongs in the handler that checks preferences and
 //   attaches an unsubscribe link.
 const MAX_TO = 20;
+// ⚠ THIS HANDLER SENDS ONE MESSAGE, so the form's cap cannot exceed what one
+//   message carries. Deriving it means raising MAX_TO past the per-message cap
+//   refuses the send with a sentence a human can act on, instead of trimming the
+//   list or surfacing the provider's `too_many_recipients`. admin-broadcast.js
+//   is the handler that chunks; this one deliberately does not.
+const MAX_PER_SEND = Math.min(MAX_TO, MAX_RECIPIENTS_PER_MESSAGE);
 const MAX_SUBJECT = 150;
 const MAX_BODY = 8000;
 const AUTH_PAGE_SIZE = 1000;
@@ -131,10 +137,10 @@ export default async function handler(request, env) {
     });
   }
   if (!valid.length) return json(400, { ok: false, error: 'Enter at least one email address.' });
-  if (valid.length > MAX_TO) {
+  if (valid.length > MAX_PER_SEND) {
     return json(400, {
       ok: false,
-      error: `${valid.length} addresses is more than this form allows (${MAX_TO}). For a bigger list, select the members and use Email selected, which respects the opt-out and adds an unsubscribe link.`,
+      error: `${valid.length} addresses is more than this form allows (${MAX_PER_SEND}). For a bigger list, select the members and use Email selected, which respects the opt-out and adds an unsubscribe link.`,
     });
   }
   if (!subject) return json(400, { ok: false, error: 'A subject is required.' });
@@ -229,7 +235,16 @@ export default async function handler(request, env) {
   //   it is not recoverable once sent.
   const single = recipients.length === 1;
   const res = await sendMail(env, {
-    ...(single ? { to: recipients } : { bcc: recipients.slice(0, MAX_RECIPIENTS_PER_MESSAGE) }),
+    // ⚠ NO slice() HERE. It used to read `recipients.slice(0, MAX_RECIPIENTS_PER_MESSAGE)`,
+    //   which is unreachable today — MAX_TO (20) refuses a longer list far above,
+    //   so it never trimmed anything. But it is the wrong failure to leave armed:
+    //   if MAX_TO is ever raised past the per-message cap, a slice DROPS the
+    //   surplus silently while `recipients.length` goes on feeding the budget,
+    //   the audit row, the panel's "sent" count and the operator's own copy —
+    //   which names every address as having received it. Passing the full list
+    //   instead makes sendMail answer `too_many_recipients`, nothing is sent,
+    //   and the admin is told. Loud and wrong beats quiet and wrong.
+    ...(single ? { to: recipients } : { bcc: recipients }),
     subject, html, text, from, replyTo,
     reserved: true,
   });

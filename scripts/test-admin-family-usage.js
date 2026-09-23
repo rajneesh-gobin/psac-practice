@@ -133,5 +133,96 @@ for (const fn of ['toggleTeacherRow', 'toggleSelectAllTeachers', 'emailOneMember
   ok(`${fn} is exported on AdminPanel`, ret.includes(fn));
 }
 
+// ── "not started" vs "practised, got nothing right" ─────────────────────────
+// ⚠ THIS SECTION EXISTS BECAUSE A STRING GREP WAS NOT ENOUGH. The check above
+//   ("a family that has done nothing says so") only asserted the phrase "not
+//   started" appeared somewhere in the function. When the label was renamed to
+//   "none correct yet" to cover a DIFFERENT family — a child who practised and
+//   missed everything, who earns no points and so reads as 0 on every
+//   points-derived number — that grep went red and the rename shipped anyway.
+//   The result was reported from the admin panel: a parent row saying
+//   "✏️ none correct yet" three lines above their child's "Has not practised
+//   yet." Both lines described the same family and disagreed.
+//
+//   So run the real functions and read what they actually say.
+//
+// ⚠ Both states exist on production — measured 2026-09-23: 17 students hold a
+//   progress row, 19 hold a 'question' point event, and 2 (Child2, Vilena) have
+//   attempts with no correct answer at all. The shapes below are those rows.
+{
+  const vm = require('node:vm');
+  const grab = (start, end) => {
+    const a = adminSrc.indexOf(start);
+    const b = adminSrc.indexOf(end, a);
+    if (a < 0 || b < 0) throw new Error('could not extract ' + start);
+    return adminSrc.slice(a, b);
+  };
+  const ctx = { out: null };
+  vm.createContext(ctx);
+  vm.runInContext(
+    grab('const _num =', 'function _memberUsageSummary') +
+    grab('function _memberUsageSummary', 'function _memberChildrenSummary') +
+    'function _esc(s){return String(s==null?"":s);}' +
+    'out = { summary: _memberUsageSummary, detail: _memberUsageDetail };', ctx);
+  const { summary: sum, detail: det } = ctx.out;
+
+  // The three real shapes, exactly as admin_family_points() returns them.
+  const NEVER   = { usage: { points: 0, earned: 0, questions: 0, attempted: 0, children: 1, last_seen: null } };
+  const TRIED   = { usage: { points: 0, earned: 0, questions: 0, attempted: 1, children: 1, last_seen: '2026-09-23T12:36:19Z' } };
+  const ACTIVE  = { usage: { points: 0, earned: 40, questions: 27, attempted: 121, children: 3, last_seen: '2026-09-23T03:20:02Z' } };
+  const UNKNOWN = { usage: { points: 0, earned: 0, questions: 0, children: 1, last_seen: null } };  // pre-migration RPC
+
+  const sNever = sum(NEVER), sTried = sum(TRIED), sActive = sum(ACTIVE);
+  ok('a family that has never opened a question says "not started"', /not started/.test(sNever));
+  ok('and does NOT claim they got something wrong', !/none right|none correct/.test(sNever));
+
+  ok('a family that tried and got nothing right says so', /none right yet/.test(sTried));
+  ok('it names how many they tried', />1 tried|1 tried/.test(sTried));
+  ok('and does NOT say "not started"', !/not started/.test(sTried));
+
+  // ⚠ The whole point: these two must not render the same text.
+  ok('the two states produce DIFFERENT chips', sNever.replace(/\s+/g, '') !== sTried.replace(/\s+/g, ''));
+
+  ok('an active family still leads with questions answered', /27 answered/.test(sActive));
+  ok('an active family is not labelled as idle', !/not started|none right/.test(sActive));
+
+  // ⚠ Unknown is not zero. An un-migrated database returns no `attempted`, and
+  //   guessing "not started" there is the exact wrong claim this fix removes.
+  ok('a pre-migration RPC reading falls back to the non-committal wording',
+    /none correct yet/.test(sum(UNKNOWN)) && !/not started/.test(sum(UNKNOWN)));
+
+  // The expanded row prints the denominator ON the line, so the two counts
+  // explain each other rather than disagreeing.
+  ok('the detail line pairs correct with tried', /0<\/b> of <b>1<\/b> tried/.test(det(TRIED)));
+  ok('a never-started family reads "nothing attempted yet"', /nothing attempted yet/.test(det(NEVER)));
+  ok('a never-started family is not given a fake denominator', !/of <b>0<\/b>/.test(det(NEVER)));
+  ok('an active family shows both numbers', /27<\/b> of <b>121<\/b> tried/.test(det(ACTIVE)));
+  ok('"last active" is still reported', /last active/.test(det(NEVER)));
+
+  // ⚠ The chip and the child panel are the two lines that contradicted each
+  //   other. The child panel's wording lives in app.js; keep them in step.
+  const appSrc = fs.readFileSync(path.join(ROOT, 'engine/app.js'), 'utf8');
+  ok('the child panel still has its own "has not practised" wording',
+    /[Hh]as not practised yet/.test(appSrc) || /[Hh]as not practised yet/.test(adminSrc));
+}
+
+// ── The migration that supplies `attempted` ─────────────────────────────────
+// ⚠ Read the NEWEST migration, not the original — the live function is the
+//   union of both, and the 2026-09-16 file above no longer describes it.
+{
+  const add = fs.readFileSync(path.join(ROOT, 'migrations/20260923_family_attempted.sql'), 'utf8');
+  ok('the RPC returns `attempted`', /'attempted',\s+x\.attempted/.test(add));
+  ok('attempted counts progress rows, not point events',
+    /FROM public\.student_question_progress pr[\s\S]{0,120}pr\.attempts > 0/.test(add));
+  // ⚠ Inferring "did they practise" from last_seen is wrong: it folds in
+  //   student_points.updated_at, and 97% of points on production are legacy XP,
+  //   so a family with carried-forward points and zero attempts would read as
+  //   having practised.
+  ok('it does not infer practice from last_seen', /Not inferred from `last_seen`/.test(add));
+  ok('the admin gate is still the first act', add.indexOf('IF NOT public.is_admin()') < add.indexOf('SELECT coalesce(jsonb_object_agg'));
+  ok('it still cannot enumerate', /f\.parent_id = ANY\(p_parents\)/.test(add));
+  ok('and is still capped to a page', /> 200/.test(add));
+}
+
 console.log(`${checks - fails}/${checks} admin family-usage checks passed`);
 process.exit(fails ? 1 : 0);

@@ -900,6 +900,28 @@ blob); nothing here needed a migration — `subject_id`, `chapter_id`,
   out (`_studyVisible` hides the control while `_editingEntryId` is set).
   ⚠ `saveEvent()`'s insert path now always inserts an ARRAY and reads back
   without `.single()`; a stub that answers `.single()` only will break it.
+- **A past paper, set from the day it is for** (2026-09-23). Tapping a day
+  offers `📄 Set a past paper` beside `+ Add Event`, for an adult only —
+  `Library.canAssign()` is the gate, because the calendar screen is the
+  CHILD'S too and without it a child sets their own homework.
+  ⚠⚠ **There is no second assign flow.** `Calendar.setPaper()` opens
+  `Library.openPicker()` into `#cal-paper-shelf`, and the choice hands off to
+  `Library.assign(id, { date, studentId, onDone })` — the same sheet the Past
+  Exam Papers tab uses. That sheet already reports partial failure per child,
+  refuses "Pick a day" with no day, and guards a double press of Set work; a
+  copy in calendar.js would have to relearn all three.
+  ⚠ **A named child outranks the library's "tick the only option" shortcut** —
+  with two children the sheet would otherwise open with nothing ticked and
+  refuse a flow that already knew the answer.
+  ⚠ `onDone` exists because the caller is NOT the parent dashboard:
+  `confirmAssign()` refreshes that, and the calendar has to reload its own due
+  rows or the day just chosen stays empty until a reload — which reads as the
+  assign having failed.
+  ⚠ The teacher's equivalent is `_choosePaper()` in
+  `teacher_classroom_detail.js`, a ROLE MODULE a parent never loads, and its
+  `.tc-*` overlay CSS is the dark teacher board's — which is why this is a
+  parent-themed modal in index.html, not a call into it.
+  Tests: `scripts/test-calendar-paper.js` (18 checks, real browser).
 - Tests: `scripts/test-timetable-plan.js` (26 checks, real browser, Supabase
   stubbed at `_sb.from` — the client is a const, its methods are not) and
   `scripts/test-timetable-views.js` (unchanged, 58).

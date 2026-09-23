@@ -3654,6 +3654,7 @@ BEGIN
            'points',    x.points,
            'earned',    x.earned,
            'questions', x.questions,
+           'attempted', x.attempted,
            'children',  x.children,
            'last_seen', x.last_seen
          )), '{}'::jsonb)
@@ -3663,8 +3664,11 @@ BEGIN
              coalesce(sum(sp.points), 0)::bigint       AS points,
              coalesce(sum(qa.n), 0)::bigint            AS questions,
              coalesce(sum(qa.earned), 0)::bigint       AS earned,
+             -- ⚠ the new number: questions TRIED, whatever the outcome. Without
+             --   it "0 answered correctly" and "has not practised" are the same
+             --   row and the list cannot say which.
+             coalesce(sum(qa.tried), 0)::bigint        AS attempted,
              count(DISTINCT s.id)                      AS children,
-             -- ⚠ the fix: the later of "earned a point" and "answered anything"
              max(GREATEST(sp.updated_at, qa.seen))     AS last_seen
         FROM public.families f
         -- ⚠ LEFT JOIN throughout. A family with no children, or children who
@@ -3678,7 +3682,11 @@ BEGIN
                       coalesce(sum(e.points) FILTER (WHERE e.kind <> 'legacy'), 0) AS earned,
                       (SELECT max(pr.last_seen_at)
                          FROM public.student_question_progress pr
-                        WHERE pr.student_id = s.id)                AS seen
+                        WHERE pr.student_id = s.id)                AS seen,
+                      (SELECT count(*)
+                         FROM public.student_question_progress pr
+                        WHERE pr.student_id = s.id
+                          AND pr.attempts > 0)                     AS tried
                  FROM public.student_point_events e
                 WHERE e.student_id = s.id
              ) qa ON true

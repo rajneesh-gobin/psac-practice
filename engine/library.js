@@ -1042,7 +1042,7 @@ const Library = (() => {
     return d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   }
 
-  async function assign(id) {
+  async function assign(id, prefill) {
     if (!canAssign()) {
       if (typeof toast === 'function') toast('Sign in as a parent or teacher to assign a paper.', 3000);
       return;
@@ -1060,6 +1060,16 @@ const Library = (() => {
     //   doing the opposite of what the parent meant.
     _assignWhen = 'tomorrow';
     if (f('lb-as-date')) f('lb-as-date').value = _dayPlus(1);
+    // ⚠ A CALLER THAT ALREADY KNOWS THE DAY MUST NOT LAND ON "Tomorrow". The
+    //   calendar asks for a paper on a day the parent has just tapped; leaving
+    //   the default would set the work for a different day than the one they
+    //   pointed at, on a sheet that looks like it agreed with them.
+    const pre = prefill || {};
+    _assignOnDone = typeof pre.onDone === 'function' ? pre.onDone : null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(pre.date || '')) {
+      _assignWhen = 'pick';
+      if (f('lb-as-date')) f('lb-as-date').value = pre.date;
+    }
     _paintWhen();
 
     const host = f('lb-as-who');
@@ -1084,7 +1094,15 @@ const Library = (() => {
     host.innerHTML = group('My children', kids, 'child') + group('My classes', classes, 'class');
     // ⚠ One child and no classes is the common case for a parent: tick it for
     //   them rather than making them tick the only option there is.
-    if (kids.length === 1 && !classes.length) {
+    // ⚠ A NAMED CHILD OUTRANKS THE ONE-CHILD SHORTCUT. The calendar opens this
+    //   sheet for the child whose calendar is on screen; a family with two
+    //   children would otherwise get nothing ticked and a "tick at least one"
+    //   refusal on a flow that already knew the answer.
+    const wantKid = pre.studentId || null;
+    if (wantKid) {
+      [...host.querySelectorAll('input[data-kind="child"]')]
+        .forEach(b => { if (b.value === wantKid) b.checked = true; });
+    } else if (kids.length === 1 && !classes.length) {
       const only = host.querySelector('input[data-kind="child"]');
       if (only) only.checked = true;
     }
@@ -1093,6 +1111,7 @@ const Library = (() => {
   let _assignKids = [];
   let _assignClasses = [];
   let _assignWhen = 'tomorrow';
+  let _assignOnDone = null;
 
   async function _myChildren() {
     try {
@@ -1211,6 +1230,13 @@ const Library = (() => {
       // reload; on any other screen this is a no-op.
       if (typeof _renderStudentAssignments === 'function' && typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID) {
         _renderStudentAssignments(ACTIVE_STUDENT_ID);
+      }
+      // ⚠ And the CALLER'S own view, which is not the parent dashboard. The
+      //   calendar has to reload its due rows, or the day the parent just chose
+      //   stays empty until a reload — which reads as the assign having failed.
+      if (_assignOnDone) {
+        const done = _assignOnDone; _assignOnDone = null;
+        try { await done(); } catch (_) { /* a stale view must not fail the assign */ }
       }
     } catch (e) {
       say('⚠ ' + (e.message || e));
