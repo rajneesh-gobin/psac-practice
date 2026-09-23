@@ -436,6 +436,19 @@ for (const t of tasks) for (const p of t.parts) {
       const target = numOnly.replace(/[\s,]/g, '');
       const nums = (flat.match(/-?\d[\d\s]*(?:\.\d+)?/g) || []).map(n => n.replace(/\s/g, ''));
       found = nums.indexOf(target) !== -1;
+    // ⚠ AN ALGEBRAIC ANSWER IS BUILT FROM THE PROMPT'S OWN SYMBOLS, so a
+    //   substring search cannot tell a giveaway from ordinary algebra.
+    //   g9m-ind-069 is "Simplify 8a^6 ÷ (2a^2)^2" with answer 2a^2. Stripping
+    //   the <sup> tags flattens the prompt to "8a6 ÷ (2a2)2" and the answer to
+    //   "2a2", which IS in there - because it is the DIVISOR, not because the
+    //   answer was handed over. A simplification question cannot avoid reusing
+    //   its own symbols and the child still has to do the work.
+    // ⚠ So an algebraic answer counts only when it stands ALONE - bounded by
+    //   space, =, : or the end. Nested inside brackets or a power it is part of
+    //   the question. "...so the answer is 2a2." is still caught.
+    } else if (/[a-z]/i.test(ans)) {
+      const esc = ans.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      found = new RegExp('(^|[\\s=:,])' + esc + '($|[\\s=:,.;!?])').test(flat);
     } else {
       found = flat.replace(/\s/g, '').includes(ans.replace(/\s/g, ''));
     }
