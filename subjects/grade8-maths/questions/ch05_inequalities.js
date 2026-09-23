@@ -209,12 +209,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-ineq-039', chapterId:'g8m-inequalities', difficulty:2,
     subsection:'solving_inequalities',
     question:'Adding the same number to both sides of an inequality:',
-    options:[
-      'Reverses the direction of the inequality',
-      'Does not change the direction of the inequality',
-      'Makes the inequality an equation',
-      'Is not allowed'
-    ], answer:'Does not change the direction of the inequality',
+    options:["Does not change the direction of the inequality","Reverses the direction of the inequality sign","Turns the inequality into an ordinary equation","Is not allowed and makes the statement false"], answer:'Does not change the direction of the inequality',
     hint:'Think about the effect of adding 5 to both sides of 3 < 7.',
     explanation:'Adding any number to both sides preserves the inequality direction. 3 < 7 → 3 + 5 < 7 + 5 → 8 < 12. <b>Direction unchanged</b>.' }),
 
@@ -429,7 +424,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-ineq-074', chapterId:'g8m-inequalities', difficulty:1,
     subsection:'inequality_graphs',
     question:'On a number line, a CLOSED (filled) circle at x = 4 means:',
-    options:['x = 4 IS included in the solution','x = 4 is NOT included','x must equal 4','x > 4 only'],
+    options:["x = 4 IS included in the solution","x = 4 is NOT part of the solution","x must be greater than 4, never equal","x must equal exactly 4 and nothing else"],
     answer:'x = 4 IS included in the solution',
     hint:'Closed circle = endpoint is included.',
     explanation:'A <b>closed (filled) circle</b> at 4 means 4 is part of the solution set (used for ≤ and ≥).' }),

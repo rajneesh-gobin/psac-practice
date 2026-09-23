@@ -12,12 +12,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-pyth-001', chapterId:'g8m-pythagoras', difficulty:1,
     subsection:'pythagoras_theorem',
     question:"Pythagoras' theorem states that in a right-angled triangle, which of the following is TRUE?",
-    options:[
-      'a² + b² = c² where c is the longest side',
-      'a + b = c where c is the longest side',
-      'a² × b² = c²',
-      'a² − b² = c²'
-    ], answer:'a² + b² = c² where c is the longest side',
+    options:["a² + b² = c² where c is the longest side","a + b = c where c is the longest side","a² × b² = c² where c is the longest side","a² − b² = c² where c is the longest side"], answer:'a² + b² = c² where c is the longest side',
     hint:'The theorem relates the squares of the three sides.',
     explanation:"<b>a² + b² = c²</b> where a and b are the two shorter sides (legs) and c is the hypotenuse — the side opposite the right angle and always the longest." }),
 
@@ -284,12 +279,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-pyth-062', chapterId:'g8m-pythagoras', difficulty:2,
     subsection:'find_shorter_side',
     question:'Which step comes first when finding a missing shorter side of a right-angled triangle?',
-    options:[
-      'Square the hypotenuse and subtract the square of the known side',
-      'Add the squares of all three sides',
-      'Multiply the hypotenuse by the known side',
-      'Divide the hypotenuse by 2'
-    ], answer:'Square the hypotenuse and subtract the square of the known side',
+    options:["Square the hypotenuse and subtract the square of the known side","Multiply the hypotenuse by the known side and take the square root","Add together the squares of all three sides of the whole triangle","Divide the hypotenuse by 2 and then square the result you get"], answer:'Square the hypotenuse and subtract the square of the known side',
     hint:'Use: a² = c² − b².',
     explanation:'The first step is to compute <b>c² − b²</b>, then take the square root to find the missing leg.' }),
 

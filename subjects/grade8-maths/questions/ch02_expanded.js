@@ -184,7 +184,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-polygons-007', chapterId:'g8m-polygons', difficulty:2,
     subsection:'interior_exterior_angles',
     question:'An interior angle and its adjacent exterior angle at the same vertex are …',
-    options:['Equal','Supplementary (add to 180°)','Complementary (add to 90°)','Vertically opposite'],
+    options:["Supplementary (add to 180°)","Complementary (add to 90°)","Vertically opposite angles","Equal to one another always"],
     answer:'Supplementary (add to 180°)',
     hint:'They form a straight line together.',
     explanation:'An interior and the adjacent exterior angle at the same vertex lie on a straight line, so they add to 180°.' }),

@@ -40,12 +40,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-sets-005', chapterId:'g8m-sets', difficulty:2,
     subsection:'set_notation',
     question:'Which of the following correctly uses set-builder notation for all even numbers from 2 to 10?',
-    options:[
-      '{2, 4, 6, 8, 10}',
-      '{x : x is even, 2 ≤ x ≤ 10}',
-      '{x : x is odd}',
-      '{2, 4, 6}'
-    ], answer:'{x : x is even, 2 ≤ x ≤ 10}',
+    options:["{x : x is even, 2 ≤ x ≤ 10}","{x : x is odd, 2 ≤ x ≤ 10}","{2, 4, 6, 8, 10} written out","{2, 4, 6} and nothing further"], answer:'{x : x is even, 2 ≤ x ≤ 10}',
     hint:'Set-builder notation describes the rule for membership.',
     explanation:'Both roster form {2,4,6,8,10} and set-builder form <b>{x : x is even, 2 ≤ x ≤ 10}</b> are correct, but only the set-builder form is listed here.' }),
 
@@ -65,24 +60,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-sets-008', chapterId:'g8m-sets', difficulty:2,
     subsection:'set_notation',
     question:'The universal set (ξ) is:',
-    options:[
-      'The empty set',
-      'The set of all elements being considered in a problem',
-      'The intersection of all sets',
-      'A set with exactly one element'
-    ], answer:'The set of all elements being considered in a problem',
+    options:["The set of all elements being considered in a problem","The set containing no elements at all, written as ∅","The intersection of every set mentioned in the problem","A set that contains exactly one element and no others"], answer:'The set of all elements being considered in a problem',
     hint:'The universal set contains everything relevant to the problem.',
     explanation:'The universal set <b>ξ</b> (or sometimes U) contains all elements relevant to the problem. All other sets in the problem are subsets of ξ.' }),
 
   makeMCQ({ id:'g8m-sets-009', chapterId:'g8m-sets', difficulty:2,
     subsection:'set_notation',
     question:'The complement of set A (written A′) contains:',
-    options:[
-      'All elements in A',
-      'All elements NOT in A (but in the universal set)',
-      'All elements in both A and another set',
-      'The empty set'
-    ], answer:"All elements NOT in A (but in the universal set)",
+    options:["All elements NOT in A (but in the universal set)","All elements that are in A and in no other set","All elements found in both A and another set","No elements at all — it is always the empty set"], answer:"All elements NOT in A (but in the universal set)",
     hint:'The complement is everything outside A within the universal set.',
     explanation:"A' (A complement) = all elements in ξ that are <b>NOT in A</b>. If ξ = {1,2,3,4,5} and A = {1,3}, then A' = {2,4,5}." }),
 
@@ -103,12 +88,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-sets-012', chapterId:'g8m-sets', difficulty:3,
     subsection:'set_notation',
     question:'Two sets A and B are equal if:',
-    options:[
-      'They have the same number of elements',
-      'They have the same elements (regardless of order)',
-      'A is a subset of B',
-      'They share at least one element'
-    ], answer:'They have the same elements (regardless of order)',
+    options:["They have the same elements (regardless of order)","They have the same number of elements in each","They share at least one element between them","A is a subset of B but B is not a subset of A"], answer:'They have the same elements (regardless of order)',
     hint:'Set equality requires identical elements, not just equal count.',
     explanation:'A = B means <b>every element of A is in B and every element of B is in A</b>. {1,2,3} = {3,1,2} because order doesn\'t matter in sets.' }),
 

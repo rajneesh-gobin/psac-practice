@@ -45,12 +45,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-real-006', chapterId:'g8m-real-numbers', difficulty:2,
     subsection:'rational_irrational',
     question:'Which statement is TRUE about irrational numbers?',
-    options:[
-      'They can always be written as a fraction',
-      'Their decimal expansions never terminate or repeat',
-      'They are always negative',
-      'They include all square roots'
-    ], answer:'Their decimal expansions never terminate or repeat',
+    options:["Their decimal expansions never terminate or repeat","They can always be written as a fraction of integers","They include every square root of a whole number","They are always negative numbers on the number line"], answer:'Their decimal expansions never terminate or repeat',
     hint:'Think about what makes a decimal impossible to write as a fraction.',
     explanation:'Irrational numbers have <b>non-terminating, non-repeating</b> decimal expansions. They cannot be written as p/q; they are not always negative; and only square roots of non-perfect squares are irrational.' }),
 
@@ -276,12 +271,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-real-042', chapterId:'g8m-real-numbers', difficulty:2,
     subsection:'surds',
     question:'A surd is a number that:',
-    options:[
-      'is always negative',
-      'is an irrational root that cannot be simplified to a rational number',
-      'can always be written as a fraction',
-      'is always greater than 1'
-    ], answer:'is an irrational root that cannot be simplified to a rational number',
+    options:["is an irrational root that cannot be simplified to a rational number","can always be rewritten as a fraction with whole numbers on both parts","is always greater than 1 no matter which root is being taken of it","is always negative because roots of negative numbers are undefined"], answer:'is an irrational root that cannot be simplified to a rational number',
     hint:'Think about what √2, √3 and √5 have in common.',
     explanation:'A surd is <b>an irrational root</b> (square root, cube root, etc.) that cannot be simplified to give a rational number. Examples: √2, √3, ∛5.' }),
 
@@ -369,12 +359,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g8m-real-059', chapterId:'g8m-real-numbers', difficulty:1,
     subsection:'real_number_line',
     question:'The real number line contains:',
-    options:[
-      'Only integers',
-      'Only rational numbers',
-      'All rational and all irrational numbers',
-      'Only positive numbers'
-    ], answer:'All rational and all irrational numbers',
+    options:["All rational and all irrational numbers","Only the integers, positive and negative","Only the positive numbers and zero itself","Only the rational numbers, not the others"], answer:'All rational and all irrational numbers',
     hint:'The real number line includes every possible number — rational and irrational.',
     explanation:'The real number line contains <b>all rational AND all irrational numbers</b>. Every point on it corresponds to a real number.' }),
 
