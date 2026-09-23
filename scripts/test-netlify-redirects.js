@@ -152,47 +152,76 @@ for (const p of ['/index.html', '/style.css', '/sw.js', '/manifest.json',
                  '/assets/questions/provenance.json', '/icons/icon-192.png'])
   ok(!blocked(p), `${p} is reachable`);
 
-// ── 5. The walk: anything new is either allowed or blocked ────────────────
-// This is the part that does not go stale. ALLOW lists what the app actually
-// serves; everything else in the publish root has to be blocked by a rule.
-const ALLOW_DIRS = ['assets', 'engine', 'fonts', 'icons', 'subjects'];
-const ALLOW_ROOT_FILES = new Set([
-  'index.html', 'guest.html', 'guest.js', 'vote.html', 'score.html',
-  'image-credits.html', 'style.css', 'sw.js', 'manifest.json',
-  // Consumed by Netlify itself and never served from the CDN.
-  'netlify.toml',
-  // Not deployed: git metadata and editor/tooling dotfiles.
-  '.gitignore', '.gitattributes', '.env.example', 'README.md',
-]);
-const SKIP_DIRS = new Set(['.git', 'node_modules']);
+// ── 5. The walk: everything STAGED is something the app means to serve ────
+// ⚠⚠ THIS USED TO WALK THE REPO ROOT AND ASK netlify.toml. Production moved to
+//    Cloudflare, which serves the STAGED directory — .deploy/, built by
+//    scripts/prepare-deploy.js from an ALLOWLIST — and never reads
+//    netlify.toml at all. Measured 2026-09-23, the old walk named backups/,
+//    .wrangler/, workers/, wrangler.toml, lab_migration.sql, prompt.md,
+//    PREDEPLOY.md and four root PDFs as "unblocked and not allowlisted". NOT
+//    ONE of them is staged, so not one was ever reachable. It cried wolf about
+//    files that cannot ship while being BLIND to the only directory that does
+//    — which is exactly where this project's two real leaks lived (the
+//    question bundles under netlify/, then subjects/*/questions/*.js, both
+//    measured answering 200 on nouklass.com).
+// ⚠ THE ALLOWLIST IS READ FROM prepare-deploy.js, never copied here. A second
+//   hand-maintained list is a list that drifts, and the drift always favours
+//   the test passing.
+const DEPLOY = path.join(ROOT, '.deploy');
+const pdSrc = fs.readFileSync(path.join(ROOT, 'scripts', 'prepare-deploy.js'), 'utf8');
+const listOf = (name) => {
+  const m = new RegExp('const ' + name + ' = \\[([\\s\\S]*?)\\n?\\];').exec(pdSrc);
+  if (!m) return null;
+  // ⚠⚠ STRIP COMMENTS BEFORE READING THE QUOTES. prepare-deploy.js explains
+  //    itself in // comments, and one of them says "a children's app". That
+  //    apostrophe opens a quoted span that swallows the next real entries, so
+  //    the allowlist came back at HALF its true length and this check reported
+  //    faq.html, privacy.html, robots.txt, sitemap.xml, style.css, sw.js,
+  //    manifest.json, guest.js and materials.js as strays - nine files the
+  //    deploy stages on purpose.
+  const body = m[1].replace(/\/\/[^\n]*/g, '');
+  return [...body.matchAll(/'([^']+)'/g)].map(x => x[1]);
+};
+const STAGE_DIRS = listOf('DIRS');
+const STAGE_FILES = listOf('FILES');
 
-console.log('\nevery path in the publish root is allowed or blocked');
-const strays = [];
-for (const name of fs.readdirSync(ROOT)) {
-  if (SKIP_DIRS.has(name)) continue;
-  const full = path.join(ROOT, name);
-  let st; try { st = fs.statSync(full); } catch { continue; }
-  if (st.isDirectory()) {
-    if (ALLOW_DIRS.includes(name)) continue;
-    // ⚠ `.netlify/` CANNOT be blocked by a path rule: it is the same prefix
-    //   Netlify serves functions from, and a 404 on it would take every
-    //   function down. It is excluded from the deploy by Netlify itself and
-    //   is listed in .gitignore; that is the only thing standing between its
-    //   state file and the CDN, so it is asserted rather than blocked.
-    if (name === '.netlify') { ok(_ignoredByGit('.netlify'), '.netlify/ is gitignored (it cannot be blocked by a rule)'); continue; }
-    if (!blocked('/' + name + '/anything')) strays.push(name + '/');
-  } else {
-    if (ALLOW_ROOT_FILES.has(name)) continue;
-    if (name.startsWith('.')) continue;
-    if (!blocked('/' + name)) strays.push(name);
-  }
+console.log('\nwhat the deploy stages is what the app serves');
+ok(Array.isArray(STAGE_DIRS) && STAGE_DIRS.length > 0, 'prepare-deploy.js DIRS allowlist is readable');
+ok(Array.isArray(STAGE_FILES) && STAGE_FILES.length > 0, 'prepare-deploy.js FILES allowlist is readable');
+
+// The allowlist must not name anything that is obviously not web content. This
+// holds even when .deploy/ has not been built, so the check never goes quiet.
+const NEVER_STAGE = ['netlify', 'workers', 'backups', 'migrations', 'scripts', 'docs', '.git', 'node_modules', '.wrangler'];
+for (const bad of NEVER_STAGE)
+  ok(!(STAGE_DIRS || []).includes(bad), `the deploy allowlist does not stage ${bad}/`);
+
+if (!fs.existsSync(DEPLOY)) {
+  console.log('  note  .deploy/ is not built — run node scripts/prepare-deploy.js to check the staged tree itself');
+} else {
+  // Nothing may sit in the staged root that the allowlist did not put there.
+  // ⚠ prepare-deploy writes these itself; they are output, not input.
+  const GENERATED = ['_headers', '_redirects'];
+  const allowed = new Set([...(STAGE_DIRS || []), ...(STAGE_FILES || []), ...GENERATED]);
+  const strays = fs.readdirSync(DEPLOY).filter(n => !allowed.has(n));
+  ok(strays.length === 0, 'nothing is staged that the allowlist did not name: ' + (strays.join(', ') || 'none'));
+
+  // ⚠ The two holes that were REAL, asserted against the staged tree rather
+  //   than against a redirect rule that no longer runs anywhere.
+  ok(!fs.existsSync(path.join(DEPLOY, 'netlify')),
+     'the built question bundles are not staged (they answered 200 in production once)');
+  const withSource = (STAGE_DIRS || []).includes('subjects')
+    ? fs.readdirSync(path.join(DEPLOY, 'subjects'), { withFileTypes: true })
+        .filter(e => e.isDirectory() && fs.existsSync(path.join(DEPLOY, 'subjects', e.name, 'questions')))
+        .map(e => e.name)
+    : [];
+  ok(withSource.length === 0,
+     'no pack ships its question SOURCE: ' + (withSource.slice(0, 6).join(', ') || 'none'));
+  ok(fs.existsSync(path.join(DEPLOY, 'subjects', '_index.js')),
+     'the pack index IS staged (PackLoader needs it)');
+  for (const secret of ['.env', '.git', 'node_modules', 'wrangler.toml', 'supabase-schema.sql'])
+    ok(!fs.existsSync(path.join(DEPLOY, secret)), `${secret} is not staged`);
 }
-ok(strays.length === 0,
-   'unblocked and not allowlisted: ' + strays.join(', ')
-   + ' — add a [[redirects]] 404 in netlify.toml, or add it to ALLOW_* here if the app serves it');
 
-// node_modules and .git are skipped by the walk, so assert them explicitly.
-ok(blocked('/node_modules/x/package.json'), 'node_modules is blocked by rule');
 
 // ── 6. subjects/ is allowed, but its question SOURCE is not ───────────────
 console.log('\nsubjects/ is served, its question source is not');
