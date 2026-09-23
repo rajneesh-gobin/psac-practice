@@ -62,7 +62,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-msr-009', chapterId:'g2mth-measurement', difficulty:2, subsection:'length_cm_m',
     question:'Mia measures a table: 50 cm + 50 cm = ___',
-    options:['1 m','100 cm and 1 m are both correct','2 m','50 cm'],
+    options:["100 cm and 1 m are both correct","1 m and nothing else is correct","2 m because you add the metres","50 cm because the table is one"],
     answer:'100 cm and 1 m are both correct',
     hint:'50 + 50 = 100 cm = 1 m.',
     explanation:'50 cm + 50 cm = 100 cm = 1 m. <b>Both 100 cm and 1 m are correct</b>.' }),

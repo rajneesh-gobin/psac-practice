@@ -48,7 +48,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-shp-007', chapterId:'g2mth-shapes', difficulty:2, subsection:'2d_shapes',
     question:'What is the difference between a square and a rectangle?',
-    options:['A square has 4 equal sides; a rectangle has 2 pairs of equal sides','They are exactly the same','A rectangle has 3 sides; a square has 4','A square is round; a rectangle is not'],
+    options:["A square has 4 equal sides; a rectangle has 2 pairs of equal sides","A square is round all over; a rectangle has straight sides only","A rectangle has only 3 sides; a square always has 4 equal sides","They are exactly the same shape and there is no difference at all"],
     answer:'A square has 4 equal sides; a rectangle has 2 pairs of equal sides',
     hint:'In a rectangle, opposite sides are equal. In a square, ALL sides are equal.',
     explanation:'A <b>square</b> has all 4 sides equal. A <b>rectangle</b> has 2 pairs of equal (but different) sides.' }),
@@ -274,7 +274,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-shp-039', chapterId:'g2mth-shapes', difficulty:1, subsection:'3d_shapes',
     question:'A cuboid is different from a cube because ___.',
-    options:['not all faces of a cuboid are the same size','a cuboid has more faces','a cube has curved surfaces','they are the same shape'],
+    options:["not all faces of a cuboid are the same size","a cube has curved surfaces and a cuboid does not","a cuboid has more faces altogether than a cube","they are really the same shape with two names"],
     answer:'not all faces of a cuboid are the same size',
     hint:'In a cube, all 6 faces are equal squares. In a cuboid, faces can be different rectangles.',
     explanation:'A <b>cuboid</b> has rectangular faces that are not all the same size, unlike a cube.' }),
@@ -290,7 +290,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-shp-041', chapterId:'g2mth-shapes', difficulty:1, subsection:'symmetry',
     question:'A shape has a line of symmetry when ___.',
-    options:['one half is a mirror image of the other','it has 4 sides','it is coloured red','it has no corners'],
+    options:["one half is a mirror image of the other","it has no corners anywhere on its edge","it has exactly 4 sides of equal length","it is coloured red rather than any other"],
     answer:'one half is a mirror image of the other',
     hint:'If you fold the shape along the line, both halves match exactly.',
     explanation:'A line of symmetry divides a shape so that <b>one half is a mirror image of the other</b>.' }),
@@ -339,14 +339,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-shp-048', chapterId:'g2mth-shapes', difficulty:2, subsection:'symmetry',
     question:'Rani folds a square in half diagonally. Do both halves match?',
-    options:['Yes — a diagonal is also a line of symmetry for a square','No — diagonals are never lines of symmetry','Sometimes','Cannot tell'],
+    options:["Yes — a diagonal is also a line of symmetry for a square","No — a diagonal is never a line of symmetry for a square","Sometimes — it depends on how big the square happens to be","We cannot tell without measuring both halves very carefully"],
     answer:'Yes — a diagonal is also a line of symmetry for a square',
     hint:'For a square, folding along a diagonal gives two equal triangles.',
     explanation:'<b>Yes</b>. A square has 4 lines of symmetry, including both diagonals.' }),
 
   makeMCQ({ id:'g2mth-shp-049', chapterId:'g2mth-shapes', difficulty:1, subsection:'symmetry',
     question:'Does the letter H have a line of symmetry?',
-    options:['Yes — both a horizontal and a vertical line','No','Only a vertical line','Only a diagonal line'],
+    options:["Yes — both a horizontal and a vertical line","Yes — but only a single diagonal line","Yes — but only a single vertical line","No — the letter H has no line at all"],
     answer:'Yes — both a horizontal and a vertical line',
     hint:'H looks the same if you flip it left/right or top/bottom.',
     explanation:'The letter <b>H</b> has both a horizontal and a vertical line of symmetry.' }),
@@ -381,7 +381,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-shp-054', chapterId:'g2mth-shapes', difficulty:1, subsection:'symmetry',
     question:'Which natural object shows symmetry?',
-    options:['a leaf with a central vein','a rock','a river','a cloud'],
+    options:["a leaf with a central vein","a cloud in the morning sky","a river running to the sea","a rock beside the seashore"],
     answer:'a leaf with a central vein',
     hint:'Many leaves have a line down the middle where both sides match.',
     explanation:'<b>A leaf</b> often has a central vein that acts as a line of symmetry.' }),
@@ -395,7 +395,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-shp-056', chapterId:'g2mth-shapes', difficulty:1, subsection:'symmetry',
     question:'Does the number 8 have a line of symmetry?',
-    options:['Yes — both horizontal and vertical','No','Only a horizontal line','Only a diagonal line'],
+    options:["Yes — both horizontal and vertical","Yes — but only a diagonal line","Yes — but only a horizontal line","No — the number 8 has none"],
     answer:'Yes — both horizontal and vertical',
     hint:'The number 8 looks the same if you flip it top/bottom or left/right.',
     explanation:'The number <b>8</b> has both a horizontal and a vertical line of symmetry.' }),
@@ -409,21 +409,21 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g2mth-shp-058', chapterId:'g2mth-shapes', difficulty:1, subsection:'symmetry',
     question:'Raj says a right-angled triangle has a line of symmetry. Is he right?',
-    options:['No — a right-angled triangle usually has no line of symmetry','Yes — it has 1 line','Yes — it has 3 lines','Sometimes'],
+    options:["No — a right-angled triangle usually has no line of symmetry","Yes — a right-angled triangle always has exactly 1 such line","Yes — a right-angled triangle always has exactly 3 such lines","Sometimes — it depends which way up the triangle is drawn"],
     answer:'No — a right-angled triangle usually has no line of symmetry',
     hint:'A right-angled triangle has sides of different lengths, so folding it won\'t give matching halves.',
     explanation:'A right-angled triangle usually has <b>no line of symmetry</b> because its sides are different lengths.' }),
 
   makeMCQ({ id:'g2mth-shp-059', chapterId:'g2mth-shapes', difficulty:2, subsection:'symmetry',
     question:'Nadia completes a picture so that it is symmetrical. She has drawn the left side. What must she do on the right side?',
-    options:['Draw a mirror image of the left side','Draw a bigger version','Draw a different shape','Leave it blank'],
+    options:["Draw a mirror image of the left side","Leave the right side completely blank","Draw a much bigger version on the right","Draw a completely different shape there"],
     answer:'Draw a mirror image of the left side',
     hint:'Symmetry means both sides are mirror images.',
     explanation:'For symmetry, the right side must be a <b>mirror image</b> of the left side.' }),
 
   makeMCQ({ id:'g2mth-shp-060', chapterId:'g2mth-shapes', difficulty:2, subsection:'symmetry',
     question:'Dev says: "A hexagon has 6 lines of symmetry." Is he right?',
-    options:['Yes — a regular hexagon has 6 lines of symmetry','No — it has 3 lines','No — it has 0 lines','No — it has 4 lines'],
+    options:["Yes — a regular hexagon has 6 lines of symmetry","No — a regular hexagon has no lines of symmetry","No — a regular hexagon has only 4 lines of symmetry","No — a regular hexagon has only 3 lines of symmetry"],
     answer:'Yes — a regular hexagon has 6 lines of symmetry',
     hint:'A regular hexagon has 6 equal sides — it can be folded in 6 equal ways.',
     explanation:'<b>Yes!</b> A regular hexagon has <b>6</b> lines of symmetry.' })

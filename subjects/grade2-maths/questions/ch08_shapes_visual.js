@@ -250,7 +250,7 @@ STATIC_QUESTIONS.push(
       '<line x1="100" y1="5" x2="100" y2="175" stroke="#DC2626" stroke-width="2" stroke-dasharray="7,4"/>' +
       '</svg></div>' +
       'Is this butterfly shape symmetrical?',
-    options:['Yes — the wings match on both sides','No — the wings are different','Only one side is correct','Cannot tell'], answer:'Yes — the wings match on both sides',
+    options:["Yes — the wings match on both sides","No — the two wings are different","Only one side of it is correct","We cannot tell from this picture"], answer:'Yes — the wings match on both sides',
     hint:'The dashed red line is the mirror line — do the wings look the same on each side?',
     explanation:'<b>Yes</b> — the butterfly is symmetrical. The left wing is a mirror image of the right wing along the vertical line.' })
 );

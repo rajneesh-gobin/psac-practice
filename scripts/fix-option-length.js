@@ -170,9 +170,18 @@ if (mode === '--apply') {
         const arr = arrayAfter(s, at);
         if (!arr) continue;
         const gap = s.slice(at, arr.start);
-        if (gap.length > 600) continue;                 // too far to be this question's options
-        if (/\]\s*\|\||=>|function\s*\(/.test(gap)) continue;   // a lookup or a helper body
-        if (!/options\s*:|question\s*:|,\s*'[^']{10,}'\s*,\s*$/.test(gap) && !/,\s*$/.test(gap)) continue;
+        if (/=>|function\s*\(/.test(gap)) continue;     // a helper body, not a question
+        // ⚠ `options:` IMMEDIATELY BEFORE THE ARRAY IS CERTAINTY, AT ANY
+        //   DISTANCE. A 600-character proximity rule refused g2mth-shp-078,
+        //   whose question embeds a whole inline SVG butterfly between the id
+        //   and its options — correct to refuse rather than guess, but the
+        //   distance was never the real signal. The keyword is.
+        if (/options\s*:\s*$/.test(gap)) { candidates.push(arr); continue; }
+        // The positional helper form has no keyword, so distance still applies
+        // there — and a lookup like G4HG_EXPL[id] must stay excluded.
+        if (gap.length > 600) continue;
+        if (/\]\s*\|\|/.test(gap)) continue;
+        if (!/question\s*:|,\s*'[^']{10,}'\s*,\s*$/.test(gap) && !/,\s*$/.test(gap)) continue;
         candidates.push(arr);
       }
       if (candidates.length !== 1) {
