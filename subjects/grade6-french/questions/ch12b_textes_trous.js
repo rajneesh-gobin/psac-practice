@@ -66,7 +66,7 @@
     'écris UN mot qui convient dans chaque trou. Il n\'y a pas de cadre pour cette partie.');
 
   add(23, 'La bagasse',
-    'Quand on écrase la canne à sucre, le jus s\'écoule et il reste une {1} sèche qu\'on appelle la bagasse. Pendant longtemps, ce n\'était qu\'un {2} : on l\'entassait à côté de l\'usine. Puis quelqu\'un a remarqué qu\'elle brûlait très {3}. Aujourd\'hui, plusieurs usines de Maurice brûlent la bagasse pour produire de la {4}, et la vapeur fait tourner des turbines qui produisent de l\'{5}.',
+    'Quand on écrase la canne à sucre, le jus s\'écoule et il reste une {1} sèche qu\'on appelle la bagasse. Pendant longtemps, ce n\'était qu\'un {2} : on l\'entassait à côté de l\'usine. Puis quelqu\'un a remarqué qu\'elle brûlait très {3}. Aujourd\'hui, plusieurs usines de Maurice brûlent la bagasse pour produire de la {4}, et celle-ci fait tourner des turbines qui produisent de l\'{5}.',
     ['fibre', 'déchet', 'bien', 'vapeur', 'électricité', 'boussole'],
     ['fibre', 'déchet', 'bien', 'vapeur', 'électricité'],
     ['Ce qui reste de la canne après l\'écrasement.',
@@ -176,7 +176,7 @@
     'écris UN mot qui convient dans chaque trou. Il n\'y a pas de cadre pour cette partie.');
 
   add(28, 'La carte de bibliothèque',
-    'La bibliothèque municipale donne une carte à qui la {1}, et cela ne coûte {2}. Il faut une adresse, et rien de plus. Ma mère m\'y a emmenée un samedi matin, quand j\'avais sept ans. La bibliothécaire a écrit mon nom sur la carte à l\'{3} bleue, très soigneusement, et m\'a dit que je pouvais emporter trois livres à la {4}. Je me souviens d\'avoir été étonnée que personne ne demande d\'{5}.',
+    'La bibliothèque municipale donne une carte à qui la {1}, et cela ne coûte {2}. Il faut une adresse, et rien de plus. Ma mère m\'y a emmenée un samedi matin, quand j\'avais sept ans. La bibliothécaire a écrit mon nom sur la carte à l\'{3} bleue, très soigneusement, et m\'a dit que je pouvais emporter trois livres à la {4}. Je me souviens d\'avoir été étonnée que personne ne réclame d\'{5}.',
     ['demande', 'rien', 'encre', 'fois', 'argent', 'ancre'],
     ['demande', 'rien', 'encre', 'fois', 'argent'],
     ['À qui la ___ : à toute personne qui en fait la demande.',

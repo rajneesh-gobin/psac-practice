@@ -27,7 +27,7 @@
       'Le nouveau nom du bâtiment.',
       'Mieux qu\'une ___ : un bâtiment abandonné qui tombe.']);
 
-  add(22, 'L\'eau du mois sec',
+  add(22, 'Le mois sec',
     'Maurice reçoit beaucoup de {1} : plus de deux mètres par an au centre de l\'île. Il est donc surprenant d\'entendre parler de coupures d\'{2}. La difficulté n\'est pas la quantité qui tombe, mais le {3} où elle tombe. La plus grande partie arrive pendant quelques mois d\'{4}. L\'île est petite et {5}, si bien que l\'eau qu\'on ne retient pas atteint la mer en quelques {6}. Les réservoirs gardent ce qu\'ils {7}, mais les vieux tuyaux en perdent une partie avant même qu\'elle n\'arrive au {8}. Un mois de septembre sec est donc moins un manque de pluie qu\'un manque de réservoirs et de tuyaux qui ne {9} pas. Réparer un tuyau n\'est pas un travail {10}, mais c\'est l\'un des plus utiles.',
     ['pluie', 'eau', 'moment', 'été', 'pentue', 'heures', 'peuvent', 'robinet', 'fuient', 'spectaculaire', 'échelle'],
     ['pluie', 'eau', 'moment', 'été', 'pentue', 'heures', 'peuvent', 'robinet', 'fuient', 'spectaculaire'],
@@ -42,7 +42,7 @@
       'Des tuyaux qui ne ___ pas : qui ne perdent pas d\'eau.',
       'Un travail ___ : qu\'on remarque, dont on parle.']);
 
-  add(23, 'Les filaos',
+  add(23, 'Les arbres des plages',
     'Sur presque toutes les plages publiques de Maurice, on passe sous des {1}. Ils ne sont pas originaires de l\'île : on les a {2} en grand nombre parce qu\'ils poussent vite dans un sol {3} et pauvre, et parce que leurs {4} retiennent le sable quand la mer le pousse. Pendant longtemps, cela a semblé une bonne chose sans aucun {5}. Depuis peu, des botanistes font remarquer un problème : les aiguilles de filao tombent en un tapis si {6} que presque aucune autre plante ne peut y {7}. Une plage de filaos est donc souvent une plage de filaos et de rien d\'{8}. Personne ne dit que ces arbres sont {9} — ils sont manifestement utiles. La question est de savoir si tout un littoral doit reposer sur une seule {10}.',
     ['filaos', 'plantés', 'sableux', 'racines', 'défaut', 'épais', 'pousser', 'autre', 'inutiles', 'espèce', 'lanterne'],
     ['filaos', 'plantés', 'sableux', 'racines', 'défaut', 'épais', 'pousser', 'autre', 'inutiles', 'espèce'],
@@ -57,7 +57,7 @@
       'Personne ne dit qu\'ils sont ___ : le contraire d\'utiles.',
       'Une seule ___ : une seule sorte d\'arbre.']);
 
-  add(24, 'Trois langues avant sept ans',
+  add(24, 'Trois façons de parler avant sept ans',
     'Un enfant mauricien peut parler le kreol à la {1}, étudier en anglais et apprendre le français comme {2}, tout cela avant l\'âge de sept ans. Pour un visiteur, cela ressemble à une {3} très lourde. Les recherches sur les classes multilingues suggèrent pourtant autre {4} : les enfants qui passent tôt d\'une langue à l\'autre remarquent souvent plus vite comment la langue {5} — qu\'un mot est un choix et non un {6}. La vraie difficulté n\'est presque jamais le nombre de {7}. Elle apparaît quand on demande à un enfant de lire dans une langue qu\'il ne parle pas encore {8}, et qu\'on le juge ensuite sur la lecture plutôt que sur la {9}. Un enfant qui comprend la science mais bute sur l\'anglais est alors noté comme {10} en science.',
     ['maison', 'matière', 'charge', 'chose', 'fonctionne', 'fait', 'langues', 'bien', 'compréhension', 'faible', 'boussole'],
     ['maison', 'matière', 'charge', 'chose', 'fonctionne', 'fait', 'langues', 'bien', 'compréhension', 'faible'],
@@ -87,7 +87,7 @@
       'Ce qu\'on pourrait croire, vu le nombre de pertes.',
       'Ce qu\'ils font, en plus de marquer et d\'éloigner.']);
 
-  add(26, 'La lettre jamais envoyée',
+  add(26, 'La lettre dans le tiroir',
     'Ma tante garde dans le tiroir de sa machine à {1} une lettre qu\'elle n\'a jamais {2}. Elle l\'a écrite à son frère aîné il y a trente ans, après une dispute dont aucun des deux ne se {3} plus la raison. Elle l\'a relue le lendemain matin, l\'a trouvée trop {4}, et l\'a rangée en se promettant d\'en écrire une plus {5}. Celle-là n\'a jamais été écrite. Ils se parlent aujourd\'hui — aux mariages, aux enterrements, au {6} pour le Nouvel An — mais jamais de {7}. L\'an dernier, elle m\'a montré l\'enveloppe. L\'encre est devenue {8} et le papier est mou aux pliures. Je lui ai demandé pourquoi elle la {9}. Elle m\'a répondu que cela lui rappelle à quelle vitesse une petite chose devient {10} si on la laisse tranquille.',
     ['coudre', 'envoyée', 'rappelle', 'dure', 'douce', 'téléphone', 'cela', 'brune', 'garde', 'grande', 'bateau'],
     ['coudre', 'envoyée', 'rappelle', 'dure', 'douce', 'téléphone', 'cela', 'brune', 'garde', 'grande'],

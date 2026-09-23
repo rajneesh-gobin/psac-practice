@@ -16,7 +16,7 @@
       title, text, bank, answers, notes,
     }));
 
-  add(21, 'Le marché de Flacq',
+  add(21, 'Dimanche matin à Flacq',
     'Tous les dimanches, Maya va au {1} de Flacq avec sa mère. Il faut partir tôt, car à huit heures il y a déjà beaucoup de {2}. Les étals sont pleins de légumes : des tomates, des brèdes, des {3} et des piments. Maya aime surtout l\'odeur des gâteaux-piments que l\'on {4} au coin de l\'allée. Sa mère achète toujours chez la même {5}, qui la connaît depuis longtemps. « Bonjour ma fille ! » dit la marchande à Maya, et elle ajoute une petite {6} de letchis dans le sac. Sur le chemin du {7}, les sacs sont lourds, mais Maya ne se plaint {8}. Elle sait que le marché n\'est pas seulement un endroit où l\'on {9} des choses. C\'est un endroit où les gens se {10}.',
     ['marché', 'monde', 'oignons', 'vend', 'marchande', 'grappe', 'retour', 'pas', 'achète', 'connaissent', 'bateau'],
     ['marché', 'monde', 'oignons', 'vend', 'marchande', 'grappe', 'retour', 'pas', 'achète', 'connaissent'],
@@ -46,7 +46,7 @@
       'Ce qui sert à recoller du papier.',
       'Celles auxquelles on tient le ___ : superlatif.']);
 
-  add(23, 'Le dodo',
+  add(23, 'L\'oiseau qui ne volait plus',
     'Il y a très {1}, un gros oiseau gris vivait sur notre île. On l\'appelait le {2}. Il avait de toutes petites {3} et il ne pouvait pas voler. Cela ne lui posait aucun problème : sur l\'île, rien ne le {4}. Il marchait lentement dans la forêt et mangeait les fruits {5}. Puis les marins sont arrivés avec des chiens, des rats et des {6}. En moins de cent ans, le dodo avait complètement {7}. Aujourd\'hui, on ne peut plus le voir que sur les armoiries de {8}. Quand la maîtresse a raconté cette histoire, personne dans la classe n\'a {9}. Sanjay a demandé si un dodo pouvait revenir un {10}. La maîtresse a répondu doucement que non.',
     ['longtemps', 'dodo', 'ailes', 'chassait', 'tombés', 'cochons', 'disparu', 'Maurice', 'ri', 'jour', 'échelle'],
     ['longtemps', 'dodo', 'ailes', 'chassait', 'tombés', 'cochons', 'disparu', 'Maurice', 'ri', 'jour'],
@@ -91,7 +91,7 @@
       'Ce que sa grand-mère ne savait pas faire.',
       'Ce qu\'on croit que jardiner veut surtout dire.']);
 
-  add(26, 'Le jour du sport',
+  add(26, 'La course de Nisha',
     'Il a plu le matin du jour du {1}, et pendant une heure tout le monde a cru que ce serait {2}. Puis le ciel s\'est dégagé et toute l\'école est descendue sur le {3} en deux longues files. Nisha courait le dernier relais. Son équipe était {4} quand le témoin est arrivé dans sa main. Elle a couru comme son entraîneur le lui avait {5} : les yeux devant, les bras souples, la respiration {6}. Elle a dépassé une coureuse dans le virage, mais elle n\'a pas rattrapé la {7}. Son équipe est arrivée deuxième. Nisha a été surprise de ne pas se sentir {8} du tout. Ses amies criaient son {9} et le soleil brillait enfin. Dans le bus, elle s\'est {10} contre la vitre, la médaille encore dans la main.',
     ['sport', 'annulé', 'terrain', 'troisième', 'appris', 'régulière', 'première', 'déçue', 'nom', 'endormie', 'boussole'],
     ['sport', 'annulé', 'terrain', 'troisième', 'appris', 'régulière', 'première', 'déçue', 'nom', 'endormie'],
