@@ -1317,7 +1317,7 @@ const TeacherMode = (() => {
     if (!root) return;
     const classes = (typeof TeacherGuestClasses !== 'undefined' ? TeacherGuestClasses.getClasses() : []).filter(c => c.active);
     if (!classes.length) {
-      root.innerHTML = '<p class="ta-gb-msg">No active classrooms yet - create one in the Classrooms tab first.</p>';
+      root.innerHTML = '<p class="ta-gb-msg">No classes yet. Open 🏫 My classes and create one first.</p>';
       return;
     }
     if (!_gbClassId || !classes.find(c => c.id === _gbClassId)) _gbClassId = classes[0].id;
@@ -1977,7 +1977,7 @@ const TeacherMaterials = (() => {
     if (!picker.classList.contains('hidden')) { picker.classList.add('hidden'); return; }
 
     if (!_classes.length) {
-      picker.innerHTML = '<p class="tm-assign-note">No classrooms yet. Create one in the Classrooms tab.</p>';
+      picker.innerHTML = '<p class="tm-assign-note">No classes yet. Open 🏫 My classes to create one.</p>';
       picker.classList.remove('hidden');
       return;
     }

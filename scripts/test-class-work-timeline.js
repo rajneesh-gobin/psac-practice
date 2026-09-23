@@ -187,7 +187,7 @@ const ok = (label, cond, detail) => {
       const w = document.getElementById('tc-cd-work');
       const r = w.getBoundingClientRect();
       return { onscreen: r.width > 0 && r.height > 0,
-               overlayShown: !document.getElementById('tc-classroom-detail').classList.contains('hidden'),
+               overlayShown: !document.getElementById('screen-classroom').classList.contains('hidden'),
                width: Math.round(r.width) };
     })()`);
     ok('⚠ the Work section is actually on screen, not rendered into hidden DOM',

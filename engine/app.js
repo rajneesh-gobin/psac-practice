@@ -2696,12 +2696,17 @@ const _TAB_SCREENS = {
   'subject-hub':  (t) => { if (typeof SubjectHub  !== 'undefined') SubjectHub.tab(t); },
   'parent':       (t) => { if (typeof PD          !== 'undefined') PD.mainTab(t); },
   'teacher':      (t) => { if (typeof TeacherMode !== 'undefined') TeacherMode.switchTab(t); },
+  // ⚠ A CLASSROOM IS A SCREEN WITH TABS, exactly like the boards above it. It
+  //   was a role=dialog until 2026-09-23, and a dialog owns no history — so
+  //   Back jumped straight out of the class instead of walking its sections.
+  'classroom':    (t) => { if (typeof TeacherClassroomDetail !== 'undefined') TeacherClassroomDetail.showSection(t); },
 };
 // The tab each board opens on. Needed because the FIRST history entry for a
 // board carries no tab, and Back onto it must put the panel back where it
 // started rather than leaving the last tab painted under an older entry.
 const _TAB_DEFAULT = {
   'student-home': 'board', 'subject-hub': 'chapters', 'parent': 'children', 'teacher': 'home',
+  'classroom': 'overview',
 };
 
 function _recordTab(screenId, tab) {
@@ -2885,7 +2890,13 @@ const _KID_ONLY_SCREENS = new Set([
   'practice-hub', 'subject-hub', 'cloze-list', 'cloze-play',
 ]);
 // Screens only an adult session may open. See the guard in showScreen().
-const _ADULT_ONLY_SCREENS = new Set(['forum', 'parent-messages', 'teacher']);
+// ⚠⚠ 'classroom' MUST BE HERE NOW THAT IT IS A SCREEN. As a role="dialog" it
+//    was unreachable except from the teacher board, so no guard was needed. A
+//    .screen can be navigated to by anything that names it — including the
+//    psac-last-screen restore, which would drop a CHILD signing in on a shared
+//    device straight into the class roster, PINs and all. The guard is the UI
+//    half; RLS is the half that counts, but a door that opens is still a door.
+const _ADULT_ONLY_SCREENS = new Set(['forum', 'parent-messages', 'teacher', 'classroom']);
 
 // ── Returning a child to where they were after a full refresh ─────────────
 // showScreen() already records `psac-last-screen`, and auth.js already restores
@@ -3020,23 +3031,18 @@ function showScreen(id) {
   // the parent-mode switch also route through here from other places.
   if (typeof closeHeaderMenu === 'function') closeHeaderMenu();
 
-  // ⚠ #tc-classroom-detail is a full-page overlay that is NOT a .screen, so
-  // the loop below never touches it. A teacher with a classroom open who
-  // tapped 🔒 Parent got the parent dashboard rendered UNDERNEATH a 1394x900
-  // panel, with document.body.style.overflow still locked to 'hidden' so the
-  // page could not even be scrolled. Measured, not guessed. It is the same
-  // defect that stranded #admin-tab-questions outside #screen-admin.
-  // ⚠ Hide it, but do NOT call TeacherClassroomDetail.close(): that clears the
-  // remembered classroom, and returning to teacher mode is supposed to restore
-  // exactly where the teacher was (psac_teacher_loc_v1). Navigating INTO
-  // teacher mode is left alone for the same reason.
-  if (id !== 'teacher') {
-    const _tcd = document.getElementById('tc-classroom-detail');
-    if (_tcd && !_tcd.classList.contains('hidden')) {
-      _tcd.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
-  }
+  // ⚠ THE CLASSROOM IS A .screen NOW (#screen-classroom), so the loop below
+  //   hides it like any other and this special case is gone. It existed because
+  //   the classroom was a full-page role="dialog" outside the screen system: a
+  //   teacher with a class open who tapped 🔒 Parent got the parent dashboard
+  //   rendered UNDERNEATH a 1394x900 panel, with document.body.style.overflow
+  //   still locked to 'hidden' so the page could not be scrolled at all.
+  //   Measured, not guessed — the same defect that stranded
+  //   #admin-tab-questions outside #screen-admin.
+  // ⚠ KEEP THIS LINE. body overflow was set by the old modal and is cleared
+  //   here once and for all; a stale 'hidden' left by any earlier session is
+  //   otherwise permanent until reload.
+  if (document.body.style.overflow) document.body.style.overflow = '';
 
   const prevIdx = _SCREEN_ORDER.indexOf(_prevScreen);
   const nextIdx = _SCREEN_ORDER.indexOf(id);
@@ -3173,6 +3179,15 @@ function showScreen(id) {
   // ⚠ The render lives HERE, and Library.open() therefore must not call it
   //   too - that is what drew every certificate twice on the screen above.
   if (id === 'library' && typeof Library !== 'undefined') Library.mountInto('library-body');
+  // ⚠ A CLASSROOM WITH NO CLASS LOADED IS AN EMPTY SHELL. The screen name
+  //   survives a reload (psac-last-screen) and a Back, but the module's
+  //   _classId does not — so landing here cold would show a header reading
+  //   "Classroom" over four dashes and nothing else. Send the teacher to their
+  //   class list, which is where they would have had to go anyway.
+  if (id === 'classroom' && !(typeof TeacherClassroomDetail !== 'undefined' && TeacherClassroomDetail.isOpen())) {
+    showScreen('teacher');
+    return;
+  }
   if (id === 'subject-select')  renderSubjectSelect();
   if (id === 'student-select')  renderStudentSelect();
   if (id === 'grade-select')    renderGradeSelect();

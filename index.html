@@ -5071,10 +5071,30 @@
       </div>
     </div>
 
-    <!-- ── CLASSROOM DETAIL OVERLAY ── -->
-    <div id="tc-classroom-detail" class="tc-cd-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="tc-cd-name">
+    <!-- ══════════ A CLASSROOM ══════════
+         ⚠⚠ THIS WAS A role="dialog" COVERING THE WHOLE VIEWPORT (position:fixed;
+            inset:0; z-index:200), and that is what made opening a class feel
+            like leaving the app: the header, the ☰ menu and every other class
+            disappeared, and the only way out was to find one ✕. It is a real
+            .screen now, so the app shell stays, Back works, and the class list
+            sits beside it.
+         ⚠ #tc-classroom-detail IS KEPT AS THE INNER ID on purpose — dozens of
+            el('tc-classroom-detail') calls and a CSS file refer to it. The
+            SCREEN wrapper owns visibility; the inner element keeps its identity
+            and its loading state. -->
+    <div id="screen-classroom" class="screen hidden">
+      <div id="tc-classroom-detail" class="tc-cd-page">
+      <!-- ⚠ ONE ELEMENT, TWO LAYOUTS. A vertical rail beside the class on a
+           wide screen; a horizontal strip of class chips above it on a phone.
+           Either way the teacher can see their other classes and switch in one
+           tap, instead of backing out and coming in again. -->
+      <aside class="tc-rail" aria-label="Your classes">
+        <p class="tc-rail-head">Your classes</p>
+        <div id="tc-rail-list" class="tc-rail-list"></div>
+      </aside>
+      <div class="tc-cd-main">
       <div class="tc-cd-header">
-        <button class="tc-cd-back" onclick="TeacherClassroomDetail.close()">← Back</button>
+        <button class="tc-cd-back" onclick="TeacherClassroomDetail.close()">← All classes</button>
         <div class="tc-cd-title">
           <span id="tc-cd-emoji">🏫</span>
           <span id="tc-cd-name">Classroom</span>
@@ -5094,10 +5114,10 @@
       </div>
       <div class="tc-cd-body">
         <nav class="tc-cd-nav" role="tablist" aria-label="Classroom sections">
-          <button class="tc-cd-nav-btn" role="tab" data-sec="overview" onclick="TeacherClassroomDetail.showSection('overview')">🏠<span>Dashboard</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="work"     onclick="TeacherClassroomDetail.showSection('work')">📅<span>Work</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="pupils"   onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
-          <button class="tc-cd-nav-btn" role="tab" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Resources</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="overview" title="What needs your attention right now" onclick="TeacherClassroomDetail.showSection('overview')">🏠<span>Today</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="work"     title="Everything you have set, on the day it is for" onclick="TeacherClassroomDetail.showSection('work')">📅<span>Work</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="pupils"   title="Your class list and their PINs" onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
+          <button class="tc-cd-nav-btn" role="tab" data-sec="materials" title="Files, links and videos you have shared" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Files</span></button>
           <div class="tc-cd-nav-more">
             <button class="tc-cd-nav-btn" id="tc-cd-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="tc-cd-more-menu" onclick="TeacherClassroomDetail.toggleMore()">⋯<span>More</span></button>
             <div id="tc-cd-more-menu" class="tc-cd-more-menu hidden" role="menu" aria-label="More classroom tools">
@@ -5114,7 +5134,9 @@
           <div id="tc-cd-settings"  class="tc-cd-section hidden"></div>
         </div>
       </div>
-    </div>
+      </div><!-- /.tc-cd-main -->
+      </div><!-- /#tc-classroom-detail -->
+    </div><!-- /#screen-classroom -->
 
     <!-- ══════════ ASSIGNMENT ENTRANCE ══════════ -->
     <div id="screen-assignment" class="screen hidden" data-hide-header="true">

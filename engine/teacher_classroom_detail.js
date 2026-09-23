@@ -94,7 +94,13 @@ const TeacherClassroomDetail = (() => {
     try { return JSON.parse(localStorage.getItem(_PREFS_KEY(classId || _classId)) || '{}'); } catch(_) { return {}; }
   }
 
-  function isOpen() { return !!_classId && !el('tc-classroom-detail')?.classList.contains('hidden'); }
+  // ⚠ ASK THE SCREEN, NOT THE INNER PANEL. #tc-classroom-detail keeps its id
+  //   (dozens of callers and the whole CSS file name it) but it is no longer
+  //   the thing that gets hidden — #screen-classroom is. Checking the inner
+  //   element made isOpen() answer true forever once a class had been opened.
+  function isOpen() {
+    return !!_classId && !el('screen-classroom')?.classList.contains('hidden');
+  }
 
   function _setClassroomLoading(loading) {
     const overlay = el('tc-classroom-detail');
@@ -132,9 +138,19 @@ const TeacherClassroomDetail = (() => {
     _workLoaded = false; _pupilsLoaded = false; _setupGuideForced = false;
     _signalEpoch++;
 
-    el('tc-classroom-detail').classList.remove('hidden');
+    // ⚠⚠ A SCREEN NOW, NOT A MODAL. This used to un-hide a fixed, full-viewport
+    //    dialog and lock body scrolling — which is what made opening a class
+    //    feel like leaving the app, and why Back could not walk its sections.
+    //    showScreen() puts it in the ordinary screen stack with the app shell
+    //    around it, and _recordTab() in showSection() makes each section a
+    //    history step.
+    // ⚠ No more document.body.style.overflow = 'hidden'. That belonged to the
+    //   modal and, left behind, is exactly the defect app.js records: a
+    //   classroom open when the teacher tapped 🔒 Parent left the page unable
+    //   to scroll at all.
+    if (typeof showScreen === 'function') showScreen('classroom');
     _setClassroomLoading(true);
-    document.body.style.overflow = 'hidden';
+    _renderRail();
 
     el('tc-cd-name').textContent = className;
     el('tc-cd-emoji').textContent = _loadPrefs().emoji || '🏫';
@@ -157,11 +173,50 @@ const TeacherClassroomDetail = (() => {
   function close() {
     _signalEpoch++;
     _setClassroomLoading(false);
-    el('tc-classroom-detail').classList.add('hidden');
-    document.body.style.overflow = '';
     _classId = null;
     if (typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.clearCurrent();
     if (typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(null);
+    // ⚠ GO TO THE BOARD, do not merely hide. As a screen this has to hand the
+    //   display to something; hiding it alone would leave nothing showing.
+    if (typeof showScreen === 'function' && (typeof S === 'undefined' || !S || S.currentScreen === 'classroom')) {
+      showScreen('teacher');
+    }
+  }
+
+  // ══ The rail — the teacher's other classes, always in reach ═══════════════
+  // ⚠ THE POINT OF STAGE 3. Opening a class used to hide every other class, so
+  //   switching meant backing out, finding the list and coming in again. The
+  //   rail is a sidebar on a wide screen and a strip of chips on a phone — one
+  //   element, two layouts, no dropdown to discover.
+  function _renderRail() {
+    const host = el('tc-rail-list');
+    if (!host) return;
+    const classes = (typeof TeacherGuestClasses !== 'undefined' && TeacherGuestClasses.getClasses
+      ? TeacherGuestClasses.getClasses() : []).filter(c => c.active);
+    if (!classes.length) { host.innerHTML = ''; return; }
+    host.innerHTML = classes.map(c => `
+      <button type="button" class="tc-rail-item${c.id === _classId ? ' is-on' : ''}"
+        aria-current="${c.id === _classId ? 'true' : 'false'}"
+        onclick="TeacherClassroomDetail.switchTo('${esc(c.id)}')">
+        <span class="tc-rail-ico" aria-hidden="true">🏫</span>
+        <span class="tc-rail-name">${esc(c.name)}</span>
+        ${c.grade ? `<span class="tc-rail-grade">G${esc(c.grade)}</span>` : ''}
+      </button>`).join('')
+      + `<button type="button" class="tc-rail-item tc-rail-new" onclick="TeacherClassroomDetail.close()">
+           <span class="tc-rail-ico" aria-hidden="true">＋</span>
+           <span class="tc-rail-name">All classes</span>
+         </button>`;
+  }
+
+  // ⚠ Switching class must not stack a second history entry per class, or Back
+  //   walks every class the teacher browsed. open() records the SECTION; the
+  //   class itself is remembered state, not a step.
+  function switchTo(id) {
+    if (!id || id === _classId) return;
+    const c = (typeof TeacherGuestClasses !== 'undefined' && TeacherGuestClasses.getClasses
+      ? TeacherGuestClasses.getClasses() : []).find(x => x.id === id);
+    if (!c) return;
+    open(id, c.name, { section: _activeSection });
   }
 
   function showSection(sec) {
@@ -172,6 +227,13 @@ const TeacherClassroomDetail = (() => {
     if (!SECTIONS.includes(sec)) sec = 'overview';
     const changed = _activeSection !== sec;
     _activeSection = sec;
+    // ⚠ EACH SECTION IS A HISTORY STEP, so Back walks Files → Pupils → Work →
+    //   Today and only THEN leaves the class. As a modal this was impossible:
+    //   a dialog owns no history, so Back jumped straight out of the classroom
+    //   and, before that, straight off the board. _recordTab lives in app.js,
+    //   which always loads before this role module, and it no-ops while a pop
+    //   is being replayed.
+    if (typeof _recordTab === 'function') _recordTab('classroom', sec);
     toggleMore(false);
     document.querySelectorAll('.tc-cd-nav-btn').forEach(b => {
       const on = b.dataset.sec === sec || (b.id === 'tc-cd-more-btn' && MORE_SECTIONS.includes(sec));
@@ -2716,6 +2778,7 @@ const TeacherClassroomDetail = (() => {
     createLibraryLink, shareLibraryLink, copyLibraryLink, rotateLibraryLink, disableLibraryLink,
     shareToClass,
     addEvent, deleteEvent, setEventKind, setPhwDue, calendarPrevious, calendarNext, calendarToday, calendarPickDate,
+    switchTo, renderRail: _renderRail,
     saveName, saveGrade, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
     openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },
@@ -2741,11 +2804,19 @@ const TeacherClassroomDetail = (() => {
         _materials = d.materials || [];
         _workLoaded = true; _pupilsLoaded = true;
         _workError = ''; _eventsError = '';
-        // ⚠ ACTUALLY OPEN THE OVERLAY. Seeding the arrays and calling
+        // ⚠ ACTUALLY SHOW THE SCREEN. Seeding the arrays and calling
         //   showSection() paints into a panel inside a container that is still
         //   .hidden — every structural assertion passes against DOM nobody can
         //   see. "Ask the DOM, not the indentation" applies to the test too.
-        el('tc-classroom-detail')?.classList.remove('hidden');
+        // ⚠ #screen-classroom, NOT #tc-classroom-detail. The inner element kept
+        //   its id when the modal became a screen, but it is no longer the
+        //   thing that gets hidden — a seed pointed at it silently stopped
+        //   working while still reporting success.
+        // ⚠ Un-hidden directly rather than through showScreen(), so seeding
+        //   stays a pure state-setter: showScreen() would apply the adult-only
+        //   guard and bounce a test that has no signed-in teacher.
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        el('screen-classroom')?.classList.remove('hidden');
         const nameEl = el('tc-cd-name');
         if (nameEl) nameEl.textContent = _className;
       },

@@ -511,14 +511,64 @@ asserting against DOM nobody could see; the screenshot is what caught it.
 
 Test: `scripts/test-class-work-timeline.js` — 27 checks in real Chrome.
 
-### Stage 3 — the class becomes a screen
-Promote `#tc-classroom-detail` from `role="dialog"` to a real `.screen`, recorded
-with `_recordTab`/`history.pushState` the way the board tabs now are. Back then
-walks class sections, then leaves the class, then leaves the board.
-*Risk:* medium — this is the one that touches `showScreen()` and the history
-model. Do it **after** Stages 1–2 are in and steady, and lean on
-`test-screen-restore.js` and `test-hub-back-button.js`, which already cover the
-recorder.
+### Stage 3 — ✅ DONE 2026-09-23 — the class is a screen, with its classes beside it
+
+`#tc-classroom-detail` was `role="dialog"`, `position:fixed; inset:0;
+z-index:200`. Opening a class hid the app header, the ☰ menu and every other
+class, and the only way out was one ✕. It is `#screen-classroom` now, an
+ordinary `.screen`.
+
+⚠ **The inner `#tc-classroom-detail` id was kept.** Dozens of callers and the
+whole CSS block name it. The SCREEN wrapper owns visibility; the inner element
+keeps its identity and its loading state.
+
+**What the conversion bought**
+
+- **Back walks the sections** — Files → Pupils → Work → Today, and only then
+  leaves the class. A dialog owns no history, which is why it could not before.
+  `_TAB_SCREENS['classroom']` joins the four boards already in that model.
+- **The app shell stays.** The header and ☰ menu never disappear, which is most
+  of what “it takes the whole screen” meant.
+- **`document.body.style.overflow` is gone.** That was the modal’s, and left
+  behind it made the page permanently unscrollable — the defect app.js records.
+  `showScreen()` now clears any stale value once, and its classroom-specific
+  hack is deleted: the `.screen` loop hides it like everything else.
+
+**The rail — one element, two layouts**
+
+A teacher can always see their other classes and switch in one tap, instead of
+backing out to a list and coming in again. Below 900px it is a sideways-scrolling
+strip of chips above the class; at 900px and up it is a sidebar beside it.
+No dropdown to discover, and nothing new to learn on either.
+
+⚠ **Switching class is not a history step.** `open()` records the SECTION; the
+class is remembered state. Otherwise Back walks every class the teacher glanced
+at.
+
+**Two guards the conversion made necessary**
+
+⚠⚠ **`classroom` had to join `_ADULT_ONLY_SCREENS`.** As a dialog it was
+unreachable except from the board, so no guard existed. A `.screen` can be
+navigated to by anything that names it — including the `psac-last-screen`
+restore, which would drop a CHILD signing in on a shared device straight into
+the class roster, **PINs and all**.
+
+⚠ **A cold open shows an empty shell.** The screen name survives a reload but
+`_classId` does not, so `showScreen('classroom')` with no class loaded now
+redirects to the class list instead of painting a header over four dashes.
+
+**Plainer words**
+
+Dashboard → **Today**, Resources → **Files**; every section carries a `title`
+saying what it holds, so a new teacher can predict a tab before tapping it. The
+two dead *“Classrooms tab”* strings are fixed — they pointed at a tab that has
+not existed since the list moved onto Home.
+
+*Touched:* `teacher_classroom_detail.js`, `app.js`, `teacher.js`, `index.html`,
+`style.css`.  *Did not touch:* any table, any migration.
+
+Test: `scripts/test-classroom-screen.js` — 26 checks in real Chrome at both
+390×844 and 1280×900, including the full Back sequence and both guards.
 
 ### Stage 4 — collapse the board
 Board goes to **My classes · Library · Account**. `materials` folds into Library

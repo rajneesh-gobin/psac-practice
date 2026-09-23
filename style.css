@@ -6672,12 +6672,19 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
   from { transform: translateY(100%); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
-.tc-cd-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
+/* ══ A CLASSROOM ══════════════════════════════════════════════════════════
+   ⚠⚠ THIS WAS position:fixed; inset:0; z-index:200 — a dialog covering the
+      whole viewport. Opening a class hid the app header, the ☰ menu and every
+      other class, and the only way out was one ✕. It is an ordinary .screen
+      now, so the app shell stays put and Back works.
+   ⚠ The chalkboard ground moves to .tc-cd-page and is unchanged, so a class
+      still READS the same; what changed is that it no longer covers the app. */
+.tc-cd-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .9rem;
+  border-radius: 1rem;
+  overflow: hidden;
   background:
     repeating-linear-gradient(
       0deg,
@@ -6687,10 +6694,9 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
       rgba(240,236,220,.055) 28px
     ),
     linear-gradient(135deg, #2e5230 0%, #1d3a1f 50%, #243f26 100%);
-  overflow: hidden;
   animation: tc-cd-slide-in .28s cubic-bezier(.22,.61,.36,1) both;
 }
-.dark .tc-cd-overlay {
+.dark .tc-cd-page {
   background:
     repeating-linear-gradient(
       0deg,
@@ -6701,8 +6707,61 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
     ),
     linear-gradient(135deg, #111 0%, #0c0c0c 100%);
 }
-.tc-cd-overlay.hidden { display: none; animation: none; }
-.tc-cd-overlay.tc-cd-is-loading .tc-cd-body { opacity: .82; }
+.tc-cd-page.tc-cd-is-loading .tc-cd-body { opacity: .82; }
+.tc-cd-main { min-width: 0; display: flex; flex-direction: column; }
+
+/* ── The rail: the teacher's other classes ────────────────────────────────
+   ⚠ ONE ELEMENT, TWO LAYOUTS. A phone gets a horizontal strip of chips above
+   the class; a wide screen gets a sidebar. Switching class is one tap either
+   way, instead of backing out to a list and coming in again — which is the
+   whole complaint this stage answers. */
+.tc-rail {
+  order: -1;
+  padding: .7rem .8rem 0;
+  min-width: 0;
+}
+.tc-rail-head {
+  font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+  color: rgba(240,236,220,.5); margin: 0 0 .4rem;
+}
+.tc-rail-list {
+  display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .5rem;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.tc-rail-list::-webkit-scrollbar { display: none }
+.tc-rail-item {
+  flex: 0 0 auto; display: flex; align-items: center; gap: .35rem;
+  border: 1px solid rgba(240,236,220,.24); background: rgba(240,236,220,.06);
+  color: rgba(240,236,220,.86); border-radius: 999px;
+  padding: .32rem .7rem; font-size: .8rem; font-weight: 600; cursor: pointer;
+  max-width: 62vw;
+}
+.tc-rail-item:hover { background: rgba(240,236,220,.13) }
+.tc-rail-item.is-on {
+  background: rgba(252,211,77,.2); border-color: #fcd34d; color: #fde68a; font-weight: 800;
+}
+.tc-rail-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.tc-rail-grade { font-size: .68rem; opacity: .7; font-weight: 700 }
+.tc-rail-ico { flex: 0 0 auto }
+
+/* ⚠ FROM 900px THE RAIL BECOMES A SIDEBAR and the class list is permanently
+   on screen. This is the layout that makes a classroom stop feeling like a
+   place you are trapped in: you can always see where else you could be. */
+@media (min-width: 900px) {
+  /* ⚠ Fill the window rather than floating in a short block. Without this the
+     board ends halfway down a desktop screen with the page background below it,
+     which reads as a half-loaded page. Phones are left alone: there the content
+     is always taller than the viewport anyway, and a min-height would add dead
+     scroll under a short class. */
+  .tc-cd-page { grid-template-columns: 210px minmax(0, 1fr); gap: 0; min-height: calc(100vh - 190px) }
+  .tc-rail {
+    order: 0; padding: 1rem .7rem; align-self: stretch;
+    border-right: 1px solid rgba(240,236,220,.14);
+    background: rgba(0,0,0,.14);
+  }
+  .tc-rail-list { flex-direction: column; overflow-x: visible; overflow-y: auto; max-height: 70vh; gap: .3rem }
+  .tc-rail-item { max-width: none; border-radius: .6rem; width: 100% }
+}
 
 /* ── Header (chalkboard green - already matches home tab) ─────────── */
 .tc-cd-header {
@@ -7933,7 +7992,7 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
   .tc-cd-grade-header, .tc-cd-grade-row { grid-template-columns: 2fr 1fr 1fr 1.5fr; font-size: .85rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tc-cd-overlay,
+  .tc-cd-page,
   .tc-cd-section-enter,
   .tc-cd-loading-indicator i,
   .tc-inline-spinner { animation: none; }
