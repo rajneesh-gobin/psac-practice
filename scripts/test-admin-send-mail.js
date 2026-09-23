@@ -124,6 +124,20 @@ function run({ emails = {}, pending = [], fetches = {} } = {}) {
     /AdminPanel\.sendMailTo\('\$\{r\.id\}'\)/.test(SRC));
   ok('the activated-member rows carry one too',
     /AdminPanel\.sendMailTo\('\$\{m\.id\}'\)/.test(SRC));
+  ok('the teachers list carries one',
+    /AdminPanel\.sendMailTo\('\$\{t\.id\}'\)/.test(SRC));
+  // ⚠ Every member list should reach it. Four call sites: pending setup, the
+  //   member row, the member detail panel, the teachers list, and the teacher
+  //   approval queue — the last two both keyed on different row variables.
+  ok('it is wired from at least four places',
+    (SRC.match(/AdminPanel\.sendMailTo\(/g) || []).length >= 4,
+    (SRC.match(/AdminPanel\.sendMailTo\(/g) || []).length);
+  // ⚠ The member and teacher rows are CLICK-TO-EXPAND. A button inside one
+  //   without stopPropagation writes to the person AND toggles their panel.
+  const rowButtons = [...SRC.matchAll(/onclick="([^"]*sendMailTo[^"]*)"/g)].map(m => m[1]);
+  const inRow = rowButtons.filter(h => /event\.stopPropagation\(\)/.test(h));
+  ok('the in-row buttons stop the row-expand click',
+    inRow.length >= 2, rowButtons);
   // ⚠ The rule is about MEMBERS, not the whole file. There is one legitimate
   //   mailto: in admin.js — a guest who used the contact form has NO ACCOUNT,
   //   so the in-app compose cannot reach them and the address they typed is the

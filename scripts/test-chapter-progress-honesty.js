@@ -6,7 +6,13 @@ const summary={innerHTML:''};
 const ctx=vm.createContext({DB:{chapters:{a:{attempted:42,correct:38},b:{attempted:1,correct:1}},stats:{totalAttempted:43,totalCorrect:39}},
   STATIC_QUESTIONS:[{id:'q1',chapterId:'a'},{id:'q1',chapterId:'a'},{id:'q2',chapterId:'a'},{id:'q3',chapterId:'b'}],
   ASSIGNMENT_MODE:false,_recordDaily(){},save(){},updateStreak(){},checkBadges(){},gainPoints(){},_questionPoints(){return 1;},Events:{emit(){}},
-  document:{getElementById:()=>summary},_muDayKey:()=> '2026-09-04',_MU_OFFSET_MS:14400000,_chapterWhen:()=> 'Today'});
+  document:{getElementById:()=>summary},_muDayKey:()=> '2026-09-04',_MU_OFFSET_MS:14400000,_chapterWhen:()=> 'Today',
+  // ⚠ recordAnswer() gained a Chapter Preview guard after this test was
+  //   written, and the harness crashed on the missing symbol rather than
+  //   failing an assertion — so it reported nothing at all about chapter
+  //   progress for as long as it was red. FALSE is the state under test: a
+  //   preview records nothing, and this file is about what recording does.
+  _isPreviewRun:()=> false});
 vm.runInContext(fn('function _chapterProgress(', '// "Today"') + '\n' + fn('function recordAnswer(', '// ── ANSWER CHECKING') + '\n' + fn('function _renderChapterSummary(', 'window.startAssignment ='),ctx);
 assert.equal(ctx._chapterProgress('a').state,'started');
 assert.equal(ctx._chapterProgress('a').unique,0);

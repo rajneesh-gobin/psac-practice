@@ -257,6 +257,8 @@ const AdminPanel = (() => {
         <p data-member-email="${r.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[r.id] || '')}</p>
         ${r.note ? `<p class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${_esc(r.note)}"</p>` : ''}
         <div class="flex gap-2 flex-wrap mt-2">
+          <button onclick="AdminPanel.sendMailTo('${r.id}')" title="Write to this applicant on their own"
+            class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg font-semibold transition-colors">✉️ Send mail</button>
           ${r.status !== 'approved' ? `
             <button onclick="AdminPanel.setTeacherStatus('${r.id}','approved','unverified')"
               class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1 rounded-lg font-semibold hover:bg-green-200 transition-colors">✅ Approve</button>` : ''}
@@ -1890,7 +1892,17 @@ const AdminPanel = (() => {
               ${m.created_at ? 'Joined ' + _fmtJoined(m.created_at) : ''}
             </p>
             ${_memberAccountLabel(m)}
-            <p id="member-email-${m.id}" data-member-email="${m.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[m.id] || '')}</p>
+            <!-- ⚠ stopPropagation, like the checkbox above: the whole row is a
+                 click-to-expand control, so without it writing to someone also
+                 toggles their panel open. -->
+            <span class="flex items-center gap-1.5 min-w-0">
+              <p id="member-email-${m.id}" data-member-email="${m.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[m.id] || '')}</p>
+              <button type="button" title="Write to this person on their own"
+                aria-label="Send mail to ${_esc(m.full_name || 'this account')}"
+                onclick="event.stopPropagation();AdminPanel.sendMailTo('${m.id}')"
+                onkeydown="event.stopPropagation()"
+                class="shrink-0 text-[11px] leading-none px-1.5 py-1 rounded-md border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30">✉️</button>
+            </span>
             <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
           </div>
           <span class="hidden sm:flex flex-col gap-0.5">${_memberChildrenSummary(m)}${_memberUsageSummary(m)}</span>
@@ -3021,7 +3033,15 @@ const AdminPanel = (() => {
           <span id="teacher-chev-${t.id}" class="text-gray-400 text-sm select-none">${open ? '▾' : '▸'}</span>
           <div class="min-w-0">
             <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(t.full_name || 'Unnamed')}</p>
-            <p data-member-email="${t.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[t.id] || '')}</p>
+            <!-- ⚠ stopPropagation: this row is click-to-expand too. -->
+            <span class="flex items-center gap-1.5 min-w-0">
+              <p data-member-email="${t.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[t.id] || '')}</p>
+              <button type="button" title="Write to this teacher on their own"
+                aria-label="Send mail to ${_esc(t.full_name || 'this teacher')}"
+                onclick="event.stopPropagation();AdminPanel.sendMailTo('${t.id}')"
+                onkeydown="event.stopPropagation()"
+                class="shrink-0 text-[11px] leading-none px-1.5 py-1 rounded-md border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30">✉️</button>
+            </span>
             <p class="text-[11px] text-gray-400 dark:text-gray-500">Joined ${joined}</p>
             <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${t.id}</p>
           </div>
