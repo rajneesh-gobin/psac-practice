@@ -234,14 +234,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-eo-048', chapterId:'g1fr-expression-orale', difficulty:1, subsection:'conversation_simple',
     question:'Tu veux un biscuit. Que demandes-tu poliment ?',
-    options:['S\'il vous plaît, puis-je avoir un biscuit ?','Donne-moi un biscuit maintenant !','Je veux un biscuit.','Un biscuit !'],
+    options:['S\'il vous plaît, puis-je avoir un biscuit ?','Donnez-moi un biscuit tout de suite !','Je veux un biscuit, apportez-le vite !','Un biscuit ! J\'en veux un maintenant !'],
     answer:'S\'il vous plaît, puis-je avoir un biscuit ?',
     hint:'N\'oublie pas les mots magiques de politesse !',
     explanation:'On demande poliment en disant <b>s\'il vous plaît</b>. C\'est un mot magique !' }),
 
   makeMCQ({ id:'g1fr-eo-049', chapterId:'g1fr-expression-orale', difficulty:1, subsection:'conversation_simple',
     question:'Comment réponds-tu si quelqu\'un te demande ton prénom ?',
-    options:['Je m\'appelle ...','Je suis ...','Mon prénom est ...','Les deux premières réponses'],
+    options:["Les deux premières réponses","Mon prénom est Ravi.","Je m'appelle Priya.","Je suis un élève."],
     answer:'Les deux premières réponses',
     hint:'Il y a plusieurs façons correctes de se présenter.',
     explanation:'On peut dire <b>Je m\'appelle...</b> ou <b>Je suis...</b> pour donner son prénom.' }),
@@ -406,7 +406,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-lec-050', chapterId:'g1fr-lecture', difficulty:1, subsection:'lettres_sons',
     question:'La lettre "e" à la fin d\'un mot en français est souvent ___.',
-    options:['muette (on ne la prononce pas)','toujours prononcée','toujours bruyante','toujours un son /é/'],
+    options:["muette (on ne la prononce pas)","toujours prononcée très fort","toujours bruyante et longue","toujours prononcée comme /é/"],
     answer:'muette (on ne la prononce pas)',
     hint:'Dis "table" — est-ce que tu prononces le "e" à la fin ?',
     explanation:'En français, le <b>e final</b> est souvent muet, comme dans table, maison, tête.' }),
@@ -655,7 +655,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-ecr-057', chapterId:'g1fr-ecriture', difficulty:1, subsection:'phrases_simples',
     question:'Laquelle de ces phrases est complète ?',
-    options:['Le lapin mange une carotte.','Le lapin.','Mange vite.','Une carotte verte.'],
+    options:["Le lapin mange une carotte.","Une carotte verte et fraîche.","Le lapin blanc du jardin.","Mange vite la carotte."],
     answer:'Le lapin mange une carotte.',
     hint:'Une phrase complète a un sujet et un verbe.',
     explanation:'<b>Le lapin mange une carotte.</b> est complète : sujet (le lapin) + verbe (mange) + complément.' }),
@@ -722,7 +722,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-grm-044', chapterId:'g1fr-grammaire', difficulty:1, subsection:'noms_communs',
     question:'Un nom commun désigne ___.',
-    options:['une chose, une personne ou un animal en général','une personne spécifique par son prénom','une couleur','une action'],
+    options:["une chose, une personne ou un animal en général","une personne précise, appelée par son prénom","une couleur claire, foncée ou vive","une action que l'on fait tous les jours"],
     answer:'une chose, une personne ou un animal en général',
     hint:'Pense à "chaise", "fille", "oiseau" — ce sont des noms communs.',
     explanation:'Un <b>nom commun</b> désigne une chose, une personne ou un animal en général : table, garçon, chien.' }),

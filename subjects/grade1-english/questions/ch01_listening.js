@@ -476,7 +476,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-lis-067', chapterId:'g1eng-listening', difficulty:1, subsection:'listening_comp',
     question:'"Mia plays with her little sister." Who does Mia play with?',
-    options:['Her little sister','Her brother','Her friend','Her mum'],
+    options:['Her older brother','Her little sister','Her best friend','Her cousin Ravi'],
     answer:'Her little sister',
     hint:'Find the person Mia plays with in the sentence. 👧',
     explanation:'Well done! The sentence says Mia plays with <b>her little sister</b>.' }),

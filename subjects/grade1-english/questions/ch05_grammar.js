@@ -87,7 +87,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-grm-012', chapterId:'g1eng-grammar', difficulty:1, subsection:'common_nouns',
     question:'In the sentence "The girl has a book", which words are nouns?',
-    options:['girl and book','the and a','has','girl only'],
+    options:['girl and book','the and a only','has and the','girl and has'],
     answer:'girl and book',
     hint:'Find the two naming words in the sentence. 👧📚',
     explanation:'Well done! <b>Girl</b> (a person) and <b>book</b> (a thing) are both nouns.' }),
@@ -122,7 +122,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-grm-017', chapterId:'g1eng-grammar', difficulty:1, subsection:'common_nouns',
     question:'How many nouns are in: "The boy ate a mango"?',
-    options:['Two (boy, mango)','One (boy)','Three','Zero'],
+    options:['Two (boy, mango)','One (boy only)','Three (boy, ate, mango)','Zero (there are none)'],
     answer:'Two (boy, mango)',
     hint:'Find all the naming words in the sentence. 🥭',
     explanation:'Well done! There are <b>two nouns</b>: <b>boy</b> (a person) and <b>mango</b> (a fruit).' }),
@@ -306,14 +306,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-grm-043', chapterId:'g1eng-grammar', difficulty:1, subsection:'articles_a_an',
     question:'When do we use "an"?',
-    options:['Before words starting with a vowel sound','Before all words','Before very long words','Before words starting with consonants'],
+    options:['Before words starting with a vowel sound','Before words starting with a consonant','Before every word that is very long','Before all words, whatever they are'],
     answer:'Before words starting with a vowel sound',
     hint:'Vowels are: a, e, i, o, u. 🔡',
     explanation:'Well done! We use <b>an</b> before words starting with a vowel sound (a, e, i, o, u): an apple, an egg.' }),
 
   makeMCQ({ id:'g1eng-grm-044', chapterId:'g1eng-grammar', difficulty:1, subsection:'articles_a_an',
     question:'When do we use "a"?',
-    options:['Before words starting with a consonant sound','Before all words','Before vowels','Before the shortest words'],
+    options:['Before words starting with a consonant sound','Before words starting with a vowel sound','Before the shortest words in a sentence','Before all words, whatever they are'],
     answer:'Before words starting with a consonant sound',
     hint:'Consonants are all letters except a, e, i, o, u. 🔤',
     explanation:'Well done! We use <b>a</b> before words starting with a consonant sound: a cat, a dog, a tree.' }),

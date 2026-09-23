@@ -24,7 +24,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-rdr-003', chapterId:'g1eng-reading', difficulty:1, subsection:'print_awareness',
     question:'What is a sentence?',
-    options:['A group of words that makes sense','One letter','A number','A drawing'],
+    options:['A group of words that makes sense','A drawing of a person or place','A number you count out loud','One letter written on its own'],
     answer:'A group of words that makes sense',
     hint:'A sentence is made of words put together. 📝',
     explanation:'Well done! A <b>sentence</b> is a group of words that together make complete sense.' }),
@@ -38,7 +38,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-rdr-005', chapterId:'g1eng-reading', difficulty:1, subsection:'print_awareness',
     question:'What must the first word of a sentence start with?',
-    options:['A capital letter','A small letter','A number','A dot'],
+    options:['A capital letter','A small letter','A number','A full stop'],
     answer:'A capital letter',
     hint:'Every sentence has a BIG letter at the very start. 🔠',
     explanation:'Well done! Every sentence begins with a <b>capital letter</b>. It is like a signal that a new sentence is starting.' }),
@@ -73,14 +73,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-rdr-010', chapterId:'g1eng-reading', difficulty:1, subsection:'print_awareness',
     question:'What is a book cover?',
-    options:['The front page that shows the title','The last page','The page with pictures','A blank page'],
+    options:['The front page that shows the title','The page in the middle with pictures','A page left blank for writing on','The last page at the very back'],
     answer:'The front page that shows the title',
     hint:'This is the first thing you see when you pick up a book. 📚',
     explanation:'Well done! The <b>book cover</b> is the front of the book. It shows the title and the author\'s name.' }),
 
   makeMCQ({ id:'g1eng-rdr-011', chapterId:'g1eng-reading', difficulty:1, subsection:'print_awareness',
     question:'What does a picture in a book help you do?',
-    options:['Understand the story better','Count numbers','Write letters','Draw shapes'],
+    options:['Understand the story better','Draw shapes on the page','Write your letters neatly','Count the numbers in order'],
     answer:'Understand the story better',
     hint:'Pictures show us what the words are talking about. 🖼️',
     explanation:'Well done! Pictures help us <b>understand the story better</b> by showing what is happening.' }),
@@ -101,7 +101,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-rdr-014', chapterId:'g1eng-reading', difficulty:1, subsection:'print_awareness',
     question:'What is a paragraph?',
-    options:['A group of sentences about the same idea','One word','A single letter','A number'],
+    options:['A group of sentences about the same idea','A single word written on its own','A number you count in order','One letter at the start of a word'],
     answer:'A group of sentences about the same idea',
     hint:'A paragraph is like a small group or family of sentences. 📝',
     explanation:'Well done! A <b>paragraph</b> is a group of sentences that are all about the same topic or idea.' }),
@@ -129,7 +129,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-rdr-018', chapterId:'g1eng-reading', difficulty:1, subsection:'print_awareness',
     question:'In a book, the page numbers help you to —',
-    options:['find your place in the book','count letters','colour pictures','write words'],
+    options:['find your place in the book','write the words more neatly','count the letters on a page','colour the pictures in nicely'],
     answer:'find your place in the book',
     hint:'Numbers on pages help you know where you are in the story. 🔢',
     explanation:'Well done! <b>Page numbers</b> help you find your place and go back to where you stopped reading.' }),
@@ -164,7 +164,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-rdr-023', chapterId:'g1eng-reading', difficulty:1, subsection:'print_awareness',
     question:'What do illustrations in a book show?',
-    options:['Pictures that match the story','Only numbers','Only letters','The author\'s name'],
+    options:['Pictures that match the story','Only the numbers on the page','Only the letters of the title','The name of the author only'],
     answer:'Pictures that match the story',
     hint:'Illustrations make the story come alive! 🖼️',
     explanation:'Well done! <b>Illustrations</b> are pictures inside a book that show what the story is about.' }),
@@ -250,7 +250,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-rdr-035', chapterId:'g1eng-reading', difficulty:1, subsection:'letter_recognition',
     question:'What letter comes after "Z" in the alphabet?',
-    options:['Nothing — Z is the last letter','A','B','Y'],
+    options:['Nothing — Z is the last letter','The letter A starts again','The letter Y comes after Z','The letter B comes after Z'],
     answer:'Nothing — Z is the last letter',
     hint:'Say the alphabet to the end. What is the very last letter? 🔤',
     explanation:'Well done! <b>Z is the last letter</b> of the English alphabet. There is nothing after it.' }),

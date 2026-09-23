@@ -245,7 +245,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-co-034', chapterId:'g1fr-comprehension-orale', difficulty:1, subsection:'vocabulaire_oral',
     question:'Quelle partie du corps utilise-t-on pour entendre ?',
-    options:['les oreilles','les yeux','la main','le pied'],
+    options:['les oreilles','les mains','les pieds','les yeux'],
     answer:'les oreilles',
     hint:'Cette partie du corps est de chaque côté de la tête. (This part is on each side of the head.)',
     explanation:'On utilise <b>les oreilles</b> pour entendre les sons et la musique. Bravo !' }),

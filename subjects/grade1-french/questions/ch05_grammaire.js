@@ -31,7 +31,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-grm-004', chapterId:'g1fr-grammaire', difficulty:1, subsection:'noms_communs',
     question:'Un nom commun désigne ...',
-    options:['une chose, une personne ou un animal','une couleur','une action','une description'],
+    options:['une chose, une personne ou un animal','une couleur, claire ou foncée','une description du temps qu\'il fait','une action que l\'on fait chaque jour'],
     answer:'une chose, une personne ou un animal',
     hint:'Il peut être précédé de "le", "la", "un" ou "une". (It can come after "le", "la", "un" or "une".)',
     explanation:'Un <b>nom commun</b> désigne <b>une chose, une personne ou un animal</b>. Exemples : chien, maison, fille, soleil, eau. Très bien !' }),
@@ -129,7 +129,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-grm-017', chapterId:'g1fr-grammaire', difficulty:1, subsection:'determinants_le_la_les',
     question:'On utilise <b>"le"</b> devant ...',
-    options:['un nom masculin singulier','un nom féminin singulier','un nom pluriel','un verbe'],
+    options:['un nom masculin singulier','un nom féminin singulier','un nom masculin pluriel','un verbe à l\'infinitif'],
     answer:'un nom masculin singulier',
     hint:'"Le" remplace "un" quand on parle d\'une chose précise. (Le replaces "un" for a specific masculine thing.)',
     explanation:'On utilise <b>"le"</b> devant un <b>nom masculin singulier</b> : le chat, le chien, le livre, le soleil. Bravo !' }),
@@ -227,7 +227,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-grm-030', chapterId:'g1fr-grammaire', difficulty:1, subsection:'phrases_simples_grm',
     question:'Quelle phrase est sur <b>deux</b> personnes ?',
-    options:['Léa et Tom jouent.','Léa joue.','Tom joue.','Le chat joue.'],
+    options:['Léa et Tom jouent.','Le chat noir joue.','Tom joue dehors.','Léa joue aussi.'],
     answer:'Léa et Tom jouent.',
     hint:'Cherche la phrase avec deux noms de personnes. (Find the sentence with two people\'s names.)',
     explanation:'"<b>Léa et Tom jouent.</b>" parle de deux personnes — Léa <b>et</b> Tom. Le mot "et" (and) relie les deux noms. Super !' }),
@@ -241,7 +241,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-grm-032', chapterId:'g1fr-grammaire', difficulty:1, subsection:'phrases_simples_grm',
     question:'Quelle phrase est une <b>question</b> ?',
-    options:['Est-ce que tu aimes les pommes ?','Je mange une pomme.','La pomme est rouge.','Les enfants jouent.'],
+    options:['Est-ce que tu aimes les pommes ?','La pomme rouge est sur la table.','Les enfants jouent dans la cour.','Je mange une pomme chaque matin.'],
     answer:'Est-ce que tu aimes les pommes ?',
     hint:'Une question se termine par un point d\'interrogation (?). (A question ends with a question mark.)',
     explanation:'"<b>Est-ce que tu aimes les pommes ?</b>" est une question — elle se termine par <b>?</b>. Les questions cherchent une réponse. Très bien !' }),

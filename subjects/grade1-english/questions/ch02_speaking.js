@@ -45,7 +45,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-006', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'A friend asks "How are you?" What is a good answer?',
-    options:['I am fine, thank you!','Goodbye!','Good morning!','See you!'],
+    options:['I am fine, thank you!','See you tomorrow!','Good morning, sir!','Goodbye for now!'],
     answer:'I am fine, thank you!',
     hint:'Tell your friend how you are feeling. 😊',
     explanation:'Well done! We answer "How are you?" with <b>I am fine, thank you!</b>' }),
@@ -66,7 +66,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-009', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'You meet your teacher. What do you say?',
-    options:['Good morning, Teacher!','What do you want?','Hey!','Come here!'],
+    options:['Good morning, Teacher!','Come over here now!','Hey, you there!','What do you want?'],
     answer:'Good morning, Teacher!',
     hint:'Greet your teacher in a polite and respectful way. 🏫',
     explanation:'Well done! We greet our teacher by saying <b>Good morning, Teacher!</b>' }),
@@ -101,7 +101,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-014', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'You want to go to the toilet. What do you say to your teacher?',
-    options:['May I go to the toilet, please?','I want the toilet!','Toilet now!','Going toilet!'],
+    options:['May I go to the toilet, please?','I want to go to the toilet now!','I am going to the toilet now.','Take me to the toilet, quick!'],
     answer:'May I go to the toilet, please?',
     hint:'Ask permission politely using "may I" and "please". 🚻',
     explanation:'Well done! We ask permission politely: <b>May I go to the toilet, please?</b>' }),
@@ -115,14 +115,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-016', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'You want to enter a room. What do you do?',
-    options:['Knock and say "May I come in?"','Walk straight in','Shout "Open!"','Bang on the door'],
+    options:['Knock and say "May I come in?"','Bang on the door and shout','Push the door and say "Open!"','Walk straight in without asking'],
     answer:'Knock and say "May I come in?"',
     hint:'It is polite to ask before entering someone\'s space. 🚪',
     explanation:'Well done! The polite thing to do is knock and ask <b>"May I come in?"</b>' }),
 
   makeMCQ({ id:'g1eng-spk-017', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'What is the polite way to ask for water?',
-    options:['May I have some water, please?','Give me water!','Water now!','I need water!'],
+    options:['May I have some water, please?','Water now! I am very thirsty!','Give me water! I want it now!','I need water! Bring it quickly!'],
     answer:'May I have some water, please?',
     hint:'Use "may I" and "please" to ask politely. 💧',
     explanation:'Well done! We ask politely: <b>May I have some water, please?</b>' }),
@@ -143,7 +143,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-020', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'You want to join your friends\' game. What do you say?',
-    options:['Can I play with you, please?','Move! I want to play!','Start the game!','Let me in!'],
+    options:['Can I play with you, please?','Move over! I want to play!','Start the game again for me!','Let me in! I am playing too!'],
     answer:'Can I play with you, please?',
     hint:'Ask to join in a polite and friendly way. ⚽',
     explanation:'Well done! We ask to join in nicely: <b>Can I play with you, please?</b>' }),
@@ -164,21 +164,21 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-023', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'A new child joins your class. What do you say?',
-    options:['Hello! My name is ___. What is your name?','Go away!','Who are you?','I don\'t know you!'],
+    options:['Hello! My name is ___. What is your name?','Who are you and why are you here?','I do not know you. Go somewhere else.','Go away! We were playing already.'],
     answer:'Hello! My name is ___. What is your name?',
     hint:'Welcome the new child in a friendly way. 😊',
     explanation:'Well done! We greet new friends with: <b>Hello! My name is ___. What is your name?</b>' }),
 
   makeMCQ({ id:'g1eng-spk-024', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'You accidentally break a friend\'s pencil. What should you say?',
-    options:['I am sorry. It was an accident.','It\'s not my fault!','You can buy another one!','I don\'t care!'],
+    options:['I am sorry. It was an accident.','You can just buy another one!','It is not my fault at all!','I do not care about your pencil!'],
     answer:'I am sorry. It was an accident.',
     hint:'Taking responsibility and saying sorry is the right thing to do. ✏️',
     explanation:'Well done! When we make a mistake, we say <b>I am sorry. It was an accident.</b>' }),
 
   makeMCQ({ id:'g1eng-spk-025', chapterId:'g1eng-speaking', difficulty:1, subsection:'greetings_phrases',
     question:'Your friend shares their snack with you. What do you say?',
-    options:['Thank you! That is very kind.','Give me more!','Is that all?','I wanted something else!'],
+    options:['Thank you! That is very kind.','I wanted something else to eat!','Is that all you are giving me?','Give me more! That is too little!'],
     answer:'Thank you! That is very kind.',
     hint:'Show your friend you are grateful for their kindness. 🍪',
     explanation:'Well done! We show gratitude by saying <b>Thank you! That is very kind.</b>' }),
@@ -371,7 +371,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-052', chapterId:'g1eng-speaking', difficulty:1, subsection:'short_talk',
     question:'Which is a complete sentence?',
-    options:['The dog runs fast.','dog runs','the fast dog','runs very'],
+    options:['The dog runs fast.','runs very fast the','the fast brown dog','dog runs the fast'],
     answer:'The dog runs fast.',
     hint:'A complete sentence has a subject (who) and a verb (action). 🐕',
     explanation:'Well done! <b>The dog runs fast</b> is a complete sentence — it has a subject (dog) and a verb (runs).' }),
@@ -399,7 +399,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-056', chapterId:'g1eng-speaking', difficulty:1, subsection:'short_talk',
     question:'Which is a complete sentence?',
-    options:['The sun is bright.','sun bright','the bright','shines sun'],
+    options:['The sun is bright.','shines the bright sun','the bright warm sun','sun bright is the'],
     answer:'The sun is bright.',
     hint:'A complete sentence has a subject and a verb. ☀️',
     explanation:'Well done! <b>The sun is bright</b> is complete — it has a subject (sun) and a verb (is).' }),
@@ -434,7 +434,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-061', chapterId:'g1eng-speaking', difficulty:1, subsection:'short_talk',
     question:'Which is a complete sentence?',
-    options:['Mia has a blue bag.','blue bag Mia','has bag','Mia bag blue'],
+    options:['Mia has a blue bag.','blue bag Mia has a','has a bag blue Mia','Mia bag blue a has'],
     answer:'Mia has a blue bag.',
     hint:'A complete sentence has a subject (Mia) and a verb (has). 🎒',
     explanation:'Well done! <b>Mia has a blue bag</b> is complete — it has a subject and a verb.' }),
@@ -462,7 +462,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-065', chapterId:'g1eng-speaking', difficulty:1, subsection:'short_talk',
     question:'Which is a complete sentence about an animal?',
-    options:['The rabbit has long ears.','rabbit long ears','has ears long','long rabbit ears'],
+    options:['The rabbit has long ears.','has ears long the rabbit','rabbit long ears the has','long rabbit ears has the'],
     answer:'The rabbit has long ears.',
     hint:'Find the sentence with a subject and a verb. 🐰',
     explanation:'Well done! <b>The rabbit has long ears</b> is complete — subject (rabbit) and verb (has).' }),
@@ -490,7 +490,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-069', chapterId:'g1eng-speaking', difficulty:1, subsection:'short_talk',
     question:'Which is a complete sentence about food?',
-    options:['I love to eat mangoes.','mango eat love','eat I mangoes','mangoes love'],
+    options:['I love to eat mangoes.','mangoes love to eat','eat I mangoes to love','mango eat love to I'],
     answer:'I love to eat mangoes.',
     hint:'Find the sentence with a subject (I) and a verb (love). 🥭',
     explanation:'Well done! <b>I love to eat mangoes</b> is a complete sentence.' }),
@@ -504,7 +504,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-071', chapterId:'g1eng-speaking', difficulty:1, subsection:'short_talk',
     question:'How do you tell someone your favourite colour?',
-    options:['My favourite colour is blue.','I have a cat.','I live in Curepipe.','I am six years old.'],
+    options:['My favourite colour is blue.','I have a cat called Kitty.','I am six years old today.','I live in Curepipe with mum.'],
     answer:'My favourite colour is blue.',
     hint:'Use "My favourite colour is ___" to tell someone what colour you like. 💙',
     explanation:'Well done! We say <b>My favourite colour is ___</b> to tell someone our favourite colour.' }),
@@ -518,7 +518,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-spk-073', chapterId:'g1eng-speaking', difficulty:1, subsection:'short_talk',
     question:'How do you tell someone what you like to do after school?',
-    options:['After school, I like to play.','My name is Priya.','The sun is bright.','Dogs bark loudly.'],
+    options:['After school, I like to play.','The sun is bright this morning.','My name is Priya Ramdhun.','Dogs bark loudly at night.'],
     answer:'After school, I like to play.',
     hint:'Use "I like to ___" to talk about what you enjoy. 🎮',
     explanation:'Well done! <b>After school, I like to play</b> tells someone about your after-school activity.' }),

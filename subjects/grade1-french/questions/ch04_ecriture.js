@@ -73,12 +73,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-ecr-010', chapterId:'g1fr-ecriture', difficulty:1, subsection:'lettres_minuscules',
     question:'Quelle est la bonne façon de tenir un crayon ?',
-    options:[
-      'Entre le pouce et l\'index, reposé sur le majeur.',
-      'Avec toute la main fermée.',
-      'Avec seulement le petit doigt.',
-      'Dans la paume de la main.',
-    ],
+    options:['Entre le pouce et l\'index, reposé sur le majeur.','Dans la paume de la main, bien fermée.','Avec toute la main serrée très fort.','Avec seulement le petit doigt replié.'],
     answer:'Entre le pouce et l\'index, reposé sur le majeur.',
     hint:'On tient le crayon légèrement — pas trop serré ! (Hold the pencil lightly — not too tight!)',
     explanation:'On tient le crayon <b>entre le pouce et l\'index, reposé sur le majeur</b>. Il ne faut pas serrer trop fort pour ne pas se fatiguer ! Super !' }),

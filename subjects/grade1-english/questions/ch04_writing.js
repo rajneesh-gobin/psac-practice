@@ -52,7 +52,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-wrt-007', chapterId:'g1eng-writing', difficulty:1, subsection:'letter_formation',
     question:'How do you hold a pencil correctly?',
-    options:['Between the thumb and first two fingers','With your whole fist','With just one finger','Between your last two fingers'],
+    options:['Between the thumb and first two fingers','Between the last two fingers only','Inside your whole fist, held tight','With just one finger on the pencil'],
     answer:'Between the thumb and first two fingers',
     hint:'The pencil should rest gently — not too tight, not too loose! ✏️',
     explanation:'Well done! Hold your pencil <b>between your thumb and first two fingers</b> for the best control.' }),
@@ -94,7 +94,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1eng-wrt-013', chapterId:'g1eng-writing', difficulty:1, subsection:'letter_formation',
     question:'What posture should you have when writing?',
-    options:['Sit up straight with feet flat on the floor','Lie down on the desk','Stand up tall','Bend forward very low'],
+    options:['Sit up straight with feet flat on the floor','Bend forward very low over the page','Stand up tall beside the desk','Lie down across the desk to write'],
     answer:'Sit up straight with feet flat on the floor',
     hint:'Good posture helps you write neatly and comfortably. 🪑',
     explanation:'Well done! We should <b>sit up straight with feet flat on the floor</b> to write comfortably and neatly.' }),

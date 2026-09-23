@@ -159,7 +159,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-eo-022', chapterId:'g1fr-expression-orale', difficulty:1, subsection:'conversation_simple',
     question:'Un ami demande : <i>"Ça va ?"</i> Tu réponds ...',
-    options:['Ça va bien, merci !','Bonjour !','Au revoir !','Bonne nuit !'],
+    options:['Ça va bien, merci !','Au revoir, à demain !','Bonjour, ça va ?','Bonne nuit, dors bien !'],
     answer:'Ça va bien, merci !',
     hint:'"Ça va ?" = How are you? "Ça va bien" = I am fine. (This is a common greeting.)',
     explanation:'Quand quelqu\'un dit <b>"Ça va ?"</b>, on répond <b>"Ça va bien, merci !"</b> ou simplement "Ça va". C\'est une salutation courante en français ! Bravo !' }),
@@ -187,7 +187,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-eo-026', chapterId:'g1fr-expression-orale', difficulty:1, subsection:'conversation_simple',
     question:'Tu ne comprends pas ce que dit la maîtresse. Tu dis ...',
-    options:['Pardon, pouvez-vous répéter ?','Au revoir !','Merci beaucoup !','Bonsoir !'],
+    options:['Pardon, pouvez-vous répéter ?','Au revoir, à demain matin !','Bonsoir, je rentre chez moi !','Merci beaucoup, c\'est gentil !'],
     answer:'Pardon, pouvez-vous répéter ?',
     hint:'On demande de répéter quand on n\'a pas compris. (We ask to repeat when we did not understand.)',
     explanation:'Quand on ne comprend pas, on dit <b>"Pardon, pouvez-vous répéter ?"</b> — Excuse me, could you repeat please? C\'est toujours bon de demander ! Bravo !' }),
@@ -252,7 +252,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-eo-035', chapterId:'g1fr-expression-orale', difficulty:1, subsection:'description_images',
     question:'Une banane a quelle forme ?',
-    options:['longue et courbée','ronde','carrée','triangulaire'],
+    options:['longue et courbée','petite et ronde','plate et carrée','grande et pointue'],
     answer:'longue et courbée',
     hint:'La banane n\'est pas droite — elle est un peu courbée. (A banana is not straight — it is curved.)',
     explanation:'Une banane est <b>longue et courbée</b>. Elle est jaune et sucrée. C\'est un fruit délicieux ! Super !' }),
