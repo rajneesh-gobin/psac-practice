@@ -342,7 +342,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1mth-ord-043', chapterId:'g1mth-ordinals', difficulty:1, subsection:'positions_4_5',
     question: 'Priya finishes the race in 4th place. Which medal does she get?',
-    options:['No medal (4th does not get a medal)','Gold','Silver','Bronze'],
+    options:["No medal (4th does not get a medal)","Bronze (that is for 3rd place)","Silver (that is for 2nd place)","Gold (that is for 1st place)"],
     answer:'No medal (4th does not get a medal)',
     hint:'Only the top 3 get medals.',
     explanation:'Only 1st, 2nd and 3rd get medals. 4th place gets <b>no medal</b>.' }),

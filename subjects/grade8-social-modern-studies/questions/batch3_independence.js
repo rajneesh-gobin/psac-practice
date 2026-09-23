@@ -18,7 +18,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8sms-independence-022', chapterId: CH, difficulty: 2, subsection: 'empires_colonies',
     question: 'Colonial powers typically exploited their colonies economically. Which of the following best describes how this worked?',
-    options: ['Raw materials left the colony cheaply; finished goods were sold back expensively', 'Colonies were allowed to trade freely with anyone', 'Colonial powers gave money to develop local industries', 'Workers in colonies were paid the same as workers at home'],
+    options: ["Raw materials left the colony cheaply; finished goods were sold back expensively","Colonies were allowed to trade freely with any country they chose to deal with","Workers in the colonies were paid exactly the same wages as workers back home","Colonial powers gave large sums of money to develop local industry and factories"],
     answer: 'Raw materials left the colony cheaply; finished goods were sold back expensively',
     hint: 'Think about sugar leaving Mauritius and what Mauritians had to buy back from Britain.',
     explanation: 'The classic colonial pattern was to extract raw materials (sugar, cotton, rubber) at low prices and sell manufactured products back to the colony at higher ones, keeping wealth and industrial jobs at home. Colonies were not free to trade with rivals, local industries were rarely encouraged, and wages in colonies were far below those paid to workers in Europe.'
@@ -44,7 +44,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8sms-independence-025', chapterId: CH, difficulty: 3, subsection: 'decolonisation',
     question: 'In February 1960 British Prime Minister Harold Macmillan told South African politicians that a "wind of change" was blowing through Africa. What did he mean?',
-    options: ['African nationalism was unstoppable and colonies would become independent', 'A tropical cyclone was approaching South Africa', 'Britain planned to take more African colonies', 'African trade winds had shifted direction'],
+    options: ["African nationalism was unstoppable and colonies would become independent","A tropical cyclone was approaching South Africa from the Indian Ocean","Britain was planning to take control of several more African colonies","The African trade winds had shifted direction and changed the climate"],
     answer: 'African nationalism was unstoppable and colonies would become independent',
     hint: 'He was acknowledging something already happening — not proposing a new policy.',
     explanation: 'Macmillan\'s famous "wind of change" speech acknowledged that African peoples were demanding self-rule and that Britain could not hold back the tide of nationalism. It was a signal that Britain would accept decolonisation rather than fight it, though his audience — the white minority government of South Africa — strongly disagreed. The phrase became a shorthand for the whole era of African independence.'
@@ -53,7 +53,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8sms-independence-026', chapterId: CH, difficulty: 2, subsection: 'decolonisation',
     question: 'In December 1960 the United Nations passed Resolution 1514. What did it declare?',
-    options: ['All colonial peoples had the right to self-determination and independence', 'Nuclear weapons should be banned worldwide', 'The Korean War should end immediately', 'France must return Algeria to independence'],
+    options: ["All colonial peoples had the right to self-determination and independence","France was required to return Algeria to independence within three years","Nuclear weapons should be banned worldwide by every member of the UN","The Korean War should end immediately and all foreign troops withdraw"],
     answer: 'All colonial peoples had the right to self-determination and independence',
     hint: 'Self-determination means the right of a people to choose their own government.',
     explanation: 'UN Resolution 1514 — the "Declaration on the Granting of Independence to Colonial Countries and Peoples" — stated that colonialism was a denial of human rights and that all peoples had the right to determine their own political future. This gave independence movements a powerful moral and legal backing on the world stage.'

@@ -49,12 +49,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g6sc-hard-004', chapterId: 'g6-ecosystems', subsection: 'food_webs', difficulty: 3,
     question: 'A food chain in Mauritius runs: leaves → caterpillar → bulbul bird → mongoose. A farmer traps and removes all the mongooses from his land. What is the most likely effect on the caterpillar population over the following months?',
-    options: [
-      'Caterpillars increase because mongooses previously ate them directly',
-      'Caterpillars decrease because bulbul birds now have fewer predators and eat more caterpillars',
-      'Caterpillars stay exactly the same because mongooses never affected them',
-      'Caterpillars die out completely because the whole food web collapses'
-    ],
+    options: ["Caterpillars decrease because bulbul birds now have fewer predators and eat more caterpillars","Caterpillars increase because the mongooses had been eating the caterpillars directly themselves","Caterpillars stay exactly the same because mongooses never affected the caterpillars in any way","Caterpillars die out completely because the whole food web collapses once one animal is removed"],
     answer: 'Caterpillars decrease because bulbul birds now have fewer predators and eat more caterpillars',
     hint: 'Mongooses eat bulbul birds. With fewer mongooses, what happens to the bulbul population — and what do bulbuls eat?',
     explanation: 'Removing mongooses means bulbul birds have fewer predators, so the bulbul population <b>increases</b>. More bulbuls eat more caterpillars, so the caterpillar population <b>decreases</b>. This indirect effect — where removing a top predator harms an organism two steps below it — is called a trophic cascade.'
@@ -63,12 +58,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g6sc-hard-005', chapterId: 'g6-plants', subsection: 'photosynthesis', difficulty: 3,
     question: 'A healthy green plant is placed inside a sealed transparent box in bright sunlight for 6 hours. What happens to the level of oxygen inside the box?',
-    options: [
-      'Oxygen decreases because the plant uses oxygen for respiration',
-      'Oxygen increases because photosynthesis produces more oxygen than the plant uses in respiration during daylight',
-      'Oxygen stays exactly the same because photosynthesis and respiration cancel each other out',
-      'Oxygen decreases because the plant absorbs oxygen through its roots'
-    ],
+    options: ["Oxygen increases because photosynthesis produces more oxygen than the plant uses in respiration during daylight","Oxygen decreases because the plant uses far more oxygen for respiration than photosynthesis can ever make","Oxygen decreases because the plant absorbs oxygen through its roots and releases it only at night time","Oxygen stays exactly the same because photosynthesis and respiration always cancel each other out exactly"],
     answer: 'Oxygen increases because photosynthesis produces more oxygen than the plant uses in respiration during daylight',
     hint: 'Both photosynthesis and respiration happen at the same time. Which process is faster in bright light?',
     explanation: 'Plants carry out <b>respiration</b> continuously (using oxygen, releasing carbon dioxide). In bright light they also carry out <b>photosynthesis</b>, which produces oxygen and uses carbon dioxide. During the day, photosynthesis runs much faster than respiration, so the plant releases <b>more oxygen than it consumes</b>. The net result is a rise in oxygen level inside the sealed box.'
@@ -91,12 +81,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g6sc-hard-007', chapterId: 'g6-plants', subsection: 'photosynthesis', difficulty: 3,
     question: 'A plant in a dark room is lit only by a lamp that emits green light. Compared with white light, what happens to the rate of photosynthesis?',
-    options: [
-      'Photosynthesis increases because plants grow best under green light',
-      'Photosynthesis is very slow or stops because plant leaves reflect green light and cannot absorb it',
-      'Photosynthesis doubles because green light carries the highest energy',
-      'The rate of photosynthesis is unchanged regardless of light colour'
-    ],
+    options: ["Photosynthesis is very slow or stops because plant leaves reflect green light and cannot absorb it","Photosynthesis increases because plants grow best of all under green light rather than white light","Photosynthesis is unchanged because the colour of the light makes no difference to the rate at all","Photosynthesis doubles because green light carries the highest energy of any colour in the spectrum"],
     answer: 'Photosynthesis is very slow or stops because plant leaves reflect green light and cannot absorb it',
     hint: 'Why do leaves look green to us? Think about which colours of light they reflect and which they absorb.',
     explanation: 'Leaves appear green because the pigment <b>chlorophyll</b> <b>reflects</b> green light rather than absorbing it. Chlorophyll absorbs mainly red and blue light, which it uses to drive photosynthesis. Under pure green light, very little light energy is absorbed, so photosynthesis slows dramatically or stops. This is why a green light is used in dark rooms where photosynthesis experiments are prepared.'
@@ -147,12 +132,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g6sc-hard-011', chapterId: 'g6-energy', subsection: 'transfer', difficulty: 4,
     question: 'A metal spoon placed in a cup of hot tea becomes too hot to hold after a few minutes. A wooden spoon placed in the same cup stays cool enough to hold throughout. Which statement best explains the difference?',
-    options: [
-      'Wood is a better conductor of heat than metal',
-      'The metal conducts heat energy from the hot tea along the spoon to your hand; wood is a poor conductor (insulator) and does not transfer heat efficiently',
-      'Metal absorbs a larger total amount of heat energy than wood at the same temperature',
-      'Wood reflects heat energy away from your hand'
-    ],
+    options: ["The metal conducts heat energy from the hot tea along the spoon to your hand; wood is a poor conductor (insulator) and does not transfer heat efficiently","Wood reflects the heat energy away from your hand while metal absorbs it, so only the metal spoon can ever feel hot enough to burn you when you hold it","Wood is a much better conductor of heat than metal, so it carries the heat away from your fingers and down into the tea instead of into your hand","Metal absorbs a far larger total amount of heat energy than wood does at the same temperature, which is why the metal spoon becomes too hot to hold"],
     answer: 'The metal conducts heat energy from the hot tea along the spoon to your hand; wood is a poor conductor (insulator) and does not transfer heat efficiently',
     hint: 'Heat travels through a material by conduction. Which material conducts heat well and which does not?',
     explanation: '<b>Metals</b> have free electrons that can carry heat energy rapidly from the hot end to the cool end — this is why they are good <b>thermal conductors</b>. <b>Wood</b> has no free electrons and its particles transfer energy slowly — it is a <b>thermal insulator</b>. This is why metal saucepan handles become dangerously hot while wooden or plastic handles stay cool even on a hot stove.'
@@ -175,12 +155,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g6sc-hard-013', chapterId: 'g6-air', subsection: 'pollution', difficulty: 3,
     question: 'Burning coal and petrol releases sulfur dioxide gas. When sulfur dioxide dissolves in rainwater, it forms sulfuric acid, creating acid rain. Which TWO effects does acid rain have on the environment?',
-    options: [
-      'It makes lake water more alkaline, which improves survival for fish',
-      'It damages the leaves of trees and lowers the pH of lakes and rivers, harming aquatic life',
-      'It cools the climate by reflecting sunlight back into space',
-      'It increases soil fertility by adding useful sulfur compounds'
-    ],
+    options: ["It damages the leaves of trees and lowers the pH of lakes and rivers, harming aquatic life","It cools the climate by reflecting sunlight back into space before it can warm the ground","It makes lake water more alkaline, which improves survival rates for fish and water plants","It increases the fertility of soil by adding useful sulfur compounds that plants need to grow"],
     answer: 'It damages the leaves of trees and lowers the pH of lakes and rivers, harming aquatic life',
     hint: 'Acid rain is harmful — think about what acid does to living things and to water chemistry.',
     explanation: 'Acid rain has a <b>low pH</b> (it is acidic). When it falls on forests it <b>damages and kills leaves</b> by breaking down the waxy coating that protects them, eventually killing trees. When it drains into lakes and rivers it <b>lowers their pH</b>, killing acid-sensitive organisms such as fish, amphibian eggs and invertebrates. Acid rain does not cool the climate; that effect is associated with volcanic dust or aerosols. It does not improve soil fertility.'

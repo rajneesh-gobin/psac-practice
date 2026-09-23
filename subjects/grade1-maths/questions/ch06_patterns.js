@@ -362,7 +362,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1mth-pat-059', chapterId:'g1mth-patterns', difficulty:2, subsection:'odd_even_patterns',
     question:'Rani has 7 flowers. She wants to give an equal number to 2 friends. Can she do it without cutting a flower?',
-    options:['No — 7 is odd so one is left over','Yes — 7 is even','Yes — 7 ÷ 2 = 3.5','No — she has no flowers'], answer:'No — 7 is odd so one is left over',
+    options:["No — 7 is odd so one is left over","Yes — 7 is even so it shares out","Yes — each friend gets 3 and a half","No — she has no flowers to give"], answer:'No — 7 is odd so one is left over',
     hint:'Odd numbers cannot be split into 2 equal groups.',
     explanation:'<b>No</b> — 7 is odd, so there will be one flower left over.' }),
 

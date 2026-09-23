@@ -37,7 +37,19 @@ const { loadSubject } = require(path.join(ROOT, 'netlify', 'lib', 'questions-san
 //    no semantic signal at all, and the test says so in as many words. Checked
 //    against the built bundle both ways before trusting either.
 const ANSWER_MIN_LEN = 25;       // below this, length carries no semantic signal
-const plain = (o) => String(o).replace(/<[^>]+>/g, '').trim();
+
+// ⚠⚠ DECODE ENTITIES BEFORE MEASURING, exactly as the test does. `&ccedil;` is
+//    ONE character on screen and eight in the source, and grade5-history writes
+//    "Fran&ccedil;ois Leguat" — so a tool that measures raw source inflates
+//    every accented French or Mauritian place name and sends you rewriting
+//    options that are already balanced. The test decodes; so must this, or the
+//    two disagree on exactly the packs that need the most care.
+// ⚠ The decoded LENGTH is what matters here, not the exact glyph, so anything
+//   unrecognised collapses to one character rather than being left raw.
+const plain = (o) => String(o)
+  .replace(/<[^>]+>/g, '')
+  .replace(/&[a-z#0-9]+;/gi, '·')
+  .trim();
 
 function leaksIn(pack) {
   const out = [];

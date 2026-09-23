@@ -80,7 +80,7 @@ add('g5hg-min5-scale-1','map-skills','scale','Why is a scale useful?',
   ['it helps calculate real distance','it shows weather patterns','it names every city','it shows the depth of rivers'],'it helps calculate real distance',
   'Multiply the map distance by the scale.');
 add('g5hg-min5-scale-2','map-skills','scale','Which map part shows the scale?',
-  ['a line or statement of distance','the title','the key or legend','the compass rose'],'a line or statement of distance',
+  ["a line or statement of distance","the key or legend of symbols","the title written at the top","the compass rose showing north"],'a line or statement of distance',
   'Multiply the map distance by the scale.');
 
 // map symbols — broken shared opts replaced with per-question options
@@ -91,7 +91,7 @@ add('g5hg-min5-symbols-1','map-skills','symbols','A blue line on a map often rep
   ['a river','a road','a railway','a boundary'],'a river',
   'Use the map key to understand symbols.');
 add('g5hg-min5-symbols-2','map-skills','symbols','Why do maps use symbols?',
-  ['to show features clearly in little space','to make maps look colourful','to list every building name','to mark the exact weather'],'to show features clearly in little space',
+  ["to show features clearly in little space","to list the name of every single building","to make the map look bright and colourful","to mark the exact weather on any given day"],'to show features clearly in little space',
   'Use the map key to understand symbols.');
 
 // seasons — broken shared opts replaced with per-question options

@@ -17,7 +17,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g7s-changes-022', chapterId: CH, difficulty: 1, subsection: 'physical_changes',
     question: 'Which of the following is a <b>physical</b> change?',
-    options: ['Dissolving sugar in water', 'Burning wood', 'Rusting iron', 'Cooking an egg'],
+    options: ["Dissolving sugar in water","Burning wood on a fire","Cooking an egg in a pan","Rusting iron in damp air"],
     answer: 'Dissolving sugar in water',
     hint: 'Look for the change where no new substance is permanently created.',
     explanation: 'Dissolving sugar is physical — the sugar molecules separate but remain sugar and can be recovered by evaporating the water. Burning wood, rusting iron and cooking an egg all form new substances (ash/CO₂, iron oxide, and denatured proteins respectively), making them chemical changes.'
@@ -26,7 +26,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g7s-changes-023', chapterId: CH, difficulty: 2, subsection: 'chemical_changes',
     question: 'Which observation is the <b>best</b> evidence that a chemical change has taken place?',
-    options: ['A new substance with different properties is formed', 'The temperature drops slightly', 'The mixture changes colour temporarily', 'The solid dissolves in water'],
+    options: ["A new substance with different properties is formed","The solid dissolves completely in the water it is in","The temperature of the mixture drops slightly as it sits","The mixture changes colour for a moment, then changes back"],
     answer: 'A new substance with different properties is formed',
     hint: 'The defining feature of a chemical change is what it produces.',
     explanation: 'Forming a new substance with different properties is the key criterion for a chemical change — it cannot be easily reversed to recover the original materials. A temperature change or colour change alone can occur in physical changes too; dissolving is a physical change.'
@@ -43,7 +43,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g7s-changes-025', chapterId: CH, difficulty: 2, subsection: 'examples_changes',
     question: 'Why is burning classified as a <b>chemical</b> change?',
-    options: ['New substances (ash, CO₂ and water vapour) are formed', 'The material gets very hot', 'The material changes shape', 'It happens very quickly'],
+    options: ["New substances (ash, CO₂ and water vapour) are formed","The material changes shape as it is heated strongly","The material gets very hot and glows brightly for a time","It happens very quickly once the material has caught alight"],
     answer: 'New substances (ash, CO₂ and water vapour) are formed',
     hint: 'Focus on what is produced, not on how fast it happens or how hot it gets.',
     explanation: 'Burning (combustion) produces completely new substances — carbon dioxide, water vapour and ash — that have different properties from the original fuel. Getting hot and changing shape can happen in physical changes too; speed alone does not determine whether a change is chemical.'
@@ -61,12 +61,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g7s-changes-027', chapterId: CH, difficulty: 2, subsection: 'examples_changes',
     question: 'Photosynthesis is a chemical change. Which equation best summarises what happens?',
-    options: [
-      'CO₂ + H₂O → glucose + O₂ (using light energy)',
-      'glucose + O₂ → CO₂ + H₂O + energy',
-      'iron + oxygen → iron oxide',
-      'water → hydrogen + oxygen'
-    ],
+    options: ["CO₂ + H₂O → glucose + O₂ (using light energy)","glucose + O₂ → CO₂ + H₂O (releasing energy)","iron + oxygen → iron oxide (in damp air)","water → hydrogen + oxygen (using electricity)"],
     answer: 'CO₂ + H₂O → glucose + O₂ (using light energy)',
     hint: 'Photosynthesis builds up sugar using light; it is the opposite of respiration.',
     explanation: 'Photosynthesis converts carbon dioxide and water into glucose and oxygen using light energy. The second option is respiration (the reverse process), the third is rusting, and the fourth is the electrolysis of water — a different chemical reaction entirely.'
@@ -106,12 +101,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g7s-changes-031', chapterId: CH, difficulty: 3, subsection: 'examples_changes',
     question: 'During respiration in cells, glucose reacts with oxygen. What kind of change is this, and why?',
-    options: [
-      'Chemical — new substances (CO₂ and water) are formed and energy is released',
-      'Physical — glucose simply dissolves in cell fluid',
-      'Physical — the change happens inside the body',
-      'Chemical — the cell gets smaller'
-    ],
+    options: ["Chemical — new substances (CO₂ and water) are formed and energy is released","Chemical — the cell becomes smaller as the glucose inside it is used up","Physical — the glucose simply dissolves in the fluid inside the cell","Physical — the change happens inside the body rather than outside it"],
     answer: 'Chemical — new substances (CO₂ and water) are formed and energy is released',
     hint: 'Ask whether new substances with different properties are produced.',
     explanation: 'Respiration produces carbon dioxide and water — substances with completely different properties from glucose and oxygen — and releases energy. This tick-list (new substances, energy change, irreversible) confirms it is a chemical change. Dissolving is physical; location inside the body and cell size are not the criteria.'

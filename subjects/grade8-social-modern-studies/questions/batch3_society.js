@@ -35,7 +35,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8sms-society-024', chapterId: CH, difficulty: 3, subsection: 'post_ww1_conditions',
     question: 'Cyclone Carol struck Mauritius in December 1960. What was its most serious economic consequence?',
-    options: ['Widespread destruction of sugar crops and houses', 'It sank the entire fishing fleet', 'It destroyed the only hospital', 'It caused a volcanic eruption'],
+    options: ["Widespread destruction of sugar crops and houses","It triggered a volcanic eruption in the interior","It destroyed the only hospital on the island","It sank the entire Mauritian fishing fleet"],
     answer: 'Widespread destruction of sugar crops and houses',
     hint: 'Sugar was still the backbone of the economy at that time, and the island was made of low-lying land and wooden houses.',
     explanation: 'Cyclone Carol was one of the most destructive storms to hit Mauritius in the twentieth century. It flattened sugar cane fields and destroyed thousands of houses, hitting the rural poor hardest. Mauritius has no volcanoes, the fishing fleet was harmed but not lost entirely, and the hospital survived.'
@@ -52,7 +52,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8sms-society-026', chapterId: CH, difficulty: 2, subsection: 'social_economic_changes',
     question: 'Mauritius introduced free secondary education in 1976. What was the most important effect of this change?',
-    options: ['Children from poor families could study beyond primary school', 'All teachers were given pay rises', 'Secondary schools were abolished', 'Only boys were allowed to study'],
+    options: ["Children from poor families could study beyond primary school","Only boys were allowed to continue into secondary school","Secondary schools were abolished across the whole island","All secondary teachers were given a large rise in pay"],
     answer: 'Children from poor families could study beyond primary school',
     hint: 'Before 1976, secondary school fees meant that many families simply could not send their children.',
     explanation: 'Before 1976, secondary schooling required fees that many working-class and rural families could not afford, so most children left school after primary. Free education opened the doors to a larger, better-educated workforce and helped reduce inequality. It was available to both girls and boys.'
@@ -79,7 +79,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8sms-society-029', chapterId: CH, difficulty: 3, subsection: 'social_economic_changes',
     question: 'By diversifying its economy in the 1970s and 1980s, Mauritius reduced a major economic risk. What was that risk?',
-    options: ['Dependence on one product whose price could collapse', 'Having too many industries to manage', 'Importing too many manufactured goods', 'Growing too fast to build schools'],
+    options: ["Dependence on one product whose price could collapse","Growing too fast to build enough schools in time","Having far too many industries for one island to manage","Importing too many manufactured goods from abroad"],
     answer: 'Dependence on one product whose price could collapse',
     hint: 'The 1930s had already shown what happened when sugar prices fell — the whole island suffered.',
     explanation: 'A country that sells only one thing is dangerously exposed when its world price falls. The lesson of the 1930s sugar-price crash — mass unemployment and hardship — pushed later governments to build tourism and manufacturing alongside sugar, so that a bad sugar year would no longer bring the entire economy down.'
@@ -106,7 +106,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g8sms-society-032', chapterId: CH, difficulty: 3, subsection: 'mauritian_society',
     question: 'Different communities in nineteenth- and twentieth-century Mauritius ran their own schools, places of worship and cultural associations. What does this pattern show about Mauritian society?',
-    options: ['Each community preserved its own identity within a shared country', 'The communities were always at war with each other', 'Only one religion was practised', 'The government banned mixing between groups'],
+    options: ["Each community preserved its own identity within a shared country","The communities were almost always at war with one another","The government banned any mixing between the different groups","Only one single religion was practised across the whole island"],
     answer: 'Each community preserved its own identity within a shared country',
     hint: 'Having your own temple, mosque or church and your own school does not prevent you from also being Mauritian.',
     explanation: 'Mauritius developed a pattern of "unity in diversity": Hindus, Muslims, Catholics, Creoles, Chinese and others each maintained their own institutions and traditions while living on the same small island and sharing one economy and one government. This was not war — it was parallel community life within one nation. The government never banned mixing; communal schools simply reflected the desire of each group to pass on its language and faith.'

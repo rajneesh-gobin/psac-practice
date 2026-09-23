@@ -118,7 +118,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1mth-tim-014', chapterId:'g1mth-time', difficulty:1, subsection:'day_night',
     question:'Which is a night-time activity?',
-    options:['Saying prayers and going to bed','Going to the market','Eating lunch at school','Playing cricket'],
+    options:["Saying prayers and going to bed","Playing cricket with your friends","Eating your lunch at school","Going to the market with mum"],
     answer:'Saying prayers and going to bed',
     hint:'This happens when it is dark and late.',
     explanation:'<b>Saying prayers and going to bed</b> happens at night-time.' }),
@@ -132,7 +132,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1mth-tim-016', chapterId:'g1mth-time', difficulty:1, subsection:'morning_evening',
     question:'What do we do first thing in the morning?',
-    options:['Wake up and wash our face','Eat dinner','Go to sleep','Watch TV at night'],
+    options:["Wake up and wash our face","Go to sleep in our bed","Watch TV late at night","Eat our dinner with family"],
     answer:'Wake up and wash our face',
     hint:'Think about what you do right after you wake up.',
     explanation:'In the <b>morning</b> we <b>wake up and wash our face</b> to get ready for the day.' }),
@@ -353,7 +353,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1mth-tim-049', chapterId:'g1mth-time', difficulty:1, subsection:'ordering_events',
     question:'What do you do BEFORE going to bed?',
-    options:['Say prayers and brush teeth','Eat breakfast','Go to school','Play in the park'],
+    options:["Say prayers and brush teeth","Play outside in the park","Eat breakfast with family","Go to school with friends"],
     answer:'Say prayers and brush teeth',
     hint:'Think about your bedtime routine.',
     explanation:'Before going to bed, we <b>say prayers and brush our teeth</b>.' }),

@@ -20,12 +20,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-002', chapterId: 'plants', subsection: 'parts', difficulty: 3,
     question: 'Water lily leaves float on the surface of a pond and have waxy upper surfaces. What is the main advantage of the waxy coating?',
-    options: [
-      'It repels water so the leaf does not become waterlogged and can still absorb sunlight',
-      'It allows the leaf to absorb extra water directly from the pond surface',
-      'It increases photosynthesis by reflecting light back into the leaf',
-      'It provides nutrients by absorbing minerals from the water surface'
-    ],
+    options: ["It repels water so the leaf does not become waterlogged and can still absorb sunlight","It increases photosynthesis by reflecting light from the pond back up into the leaf","It provides nutrients by absorbing dissolved minerals straight from the pond surface","It allows the leaf to take in extra water directly through its upper surface"],
     answer: 'It repels water so the leaf does not become waterlogged and can still absorb sunlight',
     hint: 'Think about what would happen to the leaf if water sat on top of it for long periods.',
     explanation: 'The waxy surface is <b>hydrophobic</b> — it repels water. This prevents water from pooling on the leaf and blocking sunlight. A waterlogged leaf cannot photosynthesise efficiently. The stomata (pores) of water lilies are also on the upper surface so they can exchange gases with the air above the water.'
@@ -48,12 +43,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-004', chapterId: 'plants', subsection: 'parts', difficulty: 3,
     question: 'A white carnation flower is placed in red-dyed water. After a few hours the petals turn pink. What does this demonstrate?',
-    options: [
-      'Water moves up through the stem carrying the dye, showing upward transport of water in plants',
-      'Flowers can change colour when they are under stress',
-      'The flower absorbed red light from the dye and changed its pigment',
-      'The dye reacted chemically with the petals to produce a new pigment'
-    ],
+    options: ["Water moves up through the stem carrying the dye, showing upward transport of water in plants","The dye reacted chemically with the petals and produced an entirely new pink pigment","The flower absorbed red light from the dyed water and changed its own pigment to match","Flowers change colour when they are under stress from being cut and left in water"],
     answer: 'Water moves up through the stem carrying the dye, showing upward transport of water in plants',
     hint: 'The dye does not change the water — it travels with the water through the stem.',
     explanation: 'This experiment demonstrates <b>transpiration and upward water transport</b>. Water is absorbed through the roots (or cut stem) and pulled upward through tube-like vessels called xylem. The red dye is carried along with the water and deposited in the petals, turning them pink. Cutting the stem and looking at its cross-section would show the coloured xylem vessels.'
@@ -76,12 +66,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-006', chapterId: 'animals', subsection: 'classification', difficulty: 3,
     question: 'A whale breathes air through lungs, gives birth to live young and feeds them milk. Despite living entirely in the sea, a whale is classified as:',
-    options: [
-      'A mammal, because it breathes air through lungs, gives birth to live young and feeds them milk',
-      'A fish, because it lives in the sea and has a streamlined body',
-      'A reptile, because it has smooth skin and lives in warm seas',
-      'An amphibian, because it can survive both in water and on the surface'
-    ],
+    options: ["A mammal, because it breathes air through lungs, gives birth to live young and feeds them milk","A fish, because it lives its whole life in the sea and has a smooth streamlined body","An amphibian, because it can survive both under the water and at the surface to breathe","A reptile, because it has smooth hairless skin and lives in the warm tropical seas"],
     answer: 'A mammal, because it breathes air through lungs, gives birth to live young and feeds them milk',
     hint: 'Classification is based on body features, not where an animal lives.',
     explanation: 'Mammals are defined by three key features: breathing air through lungs, giving birth to live young, and feeding young with milk. A whale has all three, so it is a mammal. <b>Habitat does not determine classification</b> — bats are mammals that fly, and seals are mammals that spend most of their lives in water. Fish breathe through gills and are cold-blooded; reptiles have scales; amphibians have moist skin and lay eggs in water.'
@@ -90,12 +75,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-007', chapterId: 'animals', subsection: 'habitats', difficulty: 4,
     question: 'A saltwater coral reef fish is placed into a freshwater lake. It dies within hours. What is the most likely scientific reason?',
-    options: [
-      'The difference in salt concentration between the fish body fluids and the fresh water causes water to enter the fish cells, making them swell and burst',
-      'The lake water is too cold compared to the warm tropical reef',
-      'The lake has no coral structures for the fish to shelter in',
-      'Fresh water contains too much dissolved oxygen for the fish to survive'
-    ],
+    options: ["The difference in salt concentration between the fish body fluids and the fresh water causes water to enter the fish cells, making them swell and burst","Fresh water contains far too much dissolved oxygen for a reef fish to cope with, so its gills are overwhelmed and it can no longer breathe properly","The lake has no coral structures for the fish to shelter inside, so it is left exposed and quickly dies of stress from having nowhere at all to hide","The lake water is far too cold compared with the warm tropical reef it came from, so its body slows down until it can no longer swim or feed itself"],
     answer: 'The difference in salt concentration between the fish body fluids and the fresh water causes water to enter the fish cells, making them swell and burst',
     hint: 'Water moves from a region of lower salt concentration to higher salt concentration through a process called osmosis.',
     explanation: 'Saltwater fish have body fluids with a high salt concentration, matched to sea water. Fresh water has very low salt concentration. By <b>osmosis</b>, water moves into the fish from the surrounding fresh water (from low salt to high salt), causing cells to swell and burst. The fish cannot regulate this water balance in fresh water and dies quickly. This is why most fish are adapted to either fresh water or salt water, not both.'
@@ -104,12 +84,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-008', chapterId: 'water-matter', subsection: 'states', difficulty: 3,
     question: 'When water evaporates from a puddle, the water molecules:',
-    options: [
-      'Gain enough energy to escape from the liquid surface and move freely as an invisible gas',
-      'Break apart into hydrogen and oxygen atoms and drift away',
-      'Slow down and join together to form ice crystals above the puddle',
-      'Sink into the soil and become groundwater underneath the puddle'
-    ],
+    options: ["Gain enough energy to escape from the liquid surface and move freely as an invisible gas","Slow down and join together to form small ice crystals in the air above the puddle","Break apart into separate hydrogen and oxygen atoms which then drift away in the air","Sink down into the soil below and become part of the groundwater under the puddle"],
     answer: 'Gain enough energy to escape from the liquid surface and move freely as an invisible gas',
     hint: 'Evaporation is a change of state from liquid to gas — the molecules themselves do not break apart.',
     explanation: '<b>Evaporation</b> is the process where liquid water molecules at the surface gain enough energy (from the Sun or air temperature) to overcome the forces holding them in the liquid and escape as water vapour (an invisible gas). The water molecules stay as H₂O — they do not split into hydrogen and oxygen. This is a physical change, not a chemical one.'
@@ -118,12 +93,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-009', chapterId: 'water-matter', subsection: 'water_cycle', difficulty: 4,
     question: 'In the water cycle, water evaporates from oceans and lakes, rises into the atmosphere, cools, condenses into clouds, and falls as rain. What provides the energy that drives evaporation?',
-    options: [
-      'The Sun\'s heat energy, which warms water at the surface until molecules can escape as vapour',
-      'The Moon\'s gravitational pull, which draws water molecules upward',
-      'Wind pressure pushing water molecules off the surface into the air',
-      'The Earth\'s internal heat rising through the ocean floor'
-    ],
+    options: ["The Sun's heat energy, which warms water at the surface until molecules can escape as vapour","The Moon's gravitational pull, which draws water molecules upward away from the ocean surface","Wind pressure at the surface, which pushes water molecules off the water and into the air","The Earth's internal heat, which rises up through the ocean floor and warms the water above"],
     answer: 'The Sun\'s heat energy, which warms water at the surface until molecules can escape as vapour',
     hint: 'Think about what dries a puddle faster — a sunny day or a cloudy day?',
     explanation: 'The <b>Sun</b> is the engine of the water cycle. Solar energy heats the surface water, giving molecules enough kinetic energy to evaporate. On a hot sunny day puddles dry quickly; on a cold cloudy day they persist much longer. The Moon affects tides (through gravity) but plays no role in evaporation. Wind can speed evaporation by removing moist air, but it is not the energy source.'
@@ -132,12 +102,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-010', chapterId: 'water-matter', subsection: 'states', difficulty: 3,
     question: 'Ice floats on liquid water. For most substances, the solid sinks in its own liquid. Why is ice different?',
-    options: [
-      'Ice has a lower density than liquid water because its molecules form a regular open structure with more space between them',
-      'Ice is lighter in colour, which makes it less dense than darker liquid water',
-      'Ice contains air bubbles that are trapped during freezing, making it float',
-      'Ice is colder, so it rises to the surface just as cold air rises in a room'
-    ],
+    options: ["Ice has a lower density than liquid water because its molecules form a regular open structure with more space between them","Ice is lighter in colour than liquid water, and a pale substance is always less dense than a darker one of the same kind","Ice is colder than the water around it, so it rises to the surface in just the same way that cold air rises in a warm room","Ice always contains many air bubbles that become trapped inside it during freezing, and those bubbles make the whole block float"],
     answer: 'Ice has a lower density than liquid water because its molecules form a regular open structure with more space between them',
     hint: 'Density = mass per unit volume. If ice takes up more space for the same mass, it is less dense.',
     explanation: 'When water freezes, the molecules arrange themselves into a regular hexagonal crystal structure that actually takes up <b>more space</b> than the same molecules in liquid water. More volume for the same mass means lower density. Since density of ice (about 0.92 g/cm³) is less than liquid water (1.00 g/cm³), ice floats. This property is vital for aquatic life — the ice layer insulates the water below and keeps it liquid in winter.'
@@ -174,12 +139,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-013', chapterId: 'energy', subsection: 'transfer', difficulty: 4,
     question: 'A student says: "Energy is used up when a light bulb shines." Why is this statement scientifically incorrect?',
-    options: [
-      'Energy cannot be created or destroyed — it is transformed from electrical energy into light and heat, and the total amount stays the same',
-      'It is correct: the electrical energy completely disappears when the bulb shines',
-      'Light energy does not require any input energy to be produced',
-      'The bulb stores energy inside the glass and releases it slowly over time'
-    ],
+    options: ["Energy cannot be created or destroyed — it is transformed from electrical energy into light and heat, and the total amount stays the same","It is correct: the electrical energy completely disappears once the bulb shines, which is why the battery eventually goes flat and stops working","The bulb stores the energy inside its glass and releases it again slowly over time, so none of the energy is ever actually used up at all","Light energy does not require any input energy at all to be produced, so nothing is used up whenever a light bulb is switched on and shines"],
     answer: 'Energy cannot be created or destroyed — it is transformed from electrical energy into light and heat, and the total amount stays the same',
     hint: 'Think about the Law of Conservation of Energy — energy cannot disappear.',
     explanation: 'The <b>Law of Conservation of Energy</b> states that energy cannot be created or destroyed — only <b>transformed</b> from one form to another. In a light bulb, electrical energy is transformed into light energy and heat energy. The total energy output (light + heat) equals the electrical energy input. We say energy is "used" in everyday language, but scientifically it is <b>converted</b>, not destroyed. Nothing is ever truly "used up" in science.'
@@ -188,12 +148,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({
     id: 'g5sc-hard-014', chapterId: 'electricity', subsection: 'circuits', difficulty: 3,
     question: 'A circuit contains a battery, a switch and two bulbs connected in SERIES (one after the other). The switch is opened (circuit broken). What happens to the bulbs?',
-    options: [
-      'Both bulbs go out because opening the switch breaks the complete circuit and current stops flowing',
-      'One bulb stays on because it is connected directly to the battery',
-      'Both bulbs glow more brightly because the current is no longer shared',
-      'Only the bulb closest to the switch goes out'
-    ],
+    options: ["Both bulbs go out because opening the switch breaks the complete circuit and current stops flowing","Only the bulb closest to the switch goes out, because the break happens nearest to that one","One bulb stays alight because it is connected directly to the battery on the other side","Both bulbs glow more brightly because the current no longer has to be shared between them"],
     answer: 'Both bulbs go out because opening the switch breaks the complete circuit and current stops flowing',
     hint: 'In a series circuit, all components are in one single loop. If one part breaks, what happens to the rest?',
     explanation: 'In a <b>series circuit</b>, there is only one path for current to flow. Opening the switch creates a gap (break) in that single path, so <b>current stops flowing everywhere</b> in the circuit — both bulbs go out immediately. This is a disadvantage of series circuits: if one component fails, all others stop working. In a parallel circuit, each branch has its own path, so one broken branch does not affect others.'

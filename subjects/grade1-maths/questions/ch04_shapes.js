@@ -144,7 +144,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1mth-shp-024', chapterId:'g1mth-shapes', difficulty:1, subsection:'2d_shapes',
     question:'Which shape is a rectangle but not a square?',
-    options:['A shape with 2 long and 2 short sides','A shape with 4 equal sides','A shape with 3 sides','A round shape'], answer:'A shape with 2 long and 2 short sides',
+    options:["A shape with 2 long and 2 short sides","A shape with 4 sides all the same","A shape with 3 sides and 3 corners","A shape that is round all the way"], answer:'A shape with 2 long and 2 short sides',
     hint:'A square has all equal sides; a rectangle does not.',
     explanation:'A rectangle that is not a square has <b>2 long sides and 2 short sides</b>.' }),
 

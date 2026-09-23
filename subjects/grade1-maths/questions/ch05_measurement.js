@@ -458,7 +458,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1mth-msr-075', chapterId:'g1mth-measurement', difficulty:2, subsection:'comparing_capacity',
     question:'Mia fills 3 small cups from a large jug. She still has some water left. Can the jug hold at least 4 cups?',
-    options:['Yes — there is still water left','No — it only holds 3 cups','No — it is now empty','Cannot tell'], answer:'Yes — there is still water left',
+    options:["Yes — there is still water left","No — it only holds 3 small cups","No — the jug is empty already","We cannot tell from this at all"], answer:'Yes — there is still water left',
     hint:'She used 3 cups and there is still water remaining.',
     explanation:'<b>Yes</b> — since water is still left after 3 cups, the jug holds more than 3 cups.' })
 );
