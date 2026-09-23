@@ -96,6 +96,24 @@
   invisible from inside a browser, which is exactly why it needs a test:
   `scripts/test-landing-no-js.js` (23 checks, runs the inline script for real,
   wired into CI).
+- ⚠⚠ **A screen only its own opener can paint is a screen the Back button shows
+  EMPTY.** Every screen is painted by the render dispatch at the foot of
+  `showScreen()` — except the practice hub and the subject hub, which were
+  painted by `PracticeHub.open()` / `SubjectHub.open()` alone. `popstate`
+  replays a screen with a bare `showScreen(target)` and never calls a module's
+  `open()`, so a child who pressed Back onto a hub they had not opened earlier
+  in that page life got an empty green board: the Grade `<select>` held **zero
+  options and measured 0x0** (measured in Chrome), and no subject books.
+  Reported as *"sometimes the dropdown shows nothing, and later when we come
+  back it reappears and works normally"* — "later" being the tab bar, which
+  calls `open()`.
+  Both hubs now expose `repaint()`, `showScreen()` calls it, and `open()` is
+  just `showScreen()`. ⚠ **`repaint()` must never navigate or fetch** —
+  `showScreen()` is mid-flight when it runs.
+  ⚠ A Node-level test of this is CIRCULAR: the harness writes the very
+  `showScreen` stub whose behaviour is in question. `scripts/test-hub-back-button.js`
+  presses the real Back button in Chrome (14 checks); it fails 7 of them
+  against the pre-fix code.
 - ⚠ **A panel that is not INSIDE a `.screen` is never hidden by anything.**
   `showScreen()` toggles `.hidden` on `.screen` elements only. Two live cases,
   both fixed: `#admin-tab-questions` had escaped `#screen-admin` by one `</div>`

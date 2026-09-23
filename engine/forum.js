@@ -5,12 +5,16 @@ const Forum = (() => {
   const CATS = [
     { id: 'announce', label: 'Announcements',        icon: '📢', desc: 'Official news, new features and platform updates from the team' },
     { id: 'general',  label: 'General Help',        icon: '🙋', desc: 'Questions about using the app or studying in general' },
-    { id: 'maths',    label: 'Maths Help',           icon: '📐', desc: 'Stuck on a Maths question? Ask here!' },
-    { id: 'english',  label: 'English Help',         icon: '📝', desc: 'Questions about English language and writing' },
-    { id: 'science',  label: 'Science Help',         icon: '🔬', desc: 'Science questions and experiments' },
-    { id: 'french',   label: 'French Help',          icon: '📕', desc: 'French language questions and practice' },
-    { id: 'history',  label: 'History & Geo Help',   icon: '🌍', desc: 'History and Geography questions' },
+    // ⚠ 'subject' replaced the FIVE per-subject boards (maths, english,
+    //   science, french, history) on 2026-09-23. All five held ZERO posts —
+    //   checked in the live forum_posts table, not inferred from the "0 posts"
+    //   the UI prints — so nothing was orphaned. Their ids remain legal in the
+    //   forum_posts CHECK constraint on purpose: a browser holding a cached
+    //   copy of the old engine can still post, and a 400 from a stale tab is a
+    //   worse failure than an unused enum value.
+    { id: 'subject',  label: 'Subject Help',         icon: '📚', desc: 'Stuck on a question? Ask about Maths, English, Science, French, History & Geography or any other subject' },
     { id: 'tips',     label: 'Study Tips',           icon: '📖', desc: 'Share revision strategies and helpful tips' },
+    { id: 'feature',  label: 'New Feature Request',  icon: '✨', desc: 'Something you wish the app could do? Tell us here' },
     { id: 'suggest',  label: 'Suggestions',          icon: '💡', desc: 'Feature requests and ideas to improve the app' },
     { id: 'report',   label: 'Report a Problem',     icon: '🐛', desc: 'Bug reports and technical issues' },
   ];

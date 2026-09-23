@@ -195,6 +195,7 @@ const AdminPanel = (() => {
     const panel = document.getElementById(`admin-tab-${name}`);
     if (panel) panel.classList.remove('hidden');
     if (name === 'reports')   loadReports();
+    if (name === 'library')   loadLibraryQueue();
     if (name === 'teachers')  loadTeachers();
     if (name === 'roles')     { _rolesQuery = ''; const rs = document.getElementById('admin-roles-search'); if (rs) rs.value = ''; loadRoles(1); }
     if (name === 'plans')     loadPlans();
@@ -418,7 +419,11 @@ const AdminPanel = (() => {
     const search = (document.getElementById('admin-member-search')?.value || '').trim();
     const now = new Date().toISOString();
     const ids = [];
-    if (_memberStatusFilter !== 'pending') {
+    // ⚠ NAME THE FILTERS THAT READ profiles, do not say "not pending". The
+    //   negative form silently swept `setup` into the profiles query the day it
+    //   was added - and those accounts have no profiles row at all, which is the
+    //   entire reason they need their own filter.
+    if (_memberStatusFilter === 'active' || _memberStatusFilter === 'all') {
       for (let offset = 0; ; offset += 100) {
         let query = _sb.from('profiles').select('id, full_name')
           .in('role', visibility.admins ? ['parent', 'admin'] : ['parent'])
@@ -434,11 +439,12 @@ const AdminPanel = (() => {
         if ((data || []).length < 100) break;
       }
     }
-    if (_memberStatusFilter !== 'active') {
+    const audienceState = _pendingState() || (_memberStatusFilter === 'all' ? 'pending' : null);
+    if (audienceState) {
       let cursor = null;
       do {
         const result = await _pendingRegistrationRequest('GET', null,
-          `?limit=100&search=${encodeURIComponent(search)}${cursor ? '&cursor=' + encodeURIComponent(cursor) : ''}`);
+          `?limit=100&state=${audienceState}&search=${encodeURIComponent(search)}${cursor ? '&cursor=' + encodeURIComponent(cursor) : ''}`);
         (result.registrations || []).forEach(r => ids.push([r.id, r.email]));
         const next = result.next_cursor || null;
         if (next && next === cursor) break;
@@ -477,6 +483,135 @@ const AdminPanel = (() => {
   function closeBroadcast() {
     if (_broadcastBusy) return;
     document.getElementById('modal-admin-broadcast')?.classList.add('hidden');
+  }
+
+  // ── Write a new email (free-form, from the admin address) ───────────────
+  //
+  // ⚠ WHY A SECOND FORM AND NOT A FIELD ON THE BROADCAST. admin@nouklass.com
+  //   is a Cloudflare Email Routing FORWARDER - it has no mailbox, so nothing
+  //   can be composed from it in a mail client, and a reply to a parent used to
+  //   go out from a personal Gmail instead. The two forms also disagree on
+  //   purpose: a broadcast picks MEMBERS by id and the browser never sees an
+  //   address; this one is correspondence, the admin types the addresses, and
+  //   the server caps it low for exactly that reason.
+  let _composeBusy = false;
+
+  // Client-side only, to count recipients for the confirm line. The SERVER
+  // decides what is valid - this deliberately does not try to agree with it.
+  function _composeAddresses() {
+    return String(document.getElementById('admin-cp-to')?.value || '')
+      .split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+  }
+
+  function openCompose(prefill = '') {
+    // Reset in the OPEN, for the reason spelled out in openBroadcast().
+    const to = document.getElementById('admin-cp-to');
+    const subject = document.getElementById('admin-cp-subject');
+    const message = document.getElementById('admin-cp-message');
+    const essential = document.getElementById('admin-cp-essential');
+    const copy = document.getElementById('admin-cp-copy');
+    const status = document.getElementById('admin-cp-status');
+    if (to) to.value = prefill || '';
+    if (subject) subject.value = '';
+    if (message) message.value = '';
+    if (essential) essential.checked = false;
+    if (copy) copy.checked = true;
+    if (status) status.textContent = '';
+    document.getElementById('admin-cp-form')?.classList.remove('hidden');
+    document.getElementById('admin-cp-done')?.classList.add('hidden');
+    _composeBusy = false;
+    document.getElementById('modal-admin-compose')?.classList.remove('hidden');
+    (prefill ? subject : to)?.focus();
+  }
+
+  function closeCompose() {
+    if (_composeBusy) return;
+    document.getElementById('modal-admin-compose')?.classList.add('hidden');
+  }
+
+  async function composePreview() { await _sendCompose(true); }
+
+  async function sendCompose() {
+    const n = _composeAddresses().length;
+    if (!n) { document.getElementById('admin-cp-status').textContent = '⚠ Enter at least one email address.'; return; }
+    const who = n === 1 ? _composeAddresses()[0] : `${n} addresses (each in Bcc)`;
+    if (!confirm(`Send this message to ${who}?`)) return;
+    await _sendCompose(false);
+  }
+
+  async function _sendCompose(dryRun) {
+    if (_composeBusy) return;
+    const to = (document.getElementById('admin-cp-to')?.value || '').trim();
+    const subject = (document.getElementById('admin-cp-subject')?.value || '').trim();
+    const message = (document.getElementById('admin-cp-message')?.value || '').trim();
+    const essential = !!document.getElementById('admin-cp-essential')?.checked;
+    const copySelf = document.getElementById('admin-cp-copy')?.checked !== false;
+    const status = document.getElementById('admin-cp-status');
+    const sendBtn = document.getElementById('admin-cp-send');
+    if (!to || !subject || !message) {
+      if (status) status.textContent = '⚠ An address, a subject and a message are all required.';
+      return;
+    }
+    _composeBusy = true;
+    if (sendBtn) sendBtn.disabled = true;
+    if (status) status.textContent = dryRun ? 'Checking the addresses…' : 'Sending…';
+
+    let result = {}, ok = false, why = '';
+    try {
+      const { data: sessionData } = await _sb.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Your sign-in session has expired. Refresh and sign in again.');
+      const response = await _serverFetch('/api/admin-compose', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to, subject, message, essential, copy_self: copySelf, dry_run: dryRun }),
+      });
+      result = await response.json().catch(() => ({}));
+      ok = response.ok && result.ok;
+      if (!ok) why = result.error || result.message || `HTTP ${response.status}`;
+    } catch (e) {
+      why = e.message || String(e);
+    }
+    _composeBusy = false;
+    if (sendBtn) sendBtn.disabled = false;
+
+    if (!ok) {
+      if (status) status.textContent = '⚠ ' + why;
+      return;
+    }
+
+    // ⚠ The WARNINGS are shown on both paths. "sent, but that person has all
+    //   email off" is not a success the admin should have to go looking for.
+    const warn = (result.warnings || []).join(' ');
+    const budget = result.budget_unknown || result.budget_remaining == null
+      ? ''
+      : ` ${result.budget_remaining} email${result.budget_remaining === 1 ? '' : 's'} left in today’s budget.`;
+
+    if (dryRun) {
+      const blocked = (result.blocked || []).length
+        ? ` ${result.blocked.length} blocked (all email off): ${result.blocked.join(', ')}.`
+        : '';
+      if (status) {
+        status.textContent = `✓ ${result.would_send} recipient${result.would_send === 1 ? '' : 's'}`
+          + `, from ${result.from}.`
+          + (result.copy_to ? ` A copy goes to ${result.copy_to}.` : '')
+          + blocked + (warn ? ' ' + warn : '') + budget;
+      }
+      return;
+    }
+
+    // Replaces the form, so the same message cannot be sent twice by accident.
+    document.getElementById('admin-cp-form')?.classList.add('hidden');
+    document.getElementById('admin-cp-done')?.classList.remove('hidden');
+    const title = document.getElementById('admin-cp-done-title');
+    const detail = document.getElementById('admin-cp-done-detail');
+    if (title) title.textContent = `Sent to ${result.sent} ${result.sent === 1 ? 'person' : 'people'}`;
+    if (detail) {
+      detail.textContent = `From ${result.from}. Replies come back to that address.`
+        + (result.bcc ? ' Everyone was Bcc’d, so nobody saw another address.' : '')
+        + (result.copy_sent ? ' A copy with the full recipient list is in your inbox.' : '')
+        + (warn ? ' ' + warn : '') + budget;
+    }
   }
 
   // ⚠ One chip per recipient, each with its own ✕. A selection survives paging,
@@ -675,7 +810,14 @@ const AdminPanel = (() => {
   let _membersReq      = 0;
   let _membersQuery   = '';
   let _membersFilterTimer = null;
-  let _memberStatusFilter = 'active'; // active | pending | all
+  let _memberStatusFilter = 'active'; // active | pending | setup | all
+  // ⚠ THREE LISTS, TWO TABLES. `active` reads profiles; `pending` and `setup`
+  //   both read auth.users through /api/pending-registrations and differ only by
+  //   the state asked for. Everything that needs to know which is which asks
+  //   these two helpers, so a fourth filter value cannot be half-added - that is
+  //   exactly how `setup` accounts came to be in no list at all.
+  const _pendingState = (filter = _memberStatusFilter) => (filter === 'pending' || filter === 'setup') ? filter : null;
+  const _isPendingList = (filter = _memberStatusFilter) => !!_pendingState(filter);
   let _pendingRegistrations = [];
   let _pendingCursor = null;
 
@@ -683,11 +825,15 @@ const AdminPanel = (() => {
     const button = document.getElementById('admin-copy-emails');
     const help = document.getElementById('admin-copy-emails-help');
     const pending = _memberStatusFilter === 'pending';
+    const setup = _memberStatusFilter === 'setup';
     const all = _memberStatusFilter === 'all';
     if (button) button.textContent = pending ? '📋 Copy unactivated emails'
+      : setup ? '📋 Copy unfinished-setup emails'
       : all ? '📋 Copy all matching emails' : '📋 Copy activated emails';
     if (help) help.textContent = pending
       ? 'Copies everyone who has registered but has not confirmed their email yet, including unloaded pages. Use Bcc when emailing a group.'
+      : setup
+      ? 'Copies everyone whose email is confirmed but who never finished family setup, including unloaded pages. Use Bcc when emailing a group.'
       : 'Copies all accounts matching these filters, including unloaded pages. Use Bcc when emailing a group.';
   }
 
@@ -712,18 +858,41 @@ const AdminPanel = (() => {
       ...(body ? { body: JSON.stringify(body) } : {}),
     });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok || !result.ok) throw new Error(result.error || 'Could not load pending registrations.');
+    // ⚠ THE STATUS TRAVELS WITH THE MESSAGE. 409 means the server and this
+    //   list disagree about one account - the row is stale, not broken - and the
+    //   caller can only act on that if it can tell a 409 from a real failure.
+    if (!response.ok || !result.ok) {
+      throw Object.assign(new Error(result.error || 'Could not load pending registrations.'), { status: response.status });
+    }
     return result;
   }
 
-  function _renderPendingRegistrations({ inMainList = false } = {}) {
+  // ⚠ A SETUP ROW HAS NO "Activate manually" BUTTON. Those accounts are already
+  //   confirmed - offering the button again would answer 409 and teach an admin
+  //   that a working account is broken, which is the confusion this whole filter
+  //   exists to end. What they need instead is WHY the account stalled, so the row
+  //   says whether the person ever signed in.
+  function _pendingRowMeta(r, state) {
+    if (state !== 'setup') {
+      return `Registered ${r.created_at ? _fmtJoined(r.created_at) : 'recently'} · awaiting email confirmation`;
+    }
+    const joined = r.created_at ? _fmtJoined(r.created_at) : 'recently';
+    return r.last_sign_in_at
+      ? `Registered ${joined} · signed in ${_fmtJoined(r.last_sign_in_at)} · never added a child`
+      : `Registered ${joined} · confirmed but never signed in`;
+  }
+
+  function _renderPendingRegistrations({ inMainList = false, state = _pendingState() || 'pending' } = {}) {
     const main = document.getElementById('admin-members-list');
     const panel = document.getElementById('admin-pending-registrations');
     const target = inMainList ? main : panel;
     if (!target) return;
+    const setup = state === 'setup';
     const rows = _pendingRegistrations;
     const body = !rows.length
-      ? '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5">No registrations are waiting for email confirmation.</p>'
+      ? `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5">${setup
+        ? 'Everyone who has confirmed their email has finished setting up their family.'
+        : 'No registrations are waiting for email confirmation.'}</p>`
       : `<div class="space-y-2">${rows.map(r => `
         <div class="flex flex-wrap items-center gap-2 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/15 px-3 py-2.5">
           <input type="checkbox" id="member-pick-${_esc(r.id)}" ${_memberPicks.has(r.id) ? 'checked' : ''}
@@ -733,41 +902,44 @@ const AdminPanel = (() => {
           <div class="min-w-0 flex-1">
             <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(r.full_name || 'Name not provided')}</p>
             <p class="text-xs text-gray-600 dark:text-gray-300 truncate">${_esc(r.email)}</p>
-            <p class="text-[11px] text-amber-700 dark:text-amber-300">Registered ${r.created_at ? _fmtJoined(r.created_at) : 'recently'} · awaiting email confirmation</p>
+            <p class="text-[11px] text-amber-700 dark:text-amber-300">${_esc(_pendingRowMeta(r, state))}</p>
           </div>
           <button type="button" onclick="AdminPanel.copyPendingEmail('${r.id}')"
             class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30">
             📋 Copy email
           </button>
-          <button id="pending-act-${_esc(r.id)}" onclick="AdminPanel.activatePendingRegistration('${r.id}')"
+          ${setup ? '' : `<button id="pending-act-${_esc(r.id)}" onclick="AdminPanel.activatePendingRegistration('${r.id}')"
             class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white disabled:opacity-60">
             ✅ Activate manually
-          </button>
+          </button>`}
         </div>`).join('')}</div>`;
     const more = _pendingCursor
-      ? `<div class="text-center mt-3"><button onclick="AdminPanel.loadMorePendingRegistrations()" class="border border-amber-300 dark:border-amber-700 rounded-lg px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300">Load more pending registrations</button></div>`
+      ? `<div class="text-center mt-3"><button onclick="AdminPanel.loadMorePendingRegistrations()" class="border border-amber-300 dark:border-amber-700 rounded-lg px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300">Load more</button></div>`
       : '';
     _paintSelectionBar();
     target.innerHTML = (inMainList
-      ? `<p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2">These people registered but have not clicked their email confirmation link. Manually activating lets them sign in and finish family setup.</p>${body}${more}`
+      ? `<p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2">${setup
+        ? 'These people confirmed their email but never finished family setup, so they have no profile and appear in no other list. Tick them to send a nudge by Bcc.'
+        : 'These people registered but have not clicked their email confirmation link. Manually activating lets them sign in and finish family setup.'}</p>${body}${more}`
       : `<div class="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/70 dark:bg-amber-900/10 p-3"><div class="flex items-center justify-between gap-2 mb-2"><p class="text-sm font-bold text-amber-800 dark:text-amber-200">✉️ Awaiting email confirmation (${rows.length}${_pendingCursor ? '+' : ''})</p><span class="text-[11px] text-amber-700 dark:text-amber-300">Shown alongside activated accounts</span></div>${body}${more}</div>`);
     if (panel) panel.classList.toggle('hidden', inMainList || _memberStatusFilter !== 'all');
   }
 
-  async function loadPendingRegistrations(reset = true, inMainList = (_memberStatusFilter === 'pending')) {
+  async function loadPendingRegistrations(reset = true, inMainList = _isPendingList(), state = _pendingState() || 'pending') {
     if (!_sb) return;
     if (reset) { _pendingRegistrations = []; _pendingCursor = null; }
     const target = inMainList ? document.getElementById('admin-members-list') : document.getElementById('admin-pending-registrations');
-    if (reset && target) target.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5 animate-pulse">Loading pending registrations…</p>';
+    if (reset && target) target.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5 animate-pulse">Loading ${state === 'setup' ? 'accounts with unfinished setup' : 'pending registrations'}…</p>`;
     try {
       const search = encodeURIComponent(_membersQuery);
       const cursor = _pendingCursor ? `&cursor=${encodeURIComponent(_pendingCursor)}` : '';
-      const result = await _pendingRegistrationRequest('GET', null, `?limit=${MEMBERS_PAGE}&search=${search}${cursor}`);
+      const result = await _pendingRegistrationRequest('GET', null, `?limit=${MEMBERS_PAGE}&state=${state}&search=${search}${cursor}`);
       _pendingRegistrations = reset ? result.registrations : _pendingRegistrations.concat(result.registrations || []);
       _pendingCursor = result.next_cursor || null;
-      _renderPendingRegistrations({ inMainList });
+      _renderPendingRegistrations({ inMainList, state });
       if (inMainList) {
-        _setCount('admin-members-count', _pendingRegistrations.length, null, 'pending registrations');
+        _setCount('admin-members-count', _pendingRegistrations.length, null,
+          state === 'setup' ? 'accounts with unfinished setup' : 'pending registrations');
         _renderPager('admin-members', _membersPage, null);
       }
     } catch (error) {
@@ -776,11 +948,11 @@ const AdminPanel = (() => {
   }
 
   async function loadMorePendingRegistrations() {
-    await loadPendingRegistrations(false, _memberStatusFilter === 'pending');
+    await loadPendingRegistrations(false, _isPendingList());
   }
 
   function setMemberStatusFilter(filter) {
-    _memberStatusFilter = ['active', 'pending', 'all'].includes(filter) ? filter : 'active';
+    _memberStatusFilter = ['active', 'pending', 'setup', 'all'].includes(filter) ? filter : 'active';
     _membersPage = 1;
     _members = [];
     _pendingRegistrations = [];
@@ -814,8 +986,20 @@ const AdminPanel = (() => {
     try {
       const result = await _pendingRegistrationRequest('POST', { action: 'activate', user_id: userId });
       toast(`${email} is now active — ${_activationMailNote(result.emailed)}`, 4500);
-      await loadPendingRegistrations(true, _memberStatusFilter === 'pending');
+      await loadPendingRegistrations(true, _isPendingList());
     } catch (error) {
+      // ⚠ 409 = the server says this account is ALREADY confirmed, so the row in
+      //   front of the admin is a stale copy of the list, not a failed action.
+      //   Leaving it in place under a red warning is what made six accounts that
+      //   had activated perfectly look broken to the admin activating them.
+      if (error.status === 409) {
+        _pendingRegistrations = _pendingRegistrations.filter(r => r.id !== userId);
+        _memberPicks.delete(userId);
+        _renderPendingRegistrations({ inMainList: _isPendingList() });
+        toast(`${email} is already active — removed from this list.`, 4000);
+        await loadPendingRegistrations(true, _isPendingList());
+        return;
+      }
       const why = error.message || 'Could not activate this account.';
       if (btn) {
         btn.disabled = false;
@@ -1098,7 +1282,7 @@ const AdminPanel = (() => {
   // loadMembers(1)  goes to the first page (a filter or the search changed)
   async function loadMembers(page = _membersPage) {
     if (!_sb) return;
-    if (_memberStatusFilter === 'pending') {
+    if (_isPendingList()) {
       // Pending registrations page by server cursor and have no total, so they
       // keep their own "load more" and the numbered pager is hidden.
       _renderPager('admin-members', _membersPage, null);
@@ -1368,7 +1552,7 @@ const AdminPanel = (() => {
         if (email) emails.set(email.toLowerCase(), email);
       };
       const now = new Date().toISOString();
-      if (status !== 'pending') {
+      if (status === 'active' || status === 'all') {
         for (let offset = 0; ; offset += 100) {
           let query = _sb.from('profiles').select('id')
             .in('role', visibility.admins ? ['parent', 'admin'] : ['parent'])
@@ -1394,11 +1578,12 @@ const AdminPanel = (() => {
           if (rows.length < 100) break;
         }
       }
-      if (status !== 'active') {
+      const listState = _pendingState(status) || (status === 'all' ? 'pending' : null);
+      if (listState) {
         let cursor = null;
         do {
           const result = await _pendingRegistrationRequest('GET', null,
-            `?limit=100&search=${encodeURIComponent(search)}${cursor ? '&cursor=' + encodeURIComponent(cursor) : ''}`);
+            `?limit=100&state=${listState}&search=${encodeURIComponent(search)}${cursor ? '&cursor=' + encodeURIComponent(cursor) : ''}`);
           (result.registrations || []).forEach(r => add(r.email));
           const next = result.next_cursor || null;
           if (next && next === cursor) throw new Error('Could not finish collecting emails. Please try again.');
@@ -3770,6 +3955,133 @@ const AdminPanel = (() => {
   const _REPORT_TYPE_LABELS = { wrong_answer:'❌ Wrong answer', unclear:'❓ Unclear', typo:'✏️ Typo',
     wrong_options:'🔄 Options', other:'💬 Other', contact:'🌐 Guest contact', ticket:'🎫 Ticket' };
 
+  // ⚠ The comment box on the pupil's report modal is OPTIONAL, and
+  //   submitReport() in app.js sends `msg || reportType` - so a report filed
+  //   with nothing typed arrives with the TYPE SLUG as its message. Printing
+  //   that raw under "Reporter's comment" shows `wrong_answer` directly beneath
+  //   the "❌ Wrong answer" chip: it duplicates the chip, reads as though the
+  //   reporter wrote something, and sends an admin looking for a complaint that
+  //   was never made. Measured on the g3eng-wrt-011 report, 2026-09-22.
+  //   Returns null when there is no real comment.
+  function _reportComment(r) {
+    const msg = (r && r.message || '').trim();
+    if (!msg) return null;
+    if (r.report_type && msg === String(r.report_type).trim()) return null;
+    return msg;
+  }
+
+  // ── Who does a reporting child belong to? ──────────────────────────────
+  // A report carries a student_id and a display name snapshot, and nothing
+  // else. An admin acting on one - replying, refunding, explaining a wrong
+  // answer - needs the adult behind it, and had to go and search the Members
+  // tab by hand for a child whose name is not in it.
+  // students.family_id -> families.parent_id -> profiles.full_name, and the
+  // address through the SAME /api/admin-member-emails the Members tab uses:
+  // profiles carries no email column and auth.users is not queryable here.
+  // ⚠ All three tables are readable across families only because each SELECT
+  //   policy carries is_admin() - checked against pg_policies, not assumed.
+  // ⚠ public.students has COLUMN-LEVEL grants. family_id IS granted; a column
+  //   that is not comes back 42501 and PostgREST turns that into an EMPTY
+  //   result, not an error, so this would silently show every child as having
+  //   no parent.
+  const _reportFamilies = {};
+
+  async function _loadReportFamilies(rows) {
+    const ids = [...new Set((rows || []).map(r => r && r.student_id).filter(Boolean))]
+      .filter(id => !(id in _reportFamilies));
+    if (!ids.length) { _paintReportFamilies(); return; }
+    try {
+      const { data: studs, error: e1 } = await _sb.from('students').select('id,family_id').in('id', ids);
+      if (e1) throw e1;
+      const famIds = [...new Set((studs || []).map(s => s.family_id).filter(Boolean))];
+      const { data: fams, error: e2 } = famIds.length
+        ? await _sb.from('families').select('id,family_name,family_code,parent_id').in('id', famIds)
+        : { data: [], error: null };
+      if (e2) throw e2;
+      const parentIds = [...new Set((fams || []).map(f => f.parent_id).filter(Boolean))];
+      const { data: profs, error: e3 } = parentIds.length
+        ? await _sb.from('profiles').select('id,full_name').in('id', parentIds)
+        : { data: [], error: null };
+      if (e3) throw e3;
+      const famById  = new Map((fams  || []).map(f => [f.id, f]));
+      const profById = new Map((profs || []).map(p => [p.id, p]));
+      // A child whose row did not come back has genuinely lost their family
+      // (deleted account); cache that so it is not re-asked every render.
+      ids.forEach(id => { _reportFamilies[id] = null; });
+      (studs || []).forEach(s => {
+        const f = famById.get(s.family_id);
+        if (!f) return;
+        _reportFamilies[s.id] = {
+          parentId:   f.parent_id || '',
+          parentName: profById.get(f.parent_id)?.full_name || '',
+          familyName: f.family_name || '',
+          familyCode: f.family_code || '',
+        };
+      });
+    } catch (e) {
+      // ⚠ Cache NOTHING on failure. Caching a network error as "no parent"
+      //   would blank every row for the rest of the session over one blip.
+      console.warn('[AdminPanel] could not resolve the families behind these reports:', e.message);
+      return;
+    }
+    _paintReportFamilies();
+    _loadMemberEmails(Object.values(_reportFamilies).filter(Boolean).map(f => f.parentId).filter(Boolean));
+  }
+
+  // ⚠ The email span carries data-member-email, so _paintMemberEmails() fills
+  //   it with no extra wiring - and it is seeded from the cache here, because
+  //   that painter only visits the ids it just fetched, and the Members tab may
+  //   already have this parent.
+  function _paintReportFamilies() {
+    document.querySelectorAll('[data-report-family]').forEach(el => {
+      const info = _reportFamilies[el.dataset.reportFamily];
+      if (info === undefined) return;
+      if (!info) { el.textContent = 'Parent: no family on this account any more'; return; }
+      const bits = ['Parent: ' + (info.parentName || 'unnamed')];
+      if (info.familyName) bits.push(info.familyName);
+      if (info.familyCode) bits.push(info.familyCode);
+      el.innerHTML = _esc(bits.join(' · '))
+        + ' <span class="text-indigo-600 dark:text-indigo-300" data-member-email="'
+        + _esc(info.parentId) + '">' + _esc(_memberEmails[info.parentId] || '') + '</span>';
+    });
+  }
+
+  // ── Does this report already have a conversation on it? ────────────────
+  // The thread loads only when "Load message thread" is pressed - one query per
+  // report is why - but the button said the same thing whether there were five
+  // messages or none, so a reply an admin had already sent was indistinguishable
+  // from silence. Measured 2026-09-23: an admin replied to the g3eng-wrt-011
+  // report, the send succeeded, and the reply was nowhere on screen.
+  // ⚠ One batched query for the whole page, not one per row.
+  const _reportThreadCounts = {};
+
+  async function _loadReportThreadCounts(rows) {
+    const ids = [...new Set((rows || []).map(r => r && r.id).filter(Boolean))];
+    if (!ids.length) return;
+    try {
+      const { data, error } = await _sb.from('question_report_messages')
+        .select('report_id,author_type').in('report_id', ids);
+      if (error) throw error;
+      ids.forEach(id => { _reportThreadCounts[id] = 0; });
+      (data || []).forEach(m => { _reportThreadCounts[m.report_id] = (_reportThreadCounts[m.report_id] || 0) + 1; });
+    } catch (e) {
+      // Same rule as the family lookup: cache nothing, say nothing on screen.
+      console.warn('[AdminPanel] could not count report threads:', e.message);
+      return;
+    }
+    _paintReportThreadCounts();
+  }
+
+  function _paintReportThreadCounts() {
+    document.querySelectorAll('[data-report-thread-btn]').forEach(btn => {
+      const n = _reportThreadCounts[btn.dataset.reportThreadBtn];
+      if (n === undefined) return;
+      btn.textContent = n
+        ? `\u{1F4AC} Show message thread (${n})`
+        : 'No follow-up messages yet';
+    });
+  }
+
   function _parseReportMeta(raw) {
     const sep = (raw || '').indexOf('\n__meta__');
     if (sep === -1) return { text: raw || '', meta: {} };
@@ -3866,7 +4178,17 @@ const AdminPanel = (() => {
     const res = await Store.replyToReport(id, msg);
     if (res.ok) {
       toast('Reply sent to student. ✅', 2000);
-      loadReports();
+      // ⚠ loadReports() REBUILDS every card, which empties #report-thread-<id>
+      //   back to a bare "Load message thread" button - so the reply that was
+      //   just sent vanished from the admin's screen the instant it succeeded,
+      //   and the only way to see it was to press that button. The card itself
+      //   survives (_reportsOpen keeps it open), which made it read as though
+      //   the message had not been saved at all. It had: the pupil's inbox
+      //   showed it the whole time.
+      //   AWAIT the rebuild, then repaint this one thread into it. The counts
+      //   re-query every id on each render, so the button label follows.
+      await loadReports();
+      await loadReportThread(id);
     } else {
       if (btn) btn.textContent = 'Send';
       toast('Could not send reply - try again.', 2500);
@@ -4061,12 +4383,22 @@ const AdminPanel = (() => {
       // background, which is right for a child and wrong here - a report can name
       // a question in any subject, and the lookup runs the moment this resolves.
       // Only needed once, not on every page.
+      // ⚠ This said `4, 5, 6` literally, and had since those were the only live
+      //   grades. All of 1-9 have been live since 2026-09-16, so a report on any
+      //   other grade could not resolve and the card said the question "is not
+      //   in the question bank loaded here" - which reads as a missing question
+      //   rather than an unloaded grade. Samaira's Grade 3 report is exactly
+      //   that case. DERIVED now, so going live somewhere new cannot strand it
+      //   again.
+      // ⚠ Deliberately NOT GradeAccess.liveGrades(): that also drops a grade the
+      //   admin kill switch has taken down, and an admin triaging a report about
+      //   that grade is precisely who still needs to read the question.
       if (typeof QuestionLoader !== 'undefined') {
-        await Promise.allSettled([
-          QuestionLoader.loadAllForGrade(4),
-          QuestionLoader.loadAllForGrade(5),
-          QuestionLoader.loadAllForGrade(6),
-        ]);
+        const grades = [...new Set(((typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []) || [])
+          .filter(p => p && !p.comingSoon)
+          .map(p => Number(p.grade))
+          .filter(Number.isFinite))].sort((a, b) => a - b);
+        await Promise.allSettled(grades.map(g => QuestionLoader.loadAllForGrade(g)));
       }
       _reportsBankLoaded = true;
     }
@@ -4218,12 +4550,14 @@ const AdminPanel = (() => {
               <!-- Reporter's comment -->
               <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
                 <p class="text-xs font-semibold text-red-500 mb-1">${isContact ? 'Their message' : "Reporter's comment"}</p>
-                <p class="text-sm text-gray-800 dark:text-white whitespace-pre-wrap">${_esc(r.message || '-')}</p>
+                ${_reportComment(r) !== null
+                  ? `<p class="text-sm text-gray-800 dark:text-white whitespace-pre-wrap">${_esc(_reportComment(r))}</p>`
+                  : `<p class="text-sm italic text-gray-400 dark:text-gray-500">No comment written - only the reason above.</p>`}
               </div>
 
               <!-- Thread (follow-up messages) -->
               <div id="report-thread-${safeId}" class="mb-3"></div>
-              <button onclick="AdminPanel.loadReportThread('${safeId}')" class="text-xs text-indigo-500 dark:text-indigo-400 underline mb-3">Load message thread</button>
+              <button onclick="AdminPanel.loadReportThread('${safeId}')" data-report-thread-btn="${safeId}" class="text-xs text-indigo-500 dark:text-indigo-400 underline mb-3">Load message thread</button>
 
               <!-- Guest sender: the only way back to them is the address they left -->
               ${isContact ? `<div class="border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-3 mb-3">
@@ -4255,6 +4589,7 @@ const AdminPanel = (() => {
               <div class="flex justify-between items-center flex-wrap gap-2">
                 <div>
                   ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}${_esc(studentGrade)}</span></p>` : ''}
+                  ${r.student_id ? `<p class="text-xs text-gray-500 dark:text-gray-400" data-report-family="${_esc(r.student_id)}"></p>` : ''}
                   <p class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
                 </div>
                 <div class="flex flex-wrap gap-1.5">
@@ -4269,6 +4604,11 @@ const AdminPanel = (() => {
         </div>
       </div>`;
     }).join('');
+    // Deliberately NOT awaited: three lookups and an email round trip must not
+    // hold the report list off the screen. The rows paint, the parent line
+    // fills in underneath them.
+    _loadReportFamilies(_reportsAll);
+    _loadReportThreadCounts(_reportsAll);
   }
 
   async function reportsPage(where) {
@@ -4536,6 +4876,7 @@ const AdminPanel = (() => {
               ${where ? `<span class="rep-sum-sub text-blue-600 dark:text-blue-400">${_escRpt(where)}</span>` : ''}
               ${snippet ? `<span class="rep-sum-snip text-gray-600 dark:text-gray-300">${_escRpt(snippet)}</span>` : ''}
               <span class="rep-sum-meta text-gray-400 dark:text-gray-500">Reported by ${_escRpt(who)} · ${_escRpt(_rptWhen(r.created_at))}</span>
+              ${r.student_id ? `<span class="rep-sum-meta text-gray-400 dark:text-gray-500" data-report-family="${_esc(r.student_id)}"></span>` : ''}
             </span>
             </span>
           </summary>
@@ -4580,6 +4921,10 @@ const AdminPanel = (() => {
     wire('data-report-resolve', r => qmResolveReport(r.id));
     wire('data-report-reject',  r => qmRejectReport(r.id));
     wire('data-report-delete',  r => deleteReport(r.id, r.question_id));
+    // Same parent line as the full Reports screen - the painter matches on the
+    // attribute, so one lookup serves both surfaces. Not awaited, for the same
+    // reason it is not awaited there.
+    _loadReportFamilies(data);
   }
 
   async function qmResolveReport(id) {
@@ -5058,7 +5403,9 @@ const AdminPanel = (() => {
       _el('qmf-difficulty').value = '2';
       _el('qmf-type').value = 'mcq';
       _el('qmf-options-block').classList.remove('hidden');
-      qmFormGradeChange();
+      // ⚠ Awaited, or the reset cascade's own continuation lands AFTER the
+      //   edit branch below has filled the form and empties it again.
+      await qmFormGradeChange();
       qmUpdatePreview();
 
       if (id) {
@@ -5084,11 +5431,15 @@ const AdminPanel = (() => {
           .filter(a => String(a) !== String(q.answer)).join('\n');
         _el('qmf-hint').value        = q.hint || '';
         _el('qmf-explanation').value = q.explanation || '';
-        qmFormGradeChange();
+        // ⚠ AWAIT each one. The subsection list is filled after a possible
+        //   PackLoader.ensure(), so firing these and carrying the tag in
+        //   straight afterwards let the continuation wipe the <select> it had
+        //   just been put into.
+        await qmFormGradeChange();
         _el('qmf-subject').value = data.subject_id;
-        qmFormSubjectChange();
+        await qmFormSubjectChange();
         _el('qmf-chapter').value = data.chapter_id;
-        qmFormChapterChange();
+        await qmFormChapterChange();
         // ⚠ A subsection the chapter no longer declares still belongs to the
         //   question. Dropping it here is how a tagged item goes missing from
         //   the syllabus screen - the invariant in CLAUDE.md, from the other side.
@@ -5111,7 +5462,7 @@ const AdminPanel = (() => {
     }
 
     // ── Form: cascading dropdowns ─────────────────────────────────────────
-    function qmFormGradeChange() {
+    async function qmFormGradeChange() {
       const grade   = _el('qmf-grade').value;
       const subSel  = _el('qmf-subject');
       subSel.innerHTML = '';
@@ -5122,10 +5473,12 @@ const AdminPanel = (() => {
           o.value = p.id; o.textContent = p.name;
           subSel.appendChild(o);
         });
-      qmFormSubjectChange();
+      await qmFormSubjectChange();
     }
 
-    function qmFormSubjectChange() {
+    // ⚠ async only because the subsection list below it must finish before
+    //   qmOpenForm() carries the question's own tag in - see there.
+    async function qmFormSubjectChange() {
       const subjectId = _el('qmf-subject').value;
       const chSel     = _el('qmf-chapter');
       chSel.innerHTML = '';
@@ -5135,16 +5488,37 @@ const AdminPanel = (() => {
         o.value = ch.id; o.textContent = ch.name;
         chSel.appendChild(o);
       });
-      qmFormChapterChange();
+      await qmFormChapterChange();
     }
 
-    function qmFormChapterChange() {
+    // ⚠ TWO independent reasons this populated NOTHING, and fixing either one
+    //   alone still populated nothing:
+    //     1. the key is `syllabus`, lower case, on all 49 packs - and
+    //        registerSubject() normalises to that name. `pack.SYLLABUS` has
+    //        never existed on anything and read undefined everywhere.
+    //     2. subjects/_index.js is the LITE index and carries no syllabus at
+    //        all, so registerSubject() leaves `pack.syllabus` as {} until
+    //        PackLoader.ensure() has fetched the real manifest.
+    //   Between them EVERY question in EVERY pack opened with an empty
+    //   subsection dropdown and its own correct tag labelled "not declared in
+    //   this chapter" - which reads as content rot rather than an unloaded
+    //   pack, and invites an admin to "fix" a tag that was right all along by
+    //   clearing it. Reported from the app as a wrong answer on
+    //   g3eng-wrt-011, whose subsection is declared and always was.
+    async function qmFormChapterChange() {
       const subjectId  = _el('qmf-subject').value;
       const chapterId  = _el('qmf-chapter').value;
       const subSel     = _el('qmf-subsection');
       subSel.innerHTML = '<option value="">- none -</option>';
+      if (typeof PackLoader !== 'undefined' && subjectId) {
+        try { await PackLoader.ensure(subjectId); } catch (_) {}
+      }
+      // ⚠ Re-read AFTER the await: registerSubject() MERGES the real manifest
+      //   over the lite entry, and the admin may have moved either dropdown
+      //   while the fetch was in flight.
+      if (_el('qmf-subject').value !== subjectId || _el('qmf-chapter').value !== chapterId) return;
       const pack       = _getPack(subjectId);
-      const syllabus   = pack?.SYLLABUS?.[chapterId];
+      const syllabus   = pack?.syllabus?.[chapterId];
       (syllabus?.subsections || []).forEach(s => {
         const o = document.createElement('option');
         o.value = s.id; o.textContent = s.name;
@@ -5761,9 +6135,296 @@ const AdminPanel = (() => {
     loadSecurityEvents();
   }
 
+  // ══ LIBRARY REVIEW ════════════════════════════════════════════════════
+  //
+  // ⚠ EVERY DECISION IS THE SERVER’S. This screen shows what is waiting and
+  //   sends an action; /api/library-review re-reads the row, writes the status
+  //   and verifies it moved before answering ok. Nothing here may assume a
+  //   200 means the row changed - that assumption is what shipped a queue that
+  //   said "activated" and kept showing the same six rows.
+  let _libQueue = [];
+  let _libSections = null;
+  let _libBusy = false;
+
+  async function _libSectionOptions() {
+    if (_libSections) return _libSections;
+    // Subject shelves only: a document belongs to a subject, not a whole grade.
+    const { data, error } = await _sb.from('library_sections')
+      .select('id,name,parent_id,status').order('sort_order');
+    if (error) return [];
+    const roots = {};
+    (data || []).forEach(s => { if (!s.parent_id) roots[s.id] = s.name; });
+    _libSections = (data || []).filter(s => s.parent_id)
+      .map(s => ({ id: s.id, label: `${roots[s.parent_id] || '?'} — ${s.name}`, status: s.status }));
+    return _libSections;
+  }
+
+  async function loadLibraryQueue() {
+    const el = document.getElementById('admin-library-list');
+    if (!el || !_sb) return;
+    const status = document.getElementById('admin-lib-status')?.value || 'pending';
+    if (status === 'reports') return loadLibraryReports();
+    el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading submissions…</p>';
+    try {
+      const { data: sessionData } = await _sb.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Your sign-in session has expired. Refresh and sign in again.');
+      const res = await _serverFetch(`/api/library-review?status=${encodeURIComponent(status)}&limit=50`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      _libQueue = out.documents || [];
+      await _libSectionOptions();
+      _renderLibraryQueue(status);
+      loadLibraryShelves();
+    } catch (e) {
+      el.innerHTML = `<p class="text-sm text-red-500 text-center py-6">${_esc(e.message || e)}</p>`;
+    }
+  }
+
+  function _libSize(b) {
+    if (!b) return '';
+    const mb = b / 1048576;
+    return mb >= 1 ? mb.toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+  }
+
+  function _renderLibraryQueue(status) {
+    const el = document.getElementById('admin-library-list');
+    const badge = document.getElementById('admin-library-badge');
+    if (badge) {
+      const n = status === 'pending' ? _libQueue.length : 0;
+      badge.textContent = String(n);
+      badge.classList.toggle('hidden', n === 0);
+    }
+    if (!el) return;
+    if (!_libQueue.length) {
+      el.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Nothing ${status === 'pending' ? 'is waiting for review' : 'here'}.</p>`;
+      return;
+    }
+    const opts = (selected) => (_libSections || [])
+      .map(s => `<option value="${_esc(s.id)}" ${s.id === selected ? 'selected' : ''}>${_esc(s.label)}${s.status !== 'active' ? ' (' + _esc(s.status) + ')' : ''}</option>`)
+      .join('');
+
+    el.innerHTML = _libQueue.map(d => {
+      // ⚠ A soft signal, shown and never acted on: what else is already on
+      //   this shelf for this year might be Paper 2 or a marking scheme.
+      const mates = (d.also_in_slot || []).length
+        ? `<p class="text-[11px] text-amber-700 dark:text-amber-300 mt-1">⚠ Already on this shelf${d.year ? ' for ' + d.year : ''}: ${
+            d.also_in_slot.map(m => _esc(m.title)).join(', ')}</p>`
+        : '';
+      // ⚠ A HINT, AND IT SAYS SO. The scan reads only uncompressed text, and a
+      //   scanned paper has none — so "nothing found" is not "nothing there".
+      //   Wording that implied otherwise would make the flag a licence to stop
+      //   looking, which is worse than having no flag at all.
+      const pii = (d.pii_flags || []).length
+        ? `<p class="text-[11px] font-bold text-red-600 dark:text-red-400 mt-1">
+             ⚠ Looks like it may contain ${_esc(d.pii_flags.join(', ').replace(/-/g, ' '))}.
+             Check before approving.</p>`
+        : '';
+      const pending = status === 'pending';
+      return `<div class="rounded-xl border border-gray-200 dark:border-gray-700 p-3" data-lib-row="${_esc(d.id)}">
+        <div class="flex flex-wrap items-start gap-2">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-bold text-gray-800 dark:text-white">${_esc(d.title)}</p>
+            <p class="text-xs text-gray-600 dark:text-gray-300">${_esc(d.doc_type)}${d.year ? ' · ' + d.year : ''} · ${_esc(_libSize(d.bytes))}${d.section_name ? ' · ' + _esc(d.section_name) : ''}</p>
+            ${d.description ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${_esc(d.description)}</p>` : ''}
+            <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1">From ${_esc(d.submitted_name || 'someone')}${d.credit_name ? ' · credit: ' + _esc(d.credit_name) : ''} · ${_esc(_fmtJoined(d.created_at))}</p>
+            ${mates}
+            ${pii}
+            ${d.review_note ? `<p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Note: ${_esc(d.review_note)}</p>` : ''}
+          </div>
+          ${d.preview_url ? `<a href="${_esc(d.preview_url)}" target="_blank" rel="noopener"
+            class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300">👁 Preview</a>` : ''}
+        </div>
+        ${pending ? `<div class="flex flex-wrap items-center gap-2 mt-3">
+          <select id="lib-sec-${_esc(d.id)}" aria-label="Shelf"
+            class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-700 dark:text-white min-w-[180px]">${opts(d.section_id)}</select>
+          <input id="lib-note-${_esc(d.id)}" type="text" maxlength="500" placeholder="Reason (sent if rejected)"
+            class="flex-1 min-w-[160px] text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-700 dark:text-white">
+          <button onclick="AdminPanel.libraryDecide(\'${d.id}\',\'approve\')"
+            class="text-xs font-bold px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white">✅ Approve</button>
+          <button onclick="AdminPanel.libraryDecide(\'${d.id}\',\'reject\')"
+            class="text-xs font-bold px-3 py-2 rounded-lg border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400">✖ Reject</button>
+        </div>` : `<div class="mt-3"><button onclick="AdminPanel.libraryDecide(\'${d.id}\',\'remove\')"
+            class="text-xs font-bold px-3 py-2 rounded-lg border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400">🗑 Remove from the library</button></div>`}
+      </div>`;
+    }).join('');
+  }
+
+  // ══ REPORTS FROM READERS ══════════════════════════════════════════════
+  // ⚠ THIS WAS THE HOLE. The report button, the table and the counter all
+  //   existed and nothing ever READ them — a child flagging something
+  //   unsuitable reached nobody at all. A queue nobody can open is the same
+  //   as no queue.
+  async function loadLibraryReports() {
+    const el = document.getElementById('admin-library-list');
+    if (!el || !_sb) return;
+    el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
+    try {
+      const { data: sessionData } = await _sb.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Your sign-in session has expired.');
+      const res = await _serverFetch('/api/library-review?view=reports', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      const reports = out.reports || [];
+      const badge = document.getElementById('admin-library-badge');
+      if (badge) { badge.textContent = String(reports.length); badge.classList.toggle('hidden', reports.length === 0); }
+      if (!reports.length) {
+        el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No open reports. ✓</p>';
+        return;
+      }
+      el.innerHTML = reports.map(r => {
+        const d = r.document;
+        return `<div class="rounded-xl border border-amber-300 dark:border-amber-800 p-3">
+          <div class="flex flex-wrap items-start gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-bold text-gray-800 dark:text-white">${_esc(d ? d.title : '(document deleted)')}</p>
+              <p class="text-xs text-amber-700 dark:text-amber-300">⚑ ${_esc(r.reason.replace(/-/g, ' '))}
+                · from a ${_esc(r.reporter_kind)}${d && d.report_count > 1 ? ` · ${d.report_count} reports on this file` : ''}</p>
+              ${r.detail ? `<p class="text-xs text-gray-600 dark:text-gray-300 mt-1">${_esc(r.detail)}</p>` : ''}
+              <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1">${_esc(_fmtJoined(r.created_at))}
+                ${d ? ` · document is ${_esc(d.status)}` : ''}</p>
+            </div>
+            ${d && d.preview_url ? `<a href="${_esc(d.preview_url)}" target="_blank" rel="noopener"
+              class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300">👁 Preview</a>` : ''}
+          </div>
+          <div class="flex flex-wrap gap-2 mt-3">
+            ${d && d.status === 'published' ? `<button onclick="AdminPanel.libraryDecide(\'${d.id}\',\'remove\')"
+              class="text-xs font-bold px-3 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white">🗑 Take it down</button>` : ''}
+            <button onclick="AdminPanel.dismissLibraryReport(\'${r.id}\')"
+              class="text-xs font-bold px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">✓ Looked, it is fine</button>
+          </div>
+        </div>`;
+      }).join('');
+    } catch (e) {
+      el.innerHTML = `<p class="text-sm text-red-500 text-center py-6">${_esc(e.message || e)}</p>`;
+    }
+  }
+
+  async function dismissLibraryReport(id) {
+    try {
+      const { data: sessionData } = await _sb.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Your sign-in session has expired.');
+      const res = await _serverFetch('/api/library-review', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'dismiss_report', id }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      toast('Report closed.', 2500);
+      await loadLibraryReports();
+    } catch (e) { toast(e.message || String(e), 4000); }
+  }
+
+  // ══ SHELVES ═══════════════════════════════════════════════════════════
+  // ⚠ Written straight through PostgREST, not a Worker: library_sections has
+  //   per-command policies gated on is_admin(), so the browser is already the
+  //   right place and a Worker would add a hop that checks the same thing.
+  async function loadLibraryShelves() {
+    const host = document.getElementById('admin-lib-shelf-list');
+    const parentSel = document.getElementById('admin-lib-new-parent');
+    if (!host || !_sb) return;
+    const { data, error } = await _sb.from('library_sections')
+      .select('id,parent_id,slug,name,grade,status,sort_order').order('sort_order');
+    if (error) { host.innerHTML = `<p class="text-xs text-red-500">${_esc(error.message)}</p>`; return; }
+    const rows = data || [];
+    const roots = rows.filter(s => !s.parent_id);
+    if (parentSel) {
+      parentSel.innerHTML = '<option value="">(a new grade or top-level shelf)</option>'
+        + roots.map(r => `<option value="${_esc(r.id)}">${_esc(r.name)}</option>`).join('');
+    }
+    const row = (s, depth) => `<div class="flex flex-wrap items-center gap-2 text-xs py-1" style="padding-left:${depth * 18}px">
+        <span class="flex-1 min-w-0 truncate text-gray-800 dark:text-white">${depth ? '↳ ' : ''}${_esc(s.name)}</span>
+        <select onchange="AdminPanel.setLibrarySectionStatus(\'${s.id}\', this.value)"
+          class="text-[11px] border border-gray-300 dark:border-gray-600 rounded px-1.5 py-1 bg-white dark:bg-gray-700 dark:text-white">
+          ${['active', 'locked', 'hidden'].map(v => `<option value="${v}" ${s.status === v ? 'selected' : ''}>${v}</option>`).join('')}
+        </select>
+        <button onclick="AdminPanel.renameLibrarySection(\'${s.id}\')" class="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold">Rename</button>
+      </div>`;
+    host.innerHTML = roots.map(r => row(r, 0)
+      + rows.filter(c => c.parent_id === r.id).map(c => row(c, 1)).join('')).join('')
+      || '<p class="text-xs text-gray-500">No shelves yet.</p>';
+  }
+
+  async function addLibrarySection() {
+    const name = (document.getElementById('admin-lib-new-name')?.value || '').trim();
+    const parent = document.getElementById('admin-lib-new-parent')?.value || null;
+    const gradeRaw = (document.getElementById('admin-lib-new-grade')?.value || '').trim();
+    if (!name) { toast('Give the shelf a name.', 2500); return; }
+    // ⚠ The slug is unique WITHIN a parent, so two grades may both have
+    //   'english'. Derived from the name so nobody has to think about it.
+    const slug = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+    if (!slug) { toast('That name cannot be used.', 2500); return; }
+    const { error } = await _sb.from('library_sections').insert({
+      parent_id: parent || null, slug, name,
+      grade: gradeRaw ? Number(gradeRaw) : null,
+      sort_order: Number(gradeRaw) || 90, status: 'active',
+    });
+    if (error) { toast('Could not add that shelf: ' + error.message, 5000); return; }
+    document.getElementById('admin-lib-new-name').value = '';
+    document.getElementById('admin-lib-new-grade').value = '';
+    toast('Shelf added.', 2000);
+    await loadLibraryShelves();
+  }
+
+  async function setLibrarySectionStatus(id, status) {
+    const { error } = await _sb.from('library_sections').update({ status }).eq('id', id);
+    if (error) { toast('Could not change that shelf: ' + error.message, 5000); return; }
+    toast(`Shelf is now ${status}.`, 2000);
+  }
+
+  async function renameLibrarySection(id) {
+    const name = prompt('New name for this shelf?');
+    if (!name || !name.trim()) return;
+    const { error } = await _sb.from('library_sections').update({ name: name.trim() }).eq('id', id);
+    if (error) { toast('Could not rename: ' + error.message, 5000); return; }
+    await loadLibraryShelves();
+  }
+
+  async function libraryDecide(id, action) {
+    if (_libBusy) return;
+    const row = _libQueue.find(d => d.id === id);
+    const note = (document.getElementById(`lib-note-${id}`)?.value || '').trim();
+    const sectionId = document.getElementById(`lib-sec-${id}`)?.value || '';
+    // ⚠ Rejecting and removing are what a contributor hears about, so they ask.
+    //   Approving is the safe direction and does not.
+    if (action !== 'approve' && !confirm(`${action === 'reject' ? 'Reject' : 'Remove'} “${row?.title || 'this document'}”? The contributor is told.`)) return;
+    _libBusy = true;
+    try {
+      const { data: sessionData } = await _sb.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Your sign-in session has expired.');
+      const res = await _serverFetch('/api/library-review', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, id, note, section_id: sectionId }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      const mail = out.emailed === 'sent' ? ' The contributor has been emailed.'
+        : out.emailed === 'not_configured' ? ' No email sent: mail is not set up on the server.'
+        : out.emailed && out.emailed !== 'skipped' ? ` No email sent: ${out.emailed}.` : '';
+      toast(`${row?.title || 'Document'} → ${out.status}.${mail}`, 4000);
+      await loadLibraryQueue();
+    } catch (e) {
+      toast(e.message || String(e), 5000);
+    }
+    _libBusy = false;
+  }
+
   return { render, showTab, loadMembers, membersPage, filterMembers, copyMemberEmails, copyPendingEmail, setMemberStatusFilter, setMemberVisibilityFilters,
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
     toggleMemberPick, toggleSelectAllMembers, clearMemberPicks, openBroadcast, closeBroadcast,
+    openCompose, closeCompose, composePreview, sendCompose,
+    loadLibraryQueue, libraryDecide, loadLibraryReports, dismissLibraryReport,
+    loadLibraryShelves, addLibrarySection, setLibrarySectionStatus, renameLibrarySection,
     toggleTeacherRow, toggleSelectAllTeachers, emailOneMember,
     copyTeacherEmails, teacherAudience,
     broadcastPreview, sendBroadcast, broadcastAudience, dropRecipient,

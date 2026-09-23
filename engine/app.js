@@ -1208,6 +1208,31 @@ function _idleNudgeAllowed() {
   return !document.querySelector('div[id^="modal-"].fixed:not(.hidden)');
 }
 
+// ⚠ A NUDGE THAT IS ALREADY ON SCREEN MUST YIELD TO A MODAL.
+//   _idleNudgeAllowed() only runs when a nudge is about to APPEAR, so it
+//   stops one opening over a dialog - it does nothing about one that is
+//   already up when the dialog arrives. Measured: the student-home nudge
+//   ("Tap any sticky note to get started") sat on top of the parent PIN pad
+//   and swallowed the taps, so the PIN could not be entered at all.
+// ⚠ Watched with a MutationObserver rather than patched into each modal’s
+//   open function: there are dozens of them across several files, opened in
+//   several different ways, and the next one would forget.
+function _watchModalsForHint() {
+  if (typeof MutationObserver === 'undefined') return;
+  const obs = new MutationObserver(() => {
+    if (!_currentHintTarget) return;
+    if (document.querySelector('div[id^="modal-"].fixed:not(.hidden)')) _hideHint();
+  });
+  // class changes only, anywhere in the body: opening a modal is a .hidden
+  // toggle, which is what this is listening for.
+  obs.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _watchModalsForHint);
+} else {
+  _watchModalsForHint();
+}
+
 // The nudge points at something; if that something is off screen, _showHint
 // would scroll the page to it, yanking the view out from under someone who may
 // simply be reading. Better to stay quiet than to grab the page.
@@ -2653,6 +2678,44 @@ function _recordScreen(id) {
   } catch (_) {}
 }
 
+// ══ TABS ARE PLACES TOO ═══════════════════════════════════════════════
+// ⚠ A tab switch changes everything on screen and went through NONE of
+//   showScreen(), so it recorded no history at all. Press Back after three
+//   tab switches and you skipped all three at once, landing on whatever
+//   screen came before the one you were on - which is why it felt random.
+//   Reported from the live app: opening the library from a board and
+//   pressing Back landed on the child dashboard.
+// ⚠ The four strips that look like tabs are owned by four different
+//   modules with four different function names. One table, so a fifth board
+//   cannot be half-added.
+// ⚠ TeacherMode is a ROLE MODULE and may not be loaded - checked by BARE
+//   IDENTIFIER, never window.TeacherMode, because these are `const` at
+//   classic-script top level and never land on window.
+const _TAB_SCREENS = {
+  'student-home': (t) => { if (typeof StudentHome !== 'undefined') StudentHome.tab(t); },
+  'subject-hub':  (t) => { if (typeof SubjectHub  !== 'undefined') SubjectHub.tab(t); },
+  'parent':       (t) => { if (typeof PD          !== 'undefined') PD.mainTab(t); },
+  'teacher':      (t) => { if (typeof TeacherMode !== 'undefined') TeacherMode.switchTab(t); },
+};
+// The tab each board opens on. Needed because the FIRST history entry for a
+// board carries no tab, and Back onto it must put the panel back where it
+// started rather than leaving the last tab painted under an older entry.
+const _TAB_DEFAULT = {
+  'student-home': 'board', 'subject-hub': 'chapters', 'parent': 'children', 'teacher': 'home',
+};
+
+function _recordTab(screenId, tab) {
+  if (_navPopping) return;               // replaying history, not making it
+  if (!tab || !_TAB_SCREENS[screenId]) return;
+  try {
+    const st = history.state || {};
+    // Already the current entry: a tab button re-tapped, or the render
+    // calling its own tab function on the way in.
+    if (st.screen === screenId && st.tab === tab) return;
+    history.pushState(Object.assign({}, st, { screen: screenId, tab }), '', location.href);
+  } catch (_) {}
+}
+
 // Spend the Back press without moving: popstate has already popped the entry,
 // so push an equivalent one back on.
 function _keepScreenEntry(id) {
@@ -2697,6 +2760,17 @@ window.addEventListener('popstate', (e) => {
   //    Android behaviour and the reason step 1 above seeds with replaceState.
   const target = (e.state && e.state.screen) || null;
   if (!target) return;
+
+  // ⚠ A TAB STEP WITHIN THE SCREEN WE ARE ALREADY ON. Swap the panel; do not
+  //   re-run showScreen(), which would re-render the board, reset the scroll
+  //   position and re-fetch. _navPopping guards the tab function from
+  //   recording the move it is replaying.
+  if (target === (S && S.currentScreen) && _TAB_SCREENS[target]) {
+    const tab = e.state.tab || _TAB_DEFAULT[target];
+    _navPopping = true;
+    try { _TAB_SCREENS[target](tab); } finally { _navPopping = false; }
+    return;
+  }
 
   _navPopping = true;
   try { showScreen(target); } finally { _navPopping = false; }
@@ -3070,6 +3144,18 @@ function showScreen(id) {
   if (id === 'inbox')           renderStudentInbox();
   if (id === 'minigames' && typeof MiniGames !== 'undefined') MiniGames.renderHub();
   if (id === 'chapter-select')  renderChapterSelect();
+  // ⚠ The two hubs paint from their OWN modules, so every route that is not
+  //   their open() used to show the screen with nothing on it. The Back
+  //   button is that route: popstate replays a screen with a bare
+  //   showScreen(), and a child who had not opened the hub earlier in this
+  //   page life landed on an empty board - the Grade dropdown holding ZERO
+  //   options (measured in Chrome, a 0x0 box) and no subject books. Tapping
+  //   Practice in the tab bar called open() and it all came back, which is
+  //   why it read as intermittent. Painting HERE means every caller inherits
+  //   it, for the same reason pushState lives in showScreen() rather than at
+  //   its ~171 call sites.
+  if (id === 'practice-hub' && typeof PracticeHub !== 'undefined') PracticeHub.repaint();
+  if (id === 'subject-hub'  && typeof SubjectHub  !== 'undefined') SubjectHub.repaint();
   if (id === 'syllabus')        renderSyllabus();
   if (id === 'interactive-map') renderInteractiveMap();
   if (id === 'past-papers')     renderPastPapers();
@@ -3084,6 +3170,9 @@ function showScreen(id) {
   // Not awaited: the screen paints its warning and its own "building…" state
   // at once, and the cards arrive when the aggregate does.
   if (id === 'certificates' && typeof Certificates !== 'undefined') Certificates.render();
+  // ⚠ The render lives HERE, and Library.open() therefore must not call it
+  //   too - that is what drew every certificate twice on the screen above.
+  if (id === 'library' && typeof Library !== 'undefined') Library.mountInto('library-body');
   if (id === 'subject-select')  renderSubjectSelect();
   if (id === 'student-select')  renderStudentSelect();
   if (id === 'grade-select')    renderGradeSelect();
@@ -5921,7 +6010,7 @@ function _buildHeaderMenu() {
     return `<button type="button" class="hdr-menu-item${danger ? ' is-danger' : ''}" data-menu-idx="${i}">
       <span class="mi-ico" aria-hidden="true">${_profEsc(icon)}</span>
       <span class="flex-1 min-w-0">
-        <span class="mi-label block truncate">${_profEsc(label)}</span>
+        <span class="mi-label block truncate">${_profEsc(label)}${btn.dataset.menuNew ? '<span class="mi-new">New</span>' : ''}</span>
         ${desc ? `<span class="mi-desc block">${_profEsc(desc)}</span>` : ''}
       </span>
     </button>`;
@@ -6907,7 +6996,7 @@ const PD = (() => {
 
   // Load reminder when detail panel opens
   const _mounted = {};
-  const _PD_PANELS = ['children', 'calendar', 'certificates', 'papers', 'preview', 'shop', 'messages', 'settings'];
+  const _PD_PANELS = ['children', 'calendar', 'certificates', 'papers', 'preview', 'shop', 'messages', 'library', 'settings'];
 
   function _mountPanel(name, srcId) {
     if (_mounted[name]) return;
@@ -6920,6 +7009,9 @@ const PD = (() => {
 
   async function _activatePanel(name, scrollTo) {
     switch (name) {
+      case 'library':
+        if (typeof Library !== 'undefined') Library.mountInto('pd-library-body');
+        break;
       case 'calendar':
         _mountPanel('calendar', 'screen-calendar');
         if (typeof Calendar !== 'undefined') Calendar.render();
@@ -6988,6 +7080,7 @@ const PD = (() => {
   }
 
   function mainTab(name, scrollTo) {
+    _recordTab('parent', name);
     const nav = document.querySelector('#screen-parent .teacher-navigation');
     if (nav) {
       nav.querySelectorAll('.ta-tab').forEach(btn => {
@@ -8771,6 +8864,9 @@ function _discardChapterResume(chapterId) {
 function renderChapterSelect() {
   const grid = document.getElementById('chapter-grid');
   if (!grid) return;
+  // ⚠ Painted on every render, for the same reason as the subject hub: the
+  //   active pack changes underneath this screen.
+  if (typeof Library !== undefined && ACTIVE_PACK) Library.mountPackLink(chapter-link-library, ACTIVE_PACK.id);
   const accent = _SUBJECT_BORDER_COLOR[ACTIVE_PACK?.subject] || '';
 
   const regular    = CHAPTERS.filter(ch => !ch.enrichment);
@@ -11183,6 +11279,7 @@ function openLabForChapter(chapterId) {
 
 const StudentHome = (() => {
   function tab(name) {
+    _recordTab('student-home', name);
     const screen = document.getElementById('screen-student-home');
     if (!screen) return;
     screen.querySelectorAll('.ta-tab[data-tab]').forEach(b =>
@@ -11193,6 +11290,7 @@ const StudentHome = (() => {
     );
     if (name === 'missions') _renderShMissions();
     if (name === 'badges')   _renderShBadges();
+    if (name === 'library' && typeof Library !== 'undefined') Library.mountInto('sh-library-body');
   }
 
   function open() {
@@ -11404,10 +11502,17 @@ const PracticeHub = (() => {
       btn.addEventListener('click', () => SubjectHub.open(btn.dataset.packId))
     );
   }
+  // ⚠ open() does NOT render - showScreen() does, by calling repaint(). A
+  //   screen that only its own opener can paint is a screen the Back button
+  //   shows empty; see the note in showScreen().
   function open() {
+    showScreen('practice-hub');
+  }
+  // Repaints in place and NEVER navigates - showScreen() is already mid-flight
+  // when this runs.
+  function repaint() {
     _renderGradeBar();
     _renderBooks(_browsingGrade());
-    showScreen('practice-hub');
   }
   function onGradeChange(grade) {
     const g = Number(grade);
@@ -11418,7 +11523,7 @@ const PracticeHub = (() => {
     _renderBooks(g);
     _renderGradeBar();
   }
-  return { open, onGradeChange };
+  return { open, repaint, onGradeChange };
 })();
 window.PracticeHub = PracticeHub;
 
@@ -11442,8 +11547,8 @@ const SubjectHub = (() => {
     if (hubSub) hubSub.textContent = (pack.grade ? `Grade ${pack.grade} · ` : '')
       + 'Chapters, exam paper and syllabus.';
     tab('chapters');
+    // Paints through repaint(), called by showScreen() - one render, not two.
     showScreen('subject-hub');
-    _renderChapters();
 
     // ⚠ PackLoader.ensure() loads the MANIFEST - chapters, syllabus,
     //   generators. It does NOT load the questions; QuestionLoader does, and
@@ -11468,7 +11573,26 @@ const SubjectHub = (() => {
 
   function back() { open(_packId); }
 
+  // ⚠ Same contract as PracticeHub.repaint(): called BY showScreen(), paints
+  //   in place, never navigates and never fetches. It re-activates the pack
+  //   only when something else has moved ACTIVE_PACK on - a Back press from
+  //   another subject's chapter list would otherwise draw this subject's
+  //   heading over the other subject's chapters.
+  function repaint() {
+    if (!_packId) return;
+    const pack = (typeof SUBJECT_PACKS !== 'undefined') && SUBJECT_PACKS?.find(p => p.id === _packId);
+    if (!pack) return;
+    if (typeof ACTIVE_PACK === 'undefined' || !ACTIVE_PACK || ACTIVE_PACK.id !== _packId) activateSubjectPack(_packId);
+    const hubTitle = document.getElementById('subj-hub-title');
+    if (hubTitle) hubTitle.textContent = pack.subject || pack.name || 'Subject';
+    const hubSub = document.getElementById('subj-hub-sub');
+    if (hubSub) hubSub.textContent = (pack.grade ? `Grade ${pack.grade} · ` : '')
+      + 'Chapters, exam paper and syllabus.';
+    _renderChapters();
+  }
+
   function tab(name) {
+    _recordTab('subject-hub', name);
     const screen = document.getElementById('screen-subject-hub');
     if (!screen) return;
     screen.querySelectorAll('.ta-tab[data-sh-tab]').forEach(b =>
@@ -11477,6 +11601,12 @@ const SubjectHub = (() => {
     screen.querySelectorAll('.ta-tab-content[data-sh-tab]').forEach(p =>
       p.classList.toggle('hidden', p.dataset.shTab !== name)
     );
+    // ⚠ Re-mounted on every activation, not once: ACTIVE_PACK moves as the
+    //   child changes subject, and a one-shot guard here would freeze the
+    //   count at whichever subject was opened first.
+    if (typeof Library !== 'undefined' && typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) {
+      Library.mountPackLink('sh-library-link', ACTIVE_PACK.id);
+    }
     if (name === 'syllabus') _renderSyllabusTab();
     if (name === 'exam') _renderExamTab();
   }
@@ -11633,7 +11763,7 @@ const SubjectHub = (() => {
     if (panel) delete panel.dataset.rendered;
   }
 
-  return { open, back, tab, setFilter, syllabusStale, _startMockExam };
+  return { open, back, repaint, tab, setFilter, syllabusStale, _startMockExam };
 })();
 window.SubjectHub = SubjectHub;
 
@@ -14199,6 +14329,9 @@ async function openReportThread(reportId) {
   const modal = document.createElement('div');
   modal.className = 'fixed inset-0 z-[120] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm';
   modal.id = 'modal-report-thread';
+  // Which report this window belongs to, so a slow fetch cannot paint into a
+  // window the child has since pointed at something else.
+  modal.dataset.reportId = reportId;
   modal.innerHTML = `
     <div class="bg-white dark:bg-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-md max-h-[80vh] flex flex-col">
       <div class="flex items-center gap-3 p-4 border-b border-gray-100 dark:border-gray-700 shrink-0">
@@ -14225,11 +14358,37 @@ async function openReportThread(reportId) {
   // Mark as seen now that the student is viewing the thread.
   Store.markReportSeen(reportId);
 
-  // Student inbox uses the data from get_student_reports (last_admin_message + reply_count).
-  // Direct access to question_report_messages requires authenticated (admin) - the student
-  // reads the thread through the RPC-provided summary. Show initial report + latest reply.
+  await _renderReportThread(reportId);
+}
+
+// The WHOLE conversation, oldest first.
+// ⚠ This used to draw get_student_reports().last_admin_message and nothing
+//   else, so a second admin reply REPLACED the first in the child's view and
+//   the child's own follow-ups were invisible to them - they could send one
+//   (add_report_message has always allowed it) and watch it disappear.
+//   get_student_report_thread() is the read side that was missing.
+async function _renderReportThread(reportId) {
+  const report = (_inboxCache || []).find(r => r.id === reportId);
+  if (!report) return;
+  const msgs = await Store.loadStudentReportThread(reportId,
+    typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null);
+
+  // ⚠ Re-read AFTER the await. The child may have closed the modal, or opened
+  //   a different report, while the fetch was in flight - painting then would
+  //   drop one report's conversation into another's window.
+  const modal = document.getElementById('modal-report-thread');
+  if (!modal || modal.dataset.reportId !== reportId) return;
   const threadEl = document.getElementById('thread-messages');
   if (!threadEl) return;
+
+  const bubble = (mine, text, who, when) => `<div class="flex ${mine ? 'justify-end' : 'justify-start'}">
+    <div class="max-w-[85%] ${mine
+      ? 'bg-indigo-600 text-white rounded-tr-none'
+      : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-tl-none'} rounded-2xl px-3 py-2">
+      <p class="text-sm">${_attr(text)}</p>
+      <p class="text-xs ${mine ? 'opacity-70 text-right' : 'text-gray-400'} mt-1">${_attr(who)}${when ? ' · ' + _attr(when) : ''}</p>
+    </div>
+  </div>`;
 
   const qPreview = (report.question_text || '').split('\n__meta__')[0].slice(0, 200);
   let html = '';
@@ -14239,23 +14398,28 @@ async function openReportThread(reportId) {
       <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">${_attr(qPreview)}</p>
     </div>`;
   }
-  html += `<div class="flex justify-end">
-    <div class="max-w-[85%] bg-indigo-600 text-white rounded-2xl rounded-tr-none px-3 py-2">
-      <p class="text-sm">${_attr(report.message || '')}</p>
-      <p class="text-xs opacity-70 mt-1 text-right">${new Date(report.created_at).toLocaleString()} · You</p>
-    </div>
-  </div>`;
-  if (report.last_admin_message) {
-    html += `<div class="flex justify-start">
-      <div class="max-w-[85%] bg-gray-100 dark:bg-gray-700 rounded-2xl rounded-tl-none px-3 py-2">
-        <p class="text-sm text-gray-800 dark:text-white">${_attr(report.last_admin_message)}</p>
-        <p class="text-xs text-gray-400 mt-1">Admin</p>
-      </div>
-    </div>`;
-  } else {
-    html += `<p class="text-xs text-gray-400 text-center">No admin reply yet - we'll update this when we review it.</p>`;
+
+  // ⚠ The comment box is optional and submitReport() sends `msg || reportType`,
+  //   so a report filed with nothing typed carries its own TYPE SLUG as its
+  //   message. Showing the child "wrong_answer" as though they had written it
+  //   is the same defect the admin panel had; show the reason they picked.
+  const typedIt = (report.message || '').trim()
+    && (report.message || '').trim() !== String(report.report_type || '').trim();
+  html += bubble(true,
+    typedIt ? report.message : (_REPORT_TYPE_LABELS[report.report_type] || 'Reported this question'),
+    'You', new Date(report.created_at).toLocaleString());
+
+  msgs.forEach(m => {
+    html += bubble(m.author_type === 'student', m.message,
+      m.author_type === 'admin' ? 'Teacher' : 'You',
+      new Date(m.created_at).toLocaleString());
+  });
+
+  if (!msgs.some(m => m.author_type === 'admin')) {
+    html += `<p class="text-xs text-gray-400 text-center">No reply yet - we'll update this when we review it.</p>`;
   }
   threadEl.innerHTML = html;
+  threadEl.scrollTop = threadEl.scrollHeight;
 }
 
 async function _sendThreadReply(reportId) {
@@ -14269,10 +14433,19 @@ async function _sendThreadReply(reportId) {
   const res = await Store.sendReportFollowup(reportId, msg);
   if (res.ok) {
     if (input) input.value = '';
+    if (btn) btn.textContent = 'Send';
     toast('Follow-up sent! 🙏', 2000);
-    document.getElementById('modal-report-thread')?.remove();
+    // ⚠ This used to CLOSE the modal and re-render the inbox, so a child sent a
+    //   message and was returned to a list with no sign of it - the same shape
+    //   as the admin's reply vanishing on send. Keep the window open and show
+    //   the message where they wrote it.
+    //   The inbox is refreshed underneath because add_report_message() re-opens
+    //   a resolved report, so its status chip in the list is now stale - but
+    //   the cache must be rebuilt BEFORE the thread repaints, since
+    //   _renderReportThread reads the report out of it.
     _inboxCache = null;
     await renderStudentInbox();
+    await _renderReportThread(reportId);
   } else {
     if (btn) btn.textContent = 'Send';
     toast('Could not send. Check your connection.', 3000);

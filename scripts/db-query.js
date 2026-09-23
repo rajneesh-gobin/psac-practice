@@ -25,20 +25,9 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 
-function loadEnv() {
-  const f = path.join(ROOT, '.env');
-  if (!fs.existsSync(f)) return;
-  for (const raw of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
-    const line = raw.replace(/\r/g, '').trim();
-    if (!line || line.startsWith('#')) continue;
-    const eq = line.indexOf('=');
-    if (eq < 0) continue;
-    const k = line.slice(0, eq).trim();
-    let v = line.slice(eq + 1).trim();
-    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
-    if (!process.env[k]) process.env[k] = v;
-  }
-}
+// ⚠ ONE shared .env reader, not a copy here - see scripts/lib/load-env.js for
+//   the CRLF trap it exists to get right in a single place.
+const { loadEnv } = require('./lib/load-env');
 loadEnv();
 
 const TOKEN = process.env.SUPABASE_ACCESS_TOKEN;

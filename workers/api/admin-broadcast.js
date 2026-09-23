@@ -16,6 +16,7 @@ import {
   sendMail, wrap, escapeHtml, siteUrl, mailConfigured,
   wantsEmail, unsubscribeUrl, MAX_RECIPIENTS_PER_MESSAGE,
   quotaPeek, quotaTake, quotaRelease, mailCap, mailReserve, mailFromHuman, mailReplyTo, replyNoteText,
+  normaliseBody, bodyToHtml,
 } from '../lib/mailer.js';
 
 const MAX_IDS = 500;
@@ -45,33 +46,10 @@ async function emailsById(sbUrl, sbH, wanted) {
   return out;
 }
 
-// The admin writes plain text. Paragraphs become <p>, and every character is
-// escaped first — an admin is trusted, but a pasted message is not, and HTML
-// from a compose box is how a mail template starts rendering someone else's
-// markup.
-// ⚠ NORMALISE ONCE, FOR BOTH BODIES. An admin composes somewhere else — a
-//   terminal, a document, a chat window — and pastes. What arrives carries the
-//   SENDER'S layout: two-space indents, a trailing space on every line, three
-//   or four blank lines between paragraphs. bodyToHtml() turns every newline
-//   into a <br>, so all of that reaches the reader verbatim: text hard-wrapped
-//   at 76 columns breaks at 76 columns on a phone too, halfway across the
-//   screen, and reads as a fault in the email rather than in the paste.
-// ⚠ Line breaks the admin MEANT are kept — a signature block, an address, a
-//   short list. Only the whitespace nobody typed on purpose is removed, and
-//   runs of blank lines collapse to the one paragraph break they mean.
-function normaliseBody(text) {
-  return String(text)
-    .replace(/\r\n?/g, '\n')
-    .split('\n').map(line => line.trim()).join('\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-}
-
-function bodyToHtml(text) {
-  return String(text).split(/\n{2,}/).map(block =>
-    `<p style="margin:0 0 14px">${escapeHtml(block).replace(/\n/g, '<br>')}</p>`
-  ).join('');
-}
+// ⚠ normaliseBody()/bodyToHtml() are imported, NOT defined here. They used to
+//   live in this file; the compose form needs the same two, and a second copy
+//   of "what an admin's paste looks like as email" is exactly the kind of
+//   duplication that drifts. See workers/lib/mailer.js.
 
 function chunk(list, size) {
   const out = [];

@@ -193,12 +193,23 @@ const only      = onlyArg
   ? new Set(onlyArg.slice('--only='.length).split(',').map(s => Number(s.trim())).filter(Boolean))
   : null;
 
+// ⚠ READ .env FIRST, or the guard below refuses on a key that is present.
+// This script checks process.env itself, but the only thing that ever read
+// .env was netlify/import-questions.js - one level down, and never reached,
+// because the guard exits first. `node scripts/preflight.js --import`, the
+// command CLAUDE.md documents, therefore always answered
+// "SUPABASE_SERVICE_ROLE_KEY is not set" while the key sat in .env correctly
+// named. Shared loader on purpose: a fourth hand-rolled copy is how the CRLF
+// trap gets re-introduced. See scripts/lib/load-env.js.
+require('./lib/load-env').loadEnv();
+
 // ⚠ Refuse BEFORE anything runs. Discovering the credential is missing at step
 // 6, after a minute of building, is how a run ends with five green steps and no
 // import - which reads as success.
 if (importMode && !process.env.SUPABASE_SERVICE_ROLE_KEY) {
   console.error('SUPABASE_SERVICE_ROLE_KEY is not set, and ' + (importMode === 'live' ? '--import' : '--import-dry-run')
-    + ' needs it.\nNothing has run. Set it and try again, or drop the flag for the local steps only.');
+    + ' needs it.\nNothing has run. Put it in .env in the project root, export it, '
+    + 'or drop the flag for the local steps only.');
   process.exit(2);
 }
 

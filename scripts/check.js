@@ -419,7 +419,76 @@ checkBadgeIds();
 checkSqlSearchPath();
 checkScreenNesting();
 checkSettingsPanelWidth();
+// ── 11 · ONE .env reader ─────────────────────────────────────────────────
+// ⚠ Written 2026-09-23. It had been hand-rolled twice
+//   (netlify/import-questions.js, scripts/db-query.js) and then NOT written a
+//   third time in scripts/preflight.js — which is how the command CLAUDE.md
+//   documents, `node scripts/preflight.js --import`, came to refuse with
+//   "SUPABASE_SERVICE_ROLE_KEY is not set" while the key sat in .env correctly
+//   named: preflight checked process.env, and the only thing that read .env was
+//   the importer one level down, which the guard exited before reaching.
+//   The parser also carries a CRLF trap that has cost this project a run
+//   already, so every extra copy is a chance to get it wrong again.
+// ⚠ ONE MISSING BRACE DISCARDS EVERY RULE AFTER IT, silently. Measured
+//   2026-09-23: a patch stripped the `}` from one rule at line 3025 of
+//   style.css and the browser threw away the remaining ~7,800 lines — the
+//   whole chalkboard, every screen layout, the lot. The only symptom anything
+//   noticed was that six tab buttons had the wrong width, and only because a
+//   headless test happened to measure them.
+// ⚠ Comments are blanked first, or a brace inside a comment counts.
+function checkCssBraces() {
+  for (const rel of ['style.css']) {
+    const file = path.join(ROOT, rel);
+    if (!fs.existsSync(file)) continue;
+    const raw = fs.readFileSync(file, 'utf8');
+    const clean = raw.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
+    let depth = 0, line = 1, openedAt = [];
+    for (const ch of clean) {
+      if (ch === '\n') line++;
+      else if (ch === '{') { depth++; openedAt.push(line); }
+      else if (ch === '}') {
+        depth--; openedAt.pop();
+        if (depth < 0) { fail(`${rel}: an extra } at line ${line} — every rule after it is discarded`); depth = 0; }
+      }
+    }
+    if (depth > 0) {
+      fail(`${rel}: ${depth} unclosed block(s), opened at line(s) ${openedAt.slice(-depth).join(", ")}`
+        + ' — every rule after that point is discarded by the browser');
+    }
+  }
+  note('checked style.css braces balance');
+}
+
+function checkOneEnvReader() {
+  const shared = path.join('scripts', 'lib', 'load-env.js');
+  if (!read(path.join(ROOT, shared))) { fail(`${shared} is missing — it is the one .env reader`); return; }
+  const offenders = [];
+  for (const dir of ['scripts', 'netlify', 'workers']) {
+    const base = path.join(ROOT, dir);
+    if (!fs.existsSync(base)) continue;
+    const walk = d => {
+      for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+        const full = path.join(d, e.name);
+        if (e.isDirectory()) { if (e.name !== 'node_modules') walk(full); continue; }
+        if (!e.name.endsWith('.js')) continue;
+        const rel = path.relative(ROOT, full).replace(/\\/g, '/');
+        if (rel === 'scripts/lib/load-env.js') continue;
+        const src = read(full) || '';
+        // The tell of a hand-rolled loader: assigning to a COMPUTED env key.
+        if (/process\.env\[[^\]]+\]\s*=/.test(src)) offenders.push(rel);
+      }
+    };
+    walk(base);
+  }
+  if (offenders.length)
+    fail('these re-implement the .env reader instead of requiring scripts/lib/load-env.js: '
+      + offenders.join(', '));
+  note('checked there is exactly one .env reader');
+}
+
 checkAuditsReadTheIndex();
+checkOneEnvReader();
+checkCssBraces();
 checkScriptsParse();
 
 for (const n of notes) console.log('  ok  ' + n);

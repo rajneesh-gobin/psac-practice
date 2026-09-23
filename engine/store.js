@@ -1263,6 +1263,24 @@ const Store = (() => {
     return data || [];
   }
 
+  // Student reads the WHOLE conversation on their own report.
+  // ⚠ question_report_messages itself is admin-only (a child has no JWT), so
+  //   this is the read side of add_report_message() - which existed on its own
+  //   for a long time, letting a child post follow-ups that nothing ever read
+  //   back to them. The inbox used to render get_student_reports()'s
+  //   last_admin_message, which is one message: a second admin reply REPLACED
+  //   the first, and the child's own messages were never shown at all.
+  // ⚠ Pass the student id so a PARENT previewing the child's inbox (JWT, no
+  //   student token) gets the thread too - the RPC's identity branch mirrors
+  //   get_student_reports().
+  async function loadStudentReportThread(reportId, studentId) {
+    if (!_sb || !reportId) return [];
+    const { data, error } = await _sb.rpc('get_student_report_thread',
+      studentId ? { p_report_id: reportId, p_student_id: studentId } : { p_report_id: reportId });
+    if (error) { console.error('[Store.loadStudentReportThread]', error.message); return []; }
+    return data || [];
+  }
+
   // Student adds a follow-up message via a SECURITY DEFINER RPC.
   async function sendReportFollowup(reportId, message) {
     if (!_sb || !reportId || !message) return { ok: false };
@@ -1555,7 +1573,7 @@ const Store = (() => {
     generateId,
     // Question reports
     reportQuestion, loadReports, countReports, resolveReport, deleteReport, deleteReports, setReportStatus,
-    replyToReport, loadReportMessages, loadStudentReports, sendReportFollowup, markReportSeen,
+    replyToReport, loadReportMessages, loadStudentReports, loadStudentReportThread, sendReportFollowup, markReportSeen,
     loadParentReports, submitParentReport,
     // Assignments
     loadAssignments, createAssignment, deleteAssignment, completeAssignment,

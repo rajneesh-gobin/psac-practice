@@ -62,7 +62,14 @@ function boot({ own = 5, allowed = [5], selected = null, packs } = {}) {
     console, __out: out,
     SELECTED_GRADE: selected,
     document: { getElementById: id => dom[id] || null },
-    showScreen: id => shown.push(id),
+    showScreen: id => {
+      shown.push(id);
+      // ⚠ MIRRORS THE REAL showScreen(): it is what paints the hub, so
+      //   every route in - the Back button's popstate replay included -
+      //   gets a painted screen. A stub that only recorded the id would
+      //   let the paint fall out of the real one and still pass here.
+      if (id === 'practice-hub' && out.PH) out.PH.repaint();
+    },
     _attr: s => String(s == null ? '' : s),
     SubjectHub: { open() {} },
     Auth: { getActiveAccount: () => ({ grade: own }) },
@@ -182,6 +189,33 @@ const selectedOption = dom => {
   const t = boot({ own: 5, allowed: [5] });
   t.PH.open();
   ok('a single allowed grade disables the picker', t.dom['prac-grade-sel'].disabled === true);
+}
+
+// 10 · The Back button. popstate replays a screen with a bare showScreen(),
+//      never the module's open(), so a hub that painted only in open() came
+//      back EMPTY: a Grade dropdown with zero options and no books. Measured
+//      in Chrome before the fix - a 0x0 select on a blank board - and the
+//      child could not tell it from a broken app. Tapping Practice in the
+//      tab bar called open() and it all returned, which is why it read as
+//      "sometimes".
+{
+  const t = boot({ own: 6, allowed: [6, 8] });
+  t.ctx.showScreen('practice-hub');          // exactly what popstate does
+  ok('Back onto the hub paints the grade picker, not an empty box',
+    selectedOption(t.dom) === 6 && /<option/.test(t.dom['prac-grade-sel'].innerHTML),
+    t.dom['prac-grade-sel'].innerHTML);
+  ok('and the subject books with it',
+    packIds(t.dom).length > 0 && packIds(t.dom).every(id => id.startsWith('grade6-')),
+    packIds(t.dom));
+}
+
+// 11 · repaint() paints and NEVER navigates - it runs from inside
+//      showScreen(), so a showScreen() of its own would recurse.
+{
+  const t = boot({ own: 5, allowed: [5, 8] });
+  t.PH.repaint();
+  ok('repaint() draws the hub without navigating',
+    selectedOption(t.dom) === 5 && t.shown.length === 0, t.shown);
 }
 
 console.log('\nPractice hub grade: ' + checks + ' checks passed.');

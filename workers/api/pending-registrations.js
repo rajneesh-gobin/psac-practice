@@ -1,4 +1,12 @@
-// GET/POST /api/pending-registrations — admin view of unconfirmed sign-ups.
+// GET/POST /api/pending-registrations — admin view of sign-ups that are not yet
+// ordinary members. TWO states, because an account can fail to arrive in the
+// members list for two completely different reasons:
+//   state=pending (default) — email never confirmed. auth.users only.
+//   state=setup            — email IS confirmed but there is still no profiles
+//                            row, i.e. they never finished family setup.
+// ⚠ The members screen reads `profiles` and this reads `auth.users`, so before
+//   state=setup existed an account in the second group was in NEITHER list and
+//   invisible to an admin. Measured 2026-09-23: 15 of 64 accounts.
 
 import { requireAdmin, json } from '../lib/admin-auth.js';
 import { sendMail, wrap, escapeHtml, siteUrl, mailConfigured, mailReplyTo, replyNoteText } from '../lib/mailer.js';
@@ -16,8 +24,32 @@ function isPendingEmail(user) {
   return !!user?.email && !user.email_confirmed_at && !user.confirmed_at;
 }
 
+// Confirmed, not deleted, and no profiles row: registered and reachable, but
+// never finished setting up a family.
+// ⚠ A SOFT-DELETED profile still counts as having one. The question here is
+//   "did this account ever get through setup", not "is it active now" - the
+//   members list answers that second one and has its own filters for it.
+function isSetupUnfinished(user, profiled) {
+  return !!user?.email && !user.deleted_at && !isPendingEmail(user) && !profiled.has(user.id);
+}
+
+// Every profiles id, service-role, paged. 49 rows today; paged anyway because
+// the one thing this must never do is silently see a partial set and report
+// everyone missing from it as never having finished setup.
+async function profiledIds(sbUrl, sbH) {
+  const ids = new Set();
+  for (let offset = 0; ; offset += 1000) {
+    const res = await fetch(`${sbUrl}/rest/v1/profiles?select=id&limit=1000&offset=${offset}`, { headers: sbH });
+    if (!res.ok) return null;
+    const rows = await res.json();
+    if (!Array.isArray(rows)) return null;
+    rows.forEach(r => ids.add(r.id));
+    if (rows.length < 1000) return ids;
+  }
+}
+
 function publicRegistration(user) {
-  return { id: user.id, email: user.email, full_name: user.user_metadata?.full_name || '', requested_role: user.user_metadata?.role || 'parent', created_at: user.created_at, confirmation_sent_at: user.confirmation_sent_at || null };
+  return { id: user.id, email: user.email, full_name: user.user_metadata?.full_name || '', requested_role: user.user_metadata?.role || 'parent', created_at: user.created_at, confirmation_sent_at: user.confirmation_sent_at || null, last_sign_in_at: user.last_sign_in_at || null };
 }
 
 // Returned as `emailed` so the admin's toast can say what actually happened.
@@ -57,6 +89,12 @@ export default async function handler(request, env) {
   if (request.method === 'GET') {
     const url = new URL(request.url);
     const limit = Math.min(100, Math.max(1, Number(url.searchParams.get('limit')) || DEFAULT_PAGE_SIZE));
+    const state = url.searchParams.get('state') === 'setup' ? 'setup' : 'pending';
+    // ⚠ FAIL, do not fall back to the pending predicate. Answering the wrong
+    //   question with HTTP 200 is how a list lies quietly.
+    const profiled = state === 'setup' ? await profiledIds(sbUrl, sbH) : null;
+    if (state === 'setup' && !profiled) return json(500, { error: 'Could not read the profile list.' });
+    const matches = (user) => state === 'setup' ? isSetupUnfinished(user, profiled) : isPendingEmail(user);
     const term = String(url.searchParams.get('search') || '').trim().toLowerCase();
     let { page, index } = parseCursor(url.searchParams.get('cursor'));
     const registrations = [];
@@ -69,7 +107,7 @@ export default async function handler(request, env) {
       const users = data?.users || [];
       while (index < users.length && registrations.length < limit) {
         const user = users[index++];
-        if (!isPendingEmail(user)) continue;
+        if (!matches(user)) continue;
         const candidate = `${user.email || ''} ${user.user_metadata?.full_name || ''}`.toLowerCase();
         if (!term || candidate.includes(term)) registrations.push(publicRegistration(user));
       }
@@ -78,7 +116,7 @@ export default async function handler(request, env) {
         else { page += 1; index = 0; }
       }
     }
-    return json(200, { ok: true, registrations, next_cursor: hasMore ? `${page}:${index}` : null, mail_configured: mailConfigured(env) });
+    return json(200, { ok: true, state, registrations, next_cursor: hasMore ? `${page}:${index}` : null, mail_configured: mailConfigured(env) });
   }
 
   let body;

@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v378';
+const SHELL_VERSION = 'shell-v380';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -105,6 +105,7 @@ const SHELL_FILES = [
   '/engine/errorhunt.js',
   '/engine/learning_coach.js',
   '/engine/certificates.js',
+  '/engine/library.js',
   // ⚠ subjects/_counts.js is deliberately ABSENT, exactly like the pack
   //   manifests above it: Certificates injects it the first time the screen is
   //   opened, and the default fetch branch caches it from that moment on, so a
@@ -188,6 +189,54 @@ self.addEventListener('fetch', event => {
       url.pathname === '/materials.html' ||
       url.pathname === '/materials.js') {
     return;
+  }
+
+  // ── /api/*: ALWAYS the network, never cached ──
+  //
+  // ⚠ These are the CLOUDFLARE WORKER routes - the spelling production actually
+  //   serves. There was no branch for them here at all, so every GET /api/… fell
+  //   through to the shell default at the bottom of this handler and was answered
+  //   CACHE-FIRST for the life of the SHELL_VERSION.
+  //
+  //   Measured 2026-09-23: an admin activated six pending registrations one by
+  //   one. All six stuck - auth.users showed email_confirmed_at set for every one,
+  //   and pending-registrations.js only answers ok after a read-after-write - yet
+  //   the list still showed all six on every reload, because the reload was the
+  //   cached copy of the FIRST list, written before any of them were activated.
+  //   Clicking Activate again then answered "This account is already activated",
+  //   which is the POST talking to the live server while the GET beside it talked
+  //   to disk. ⚠ A `Cache-Control: no-store` on the response does not save you
+  //   here: a service worker caches what IT decides to cache, and cache.put()
+  //   ignores the header.
+  //
+  //   Nothing under /api/ wants an offline copy - they are all dynamic and
+  //   authenticated (admin actions, exam submission, answer checking, the contact
+  //   form, guest homework) - and several must not leave one on a shared family or
+  //   school device: the pending list is a page of real email addresses, and this
+  //   blanket skip is also what keeps /api/questions safe the day question_loader
+  //   moves off the /.netlify/functions spelling the branch below guards by name.
+  if (url.pathname.startsWith('/api/')) {
+    return; // straight to the network, never cached
+  }
+
+  // ── /library/: the public shelf. Straight to the network, never cached ──
+  //
+  // ⚠ WITHOUT THIS BRANCH A LIBRARY PDF HITS THE SHELL DEFAULT at the bottom
+  //   of this handler - cache-first, into SHELL_CACHE. Three things go wrong at
+  //   once, and none of them is visible: a 600 MB corpus competes for the
+  //   browser’s storage budget against the app itself; `activate` deletes the
+  //   whole shell cache on the next SHELL_VERSION bump, which this project does
+  //   constantly, so every paper a child has opened is silently re-downloaded on
+  //   mobile data; and safePut() swallows the quota error that would have been
+  //   the only clue.
+  //
+  // ⚠ AN OFFLINE SHELF IS A SEPARATE FEATURE, and when it is built it gets its
+  //   OWN named cache with its own byte budget and per-document opt-in - the
+  //   same discipline question_loader.js uses. It must never be SHELL_CACHE,
+  //   and it must never be automatic: a child who taps one paper has not asked
+  //   to store four hundred.
+  if (url.pathname.startsWith('/library/')) {
+    return; // straight to the network, never cached
   }
 
   // ── Netlify functions: network-first ──

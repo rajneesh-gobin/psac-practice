@@ -78,12 +78,22 @@ STATIC_QUESTIONS.push(
     hint:'A problem creates conflict and makes the reader want to find out what happens next.',
     explanation:'A story problem is something that has to be solved. <b>The goldfish escaping into the pond</b> creates tension; liking a fish, owning one or walking to school create none.'}),
 
-  makeMCQ({ id:'g3eng-wrt-011', chapterId:'g3eng-writing', difficulty:1, subsection:'creative_writing',
-    question:'Which sentence uses a SIMILE to describe something?',
-    options:['The stars sparkled like diamonds up above.','There were very many stars in the night sky.','The stars were extremely bright last night.','Many bright stars shone in the sky above.'],
-    answer:'The stars sparkled like diamonds up above.',
-    hint:'A simile compares two things using "like" or "as".',
-    explanation:'A <b>simile</b> compares one thing with another using "like" or "as". "The stars sparkled <b>like diamonds</b>" is a simile; the others simply describe.'}),
+  // ⚠ Replaces g3eng-wrt-011, which asked a Grade 3 child to identify a SIMILE.
+  //   The word appears NOWHERE else in this pack - the chapter's notes teach
+  //   planning, sentence types, commas in a list and "describing words and
+  //   connectives", and simile is a Grade 5 concept (grade5-english notes,
+  //   ch06_writing.js, exam_depth.js). It was also the only stem of the 40 here
+  //   that used an unexplained technical term, and it was tagged Basic, so the
+  //   child had no route to it. A parent reported it as a wrong answer; the
+  //   answer was right, the level was not. A NEW id on purpose - the old one
+  //   carries a child's progress and must not silently come to mean a
+  //   different question.
+  makeMCQ({ id:'g3eng-wrt-076', chapterId:'g3eng-writing', difficulty:1, subsection:'creative_writing',
+    question:'A writer is describing a HOT, sunny day at the beach. Which describing word does NOT belong?',
+    options:['freezing','blazing','golden','bright'],
+    answer:'freezing',
+    hint:'Three of the words suit a hot, sunny day. One of them means the opposite.',
+    explanation:'<b>Freezing</b> means very cold, so it does not fit a hot, sunny beach. <b>Blazing</b>, <b>golden</b> and <b>bright</b> all help to paint the same picture. Keep your describing words suited to the scene.'}),
 
   makeMCQ({ id:'g3eng-wrt-012', chapterId:'g3eng-writing', difficulty:2, subsection:'creative_writing',
     question:'Which group of words is NOT a suitable opening for an adventure story?',

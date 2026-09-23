@@ -228,6 +228,62 @@ at all** — measured on the live Worker's bindings, which held exactly one secr
 - Tests: `scripts/test-email-preferences.js` (93 checks, including the
   client/server agreement below).
 
+## Admin › Write a new email — free-form, from `admin@nouklass.com`
+`workers/api/admin-compose.js` · `POST /api/admin-compose` · Members tab →
+**✍️ Write a new email** · `AdminPanel.openCompose()`.
+
+⚠ **`admin@nouklass.com` is a Cloudflare Email Routing FORWARDER.** It has no
+mailbox, so nothing can be composed *from* it in a mail client — replies to a
+parent went out from a personal Gmail instead, a different sender from every
+automated message that family had ever had from us. Resend already sends as that
+address (`mailFromHuman()`, same verified domain, no DNS change), so this form is
+the missing half. There is still **no Sent folder**, which is why the copy-to-self
+below is not a nicety.
+
+| | Email selected (broadcast) | Write a new email (compose) |
+|---|---|---|
+| Recipients | members, picked by **id** | any address, **typed** |
+| Cap | 500 | **20** |
+| Budget | bulk | **transactional** (`bulk: false`) |
+| Announcements off | skipped | sent, **reported** |
+| All email off (`enabled:false`) | skipped | **refused** unless essential |
+| Unsubscribe link | yes | no — it is correspondence |
+
+- ⚠ **This is the ONE endpoint where the browser supplies the addresses.** The
+  broadcast’s rule — the browser only ever sends ids and never sees an address —
+  cannot apply to writing to someone who may have no account. That is why it is a
+  separate handler and not a flag on the broadcast, and why the cap is small: a
+  low cap is what stops it becoming an un-opt-outable newsletter.
+- ⚠ **One recipient → `To`; two or more → `Bcc`, always.** Putting four parents
+  in a visible To hands each of them the other three addresses and cannot be
+  undone once sent.
+- ⚠ **One malformed address fails the WHOLE send.** Delivering to four of five
+  and mentioning the fifth in small print is how a message goes out twice: the
+  admin fixes the typo and presses Send again.
+- ⚠ **`enabled: false` is a refusal; `announcements: false` is only a warning.**
+  "Send me nothing" is the master switch and is honoured here too (the essential
+  tick is the documented override); "no newsletters" is not a request to be
+  un-repliable, and a direct reply is not a newsletter.
+- ⚠ **The copy-to-self is a SEPARATE message, not a Bcc of the original.** A Bcc
+  copy cannot say who else received it — which is the one thing the operator needs
+  from it, since a Bcc list is invisible by design and the sending address has no
+  Sent folder. It is counted against the budget, because it is a real email.
+- ⚠ **The audit row must not become an address book.** `logAdminAction()`’s rule is
+  ids, never addresses, and a typed address often has no id — so `compose_sent`
+  records the id where there is one and the **domain + a count** otherwise. The
+  exact list lives in the admin’s own copy of the message, which is where a list
+  of addresses belongs.
+- ⚠ **The sending admin’s own address is never put on the message**, in either
+  header — same rule as the broadcast. Who pressed Send is in `admin_actions`.
+- ⚠ **`normaliseBody()` / `bodyToHtml()` live in `workers/lib/mailer.js`**, not in
+  either handler. They used to sit in `admin-broadcast.js`; a second copy of "what
+  an admin’s paste looks like as email" is exactly the duplication that drifts.
+  ⚠ `test-email-preferences.js` asserted the escaping with a regex against the
+  broadcast file and went red on the move — it now checks the wiring there and the
+  behaviour in the helper.
+- Tests: `scripts/test-admin-compose.js` (34 checks; drives the real handler with
+  the real mailer and only `sendMail` spied, so nothing is delivered).
+
 ## Admin › group email (Bcc)
 Members tab: tick accounts (selection survives paging and filtering), or *Add
 everyone matching these filters*, then **✉️ Email selected**.
@@ -1808,6 +1864,47 @@ It does not touch real classrooms, pupil PINs, materials or results.
 - `scripts/test-teacher-tier.js` reads the two allowed words **out of
   `supabase-schema.sql`** and checks the select, the writer and
   `GUEST_LIMIT_DEFAULTS` against them, so this cannot drift in one place again.
+
+## Admin › Members — four status filters, TWO tables
+The status dropdown is not one list filtered four ways. `active` and the
+`profiles` half of `all` query **`profiles`**; `pending` and `setup` go to
+**`auth.users`** through `/api/pending-registrations`, which takes a `state`.
+
+| Filter | Means | Read from |
+|---|---|---|
+| `active` | has a profile row | `profiles` |
+| `pending` | registered, email never confirmed | `auth.users`, `state=pending` |
+| `setup` | email confirmed, still no profile | `auth.users`, `state=setup` |
+| `all` | `active` + `pending` | both |
+
+- ⚠⚠ **A profile row is written at FAMILY SETUP, not at sign-up or sign-in** —
+  `Store.createProfile()` is called from the add-first-child step (`auth.js`) and
+  from the teacher-tab bootstrap, and **nothing else**; there is no trigger on
+  `auth.users` (checked on production: `pg_trigger` is empty). So confirming an
+  email creates no profile, and until `setup` existed those accounts were in
+  **neither** list and invisible to an admin. Measured 2026-09-23: **15 of 64**,
+  8 of whom had signed in and given up during setup, 7 never signed in.
+- ⚠ **A `setup` row has NO "Activate manually" button.** The account is already
+  confirmed, so the POST answers 409 — offering it teaches an admin that a working
+  account is broken, which is the confusion the filter exists to end. The row
+  carries `last_sign_in_at` instead, which is what separates "never came back"
+  from "gave up in setup".
+- ⚠ **`activatePendingRegistration()` treats a 409 as a STALE ROW, not a failure**
+  — it drops the row and re-reads. The status is carried out of
+  `_pendingRegistrationRequest` on the error object for exactly this.
+- ⚠ **Never decide which table to read with a negative** (`status !== 'pending'`).
+  Both collectors — `copyMemberEmails()` and `broadcastAudience()` — used to, and
+  a negative silently classes any NEW filter as profile-backed: pressing Copy
+  under `setup` would have returned the wrong people with no error. `_pendingState()`
+  / `_isPendingList()` are the single definition; `scripts/test-member-status-filters.js`
+  fails on a negative reappearing in either function.
+- ⚠ **`state=setup` needs the FULL set of profile ids to answer at all.** A partial
+  read reports everyone missing from it as never having finished setup, so a failed
+  or non-array read answers **500** rather than the other question.
+  `scripts/test-pending-registration-states.js` drives the real handler for this.
+- The `all` filter still means `active` + `pending` only — deliberately unchanged,
+  because it also feeds the broadcast audience. Widening it would silently enlarge
+  who an admin is about to email.
 
 ## Admin › Members — a family's settings, fixed without signing in as them
 Built 2026-09-11 for support calls ("my child cannot see Science"). In a

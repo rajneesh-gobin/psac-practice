@@ -717,6 +717,20 @@
         <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hdr-btn is-teacher hidden" data-hdr-pri="high" title="Teacher Dashboard" aria-label="Teacher dashboard"
           data-menu-desc="Your classes, assignments and pupils">
           <span class="hdr-ico" aria-hidden="true">👩‍🏫</span><span class="hdr-word">Teacher</span></button>
+        <!-- ⚠ A WHOLE SECTION NEEDS A DOOR ON EVERY SCREEN. The first entry point
+             was a link card inside the student-home Progress tab, which starts
+             hidden - so the library existed and could not be found. A .hdr-btn in
+             #hdr-actions is picked up by _headerMenuButtons() automatically, so
+             this one row also becomes a ☰ Menu entry with no extra wiring. -->
+        <!-- ⚠ TEMPORARY "New" BADGE - remove the two data-menu-new/.hdr-new bits
+             below, the .hdr-new/.mi-new rules in style.css and the menu branch in
+             _renderHeaderMenu() together when the Library is no longer new.
+             ⚠ The badge sits OUTSIDE .hdr-word on purpose: _renderHeaderMenu()
+             builds its row label from that span's textContent, so a badge inside
+             it would render the mobile menu entry as "LibraryNew". -->
+        <button id="btn-open-library" onclick="Library.open()" class="hdr-btn is-papers" data-hdr-pri="low" title="Past Exam Papers" aria-label="Past Exam Papers (new)"
+          data-menu-desc="Past papers and worksheets, by grade and subject" data-menu-new="1">
+          <span class="hdr-ico" aria-hidden="true">📚</span><span class="hdr-word">Past Exam Papers</span><span class="hdr-new">New</span></button>
         <button id="search-btn" onclick="Search.open()" class="hdr-btn hidden" data-hdr-pri="low" title="Search Questions" aria-label="Search questions"
           data-menu-desc="Find a question in any subject or chapter">
           <span class="hdr-ico" aria-hidden="true">🔍</span><span class="hdr-word">Search</span></button>
@@ -2959,6 +2973,7 @@
           <button class="ta-tab" data-sh-tab="syllabus" aria-selected="false">🗒️ Syllabus</button>
         </div>
         <div class="ta-tab-content" data-sh-tab="chapters">
+          <div id="sh-library-link" class="lb-packlink-host"></div>
           <div id="sh-chapter-panel"></div>
         </div>
         <div class="ta-tab-content hidden" data-sh-tab="exam">
@@ -3011,6 +3026,7 @@
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="inbox"    onclick="StudentHome.tab('inbox')"   ><strong>📬 Messages</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="missions" onclick="StudentHome.tab('missions')"><strong>🎯 Missions</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="badges"   onclick="StudentHome.tab('badges')"  ><strong>🏅 Badges</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="library" onclick="StudentHome.tab('library')"><strong>📚 Past Exam Papers</strong></button>
       </div>
 
       <!-- Board tab: sticky notes grid -->
@@ -3118,12 +3134,24 @@
             <div><strong>Syllabus Browser</strong><span>Progress by topic and subsection</span></div>
             <span class="sh-link-arrow">›</span>
           </button>
+          <button onclick="Library.open()" class="sh-link-card">
+            <span class="sh-link-ico">📚</span>
+            <div><strong>Past Exam Papers</strong><span>Past papers and worksheets, by grade and subject</span></div>
+            <span class="sh-link-arrow">›</span>
+          </button>
           <button onclick="Certificates.open()" class="sh-link-card">
             <span class="sh-link-ico">🎓</span>
             <div><strong>My Certificates</strong><span>One per subject, from Starter to Subject Master</span></div>
             <span class="sh-link-arrow">›</span>
           </button>
         </div>
+      </div>
+
+      <!-- Library tab. An empty host: Library.render() paints the notice,
+           the contribute button and the shelves into whichever mount it is
+           given, so there is only ever one copy of that markup. -->
+      <div class="ta-tab-content hidden" data-tab="library">
+        <div id="sh-library-body" class="lb-body"></div>
       </div>
 
       <!-- Messages / inbox tab -->
@@ -3437,6 +3465,7 @@
 
       <!-- Filled by _renderChapterSummary() -->
       <div id="chapter-summary" class="ch-summary"></div>
+      <div id="chapter-link-library" class="lb-packlink-host"></div>
 
       <div id="chapter-grid"></div>
     </div>
@@ -3801,6 +3830,8 @@
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📊 Stats</button>
         <button onclick="AdminPanel.showTab('reports')" data-tab="reports"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🚩 Reports<span id="admin-reports-badge" class="hidden ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold align-middle">0 open</span></button>
+        <button onclick="AdminPanel.showTab('library')" data-tab="library"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📚 Past Exam Papers<span id="admin-library-badge" class="hidden ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold align-middle">0</span></button>
         <button id="admin-tab-roles-btn" onclick="AdminPanel.showTab('roles')" data-tab="roles"
           class="admin-tab hidden flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">👑 Roles</button>
         <button id="admin-tab-plans-btn" onclick="AdminPanel.showTab('plans')" data-tab="plans"
@@ -3832,12 +3863,13 @@
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">All registered accounts</p>
           <button onclick="AdminPanel.loadMembers()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
-        <div class="flex gap-2 mb-3">
+        <div class="flex flex-wrap gap-2 mb-3">
           <select id="admin-member-status-filter" onchange="AdminPanel.setMemberStatusFilter(this.value)"
             aria-label="Member confirmation status"
-            class="w-44 shrink-0 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            class="w-full sm:w-56 shrink-0 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
             <option value="active">Activated accounts</option>
             <option value="pending">Needs activation — email not confirmed</option>
+            <option value="setup">Setup not finished — confirmed, no profile</option>
             <option value="all">All accounts</option>
           </select>
           <input id="admin-member-search" type="text" placeholder="Search by name or email…"
@@ -3850,7 +3882,7 @@
           <label class="inline-flex items-center gap-1.5 cursor-pointer"><input id="admin-member-show-disabled" type="checkbox" checked onchange="AdminPanel.setMemberVisibilityFilters()" class="accent-indigo-600"> 🚫 Show disabled accounts</label>
         </div>
         <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1 leading-relaxed">
-          Activated accounts show <b>parents and administrators</b>; teachers remain in the separate <b>👩‍🏫 Teachers</b> tab. Awaiting confirmation shows new sign-ups that have not created a profile yet. Expand a row to manage its account type and family.
+          Activated accounts lists everyone with a profile — signed in and <b>finished family setup</b>: parents and administrators; teachers remain in the separate <b>👩‍🏫 Teachers</b> tab. Needs activation lists sign-ups whose <b>email is still unconfirmed</b>. ⚠ An account that is confirmed but has never finished family setup is in <b>neither</b> list. Expand a row to manage its account type and family.
         </p>
         <!-- Group email. The selection bar only appears once something is
              ticked, so the ordinary members screen is unchanged for an admin
@@ -3863,6 +3895,7 @@
         </div>
         <div class="mb-3">
           <button id="admin-copy-emails" onclick="AdminPanel.copyMemberEmails()" class="rounded-lg px-3 py-2 text-sm font-semibold bg-indigo-600 text-white disabled:opacity-50">📋 Copy activated emails</button>
+          <button onclick="AdminPanel.openCompose()" class="rounded-lg px-3 py-2 text-sm font-semibold border border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30">✍️ Write a new email</button>
           <p id="admin-copy-emails-help" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Copies all accounts matching these filters, including unloaded pages. Use Bcc when emailing a group.</p>
           <p id="admin-copy-emails-status" role="status" class="text-xs text-gray-600 dark:text-gray-300 mt-1"></p>
           <textarea id="admin-copy-emails-output" readonly aria-label="Matching email addresses, separated by commas" class="hidden w-full mt-2 p-2 rounded-lg border bg-white dark:bg-gray-700 dark:text-white" rows="3"></textarea>
@@ -4192,6 +4225,62 @@
       </div>
 
       <!-- ── Reports tab ── -->
+      <!-- ── LIBRARY REVIEW ────────────────────────────────────────────
+           ⚠ Every community submission lands here as `pending` and appears
+             nowhere else until an admin approves it. Approving is the only
+             thing that writes `published_at`, and the shelf requires it. -->
+      <div id="admin-tab-library" class="admin-tab-panel hidden">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <select id="admin-lib-status" onchange="AdminPanel.loadLibraryQueue()"
+            aria-label="Which submissions to show"
+            class="text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            <option value="pending">Waiting for review</option>
+            <option value="published">Published</option>
+            <option value="rejected">Rejected</option>
+            <option value="removed">Removed</option>
+            <option value="reports">⚑ Reported by readers</option>
+          </select>
+          <button onclick="AdminPanel.loadLibraryQueue()" class="text-sm font-semibold px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">↻ Refresh</button>
+        </div>
+        <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3 leading-relaxed">
+          ⚠ <b>Look for personal details</b> — a pupil name, a phone number, a school stamp. The scan below flags what it can see, but it only reads uncompressed text, so a scanned paper shows nothing even when it has plenty. <b>A clean row is not a clean document.</b><br>
+          Preview each document before approving. You can move it to a different grade or subject
+          on the way in — classification lives in the database, so moving it costs nothing.
+          The contributor is emailed either way.
+        </p>
+        <div id="admin-library-list" class="space-y-3"></div>
+
+        <!-- ── SHELVES ───────────────────────────────────────────────
+             ⚠ The schema has always supported creating a grade or a subject
+               and locking or hiding one; nothing in the app could do it, so
+               the only way to add a shelf was a hand-written SQL statement.
+             ⚠ Three states, and they mean different things: ACTIVE is
+               normal, LOCKED is readable but closed to new uploads, HIDDEN
+               is invisible to everyone but an admin. All three are enforced
+               server-side; this only chooses them. -->
+        <details id="admin-lib-shelves" class="mt-6 rounded-xl border border-gray-200 dark:border-gray-700 p-3">
+          <summary class="text-sm font-bold cursor-pointer text-gray-800 dark:text-white">📚 Shelves — grades and subjects</summary>
+          <div class="flex flex-wrap gap-2 items-end mt-3 mb-3">
+            <div>
+              <label for="admin-lib-new-name" class="block text-[11px] font-semibold text-gray-600 dark:text-gray-300 mb-1">New shelf name</label>
+              <input id="admin-lib-new-name" type="text" maxlength="60" placeholder="e.g. Grade 10, or Kreol"
+                class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-700 dark:text-white">
+            </div>
+            <div>
+              <label for="admin-lib-new-parent" class="block text-[11px] font-semibold text-gray-600 dark:text-gray-300 mb-1">Inside</label>
+              <select id="admin-lib-new-parent" class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-700 dark:text-white"></select>
+            </div>
+            <div class="w-24">
+              <label for="admin-lib-new-grade" class="block text-[11px] font-semibold text-gray-600 dark:text-gray-300 mb-1">Grade no.</label>
+              <input id="admin-lib-new-grade" type="number" min="1" max="13" placeholder="6"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-700 dark:text-white">
+            </div>
+            <button onclick="AdminPanel.addLibrarySection()" class="text-xs font-bold px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">➕ Add shelf</button>
+          </div>
+          <div id="admin-lib-shelf-list" class="space-y-1"></div>
+        </details>
+      </div>
+
       <div id="admin-tab-reports" class="admin-tab-panel hidden">
         <div class="flex justify-between items-center mb-3">
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Reports and messages</p>
@@ -4528,6 +4617,41 @@
           <button onclick="Auth.switchToStudentSelect()" class="ta-btn-pencil ta-mode-switch" title="Hand the device to a pupil">
             🎒 Student mode
           </button>
+          <!-- ⚠ A BUTTON, NOT A TAB, for the same measured reason as Settings
+               below: the strip had grown to eight tabs and "📚 Past Exam Papers"
+               — a longer label than the "Library" it replaced — pushed the last
+               one onto a second line at laptop width. Messages is the tool a
+               teacher opens occasionally and leaves, so it is the one that
+               belongs up here; the others are where the work happens.
+               ⚠ Same handler and same panel — only its home changed. 'messages'
+               stays in TOOL_TABS and switchTab() still opens it, exactly as
+               'settings' does. The #tc-msg-badge id must survive the move:
+               teacher.js reads it by id to show the unread dot. -->
+          <button id="tc-messages-btn" onclick="TeacherMode.switchTab('messages')"
+            class="ta-btn-pencil" title="Ask a question or report a problem">
+            💬 Messages<span id="tc-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span>
+          </button>
+          <!-- ⚠ Also a button, also for width. MEASURED at 1280px: the seven
+               remaining tabs needed 1176px in a 1100px strip — 76px over — so
+               removing Messages alone still left it wrapping. Chapter preview
+               is the widest of the rarely-used tools at 200px, and taking it
+               out drops the strip to ~976px with headroom for the next tab.
+               ⚠ Same rule as Settings and Messages: a tool you open, look at,
+               and leave belongs up here; the strip is for where the work is. -->
+          <button id="tc-preview-btn" onclick="TeacherMode.switchTab('preview')"
+            class="ta-btn-pencil" title="See a chapter as a pupil sees it">
+            👀 Chapter preview
+          </button>
+          <!-- ⚠ A BUTTON, NOT A TAB, and for a measured reason: nine tabs did
+               not fit the strip at laptop width, so the last one was cut off
+               and the strip had to scroll sideways — which is a poor shape for
+               a menu. Settings is the one a teacher visits rarely and leaves,
+               so it is the one that belongs up here. Same handler, same panel;
+               only its home changed. The parent board did the same. -->
+          <button id="tc-settings-btn" onclick="TeacherMode.switchTab('settings')"
+            class="ta-btn-pencil" title="Install, invite, account">
+            ⚙️ Settings
+          </button>
         </div>
       </div>
 
@@ -4548,9 +4672,11 @@
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="materials" title="Every worksheet and note you have uploaded" onclick="TeacherMode.switchTab('materials')"><strong>📂 My files</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="assignments" title="Work that has closed or been put away" onclick="TeacherMode.switchTab('assignments')"><strong>📦 Past work</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="papers" title="Build a printable paper with its answer sheet" onclick="TeacherMode.switchTab('papers')"><strong>📝 Test papers</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="preview" title="See a chapter as a pupil sees it" onclick="TeacherMode.switchTab('preview')"><strong>👀 Chapter preview</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="messages" title="Ask a question or report a problem" onclick="TeacherMode.switchTab('messages')"><strong>💬 Messages</strong><span id="tc-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="settings" title="Install, invite, account" onclick="TeacherMode.switchTab('settings')"><strong>⚙️ Settings</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="library" title="Past papers and worksheets you can share with a class" onclick="TeacherMode.switchTab('library')"><strong>📚 Past Exam Papers</strong></button>
+      </div>
+
+      <div class="ta-tab-content hidden" data-tab="library">
+        <div id="tc-library-body" class="lb-body"></div>
       </div>
 
       <!-- ── TAB: MY CLASSES ──
@@ -5071,6 +5197,13 @@
              second line. Same handler, same modal; only its home changed. -->
         <button id="pd-invite-btn" onclick="Auth.openInviteModal()" class="pd-action" title="Invite a friend to Nou Klass">
           <span class="ico">🎁</span><span>Invite</span></button>
+        <!-- ⚠ A BUTTON, NOT A TAB, for the same reason Invite above it is one:
+             it was the NINTH item in that strip and tipped it onto a second
+             line. It still opens the settings PANEL through PD.mainTab, so the
+             panel, the history entry and the co-parent deep link from "Add
+             parent" all keep working — only its home changed. -->
+        <button id="pd-settings-btn" onclick="PD.mainTab('settings')" class="pd-action" title="Family settings">
+          <span class="ico">⚙️</span><span>Settings</span></button>
         </div>
       </div>
 
@@ -5100,7 +5233,7 @@
         <button id="pd-tab-preview" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('preview')"><strong>👀 Chapter Preview</strong></button>
         <button id="pd-tab-shop" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('shop')"><strong>🛒 Shop</strong><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
         <button id="pd-tab-messages" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('messages')"><strong>💬 Messages</strong><span id="pd-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
-        <button id="pd-tab-settings" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('settings')"><strong>⚙️ Settings</strong></button>
+        <button id="pd-tab-library" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('library')"><strong>📚 Past Exam Papers</strong></button>
       </div>
 
       <!-- Board frame - same chalkboard aesthetic as the student home -->
@@ -5501,6 +5634,10 @@
       <!-- ── Messages panel ── -->
       <div id="pd-panel-messages" class="hidden"></div>
 
+      <div id="pd-panel-library" class="hidden">
+        <div id="pd-library-body" class="lb-body"></div>
+      </div>
+
       <!-- ── Settings panel ── -->
       <div id="pd-panel-settings" class="hidden">
         <div id="pd-profile-content" class="py-4"></div>
@@ -5739,7 +5876,173 @@
            one way this feature can do harm, so the page says what it is before
            it shows a single award. Certificates.DISCLAIMER carries the same
            words onto the artwork, the PDF and the share message. -->
+    <!-- ── OUR LIBRARY ──────────────────────────────────────────────
+         ⚠ The documents are NOT hosted by us in the sense a reader might
+           assume, and the notice below says so in the page rather than only
+           in a policy nobody opens. Community uploads are the contributor’s
+           responsibility; the seed corpus is ministry material. The takedown
+           route is on the page for the same reason. -->
+    <div id="screen-library" class="screen hidden">
+      <div class="lb-head">
+        <div>
+          <h2 class="lb-title">📚 Our Library</h2>
+          <p class="lb-sub">Past papers, specimen papers and practice materials,
+            shelved by grade and subject. Free to open, free to print.</p>
+        </div>
+        <button class="lb-btn" onclick="Library.refresh()">↻ Refresh</button>
+      </div>
+
+
+      <div id="library-body" class="lb-body"></div>
+
+      <button class="lb-back" onclick="Library.back()">‹ Back</button>
+    </div>
+
+  <!-- ── SHARE A DOCUMENT WITH THE LIBRARY ────────────────────────────────
+       ⚠ Every submission lands `pending` and an admin reviews it. Nothing a
+         contributor types can change that - the status is set on the server,
+         field by field, and never spread from the request body.
+       ⚠ The disclaimer is stored WITH ITS VERSION and the time it was ticked.
+         A box that leaves no trace of what was agreed proves nothing later. -->
+  <!-- ── REPORT A LIBRARY DOCUMENT ────────────────────────────────────────
+       ⚠ Offered to EVERY reader, children included — a child is the person
+         most likely to open something that should not be there, and has no
+         other way to tell anyone. The server takes an adult JWT or a pupil’s
+         x-student-token and refuses anyone with neither.
+       ⚠ Reporting never removes anything. It records a row and raises a count
+         an admin sorts by; a document comes down only when a person decides. -->
+  <!-- ── SHARE A LIBRARY DOCUMENT WITH A CLASS ────────────────────────────
+       ⚠ A REFERENCE, not a copy: the bytes stay in the library and the
+         classroom row points at them, so a takedown is not left standing in
+         every class that had it. -->
+  <div id="modal-library-share" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md p-5 my-auto relative">
+      <button onclick="Library.closeShare()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">➕ Share with a class</h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3"><b id="lb-share-title"></b></p>
+      <div id="lb-share-list" class="mb-3 max-h-64 overflow-y-auto"></div>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3">Pupils see it on the class page with the rest of your materials. The file stays in the library — nothing is copied.</p>
+      <p id="lb-share-status" role="status" aria-live="polite" class="text-xs text-gray-600 dark:text-gray-300 mb-3 min-h-[1.2em]"></p>
+      <div class="flex flex-wrap gap-2 justify-end">
+        <button onclick="Library.closeShare()" class="text-sm font-semibold px-4 py-2 rounded-xl text-gray-500 dark:text-gray-400">Cancel</button>
+        <button onclick="Library.confirmShare()" class="text-sm font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">Share</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-library-report" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md p-5 my-auto relative">
+      <button onclick="Library.closeReport()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">⚑ Report a problem</h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">About <b id="lb-rep-title"></b></p>
+
+      <div id="lb-rep-form">
+        <label for="lb-rep-reason" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">What is wrong?</label>
+        <select id="lb-rep-reason" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white"></select>
+
+        <label for="lb-rep-detail" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Anything else? <span class="font-normal opacity-60">(optional)</span></label>
+        <textarea id="lb-rep-detail" rows="3" maxlength="600" placeholder="Tell us what you noticed"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></textarea>
+        <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Nobody else sees your report. An administrator checks it and decides.</p>
+
+        <p id="lb-rep-status" role="status" aria-live="polite" class="text-xs text-gray-600 dark:text-gray-300 mb-3 min-h-[1.2em]"></p>
+        <div class="flex flex-wrap gap-2 justify-end">
+          <button onclick="Library.closeReport()" class="text-sm font-semibold px-4 py-2 rounded-xl text-gray-500 dark:text-gray-400">Cancel</button>
+          <button id="lb-rep-send" onclick="Library.sendReport()" class="text-sm font-bold px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white disabled:opacity-60">Send report</button>
+        </div>
+      </div>
+
+      <div id="lb-rep-done" class="hidden text-center py-6">
+        <div class="text-5xl mb-3" aria-hidden="true">✅</div>
+        <p class="text-lg font-bold text-gray-800 dark:text-white">Thank you</p>
+        <p id="lb-rep-done-detail" class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed"></p>
+        <button onclick="Library.closeReport()" class="mt-5 text-sm font-bold px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-library-upload" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-lg p-5 my-auto relative">
+      <button onclick="Library.closeUpload()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">⬆️ Share a document</h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">PDF only, up to 6&nbsp;MB. An administrator reviews everything before it appears.</p>
+
+      <div id="lb-up-form">
+        <label for="lb-up-file" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">The file</label>
+        <input id="lb-up-file" type="file" accept="application/pdf,.pdf"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white">
+
+        <label for="lb-up-title" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Title</label>
+        <input id="lb-up-title" type="text" maxlength="160" placeholder="e.g. Grade 6 Fractions revision sheet"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white">
+
+        <div class="flex flex-wrap gap-3 mb-3">
+          <div class="flex-1 min-w-[160px]">
+            <!-- ⚠ TWO SELECTS, SUBJECT FIRST. One combined "Grade 4 — Mathematics"
+                 list is every grade times every subject: it was already 25 rows
+                 with three grades seeded and grows multiplicatively. Subject
+                 first, then the grades that actually have that subject. -->
+            <label for="lb-up-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Subject</label>
+            <select id="lb-up-subject" onchange="Library.uploadSubjectChanged()"
+              class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white"></select>
+            <label for="lb-up-grade" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Grade</label>
+            <select id="lb-up-grade" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></select>
+          </div>
+          <div class="flex-1 min-w-[160px]">
+            <label for="lb-up-type" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">What is it?</label>
+            <select id="lb-up-type" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"></select>
+          </div>
+          <div class="w-24">
+            <label for="lb-up-year" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Year</label>
+            <input id="lb-up-year" type="number" min="1990" max="2099" placeholder="2025"
+              class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+          </div>
+        </div>
+
+        <label for="lb-up-desc" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Description <span class="font-normal opacity-60">(optional)</span></label>
+        <textarea id="lb-up-desc" rows="2" maxlength="1000" placeholder="What does it cover? Who is it for?"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white"></textarea>
+
+        <label for="lb-up-credit" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Credit this to <span class="font-normal opacity-60">(optional, shown publicly)</span></label>
+        <input id="lb-up-credit" type="text" maxlength="80" placeholder="e.g. Mrs Devi, Grade 6"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white">
+
+        <label class="flex items-start gap-2 mb-3 cursor-pointer">
+          <input id="lb-up-agree" type="checkbox" class="accent-indigo-600 mt-0.5">
+          <span class="text-xs text-gray-600 dark:text-gray-300">
+            <b>I may share this.</b> I confirm I made this document or am allowed to share it,
+            that it contains no personal details of any child, and that I take responsibility
+            for it. Nou Klass hosts it on my behalf and may remove it at any time.
+          </span>
+        </label>
+
+        <p id="lb-up-status" role="status" aria-live="polite" class="text-xs text-gray-600 dark:text-gray-300 mb-3 min-h-[1.2em]"></p>
+
+        <div class="flex flex-wrap gap-2 justify-end">
+          <button onclick="Library.closeUpload()" class="text-sm font-semibold px-4 py-2 rounded-xl text-gray-500 dark:text-gray-400">Cancel</button>
+          <button id="lb-up-send" onclick="Library.submitUpload()" class="text-sm font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60">Share it</button>
+        </div>
+      </div>
+
+      <div id="lb-up-done" class="hidden text-center py-6">
+        <div class="text-5xl mb-3" aria-hidden="true">🙏</div>
+        <p class="text-lg font-bold text-gray-800 dark:text-white">Thank you</p>
+        <p id="lb-up-done-detail" class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed"></p>
+        <button onclick="Library.closeUpload()" class="mt-5 text-sm font-bold px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">Done</button>
+      </div>
+    </div>
+  </div>
+
     <div id="screen-certificates" class="screen hidden">
+      <!-- ⚠ This screen shipped with NO way out. Both doors into it are on the
+           student home screen, and the header is the only other navigation, so
+           a child who opened their certificates was stranded unless they knew
+           to use the browser's Back button. Same pattern and destination as
+           every other child screen. -->
+      <button class="back-btn mb-3" onclick="StudentHome.open()">← Home</button>
       <div class="cert-head">
         <div>
           <h2 class="cert-title">🎓 My Certificates</h2>
@@ -6585,6 +6888,7 @@
   <script src="engine/errorhunt.js"></script>
   <script src="engine/learning_coach.js"></script>
   <script src="engine/certificates.js"></script>
+  <script src="engine/library.js"></script>
 
   <!-- ── Exam review sheet ──
        Reached from "Review →", the label the Next button takes on the last
@@ -7166,6 +7470,73 @@
          workers/api/admin-broadcast.js resolves them with the service role.
        The modal- id prefix and fixed inset-0 wrapper are what _Dialogs keys
        on for the focus trap, Escape handling and aria wiring. -->
+  <!-- ── WRITE A NEW EMAIL (free-form, from admin@nouklass.com) ──────────
+       ⚠ admin@nouklass.com is a Cloudflare Email Routing FORWARDER with no
+         mailbox, so nothing can be composed from it in a mail client. This
+         form is how a message goes out under that address; the server sends it
+         through Resend, which the domain is verified for.
+       ⚠ Unlike the broadcast beside it, the admin TYPES the addresses - so the
+         cap is small and the server refuses the whole send if one is malformed,
+         rather than delivering to the rest. -->
+  <div id="modal-admin-compose" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-lg p-5 my-auto relative">
+      <button onclick="AdminPanel.closeCompose()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">✍️ Write a new email</h2>
+      <p id="admin-cp-from" class="text-xs text-gray-500 dark:text-gray-400 mb-3">Sent from the Nou Klass admin address. Replies come back to it.</p>
+
+      <div id="admin-cp-form">
+
+      <label for="admin-cp-to" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">To</label>
+      <textarea id="admin-cp-to" rows="2" placeholder="someone@example.com, another@example.com"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Separate addresses with a comma or a new line, up to 20. Two or more go in Bcc, so recipients never see each other. For a longer list, tick members in the list behind this box and use <b>Email selected</b> instead — that one respects the opt-out and adds an unsubscribe link.</p>
+
+      <label for="admin-cp-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Subject</label>
+      <input id="admin-cp-subject" type="text" maxlength="150" placeholder="e.g. About your Nou Klass account"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+      <label for="admin-cp-message" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Message</label>
+      <textarea id="admin-cp-message" rows="8" maxlength="8000" placeholder="Write in plain text. A blank line starts a new paragraph."
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only — it is escaped before sending, so pasted formatting will not carry through. Your own address is never put on the message.</p>
+
+      <label class="flex items-start gap-2 mb-2 cursor-pointer">
+        <input id="admin-cp-copy" type="checkbox" checked class="accent-indigo-600 mt-0.5">
+        <span class="text-xs text-gray-600 dark:text-gray-300">
+          <b>Send me a copy</b> — with the full recipient list.
+          <span class="block text-[11px] text-gray-400 dark:text-gray-500">The admin address forwards to your inbox and has no Sent folder, so this copy is the only record you will have of what went out.</span>
+        </span>
+      </label>
+
+      <label class="flex items-start gap-2 mb-3 cursor-pointer">
+        <input id="admin-cp-essential" type="checkbox" class="accent-indigo-600 mt-0.5">
+        <span class="text-xs text-gray-600 dark:text-gray-300">
+          <b>Essential notice</b> — send even to someone who has turned all email off.
+          <span class="block text-[11px] text-gray-400 dark:text-gray-500">Only for account, billing or safety messages.</span>
+        </span>
+      </label>
+
+      <p id="admin-cp-status" role="status" aria-live="polite" class="text-xs text-gray-600 dark:text-gray-300 mb-3 min-h-[1.2em]"></p>
+
+      <div class="flex flex-wrap gap-2 justify-end">
+        <button onclick="AdminPanel.closeCompose()" class="text-sm font-semibold px-4 py-2 rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">Cancel</button>
+        <button onclick="AdminPanel.composePreview()" class="text-sm font-semibold px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">Check before sending</button>
+        <button id="admin-cp-send" onclick="AdminPanel.sendCompose()" class="text-sm font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60">Send</button>
+      </div>
+      </div>
+
+      <!-- Replaces the form, so a send cannot be repeated by accident. -->
+      <div id="admin-cp-done" class="hidden text-center py-6">
+        <div class="text-5xl mb-3" aria-hidden="true">✅</div>
+        <p id="admin-cp-done-title" class="text-lg font-bold text-gray-800 dark:text-white"></p>
+        <p id="admin-cp-done-detail" class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed"></p>
+        <button onclick="AdminPanel.closeCompose()"
+          class="mt-5 text-sm font-bold px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">Done</button>
+      </div>
+    </div>
+  </div>
+
   <div id="modal-admin-broadcast" class="hidden fixed inset-0 z-[70] flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm" style="overflow-y:auto">
     <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-lg p-5 my-auto relative">
       <button onclick="AdminPanel.closeBroadcast()" aria-label="Close"

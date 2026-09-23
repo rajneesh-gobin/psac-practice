@@ -73,21 +73,13 @@ const args = parseArgs(process.argv.slice(2));
 if (args.help)  { console.log(USAGE); process.exit(0); }
 if (args.error) { console.error(args.error + '\n\n' + USAGE); process.exit(2); }
 
-function _loadDotEnv() {
-  const envPath = path.join(ROOT, '.env');
-  if (!fs.existsSync(envPath)) return;
-  // ⚠ Split on /\r?\n/, not '\n'. A CRLF .env — which is what every Windows
-  //   editor writes — leaves a trailing \r on each line, and \r is a regex line
-  //   terminator: `.` cannot match it and `$` will not match before it, so the
-  //   pattern below failed on EVERY line and the file parsed to {}. The error
-  //   then read "SUPABASE_SERVICE_ROLE_KEY is not set" while the key was
-  //   sitting in .env, correctly named.
-  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
-    const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
-    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
-  }
-}
-_loadDotEnv();
+// ⚠ ONE shared .env reader (scripts/lib/load-env.js), not a copy here. The CRLF
+//   trap it documents — a '\n' split leaves a trailing \r, which is a regex line
+//   terminator, so the file parses to {} and the key reads as missing while it
+//   is sitting in .env correctly named — cost this project a run once already.
+//   scripts/preflight.js not having this reader is what made its documented
+//   `--import` refuse on a key that was present.
+require('../scripts/lib/load-env').loadEnv();
 
 const SB_URL = process.env.SUPABASE_URL || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 const SB_SRK = process.env.SUPABASE_SERVICE_ROLE_KEY;

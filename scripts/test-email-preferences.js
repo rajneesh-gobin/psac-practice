@@ -168,7 +168,13 @@ function eq(label, got, want) {
   const bcSrc = fs.readFileSync(path.join(ROOT, 'workers/api/admin-broadcast.js'), 'utf8');
   ok('broadcast sends Bcc, never To', /bcc: batch\.map/.test(bcSrc));
   ok('broadcast honours announcements unless essential', /!essential && !wantsEmail/.test(bcSrc));
-  ok('broadcast escapes the body', /escapeHtml\(block\)/.test(bcSrc));
+  // ⚠ Two halves, because the escaping MOVED: bodyToHtml() now lives in
+  //   mailer.js so the compose form shares it, and a regex looking for
+  //   `escapeHtml(block)` in this file passed only while the copy was here.
+  //   Assert the wiring in the broadcast and the behaviour in the helper.
+  ok('broadcast escapes the body', /bodyToHtml\(message\)/.test(bcSrc)
+    && M.bodyToHtml('<script>alert(1)</script>').includes('&lt;script&gt;')
+    && !M.bodyToHtml('<script>alert(1)</script>').includes('<script>'));
 
   ok('every documented frequency has a day count',
     ['weekly', 'fortnightly', 'monthly'].every(k => typeof DIGEST_EVERY_DAYS[k] === 'number'));

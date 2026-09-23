@@ -30,6 +30,11 @@ import adminDeleteAccountHandler   from './api/admin-delete-account.js';
 import adminMemberEmailsHandler    from './api/admin-member-emails.js';
 import adminTeacherActivityHandler from './api/admin-teacher-activity.js';
 import adminBroadcastHandler       from './api/admin-broadcast.js';
+import adminComposeHandler         from './api/admin-compose.js';
+import librarySubmitHandler        from './api/library-submit.js';
+import libraryReviewHandler        from './api/library-review.js';
+import libraryFileHandler          from './api/library-file.js';
+import libraryReportHandler        from './api/library-report.js';
 import emailPrefsHandler           from './api/email-prefs.js';
 
 import { scheduled as cleanupScheduled } from './api/assignment-cleanup.js';
@@ -135,6 +140,11 @@ const ROUTES = makeRoutes({
   '/api/admin-member-emails':     adminMemberEmailsHandler,
   '/api/admin-teacher-activity':  adminTeacherActivityHandler,
   '/api/admin-broadcast':         adminBroadcastHandler,
+  '/api/admin-compose':           adminComposeHandler,
+  '/api/library-submit':          librarySubmitHandler,
+  '/api/library-review':          libraryReviewHandler,
+  '/api/library-file':            libraryFileHandler,
+  '/api/library-report':          libraryReportHandler,
   '/api/email-prefs':             emailPrefsHandler,
 });
 

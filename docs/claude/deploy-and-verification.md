@@ -45,6 +45,36 @@ Three rules, not a one-off tidy-up:
   `/fonts/*` a 30-day max-age — deliberately **not** the engine or `index.html`,
   and deliberately not `immutable`.
 
+### What the fetch handler must NEVER intercept
+`sw.js` routes by pathname and **ends in a cache-first default**, so a route with
+no branch of its own is cached on disk for the life of the `SHELL_VERSION`.
+- ⚠⚠ **`/api/*` goes straight to the network — it is the CLOUDFLARE route family,
+  i.e. the spelling production actually serves.** It had no branch at all, so every
+  GET fell through to the shell default. Measured 2026-09-23: an admin activated six
+  pending registrations one by one; `auth.users.email_confirmed_at` was set for all
+  six and `pending-registrations.js` only answers ok **after a read-after-write**, yet
+  every reload still showed all six — the reload was the cached copy of the FIRST
+  list. Clicking Activate again answered *"This account is already activated"*, which
+  is the POST talking to the live server while the GET beside it talked to disk.
+- ⚠ **`Cache-Control: no-store` is not a defence inside a service worker.** The
+  worker caches what IT decides to cache and `cache.put()` ignores the header, so the
+  `no-store` that `workers/lib/admin-auth.js` sets on every response bought nothing.
+  The only thing that keeps a dynamic authenticated route honest is not intercepting
+  it.
+- ⚠ **The guards written by NAME cover one spelling only.** `/.netlify/functions/`
+  `questions` and `profile-manifest` are skipped by exact path; the blanket `/api/`
+  skip is what covers them the day `question_loader.js` moves to the Cloudflare
+  spelling. A URL-keyed shared cache ignores the auth header, which on a family or
+  school device is one child’s entitled set served to another.
+- ⚠ **A grep over `sw.js` cannot test this** — the bug was a missing branch, not a
+  missing string. `scripts/test-sw-api-routing.js` loads the real worker into a fake
+  `ServiceWorkerGlobalScope`, dispatches fetch events and asserts on what the handler
+  DID (did it call `respondWith`, did anything reach a cache). Verified against the
+  bug: delete the branch and it fails 11 checks.
+- Poisoned entries live in `SHELL_CACHE`, which `activate` deletes on a version bump,
+  so shipping the fix clears them. `ASSET_CACHE`/`DATA_CACHE` survive bumps and hold
+  no `/api/` rows.
+
 ### Question images are BUNDLED (138 files, 11.9 MB, `assets/questions/`)
 The bank used to hotlink from Wikimedia Commons. ⚠ **Hotlinking had already failed
 silently**: 24 of the 139 Commons files had been DELETED and were 404ing in

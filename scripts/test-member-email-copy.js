@@ -13,6 +13,12 @@ async function test(status, blocked = false) {
   const ctx = vm.createContext({
     document: { getElementById: id => nodes[id] }, _memberStatusFilter: status,
     _memberVisibility: () => ({ admins: false, expired: false, disabled: false }),
+    // ⚠ The SAME definition as engine/admin.js. copyMemberEmails() decides which
+    //   table to read through this helper rather than a `!== 'pending'` negative,
+    //   so the slice run here needs it in scope — without it every status threw a
+    //   ReferenceError inside the function's own try/catch and copied nothing,
+    //   which reads as "the filters are wrong" rather than "the stub is missing".
+    _pendingState: (filter = status) => (filter === 'pending' || filter === 'setup') ? filter : null,
     _sb: { from() {
       const q = {};
       for (const method of ['select','in','order','or','eq','ilike']) q[method] = (...args) => { filters.push([method,...args]); return q; };
@@ -32,9 +38,11 @@ async function test(status, blocked = false) {
   });
   vm.runInContext(fn, ctx);
   await ctx.copyMemberEmails();
-  const expected = status === 'active' ? 101 : status === 'pending' ? 2 : 102;
+  // `pending` and `setup` are both auth.users-backed: no profiles query at all.
+  const authBacked = status === 'pending' || status === 'setup';
+  const expected = status === 'active' ? 101 : authBacked ? 2 : 102;
   assert.equal(nodes['admin-copy-emails-output'].value.split(', ').length, expected);
-  assert.equal(pages, status === 'pending' ? 0 : 2);
+  assert.equal(pages, authBacked ? 0 : 2);
   assert.equal(pending, status === 'active' ? 0 : 2);
   assert.equal(nodes['admin-copy-emails'].disabled, false);
   if (!blocked) assert.equal(copied, nodes['admin-copy-emails-output'].value);
@@ -47,6 +55,6 @@ async function test(status, blocked = false) {
   }
 }
 (async () => {
-  await test('active'); await test('pending'); await test('all'); await test('all', true);
+  await test('active'); await test('pending'); await test('setup'); await test('all'); await test('all', true);
   console.log('Member email copy: filters, all pages, pending queue, deduplication and clipboard fallback passed.');
 })().catch(e => { console.error(e); process.exitCode = 1; });

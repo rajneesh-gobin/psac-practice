@@ -94,6 +94,38 @@ export async function unsubscribeUrl(env, userId, scope = 'all') {
   return `${siteUrl(env)}/api/email-prefs?u=${encodeURIComponent(userId)}&s=${encodeURIComponent(scope)}&t=${token}`;
 }
 
+// ── An admin's typing → an email body ──────────────────────────────────
+// Shared by every handler that turns something a PERSON wrote into mail, so
+// a broadcast and a one-off message can never render the same paste
+// differently.
+//
+// ⚠ NORMALISE ONCE, FOR BOTH BODIES. An admin composes somewhere else - a
+//   terminal, a document, a chat window - and pastes. What arrives carries the
+//   SENDER'S layout: two-space indents, a trailing space on every line, three
+//   or four blank lines between paragraphs. bodyToHtml() turns every newline
+//   into a <br>, so all of that reaches the reader verbatim: text hard-wrapped
+//   at 76 columns breaks at 76 columns on a phone too, halfway across the
+//   screen, and reads as a fault in the email rather than in the paste.
+// ⚠ Line breaks the admin MEANT are kept - a signature block, an address, a
+//   short list. Only the whitespace nobody typed on purpose is removed, and
+//   runs of blank lines collapse to the one paragraph break they mean.
+export function normaliseBody(text) {
+  return String(text)
+    .replace(/\r\n?/g, '\n')
+    .split('\n').map(line => line.trim()).join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+// ⚠ EVERY CHARACTER IS ESCAPED FIRST. An admin is trusted; a message they
+//   pasted from somewhere else is not, and HTML arriving from a compose box is
+//   how a mail template starts rendering someone else's markup.
+export function bodyToHtml(text) {
+  return String(text).split(/\n{2,}/).map(block =>
+    `<p style="margin:0 0 14px">${escapeHtml(block).replace(/\n/g, '<br>')}</p>`
+  ).join('');
+}
+
 // A plain, readable shell every message shares, so a parent recognises them.
 // Inline styles only - Gmail strips <style> blocks.
 // ⚠ `env` is optional only so older call sites keep compiling; pass it. Without

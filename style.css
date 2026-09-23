@@ -323,6 +323,22 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
    code in auth.js and app.js adds alongside `.hidden`. Without this the Teacher
    and Admin buttons would be visible to every account. */
 .hdr-btn.hidden { display: none !important; }
+/* ── TEMPORARY: "New" badge on the Library button ─────────────────────────
+   Remove this block, the badge markup in index.html and the menu branch in
+   _renderHeaderMenu() together when the Library stops being a new feature.
+   ⚠ INLINE, never position:absolute — .hdr-btn is not position:relative, so an
+     absolutely positioned badge would anchor to the nearest positioned
+     ancestor (the page) and land somewhere else entirely. */
+.hdr-new, .mi-new {
+  display: inline-block; flex: 0 0 auto;
+  margin-left: 0.3rem; padding: 0.1rem 0.3rem;
+  border-radius: 999px;
+  background: #ef4444; color: #fff;
+  font-size: 0.5625rem; font-weight: 800; line-height: 1.35;
+  letter-spacing: 0.02em; text-transform: uppercase;
+  vertical-align: middle;
+}
+.dark .hdr-new, .dark .mi-new { background: #f87171; color: #431407; }
 .hdr-btn .hdr-ico { font-size: 1rem; line-height: 1; flex: 0 0 auto; }
 .hdr-btn .hdr-word { max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.5; }
 /* Leave room for descenders (g, p, y). Only variable-length labels need clipping. */
@@ -2998,7 +3014,8 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 #screen-profile,
 #screen-parent-messages,
 #screen-add-student,
-#screen-schedule {
+#screen-schedule,
+#screen-library {
   background:
     repeating-linear-gradient(
       0deg,
@@ -3022,31 +3039,32 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 #screen-parent-messages h2, #screen-parent-messages h3,
 #screen-add-student h2, #screen-add-student h3,
 #screen-schedule h2, #screen-schedule h3 { color: #f0ece8; }
+#screen-library h2, #screen-library h3, #screen-library h4 { color: #f0ece8; }
 
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule) p { color: rgba(240,236,220,.72); }
+    #screen-add-student, #screen-schedule, #screen-library) p { color: rgba(240,236,220,.72); }
 
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule) label { color: rgba(240,236,220,.85); }
+    #screen-add-student, #screen-schedule, #screen-library) label { color: rgba(240,236,220,.85); }
 
 /* ── Common Tailwind text overrides ── */
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(.text-gray-800, .text-gray-700, .dark\:text-white) { color: #f0ece8 !important; }
 
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(.text-gray-600, .text-gray-500, .text-gray-400,
       .dark\:text-gray-300, .dark\:text-gray-400, .dark\:text-gray-500) { color: rgba(240,236,220,.58) !important; }
 
 /* ── Cards / panels (bg-white, bg-gray-50, dark:bg-gray-800) ── */
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(.bg-white, .bg-gray-50, .dark\:bg-gray-800, .dark\:bg-gray-700\/50) {
     background: rgba(240,236,220,.07) !important;
     color: #f0ece8 !important;
@@ -3054,7 +3072,7 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(.bg-gray-100, .bg-gray-50, .dark\:bg-gray-700) {
     background: rgba(240,236,220,.10) !important;
     color: #f0ece8 !important;
@@ -3063,7 +3081,7 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 /* ── Borders ── */
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(.border-gray-200, .border-gray-300, .dark\:border-gray-700, .dark\:border-gray-600) {
     border-color: rgba(240,236,220,.18) !important;
   }
@@ -3071,7 +3089,7 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 /* ── Inputs, textareas, selects ── */
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(input, textarea, select) {
     background: rgba(240,236,220,.08) !important;
     border-color: rgba(240,236,220,.25) !important;
@@ -3080,13 +3098,13 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(input::placeholder, textarea::placeholder) { color: rgba(240,236,220,.35) !important; }
 
 /* ── Back / utility buttons (bg-gray-100 style) ── */
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(.bg-gray-100, .dark\:bg-gray-700):is(button, a) {
     background: rgba(240,236,220,.10) !important;
     color: #f0ece8 !important;
@@ -3102,15 +3120,15 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 /* ── Info banners (green/amber/blue) keep tint but on dark base ── */
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   .bg-green-50   { background: rgba(34,197,94,.1) !important; }
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   .bg-amber-50, .bg-yellow-50 { background: rgba(245,158,11,.1) !important; }
 :is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
     #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   .bg-blue-50    { background: rgba(59,130,246,.1) !important; }
 
 /* ── Schedule section dividers already chalk-styled via .sch-* ── */
@@ -3118,12 +3136,12 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 /* ── Light-mode force: override the day-theme block for these screens ── */
 html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
     #screen-forum, #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   :is(.bg-white, .bg-gray-50) { background: rgba(240,236,220,.07) !important; color: #f0ece8 !important; }
 
 html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
     #screen-forum, #screen-inbox, #screen-profile, #screen-parent-messages,
-    #screen-add-student, #screen-schedule)
+    #screen-add-student, #screen-schedule, #screen-library)
   .stat-tile { background: rgba(240,236,220,.08) !important; }
 
 /* ── Practice Hub ──────────────────────────────────────────────── */
@@ -10714,3 +10732,279 @@ html.dark .cert-gradetab-n { background: rgba(255, 255, 255, .12); }
   .cert-fx { flex-wrap: wrap; }
   .cert-fx-go { width: 100%; }
 }
+
+/* ── Our Library ───────────────────────────────────────────────────────────
+   ⚠ NO transform/filter/contain ON .screen, main OR body — only on the cards
+     below. A transformed ancestor becomes the containing block for every
+     position:fixed descendant, which is how the sticky action bar was lost
+     once already. */
+.lb-head{display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
+.lb-title{font-size:1.5rem;font-weight:800;margin:0}
+.lb-sub{font-size:.85rem;opacity:.75;margin:.25rem 0 0;max-width:46ch}
+.lb-btn{border:1px solid rgba(128,128,128,.35);border-radius:.75rem;padding:.5rem .9rem;font-size:.8rem;font-weight:700;background:transparent;color:inherit;cursor:pointer}
+.lb-warn{display:flex;gap:.6rem;align-items:flex-start;border:1px solid rgba(217,119,6,.35);background:rgba(217,119,6,.08);border-radius:.9rem;padding:.75rem .9rem;margin-bottom:1.25rem}
+.lb-warn p{margin:0;font-size:.78rem;line-height:1.5}
+.lb-note{opacity:.7;font-size:.9rem;text-align:center;padding:2rem 0}
+.lb-error{color:#dc2626}
+
+.lb-grade{border:1px solid rgba(128,128,128,.25);border-radius:1rem;margin-bottom:.75rem;overflow:hidden}
+.lb-grade-head{display:flex;align-items:center;gap:.75rem;width:100%;padding:.9rem 1rem;background:transparent;border:0;color:inherit;cursor:pointer;text-align:left;font:inherit}
+.lb-grade-ico{font-size:1.4rem;line-height:1}
+.lb-grade-name{font-weight:800;flex:1;min-width:0}
+.lb-grade-count{font-size:.75rem;opacity:.65;white-space:nowrap}
+.lb-chev{opacity:.55;font-size:1.1rem}
+.lb-grade-body{padding:0 .25rem}
+.lb-grade.is-open .lb-grade-body{padding-bottom:.5rem}
+
+.lb-shelf{padding:.25rem .75rem 0}
+.lb-shelf-title{font-size:.85rem;font-weight:700;opacity:.8;margin:.5rem 0 .5rem;display:flex;align-items:center;gap:.5rem}
+.lb-count{font-size:.7rem;font-weight:600;opacity:.6;border:1px solid rgba(128,128,128,.3);border-radius:1rem;padding:0 .45rem}
+
+/* A scroll-snapping row reads as a shelf on a phone and needs no library. */
+.lb-row{display:flex;gap:.85rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.25rem .1rem .6rem;-webkit-overflow-scrolling:touch}
+.lb-row::-webkit-scrollbar{height:6px}
+.lb-row::-webkit-scrollbar-thumb{background:rgba(128,128,128,.35);border-radius:3px}
+/* The ledge is what makes a row read as a shelf — cheaper than wood, and it
+   survives dark mode. */
+.lb-ledge{height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(128,128,128,.35),transparent);margin:0 .1rem .5rem}
+
+.lb-book{flex:0 0 auto;width:112px;scroll-snap-align:start;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:.35rem}
+.lb-cover-wrap{display:block;border-radius:.5rem;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:transform .18s ease,box-shadow .18s ease}
+.lb-cover{display:block;width:112px;height:150px}
+.lb-book:hover .lb-cover-wrap,.lb-book:focus-visible .lb-cover-wrap{transform:translateY(-3px) rotate(-.6deg);box-shadow:0 8px 18px rgba(0,0,0,.32)}
+.lb-book-title{font-size:.74rem;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lb-book-meta{font-size:.68rem;opacity:.6}
+.lb-back{margin-top:1.5rem;border:0;background:transparent;color:inherit;opacity:.7;font-weight:600;cursor:pointer;padding:.5rem}
+
+/* ⚠ A child who has asked for less motion gets none of the lift. */
+@media (prefers-reduced-motion:reduce){
+  .lb-cover-wrap{transition:none}
+  .lb-book:hover .lb-cover-wrap,.lb-book:focus-visible .lb-cover-wrap{transform:none}
+}
+
+/* ⚠ THE LIBRARY IS A CHALKBOARD IN BOTH THEMES, like #screen-parent and the
+   other parent-mode screens it now shares a background with. So there is ONE
+   palette here and no html.dark variant: a light-theme rule would paint dark
+   text on a dark board, which is the same contrast bug this screen already
+   shipped once when it used `color: inherit`.
+   ⚠ The chalk values are the ones the rest of the boards use - #f0ece8 and
+   rgba(240,236,220,…) - so the library reads as the same surface rather than
+   an approximation of it. */
+.lb-title{color:#f0ece8}
+.lb-sub{color:rgba(240,236,220,.72)}
+.lb-btn{color:#f0ece8;border-color:rgba(240,236,220,.35);background:rgba(240,236,220,.08)}
+.lb-btn:hover{background:rgba(240,236,220,.16)}
+.lb-warn{border-color:rgba(251,191,36,.38);background:rgba(251,191,36,.10)}
+.lb-warn p{color:#fcd9a4}
+.lb-warn a{color:#fde68a;text-decoration:underline}
+.lb-grade{border-color:rgba(240,236,220,.22);background:rgba(240,236,220,.05)}
+.lb-grade-name{color:#f0ece8}
+.lb-grade-count,.lb-chev{color:rgba(240,236,220,.62)}
+.lb-shelf-title{color:#f0ece8}
+.lb-count{color:rgba(240,236,220,.72);border-color:rgba(240,236,220,.28)}
+.lb-book-title{color:#f0ece8}
+.lb-book-meta{color:rgba(240,236,220,.58)}
+.lb-note{color:rgba(240,236,220,.65)}
+.lb-error{color:#fca5a5}
+.lb-back{color:rgba(240,236,220,.72)}
+.lb-ledge{background:linear-gradient(90deg,transparent,rgba(240,236,220,.28),transparent)}
+/* ⚠ THE CHALKBOARD ACTION STYLE, not a flat web button. Solid #4f46e5 sat on the
+   board like a sticker next to the chalk-outlined Refresh beside it. This is the
+   treatment #screen-schedule .tt-today-btn already uses for the one primary
+   action on a board: translucent indigo, a light indigo edge, pale indigo text.
+   ⚠ The MODALS stay ordinary white/dark sheets. style.css says it in as many
+   words for the schedule's day popup — what sits ON the board is chalk, a dialog
+   outside the screen is a normal sheet — and every other modal here follows it. */
+.lb-btn-primary{background:rgba(99,102,241,.32);border-color:#a5b4fc;color:#e0e7ff}
+.lb-btn-primary:hover{background:rgba(99,102,241,.46);border-color:#c7d2fe}
+/* The rendered chrome row: the action sits above the notice, right-aligned so it
+   does not compete with the heading. */
+.lb-chrome{display:flex;justify-content:flex-end;margin:0 0 .75rem}
+
+/* ══ Tab strips on a phone ═════════════════════════════════════════════════
+   ⚠ The chalk-tray strip is a ROW that wraps. With 9 tabs on the parent and
+     teacher boards that produced three ragged rows of different-width tabs —
+     the "broken blackboard". Below 700px they become one column of equal-size
+     buttons instead: same height, same width, each reachable with a thumb.
+   ⚠ This OVERRIDES the min-width/font shrinking above, which existed to squeeze
+     five tabs into one row. Stacked, there is nothing to squeeze — so the text
+     goes back to full size rather than 0.85rem. */
+@media (max-width:700px){
+  #screen-teacher .teacher-navigation,
+  #screen-student-home .teacher-navigation,
+  #screen-subject-hub .teacher-navigation,
+  #screen-parent .teacher-navigation{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
+    padding:10px;
+    border-radius:8px;
+    align-items:stretch;
+  }
+  #screen-teacher .ta-tab,
+  #screen-student-home .ta-tab,
+  #screen-subject-hub .ta-tab,
+  #screen-parent .ta-tab{
+    width:100%;
+    min-width:0;
+    min-height:44px;               /* a thumb-sized target, not a chalk stub */
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:.4rem;
+    padding:.6rem .9rem;
+    font-size:1rem;
+    border-radius:6px;
+    text-align:left;
+  }
+  /* The tray ledge is a row ornament; stacked it just draws a line under a
+     column of buttons and reads as a mistake. */
+  #screen-teacher .teacher-navigation::after,
+  #screen-student-home .teacher-navigation::after,
+  #screen-subject-hub .teacher-navigation::after,
+  #screen-parent .teacher-navigation::after{ display:none }
+}
+/* ⚠ The ≤420px squeeze must not come back and re-shrink the stacked buttons —
+   it is listed after this block in the file and would otherwise win on
+   equal specificity. */
+@media (max-width:420px){
+  #screen-teacher .ta-tab,
+  #screen-student-home .ta-tab,
+  #screen-subject-hub .ta-tab,
+  #screen-parent .ta-tab{ min-width:0; padding:.6rem .9rem; font-size:1rem }
+}
+
+/* ⚠ The duplicate .lb-btn-primary that used to sit here has been removed. It was
+   appended after the chalk block and therefore WON on equal specificity, so the
+   board kept the flat indigo no matter what the rule above said. */
+
+/* The report control sits under each cover, outside the link — a button nested
+   in an <a> is invalid and a tap on it would follow the link instead. */
+.lb-book-wrap{flex:0 0 auto;width:112px;scroll-snap-align:start;display:flex;flex-direction:column;gap:.3rem}
+.lb-book-wrap .lb-book{width:100%}
+.lb-report{align-self:flex-start;border:0;background:none;padding:.15rem .1rem;font-size:.66rem;
+  color:rgba(240,236,220,.42);cursor:pointer;letter-spacing:.02em}
+.lb-report:hover,.lb-report:focus-visible{color:#fca5a5;text-decoration:underline}
+
+/* ══ MODALS ON THE CHALKBOARD ══════════════════════════════════════════════
+   Every dialog in the app, not just the library's two. style.css used to say
+   the opposite — "a dialog outside the screen is a normal white/dark sheet" —
+   and that note is now wrong on purpose: a chalk app with white dialogs reads
+   as two products.
+
+   ⚠ SAME TECHNIQUE AS THE PARENT-MODE SCREEN BLOCK above: override the Tailwind
+     utilities the markup already carries, rather than editing 43 modals by hand.
+     The Play CDN only generates rules for classes present at its initial scan,
+     so a modal built by innerHTML gets the class and no rule — overriding the
+     class is what reaches both.
+   ⚠ SCOPED TO THE PANEL, never the backdrop: .bg-black/60 stays as it is, or the
+     dimming behind the dialog would go too.
+   ⚠ COLOURED BUTTONS ARE LEFT ALONE. Only white/grey surfaces and grey text are
+     repainted, so bg-indigo-600 / bg-green-600 / bg-red-600 actions keep their
+     meaning — those colours are the difference between Approve and Reject. */
+div[id^="modal-"].fixed :is(.bg-white, .dark\:bg-gray-800) {
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 34px,
+      rgba(180,180,180,.06) 34px, rgba(180,180,180,.06) 35px),
+    #1e1e1e !important;
+  color: #f0ece8 !important;
+  border: 1px solid rgba(240,236,220,.16);
+}
+div[id^="modal-"].fixed :is(.bg-gray-50, .bg-gray-100, .dark\:bg-gray-700, .dark\:bg-gray-700\/50, .dark\:bg-gray-600) {
+  background: rgba(240,236,220,.09) !important;
+  color: #f0ece8 !important;
+}
+div[id^="modal-"].fixed :is(h1, h2, h3, h4, b, strong) { color: #f0ece8; }
+div[id^="modal-"].fixed :is(.text-gray-800, .text-gray-700, .dark\:text-white) { color: #f0ece8 !important; }
+div[id^="modal-"].fixed :is(.text-gray-600, .text-gray-500, .text-gray-400,
+  .dark\:text-gray-200, .dark\:text-gray-300, .dark\:text-gray-400, .dark\:text-gray-500) {
+  color: rgba(240,236,220,.62) !important;
+}
+div[id^="modal-"].fixed :is(p, label, span, li, td, th) { color: inherit; }
+div[id^="modal-"].fixed :is(.border-gray-200, .border-gray-300, .dark\:border-gray-600, .dark\:border-gray-700) {
+  border-color: rgba(240,236,220,.24) !important;
+}
+/* Fields: chalk on slate, with a visible focus ring — a dark input with a dark
+   border is invisible on a dark panel. */
+div[id^="modal-"].fixed :is(input[type="text"], input[type="email"], input[type="number"],
+  input[type="password"], input[type="search"], input[type="tel"], input[type="date"],
+  input[type="file"], select, textarea) {
+  background: rgba(240,236,220,.08) !important;
+  color: #f0ece8 !important;
+  border-color: rgba(240,236,220,.32) !important;
+}
+div[id^="modal-"].fixed :is(input, select, textarea)::placeholder { color: rgba(240,236,220,.42); }
+div[id^="modal-"].fixed :is(input, select, textarea):focus {
+  outline: none;
+  border-color: #a5b4fc !important;
+  box-shadow: 0 0 0 2px rgba(165,180,252,.28);
+}
+/* ⚠ A <select>'s dropdown list is painted by the OS, not by this stylesheet, so
+   the options need their own colour or they render dark-on-dark on some
+   platforms. */
+div[id^="modal-"].fixed select option { background: #1e1e1e; color: #f0ece8; }
+
+/* The grade picker. One control however many shelves there are — an accordion
+   cost a row of vertical space per grade whether or not anyone wanted it. */
+.lb-pick{display:flex;align-items:center;gap:.6rem;margin:0 0 1rem}
+.lb-pick-label{font-size:.78rem;font-weight:700;color:rgba(240,236,220,.72);white-space:nowrap}
+.lb-pick-select{flex:1;min-width:0;font-size:.95rem;font-weight:600;padding:.6rem .8rem;border-radius:.75rem;
+  background:rgba(240,236,220,.08);color:#f0ece8;border:1px solid rgba(240,236,220,.32)}
+.lb-pick-select:focus{outline:none;border-color:#a5b4fc;box-shadow:0 0 0 2px rgba(165,180,252,.28)}
+/* ⚠ The option list is painted by the OS, not by this sheet — without its own
+   colour it renders dark-on-dark on some platforms. */
+.lb-pick-select option{background:#1e1e1e;color:#f0ece8}
+/* ⚠ THE STRIP WRAPS, IT DOES NOT SCROLL SIDEWAYS. An earlier version made it
+   one scrolling row; a menu that scrolls horizontally hides its own options and
+   reads wrong on a laptop. With Settings moved to the action row on BOTH boards
+   the eight remaining tabs fit on one line at 1280px (measured), and on a
+   narrower window they wrap to a tidy second row - which is an ordinary menu
+   shape, unlike a sideways scroll. Below 700px they become one column instead.
+   ⚠ Nothing here sets overflow, so the chalk-tray ::after ledge at bottom:-4px
+     is never clipped - that was the side effect the scrolling version had to
+     work around. */
+
+/* ⚠ 1.2rem of side padding × 2 × 8 tabs is ~307px of the parent strip's width.
+   Trimming it to .85rem between 701px and 1300px returns ~90px — measured: the
+   eight tabs went 1155px into a 1088px container, so the tail of the last one
+   ("📚 Library") was cut off at a common laptop width. The scroll above is the
+   safety net for when tabs outgrow even this; this is what stops it being
+   needed on the screens people actually use. */
+@media (min-width:701px) and (max-width:1300px){
+  #screen-teacher .ta-tab,
+  #screen-student-home .ta-tab,
+  #screen-subject-hub .ta-tab,
+  #screen-parent .ta-tab{ padding:.55rem .85rem .5rem }
+}
+
+/* Teacher-only, and it sits under the report link on the card. */
+.lb-share{align-self:flex-start;border:0;background:none;padding:.15rem .1rem;font-size:.66rem;
+  color:rgba(165,180,252,.85);cursor:pointer;font-weight:600}
+.lb-share:hover,.lb-share:focus-visible{color:#c7d2fe;text-decoration:underline}
+.lb-book-credit{font-size:.64rem;color:rgba(240,236,220,.5);font-style:italic}
+
+/* Library search. Across the whole library, not the shelf you are standing on. */
+.lb-search-row{margin:0 0 .75rem}
+.lb-search{width:100%;font-size:.95rem;padding:.65rem .9rem;border-radius:.75rem;
+  background:rgba(240,236,220,.08);color:#f0ece8;border:1px solid rgba(240,236,220,.32)}
+.lb-search::placeholder{color:rgba(240,236,220,.42)}
+.lb-search:focus{outline:none;border-color:#a5b4fc;box-shadow:0 0 0 2px rgba(165,180,252,.28)}
+.lb-hits{text-align:left;padding:.25rem 0 .5rem}
+/* Results wrap instead of scrolling sideways — a result list is read, not swiped. */
+.lb-row-wrap{flex-wrap:wrap;overflow-x:visible;scroll-snap-type:none}
+
+/* The one-line link from a subject or chapter screen into the library. */
+.lb-packlink-host:empty{display:none}
+.lb-packlink{display:inline-flex;align-items:center;gap:.45rem;width:100%;margin:0 0 1rem;
+  padding:.7rem .9rem;border-radius:.8rem;cursor:pointer;text-align:left;font-size:.85rem;
+  background:rgba(99,102,241,.14);border:1px solid rgba(165,180,252,.45);color:#e0e7ff}
+.lb-packlink:hover{background:rgba(99,102,241,.26)}
+.lb-packlink span[aria-hidden]{margin-left:auto;opacity:.7}
+.lb-clearfilter{border:0;background:none;color:#a5b4fc;font-weight:700;cursor:pointer;text-decoration:underline;font-size:.78rem}
+
+/* Sort and filter. Wraps on a phone rather than squeezing three selects. */
+.lb-controls{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 .9rem}
+.lb-ctl{flex:1 1 auto;min-width:8.5rem;font-size:.82rem;padding:.45rem .6rem;border-radius:.6rem;
+  background:rgba(240,236,220,.08);color:#f0ece8;border:1px solid rgba(240,236,220,.28)}
+.lb-ctl:focus{outline:none;border-color:#a5b4fc;box-shadow:0 0 0 2px rgba(165,180,252,.28)}
+.lb-ctl option{background:#1e1e1e;color:#f0ece8}

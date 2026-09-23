@@ -1,7 +1,7 @@
 -- ══════════════════════════════════════════════════════════════════════════
 --  PSAC Exam Practice — CONSOLIDATED DATABASE SCHEMA
 --
---  GENERATED FROM THE LIVE DATABASE on 2026-09-19
+--  GENERATED FROM THE LIVE DATABASE on 2026-09-23
 --  (project xawvjwsiqhtxgpocdqgm, PostgreSQL 17.6).
 --
 --  This one file replaces 31 incremental migrations — every supabase-*.sql,
@@ -16,7 +16,7 @@
 --  • Answering "what is really deployed?": read this, not a migration file.
 --  • Re-running it against production: every statement is idempotent, so it is
 --    safe — but it is a SNAPSHOT, not a diff. It drops nothing, so an object
---    added to production since 2026-09-19 survives; and it overwrites function,
+--    added to production since 2026-09-23 survives; and it overwrites function,
 --    policy and trigger definitions with the ones recorded here, so regenerate
 --    before you re-run or you will roll a later fix backwards.
 --
@@ -628,6 +628,155 @@ ALTER TABLE public.learning_materials ALTER COLUMN id SET NOT NULL;
 ALTER TABLE public.learning_materials ALTER COLUMN title SET NOT NULL;
 ALTER TABLE public.learning_materials ALTER COLUMN link_expiry_seconds SET NOT NULL;
 ALTER TABLE public.learning_materials ALTER COLUMN source_type SET NOT NULL;
+
+CREATE TABLE IF NOT EXISTS public.library_documents (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  sha256 text NOT NULL,
+  text_sha256 text,
+  filename text NOT NULL,
+  storage text DEFAULT 'static'::text NOT NULL,
+  storage_key text,
+  section_id uuid,
+  grade integer,
+  subject text,
+  doc_type text NOT NULL,
+  board text,
+  year integer,
+  title text NOT NULL,
+  description text,
+  pages integer,
+  bytes integer NOT NULL,
+  pack_id text,
+  chapter_ids text[],
+  status text DEFAULT 'pending'::text NOT NULL,
+  hold_reason text,
+  source text DEFAULT 'community'::text NOT NULL,
+  submitted_by uuid,
+  submitted_name text,
+  credit_name text,
+  disclaimer_version text,
+  disclaimer_accepted_at timestamp with time zone,
+  reviewed_by uuid,
+  reviewed_at timestamp with time zone,
+  review_note text,
+  published_at timestamp with time zone,
+  search_text text,
+  download_count integer DEFAULT 0 NOT NULL,
+  report_count integer DEFAULT 0 NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS sha256 text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS text_sha256 text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS filename text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS storage text DEFAULT 'static'::text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS storage_key text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS section_id uuid;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS grade integer;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS subject text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS doc_type text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS board text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS year integer;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS title text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS description text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS pages integer;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS bytes integer;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS pack_id text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS chapter_ids text[];
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS status text DEFAULT 'pending'::text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS hold_reason text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS source text DEFAULT 'community'::text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS submitted_by uuid;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS submitted_name text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS credit_name text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS disclaimer_version text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS disclaimer_accepted_at timestamp with time zone;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS reviewed_by uuid;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS reviewed_at timestamp with time zone;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS review_note text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS published_at timestamp with time zone;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS search_text text;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS download_count integer DEFAULT 0;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS report_count integer DEFAULT 0;
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.library_documents ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.library_documents ALTER COLUMN id SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN sha256 SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN filename SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN storage SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN doc_type SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN title SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN bytes SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN status SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN source SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN download_count SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN report_count SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN created_at SET NOT NULL;
+ALTER TABLE public.library_documents ALTER COLUMN updated_at SET NOT NULL;
+
+CREATE TABLE IF NOT EXISTS public.library_reports (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  document_id uuid NOT NULL,
+  reporter_id uuid,
+  reporter_kind text DEFAULT 'parent'::text NOT NULL,
+  reason text NOT NULL,
+  detail text,
+  status text DEFAULT 'open'::text NOT NULL,
+  handled_by uuid,
+  handled_at timestamp with time zone,
+  handler_note text,
+  created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS document_id uuid;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS reporter_id uuid;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS reporter_kind text DEFAULT 'parent'::text;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS reason text;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS detail text;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS status text DEFAULT 'open'::text;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS handled_by uuid;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS handled_at timestamp with time zone;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS handler_note text;
+ALTER TABLE public.library_reports ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.library_reports ALTER COLUMN id SET NOT NULL;
+ALTER TABLE public.library_reports ALTER COLUMN document_id SET NOT NULL;
+ALTER TABLE public.library_reports ALTER COLUMN reporter_kind SET NOT NULL;
+ALTER TABLE public.library_reports ALTER COLUMN reason SET NOT NULL;
+ALTER TABLE public.library_reports ALTER COLUMN status SET NOT NULL;
+ALTER TABLE public.library_reports ALTER COLUMN created_at SET NOT NULL;
+
+CREATE TABLE IF NOT EXISTS public.library_sections (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  parent_id uuid,
+  slug text NOT NULL,
+  name text NOT NULL,
+  grade integer,
+  pack_id text,
+  icon text,
+  sort_order integer DEFAULT 0 NOT NULL,
+  status text DEFAULT 'active'::text NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS parent_id uuid;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS slug text;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS name text;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS grade integer;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS pack_id text;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS icon text;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS sort_order integer DEFAULT 0;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS status text DEFAULT 'active'::text;
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS created_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.library_sections ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone DEFAULT now();
+ALTER TABLE public.library_sections ALTER COLUMN id SET NOT NULL;
+ALTER TABLE public.library_sections ALTER COLUMN slug SET NOT NULL;
+ALTER TABLE public.library_sections ALTER COLUMN name SET NOT NULL;
+ALTER TABLE public.library_sections ALTER COLUMN sort_order SET NOT NULL;
+ALTER TABLE public.library_sections ALTER COLUMN status SET NOT NULL;
+ALTER TABLE public.library_sections ALTER COLUMN created_at SET NOT NULL;
+ALTER TABLE public.library_sections ALTER COLUMN updated_at SET NOT NULL;
 
 CREATE TABLE IF NOT EXISTS public.login_events (
   id uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -1672,6 +1821,27 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_pkey'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_pkey PRIMARY KEY (id);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_reports_pkey'
+                    AND conrelid = 'library_reports'::regclass) THEN
+    ALTER TABLE library_reports ADD CONSTRAINT library_reports_pkey PRIMARY KEY (id);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_sections_pkey'
+                    AND conrelid = 'library_sections'::regclass) THEN
+    ALTER TABLE library_sections ADD CONSTRAINT library_sections_pkey PRIMARY KEY (id);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'login_events_pkey'
                     AND conrelid = 'login_events'::regclass) THEN
     ALTER TABLE login_events ADD CONSTRAINT login_events_pkey PRIMARY KEY (id);
@@ -1975,6 +2145,27 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_filename_key'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_filename_key UNIQUE (filename);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_sha256_key'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_sha256_key UNIQUE (sha256);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_sections_slug_unique'
+                    AND conrelid = 'library_sections'::regclass) THEN
+    ALTER TABLE library_sections ADD CONSTRAINT library_sections_slug_unique UNIQUE (parent_id, slug);
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'profiles_referral_code_key'
                     AND conrelid = 'profiles'::regclass) THEN
     ALTER TABLE profiles ADD CONSTRAINT profiles_referral_code_key UNIQUE (referral_code);
@@ -2077,7 +2268,7 @@ DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'forum_posts_category_check'
                     AND conrelid = 'forum_posts'::regclass) THEN
-    ALTER TABLE forum_posts ADD CONSTRAINT forum_posts_category_check CHECK ((category = ANY (ARRAY['general'::text, 'maths'::text, 'english'::text, 'science'::text, 'french'::text, 'history'::text, 'tips'::text, 'suggest'::text, 'report'::text, 'announce'::text])));
+    ALTER TABLE forum_posts ADD CONSTRAINT forum_posts_category_check CHECK ((category = ANY (ARRAY['general'::text, 'subject'::text, 'history'::text, 'tips'::text, 'feature'::text, 'suggest'::text, 'report'::text, 'announce'::text, 'maths'::text, 'english'::text, 'science'::text, 'french'::text])));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2176,6 +2367,55 @@ DO $$ BEGIN
                   WHERE conname = 'learning_materials_title_len_ck'
                     AND conrelid = 'learning_materials'::regclass) THEN
     ALTER TABLE learning_materials ADD CONSTRAINT learning_materials_title_len_ck CHECK (((title IS NULL) OR (length(title) <= 200)));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_source_check'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_source_check CHECK ((source = ANY (ARRAY['seed'::text, 'community'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_status_check'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_status_check CHECK ((status = ANY (ARRAY['pending'::text, 'published'::text, 'rejected'::text, 'removed'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_storage_check'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_storage_check CHECK ((storage = ANY (ARRAY['static'::text, 'supabase'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_storage_key'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_storage_key CHECK ((((storage = 'supabase'::text) AND (storage_key IS NOT NULL)) OR ((storage = 'static'::text) AND (storage_key IS NULL))));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_reports_reporter_kind_check'
+                    AND conrelid = 'library_reports'::regclass) THEN
+    ALTER TABLE library_reports ADD CONSTRAINT library_reports_reporter_kind_check CHECK ((reporter_kind = ANY (ARRAY['parent'::text, 'teacher'::text, 'student'::text, 'admin'::text, 'anon'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_reports_status_check'
+                    AND conrelid = 'library_reports'::regclass) THEN
+    ALTER TABLE library_reports ADD CONSTRAINT library_reports_status_check CHECK ((status = ANY (ARRAY['open'::text, 'dismissed'::text, 'actioned'::text])));
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_sections_status_check'
+                    AND conrelid = 'library_sections'::regclass) THEN
+    ALTER TABLE library_sections ADD CONSTRAINT library_sections_status_check CHECK ((status = ANY (ARRAY['active'::text, 'locked'::text, 'hidden'::text])));
   END IF;
 END $$;
 DO $$ BEGIN
@@ -2672,6 +2912,55 @@ DO $$ BEGIN
 END $$;
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_reviewed_by_fkey'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_reviewed_by_fkey FOREIGN KEY (reviewed_by) REFERENCES profiles(id) ON DELETE SET NULL;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_section_id_fkey'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_section_id_fkey FOREIGN KEY (section_id) REFERENCES library_sections(id) ON DELETE SET NULL;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_documents_submitted_by_fkey'
+                    AND conrelid = 'library_documents'::regclass) THEN
+    ALTER TABLE library_documents ADD CONSTRAINT library_documents_submitted_by_fkey FOREIGN KEY (submitted_by) REFERENCES profiles(id) ON DELETE SET NULL;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_reports_document_id_fkey'
+                    AND conrelid = 'library_reports'::regclass) THEN
+    ALTER TABLE library_reports ADD CONSTRAINT library_reports_document_id_fkey FOREIGN KEY (document_id) REFERENCES library_documents(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_reports_handled_by_fkey'
+                    AND conrelid = 'library_reports'::regclass) THEN
+    ALTER TABLE library_reports ADD CONSTRAINT library_reports_handled_by_fkey FOREIGN KEY (handled_by) REFERENCES profiles(id) ON DELETE SET NULL;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_reports_reporter_id_fkey'
+                    AND conrelid = 'library_reports'::regclass) THEN
+    ALTER TABLE library_reports ADD CONSTRAINT library_reports_reporter_id_fkey FOREIGN KEY (reporter_id) REFERENCES profiles(id) ON DELETE SET NULL;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                  WHERE conname = 'library_sections_parent_id_fkey'
+                    AND conrelid = 'library_sections'::regclass) THEN
+    ALTER TABLE library_sections ADD CONSTRAINT library_sections_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES library_sections(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
                   WHERE conname = 'minigame_polls_student_id_fkey'
                     AND conrelid = 'minigame_polls'::regclass) THEN
     ALTER TABLE minigame_polls ADD CONSTRAINT minigame_polls_student_id_fkey FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE;
@@ -2946,7 +3235,7 @@ END $$;
 
 
 -- ═══ 4 · FUNCTIONS ════════════════════════════════════════════════════════════
--- 143 functions, verbatim from pg_get_functiondef().
+-- 145 functions, verbatim from pg_get_functiondef().
 --
 -- ⚠ SECURITY DEFINER and the pinned search_path on each are part of the
 --   definition, not decoration. Do not strip either when editing one.
@@ -4658,6 +4947,55 @@ AS $function$
     and (p_difficulty is null or (data->>'difficulty')::int = p_difficulty)
     and (p_allowed_chapters is null or data->>'chapterId' = any(p_allowed_chapters))
     and (p_blocked_chapters is null or data->>'chapterId' != all(p_blocked_chapters))
+$function$;
+
+-- ── get_student_report_thread(p_report_id uuid, p_student_id uuid)
+CREATE OR REPLACE FUNCTION public.get_student_report_thread(p_report_id uuid, p_student_id uuid DEFAULT NULL::uuid)
+ RETURNS TABLE(id uuid, author_type text, message text, created_at timestamp with time zone)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+DECLARE
+  v_sid uuid;
+BEGIN
+  v_sid := current_student_id();
+
+  IF v_sid IS NULL THEN
+    -- Parent previewing a child (no student token, but has a JWT).
+    IF p_student_id IS NOT NULL AND auth.uid() IS NOT NULL THEN
+      IF EXISTS (
+        SELECT 1 FROM public.students s
+        JOIN public.families f ON f.id = s.family_id
+        WHERE s.id = p_student_id
+          AND (f.parent_id = auth.uid()
+               OR EXISTS (
+                 SELECT 1 FROM public.family_members fm
+                 WHERE fm.family_id = f.id AND fm.user_id = auth.uid()
+               ))
+      ) THEN
+        v_sid := p_student_id;
+      ELSE
+        RAISE EXCEPTION 'not_authorized';
+      END IF;
+    ELSE
+      RETURN; -- no identity: return empty
+    END IF;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM public.question_reports qr
+    WHERE qr.id = p_report_id AND qr.student_id = v_sid
+  ) THEN
+    RETURN; -- not this child's report: empty, indistinguishable from no messages
+  END IF;
+
+  RETURN QUERY
+  SELECT m.id, m.author_type, m.message, m.created_at
+  FROM public.question_report_messages m
+  WHERE m.report_id = p_report_id
+  ORDER BY m.created_at ASC;
+END;
 $function$;
 
 -- ── get_student_reports(p_student_id uuid)
@@ -7580,6 +7918,46 @@ BEGIN
     'features', coalesce(v_features, '{}'::jsonb));
 END $function$;
 
+-- ── student_subject_progress(p_student uuid)
+CREATE OR REPLACE FUNCTION public.student_subject_progress(p_student uuid DEFAULT NULL::uuid)
+ RETURNS TABLE(pack_id text, chapter_id text, explored integer, secure integer, improved integer, needs integer, legacy integer, attempts bigint, correct bigint, last_at timestamp with time zone)
+ LANGUAGE plpgsql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_student uuid := public.current_student_id();
+BEGIN
+  IF v_student IS NULL THEN
+    IF p_student IS NULL THEN
+      RAISE EXCEPTION 'no_student' USING ERRCODE = '28000';
+    END IF;
+    IF NOT (public.owns_student(p_student) OR public.is_admin()) THEN
+      RAISE EXCEPTION 'not_authorized' USING ERRCODE = '42501';
+    END IF;
+    v_student := p_student;
+  ELSIF p_student IS NOT NULL AND p_student <> v_student THEN
+    -- A student token may only ever read its own rows.
+    RAISE EXCEPTION 'not_authorized' USING ERRCODE = '42501';
+  END IF;
+
+  RETURN QUERY
+  SELECT coalesce(q.subject_pack_id, '')                                    AS pack_id,
+         q.chapter_id                                                       AS chapter_id,
+         count(*)::integer                                                  AS explored,
+         count(*) FILTER (WHERE q.state = 'secure')::integer                AS secure,
+         count(*) FILTER (WHERE q.state = 'improved')::integer              AS improved,
+         count(*) FILTER (WHERE q.state = 'needs_practice')::integer        AS needs,
+         count(*) FILTER (WHERE q.state = 'legacy_seen')::integer           AS legacy,
+         coalesce(sum(q.attempts), 0)::bigint                               AS attempts,
+         coalesce(sum(q.correct_attempts), 0)::bigint                       AS correct,
+         max(q.last_seen_at)                                                AS last_at
+  FROM public.student_question_progress q
+  WHERE q.student_id = v_student
+  GROUP BY 1, 2;
+END;
+$function$;
+
 -- ── teacher_classroom_materials_link(p_classroom uuid, p_action text)
 CREATE OR REPLACE FUNCTION public.teacher_classroom_materials_link(p_classroom uuid, p_action text DEFAULT 'get'::text)
  RETURNS jsonb
@@ -8606,7 +8984,7 @@ ALTER TABLE public.forum_replies ALTER COLUMN author_student_id SET DEFAULT curr
 
 -- ═══ 6 · INDEXES ══════════════════════════════════════════════════════════════
 -- Indexes that back a constraint are omitted — §3 creates those with the
--- constraint itself. 78 standalone indexes.
+-- constraint itself. 87 standalone indexes.
 CREATE INDEX IF NOT EXISTS admin_actions_student_idx ON public.admin_actions USING btree (target_student, created_at DESC);
 CREATE INDEX IF NOT EXISTS admin_actions_user_idx ON public.admin_actions USING btree (target_user, created_at DESC);
 CREATE INDEX IF NOT EXISTS submissions_assignment_idx ON public.assignment_submissions USING btree (assignment_id);
@@ -8636,6 +9014,15 @@ CREATE INDEX IF NOT EXISTS guest_material_completions_class_idx ON public.guest_
 CREATE INDEX IF NOT EXISTS guest_submissions_assignment_idx ON public.guest_submissions USING btree (assignment_id);
 CREATE INDEX IF NOT EXISTS guest_submissions_device_idx ON public.guest_submissions USING btree (assignment_id, device_code) WHERE (device_code IS NOT NULL);
 CREATE INDEX IF NOT EXISTS learning_materials_teacher_created_idx ON public.learning_materials USING btree (teacher_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS library_documents_pack_idx ON public.library_documents USING btree (pack_id) WHERE (pack_id IS NOT NULL);
+CREATE INDEX IF NOT EXISTS library_documents_shelf_idx ON public.library_documents USING btree (section_id, status, year DESC NULLS LAST);
+CREATE INDEX IF NOT EXISTS library_documents_status_idx ON public.library_documents USING btree (status, created_at DESC);
+CREATE INDEX IF NOT EXISTS library_documents_submitter_idx ON public.library_documents USING btree (submitted_by, created_at DESC);
+CREATE INDEX IF NOT EXISTS library_documents_text_hash_idx ON public.library_documents USING btree (text_sha256) WHERE (text_sha256 IS NOT NULL);
+CREATE INDEX IF NOT EXISTS library_reports_document_idx ON public.library_reports USING btree (document_id);
+CREATE INDEX IF NOT EXISTS library_reports_open_idx ON public.library_reports USING btree (status, created_at DESC);
+CREATE INDEX IF NOT EXISTS library_sections_parent_idx ON public.library_sections USING btree (parent_id, sort_order);
+CREATE UNIQUE INDEX IF NOT EXISTS library_sections_root_slug_unique ON public.library_sections USING btree (slug) WHERE (parent_id IS NULL);
 CREATE INDEX IF NOT EXISTS login_events_user_idx ON public.login_events USING btree (user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS minigame_polls_student_kind_created_idx ON public.minigame_polls USING btree (student_id, kind, created_at DESC);
 CREATE INDEX IF NOT EXISTS payments_plan_idx ON public.payments USING btree (plan_id);
@@ -8752,7 +9139,7 @@ CREATE TRIGGER teacher_guest_pupils_name_log AFTER INSERT OR UPDATE OF name ON p
 -- ⚠ The forum is adults-only IN THE DATABASE (auth.uid() IS NOT NULL), not by
 --   hiding a button. A child session is anon and is excluded by construction.
 --
--- RLS is enabled on all 59 public tables.
+-- RLS is enabled on all 62 public tables.
 
 ALTER TABLE public.admin_actions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.assignment_submissions ENABLE ROW LEVEL SECURITY;
@@ -8776,6 +9163,9 @@ ALTER TABLE public.guest_material_completions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.guest_pin_attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.guest_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.learning_materials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.library_documents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.library_reports ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.library_sections ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.login_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.mail_quota ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.minigame_polls ENABLE ROW LEVEL SECURITY;
@@ -8995,6 +9385,60 @@ CREATE POLICY "teachers can read materials" ON public.learning_materials
   FOR SELECT
   TO authenticated
   USING (((teacher_id = auth.uid()) OR is_admin()));
+
+-- ── library_documents
+DROP POLICY IF EXISTS library_documents_admin_write ON public.library_documents;
+CREATE POLICY library_documents_admin_write ON public.library_documents
+  FOR UPDATE
+  TO authenticated
+  USING (is_admin())
+  WITH CHECK (is_admin());
+DROP POLICY IF EXISTS library_documents_read ON public.library_documents;
+CREATE POLICY library_documents_read ON public.library_documents
+  FOR SELECT
+  TO anon, authenticated
+  USING (((status = 'published'::text) OR is_admin() OR ((submitted_by IS NOT NULL) AND (submitted_by = auth.uid()))));
+
+-- ── library_reports
+DROP POLICY IF EXISTS library_reports_admin_read ON public.library_reports;
+CREATE POLICY library_reports_admin_read ON public.library_reports
+  FOR SELECT
+  TO authenticated
+  USING (is_admin());
+DROP POLICY IF EXISTS library_reports_admin_update ON public.library_reports;
+CREATE POLICY library_reports_admin_update ON public.library_reports
+  FOR UPDATE
+  TO authenticated
+  USING (is_admin())
+  WITH CHECK (is_admin());
+DROP POLICY IF EXISTS library_reports_insert ON public.library_reports;
+CREATE POLICY library_reports_insert ON public.library_reports
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (((reporter_id IS NULL) OR (reporter_id = auth.uid())));
+
+-- ── library_sections
+DROP POLICY IF EXISTS library_sections_admin_delete ON public.library_sections;
+CREATE POLICY library_sections_admin_delete ON public.library_sections
+  FOR DELETE
+  TO authenticated
+  USING (is_admin());
+DROP POLICY IF EXISTS library_sections_admin_insert ON public.library_sections;
+CREATE POLICY library_sections_admin_insert ON public.library_sections
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (is_admin());
+DROP POLICY IF EXISTS library_sections_admin_update ON public.library_sections;
+CREATE POLICY library_sections_admin_update ON public.library_sections
+  FOR UPDATE
+  TO authenticated
+  USING (is_admin())
+  WITH CHECK (is_admin());
+DROP POLICY IF EXISTS library_sections_read ON public.library_sections;
+CREATE POLICY library_sections_read ON public.library_sections
+  FOR SELECT
+  TO anon, authenticated
+  USING (((status <> 'hidden'::text) OR is_admin()));
 
 -- ── login_events
 DROP POLICY IF EXISTS login_insert ON public.login_events;
@@ -9389,6 +9833,15 @@ GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.learning_materials TO anon;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.learning_materials TO authenticated;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.learning_materials TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_documents TO anon;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_documents TO authenticated;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_documents TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_reports TO anon;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_reports TO authenticated;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_reports TO service_role;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_sections TO anon;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_sections TO authenticated;
+GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.library_sections TO service_role;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.login_events TO anon;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.login_events TO authenticated;
 GRANT DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE ON public.login_events TO service_role;
@@ -9547,6 +10000,7 @@ GRANT EXECUTE ON FUNCTION public.get_my_points() TO anon, authenticated, service
 GRANT EXECUTE ON FUNCTION public.get_my_points_rank(p_grade integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_points_leaderboard(p_grade integer, p_limit integer) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_questions_for_client(p_subject_id text, p_chapter_id text, p_difficulty integer, p_allowed_chapters text[], p_blocked_chapters text[]) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_student_report_thread(p_report_id uuid, p_student_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.get_student_reports(p_student_id uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_profiles_privileged() TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.guard_students_privileged() TO anon, authenticated, service_role;
@@ -9624,6 +10078,7 @@ GRANT EXECUTE ON FUNCTION public.shop_settings() TO anon, authenticated, service
 GRANT EXECUTE ON FUNCTION public.shop_subject_price(p_subject_id text) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.soft_delete_student(p_student uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.student_plan_features(p_student uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.student_subject_progress(p_student uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_classroom_materials_link(p_classroom uuid, p_action text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_admin_recover(p_action text, p_classroom uuid) TO anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.teacher_guest_archive_assignment(p_id uuid, p_archive boolean) TO authenticated, service_role;

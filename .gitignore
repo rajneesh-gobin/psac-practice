@@ -50,3 +50,17 @@ keystore.properties
 # It carries signing config and a full Gradle build - neither belongs here.
 nouklass-android/
 twa-manifest.json
+# ⚠ library/ IS COMMITTED, deliberately, and this is the reason:
+#   production deploys from a push to this repo, so a Cloudflare build only ever
+#   sees what is committed. Files kept out of git are simply absent from the
+#   build — and because a Workers deploy replaces the WHOLE asset manifest, a
+#   manual upload would be wiped by the next push. Committing them is the only
+#   arrangement where the library keeps working on its own.
+# ⚠ They are written once and never modified — append-only, which is the one
+#   binary pattern git handles cleanly. Never rewrite a file in place here:
+#   the name carries a content hash, so a changed document is a NEW name.
+#   (~502 MB, largest file 9.4 MB — well under GitHub's 100 MB per-file limit.)
+library/.gitkeep
+# The generated catalogue: rebuilt by scripts/library-scan.js from the source
+# folder, which is not in this repo.
+.library/

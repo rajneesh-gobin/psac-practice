@@ -61,6 +61,10 @@ const MIME = {
   '.jpg':  'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.ico':  'image/x-icon',
+  // ⚠ Without this a library PDF is served application/octet-stream and the
+  //   browser DOWNLOADS it instead of opening it - which is not how it behaves
+  //   on Cloudflare, so local testing would disagree with production.
+  '.pdf':  'application/pdf',
   '.webmanifest': 'application/manifest+json',
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',

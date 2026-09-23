@@ -22,7 +22,10 @@ const TeacherMode = (() => {
   // their own, matching the parent dashboard. They are still listed here
   // separately from MAIN_TABS because they are TOOLS - a teacher visits one and
   // comes back - while home is where the work is.
-  const TOOL_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'papers', 'preview', 'settings'];
+  // ⚠ 'library' MUST be listed, or switchTab() silently falls back to 'home':
+  //   the guard below rejects any tab not named here, so a panel and a button
+  //   alone are not enough to make a tab exist.
+  const TOOL_TABS = ['materials', 'messages', 'gradebook', 'assignments', 'papers', 'preview', 'library', 'settings'];
   const ALL_TABS = MAIN_TABS.concat(DETAIL_TABS, TOOL_TABS);
 
   function _getData() {
@@ -762,6 +765,9 @@ const TeacherMode = (() => {
 
   // ── Tab switching ──────────────────────────────
   function switchTab(tab, opts = {}) {
+    // ⚠ Recorded so Back walks the tabs instead of leaping off the board.
+    //   _recordTab lives in app.js, which always loads before this role module.
+    if (typeof _recordTab === 'function') _recordTab('teacher', tab);
     // 'classes' was its own tab until the classroom list moved onto Home.
     // Older callers, and a location saved before the change, still name it.
     if (tab === 'classes') tab = 'home';
@@ -771,6 +777,7 @@ const TeacherMode = (() => {
       if (typeof TeacherGuestClasses !== 'undefined' && !opts.restoring) TeacherGuestClasses.refresh();
     }
     if (tab === 'materials') TeacherMaterials.load();
+    if (tab === 'library' && typeof Library !== 'undefined') Library.mountInto('tc-library-body');
     if (tab === 'create')    { _renderClassPicker(); modeChanged(); _applyLevelWords(); if (!opts.keepStep) gotoStep(1, { silent: true }); }
     if (tab === 'results' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showResults(_readLoc().resultsId || '');
     if (tab === 'assignments' && typeof TeacherWorkspace !== 'undefined') TeacherWorkspace.showList(opts.filter || _readLoc().listFilter || 'archived');
