@@ -31,8 +31,21 @@ const html = read('index.html');
 const css = read('style.css');
 const store = read('engine/store.js');
 
+// ⚠ MATCH ON THE DECLARATION, NEVER ON THE PARAMETER LIST. This pinned the
+//   whole header, so when Library.assign(id) gained an optional `prefill` the
+//   lookup missed and the test died on its FIRST check - taking every later
+//   check with it, and reporting "not found" as though the function had been
+//   deleted. The body scan below already handles any parameter list; only the
+//   lookup was rigid.
 function fnBody(src, header) {
-  const start = src.indexOf(header);
+  let start = src.indexOf(header);
+  if (start < 0) {
+    const upto = header.indexOf('(');
+    const decl = (upto < 0 ? header : header.slice(0, upto)).trimEnd();
+    const re = new RegExp(decl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\(');
+    const m = re.exec(src);
+    if (m) start = m.index;
+  }
   if (start < 0) throw new Error('not found: ' + header);
   let i = src.indexOf('(', start), parens = 0;
   for (; i < src.length; i++) {
