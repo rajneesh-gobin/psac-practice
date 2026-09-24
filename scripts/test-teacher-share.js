@@ -186,7 +186,7 @@ const ROWS = [
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
     document.getElementById('screen-teacher').classList.remove('hidden');
     document.querySelectorAll('#screen-teacher .ta-tab-content').forEach(p => p.classList.add('hidden'));
-    document.querySelector('#screen-teacher .ta-tab-content[data-tab="materials"]').classList.remove('hidden');
+    document.querySelector('#screen-teacher .ta-tab-content[data-tab="library"]').classList.remove('hidden');
     await TeacherMaterials.load();
     return true;
   })()`);

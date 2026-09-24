@@ -102,8 +102,18 @@ check(/\.select\('assigned_at, learning_materials\(\*\)'\)/.test(detailSrc),
   'the classroom query asks for assigned_at — when the file was shared with THIS class');
 check(/shared_at: r\.assigned_at/.test(detailSrc), 'assigned_at is mapped onto each row as shared_at');
 check(/sortMaterials\(files, _matSort\)/.test(detailSrc), 'the classroom list is ordered by the shared comparator');
-check(/sortMaterials\(_materials, 'recent'\)\.slice\(0, 6\)/.test(detailSrc),
-  'the Work tab preview stays newest-first whatever sort the Materials tab is on');
+// ⚠ THE WORK-TAB PREVIEW IS GONE, and this used to assert it stayed
+//   newest-first whatever the Materials tab was sorted to:
+//     sortMaterials(_materials, 'recent').slice(0, 6)
+//   The classroom redesign merged Activities and Calendar into one Work
+//   timeline and gave Files a section of its own, so there is no six-item
+//   preview left to keep in its own order — grep confirms _renderOverview()
+//   touches no materials at all. Asserting a call that no longer exists tests
+//   the redesign, not the sorting, so it is retired rather than relaxed.
+// ⚠ What it was really protecting — that the list a teacher sees is ordered by
+//   the ONE shared comparator — is still asserted directly above.
+check(!/sortMaterials\(_materials, 'recent'\)/.test(detailSrc),
+  'no stale newest-first preview is left behind in the classroom detail');
 check(/materialSortBar\(_matSort, 'TeacherClassroomDetail\.setMaterialSort'/.test(detailSrc),
   'the classroom section renders the shared sort bar');
 check(/files\.length > 1 \? materialSortBar/.test(detailSrc),
@@ -283,7 +293,13 @@ const TEACHER_ROWS = MATS.map((m, i) => ({
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
     document.getElementById('screen-teacher').classList.remove('hidden');
     document.querySelectorAll('#screen-teacher .ta-tab-content').forEach(p => p.classList.add('hidden'));
-    document.querySelector('#screen-teacher .ta-tab-content[data-tab="materials"]').classList.remove('hidden');
+    document.querySelector('#screen-teacher .ta-tab-content[data-tab="library"]').classList.remove('hidden');
+    // ⚠ The Library tab now holds SHELVES, and the file shelf starts hidden.
+    //   Without this the chips render and click fine but measure 0px tall, so
+    //   the 44px touch-target check failed while every behaviour check passed
+    //   — a hidden element is not a small one.
+    document.querySelectorAll('#screen-teacher [data-shelf-panel]').forEach(p => p.classList.add('hidden'));
+    document.querySelector('#screen-teacher [data-shelf-panel="files"]').classList.remove('hidden');
     await TeacherMaterials.load();
     return true;
   })()`);
