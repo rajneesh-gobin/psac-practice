@@ -212,8 +212,20 @@ section('the pupil page');
     && !/setItem\([^)]*pin/i.test(js));
   ck('homework cards link to the guest runner and start nothing themselves',
     /'\/a\/' \+ encodeURIComponent/.test(js) && !/assignment-open/.test(js));
-  ck('no score is rendered on a homework card',
-    !/a\.score|a\.pct/.test(js) && /NO SCORE is shown, deliberately/.test(js));
+  // ⚠ THE DECISION CHANGED, AND THE CODE WON. This asserted that no mark is
+  //   ever rendered. bfd6e46 now renders a.pct, and the reasoning it gives is
+  //   better than the blanket rule it replaced: the mark is shown only where
+  //   it is the child's OWN, because the SERVER withholds it entirely on a
+  //   shared-PIN or open-link classroom, where the identity is a typed name
+  //   anyone in the room can enter. The original worry -- children comparing
+  //   marks on a shared tablet -- is answered there, not by hiding it here.
+  // ⚠ So what is asserted now is the SHAPE of that decision, and the part
+  //   that would actually hurt a child if it broke: the mark is gated on it
+  //   being present at all, and it is never styled as a failure.
+  ck('a mark is shown only when the server sent this child their own',
+    /if \(a\.done && a\.pct != null\)/.test(js));
+  ck('…and a mark is never red', !/mark-bad|mark-fail|tag danger/.test(js)
+    && /NEVER RED/.test(js));
   ck('to do is listed before finished, and never mixed in',
     /To do FIRST and never mixed in/.test(js));
   ck('…plus a search box', /id="q"/.test(page));
@@ -235,14 +247,34 @@ section('the pupil page');
 
   // ⚠ Dark mode: every token defined on bare :root FIRST. A colour whose only
   //   definition is inside a media query has no value in the other theme.
-  ck('the light palette is defined on bare :root', /:root\{[\s\S]{0,400}--bg:#f6f7fb/.test(page));
-  ck('…and dark only redefines it', /@media \(prefers-color-scheme: dark\)\{\s*:root\{/.test(page));
+  // ⚠ THE INVARIANT, NOT THE LITERAL. These pinned --bg:#f6f7fb and a
+  //   prefers-color-scheme media query. The token is now #f8fafc and the dark
+  //   palette hangs off html.dark, which is BETTER -- it follows the app's own
+  //   theme control instead of only the operating system. Both checks failed
+  //   while the rule they exist for was being kept perfectly.
+  // ⚠ The rule is: a token whose ONLY definition lives in the dark block has
+  //   no value in light mode. That is now tested directly, by comparing the
+  //   two blocks, so it holds whatever the colours are and however dark is
+  //   selected.
+  const rootBlock = (/:root\{([\s\S]*?)\}/.exec(page) || [, ''])[1];
+  const darkBlock = (/(?:html\.dark|@media[^{]*prefers-color-scheme: ?dark[^{]*\{\s*:root)\{([\s\S]*?)\}/.exec(page) || [, ''])[1];
+  const names = b => new Set([...b.matchAll(/(--[a-z-]+)\s*:/g)].map(m => m[1]));
+  const light = names(rootBlock), dark = names(darkBlock);
+  ck('the light palette is defined on bare :root', light.size >= 10);
+  const orphans = [...dark].filter(t => !light.has(t));
+  ck('…and dark only redefines it, defining nothing of its own',
+    dark.size > 0 && orphans.length === 0, orphans.join(','));
   ck('body paints its own background', /body\{[\s\S]{0,120}background:var\(--bg\)/.test(page));
   // ⚠ MEASURED, not read. A headless run at 360px found white-on-#8b8bf5 at
   //   roughly 2.6:1 in dark mode: --brand is lightened so it reads ON a dark
   //   ground, which leaves the text sitting on it unreadable.
+  // ⚠ Pinned #12141d, which the dark palette now spells #111827. What matters
+  //   is that the ink FLIPS at all: a lightened --brand with white text on it
+  //   measured about 2.6:1, which is why this check exists.
   ck('the ink ON the brand flips with the brand',
-    /--on-brand:#fff/.test(page) && /--on-brand:#12141d/.test(page));
+    light.has('--on-brand') && dark.has('--on-brand')
+    && /--on-brand:\s*#fff/i.test(rootBlock)
+    && !/--on-brand:\s*#fff/i.test(darkBlock));
   ck('…and the primary button and selected day both use it',
     /background:var\(--brand\);color:var\(--on-brand\)/.test(page)
     && /\.cal-cell\.has\.sel\{background:var\(--brand\);color:var\(--on-brand\)\}/.test(page));

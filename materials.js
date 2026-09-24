@@ -494,9 +494,16 @@ function render() {
 // ⚠ Every card is a link to /a/<CODE>, the SAME guest runner the WhatsApp link
 //   opens. This page starts nothing and grades nothing — it is a way in, so a
 //   child who lost the message can still find their work.
-// ⚠ NO SCORE is shown, deliberately. The server does not send one: a mark
-//   belongs on the teacher's screen until they have looked at it, and children
-//   comparing marks on a shared tablet is what this must not enable.
+// ⚠ A MARK IS SHOWN ONLY WHERE IT IS THE CHILD'S OWN. This said "NO SCORE is
+//   shown, deliberately" and stopped being true in bfd6e46, which now renders
+//   a.pct in workHTML() below — so the file argued against its own code, and
+//   the next reader would have believed the comment.
+//   The original worry is still the right one and is still answered, just
+//   somewhere better: children comparing marks on a shared tablet. The SERVER
+//   withholds the mark entirely on a shared-PIN or open-link classroom, where
+//   the identity is a typed name anyone in the room can enter, so a.pct is
+//   simply absent there and nothing is decided in this file.
+//   ⚠ And never red — see workHTML(). A mark is a fact, not a verdict.
 function dueText(a) {
   const t = Date.parse(a.due_at || a.expires_at || '') || 0;
   if (!t) return { text: '', cls: '' };
