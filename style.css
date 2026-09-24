@@ -9656,6 +9656,25 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
 .dark .pj-cell.is-improved { background: #1e3a8a; color: #bfdbfe; border-color: #60a5fa; }
 .dark .pj-cell.is-secure   { background: #14532d; color: #bbf7d0; border-color: #4ade80; }
 
+/* ⚠ THE STATUS CHIPS KEEP THEIR INK INSIDE THE MODAL. Every modal is a
+   chalkboard, and `div[id^="modal-"].fixed :is(p, label, span, ...) { color:
+   inherit }` outranks a plain class rule - so each .pj-cell kept its pastel
+   background (which carries the meaning: needs / improved / secure) while its
+   text was replaced by the board's near-white chalk. Measured 1:1 in light
+   mode - the mark was invisible on its own chip.
+   ⚠ The chips are repainted here rather than exempted from the modal rule,
+   because the colour pairs ARE the legend and must survive both themes. */
+#modal-question-map .pj-cell.is-new      { color: #4b5563; }
+#modal-question-map .pj-cell.is-legacy   { color: #4b5563; }
+#modal-question-map .pj-cell.is-needs    { color: #9a3412; }
+#modal-question-map .pj-cell.is-improved { color: #1e40af; }
+#modal-question-map .pj-cell.is-secure   { color: #166534; }
+.dark #modal-question-map .pj-cell.is-new      { color: #9ca3af; }
+.dark #modal-question-map .pj-cell.is-legacy   { color: #9ca3af; }
+.dark #modal-question-map .pj-cell.is-needs    { color: #fed7aa; }
+.dark #modal-question-map .pj-cell.is-improved { color: #bfdbfe; }
+.dark #modal-question-map .pj-cell.is-secure   { color: #bbf7d0; }
+
 /* the small control beside the chapter card's big button */
 .ch-options {
   position: absolute; right: .55rem; bottom: .5rem; z-index: 3;
@@ -11043,6 +11062,28 @@ div[id^="modal-"].fixed :is(.text-gray-600, .text-gray-500, .text-gray-400,
   color: rgba(240,236,220,.62) !important;
 }
 div[id^="modal-"].fixed :is(p, label, span, li, td, th) { color: inherit; }
+
+/* ⚠⚠ SURFACES THAT PAINT THEMSELVES WHITE MUST JOIN THE BOARD, not fight it.
+   The rule directly above gives every span/p/label in a modal `color:
+   inherit`, and it outranks a plain class rule - so a component that sets its
+   own ink loses it, while a component that sets its own WHITE background
+   keeps it. .tt-sess predates the chalkboard and still paints `background:
+   #fff`, so the timetable day sheet drew near-white chalk text on a white
+   card: measured 1.2:1 in light mode (.tt-sess-title, -meta, -note,
+   .tt-diffs-label), which is invisible. .tt-choose is transparent over the
+   board and kept its light-mode indigo, 2.1:1.
+   ⚠ Fixed by repainting the CARD, not by forcing dark ink back onto it: the
+   modal is a chalkboard in BOTH themes, so a white card here is the bug. */
+#modal-tt-day .tt-sess {
+  background: rgba(240,236,220,.07);
+  border-color: rgba(240,236,220,.16);
+}
+#modal-tt-day .tt-sess-title { color: #f0ece8; }
+#modal-tt-day .tt-sess-meta,
+#modal-tt-day .tt-sess-note,
+#modal-tt-day .tt-diffs-label { color: rgba(240,236,220,.72); }
+#modal-tt-day .tt-choose { color: #c7d2fe; border-color: #6366f1; }
+
 div[id^="modal-"].fixed :is(.border-gray-200, .border-gray-300, .dark\:border-gray-600, .dark\:border-gray-700) {
   border-color: rgba(240,236,220,.24) !important;
 }
