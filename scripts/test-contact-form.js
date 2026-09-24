@@ -268,7 +268,15 @@ const run = async (fn, over) => { calls = []; const r = await fn.handler(ev(over
   const adminSrc = fs.readFileSync(path.join(ROOT, 'engine/admin.js'), 'utf8');
   check(/isContact/.test(adminSrc) && /contact:'🌐 Guest contact'/.test(adminSrc),
     'the admin card knows what a contact row is');
-  check(/isOpen && !isContact/.test(adminSrc),
+  // ⚠ THE GUEST GATE IS !isContact, AND ONLY THAT. This asked for
+  //   `isOpen && !isContact`, but the isOpen half was deliberately dropped:
+  //   admin.js records that gating on the open status meant the moment a
+  //   report was resolved the admin could no longer answer a follow-up on it,
+  //   and could not explain the resolution either, because resolving removed
+  //   the box. That change is nothing to do with guests.
+  // ⚠ What this line is FOR is that a guest — who has no inbox — is never
+  //   offered an in-app reply, so that is what it checks.
+  check(/\$\{!isContact \? `<div/.test(adminSrc),
     'the in-app reply box is hidden for a guest, who has no inbox to read it in');
   check(/mailto:\$\{_esc\(meta\.guestEmail\)\}/.test(adminSrc), 'and the admin gets a mailto instead');
 

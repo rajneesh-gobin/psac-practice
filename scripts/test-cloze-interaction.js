@@ -130,8 +130,14 @@ const check = (ok, label, detail) => {
     CHAPTERS.push({ id: 'g5fr-textes-trous', name: 'Textes à Trous', icon: '🧩', enrichment: true });
     true;`);
 
-  check(await evalIn('STATIC_QUESTIONS.filter(q => q.type === "cloze").length') === 20,
-    'the 20 built Grade 5 texts are in the pool');
+  // ⚠⚠ COUNT WHAT IS THERE, do not pin 20. Five checks in this file hard-coded
+  //    the number of Grade 5 texts, and one hard-coded 18 for "the rest after
+  //    two are done". The packs now hold 26 / 26 / 29 across a second file
+  //    each, so every one of them failed BECAUSE more practice was written -
+  //    which is the opposite of what this file is for. The counts are derived
+  //    once here and the assertions are stated relative to them.
+  const g5Texts = await evalIn('STATIC_QUESTIONS.filter(q => q.type === "cloze").length');
+  check(g5Texts >= 20, 'the built Grade 5 texts are in the pool', g5Texts);
 
   // ── The list ──
   await evalIn('ClozeText.open("g5fr-textes-trous")');
@@ -142,9 +148,9 @@ const check = (ok, label, detail) => {
   await evalIn('ClozeText.open("g5fr-textes-trous")');
   check(await evalIn('!document.getElementById("screen-cloze-list").classList.contains("hidden")'),
     'open() shows the list screen');
-  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-item").length') === 20,
-    'the list shows all 20 texts');
-  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-badge.is-new").length') === 20,
+  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-item").length') === g5Texts,
+    'the list shows every text in the pool, none dropped', g5Texts);
+  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-badge.is-new").length') === g5Texts,
     'every text starts as "Pas encore fait" (no ticks yet)');
 
   // ── Open one and inspect the player ──
@@ -279,8 +285,10 @@ const check = (ok, label, detail) => {
     'the perfect one is badged differently from the partial one');
   check(/[✓]/.test(await evalIn('document.querySelector("#cloze-list-body .clz-item.is-attempted .clz-badge").textContent')),
     'the badge is a visible tick');
-  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-badge.is-new").length') === 18,
-    'the other 18 still read "Pas encore fait", so a child can pick another');
+  // ⚠ Two have been attempted by this point, so the rest is the pool minus 2 -
+  //   stated that way rather than as a literal 18.
+  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-badge.is-new").length') === g5Texts - 2,
+    'the others still read "Pas encore fait", so a child can pick another', g5Texts - 2);
 
   const overList = await evalIn(OVERFLOW.replace('screen-cloze-play', 'screen-cloze-list'));
   check(overList.length === 0, 'nothing protrudes past 360px on the list screen', overList.slice(0, 3).join('; '));
@@ -298,8 +306,8 @@ const check = (ok, label, detail) => {
     true;`);
 
   await evalIn('ClozeText.open("g6fr-textes-trous")');
-  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-item").length') === 20,
-    'the Grade 6 list shows all 20 two-part texts');
+  check(await evalIn('document.querySelectorAll("#cloze-list-body .clz-item").length') === g6.length,
+    'the Grade 6 list shows every two-part text, none dropped', g6.length);
   check(/6A/.test(await evalIn('document.querySelector("#cloze-list-body .clz-item-meta").textContent')),
     'the card says up front that the text has a 6A and a 6B half');
 
