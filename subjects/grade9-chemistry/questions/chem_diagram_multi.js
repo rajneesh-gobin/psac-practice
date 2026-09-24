@@ -7,7 +7,7 @@ STATIC_QUESTIONS.push(
   // 4 grey (phosphorus) atoms + 6 white (oxygen) atoms bonded → P₄O₆
 
   makeMCQ({ id: 'g9s-cdm-001', chapterId: 'g9s-c3-language', subsection: 'formulae_of_compounds', difficulty: 2,
-    question: 'The diagram below shows a ball-and-stick model of a molecule. The grey filled circles represent <b>Phosphorus (P)</b> atoms and the white circles represent <b>Oxygen (O)</b> atoms.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160" style="display:block;margin:8px auto">' +
+    question: 'The diagram below shows a ball-and-stick model of a molecule. The grey filled circles represent <b>Phosphorus (P)</b> atoms and the white circles represent <b>Oxygen (O)</b> atoms.<br><svg role="img" aria-label="a ball-and-stick model of a molecule" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160" style="display:block;margin:8px auto">' +
       '<line x1="100" y1="25" x2="60" y2="65" stroke="#555" stroke-width="2"/>' +
       '<line x1="100" y1="25" x2="140" y2="65" stroke="#555" stroke-width="2"/>' +
       '<line x1="60" y1="65" x2="40" y2="110" stroke="#555" stroke-width="2"/>' +

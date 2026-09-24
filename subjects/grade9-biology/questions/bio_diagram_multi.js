@@ -7,7 +7,7 @@ STATIC_QUESTIONS.push(
   // Farmer releasing fertilisers → algae bloom → dead fish in river.
 
   makeMCQ({ id: 'g9s-bdm-001', chapterId: 'g9s-b3-biodiversity', subsection: 'human_threats', difficulty: 2,
-    question: 'The diagram below shows a scene near a river.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130" width="300" height="130" style="display:block;margin:8px auto">' +
+    question: 'The diagram below shows a scene near a river.<br><svg role="img" aria-label="a scene near a river" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130" width="300" height="130" style="display:block;margin:8px auto">' +
       '<rect x="0" y="0" width="300" height="130" fill="#f0f8ff" stroke="#ccc" stroke-width="1"/>' +
       '<rect x="0" y="85" width="120" height="45" fill="#8fbc8f"/>' +
       '<text x="15" y="78" font-size="9" fill="#333">Release of</text>' +
@@ -34,7 +34,7 @@ STATIC_QUESTIONS.push(
   // sperm + ovum → zygote (X) → foetus
 
   makeMCQ({ id: 'g9s-bdm-002', chapterId: 'g9s-b2-reproductive', subsection: 'reproduction_basics', difficulty: 2,
-    question: 'A diagram shows the steps in the fertilisation process:<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80" style="display:block;margin:8px auto">' +
+    question: 'A diagram shows the steps in the fertilisation process:<br><svg role="img" aria-label="the steps in the fertilisation process" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80" style="display:block;margin:8px auto">' +
       '<circle cx="40" cy="40" r="24" fill="#ffe0f0" stroke="#cc66aa" stroke-width="2"/>' +
       '<ellipse cx="40" cy="40" rx="12" ry="9" fill="#dd88bb"/>' +
       '<line x1="24" y1="48" x2="16" y2="58" stroke="#cc66aa" stroke-width="1.5"/>' +
@@ -71,7 +71,7 @@ STATIC_QUESTIONS.push(
   // wide lumen), capillary (tiny, one-cell wall).
 
   makeMCQ({ id: 'g9s-bdm-004', chapterId: 'g9s-b1-circulatory', subsection: 'blood_vessels', difficulty: 2,
-    question: 'Cross-sections of three blood vessels are shown below.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 100" width="260" height="100" style="display:block;margin:8px auto">' +
+    question: 'Cross-sections of three blood vessels are shown below.<br><svg role="img" aria-label="cross-sections of three blood vessels" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 100" width="260" height="100" style="display:block;margin:8px auto">' +
       '<circle cx="45" cy="45" r="35" fill="#888" stroke="#333" stroke-width="1.5"/>' +
       '<circle cx="45" cy="45" r="18" fill="#ffaaaa"/>' +
       '<text x="45" y="88" font-size="10" text-anchor="middle" fill="#333">Artery</text>' +

@@ -644,7 +644,7 @@ STATIC_QUESTIONS.push(makeTask({
   source: 'NCE Chemistry C2 practical skills structured question.',
   intro: 'Two students each prepare copper sulfate crystals from copper oxide and dilute sulfuric acid. Their procedures are compared below.',
   stimulus: {
-    html: '<svg viewBox="0 0 380 120" width="380" role="img" aria-label="a table comparing two students crystallisation procedures">'
+    html: '<svg viewBox="0 0 420 120" width="420" role="img" aria-label="a table comparing two students crystallisation procedures">'
         + '<rect x="8" y="8" width="364" height="108" fill="none" stroke="#0f172a" stroke-width="1.5"/>'
         + '<line x1="130" y1="8" x2="130" y2="116" stroke="#0f172a" stroke-width="1.5"/>'
         + '<line x1="255" y1="8" x2="255" y2="116" stroke="#0f172a" stroke-width="1.5"/>'

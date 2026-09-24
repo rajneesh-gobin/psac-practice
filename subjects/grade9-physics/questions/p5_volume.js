@@ -60,7 +60,7 @@ const seriesCircuit = (opts) => {
     '<rect x="95" y="12" width="50" height="16" fill="#fff" stroke="none"/>' +
     '<line x1="112" y1="8" x2="112" y2="32" stroke="#0f172a" stroke-width="2"/>' +
     '<line x1="128" y1="14" x2="128" y2="26" stroke="#0f172a" stroke-width="4"/>' +
-    (opts.emf ? '<text x="120" y="6" font-size="9" text-anchor="middle" fill="#334155">' + opts.emf + '</text>' : '');
+    (opts.emf ? '<text x="168" y="17" font-size="9" text-anchor="middle" fill="#334155">' + opts.emf + '</text>' : '');
   const lamp =
     '<rect x="100" y="105" width="40" height="30" fill="#fff" stroke="none"/>' +
     '<circle cx="120" cy="120" r="13" fill="none" stroke="#0f172a" stroke-width="2"/>' +

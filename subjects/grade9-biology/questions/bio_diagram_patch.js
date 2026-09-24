@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
   // vessels labelled Q and R; students identify which vessel each label names.
 
   makeMCQ({ id: 'g9s-bdiag-001', chapterId: 'g9s-b1-circulatory', subsection: 'blood_vessels', difficulty: 2,
-    question: 'The diagram below shows a simplified heart with two blood vessels labelled Q and R.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 170" width="240" height="170" style="display:block;margin:8px auto">' +
+    question: 'The diagram below shows a simplified heart with two blood vessels labelled Q and R.<br><svg role="img" aria-label="a simplified heart with two labelled blood vessels" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 170" width="240" height="170" style="display:block;margin:8px auto">' +
       '<rect x="70" y="55" width="100" height="85" rx="8" fill="#ffe0e0" stroke="#c0392b" stroke-width="2.5"/>' +
       '<line x1="120" y1="55" x2="120" y2="140" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5,3"/>' +
       '<text x="92" y="102" font-size="10" fill="#c0392b" text-anchor="middle">Right</text>' +
@@ -40,7 +40,7 @@ STATIC_QUESTIONS.push(
   // numbered component contains haemoglobin.
 
   makeMCQ({ id: 'g9s-bdiag-003', chapterId: 'g9s-b1-circulatory', subsection: 'components_of_blood', difficulty: 2,
-    question: 'The diagram below shows a blood smear with four components numbered 1–4.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130" width="260" height="130" style="display:block;margin:8px auto">' +
+    question: 'The diagram below shows a blood smear with four components numbered 1–4.<br><svg role="img" aria-label="a blood smear with four numbered components" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130" width="260" height="130" style="display:block;margin:8px auto">' +
       '<rect x="0" y="0" width="260" height="130" fill="#fff9f0" stroke="#ccc" stroke-width="1"/>' +
       '<text x="130" y="12" font-size="9" fill="#999" text-anchor="middle">Blood smear (microscope view)</text>' +
       '<ellipse cx="45" cy="65" rx="24" ry="16" fill="#ff8888" stroke="#cc2222" stroke-width="1.5"/>' +

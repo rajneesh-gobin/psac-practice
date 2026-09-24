@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
   // these use inline SVG to replicate the diagram-recognition task.
 
   makeMCQ({ id: 'g9ict-diag-001', chapterId: 'g9ict-networks', subsection: 'topologies', difficulty: 2,
-    question: 'Four network topology diagrams are shown below. Which diagram represents a <b>bus topology</b>?<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" width="280" height="200" style="display:block;margin:8px auto">' +
+    question: 'Four network topology diagrams are shown below. Which diagram represents a <b>bus topology</b>?<br><svg role="img" aria-label="four network topology diagrams" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" width="280" height="200" style="display:block;margin:8px auto">' +
       '<text x="5" y="14" font-size="10" font-weight="bold" fill="#333">A</text>' +
       '<line x1="20" y1="30" x2="120" y2="30" stroke="#333" stroke-width="2"/>' +
       '<circle cx="40" cy="30" r="6" fill="#4488cc"/><circle cx="70" cy="30" r="6" fill="#4488cc"/><circle cx="100" cy="30" r="6" fill="#4488cc"/>' +

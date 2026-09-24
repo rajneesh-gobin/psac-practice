@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
   // (input/output), Rectangle (process). Question asks which = PROCESS.
 
   makeMCQ({ id: 'g9ict-dm-001', chapterId: 'g9ict-algorithms', subsection: 'flowchart_symbols', difficulty: 1,
-    question: 'Four shapes used in flowcharts are shown below. Which shape represents a <b>PROCESS</b>?<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 90" width="280" height="90" style="display:block;margin:8px auto">' +
+    question: 'Four shapes used in flowcharts are shown below. Which shape represents a <b>PROCESS</b>?<br><svg role="img" aria-label="four flowchart shapes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 90" width="280" height="90" style="display:block;margin:8px auto">' +
       '<polygon points="35,10 55,35 35,60 15,35" fill="#fff" stroke="#333" stroke-width="2"/>' +
       '<text x="35" y="76" font-size="11" font-weight="bold" text-anchor="middle" fill="#333">A</text>' +
       '<ellipse cx="100" cy="35" rx="30" ry="18" fill="#fff" stroke="#333" stroke-width="2"/>' +
@@ -38,7 +38,7 @@ STATIC_QUESTIONS.push(
   // Row 5 has Malini with 56 marks → cell B5.
 
   makeMCQ({ id: 'g9ict-dm-003', chapterId: 'g9ict-spreadsheets', subsection: 'cells_ranges', difficulty: 1,
-    question: 'The spreadsheet below shows student marks.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130" width="260" height="130" style="display:block;margin:8px auto">' +
+    question: 'The spreadsheet below shows student marks.<br><svg role="img" aria-label="a spreadsheet of student marks" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130" width="260" height="130" style="display:block;margin:8px auto">' +
       '<rect x="10" y="10" width="240" height="115" fill="#fff" stroke="#999" stroke-width="1"/>' +
       '<rect x="10" y="10" width="30" height="20" fill="#dde" stroke="#999" stroke-width="1"/>' +
       '<rect x="40" y="10" width="110" height="20" fill="#dde" stroke="#999" stroke-width="1"/>' +
@@ -71,7 +71,7 @@ STATIC_QUESTIONS.push(
   // Diagram: 3 computers on top row, 3 more below, connected hierarchically.
 
   makeMCQ({ id: 'g9ict-dm-004', chapterId: 'g9ict-networks', subsection: 'topologies', difficulty: 2,
-    question: 'A network diagram is shown below. Computers are arranged in layers: a root node at the top, connecting to two nodes in the middle, each of which connects to further nodes below.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140" width="200" height="140" style="display:block;margin:8px auto">' +
+    question: 'A network diagram is shown below. Computers are arranged in layers: a root node at the top, connecting to two nodes in the middle, each of which connects to further nodes below.<br><svg role="img" aria-label="a network diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140" width="200" height="140" style="display:block;margin:8px auto">' +
       '<rect x="85" y="8" width="30" height="22" rx="3" fill="#aaccee" stroke="#336"/>' +
       '<text x="100" y="22" font-size="8" text-anchor="middle" fill="#333">Root</text>' +
       '<line x1="100" y1="30" x2="55" y2="52" stroke="#333" stroke-width="1.5"/>' +

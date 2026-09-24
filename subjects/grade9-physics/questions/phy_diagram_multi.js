@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
   // rectangular box labelled X at bottom = resistor.
 
   makeMCQ({ id: 'g9s-pdm-001', chapterId: 'g9s-p5-electricity', subsection: 'circuit_symbols', difficulty: 1,
-    question: 'A simple electric circuit diagram shows a battery at the top connected by wires to a rectangular box labelled <b>X</b> at the bottom.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 130" width="180" height="130" style="display:block;margin:8px auto">' +
+    question: 'A simple electric circuit diagram shows a battery at the top connected by wires to a rectangular box labelled <b>X</b> at the bottom.<br><svg role="img" aria-label="a circuit diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 130" width="180" height="130" style="display:block;margin:8px auto">' +
       '<rect x="20" y="20" width="140" height="90" fill="none" stroke="#333" stroke-width="2.5"/>' +
       '<line x1="85" y1="20" x2="85" y2="8" stroke="#333" stroke-width="2.5"/>' +
       '<line x1="82" y1="8" x2="88" y2="8" stroke="#333" stroke-width="4"/>' +
