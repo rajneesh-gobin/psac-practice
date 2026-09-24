@@ -36,7 +36,16 @@ const packs = {};
 
 for (const g of [4, 5, 6]) {
   const pack = 'grade' + g + '-french';
-  const items = loadSubject(pack).filter(q => q.type === 'text');
+  // ⚠⚠ THE Q7A ITEMS ARE THE corr- ONES, not "every text question in the pack".
+  //    `type === 'text'` also catches the passé-composé drills (g5fr-pcs-*, 20
+  //    of them) and the open answers under each reading passage (g5fr-rcp-*,
+  //    g6fr-rcp-*), which live in their own chapters and are not corrections at
+  //    all. That is why "all of them sit in the question-7 chapter" reported
+  //    fr-passe-compose and fr-lecture, and why 40 items were said to be
+  //    missing their single underlined word — a comprehension answer has no
+  //    underlined word because nothing is being corrected.
+  const items = loadSubject(pack).filter(q => q.type === 'text'
+    && String(q.id).startsWith('g' + g + 'fr-corr-'));
   packs[g] = items;
 
   console.log('── ' + pack + ' ──');

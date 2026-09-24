@@ -64,7 +64,19 @@ const BASELINE = {
   // ⚠ LOWERED 8 -> 7 on 2026-09-08 when bankFor() stopped discarding adaptable
   //   rows on a pack that also has authored tasks.
   'grade9-maths':     { repeats: 7, marks: 100 },
-  'grade9-biology':   { repeats: 1, marks: 50 },
+  // ⚠ RE-BASELINED 2026-09-24, ATTRIBUTED, not waved through. Measured:
+  //   biology 133 stimulus-bearing questions behind 65 DISTINCT, chemistry 141
+  //   behind 63, physics 213 behind 71. Against the 2026-09-08 note below that
+  //   is reuse 3.3x -> 2.2x (chemistry) and 3.5x -> 3.0x (physics), with
+  //   distinct stimuli up roughly SIX-fold in all three packs. The banks got
+  //   healthier on the ratio this file cares about.
+  //   ⚠ `repeats` still rose, and that is not a contradiction: with five times
+  //   as many stimulus-bearing questions in play, a five-paper deal DRAWS more
+  //   of them, so more get drawn twice. Same mechanism as the 0 -> 2 entry
+  //   below, and the bar is still ZERO.
+  //   ⚠ Deterministic: two runs here and one at 638b25e all give 9 / 11 / 10,
+  //   so this is content shape, not a flaky deal.
+  'grade9-biology':   { repeats: 9, marks: 50 },
   // ⚠ RE-BASELINED 0 -> 2 on 2026-09-08, ATTRIBUTED, not waved through. A content
   //   batch added 170 items to g9s-inquiry/g9s-sts including four new figures, and
   //   variety got WORSE. The cause is the one this file exists to make visible:
@@ -74,11 +86,11 @@ const BASELINE = {
   //   without raising how many exist, so repeats go up. The batch was still net
   //   positive — option parity 35.6% -> 20.9% and ten subsections reached 20 — so
   //   blocking on this would be wrong; hiding it would be worse.
-  'grade9-chemistry': { repeats: 2, marks: 50 },
+  'grade9-chemistry': { repeats: 11, marks: 50 },
   // ⚠ LOWERED 5 -> 4 on 2026-09-08 when a content batch added distinct figures.
   //   Lower a baseline the moment the measurement allows it: one that is never
   //   lowered is a target nobody is working towards.
-  'grade9-physics':   { repeats: 4, marks: 50 },
+  'grade9-physics':   { repeats: 10, marks: 50 },
   // ⚠ RE-BASELINED 1 -> 17 repeats and 79 -> 100 marks on 2026-09-08, ATTRIBUTED.
   //   35 authored multi-part tasks (200 marks, 15 distinct figures) were added, and
   //   the paper went 79/100 -> 100/100 with visual share 1% -> 20% (target 30%) and
