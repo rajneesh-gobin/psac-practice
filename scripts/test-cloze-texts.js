@@ -82,7 +82,14 @@ for (const pack of PACKS) {
   }
 
   const texts = loadSubject(pack.id).filter(q => q.chapterId === pack.chapter);
-  check(texts.length === 20, `${pack.id}: ${pack.chapter} holds 20 texts`, `${texts.length}`);
+  // ⚠⚠ A FLOOR, NOT A PIN. This asserted exactly 20 because that was the
+  //    count the day it was written; nothing marks 20 as a design size. The
+  //    packs now hold 26 / 26 / 29 across a second file each (ch12b/ch14b),
+  //    so a test meant to protect the content was failing BECAUSE the
+  //    content grew -- and its noise hid nine real answer giveaways
+  //    underneath it until 2026-09-24. Adding texts is the good outcome;
+  //    losing them is the one worth failing on.
+  check(texts.length >= 20, `${pack.id}: ${pack.chapter} holds at least 20 texts`, `${texts.length}`);
 
   let malformed = 0, badBank = 0, badSpare = 0, badNotes = 0, adjacent = 0, wrongType = 0, badId = 0;
   let leakInTitle = 0, badShape = 0, badAlts = 0, leakInText = 0;
@@ -164,7 +171,14 @@ for (const pack of PACKS) {
   const bundlePath = path.join(root, 'netlify/question-bundles', `${pack.id}.json`);
   if (fs.existsSync(bundlePath)) {
     const built = JSON.parse(fs.readFileSync(bundlePath, 'utf8')).filter(q => q.chapterId === pack.chapter);
-    check(built.length === 20, `${pack.id}: 20 texts reach the BUILT bundle`, `${built.length}`);
+    // ⚠ THE REAL INVARIANT IS SOURCE === BUILT, which is what the comment
+    //   above is about: learnMore and subsection were each silently stripped
+    //   at build time for months while the source read correctly. Comparing
+    //   the two counts catches that whatever the pack holds; comparing both
+    //   to a literal 20 only caught it until someone wrote a 21st text.
+    check(built.length === texts.length,
+      `${pack.id}: every source text reaches the BUILT bundle`,
+      `${texts.length} in source, ${built.length} built`);
     const complete = built.filter(q => Array.isArray(q.bank) && Array.isArray(q.gapAnswers)
       && Array.isArray(q.notes) && Array.isArray(q.gapAlts) && q.text && q.title
       && q.gaps === totalGaps && q.gapsA === pack.gapsA && q.gapsB === pack.gapsB && q.twoPart === two);
@@ -209,7 +223,10 @@ for (const [pack, chapter, sibling] of [
     for (let i = 0; i < 20; i++) for (const q of assembleExamPaper('full').questions) if (clozeIds.has(q.id)) leaked++;
     ({ cloze: clozeIds.size, leaked });
   `, ctx);
-  check(out.cloze === 20, `the ${pack} pool source really holds the 20 cloze texts`, `${out.cloze}`);
+  // ⚠ A floor again: what this guards is `leaked` below -- that a cloze text
+  //   never reaches a practice or exam pool. The count only confirms the
+  //   fixture loaded something to leak.
+  check(out.cloze >= 20, `the ${pack} pool source really holds its cloze texts`, `${out.cloze}`);
   check(out.leaked === 0, `no ${pack} cloze item can be dealt into practice, subsection practice or an exam paper`,
     `${out.leaked} leaked`);
 }
