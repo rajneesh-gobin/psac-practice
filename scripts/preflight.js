@@ -4,15 +4,15 @@
 //  The content preflight — the local commands that must pass after any
 //  content or chapter change, in the one order that works:
 //
-//    1 build-subject-index       regenerates subjects/_index.js
-//    2 test-subsection-invariant declared vs tagged subsection ids
-//    3 build-questions           rebuilds netlify/question-bundles/
-//    4 test-live-pack-content    a live pack must actually hold questions
-//    5 test-syllabus-facts       the pack asks what its source document teaches
-//    6 check                     static checks, incl. index drift from (1)
+//  ⚠ THE STEP LIST LIVES IN `STEPS` BELOW AND NOWHERE ELSE — read it with
+//    `node scripts/preflight.js --list`. It was written out here as six steps
+//    and was still being quoted as six long after it had nine, which is how a
+//    reader comes to believe a step runs that does not. The ordering rules are
+//    commented on the rows they constrain, where they cannot go stale silently.
 //
-//  Order is load-bearing: the LAST step fails on the index drift that (1) fixes, and
-//  (3) must see the manifests (1) has just rewritten. Each step runs as its
+//  Order is load-bearing: the LAST step, check.js, fails on the drift the
+//  builders before it fix, and each builder must see what the one before it
+//  rewrote. Each step runs as its
 //  OWN node process — the builders and the tests each define STATIC_QUESTIONS
 //  and the question factories at global scope, so one process would collide.
 //
@@ -93,6 +93,9 @@ const SUMMARY = {
 
   synonyms: out => grab(out, /^([\d,]+ checked, .+)$/m),
 
+  // Both demo generators end on one ✅ line naming what they published.
+  demo: out => { const m = lines(out).filter(l => l.includes('✅')); return m.length ? m[m.length - 1].replace(/^\s*✅\s*/, '').trim() : ''; },
+
   checks: out => {
     const n = lines(out).filter(l => /^\s{2}ok\s{2}/.test(l)).length;
     return n ? `${n} checks passed` : '';
@@ -135,7 +138,26 @@ const STEPS = [
     summary: SUMMARY.synonyms },
   { script: 'scripts/test-certificates.js',         label: 'certificate levels, artwork and disclaimer',
     summary: SUMMARY.certificates },
-  { script: 'scripts/check.js',                     label: 'static checks (index drift, sw shell, LOCAL_FILES)',
+  // ⚠ THE TWO DEMO GENERATORS ARE PINNED BETWEEN TWO STEPS, and both edges are
+  //   load-bearing.
+  //   AFTER the bundle build: build-demo-decks.js reads
+  //   netlify/question-bundles/*.json, so run before it and the public sample is
+  //   cut from the PREVIOUS build — stale on precisely the run that changed the
+  //   content, which is the only run that matters.
+  //   BEFORE check.js: check.js rebuilds both of these and fails on any
+  //   difference. Regenerating afterwards would mean every content batch failed
+  //   the preflight once and passed on the re-run, which teaches people to
+  //   re-run rather than to read.
+  // ⚠ These write to assets/demo/, which is served WORLD-READABLE forever. They
+  //   are still local steps — nothing here touches the network — but what they
+  //   write is a publishing decision, so read their output rather than the tick.
+  { script: 'scripts/build-demo-decks.js',          label: 'regenerate the public landing-page decks',
+    summary: SUMMARY.demo },
+  { script: 'scripts/build-demo-shelf.js',          label: 'regenerate the public past-paper shelf',
+    summary: SUMMARY.demo, watch: 'assets/demo/shelf.js' },
+  { script: 'scripts/build-demo-subsections.js',    label: 'regenerate the public sub-topic sample',
+    summary: SUMMARY.demo, watch: 'assets/demo/subsections.js' },
+  { script: 'scripts/check.js',                     label: 'static checks (index drift, demo drift, sw shell, LOCAL_FILES)',
     summary: SUMMARY.checks },
 ];
 

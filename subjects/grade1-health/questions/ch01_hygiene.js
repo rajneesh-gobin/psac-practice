@@ -128,11 +128,11 @@ STATIC_QUESTIONS.push(
     explanation:'After applying soap, we <b>rub our hands together</b> to spread the soap and clean between our fingers.' }),
 
   makeMCQ({ id:'g1he-hyg-019', chapterId:'g1he-hygiene', difficulty:1, subsection:'hand_washing',
-    question:'After rubbing, what do we do?',
+    question:'When we wash our hands, what do we do straight after rubbing them with soap?',
     options:['Rinse our hands','Add more soap','Eat straight away','Wipe on our clothes'],
     answer:'Rinse our hands',
     hint:'We need to wash the soap away.',
-    explanation:'After rubbing, we <b>rinse our hands</b> with clean water to wash all the soap and germs away.' }),
+    explanation:'After rubbing in the soap we <b>rinse our hands</b> with clean water, to wash all the soap and germs away.' }),
 
   makeMCQ({ id:'g1he-hyg-020', chapterId:'g1he-hygiene', difficulty:1, subsection:'hand_washing',
     question:'What is the LAST step when washing our hands?',

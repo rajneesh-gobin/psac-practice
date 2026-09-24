@@ -8,11 +8,11 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g8eng-listening-001', chapterId:'g8eng-listening', difficulty:1,
     subsection:'fact_opinion',
-    question:'A speaker says: "Cycling to school reduces pollution and improves fitness." Is this statement a FACT or an OPINION?',
+    question:'A speaker says: "Cycling to school reduces pollution, and it is the best way for any pupil to travel." Is this statement a FACT or an OPINION?',
     options:['Fact only','Opinion only','Fact and opinion mixed','Neither fact nor opinion'],
     answer:'Fact and opinion mixed',
     hint:'Is every part of the statement provable? Which part is a belief or judgement?',
-    explanation:'The statement mixes <b>fact</b> (cycling can reduce pollution — this is measurable) and <b>opinion</b> (whether it "improves fitness" as stated is generally true but the phrasing as an absolute is a claim). Distinguishing fact (provable) from opinion (someone\'s belief or judgement) is essential for critical listening.' }),
+    explanation:'It mixes the two. That cycling reduces pollution can be <b>measured</b>, so it is a fact. That it is the <b>best</b> way for any pupil to travel is a judgement — someone living ten kilometres away could reasonably disagree — so it is an opinion.' }),
 
   makeMCQ({ id:'g8eng-listening-002', chapterId:'g8eng-listening', difficulty:2,
     subsection:'fact_opinion',

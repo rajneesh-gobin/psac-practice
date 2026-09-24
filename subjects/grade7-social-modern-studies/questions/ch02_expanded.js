@@ -6,7 +6,7 @@ STATIC_QUESTIONS.push(
   // ── Our Islands & their Landforms — islands_republic ─────────────────────
 
   makeMCQ({ id:'g7sms-islands-013', chapterId:'g7sms-islands', difficulty:2, subsection:'islands_republic',
-    question:'Saint Brandon (Cargados Carajos Shoals) is important to Mauritius mainly because it:',
+    question:'Saint Brandon (Cargados Carajos Shoals) matters to Mauritius mainly for one reason. Which?',
     options:['It extends the maritime zone','It holds the largest population','It is the closest to Africa','It has the highest mountains'],
     answer:'It extends the maritime zone',
     hint:'Remote island territories often have strategic value for ocean resources.',

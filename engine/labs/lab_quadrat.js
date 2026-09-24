@@ -783,11 +783,11 @@ const LabQuadrat = (() => {
     if (k === 'species') { _coach('Species selected. Look for it in the quadrat.'); return; }
     if (k === 'view') { _coach('View changed.'); return; }
     if (on === 'throw') { _coach('Quadrat thrown randomly. Count everything inside it.'); return; }
-    if (on === 'thick') { _coach('You sampled the densest patches. Compare this estimate with random sampling — is it biased?'); return; }
+    if (on === 'thick') { _coach('You sampled the densest patches. Compare this estimate with random sampling - is it biased?'); return; }
     if (on === 'count' || k === 'count') {
       if (v === 'all') { _coach('All organisms counted.'); return; }
       if (v === 'inside') { _coach('Inside count done.'); return; }
-      _coach('Count recorded. Keep going — more quadrats means more accuracy.'); return;
+      _coach('Count recorded. Keep going - more quadrats means more accuracy.'); return;
     }
     if (on === 'record') { _coach('Result recorded in the notebook.'); return; }
     if (on === 'auto5') { _coach('Five quadrats sampled automatically.'); return; }
@@ -796,7 +796,7 @@ const LabQuadrat = (() => {
     if (on === 'census') { _coach('Full census done. Compare with the estimate.'); return; }
     if (k === 'event') { _coach('Environmental event noted.'); return; }
     if (on === 'restore') { _coach('Habitat restored.'); return; }
-    _coach('Good — on to the next step.');
+    _coach('Good - on to the next step.');
   }
 
   // The control a token belongs to: its icon and the label a step must name.

@@ -405,9 +405,9 @@ const LabEnergy = (() => {
   function _renderReadouts() {
     const c = _calc(), f = P().fmt;
     const chip = (id, val) => { const el = $(id); if (el) el.textContent = val; };
-    chip('lab-energy-force', c ? f(c.force) + ' N' : '— N');
-    chip('lab-energy-dist',  c ? (c.dist * _posAnim).toFixed(2) + ' m' : '— m');
-    chip('lab-energy-work',  c ? (c.work * _posAnim).toFixed(1) + ' J' : '— J');
+    chip('lab-energy-force', c ? f(c.force) + ' N' : '- N');
+    chip('lab-energy-dist',  c ? (c.dist * _posAnim).toFixed(2) + ' m' : '- m');
+    chip('lab-energy-work',  c ? (c.work * _posAnim).toFixed(1) + ' J' : '- J');
 
     const tEl = $('lab-energy-time'), pEl = $('lab-energy-power');
     const s = _speed().s;
@@ -420,7 +420,7 @@ const LabEnergy = (() => {
     if (pEl) {
       if (!_timing) pEl.textContent = 'off';
       else if (_timedResult && _pullDone && _timedResult.powerW !== null) pEl.textContent = f(_timedResult.powerW) + ' W';
-      else pEl.textContent = '— W';
+      else pEl.textContent = '- W';
     }
     const tb = _root && _root.querySelector('[data-act="timer"]');
     if (tb) tb.setAttribute('aria-pressed', _timing ? 'true' : 'false');
@@ -566,16 +566,16 @@ const LabEnergy = (() => {
       <div class="lab-canvas-wrap">
         <canvas id="lab-energy-canvas" role="img" aria-label="An inclined plane with a load on a rope"></canvas>
         <div class="lab-energy-chips" aria-live="polite">
-          <div class="lab-chip"><span>F</span><b id="lab-energy-force">— N</b></div>
-          <div class="lab-chip"><span>d</span><b id="lab-energy-dist">— m</b></div>
-          <div class="lab-chip lab-chip-w"><span>W</span><b id="lab-energy-work">— J</b></div>
+          <div class="lab-chip"><span>F</span><b id="lab-energy-force">- N</b></div>
+          <div class="lab-chip"><span>d</span><b id="lab-energy-dist">- m</b></div>
+          <div class="lab-chip lab-chip-w"><span>W</span><b id="lab-energy-work">- J</b></div>
           <div class="lab-chip"><span>t</span><b id="lab-energy-time">off</b></div>
           <div class="lab-chip lab-chip-p"><span>P</span><b id="lab-energy-power">off</b></div>
         </div>
       </div>
 
       <div class="lab-coach" id="lab-energy-coach">⚡ Choose a mode, mass and height, then tap Pull!</div>
-      <div class="lab-task-strip">Set the mode, mass and height — then pull to measure work, energy and power!</div>
+      <div class="lab-task-strip">Set the mode, mass and height - then pull to measure work, energy and power!</div>
       <div class="lab-guide" id="lab-guide" aria-live="polite" hidden></div>
 
       <div class="lab-tools lab-energy-tools">
@@ -765,7 +765,7 @@ const LabEnergy = (() => {
       title: 'How this lab works',
       happened: 'You are on the Work, Energy & Power bench.',
       instead: '① Choose a mode (Lift or Ramp), a mass, a height and a speed.\n② Tap Pull! to raise the load and read F, d and W.\n③ Switch the Timer on before pulling to see t and P.\n④ Tap Record to write the reading in your notebook.\n\nFormulas: W = F × d · GPE = mgh · P = W ÷ t',
-      exam: '📝 In the NCE exam — Work, Energy & Power is an examWeight 3 chapter.',
+      exam: '📝 In the NCE exam - Work, Energy & Power is an examWeight 3 chapter.',
       onClose: () => {},
     });
   }

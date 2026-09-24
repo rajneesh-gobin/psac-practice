@@ -742,7 +742,7 @@ const AdminPanel = (() => {
       if (status) status.textContent = errors.length
         ? `⚠ ${errors[0]}`
         : (deferred
-            ? `⚠ ${eligible} can receive this, but only ${would} can go today — ${deferred} would wait for tomorrow's budget.`
+            ? `⚠ ${eligible} can receive this, but only ${would} can go today - ${deferred} would wait for tomorrow's budget.`
             + `${skipNote ? ` Skipped: ${skipNote}.` : ''}${budgetNote} Nothing has been sent.`
             : `${would} of ${ids.length} would receive this${skipNote ? ` (skipped: ${skipNote})` : ''}.`
             + `${budgetNote} Nothing has been sent.`);
@@ -750,7 +750,7 @@ const AdminPanel = (() => {
     }
     if (status) {
       status.textContent = sent
-        ? `✅ Sent to ${sent} recipient${sent === 1 ? '' : 's'}${deferred ? ` — ${deferred} deferred to tomorrow` : ''}${skipNote ? ` — skipped: ${skipNote}` : ''}${errors.length ? ` — ${errors.length} batch(es) failed: ${errors[0]}` : ''}`
+        ? `✅ Sent to ${sent} recipient${sent === 1 ? '' : 's'}${deferred ? ` - ${deferred} deferred to tomorrow` : ''}${skipNote ? ` - skipped: ${skipNote}` : ''}${errors.length ? ` - ${errors.length} batch(es) failed: ${errors[0]}` : ''}`
         : `⚠ Nothing was sent. ${errors[0] || (skipNote ? `Everyone was skipped: ${skipNote}` : '')}`;
     }
     if (sent) {
@@ -769,7 +769,7 @@ const AdminPanel = (() => {
           `Subject: “${subject}”`,
           // ⚠ Deferred is NOT a failure and must not read as one — those people
           //   were never attempted, and the admin needs to know to come back.
-          deferred ? `⏳ ${deferred} could not go today (daily email budget) — select them again tomorrow.` : '',
+          deferred ? `⏳ ${deferred} could not go today (daily email budget) - select them again tomorrow.` : '',
           skipNote ? `Skipped: ${skipNote}.` : '',
           errors.length ? `⚠ ${errors.length} batch(es) failed: ${errors[0]}` : '',
           budgetNote.trim(),
@@ -998,7 +998,7 @@ const AdminPanel = (() => {
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Activating…'; }
     try {
       const result = await _pendingRegistrationRequest('POST', { action: 'activate', user_id: userId });
-      toast(`${email} is now active — ${_activationMailNote(result.emailed)}`, 4500);
+      toast(`${email} is now active - ${_activationMailNote(result.emailed)}`, 4500);
       await loadPendingRegistrations(true, _isPendingList());
     } catch (error) {
       // ⚠ 409 = the server says this account is ALREADY confirmed, so the row in
@@ -1009,7 +1009,7 @@ const AdminPanel = (() => {
         _pendingRegistrations = _pendingRegistrations.filter(r => r.id !== userId);
         _memberPicks.delete(userId);
         _renderPendingRegistrations({ inMainList: _isPendingList() });
-        toast(`${email} is already active — removed from this list.`, 4000);
+        toast(`${email} is already active - removed from this list.`, 4000);
         await loadPendingRegistrations(true, _isPendingList());
         return;
       }
@@ -1195,7 +1195,7 @@ const AdminPanel = (() => {
       console.error("[AdminPanel] " + path + " did not return JSON:", response.status, ctype);
       throw new Error(`${path} is not available (HTTP ${response.status}). `
         + "This action needs a server function. Open the site on the deployed URL, "
-        + "or run the dev server locally — not a plain static file server.");
+        + "or run the dev server locally - not a plain static file server.");
     }
     const result = await response.json().catch(() => ({}));
     if (!response.ok || !result.ok) throw new Error(result.error || "The server refused the request.");
@@ -2010,7 +2010,7 @@ const AdminPanel = (() => {
             <span class="text-xs text-gray-500 dark:text-gray-400">Account type</span>
             ${roleSelect()}
             <!-- ⚠ Writes to this ONE person through the app's own compose form.
-                 Not a mailto: — admin@nouklass.com has no mailbox to send from;
+                 Not a mailto: - admin@nouklass.com has no mailbox to send from;
                  see sendMailTo(). -->
             <button onclick="AdminPanel.sendMailTo('${m.id}')"
               title="Write to this person on their own"
@@ -4257,14 +4257,14 @@ const AdminPanel = (() => {
     const msg = (box && box.value || '').trim();
     if (msg) {
       const res = await Store.replyToReport(id, msg);
-      if (!res.ok) { toast('Could not send the message — the status was NOT changed.', 3500); return false; }
+      if (!res.ok) { toast('Could not send the message - the status was NOT changed.', 3500); return false; }
       if (box) box.value = '';
     }
     const ok = status === 'resolved'
       ? await Store.resolveReport(id)
       : await Store.setReportStatus(id, status);
     if (!ok) {
-      toast(msg ? 'Message sent, but the status did not change — try again.' : 'Could not update — try again.', 3500);
+      toast(msg ? 'Message sent, but the status did not change - try again.' : 'Could not update - try again.', 3500);
       return false;
     }
     toast(msg ? 'Message sent to the pupil ✅ · ' + _REPORT_STATUS_WORD[status] : _REPORT_STATUS_WORD[status], 2200);
@@ -5038,7 +5038,7 @@ const AdminPanel = (() => {
             <!-- ⚠ A DISTINCT ID. The Reports tab renders report-reply-<id> for
                  the same report, both panels can be in the DOM at once, and two
                  elements with one id means getElementById returns the wrong box. -->
-            <p class="font-semibold text-xs text-gray-500 dark:text-gray-400 mb-1">Message to the pupil <span class="font-normal">(optional — sent with whichever button you press)</span></p>
+            <p class="font-semibold text-xs text-gray-500 dark:text-gray-400 mb-1">Message to the pupil <span class="font-normal">(optional - sent with whichever button you press)</span></p>
             <textarea id="qm-report-reply-${safeId}" rows="2" maxlength="1000"
               placeholder="They see this in their inbox…"
               class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-2 dark:bg-gray-700 dark:text-white resize-none"></textarea>
@@ -5854,7 +5854,7 @@ const AdminPanel = (() => {
       //   alone reports a refusal as a success.
       const { data, error } = await _sb.from('questions').delete().eq('id', id).select('id');
       if (error) { toast('Delete failed: ' + error.message, 3000); return; }
-      if (!data?.length) { toast('Delete refused — the question is still there.', 3500); return; }
+      if (!data?.length) { toast('Delete refused - the question is still there.', 3500); return; }
       toast('Deleted ✅', 1500);
       _fetchAndRender();
     }
@@ -6309,7 +6309,7 @@ const AdminPanel = (() => {
     const roots = {};
     (data || []).forEach(s => { if (!s.parent_id) roots[s.id] = s.name; });
     _libSections = (data || []).filter(s => s.parent_id)
-      .map(s => ({ id: s.id, label: `${roots[s.parent_id] || '?'} — ${s.name}`, status: s.status }));
+      .map(s => ({ id: s.id, label: `${roots[s.parent_id] || '?'} - ${s.name}`, status: s.status }));
     return _libSections;
   }
 

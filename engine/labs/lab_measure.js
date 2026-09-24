@@ -1106,13 +1106,13 @@ const LabMeasure = (() => {
     if (k === 'inst') { const I = DATA().INSTRUMENTS[v]; _coach(I ? `${I.name} selected. Look at it carefully before you read.` : 'Instrument selected.'); }
     else if (k === 'spec') { const S = DATA().SPECIMENS[v]; _coach(S ? `${S.name} chosen. Place it carefully on the instrument.` : 'Specimen chosen.'); }
     else if (k === 'zoom') _coach('Zoomed in. Read the scale at eye level.');
-    else if (k === 'eye') _coach(v === 'level' ? 'Eye level — no parallax error now. Read the scale.' : 'Eye position changed. Now read the scale.');
+    else if (k === 'eye') _coach(v === 'level' ? 'Eye level - no parallax error now. Read the scale.' : 'Eye position changed. Now read the scale.');
     else if (k === 'align') _coach('Aligned. Now read the mark at the other end.');
     else if (k === 'tare') _coach(_kid() ? 'Pointer on 0. Ready to measure!' : 'Balance zeroed (tared). Now place the object on the pan.');
     else if (k === 'tap') _coach('Bubble gone. Now read the bottom of the meniscus at eye level.');
     else if (k === 'start') _coach('Timing started. Watch the stopwatch.');
     else if (k === 'read') _coach('Reading taken. Well done!');
-    else _coach('Good — on to the next step.');
+    else _coach('Good - on to the next step.');
   }
 
   // A discovery's recipe, in words a pupil can follow.
@@ -1623,7 +1623,7 @@ const LabMeasure = (() => {
     if (strip) {
       if (!I) strip.textContent = _kid() ? 'Pick a tool from the shelf → the scale appears here.' : 'Pick an instrument from the shelf → its scale appears here.';
       else if (!S) strip.textContent = _kid() ? `Good! Now pick what you will measure with the ${I.name.toLowerCase()}.` : `${I.name} ready. Now pick something to measure.`;
-      else strip.textContent = _kid() ? 'Read the scale — zoom in to see the marks.' : 'Read the scale at eye level — zoom in to see the smallest marks.';
+      else strip.textContent = _kid() ? 'Read the scale - zoom in to see the marks.' : 'Read the scale at eye level - zoom in to see the smallest marks.';
     }
     const st = $('lab-status');
     if (st) {
@@ -1781,7 +1781,7 @@ const LabMeasure = (() => {
     _font(14, 700);
     c.fillText(_kid() ? '↓  Pick a tool from the shelf below' : '↓  Pick an instrument from the shelf below', _W / 2, _H * 0.56);
     _font(12, 400);
-    c.fillText(_kid() ? 'Tap it — the scale will appear here.' : 'Tap one — its scale will appear here.', _W / 2, _H * 0.68);
+    c.fillText(_kid() ? 'Tap it - the scale will appear here.' : 'Tap one - its scale will appear here.', _W / 2, _H * 0.68);
   }
 
   function _line(x1, y1, x2, y2, col, w) {

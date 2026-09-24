@@ -192,7 +192,7 @@ const LabSeparation = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <div class="lab-task-strip">Build the rig, then run the experiment — or explore freely!</div>
+          <div class="lab-task-strip">Build the rig, then run the experiment - or explore freely!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-separation-tools" id="lab-tools"></div>
         </div>
@@ -1238,7 +1238,7 @@ const LabSeparation = (() => {
 
   function _coachGuide(on) {
     const [k, a] = on.split(':');
-    if (k === 'goggles') return _coach('Goggles on — safe to heat now.');
+    if (k === 'goggles') return _coach('Goggles on - safe to heat now.');
     if (k === 'mode') {
       const msgs = { distil: 'Distillation bench open. Build the rig from the shelf.', crystal: 'Crystallisation bench open. Time to heat and test.', sublime: 'Sublimation bench ready. Choose the mixture.', filter: 'Filtration bench open. Set up the filter.', evap: 'Evaporation bench open. Choose your solution.', chroma: 'Chromatography bench open. Set up the paper.', dissolve: 'Dissolving bench open. Choose a solid.', choose: 'Which technique bench open. Read each mixture carefully.' };
       return _coach(msgs[a] || 'Bench open. Follow the steps.');
@@ -1248,7 +1248,7 @@ const LabSeparation = (() => {
     if (k === 'heat') return _coach('Burner lit. Watch what happens as the temperature rises.');
     if (k === 'heat-off') return _coach('Heat off. The mixture will cool now.');
     if (k === 'rod') return _coach('Glass rod test done. Any crystals forming?');
-    if (k === 'cool') return _coach(a === 'slow' ? 'Cooling slowly — large crystals will form.' : 'Cold water cooling — smaller crystals, faster.');
+    if (k === 'cool') return _coach(a === 'slow' ? 'Cooling slowly - large crystals will form.' : 'Cold water cooling - smaller crystals, faster.');
     if (k === 'drop') return _coach('Drop on the watch glass. Let it evaporate completely.');
     if (k === 'reset') return _coach('Bench cleared. Ready to start again.');
     if (k === 'pour') return _coach('Mixture poured into the filter. Watch the filtrate collect below.');
@@ -1260,7 +1260,7 @@ const LabSeparation = (() => {
     if (k === 'mix') return _coach('Read what you want from this mixture, then choose.');
     if (k === 'tech') return _coach('Good choice. Now the reason it works.');
     if (k === 'why') return _coach('Right reason. Next one…');
-    _coach('Good — on to the next step.');
+    _coach('Good - on to the next step.');
   }
 
   // ── Discoveries: every card opens ─────────────

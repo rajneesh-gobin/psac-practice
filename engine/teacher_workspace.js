@@ -257,7 +257,7 @@ const TeacherWorkspace = (() => {
              one row of a 240px card, so they wrapped to a second 44px row on
              every card. Each carries BOTH aria-label (screen readers) and title
              (a hover tooltip for the teacher), and each is still a full 44px
-             target — the height came out of the second row, not the tap area. -->
+             target - the height came out of the second row, not the tap area. -->
         <button type="button" class="tw-btn tw-btn-icon" data-details="${i}"
           aria-label="Details for ${esc(a.title)}" title="Details">ⓘ</button>
         <button type="button" class="tw-btn tw-btn-icon" data-share="${i}" ${a.archived ? 'disabled' : ''}

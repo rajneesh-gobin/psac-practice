@@ -37,7 +37,7 @@ const G4HG_EXPL = {
   'g4hg-cov-festivals-4': "The people who celebrate it know what it means to them, so the best way to learn is to <b>ask them</b> — politely and with interest.",
   'g4hg-cov-religions-0': "A <b>church</b> is where Christians gather to worship.",
   'g4hg-cov-religions-1': "A <b>mosque</b> is where Muslims gather for prayer.",
-  'g4hg-cov-religions-2': "A <b>temple</b> is where Hindus worship.",
+  'g4hg-cov-religions-2': "A <b>temple</b> with statues of Shiva, Ganesh and other gods is where Hindus worship. A Chinese pagoda is the place of worship for Buddhist families.",
   'g4hg-cov-religions-3': "A <b>pagoda</b> is a place of worship linked with Buddhist and Chinese communities.",
   'g4hg-cov-religions-4': "A place of worship is important to the people who use it, so a visitor should <b>always be respectful</b>.",
   'g4hg-cov-religions-5': "Families, histories and communities differ, so <b>people hold different beliefs</b> — and in Mauritius many live side by side.",
@@ -154,7 +154,7 @@ const G4HG_EXPL = {
   const HINT_REL = 'Choose the respectful and accurate answer.';
   add('g4hg-cov-religions-0', 'g4hist-community', 'religions', 'A church is a place of worship for many…', ['Christian families here', 'Muslim families here', 'Hindu families here', 'Buddhist families here'], 'Christian families here', HINT_REL);
   add('g4hg-cov-religions-1', 'g4hist-community', 'religions', 'A mosque is a place of worship for many…', ['Muslim families here', 'Christian families here', 'Hindu families here', 'Buddhist families here'], 'Muslim families here', HINT_REL);
-  add('g4hg-cov-religions-2', 'g4hist-community', 'religions', 'A temple is a place of worship for many…', ['Hindu families here', 'Christian families here', 'Muslim families here', 'Buddhist families here'], 'Hindu families here', HINT_REL);
+  add('g4hg-cov-religions-2', 'g4hist-community', 'religions', 'A temple with statues of gods such as Shiva and Ganesh is a place of worship for many…', ['Hindu families here', 'Christian families here', 'Muslim families here', 'Buddhist families here'], 'Hindu families here', HINT_REL);
   add('g4hg-cov-religions-3', 'g4hist-community', 'religions', 'A pagoda is linked to many…', ['Buddhist families here', 'Hindu families here', 'Muslim families here', 'Christian families here'], 'Buddhist families here', HINT_REL);
   add('g4hg-cov-religions-4', 'g4hist-community', 'religions', 'What should you do when visiting any place of worship?', ['always be respectful', 'take photographs freely', 'speak loudly inside', 'leave as quickly as possible'], 'always be respectful', HINT_REL);
   add('g4hg-cov-religions-5', 'g4hist-community', 'religions', 'Why do people have different religions?', ['people have different beliefs', 'one religion is always right', 'all religions say the same things', 'only adults choose a religion'], 'people have different beliefs', HINT_REL);

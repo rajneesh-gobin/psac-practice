@@ -178,8 +178,8 @@ window.MINIGAME_STORY = [
       + 'pushes at it. For decades that seemed like an unmixed good. More recently, '
       + 'botanists have pointed out a cost: filao needles fall in a thick mat that few '
       + 'other plants can grow through, so a filao beach is often a beach with filao and '
-      + 'very little else. The argument now is not whether the trees are useful — they '
-      + 'plainly are — but whether a coastline should be held together by a single species.',
+      + 'very little else. The argument now is not whether the trees are useful - they '
+      + 'plainly are - but whether a coastline should be held together by a single species.',
     questions: [
       { q: 'Why were filao trees planted on beaches?', options: ['They are native to Mauritius', 'Their roots hold the sand in place', 'They provide fruit', 'They grow slowly and last long'], answer: 'Their roots hold the sand in place' },
       { q: 'What problem do botanists point out?', options: ['The trees die in salt water', 'Their fallen needles stop other plants growing', 'They attract insects', 'They block the view of the sea'], answer: 'Their fallen needles stop other plants growing' },
@@ -188,7 +188,7 @@ window.MINIGAME_STORY = [
   },
   {
     id: 'st3-water', band: 3, lang: 'en', title: 'A Dry Month',
-    text: 'Mauritius receives a great deal of rain — more than two metres a year in the '
+    text: 'Mauritius receives a great deal of rain - more than two metres a year in the '
       + 'centre of the island. It is therefore surprising to hear of water cuts. The '
       + 'difficulty is not how much falls but when, and what happens next. Most of the '
       + 'rain arrives in a few summer months. The island is small and steep, so water that '
@@ -208,7 +208,7 @@ window.MINIGAME_STORY = [
       + 'as a subject, all before the age of seven. To a visitor this sounds like a burden. '
       + 'Research on multilingual classrooms suggests something more interesting: children '
       + 'who move between languages early are often quicker to notice how language itself '
-      + 'works — that a word is a choice, not a fact. The difficulty is rarely the number '
+      + 'works - that a word is a choice, not a fact. The difficulty is rarely the number '
       + 'of languages. It is when a child is taught to read in a language they do not yet '
       + 'speak well, and is judged on the reading rather than on the understanding.',
     questions: [

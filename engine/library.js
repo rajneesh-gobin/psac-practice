@@ -363,7 +363,7 @@ const Library = (() => {
            not the row, and shift+wheel is a trick most people do not know.
            These arrows are the pointer equivalent of a swipe. They are hidden
            on touch (where they would be clutter) and on rows short enough not
-           to scroll — see _syncShelfArrows(). -->
+           to scroll - see _syncShelfArrows(). -->
       <div class="lb-rowbox">
         <button type="button" class="lb-arrow lb-arrow-l" aria-label="Scroll ${_esc(section.name)} left"
           onclick="Library.scrollShelf(this, -1)">‹</button>
@@ -402,7 +402,7 @@ const Library = (() => {
   //   matters is always the one nobody updated.
   function _chrome() {
     return `<div class="lb-search-row">
-      <input id="lb-search" type="search" class="lb-search" placeholder="Search the library — try 2019 maths, or CPE"
+      <input id="lb-search" type="search" class="lb-search" placeholder="Search the library - try 2019 maths, or CPE"
         value="${_esc(_query)}" oninput="Library.search(this.value)" aria-label="Search the library">
     </div>
     <div class="lb-chrome">
@@ -499,7 +499,7 @@ const Library = (() => {
       <label class="lb-pick-label" for="lb-grade-pick">Grade</label>
       <select id="lb-grade-pick" class="lb-pick-select" onchange="Library.toggle(this.value)">
         ${shelves.map(sec => `<option value="${_esc(sec.id)}" ${sec.id === chosen.id ? 'selected' : ''}>${
-          _esc((sec.icon ? sec.icon + '  ' : '') + sec.name)} — ${count(sec)} document${count(sec) === 1 ? '' : 's'}</option>`).join('')}
+          _esc((sec.icon ? sec.icon + '  ' : '') + sec.name)} - ${count(sec)} document${count(sec) === 1 ? '' : 's'}</option>`).join('')}
       </select>
     </div>`;
 
@@ -803,7 +803,7 @@ const Library = (() => {
       f('lb-up-form')?.classList.add('hidden');
       f('lb-up-done')?.classList.remove('hidden');
       const d = f('lb-up-done-detail');
-      if (d) d.textContent = out.message || 'Thank you — an administrator will review it.';
+      if (d) d.textContent = out.message || 'Thank you - an administrator will review it.';
     } catch (e) {
       say('⚠ ' + (e.message || e));
     }

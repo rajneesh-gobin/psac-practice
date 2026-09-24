@@ -773,7 +773,7 @@ const LabMaterials = (() => {
     }
     if (k === 'sort') { _coach('Material sorted into the right group.'); return; }
     if (k === 'job') { _coach('Job matched to the right material.'); return; }
-    _coach('Good — on to the next step.');
+    _coach('Good - on to the next step.');
   }
 
   function _guideHint() {

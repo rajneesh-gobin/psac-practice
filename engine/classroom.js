@@ -65,7 +65,7 @@ const Classroom = (() => {
     const { data, error } = await _sb.from('classrooms')
       .delete().eq('id', classroomId).select('id');
     if (error) { console.error('[Classroom.remove]', error.message); return false; }
-    if (!data?.length) { console.error('[Classroom.remove] refused — no row deleted for', classroomId); return false; }
+    if (!data?.length) { console.error('[Classroom.remove] refused - no row deleted for', classroomId); return false; }
     return true;
   }
 

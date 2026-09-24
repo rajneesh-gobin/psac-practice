@@ -975,7 +975,7 @@ function paperHtml(paper, opts) {
 
 <div class="cover">
   <div class="band">
-    <h1>Nou Klass — NCE-style practice paper</h1>
+    <h1>Nou Klass - NCE-style practice paper</h1>
     <p class="sub">Generated for revision. <b>Not an official examination paper</b> and not
        produced, endorsed or approved by the Mauritius Examinations Syndicate.</p>
   </div>

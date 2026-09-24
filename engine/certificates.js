@@ -58,7 +58,7 @@ const Certificates = (() => {
     //   would push the last one under the frame. Re-measure the picture with
     //   scripts/test-certificate-render.js after changing a word.
     short: [
-      'Generated automatically by nouklass.com from this pupil’s own practice record — not an examination result.',
+      'Generated automatically by nouklass.com from this pupil’s own practice record - not an examination result.',
       'Not affiliated with, endorsed by or recognised by the Mauritius Examinations Syndicate, the MIE,',
       'the Ministry of Education or any other official body. Progress against nouklass.com’s own standards only.',
     ],
@@ -70,7 +70,7 @@ const Certificates = (() => {
         + 'Syndicate, the Mauritius Institute of Education, the Ministry of Education or any '
         + 'other official body in Mauritius or elsewhere. The level shown describes progress '
         + 'against our own practice standards only.',
-    share: 'Nou Klass practice certificate — our own standards, not an official result.',
+    share: 'Nou Klass practice certificate - our own standards, not an official result.',
   };
 
   // ── the ladder ──────────────────────────────────────────────────────────
@@ -95,7 +95,7 @@ const Certificates = (() => {
 
     { key: 'explorer',    idx: 2, min: 5,   name: 'Explorer',         icon: '\u{1F9ED}',
       line: 'is exploring this subject',
-      blurb: 'A twentieth of the subject is mastered — enough to know the shape of it.' },
+      blurb: 'A twentieth of the subject is mastered - enough to know the shape of it.' },
 
     { key: 'rising',      idx: 3, min: 15,  name: 'Rising Star',      icon: '⭐',
       line: 'is making real progress in',
@@ -107,7 +107,7 @@ const Certificates = (() => {
 
     { key: 'high',        idx: 5, min: 50,  name: 'High Achiever',    icon: '\u{1F3C5}',
       line: 'has passed the halfway mark in',
-      blurb: 'More than half the subject is mastered — the harder half is what is left.' },
+      blurb: 'More than half the subject is mastered - the harder half is what is left.' },
 
     { key: 'scholar',     idx: 6, min: 70,  name: 'Scholar',          icon: '\u{1F4DC}',
       line: 'has shown scholarship in',
@@ -978,7 +978,7 @@ const Certificates = (() => {
     }
 
     const staleNote = _stale
-      ? `<p class="cert-stale">⏳ Showing the last progress saved on this device — we could not reach the
+      ? `<p class="cert-stale">⏳ Showing the last progress saved on this device - we could not reach the
            server just now, so these numbers may be behind.</p>`
       : '';
 
@@ -1069,7 +1069,7 @@ const Certificates = (() => {
       ? `Grade ${esc(r.grade)} is not unlocked right now, so this certificate stays as it is.`
       : r.nextTier
         ? `${fmt(r.toNext)} more to reach <strong>${esc(r.nextTier.name)}</strong>`
-        : 'Every question mastered — the highest level.';
+        : 'Every question mastered - the highest level.';
     return `
       <article class="cert-card${started ? '' : ' is-locked'}" style="--c-frame:${a.frame};--c-seal:${a.seal};--c-paper:${a.paper};--c-paper2:${a.paper2};--c-ink:${a.ink}">
         <div class="cert-thumb" aria-hidden="true">${svg(r, { name: _subject.name, serial: r.serial, issued: r.issued })}</div>
@@ -1182,10 +1182,10 @@ const Certificates = (() => {
         const b = PracticeSelector.bucket(qs, QuestionProgress.forChapter(chapterId));
         if (use === 'fix' && !b.needs.length) {
           use = 'smart';
-          if (typeof toast === 'function') toast('Nothing left to fix in this chapter — here is a practice set instead.', 3400);
+          if (typeof toast === 'function') toast('Nothing left to fix in this chapter - here is a practice set instead.', 3400);
         } else if (use === 'new' && !b.unseen.length) {
           use = 'smart';
-          if (typeof toast === 'function') toast('You have tried every question here — here is a revision set.', 3400);
+          if (typeof toast === 'function') toast('You have tried every question here - here is a revision set.', 3400);
         }
       }
       PracticeJourney.start(chapterId, use);
@@ -1260,7 +1260,7 @@ const Certificates = (() => {
          <p class="cert-note">${esc(r.locked
             ? 'Closest to finishing first. This grade is not unlocked right now, so these are for reference.'
             : canPractise
-              ? 'Closest to finishing first — the quickest points are at the top.'
+              ? 'Closest to finishing first - the quickest points are at the top.'
               : 'Closest to finishing first. Hand the device over and your child can start from here.')}</p>
          <ul class="cert-fx-list">${todo.slice(0, 5).map(focusRow).join('')}</ul>
          ${todo.length > 5 ? `<p class="cert-note">${todo.length - 5} more chapter${todo.length - 5 === 1 ? '' : 's'} below.</p>` : ''}`
@@ -1281,7 +1281,7 @@ const Certificates = (() => {
     const capNote = r.cappedOut > 0
       ? `<p class="cert-note is-warn">\u{1F512} <strong>${fmt(r.cappedOut)}</strong> of these questions are above the
            difficulty level a parent has set for this account, so they cannot be practised right now. They still
-           count towards the total — a lower setting must not make mastery easier to reach.</p>`
+           count towards the total - a lower setting must not make mastery easier to reach.</p>`
       : '';
 
     const lockNote = r.locked
@@ -1307,7 +1307,7 @@ const Certificates = (() => {
         <div class="${r.needs ? 'is-flag' : ''}"><dt>Still to fix</dt><dd>${fmt(r.needs)}</dd></div>
         <div><dt>Never tried</dt><dd>${fmt(Math.max(0, r.total - r.explored))}</dd></div>
         <div><dt>Chapters complete</dt><dd>${r.chaptersComplete} / ${r.chaptersTotal}</dd></div>
-        <div><dt>Answer accuracy</dt><dd>${r.accuracy == null ? '—' : r.accuracy + '%'}</dd></div>
+        <div><dt>Answer accuracy</dt><dd>${r.accuracy == null ? '-' : r.accuracy + '%'}</dd></div>
       </dl>
 
       ${nextBlock}
@@ -1315,7 +1315,7 @@ const Certificates = (() => {
       ${focusBlock}
 
       <h4 class="cert-h4">What counts as mastered</h4>
-      <p class="cert-note">A question is mastered when it is answered correctly first time — or, after a wrong
+      <p class="cert-note">A question is mastered when it is answered correctly first time - or, after a wrong
         answer, correctly <strong>twice in a row</strong>. One lucky guess after a mistake is not enough.
         Practising a chapter deals 20 questions at a time, so a chapter with 80 questions needs several
         rounds before it is complete, and this subject needs every chapter finished.</p>
@@ -1407,7 +1407,7 @@ const Certificates = (() => {
 
   function shareText(r) {
     const subject = [r.grade ? `Grade ${r.grade}` : '', r.name].filter(Boolean).join(' ');
-    return `${r.tier.icon} ${r.tier.name} certificate earned in ${subject} on Nou Klass — `
+    return `${r.tier.icon} ${r.tier.name} certificate earned in ${subject} on Nou Klass - `
          + `${fmt(r.mastered)} of ${fmt(r.total)} questions mastered.\n\n`
          + `${DISCLAIMER.share}\n${_appUrl()}`;
   }

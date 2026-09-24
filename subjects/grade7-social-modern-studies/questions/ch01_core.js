@@ -138,8 +138,8 @@ STATIC_QUESTIONS.push(
     question:'Indian indentured labourers began arriving in Mauritius from:',
     options:['1834','1715','1638','1968'],
     answer:'1834',
-    hint:'They arrived shortly after the abolition of slavery.',
-    explanation:'After the <b>abolition of slavery in 1835</b>, Indian indentured labourers began arriving in <b>1834</b>. They came to work on sugar plantations under contracts. Today, people of Indian origin form the majority of the Mauritian population.' }),
+    hint:'They arrived as slavery was being brought to an end.',
+    explanation:'The first Indian indentured labourers landed at <b>Aapravasi Ghat in 1834</b>, months before slavery was abolished on 1 February 1835 — the planters were already arranging the labour that would replace it. They came under contract to work the sugar plantations, and today people of Indian origin form the majority of the Mauritian population.' }),
 
   makeMCQ({ id:'g7sms-origins-007', chapterId:'g7sms-origins', difficulty:2, subsection:'settlers_origins',
     question:'Chinese migrants came to Mauritius mainly to:',

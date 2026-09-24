@@ -187,7 +187,7 @@ STATIC_QUESTIONS.push(
     explanation:'"She said that she <b>would come to the party the next day</b>." - Reported speech changes: (1) <b>will → would</b>; (2) <b>tomorrow → the next day</b>. Full time expression shifts: now→then, today→that day, yesterday→the day before, last week→the week before, here→there. The MIE Grade 6 textbook has a complete table of these time shifts for the PSAC.' }),
 
   makeMCQ({ id:'g6eng-cls-019', chapterId:'g6eng-clauses', subsection:'clause_types', difficulty:3,
-    question:'Identify the type of clause underlined: "The novel [that was written by Dickens] is still popular today."',
+    question:'Identify the type of clause in brackets: "The novel [that was written by Dickens] is still popular today."',
     options:[
       'A main clause',
       'A time clause',

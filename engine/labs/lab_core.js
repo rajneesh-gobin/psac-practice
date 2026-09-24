@@ -75,9 +75,9 @@ const Labs = (() => {
       6: 'Spin Earth to create day and night. Place a shadow stick. Trigger eclipses.',
       7: 'Explore eight moon phases, tidal locking, seasons and eclipse geometry.' }, [6, 7], true),
     L('forces',    '⚖️', 'Forces & Pressure', 'Science', 'LabForces',
-      'Hang weights on a spring balance and press pads into soft ground — measure force and pressure.', [8], true),
+      'Hang weights on a spring balance and press pads into soft ground - measure force and pressure.', [8], true),
     L('magnets',   '🧲', 'Magnets',           'Science', 'LabMagnets', {
-      4: 'Test objects with a magnet. Which things are pulled? Sort them — magnetic or not.',
+      4: 'Test objects with a magnet. Which things are pulled? Sort them - magnetic or not.',
       8: 'Two bar magnets, iron filings and a plotting compass. Map the invisible field.' }, [4, 8], true),
     L('heat',      '🔥', 'Heat Transfer',     'Science', 'LabHeat',
       'Conduction, convection and radiation. Three stations, three big ideas.', [6], true),
@@ -89,7 +89,7 @@ const Labs = (() => {
       7: 'Sort changes into physical and chemical. Can you reverse it? Was a new substance made?',
       8: 'Classify reactions by observation: colour change, gas, precipitate, temperature shift.' }, [7, 8], true),
     L('energy',    '⚡', 'Work, Energy & Power', 'Science', 'LabEnergy',
-      'Pull a weight up a ramp and calculate the work done. Do it faster — compare the power.', [8], true),
+      'Pull a weight up a ramp and calculate the work done. Do it faster - compare the power.', [8], true),
     // ⚠ 'periodic' (engine/labs/lab_periodic*.js) is NOT registered: it was
     //   listed at Grade 9 with no guides, missions, discoveries or chapter -
     //   the periodic table is a Grade 7 subsection (g7s-elements) - and it

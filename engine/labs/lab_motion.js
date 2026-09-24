@@ -627,7 +627,7 @@ const LabMotion = (() => {
     const [k, v] = on.split(':');
     if (k === 'setup')        _coach(v === 'ramp' ? 'Track set up. Check it is straight and the sensor is connected.' : 'Out on the field. Take your measurements carefully.');
     else if (k === 'height')  _coach(+v === 0 ? 'Track laid flat.' : `Ramp set to ${v} cm. A steeper ramp means more acceleration.`);
-    else if (k === 'start')   _coach('Trolley ready. Release it smoothly — don\'t push.');
+    else if (k === 'start')   _coach('Trolley ready. Release it smoothly - don\'t push.');
     else if (k === 'timer' && v === 'on')  _coach('Timer started. Watch the speed–time graph build.');
     else if (k === 'timer' && v === 'off') _coach('Timer stopped. Look at the graph shape.');
     else if (k === 'block' && v === 'on')  _coach('Block in place. The trolley will stop here.');
@@ -637,10 +637,10 @@ const LabMotion = (() => {
     else if (k === 'disp')    _coach('Distance set.');
     else if (on === 'run')    _coach('Run complete. Examine the speed–time graph.');
     else if (on === 'gradient')     _coach('Gradient calculated. That is the acceleration.');
-    else if (on === 'gradient-bad') _coach('Incorrect gradient — see the result card.');
+    else if (on === 'gradient-bad') _coach('Incorrect gradient - see the result card.');
     else if (on === 'area')   _coach('Area under the graph calculated. That is the distance.');
     else if (on === 'walk')   _coach('Walked the route. Compare with the trolley run.');
-    else _coach('Good — on to the next step.');
+    else _coach('Good - on to the next step.');
   }
 
   // ── Discoveries: every card opens ─────────────

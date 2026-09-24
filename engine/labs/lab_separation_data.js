@@ -356,7 +356,7 @@ const LabSeparationData = (() => {
       instead: 'Put on safety goggles before you heat anything, and keep them on until the apparatus has cooled. Tap 🥽 at the top.',
       exam: g => g >= 9
         ? 'Safety precautions are asked on almost every paper (Chemistry 2021 Q5(c)(ii), 2022 Q5(a)(ii), 2025 Q3(b)(iii)): "Wear safety goggles when heating."'
-        : 'In the science exam: you may be asked to name a safety precaution when heating — "wear safety goggles" is always a correct answer.',
+        : 'In the science exam: you may be asked to name a safety precaution when heating - "wear safety goggles" is always a correct answer.',
     },
     bumping: {
       signs: ['hot'], fx: 'bump', card: 'bumping',
@@ -376,7 +376,7 @@ const LabSeparationData = (() => {
       instead: 'Never heat a closed system. The receiver end of a distillation rig must be open to the air - no bung in the conical flask.',
       exam: g => g >= 9
         ? 'Chemistry 2025 Q5(b)(iii) asks for two errors in a distillation rig. A sealed apparatus is one to look for - with the thermometer bulb and the condenser water.'
-        : 'In the science exam: you may be asked to spot errors in a distillation rig — a sealed receiver (bung in the conical flask) is always an error.',
+        : 'In the science exam: you may be asked to spot errors in a distillation rig - a sealed receiver (bung in the conical flask) is always an error.',
     },
     fumes: {
       signs: ['irritant'], fx: 'haze', card: 'fumes',
@@ -397,7 +397,7 @@ const LabSeparationData = (() => {
       instead: 'Connect the cold water IN at the BOTTOM of the condenser and OUT at the TOP. The jacket then stays completely full, and the coldest water meets the vapour just before it leaves.',
       exam: g => g >= 9
         ? 'Chemistry 2022 Q3(b): draw an arrow to show where water enters the condenser - at the LOWER end, nearer the receiver.'
-        : 'In the science exam: you may be asked where the cooling water should enter a condenser — at the lower (bottom) end.' },
+        : 'In the science exam: you may be asked where the cooling water should enter a condenser - at the lower (bottom) end.' },
     thermo_liquid: { icon: '📍', title: 'The thermometer read the wrong thing',
       happened: c => c.elev
         ? `The bulb was down in the flask, so it read ${c.reading} °C - the boiling salty water, which is above 100 °C and keeps rising as the salt gets more concentrated. It did not tell you the temperature of the vapour going over, which is pure water at 100 °C.`
@@ -405,7 +405,7 @@ const LabSeparationData = (() => {
       instead: 'Put the thermometer bulb level with the side arm (the opening to the condenser). There it sits in the vapour and reads the boiling point of what is distilling: 100 °C for water.',
       exam: g => g >= 9
         ? 'A thermometer bulb dipping into the liquid is a classic error in "spot the errors in this distillation rig" (Chemistry 2025 Q5(b)(iii)).'
-        : 'In the science exam: you may be asked to spot errors in a distillation rig — a thermometer bulb dipping into the liquid instead of sitting in the vapour is a classic mistake.' },
+        : 'In the science exam: you may be asked to spot errors in a distillation rig - a thermometer bulb dipping into the liquid instead of sitting in the vapour is a classic mistake.' },
     dryness: { icon: '⚪', title: 'Heated to dryness',
       happened: () => 'You kept heating until the water had gone. The last of it spat hot solid out of the basin, and the blue crystals lost their water of crystallisation and turned into a white powder (anhydrous copper(II) sulfate).',
       instead: 'Heat only until the crystallisation point - when a drop on a glass rod forms crystals as it cools. Then turn the heat off and let the solution cool slowly.',
@@ -419,13 +419,13 @@ const LabSeparationData = (() => {
       instead: 'Cover the dish with an inverted funnel. Its cool inside is where the vapour turns back into a solid - the sublimate. Plug the stem with cotton wool.',
       exam: g => g >= 9
         ? 'Chemistry 2024 Q2(b)(i) labels this rig from a word bank: evaporating dish, Bunsen burner, tripod, sublimate ("beaker" is the extra word).'
-        : 'In the science exam: you may be asked to identify the equipment needed for sublimation — an inverted funnel over the dish, with a cotton wool plug in its stem.' },
+        : 'In the science exam: you may be asked to identify the equipment needed for sublimation - an inverted funnel over the dish, with a cotton wool plug in its stem.' },
     no_plug: { icon: '☁️', title: 'Vapour escaped up the stem',
       happened: c => `Some ${c.solid} re-formed on the funnel, but a stream of ${c.vapour} escaped out of the open stem, so part of it was lost.`,
       instead: 'Push a cotton wool plug into the stem of the funnel so the vapour cannot escape.',
       exam: g => g >= 9
         ? 'Chemistry 2024 Q2(b)(ii): "What precaution needs to be taken during sublimation to prevent vapours from escaping?" - an inverted funnel with a cotton wool plug.'
-        : 'In the science exam: you may be asked what precaution stops vapour from escaping during sublimation — a cotton wool plug in the stem of the funnel.' },
+        : 'In the science exam: you may be asked what precaution stops vapour from escaping during sublimation - a cotton wool plug in the stem of the funnel.' },
     wrong_tech: { icon: '🧰', title: 'Not the right technique',
       happened: c => c.why,
       instead: c => `Use ${TECHNIQUES[c.right].name.toLowerCase()}: ${PRINCIPLES[TECH_PRINCIPLE[c.right]]}`,
@@ -556,26 +556,26 @@ const LabSeparationData = (() => {
       lesson: 'Distillation: the sea water boils, the steam goes along the side arm into the condenser, the cold jacket turns it back into liquid, and pure water (the distillate) drips into the conical flask. The salt stays in the flask. The thermometer at the side arm reads 100 °C - the boiling point of water.',
       steps: [
         { on: 'mode:distil',          say: 'Tap ⚗️ Distillation bench to open it.' },
-        { on: 'part:flask:sea',       say: 'Tap ⚗️ Flask of sea water — salty water you want to purify.' },
+        { on: 'part:flask:sea',       say: 'Tap ⚗️ Flask of sea water - salty water you want to purify.' },
         { on: 'part:granules:yes',    say: 'Tap ⚪ Add anti-bumping granules so it boils smoothly.' },
-        { on: 'part:thermo:arm',      say: 'Tap 🌡️ Bulb level with the side arm — in the vapour, not the liquid.' },
-        { on: 'part:condenser:bottom',say: 'Tap 🧊 Water in at the bottom — cold water must flow in at the bottom.' },
-        { on: 'part:receiver:open',   say: 'Tap 🫙 Open conical flask — never seal the receiver end.' },
-        { on: 'part:burner:yes',      say: 'Tap 🔥 Burner under the flask — heat goes under the round-bottom flask.' },
-        { on: 'goggles',              say: 'Tap 🥽 Put on goggles — always wear goggles before heating.' },
+        { on: 'part:thermo:arm',      say: 'Tap 🌡️ Bulb level with the side arm - in the vapour, not the liquid.' },
+        { on: 'part:condenser:bottom',say: 'Tap 🧊 Water in at the bottom - cold water must flow in at the bottom.' },
+        { on: 'part:receiver:open',   say: 'Tap 🫙 Open conical flask - never seal the receiver end.' },
+        { on: 'part:burner:yes',      say: 'Tap 🔥 Burner under the flask - heat goes under the round-bottom flask.' },
+        { on: 'goggles',              say: 'Tap 🥽 Put on goggles - always wear goggles before heating.' },
         { on: 'heat',                 say: 'Tap 🔥 Start heating to light the burner.' },
         { on: 'wait:boil',            say: 'Watch the thermometer and the flask… it is warming up.' },
-        { on: 'wait:distillate',      say: 'It is boiling! Follow the steam into the condenser — watch the drops collect.' },
+        { on: 'wait:distillate',      say: 'It is boiling! Follow the steam into the condenser - watch the drops collect.' },
       ] },
     { id: 'grow', icon: '💎', title: 'Grow copper sulfate crystals',
       blurb: 'Evaporate, find the crystallisation point with a glass rod, then cool.',
       lesson: 'Crystallisation: heating evaporates water until the solution is saturated (the glass-rod test). As it cools, copper(II) sulfate becomes less soluble, so the extra comes out of solution as blue crystals. Cooling slowly gives big crystals.',
       steps: [
         { on: 'mode:crystal', say: 'Tap 💎 Crystallisation bench to open it.' },
-        { on: 'goggles',      say: 'Tap 🥽 Put on goggles — hot solutions spit.' },
+        { on: 'goggles',      say: 'Tap 🥽 Put on goggles - hot solutions spit.' },
         { on: 'heat',         say: 'Tap 🔥 Start heating to evaporate some water.' },
-        { on: 'rod',          say: 'Tap 🥢 Test with the glass rod — if crystals form on it, stop heating.' },
-        { on: 'heat-off',     say: 'Crystals on the rod! Tap 🧯 Turn off the heat — do not heat to dryness.' },
+        { on: 'rod',          say: 'Tap 🥢 Test with the glass rod - if crystals form on it, stop heating.' },
+        { on: 'heat-off',     say: 'Crystals on the rod! Tap 🧯 Turn off the heat - do not heat to dryness.' },
         { on: 'cool:slow',    say: 'Tap 🐢 Leave to cool slowly for large crystals.' },
         { on: 'wait:crystals',say: 'Watch the crystals grow as it cools (time-lapse)…' },
       ] },
@@ -585,19 +585,19 @@ const LabSeparationData = (() => {
       steps: [
         { on: 'mode:sublime',           say: 'Tap 🟣 Sublimation bench to open it.' },
         { on: 'part:mixture:iodine',    say: 'Tap 🥣 Iodine + sand to put the mixture in the evaporating dish.' },
-        { on: 'part:place:hood',        say: 'Tap 🏠 Fume cupboard — iodine vapour is harmful.' },
+        { on: 'part:place:hood',        say: 'Tap 🏠 Fume cupboard - iodine vapour is harmful.' },
         { on: 'part:cover:funnel_plug', say: 'Tap 🔻 Funnel + cotton wool plug to cover the dish.' },
         { on: 'goggles',                say: 'Tap 🥽 Put on goggles before heating.' },
-        { on: 'heat',                   say: 'Tap 🔥 Heat gently — iodine sublimes at a low temperature.' },
-        { on: 'wait:sublimate',         say: 'Watch the violet vapour — and the cool funnel above it…' },
+        { on: 'heat',                   say: 'Tap 🔥 Heat gently - iodine sublimes at a low temperature.' },
+        { on: 'wait:sublimate',         say: 'Watch the violet vapour - and the cool funnel above it…' },
       ] },
     { id: 'which', icon: '🤔', title: 'Which technique?',
       blurb: 'Match a mixture to the technique that separates it - and say why.',
       lesson: 'Choose by asking what you want to keep. Want the liquid? Distil. Want a dissolved solid as crystals? Crystallise. Does one solid sublime? Sublime. An insoluble solid in a liquid? Filter.',
       steps: [
         { on: 'mode:choose',      say: 'Tap 🤔 Which technique? to open the chooser.' },
-        { on: 'choose:sea_water', say: 'Tap ⚗️ Distillation — sea water has different boiling points (water vs salt).' },
-        { on: 'choose:iodine_sand', say: 'Tap 🟣 Sublimation — iodine sublimes, sand does not.' },
+        { on: 'choose:sea_water', say: 'Tap ⚗️ Distillation - sea water has different boiling points (water vs salt).' },
+        { on: 'choose:iodine_sand', say: 'Tap 🟣 Sublimation - iodine sublimes, sand does not.' },
       ] },
   ];
 
@@ -1202,10 +1202,10 @@ const LabSeparationData = (() => {
       lesson: 'Filtration: mud does not dissolve, and its particles are too big for the tiny holes in the filter paper. The mud stays on the paper (the residue) and clear water runs through (the filtrate).',
       steps: [
         { on: 'mode:filter',          say: 'Tap 🧻 Filtration bench to open it.' },
-        { on: 'part:fmix:muddy',      say: 'Tap 🥤 Muddy water — soil stirred into water.' },
-        { on: 'part:paper:cone',      say: 'Tap 🧻 Folded into a cone — fold the filter paper and open it into the funnel.' },
-        { on: 'part:fbeaker:sound',   say: 'Tap 🫙 A clean beaker — place it under the funnel to catch the filtrate.' },
-        { on: 'part:pouring:rod',     say: 'Tap 🥢 Slowly, down a glass rod — keep the liquid below the top of the paper.' },
+        { on: 'part:fmix:muddy',      say: 'Tap 🥤 Muddy water - soil stirred into water.' },
+        { on: 'part:paper:cone',      say: 'Tap 🧻 Folded into a cone - fold the filter paper and open it into the funnel.' },
+        { on: 'part:fbeaker:sound',   say: 'Tap 🫙 A clean beaker - place it under the funnel to catch the filtrate.' },
+        { on: 'part:pouring:rod',     say: 'Tap 🥢 Slowly, down a glass rod - keep the liquid below the top of the paper.' },
         { on: 'pour',                 say: 'Tap 🫗 Pour to pour the muddy water through.' },
         { on: 'wait:filtrate',        say: 'Watch the paper and the beaker underneath…' },
       ] },
@@ -1214,12 +1214,12 @@ const LabSeparationData = (() => {
       lesson: 'Evaporation: heating turns the water into vapour, which escapes; the dissolved salt cannot, so it is left behind. Stop heating when crystals appear at the edge, and let the rest dry slowly - it will not spit, and the crystals grow bigger.',
       steps: [
         { on: 'mode:evap',        say: 'Tap ♨️ Evaporation bench to open it.' },
-        { on: 'part:emix:salt',   say: 'Tap 🥣 Salt water — 5 g of salt in 50 cm³ of water.' },
-        { on: 'goggles',          say: 'Tap 🥽 Put on goggles — a heated basin can spit.' },
+        { on: 'part:emix:salt',   say: 'Tap 🥣 Salt water - 5 g of salt in 50 cm³ of water.' },
+        { on: 'goggles',          say: 'Tap 🥽 Put on goggles - a heated basin can spit.' },
         { on: 'heat',             say: 'Tap 🔥 Start heating to evaporate the water.' },
-        { on: 'wait:edge',        say: 'Watch the edge of the liquid — stop as soon as the first crystals appear…' },
-        { on: 'heat-off',         say: 'Crystals at the edge! Tap 🧯 Turn off the heat — do not heat it dry.' },
-        { on: 'leave',            say: 'Tap 🪟 Leave it to dry — the rest evaporates slowly.' },
+        { on: 'wait:edge',        say: 'Watch the edge of the liquid - stop as soon as the first crystals appear…' },
+        { on: 'heat-off',         say: 'Crystals at the edge! Tap 🧯 Turn off the heat - do not heat it dry.' },
+        { on: 'leave',            say: 'Tap 🪟 Leave it to dry - the rest evaporates slowly.' },
         { on: 'wait:dry',         say: 'Watch the salt crystals appear as it dries (time-lapse)…' },
       ] },
     { id: 'g8_ink', grades: [8], icon: '🌈', title: 'Separate the dyes in ink',
@@ -1228,18 +1228,18 @@ const LabSeparationData = (() => {
       steps: [
         { on: 'mode:chroma',       say: 'Tap 🌈 Chromatography bench to open it.' },
         { on: 'part:ink:green',    say: 'Tap 🖊️ Green ink to put a spot on the paper.' },
-        { on: 'part:line:pencil',  say: 'Tap ✏️ Drawn in pencil — always use pencil, not pen, for the start line.' },
-        { on: 'part:level:low',    say: 'Tap 💧 Below the start line — water level must be below the ink spot.' },
+        { on: 'part:line:pencil',  say: 'Tap ✏️ Drawn in pencil - always use pencil, not pen, for the start line.' },
+        { on: 'part:level:low',    say: 'Tap 💧 Below the start line - water level must be below the ink spot.' },
         { on: 'run',               say: 'Tap 💧 Stand it in the water to lower the paper into the beaker.' },
-        { on: 'wait:chromatogram', say: 'Watch the water climb the paper — and the spot…' },
+        { on: 'wait:chromatogram', say: 'Watch the water climb the paper - and the spot…' },
       ] },
     { id: 'g8_which', grades: [8], icon: '🤔', title: 'Which technique?',
       blurb: 'Match a mixture to the technique that separates it - and say why.',
       lesson: 'Choose by asking what you want to keep and how the substances differ. Insoluble solid? Filter. Settled solid? Decant. Dissolved solid? Evaporate. Magnetic? Magnet. Dyes? Chromatography. The pure liquid? Distil.',
       steps: [
         { on: 'mode:choose',          say: 'Tap 🤔 Which technique? to open the chooser.' },
-        { on: 'choose:iron_sulphur',  say: 'Tap 🧲 Magnetic separation — iron filings are magnetic, sulphur is not.' },
-        { on: 'choose:muddy_water',   say: 'Tap 🧻 Filtration — mud is insoluble and cannot pass through filter paper.' },
+        { on: 'choose:iron_sulphur',  say: 'Tap 🧲 Magnetic separation - iron filings are magnetic, sulphur is not.' },
+        { on: 'choose:muddy_water',   say: 'Tap 🧻 Filtration - mud is insoluble and cannot pass through filter paper.' },
       ] },
 
     { id: 'g7_dissolve', grades: [7], icon: '🧂', title: 'Dissolve salt and weigh it',
@@ -1248,10 +1248,10 @@ const LabSeparationData = (() => {
       steps: [
         { on: 'mode:dissolve',       say: 'Tap 🥄 Dissolving bench to open it.' },
         { on: 'part:solid:salt',     say: 'Tap 🥄 5 g of salt to weigh it out on a weighing boat.' },
-        { on: 'part:dbeaker:sound',  say: 'Tap 🫙 A beaker of water — 100 g of water on the balance.' },
-        { on: 'add',                 say: 'Tap 🥄 Tip it in — tip the salt into the water and watch the balance.' },
+        { on: 'part:dbeaker:sound',  say: 'Tap 🫙 A beaker of water - 100 g of water on the balance.' },
+        { on: 'add',                 say: 'Tap 🥄 Tip it in - tip the salt into the water and watch the balance.' },
         { on: 'stir',                say: 'Tap 🥢 Stir with a glass rod.' },
-        { on: 'wait:dissolved',      say: 'Watch the salt grains — and the balance…' },
+        { on: 'wait:dissolved',      say: 'Watch the salt grains - and the balance…' },
       ] },
     { id: 'g7_back', grades: [7], icon: '💠', title: 'Get the salt back',
       blurb: 'Evaporate salt water - is dissolving a change you can undo?',
@@ -1259,7 +1259,7 @@ const LabSeparationData = (() => {
       steps: [
         { on: 'mode:evap',        say: 'Tap ♨️ Evaporation bench to open it.' },
         { on: 'part:emix:salt',   say: 'Tap 🥣 Salt water to pour it into the basin.' },
-        { on: 'goggles',          say: 'Tap 🥽 Put on goggles — a heated basin can spit.' },
+        { on: 'goggles',          say: 'Tap 🥽 Put on goggles - a heated basin can spit.' },
         { on: 'heat',             say: 'Tap 🔥 Start heating the basin.' },
         { on: 'wait:edge',        say: 'Watch the edge of the liquid for the first crystals…' },
         { on: 'heat-off',         say: 'Crystals! Tap 🧯 Turn off the heat now.' },
@@ -1271,18 +1271,18 @@ const LabSeparationData = (() => {
       lesson: 'Distillation: the water boils (liquid → gas), the steam is cooled in the condenser (gas → liquid) and pure water drips out. The salt stays behind. Both changes of state are physical changes.',
       steps: [
         { on: 'mode:distil',    say: 'Tap ⚗️ Distillation bench to open it.' },
-        { on: 'build:correct',  say: 'Tap 🔧 Set up the rig — the rig will be assembled with sea water.' },
+        { on: 'build:correct',  say: 'Tap 🔧 Set up the rig - the rig will be assembled with sea water.' },
         { on: 'goggles',        say: 'Tap 🥽 Put on goggles before heating.' },
         { on: 'heat',           say: 'Tap 🔥 Start heating the flask.' },
-        { on: 'wait:distillate',say: 'Follow the steam into the cold condenser — and watch the drops of water…' },
+        { on: 'wait:distillate',say: 'Follow the steam into the cold condenser - and watch the drops of water…' },
       ] },
     { id: 'g7_kinds', grades: [7], icon: '🔹', title: 'Element, compound or mixture?',
       blurb: 'Sort substances by what they are made of - and say why.',
       lesson: 'An element has one kind of atom. A compound has two or more elements chemically joined. A mixture has substances that are not joined, so they can be separated by physical means.',
       steps: [
         { on: 'mode:choose',   say: 'Tap 🔹 Element or mixture? to open the sorting bench.' },
-        { on: 'choose:iron',   say: 'Tap 🔹 Element — iron has only iron atoms (symbol Fe).' },
-        { on: 'choose:air',    say: 'Tap 🥣 Mixture — air has nitrogen, oxygen and other gases, not chemically joined.' },
+        { on: 'choose:iron',   say: 'Tap 🔹 Element - iron has only iron atoms (symbol Fe).' },
+        { on: 'choose:air',    say: 'Tap 🥣 Mixture - air has nitrogen, oxygen and other gases, not chemically joined.' },
       ] },
   );
 

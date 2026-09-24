@@ -5,6 +5,7 @@ import questionsHandler          from './api/questions.js';
 import checkAnswerHandler        from './api/check-answer.js';
 import submitExamHandler         from './api/submit-exam.js';
 import assignmentOpenHandler     from './api/assignment-open.js';
+import assignmentSubmitHandler   from './api/assignment-submit.js';
 import assignmentCleanupHandler  from './api/assignment-cleanup.js';
 import classroomMaterialsHandler from './api/classroom-materials.js';
 import classroomPurgeHandler     from './api/classroom-purge.js';
@@ -115,6 +116,7 @@ const ROUTES = makeRoutes({
   '/api/check-answer':            checkAnswerHandler,
   '/api/submit-exam':             submitExamHandler,
   '/api/assignment-open':         assignmentOpenHandler,
+  '/api/assignment-submit':       assignmentSubmitHandler,
   '/api/assignment-cleanup':      assignmentCleanupHandler,
   '/api/classroom-materials':     classroomMaterialsHandler,
   '/api/classroom-purge':         classroomPurgeHandler,

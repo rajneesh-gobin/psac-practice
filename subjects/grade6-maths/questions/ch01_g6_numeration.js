@@ -5,7 +5,7 @@
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6m-num-001', chapterId:'g6-numeration', subsection:'place_value', difficulty:1,
-    question:'What is the value of the digit <b>7</b> in the number 3 <b>7</b>4,256?',
+    question:'What is the value of the digit <b>7</b> in the number 3<b>7</b>4,256?',
     options:['7','70','70,000','700,000'],
     answer:'70,000',
     hint:'Count the place value positions from right: ones, tens, hundreds, thousands, ten-thousands...',

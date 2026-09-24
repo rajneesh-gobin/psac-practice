@@ -8,11 +8,11 @@
       },
       "grade4-french": {
         "count": 2210,
-        "hash": "5aa1e9acd5ee45a26242f734e861afffff1710f0c86b2ec16b7d6c9fdf4abba8"
+        "hash": "9a865741d7d87f3d2377d269845ffb8364463374d9b812e9e81039b5e85f57f9"
       },
       "grade4-history": {
         "count": 648,
-        "hash": "5e608d6f0ad6cec6734a84f7cb348e8bf30a689a580f370ce521d9774ce02518"
+        "hash": "4da2ae0fdf40ac937048fb1a263b5d47369d746c489005077c3a4cb879e67e92"
       },
       "grade4-maths": {
         "count": 762,
@@ -37,11 +37,11 @@
       },
       "grade5-history": {
         "count": 893,
-        "hash": "24fcb478a5c302242174ecbf4d33bc10a13735397530f1eed268ea63b60b1704"
+        "hash": "3675fda0cc3a114470104ac65981454059fa2155c27da4d01cd7c26c7408cfe0"
       },
       "grade5-maths": {
         "count": 1479,
-        "hash": "6394bc09801e8c5717880c725b81e3725c7ac03065b9904dc69f635f08c38155"
+        "hash": "2ce1bbbf3c8013d4ea405cbdc64e4d3ef5c271f32362d7a8acf670233b6faffd"
       },
       "grade5-science": {
         "count": 550,
@@ -54,7 +54,7 @@
     "subjects": {
       "grade6-english": {
         "count": 1050,
-        "hash": "eb3173ae30b5578f6b1066d4ac801acb28618b87c3164c4fb1182dab14d801b2"
+        "hash": "0b641c82d115556862a04cfc4b9ac19161a6bb5585eddd47f61b928f49b3373a"
       },
       "grade6-french": {
         "count": 2373,
@@ -66,7 +66,7 @@
       },
       "grade6-maths": {
         "count": 815,
-        "hash": "6ae06c73741415b774a802d9932a344b3215d27d404d16f67a8bf9a4d1e0763b"
+        "hash": "91c65e9280f5b4f13316c3be55f6b511fd0fe0c044f9649ed53fbb491526609c"
       },
       "grade6-science": {
         "count": 626,

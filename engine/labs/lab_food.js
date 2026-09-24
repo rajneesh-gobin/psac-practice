@@ -80,7 +80,7 @@ const LabFood = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <p class="lab-task-strip">Add a sample to the tube, then add the right reagent — compare with the control!</p>
+          <p class="lab-task-strip">Add a sample to the tube, then add the right reagent - compare with the control!</p>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-food-tools" id="lab-food-tools">
             <button type="button" class="lab-tool" data-act="bath" id="lab-food-bath"><span aria-hidden="true">🛁</span><em>Water bath</em></button>

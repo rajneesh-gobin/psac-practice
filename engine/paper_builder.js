@@ -138,7 +138,7 @@ const PaperBuilder = (() => {
           <p class="pb-warn">⚠ <b>Not recommended.</b> A real exam paper covers one
             subject with one mark scheme. A mixed sheet has marks that match no real
             paper, loses the maths layout, and asks a pupil to switch subject partway
-            through. Useful as an end-of-term revision sheet — not as a mock exam.</p>
+            through. Useful as an end-of-term revision sheet - not as a mock exam.</p>
           ${_state.mixed ? `
           <div class="pb-checks" id="pb-subjects">
             ${packs.map((p) => `
@@ -351,7 +351,7 @@ const PaperBuilder = (() => {
       const wantA = _state.secA ?? (_allMaths ? 20 : 30);
       const wantB = _state.secB ?? (_allMaths ? 15 : 10);
       if (avail < wantA + wantB) {
-        _status(`Only ${avail} question${avail === 1 ? '' : 's'} match — that is not enough for a `
+        _status(`Only ${avail} question${avail === 1 ? '' : 's'} match - that is not enough for a `
           + `${wantA + wantB}-question paper. Tick more chapters or levels, or shorten the paper.`, 'err');
         return;
       }

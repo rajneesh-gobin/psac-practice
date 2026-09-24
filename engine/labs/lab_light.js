@@ -98,7 +98,7 @@ const LabLight = (() => {
             ${_primary() ? '<button type="button" class="lab-coach-tip lab-light-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>' : ''}
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <div class="lab-task-strip">Follow the guide — or investigate light freely!</div>
+          <div class="lab-task-strip">Follow the guide - or investigate light freely!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-light-controls" class="lab-light-controls"></div>
         </div>
@@ -1095,10 +1095,10 @@ const LabLight = (() => {
     if (k === 'ruler') { _coach('Ruler placed. Measure carefully.'); return; }
     if (k === 'measure') { _coach('Measurement taken.'); return; }
     if (k === 'name') { _coach('Label written.'); return; }
-    if (on === 'read-bad') { _coach('That angle is wrong — see the result card for why.'); return; }
-    if (on === 'measure-bad') { _coach('Measurement error — see the result card.'); return; }
-    if (on === 'name-bad') { _coach('Incorrect label — check the result card.'); return; }
-    _coach('Good — on to the next step.');
+    if (on === 'read-bad') { _coach('That angle is wrong - see the result card for why.'); return; }
+    if (on === 'measure-bad') { _coach('Measurement error - see the result card.'); return; }
+    if (on === 'name-bad') { _coach('Incorrect label - check the result card.'); return; }
+    _coach('Good - on to the next step.');
   }
 
   function _guideHint() {

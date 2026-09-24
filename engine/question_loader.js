@@ -975,7 +975,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 162;
+  const _CACHE_VERSION = 163;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
@@ -1618,10 +1618,10 @@ const QuestionLoader = (() => {
       if (resp.status === 429) {
         const retryAfter = Math.max(60, parseInt(resp.headers.get('Retry-After') || '60', 10));
         _rateLimitedUntil.set(subjectId, Date.now() + retryAfter * 1000);
-        console.warn('[QuestionLoader] Rate limited for', subjectId, '— retry in', retryAfter, 's');
+        console.warn('[QuestionLoader] Rate limited for', subjectId, '- retry in', retryAfter, 's');
         return 'rate-limited';
       }
-      if (resp.status === 401) { console.warn('[QuestionLoader] Auth error for', subjectId, '— session expired'); return 'auth-error'; }
+      if (resp.status === 401) { console.warn('[QuestionLoader] Auth error for', subjectId, '- session expired'); return 'auth-error'; }
       if (!resp.ok) { console.warn('[QuestionLoader] API error', resp.status); return false; }
 
       const incoming = await resp.json();
@@ -1655,10 +1655,10 @@ const QuestionLoader = (() => {
         const retryAfter = Math.max(60, parseInt(resp.headers.get('Retry-After') || '60', 10));
         const until = Date.now() + retryAfter * 1000;
         packs.forEach(p => _rateLimitedUntil.set(p.id, until));
-        console.warn('[QuestionLoader] Batch rate limited for grade', grade, '— retry in', retryAfter, 's');
+        console.warn('[QuestionLoader] Batch rate limited for grade', grade, '- retry in', retryAfter, 's');
         return false;
       }
-      if (resp.status === 401) { console.warn('[QuestionLoader] Batch auth error for grade', grade, '— session expired'); return 'auth-error'; }
+      if (resp.status === 401) { console.warn('[QuestionLoader] Batch auth error for grade', grade, '- session expired'); return 'auth-error'; }
       if (!resp.ok) return false;
 
       const bundle = await resp.json(); // { 'grade5-maths': [...], ... }

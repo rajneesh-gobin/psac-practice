@@ -698,10 +698,10 @@ const LabMagnets = (() => {
   function _coachG8Poles() {
     if (!_g8) return;
     const config = _g8.poleA + _g8.poleB;
-    if (config === 'NS') _coach('North meets South — unlike poles attract! They pull toward each other.');
-    else if (config === 'NN') _coach('North meets North — like poles repel! They push each other apart.');
-    else if (config === 'SS') _coach('South meets South — like poles repel! They push each other apart.');
-    else if (config === 'SN') _coach('South meets North — unlike poles attract!');
+    if (config === 'NS') _coach('North meets South - unlike poles attract! They pull toward each other.');
+    else if (config === 'NN') _coach('North meets North - like poles repel! They push each other apart.');
+    else if (config === 'SS') _coach('South meets South - like poles repel! They push each other apart.');
+    else if (config === 'SN') _coach('South meets North - unlike poles attract!');
   }
 
   function _syncG8Btns() {
@@ -721,7 +721,7 @@ const LabMagnets = (() => {
     if (!obj) return;
     const tok = 'drag:' + id;
     if (_expWrong(tok)) { _guideEvent(tok); return; }
-    if (_g4.busy) { _coach('Wait — something is happening. Try again in a moment.'); return; }
+    if (_g4.busy) { _coach('Wait - something is happening. Try again in a moment.'); return; }
     const type = obj.magnetic ? 'attract' : 'bounce';
     delete _g4.rest[id];
     const used = new Set(Object.values(_g4.rest).filter(r => r.type === type).map(r => r.k));

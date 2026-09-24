@@ -79,7 +79,7 @@ const LabHeat = (() => {
             <button type="button" class="lab-coach-tip" data-act="say-coach" aria-label="Read this aloud">🔊</button>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <p class="lab-task-strip">Visit 🔥 Conduction, 🌊 Convection and ☀️ Radiation — discover how heat travels!</p>
+          <p class="lab-task-strip">Visit 🔥 Conduction, 🌊 Convection and ☀️ Radiation - discover how heat travels!</p>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-heat-tools" id="lab-heat-tools"></div>
         </div>
@@ -341,7 +341,7 @@ const LabHeat = (() => {
       const D = P();
       const melted = st.materials.filter(m => D.anyWaxMelted(m, st.condTime) && !D.anyWaxMelted(m, from));
       if (melted.length) {
-        coach = melted.map(m => D.MATERIALS[m].name + ' — wax drops melting!').join(' ');
+        coach = melted.map(m => D.MATERIALS[m].name + ' - wax drops melting!').join(' ');
       } else {
         const hot = st.materials.filter(m => D.anyWaxMelted(m, st.condTime));
         const cool = st.materials.filter(m => !D.anyWaxMelted(m, st.condTime));
@@ -473,7 +473,7 @@ const LabHeat = (() => {
     _fxAdd('flash', () => {
       _busy = false;
       _card('hazard', { signs: H.signs, title: H.title(), happened: H.happened(), why: H.why, instead: H.instead, exam: H.exam,
-        button: 'Got it — I will be safe', onClose: () => _coach('Always be careful with heat. Ask an adult if you are not sure.') });
+        button: 'Got it - I will be safe', onClose: () => _coach('Always be careful with heat. Ask an adult if you are not sure.') });
     });
   }
 
@@ -1101,7 +1101,7 @@ const LabHeat = (() => {
         <p class="lab-done-icon" aria-hidden="true">🔥</p>
         <h2 id="lab-ov-title">Welcome to the Heat Transfer Lab</h2>
         <ul class="lab-intro-list">
-          <li><b>Three stations.</b> Conduction, Convection and Radiation — explore all three.</li>
+          <li><b>Three stations.</b> Conduction, Convection and Radiation - explore all three.</li>
           <li><b>Conduction:</b> wax drops melt along a metal rod, wood and plastic.</li>
           <li><b>Convection:</b> watch coloured particles circle in a heated beaker.</li>
           <li><b>Radiation:</b> a black can heats faster than a silver one under the lamp.</li>
@@ -1124,14 +1124,14 @@ const LabHeat = (() => {
       <div class="lab-help">
         <section><h3>Three ways heat can travel</h3><ul>
           <li><b>Conduction:</b> heat travels through a solid, particle by particle. Metal conducts well; wood and plastic do not.</li>
-          <li><b>Convection:</b> heat travels through a liquid or gas by making it move — warm fluid rises, cool fluid sinks.</li>
+          <li><b>Convection:</b> heat travels through a liquid or gas by making it move - warm fluid rises, cool fluid sinks.</li>
           <li><b>Radiation:</b> heat travels as invisible waves, even through empty space. The Sun heats the Earth this way.</li></ul></section>
         <section><h3>Conduction station</h3><ul>
           <li>Add materials to the rack. Turn on the burner. Watch the wax drops.</li>
           <li>Metal wax drops melt quickly. Wood and plastic take much longer.</li></ul></section>
         <section><h3>Convection station</h3><ul>
           <li>Turn on the heater. Add a dye drop. Watch the convection loop.</li>
-          <li>Switch to "Air" to see the same thing in a room — or in Mauritius!</li></ul></section>
+          <li>Switch to "Air" to see the same thing in a room - or in Mauritius!</li></ul></section>
         <section><h3>Radiation station</h3><ul>
           <li>Turn on the lamp. Read both thermometers. The black can heats faster.</li>
           <li>In Mauritius, dark clothing gets hotter in the sun than light clothing.</li></ul></section>

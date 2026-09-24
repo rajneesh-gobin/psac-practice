@@ -654,7 +654,7 @@ const MiniGames = (() => {
   // questions before the per-game safe() filter runs.
   function _pickFailToast(res) {
     if (!_bankLoaded() || !res || !res.loaded || (res.poolSize !== undefined && res.poolSize < 25)) {
-      toast('Questions are still loading — try again in a moment!', 3000);
+      toast('Questions are still loading - try again in a moment!', 3000);
       _preloadGrade();
       return;
     }
@@ -696,7 +696,7 @@ const MiniGames = (() => {
       if (!_loadingActive) { _cleanup(); return; }
       _cleanup();
       _cancelLoading();
-      toast('Your session has expired — please sign out and sign back in.', 5000);
+      toast('Your session has expired - please sign out and sign back in.', 5000);
     };
     document.addEventListener('ql-questions-ready', _onReady);
     document.addEventListener('ql-auth-error', _onAuthErr, { once: true });
@@ -706,7 +706,7 @@ const MiniGames = (() => {
       if (!_loadingActive) return;
       _cleanup();
       _cancelLoading();
-      toast('Questions are taking longer than expected — check your connection and try again.', 4500);
+      toast('Questions are taking longer than expected - check your connection and try again.', 4500);
     }, 12000);
 
     _preloadGrade();
@@ -1362,7 +1362,7 @@ const MiniGames = (() => {
       x.textAlign = 'center'; x.fillStyle = '#fff';
       x.font = '600 46px system-ui,sans-serif'; x.fillText('⚡ QUICK FIRE', W / 2, 250);
       x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillText('Nou Klass - Exam Practice', W / 2, 315);
       x.fillStyle = '#fde047'; x.font = '800 300px system-ui,sans-serif';
       x.fillText(String(_qf.score), W / 2, 660);
       x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
@@ -2874,7 +2874,7 @@ ${_socialShareBtns('fnShareTo')}
       x.textAlign = 'center'; x.fillStyle = '#fff';
       x.font = '600 46px system-ui,sans-serif'; x.fillText('🗡️ FRENCH NINJA', W / 2, 250);
       x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillText('Nou Klass - Exam Practice', W / 2, 315);
       x.fillStyle = '#fde047'; x.font = '800 300px system-ui,sans-serif';
       x.fillText(String(_fn.score), W / 2, 660);
       x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
@@ -3072,7 +3072,7 @@ ${_socialShareBtns('fnShareTo')}
           ${_rf.streak > 1 ? `<span class="rf-streak">🔥 ${_rf.streak} in a row</span>` : ''}
           <button class="mg-btn-ghost rf-quit" onclick="MiniGames.rfQuit()">✕</button>
         </div>
-        <p class="rf-instruction">Flip two shells — match the French word to its English meaning.</p>
+        <p class="rf-instruction">Flip two shells - match the French word to its English meaning.</p>
         <div class="rf-board" style="--rf-cols:${_rf.cols}">${cells}</div>
       </div>`;
   }
@@ -3092,7 +3092,7 @@ ${_socialShareBtns('fnShareTo')}
     const grade = perfect ? { t: 'Perfect dive! 🥇', s: 'Not one wasted flip.' }
       : _rf.wasted <= _rf.pairs ? { t: 'Great memory! 🥈', s: 'You kept most of your pearls.' }
         : _rf.wasted <= _rf.pairs * 2 ? { t: 'Nice work! 🥉', s: 'The reef is starting to look familiar.' }
-          : { t: 'Keep diving! 💪', s: 'Say each word out loud as you flip it — it sticks better.' };
+          : { t: 'Keep diving! 💪', s: 'Say each word out loud as you flip it - it sticks better.' };
 
     $('mg-game').innerHTML = `
       <div class="qf-end mg-pop">
@@ -3159,7 +3159,7 @@ ${_socialShareBtns('rfShareTo')}
       x.textAlign = 'center'; x.fillStyle = '#fff';
       x.font = '600 46px system-ui,sans-serif'; x.fillText('🐠 MEMORY REEF', W / 2, 250);
       x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillText('Nou Klass - Exam Practice', W / 2, 315);
       x.fillStyle = '#5eead4'; x.font = '800 300px system-ui,sans-serif';
       x.fillText(String(_rf.score), W / 2, 660);
       x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
@@ -3388,7 +3388,7 @@ ${_socialShareBtns('rfShareTo')}
 
     const verdict = !f ? ''
       : f.hit ? '<p class="lb-verdict lb-verdict-good">✅ Correct!</p>'
-        : `<p class="lb-verdict lb-verdict-bad">${f.timeout ? '⏰ Too slow' : '❌ Not quite'} — that one goes in <b>${_rfEsc((round.categories.find(c => c.key === f.correct) || {}).label || '')}</b></p>`;
+        : `<p class="lb-verdict lb-verdict-bad">${f.timeout ? '⏰ Too slow' : '❌ Not quite'} - that one goes in <b>${_rfEsc((round.categories.find(c => c.key === f.correct) || {}).label || '')}</b></p>`;
 
     el.innerHTML = `
       <div class="lb-stage">
@@ -3429,7 +3429,7 @@ ${_socialShareBtns('rfShareTo')}
     const grade = _lb.acc >= 90 ? { t: 'Master chemist! 🥇', s: 'Almost nothing went in the wrong cauldron.' }
       : _lb.acc >= 70 ? { t: 'Sharp sorting! 🥈', s: 'You know your groups.' }
         : _lb.acc >= 45 ? { t: 'Good lab work! 🥉', s: 'Read the cauldron labels before you tap.' }
-          : { t: 'Keep experimenting! 💪', s: 'Say the group out loud as you sort — it sticks.' };
+          : { t: 'Keep experimenting! 💪', s: 'Say the group out loud as you sort - it sticks.' };
 
     $('mg-game').innerHTML = `
       <div class="qf-end mg-pop">
@@ -3488,7 +3488,7 @@ ${_socialShareBtns('lbShareTo')}
       x.textAlign = 'center'; x.fillStyle = '#fff';
       x.font = '600 46px system-ui,sans-serif'; x.fillText('🧪 POTION LAB', W / 2, 250);
       x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillText('Nou Klass - Exam Practice', W / 2, 315);
       x.fillStyle = '#86efac'; x.font = '800 300px system-ui,sans-serif';
       x.fillText(String(_lb.score), W / 2, 660);
       x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
@@ -3759,7 +3759,7 @@ ${_socialShareBtns('lbShareTo')}
           <button class="mg-btn-ghost ec-quit" onclick="MiniGames.ecQuit()">✕</button>
         </div>
         <div class="ec-parrot">🦜</div>
-        ${flash ? '<p class="ec-mode-note">Pas de voix française sur cet appareil — regarde bien, le mot va disparaître !</p>' : ''}
+        ${flash ? '<p class="ec-mode-note">Pas de voix française sur cet appareil - regarde bien, le mot va disparaître !</p>' : ''}
         <div class="ec-flashbox">${_ec.showing ? `<span class="ec-flashword">${_rfEsc(item.say)}</span>` : (_ec.heard ? '<span class="ec-flashdots">• • •</span>' : '')}</div>
         <button class="ec-listen" ${(_ec.heard && _ec.replaysLeft <= 0) || _ec.locked ? 'disabled' : ''}
           onclick="MiniGames.ecListen()">${listenLabel}</button>
@@ -3846,7 +3846,7 @@ ${_socialShareBtns('ecShareTo')}
       x.textAlign = 'center'; x.fillStyle = '#fff';
       x.font = '600 46px system-ui,sans-serif'; x.fillText('🦜 ÉCOUTE !', W / 2, 250);
       x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillText('Nou Klass - Exam Practice', W / 2, 315);
       x.fillStyle = '#fde047'; x.font = '800 300px system-ui,sans-serif';
       x.fillText(String(_ec.score), W / 2, 660);
       x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';
@@ -4125,8 +4125,8 @@ ${_socialShareBtns('ecShareTo')}
             <p class="st-text">${_rfEsc(p.text)}</p>
           </div>
           <p class="st-warn">⏱️ ${p.lang === 'fr'
-    ? 'Prends ton temps — le chrono ne démarre qu’après. Le texte disparaîtra ensuite.'
-    : 'Take all the time you need — the clock starts after this. The passage is hidden once you begin.'}</p>
+    ? 'Prends ton temps - le chrono ne démarre qu’après. Le texte disparaîtra ensuite.'
+    : 'Take all the time you need - the clock starts after this. The passage is hidden once you begin.'}</p>
           <button class="mg-btn-primary st-begin" onclick="MiniGames.stBeginQuiz()">${p.lang === 'fr' ? 'J’ai fini de lire ▶' : 'I’ve finished reading ▶'}</button>
         </div>`;
       return;
@@ -4185,7 +4185,7 @@ ${_socialShareBtns('ecShareTo')}
     const grade = _st.acc >= 90 ? { t: 'Sharp reader! 🥇', s: 'You held on to almost every detail.' }
       : _st.acc >= 70 ? { t: 'Well read! 🥈', s: 'Your reading is doing the work.' }
         : _st.acc >= 45 ? { t: 'Good effort! 🥉', s: 'Try reading the last line twice before you start.' }
-          : { t: 'Keep reading! 💪', s: 'Slow down on the first read — the clock waits for you.' };
+          : { t: 'Keep reading! 💪', s: 'Slow down on the first read - the clock waits for you.' };
 
     $('mg-game').innerHTML = `
       <div class="qf-end mg-pop">
@@ -4243,7 +4243,7 @@ ${_socialShareBtns('stShareTo')}
       x.textAlign = 'center'; x.fillStyle = '#fff';
       x.font = '600 46px system-ui,sans-serif'; x.fillText('📖 STORY SPRINT', W / 2, 250);
       x.font = '700 40px system-ui,sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)';
-      x.fillText('Nou Klass — Exam Practice', W / 2, 315);
+      x.fillText('Nou Klass - Exam Practice', W / 2, 315);
       x.fillStyle = '#fed7aa'; x.font = '800 300px system-ui,sans-serif';
       x.fillText(String(_st.score), W / 2, 660);
       x.fillStyle = '#fff'; x.font = '600 42px system-ui,sans-serif';

@@ -594,7 +594,7 @@ const Calendar = (() => {
           subject: doc ? null : (pack || null),
           // ⚠ The wording carries the STATE, because the dot colour cannot: a
           //   parent scanning the month needs "late" to read as late.
-          detail: state === 'overdue' ? 'not done yet — was due' : (doc ? 'paper to work on' : 'to do'),
+          detail: state === 'overdue' ? 'not done yet - was due' : (doc ? 'paper to work on' : 'to do'),
           pct: null,
         });
       }
@@ -915,7 +915,7 @@ const Calendar = (() => {
       .delete().eq('id', id).select('id');
     if (error || !data?.length) {
       if (error) console.error('[Calendar.deleteEntry]', error.message);
-      else console.error('[Calendar.deleteEntry] refused — no row deleted for', id);
+      else console.error('[Calendar.deleteEntry] refused - no row deleted for', id);
       if (typeof toast !== 'undefined') toast('Could not remove that event. Please try again.', 3000);
       return;
     }
@@ -972,7 +972,7 @@ const Calendar = (() => {
     const sel = _el('add-event-chapter');
     if (!sel) return;
     const seq = ++_chapterFillSeq;
-    sel.innerHTML = '<option value="">— No specific chapter, just practise —</option>';
+    sel.innerHTML = '<option value="">- No specific chapter, just practise -</option>';
     const pack = _subjectById(subjectId);
     if (!pack) return;
     if (typeof PackLoader !== 'undefined' && !(pack._chapters || pack.chapters || []).length) {
@@ -980,7 +980,7 @@ const Calendar = (() => {
       if (seq !== _chapterFillSeq) return;
     }
     const chs = (pack._chapters || pack.chapters || []).filter(c => !c.hidden);
-    sel.innerHTML = '<option value="">— No specific chapter, just practise —</option>'
+    sel.innerHTML = '<option value="">- No specific chapter, just practise -</option>'
       + chs.map(c => `<option value="${_esc(c.id)}" ${c.id === selected ? 'selected' : ''}>${c.icon || '📖'} ${_esc(c.name)}</option>`).join('');
   }
   function onTypeChange() {

@@ -47,13 +47,13 @@
        and TikTok, and not one result from this domain.
      ⚠ app.js rewrites document.title per screen. This one is what a crawler
        and a cold visitor get. -->
-  <title>Nou Klass — Free PSAC &amp; NCE Exam Practice for Mauritius</title>
+  <title>Nou Klass - Free PSAC &amp; NCE Exam Practice for Mauritius</title>
   <!-- ⚠ A FIFTH COPY OF THE COVERAGE SENTENCE. og:description, twitter:description,
        og:image:alt, the landing hero, _appShareText() and _inviteText() all state
        the same grade range, and this one is now in the SURFACES map of
        scripts/test-share-copy-parity.js with them. Change one, change all.
      ⚠ 158 chars — Google truncates a snippet past ~160. -->
-  <meta name="description" content="Free PSAC and NCE exam practice for Mauritius. Grades 1–6 and 7–9 — Maths, English, French, Science, History &amp; Geography, aligned with the MIE curriculum.">
+  <meta name="description" content="Free PSAC and NCE exam practice for Mauritius. Grades 1–6 and 7–9 - Maths, English, French, Science, History &amp; Geography, aligned with the MIE curriculum.">
   <!-- ⚠ index.html is served at "/" and nowhere else: the Worker 404s unknown
        paths rather than falling back to the SPA shell (probed on production, not
        assumed), and /a/ /m/ /v/ rewrite to guest.html, materials.html and
@@ -72,8 +72,8 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Nou Klass">
   <meta property="og:url" content="https://nouklass.com/">
-  <meta property="og:title" content="Nou Klass — Exam Practice for Mauritius">
-  <meta property="og:description" content="Free PSAC revision for Grades 1–6 and NCE Grades 7–9 — Maths, English, French, Science and History &amp; Geography, aligned with the Mauritius MIE curriculum. XP, streaks and real-time parent tracking built in.">
+  <meta property="og:title" content="Nou Klass - Exam Practice for Mauritius">
+  <meta property="og:description" content="Free PSAC revision for Grades 1–6 and NCE Grades 7–9 - Maths, English, French, Science and History &amp; Geography, aligned with the Mauritius MIE curriculum. XP, streaks and real-time parent tracking built in.">
   <!-- ⚠ THE BANNER CARRIES THE SAME SENTENCE AS og:description, drawn into the
          image ("PSAC Grades 1–6 · NCE Grades 7–9"). They render TOGETHER in one
          Facebook card, so a change to either is a change to both — and it has
@@ -94,13 +94,13 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Nou Klass — exam practice for Mauritius. PSAC Grades 1–6 and NCE Grades 7–9.">
+  <meta property="og:image:alt" content="Nou Klass - exam practice for Mauritius. PSAC Grades 1–6 and NCE Grades 7–9.">
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Nou Klass — Exam Practice for Mauritius">
+  <meta name="twitter:title" content="Nou Klass - Exam Practice for Mauritius">
   <meta name="twitter:description" content="Free PSAC revision for Grades 1–6 and NCE Grades 7–9, aligned with the Mauritius MIE curriculum.">
   <meta name="twitter:image" content="https://nouklass.com/assets/og-banner.jpg">
-  <meta name="twitter:image:alt" content="Nou Klass — exam practice for Mauritius. PSAC Grades 1–6 and NCE Grades 7–9.">
+  <meta name="twitter:image:alt" content="Nou Klass - exam practice for Mauritius. PSAC Grades 1–6 and NCE Grades 7–9.">
 
   <!-- PWA manifest -->
   <!-- Select a saved person's manifest before the browser fetches it. The URL
@@ -188,10 +188,12 @@
        already live on several other surfaces, and one more that nobody updates
        is how a search result ends up promising something the app stopped doing.
      ⚠ THIS BLOCK MUST STAY FIRST. scripts/test-landing-no-js.js reads the FIRST
-       ld+json in this file and asserts both of the above; the FAQ block below
-       does state a range, by design, and is governed by the parity test instead.
-     ⚠ Keep @id stable — the generated subject pages and the FAQ block below
-       reference https://nouklass.com/#organization rather than repeating it. -->
+       ld+json in this file and asserts both of the above. Nothing else on this
+       page states a range in schema any more — the FAQPage block that did moved
+       to /faq on 2026-09-24 along with the answers it described.
+     ⚠ Keep @id stable — the WebSite node below, /faq and all 46 generated
+       subject pages reference https://nouklass.com/#organization rather than
+       repeating it. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -251,86 +253,24 @@
     ]
   }
   </script>
-  <!-- ⚠ GENERATED-SHAPED, HAND-MAINTAINED: every answer below is a character-for-
-       character copy of the matching <p> in #landing-faq. Google requires the
-       schema to match the visible text, and test-landing-no-js.js fails if they
-       drift. Edit the section, then edit this — or neither. -->
+  <!-- ⚠ THE WebSite NODE ONLY. It used to sit in a @graph beside a FAQPage whose
+       answers were the visible FAQ further down this file; both moved to /faq on
+       2026-09-24, because a schema block is required to describe text the visitor
+       can actually see and this page now shows a teaser instead.
+     ⚠ KEEP THE @id. /faq and all 46 generated subject pages point isPartOf and
+       publisher at https://nouklass.com/#website and #organization rather than
+       repeating either — deleting this node orphans every one of those refs. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://nouklass.com/#website",
-        "url": "https://nouklass.com/",
-        "name": "Nou Klass",
-        "inLanguage": "en-GB",
-        "publisher": {
-          "@id": "https://nouklass.com/#organization"
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://nouklass.com/#faq",
-        "inLanguage": "en-GB",
-        "isPartOf": {
-          "@id": "https://nouklass.com/#website"
-        },
-        "publisher": {
-          "@id": "https://nouklass.com/#organization"
-        },
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is Nou Klass?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nou Klass is a free online practice and revision platform for pupils in Mauritius, covering Grades 1–6 (PSAC) and Grades 7–9 (NCE). It provides over 34,000 bite-sized practice questions with instant feedback and diagnostic progress tracking, aligned with the Mauritius Institute of Education (MIE) curriculum. It runs in any web browser at nouklass.com, with nothing to install."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Nou Klass aligned with the MIE curriculum used in Mauritian schools?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Every question on Nou Klass is written against the Mauritius Institute of Education (MIE) curriculum and organised by the same chapters and topics pupils follow in class — more than 450 chapters, each split into named sub-topics. Grades 1–6 follow the PSAC syllabus and Grades 7–9 follow the NCE syllabus, and practice includes questions from real past examination papers. Nou Klass is an independent platform and is not affiliated with the MIE or the Ministry of Education."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which grades and subjects does Nou Klass cover?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nou Klass covers Grades 1–6 (PSAC) and Grades 7–9 (NCE) in Mauritius. Grades 1–3 offer Mathematics, English, French and Health Education; Grades 4–6 offer Mathematics, English, French, Science and History & Geography; Grades 7–9 offer Mathematics, English, Français, Science and Social & Modern Studies, with Grade 9 adding Biology, Chemistry, Physics and ICT as separate subjects."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How can my child practise for the PSAC exam online?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "On Nou Klass, a pupil picks their grade and subject, then practises chapter by chapter in short sets graded from basic recall to full word problems. Every answer is marked instantly with a hint and a worked explanation, wrong answers come back automatically in a spaced Fix My Mistakes drill, and timed mock papers rehearse the real PSAC or NCE exam format from start to finish."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Nou Klass free to use?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Nou Klass is completely free for every account while the platform is being built — every grade, every subject and every practice question, with no card required, no trial and nothing to cancel. Parents will be notified well in advance before anything about access changes."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Do parents need to install an app, and does it work offline?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No installation is required. Nou Klass runs in any mobile or desktop browser at nouklass.com and can be added to a phone’s home screen as an app. Practice questions are cached on the device, so a pupil can keep revising without a data connection and their progress syncs once they are back online. Parents follow mastery, streaks and weak chapters from their own dashboard."
-            }
-          }
-        ]
-      }
-    ]
+    "@type": "WebSite",
+    "@id": "https://nouklass.com/#website",
+    "url": "https://nouklass.com/",
+    "name": "Nou Klass",
+    "inLanguage": "en-GB",
+    "publisher": {
+      "@id": "https://nouklass.com/#organization"
+    }
   }
   </script>
 </head>
@@ -355,24 +295,25 @@
       <div class="flex items-start gap-3 mb-4">
         <span class="text-2xl select-none shrink-0">🚧</span>
         <h3 class="text-base font-bold text-gray-800 dark:text-white leading-snug">
-          Actively being updated — all Grades 1–9 now live
+          Actively being updated - all Grades 1–9 now live
         </h3>
       </div>
       <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
         <p>
           The site is being <b>actively updated</b> and new questions are being added every day.
           <b>All Grades 1–9 are now live and accessible.</b> While the work is under way,
-          <b>all tiers are completely free for every account</b> — no card, no trial, nothing to cancel.
+          <b>all tiers are completely free for every account</b> - no card, no trial, nothing to cancel.
         </p>
         <p>
           <b>Some questions may have errors or may not be perfectly appropriate to the grade level.</b>
           We are actively working to fix these issues as fast as we can. If you spot a problem,
-          please use the <b>Report</b> button inside the app to let us know — your reports go
+          please use the <b>Report</b> button inside the app to let us know - your reports go
           directly to us and help improve the experience for everyone.
         </p>
         <p>
           Some parts of the site may still look unfinished or behave unexpectedly while we build.
-          Bear with us — and enjoy the free access in the meantime. You will be notified well
+          Bear with us - and enjoy the free access in the meantime. Nou Klass is kept going by
+          <b>voluntary donations</b> from families who can spare something; you will be notified well
           before anything changes.
         </p>
       </div>
@@ -475,7 +416,7 @@
         <h3 class="text-lg font-bold text-gray-800 dark:text-white">🎁 Invite &amp; Rewards</h3>
         <button onclick="Auth.closeInviteModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Share Nou Klass — Exam Practice with other families. Every friend who <b>creates an account</b> with your link counts towards the rewards below.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Share Nou Klass - Exam Practice with other families. Every friend who <b>creates an account</b> with your link counts towards the rewards below.</p>
 
       <!-- Credit balance + how it is earned. Filled by renderInviteCredits() in
            app.js; empty markup here so a failed network call leaves a blank
@@ -598,7 +539,7 @@
            "Everything is free right now" and a Buy button cannot both be true. -->
       <div data-free-banner class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-xl p-3 mb-4">
         <p class="text-sm font-bold text-green-700 dark:text-green-300">🎉 Everything is free right now</p>
-        <p class="text-xs text-green-600 dark:text-green-400 mt-0.5">Every chapter, every subject, every child. No card needed. Paid plans will arrive later - you will be told well before anything changes.</p>
+        <p class="text-xs text-green-600 dark:text-green-400 mt-0.5">Every chapter, every subject, every child. No card needed. Nou Klass is kept going by voluntary donations - you will be told well before anything about access changes.</p>
       </div>
 
       <!-- The permanent rule, stated separately from the temporary promotion
@@ -633,7 +574,7 @@
           <span class="text-[10px] font-bold uppercase tracking-wide bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 px-2 py-1 rounded-full shrink-0">Soon</span>
         </button>
       </div>
-      <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Paid plans will open later. Nothing is charged today and no payment details are collected.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Nothing is charged today and no payment details are collected.</p>
     </div>
   </div>
 
@@ -664,7 +605,7 @@
       <div class="flex items-center gap-2 min-w-0 flex-1">
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
         <div class="min-w-0 flex-1">
-          <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">Nou Klass — Exam Practice</h1>
+          <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">Nou Klass - Exam Practice</h1>
           <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 1–6 (PSAC) · Grades 7–9 (NCE)</p>
         </div>
         <!-- Stats ride with the branding, not with the actions: they are
@@ -797,7 +738,7 @@
         <div class="flex items-center gap-2.5 min-w-0">
           <span class="text-3xl select-none shrink-0">🎓</span>
           <div class="min-w-0">
-            <div class="text-base sm:text-lg font-black text-white leading-tight truncate">Nou Klass — Exam Practice</div>
+            <div class="text-base sm:text-lg font-black text-white leading-tight truncate">Nou Klass - Exam Practice</div>
             <div class="text-xs text-indigo-300/70">Mauritius</div>
           </div>
         </div>
@@ -874,24 +815,335 @@
           class="w-full flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/40 rounded-full px-4 py-2 text-left hover:from-amber-500/30 hover:to-orange-500/30 transition-colors">
           <span class="text-lg select-none shrink-0">🚧</span>
           <span class="font-bold text-amber-200 text-xs sm:text-sm flex-1 truncate">
-            Actively updating · Grades 1–9 now live · Some content may have errors — use the report button
+            Actively updating · Grades 1–9 now live · Some content may have errors - use the report button
           </span>
           <span class="text-amber-300/70 text-xs shrink-0 underline underline-offset-2">Details</span>
         </button>
       </div>
 
       <!-- Hero -->
-      <section class="flex-1 flex flex-col items-center justify-center text-center px-4 py-8">
-        <div class="text-8xl mb-6 select-none animate-bounce" style="animation-duration:3s">🎓</div>
-        <h1 class="text-3xl sm:text-5xl font-black leading-tight mb-4 max-w-2xl">
+      <!-- ══ Hero — the pitch, then the board ══ -->
+      <!-- ⚠ THE PITCH COMES FIRST AGAIN, and it is deliberately SHORT. It ran
+           the other way round for a while (preview above the headline) and the
+           measured result on a 390x844 phone was that the first screenful a
+           stranger saw was a list of padlocked chapter names with no sentence
+           anywhere saying what the site is: the h1 was ~1700px down and the
+           first live question ~1230px down, behind a 400px picker.
+           ⚠ So: headline, one line of what it is, the two buttons — and the
+           board immediately under them, still inside the first scroll. The
+           subject pills, the trust badge and the measured stat tiles moved
+           BELOW the board; they are reassurance, and reassurance is read after
+           someone has tried the thing, not before.
+           ⚠ The 🎓 stays at text-6xl/7xl. At text-8xl it and the h1 filled a
+           360x640 viewport between them. -->
+      <section class="px-4 pt-2 pb-6 max-w-3xl mx-auto w-full flex flex-col items-center text-center">
+        <div class="text-5xl sm:text-7xl mb-3 select-none animate-bounce" style="animation-duration:3s">🎓</div>
+        <h1 class="text-3xl sm:text-5xl font-black leading-tight mb-3">
           Ace your <span class="text-indigo-300">PSAC &amp; NCE Exams</span><br>Practice Made Fun
         </h1>
-        <p class="text-indigo-200 text-base sm:text-lg mb-5 max-w-xl font-medium">
+        <p class="text-indigo-200 text-sm sm:text-lg mb-5 max-w-xl font-medium">
           Interactive revision for Grades 1–6 (PSAC) and Grades 7–9 (NCE), aligned with the Mauritius MIE curriculum.
         </p>
 
+        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center">
+          <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('parent');Auth.showSignUp();},60)"
+            class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-bold px-8 py-3.5 rounded-2xl text-base shadow-2xl transition-all hover:scale-105">
+            Get Started - Free →
+          </button>
+          <button onclick="showScreen('auth'); setTimeout(()=>Auth.setRole('parent'),60)"
+            class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-8 py-3.5 rounded-2xl text-base transition-colors">
+            I already have an account
+          </button>
+        </div>
+
+        <p class="mt-4 text-sm text-indigo-200/80">
+          …or try a real question first - no account needed ↓
+        </p>
+      </section>
+
+      <!-- ══ THE DECK — a whole panel slides, not a pane inside one ═════════
+           ⚠⚠ THE SLIDE IS THE PANEL. The first build put the track INSIDE the
+           classroom board, so every slide wore the same wooden frame and the
+           same green chalkboard — the game looked like the chapter list with
+           different words in it. Each slide now carries its OWN surface: the
+           classroom board here, the quiz studio next door, and whatever a later
+           slide needs. What slides is the whole thing.
+
+           ⚠ THE GAME SLIDE USES THE REAL .bq-* CLASSES from style.css, the ones
+           engine/minigame.js paints the actual game with. That is the point: a
+           preview drawn in its own approximation of the game is a picture of a
+           product that does not exist. If the studio changes there, it changes
+           here for free — and if someone renames .bq-stage, this breaks loudly
+           rather than drifting quietly.
+
+           ⚠ THE GRADE RAIL IS PER SLIDE, AND STILL GLOBAL. _renderGrades()
+           writes into EVERY [data-demo-grades] host, which is why that was
+           built that way — so each slide can style its own rail to its own
+           surface while they all stay one choice. Picking Grade 6 on the board
+           changes the game's questions too.
+
+           ⚠ SLIDES ARE REGISTERED IN engine/demo.js. A <section> with no
+           registry entry is a slide nobody can reach and a gap in the dots; a
+           registry entry with no <section> renders nothing. Add both or neither
+           — and never a tab for a slide that does not exist yet, because
+           "coming soon" is banned copy on this page.
+
+           ⚠ INACTIVE SLIDES ARE `inert`. Without it Tab walks into the
+           off-screen slides and the track scrolls sideways on its own — the
+           classic carousel bug, invisible with a mouse. -->
+      <section id="demo" class="px-4 pb-10 max-w-5xl mx-auto w-full">
+        <div class="demo-deck">
+          <div class="demo-track" id="demo-track">
+
+
+
+
+
+            <!-- ④ EXPERIMENT — the lab bench -->
+
+            <!-- ⑤ THE GAME ZONE — the arcade -->
+
+
+            <!-- ⑥ FOR PARENTS — a sample report, and it says so -->
+            <!-- ① PRACTISE — the classroom board -->
+            <section class="demo-slide" id="demo-slide-practise" role="tabpanel" aria-label="Practise a chapter">
+              <div class="demo-board">
+                <div class="demo-board-inner">
+
+                  <div class="demo-board-top">
+                    <span class="demo-preview-tag"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                    <p class="demo-board-title">This is a preview - try it without an account</p>
+                  </div>
+
+                  <div class="demo-rail">
+                    <span class="demo-rail-l">Grade</span>
+                    <div class="demo-grades" data-demo-grades role="group" aria-label="Choose a grade to preview"></div>
+                  </div>
+
+                  <div class="demo-rail">
+                    <span class="demo-rail-l">Subject</span>
+                    <div id="demo-subjects" class="demo-subjects" role="group" aria-label="Choose a subject"></div>
+                  </div>
+
+                  <div class="demo-shell">
+                    <!-- the chalk list -->
+                    <aside class="demo-picker">
+                      <p class="demo-pick-h" id="demo-ch-head">Chapters</p>
+                      <div id="demo-chapters" class="demo-chapters" role="group" aria-label="Choose a chapter"></div>
+                      <!-- ⚠ OUTSIDE the chapter list, which scrolls. Rendered into it, this
+                           sat below the fold of its own scroller and a visitor never saw
+                           the one control that answers the padlocks above it. -->
+                      <div id="demo-ch-more"></div>
+                    </aside>
+
+                    <!-- the paper. Filled by engine/demo.js, records nothing. -->
+                    <div class="demo-stage">
+                      <div id="demo-card" class="demo-card" aria-live="polite"></div>
+                    </div>
+                  </div>
+
+                  <p class="demo-board-foot">
+                    🔒 Nothing here is saved - this preview is not linked to any account.
+                    <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                    to open every chapter and to track your child's progress.
+                  </p>
+
+                </div>
+              </div>
+            </section>
+
+            <!-- ② NOTHING IS SKIPPED — the coverage proof -->
+            <!-- ⚠ NO GRADE RAIL: the sample is four chapters across four grades
+                 on purpose, so it reads as coverage rather than as one good pack.
+                 A rail would have to hide three of them to mean anything. -->
+            <section class="demo-slide" id="demo-slide-cover" role="tabpanel" aria-label="How a chapter is broken up">
+              <div class="demo-cv">
+                <div class="demo-cv-top">
+                  <span class="demo-preview-tag demo-preview-tag-cv"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                  <p class="demo-cv-heading">🧭 Nothing is skipped</p>
+                </div>
+                <div id="demo-cover" class="demo-cv-body" aria-live="polite"></div>
+                <p class="demo-cv-foot">
+                  🔒 Nothing here is saved — this preview is not linked to any account.
+                  <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                  and your child can practise any sub-topic on its own, and see which ones they have covered.
+                </p>
+              </div>
+            </section>
+
+            <!-- ② PLAY — the quiz studio -->
+            <section class="demo-slide" id="demo-slide-play" role="tabpanel" aria-label="Play Who Wants to Be a Billionaire">
+              <div class="demo-studio">
+
+                <div class="demo-studio-top">
+                  <span class="demo-preview-tag demo-preview-tag-gold"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                  <p class="demo-studio-title">💰 Who Wants to Be a Billionaire?</p>
+                </div>
+
+                <div class="demo-rail demo-rail-studio">
+                  <span class="demo-rail-l">Grade</span>
+                  <div class="demo-grades" data-demo-grades role="group" aria-label="Choose a grade to preview"></div>
+                </div>
+
+                <div id="demo-play" class="demo-play" aria-live="polite"></div>
+
+                <p class="demo-studio-foot">
+                  🔒 Nothing here is saved - no score, no account.
+                  <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                  to play all twenty rungs, keep your best score and track your child's progress.
+                </p>
+
+              </div>
+            </section>
+
+            <!-- ⚠ NO GRADE RAIL: Island Explorer is Mauritius geography for every
+                 grade, and the twelve-game grid is not grade-scoped either. A rail
+                 that changed nothing would be a lie, as on the lab slide. -->
+            <section class="demo-slide" id="demo-slide-games" role="tabpanel" aria-label="The Game Zone">
+              <div class="demo-gz">
+                <div class="demo-gz-top">
+                  <span class="demo-preview-tag demo-preview-tag-gz"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                  <p class="demo-gz-heading">🎮 The Game Zone</p>
+                  <span class="demo-gz-sub">Island Explorer · try three stops</span>
+                </div>
+                <div id="demo-arcade" class="demo-gz-body" aria-live="polite"></div>
+                <p class="demo-gz-foot">
+                  🔒 Nothing here is saved — no score, no account.
+                  <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                  to play all twelve, keep your best scores and track your child's progress.
+                </p>
+              </div>
+            </section>
+
+            <!-- ⚠ NO GRADE RAIL HERE, deliberately: the experiment is Grade 4
+                 Materials and a rail that changed nothing would be a lie. The
+                 slide names its grade and the range instead. -->
+            <section class="demo-slide" id="demo-slide-lab" role="tabpanel" aria-label="Run a science experiment">
+              <div class="demo-lab">
+
+                <div class="demo-lab-top">
+                  <span class="demo-preview-tag demo-preview-tag-lab"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                  <p class="demo-lab-heading">🧲 Science Lab · Magnets</p>
+                  <span class="demo-lab-grade">Grade 4 · Materials</span>
+                </div>
+
+                <div id="demo-lab" class="demo-lab-body" aria-live="polite"></div>
+
+                <p class="demo-lab-foot">
+                  🔒 Nothing here is saved - this preview is not linked to any account.
+                  Science Labs run from Grade 4 to Grade 9.
+                  <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                  to open them all and to track your child's progress.
+                </p>
+
+              </div>
+            </section>
+
+            <!-- ③ BUILD A PAPER — the desk -->
+            <section class="demo-slide" id="demo-slide-paper" role="tabpanel" aria-label="Build a test paper">
+              <div class="demo-mk">
+
+                <div class="demo-mk-top">
+                  <span class="demo-preview-tag demo-preview-tag-ink"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                  <p class="demo-mk-heading">📝 Build a test paper</p>
+                </div>
+
+                <div class="demo-rail demo-rail-ink">
+                  <span class="demo-rail-l">Grade</span>
+                  <div class="demo-grades" data-demo-grades role="group" aria-label="Choose a grade to preview"></div>
+                </div>
+
+                <div id="demo-make" class="demo-make" aria-live="polite"></div>
+
+                <p class="demo-mk-foot">
+                  🔒 Nothing here is saved - this preview is not linked to any account.
+                  <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                  to print any paper you build, with its mark scheme, and to track your child's progress.
+                </p>
+
+              </div>
+            </section>
+
+            <!-- ⑤ PAST PAPERS — the shelf -->
+            <section class="demo-slide" id="demo-slide-papers" role="tabpanel" aria-label="Browse the past-paper library">
+              <div class="demo-shelf">
+                <div class="demo-shelf-top">
+                  <span class="demo-preview-tag demo-preview-tag-wood"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                  <p class="demo-shelf-heading">📚 Past exam papers</p>
+                </div>
+                <div class="demo-rail demo-rail-wood">
+                  <span class="demo-rail-l">Grade</span>
+                  <div class="demo-grades" data-demo-grades role="group" aria-label="Choose a grade to preview"></div>
+                </div>
+                <div id="demo-shelf" class="demo-shelf-body" aria-live="polite"></div>
+                <p class="demo-shelf-foot">
+                  🔒 Nothing here is saved — this preview is not linked to any account.
+                  <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                  to open the whole library, and to track your child's progress.
+                </p>
+              </div>
+            </section>
+
+            <!-- ⚠ NO GRADE RAIL: the sample is one fictional child. A rail that
+                 changed nothing would be a lie, like the lab slide. -->
+            <section class="demo-slide" id="demo-slide-parent" role="tabpanel" aria-label="What a parent sees">
+              <div class="demo-pv">
+                <div class="demo-pv-top">
+                  <span class="demo-preview-tag demo-preview-tag-pv"><span class="demo-live-dot" aria-hidden="true"></span> Live preview</span>
+                  <p class="demo-pv-heading">👨‍👩‍👧 What you would see</p>
+                </div>
+                <div id="demo-parent" class="demo-pv-body"></div>
+                <p class="demo-pv-foot">
+                  Every label above is the real one. The numbers are invented.
+                  <button type="button" class="demo-nudge-a" onclick="Demo.signUp()">Register free</button>
+                  and this fills in from your child's own practice.
+                </p>
+              </div>
+            </section>
+
+          </div>
+
+          <!-- ⚠ THE ARROWS FLANK THE TRACK, in their own grid columns — they are
+               not overlaid on the panel and not floated outside the section.
+               Overlaying puts a button on top of the chalk chapter list and the
+               prize ladder; floating outside overflows the viewport between
+               ~720px and ~1140px, where the section is already edge to edge.
+               A three-column grid simply gives them room.
+               ⚠ They are OUTSIDE the track and outside every slide: a control
+               inside slide one would slide away with it.
+             ⚠ THE GLYPH IS A SET SQUARE, drawn inline. It was ‹ and › at 44px
+               in a 6%-white circle, which measured 1.6:1 against the panel
+               behind it and was reported as barely visible. Inline SVG rather
+               than 📐, which is a colour emoji on one platform and a black
+               outline on another and cannot take currentColor for the
+               disabled state; and rather than an <img>, which is a request
+               that can 404 and is gone offline.
+             ⚠ The point faces the way it travels, so the triangle IS the
+               direction. engine/demo.js only ever sets .disabled and toggles
+               .is-hint on these buttons - it never writes their contents, so
+               the SVG survives every render. Check that before adding markup. -->
+          <button type="button" class="demo-deck-arrow demo-deck-prev" onclick="Demo.move(-1)" aria-label="Previous section"><svg class="dda-ico" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path class="dda-body" d="M25 16 L11 2 L11 30 Z"/><path class="dda-ticks" d="M11 9 h3.4 M11 16 h5 M11 23 h3.4"/></svg></button>
+
+          <!-- the track is injected between them by the grid areas -->
+
+          <button type="button" class="demo-deck-arrow demo-deck-next" onclick="Demo.move(1)" aria-label="Next section"><svg class="dda-ico" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path class="dda-body" d="M25 16 L11 2 L11 30 Z"/><path class="dda-ticks" d="M11 9 h3.4 M11 16 h5 M11 23 h3.4"/></svg></button>
+
+          <div class="demo-deck-nav">
+            <div class="demo-tabs" id="demo-tabs" role="tablist" aria-label="Preview sections"></div>
+          </div>
+          <div class="demo-dots" id="demo-dots"></div>
+        </div>
+
+        <div class="demo-cat-cta">
+          <button type="button" class="demo-btn demo-btn-go" onclick="Demo.signUp()">Register free to open every chapter →</button>
+          <p class="demo-cat-cta-note">Free to create an account, and it is what saves your child's progress. Grades 1 &amp; 2 are free permanently, and everything is free right now.</p>
+        </div>
+      </section>
+
+      <!-- ══ Reassurance — read AFTER the board, never before it ══ -->
+      <section class="px-4 pt-2 pb-8 max-w-3xl mx-auto w-full flex flex-col items-center text-center">
         <!-- Subject pills -->
-        <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
           <span class="flex items-center gap-1.5 bg-blue-500/20 border border-blue-400/30 text-blue-200 text-sm font-semibold px-4 py-1.5 rounded-full">📐 Maths</span>
           <span class="flex items-center gap-1.5 bg-rose-500/20 border border-rose-400/30 text-rose-200 text-sm font-semibold px-4 py-1.5 rounded-full">📖 English</span>
           <span class="flex items-center gap-1.5 bg-violet-500/20 border border-violet-400/30 text-violet-200 text-sm font-semibold px-4 py-1.5 rounded-full">📕 French</span>
@@ -900,29 +1152,13 @@
           <span class="flex items-center gap-1.5 bg-cyan-500/20 border border-cyan-400/30 text-cyan-200 text-sm font-semibold px-4 py-1.5 rounded-full">🎓 8 NCE subjects</span>
         </div>
 
-        <p class="text-indigo-200/80 text-sm sm:text-base mb-10 max-w-lg">
-          We cover <b class="text-white">every part of the syllabus with clear, straightforward questions</b>
-          - not a handful of impossible ones. Seven games keep them coming back for more.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('parent');Auth.showSignUp();},60)"
-            class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-bold px-8 py-4 rounded-2xl text-base shadow-2xl transition-all hover:scale-105">
-            Get Started - Free →
-          </button>
-          <button onclick="showScreen('auth'); setTimeout(()=>Auth.setRole('parent'),60)"
-            class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl text-base transition-colors">
-            I already have an account
-          </button>
-        </div>
-        <!-- Flag badge -->
-        <div class="mt-8 flex items-center gap-2 text-xs text-indigo-200/85 bg-white/5 border border-white/10 px-4 py-2 rounded-full">
+        <div class="flex items-center gap-2 text-xs text-indigo-200/85 bg-white/5 border border-white/10 px-4 py-2 rounded-full">
           <span>🏝</span> Built for Mauritian students · PSAC &amp; NCE
         </div>
         <button onclick="showScreen('auth'); setTimeout(()=>Auth.setRole('student'),60)"
-          class="mt-4 text-sm text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">
+          class="mt-3 text-sm text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">
           🎒 Already have a username &amp; PIN? Student sign in →
         </button>
-
         <!-- ⚠ Measured from the BUILT question bundles and the live manifests, not
              estimated. Re-measured 2026-09-16: 34,392 practisable questions and
              457 chapters across the 46 LIVE packs, 926 past-paper items
@@ -944,7 +1180,7 @@
              no question text at all, so counting bundle rows would claim 667 questions
              a child can never be dealt. Count what projects, not what is stored.
              Re-count before changing a number here. -->
-        <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-2xl">
+        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl mx-auto">
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
             <div class="text-2xl sm:text-3xl font-black text-white">34,000+</div>
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">practice questions</div>
@@ -1009,7 +1245,7 @@
           <div class="bg-amber-400/10 border border-amber-400/25 rounded-2xl p-6">
             <div class="text-3xl mb-3 select-none">🤝</div>
             <h3 class="font-bold text-white mb-2">Better with you beside them</h3>
-            <p class="text-sm text-indigo-100/75 leading-relaxed">This app is a revision tool — it does not replace your time with your child. Children focus better and learn more when a parent sits with them, even for just a few minutes. We actively encourage you to join them at the screen whenever you can.</p>
+            <p class="text-sm text-indigo-100/75 leading-relaxed">This app is a revision tool - it does not replace your time with your child. Children focus better and learn more when a parent sits with them, even for just a few minutes. We actively encourage you to join them at the screen whenever you can.</p>
           </div>
         </div>
       </section>
@@ -1041,7 +1277,7 @@
         <p class="text-center mb-7">
           <span class="inline-flex flex-wrap justify-center items-center gap-2 max-w-full rounded-full bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 text-sm text-emerald-200">
             <span class="rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-emerald-950">Live</span>
-            All NCE Grade 9 subjects live — <b class="text-white">Maths</b>, <b class="text-white">ICT</b>, <b class="text-white">Biology</b>, <b class="text-white">Chemistry</b>, <b class="text-white">Physics</b>, <b class="text-white">English</b>, <b class="text-white">French</b> &amp; <b class="text-white">Social Studies</b>
+            All NCE Grade 9 subjects live - <b class="text-white">Maths</b>, <b class="text-white">ICT</b>, <b class="text-white">Biology</b>, <b class="text-white">Chemistry</b>, <b class="text-white">Physics</b>, <b class="text-white">English</b>, <b class="text-white">French</b> &amp; <b class="text-white">Social Studies</b>
           </span>
         </p>
 
@@ -1102,7 +1338,7 @@
             <div class="text-4xl mb-2">❤️</div>
             <h3 class="font-bold text-white mb-1">Health Education &amp; SSEE</h3>
             <p class="text-xs text-rose-300/60 mb-2">Grades 1–3 (PSAC)</p>
-            <p class="text-sm text-indigo-200/60">Hygiene, nutrition and staying safe across Grades 1–3 — plus SSEE in Grade 3: our environment, living things, water and weather.</p>
+            <p class="text-sm text-indigo-200/60">Hygiene, nutrition and staying safe across Grades 1–3 - plus SSEE in Grade 3: our environment, living things, water and weather.</p>
           </div>
 
           <div class="bg-cyan-500/10 hover:bg-cyan-500/15 border border-cyan-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
@@ -1116,7 +1352,7 @@
             <div class="text-4xl mb-2">🧪</div>
             <h3 class="font-bold text-white mb-1">Biology · Chemistry · Physics</h3>
             <p class="text-xs text-teal-300/60 mb-2">Grade 9 (NCE)</p>
-            <p class="text-sm text-indigo-200/60">Three separate subjects, exactly as the NCE sets them — not one combined science paper.</p>
+            <p class="text-sm text-indigo-200/60">Three separate subjects, exactly as the NCE sets them - not one combined science paper.</p>
           </div>
 
           <div class="bg-orange-500/10 hover:bg-orange-500/15 border border-orange-400/25 rounded-2xl p-5 transition-colors text-center sm:col-span-1">
@@ -1253,7 +1489,7 @@
           <div class="bg-fuchsia-500/10 border border-fuchsia-400/25 rounded-2xl p-5">
             <div class="text-4xl mb-3 select-none">🗡️</div>
             <h3 class="font-bold text-fuchsia-200 mb-1.5">French Ninja</h3>
-            <p class="text-sm text-indigo-100/70 leading-relaxed">Slice the mistakes out of a French phrase before it vanishes — tap the wrong words and leave the right ones alone.</p>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">Slice the mistakes out of a French phrase before it vanishes - tap the wrong words and leave the right ones alone.</p>
           </div>
           <!-- ⚠ The NINTH game. Memory Reef came OUT of the workshop list below
                in the same change that added this card — a game promised as
@@ -1272,7 +1508,7 @@
           <div class="bg-amber-500/10 border border-amber-400/25 rounded-2xl p-5">
             <div class="text-4xl mb-3 select-none">🦜</div>
             <h3 class="font-bold text-amber-200 mb-1.5">Écoute !</h3>
-            <p class="text-sm text-indigo-100/70 leading-relaxed">The parrot says a French word — chat or chaud? poisson or poison? Listen, then pick exactly what you heard.</p>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">The parrot says a French word - chat or chaud? poisson or poison? Listen, then pick exactly what you heard.</p>
           </div>
           <!-- ⚠ The TWELFTH game, and the last of the four that were promised
                as "coming soon". The dashed workshop placeholder that stood here
@@ -1281,7 +1517,7 @@
           <div class="bg-orange-500/10 border border-orange-400/25 rounded-2xl p-5">
             <div class="text-4xl mb-3 select-none">📖</div>
             <h3 class="font-bold text-orange-200 mb-1.5">Story Sprint</h3>
-            <p class="text-sm text-indigo-100/70 leading-relaxed">Read a short story at your own pace — the clock does not start until you say you are ready — then race through three questions on it.</p>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">Read a short story at your own pace - the clock does not start until you say you are ready - then race through three questions on it.</p>
           </div>
         </div>
         <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-indigo-200/60">
@@ -1379,11 +1615,16 @@
             Every subject, every chapter, every game, for every child on your account.
             <b class="text-white">No card, no trial, nothing to cancel.</b>
           </p>
-          <p class="text-sm text-indigo-200/70 max-w-xl mx-auto mb-6 leading-relaxed">
+          <p class="text-sm text-indigo-200/70 max-w-xl mx-auto mb-3 leading-relaxed">
             The site is still under construction, so you may meet the odd rough edge - sorry, we are on it.
-            Paid options will arrive later, once the app is finished and worth paying for.
-            <b class="text-white">You will be told well before anything changes</b>, and nothing you do now is lost.
+            Nou Klass is kept going by <b class="text-white">voluntary donations</b> from families who can spare something.
+            Give nothing and nothing changes - your child keeps the whole app, and you will be told well
+            before anything about access changes.
           </p>
+          <!-- ⚠ The ask is a LINE, not a donate button: there is no donation flow yet, so
+               the honest route is the contact form the app already has. Give this a real
+               payment path before it grows a "Donate" call to action. -->
+          <button onclick="showScreen('contact')" class="mb-6 inline-flex items-center justify-center min-h-[44px] px-5 text-amber-100 hover:text-white font-bold underline underline-offset-4 transition-colors">Happy to chip in? Talk to us →</button>
           <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-amber-200/80">
             <span>✓ No payment details collected</span>
             <span>✓ Nothing to cancel</span>
@@ -1445,61 +1686,45 @@
         </div>
       </section>
 
-      <!-- ══ FAQ ══════════════════════════════════════════════════════════
-           ⚠ THIS IS A COPY SURFACE, and it is now in the SURFACES map of
-             scripts/test-share-copy-parity.js with the other seven. It states
-             the grade range and the "free right now" promise; both already
-             drift across surfaces when nobody checks.
-           ⚠ EVERY ANSWER IS MIRRORED VERBATIM in the FAQPage JSON-LD in
-             <head>. Google requires the schema text to match the visible text,
-             and an LLM that quotes one while the page shows the other is worse
-             than having neither. scripts/test-landing-no-js.js compares them
-             character for character — change one, change both.
-           ⚠ Plain always-visible text, NOT <details>: the whole reason this
-             page was made static is that a crawler must read it with nothing
-             running. Never move it into an innerHTML render either — the
-             Tailwind Play CDN only generates rules for classes present at its
-             initial scan. -->
-      <section id="landing-faq" aria-labelledby="faq-heading" class="px-4 pb-16 max-w-3xl mx-auto w-full">
-        <h2 id="faq-heading" class="text-2xl sm:text-3xl font-black text-white mb-2 text-center">Frequently asked questions</h2>
-        <p class="text-indigo-200/70 text-sm mb-8 text-center">PSAC and NCE revision in Mauritius — what Nou Klass covers and how it works.</p>
-        <div class="space-y-4">
-          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
-            <h3 class="text-base sm:text-lg font-bold text-white mb-2">What is Nou Klass?</h3>
-            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Nou Klass is a free online practice and revision platform for pupils in Mauritius, covering Grades 1–6 (PSAC) and Grades 7–9 (NCE). It provides over 34,000 bite-sized practice questions with instant feedback and diagnostic progress tracking, aligned with the Mauritius Institute of Education (MIE) curriculum. It runs in any web browser at nouklass.com, with nothing to install.</p>
-          </article>
-          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
-            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Is Nou Klass aligned with the MIE curriculum used in Mauritian schools?</h3>
-            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Yes. Every question on Nou Klass is written against the Mauritius Institute of Education (MIE) curriculum and organised by the same chapters and topics pupils follow in class — more than 450 chapters, each split into named sub-topics. Grades 1–6 follow the PSAC syllabus and Grades 7–9 follow the NCE syllabus, and practice includes questions from real past examination papers. Nou Klass is an independent platform and is not affiliated with the MIE or the Ministry of Education.</p>
-          </article>
-          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
-            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Which grades and subjects does Nou Klass cover?</h3>
-            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Nou Klass covers Grades 1–6 (PSAC) and Grades 7–9 (NCE) in Mauritius. Grades 1–3 offer Mathematics, English, French and Health Education; Grades 4–6 offer Mathematics, English, French, Science and History &amp; Geography; Grades 7–9 offer Mathematics, English, Français, Science and Social &amp; Modern Studies, with Grade 9 adding Biology, Chemistry, Physics and ICT as separate subjects.</p>
-          </article>
-          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
-            <h3 class="text-base sm:text-lg font-bold text-white mb-2">How can my child practise for the PSAC exam online?</h3>
-            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">On Nou Klass, a pupil picks their grade and subject, then practises chapter by chapter in short sets graded from basic recall to full word problems. Every answer is marked instantly with a hint and a worked explanation, wrong answers come back automatically in a spaced Fix My Mistakes drill, and timed mock papers rehearse the real PSAC or NCE exam format from start to finish.</p>
-          </article>
-          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
-            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Is Nou Klass free to use?</h3>
-            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Yes. Nou Klass is completely free for every account while the platform is being built — every grade, every subject and every practice question, with no card required, no trial and nothing to cancel. Parents will be notified well in advance before anything about access changes.</p>
-          </article>
-          <article class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
-            <h3 class="text-base sm:text-lg font-bold text-white mb-2">Do parents need to install an app, and does it work offline?</h3>
-            <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">No installation is required. Nou Klass runs in any mobile or desktop browser at nouklass.com and can be added to a phone’s home screen as an app. Practice questions are cached on the device, so a pupil can keep revising without a data connection and their progress syncs once they are back online. Parents follow mastery, streaks and weak chapters from their own dashboard.</p>
-          </article>
+      <!-- ══ FAQ TEASER ═════════════════════════════════════════
+           SIX answers used to sit here in full, mirrored character for
+           character by a FAQPage block in <head>. Both moved to /faq on
+           2026-09-24. /faq was ALREADY rendering those six plus six longer
+           ones of its own — and was reachable from nothing but sitemap.xml,
+           so this page was carrying a duplicate of half an orphan.
+         ⚠ THE ANSWER BELOW IS COPIED CHARACTER FOR CHARACTER from the matching
+           entry in scripts/faq-copy.js, and test-landing-no-js.js compares them.
+           That is the whole reason it is safe to show one answer in two places:
+           it is one string with two renderings, not a second copy somebody will
+           improve on one page and not the other.
+         ⚠ It is the "free right now" promise — the one with no end date on any
+           surface. Do not add a deadline here, or in faq-copy.js, without
+           changing every other surface in the same commit.
+         ⚠ NO FAQPage SCHEMA ON THIS PAGE ANY MORE, deliberately. One question is
+           not an FAQ, and marking up an answer whose siblings live on another URL
+           is the doorway pattern. /faq carries the schema for all twelve.
+         ⚠ Plain always-visible text and a real <a href>, NOT a button or an
+           innerHTML render: this page is static so a crawler reads it with
+           nothing running, and that is the whole reason /faq gets found at all. -->
+      <section id="landing-faq-teaser" aria-labelledby="faq-teaser-heading" class="px-4 pb-16 max-w-3xl mx-auto w-full">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 text-center">
+          <h2 id="faq-teaser-heading" class="text-xl sm:text-2xl font-black text-white mb-2">Is Nou Klass free to use?</h2>
+          <p class="text-sm sm:text-base text-indigo-100/85 leading-relaxed">Yes. Nou Klass is completely free for every account while the platform is being built - every grade, every subject and every practice question, with no card required, no trial and nothing to cancel. It is kept going by voluntary donations from families who can spare something, and parents will be notified well in advance before anything about access changes.</p>
+          <a href="/faq" class="mt-5 inline-flex items-center justify-center min-h-[44px] px-5 text-indigo-200 hover:text-white font-bold underline underline-offset-4 transition-colors">Read the full FAQ →</a>
         </div>
       </section>
 
       <!-- Footer -->
       <footer class="text-center pb-10 text-indigo-200/75 text-xs px-4">
-        <p>Nou Klass — Exam Practice · Mauritius · Grades 1–6 (PSAC) · Grades 7–9 (NCE) · Maths · English · French · Science · History &amp; Geography</p>
+        <p>Nou Klass - Exam Practice · Mauritius · Grades 1–6 (PSAC) · Grades 7–9 (NCE) · Maths · English · French · Science · History &amp; Geography</p>
         <p class="mt-1">Progress saved securely in the cloud · Installable app · Aligned to the MIE curriculum</p>
         <button onclick="showScreen('contact')" class="mt-2 text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">Contact the admins</button>
         <span class="mt-2 mx-2 text-indigo-200/40" aria-hidden="true">·</span>
+        <a href="/faq" class="mt-2 text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">FAQ</a>
+        <span class="mt-2 mx-2 text-indigo-200/40" aria-hidden="true">·</span>
         <a href="image-credits.html" class="mt-2 text-indigo-200/85 hover:text-white underline underline-offset-2 transition-colors min-h-[44px] inline-flex items-center justify-center">Image credits</a>
         <p class="mt-2 text-indigo-200/70">
-          Still under construction and free to use - paid options will come later.
+          Still under construction and free to use, kept going by voluntary donations.
           Not affiliated with the Mauritius Institute of Education or the Ministry of Education.
         </p>
       </footer>
@@ -1657,7 +1882,7 @@
                   <li>Owns the account and the family - up to 3 children.</li>
                   <li>Sees everything each child does, chapter by chapter.</li>
                   <li>Sets homework, locks chapters, caps difficulty.</li>
-                  <li>Holds the billing, when paid plans open.</li>
+                  <li>Holds the account - and any support the family chooses to give.</li>
                   <li>Creates each child's username and PIN, and resets a forgotten one.</li>
                 </ul>
                 <p class="role-foot">This is the account you create when you sign up.</p>
@@ -2199,7 +2424,7 @@
            short screen. -->
       <div class="auth-brand text-center mb-6 select-none">
         <div class="auth-logo mb-2 drop-shadow-xl">🎓</div>
-        <h1 class="auth-title font-black text-white tracking-tight">Nou Klass — Exam Practice</h1>
+        <h1 class="auth-title font-black text-white tracking-tight">Nou Klass - Exam Practice</h1>
         <p class="auth-sub text-indigo-300 text-sm mt-1">Grades 1–6 (PSAC) · Grades 7–9 (NCE) · Mauritius</p>
       </div>
 
@@ -2935,15 +3160,18 @@
           </div>
           <button class="prac-hub-search-btn" onclick="Search.open()">🔍 Search questions</button>
         </div>
-        <div class="prac-board-mat">
-          <div class="sh-board-frame">
-            <div class="prac-grade-bar">
-              <label class="prac-grade-label" for="prac-grade-sel">Grade</label>
-              <select id="prac-grade-sel" class="prac-grade-dropdown" onchange="PracticeHub.onGradeChange(this.value)"></select>
-            </div>
-            <p class="prac-grade-note" id="prac-locked-note" style="display:none">🔒 Check with your parent to unlock other grades.</p>
-            <div class="prac-books-grid" id="prac-books-grid"></div>
+        <!-- ⚠ ONE BOARD, not two. This carried .prac-board-mat wrapped around
+             .sh-board-frame - an 8px-framed blackboard containing a 6px-framed
+             blackboard. It was invisible only while both painted near-black in
+             dark mode; the moment the board went back to being green it read as
+             a picture of a board hung on a board. -->
+        <div class="sh-board-frame">
+          <div class="prac-grade-bar">
+            <label class="prac-grade-label" for="prac-grade-sel">Grade</label>
+            <select id="prac-grade-sel" class="prac-grade-dropdown" onchange="PracticeHub.onGradeChange(this.value)"></select>
           </div>
+          <p class="prac-grade-note" id="prac-locked-note" style="display:none">🔒 Check with your parent to unlock other grades.</p>
+          <div class="prac-books-grid" id="prac-books-grid"></div>
         </div>
       </div>
     </div>
@@ -3451,22 +3679,36 @@
     </div>
 
     <!-- ══════════ CHAPTER SELECTOR ══════════ -->
+    <!-- ⚠ SAME SHELL as #screen-practice-hub and #screen-subject-hub: paper
+         page, chalk .sh-header, the list on a framed board. This screen is the
+         only other way into the chapter list (the dashboard's "Chapter
+         Practice" card, a calendar task, a resumed round), and it was still
+         painted on the app's plain page - so arriving here left the child's
+         desk for what reads as a different app. Keep the three in step. -->
     <div id="screen-chapter-select" class="screen hidden">
-      <button class="back-btn mb-4" data-target="subject-hub">← Subjects</button>
+      <!-- ⚠ THE BACK BUTTON IS INSIDE .subj-hub-outer. Outside it, it kept the
+           screen's own 1.25rem padding while everything else was centred in an
+           860px wrapper, so at 1440 it started at x=180 against the board's
+           x=290 and read as a stray control belonging to nothing. -->
+      <div class="subj-hub-outer">
+        <button class="back-btn mb-3" data-target="subject-hub">← Subjects</button>
 
-      <div class="ch-header">
-        <div class="ch-header-text">
-          <h2 class="ch-title">📚 Chapter Practice</h2>
-          <p class="ch-subtitle" id="chapter-subtitle">Pick a chapter to begin. Your mastery is tracked automatically.</p>
+        <div class="sh-header">
+          <div>
+            <h2 class="sh-title">📚 Chapter Practice</h2>
+            <p class="sh-subtitle" id="chapter-subtitle">Pick a chapter to begin. Your mastery is tracked automatically.</p>
+          </div>
+          <button onclick="Search.open()" class="prac-hub-search-btn">🔍 Search questions</button>
         </div>
-        <button onclick="Search.open()" class="ch-search-btn">🔍 <span>Search questions</span></button>
+
+        <div class="prac-board-mat ch-board">
+          <!-- Filled by _renderChapterSummary() -->
+          <div id="chapter-summary" class="ch-summary"></div>
+          <div id="chapter-link-library" class="lb-packlink-host"></div>
+
+          <div id="chapter-grid"></div>
+        </div>
       </div>
-
-      <!-- Filled by _renderChapterSummary() -->
-      <div id="chapter-summary" class="ch-summary"></div>
-      <div id="chapter-link-library" class="lb-packlink-host"></div>
-
-      <div id="chapter-grid"></div>
     </div>
 
     <!-- ══════════ PRACTICE ══════════ -->
@@ -3595,7 +3837,11 @@
           </button>
         </div>
 
-        <p id="practice-error-note" class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1 px-2">⚙️ The site is being updated, so some questions may still contain small errors. If one looks wrong, please tap <b>🚩 Report question</b> above so an admin can fix it. 🙏</p>
+        <!-- ⚠ No `mt-1`. .pr-wrap is a flex column with `gap: .75rem`, so the
+             margin was 4px ON TOP of the gap every other block here gets — and
+             on a 360x740 phone those 4px were the last of what pushed the
+             sticky action bar's flow slot past the fold. -->
+        <p id="practice-error-note" class="text-xs text-gray-500 dark:text-gray-400 text-center px-2">⚙️ The site is being updated, so some questions may still contain small errors. If one looks wrong, please tap <b>🚩 Report question</b> above so an admin can fix it. 🙏</p>
 
         <!-- Scratchpad: collapsed by default, opened from the toolbar. -->
         <div id="practice-scratch-wrap" class="hidden pr-scratch">
@@ -5878,12 +6124,11 @@
           <div class="min-w-0">
             <div class="font-bold text-green-800 dark:text-green-300 text-sm">Everything is already free right now</div>
             <p class="text-xs text-green-700 dark:text-green-400 mt-0.5 leading-relaxed">
-              Every subject and every chapter is open to every family - you do not need to
-              buy anything, and paid plans are still to come.
+              Every subject and every chapter is open to every family - you do not need to buy anything.
               <b>Grades 1 and 2 stay free permanently</b> and are not sold here at all.
               Credits you earn now are <b>banked</b>: spend them here whenever you like, and what
-              you unlock keeps working for its full <span id="shop-days-note">30</span> days even
-              after paid plans start, and even if your access lapses.
+              you unlock keeps working for its full <span id="shop-days-note">30</span> days,
+              even if your access ever changes.
             </p>
           </div>
         </div>
@@ -7011,6 +7256,9 @@
   <script src="engine/learning_coach.js"></script>
   <script src="engine/certificates.js"></script>
   <script src="engine/library.js"></script>
+  <!-- The landing-page demo. Loads last: it needs SUBJECT_PACKS (registry.js)
+       and window._gradeStage (app.js), and it renders nothing on any other screen. -->
+  <script src="engine/demo.js"></script>
 
   <!-- ── Exam review sheet ──
        Reached from "Review →", the label the Next button takes on the last
@@ -7247,7 +7495,7 @@
       <p id="pin-entry-error" class="hidden text-xs text-red-500 text-center mb-3">Incorrect PIN. Try again.</p>
       <p id="pin-entry-busy" class="hidden text-xs text-indigo-600 dark:text-indigo-300 text-center mb-3 flex items-center justify-center gap-1.5">
         <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 16 16" fill="none" style="animation:ps-spin .7s linear infinite" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-opacity=".25" stroke-width="2.5"/><path d="M8 2.5A5.5 5.5 0 0 1 13.5 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-        PIN correct — loading your dashboard…
+        PIN correct - loading your dashboard…
       </p>
       <div class="grid grid-cols-3 gap-2 mb-4">
         <button onclick="Auth._pinKey('1')" class="pin-key-btn">1</button>
@@ -7484,7 +7732,7 @@
       <div>
         <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Question ID <span class="text-gray-400 font-normal">(leave blank to auto-generate)</span></label>
         <input id="qmf-id" type="text" placeholder="e.g. g5fr-lec-071" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1 font-mono">
-        <p id="qmf-id-note" class="hidden text-xs text-gray-500 dark:text-gray-400 mt-1">The id is fixed once a question exists — progress, mistakes and the importer all key on it. Delete and re-add to change it.</p>
+        <p id="qmf-id-note" class="hidden text-xs text-gray-500 dark:text-gray-400 mt-1">The id is fixed once a question exists - progress, mistakes and the importer all key on it. Delete and re-add to change it.</p>
       </div>
 
       <div>
@@ -7528,7 +7776,7 @@
       </div>
 
       <div>
-        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Also accept <span class="text-gray-400 font-normal">(one per line — other spellings or wordings marked right)</span></label>
+        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Also accept <span class="text-gray-400 font-normal">(one per line - other spellings or wordings marked right)</span></label>
         <textarea id="qmf-accept" rows="2" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1 font-mono"></textarea>
       </div>
 
@@ -7573,9 +7821,9 @@
         </div>
       </div>
       <div class="qm-preview-opts">
-        <label><input id="qmp-answered" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> After they answer — shows the correct answer and the explanation</label>
+        <label><input id="qmp-answered" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> After they answer - shows the correct answer and the explanation</label>
         <label><input id="qmp-show-hints" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> Show the three hints the pupil can ask for</label>
-        <label id="qmp-blank-row" class="hidden"><input id="qmp-blank" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> Typed-blank face — half of pupils get this question as a typed box instead of four options</label>
+        <label id="qmp-blank-row" class="hidden"><input id="qmp-blank" type="checkbox" onchange="AdminPanel.qmPreviewToggle()"> Typed-blank face - half of pupils get this question as a typed box instead of four options</label>
       </div>
       <p class="qm-preview-note">Shown at a phone's width, on the practice screen. An exam draws the same question on the exam layout, and read-aloud there speaks the question only.</p>
       <div class="flex gap-2 pt-1">
@@ -7612,7 +7860,7 @@
       <label for="admin-cp-to" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">To</label>
       <textarea id="admin-cp-to" rows="2" placeholder="someone@example.com, another@example.com"
         class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
-      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Separate addresses with a comma or a new line, up to 20. Two or more go in Bcc, so recipients never see each other. For a longer list, tick members in the list behind this box and use <b>Email selected</b> instead — that one respects the opt-out and adds an unsubscribe link.</p>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Separate addresses with a comma or a new line, up to 20. Two or more go in Bcc, so recipients never see each other. For a longer list, tick members in the list behind this box and use <b>Email selected</b> instead - that one respects the opt-out and adds an unsubscribe link.</p>
 
       <label for="admin-cp-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Subject</label>
       <input id="admin-cp-subject" type="text" maxlength="150" placeholder="e.g. About your Nou Klass account"
@@ -7621,12 +7869,12 @@
       <label for="admin-cp-message" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Message</label>
       <textarea id="admin-cp-message" rows="8" maxlength="8000" placeholder="Write in plain text. A blank line starts a new paragraph."
         class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
-      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only — it is escaped before sending, so pasted formatting will not carry through. Your own address is never put on the message.</p>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only - it is escaped before sending, so pasted formatting will not carry through. Your own address is never put on the message.</p>
 
       <label class="flex items-start gap-2 mb-2 cursor-pointer">
         <input id="admin-cp-copy" type="checkbox" checked class="accent-indigo-600 mt-0.5">
         <span class="text-xs text-gray-600 dark:text-gray-300">
-          <b>Send me a copy</b> — with the full recipient list.
+          <b>Send me a copy</b> - with the full recipient list.
           <span class="block text-[11px] text-gray-400 dark:text-gray-500">The admin address forwards to your inbox and has no Sent folder, so this copy is the only record you will have of what went out.</span>
         </span>
       </label>
@@ -7634,7 +7882,7 @@
       <label class="flex items-start gap-2 mb-3 cursor-pointer">
         <input id="admin-cp-essential" type="checkbox" class="accent-indigo-600 mt-0.5">
         <span class="text-xs text-gray-600 dark:text-gray-300">
-          <b>Essential notice</b> — send even to someone who has turned all email off.
+          <b>Essential notice</b> - send even to someone who has turned all email off.
           <span class="block text-[11px] text-gray-400 dark:text-gray-500">Only for account, billing or safety messages.</span>
         </span>
       </label>
@@ -7679,12 +7927,12 @@
       <label for="admin-bc-message" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Message</label>
       <textarea id="admin-bc-message" rows="8" maxlength="8000" placeholder="Write in plain text. A blank line starts a new paragraph."
         class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
-      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only — it is escaped before sending, so pasted formatting will not carry through. It is sent from the Nou Klass admin address, and replies come back there — not to your personal inbox, which is never put on the message.</p>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 mb-3">Plain text only - it is escaped before sending, so pasted formatting will not carry through. It is sent from the Nou Klass admin address, and replies come back there - not to your personal inbox, which is never put on the message.</p>
 
       <label class="flex items-start gap-2 mb-3 cursor-pointer">
         <input id="admin-bc-essential" type="checkbox" class="accent-indigo-600 mt-0.5">
         <span class="text-xs text-gray-600 dark:text-gray-300">
-          <b>Essential notice</b> — send even to people who have switched announcements off.
+          <b>Essential notice</b> - send even to people who have switched announcements off.
           <span class="block text-[11px] text-gray-400 dark:text-gray-500">Only for account, billing or safety messages. Anything else must respect the opt-out.</span>
         </span>
       </label>
@@ -7721,7 +7969,7 @@
       <button onclick="closeHelpRequest()" aria-label="Close"
         class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">✕</button>
       <h2 class="text-base font-bold text-gray-800 dark:text-white mb-1">🙋 Ask a friend</h2>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Send this question to people you know. They vote, you see what they picked — then <b>you</b> choose.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Send this question to people you know. They vote, you see what they picked - then <b>you</b> choose.</p>
 
       <div id="ask-friend-preview" class="text-sm text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/40 rounded-xl px-3 py-2.5 mb-3 max-h-32 overflow-y-auto"></div>
 
@@ -7732,7 +7980,7 @@
           <button type="button" data-help-duration="5" aria-pressed="true" onclick="pickHelpDuration(this)" class="af-dur af-dur-on">5 min</button>
           <button type="button" data-help-duration="10" aria-pressed="false" onclick="pickHelpDuration(this)" class="af-dur">10 min</button>
         </div>
-        <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3">🔒 Your name is never sent, and the correct answer is never shared — not even with the people voting. You can stop waiting and answer it yourself at any time.</p>
+        <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3">🔒 Your name is never sent, and the correct answer is never shared - not even with the people voting. You can stop waiting and answer it yourself at any time.</p>
         <button onclick="createHelpRequest(this)" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold disabled:opacity-60">🙋 Make my help link</button>
       </div>
 
@@ -7755,7 +8003,7 @@
              voting into a void. -->
         <button onclick="cancelHelpRequest()"
           class="w-full mt-3 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-          ✋ Stop waiting — I'll answer it myself
+          ✋ Stop waiting - I'll answer it myself
         </button>
       </div>
 

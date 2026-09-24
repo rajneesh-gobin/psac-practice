@@ -239,44 +239,70 @@ ok('subject pages are NOT in the service-worker shell',
   !/\/(psac|nce)\//.test(shell));
 ok('/faq is NOT in the service-worker shell either', !/faq\.html/.test(shell));
 
-// ── 7. /faq is DERIVED from the landing FAQ, not a second copy of it ───────
-// ⚠ The whole reason /faq can exist without becoming a duplicate-content problem
-//   is that its first six answers ARE the landing answers — the same words, one
-//   authored source, two URLs. The moment they differ, the site answers the same
-//   question two ways and an answer engine picks one at random.
+// ── 7. /faq renders every answer, and is the ONLY page that renders them ──
+// ⚠ WHAT CHANGED ON 2026-09-24 AND WHY THIS SECTION STILL EXISTS. /faq used to
+//   be DERIVED from the landing page: its first six answers were read out of the
+//   FAQPage JSON-LD in index.html, because those six were also visible there, and
+//   the risk was the two URLs answering one question with almost the same words.
+//   The landing FAQ moved here, scripts/faq-copy.js became the only source, and
+//   that particular drift is now impossible.
+// ⚠ THE REPLACEMENT RISK IS COVERAGE, and it is quieter than the one it replaced.
+//   An answer added to faq-copy.js reaches a reader only if the generator is
+//   re-run; un-run, faq-copy.js and faq.html disagree and NOTHING about the site
+//   looks broken — the page loads, the old answers are all correct, and the new
+//   one is simply not there. That is checked below rather than assumed.
 {
   const FAQ_COPY = require('./faq-copy.js');
   const faq = pages.find((p) => p.standalone);
-  const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const norm = (s) => s.replace(/<[^>]*>/g, '')
     .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
     .replace(/\s+/g, ' ').trim();
 
-  const landingLd = (indexHtml.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [])
-    .find((s) => s.includes('"FAQPage"'));
-  ok('index.html still carries the FAQPage block /faq is built from', !!landingLd);
+  const all = [...(FAQ_COPY.core || []), ...(FAQ_COPY.extra || [])];
+  ok('faq-copy.js declares a core[] and an extra[]',
+    !!(FAQ_COPY.core || []).length && !!(FAQ_COPY.extra || []).length,
+    'core ' + (FAQ_COPY.core || []).length + ', extra ' + (FAQ_COPY.extra || []).length);
 
-  if (landingLd && faq) {
-    const obj = JSON.parse(landingLd.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, ''));
-    const core = ((obj['@graph'] || [obj]).find((n) => n['@type'] === 'FAQPage') || {}).mainEntity || [];
+  if (faq) {
     const visible = norm(faq.html);
-    for (const qa of core) {
-      ok('/faq carries the landing answer verbatim: ' + qa.name.slice(0, 44),
-        visible.includes(norm(qa.acceptedAnswer.text)),
+    for (const qa of all) {
+      ok('/faq renders the answer verbatim: ' + qa.q.slice(0, 44),
+        visible.includes(norm(qa.q)) && visible.includes(norm(qa.a)),
         'regenerate: node scripts/build-subject-pages.js');
     }
-    // ⚠ And the extras must be EXTRA. A near-duplicate of a core answer is the
-    //   doorway pattern inside a single page.
-    const coreQs = new Set(core.map((q) => norm(q.name).toLowerCase()));
-    for (const e of FAQ_COPY.extra) {
-      ok('extra question is not already answered on the landing page: ' + e.q.slice(0, 44),
-        !coreQs.has(norm(e.q).toLowerCase()));
+    ok('/faq renders every answer and no others',
+      (faq.html.match(/<div class="qa">/g) || []).length === all.length,
+      (faq.html.match(/<div class="qa">/g) || []).length + ' blocks, ' + all.length + ' authored');
+
+    // ⚠ No two questions may be near-duplicates: that is the doorway pattern
+    //   inside a single page, and an answer engine then quotes whichever it saw
+    //   last. It used to only be possible between core and extra; now that they
+    //   sit in one file it is possible within either.
+    const seen = new Map();
+    for (const e of all) {
+      const k = norm(e.q).toLowerCase();
+      ok('question is asked only once on /faq: ' + e.q.slice(0, 44), !seen.has(k));
+      seen.set(k, true);
     }
-    ok('/faq answers every core question plus the extras',
-      (faq.html.match(/<div class="qa">/g) || []).length === core.length + FAQ_COPY.extra.length,
-      (faq.html.match(/<div class="qa">/g) || []).length + ' blocks');
   }
 
+  // ⚠ index.html MUST NOT carry a FAQPage block any more. Google requires the
+  //   markup to describe text the visitor can see, and the landing page now shows
+  //   one teaser answer whose eleven siblings are on another URL. Marking that up
+  //   as an FAQ is the doorway pattern stated in schema.
+  const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  ok('index.html declares no FAQPage block (it moved to /faq)',
+    !(indexHtml.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [])
+      .some((b) => b.includes('"FAQPage"')));
+
+  // ⚠ AND /faq MUST BE LINKED. It was in sitemap.xml and nothing else for as long
+  //   as it existed, which is how a page carrying twelve answers stayed invisible
+  //   to every reader who does not parse sitemaps. Losing the link again would
+  //   break nothing, 404 nothing, and undo the entire reason the FAQ moved here.
+  ok('index.html links to /faq', /href="\/faq"/.test(indexHtml));
+  for (const pg of pages.filter((x) => !x.standalone).slice(0, 3)) {
+    ok('subject page links to /faq: ' + pg.rel, /href="\/faq"/.test(pg.html));
+  }
   // The same three promise rules the subject copy has, on the FAQ prose.
   const prose = [FAQ_COPY.lede, ...FAQ_COPY.intro,
     ...FAQ_COPY.extra.flatMap((e) => [e.q, e.a])].join(' ');

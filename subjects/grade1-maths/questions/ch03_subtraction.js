@@ -457,7 +457,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>13</b> − 7 = 6.' }),
 
   makeMCQ({ id:'g1mth-sub-075', chapterId:'g1mth-subtraction', difficulty:2, subsection:'missing_numbers',
-    question:'Which number sentence is MISSING the correct □? 20 − □ = 14',
+    question:'Which number goes in the box? 20 − □ = 14',
     options:['6','5','7','4'], answer:'6',
     hint:'What do you take from 20 to get 14?',
     explanation:'20 − <b>6</b> = 14.' })

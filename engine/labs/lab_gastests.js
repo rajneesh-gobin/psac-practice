@@ -127,7 +127,7 @@ const LabGastests = (() => {
     _updateTools();
     const st = Labs.store(ID);
     if (!st.intro) _intro();
-    else _coach('Select a gas station on the left and follow the steps — or pick a guide below.');
+    else _coach('Select a gas station on the left and follow the steps - or pick a guide below.');
     if (!_resizeWired) {
       window.addEventListener('resize', () => { if (_cv && _cv.isConnected) _resize(); });
       _resizeWired = true;
@@ -261,7 +261,7 @@ const LabGastests = (() => {
   function _toggleGoggles() {
     _goggles = !_goggles;
     _syncGoggles();
-    _coach(_goggles ? 'Goggles on. Ready for gas tests.' : 'Goggles off — put them back on before testing.');
+    _coach(_goggles ? 'Goggles on. Ready for gas tests.' : 'Goggles off - put them back on before testing.');
     if (_goggles) _guideEvent('goggles');
   }
 
@@ -391,7 +391,7 @@ const LabGastests = (() => {
           </section>
           <section class="lab-hz-sec is-exam">
             <h3>Why it matters</h3>
-            <p>Only the oxygen (${esc(D().airPct('o2'))}%) supports burning. Nitrogen is unreactive. Carbon dioxide is only ${esc(D().airPct('co2'))}% — so little that you need a sensitive test (limewater) to detect it.</p>
+            <p>Only the oxygen (${esc(D().airPct('o2'))}%) supports burning. Nitrogen is unreactive. Carbon dioxide is only ${esc(D().airPct('co2'))}% - so little that you need a sensitive test (limewater) to detect it.</p>
           </section>
         </div>
       </div>
@@ -456,12 +456,12 @@ const LabGastests = (() => {
         why: H.why,
         instead: H.instead,
         exam: H.exam(),
-        button: 'Got it — try again safely',
+        button: 'Got it - try again safely',
         onClose: () => {
           if (id === 'no_goggles_acid' || id === 'no_goggles_h2' || id === 'no_goggles_lit_o2')
             _coach('Tap 🥽 at the top to put on your goggles, then try again.');
           else if (id === 'glowing_in_h2')
-            _coach('For hydrogen: hold a LIGHTED splint at the MOUTH of the tube — not inside.');
+            _coach('For hydrogen: hold a LIGHTED splint at the MOUTH of the tube - not inside.');
         },
       });
     });
@@ -748,7 +748,7 @@ const LabGastests = (() => {
       st.missions[ms.id] = { stars: Math.max(prev.stars || 0, s), last: s, at: Date.now() };
       Labs.persist();
       const lines = [];
-      if (ms.hazards) lines.push(`${ms.hazards} safety mistake${ms.hazards === 1 ? '' : 's'} — no hazards next time for a bonus star.`);
+      if (ms.hazards) lines.push(`${ms.hazards} safety mistake${ms.hazards === 1 ? '' : 's'} - no hazards next time for a bonus star.`);
       else lines.push('No safety mistakes! 🥽');
       if (r.firstTry < r.total - 1) lines.push('Answer all but one first try for another star.');
       Labs.missionDone({ icon: M.icon, title: M.title, stars: s, score: r.firstTry, total: r.total, lines,
@@ -864,7 +864,7 @@ const LabGastests = (() => {
         <h2 id="lab-ov-title">Gas Tests</h2>
         <div class="lab-hz-body">
           <section class="lab-hz-sec is-what"><h3>What you will do</h3>
-            <p>Collect three gases — oxygen, carbon dioxide and hydrogen — and test each one with the right tool: a glowing splint, limewater or a lighted splint.</p></section>
+            <p>Collect three gases - oxygen, carbon dioxide and hydrogen - and test each one with the right tool: a glowing splint, limewater or a lighted splint.</p></section>
           <section class="lab-hz-sec is-exam"><h3>In the science exam</h3>
             <p>You need to know all three gas tests: which gas, which test, and what you see.</p></section>
         </div>
@@ -887,9 +887,9 @@ const LabGastests = (() => {
         <div class="lab-hz-body">
           <section class="lab-hz-sec is-what"><h3>The three stations</h3>
             <ul>
-              <li><b>O₂</b> — oxygen from hydrogen peroxide + MnO₂ catalyst. Test: glowing splint (relights).</li>
-              <li><b>CO₂</b> — carbon dioxide from marble chips + acid. Test: limewater (turns milky).</li>
-              <li><b>H₂</b> — hydrogen from zinc + acid. Test: lighted splint at the mouth (squeaky pop).</li>
+              <li><b>O₂</b> - oxygen from hydrogen peroxide + MnO₂ catalyst. Test: glowing splint (relights).</li>
+              <li><b>CO₂</b> - carbon dioxide from marble chips + acid. Test: limewater (turns milky).</li>
+              <li><b>H₂</b> - hydrogen from zinc + acid. Test: lighted splint at the mouth (squeaky pop).</li>
             </ul>
           </section>
           <section class="lab-hz-sec"><h3>Steps for each station</h3>

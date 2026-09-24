@@ -38,10 +38,10 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Malaria</b> was endemic in Mauritius until it was eradicated in the late 1940s through DDT spraying campaigns. It was one of the biggest killers at the time.' }),
 
   makeMCQ({ id:'g9sms-my006', chapterId:'g9sms-living-conditions', subsection:'strike_1975', difficulty:2,
-    question:'What was the main outcome of the student strike of 1975 in Mauritius?',
+    question:'Which practical benefit for students followed the student movement of 1975 in Mauritius?',
     options:["Free bus transport for students was introduced","Secondary school fees were doubled nationwide","The price of sugar exports was fixed by law","A new national university was founded"], answer:'Free bus transport for students was introduced',
     hint:'It was a practical benefit that students demanded.',
-    explanation:'Following the <b>1975 student strike</b>, the government introduced <b>free bus transport</b> for students, which remains in place today.' }),
+    explanation:'After the <b>1975 student movement</b> the government introduced <b>free bus transport</b> for students, which is still in place. The bigger demand behind the march — free secondary education — followed in 1977.' }),
 
   makeMCQ({ id:'g9sms-my007', chapterId:'g9sms-living-conditions', subsection:'education_before_reform', difficulty:2,
     question:'Before education reforms in Mauritius, primary schooling was mainly available to which group?',

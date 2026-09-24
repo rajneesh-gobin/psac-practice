@@ -342,11 +342,17 @@ const CONV_QS = [
     hint:'1.2 kg = 1,200 g. 1,200 ÷ 400 = 3.',
     explanation:'1,200 ÷ 400 = <b>3 bags</b>.' }),
 
+  // ⚠ ONE LITERAL, ONE QUESTION. This used to be a wrong question (a fill time in
+  //   minutes asked for in hours) followed, below the array, by a patch block that
+  //   found it by id and replaced it — so the file defined CV_MX03 twice and the
+  //   dead copy is what every later reader edited. Folded back in place: the patch
+  //   replaced rather than pushed, so deleting the literal instead would have
+  //   removed the question outright and orphaned its row (the importer never deletes).
   makeNum({ id:'CV_MX03', chapterId:'conversions', subsection:'mixed', difficulty:3,
-    question:'A swimming pool holds <b>500,000 L</b> of water. A pump fills it at <b>2,500 L per minute</b>.<br>How many <b>hours</b> does it take to fill?',
-    answer:'200', acceptableAnswers:['200','200 hours'],
-    hint:'Minutes to fill = 500,000 ÷ 2,500. Convert to hours (÷60).',
-    explanation:'500,000 ÷ 2,500 = 200 minutes. 200 ÷ 60 is not a whole number... re-check: 200 minutes = 3 h 20 min. Wait - let me fix: fill time = 200 min = <b>200 minutes</b>. (Answer updated below.)' }),
+    question:'A pump fills a tank at <b>2,500 L per minute</b>.<br>How many litres does it pump in <b>1.5 hours</b>?',
+    answer:'225000', acceptableAnswers:['225000','225,000'],
+    hint:'1.5 hours = 90 minutes. 2,500 × 90.',
+    explanation:'90 × 2,500 = <b>225,000 L</b>.' }),
 
   makeNum({ id:'CV_MX04', chapterId:'conversions', subsection:'mixed', difficulty:3,
     question:'A runner covers <b>5 km</b> in <b>25 minutes</b>.<br>How many <b>metres per minute</b> is that?',
@@ -380,16 +386,6 @@ const CONV_QS = [
 
 ];
 
-// Fix CV_MX03 - answer was wrong; correct answer is 200 minutes, not hours
-// Let\'s replace it with a better-formed question:
-const mxFix = CONV_QS.findIndex(q => q && q.id === 'CV_MX03');
-if (mxFix !== -1) {
-  CONV_QS[mxFix] = makeNum({ id:'CV_MX03', chapterId:'conversions', subsection:'mixed', difficulty:3,
-    question:'A pump fills a tank at <b>2,500 L per minute</b>.<br>How many litres does it pump in <b>1.5 hours</b>?',
-    answer:'225000', acceptableAnswers:['225000','225,000'],
-    hint:'1.5 hours = 90 minutes. 2,500 × 90.',
-    explanation:'90 × 2,500 = <b>225,000 L</b>.' });
-}
 
 CONV_QS.forEach(q => { if (q) STATIC_QUESTIONS.push(q); });
 console.log(`✅ Conversions chapter loaded: ${CONV_QS.filter(Boolean).length} questions.`);

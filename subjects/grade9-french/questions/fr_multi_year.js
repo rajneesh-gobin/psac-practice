@@ -89,8 +89,8 @@ STATIC_QUESTIONS.push(makeMCQ({
     'Kenzo boit ne pas de l\'eau le matin.',
     'Kenzo ne pas boit de l\'eau le matin.'
   ],
-  answer: 'Kenzo ne boit pas de l\'eau le matin.',
-  explanation: 'Forme négative : ne + verbe + pas. L\'article partitif reste après "pas de".'
+  answer: 'Kenzo ne boit pas d\'eau le matin.',
+  explanation: 'Forme négative : ne + verbe + pas. Après la négation, l\'article partitif « de l\' » devient « d\' » : Kenzo ne boit pas <b>d\'eau</b>.'
 }));
 
 STATIC_QUESTIONS.push(makeMCQ({

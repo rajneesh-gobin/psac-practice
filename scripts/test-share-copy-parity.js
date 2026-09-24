@@ -99,20 +99,28 @@ for (const name of ['_inviteText', '_inviteTextWhatsApp']) {
     'body: ' + body.replace(/\s+/g, ' ').slice(0, 80));
 }
 
-// ── The landing FAQ, added 2026-09-22 ──────────────────────────────────────
-// ⚠ TWO MORE SURFACES, and the first ones aimed at a MACHINE rather than a
-//   parent: the visible FAQ and the FAQPage JSON-LD that mirrors it are what an
-//   LLM quotes when someone asks it where to revise for the PSAC. A stale range
-//   here is repeated by an answer engine to people who never see the site, and
-//   unlike a Facebook card there is no scrape to re-run.
-// ⚠ STRIP HTML COMMENTS FIRST, for the same reason uncomment() exists above —
-//   the section carries a note about the range it promises, and reading a range
-//   out of the commentary is a drift report that is not real.
-const faqHtml = ((index.match(/<section id="landing-faq"[\s\S]*?<\/section>/) || [''])[0])
-  .replace(/<!--[\s\S]*?-->/g, '');
-const faqLd = (index.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [])
-  .find((s) => s.includes('"FAQPage"')) || '';
+// ── The FAQ, which lives on /faq since 2026-09-24 ─────────────────
+// ⚠ TWO SURFACES AIMED AT A MACHINE rather than a parent: the answers on /faq
+//   and the FAQPage JSON-LD mirroring them are what an LLM quotes when someone
+//   asks it where to revise for the PSAC. A stale range there is repeated by an
+//   answer engine to people who never see the site, and unlike a Facebook card
+//   there is no scrape to re-run.
+// ⚠ THEY USED TO BE READ OUT OF index.html, where the FAQ was visible on the
+//   landing page. It moved to /faq — which already rendered the same answers and
+//   was linked from nothing but sitemap.xml — and the landing page now shows a
+//   one-answer teaser and a link. Reading them here from the GENERATED page
+//   rather than from scripts/faq-copy.js is deliberate: the source is not what
+//   a crawler is served, and a generator left un-run is exactly how a corrected
+//   range fails to ship.
+const faqPage = fs.existsSync(path.join(ROOT, 'faq.html')) ? read('faq.html') : '';
+const faqHtml = ((faqPage.match(/<h1[\s\S]*?<footer/) || [''])[0]).replace(/<!--[\s\S]*?-->/g, '');
+const faqLd = (faqPage.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [])
+  .find((b) => b.includes('"FAQPage"')) || '';
 
+// ⚠ The landing teaser is NOT a surface here, on purpose. It is one answer about
+//   price and states no range at all; adding a range to it would create a seventh
+//   copy of the promise for no reader benefit. test-landing-no-js.js pins its
+//   wording to scripts/faq-copy.js instead, which is the drift that can happen.
 const SURFACES = {
   // ⚠ The <meta name="description"> is the SEARCH RESULT, added 2026-09-16. It
   //   is the only surface here a parent reads BEFORE they ever reach the site,
@@ -124,8 +132,8 @@ const SURFACES = {
   'landing hero':        heroLine,
   '_appShareText()':     shareText,
   '_inviteText()':       inviteText,
-  'landing FAQ':         faqHtml,
-  'FAQPage JSON-LD':     faqLd,
+  '/faq answers':        faqHtml,
+  '/faq FAQPage JSON-LD': faqLd,
 };
 
 const ranges = {};

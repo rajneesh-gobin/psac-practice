@@ -63,14 +63,30 @@ const PracticeJourney = (() => {
   //  chapter, which is what "Round Complete" and a bare "Continue →" did.
   function cardLabel(chapterId) {
     const qs = eligible(chapterId);
-    if (!qs.length) return { mode: 'smart', label: 'Start →' };
+    // ⚠ NO ARROW. _journeyCta() in app.js appends ' →' to this label, and
+    //   every other label primaryAction() returns is arrow-free - so this one
+    //   printed "Start → →" on every card whose bank had not loaded yet.
+    if (!qs.length) return { mode: 'smart', label: 'Start' };
     return PracticeSelector.primaryAction(qs, progressFor(chapterId), savedSet(chapterId));
+  }
+
+  // ⚠ THE SAME OBJECT coverageLine() renders, exposed so the chapter card's
+  //   progress bar can be drawn from it. It used to draw its own from
+  //   DB.chapters[id].answeredIds while the sentence under it came from
+  //   QuestionProgress - two stores, and measured on one card they disagreed
+  //   flatly: a 73% bar directly above "0 of 30 questions explored".
+  function coverageOf(chapterId) {
+    return PracticeSelector.coverage(eligible(chapterId), progressFor(chapterId));
   }
 
   function coverageLine(chapterId) {
     const qs = eligible(chapterId);
     const cov = PracticeSelector.coverage(qs, progressFor(chapterId));
-    if (!cov.known) return 'Question bank not loaded yet';
+    // ⚠ Child-facing wording. "Question bank not loaded yet" is engine-speak,
+    //   and it is what a nine-year-old reads on every card for the first second
+    //   of the screen's life. The same sentence exists in _journeyCoverage()
+    //   in app.js as the no-PracticeJourney fallback - change both together.
+    if (!cov.known) return 'Questions are still loading…';
     const gen = hasGenerator(chapterId) ? ' · plus unlimited generated practice' : '';
     const needs = cov.needs ? ` · ${cov.needs} to fix` : '';
     return `${cov.explored} of ${cov.total} questions explored${needs}${gen}`;
@@ -297,7 +313,7 @@ const PracticeJourney = (() => {
       : `<span class="pj-sync" title="Saving your progress…">Saving…</span>`;
   }
 
-  return { eligible, cardLabel, coverageLine, start, openOptions, openMap, renderMap, close, dismissTip, syncBadge, CELL, SET_SIZE };
+  return { eligible, cardLabel, coverageLine, coverageOf, start, openOptions, openMap, renderMap, close, dismissTip, syncBadge, CELL, SET_SIZE };
 })();
 
 if (typeof window !== 'undefined') window.PracticeJourney = PracticeJourney;

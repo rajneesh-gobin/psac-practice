@@ -100,11 +100,11 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Whale</b> starts with the "wh" sound. Wh-ale! The "wh" letters together make a special /w/ sound.' }),
 
   makeMCQ({ id:'g2eng-lis-014', chapterId:'g2eng-listening', difficulty:1, subsection:'sound_discrimination',
-    question:'Which pair of words start with a DIFFERENT sound from each other?',
+    question:'Which pair starts with the SAME sound but DIFFERENT letters?',
     options:['pig and pen','moon and mop','dog and door','cake and kite'],
     answer:'cake and kite',
-    hint:'Say the first sound of each word. Most pairs share the same first sound — but one pair is tricky!',
-    explanation:'<b>Cake and kite</b> — even though they start with different letters (c and k), they actually make the same /k/ sound! So this pair is a trick question; all pairs here share a sound. Cake=/k/, kite=/k/. Great thinking!' }),
+    hint:'Say the first sound of each pair aloud, then look at the first letter of each word.',
+    explanation:'<b>Cake and kite</b> both start with the /k/ sound, but one is spelt with a <b>c</b> and the other with a <b>k</b>. The other pairs share their first sound <i>and</i> their first letter: p-p, m-m, d-d.' }),
 
   makeMCQ({ id:'g2eng-lis-015', chapterId:'g2eng-listening', difficulty:1, subsection:'sound_discrimination',
     question:'Which word ends with the /s/ sound?',

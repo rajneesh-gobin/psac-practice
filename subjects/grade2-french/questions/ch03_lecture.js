@@ -109,7 +109,7 @@ STATIC_QUESTIONS.push(
     explanation:'« a-mi » a <b>2 syllabes</b>. (Ami — friend — has 2 syllables.)' }),
 
   makeMCQ({ id:'g2fr-lec-015', chapterId:CH, difficulty:1, subsection:'decodage_syllabes',
-    question:'Quelle syllabe manque dans « so-_eil » pour faire « soleil » ?',
+    question:'Quelle lettre manque dans « so-_eil » pour faire « soleil » ?',
     options:['l','m','n','r'],
     answer:'l',
     hint:'so + l + eil = soleil. (so + l + eil = soleil.)',

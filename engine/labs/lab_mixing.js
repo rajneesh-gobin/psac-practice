@@ -1051,14 +1051,14 @@ const LabMixing = (() => {
     const [k, id] = on.split(':');
     const kind = _kind(k);
     if (kind === 'goggles') _coach('Goggles on! Now you are ready to use acids and alkalis safely.');
-    else if (kind === 'liquid') { const L = LabChem.LIQUIDS[id]; if (L) _coach(`Good — ${L.name.toLowerCase()} added. Watch the tube!`); }
-    else if (kind === 'metal' || kind === 'solid') { const M = _solid(id); if (M) _coach(`${M.name} in the tube! Watch what happens — the reaction takes a few seconds to start.`); }
-    else if (kind === 'rinse') _coach('Good — clean tube. Ready for the next step.');
+    else if (kind === 'liquid') { const L = LabChem.LIQUIDS[id]; if (L) _coach(`Good - ${L.name.toLowerCase()} added. Watch the tube!`); }
+    else if (kind === 'metal' || kind === 'solid') { const M = _solid(id); if (M) _coach(`${M.name} in the tube! Watch what happens - the reaction takes a few seconds to start.`); }
+    else if (kind === 'rinse') _coach('Good - clean tube. Ready for the next step.');
     else if (kind === 'pop') _coach('Squeaky pop! Hydrogen confirmed. Well done.');
-    else if (kind === 'out') _coach('Good — the flame went out. That rules out hydrogen. Try limewater to check for carbon dioxide!');
+    else if (kind === 'out') _coach('Good - the flame went out. That rules out hydrogen. Try limewater to check for carbon dioxide!');
     else if (kind === 'glow') _coach('Tested with the glowing splint. Did it relight?');
-    else if (kind === 'litmus') _coach(`${id === 'red' ? 'Red' : 'Blue'} litmus in — watch the colour!`);
-    else if (kind === 'lime') _coach('Limewater in — did it turn milky or stay clear?');
+    else if (kind === 'litmus') _coach(`${id === 'red' ? 'Red' : 'Blue'} litmus in - watch the colour!`);
+    else if (kind === 'lime') _coach('Limewater in - did it turn milky or stay clear?');
     else if (kind === 'conclude') _coach('Good reasoning. Red litmus staying red only rules out an alkali.');
   }
 

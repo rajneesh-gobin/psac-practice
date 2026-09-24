@@ -621,7 +621,7 @@ const MCQ = [
    ['2Al + 3H₂SO₄ → Al₂(SO₄)₃ + 3H₂', 'Al + H₂SO₄ → AlSO₄ + H₂', '2Al + H₂SO₄ → Al₂SO₄ + H₂', 'Al + 3H₂SO₄ → Al(SO₄)₃ + H₂'],
    '2Al + 3H₂SO₄ → Al₂(SO₄)₃ + 3H₂',
    'Al³⁺ reacts with SO₄²⁻; find the formula of aluminium sulfate first.',
-   'Al³⁺ and SO₄²⁻ give Al₂(SO₄)₃. 2 Al react with 3 H₂SO₄: left 4 H, right 3H₂ = 6H. Wait — 2Al + 3H₂SO₄ → Al₂(SO₄)₃ + 3H₂: left 6H, right 6H. Left: 2Al, 3S, 12O; right: 2Al, 3S, 12O. Balanced.'],
+   'Al³⁺ and SO₄²⁻ give Al₂(SO₄)₃, so 2 Al need 3 sulfate groups — that is 3 H₂SO₄. Counting 2Al + 3H₂SO₄ → Al₂(SO₄)₃ + 3H₂: left 2Al, 6H, 3S, 12O; right 2Al, 6H, 3S, 12O. Balanced.'],
 
   ['g9s-c4-v077', 'equations_for_metals', 2,
    'What is the balanced equation for calcium reacting with water?',

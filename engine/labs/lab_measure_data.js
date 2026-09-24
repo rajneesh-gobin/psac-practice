@@ -1608,9 +1608,9 @@ const LabMeasureData = (() => {
   // ── Guided experiments ─────────────────────────
   // One action per step; `on` is what completes it (the discovery vocabulary
   // above). A step with `btn` gets a button in the yellow box that does it.
-  const READ = { on: 'read', say: 'Read the scale — type your reading in the box and tap Check!' };
-  const READ4 = { on: 'read', say: 'Read the scale — type the number, pick the unit and tap Check.' };
-  const READ78 = { on: 'read', say: 'Read the scale — type the number, pick the unit and tap Check.' };
+  const READ = { on: 'read', say: 'Read the scale - type your reading in the box and tap Check!' };
+  const READ4 = { on: 'read', say: 'Read the scale - type the number, pick the unit and tap Check.' };
+  const READ78 = { on: 'read', say: 'Read the scale - type the number, pick the unit and tap Check.' };
   const GUIDES = [
     { id: 'cylinder', icon: '🧪', title: 'Read a measuring cylinder',
       blurb: 'Find the bottom of the meniscus and read it at eye level.',
@@ -1619,7 +1619,7 @@ const LabMeasureData = (() => {
         { on: 'inst:cylinder', say: 'Tap 🧪 the measuring cylinder to pick it.' },
         { on: 'spec:water',    say: 'Tap 💧 water to choose what to measure.' },
         { on: 'zoom',          say: 'Tap 🔍 Zoom in to see every 1 cm³ mark.' },
-        { on: 'zoom',          say: 'Tap 🔍 Zoom in again — look at the curved surface.' },
+        { on: 'zoom',          say: 'Tap 🔍 Zoom in again - look at the curved surface.' },
         READ,
       ] },
     { id: 'vernier', icon: '🔧', title: 'Read a vernier caliper',
@@ -1629,7 +1629,7 @@ const LabMeasureData = (() => {
         { on: 'inst:vernier', say: 'Tap 🔧 the vernier caliper to pick it.' },
         { on: 'spec:coin',    say: 'Tap 🪙 to close the jaws on the coin.' },
         { on: 'zoom',         say: 'Tap 🔍 Zoom in to see both scales.' },
-        { on: 'zoom',         say: 'Tap 🔍 Zoom in again — find the vernier line that lines up exactly.' },
+        { on: 'zoom',         say: 'Tap 🔍 Zoom in again - find the vernier line that lines up exactly.' },
         READ,
       ] },
     { id: 'parallax', icon: '👁️', title: 'Beat parallax error',
@@ -1638,9 +1638,9 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:cylinder',    say: 'Tap 🧪 the measuring cylinder to pick it.' },
         { on: 'spec:water',       say: 'Tap 💧 to measure the water.' },
-        { on: 'eye:above',        say: 'Tap 👁️ Eye above — stand tall so your eye is above the water.' },
-        { on: 'misread:apparent', say: 'Read where the dashed line crosses the scale — tap ✏️ to record it.' },
-        { on: 'eye:level',        say: 'Tap 👁️ Eye level — bend down so your eye is level with the meniscus.' },
+        { on: 'eye:above',        say: 'Tap 👁️ Eye above - stand tall so your eye is above the water.' },
+        { on: 'misread:apparent', say: 'Read where the dashed line crosses the scale - tap ✏️ to record it.' },
+        { on: 'eye:level',        say: 'Tap 👁️ Eye level - bend down so your eye is level with the meniscus.' },
         READ,
       ] },
     { id: 'compare', icon: '🔬', title: 'Which is most precise?',
@@ -1654,7 +1654,7 @@ const LabMeasureData = (() => {
         { on: 'inst:vernier',    say: 'Tap 🔧 the vernier caliper to try it next.' },
         { on: 'spec:wire',       say: 'Tap 〰️ to measure the same wire.' },
         READ,
-        { on: 'inst:micrometer', say: 'Tap 🗜️ the micrometer — the most precise instrument.' },
+        { on: 'inst:micrometer', say: 'Tap 🗜️ the micrometer - the most precise instrument.' },
         { on: 'spec:wire',       say: 'Tap 〰️ to measure the wire one more time.' },
         READ,
       ] },
@@ -1662,13 +1662,13 @@ const LabMeasureData = (() => {
       blurb: 'Close the jaws of an old caliper, read its zero error, then correct a reading.',
       lesson: 'Close the jaws first. If the reading is not zero, that is the zero error. True reading = scale reading − zero error.',
       steps: [
-        { on: 'inst:vernier_old', say: 'Tap 🔧 old caliper A — its jaw is worn.' },
+        { on: 'inst:vernier_old', say: 'Tap 🔧 old caliper A - its jaw is worn.' },
         { on: 'spec:closed',      say: 'Tap 🤏 to close the jaws with nothing between them.' },
         { on: 'zoom',             say: 'Tap 🔍 Zoom in to see both zeros.' },
-        { on: 'zoom',             say: 'Tap 🔍 Zoom in again — does the vernier zero line up with the main-scale zero?' },
-        { on: 'read',             say: 'Type what it really reads — that is the zero error. Tap Check.' },
+        { on: 'zoom',             say: 'Tap 🔍 Zoom in again - does the vernier zero line up with the main-scale zero?' },
+        { on: 'read',             say: 'Type what it really reads - that is the zero error. Tap Check.' },
         { on: 'spec:rod',         say: 'Tap 🔩 to measure the metal rod with the same caliper.' },
-        { on: 'read',             say: 'Read the scales, take away the zero error — type the TRUE diameter.' },
+        { on: 'read',             say: 'Read the scales, take away the zero error - type the TRUE diameter.' },
       ] },
     { id: 'swing', icon: '🕰️', title: 'Time a pendulum',
       blurb: 'Time 10 swings with a stopwatch and work out one swing.',
@@ -1676,7 +1676,7 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:stopwatch', say: 'Tap ⏱️ the stopwatch to pick it.' },
         { on: 'spec:pendulum',  say: 'Tap 🕰️ to time 10 swings of the pendulum.' },
-        { on: 'start',          say: 'Tap ▶️ Start as you release the bob — it stops after 10 swings.' },
+        { on: 'start',          say: 'Tap ▶️ Start as you release the bob - it stops after 10 swings.' },
         READ,
       ] },
 
@@ -1696,9 +1696,9 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:jug',         say: 'Tap 🫗 the measuring jug to pick it.' },
         { on: 'spec:juice4',      say: 'Tap 🧃 orange juice to measure it.' },
-        { on: 'eye:above',        say: 'Tap 👁️ Eye above — stand tall so your eye is above the juice.' },
-        { on: 'misread:apparent', say: 'Read the mark where the dashed line meets the scale — tap ✏️ to record.' },
-        { on: 'eye:level',        say: 'Tap 👁️ Eye level — bend down to get your eye level with the juice.' },
+        { on: 'eye:above',        say: 'Tap 👁️ Eye above - stand tall so your eye is above the juice.' },
+        { on: 'misread:apparent', say: 'Read the mark where the dashed line meets the scale - tap ✏️ to record.' },
+        { on: 'eye:level',        say: 'Tap 👁️ Eye level - bend down to get your eye level with the juice.' },
         READ4,
       ] },
     { id: 'g4_thermo', grades: [4], icon: '🌡️', title: 'Read a thermometer',
@@ -1708,7 +1708,7 @@ const LabMeasureData = (() => {
         { on: 'inst:thermo4', say: 'Tap 🌡️ the thermometer to pick it.' },
         { on: 'spec:tap4',    say: 'Tap 🚰 tap water to put the thermometer in.' },
         { on: 'zoom',         say: 'Tap 🔍 Zoom in to see the red line.' },
-        { on: 'zoom',         say: 'Tap 🔍 Zoom in again — each small mark is 2 °C.' },
+        { on: 'zoom',         say: 'Tap 🔍 Zoom in again - each small mark is 2 °C.' },
         READ4,
       ] },
     { id: 'g4_scale', grades: [4], icon: '⚖️', title: 'Weigh a mango',
@@ -1727,7 +1727,7 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:watch4', say: 'Tap ⏱️ the stopwatch to pick it.' },
         { on: 'spec:ball4',  say: 'Tap ⚽ the ball on the slope.' },
-        { on: 'start',       say: 'Tap ▶️ Start — the ball rolls and the stopwatch stops at the bottom.' },
+        { on: 'start',       say: 'Tap ▶️ Start - the ball rolls and the stopwatch stops at the bottom.' },
         READ4,
         { on: 'start',       say: 'Tap ▶️ Start to time it again.' },
         READ4,
@@ -1743,7 +1743,7 @@ const LabMeasureData = (() => {
         { on: 'inst:cyl78',   say: 'Tap 🧪 the measuring cylinder to pick it.' },
         { on: 'spec:water78', say: 'Tap 💧 to choose the water in it.' },
         { on: 'zoom',         say: 'Tap 🔍 Zoom in on the water level.' },
-        { on: 'zoom',         say: 'Tap 🔍 Zoom in again — see how the surface curves? That is the meniscus.' },
+        { on: 'zoom',         say: 'Tap 🔍 Zoom in again - see how the surface curves? That is the meniscus.' },
         READ78,
       ] },
     { id: 'g7_displace', grades: [7], icon: '🪨', title: 'Volume of a stone',
@@ -1752,15 +1752,15 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:cyl78',    say: 'Tap 🧪 the measuring cylinder (50 cm³ of water inside).' },
         { on: 'spec:stone78',  say: 'Tap 🪨 to lower the stone in gently on a thread.' },
-        { on: 'misread:level', say: 'Try the common mistake — tap ✏️ to write the new level as the volume.' },
-        { on: 'read',          say: 'Now subtract the first reading — type the stone\'s actual volume.' },
+        { on: 'misread:level', say: 'Try the common mistake - tap ✏️ to write the new level as the volume.' },
+        { on: 'read',          say: 'Now subtract the first reading - type the stone\'s actual volume.' },
       ] },
     { id: 'g7_bubble', grades: [7], icon: '🫧', title: 'Beat the air bubble',
       blurb: 'A bubble makes a volume too big.',
       lesson: 'Air takes up space. Tap the glass so no bubble stays stuck to the solid, then read the level.',
       steps: [
         { on: 'inst:cyl78',     say: 'Tap 🧪 the measuring cylinder (40 cm³ of water inside).' },
-        { on: 'spec:bubble78',  say: 'Tap 🫧 to lower the rough stone in — see the air bubble stuck to it?' },
+        { on: 'spec:bubble78',  say: 'Tap 🫧 to lower the rough stone in - see the air bubble stuck to it?' },
         { on: 'misread:bubble', say: 'Tap ✏️ to record the volume with the bubble still there.' },
         { on: 'tap',            say: 'Tap 👆 the glass to free the bubble.' },
         READ78,
@@ -1770,15 +1770,15 @@ const LabMeasureData = (() => {
       lesson: 'A regular block needs no water. Measure its three sides and multiply: volume = length × width × height, in cm³.',
       steps: [
         { on: 'inst:block7', say: 'Tap 🧱 the ruler and block to pick them.' },
-        { on: 'spec:box7',   say: 'Tap 🧱 the wooden block — its sides are already measured.' },
-        { on: 'read',        say: 'Multiply the three sides — type the volume and pick its unit.' },
+        { on: 'spec:box7',   say: 'Tap 🧱 the wooden block - its sides are already measured.' },
+        { on: 'read',        say: 'Multiply the three sides - type the volume and pick its unit.' },
       ] },
     { id: 'g7_balance', grades: [7], icon: '⚖️', title: 'Weigh a stone',
       blurb: 'Zero the balance, then weigh.',
       lesson: 'Check the empty pan. Press Zero (tare) so it reads 0.0 g. Then the display is the mass, in grams.',
       steps: [
-        { on: 'inst:bal78',   say: 'Tap ⚖️ the electronic balance — look at the empty pan.' },
-        { on: 'tare',         say: 'Tap 0️⃣ Zero — it reads 2.4 g with nothing on it, not zero!' },
+        { on: 'inst:bal78',   say: 'Tap ⚖️ the electronic balance - look at the empty pan.' },
+        { on: 'tare',         say: 'Tap 0️⃣ Zero - it reads 2.4 g with nothing on it, not zero!' },
         { on: 'spec:stone78', say: 'Tap 🪨 to put the stone on the pan.' },
         READ78,
       ] },
@@ -1790,8 +1790,8 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:dens8',   say: 'Tap 🧮 the density bench to pick it.' },
         { on: 'spec:alu8',    say: 'Tap ⬜ the aluminium block.' },
-        { on: 'misread:flip', say: 'Try the common mistake — tap ✏️ to divide volume ÷ mass.' },
-        { on: 'read',         say: 'Now do mass ÷ volume — type the density and pick g/cm³.' },
+        { on: 'misread:flip', say: 'Try the common mistake - tap ✏️ to divide volume ÷ mass.' },
+        { on: 'read',         say: 'Now do mass ÷ volume - type the density and pick g/cm³.' },
       ] },
     { id: 'g8_stone', grades: [8], icon: '🪨', title: 'The whole method: a stone',
       blurb: 'Weigh it, find its volume, then divide.',
@@ -1800,13 +1800,13 @@ const LabMeasureData = (() => {
         { on: 'inst:bal78',   say: 'Tap ⚖️ the electronic balance to pick it.' },
         { on: 'tare',         say: 'Tap 0️⃣ Zero with the pan empty.' },
         { on: 'spec:stone78', say: 'Tap 🪨 to put the stone on the pan.' },
-        { on: 'read',         say: 'Read the mass in grams — type it and tap Check.' },
+        { on: 'read',         say: 'Read the mass in grams - type it and tap Check.' },
         { on: 'inst:cyl78',   say: 'Tap 🧪 the measuring cylinder next.' },
         { on: 'spec:stone78', say: 'Tap 🪨 to lower the same stone into 50 cm³ of water.' },
-        { on: 'read',         say: 'Volume = final reading − first reading — type it.' },
+        { on: 'read',         say: 'Volume = final reading − first reading - type it.' },
         { on: 'inst:dens8',   say: 'Tap 🧮 the density bench.' },
         { on: 'spec:stone8',  say: 'Tap 🪨 the same stone.' },
-        { on: 'read',         say: 'Density = mass ÷ volume — type it and pick g/cm³.' },
+        { on: 'read',         say: 'Density = mass ÷ volume - type it and pick g/cm³.' },
       ] },
     { id: 'g8_float', grades: [8], icon: '🛟', title: 'Float or sink?',
       blurb: 'Cork and steel: compare each with water.',
@@ -1814,9 +1814,9 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:dens8',  say: 'Tap 🧮 the density bench to pick it.' },
         { on: 'spec:cork8',  say: 'Tap 🍾 the cork block.' },
-        { on: 'read',        say: 'Work out its density — will it float? Type and check.' },
+        { on: 'read',        say: 'Work out its density - will it float? Type and check.' },
         { on: 'spec:steel8', say: 'Tap 🔩 the steel block next.' },
-        { on: 'read',        say: 'Work out its density — float or sink? Type and check.' },
+        { on: 'read',        say: 'Work out its density - float or sink? Type and check.' },
       ] },
     { id: 'g8_liquid', grades: [8], icon: '🫒', title: 'Density of a liquid',
       blurb: 'Weigh the cylinder empty, then full.',
@@ -1824,8 +1824,8 @@ const LabMeasureData = (() => {
       steps: [
         { on: 'inst:dens8',    say: 'Tap 🧮 the density bench to pick it.' },
         { on: 'spec:oil8',     say: 'Tap 🫒 the cooking oil.' },
-        { on: 'misread:total', say: 'Try the common slip — tap ✏️ to use the full reading as the mass.' },
-        { on: 'read',          say: 'Subtract the empty cylinder mass, then divide by volume — type the density.' },
+        { on: 'misread:total', say: 'Try the common slip - tap ✏️ to use the full reading as the mass.' },
+        { on: 'read',          say: 'Subtract the empty cylinder mass, then divide by volume - type the density.' },
       ] },
   ];
 

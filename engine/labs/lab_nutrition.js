@@ -84,7 +84,7 @@ const LabNutrition = (() => {
             <button type="button" class="lab-coach-tip lab-nutrition-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show a science fact">💡</button>
           </div>
-          <div class="lab-task-strip">↓ Pick a food from the shelf — it lands on the plate.</div>
+          <div class="lab-task-strip">↓ Pick a food from the shelf - it lands on the plate.</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-nutrition-tools" id="lab-nutrition-tools"></div>
         </div>
@@ -848,7 +848,7 @@ const LabNutrition = (() => {
         + '<button type="button" class="lab-mission-start" data-act="mission-start" data-mid="' + esc(M.id) + '">'
         + M.icon + ' ' + esc(M.title) + '</button>'
         + '<p class="lab-hint">' + esc(M.blurb) + '</p>'
-        + '<span class="lab-stars">' + ('⭐'.repeat(stars) || '—') + '</span>'
+        + '<span class="lab-stars">' + ('⭐'.repeat(stars) || '-') + '</span>'
         + '</div>';
     });
     html += '</div>';
@@ -921,7 +921,7 @@ const LabNutrition = (() => {
     if (!el || _station !== 'teeth') { if (el) el.innerHTML = ''; return; }
     el.innerHTML = [..._tappedTeeth].map(t => {
       const tooth = P().TEETH[t];
-      return '<span class="lab-chip lab-nutrition-tooth-chip">' + esc(tooth.name) + ' — ' + esc(tooth.function) + '</span>';
+      return '<span class="lab-chip lab-nutrition-tooth-chip">' + esc(tooth.name) + ' - ' + esc(tooth.function) + '</span>';
     }).join('');
   }
 
@@ -1026,8 +1026,8 @@ const LabNutrition = (() => {
     Labs.overlay(
       '<h2 id="lab-ov-title">🥦 Food Groups &amp; Teeth</h2>'
       + '<p>There are two stations:</p>'
-      + '<ul><li><strong>Meal Builder</strong> — tap (or drag) foods to fill the plate. Get all five groups for a balanced meal. Use the test droppers to test foods.</li>'
-      + '<li><strong>Teeth Lab</strong> — tap each tooth in the diagram to learn its name and job.</li></ul>'
+      + '<ul><li><strong>Meal Builder</strong> - tap (or drag) foods to fill the plate. Get all five groups for a balanced meal. Use the test droppers to test foods.</li>'
+      + '<li><strong>Teeth Lab</strong> - tap each tooth in the diagram to learn its name and job.</li></ul>'
       + '<p>Try a guided experiment to get started!</p>'
       + '<div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Got it</button></div>'
     );
@@ -1040,8 +1040,8 @@ const LabNutrition = (() => {
       + '<h2 id="lab-ov-title">Food Groups &amp; Teeth</h2>'
       + '<p>Two stations to explore:</p>'
       + '<ul class="lab-intro-list">'
-      + '<li><strong>Meal Builder</strong> — place one food from each group on the plate.</li>'
-      + '<li><strong>Teeth Lab</strong> — tap each tooth to learn its name and job.</li>'
+      + '<li><strong>Meal Builder</strong> - place one food from each group on the plate.</li>'
+      + '<li><strong>Teeth Lab</strong> - tap each tooth to learn its name and job.</li>'
       + '</ul>'
       + '</div>'
       + '<div class="lab-ov-actions">'

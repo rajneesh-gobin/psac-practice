@@ -37,6 +37,28 @@
   holding two characters. The test is on the content, not the viewport: a French
   comprehension option is a whole sentence. The class is cleared at the top of the
   render, per the module-state rule — every other type returns early.
+  - ⚠⚠ **A sticky bar pins when its FLOW SLOT falls below the fold, and it then
+    covers whatever is between the two positions** — so "the bar overlaps
+    content at rest" is never a bug in the bar. It is a bug in whatever made
+    the content 48px too tall. Measured 2026-09-24 at 360×740 with a one-line
+    MCQ: the bar pinned at `649..740` over `#practice-error-note` at `649..697`,
+    `gapAtRest -48px`. ⚠ **`min-height: 100vh` was the wrong suspect** — the
+    screen starts 76px down (52px header + `main`'s `py-6`), so it does add
+    ~100px of dead scroll, but deleting it leaves the page 20px over and the
+    bar still pinned. The 48px was:
+    - **`.pr-tools` held FOUR buttons in a hand-written three-column grid**
+      (five on a maths pack), stranding Report on a row of its own: 110px
+      instead of 66px. The grid is `repeat(auto-fit, minmax(3.2rem, 1fr))` now,
+      and `.pr-tools-4` — the maths-only four-column override, and its
+      `_nhPopulate()` toggle — is deleted. ⚠ Not `grid-auto-flow: column`,
+      which never wraps and would overflow sideways at 320px or at a large
+      browser font scale; `auto-fit` wraps instead. Floor measured: every
+      button ≥ 52×66px at 320px.
+    - **`#practice-error-note` carried `mt-1` inside a flex column that already
+      has `gap: .75rem`** — 4px on top of the gap every sibling gets, and the
+      last 4px of the overflow.
+  - ⚠ 85/85 at 360, 414, 768, 1280, 1920 and 2560 after both; it fails 1 with
+    either half alone (`-2px`). Re-measure before trusting a number here.
 - `scripts/test-practice-action-bar.js` guards both. ⚠ Two harness traps: poll for
   `typeof renderAnswerArea === 'function'`, **not** for `.pr-actions` (which is in
   `index.html` from the first byte and so races `app.js`); and read every
@@ -114,6 +136,117 @@
   `showScreen` stub whose behaviour is in question. `scripts/test-hub-back-button.js`
   presses the real Back button in Chrome (14 checks); it fails 7 of them
   against the pre-fix code.
+- ⚠⚠ **The practice flow is ONE composition across THREE screens, and a fourth
+  door into it must wear the same shell.** `#screen-practice-hub`,
+  `#screen-subject-hub` and `#screen-chapter-select` all paint
+  `background: #f2ebe0` (`.dark` → `#1a1208`), `min-height: 100vh`,
+  `padding: 1.25rem 1.25rem 5rem`, an `-outer` max-width wrapper, a chalk
+  `.sh-header` (`.sh-title` Caveat + `.sh-subtitle` + `.prac-hub-search-btn`)
+  and their content on a framed blackboard. Chapter Practice was the one still
+  on the app's plain page — measured 2026-09-24: `rgba(0,0,0,0)` against the
+  hubs' `rgb(26,18,8)`, a bold sans `.ch-title` against their green Caveat, and
+  its own `.ch-header`/`.ch-search-btn` components. Reported as *"the screen has
+  a mini jump to a new layout"* beside Progress / Messages / Missions / Badges,
+  which are TABS of `#screen-student-home` and so never change shell at all.
+  `.ch-header`, `.ch-header-text`, `.ch-title`, `.ch-subtitle` and
+  `.ch-search-btn` are **deleted** — a second header component for the same job
+  is how the two drifted apart.
+  - ⚠ **`.prac-board-mat`, not `.ta-tab-content`**, for a board with no folder
+    tabs above it: the tab panel is shaped for them (square top-left corner, no
+    top border) and reads as a torn-off card on its own.
+  - ⚠ **The chapter list is CHALK on the board, and its defaults are slate on
+    white** — `.ch-sum-num` `#334155`, `.ch-sum-lbl`/`.ch-sum-of`/`.ch-sum-last`
+    `#94a3b8`, `.ch-section-note` `#64748b`, `.ch-filter` `#475569` on `#f1f5f9`.
+    None of the `.dark` partners apply in light mode, where the board is still
+    dark green — the same defect class as the teacher board's coloured chips.
+    The override list covers **both** boards at once (`#screen-subject-hub
+    .ta-tab-content` and `#screen-chapter-select .prac-board-mat`), which is what
+    fixed the Subject Hub's own light-mode strip. Measured after: every item
+    ≥ 6.29:1 in both themes, `.ch-name` 13.04:1 on its paper card.
+  - ⚠ **`.ch-card` keeps its own ink** — it is paper pinned to the board, not
+    chalk on it, so `h3.ch-name` and `p.ch-status` are re-asserted inside it.
+    Extend those selector lists; never duplicate the block.
+- ⚠⚠ **ONE BOARD RECIPE, AND A BOARD IS NEVER INSIDE A BOARD.** Three existed:
+  `.prac-board-mat` (green, 8px `#5c3810` frame), `.sh-board-frame` (`#1e1e1e`,
+  6px `#5c3d1e`) and the `.ta-tab-content` panel (which painted `#111` in dark).
+  All three are the same green gradient and the same 8px frame now — light
+  `#2e5230 → #1c3420`, dark `#1b301d → #101d12`. Change one, change all three.
+  - ⚠ **The dark theme had deleted the classroom.** `#111 → #0a0a0a` on these
+    screens' own `#1a1208` page is a black rectangle on a nearly-black page: the
+    wooden frame vanished and the chalk had nothing to be chalk ON, so the whole
+    theme existed in light mode only.
+  - ⚠ **Two screens nested two of them**: `#screen-practice-hub` had
+    `.prac-board-mat` wrapped around `.sh-board-frame`, and `#screen-student-home`
+    has `.sh-board-frame` inside `.ta-tab-content`. Invisible while both painted
+    near-black; the moment the board went back to green it read as a picture of a
+    blackboard hung on a blackboard. The practice hub's wrapper is deleted, and a
+    CSS guard (`.ta-tab-content .sh-board-frame`, `.prac-board-mat .sh-board-frame`,
+    `.sh-board-frame .sh-board-frame`) strips the inner one's frame wherever else
+    it happens.
+- ⚠⚠ **`.ch-options` IS IN THE FOOTER ROW, not over it.** As
+  `position: absolute; right: .55rem; bottom: .5rem; z-index: 3` it covered the
+  coverage line and the `Start →` CTA on **every card at every width** (measured
+  at 390 and 1440). `.ch-foot` is a `flex-wrap: nowrap` row; the CTA is the
+  flexible item so its label wraps inside its own box instead of pushing the gear
+  onto a line of its own.
+  - ⚠ **`pointer-events: auto` is not optional** on anything inside `.ch-body`,
+    which is `pointer-events: none` so `.ch-hit` underneath stays one whole-card
+    tap target. `.ch-lab-chip` never had it and had therefore been **inert since
+    it was added** — it looked like a button and nothing happened.
+  - ⚠ **The gear carries no word.** "⚙ Options" plus "Continue Smart Practice →"
+    does not fit one line of a 15rem card at a size a child can read. And the
+    label may NOT be shortened to a bare "Continue →" — `cardLabel()` in
+    `practice_journey.js` says why (a 20-question set must never read as a
+    finished chapter).
+- ⚠ **"Start → →".** `_journeyCta()` appends `' →'` to whatever `cardLabel()`
+  returns, and every label `PracticeSelector.primaryAction()` produces is
+  arrow-free. Only `cardLabel()`'s not-loaded fallback carried one of its own, so
+  every card whose bank had not arrived printed the arrow twice.
+- ⚠ **`.ch-card` is PAPER IN BOTH THEMES** (`#fbf5e6` light, `#ded5be` dark) with
+  one ink (`#2b2620`). It used to be pale blue in light and slate blue in dark —
+  two card colours, neither of them anything a classroom contains, on a green
+  board. One paper means the board's chalk overrides no longer have to guess: the
+  `.dark … .ch-card h3.ch-name` rule flipped to `#f1f5f9`, which measures 1.3:1 on
+  manila. Measured after: `.ch-name` 10.26 / 13.32, `.ch-status` 7.12 / 9.25,
+  `.ch-cta` 6.56 / 8.52, `.ch-cover` ≥5, `.ch-when` 5.47 / 7.11 (dark / light).
+  - ⚠ A translucent fill defeats a naive contrast probe (`rgba(43,38,32,.07)`
+    reads as opaque `#2b2620`), and so does a **gradient** ancestor, whose
+    `backgroundColor` is `transparent` — chalk on the board measured a false 1:1.
+    Composite the layers, or read the rendered pixels.
+- ⚠ **`.ch-bar` was dead CSS.** It had existed for a long time and `_chapterCard()`
+  never drew one, so the only thing on the card a nine-year-old can read without
+  reading was available as a sentence only. It shows **coverage** (unique seen /
+  questions in the chapter), never accuracy, and there is **no bar at all** when
+  the denominator is unknown — a bar from an unknown total is the exact bug
+  `_chapterProgress()` exists to prevent.
+  - ⚠⚠ **ONE SOURCE for the bar and the sentence under it.** `PracticeJourney`
+    reads `QuestionProgress` (per question, server-backed); `prog.unique` reads the
+    progress blob's `answeredIds`. Both are real and they are **not the same
+    number**: measured on one card, a 73% bar sat directly above "0 of 30 questions
+    explored". `_journeyCoverageNums()` asks `PracticeJourney.coverageOf()` first
+    and falls back to the blob only when the module is not loaded.
+- ⚠ **"Question bank not loaded yet" was engine-speak on a child's screen**, shown
+  on every card for the first second of the screen's life. It is "Questions are
+  still loading…" now, **in both copies** — `coverageLine()` in
+  `practice_journey.js` and the no-module fallback in `_journeyCoverage()`.
+- ⚠ **The back button belongs INSIDE `.subj-hub-outer`.** Outside it, it kept the
+  screen's own 1.25rem padding while everything else was centred in an 860px
+  wrapper: at 1440 it started at x=180 against the board's x=290 and read as a
+  stray control belonging to nothing.
+- ⚠ `.back-btn` and `.sh-subtitle` measured **4.08:1** on the practice
+  composition's cream `#f2ebe0` page. The override is **scoped to those three
+  screens** — both are shared components used on a dozen others with a different
+  background.
+- ⚠⚠ **A render that throws paints the header and nothing else, and the screen
+  looks "designed wrong" rather than broken.** `renderChapterSelect()` carried
+  `Library.mountPackLink(chapter-link-library, …)` — a bare identifier, not a
+  string — so the moment a pack was active it threw *"ReferenceError: chapter is
+  not defined"* before the grid. Measured in Chrome: **18 chapters loaded, 0
+  cards drawn**, the subtitle left on its authored placeholder, and every line
+  of `showScreen()` after the dispatch skipped. `scripts/check.js` parses every
+  browser script, which catches a syntax error and cannot catch this one.
+  ⚠ The guard beside it was `typeof Library !== undefined` — `typeof` yields a
+  **string**, so that comparison is always true and guarded nothing.
 - ⚠ **A panel that is not INSIDE a `.screen` is never hidden by anything.**
   `showScreen()` toggles `.hidden` on `.screen` elements only. Two live cases,
   both fixed: `#admin-tab-questions` had escaped `#screen-admin` by one `</div>`

@@ -115,7 +115,7 @@ const LabMicroscope = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <p class="lab-task-strip">Focus the 🔬 microscope on the slide — or 📐 measure a drawing!</p>
+          <p class="lab-task-strip">Focus the 🔬 microscope on the slide - or 📐 measure a drawing!</p>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-microscope-tools"></div>
         </div>
@@ -1020,7 +1020,7 @@ const LabMicroscope = (() => {
     if (on === 'lower')    return _coach('Lens lowered carefully. Never let it touch the slide.');
     if (k === 'focus')     return _coach('Image coming into focus.');
     if (k === 'coarse')    return _coach('Coarse focus adjusted.');
-    if (k === 'fine')      return _coach('Fine focus — sharper now.');
+    if (k === 'fine')      return _coach('Fine focus - sharper now.');
     if (k === 'move')      return _coach('Stage moved to find the specimen.');
     if (k === 'eye')       return _coach('Eyepiece adjusted.');
     if (k === 'part')      return _coach('Part identified.');
@@ -1034,7 +1034,7 @@ const LabMicroscope = (() => {
     if (on === 'multiply') return _coach('Multiplication done. Check your decimal point.');
     if (on === 'answer')   return _coach('Magnification calculated.');
     if (k === 'pick')      return _coach('Answer written.');
-    _coach('Good — on to the next step.');
+    _coach('Good - on to the next step.');
   }
 
   // The words for a discovery's "how" tokens.

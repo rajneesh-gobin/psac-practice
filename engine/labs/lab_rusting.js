@@ -79,7 +79,7 @@ const LabRusting = (() => {
             <button type="button" class="lab-coach-tip lab-rusting-say" data-act="say-coach" aria-label="Read this aloud">🔊</button>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <div class="lab-task-strip">Follow the guide — or investigate rusting freely!</div>
+          <div class="lab-task-strip">Follow the guide - or investigate rusting freely!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-tools lab-rusting-tools" id="lab-rusting-tools"></div>
         </div>
@@ -642,7 +642,7 @@ const LabRusting = (() => {
     if (k === 'coat')     return _coach('Nail coated.');
     if (k === 'jwater')   return _coach('Water added to the jar.');
     if (on === 'tweezers') return _coach('Nail removed with tweezers. Never touch a rusty nail with bare hands.');
-    _coach('Good — on to the next step.');
+    _coach('Good - on to the next step.');
   }
 
   function _guideDo() {

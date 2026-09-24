@@ -144,12 +144,12 @@ const LabNutritionData = (() => {
       lesson: 'A balanced meal has all five food groups. Every group does a different job.',
       steps: [
         { on: 'station:meal',  say: 'Tap the 🍽️ Meal Builder tab.' },
-        { on: 'food:bread',    say: 'Tap 🍞 bread — or drag it onto the plate!' },
+        { on: 'food:bread',    say: 'Tap 🍞 bread - or drag it onto the plate!' },
         { on: 'food:egg',      say: 'Now tap 🥚 egg for protein.' },
         { on: 'food:butter',   say: 'Tap 🧈 butter for the fats group.' },
         { on: 'food:orange',   say: 'Tap 🍊 orange for vitamins.' },
-        { on: 'food:water_g',  say: 'Tap 💧 water — every meal needs water!' },
-        { on: 'check',         say: 'Tap ✅ Check — is your meal balanced?' },
+        { on: 'food:water_g',  say: 'Tap 💧 water - every meal needs water!' },
+        { on: 'check',         say: 'Tap ✅ Check - is your meal balanced?' },
       ],
     },
     { id: 'iodine_test', icon: '🔵', title: 'Which foods have starch?', grades: G6,
@@ -158,7 +158,7 @@ const LabNutritionData = (() => {
       steps: [
         { on: 'station:meal',    say: 'Tap the 🍽️ Meal Builder tab.' },
         { on: 'test:iodine',     say: 'Tap the 🔵 iodine dropper in the test tools.' },
-        { on: 'food:bread',      say: 'Tap 🍞 bread — does the colour change?' },
+        { on: 'food:bread',      say: 'Tap 🍞 bread - does the colour change?' },
         { on: 'food:rice',       say: 'Now tap 🍚 rice.' },
         { on: 'food:orange',     say: 'Now tap 🍊 orange.' },
         { on: 'food:butter',     say: 'Now tap 🧈 butter.' },
@@ -170,9 +170,9 @@ const LabNutritionData = (() => {
       lesson: 'Adults have four types of teeth. Each type has a different shape and job.',
       steps: [
         { on: 'station:teeth',   say: 'Tap the 🦷 Teeth Lab tab.' },
-        { on: 'tooth:incisor',   say: 'Tap an incisor on the diagram — the flat front tooth.' },
+        { on: 'tooth:incisor',   say: 'Tap an incisor on the diagram - the flat front tooth.' },
         { on: 'tooth:canine',    say: 'Tap the pointed canine tooth.' },
-        { on: 'tooth:premolar',  say: 'Tap a premolar — it has small ridges on top.' },
+        { on: 'tooth:premolar',  say: 'Tap a premolar - it has small ridges on top.' },
         { on: 'tooth:molar',     say: 'Tap a large flat molar at the back.' },
         { on: 'label',           say: 'Tap 🏷️ Label to name all four types!' },
       ],
@@ -298,7 +298,7 @@ const LabNutritionData = (() => {
       exam: '📝 In the PSAC exam: too much fat is stored as energy in the body.',
     },
     deficiency: {
-      icon: '⚠️', title: 'Missing vitamins — deficiency',
+      icon: '⚠️', title: 'Missing vitamins - deficiency',
       happened: () => 'There are no fruit or vegetables on the plate.',
       instead: 'Add fruit or vegetables to get vitamins and minerals.',
       exam: '📝 In the PSAC exam: lack of vitamin C causes scurvy. Lack of vitamin D causes rickets.',
@@ -314,7 +314,7 @@ const LabNutritionData = (() => {
   // ── Missions ──────────────────────────────────────────────────────────────────
   const MISSIONS = [
     { id: 'meal_challenge', icon: '🍽️', title: 'Balanced Meal Challenge', grades: G6,
-      blurb: 'Place five foods on the plate — one from each group.',
+      blurb: 'Place five foods on the plate - one from each group.',
       intro: 'Balanced Meal Challenge! Place one food from each group. Then answer five questions.',
       foods: ['bread', 'egg', 'butter', 'orange', 'water_g'],
       quiz: [
@@ -327,7 +327,7 @@ const LabNutritionData = (() => {
         { q: 'Which foods belong to vitamins and minerals?',
           options: ['Orange and spinach', 'Bread and rice', 'Butter and oil', 'Egg and meat'],
           why: 'Fruit and vegetables give vitamins and minerals. Orange and spinach both are.' },
-        { q: 'A meal has bread, egg and orange — but no water. What is missing?',
+        { q: 'A meal has bread, egg and orange - but no water. What is missing?',
           options: ['Water', 'Fats', 'Carbohydrates', 'Protein'],
           why: 'The meal has carbs, protein and vitamins. Water is the missing group.' },
         { q: 'Why is water important in a balanced diet?',
@@ -366,7 +366,7 @@ const LabNutritionData = (() => {
     'Fats keep you warm and store energy. Too much fat is stored in the body.',
     'Vitamins protect you from illness. Fruit and vegetables are full of vitamins.',
     'Water makes up about 60% of your body. You need it every day.',
-    'A balanced diet has all five food groups — not the same amount of each.',
+    'A balanced diet has all five food groups - not the same amount of each.',
     'Adults have 32 teeth: 8 incisors, 4 canines, 8 premolars and 12 molars.',
     'Incisors are at the front. They are chisel-shaped and cut food.',
     'Canines are pointed. They sit at the corners and tear food.',

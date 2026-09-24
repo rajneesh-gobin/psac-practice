@@ -349,9 +349,9 @@ CHALLENGE_QS.push(
   makeMCQ({ id:'CH_SQN12', chapterId:'square_nums', subsection:'square_nums', difficulty:3,
     question:'How many square numbers are there between 50 and 150?',
     options:['3','4','5','6'],
-    answer:'4',
-    hint:'List: 64 (8²), 81 (9²), 100 (10²), 121 (11²), 144 (12²) - which are strictly between 50 and 150?',
-    explanation:'8²=64, 9²=81, 10²=100, 11²=121, 12²=144. All 5 are between 50 and 150. Wait - 144<150 ✓. So 5. Let me recheck: strictly between means >50 and <150. 64,81,100,121,144 - all qualify. That\'s 5.' }),
+    answer:'5',
+    hint:'List the squares in order and keep the ones bigger than 50 and smaller than 150.',
+    explanation:'8²=64, 9²=81, 10²=100, 11²=121, 12²=144 — <b>5</b> square numbers lie between 50 and 150. 7²=49 is too small and 13²=169 is too big.' }),
 
   makeNum({ id:'CH_SQN13', chapterId:'square_nums', subsection:'word_probs', difficulty:4,
     question:'Zara tiles a square floor using 1 cm² tiles. She uses 441 tiles. What is the perimeter of the floor in cm?',

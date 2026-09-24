@@ -197,7 +197,7 @@ const MCQ = [
 
   ['g9s-c2-v023', 'crystallization', 1,
    'What is the name given to the liquid that remains after the crystals are filtered off?',
-   ['Mother liquor', 'Distillate', 'Residue', 'Filtrate solution'],
+   ['Mother liquor', 'Distillate', 'Residue', 'Precipitate'],
    'Mother liquor',
    'It is the "mother" from which the crystals grew.',
    'The solution left after crystallisation and filtration is called the mother liquor; it is a saturated solution at the lower temperature and still contains dissolved solute.'],

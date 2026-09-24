@@ -82,7 +82,7 @@ const LabAir = (() => {
             <button type="button" class="lab-coach-tip" data-act="say-coach" aria-label="Read this out loud">🔊</button>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <div class="lab-task-strip">Follow the guide — or investigate properties of air freely!</div>
+          <div class="lab-task-strip">Follow the guide - or investigate properties of air freely!</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div id="lab-air-controls" class="lab-air-controls"></div>
         </div>

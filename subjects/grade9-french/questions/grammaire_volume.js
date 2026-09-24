@@ -602,7 +602,7 @@ STATIC_QUESTIONS.push(
     explanation:'Pour refuser deux options, on emploie <b>ni l\'un ni l\'autre</b>. « Aucun » est possible aussi, mais « ni l\'un ni l\'autre » reprend explicitement les deux alternatives.' }),
 
   makeMCQ({ id:'g9fr-grv-085', chapterId:'g9fr-grammaire', subsection:'pronoms', difficulty:3,
-    question:'Choisis la phrase correcte : « Donnez-les-moi » ou autre forme. Le professeur demande les copies.',
+    question:'Le professeur veut les copies. Quelle forme de l\u2019impératif est correcte ?',
     options:['Donnez-les-moi','Donnez-moi-les','Les-donnez-moi','Me-les donnez'],
     answer:'Donnez-les-moi',
     hint:'À l\'impératif affirmatif, COD (les) avant COI (moi).',

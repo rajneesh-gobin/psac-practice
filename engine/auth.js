@@ -2468,14 +2468,14 @@ const Auth = (() => {
   //   that survives being flattened into a sentence a parent forwards.
   function _inviteBody(bold) {
     const b = (s) => (bold ? '*' + s + '*' : s);
-    return 'Join me on ' + b('Nou Klass') + ' 🎓 — free PSAC & NCE exam practice, made in Mauritius 🇲🇺\n\n'
-      + b('34,000+ practice questions') + ', aligned with the Mauritius MIE syllabus — '
+    return 'Join me on ' + b('Nou Klass') + ' 🎓 - free PSAC & NCE exam practice, made in Mauritius 🇲🇺\n\n'
+      + b('34,000+ practice questions') + ', aligned with the Mauritius MIE syllabus - '
       + 'and everything is ' + b('free right now') + '.\n\n'
       + '📚 Grades 1–6 (PSAC) and Grades 7–9 (NCE)\n'
       + '✏️ Maths · English · French · Science · History & Geography\n'
       + '📝 926 real past-paper questions (2016–2024)\n'
-      + '📄 Print or save a full 40-question exam paper as ' + b('PDF') + ' — with a separate answer key for you\n'
-      + '📊 Follow your child\'s progress live — every score, streak and weak topic\n\n'
+      + '📄 Print or save a full 40-question exam paper as ' + b('PDF') + ' - with a separate answer key for you\n'
+      + '📊 Follow your child\'s progress live - every score, streak and weak topic\n\n'
       + 'No ads. No tracking. Works offline.\n\n'
       + 'My invite link 👇';
   }
@@ -2545,7 +2545,7 @@ const Auth = (() => {
     const link = _inviteLink();
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'Nou Klass — Exam Practice', text: _inviteText(), url: link });
+        await navigator.share({ title: 'Nou Klass - Exam Practice', text: _inviteText(), url: link });
         return;
       } catch(e) {
         if (e.name === 'AbortError') return; // user cancelled the share sheet

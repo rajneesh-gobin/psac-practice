@@ -159,51 +159,80 @@ ok('JSON-LD declares an EducationalOrganization',
 //   ones that exist.
 ok('JSON-LD states no grade range', !!ldObj && !/Grades?\s+\d/.test(JSON.stringify(ldObj)));
 
-// ── 6. The FAQ, and its schema, which must be the SAME WORDS ───────────────
-// ⚠ WHY THIS IS A CHECK AND NOT A COMMENT. Google requires FAQPage schema to
-//   match the answer a visitor can actually see, and an answer engine quoting a
-//   sentence this page no longer contains is a promise nobody can trace back.
-//   The two are edited by hand in two places 600 lines apart; that is exactly
-//   the shape of every drift this repo has already paid for.
-// ⚠ Compared with entities decoded and whitespace collapsed, because the HTML
-//   copy carries &amp; and line wrapping the JSON copy cannot.
-const faqLdRaw = (index.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g) || [])
-  .find((s) => s.includes('"FAQPage"')) || '';
-let faqObj = null;
-try {
-  faqObj = JSON.parse(faqLdRaw.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, ''));
-} catch (_) {}
-const faqNode = faqObj && (faqObj['@graph'] || []).find((n) => n['@type'] === 'FAQPage');
-ok('a FAQPage JSON-LD block is present and parses', !!faqNode);
+// ── 6. The FAQ teaser, and the link that is now the only route to /faq ───
+// ⚠ WHAT THIS USED TO CHECK, AND WHY IT NO LONGER CAN. Until 2026-09-24 this
+//   page carried six answers in full plus a FAQPage block in <head> mirroring
+//   them, and the check here compared the two character for character. Both moved
+//   to /faq, which was already rendering those same six alongside six longer ones
+//   of its own, and was linked from nothing but sitemap.xml. There is no second
+//   copy left on this page to drift.
+// ⚠ SO THE RISK MOVED RATHER THAN DISAPPEARING, and it is now a WORSE one: /faq
+//   is a static page no script writes, so if this link is dropped in a redesign
+//   nothing breaks, nothing 404s, and all twelve answers simply stop being
+//   reachable by anything that does not read sitemaps — which is the state the
+//   move was meant to END, not recreate. The link is asserted harder than the
+//   prose is, for that reason.
+const teaser = (index.match(/<section id="landing-faq-teaser"[\s\S]*?<\/section>/) || [''])[0];
+ok('the FAQ teaser section is in the landing markup', !!teaser);
 
-const faqSection = (index.match(/<section id="landing-faq"[\s\S]*?<\/section>/) || [''])[0];
-ok('the visible FAQ section is in the landing markup', !!faqSection);
+// ⚠ A REAL <a href>, NOT a button or an onclick. The whole point of this file is
+//   what a crawler sees with nothing running; showScreen() is invisible to it.
+ok('the teaser links to /faq with a real href',
+  /<a[^>]+href="\/faq"/.test(teaser),
+  'the crawlable route to twelve answers is this one tag');
 
-const norm = (s) => s
+// ⚠ The footer link is the second route and the one a reader actually uses from
+//   the bottom of a long page. Both, or the page has a dead end where an FAQ was.
+ok('the footer links to /faq as well',
+  /<footer[\s\S]*?href="\/faq"[\s\S]*?<\/footer>/.test(index));
+
+// ⚠ NO FAQPage SCHEMA ON THIS PAGE. Google requires the markup to describe text
+//   the visitor can see; one teaser answer marked up as an FAQ, with its eleven
+//   siblings on another URL, is the doorway pattern stated in schema. /faq owns it.
+ok('index.html declares no FAQPage schema any more',
+  !(index.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [])
+    .some((b) => b.includes('"FAQPage"')),
+  'the FAQPage block belongs on /faq, which renders all twelve answers');
+
+// ⚠ The WebSite node must survive the removal: /faq and all 46 subject pages
+//   point isPartOf/publisher at #website rather than repeating it.
+ok('the WebSite JSON-LD node survives, with its @id intact',
+  (index.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [])
+    .some((b) => b.includes('"WebSite"') && b.includes('nouklass.com/#website')),
+  '/faq and every subject page reference this @id');
+
+// ⚠ THE TEASER IS ONE STRING WITH TWO RENDERINGS, NOT TWO COPIES. The question
+//   and answer shown here are the matching entry in scripts/faq-copy.js, which is
+//   also what /faq renders. That is the only reason showing an answer in two
+//   places is safe: the failure this whole file exists to prevent is somebody
+//   improving the wording on one page and leaving the other behind, and a
+//   character comparison is the only thing that has ever caught it.
+// ⚠ Entities and wrapping differ between the two — the HTML copy carries &amp;
+//   and line breaks the module cannot — so compare decoded and collapsed.
+const FAQ_COPY = require('./faq-copy.js');
+const denorm = (t) => t
   .replace(/<[^>]*>/g, '')
   .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
   .replace(/\s+/g, ' ').trim();
+const teaserText = denorm(teaser);
+const teaserPair = (FAQ_COPY.core || []).find((x) => teaserText.includes(denorm(x.q)));
+ok('the teaser question is one of the answers /faq renders', !!teaserPair,
+  'it must come from faq-copy.js core[], not be written afresh here');
+ok('the teaser answer matches faq-copy.js character for character',
+  !!teaserPair && teaserText.includes(denorm(teaserPair.a)),
+  'edit scripts/faq-copy.js and re-render, never the markup alone');
 
-if (faqNode && faqSection) {
-  const visible = norm(faqSection);
-  const pairs = faqNode.mainEntity || [];
-  ok('the FAQ has at least 5 question/answer pairs', pairs.length >= 5, 'found ' + pairs.length);
-  for (const qa of pairs) {
-    const q = norm(qa.name || '');
-    const a = norm((qa.acceptedAnswer || {}).text || '');
-    ok('schema question is visible on the page: ' + q.slice(0, 48),
-      !!q && visible.includes(q));
-    ok('schema answer matches the visible text: ' + q.slice(0, 48),
-      !!a && visible.includes(a),
-      'the page does not contain this answer verbatim');
-  }
-  // ⚠ The opposite direction: an answer added to the page and not to the schema
-  //   is invisible to every engine this block exists for.
-  const visibleAnswers = (faqSection.match(/<p class="text-sm[^"]*">([\s\S]*?)<\/p>/g) || []).length;
-  ok('every visible answer is also in the schema',
-    visibleAnswers === pairs.length,
-    visibleAnswers + ' on the page, ' + pairs.length + ' in the schema');
-}
+// ⚠ ONE question, not several. A second answer here and the page is competing
+//   with /faq for the same query with slightly different words, which is the
+//   doorway shape the move was meant to end. Keep the teaser a teaser.
+ok('the teaser shows exactly one answer',
+  (teaser.match(/<h2/g) || []).length === 1, 'found ' + (teaser.match(/<h2/g) || []).length);
+
+// ⚠ The teaser carries no deadline for "free": pricing is hidden, not deleted,
+//   and a cached page is the worst place to have to correct a promise.
+ok('the teaser states no deadline for "free"',
+  !!teaser && !/\b(until|till|ends?|expires?|deadline)\b/i.test(teaser.replace(/<!--[\s\S]*?-->/g, '')),
+  'pricing is hidden, not deleted, and a cached page is the worst place to correct a promise');
 
 console.log(fails
   ? `\n  ${checks - fails}/${checks} landing-no-js checks passed, ${fails} FAILED`

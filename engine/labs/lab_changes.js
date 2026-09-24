@@ -199,7 +199,7 @@ const LabChanges = (() => {
       if (_phaseT >= dur && !_classifyOpen) {
         _showClassify(true);
         _renderChips();
-        if (!_expOn()) _coach('Drag the card to the right bucket — or just tap Physical or Chemical.');
+        if (!_expOn()) _coach('Drag the card to the right bucket - or just tap Physical or Chemical.');
       }
     } else if (_phase === 'reveal' && _pending) {
       _pendingT += dt;
@@ -444,9 +444,9 @@ const LabChanges = (() => {
     }
     const type = sc.newSubstance ? 'chemical' : 'physical';
     Labs.resultCard({ icon: sc.icon, title: `That is a ${type} change`,
-      happened: `You said the change is ${sc.type === 'physical' ? 'chemical' : 'physical'} — but ${sc.name.toLowerCase()} is a ${type} change.`,
+      happened: `You said the change is ${sc.type === 'physical' ? 'chemical' : 'physical'} - but ${sc.name.toLowerCase()} is a ${type} change.`,
       instead: sc.explanation,
-      exam: sc.wordEq ? `Word equation: ${sc.wordEq}` : `No new substance is formed — physical change.` });
+      exam: sc.wordEq ? `Word equation: ${sc.wordEq}` : `No new substance is formed - physical change.` });
   }
 
   function _renderReveal(sc, correct, wrongSub, wrongRev) {
@@ -999,7 +999,7 @@ const LabChanges = (() => {
       </div>
       <div class="lab-hz-body">
         <section class="lab-hz-sec is-what"><h3>What you will do</h3>
-          <p>Watch 10 different scenarios — melting, burning, rusting and more. For each one, decide: is it a <strong>physical change</strong> or a <strong>chemical change</strong>?</p>
+          <p>Watch 10 different scenarios - melting, burning, rusting and more. For each one, decide: is it a <strong>physical change</strong> or a <strong>chemical change</strong>?</p>
           <p>The two key questions: <strong>Was a new substance formed?</strong> and <strong>Is it reversible?</strong></p></section>
       </div>
       <div class="lab-ov-actions">
@@ -1038,7 +1038,7 @@ const LabChanges = (() => {
           <span class="lab-start-text"><b>${esc(G.title)}</b><br><small>${esc(G.blurb)}</small></span>
           ${st.guides[G.id] ? '<span class="lab-found-badge">✓</span>' : ''}
         </button>`).join('')}
-        <p class="lab-start-sub">Scenarios — pick one to classify</p>
+        <p class="lab-start-sub">Scenarios - pick one to classify</p>
         <div class="lab-changes-scenario-list">
           ${scenarios.map(sc => `<button type="button" class="lab-changes-scenario-item" data-scenario="${sc.id}">
             <span class="lab-changes-sc-icon" aria-hidden="true">${sc.icon}</span>

@@ -720,25 +720,10 @@ body.is-parent-session #xp-display { display: none !important; }
    rendered as a row of empty boxes with loose text under them. Keep .ch-hit
    above .ch-body in z-order and the whole card stays one tap target. */
 
-.ch-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;
-}
-.ch-header-text { min-width: 12rem; flex: 1; }
-.ch-title    { font-size: 1.5rem; font-weight: 800; color: #1f2937; line-height: 1.2; }
-.dark .ch-title { color: #fff; }
-.ch-subtitle { font-size: 0.8rem; color: #64748b; margin-top: 0.2rem; }
-
-.ch-search-btn {
-  display: inline-flex; align-items: center; gap: 0.4rem; flex: 0 0 auto;
-  font-size: 0.8rem; font-weight: 600; cursor: pointer;
-  color: #4f46e5; background: #eef2ff; border: 1px solid #c7d2fe;
-  padding: 0.55rem 0.9rem; border-radius: 0.75rem; transition: background 0.15s;
-}
-.ch-search-btn:hover { background: #e0e7ff; }
-.dark .ch-search-btn { color: #c7d2fe; background: rgba(49,46,129,0.4); border-color: #4338ca; }
-.dark .ch-search-btn:hover { background: rgba(55,48,163,0.6); }
-@media (max-width: 380px) { .ch-search-btn span { display: none; } }
+/* ⚠ .ch-header / .ch-title / .ch-subtitle / .ch-search-btn are GONE. Chapter
+   Practice wears the hubs' .sh-header, .sh-title, .sh-subtitle and
+   .prac-hub-search-btn now, so a second header component here only invited
+   the two to drift apart again. */
 
 /* ── Summary strip ── */
 .ch-summary {
@@ -773,21 +758,30 @@ body.is-parent-session #xp-display { display: none !important; }
 @media (max-width: 400px) { .ch-grid { grid-template-columns: 1fr; } }
 
 /* ── Card ── */
+/* ⚠ PAPER PINNED TO THE BOARD, and paper in BOTH themes. The card used to
+   be pale blue in light and slate blue in dark - two card colours, neither
+   of them anything a classroom contains, sitting on a green chalkboard. A
+   manila card keeps ONE ink colour for both themes, which is also what stops
+   the board's chalk overrides from having to guess (see the .ch-name /
+   .ch-status pair further down: they used to flip to near-white in dark, and
+   near-white on manila is unreadable).
+   ⚠ Dark mode gets a DIMMER paper, not a dark card: a full-brightness sheet
+   at night is the glare a child reads by. */
 .ch-card {
-  position: relative; display: flex; border-radius: 1rem;
-  background: #f0f7ff; color: #1e293b; border: 1px solid #cbdcf0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  position: relative; display: flex; border-radius: .85rem;
+  background: #fbf5e6; color: #2b2620; border: 1px solid #ddd0b2;
+  box-shadow: 0 3px 8px rgba(0,0,0,.28), 0 1px 0 rgba(255,255,255,.5) inset;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
   overflow: hidden;
 }
-.dark .ch-card { background: #273449; color: #f1f5f9; border-color: #52647e; }
+.dark .ch-card { background: #ded5be; color: #2b2620; border-color: #a99b7d; }
 /* Subject colour as a left spine - set per-pack via --ch-accent. */
 .ch-card::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
   background: var(--ch-accent, #6366f1);
 }
-.ch-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.09); border-color: #a5b4fc; }
-.dark .ch-card:hover { border-color: #4f46e5; }
+.ch-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,.35); border-color: #b9a67c; }
+.dark .ch-card:hover { border-color: #8d7d5c; }
 .ch-card:has(.ch-hit:focus-visible) { outline: 2px solid #6366f1; outline-offset: 2px; }
 
 .ch-hit {
@@ -801,28 +795,43 @@ body.is-parent-session #xp-display { display: none !important; }
 .ch-hit:focus-visible { outline: 2px solid #6366f1; outline-offset: -3px; }
 .ch-hit:focus:not(:focus-visible) { outline: none; }
 
+/* ⚠ min-height 8.25rem, down from 10.5rem. The card lost a whole stacked row
+   when the icon moved beside the title, so 10.5rem simply became 34px of
+   empty paper between the name and the status line on every card - and nine
+   of those is most of a phone screen. */
 .ch-body {
   position: relative; z-index: 0; pointer-events: none;
   display: flex; flex-direction: column; flex: 1;
-  padding: 0.9rem 0.9rem 0.8rem 1.1rem; min-height: 10.5rem;
+  padding: 0.8rem 0.85rem 0.75rem 1rem; min-height: 8.25rem;
 }
-.ch-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
-.ch-icon { font-size: 1.75rem; line-height: 1; }
+/* ⚠ The icon and the name are ONE row now. They were stacked - a 28px emoji,
+   then the title under it - which cost 34px of card height per chapter and
+   left the emoji reading as decoration rather than as the chapter's mark. */
+/* ⚠ padding-right clears .ch-flag, which is position:absolute at top .4rem /
+   right .4rem. Without it a two-line chapter name ("Sentences & Punctuation")
+   runs straight under the flag glyph. A paused card carries .ch-restart beside
+   the flag, so it needs twice the room. */
+.ch-head { display: flex; align-items: flex-start; gap: 0.55rem; padding-right: 1.5rem; }
+.ch-card.is-paused .ch-head { padding-right: 3rem; }
+.ch-card.is-locked .ch-head { padding-right: 0; }
+.ch-icon { font-size: 1.5rem; line-height: 1.1; flex: 0 0 auto }
+.ch-headtext { flex: 1 1 auto; min-width: 0 }
 .ch-badge {
-  font-size: 0.6rem; font-weight: 700; color: #92400e; background: #fde68a;
-  border-radius: 9999px; padding: 0.15rem 0.5rem; white-space: nowrap;
+  flex: 0 0 auto;
+  font-size: 0.6rem; font-weight: 800; color: #7a4a06; background: #f6d98a;
+  border: 1px solid #d9b558; border-radius: 9999px; padding: 0.15rem 0.5rem; white-space: nowrap;
 }
-.dark .ch-badge { color: #fcd34d; background: rgba(120,53,15,0.55); }
+.dark .ch-badge { color: #7a4a06; background: #ecc97c; border-color: #c9a750; }
 
 .ch-name {
-  font-size: 0.9rem; font-weight: 700; color: #1f2937;
-  margin-top: 0.5rem; line-height: 1.3;
+  font-size: 0.95rem; font-weight: 800; color: #2b2620;
+  margin-top: 0; line-height: 1.3; overflow-wrap: anywhere;
 }
-.dark .ch-name { color: #f1f5f9; }
-.ch-part { font-size: 0.65rem; color: #64748b; margin-top: 0.1rem; }
+.dark .ch-name { color: #2b2620; }
+.ch-part { font-size: 0.65rem; color: #6b6357; margin-top: 0.1rem; }
 /* Pushes the status/bar/footer block to the bottom so every card in a row
    lines its progress up, however long the titles are. */
-.ch-spacer { flex: 1; min-height: 0.5rem; }
+.ch-spacer { flex: 1; min-height: 0.35rem; }
 
 /* ── "Have I done this one?" ──
    A done-ness badge and a last-practised stamp. The card already carried an
@@ -839,10 +848,10 @@ body.is-parent-session #xp-display { display: none !important; }
 .dark .ch-done.is-mastered { background: rgba(22,163,74,0.25); color: #86efac; }
 .ch-done.is-worked   { background: #dbeafe; color: #1d4ed8; }
 .dark .ch-done.is-worked { background: rgba(37,99,235,0.25); color: #93c5fd; }
-.ch-done.is-started  { background: #f1f5f9; color: #64748b; }
-.dark .ch-done.is-started { background: #374151; color: #cbd5e1; }
-.ch-when { font-size: 0.6rem; font-weight: 600; color: #94a3b8; white-space: nowrap; }
-.dark .ch-when { color: #94a3b8; }
+.ch-done.is-started  { background: rgba(43,38,32,.1); color: #453f36; }
+.dark .ch-done.is-started { background: rgba(43,38,32,.12); color: #453f36; }
+.ch-when { font-size: 0.62rem; font-weight: 700; color: #57503f; white-space: nowrap; }
+.dark .ch-when { color: #57503f; }
 
 /* ── Filter row above the grid ── */
 .ch-filters {
@@ -872,30 +881,47 @@ body.is-parent-session #xp-display { display: none !important; }
 .ch-sum-last { font-size: 0.6rem; font-weight: 500; color: #94a3b8; margin-top: 0.15rem; }
 .dark .ch-sum-last { color: #94a3b8; }
 
-.ch-status { color: #334155; font-size: 0.8rem; line-height: 1.5; font-weight: 600; display: block; margin-bottom: 0.45rem; overflow-wrap: anywhere; }
-.dark .ch-status { color: #e2e8f0; }
-.ch-status.new  { color: #64748b; }
+.ch-status { color: #453f36; font-size: 0.78rem; line-height: 1.45; font-weight: 600; display: block; margin-bottom: 0.4rem; overflow-wrap: anywhere; }
+.dark .ch-status { color: #453f36; }
+/* The coverage line is the quietest thing on the card: it is detail under a
+   bar that has already said the same thing at a glance. */
+.ch-cover { font-size: .7rem; font-weight: 500; color: #5d5647 !important; margin-bottom: 0 }
+.ch-status.new  { color: #6b6357; }
 .ch-status.low  { color: #1d4ed8; }
 .ch-status.mid  { color: #b45309; }
 .ch-status.good { color: #15803d; }
 .ch-status.lock { color: #b45309; }
 .ch-status.resume { color: #ea580c; }
-.dark .ch-status.low { color: #60a5fa; } .dark .ch-status.mid { color: #fbbf24; }
-.dark .ch-status.good { color: #4ade80; } .dark .ch-status.lock { color: #fcd34d; }
-.dark .ch-status.resume { color: #fb923c; }
+/* ⚠ No dark partners: the card is the same paper in both themes, so the same
+   ink reads in both. A dark-mode variant here would be near-white on manila. */
 
-.ch-bar { height: 5px; border-radius: 9999px; background: #e2e8f0; overflow: hidden; }
-.dark .ch-bar { background: #334155; }
-.ch-bar-fill { height: 100%; border-radius: 9999px; transition: width 0.6s ease; }
-.ch-bar-fill.low { background: #3b82f6; } .ch-bar-fill.mid { background: #f59e0b; }
-.ch-bar-fill.good { background: #22c55e; }
+/* ⚠ THIS EXISTED AS DEAD CSS. _chapterCard() never drew a .ch-bar, so the one
+   thing on the card a nine-year-old can read without reading - how much of the
+   chapter they have covered - was only ever available as a sentence. */
+.ch-bar { height: 6px; border-radius: 9999px; background: rgba(43,38,32,.14); overflow: hidden; margin-bottom: .4rem }
+.dark .ch-bar { background: rgba(43,38,32,.16); }
+.ch-bar-fill { display: block; height: 100%; border-radius: 9999px; transition: width 0.6s ease; }
+.ch-bar-fill.low { background: #3b82f6; } .ch-bar-fill.mid { background: #d97706; }
+.ch-bar-fill.good { background: #16a34a; }
 
-.ch-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 0.55rem; }
+/* ⚠ A FLEX ROW THE OPTIONS BUTTON IS IN, not one it floats over. See the
+   comment on _chapterCard() in engine/app.js. The lab chip keeps margin-right:
+   auto so the CTA and Options stay right-aligned whether or not it is there. */
+.ch-foot {
+  display: flex; align-items: center; gap: .5rem;
+  flex-wrap: nowrap; margin-top: 0.6rem;
+}
+/* ⚠ nowrap, and the CTA is the flexible one. With flex-wrap:wrap the gear
+   dropped onto a second line on exactly the cards whose label is longest
+   ("Continue Smart Practice →"), so a grid of nine cards had Options inline on
+   some and on its own row on others. The label wraps inside its own box now. */
+.ch-foot .ch-cta { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere }
+.ch-foot .ch-lab-chip { flex: 0 0 auto; margin: 0 }
 .ch-star { color: #cbd5e1; font-size: 0.8rem; letter-spacing: -0.05em; }
 .dark .ch-star { color: #475569; }
 .ch-star.on { color: #fbbf24; }
-.ch-cta { font-size: 0.7rem; font-weight: 700; color: #4f46e5; }
-.dark .ch-cta { color: #a5b4fc; }
+.ch-cta { font-size: 0.74rem; font-weight: 800; color: #2a4d28; }
+.dark .ch-cta { color: #2a4d28; }
 .ch-card:hover .ch-cta { text-decoration: underline; }
 
 /* Flag: a real sibling button, above .ch-hit, so it is clickable and the card
@@ -903,13 +929,13 @@ body.is-parent-session #xp-display { display: none !important; }
 .ch-flag {
   position: absolute; top: 0.4rem; right: 0.4rem; z-index: 2;
   background: none; border: 0; cursor: pointer; line-height: 1;
-  font-size: 0.85rem; color: #64748b; padding: 0.3rem;
+  font-size: 0.85rem; color: #6b6357; padding: 0.3rem;
   border-radius: 9999px; transition: color 0.15s, background 0.15s;
 }
-.ch-flag:hover { color: #dc2626; background: rgba(248,113,113,0.1); }
-.ch-flag.on { color: #dc2626; }
-.dark .ch-flag { color: #94a3b8; }
-.dark .ch-flag.on { color: #f87171; }
+.ch-flag:hover { color: #b3261e; background: rgba(179,38,30,0.1); }
+.ch-flag.on { color: #b3261e; }
+.dark .ch-flag { color: #6b6357; }
+.dark .ch-flag.on { color: #b3261e; }
 
 /* Discard-and-restart: sits left of the flag, same pill treatment, only
    rendered at all when the chapter actually has paused progress. */
@@ -919,24 +945,24 @@ body.is-parent-session #xp-display { display: none !important; }
   font-size: 0.9rem; color: #64748b; padding: 0.3rem;
   border-radius: 9999px; transition: color 0.15s, background 0.15s;
 }
-.ch-restart:hover { color: #ea580c; background: rgba(234,88,12,0.1); }
-.dark .ch-restart { color: #94a3b8; }
-.dark .ch-restart:hover { color: #fb923c; }
+.ch-restart:hover { color: #b45309; background: rgba(180,83,9,0.1); }
+.dark .ch-restart { color: #6b6357; }
+.dark .ch-restart:hover { color: #b45309; }
 
 /* Bonus + locked + paused variants */
-.ch-card.is-bonus { background: linear-gradient(135deg, #fffbeb, #fef3c7); border-color: #fcd34d; }
-.dark .ch-card.is-bonus { background: #342a20; border-color: #a77e44; }
+.ch-card.is-bonus { background: linear-gradient(135deg, #fdf3d6, #f8e6b4); border-color: #dcb757; }
+.dark .ch-card.is-bonus { background: linear-gradient(135deg, #e6d7ae, #d8c48f); border-color: #b08f43; }
 .ch-card.is-bonus::before { background: #f59e0b; }
 .ch-card.is-locked { border-style: dashed; }
-.ch-card.is-locked::before { background: #cbd5e1; }
+.ch-card.is-locked::before { background: #b5a98f; }
 .ch-card.is-locked:hover { transform: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 .ch-card.is-locked .ch-hit { cursor: not-allowed; }
 /* Paused wins over the bonus tint if a chapter is somehow both - the
    actionable "come back to this" state matters more than the badge. */
-.ch-card.is-paused { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fdba74; }
-.dark .ch-card.is-paused { background: #372b28; border-color: #b87957; }
+.ch-card.is-paused { background: linear-gradient(135deg, #fdf0e2, #fbe2c8); border-color: #e0a066; }
+.dark .ch-card.is-paused { background: linear-gradient(135deg, #e7d4bd, #dcc2a4); border-color: #b3834f; }
 .ch-card.is-paused::before { background: #ea580c; }
-.ch-card.is-locked .ch-cta { color: #64748b; }
+.ch-card.is-locked .ch-cta { color: #6b6357; }
 
 /* Section divider between the main chapters and the bonus ones */
 .ch-section { display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 0.25rem; }
@@ -1408,7 +1434,9 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
     cursor: pointer;
     transition: background 0.2s, width 0.2s;
   }
-  .mcar-dot.active { background: #fff; width: 1.25rem; border-radius: 99px; }
+  /* ⚠ Same trap as .demo-dot.is-on: the shorthand drops background-clip and
+     the active dot paints its padding box. */
+  .mcar-dot.active { background-color: #fff; background-clip: content-box; width: 1.25rem; border-radius: 99px; }
 
   /* Trim the generous desktop section spacing - it is a big share of the
      remaining scroll once the cards are side by side. */
@@ -1611,8 +1639,19 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
   .adm-teacher-grid { grid-template-columns: 1.5rem 1.6rem 2.4fr 1.4fr 0.8fr; }
 }
 
+/* ⚠ The column count FOLLOWS the buttons. Hand-written as `1.25fr 1fr 1fr`
+   it held FOUR (five on a maths pack), so Report sat alone on a second row:
+   110px of ragged strip instead of 66px, measured at 360px. Those 44px were
+   also what pushed the sticky bar's flow slot past the fold on a 360x740
+   phone — the bar then pinned and covered the last 48px of .pr-wrap. `auto-fit`
+   cannot rot the way a literal count did when a fourth tool arrived, and it
+   WRAPS rather than overflowing when a 3.2rem column no longer fits (320px
+   with five tools, or a browser font scale above ~150%), which a
+   `grid-auto-flow: column` row would not. Floor measured: every button is
+   ≥ 52x66px at 320px, clear of the 44px tap target. */
 .pr-tools {
-  display: grid; gap: 0.4rem; grid-template-columns: 1.25fr 1fr 1fr;
+  display: grid; gap: 0.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(3.2rem, 1fr));
 }
 .pr-help-tray {
   display: grid; gap: 0.4rem;
@@ -1681,7 +1720,10 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
 .pr-scratch-clear:hover { color: #dc2626; }
 
 /* ── Number Helper panel ── */
-.pr-tools-4 { grid-template-columns: 1.25fr 1fr 1fr 1fr; }
+/* ⚠ .pr-tools-4 is GONE, with the `_nhPopulate()` line that toggled it. It
+   widened the row to four columns when the maths Number Helper appeared — the
+   exact hand-counting that left Report on a row of its own once a fourth tool
+   was added. auto-fit above counts for itself. */
 .nh-panel {
   background: #fff; border: 1px solid #e5e7eb; border-radius: 1rem;
   padding: 0.75rem; display: flex; flex-direction: column; gap: 0.55rem;
@@ -2655,7 +2697,6 @@ body.has-bottom-nav main {
 /* Dark-mode partners for the greys raised for light-mode contrast above.
    slate-500 is 4.76:1 on white but only 3.07:1 on a #1e293b card; slate-400 is
    the mirror image (2.56:1 / 5.71:1). Each surface gets the one that passes. */
-.dark .ch-subtitle,
 .dark .ch-sum-lbl,
 .dark .ch-sum-bar-head,
 .dark .ch-part,
@@ -3196,14 +3237,20 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
   padding: .9rem;
   box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
 }
+/* ⚠ STILL A GREEN BOARD AT NIGHT, just a darker one. It used to paint
+   #111 → #0a0a0a, which on the screen's own #1a1208 page is a black
+   rectangle on a nearly-black page: the wooden frame vanished, the chalk
+   had nothing to be chalk ON, and the whole classroom theme existed in
+   light mode only. Measured against the light board (#2e5230), this is the
+   same hue at roughly half the lightness. */
 .dark .prac-board-mat {
   background:
     repeating-linear-gradient(
       to bottom,
       transparent 0px, transparent 31px,
-      rgba(255,255,255,.025) 31px, rgba(255,255,255,.025) 32px
+      rgba(255,255,255,.028) 31px, rgba(255,255,255,.028) 32px
     ),
-    linear-gradient(158deg, #111 0%, #0a0a0a 40%, #131313 70%, #0d0d0d 100%);
+    linear-gradient(158deg, #1b301d 0%, #122011 25%, #16281a 50%, #101d12 75%, #142616 100%);
   border-color: #3a2008;
 }
 @media (max-width: 420px) { .prac-board-mat { padding: .5rem; border-width: 6px; } }
@@ -3266,6 +3313,21 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
 }
 .dark #screen-subject-hub { background: #1a1208; }
 .subj-hub-outer { max-width: 860px; margin: 0 auto; }
+
+/* ── Chapter Practice ─────────────────────────────────────────────
+   ⚠ The THIRD screen in the same composition, and it has to stay that way.
+   It shows the Subject Hub's chapter list from the other doors into it - the
+   dashboard's "Chapter Practice" card, a calendar task, a resumed round - and
+   was the one stop in the flow still painted on the app's plain page, so
+   walking in here read as leaving the child's desk for a different app.
+   ⚠ .prac-board-mat, NOT .ta-tab-content: that panel is shaped for folder
+   tabs (square top-left, no top border) and this screen has none. */
+#screen-chapter-select {
+  background: #f2ebe0;
+  min-height: 100vh;
+  padding: 1.25rem 1.25rem 5rem;
+}
+.dark #screen-chapter-select { background: #1a1208; }
 /* Chapter cards inside Subject Hub */
 .sh-chapter-list { display: flex; flex-direction: column; gap: .5rem; }
 .sh-chapter-card { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; background: rgba(255,255,255,.08); border: 1px solid rgba(240,236,220,.18); border-radius: .75rem; cursor: pointer; color: #f0ece8; text-align: left; transition: background .15s; width: 100%; }
@@ -3392,17 +3454,21 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
 .dark .sh-subtitle { color: #86836a; }
 
 /* Blackboard frame - the visible bordered board the notes sit on */
+/* ⚠ THE SAME BOARD AS .prac-board-mat, deliberately. It used to be #1e1e1e
+   with its own rule pitch and its own frame width, so the app had two
+   blackboards that did not match - and #screen-practice-hub nested one
+   inside the other, which only stopped being obvious because both painted
+   near-black at night. If you change the green here, change .prac-board-mat
+   and the .ta-tab-content panel with it. */
 .sh-board-frame {
   background:
     repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 34px,
-      rgba(180,180,180,.10) 34px,
-      rgba(180,180,180,.10) 35px
+      to bottom,
+      transparent 0px, transparent 31px,
+      rgba(255,255,255,.035) 31px, rgba(255,255,255,.035) 32px
     ),
-    #1e1e1e;
-  border: 6px solid #5c3d1e;
+    linear-gradient(158deg, #2e5230 0%, #1e3a22 25%, #264028 50%, #1c3420 75%, #203824 100%);
+  border: 8px solid #5c3810;
   border-radius: .75rem;
   padding: .85rem;
   box-shadow:
@@ -3410,6 +3476,17 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
     0 6px 18px rgba(0,0,0,.5),
     0 2px 4px rgba(0,0,0,.3);
   margin-bottom: 0;
+}
+
+.dark .sh-board-frame {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 31px,
+      rgba(255,255,255,.028) 31px, rgba(255,255,255,.028) 32px
+    ),
+    linear-gradient(158deg, #1b301d 0%, #122011 25%, #16281a 50%, #101d12 75%, #142616 100%);
+  border-color: #3a2008;
 }
 
 /* Area below the blackboard - outside the frame, on the page background */
@@ -4518,6 +4595,10 @@ html.dark select optgroup {
   border-top: none;
 }
 /* Blackboard in dark mode */
+/* ⚠ Still a GREEN board at night - see .prac-board-mat and .sh-board-frame.
+   #111 on these screens' own #1a1208 page is a black rectangle on a nearly
+   black page: the wooden frame vanishes and the chalk has nothing to be
+   chalk on. Three recipes, one colour. */
 .dark #screen-teacher .ta-tab-content,
 .dark #screen-student-home .ta-tab-content,
 .dark #screen-subject-hub .ta-tab-content {
@@ -4525,11 +4606,9 @@ html.dark select optgroup {
     repeating-linear-gradient(
       to bottom,
       transparent 0px, transparent 31px,
-      rgba(255,255,255,.025) 31px, rgba(255,255,255,.025) 32px
+      rgba(255,255,255,.028) 31px, rgba(255,255,255,.028) 32px
     ),
-    linear-gradient(158deg,
-      #111 0%, #0a0a0a 40%, #131313 70%, #0d0d0d 100%
-    );
+    linear-gradient(158deg, #1b301d 0%, #122011 25%, #16281a 50%, #101d12 75%, #142616 100%);
   border-color: #3a2008;
   color: #e8dcc8;
 }
@@ -4538,7 +4617,8 @@ html.dark select optgroup {
 #screen-teacher .ta-tab-content h3,
 #screen-teacher .ta-tab-content h4:not(.teacher-step),
 #screen-student-home .ta-tab-content h3,
-#screen-subject-hub .ta-tab-content h3 {
+#screen-subject-hub .ta-tab-content h3,
+#screen-chapter-select .prac-board-mat h3 {
   color: #f0ece0;
   font-family: 'Caveat', cursive;
   font-size: 1.3rem;
@@ -4555,12 +4635,17 @@ html.dark select optgroup {
 #screen-subject-hub .ta-tab-content label,
 #screen-subject-hub .ta-tab-content .text-xs,
 #screen-subject-hub .ta-tab-content .text-sm,
-#screen-subject-hub .ta-tab-content p {
+#screen-subject-hub .ta-tab-content p,
+#screen-chapter-select .prac-board-mat label,
+#screen-chapter-select .prac-board-mat .text-xs,
+#screen-chapter-select .prac-board-mat .text-sm,
+#screen-chapter-select .prac-board-mat p {
   color: rgba(240,236,220,.8) !important;
 }
 #screen-teacher .ta-tab-content b,
 #screen-student-home .ta-tab-content b,
-#screen-subject-hub .ta-tab-content b { color: #f0ece0; }
+#screen-subject-hub .ta-tab-content b,
+#screen-chapter-select .prac-board-mat b { color: #f0ece0; }
 /* ── Admin › Teachers: activity summary on each card ── */
 .tch-act { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid #f3f4f6; }
 .dark .tch-act { border-top-color: #374151; }
@@ -4591,13 +4676,57 @@ html.dark select optgroup {
    overrides above match every h3/p inside the panel, which painted
    "Numeration & Notation" in cream Caveat on a WHITE card in light mode
    (measured ~1.2:1). The card's own ink wins inside .ch-card. */
-#screen-subject-hub .ta-tab-content .ch-card h3.ch-name {
-  color: #1f2937; font-family: inherit; font-size: 0.9rem; text-shadow: none;
+#screen-subject-hub .ta-tab-content .ch-card h3.ch-name,
+#screen-chapter-select .prac-board-mat .ch-card h3.ch-name {
+  color: #2b2620; font-family: inherit; font-size: 0.95rem; text-shadow: none;
 }
-.dark #screen-subject-hub .ta-tab-content .ch-card h3.ch-name { color: #f1f5f9; }
-#screen-subject-hub .ta-tab-content .ch-card p.ch-status { color: #334155 !important; }
-.dark #screen-subject-hub .ta-tab-content .ch-card p.ch-status { color: #e2e8f0 !important; }
-#screen-subject-hub .ta-tab-content .ch-card b { color: inherit; }
+/* ⚠ Ink in BOTH themes now - .ch-card is the same manila paper in both, and
+   #f1f5f9 on manila measured 1.3:1. */
+.dark #screen-subject-hub .ta-tab-content .ch-card h3.ch-name,
+.dark #screen-chapter-select .prac-board-mat .ch-card h3.ch-name { color: #2b2620; }
+#screen-subject-hub .ta-tab-content .ch-card p.ch-status,
+#screen-chapter-select .prac-board-mat .ch-card p.ch-status { color: #453f36 !important; }
+#screen-subject-hub .ta-tab-content .ch-card p.ch-cover,
+#screen-chapter-select .prac-board-mat .ch-card p.ch-cover { color: #5d5647 !important; }
+.dark #screen-subject-hub .ta-tab-content .ch-card p.ch-status,
+.dark #screen-chapter-select .prac-board-mat .ch-card p.ch-status { color: #453f36 !important; }
+.dark #screen-subject-hub .ta-tab-content .ch-card p.ch-cover,
+.dark #screen-chapter-select .prac-board-mat .ch-card p.ch-cover { color: #5d5647 !important; }
+#screen-subject-hub .ta-tab-content .ch-card b,
+#screen-chapter-select .prac-board-mat .ch-card b { color: inherit; }
+
+/* The strip above the grid is CHALK on both boards. Its defaults are slate on
+   white (.ch-sum-num #334155, .ch-sum-lbl/.ch-sum-of/.ch-sum-last #94a3b8,
+   .ch-section-note #64748b) - readable on the old plain page, and 1.x:1 on
+   dark green in light mode, where none of the `.dark` variants apply. Both
+   boards carry the same content, so they take the same rule. */
+#screen-subject-hub .ta-tab-content :is(.ch-sum-num, .ch-sum-of, .ch-sum-lbl, .ch-sum-last, .ch-sum-bar-head),
+#screen-chapter-select .prac-board-mat :is(.ch-sum-num, .ch-sum-of, .ch-sum-lbl, .ch-sum-last, .ch-sum-bar-head) {
+  color: rgba(240,236,220,.78) !important;
+}
+#screen-subject-hub .ta-tab-content .ch-sum-num,
+#screen-chapter-select .prac-board-mat .ch-sum-num { color: #f0ece0 !important; }
+#screen-subject-hub .ta-tab-content :is(.ch-sum-num.good, .ch-sum-pct),
+#screen-chapter-select .prac-board-mat :is(.ch-sum-num.good, .ch-sum-pct) { color: #86efac !important; }
+#screen-subject-hub .ta-tab-content .ch-section-label,
+#screen-chapter-select .prac-board-mat .ch-section-label { color: #fbbf24; }
+#screen-subject-hub .ta-tab-content .ch-section-note,
+#screen-chapter-select .prac-board-mat .ch-section-note { color: rgba(240,236,220,.7) !important; }
+/* The filter pills are the one chalk-on-board control here: a white-ish pill
+   reads as paper stuck on the board rather than as a tab. */
+#screen-subject-hub .ta-tab-content .ch-filter,
+#screen-chapter-select .prac-board-mat .ch-filter {
+  background: rgba(240,236,220,.1); color: rgba(240,236,220,.85);
+  border-color: rgba(240,236,220,.22);
+}
+#screen-subject-hub .ta-tab-content .ch-filter:hover,
+#screen-chapter-select .prac-board-mat .ch-filter:hover {
+  background: rgba(240,236,220,.2); color: #f0ece8;
+}
+#screen-subject-hub .ta-tab-content .ch-filter.on,
+#screen-chapter-select .prac-board-mat .ch-filter.on {
+  background: #4f46e5; color: #fff; border-color: #6366f1;
+}
 /* Strip inner white boxes - everything sits directly on the board */
 #screen-teacher .ta-tab-content .bg-white,
 #screen-teacher .ta-tab-content [class*="bg-gray"],
@@ -5315,8 +5444,8 @@ html:not(.dark) #pd-children-grid .pd-child-card,
 html:not(.dark) .ch-card:not(.is-bonus):not(.is-paused) {
   background-color:#edf2f8; color:var(--day-ink); border-color:var(--day-border);
 }
-html:not(.dark) :is(.ch-subtitle,.ch-sum-lbl,.ch-section-note,.ch-part,.pr-sess,.pr-level,.pr-scratch-head,.stat-label,.pd-child-next,.qm-question-id) { color:var(--day-muted); }
-html:not(.dark) :is(.ch-subtitle,.ch-section-note,.pd-child-next) { font-size:.875rem; line-height:1.6; }
+html:not(.dark) :is(.ch-sum-lbl,.ch-section-note,.ch-part,.pr-sess,.pr-level,.pr-scratch-head,.stat-label,.pd-child-next,.qm-question-id) { color:var(--day-muted); }
+html:not(.dark) :is(.ch-section-note,.pd-child-next) { font-size:.875rem; line-height:1.6; }
 html:not(.dark) .pd-action { font-size:.8rem; line-height:1.4; }
 html:not(.dark) .pr-tool-lbl { font-size:.75rem; line-height:1.4; text-transform:none; letter-spacing:0; }
 html:not(.dark) .pr-tool { color:var(--day-muted); border-color:var(--day-border); }
@@ -9682,18 +9811,31 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
 .dark #modal-question-map .pj-cell.is-improved { color: #bfdbfe; }
 .dark #modal-question-map .pj-cell.is-secure   { color: #bbf7d0; }
 
-/* the small control beside the chapter card's big button */
+/* The small control BESIDE the chapter card's big button - in the footer row,
+   never over it. As `position:absolute; right:.55rem; bottom:.5rem` it covered
+   the coverage line and the CTA on every card at every width.
+   ⚠ pointer-events: auto is not optional: .ch-body is pointer-events:none so
+   that .ch-hit underneath stays one whole-card tap target, and a child cannot
+   open Options at all without this. */
+/* ⚠ THE GEAR CARRIES NO WORD. "⚙ Options" plus the CTA ("Continue Smart
+   Practice →" - and that label may NOT be shortened to a bare "Continue →",
+   see cardLabel() in practice_journey.js) does not fit one line of a 15rem
+   card at any font size that a child can read, so the row either wrapped the
+   gear onto a line of its own on the long-label cards only, or broke the
+   label across two lines with an orphan arrow. The whole card is already the
+   primary action; this is the secondary one, and it keeps title +
+   aria-label="Practice options for <chapter>". */
 .ch-options {
-  position: absolute; right: .55rem; bottom: .5rem; z-index: 3;
-  min-width: 44px; min-height: 44px; padding: 0 .55rem;
-  display: inline-flex; align-items: center; justify-content: center; gap: .25rem;
-  font-size: .72rem; font-weight: 700; cursor: pointer;
-  color: #4338ca; background: rgba(238, 242, 255, .95);
-  border: 1px solid rgba(99, 102, 241, .45); border-radius: .75rem;
+  position: relative; z-index: 3; pointer-events: auto; flex: 0 0 auto;
+  width: 34px; height: 34px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .95rem; line-height: 1; cursor: pointer;
+  color: #3d3a2e; background: rgba(43,38,32,.07);
+  border: 1px solid rgba(43,38,32,.22); border-radius: .5rem;
 }
-.dark .ch-options { color: #c7d2fe; background: rgba(30, 27, 75, .9); border-color: rgba(129, 140, 248, .45); }
-.ch-options:hover { background: #e0e7ff; }
-.dark .ch-options:hover { background: rgba(67, 56, 202, .55); }
+.dark .ch-options { color: #3d3a2e; background: rgba(43,38,32,.09); border-color: rgba(43,38,32,.26); }
+.ch-options:hover, .dark .ch-options:hover { background: rgba(43,38,32,.16); }
+.ch-options:focus-visible { outline: 2px solid #2a4d28; outline-offset: 2px }
 
 .pj-sync { font-size: .7rem; font-weight: 700; color: #6b7280; margin-left: .4rem; }
 .pj-sync.is-offline { color: #b45309; }
@@ -10576,10 +10718,13 @@ button.tc-cd-stat:focus-visible { outline: 3px solid #f4ce52; outline-offset: 2p
 
 /* "🔬 Try the experiment" on a chapter card / syllabus row - injected by
    innerHTML, so it cannot use Tailwind classes (ui-css.md). */
-.ch-lab-chip { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 4px 10px; border-radius: 999px; border: 1px solid #93c5fd; background: #eff6ff; color: #1d4ed8; font-size: 0.74rem; font-weight: 700; cursor: pointer; margin: 4px 8px 4px 0; }
+/* ⚠ pointer-events: auto - same reason as .ch-options above. Without it this
+   chip has been INERT inside .ch-body (pointer-events:none) since it was
+   added: it looked like a button, and nothing happened. */
+.ch-lab-chip { position: relative; z-index: 2; pointer-events: auto; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 4px 10px; border-radius: 999px; border: 1px solid #93c5fd; background: #eff6ff; color: #1d4ed8; font-size: 0.74rem; font-weight: 700; cursor: pointer; margin: 4px 8px 4px 0; }
 .ch-lab-chip:hover { background: #dbeafe; }
 .dark .ch-lab-chip { background: rgba(59, 130, 246, 0.18); border-color: #1e3a8a; color: #bfdbfe; }
-.ch-foot .ch-lab-chip { margin-right: auto; }
+
 
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -11343,3 +11488,1545 @@ html.dark .lb-when.is-on{background:#6366f1;border-color:#6366f1;color:#fff}
 .ta-across-btn > span:first-child { font-size: 1.2rem; line-height: 1 }
 .ta-across-btn strong { display: block; font-weight: 700 }
 .ta-across-btn small { display: block; font-size: .74rem; color: rgba(240,236,220,.6); margin-top: .1rem }
+
+/* ══ THE LANDING-PAGE PREVIEW — "the classroom board" ═════════════════════
+   The whole demo-* namespace exists because engine/demo.js writes these panes
+   with innerHTML. The Tailwind Play CDN only generates rules for classes
+   present at its INITIAL scan, so a utility class inside injected markup gets
+   the class and no rule — silently. Every visual decision for the preview
+   therefore lives here, in the stylesheet that loads AFTER the CDN.
+
+   ⚠ IT IS THE APP'S OWN SURFACE, REBUILT ON THE LANDING PAGE: wooden frame,
+   green board, chalk list, paper. #screen-practice-hub, #screen-subject-hub
+   and #screen-chapter-select are all cream paper + a framed blackboard +
+   Caveat chalk (.prac-board-mat is the same 8px #5c3810 frame over the same
+   green gradient). The preview was a dark indigo panel, so it advertised a
+   product that does not exist — a stranger tried one thing and registered
+   into another. Keep the two in step: a change to the board here is a change
+   to .prac-board-mat there, and the reverse.
+
+   ⚠ NO @media (prefers-color-scheme) BLOCK, and no .dark partner. These
+   classes appear only inside #screen-landing, which paints its own fixed
+   indigo→purple gradient at every setting. A light variant would be a second
+   palette nothing ever renders.
+
+   ⚠ Tap targets are 44px, not because the preview is a form but because the
+   first person to use it on a phone is usually a parent holding a child.
+   scripts/test-landing-demo.js fails any #demo button under 40px, with one
+   exemption by name (.demo-nudge-a — see its own comment below).
+
+   ⚠ TWO SURFACES, TWO INKS. Chalk (--chalk) is only ever legible on the
+   board; ink (--ink) is only ever legible on the paper. Every colour below
+   says which surface it belongs to. Putting a chalk colour inside .demo-card
+   is how a "blank" question card happens. */
+#demo {
+  /* chalk on the board */
+  --chalk:        #f2efe6;
+  --chalk-dim:    rgba(242,239,230,.66);
+  --chalk-faint:  rgba(242,239,230,.5);
+  --chalk-line:   rgba(242,239,230,.18);
+  /* ink on the paper */
+  --paper:        #fdfaf1;
+  --paper-2:      #fffdf7;
+  --paper-edge:   #ded4bd;
+  --ink:          #2b2620;
+  --ink-soft:     #6b6357;
+  --ink-rule:     rgba(43,38,32,.06);
+  --margin-rule:  rgba(206,98,98,.72);
+  --pen-green:    #2e7d4f;
+  --pen-red:      #c0392b;
+}
+
+/* ── the frame ────────────────────────────────────────────────────────────
+   Two elements on purpose: border-image cannot draw a gradient AND respect
+   border-radius, so the wood is the OUTER element's padding and the board is
+   the inner element's background. One element with a gradient border-image
+   gives square corners and a frame that stops looking like wood. */
+.demo-board {
+  position: relative;
+  border-radius: 1rem;
+  padding: 12px 12px 20px;
+  background:
+    linear-gradient(162deg, #91602c 0%, #5c3810 26%, #7d4d1a 48%, #4a2c0c 74%, #82552a 100%);
+  box-shadow:
+    0 22px 48px -18px rgba(0,0,0,.75),
+    0 2px 0 rgba(255,255,255,.14) inset,
+    0 -2px 0 rgba(0,0,0,.35) inset;
+}
+/* the chalk ledge along the bottom rail */
+.demo-board::after {
+  content: ''; position: absolute; left: 7%; right: 7%; bottom: 5px; height: 7px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #b07c38, #6b4415);
+  box-shadow: 0 3px 7px rgba(0,0,0,.45);
+  pointer-events: none;
+}
+@media (max-width: 480px) {
+  .demo-board { padding: 8px 8px 16px; border-radius: .8rem }
+}
+
+.demo-board-inner {
+  border-radius: .45rem;
+  padding: .85rem .9rem 1rem;
+  /* Same recipe as .prac-board-mat: faint horizontal rules over a green
+     gradient, plus a soft light from the top edge. */
+  background:
+    repeating-linear-gradient(to bottom,
+      transparent 0 31px, rgba(255,255,255,.035) 31px 32px),
+    radial-gradient(120% 70% at 50% -10%, rgba(255,255,255,.09), transparent 62%),
+    linear-gradient(158deg, #2e5230 0%, #1e3a22 25%, #264028 50%, #1c3420 75%, #203824 100%);
+  box-shadow: 0 2px 14px rgba(0,0,0,.45) inset;
+}
+@media (max-width: 480px) { .demo-board-inner { padding: .65rem .6rem .8rem } }
+
+/* ── the board's own heading ──────────────────────────────────────────────
+   ⚠ The copy is load-bearing: test-landing-demo.js asserts the preview says
+   it IS a preview. Never reword it to something that does not contain
+   "this is a preview". */
+.demo-board-top {
+  display: flex; align-items: center; gap: .55rem .7rem; flex-wrap: wrap;
+  padding-bottom: .65rem; margin-bottom: .75rem;
+  border-bottom: 1px dashed var(--chalk-line);
+}
+.demo-board-title {
+  margin: 0; min-width: 0;
+  font-family: 'Caveat', cursive; font-size: 1.5rem; line-height: 1.15;
+  color: var(--chalk); text-shadow: 0 1px 0 rgba(0,0,0,.4);
+}
+@media (max-width: 480px) { .demo-board-title { font-size: 1.3rem } }
+
+.demo-preview-tag {
+  display: inline-flex; align-items: center; gap: .4rem; flex: 0 0 auto;
+  font-size: .64rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
+  color: #fde68a; background: rgba(251,191,36,.16);
+  border: 1px solid rgba(251,191,36,.42); border-radius: 999px; padding: .22rem .6rem;
+}
+/* A pulse is the cheapest way to say "this is live, not a screenshot". */
+.demo-live-dot {
+  width: .5rem; height: .5rem; border-radius: 999px; background: #34d399;
+  box-shadow: 0 0 0 0 rgba(52,211,153,.6); animation: demoPulse 2.2s infinite;
+}
+@keyframes demoPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(52,211,153,.55) }
+  70%  { box-shadow: 0 0 0 .5rem rgba(52,211,153,0) }
+  100% { box-shadow: 0 0 0 0 rgba(52,211,153,0) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-live-dot { animation: none }
+  .demo-track { transition: none }
+}
+
+/* ── the two rails ────────────────────────────────────────────────────────
+   ⚠ THE LABEL COLUMN IS THE ALIGNMENT. "Grade" and "Subject" share one grid
+   column, so both chip rows begin on the same vertical line and the rails
+   read as one control. The previous version centred the grade rail inside a
+   left-aligned section, which is most of what "misaligned" meant. */
+.demo-rail {
+  display: grid; grid-template-columns: 4.6rem minmax(0, 1fr);
+  align-items: start; gap: .45rem .7rem; margin-bottom: .5rem;
+}
+.demo-rail-l {
+  font-family: 'Caveat', cursive; font-size: 1.2rem; line-height: 2.2rem;
+  color: var(--chalk-dim);
+}
+/* Below 640px the label sits ABOVE its chips: at 4.6rem the column costs a
+   sixth of a 360px screen and the chips get two per row instead of three. */
+@media (max-width: 640px) {
+  .demo-rail { grid-template-columns: minmax(0, 1fr); gap: .15rem }
+  .demo-rail-l { font-size: 1.05rem; line-height: 1.5 }
+}
+
+/* ⚠ A GRID WITH A CAPPED TRACK, for the same reason as .demo-subjects below:
+   nine chips flex-wrapped 6+3 at 390px and the second row sat under nothing.
+   Fixed-ish tracks wrap into aligned columns and never stretch to fill a wide
+   rail the way minmax(x, 1fr) would. */
+.demo-grades {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(3.1rem, 3.5rem));
+  justify-content: start; gap: .35rem; min-width: 0;
+}
+.demo-grade-chip {
+  flex: 0 0 auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-width: 3rem; min-height: 2.75rem; padding: .25rem .5rem;
+  border: 1px solid var(--chalk-line); background: rgba(242,239,230,.05);
+  border-radius: .6rem; color: var(--chalk-dim); cursor: pointer; line-height: 1.1;
+  transition: background .14s, border-color .14s, color .14s, transform .1s;
+}
+.demo-grade-chip:hover { background: rgba(242,239,230,.13); color: var(--chalk) }
+.demo-grade-chip:active { transform: scale(.95) }
+.demo-grade-chip-g { font-size: .86rem; font-weight: 800 }
+.demo-grade-chip-s { font-size: .56rem; font-weight: 700; letter-spacing: .05em; opacity: .7 }
+/* Selected = written in chalk and boxed, not tinted indigo. */
+.demo-grade-chip.is-on {
+  background: var(--chalk); border-color: #fff; color: #23401f;
+  box-shadow: 0 4px 10px -4px rgba(0,0,0,.7);
+}
+.demo-grade-chip.is-on .demo-grade-chip-s { opacity: .8 }
+
+/* ── subjects ─────────────────────────────────────────────────────────────
+   ⚠ A GRID, NOT A WRAPPING CHIP ROW. Measured on the old flex-wrap version:
+   5 chips broke 2/1/2 at 1440 and 2/2/1 at 390 — a ragged block whichever
+   width you looked at. auto-fit columns wrap into aligned rows, and a chip
+   whose name needs two lines simply makes its row taller, in step with its
+   neighbours. */
+.demo-subjects {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(8.6rem, 1fr));
+  gap: .4rem; min-width: 0;
+}
+@media (max-width: 360px) { .demo-subjects { grid-template-columns: repeat(auto-fit, minmax(7.4rem, 1fr)) } }
+.demo-subj {
+  display: flex; align-items: center; gap: .4rem; min-width: 0;
+  min-height: 2.75rem; padding: .35rem .55rem; text-align: left;
+  border: 1px solid var(--chalk-line); background: rgba(242,239,230,.05);
+  border-radius: .6rem; color: var(--chalk-dim); cursor: pointer;
+  font-size: .8rem; font-weight: 700; line-height: 1.2;
+  transition: background .14s, border-color .14s, color .14s, transform .1s;
+}
+.demo-subj:hover { background: rgba(242,239,230,.13); color: var(--chalk) }
+.demo-subj:active { transform: scale(.97) }
+.demo-subj-i { font-size: 1.05rem; line-height: 1; flex: 0 0 auto }
+.demo-subj-n {
+  flex: 1 1 auto; min-width: 0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; overflow-wrap: anywhere;
+}
+.demo-subj-b {
+  flex: 0 0 auto; font-size: .6rem; font-weight: 900;
+  background: rgba(242,239,230,.14); color: var(--chalk-dim);
+  border-radius: 999px; padding: .05rem .34rem;
+}
+.demo-subj.is-on {
+  background: var(--chalk); border-color: #fff; color: #23401f;
+  box-shadow: 0 4px 10px -4px rgba(0,0,0,.7);
+}
+.demo-subj.is-on .demo-subj-b { background: rgba(35,64,31,.16); color: #23401f }
+
+/* ── the shell: chalk list beside the paper ───────────────────────────────
+   ⚠ minmax(0,1fr) on the stage, not 1fr. A grid track defaults to
+   min-width:auto, so a long question stem would widen the column and push the
+   whole section past the viewport.
+   ⚠ align-items: stretch (the default, stated here because it is the fix):
+   the old grid used `start`, so the 352px question card sat beside a 530px
+   picker and left ~180px of dead page under it. Both columns are now the
+   height of the taller one, and .demo-card / .demo-chapters flex to fill.
+   ⚠ THE PAPER COMES FIRST ON A PHONE. DOM order is picker → stage so that
+   desktop reading order matches the columns; `order: -1` lifts the paper
+   above the list only where they stack. */
+.demo-shell { display: grid; grid-template-columns: minmax(0, 1fr); gap: .8rem; margin-top: .65rem }
+@media (min-width: 900px) {
+  .demo-shell { grid-template-columns: 17.5rem minmax(0, 1fr); gap: 1rem }
+  /* ⚠ 19rem, measured: at 27rem a nine-chapter pack made the picker 530px
+     against the paper's natural 345px, and stretch then grew the paper - so
+     the dead space the old `start` grid left UNDER the card simply moved
+     INSIDE it as 200px of blank ruled sheet. At 19rem the picker lands ~390px
+     and the slack is under 50px. The list scrolls, and the fade plus the
+     "open the other N chapters" button below it say so. */
+  /* ⚠ 26rem, not 19. The 19rem cap balanced the picker against the paper when
+     the practise slide was the whole board. It is now one pane of a deck whose
+     height is set by the TALLEST slide (the twenty-rung prize ladder, measured
+     601px), so a short list just leaves blank board — the cap may as well buy
+     more visible chapters. Re-measure if the tallest slide changes.*/
+  .demo-chapters { max-height: 26rem }
+}
+@media (max-width: 899px) { .demo-stage { order: -1 } }
+
+.demo-picker {
+  display: flex; flex-direction: column; min-width: 0;
+  background: rgba(0,0,0,.2); border: 1px solid var(--chalk-line);
+  border-radius: .7rem; padding: .65rem .6rem .7rem;
+}
+.demo-pick-h {
+  margin: 0 0 .4rem; font-family: 'Caveat', cursive; font-size: 1.15rem;
+  line-height: 1.25; color: var(--chalk-dim);
+}
+
+/* ⚠ A SHUT CHAPTER IS A <div>, NOT A DISABLED BUTTON. A disabled control is
+   skipped by a screen reader and invites a tap that does nothing; a row that
+   was never a control reads correctly as a listing. Every chapter here
+   EXISTS — the padlock means "register to open", never "not built". */
+.demo-chapters {
+  display: flex; flex-direction: column; gap: .15rem;
+  flex: 0 1 auto; min-height: 0; max-height: 22rem;
+  overflow-y: auto; padding-right: .1rem;
+  /* The list cuts off mid-row at its max-height, which reads as a broken
+     panel rather than as "there is more". The fade says scrollable without
+     costing a row of height. */
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 1.4rem), transparent 100%);
+          mask-image: linear-gradient(180deg, #000 calc(100% - 1.4rem), transparent 100%);
+}
+.demo-chapters::-webkit-scrollbar { width: 5px }
+.demo-chapters::-webkit-scrollbar-thumb { background: rgba(242,239,230,.22); border-radius: 999px }
+
+/* ⚠ FOUR FIXED COLUMNS, so every row's number, icon, name and badge line up
+   whatever the name's length. The old row was a flex line and a two-line name
+   ("Nouns, Pronouns & Articles") pushed its count pill out of step with the
+   rows above and below it. */
+.demo-ch {
+  display: grid; grid-template-columns: 1.25rem 1.25rem minmax(0, 1fr) auto;
+  align-items: center; gap: .4rem; width: 100%; text-align: left;
+  min-height: 2.75rem; padding: .3rem .4rem; border-radius: .45rem;
+  border: 1px solid transparent; color: var(--chalk-faint);
+  font-size: .82rem; line-height: 1.25; min-width: 0;
+}
+.demo-ch-num {
+  font-family: 'Caveat', cursive; font-size: 1.05rem; line-height: 1;
+  text-align: center; opacity: .75;
+}
+.demo-ch-i { font-size: .95rem; line-height: 1; text-align: center }
+.demo-ch-n {
+  min-width: 0; display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere;
+}
+.demo-ch-q {
+  font-size: .6rem; font-weight: 800; white-space: nowrap;
+  color: #bff0d3; background: rgba(110,220,160,.14);
+  border: 1px solid rgba(110,220,160,.3); border-radius: 999px; padding: .05rem .35rem;
+}
+.demo-ch-lock { font-size: .75rem; opacity: .6 }
+
+.demo-ch.is-open { color: var(--chalk); cursor: pointer; transition: background .13s, border-color .13s }
+.demo-ch.is-open:hover { background: rgba(242,239,230,.1); border-color: rgba(242,239,230,.22) }
+.demo-ch.is-on {
+  background: rgba(242,239,230,.16); border-color: rgba(242,239,230,.5); color: #fff;
+}
+.demo-ch.is-on .demo-ch-num { opacity: 1 }
+.demo-ch.is-shut { color: var(--chalk-faint) }
+
+#demo-ch-more { margin-top: auto; padding-top: .55rem }
+.demo-ch-more {
+  width: 100%; text-align: left; min-height: 2.75rem;
+  padding: .5rem .6rem; border-radius: .5rem;
+  border: 1px dashed rgba(251,191,36,.45); background: rgba(251,191,36,.09);
+  color: #fde68a; font-size: .75rem; font-weight: 700; line-height: 1.35; cursor: pointer;
+  transition: background .13s;
+}
+.demo-ch-more:hover { background: rgba(251,191,36,.18) }
+
+/* ── the paper ────────────────────────────────────────────────────────────
+   A sheet of exercise paper: a red margin rule near the left edge, very faint
+   horizontal rules behind the text (texture, not lines to write on — at full
+   strength they fight every option box), and ink for every colour.
+   ⚠ padding-left clears the margin rule. If you move one, move the other. */
+.demo-stage { display: flex; min-width: 0 }
+.demo-card {
+  position: relative; flex: 1 1 auto; min-width: 0;
+  display: flex; flex-direction: column;
+  min-height: 21rem; padding: .85rem .85rem .9rem 1.15rem;
+  color: var(--ink);
+  border-radius: .35rem;
+  background:
+    linear-gradient(90deg,
+      transparent 0 .78rem, var(--margin-rule) .78rem calc(.78rem + 1.5px), transparent calc(.78rem + 1.5px)),
+    repeating-linear-gradient(to bottom, transparent 0 27px, var(--ink-rule) 27px 28px),
+    var(--paper);
+  box-shadow:
+    0 12px 28px -10px rgba(0,0,0,.6),
+    0 0 0 1px rgba(0,0,0,.18);
+}
+@media (min-width: 640px) { .demo-card { padding: 1rem 1rem 1.05rem 1.35rem; min-height: 22rem } }
+
+.demo-qhead {
+  display: flex; align-items: center; flex-wrap: wrap; gap: .4rem;
+  padding-bottom: .45rem; margin-bottom: .55rem;
+  border-bottom: 1px solid var(--paper-edge);
+}
+.demo-qchip {
+  font-size: .68rem; font-weight: 800; color: #2a4d28;
+  background: #e8f0e4; border: 1px solid #c2d5bd;
+  padding: .16rem .5rem; border-radius: 999px; white-space: nowrap;
+}
+.demo-qchap {
+  font-size: .72rem; color: var(--ink-soft); min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 50%;
+}
+/* ⚠ The text is read by scripts/test-landing-demo.js as "2 / 5". Style it,
+   never reformat it. */
+.demo-qcount {
+  margin-left: auto; font-family: 'Caveat', cursive;
+  font-size: 1.05rem; font-weight: 700; color: var(--ink-soft); white-space: nowrap;
+}
+
+.demo-progress {
+  height: .3rem; border-radius: 999px; background: rgba(43,38,32,.1);
+  overflow: hidden; margin-bottom: .75rem; flex: 0 0 auto;
+}
+.demo-progress > span {
+  display: block; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #4caf7d, #2e7d4f);
+  transition: width .3s ease;
+}
+
+.demo-q { font-size: 1rem; line-height: 1.55; font-weight: 600; color: var(--ink); margin: 0 0 .8rem }
+@media (min-width: 640px) { .demo-q { font-size: 1.06rem } }
+/* ⚠ The stem is a DIV, not a P. Harder questions carry block markup of their own
+   — a <p> holding two drafts to compare, a <br> between them — and a <p> inside a
+   <p> is closed by the parser, which dropped half the question out of the styled
+   stem. Grades 4-9 preview from L3/L4 now, so this is the ordinary case. */
+.demo-q p { margin: .45rem 0 0 }
+.demo-q p:first-child { margin-top: 0 }
+/* A highlighter stripe rather than a colour change: bold inside a question
+   stem is almost always the word the child has to act on. */
+.demo-q b, .demo-q strong {
+  color: var(--ink); background: linear-gradient(transparent 60%, #ffe9a8 60%);
+}
+
+.demo-opts { display: grid; gap: .4rem }
+.demo-opt {
+  display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left;
+  min-height: 2.85rem; padding: .5rem .65rem;
+  background: var(--paper-2); border: 1.5px solid var(--paper-edge);
+  border-radius: .6rem; color: var(--ink); font-size: .92rem; line-height: 1.35;
+  cursor: pointer; box-shadow: 0 1px 0 rgba(43,38,32,.06);
+  transition: background .13s, border-color .13s, transform .1s, opacity .13s;
+}
+.demo-opt:hover:not(:disabled) { background: #f3f8f1; border-color: #7fa88a }
+.demo-opt:active:not(:disabled) { transform: scale(.985) }
+.demo-opt:disabled { cursor: default }
+.demo-opt-k {
+  flex: 0 0 auto; width: 1.7rem; height: 1.7rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid #c3b9a4; background: #fff;
+  font-size: .78rem; font-weight: 800; color: var(--ink-soft);
+}
+.demo-opt.is-right { background: #e9f7ef; border-color: var(--pen-green); color: #14532d }
+.demo-opt.is-right .demo-opt-k { background: var(--pen-green); border-color: var(--pen-green); color: #fff }
+.demo-opt.is-wrong { background: #fdeceb; border-color: var(--pen-red); color: #7f1d1d }
+.demo-opt.is-wrong .demo-opt-k { background: var(--pen-red); border-color: var(--pen-red); color: #fff }
+.demo-opt.is-dim { opacity: .48 }
+
+.demo-hint-line { margin: .8rem 0 0; font-size: .8rem; line-height: 1.5; color: var(--ink-soft) }
+
+/* The teacher's note in the margin. */
+.demo-verdict {
+  margin-top: .8rem; padding: .65rem .75rem; border-radius: .4rem;
+  border: 1px solid transparent; border-left-width: 4px;
+}
+.demo-verdict.is-right { background: #eefaf2; border-color: #cfe9da; border-left-color: var(--pen-green) }
+.demo-verdict.is-wrong { background: #fdf1f0; border-color: #f0d3d0; border-left-color: var(--pen-red) }
+.demo-verdict-t { margin: 0 0 .28rem; font-size: .88rem; font-weight: 800; color: var(--ink) }
+.demo-verdict-x { margin: 0; font-size: .83rem; line-height: 1.6; color: #453f36 }
+.demo-verdict-x b, .demo-verdict-x strong { color: var(--ink) }
+
+/* The ask, earned rather than timed — see _nudge() in engine/demo.js.
+   Drawn as a sticky note on the paper, because it is an aside to the marking
+   above it, not part of it. */
+.demo-nudge {
+  margin: .7rem 0 0; padding: .6rem .7rem; border-radius: .25rem;
+  background: #fff5cf; border: 1px solid #e6cd8a;
+  font-size: .8rem; line-height: 1.5; color: #5a4412;
+  box-shadow: 0 2px 6px rgba(43,38,32,.14);
+}
+/* ⚠ The one control here that is NOT 44px, deliberately: it is a link inside a
+   sentence, and padding it to 44px would break the line it sits in. The
+   vertical padding still lifts the hit area from 21px to ~34px, and every
+   place it appears also carries a full-size "Register free" button — so a
+   thumb that misses it has a proper target a few millimetres away.
+   ⚠ scripts/test-landing-demo.js exempts this class by name for that reason.
+   Nothing else may be added to the exemption without the same argument.
+   ⚠ It appears on BOTH surfaces, so it takes its colour from the surface
+   rather than carrying one of its own. */
+.demo-nudge-a {
+  display: inline-block; background: none; border: 0; cursor: pointer;
+  padding: .32rem 0; margin: -.32rem 0;
+  color: inherit; font-weight: 800; font-size: inherit;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.demo-nudge .demo-nudge-a { color: #14532d }
+.demo-nudge .demo-nudge-a:hover { color: #0b2f18 }
+.demo-board-foot .demo-nudge-a { color: #fff }
+.demo-board-foot .demo-nudge-a:hover { color: #fde68a }
+
+.demo-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+  min-height: 2.85rem; padding: .6rem 1.1rem; border-radius: .6rem;
+  font-size: .9rem; font-weight: 800; cursor: pointer; border: 1px solid transparent;
+  transition: background .14s, border-color .14s, transform .1s, box-shadow .14s;
+}
+.demo-btn:active { transform: scale(.97) }
+/* Green board ink — this button lives ON THE PAPER. The section CTA outside
+   the frame overrides it below, because indigo is the page's colour, not the
+   classroom's. */
+.demo-btn-go {
+  margin-top: .85rem; width: 100%;
+  background: linear-gradient(180deg, #2f7d4a, #215a34); color: #fff;
+  border-color: #1b4a2a; box-shadow: 0 8px 18px -8px rgba(0,0,0,.7);
+}
+.demo-btn-go:hover { background: linear-gradient(180deg, #379158, #276b3d) }
+.demo-btn-ghost { background: #fff; border-color: var(--paper-edge); color: var(--ink) }
+.demo-btn-ghost:hover { background: #f4efe3 }
+
+/* ── loading / failure — on the paper, so ink ─────────────────────────────*/
+.demo-loading {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .5rem; text-align: center; color: var(--ink-soft); font-size: .88rem;
+}
+.demo-loading p { margin: 0 }
+.demo-fail-t { font-weight: 800; color: var(--ink) }
+.demo-fail-x { font-size: .82rem; color: var(--ink-soft) }
+.demo-spinner {
+  width: 1.6rem; height: 1.6rem; border-radius: 999px;
+  border: 2px solid rgba(43,38,32,.14); border-top-color: var(--pen-green);
+  animation: demoSpin .8s linear infinite;
+}
+@keyframes demoSpin { to { transform: rotate(360deg) } }
+@media (prefers-reduced-motion: reduce) { .demo-spinner { animation-duration: 2.4s } }
+
+/* ── the finish card — a marked sheet ─────────────────────────────────────*/
+.demo-finish {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: .5rem .25rem;
+}
+/* Red pen, in the teacher's hand. */
+.demo-finish-score {
+  font-family: 'Caveat', cursive; font-size: 3.6rem; font-weight: 700;
+  color: var(--pen-red); line-height: 1;
+}
+.demo-finish-score span { font-size: 1.8rem; font-weight: 700; color: rgba(192,57,43,.55) }
+.demo-finish-mood { margin: .35rem 0 0; font-size: 1rem; font-weight: 800; color: var(--ink) }
+.demo-finish-copy {
+  margin: .75rem 0 0; max-width: 24rem;
+  font-size: .87rem; line-height: 1.6; color: #453f36;
+}
+.demo-finish-copy b { color: var(--ink) }
+.demo-finish-actions { display: flex; flex-direction: column; gap: .5rem; width: 100%; max-width: 20rem }
+.demo-finish-actions .demo-btn-go { margin-top: 1rem }
+.demo-finish-note { margin: .85rem 0 0; font-size: .7rem; color: var(--ink-soft) }
+
+/* ── the board's footer line ──────────────────────────────────────────────
+   ⚠ Carries two of the three copy promises the test reads out of #demo:
+   "register free" and "progress". Reword freely, but keep both. */
+.demo-board-foot {
+  margin: .85rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px dashed var(--chalk-line);
+  font-size: .78rem; line-height: 1.6; color: var(--chalk-dim);
+}
+
+/* ── the section CTA, outside the frame and on the page ───────────────────*/
+.demo-cat-cta { margin-top: 1.4rem; text-align: center }
+.demo-cat-cta .demo-btn-go {
+  width: auto; margin-top: 0; padding-left: 1.6rem; padding-right: 1.6rem;
+  border-radius: .85rem; border-color: transparent;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  box-shadow: 0 10px 26px -10px rgba(139,92,246,.95);
+}
+.demo-cat-cta .demo-btn-go:hover { background: linear-gradient(135deg, #818cf8, #c084fc) }
+.demo-cat-cta-note {
+  margin: .6rem auto 0; max-width: 34rem;
+  font-size: .74rem; line-height: 1.5; color: rgba(199,210,254,.6);
+}
+
+/* ── The practice composition's cream page: two shared components measured
+   under 4.5:1 on it (#6b7280 on #f2ebe0 = 4.08). Scoped to the three screens
+   that paint that page, because .back-btn and .sh-subtitle are used on a dozen
+   others with a different background. */
+html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-select) .back-btn { color: #4b5563 }
+html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-select) .sh-subtitle { color: #4b5563 }
+
+/* ⚠ A BOARD INSIDE A BOARD IS NOT A BOARD. .sh-board-frame, .prac-board-mat
+   and the .ta-tab-content panel are all the same framed blackboard now, and
+   two of them were nested on #screen-student-home (board tab) the way they
+   were on #screen-practice-hub. It was invisible only while the dark theme
+   painted both near-black; the moment the board went back to green it read as
+   a picture of a blackboard hung on a blackboard. The inner one gives up its
+   frame and keeps its layout. */
+.ta-tab-content .sh-board-frame,
+.prac-board-mat .sh-board-frame,
+.sh-board-frame .sh-board-frame {
+  background: none; border: 0; border-radius: 0; box-shadow: none; padding: 0;
+}
+
+
+/* ══ THE DECK — a whole panel slides, not a pane inside one ═══════════════
+   ⚠⚠ THE SLIDE IS THE PANEL. The first build put the track INSIDE .demo-board,
+   so every slide wore the same wooden frame and the same green chalkboard and
+   the game read as the chapter list with different words in it. A slide now
+   carries its own SURFACE — .demo-board here, .demo-studio next door — and
+   what slides is the whole thing.
+
+   ⚠ NOT [data-carousel]. That turns a GRID OF CARDS into a swipe track under
+   640px and leaves the grid alone above it; this is one full-width panel at
+   every width, with arrows on desktop. Its dots borrow the .mcar-dot look on
+   purpose: one visual language for "there is more this way".
+
+   ⚠ SCROLL-SNAP, NOT transform. Native swipe and momentum on a phone for free,
+   and no transformed ancestor — which becomes the containing block for every
+   position:fixed descendant.
+
+   ⚠ THE TRACK CLIPS. Each panel carries a deep drop shadow, and the track is
+   overflow:auto/hidden, so .demo-slide pads the panel away from the edges or
+   the shadow is sliced off. That padding is inside the 100% pane (Tailwind
+   preflight sets border-box globally), so it costs no alignment. */
+/* ⚠ A THREE-COLUMN GRID, so the arrows sit BESIDE the panel and cannot land
+   on top of it. Named areas rather than source order, because the track is
+   written between the two buttons in index.html only for reading order. */
+.demo-deck {
+  position: relative;
+  display: grid; align-items: center; column-gap: .45rem; row-gap: .2rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "prev track next"
+    "nav  nav   nav"
+    "dots dots  dots";
+}
+.demo-deck-prev { grid-area: prev }
+.demo-deck-next { grid-area: next }
+.demo-deck-nav  { grid-area: nav }
+.demo-dots      { grid-area: dots }
+
+.demo-track {
+  grid-area: track;
+  display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* ⚠ The height is set in JS — see _fit() in engine/demo.js. align-items:
+     flex-start is load-bearing there: with the default `stretch` each pane
+     grows to the height we just set, so the next measurement reads its own
+     answer back. */
+  transition: height .24s ease;
+}
+.demo-track::-webkit-scrollbar { display: none }
+.demo-slide {
+  flex: 0 0 100%; min-width: 0; scroll-snap-align: start;
+  padding: .4rem .5rem 1.6rem;
+}
+
+/* ⚠ BELOW the track, on the page. Inside a slide it would slide away with it. */
+.demo-deck-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: .4rem; min-width: 0; margin-top: .3rem;
+}
+/* ⚠ SIZE AND CONTRAST ARE THE FEATURE HERE. This was a 2.75rem circle of 6%
+   white holding a ‹, and it was reported as barely visible against the deck
+   behind it. Three things were wrong at once and all three are fixed: the box
+   was small, the fill and border were nearly transparent, and the glyph was a
+   thin piece of text. Change one and it is still hard to see.
+   ⚠ THE 44px FLOOR IS NOT WHAT SETS THIS SIZE. 3.4rem is above the tap-target
+     minimum either way; the constraint is that these sit BESIDE the panel in
+     a three-column grid, so every pixel here is a pixel the panel loses. They
+     are hidden under 720px, where the swipe is the control. */
+.demo-deck-arrow {
+  width: 3.4rem; height: 3.4rem; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  line-height: 1; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.34); background: rgba(255,255,255,.12);
+  border-radius: 999px; color: rgba(233,238,255,.96);
+  box-shadow: 0 1px 6px rgba(15,10,40,.34);
+  transition: background .14s, color .14s, border-color .14s, transform .1s;
+}
+.demo-deck-arrow:hover {
+  background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.5); color: #fff;
+}
+.demo-deck-arrow:active { transform: scale(.94) }
+
+/* ⚠ currentColor throughout, so the disabled and hover states move the whole
+   set square with the button and nothing has to be restated. */
+.dda-ico { width: 1.85rem; height: 1.85rem; display: block; overflow: visible }
+.dda-body {
+  fill: rgba(255,255,255,.14); stroke: currentColor;
+  stroke-width: 2.4; stroke-linejoin: round;
+}
+.dda-ticks {
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; opacity: .75;
+}
+/* ⚠ ONE drawing, mirrored - not two paths to keep in step. The flip is on
+   the SVG and never on the button: .demo-deck-arrow:active already owns
+   transform, and a second rule there would silently cancel the press. */
+.demo-deck-prev .dda-ico { transform: scaleX(-1) }
+/* ⚠ A disabled end-arrow is the one place a disabled control is right: there
+   is genuinely nowhere to go. It keeps its 44px box so the row does not
+   reflow at the ends of the deck. */
+.demo-deck-arrow[disabled] { opacity: .3; cursor: default }
+.demo-deck-arrow[disabled]:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.34); color: rgba(233,238,255,.96) }
+
+/* ⚠ THE HINT PULSE IS A HINT, NOT A BEACON. Two short glows near the end of a
+   5.5s cycle, quiet for the other four seconds — a continuous pulse beside a
+   question a child is reading is just noise. engine/demo.js removes the class
+   the moment the visitor moves the deck themselves, so it never nags someone
+   who has already understood it. */
+.demo-deck-arrow.is-hint { animation: demoArrowHint 5.5s ease-in-out infinite }
+@keyframes demoArrowHint {
+  0%, 60%, 100% { box-shadow: 0 1px 6px rgba(15,10,40,.34); background: rgba(255,255,255,.12) }
+  64%  { box-shadow: 0 0 0 0 rgba(167,139,250,.6); background: rgba(167,139,250,.3) }
+  72%  { box-shadow: 0 0 0 .6rem rgba(167,139,250,0); background: rgba(255,255,255,.12) }
+  76%  { box-shadow: 0 0 0 0 rgba(167,139,250,.6); background: rgba(167,139,250,.3) }
+  84%  { box-shadow: 0 0 0 .6rem rgba(167,139,250,0); background: rgba(255,255,255,.12) }
+}
+@media (prefers-reduced-motion: reduce) { .demo-deck-arrow.is-hint { animation: none } }
+
+/* ⚠ Hidden on a phone, where the swipe IS the control and two 44px buttons
+   beside a full-width panel would squeeze it to nothing. The dots carry the
+   "there is more" signal there. */
+@media (max-width: 720px) {
+  .demo-deck-arrow { display: none }
+  .demo-deck {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "track" "nav" "dots";
+  }
+}
+
+.demo-tabs {
+  flex: 0 1 auto; min-width: 0;
+  display: flex; gap: .35rem; overflow-x: auto; scrollbar-width: none;
+  scroll-snap-type: x proximity; padding: .1rem;
+}
+.demo-tabs::-webkit-scrollbar { display: none }
+/* The tab strip sits on the PAGE, not on a board, so it takes the page's
+   indigo rather than either panel's palette. */
+.demo-tab {
+  flex: 0 0 auto; scroll-snap-align: start;
+  display: flex; flex-direction: column; justify-content: center;
+  min-height: 2.75rem; padding: .3rem .8rem; text-align: left;
+  border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05);
+  border-radius: .7rem; color: rgba(199,210,254,.75); cursor: pointer; line-height: 1.15;
+  transition: background .14s, border-color .14s, color .14s;
+}
+.demo-tab:hover { background: rgba(255,255,255,.13); color: #fff }
+.demo-tab-n { display: none }
+.demo-tab-t { font-size: .82rem; font-weight: 800 }
+.demo-tab-s { font-size: .62rem; font-weight: 600; opacity: .7; white-space: nowrap }
+.demo-tab.is-on {
+  background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff;
+  border-color: rgba(255,255,255,.45);
+  box-shadow: 0 6px 18px -8px rgba(139,92,246,.95);
+}
+.demo-tab.is-on .demo-tab-s { opacity: .85 }
+
+/* Dots: phones only — the tab strip already says where you are on desktop. */
+.demo-dots { display: none }
+@media (max-width: 720px) {
+  .demo-dots { display: flex; justify-content: center; align-items: center; gap: 0; margin-top: -.2rem }
+  /* Same 16x44 trick as .mcar-dot: an 8px dot is an 8px target, and these sit
+     under a swipeable area where a miss scrolls the page instead. box-sizing
+     must be stated — Tailwind preflight sets border-box globally, which would
+     eat the padding rather than add to it. */
+  .demo-dot {
+    box-sizing: content-box; width: .5rem; height: .5rem;
+    /* ⚠ 1.125rem vertical, exactly like .mcar-dot: an 8px dot plus 2x18px of
+       padding is the 44px target. At .9rem it measures 37px and the suite
+       fails it — which is the suite doing its job, not a threshold to lower. */
+    padding: 1.125rem .25rem; border: 0; border-radius: 50%;
+    background: rgba(255,255,255,.28); background-clip: content-box;
+    cursor: pointer; transition: background .2s, width .2s;
+  }
+  /* ⚠ background-COLOR, not the background shorthand: the shorthand resets
+     background-clip to border-box and the dot paints its whole 16x44 padding
+     box as a white slab. Measured: 30x44 instead of 20x8. */
+  .demo-dot.is-on { background-color: #fff; background-clip: content-box; width: 1.25rem; border-radius: 99px }
+}
+
+/* ══ ② PLAY — the quiz studio ═════════════════════════════════════════════
+   ⚠⚠ THE STAGE ITSELF IS THE REAL GAME'S. .bq-stage, .bq-main, .bq-topbar,
+   .bq-lifes/.bq-life, .bq-prize-now, .bq-qwrap/.bq-source/.bq-qcard/.bq-qtext,
+   .bq-opts/.bq-opt/.bq-tag and .bq-ladder/.bq-rung all come from the block
+   engine/minigame.js paints the actual game with. Nothing here restyles them.
+   A preview drawn in its own approximation of the game is a picture of a
+   product that does not exist — and this way a change to the studio reaches
+   the landing page for free.
+   ⚠ NEVER .bq-ladder-peek: that variant is position:fixed, and a fixed strip
+   pinned to the viewport bottom would float over the whole site. The plain
+   ladder hides itself under 600px, which is what the prize line is for.
+   Everything below is the FRAME around that stage, and the few preview-only
+   pieces the real game has no need for. */
+.demo-studio {
+  border-radius: 1.1rem;
+  padding: .9rem .85rem 1rem;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(99,102,241,.22), transparent 62%),
+    linear-gradient(170deg, #111a3d 0%, #0a1030 55%, #070a22 100%);
+  border: 1px solid rgba(147,167,255,.22);
+  box-shadow: 0 22px 48px -18px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.08) inset;
+}
+@media (max-width: 480px) { .demo-studio { padding: .7rem .6rem .8rem; border-radius: .9rem } }
+
+.demo-studio-top {
+  display: flex; align-items: center; gap: .55rem .7rem; flex-wrap: wrap;
+  padding-bottom: .6rem; margin-bottom: .7rem;
+  border-bottom: 1px solid rgba(147,167,255,.18);
+}
+.demo-studio-title {
+  margin: 0; min-width: 0;
+  font-size: 1.05rem; font-weight: 900; line-height: 1.2; color: #fde047;
+  text-shadow: 0 2px 10px rgba(253,224,71,.35);
+}
+@media (max-width: 480px) { .demo-studio-title { font-size: .95rem } }
+.demo-preview-tag-gold {
+  color: #fde047; background: rgba(253,224,71,.14); border-color: rgba(253,224,71,.42);
+}
+
+/* The grade rail on navy rather than on chalk. Same control, same host
+   ([data-demo-grades]), different surface. */
+.demo-rail-studio { margin-bottom: .7rem }
+.demo-rail-studio .demo-rail-l { font-family: inherit; font-size: .68rem; font-weight: 800;
+  letter-spacing: .09em; text-transform: uppercase; color: rgba(199,210,254,.6); line-height: 2.75rem }
+.demo-rail-studio .demo-grade-chip {
+  border-color: rgba(147,167,255,.26); background: rgba(147,167,255,.08); color: #c7d2fe;
+}
+.demo-rail-studio .demo-grade-chip:hover { background: rgba(147,167,255,.2); color: #fff }
+.demo-rail-studio .demo-grade-chip.is-on {
+  background: linear-gradient(135deg, #f59e0b, #d97706); border-color: #fde047; color: #1f1300;
+  box-shadow: 0 6px 18px -6px rgba(245,158,11,.9);
+}
+@media (max-width: 640px) { .demo-rail-studio .demo-rail-l { line-height: 1.5 } }
+
+.demo-studio-foot {
+  margin: .8rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px solid rgba(147,167,255,.18);
+  font-size: .76rem; line-height: 1.6; color: rgba(199,210,254,.72);
+}
+.demo-studio-foot .demo-nudge-a { color: #fde047 }
+.demo-studio-foot .demo-nudge-a:hover { color: #fff }
+
+/* ⚠ A LOCKED lifeline is not a USED one. .bq-life.used means "you spent it"
+   and paints an ✕ through it; these were never available. They stay real
+   buttons — a child WILL tap one, and a disabled control is silent to a screen
+   reader and invites a tap that does nothing. */
+.bq-life-lock { opacity: .55; position: relative }
+.bq-life-lock:hover { opacity: .85 }
+.bq-life-pad { position: absolute; top: 2px; right: 3px; font-size: .58rem; font-style: normal }
+
+.demo-bq-jump {
+  margin: 0 0 .6rem; padding: .45rem .6rem; border-radius: .4rem;
+  background: rgba(124,58,237,.22); border: 1px solid rgba(167,139,250,.45);
+  font-size: .76rem; line-height: 1.45; color: #ddd6fe; text-align: center;
+}
+.demo-bq-jump b { color: #fff }
+
+.demo-bq-note {
+  margin: .6rem 0 0; padding: .55rem .7rem; border-radius: .5rem;
+  background: rgba(253,224,71,.1); border: 1px solid rgba(253,224,71,.32);
+  font-size: .78rem; line-height: 1.5; color: #fde68a;
+}
+.demo-bq-note .demo-nudge-a { color: #fff }
+
+.demo-bq-verdict {
+  margin-top: .7rem; padding: .65rem .75rem; border-radius: .6rem;
+  border: 1px solid transparent; border-left-width: 4px;
+}
+.demo-bq-verdict.is-right { background: rgba(22,163,74,.16); border-color: rgba(74,222,128,.4); border-left-color: #4ade80 }
+.demo-bq-verdict.is-wrong { background: rgba(220,38,38,.16); border-color: rgba(248,113,113,.4); border-left-color: #f87171 }
+.demo-bq-verdict-t { margin: 0 0 .28rem; font-size: .88rem; font-weight: 800; color: #fff }
+.demo-bq-verdict-x { margin: 0; font-size: .82rem; line-height: 1.6; color: rgba(226,232,240,.88) }
+.demo-bq-verdict-x b, .demo-bq-verdict-t b { color: #fde047 }
+
+.demo-bq-soft { margin: .6rem 0 0; font-size: .76rem; line-height: 1.5; color: rgba(199,210,254,.66); text-align: center }
+
+/* The wall. Same stage, the ladder still beside it, so it reads as the game
+   pausing rather than as a different screen. */
+.demo-bq-end { align-items: center; text-align: center }
+.demo-bq-won {
+  font-size: 2.6rem; font-weight: 900; line-height: 1.1; color: #fde047;
+  text-shadow: 0 3px 18px rgba(253,224,71,.45);
+}
+.demo-bq-end-t { margin: .2rem 0 0; font-size: .9rem; font-weight: 800; color: #e0e7ff }
+.demo-bq-end-x { margin: .7rem 0 0; max-width: 26rem; font-size: .84rem; line-height: 1.6; color: rgba(226,232,240,.85) }
+.demo-bq-end-x b { color: #fff }
+.demo-bq-end-actions { display: flex; flex-direction: column; gap: .5rem; width: 100%; max-width: 20rem; margin-top: .9rem }
+
+.demo-btn-gold {
+  width: 100%; margin-top: .8rem;
+  background: linear-gradient(160deg, #f59e0b, #d97706); color: #1f1300;
+  border-color: #fde047; box-shadow: 0 8px 20px -8px rgba(245,158,11,.9);
+}
+.demo-btn-gold:hover { background: linear-gradient(160deg, #fbbf24, #ea8c06) }
+.demo-btn-dark {
+  background: rgba(255,255,255,.08); border-color: rgba(147,167,255,.3); color: #e0e7ff;
+}
+.demo-btn-dark:hover { background: rgba(255,255,255,.16) }
+
+/* ⚠ The board is now a slide's PANEL, not the section's only child. Its own
+   margins would fight .demo-slide's padding. */
+.demo-board { margin: 0 }
+
+/* ⚠ The preview centres the question against the ladder; the real game does
+   not, because it also carries a poll panel, a message row and a walk-away
+   button under the options. With three rungs and none of that, .bq-main ended
+   at ~535px beside a 705px ladder and left a slab of empty navy. Scoped to
+   #demo-play so the game itself is untouched. */
+#demo-play .bq-stage { align-items: stretch }
+#demo-play .bq-main { justify-content: center }
+
+/* ══ ③ BUILD A PAPER — the desk ════════════════════════════════════════════
+   A third surface, and deliberately neither of the other two: a sheet of
+   graph paper on a desk, with the form on the left and the paper being written
+   on the right. The classroom board is where a child practises and the studio
+   is where they play; this one is for the adult holding the phone. */
+.demo-mk {
+  border-radius: 1.1rem;
+  padding: .9rem .85rem 1rem;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, rgba(43,38,32,.045) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, rgba(43,38,32,.045) 23px 24px),
+    linear-gradient(170deg, #f7f2e6 0%, #efe7d5 100%);
+  border: 1px solid #ddd0b2;
+  box-shadow: 0 22px 48px -18px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.6) inset;
+  color: var(--ink);
+}
+@media (max-width: 480px) { .demo-mk { padding: .7rem .6rem .8rem; border-radius: .9rem } }
+
+.demo-mk-top {
+  display: flex; align-items: center; gap: .55rem .7rem; flex-wrap: wrap;
+  padding-bottom: .6rem; margin-bottom: .7rem;
+  border-bottom: 1px solid rgba(43,38,32,.16);
+}
+.demo-mk-heading { margin: 0; min-width: 0; font-size: 1.05rem; font-weight: 900; line-height: 1.2; color: #2a4d28 }
+@media (max-width: 480px) { .demo-mk-heading { font-size: .95rem } }
+.demo-preview-tag-ink { color: #6b5310; background: #fdf3d6; border-color: #e0bf6a }
+
+/* The grade rail on paper. Same host, same choice — a third surface. */
+.demo-rail-ink { margin-bottom: .75rem }
+.demo-rail-ink .demo-rail-l {
+  font-family: inherit; font-size: .68rem; font-weight: 800; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ink-soft); line-height: 2.75rem;
+}
+.demo-rail-ink .demo-grade-chip { border-color: #d8cbae; background: #fffdf7; color: #5d5647 }
+.demo-rail-ink .demo-grade-chip:hover { background: #f4eddc; color: var(--ink) }
+.demo-rail-ink .demo-grade-chip.is-on {
+  background: linear-gradient(135deg, #2f7d4a, #215a34); border-color: #1b4a2a; color: #fff;
+  box-shadow: 0 6px 16px -6px rgba(33,90,52,.8);
+}
+@media (max-width: 640px) { .demo-rail-ink .demo-rail-l { line-height: 1.5 } }
+
+.demo-mk-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .8rem }
+@media (min-width: 900px) { .demo-mk-grid { grid-template-columns: 17.5rem minmax(0, 1fr); gap: 1rem } }
+
+.demo-mk-form { min-width: 0 }
+.demo-mk-h {
+  margin: .85rem 0 .4rem; font-size: .68rem; font-weight: 900;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft);
+  display: flex; align-items: baseline; gap: .4rem;
+}
+.demo-mk-form > .demo-mk-h:first-child { margin-top: 0 }
+.demo-mk-count { margin-left: auto; font-size: .66rem; font-weight: 700; letter-spacing: 0; text-transform: none }
+
+/* ⚠ auto-fit columns, not a wrapping chip row — the same raggedness fix the
+   subject rail on the board needed. */
+.demo-mk-subjs { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: .35rem }
+.demo-mk-subj {
+  display: flex; align-items: center; gap: .4rem; min-width: 0;
+  min-height: 2.75rem; padding: .3rem .55rem; text-align: left;
+  border: 1px solid #d8cbae; background: #fffdf7; border-radius: .55rem;
+  color: #5d5647; font-size: .78rem; font-weight: 700; line-height: 1.2; cursor: pointer;
+  transition: background .13s, border-color .13s;
+}
+.demo-mk-subj:hover { background: #f4eddc; color: var(--ink) }
+.demo-mk-subj > span:last-child { min-width: 0; overflow-wrap: anywhere }
+.demo-mk-subj.is-on { background: #e6efe1; border-color: #2a4d28; color: #23401f }
+
+.demo-mk-types { display: flex; flex-direction: column; gap: .3rem }
+.demo-mk-type {
+  display: flex; align-items: flex-start; gap: .5rem; width: 100%; text-align: left;
+  min-height: 2.75rem; padding: .45rem .55rem;
+  border: 1px solid #d8cbae; background: #fffdf7; border-radius: .55rem;
+  color: var(--ink); cursor: pointer; transition: background .13s, border-color .13s;
+}
+.demo-mk-type:hover { background: #f4eddc }
+.demo-mk-type.is-on { background: #e6efe1; border-color: #2a4d28 }
+.demo-mk-type-i { flex: 0 0 auto; font-size: 1.05rem; line-height: 1.2 }
+.demo-mk-type-t { min-width: 0 }
+.demo-mk-type-t b { display: block; font-size: .8rem; font-weight: 800 }
+.demo-mk-type-t small { display: block; font-size: .66rem; line-height: 1.35; color: var(--ink-soft) }
+
+.demo-mk-chs { display: flex; flex-direction: column; gap: .18rem; max-height: 13rem; overflow-y: auto }
+.demo-mk-ch {
+  display: flex; align-items: center; gap: .5rem; width: 100%; text-align: left;
+  min-height: 2.5rem; padding: .25rem .4rem; border-radius: .4rem;
+  border: 1px solid transparent; background: none; cursor: pointer;
+  font-size: .78rem; line-height: 1.3; color: #5d5647; min-width: 0;
+}
+.demo-mk-ch:hover { background: rgba(43,38,32,.06) }
+.demo-mk-box {
+  flex: 0 0 auto; width: 1.1rem; height: 1.1rem; border-radius: .25rem;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid #b9ab8c; background: #fffdf7;
+  font-size: .72rem; font-weight: 900; color: #fff;
+}
+.demo-mk-ch-n { min-width: 0; overflow-wrap: anywhere }
+.demo-mk-ch.is-on { color: var(--ink) }
+.demo-mk-ch.is-on .demo-mk-box { background: #2a4d28; border-color: #2a4d28 }
+
+/* ── the sheet ────────────────────────────────────────────────────────────*/
+.demo-mk-sheet-wrap { min-width: 0 }
+.demo-mk-sheet {
+  display: flex; flex-direction: column; min-height: 20rem; height: 100%;
+  padding: 1rem .95rem 1rem 1.2rem;
+  background:
+    linear-gradient(90deg, transparent 0 .8rem, rgba(206,98,98,.6) .8rem calc(.8rem + 1.5px), transparent calc(.8rem + 1.5px)),
+    var(--paper);
+  border: 1px solid rgba(43,38,32,.2); border-radius: .35rem;
+  box-shadow: 0 12px 28px -12px rgba(0,0,0,.45);
+}
+.demo-mk-head { padding-bottom: .6rem; margin-bottom: .7rem; border-bottom: 2px solid rgba(43,38,32,.5); text-align: center }
+.demo-mk-title { margin: 0; font-size: 1rem; font-weight: 900; color: var(--ink); letter-spacing: .01em }
+.demo-mk-sub { margin: .15rem 0 0; font-size: .82rem; font-weight: 700; color: #2a4d28 }
+.demo-mk-meta { margin: .2rem 0 0; font-size: .7rem; color: var(--ink-soft) }
+
+.demo-mk-blank { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .3rem }
+.demo-mk-blank-t { margin: 0; font-family: 'Caveat', cursive; font-size: 1.5rem; color: var(--ink-soft) }
+.demo-mk-blank-x { margin: 0; max-width: 22rem; font-size: .78rem; line-height: 1.55; color: var(--ink-soft) }
+
+.demo-mk-body { flex: 1 1 auto; min-height: 0 }
+.demo-mk-q { margin-bottom: .8rem }
+.demo-mk-qn { margin: 0 0 .35rem; font-size: .86rem; font-weight: 700; line-height: 1.45; color: var(--ink) }
+.demo-mk-opts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .2rem .8rem }
+.demo-mk-opts li { display: flex; gap: .4rem; font-size: .78rem; line-height: 1.45; color: #453f36 }
+.demo-mk-opts li span { flex: 0 0 auto; font-weight: 800; color: var(--ink-soft) }
+.demo-mk-none { margin: 0; font-size: .8rem; line-height: 1.6; color: var(--ink-soft) }
+
+/* ⚠ The wall sits ON the sheet, under the two printed questions, so what is
+   being withheld is visibly the REST OF A PAPER THAT EXISTS rather than a
+   locked door where a paper might have been. */
+.demo-mk-wall {
+  margin-top: auto; padding-top: .8rem;
+  border-top: 1px dashed rgba(43,38,32,.3);
+  text-align: center;
+}
+.demo-mk-wall-t { margin: 0; font-size: .85rem; font-weight: 800; color: var(--ink) }
+.demo-mk-wall-x { margin: .3rem auto .7rem; max-width: 24rem; font-size: .76rem; line-height: 1.55; color: var(--ink-soft) }
+.demo-mk-wall .demo-btn { width: 100%; max-width: 20rem; margin: 0 auto .4rem }
+
+.demo-btn-ink {
+  background: linear-gradient(180deg, #2f7d4a, #215a34); color: #fff;
+  border-color: #1b4a2a; box-shadow: 0 8px 18px -8px rgba(0,0,0,.5);
+}
+.demo-btn-ink:hover { background: linear-gradient(180deg, #379158, #276b3d) }
+.demo-btn-paper { background: #fffdf7; border-color: #d8cbae; color: var(--ink) }
+.demo-btn-paper:hover { background: #f4eddc }
+.demo-mk-sheet.is-blank .demo-btn-ink { width: 100%; max-width: 20rem; margin: .9rem auto 0 }
+
+.demo-mk-foot {
+  margin: .8rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px solid rgba(43,38,32,.16);
+  font-size: .76rem; line-height: 1.6; color: var(--ink-soft);
+}
+.demo-mk-foot .demo-nudge-a { color: #2a4d28 }
+.demo-mk-foot .demo-nudge-a:hover { color: #14532d }
+
+/* ══ ④ EXPERIMENT — the lab bench ══════════════════════════════════════════
+   ⚠ THESE ARE NOT THE REAL LAB'S CLASSES, and that is deliberate. The Science
+   Labs' stylesheet is engine/labs/labs.css, which is <link>ed on demand and is
+   NOT part of style.css. Linking it here would drag in `.lab-overlay`
+   (position:fixed; inset:0; z-index:1000) and `.lab-top` (position:sticky) —
+   either of which would smear across the whole landing page from inside a
+   horizontally scrolling track. The palette below matches the real lab's
+   (--lab-bg #EDF3F2 / --lab-ink #14211D) so the preview still looks like the
+   product; the rules are our own.
+   ⚠ It is a LIGHT surface on a dark page, like the real lab, which is why
+   every colour here is stated rather than inherited. */
+.demo-lab {
+  border-radius: 1.1rem;
+  padding: .9rem .85rem 1rem;
+  background: linear-gradient(170deg, #f4f8f7 0%, #e3edeb 100%);
+  border: 1px solid #b9cfca;
+  box-shadow: 0 22px 48px -18px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.7) inset;
+  color: #14211d;
+}
+@media (max-width: 480px) { .demo-lab { padding: .7rem .6rem .8rem; border-radius: .9rem } }
+
+.demo-lab-top {
+  display: flex; align-items: center; gap: .5rem .7rem; flex-wrap: wrap;
+  padding-bottom: .6rem; margin-bottom: .7rem; border-bottom: 1px solid rgba(20,33,29,.14);
+}
+.demo-lab-heading { margin: 0; min-width: 0; font-size: 1.05rem; font-weight: 900; line-height: 1.2; color: #0f5132 }
+@media (max-width: 480px) { .demo-lab-heading { font-size: .95rem } }
+.demo-lab-grade {
+  margin-left: auto; font-size: .68rem; font-weight: 800; letter-spacing: .04em;
+  color: #2a6b52; background: #d7ece3; border: 1px solid #a9d0c2;
+  border-radius: 999px; padding: .2rem .6rem; white-space: nowrap;
+}
+.demo-preview-tag-lab { color: #0f5132; background: #d7ece3; border-color: #a9d0c2 }
+
+/* ⚠ Six stops, the real ones. Check and Done are SHOWN and marked shut rather
+   than hidden: a visitor should see the whole shape of an experiment,
+   including the marked quiz this preview does not give them. */
+.demo-lab-strip {
+  list-style: none; margin: 0 0 .75rem; padding: 0;
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .25rem;
+}
+.demo-lab-stop {
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  padding: .3rem .15rem; border-radius: .45rem;
+  background: rgba(20,33,29,.05); border: 1px solid transparent;
+  font-size: .6rem; color: #5b6b66; text-align: center; line-height: 1.2;
+}
+.demo-lab-stop-n {
+  width: 1.2rem; height: 1.2rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(20,33,29,.12); font-size: .62rem; font-weight: 800; color: #3d4f4a;
+}
+.demo-lab-stop-t { overflow-wrap: anywhere }
+.demo-lab-stop.is-done { background: #dff0e8; color: #24614a }
+.demo-lab-stop.is-done .demo-lab-stop-n { background: #2f7d4a; color: #fff }
+.demo-lab-stop.is-now { background: #fff; border-color: #2f7d4a; color: #14211d; font-weight: 800 }
+.demo-lab-stop.is-now .demo-lab-stop-n { background: #2f7d4a; color: #fff }
+.demo-lab-stop.is-shut { opacity: .55; border-style: dashed; border-color: rgba(20,33,29,.25) }
+
+.demo-lab-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .7rem }
+/* ⚠ stretch, not start: the bench is 20 rungs of shelf and the phase card is
+   four lines, so  left a slab of empty panel under the card — and the
+   deck is as tall as its tallest slide, so that slab would show on every other
+   slide too. The card fills its column instead. */
+@media (min-width: 900px) {
+  .demo-lab-grid { grid-template-columns: minmax(0, 1fr) 19rem; gap: 1rem; align-items: stretch }
+  .demo-lab-left { display: flex }
+  .demo-lab-card { flex: 1; display: flex; flex-direction: column }
+}
+
+.demo-lab-card {
+  background: #fff; border: 1px solid #c9dcd7; border-radius: .8rem;
+  padding: .85rem .9rem; box-shadow: 0 2px 8px rgba(20,33,29,.08);
+}
+.demo-lab-kicker {
+  margin: 0 0 .3rem; font-size: .66rem; font-weight: 900; letter-spacing: .09em;
+  text-transform: uppercase; color: #2a6b52;
+}
+.demo-lab-title { margin: 0 0 .4rem; font-size: 1.05rem; font-weight: 900; line-height: 1.25; color: #14211d }
+.demo-lab-q { margin: 0 0 .55rem; font-size: .98rem; font-weight: 700; line-height: 1.4; color: #14211d }
+.demo-lab-aim { margin: 0 0 .2rem; font-size: .85rem; line-height: 1.55; color: #40524d }
+.demo-lab-hint { margin: .55rem 0 0; font-size: .76rem; line-height: 1.5; color: #6a7a75; font-style: italic }
+.demo-lab-wrong {
+  margin: .55rem 0 0; padding: .5rem .6rem; border-radius: .5rem;
+  background: #fdf0ef; border: 1px solid #edc4c0; color: #7f2a24;
+  font-size: .78rem; line-height: 1.5;
+}
+
+.demo-lab-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .4rem }
+.demo-lab-opt {
+  display: flex; align-items: center; gap: .5rem; min-width: 0;
+  min-height: 2.85rem; padding: .4rem .6rem; text-align: left;
+  border: 1.5px solid #c9dcd7; background: #f7fbfa; border-radius: .6rem;
+  color: #14211d; font-size: .85rem; font-weight: 700; line-height: 1.3; cursor: pointer;
+  transition: background .13s, border-color .13s, transform .1s;
+}
+.demo-lab-opt:hover { background: #e7f3ef; border-color: #2f7d4a }
+.demo-lab-opt:active { transform: scale(.98) }
+.demo-lab-opt-i { flex: 0 0 auto; font-size: 1.15rem; line-height: 1 }
+
+/* ── the bench ────────────────────────────────────────────────────────────*/
+.demo-lab-bench {
+  background: #eaf3f0; border: 1px solid #c9dcd7; border-radius: .8rem; padding: .7rem;
+}
+.demo-lab-magnet {
+  display: flex; align-items: center; gap: .6rem; min-height: 3.4rem;
+  padding: .5rem .6rem; margin-bottom: .6rem;
+  background: #fff; border: 1px dashed #9ec4b6; border-radius: .6rem;
+}
+.demo-lab-magnet-i { font-size: 1.9rem; line-height: 1; flex: 0 0 auto }
+.demo-lab-stuck { display: flex; flex-wrap: wrap; gap: .3rem; min-width: 0 }
+.demo-lab-chip {
+  font-size: 1.3rem; line-height: 1;
+  animation: demoLabSnap .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes demoLabSnap { from { transform: translateY(14px) scale(.7); opacity: 0 } to { transform: none; opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .demo-lab-chip { animation: none } }
+.demo-lab-empty { font-size: .74rem; color: #8b9a95; font-style: italic }
+
+/* ⚠ Every object stays a BUTTON, disabled when it is not one of this step's
+   choices — the real bench glows the live ones the same way. A disabled object
+   keeps its 44px box so the shelf does not reflow between steps. */
+.demo-lab-shelf { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: .35rem }
+.demo-lab-obj {
+  display: flex; align-items: center; gap: .4rem; min-width: 0;
+  min-height: 2.75rem; padding: .3rem .45rem; text-align: left;
+  border: 1px solid #cfdedb; background: #fff; border-radius: .5rem;
+  color: #40524d; font-size: .72rem; font-weight: 700; line-height: 1.2;
+  cursor: default; transition: background .13s, border-color .13s, box-shadow .13s;
+}
+.demo-lab-obj-i { flex: 0 0 auto; font-size: 1.1rem; line-height: 1 }
+.demo-lab-obj-n { min-width: 0; overflow-wrap: anywhere }
+.demo-lab-obj[disabled] { opacity: .5 }
+.demo-lab-obj.is-live {
+  cursor: pointer; color: #14211d; border-color: #2f7d4a; background: #f2fbf6;
+  box-shadow: 0 0 0 2px rgba(47,125,74,.18);
+}
+.demo-lab-obj.is-live:hover { background: #e2f5ea }
+.demo-lab-floor { margin: .55rem 0 0; font-size: .74rem; color: #6a7a75 }
+
+/* ── see / the wall ──────────────────────────────────────────────────────*/
+.demo-lab-pred { margin: 0 0 .5rem; font-size: .85rem; font-weight: 800 }
+.demo-lab-pred.is-right { color: #1a7f4b }
+.demo-lab-pred.is-wrong { color: #8a5a10 }
+.demo-lab-saw { margin: 0 0 .5rem; font-size: .88rem; line-height: 1.55; color: #14211d }
+.demo-lab-learn {
+  margin: 0 0 .5rem; padding: .55rem .65rem; border-radius: .5rem;
+  background: #e7f3ef; border-left: 4px solid #2f7d4a;
+  font-size: .84rem; line-height: 1.55; color: #14211d;
+}
+.demo-lab-exam { margin: 0; font-size: .78rem; line-height: 1.5; color: #40524d }
+
+.demo-lab-wall { margin-top: .8rem; padding-top: .75rem; border-top: 1px dashed rgba(20,33,29,.25); text-align: center }
+.demo-lab-wall-t { margin: 0; font-size: .85rem; font-weight: 800; color: #14211d }
+.demo-lab-wall-x { margin: .3rem auto .7rem; max-width: 26rem; font-size: .78rem; line-height: 1.55; color: #40524d }
+.demo-lab-wall .demo-btn { width: 100%; max-width: 20rem; margin: 0 auto .4rem }
+
+.demo-btn-lab {
+  background: linear-gradient(180deg, #2f7d4a, #215a34); color: #fff;
+  border-color: #1b4a2a; box-shadow: 0 8px 18px -8px rgba(0,0,0,.45);
+}
+.demo-btn-lab:hover { background: linear-gradient(180deg, #379158, #276b3d) }
+.demo-lab-card > .demo-btn-lab { width: 100%; max-width: 16rem; margin-top: .8rem }
+.demo-btn-lab-ghost { background: #fff; border-color: #c9dcd7; color: #14211d }
+.demo-btn-lab-ghost:hover { background: #e7f3ef }
+
+.demo-lab-foot {
+  margin: .8rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px solid rgba(20,33,29,.14);
+  font-size: .76rem; line-height: 1.6; color: #40524d;
+}
+.demo-lab-foot .demo-nudge-a { color: #0f5132 }
+.demo-lab-foot .demo-nudge-a:hover { color: #14211d }
+
+/* ══ ⑤ PAST PAPERS — the shelf ═════════════════════════════════════════════
+   A fifth surface: dark wood, because the thing on it is a bookshelf. */
+.demo-shelf {
+  border-radius: 1.1rem; padding: .9rem .85rem 1rem;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 7px, rgba(0,0,0,.05) 7px 8px),
+    linear-gradient(170deg, #5a3a1c 0%, #3d2611 55%, #2a1a0b 100%);
+  border: 1px solid #7a5228;
+  box-shadow: 0 22px 48px -18px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.12) inset;
+  color: #f4e9d8;
+}
+@media (max-width: 480px) { .demo-shelf { padding: .7rem .6rem .8rem; border-radius: .9rem } }
+
+.demo-shelf-top {
+  display: flex; align-items: center; gap: .55rem .7rem; flex-wrap: wrap;
+  padding-bottom: .6rem; margin-bottom: .7rem; border-bottom: 1px solid rgba(244,233,216,.18);
+}
+.demo-shelf-heading { margin: 0; min-width: 0; font-size: 1.05rem; font-weight: 900; line-height: 1.2; color: #f7c873 }
+@media (max-width: 480px) { .demo-shelf-heading { font-size: .95rem } }
+.demo-preview-tag-wood { color: #f7c873; background: rgba(247,200,115,.14); border-color: rgba(247,200,115,.4) }
+
+.demo-rail-wood { margin-bottom: .75rem }
+.demo-rail-wood .demo-rail-l {
+  font-family: inherit; font-size: .68rem; font-weight: 800; letter-spacing: .09em;
+  text-transform: uppercase; color: rgba(244,233,216,.6); line-height: 2.75rem;
+}
+.demo-rail-wood .demo-grade-chip { border-color: rgba(244,233,216,.22); background: rgba(244,233,216,.07); color: rgba(244,233,216,.8) }
+.demo-rail-wood .demo-grade-chip:hover { background: rgba(244,233,216,.16); color: #fff }
+.demo-rail-wood .demo-grade-chip.is-on {
+  background: linear-gradient(135deg, #f7c873, #d79a3c); border-color: #ffe0a3; color: #3a2407;
+  box-shadow: 0 6px 16px -6px rgba(215,154,60,.9);
+}
+@media (max-width: 640px) { .demo-rail-wood .demo-rail-l { line-height: 1.5 } }
+
+.demo-shelf-stat { margin: 0; font-size: .95rem; font-weight: 700; color: #f4e9d8 }
+.demo-shelf-stat b { font-size: 1.25rem; font-weight: 900; color: #f7c873 }
+.demo-shelf-sub { margin: .15rem 0 .75rem; font-size: .72rem; color: rgba(244,233,216,.62) }
+
+/* ⚠ A shelf, so the books sit on a rail with a lip. The first cover is the one
+   genuinely open — it carries 📖 where the others carry 🔒, and the note under
+   the rack says which. Never draw all of them locked: the PDFs are public
+   static files and the claim would be false. */
+.demo-shelf-rack {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: .5rem; padding-bottom: .7rem; border-bottom: 5px solid rgba(0,0,0,.35);
+  box-shadow: 0 6px 0 -1px rgba(255,255,255,.06);
+}
+.demo-shelf-book {
+  position: relative; display: flex; align-items: stretch; gap: .45rem;
+  min-height: 4.6rem; padding: .45rem .5rem .45rem .35rem; text-align: left;
+  border: 1px solid rgba(0,0,0,.35); border-radius: .2rem .45rem .45rem .2rem;
+  background: linear-gradient(160deg, #f6f1e4, #e3d9c3);
+  color: #2b2620; cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,.45);
+  transition: transform .14s, box-shadow .14s;
+}
+.demo-shelf-book:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,.5) }
+.demo-shelf-spine { flex: 0 0 auto; width: .35rem; border-radius: .15rem; background: #8d6a34 }
+.demo-shelf-book.is-open .demo-shelf-spine { background: #2f7d4a }
+.demo-shelf-book-b { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: .1rem }
+.demo-shelf-book-y { font-family: 'Caveat', cursive; font-size: 1.15rem; font-weight: 700; line-height: 1; color: #6b5310 }
+.demo-shelf-book-s { font-size: .76rem; font-weight: 800; line-height: 1.2; overflow-wrap: anywhere }
+.demo-shelf-book-t { font-size: .64rem; color: #6b6357 }
+.demo-shelf-book-i { flex: 0 0 auto; align-self: flex-start; font-size: .82rem; opacity: .7 }
+.demo-shelf-book.is-open .demo-shelf-book-i { opacity: 1 }
+
+.demo-shelf-none { margin: 0; padding: 1.2rem .5rem; font-size: .84rem; line-height: 1.6; color: rgba(244,233,216,.72); text-align: center }
+.demo-shelf-note {
+  margin: .8rem 0 0; padding: .55rem .7rem; border-radius: .5rem;
+  background: rgba(247,200,115,.12); border: 1px solid rgba(247,200,115,.34);
+  font-size: .78rem; line-height: 1.5; color: #f7dfb2;
+}
+.demo-shelf-note .demo-nudge-a { color: #fff }
+.demo-shelf-open-note { margin: .6rem 0 0; font-size: .72rem; line-height: 1.5; color: rgba(244,233,216,.58) }
+.demo-shelf-msg { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 2.5rem 1rem; text-align: center }
+.demo-shelf-msg-t { margin: 0; font-weight: 800; color: #f4e9d8 }
+.demo-shelf-msg-x { margin: 0; font-size: .82rem; color: rgba(244,233,216,.7) }
+
+.demo-shelf-foot {
+  margin: .8rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px solid rgba(244,233,216,.18);
+  font-size: .76rem; line-height: 1.6; color: rgba(244,233,216,.7);
+}
+.demo-shelf-foot .demo-nudge-a { color: #f7c873 }
+.demo-shelf-foot .demo-nudge-a:hover { color: #fff }
+
+/* ══ ⑥ FOR PARENTS — a sample report ══════════════════════════════════════
+   The sixth surface, and the quietest: this one is read, not played with. */
+.demo-pv {
+  border-radius: 1.1rem; padding: .9rem .85rem 1rem;
+  background: linear-gradient(170deg, #1b2440 0%, #141a31 55%, #0f1425 100%);
+  border: 1px solid rgba(148,163,210,.24);
+  box-shadow: 0 22px 48px -18px rgba(0,0,0,.75), 0 1px 0 rgba(255,255,255,.07) inset;
+  color: #e6ebff;
+}
+@media (max-width: 480px) { .demo-pv { padding: .7rem .6rem .8rem; border-radius: .9rem } }
+.demo-pv-top {
+  display: flex; align-items: center; gap: .55rem .7rem; flex-wrap: wrap;
+  padding-bottom: .6rem; margin-bottom: .7rem; border-bottom: 1px solid rgba(148,163,210,.2);
+}
+.demo-pv-heading { margin: 0; min-width: 0; font-size: 1.05rem; font-weight: 900; line-height: 1.2; color: #a5c9ff }
+@media (max-width: 480px) { .demo-pv-heading { font-size: .95rem } }
+.demo-preview-tag-pv { color: #a5c9ff; background: rgba(165,201,255,.14); border-color: rgba(165,201,255,.4) }
+
+/* ⚠ The sample label is not fine print. A landing page showing a child's
+   report has to say, before anything else, that the child is invented. */
+.demo-pv-sample {
+  margin: 0 0 .8rem; padding: .55rem .7rem; border-radius: .5rem;
+  background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.34);
+  font-size: .78rem; line-height: 1.55; color: #fde68a;
+}
+
+.demo-pv-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .7rem }
+@media (min-width: 900px) { .demo-pv-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; align-items: start } }
+
+.demo-pv-card {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(148,163,210,.22);
+  border-radius: .8rem; padding: .75rem .8rem;
+}
+.demo-pv-head { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; margin-bottom: .5rem }
+.demo-pv-h { margin: 0; font-size: .88rem; font-weight: 900; color: #fff }
+.demo-pv-vs { margin-left: auto; font-size: .66rem; color: rgba(199,210,254,.6) }
+.demo-pv-sub { margin: -.25rem 0 .55rem; font-size: .72rem; color: rgba(199,210,254,.7) }
+
+.demo-pv-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .35rem }
+.demo-pv-tile {
+  display: flex; flex-direction: column; align-items: center; gap: .1rem;
+  padding: .5rem .3rem; border-radius: .5rem; background: rgba(255,255,255,.06);
+}
+.demo-pv-num { font-size: 1.1rem; font-weight: 900; color: #fff; line-height: 1 }
+.demo-pv-lbl { font-size: .62rem; font-weight: 700; color: rgba(199,210,254,.66); text-align: center }
+.demo-pv-say { margin: .6rem 0 0; font-size: .8rem; line-height: 1.55; color: #d7e2ff }
+.demo-pv-say-alt { margin: .5rem 0 0; font-size: .72rem; line-height: 1.55; color: rgba(199,210,254,.62) }
+
+.demo-pv-subs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .3rem }
+.demo-pv-sub-row { display: flex; align-items: center; gap: .45rem; min-width: 0; font-size: .78rem }
+.demo-pv-sub-i { flex: 0 0 auto; font-size: 1rem; line-height: 1 }
+.demo-pv-sub-n { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column }
+.demo-pv-sub-n b { font-weight: 800; color: #fff }
+.demo-pv-sub-n small { font-size: .64rem; color: rgba(199,210,254,.6) }
+.demo-pv-sub-p { flex: 0 0 auto; font-weight: 900; color: #fff; font-size: .8rem }
+.demo-pv-tag { flex: 0 0 auto; font-size: .58rem; font-weight: 900; border-radius: 999px; padding: .1rem .4rem; white-space: nowrap }
+.demo-pv-tag-strong { background: rgba(34,197,94,.2); color: #86efac }
+.demo-pv-tag-getting { background: rgba(245,158,11,.2); color: #fcd34d }
+.demo-pv-tag-needs { background: rgba(239,68,68,.2); color: #fca5a5 }
+/* ⚠ "Not started", never 0%. A chapter or subject nobody has touched has no
+   percentage — printing one invents a failure. */
+.demo-pv-notstarted { margin: .6rem 0 0; font-size: .72rem; color: rgba(199,210,254,.6) }
+
+.demo-pv-certcard {
+  background: linear-gradient(160deg, #fbf6e8, #f0e6cd); color: #2b2620;
+  border: 1px solid #d8c79b; border-radius: .55rem; padding: .6rem .65rem;
+}
+.demo-pv-cert-top { display: flex; align-items: center; gap: .5rem; margin-bottom: .45rem }
+.demo-pv-cert-i { font-size: 1.5rem; line-height: 1 }
+.demo-pv-cert-n { display: flex; flex-direction: column; min-width: 0 }
+.demo-pv-cert-n b { font-size: .85rem; font-weight: 900 }
+.demo-pv-cert-n small { font-size: .7rem; color: #6b5310; font-weight: 800 }
+.demo-pv-cert-bar { height: 7px; border-radius: 999px; background: rgba(43,38,32,.14); overflow: hidden }
+.demo-pv-cert-bar > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #d79a3c, #a9741f) }
+.demo-pv-cert-num { margin: .4rem 0 0; font-size: .72rem; font-weight: 700; color: #453f36 }
+.demo-pv-cert-next { margin: .15rem 0 0; font-size: .7rem; color: #6b6357 }
+.demo-pv-cert-note { margin: .55rem 0 0; font-size: .7rem; line-height: 1.5; color: rgba(199,210,254,.66) }
+.demo-pv-cert-dis { margin: .35rem 0 0; font-size: .66rem; line-height: 1.5; color: rgba(199,210,254,.5); font-style: italic }
+
+.demo-pv-foot {
+  margin: .8rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px solid rgba(148,163,210,.2);
+  font-size: .76rem; line-height: 1.6; color: rgba(199,210,254,.7);
+}
+.demo-pv-foot .demo-nudge-a { color: #a5c9ff }
+.demo-pv-foot .demo-nudge-a:hover { color: #fff }
+
+/* ══ ⑤ THE GAME ZONE — the arcade ══════════════════════════════════════════
+   A seventh surface: neon on near-black, the one slide that is allowed to
+   look like a toy. The Explorer stage inside it reuses the REAL game's
+   classes — .ex-route/.ex-dot/.ex-stop/.ex-clue/.ex-explain/.ex-passport and
+   .qf-opts/.qf-opt — all of which live in this same stylesheet and carry no
+   ancestor selector, so they work here unchanged. Only the frame is ours.
+   ⚠ .mg-help-overlay is position:fixed; inset:0 — never render the ❓ button
+   that opens it. Same family of trap as .bq-ladder-peek. */
+.demo-gz {
+  border-radius: 1.1rem; padding: .9rem .85rem 1rem;
+  background:
+    radial-gradient(90% 60% at 15% 0%, rgba(236,72,153,.22), transparent 60%),
+    radial-gradient(90% 60% at 85% 10%, rgba(56,189,248,.18), transparent 60%),
+    linear-gradient(170deg, #1a1030 0%, #120b22 55%, #0b0716 100%);
+  border: 1px solid rgba(236,72,153,.26);
+  box-shadow: 0 22px 48px -18px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.08) inset;
+  color: #f0e9ff;
+}
+@media (max-width: 480px) { .demo-gz { padding: .7rem .6rem .8rem; border-radius: .9rem } }
+
+.demo-gz-top {
+  display: flex; align-items: center; gap: .5rem .7rem; flex-wrap: wrap;
+  padding-bottom: .6rem; margin-bottom: .7rem; border-bottom: 1px solid rgba(240,233,255,.16);
+}
+.demo-gz-heading { margin: 0; min-width: 0; font-size: 1.05rem; font-weight: 900; line-height: 1.2; color: #f9a8d4 }
+@media (max-width: 480px) { .demo-gz-heading { font-size: .95rem } }
+.demo-gz-sub {
+  margin-left: auto; font-size: .68rem; font-weight: 800; color: #7dd3fc;
+  background: rgba(56,189,248,.14); border: 1px solid rgba(56,189,248,.34);
+  border-radius: 999px; padding: .2rem .6rem; white-space: nowrap;
+}
+.demo-preview-tag-gz { color: #f9a8d4; background: rgba(236,72,153,.16); border-color: rgba(236,72,153,.42) }
+
+.demo-gz-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .8rem }
+@media (min-width: 900px) { .demo-gz-grid { grid-template-columns: 15rem minmax(0, 1fr); gap: 1rem; align-items: start } }
+
+/* ⚠ TWELVE COMPACT TILES, not twelve .mg-card rows. The real hub card is a
+   full-width row with artwork and a best-score line; twelve of those is about
+   1,500px, which would make this the tallest slide in the deck by a factor of
+   two — and the deck sizes itself to the open slide, so the whole page would
+   lurch when you arrived here. The tiles say "there are twelve of these";
+   the stage beside them says what one is actually like. */
+.demo-gz-h {
+  margin: 0 0 .45rem; font-size: .68rem; font-weight: 900; letter-spacing: .09em;
+  text-transform: uppercase; color: rgba(240,233,255,.6);
+}
+.demo-gz-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.4rem, 1fr)); gap: .3rem }
+.demo-gz-tile {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: .18rem; min-height: 3.6rem; padding: .35rem .25rem;
+  border: 1px solid rgba(240,233,255,.14); background: rgba(240,233,255,.05);
+  border-radius: .5rem; text-align: center;
+}
+.demo-gz-tile-i { font-size: 1.2rem; line-height: 1 }
+.demo-gz-tile-n { font-size: .56rem; font-weight: 700; line-height: 1.25; color: rgba(240,233,255,.72); overflow-wrap: anywhere }
+/* The one being played is lit, so the grid and the stage read as one thing. */
+.demo-gz-tile.is-on {
+  border-color: #38bdf8; background: rgba(56,189,248,.16);
+  box-shadow: 0 0 0 1px rgba(56,189,248,.35), 0 6px 16px -8px rgba(56,189,248,.8);
+}
+.demo-gz-tile.is-on .demo-gz-tile-n { color: #e0f2fe }
+.demo-gz-note { margin: .55rem 0 0; font-size: .7rem; line-height: 1.5; color: rgba(240,233,255,.55) }
+
+.demo-gz-stage { min-width: 0 }
+.demo-gz-progress {
+  margin: 0 0 .4rem; font-size: .72rem; font-weight: 800; color: #7dd3fc; text-align: center;
+}
+.demo-gz-try { margin: .6rem 0 0; font-size: .76rem; line-height: 1.5; text-align: center; color: #fbbf24 }
+.demo-gz-try-q { color: rgba(240,233,255,.5) }
+
+.demo-gz-end { text-align: center; padding: .4rem 0 }
+.demo-gz-end-t { margin: 0 0 .6rem; font-size: 1rem; font-weight: 900; color: #f9a8d4 }
+.demo-gz-end-x { margin: .7rem auto 0; max-width: 26rem; font-size: .82rem; line-height: 1.6; color: rgba(240,233,255,.82) }
+.demo-gz-end-actions {
+  display: flex; flex-direction: column; gap: .5rem; width: 100%; max-width: 20rem;
+  margin: .9rem auto 0;
+}
+.demo-gz-msg { text-align: center; padding: 2rem 1rem }
+.demo-gz-msg-t { margin: 0 0 .3rem; font-weight: 800; color: #f0e9ff }
+.demo-gz-msg-x { margin: 0; font-size: .82rem; color: rgba(240,233,255,.7) }
+
+.demo-btn-gz {
+  width: 100%; margin-top: .8rem;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6); color: #fff;
+  border-color: rgba(255,255,255,.35); box-shadow: 0 8px 20px -8px rgba(236,72,153,.9);
+}
+.demo-btn-gz:hover { background: linear-gradient(135deg, #f472b6, #a78bfa) }
+.demo-btn-gz-ghost { background: rgba(240,233,255,.08); border-color: rgba(240,233,255,.22); color: #f0e9ff }
+.demo-btn-gz-ghost:hover { background: rgba(240,233,255,.16) }
+
+.demo-gz-foot {
+  margin: .8rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px solid rgba(240,233,255,.16);
+  font-size: .76rem; line-height: 1.6; color: rgba(240,233,255,.7);
+}
+.demo-gz-foot .demo-nudge-a { color: #f9a8d4 }
+.demo-gz-foot .demo-nudge-a:hover { color: #fff }
+
+/* ⚠ The real .qf-opt is sized for the app's full-width game screen; inside a
+   carousel column it needs to stay ≥40px (the suite fails anything under) and
+   wrap rather than clip a long Mauritius place name. */
+.demo-gz-stage .qf-opts { grid-template-columns: minmax(0, 1fr) }
+@media (min-width: 640px) { .demo-gz-stage .qf-opts { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+.demo-gz-stage .qf-opt { min-height: 2.85rem; white-space: normal; overflow-wrap: anywhere }
+.demo-gz-stage .ex-clue { margin: .7rem 0 }
+.demo-gz-stage .ex-explain { margin-top: .7rem }
+
+/* ══ ② NOTHING IS SKIPPED — the coverage proof ═════════════════════════════
+   An eighth surface, and the plainest of them: this slide is an argument, not
+   a toy. Squared paper, a chapter opened up, one bar per sub-topic. */
+.demo-cv {
+  border-radius: 1.1rem; padding: .9rem .85rem 1rem;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(16,34,64,.05) 27px 28px),
+    linear-gradient(170deg, #f6f8fc 0%, #e9eef7 100%);
+  border: 1px solid #c3cddf;
+  box-shadow: 0 22px 48px -18px rgba(0,0,0,.55), 0 1px 0 rgba(255,255,255,.7) inset;
+  color: #16233a;
+}
+@media (max-width: 480px) { .demo-cv { padding: .7rem .6rem .8rem; border-radius: .9rem } }
+
+.demo-cv-top {
+  display: flex; align-items: center; gap: .55rem .7rem; flex-wrap: wrap;
+  padding-bottom: .6rem; margin-bottom: .7rem; border-bottom: 1px solid rgba(22,35,58,.14);
+}
+.demo-cv-heading { margin: 0; min-width: 0; font-size: 1.05rem; font-weight: 900; line-height: 1.2; color: #1d4ed8 }
+@media (max-width: 480px) { .demo-cv-heading { font-size: .95rem } }
+.demo-preview-tag-cv { color: #1d4ed8; background: #dbe6ff; border-color: #a9c0f0 }
+
+/* Four chapters, four grades, four subjects — the picker is the argument as
+   much as the bars are. */
+.demo-cv-picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .35rem; margin-bottom: .7rem }
+.demo-cv-pick {
+  display: flex; align-items: center; gap: .45rem; min-width: 0;
+  min-height: 2.75rem; padding: .35rem .5rem; text-align: left;
+  border: 1px solid #c3cddf; background: #fff; border-radius: .55rem;
+  color: #40506b; cursor: pointer; transition: background .13s, border-color .13s;
+}
+.demo-cv-pick:hover { background: #eef3fb; color: #16233a }
+.demo-cv-pick.is-on { background: #dbe6ff; border-color: #1d4ed8; color: #16233a }
+.demo-cv-pick-i { flex: 0 0 auto; font-size: 1.1rem; line-height: 1 }
+.demo-cv-pick-t { min-width: 0; display: flex; flex-direction: column }
+.demo-cv-pick-t b { font-size: .78rem; font-weight: 800; overflow-wrap: anywhere }
+.demo-cv-pick-t small { font-size: .64rem; color: #64748b }
+
+.demo-cv-sheet { background: #fff; border: 1px solid #c3cddf; border-radius: .7rem; padding: .75rem .8rem }
+.demo-cv-head { display: flex; align-items: center; gap: .6rem; padding-bottom: .55rem; margin-bottom: .6rem; border-bottom: 2px solid rgba(22,35,58,.12) }
+.demo-cv-head-i { flex: 0 0 auto; font-size: 1.5rem; line-height: 1 }
+.demo-cv-head-t { min-width: 0; display: flex; flex-direction: column }
+.demo-cv-head-t b { font-size: .95rem; font-weight: 900 }
+.demo-cv-head-t small { font-size: .72rem; color: #64748b }
+
+/* ⚠ A GRID, so the numbers, names, bars and counts line up down the column
+   whatever the name's length — "Determiners & Quantifiers" next to "Plurals".
+   Same reasoning as .demo-ch on the chalkboard slide. */
+.demo-cv-rows { display: flex; flex-direction: column; gap: .28rem }
+.demo-cv-row {
+  display: grid; grid-template-columns: 1.3rem minmax(0, 1fr) 6rem 2.2rem;
+  align-items: center; gap: .5rem; min-height: 1.9rem; font-size: .8rem;
+}
+@media (max-width: 560px) { .demo-cv-row { grid-template-columns: 1.2rem minmax(0, 1fr) 3.5rem 2rem; gap: .35rem; font-size: .76rem } }
+.demo-cv-n { font-family: 'Caveat', cursive; font-size: 1rem; color: #94a3b8; text-align: center }
+.demo-cv-name { min-width: 0; overflow-wrap: anywhere; line-height: 1.3; color: #16233a }
+.demo-cv-bar { height: 7px; border-radius: 999px; background: rgba(22,35,58,.1); overflow: hidden }
+.demo-cv-bar > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #60a5fa, #1d4ed8) }
+.demo-cv-q { font-weight: 800; color: #1d4ed8; text-align: right; font-size: .78rem }
+
+.demo-cv-stat { margin: .8rem 0 0; font-size: .86rem; line-height: 1.55; color: #16233a; text-align: center }
+.demo-cv-stat b { color: #1d4ed8; font-weight: 900 }
+.demo-cv-note { margin: .5rem auto 0; max-width: 40rem; font-size: .78rem; line-height: 1.6; color: #475569; text-align: center }
+.demo-cv-msg { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 2.5rem 1rem; text-align: center }
+.demo-cv-msg-t { margin: 0; font-weight: 800; color: #16233a }
+.demo-cv-msg-x { margin: 0; font-size: .82rem; color: #64748b }
+
+.demo-cv-foot {
+  margin: .8rem 0 0; padding-top: .7rem; text-align: center;
+  border-top: 1px solid rgba(22,35,58,.14);
+  font-size: .76rem; line-height: 1.6; color: #475569;
+}
+.demo-cv-foot .demo-nudge-a { color: #1d4ed8 }
+.demo-cv-foot .demo-nudge-a:hover { color: #16233a }

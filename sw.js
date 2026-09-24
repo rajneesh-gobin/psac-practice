@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v392';
+const SHELL_VERSION = 'shell-v404';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -106,6 +106,7 @@ const SHELL_FILES = [
   '/engine/learning_coach.js',
   '/engine/certificates.js',
   '/engine/library.js',
+  '/engine/demo.js',
   // ⚠ subjects/_counts.js is deliberately ABSENT, exactly like the pack
   //   manifests above it: Certificates injects it the first time the screen is
   //   opened, and the default fetch branch caches it from that moment on, so a

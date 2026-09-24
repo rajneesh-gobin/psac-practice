@@ -1104,11 +1104,11 @@ const LabCircuit = (() => {
     const [k, a, b] = on.split(':');
     if (k === 'place') { const K = D().KINDS[b]; if (K) _coach(`${K.name} placed! Now see what the circuit does.`); }
     else if (k === 'remove') _coach('Part removed. On to the next step!');
-    else if (k === 'switch') _coach(a === 'on' ? 'Switch closed! Current is flowing — watch the bulb!' : 'Switch open. The circuit is broken — the bulb goes out.');
+    else if (k === 'switch') _coach(a === 'on' ? 'Switch closed! Current is flowing - watch the bulb!' : 'Switch open. The circuit is broken - the bulb goes out.');
     else if (k === 'bulb') _coach(b === 'out' ? 'Bulb unscrewed. What happened to the other one?' : 'Bulb screwed back in.');
     else if (k === 'flip') _coach('Cell turned round! Watch what happens when they face each other.');
-    else if (k === 'read') _coach('Reading taken — check your lab notebook for the values!');
-    else if (k === 'view') _coach(a === 'symbols' ? 'Circuit-diagram view — this is how physicists draw it!' : 'Picture view — back to the real components!');
+    else if (k === 'read') _coach('Reading taken - check your lab notebook for the values!');
+    else if (k === 'view') _coach(a === 'symbols' ? 'Circuit-diagram view - this is how physicists draw it!' : 'Picture view - back to the real components!');
   }
 
   // ── Discoveries: every card opens ─────────────

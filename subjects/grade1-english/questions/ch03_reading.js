@@ -363,7 +363,7 @@ STATIC_QUESTIONS.push(
   // ── sight_words (25) ──────────────────────────────────────────────────────
 
   makeMCQ({ id:'g1eng-rdr-051', chapterId:'g1eng-reading', difficulty:1, subsection:'sight_words',
-    question:'Which word means the same as "myself"?',
+    question:'Which word do you use when you talk about yourself?',
     options:['I','You','He','She'],
     answer:'I',
     hint:'When you talk about yourself, you use this little word. 😊',
@@ -503,11 +503,11 @@ STATIC_QUESTIONS.push(
     explanation:'Well done! <b>Have</b> means to own or possess: "I <b>have</b> a dog."' }),
 
   makeMCQ({ id:'g1eng-rdr-071', chapterId:'g1eng-reading', difficulty:1, subsection:'sight_words',
-    question:'Which word means "not the same as"?',
+    question:'Which word means "almost the same as"?',
     options:['Like','And','But','Or'],
     answer:'Like',
-    hint:'Actually — "like" means similar to, not different. The word that shows contrast in a sentence is... 🤔',
-    explanation:'Well done — tricky question! <b>Like</b> means similar to or enjoy. For example: "I <b>like</b> cats." It shows something you enjoy.' }),
+    hint:'Think of "My bag is like yours" — the two bags are almost the same.',
+    explanation:'Well done! <b>Like</b> means almost the same as. For example: "My hat is <b>like</b> yours." It can also mean to enjoy something: "I <b>like</b> cats."' }),
 
   makeMCQ({ id:'g1eng-rdr-072', chapterId:'g1eng-reading', difficulty:1, subsection:'sight_words',
     question:'Fill in: "The flowers are red ___ yellow."',

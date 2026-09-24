@@ -916,7 +916,7 @@ const TeacherClassroomDetail = (() => {
       </div>
       <label for="tc-paper-note" class="tc-paper-label">Note for pupils <span style="font-weight:400;opacity:.7">(optional)</span></label>
       <input id="tc-paper-note" type="text" maxlength="200" class="ncf-input" placeholder="Do Section A only">
-      <p class="tc-paper-hint">Pupils see it on the class page with the rest of your resources, and on the date you choose. The file stays in the library — nothing is copied.</p>
+      <p class="tc-paper-hint">Pupils see it on the class page with the rest of your resources, and on the date you choose. The file stays in the library - nothing is copied.</p>
       <p id="tc-paper-status" class="tc-cd-status-msg" role="status" aria-live="polite"></p>
       <div class="tc-paper-actions">
         <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.closePaperPick()">Cancel</button>
@@ -1746,7 +1746,7 @@ const TeacherClassroomDetail = (() => {
       <div class="tc-cd-lib tc-cd-lib-off">
         <div class="tc-cd-lib-head"><span aria-hidden="true">🔖</span>
           <div><strong>One permanent link for this class</strong>
-          <small>Share it once. Your pupils sign in with the PIN they already use, and see their homework and every file you have shared — including anything you add later, at the same address.</small></div>
+          <small>Share it once. Your pupils sign in with the PIN they already use, and see their homework and every file you have shared - including anything you add later, at the same address.</small></div>
         </div>
         <button type="button" class="tc-cd-action-btn" onclick="TeacherClassroomDetail.createLibraryLink()">🔖 Create the link</button>
       </div>`;
@@ -1825,13 +1825,13 @@ const TeacherClassroomDetail = (() => {
     if (!_libCode) return;
     const url = _libUrl(_libCode);
     const shared = (_libAccess || _accessType) === 'shared';
-    const text = `📚 ${_className} — homework and class files\n\nEverything is here, and it stays at this same link:\n${url}\n\n${
+    const text = `📚 ${_className} - homework and class files\n\nEverything is here, and it stays at this same link:\n${url}\n\n${
       shared ? 'Sign in with the class PIN and your name.' : 'Sign in with your own four-digit PIN.'}`;
     if (typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.shareText) {
-      TeacherWorkspace.shareText(_className + ' — class page', text, url);
+      TeacherWorkspace.shareText(_className + ' - class page', text, url);
       return;
     }
-    _showSharePanel(_className + ' — class page', url, `https://wa.me/?text=${encodeURIComponent(text)}`);
+    _showSharePanel(_className + ' - class page', url, `https://wa.me/?text=${encodeURIComponent(text)}`);
   }
 
   // ⚠ RLS scopes learning_materials to this teacher's own rows, so this asks

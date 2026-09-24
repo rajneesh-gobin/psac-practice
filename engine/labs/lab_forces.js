@@ -82,7 +82,7 @@ const LabForces = (() => {
             <p id="lab-coach-text" aria-live="polite"></p>
             <button type="button" class="lab-coach-tip" data-act="tip" aria-label="Show me a science fact">💡</button>
           </div>
-          <div class="lab-task-strip">Apply forces and measure the effects — push, pull, stretch or compress.</div>
+          <div class="lab-task-strip">Apply forces and measure the effects - push, pull, stretch or compress.</div>
           <div id="lab-guide" class="lab-guide" aria-live="polite" hidden></div>
           <div class="lab-forces-shelf" id="lab-forces-shelf"></div>
         </div>
@@ -113,7 +113,7 @@ const LabForces = (() => {
     if (!st.intro) _intro();
     else if (_guide) _guideEnter();
     else _coach(_mode === 'bench'
-      ? '👋 Tap an object from the shelf to hang it on the spring balance — then read its weight.'
+      ? '👋 Tap an object from the shelf to hang it on the spring balance - then read its weight.'
       : '📐 Choose a pad shape and a force, then apply it to see the pressure.');
     if (!_resizeWired) {
       window.addEventListener('resize', () => { if (_cv && _cv.isConnected) _resize(); });
@@ -363,7 +363,7 @@ const LabForces = (() => {
       _guideEvent('read');
       _renderPanel();
     } else {
-      if (!_applied) { _coach('Apply a force first — choose a pad, a force, then tap "Apply force".'); return; }
+      if (!_applied) { _coach('Apply a force first - choose a pad, a force, then tap "Apply force".'); return; }
       const r = P().calcPressure(_force, _pad);
       if (!r) return;
       const pad = P().PADS[_pad];
@@ -972,7 +972,7 @@ const LabForces = (() => {
       st.missions[ms.id] = { stars: Math.max(prev.stars || 0, s), last: s, at: Date.now() };
       Labs.persist();
       const lines = [];
-      lines.push(ms.hazards ? `${ms.hazards} safety mistake${ms.hazards === 1 ? '' : 's'} — avoid them for an extra star.` : 'No safety mistakes. 👍');
+      lines.push(ms.hazards ? `${ms.hazards} safety mistake${ms.hazards === 1 ? '' : 's'} - avoid them for an extra star.` : 'No safety mistakes. 👍');
       if (r.firstTry < r.total - 1) lines.push('Get all but one question right first time for another star.');
       Labs.missionDone({ icon: M.icon, title: M.title, stars: s, score: r.firstTry, total: r.total, lines,
         onAgain: () => startMission(ms.id),
@@ -1200,8 +1200,8 @@ const LabForces = (() => {
         <ul class="lab-intro-list">
           <li><b>Force Bench</b>: hang objects on a spring balance and read their weight in newtons.</li>
           <li><b>Pressure Pad</b>: press different shapes into soft ground and calculate P = F ÷ A.</li>
-          <li><b>Record results</b> in the lab notebook — the formula and working are shown each time.</li>
-          <li><b>Make mistakes safely</b>: overload the spring, mix up mass and weight — you'll see what goes wrong.</li>
+          <li><b>Record results</b> in the lab notebook - the formula and working are shown each time.</li>
+          <li><b>Make mistakes safely</b>: overload the spring, mix up mass and weight - you'll see what goes wrong.</li>
           <li><b>Earn stars</b>: two missions with exam-style questions and ${_mine(P().DISCOVERIES).length} discoveries to collect.</li>
         </ul>
       </div>
@@ -1211,7 +1211,7 @@ const LabForces = (() => {
       </div>`,
       { cls: 'is-intro', onClose: () => {
         const st = Labs.store(ID); st.intro = true; Labs.persist();
-        _coach('Start by hanging an object on the spring balance — tap anything from the shelf.');
+        _coach('Start by hanging an object on the spring balance - tap anything from the shelf.');
       } });
   }
 
@@ -1225,7 +1225,7 @@ const LabForces = (() => {
           <li>Weight (N) = mass (kg) × 10. Force is measured in newtons (N).</li>
           <li>Never exceed the spring balance's 10 N limit.</li></ul></section>
         <section><h3>Pressure Pad</h3><ul>
-          <li>Choose a pad shape — its area is shown in cm² and m².</li>
+          <li>Choose a pad shape - its area is shown in cm² and m².</li>
           <li>Set the force (10, 20 or 50 N), then tap "Apply force".</li>
           <li>P = F ÷ A. Always convert area to m² first (1 cm² = 0.0001 m²).</li>
           <li>The deeper the indentation, the higher the pressure.</li></ul></section>

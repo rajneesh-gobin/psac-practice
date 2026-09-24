@@ -13,11 +13,11 @@ STATIC_QUESTIONS.push(
     explanation:'The Portuguese were the first European explorers to discover the Mascarene Islands in the early 16th century. They did not settle them permanently, but they named and mapped the islands.' }),
 
   makeMCQ({ id:'g5hg-disc-002', chapterId:'discovery', subsection:'mascarene', difficulty:1,
-    question:'What was the Mascarene Islands called by the Portuguese who first discovered them?',
-    options:['The Spice Islands','The Mascarenhas Islands','The Golden Islands','The Indian Islands'],
-    answer:'The Mascarenhas Islands',
-    hint:'The islands were named after a Portuguese navigator.',
-    explanation:'The Portuguese navigator Pedro de Mascarenhas gave his name to the island group, which became known as the Mascarenhas (Mascarene) Islands.' }),
+    question:'Which European sailors were the first to sight the islands we now call the Mascarenes?',
+    options:['The Portuguese','The Dutch','The French','The British'],
+    answer:'The Portuguese',
+    hint:'The island group was named after one of their navigators.',
+    explanation:'Portuguese sailors sighted the islands early in the 1500s, and the navigator Pedro de Mascarenhas gave his name to the group — the Mascarenhas, or Mascarene, Islands. The Dutch came later, in 1598, and were the first to settle.' }),
 
   makeMCQ({ id:'g5hg-disc-003', chapterId:'discovery', subsection:'portuguese', difficulty:2,
     question:'When Portuguese explorers first arrived, Mauritius was uninhabited. What does "uninhabited" mean?',

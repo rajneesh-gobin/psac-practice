@@ -373,7 +373,7 @@ const LabSunmoon = (() => {
       'The Moon is between Earth and the Sun. We see the dark side.',
       'A thin sliver of lit Moon grows on the right.',
       'Half the Moon is lit. This is called First Quarter.',
-      'More than half is lit — a gibbous Moon.',
+      'More than half is lit - a gibbous Moon.',
       'The whole lit side faces us. Full Moon!',
       'The lit part starts to shrink.',
       'Half lit again, on the other side.',
@@ -472,7 +472,7 @@ const LabSunmoon = (() => {
     if (_mission) _mission.errors++;
     _hush();
     _card('hazard', { signs: H.signs, title: H.title(), happened: H.happened(), why: H.why, instead: H.instead, exam: H.exam,
-      button: 'Got it — use eclipse glasses',
+      button: 'Got it - use eclipse glasses',
       onClose: () => _coach('Remember: never look directly at the Sun or at a solar eclipse without certified eclipse glasses.') });
   }
 
@@ -1040,13 +1040,13 @@ const LabSunmoon = (() => {
         <section><h3>The diagram</h3>
           <p class="lab-hint">The Sun is on the left (yellow glow). Earth is to the right. The Moon orbits Earth.</p></section>
         <section><h3>Day and night</h3><ul>
-          <li>The left side of Earth faces the Sun — that side has <b>day</b>.</li>
-          <li>The right side faces away — <b>night</b>.</li>
+          <li>The left side of Earth faces the Sun - that side has <b>day</b>.</li>
+          <li>The right side faces away - <b>night</b>.</li>
           <li>Earth rotates once every <b>24 hours</b>, giving us day and night.</li></ul></section>
         <section><h3>Shadows</h3><ul>
           <li>The shadow stick stands at <b>Mauritius</b>.</li>
-          <li>At noon the Sun is highest — shadow is <b>shortest</b>.</li>
-          <li>At sunrise and sunset the Sun is low — shadow is <b>longest</b>.</li></ul></section>
+          <li>At noon the Sun is highest - shadow is <b>shortest</b>.</li>
+          <li>At sunrise and sunset the Sun is low - shadow is <b>longest</b>.</li></ul></section>
         <section><h3>Eclipses</h3><ul>
           <li><b>Solar:</b> Moon between Earth and Sun. Moon blocks the Sun.</li>
           <li><b>Lunar:</b> Earth between Sun and Moon. Earth's shadow covers the Moon.</li>
@@ -1055,7 +1055,7 @@ const LabSunmoon = (() => {
           <li>There are <b>8 phases</b>: new, crescent, quarter, gibbous, full, gibbous, quarter, crescent.</li>
           <li><b>Waxing</b> = lit part growing. <b>Waning</b> = lit part shrinking.</li>
           <li>A full cycle takes about <b>29.5 days</b>.</li>
-          <li>The Moon always shows the same face — <b>tidal locking</b>.</li></ul></section>` : ''}
+          <li>The Moon always shows the same face - <b>tidal locking</b>.</li></ul></section>` : ''}
       </div>
       <div class="lab-ov-actions"><button type="button" class="lab-btn lab-btn-primary" data-ov-close data-autofocus>Back to the lab</button></div>`,
       { cls: 'is-help' });
@@ -1164,7 +1164,7 @@ const LabSunmoon = (() => {
     c.fillStyle = '#fff'; c.font = '14px sans-serif'; c.textAlign = 'center';
     c.fillText('N', ex + dx, y - dy - 8); c.fillText('S', ex - dx, y + dy + 17);
     c.fillText('Sun', x, y + r + 22);
-    c.fillText(_season === 'june' ? 'June — Mauritius: winter' : 'December — Mauritius: summer', x, _H - 56);
+    c.fillText(_season === 'june' ? 'June - Mauritius: winter' : 'December - Mauritius: summer', x, _H - 56);
     c.fillText('Axis tilt: 23.5° · diagram not to scale', x, _H - 28);
   }
 

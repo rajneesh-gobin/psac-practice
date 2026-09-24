@@ -89,14 +89,248 @@ older blob with no such key reads as off, and so does a failed read on the clien
 ---
 ## The landing page (`#screen-landing`, index.html)
 The public front door, and the only screen most visitors ever see. Order: nav →
-under-construction banner → hero → measured stats strip → **How we teach** →
-subjects → what we offer → Game Zone → three ways in → free-while-we-build panel
+under-construction banner → **hero (pitch + the two CTAs)** → **the preview board**
+→ reassurance (subject pills, trust badge, measured stats strip) → **How we teach**
+→ subjects → what we offer → Game Zone → three ways in → free-while-we-build panel
 → 3 steps → tutors → footer.
+
+### The preview board — `#demo`, `engine/demo.js`, the `demo-*` namespace
+The no-account try-it: grade → subject → chapter → real questions, recording
+nothing. Rebuilt 2026-09-24; before that it was a dark indigo panel sitting
+ABOVE the headline.
+- ⚠⚠ **IT IS DRAWN AS THE APP IS DRAWN** — wooden frame, green board, chalk
+  chapter list, the question on a sheet of paper. `#screen-practice-hub`,
+  `#screen-subject-hub` and `#screen-chapter-select` are all cream paper + a
+  framed blackboard + Caveat chalk, so an indigo preview advertised a product
+  that does not exist: a stranger tried one thing and registered into another.
+  A change to the board here is a change to `.prac-board-mat` / `.sh-board-frame`
+  there, and the reverse.
+- ⚠⚠ **ONE FRAME, ONE WIDTH.** It was three stacked containers — an amber bar at
+  `max-width: 54rem` centred, a centred grade rail, and a `max-w-6xl` two-column
+  shell. Measured at 1440: the bar's left edge x=222, the picker's x=128, the CTA
+  centred at 553. **Nothing shared an edge**, and that is what "misaligned"
+  looked like. Everything the preview shows now lives inside `.demo-board`.
+- ⚠ **The label column is what aligns the two rails.** "Grade" and "Subject" sit
+  in the same grid column of `.demo-rail`, so both chip rows begin on one line.
+  Never give either rail its own centred layout again.
+- ⚠ **Chips are GRIDS, not wrapping flex rows.** Measured: 5 subject chips broke
+  2/1/2 at 1440 and 2/2/1 at 390; 9 grade chips broke 6+3 with the second row
+  under nothing. `repeat(auto-fit, …)` wraps into aligned columns, and a
+  two-line subject name simply makes its row taller in step with its neighbours.
+- ⚠ **The two columns stretch to the same height.** The old grid used
+  `align-items: start`, so a 352px question card sat beside a 530px picker and
+  left ~180px of dead page under it. `.demo-chapters` is capped at 19rem on
+  desktop for the same reason: uncapped, `stretch` moved that dead space INSIDE
+  the paper as 200px of blank ruled sheet.
+- ⚠ **On a phone the paper comes first** (`.demo-stage { order: -1 }`), the
+  chapter list under it. The grade and subject rails stay ABOVE both, which is
+  what answers the original reason for putting the picker first — the thing you
+  are choosing is visible. DOM order is picker → stage so desktop reading order
+  matches the columns.
+- ⚠ **The progress bar shows POSITION, not score** — the same claim as the "3 / 5"
+  counter beside it. Counting answered questions drew a completely empty bar on
+  an unanswered first question, which on paper reads as a stray rule.
+- ⚠ **Two surfaces, two inks.** Chalk (`--chalk`) is only legible on the board;
+  ink (`--ink`) only on the paper. A chalk colour inside `.demo-card` is how a
+  "blank" question card happens.
+- ⚠ **Every class comes from `style.css`, never Tailwind** — all three panes are
+  written by `innerHTML` long after the Play CDN's initial scan.
+- ⚠ **The catalogue is DERIVED from `SUBJECT_PACKS`**, never typed. A hand-written
+  list would have missed Health Education, SSEE and the three Grade 9 sciences.
+- ⚠ **Copy the test reads out of `#demo`**: it must contain "this is a preview",
+  "register free" and "progress", and must NOT contain "coming soon", "not
+  available", "free until" or "expires". A shut chapter EXISTS.
+- ⚠ Every `#demo button` is ≥40px tall, with ONE exemption by name
+  (`.demo-nudge-a`, a link inside a sentence). `scripts/test-landing-demo.js`
+  (52 checks, real Chrome, and a `file://` pass) guards all of it.
+
+
+### The deck — six slides, six surfaces
+The preview is a carousel of WHOLE PANELS, not a pane inside one frame.
+- ⚠⚠ **THE SLIDE IS THE PANEL.** The first build put the track inside
+  `.demo-board`, so every slide wore the same wooden frame and the same green
+  chalkboard and the game read as the chapter list with different words in it.
+  Each slide now carries its own surface, and what slides is the whole thing:
+
+  | # | Slide | Surface | Where its content comes from |
+  |---|---|---|---|
+  | ① | Practise | `.demo-board` — chalkboard + paper | `assets/demo/deck-g<N>.js` |
+  | ② | Play | `.bq-*` — **the real game's studio** | the same decks + `window.MINIGAME_GK` |
+  | ③ | Build a paper | `.demo-mk` — graph paper on a desk | the same decks |
+  | ④ | Experiment | `.demo-lab-*` — lab bench | `which_pull`, copied from `lab_magnets_data.js` |
+  | ⑤ | Past papers | `.demo-shelf-*` — dark wood | `assets/demo/shelf.js` (generated) |
+  | ⑥ | For parents | `.demo-pv-*` — night-blue report | invented numbers, **real labels** |
+
+- ⚠ **Slides are DATA** (`SLIDES` in `engine/demo.js`) and the `<section>` and the
+  registry entry go in together. A section with no entry is a slide nobody can
+  reach; an entry with no section is a dead tab — and "coming soon" is banned
+  copy here, so a placeholder tab is not an option either.
+- ⚠ `mount` runs ONCE, on first arrival; `grade` runs on every grade change but
+  only for slides already mounted. A stranger who never swipes pays for nothing
+  they did not look at.
+- ⚠ **The grade rail is per slide and still global.** `_renderGrades()` writes
+  into EVERY `[data-demo-grades]` host, which is why it was built that way — each
+  panel styles its own rail to its own surface and they are all one choice.
+  Slides ④ and ⑥ deliberately have NO rail: one is a Grade 4 experiment and the
+  other is one fictional child, and a rail that changed nothing would be a lie.
+- ⚠⚠ **The track is sized to the ACTIVE slide** (`_fit()`), never the tallest.
+  Measured at 390px: practise 1120px, the game 562 — without it the game sat
+  above half a phone screen of empty panel. At 1440 both are ~520, which is
+  exactly how this ships broken if you only look at a laptop. `.demo-track`
+  needs `align-items: flex-start` or a pane stretches to the height we just set
+  and the next measurement reads its own answer back. A `ResizeObserver` on the
+  panes re-fits when a slide's content changes height on its own.
+- ⚠⚠ **A resize rewinds the deck.** The panes are `flex: 0 0 100%`, so a width
+  change rewrites every `offsetLeft` while `scrollLeft` keeps its pixel value and
+  the scroll handler finds pane 0 nearest. On a phone that is every rotation.
+  The wanted slide is captured on the FIRST resize event of a burst, before any
+  scroll event can clobber it, and restored without animation.
+- ⚠ **Inactive slides are `inert`.** Without it Tab walks into the off-screen
+  slides and the track scrolls sideways on its own — invisible with a mouse.
+- ⚠ The arrows sit in their own grid columns FLANKING the track, never overlaid
+  (they would land on the chapter list and the prize ladder) and never floated
+  outside the section (between ~720px and ~1140px that overflows the viewport).
+  The hint pulse is two short glows in a 5.5s cycle and `engine/demo.js` removes
+  it at the visitor's first move, however they make it.
+- ⚠ **The `background` shorthand resets `background-clip`.** Both dot components
+  paint an 8px dot inside a 44px tap target with `background-clip: content-box`,
+  and both set their active state with the shorthand — which silently threw that
+  away and painted the whole 16×44 pad. `.mcar-dot.active` had the same bug.
+
+#### ② Play — it is the real studio
+`.bq-stage`, `.bq-topbar`, `.bq-lifes`/`.bq-life`, `.bq-prize-now`, `.bq-qwrap`,
+`.bq-qcard`, `.bq-opts`/`.bq-opt`/`.bq-tag` and `.bq-ladder`/`.bq-rung` are the
+classes `engine/minigame.js` paints the actual game with. Nothing restyles them.
+- ⚠⚠ **`MiniGames.startBillionaire()` MUST NOT be reused**, even though
+  `minigame.js` is already loaded here: it writes `DB.games.billionaire`,
+  persists the run to sessionStorage under the LAST STUDENT'S key, and ends in
+  `_awardRun()` → a server points RPC.
+- ⚠ **Never `.bq-ladder-peek`** — `position: fixed`, and it would pin a strip
+  over the whole site.
+- ⚠ PRIZES, SAFE and the rung difficulty bands are copied verbatim. A preview
+  that quotes different money is a lie about the product. The jump to rung 16 is
+  LABELLED; the last five rungs really are general knowledge.
+- ⚠ The fine print travels with it: *"Educational game - the rupees are pretend,
+  no real money can be won."*
+
+#### ④ Experiment — why it is purpose-built
+The real runner cannot be reused, and not merely for weight:
+- `Labs.store()` writes `DB.labs` and `Labs.persist()` calls `save(DB)` — a no-op
+  only while `ACTIVE_STUDENT_ID` is unset. **A signed-in parent scrolling to the
+  landing carousel would have a stranger's demo run written into their own
+  child's saved progress.**
+- `LabExperiment.attach()` writes `store().intro = true` on MOUNT.
+- `Labs.quiz()` renders into `#labs-root`, which lives inside `#screen-labs`;
+  elsewhere `overlay()` returns null and the runner silently dead-ends at Check.
+- `experiment.list()` filters on `Labs.grade()`, set only inside `openLab()`,
+  which assumes a signed-in child.
+- `engine/labs/*.js` is lazily loaded and both modules are top-level consts —
+  `Labs` is a ReferenceError on this page.
+- ⚠ And **`labs.css` is not linked here**: `.lab-overlay` is
+  `position:fixed; inset:0; z-index:1000` and `.lab-top` is sticky. The palette
+  is matched by hand in `demo-lab-*` instead.
+
+#### ⑤ Past papers — one paper really opens
+- ⚠⚠ **The PDFs in `library/` are PUBLIC STATIC ASSETS** (`prepare-deploy.js`
+  copies the whole directory). A padlock on every cover would be theatre. One
+  paper opens for real; the copy is "register free to open the library", never
+  "register to unlock this file". Do not write a claim the filesystem
+  contradicts.
+- ⚠⚠ **`.library/catalogue.json` is NOT shipped** — it carries `sha256` sums and
+  `source` paths like `D:\past-papers\…`. `assets/demo/shelf.js` is the public
+  extract, built by `scripts/build-demo-shelf.js` with an **allow-list** of six
+  fields (`grade, subject, year, doc_type, title, filename`). The suite asserts
+  the SHIPPED file leaks no hash, no local path and no unlisted field — the
+  generator is not what gets deployed.
+- Totals quoted on the slide come from the FULL published set, not the sample:
+  measured **657 published** — 428 past papers, 144 examiners' reports, 28
+  specimen, 57 practice — **2006–2026, 25 subjects, grades 4–9**. Re-measure; do
+  not carry these forward.
+
+#### ⑥ For parents — every label real, every number invented
+- ⚠ Rendered by hand, because it cannot be otherwise: `PD` and `Certificates` are
+  top-level consts (not on `window`), `_renderReports()` reads `DB.daily` /
+  `DB.stats` unguarded, and `Certificates.render()` calls the Supabase RPC
+  `student_subject_progress()` and needs `ACTIVE_STUDENT_ID`.
+- ⚠ **No real ids.** This is one document; reusing `pd-total`, `pd-acc`,
+  `pd-reports` or `pd-cert-body` would break the real dashboard's
+  `getElementById` calls.
+- ⚠⚠ **Absent because they would be lies:** any mention of a weekly EMAIL
+  (delivery has never been verified end to end, the frequency is per-parent, and
+  the cron is 09:00 UTC = 13:00 Mauritius, not "Sunday morning"); "mastery" on a
+  chapter or subject bar (that is ACCURACY — only a certificate may say
+  mastered); 0% for anything untouched (it reads "not started"); any ranking of
+  one child against another; a previous window of zero shown as "+100%" (it
+  reads "new"). Report copy says **"they"**.
+
+
+#### ② Nothing is skipped, and ④ the Game Zone
+- ⚠ **Subsection data is NOT on the landing page and cannot be.**
+  `build-subject-index.js` strips the pack-level `syllabus` map (the
+  chapterId → subsections table) *and* the chapter prose, and `_counts.js` stops
+  at chapter level. The slide reads `assets/demo/subsections.js`, generated by
+  `scripts/build-demo-subsections.js` — four chapters across four grades and
+  four subjects, 2.4 KB, a script tag injected on first open.
+- ⚠⚠ **`totals.taggedQuestions` is NOT the site's practisable total.** It counts
+  stored rows carrying a sub-topic tag — raw `task` rows, past papers and cloze
+  passages included — where the 34,000+ on the stats strip drops raw tasks and
+  counts what `Assessment.projectToItems()` projects instead. Printing it beside
+  the words "practice questions" quotes the wrong number at a parent. The suite
+  asserts the slide never does.
+- ⚠ The generator refuses to publish a chapter that has an empty sub-topic —
+  that would be the exact lie the slide disproves — and the suite asserts it
+  again on the rendered page, because the generator is not what ships. Measured
+  corpus-wide: **1,771 named sub-topics across 461 chapters, none of them
+  empty.**
+- ⚠ **Island Explorer is the Game Zone's playable taste** because it is the only
+  live game whose draw path touches no timer, no `GameSettings` and no question
+  bank. Purpose-built anyway: `_persist()` runs INSIDE `_exRender()` — keyed on
+  `ACTIVE_STUDENT_ID`, so a stranger's run would file under the last child who
+  used the device — and `_exSaveBest()` ends in `_awardRun()`, a server RPC. No
+  audio, no confetti, and never `_helpBtn()`: it opens `.mg-help-overlay`, which
+  is `position: fixed; inset: 0`.
+- ⚠ **`.ex-dot` is sized by `font-size`.** An empty dot collapses and the
+  twelve-stop route renders as one solid green bar; every dot must carry its
+  stop icon, and a medal once cleared. Asserted.
+- ⚠⚠ **Never write the phrase "&lt;word&gt; learning games" anywhere in `#demo`.**
+  `test-landing-subjects.js` matches the FIRST occurrence of that phrase in the
+  whole landing page, and the deck sits above the Game Zone section it is meant
+  to check. The twelve titles here are a copy of the hub's inline HTML, so the
+  suite asserts the tile COUNT against `mg-card-live` instead — the same
+  authority that test uses.
+- ⚠⚠ **DOM order must equal the `SLIDES` registry order.** `_goto()` indexes the
+  track's children by registry position, so a mismatch sends every arrow and
+  every tab to the wrong pane. Adding a slide in the middle means moving the
+  `<section>` too — and any test that hard-codes a slide index breaks. Two did.
+- ⚠ **`assets/demo/` now has drift protection**, which it did not before:
+  `check.js` rebuilds each generator into a temp directory and compares, and
+  `preflight.js` runs all three generators after the bundle build and before
+  `check.js`. It found real drift on its first live run — the public decks had
+  gone stale against the corpus.
+
+### The rest of the page
 - ⚠ **PRICING IS HIDDEN, NOT DELETED.** The three priced tiers at `#plans` were
   replaced by an "everything is free right now" panel; the nav Pricing link and
   `#pd-upgrade-btn` are gone/hidden. `modal-plans`, `Store.listPlans()`,
   `purchase_*()` and the admin Plans tab all still work — restoring it is markup.
   `#plans` is kept as the section id so old anchors still land somewhere sensible.
+- ⚠ **THE MODEL IS "FREE, KEPT GOING BY VOLUNTARY DONATIONS" — the app no longer
+  promises paid plans are coming.** Six parent-facing surfaces carried that promise
+  and were changed together on 2026-09-24: the landing `#plans` panel, the landing
+  footer line, the `[data-free-banner]` in `modal-plans`, the payment-methods note
+  under it, the Credit Shop notice, and the "Holds the billing, when paid plans
+  open" bullet in the roles table. ⚠ **Grep before adding a seventh** — "paid plans",
+  "paid options", "will arrive later" — because a page still saying money is coming
+  beside one saying donations keep it free is the app telling two stories.
+  ⚠ The ask is a LINE to the contact screen, **not a Donate button**: there is no
+  donation flow, and a button that collects nothing is worse than a sentence. Build
+  the path before writing the call to action.
+  ⚠ Still true and unchanged: no end date on any surface, no price anywhere, and
+  `data-free-banner` still comes down the moment `juice_enabled` goes on.
+  ⚠ It is now EIGHT surfaces, not six: the /faq answer (one string in
+  `scripts/faq-copy.js`, rendered to `faq.html` and copied character for character
+  into the landing teaser — `test-landing-no-js.js` compares them) and the revamp
+  notice modal say it too. Edit the faq-copy string and re-render; never the markup.
 - ⚠ **"How we teach" is the product's actual claim**, not decoration: many simple
   questions covering the WHOLE syllabus beat a handful of very hard ones;
   difficulty rises Basic → Medium → Hard → Word Problems where harder means
@@ -417,14 +651,248 @@ older blob with no such key reads as off, and so does a failed read on the clien
 ---
 ## The landing page (`#screen-landing`, index.html)
 The public front door, and the only screen most visitors ever see. Order: nav →
-under-construction banner → hero → measured stats strip → **How we teach** →
-subjects → what we offer → Game Zone → three ways in → free-while-we-build panel
+under-construction banner → **hero (pitch + the two CTAs)** → **the preview board**
+→ reassurance (subject pills, trust badge, measured stats strip) → **How we teach**
+→ subjects → what we offer → Game Zone → three ways in → free-while-we-build panel
 → 3 steps → tutors → footer.
+
+### The preview board — `#demo`, `engine/demo.js`, the `demo-*` namespace
+The no-account try-it: grade → subject → chapter → real questions, recording
+nothing. Rebuilt 2026-09-24; before that it was a dark indigo panel sitting
+ABOVE the headline.
+- ⚠⚠ **IT IS DRAWN AS THE APP IS DRAWN** — wooden frame, green board, chalk
+  chapter list, the question on a sheet of paper. `#screen-practice-hub`,
+  `#screen-subject-hub` and `#screen-chapter-select` are all cream paper + a
+  framed blackboard + Caveat chalk, so an indigo preview advertised a product
+  that does not exist: a stranger tried one thing and registered into another.
+  A change to the board here is a change to `.prac-board-mat` / `.sh-board-frame`
+  there, and the reverse.
+- ⚠⚠ **ONE FRAME, ONE WIDTH.** It was three stacked containers — an amber bar at
+  `max-width: 54rem` centred, a centred grade rail, and a `max-w-6xl` two-column
+  shell. Measured at 1440: the bar's left edge x=222, the picker's x=128, the CTA
+  centred at 553. **Nothing shared an edge**, and that is what "misaligned"
+  looked like. Everything the preview shows now lives inside `.demo-board`.
+- ⚠ **The label column is what aligns the two rails.** "Grade" and "Subject" sit
+  in the same grid column of `.demo-rail`, so both chip rows begin on one line.
+  Never give either rail its own centred layout again.
+- ⚠ **Chips are GRIDS, not wrapping flex rows.** Measured: 5 subject chips broke
+  2/1/2 at 1440 and 2/2/1 at 390; 9 grade chips broke 6+3 with the second row
+  under nothing. `repeat(auto-fit, …)` wraps into aligned columns, and a
+  two-line subject name simply makes its row taller in step with its neighbours.
+- ⚠ **The two columns stretch to the same height.** The old grid used
+  `align-items: start`, so a 352px question card sat beside a 530px picker and
+  left ~180px of dead page under it. `.demo-chapters` is capped at 19rem on
+  desktop for the same reason: uncapped, `stretch` moved that dead space INSIDE
+  the paper as 200px of blank ruled sheet.
+- ⚠ **On a phone the paper comes first** (`.demo-stage { order: -1 }`), the
+  chapter list under it. The grade and subject rails stay ABOVE both, which is
+  what answers the original reason for putting the picker first — the thing you
+  are choosing is visible. DOM order is picker → stage so desktop reading order
+  matches the columns.
+- ⚠ **The progress bar shows POSITION, not score** — the same claim as the "3 / 5"
+  counter beside it. Counting answered questions drew a completely empty bar on
+  an unanswered first question, which on paper reads as a stray rule.
+- ⚠ **Two surfaces, two inks.** Chalk (`--chalk`) is only legible on the board;
+  ink (`--ink`) only on the paper. A chalk colour inside `.demo-card` is how a
+  "blank" question card happens.
+- ⚠ **Every class comes from `style.css`, never Tailwind** — all three panes are
+  written by `innerHTML` long after the Play CDN's initial scan.
+- ⚠ **The catalogue is DERIVED from `SUBJECT_PACKS`**, never typed. A hand-written
+  list would have missed Health Education, SSEE and the three Grade 9 sciences.
+- ⚠ **Copy the test reads out of `#demo`**: it must contain "this is a preview",
+  "register free" and "progress", and must NOT contain "coming soon", "not
+  available", "free until" or "expires". A shut chapter EXISTS.
+- ⚠ Every `#demo button` is ≥40px tall, with ONE exemption by name
+  (`.demo-nudge-a`, a link inside a sentence). `scripts/test-landing-demo.js`
+  (52 checks, real Chrome, and a `file://` pass) guards all of it.
+
+
+### The deck — six slides, six surfaces
+The preview is a carousel of WHOLE PANELS, not a pane inside one frame.
+- ⚠⚠ **THE SLIDE IS THE PANEL.** The first build put the track inside
+  `.demo-board`, so every slide wore the same wooden frame and the same green
+  chalkboard and the game read as the chapter list with different words in it.
+  Each slide now carries its own surface, and what slides is the whole thing:
+
+  | # | Slide | Surface | Where its content comes from |
+  |---|---|---|---|
+  | ① | Practise | `.demo-board` — chalkboard + paper | `assets/demo/deck-g<N>.js` |
+  | ② | Play | `.bq-*` — **the real game's studio** | the same decks + `window.MINIGAME_GK` |
+  | ③ | Build a paper | `.demo-mk` — graph paper on a desk | the same decks |
+  | ④ | Experiment | `.demo-lab-*` — lab bench | `which_pull`, copied from `lab_magnets_data.js` |
+  | ⑤ | Past papers | `.demo-shelf-*` — dark wood | `assets/demo/shelf.js` (generated) |
+  | ⑥ | For parents | `.demo-pv-*` — night-blue report | invented numbers, **real labels** |
+
+- ⚠ **Slides are DATA** (`SLIDES` in `engine/demo.js`) and the `<section>` and the
+  registry entry go in together. A section with no entry is a slide nobody can
+  reach; an entry with no section is a dead tab — and "coming soon" is banned
+  copy here, so a placeholder tab is not an option either.
+- ⚠ `mount` runs ONCE, on first arrival; `grade` runs on every grade change but
+  only for slides already mounted. A stranger who never swipes pays for nothing
+  they did not look at.
+- ⚠ **The grade rail is per slide and still global.** `_renderGrades()` writes
+  into EVERY `[data-demo-grades]` host, which is why it was built that way — each
+  panel styles its own rail to its own surface and they are all one choice.
+  Slides ④ and ⑥ deliberately have NO rail: one is a Grade 4 experiment and the
+  other is one fictional child, and a rail that changed nothing would be a lie.
+- ⚠⚠ **The track is sized to the ACTIVE slide** (`_fit()`), never the tallest.
+  Measured at 390px: practise 1120px, the game 562 — without it the game sat
+  above half a phone screen of empty panel. At 1440 both are ~520, which is
+  exactly how this ships broken if you only look at a laptop. `.demo-track`
+  needs `align-items: flex-start` or a pane stretches to the height we just set
+  and the next measurement reads its own answer back. A `ResizeObserver` on the
+  panes re-fits when a slide's content changes height on its own.
+- ⚠⚠ **A resize rewinds the deck.** The panes are `flex: 0 0 100%`, so a width
+  change rewrites every `offsetLeft` while `scrollLeft` keeps its pixel value and
+  the scroll handler finds pane 0 nearest. On a phone that is every rotation.
+  The wanted slide is captured on the FIRST resize event of a burst, before any
+  scroll event can clobber it, and restored without animation.
+- ⚠ **Inactive slides are `inert`.** Without it Tab walks into the off-screen
+  slides and the track scrolls sideways on its own — invisible with a mouse.
+- ⚠ The arrows sit in their own grid columns FLANKING the track, never overlaid
+  (they would land on the chapter list and the prize ladder) and never floated
+  outside the section (between ~720px and ~1140px that overflows the viewport).
+  The hint pulse is two short glows in a 5.5s cycle and `engine/demo.js` removes
+  it at the visitor's first move, however they make it.
+- ⚠ **The `background` shorthand resets `background-clip`.** Both dot components
+  paint an 8px dot inside a 44px tap target with `background-clip: content-box`,
+  and both set their active state with the shorthand — which silently threw that
+  away and painted the whole 16×44 pad. `.mcar-dot.active` had the same bug.
+
+#### ② Play — it is the real studio
+`.bq-stage`, `.bq-topbar`, `.bq-lifes`/`.bq-life`, `.bq-prize-now`, `.bq-qwrap`,
+`.bq-qcard`, `.bq-opts`/`.bq-opt`/`.bq-tag` and `.bq-ladder`/`.bq-rung` are the
+classes `engine/minigame.js` paints the actual game with. Nothing restyles them.
+- ⚠⚠ **`MiniGames.startBillionaire()` MUST NOT be reused**, even though
+  `minigame.js` is already loaded here: it writes `DB.games.billionaire`,
+  persists the run to sessionStorage under the LAST STUDENT'S key, and ends in
+  `_awardRun()` → a server points RPC.
+- ⚠ **Never `.bq-ladder-peek`** — `position: fixed`, and it would pin a strip
+  over the whole site.
+- ⚠ PRIZES, SAFE and the rung difficulty bands are copied verbatim. A preview
+  that quotes different money is a lie about the product. The jump to rung 16 is
+  LABELLED; the last five rungs really are general knowledge.
+- ⚠ The fine print travels with it: *"Educational game - the rupees are pretend,
+  no real money can be won."*
+
+#### ④ Experiment — why it is purpose-built
+The real runner cannot be reused, and not merely for weight:
+- `Labs.store()` writes `DB.labs` and `Labs.persist()` calls `save(DB)` — a no-op
+  only while `ACTIVE_STUDENT_ID` is unset. **A signed-in parent scrolling to the
+  landing carousel would have a stranger's demo run written into their own
+  child's saved progress.**
+- `LabExperiment.attach()` writes `store().intro = true` on MOUNT.
+- `Labs.quiz()` renders into `#labs-root`, which lives inside `#screen-labs`;
+  elsewhere `overlay()` returns null and the runner silently dead-ends at Check.
+- `experiment.list()` filters on `Labs.grade()`, set only inside `openLab()`,
+  which assumes a signed-in child.
+- `engine/labs/*.js` is lazily loaded and both modules are top-level consts —
+  `Labs` is a ReferenceError on this page.
+- ⚠ And **`labs.css` is not linked here**: `.lab-overlay` is
+  `position:fixed; inset:0; z-index:1000` and `.lab-top` is sticky. The palette
+  is matched by hand in `demo-lab-*` instead.
+
+#### ⑤ Past papers — one paper really opens
+- ⚠⚠ **The PDFs in `library/` are PUBLIC STATIC ASSETS** (`prepare-deploy.js`
+  copies the whole directory). A padlock on every cover would be theatre. One
+  paper opens for real; the copy is "register free to open the library", never
+  "register to unlock this file". Do not write a claim the filesystem
+  contradicts.
+- ⚠⚠ **`.library/catalogue.json` is NOT shipped** — it carries `sha256` sums and
+  `source` paths like `D:\past-papers\…`. `assets/demo/shelf.js` is the public
+  extract, built by `scripts/build-demo-shelf.js` with an **allow-list** of six
+  fields (`grade, subject, year, doc_type, title, filename`). The suite asserts
+  the SHIPPED file leaks no hash, no local path and no unlisted field — the
+  generator is not what gets deployed.
+- Totals quoted on the slide come from the FULL published set, not the sample:
+  measured **657 published** — 428 past papers, 144 examiners' reports, 28
+  specimen, 57 practice — **2006–2026, 25 subjects, grades 4–9**. Re-measure; do
+  not carry these forward.
+
+#### ⑥ For parents — every label real, every number invented
+- ⚠ Rendered by hand, because it cannot be otherwise: `PD` and `Certificates` are
+  top-level consts (not on `window`), `_renderReports()` reads `DB.daily` /
+  `DB.stats` unguarded, and `Certificates.render()` calls the Supabase RPC
+  `student_subject_progress()` and needs `ACTIVE_STUDENT_ID`.
+- ⚠ **No real ids.** This is one document; reusing `pd-total`, `pd-acc`,
+  `pd-reports` or `pd-cert-body` would break the real dashboard's
+  `getElementById` calls.
+- ⚠⚠ **Absent because they would be lies:** any mention of a weekly EMAIL
+  (delivery has never been verified end to end, the frequency is per-parent, and
+  the cron is 09:00 UTC = 13:00 Mauritius, not "Sunday morning"); "mastery" on a
+  chapter or subject bar (that is ACCURACY — only a certificate may say
+  mastered); 0% for anything untouched (it reads "not started"); any ranking of
+  one child against another; a previous window of zero shown as "+100%" (it
+  reads "new"). Report copy says **"they"**.
+
+
+#### ② Nothing is skipped, and ④ the Game Zone
+- ⚠ **Subsection data is NOT on the landing page and cannot be.**
+  `build-subject-index.js` strips the pack-level `syllabus` map (the
+  chapterId → subsections table) *and* the chapter prose, and `_counts.js` stops
+  at chapter level. The slide reads `assets/demo/subsections.js`, generated by
+  `scripts/build-demo-subsections.js` — four chapters across four grades and
+  four subjects, 2.4 KB, a script tag injected on first open.
+- ⚠⚠ **`totals.taggedQuestions` is NOT the site's practisable total.** It counts
+  stored rows carrying a sub-topic tag — raw `task` rows, past papers and cloze
+  passages included — where the 34,000+ on the stats strip drops raw tasks and
+  counts what `Assessment.projectToItems()` projects instead. Printing it beside
+  the words "practice questions" quotes the wrong number at a parent. The suite
+  asserts the slide never does.
+- ⚠ The generator refuses to publish a chapter that has an empty sub-topic —
+  that would be the exact lie the slide disproves — and the suite asserts it
+  again on the rendered page, because the generator is not what ships. Measured
+  corpus-wide: **1,771 named sub-topics across 461 chapters, none of them
+  empty.**
+- ⚠ **Island Explorer is the Game Zone's playable taste** because it is the only
+  live game whose draw path touches no timer, no `GameSettings` and no question
+  bank. Purpose-built anyway: `_persist()` runs INSIDE `_exRender()` — keyed on
+  `ACTIVE_STUDENT_ID`, so a stranger's run would file under the last child who
+  used the device — and `_exSaveBest()` ends in `_awardRun()`, a server RPC. No
+  audio, no confetti, and never `_helpBtn()`: it opens `.mg-help-overlay`, which
+  is `position: fixed; inset: 0`.
+- ⚠ **`.ex-dot` is sized by `font-size`.** An empty dot collapses and the
+  twelve-stop route renders as one solid green bar; every dot must carry its
+  stop icon, and a medal once cleared. Asserted.
+- ⚠⚠ **Never write the phrase "&lt;word&gt; learning games" anywhere in `#demo`.**
+  `test-landing-subjects.js` matches the FIRST occurrence of that phrase in the
+  whole landing page, and the deck sits above the Game Zone section it is meant
+  to check. The twelve titles here are a copy of the hub's inline HTML, so the
+  suite asserts the tile COUNT against `mg-card-live` instead — the same
+  authority that test uses.
+- ⚠⚠ **DOM order must equal the `SLIDES` registry order.** `_goto()` indexes the
+  track's children by registry position, so a mismatch sends every arrow and
+  every tab to the wrong pane. Adding a slide in the middle means moving the
+  `<section>` too — and any test that hard-codes a slide index breaks. Two did.
+- ⚠ **`assets/demo/` now has drift protection**, which it did not before:
+  `check.js` rebuilds each generator into a temp directory and compares, and
+  `preflight.js` runs all three generators after the bundle build and before
+  `check.js`. It found real drift on its first live run — the public decks had
+  gone stale against the corpus.
+
+### The rest of the page
 - ⚠ **PRICING IS HIDDEN, NOT DELETED.** The three priced tiers at `#plans` were
   replaced by an "everything is free right now" panel; the nav Pricing link and
   `#pd-upgrade-btn` are gone/hidden. `modal-plans`, `Store.listPlans()`,
   `purchase_*()` and the admin Plans tab all still work — restoring it is markup.
   `#plans` is kept as the section id so old anchors still land somewhere sensible.
+- ⚠ **THE MODEL IS "FREE, KEPT GOING BY VOLUNTARY DONATIONS" — the app no longer
+  promises paid plans are coming.** Six parent-facing surfaces carried that promise
+  and were changed together on 2026-09-24: the landing `#plans` panel, the landing
+  footer line, the `[data-free-banner]` in `modal-plans`, the payment-methods note
+  under it, the Credit Shop notice, and the "Holds the billing, when paid plans
+  open" bullet in the roles table. ⚠ **Grep before adding a seventh** — "paid plans",
+  "paid options", "will arrive later" — because a page still saying money is coming
+  beside one saying donations keep it free is the app telling two stories.
+  ⚠ The ask is a LINE to the contact screen, **not a Donate button**: there is no
+  donation flow, and a button that collects nothing is worse than a sentence. Build
+  the path before writing the call to action.
+  ⚠ Still true and unchanged: no end date on any surface, no price anywhere, and
+  `data-free-banner` still comes down the moment `juice_enabled` goes on.
+  ⚠ It is now EIGHT surfaces, not six: the /faq answer (one string in
+  `scripts/faq-copy.js`, rendered to `faq.html` and copied character for character
+  into the landing teaser — `test-landing-no-js.js` compares them) and the revamp
+  notice modal say it too. Edit the faq-copy string and re-render; never the markup.
 - ⚠ **"How we teach" is the product's actual claim**, not decoration: many simple
   questions covering the WHOLE syllabus beat a handful of very hard ones;
   difficulty rises Basic → Medium → Hard → Word Problems where harder means

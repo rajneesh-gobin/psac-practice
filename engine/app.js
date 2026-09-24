@@ -1488,14 +1488,14 @@ function _appShareText() {
   // ⚠ "free right now" is the sanctioned wording and carries NO end date on any
   //   surface. Never write "free forever" here: grades 3-9 are paid in the
   //   pricing model, and only grades 1-2 are free permanently.
-  return '🎓 *Nou Klass* — free PSAC & NCE exam practice, made in Mauritius 🇲🇺\n\n'
-    + '*34,000+ practice questions*, aligned with the Mauritius MIE syllabus — '
+  return '🎓 *Nou Klass* - free PSAC & NCE exam practice, made in Mauritius 🇲🇺\n\n'
+    + '*34,000+ practice questions*, aligned with the Mauritius MIE syllabus - '
     + 'and everything is *free right now*.\n\n'
     + '📚 Grades 1–6 (PSAC) and Grades 7–9 (NCE)\n'
     + '✏️ Maths · English · French · Science · History & Geography\n'
     + '📝 926 real past-paper questions (2016–2024)\n'
-    + '📄 Print or save a full 40-question exam paper as *PDF* — with a separate answer key for you\n'
-    + '📊 Follow your child\'s progress live — every score, streak and weak topic\n'
+    + '📄 Print or save a full 40-question exam paper as *PDF* - with a separate answer key for you\n'
+    + '📊 Follow your child\'s progress live - every score, streak and weak topic\n'
     + '🎮 XP, streaks and 7 learning games, so they actually keep revising\n\n'
     + 'No ads. No tracking. Works offline.\n\n'
     + 'Have a look 👇';
@@ -1635,7 +1635,7 @@ async function cancelHelpRequest() {
   const code = _helpPollCode;
   _stopHelpPoll();
   closeHelpRequest();
-  toast('👍 Help cancelled — have a go yourself!', 2600);
+  toast('👍 Help cancelled - have a go yourself!', 2600);
   if (!code || typeof _sb === 'undefined' || !_sb) return;
   // Fire and forget: the child is already back on the question, and a failed
   // close only means the poll runs out on its own a few minutes later.
@@ -1670,7 +1670,7 @@ async function createHelpRequest(btn) {
     if (status) status.textContent =
       why === 'not_signed_in' ? '📣 Only a signed-in pupil can ask for help on a question.'
       : why === 'too_many'    ? '📣 You have asked for a lot of help this hour. Try again a little later.'
-      : '📣 Could not make the link — check your connection and try again.';
+      : '📣 Could not make the link - check your connection and try again.';
     if (btn) { btn.disabled = false; btn.textContent = '🙋 Make my help link'; }
     return;
   }
@@ -1711,7 +1711,7 @@ function _helpShareText() {
     : 5;
   return `🙋 One of your friends needs help to answer this question!\n\n`
     + `Tap the link and vote for the answer you think is right. `
-    + `It is only open for about ${mins} minute${mins === 1 ? '' : 's'} — voting closes at ${_helpCloseLabel()}.\n\n`
+    + `It is only open for about ${mins} minute${mins === 1 ? '' : 's'} - voting closes at ${_helpCloseLabel()}.\n\n`
     + helpPollUrl();
 }
 
@@ -1742,7 +1742,7 @@ function _renderHelpPollPanel(options, seconds) {
       <div class="af-bar-track"><div class="af-bar-fill" id="af-bar-${i}" style="width:0%"></div></div>
     </div>`).join('');
   const total = document.getElementById('ask-friend-total');
-  if (total) total.textContent = 'No votes yet — send your link to someone!';
+  if (total) total.textContent = 'No votes yet - send your link to someone!';
   _startHelpPoll(seconds);
 }
 
@@ -1768,8 +1768,8 @@ function _startHelpPoll(seconds) {
         });
         const total = document.getElementById('ask-friend-total');
         if (total) total.textContent = sum
-          ? `${sum} ${sum === 1 ? 'person has' : 'people have'} voted. Remember — the crowd can be wrong! You choose.`
-          : 'No votes yet — send your link to someone!';
+          ? `${sum} ${sum === 1 ? 'person has' : 'people have'} voted. Remember - the crowd can be wrong! You choose.`
+          : 'No votes yet - send your link to someone!';
         left = data.seconds_left;
         // ⚠ Say what to do next. A closed poll with no instruction leaves the
         //   child waiting on a screen that will never change again.
@@ -1777,7 +1777,7 @@ function _startHelpPoll(seconds) {
           _stopHelpPoll();
           const done = document.getElementById('ask-friend-total');
           if (done && !sum) done.textContent = 'Voting has closed and nobody voted. Close this and have a go yourself!';
-          else if (done) done.textContent = `Voting has closed. ${sum} ${sum === 1 ? 'person' : 'people'} voted — but you choose!`;
+          else if (done) done.textContent = `Voting has closed. ${sum} ${sum === 1 ? 'person' : 'people'} voted - but you choose!`;
         }
       }
     } catch (_) {}
@@ -4347,7 +4347,7 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
     if (m && m.ok && m.slip) {
       cont.innerHTML += isFr
         ? `<p class="txt-slip">Juste - attention à l’accent : <b>${_attr(q.answer)}</b></p>`
-        : `<p class="txt-slip">Correct — check the spelling: <b>${_attr(q.answer)}</b></p>`;
+        : `<p class="txt-slip">Correct - check the spelling: <b>${_attr(q.answer)}</b></p>`;
     }
     return;
   }
@@ -7713,7 +7713,7 @@ async function _repShare() {
     `Days practised: ${now.days} of 7`,
     now.e ? `Exams taken: ${now.e}` : '',
     spots ? `\nRecent trouble spots:\n${spots}` : '',
-    `\nNou Klass — Exam Practice`,
+    `\nNou Klass - Exam Practice`,
   ].filter(Boolean).join('\n');
 
   try {
@@ -8280,7 +8280,7 @@ async function shareFriendLink() {
   if (!_friendCode) { toast('Loading your code…', 1500); return; }
   const link = _friendInviteLink();
   if (navigator.share) {
-    try { await navigator.share({ title: 'Nou Klass — Friend Challenge', text: _friendInviteText(), url: link }); return; }
+    try { await navigator.share({ title: 'Nou Klass - Friend Challenge', text: _friendInviteText(), url: link }); return; }
     catch(e) { if (e.name === 'AbortError') return; }
   }
   try { await navigator.clipboard.writeText(link); toast('Link copied! 📋', 2000); }
@@ -8420,7 +8420,7 @@ function _nhCalc() {
     { op: 'Aᴮ', expr: a + ' ^ ' + b,   val: _nhFmt(Math.pow(a, b)) },
   ];
   body.innerHTML = rows.map(function(r) {
-    const cell = r.val != null ? r.val : '<span class="nh-na">—</span>';
+    const cell = r.val != null ? r.val : '<span class="nh-na">-</span>';
     return '<tr><td class="nh-op">' + r.op + '</td><td class="nh-expr">' +
            r.expr + '</td><td class="nh-val">' + cell + '</td></tr>';
   }).join('');
@@ -8437,11 +8437,13 @@ function _nhChipClick(n) {
 function _nhPopulate(q) {
   const btn   = document.getElementById('num-helper-btn');
   const panel = document.getElementById('num-helper-panel');
-  const tools = document.querySelector('.pr-tools');
   if (!btn || !panel) return;
   const isMaths = !!(ACTIVE_PACK && ACTIVE_PACK.subject === 'Maths');
+  // ⚠ Showing the button is the WHOLE job now. The row's column count used to
+  //   be toggled here too (.pr-tools-4); .pr-tools is auto-fit and counts its
+  //   own visible children, which is why a fourth tool can no longer strand
+  //   the last one on a row of its own. See style.css.
   btn.classList.toggle('hidden', !isMaths);
-  if (tools) tools.classList.toggle('pr-tools-4', isMaths);
   if (!isMaths) {
     panel.classList.add('hidden');
     btn.classList.remove('is-on');
@@ -8943,29 +8945,51 @@ function _chapterCard(ch, borderColor) {
     ? `<button class="ch-hit" onclick="_doResume('practice','${ch.id}')" aria-label="Resume ${_profEsc(ch.name)}"></button>`
     : `<button class="ch-hit" onclick="startChapterDirect('${ch.id}')" aria-label="Practise ${_profEsc(ch.name)}"></button>`;
 
+  // ⚠ COVERAGE, never accuracy, and only when the bank is actually loaded.
+  //   unique-questions-seen / questions-in-the-chapter is the one number that
+  //   answers what the card exists to answer - "have I done this one?".
+  //   Accuracy is on the status line above, worded as accuracy.
+  // ⚠ `known` is false until QuestionLoader has answered, and a bar drawn from
+  //   an unknown denominator is the exact bug _chapterProgress() exists to
+  //   prevent - so there is NO bar rather than a 0% one.
+  const cov = _journeyCoverageNums(ch.id, prog, total);
+  const covPct  = (!locked && cov) ? Math.round((cov.explored / cov.total) * 100) : null;
+  const covTone = covPct === null ? '' : covPct >= 80 ? 'good' : covPct >= 40 ? 'mid' : 'low';
+  const bar = covPct === null ? '' : `<div class="ch-bar" role="img"
+      aria-label="${covPct}% of this chapter seen"><span class="ch-bar-fill ${covTone}" style="width:${covPct}%"></span></div>`;
+
+  // ⚠ .ch-options IS IN THE FOOTER ROW, not absolutely positioned over it.
+  //   As `position:absolute; right:.55rem; bottom:.5rem` it sat ON TOP of the
+  //   coverage line and the CTA at every width - measured at 390 and 1440, on
+  //   every card. The footer is a flex row now, so the two cannot collide.
+  //   ⚠ It needs pointer-events:auto: .ch-body is pointer-events:none so that
+  //   .ch-hit underneath it stays one big tap target.
   return `<article class="${cls}"${style}>
     ${hit}
     ${locked ? '' : `<button class="ch-flag${isFlagged ? ' on' : ''}" onclick="toggleChapterFlag('${ch.id}')"
       title="${isFlagged ? 'Remove flag' : 'Flag this chapter for your parent'}"
       aria-label="${isFlagged ? 'Remove flag' : 'Flag for parent'}">${isFlagged ? '🚩' : '⚐'}</button>`}
-    ${locked ? '' : `<button class="ch-options" onclick="event.stopPropagation();PracticeJourney.openOptions('${ch.id}')"
-      aria-label="Practice options for ${_profEsc(ch.name)}" title="Practice options">⚙ Options</button>`}
     ${resume ? `<button class="ch-restart" onclick="event.stopPropagation();_discardChapterResume('${ch.id}')"
       title="Discard paused progress and start fresh" aria-label="Discard paused progress and start fresh">↺</button>` : ''}
     <div class="ch-body">
       <div class="ch-head">
         <span class="ch-icon" aria-hidden="true">${ch.icon || '📘'}</span>
+        <div class="ch-headtext">
+          <h3 class="ch-name">${_profEsc(ch.name)}</h3>
+          ${ch.part != null ? `<div class="ch-part">Part ${ch.part}</div>` : ''}
+        </div>
         ${isEnr ? '<span class="ch-badge">✨ Bonus</span>' : ''}
       </div>
-      <h3 class="ch-name">${_profEsc(ch.name)}</h3>
-      ${ch.part != null ? `<div class="ch-part">Part ${ch.part}</div>` : ''}
       <div class="ch-spacer"></div>
       ${metaRow}
       ${status}
-      ${locked ? '' : `<p class="ch-status">${_journeyCoverage(ch.id, prog, total)}</p>`}
+      ${bar}
+      ${locked ? '' : `<p class="ch-status ch-cover">${_journeyCoverage(ch.id, prog, total)}</p>`}
       <div class="ch-foot">
         ${locked ? '' : _labChip(ch.id)}
         <span class="ch-cta">${locked ? 'Locked' : _journeyCta(ch.id, resume, attempted)}</span>
+        ${locked ? '' : `<button class="ch-options" onclick="event.stopPropagation();PracticeJourney.openOptions('${ch.id}')"
+          aria-label="Practice options for ${_profEsc(ch.name)}" title="Practice options">⚙</button>`}
       </div>
     </div>
   </article>`;
@@ -8987,13 +9011,30 @@ function _journeyCta(chapterId, resume, attempted) {
   catch (e) { return resume ? '▶ Resume →' : attempted ? 'Continue →' : 'Start →'; }
 }
 
+// ⚠ ONE SOURCE for the bar and the sentence. PracticeJourney reads
+//   QuestionProgress (per-question, server-backed); prog.unique reads the
+//   progress blob's answeredIds. Both are real, and they are not the same
+//   number - so the card asks the journey first and only falls back to the
+//   blob when the module is not loaded. Returns null when the denominator is
+//   unknown, which is what suppresses the bar entirely.
+function _journeyCoverageNums(chapterId, prog, total) {
+  if (typeof PracticeJourney !== 'undefined' && PracticeJourney.coverageOf) {
+    try {
+      const c = PracticeJourney.coverageOf(chapterId);
+      if (c && c.known && c.total) return { explored: c.explored, total: c.total };
+    } catch (e) {}
+    return null;
+  }
+  return (prog.known && total) ? { explored: prog.unique, total } : null;
+}
+
 function _journeyCoverage(chapterId, prog, total) {
   if (typeof PracticeJourney !== 'undefined') {
     try { return _profEsc(PracticeJourney.coverageLine(chapterId)); } catch (e) {}
   }
   return prog.known
     ? `${prog.unique} of ${total} questions explored`
-    : 'Question bank not loaded yet';
+    : 'Questions are still loading…';
 }
 
 function _discardChapterResume(chapterId) {
@@ -9007,7 +9048,12 @@ function renderChapterSelect() {
   if (!grid) return;
   // ⚠ Painted on every render, for the same reason as the subject hub: the
   //   active pack changes underneath this screen.
-  if (typeof Library !== undefined && ACTIVE_PACK) Library.mountPackLink(chapter-link-library, ACTIVE_PACK.id);
+  // ⚠ The mount id is a STRING and the guard compares typeof to a STRING. As
+  //   `Library.mountPackLink(chapter-link-library, …)` this line threw
+  //   "ReferenceError: chapter is not defined" the moment a pack was active -
+  //   measured: 18 chapters loaded, 0 cards drawn, the subtitle left on its
+  //   placeholder - so this whole screen painted its header and nothing else.
+  if (typeof Library !== 'undefined' && ACTIVE_PACK) Library.mountPackLink('chapter-link-library', ACTIVE_PACK.id);
   const accent = _SUBJECT_BORDER_COLOR[ACTIVE_PACK?.subject] || '';
 
   const regular    = CHAPTERS.filter(ch => !ch.enrichment);
@@ -9455,7 +9501,7 @@ async function startChapterPreview(packId, chapterId, forceDiff, backTo) {
     qs = getMixedQuestions(chapterId, 4, 20);
     if (qs.length) {
       forceDiff = null;
-      toast('No questions at that level in this chapter — showing all levels instead.', 3500);
+      toast('No questions at that level in this chapter - showing all levels instead.', 3500);
     }
   }
   if (!qs.length) {
@@ -9534,8 +9580,8 @@ function _setPreviewBanner(on) {
   const how = document.getElementById('practice-preview-how');
   if (on && how) {
     how.textContent = S.practice.previewBack === 'teacher'
-      ? 'For it to count, a pupil answers it themselves — from their own sign-in or your class link.'
-      : 'For it to count, your child answers it themselves — go back and tap 🎒 Switch to student mode, then they sign in with their PIN.';
+      ? 'For it to count, a pupil answers it themselves - from their own sign-in or your class link.'
+      : 'For it to count, your child answers it themselves - go back and tap 🎒 Switch to student mode, then they sign in with their PIN.';
   }
 }
 
@@ -10935,7 +10981,7 @@ function generatePrintablePaper(opts) {
        at the very bottom does not undo the top of the page. It also is not the
        PSAC format; it is this app's own layout. Both now say so. -->
   <div class="header-box">
-    <div class="ministry">Nou Klass — practice paper</div>
+    <div class="ministry">Nou Klass - practice paper</div>
     <div class="title">Exam-Style Practice Paper ${year}</div>
     <div class="subtitle">${_label.name} &nbsp;|&nbsp; Grade ${_label.grade}</div>
     <div class="meta">
@@ -12240,7 +12286,7 @@ function loadPracticeQuestion() {
         const _maxD = DB.restrictions?.maxDifficulty ?? 4;
         S.practice.qs = getMixedQuestions(S.practice.chapterId, _maxD, 20);
         if (S.practice.qs.length) {
-          toast(`No ${_lvlName} questions in this chapter yet — showing all levels instead.`, 3500);
+          toast(`No ${_lvlName} questions in this chapter yet - showing all levels instead.`, 3500);
         }
       }
     } else if (S.practice.chapterId) {
@@ -12447,7 +12493,7 @@ function _buildHints(q, serverHint) {
 
   const h3 = q.type === 'mcq'
     ? 'Try eliminating options you know are wrong - that narrows it down quickly.'
-    : 'Try your best answer — submit to reveal the correct one.';
+    : 'Try your best answer - submit to reveal the correct one.';
   return [h1, h2, h3];
 }
 
@@ -12604,7 +12650,7 @@ async function practiceSubmit() {
     ASSIGNMENT_TEST_ANSWERS.push({
       question:      q.question,
       userAnswer:    ua || '-',
-      correctAnswer: correctAnswer ?? '—',
+      correctAnswer: correctAnswer ?? '-',
       correct:       ok,
       explanation:   explanation || '',
     });
@@ -12672,7 +12718,7 @@ async function practiceSubmit() {
       ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
       : q.type === 'symmetry-line'
       ? 'Your correctly placed lines are green. The correct line or lines you missed are shown as orange dashes.'
-      : `Not quite. Correct answer: <b>${_prettyMath(String(correctAnswer ?? '—'))}</b>`;
+      : `Not quite. Correct answer: <b>${_prettyMath(String(correctAnswer ?? '-'))}</b>`;
     fb.innerHTML = `
       <div class="flex items-start gap-3">
         <span class="text-3xl feedback-buddy" aria-hidden="true">${reaction.icon}</span>
@@ -15243,7 +15289,7 @@ async function _renderParentProfile(container) {
           <div class="font-bold text-gray-800 dark:text-white text-sm">✉️ Emails from Nou Klass</div>
           <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${mailOn
             ? `Sent to ${_profEsc(email) || 'your email'}. Turn this off and we send you nothing automatic at all.`
-            : 'Off — no automatic emails are sent to you. Messages about your account may still reach you.'}</div>
+            : 'Off - no automatic emails are sent to you. Messages about your account may still reach you.'}</div>
         </div>
         <label class="relative inline-flex items-center cursor-pointer shrink-0">
           <input type="checkbox" id="set-email-enabled" class="sr-only peer" ${mailOn ? 'checked' : ''} onchange="_toggleEmailEnabled(this)">
@@ -15268,7 +15314,7 @@ async function _renderParentProfile(container) {
           'An email when a child finishes a piece of homework a teacher set.')}` : ''}
         ${subToggle('set-email-announcements', mail.announcements !== false, '_toggleAnnouncementEmail', '📣', 'News and announcements',
           'Occasional messages about new subjects and features. Never more than a few a term.')}
-        <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">Emails about your account itself — a password reset, or an administrator activating your account — are always sent, because you need them to sign in.</p>
+        <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">Emails about your account itself - a password reset, or an administrator activating your account - are always sent, because you need them to sign in.</p>
       </div>
 
       ${children.length ? `

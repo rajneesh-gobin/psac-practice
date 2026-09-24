@@ -1471,7 +1471,7 @@ const Store = (() => {
       .delete().eq('id', id).select('id');
     if (error) { console.error('[Store.deleteAssignment]', error.message); return { ok: false, error: error.message }; }
     if (!data?.length) {
-      console.error('[Store.deleteAssignment] refused — no row deleted for', id);
+      console.error('[Store.deleteAssignment] refused - no row deleted for', id);
       return { ok: false, error: 'not found or not allowed' };
     }
     return { ok: true };

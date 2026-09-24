@@ -250,6 +250,146 @@ function checkSubjectCounts() {
   note('checked subjects/_counts.js against ' + b.length + ' packs (' + n + ' practisable questions)');
 }
 
+// ── 4c · The generated PUBLIC demo assets must match their generators ─────
+// assets/demo/ is everything the landing-page preview shows a stranger who has
+// no account: deck-g<N>.js are frozen question samples and shelf.js is a frozen
+// sample of the past-paper catalogue. Nothing re-derives them at runtime — they
+// ship as script tags, because file:// blocks fetch — so a content change
+// leaves the public page advertising questions that have moved, and an
+// UNPUBLISHED paper stays listed on the shelf until someone remembers. Same
+// class of failure as _counts.js above: a stale file here never throws, it
+// quietly shows the wrong thing to exactly the people who have not signed up.
+//
+// ⚠ Rebuilt and compared, not regex-read, for the same reason as _counts.js:
+//   the generator is the only definition of what belongs in these files, and
+//   re-implementing its selection rules here would be a second copy of a
+//   PUBLISHING decision (what may be world-readable forever). Reading the
+//   committed file can only ever confirm that it parses.
+// ⚠ The rebuild is REDIRECTED into a temp directory by patching fs in the
+//   child, never run in place. A check that overwrites the tree it is checking
+//   destroys the evidence at the moment it finds something, and this worktree
+//   is edited by more than one process at a time.
+// ⚠ This is the only check here that executes another program, so it is the
+//   one allowed to be the slowest — and a generator is free to get slower as
+//   the corpus grows. The note prints its own elapsed time, so the pause is a
+//   measured cost rather than a mystery.
+const DEMO_ASSETS = [
+  { script: 'scripts/build-demo-decks.js', owns: /^deck-g\d+\.js$/, what: 'landing-page preview decks' },
+  { script: 'scripts/build-demo-shelf.js', owns: /^shelf\.js$/,     what: 'landing-page past-paper shelf' },
+  { script: 'scripts/build-demo-subsections.js', owns: /^subsections\.js$/, what: 'landing-page subsection samples' },
+];
+
+function checkDemoAssets() {
+  const os = require('os');
+  const { spawnSync } = require('child_process');
+  const DIR = 'assets/demo';
+
+  // The generators take no arguments and have no output-path hook, and they
+  // must not grow one for a checker's benefit — so fs is patched under them
+  // instead. Only the first path argument is remapped; reads fall back to the
+  // real tree, because a generator reads its INPUTS (question bundles, the
+  // library catalogue) through the same module.
+  const SHIM = [
+    "const fs = require('fs'), path = require('path');",
+    "const FROM = process.env.PSAC_DEMO_FROM, TO = process.env.PSAC_DEMO_TO;",
+    "const map = p => {",
+    "  if (typeof p !== 'string') return p;",
+    "  const abs = path.resolve(p);",
+    "  return (abs === FROM || abs.startsWith(FROM + path.sep))",
+    "    ? path.join(TO, path.relative(FROM, abs)) : p;",
+    "};",
+    "const realExists = fs.existsSync;",
+    "for (const fn of ['writeFileSync','mkdirSync','appendFileSync','statSync','rmSync','unlinkSync','existsSync']) {",
+    "  const orig = fs[fn];",
+    "  fs[fn] = function (p, ...rest) { return orig.call(fs, map(p), ...rest); };",
+    "}",
+    "for (const fn of ['readFileSync','readdirSync']) {",
+    "  const orig = fs[fn];",
+    "  fs[fn] = function (p, ...rest) {",
+    "    const m = map(p);",
+    "    return orig.call(fs, (m !== p && realExists(m)) ? m : p, ...rest);",
+    "  };",
+    "}",
+    "require(process.env.PSAC_DEMO_SCRIPT);",
+  ].join('\n');
+
+  // ⚠ Line endings differ per file and between processes on Windows, and a
+  //   CRLF difference is not drift — re-running the generator would not fix it,
+  //   so reporting it would be an unfixable failure.
+  const norm = s => String(s == null ? '' : s).replace(/\r\n/g, '\n');
+  const firstDiff = (a, b) => {
+    const la = a.split('\n'), lb = b.split('\n');
+    for (let i = 0; i < Math.max(la.length, lb.length); i++)
+      if (la[i] !== lb[i]) return 'first difference at line ' + (i + 1);
+    return 'differs only past the last newline';
+  };
+
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'psac-demo-check-'));
+  const t0 = Date.now();
+  let compared = 0;
+  try {
+    for (const asset of DEMO_ASSETS) {
+      const REGEN = 'run: node ' + asset.script;
+      if (!exists(asset.script)) {
+        fail(asset.script + ' is missing — nothing generates the ' + asset.what);
+        continue;
+      }
+      const out = path.join(tmp, path.basename(asset.script, '.js'));
+      fs.mkdirSync(out, { recursive: true });
+
+      // ⚠ No tight timeout. A generator that reads every question bundle is
+      //   allowed to take its time; killing it would report drift that is not
+      //   there. The ceiling exists only so a hung child cannot hang the build.
+      const r = spawnSync(process.execPath, ['-e', SHIM], {
+        cwd: ROOT,
+        encoding: 'utf8',
+        timeout: 10 * 60 * 1000,
+        env: Object.assign({}, process.env, {
+          PSAC_DEMO_FROM: path.join(ROOT, 'assets', 'demo'),
+          PSAC_DEMO_TO: out,
+          PSAC_DEMO_SCRIPT: path.join(ROOT, asset.script),
+        }),
+      });
+      if (r.error || r.status !== 0) {
+        const why = (r.error && r.error.message)
+          || (String((r.stderr || '') + (r.stdout || '')).trim().split(/\r?\n/).filter(Boolean).pop())
+          || ('exit ' + r.status);
+        fail(asset.script + ' does not run, so ' + DIR + ' cannot be verified: ' + why);
+        continue;
+      }
+
+      const built  = fs.readdirSync(out).filter(f => asset.owns.test(f)).sort();
+      const onDisk = (exists(DIR) ? fs.readdirSync(path.join(ROOT, DIR)) : [])
+        .filter(f => asset.owns.test(f)).sort();
+      if (!built.length) {
+        fail(asset.script + ' produced no ' + asset.what + ' at all — ' + REGEN + ' and read what it says');
+        continue;
+      }
+      for (const f of built)  if (!onDisk.includes(f)) fail(DIR + '/' + f + ' is missing — ' + REGEN);
+      for (const f of onDisk) if (!built.includes(f))
+        fail(DIR + '/' + f + ' is no longer produced by ' + asset.script + ' — delete it, then ' + REGEN);
+      for (const f of built) {
+        if (!onDisk.includes(f)) continue;
+        compared++;
+        const shipped = norm(read(path.join(ROOT, DIR, f)));
+        const fresh   = norm(read(path.join(out, f)));
+        if (shipped !== fresh)
+          fail(DIR + '/' + f + ' has DRIFTED from ' + asset.script
+            + ' (' + firstDiff(shipped, fresh) + ') — ' + REGEN);
+      }
+    }
+  } finally {
+    try { fs.rmSync(tmp, { recursive: true, force: true }); } catch {}
+  }
+  // ⚠ Prints its own elapsed time. This is the only check that executes other
+  //   programs, so it is the one allowed to be the slowest here — and a reader
+  //   watching check.js pause should be able to see which check paused, and by
+  //   how much, without timing it themselves.
+  note('rebuilt ' + DEMO_ASSETS.length + ' demo generator(s) and compared ' + compared + ' file(s) in '
+    + DIR + ' (' + ((Date.now() - t0) / 1000).toFixed(1) + 's — runs the generators, so this one is '
+    + 'allowed to be the slowest check here)');
+}
+
 // ── 5 · Badge ids must be unique and never reused ─────────────────────────
 // They are persisted in DB.badges; a collision silently awards the wrong badge.
 function checkBadgeIds() {
@@ -415,6 +555,7 @@ checkServiceWorker();
 checkLocalFiles();
 checkManifests();
 checkSubjectCounts();
+checkDemoAssets();
 checkBadgeIds();
 checkSqlSearchPath();
 checkScreenNesting();

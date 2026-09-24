@@ -31,7 +31,7 @@ const ChapterPreview = (() => {
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   const DIFFS = [
-    { v: '', label: 'Mixed — as a child gets it' },
+    { v: '', label: 'Mixed - as a child gets it' },
     { v: '1', label: 'Basic only' },
     { v: '2', label: 'Medium only' },
     { v: '3', label: 'Hard only' },
@@ -93,12 +93,12 @@ const ChapterPreview = (() => {
     //   sentence as the in-run banner (_setPreviewBanner in app.js) - a parent
     //   who reads one and not the other must not get two different answers.
     const how = _surface === 'teacher'
-      ? 'Work only counts when a pupil answers it signed in themselves — from their own sign-in or your class link.'
+      ? 'Work only counts when a pupil answers it signed in themselves - from their own sign-in or your class link.'
       : 'Work only counts when your child answers it themselves: tap 🎒 Switch to student mode on your dashboard and they sign in with their PIN.';
     host.innerHTML = `
       <div class="space-y-4">
         <p class="text-sm text-gray-600 dark:text-gray-300">
-          Open any chapter exactly as ${esc(who)} would see it — the same questions, hints and explanations.
+          Open any chapter exactly as ${esc(who)} would see it - the same questions, hints and explanations.
           <b>Nothing you answer is saved or counted.</b>
           <span class="block mt-1">${esc(how)}</span>
         </p>
@@ -156,7 +156,7 @@ const ChapterPreview = (() => {
         </span>
         <span class="shrink-0 text-xs font-bold text-indigo-600 dark:text-indigo-300">Preview →</span>
       </button>`;
-    }).join('') + `<p class="text-[11px] text-gray-400 dark:text-gray-500 pt-1">Back to ${backTo === 'teacher' ? 'teaching' : 'your dashboard'} at any time — the ← button at the top of the preview.</p>`;
+    }).join('') + `<p class="text-[11px] text-gray-400 dark:text-gray-500 pt-1">Back to ${backTo === 'teacher' ? 'teaching' : 'your dashboard'} at any time - the ← button at the top of the preview.</p>`;
   }
 
   function _repaintChapters() {
