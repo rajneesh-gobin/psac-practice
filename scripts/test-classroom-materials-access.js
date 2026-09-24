@@ -49,13 +49,27 @@ ok('More keeps only settings',
   [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map(m => m[1]).join() === 'settings');
 ok('the More button no longer lights up for materials or the calendar',
   /MORE_SECTIONS = \['settings'\]/.test(detail));
-ok('Calendar is a primary nav section beside Materials',
-  /data-sec="materials"[^]*?data-sec="calendar"/.test(overlay) && !/role="menuitem" data-sec="calendar"/.test(overlay));
+// ⚠ THE CALENDAR IS NOW THE WORK TIMELINE. The redesign merged Activities and
+//   Calendar into one dated view, so there is no data-sec="calendar" button to
+//   find - showSection() maps the old name onto 'work'. What this line
+//   protects is unchanged and still worth asserting: the dated view is reached
+//   from the PRIMARY row, never from the More menu. The old id must keep
+//   working too, because saved locations and _recordTab history hold it.
+ok('the dated view is a primary nav section beside Materials',
+  /data-sec="work"[^]*?data-sec="materials"/.test(overlay) && !/role="menuitem" data-sec="(calendar|work)"/.test(overlay));
+ok('the old calendar id still routes to it',
+  /sec === 'calendar'/.test(detail) && /sec = 'work'/.test(detail));
 ok('the classroom header count for files is the route to them',
   /class="tc-cd-stat" onclick="TeacherClassroomDetail\.showSection\('materials'\)"[\s\S]{0,120}id="tc-cd-stat-materials"/.test(overlay));
+// ⚠ THE ROUTE MOVED, THE GUARANTEE DID NOT. This matched a "📁 Files shared
+//   with this class" subhead plus "No files yet", both of which the redesign
+//   removed when the Work timeline replaced the old Activities list. The point
+//   was never that wording — it is that a teacher sitting on Work can reach
+//   Materials WITHOUT already having a file to click, which is the state a new
+//   class is always in. That route is now the "Need to share a file, link or
+//   video?" link, so it is matched by where it goes rather than by its words.
 ok('the Work tab routes to Materials even with no files yet',
-  /_workFilter === 'active' \? `<h4 class="tc-work-subhead">📁 Files shared with this class/.test(detail)
-  && /No files yet/.test(detail));
+  /class="tc-work-resource-link"[\s\S]{0,240}showSection\('materials'\)/.test(detail));
 
 // ── Geometry: every section reachable, on every phone width ────────────────
 const PROBE = `(() => {
@@ -106,7 +120,14 @@ const PROBE = `(() => {
   // breakpoint that keeps it compact. Both bands are measured on purpose.
   for (const width of [320, 360, 375, 390, 393, 412, 430, 431, 480, 700, 1280]) {
     await call('Emulation.setDeviceMetricsOverride', { width, height: 780, deviceScaleFactor: 1, mobile: width < 700 });
-    await ev("document.getElementById('tc-classroom-detail').classList.remove('hidden'); true");
+    // ⚠ THE CLASSROOM IS ITS OWN SCREEN NOW. Un-hiding #tc-classroom-detail
+    //   alone leaves it inside #screen-classroom, which is still display:none —
+    //   so every nav button measured 0px tall while the order check above
+    //   passed, because a hidden element still has a position in the DOM.
+    //   Reveal the screen first, exactly as showScreen('classroom') would.
+    await ev(`document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById('screen-classroom').classList.remove('hidden');
+      document.getElementById('tc-classroom-detail').classList.remove('hidden'); true`);
     await sleep(320);
     const m = await ev(PROBE);
     const secs = m.btns.map(b => b.sec);

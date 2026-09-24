@@ -87,7 +87,14 @@ let chrome,ws;
       return {measured,buttons:teacher.querySelectorAll('.teacher-navigation .ta-tab').length,steps:teacher.querySelectorAll('.ta-wiz-step').length,coach:typeof LearningCoach};
     })()`});
     assert(!result.exceptionDetails,JSON.stringify(result.exceptionDetails));
-    const value=result.result.value;assert.equal(value.buttons,8,"one destination + seven tool tabs on the nav row");assert.equal(value.steps,5);assert.equal(value.coach,'object');
+    const value=result.result.value;
+    // ⚠ THE STRIP’S COMPOSITION IS NOT THIS FILE’S JOB. This pinned exactly 8
+    //   tabs; the teacher redesign merged them to 3 and the assertion failed
+    //   before a single LAYOUT measurement ran - which is what this harness is
+    //   actually for (overflow at 390px and 1280px, light and dark).
+    //   scripts/test-teacher-tabstrip.js owns how many tabs there are and that
+    //   they stay on one row; here it only matters that a strip exists to lay out.
+    assert(value.buttons >= 1, "the teacher nav row has tabs to measure");assert.equal(value.steps,5);assert.equal(value.coach,'object');
     for(const e of value.measured){assert(e.width>0,e.text+' visible');assert(e.x>=-1&&e.right<=width+1,e.text+' fits '+width);}
     console.log(`Teacher layout fits ${width}px, ${dark?'dark':'light'} theme; coach module loaded.`);
     const coachResult=await call('Runtime.evaluate',{returnByValue:true,expression:`(()=>{

@@ -110,6 +110,7 @@ const ok = (label, cond, detail) => {
       const tops = [...new Set(tabs.map(b => Math.round(b.getBoundingClientRect().top)))];
       return { tabs: tabs.length, rows: tops.length,
                labels: tabs.map(b => b.textContent.trim()),
+               keys: tabs.map(b => b.getAttribute('data-tab')),
                navW: Math.round(nav.getBoundingClientRect().width), scrollW: nav.scrollWidth };
     })()`);
     ok('the tab strip is a SINGLE row at 1280px', strip && strip.rows === 1,
@@ -117,8 +118,15 @@ const ok = (label, cond, detail) => {
     ok('and it does not overflow its container', strip && strip.scrollW <= strip.navW + 1, strip);
     ok('Messages is no longer one of the tabs',
       strip && !strip.labels.some(l => /Messages/i.test(l)), strip && strip.labels);
-    ok('Past Exam Papers is still a tab',
-      strip && strip.labels.some(l => /Past Exam Papers/i.test(l)), strip && strip.labels);
+    // ⚠ THE DESTINATION, NOT THE LABEL. This asked for a tab reading "Past
+    //   Exam Papers", which is the wording that CAUSED the wrap this file
+    //   exists to catch. The teacher redesign renamed it back to "📚 Library"
+    //   and merged the strip down to three tabs, so the literal string is gone
+    //   by design while the thing being guarded is not: the point is that
+    //   nobody makes the strip fit by DELETING the past-papers destination.
+    //   That is the data-tab key, which survives any amount of re-labelling.
+    ok('the past-papers destination is still a tab',
+      strip && strip.keys.includes('library'), strip && { labels: strip.labels, keys: strip.keys });
     ok('Chapter preview is no longer one of the tabs',
       strip && !strip.labels.some(l => /Chapter preview/i.test(l)), strip && strip.labels);
 

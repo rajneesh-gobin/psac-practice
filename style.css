@@ -6946,7 +6946,14 @@ html.dark .pb-inpack { color:#c7d2fe; background:rgba(55,48,163,.5); }
    turns these buttons into rows and would otherwise win at 360px. The old
    `width: 52px` here was already dead for the same reason - that block sets
    `width: auto`. */
-@media (max-width: 430px) {
+/* ⚠⚠ THE COMPACT BAND MUST COVER THE WHOLE ROW LAYOUT. The 600px block
+   below turns this nav into a horizontal row, but compact buttons stopped at
+   430px - so from 431px to 600px five full-size buttons sat in a row that
+   overflowed, and « More » could only be reached by scrolling the nav
+   sideways. Measured at 431px: tc-cd-more-btn fell outside the box.
+   ⚠ A nav you have to scroll to see is a nav with hidden sections, which is
+   the whole complaint the classroom redesign set out to fix. */
+@media (max-width: 600px) {
   .tc-cd-nav { padding: .5rem .3rem; gap: 1px; }
   .tc-cd-nav .tc-cd-nav-btn { flex-direction: column; gap: 2px; padding: .42rem .3rem; }
   /* ⚠ .62rem was the worst of it. Never below .7rem for a label. */
