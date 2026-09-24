@@ -252,10 +252,14 @@ const ITEMS = [
    '(a<sup>4</sup>)<sup>5</sup> = a<sup>4&times;5</sup> = a<sup>20</sup>.'],
 
   // ── laws: "find m" index equations (NCE 2025 Q17a / 2023 Q9 pattern) ──
-  ['g9m-ind-050', 'laws', 2, 1, 'Find the value of <i>m</i>, if 27 = 3<sup><i>m</i></sup>.',
+  // ⚠ NOT 27 = 3^m. That is g9m-ind-063 part (a) verbatim — the real NCE 2025
+  //   Q17 — so the bank held the same prompt AND the same answer twice, and a
+  //   child could be dealt both. Powers of ten instead: a base this family does
+  //   not otherwise use, and the one that carries over into standard form.
+  ['g9m-ind-050', 'laws', 2, 1, 'Find the value of <i>m</i>, if 1000 = 10<sup><i>m</i></sup>.',
    '3', [],
-   'Write 27 as a power of 3.',
-   '3 &times; 3 &times; 3 = 27, so 27 = 3<sup>3</sup> and m = 3.'],
+   'Write 1000 as a power of 10.',
+   '10 &times; 10 &times; 10 = 1000, so 1000 = 10<sup>3</sup> and m = 3.'],
 
   ['g9m-ind-051', 'laws', 2, 1, 'Find the value of <i>n</i>, if 64 = 2<sup><i>n</i></sup>.',
    '6', [],

@@ -22,8 +22,25 @@ let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) pass++; else { fail++; console.log('  ✗ ' + m); } };
 
 // ── Load the pack the way the builder does ────────────────────────────────
+// ⚠⚠ THE CONTEXT COMES FROM questions-sandbox.js, never a private one here.
+//    This said "the way the builder does" while actually being
+//    { STATIC_QUESTIONS, makeTask, console } - one factory. So every file in
+//    the pack that uses another one threw and was reported as a broken FILE:
+//    "maths_multi_year.js threw: makeNum is not defined" and
+//    "past_paper_2024.js threw: makeMCQ is not defined". Both files are fine;
+//    loadSubject('grade9-maths') reads all 1,760 items including their 40 and
+//    45. It was the harness that could not run them.
+// ⚠ This is the exact shape that cost this project 365 questions in
+//   production: six French files threw `makeCloze is not defined` inside a
+//   private vm context, were skipped with a warning nobody read, and the
+//   database held 0 cloze rows. A second hand-rolled factory list is the bug.
+// ⚠ makeTask stays the engine/assessment.js one: this harness exists to
+//   re-derive TASK answers, and it must grade them with the code the app
+//   grades them with, not with the builder's copy.
+const { buildContext } = require(path.join(ROOT, 'netlify', 'lib', 'questions-sandbox.js'));
 const STATIC_QUESTIONS = [];
-const sandbox = { STATIC_QUESTIONS, makeTask: A.makeTask, console };
+const sandbox = Object.assign(buildContext(STATIC_QUESTIONS),
+                              { STATIC_QUESTIONS, makeTask: A.makeTask, console });
 vm.createContext(sandbox);
 for (const file of fs.readdirSync(DIR).filter(f => f.endsWith('.js')).sort()) {
   const code = fs.readFileSync(path.join(DIR, file), 'utf8');
@@ -57,7 +74,14 @@ ok(ids.every(i => /^g9m-[a-z]+-\d{3}$/.test(i)), 'every id follows g9m-<chapter>
 const norm = s => String(s).replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, '-')
   .replace(/\s+/g, ' ').trim().toLowerCase();
 const prompts = {};
+// ⚠⚠ A DEPENDENT PART CARRIES ITS CONTEXT IN THE PART BEFORE IT, so it can
+//    never be compared across tasks. g9m-crd-059 and -061 both have a part (b)
+//    reading "Find the equation of the line AB" - identical text, but (a) names
+//    A(1,2), B(5,10) in one and A(0,2), B(4,6) in the other, and the answers
+//    are y=2x and y=x+2. A child sits the whole task, so nothing repeats. Only
+//    a STANDALONE prompt can duplicate another standalone prompt.
 for (const t of tasks) for (const p of t.parts) {
+  if (p.dependsOn) continue;
   const k = norm(p.prompt);
   (prompts[k] = prompts[k] || []).push(t.id);
 }
