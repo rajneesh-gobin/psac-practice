@@ -200,7 +200,17 @@ function sourceChecks() {
       await sleep(300);
     }
     const noAuth = await ev('(document.querySelector("#adm-nce-out .text-rose-500")||{}).textContent||""');
-    ok(/No multi-part tasks reached the browser/.test(noAuth),
+    // ⚠ THE OLD WORDING WAS THE SYMPTOM OF A FIXED BUG. This matched "No
+    //   multi-part tasks reached the browser", which is what the screen used to
+    //   say for grade9-biology, -chemistry, -physics and -ict — four live packs
+    //   that hold zero authored `task` rows, so the generator could not build
+    //   their paper at all. tasksFromBank() now adapts plain questions too, and
+    //   the message was rewritten to say which of the two things went wrong:
+    //   no content, or the question service refusing this session.
+    // ⚠ Pinning the sentence would re-fail the moment it is improved again, so
+    //   this asserts the two things that matter — a refusal is SHOWN, and it
+    //   names the pack the adult asked for.
+    ok(/No usable questions reached the browser/.test(noAuth) && /grade9-maths/.test(noAuth),
        'an unauthenticated session gets a plain refusal, not a blank paper');
     ok(await ev('NcePaperAdmin._state() === null'), 'no paper state is left behind');
 

@@ -221,9 +221,22 @@ const FIXTURES = [
   await openCard(1); await sleep(200); m = await modal();
   ok('a fresh preview opens unanswered, whatever the last one was left on',
     !m.fbShown && m.correct === 0 && !m.hintsShown, m);
-  ok('a one-word MCQ offers its typed-blank face', m.blankRowShown, m);
-  await tickBox('qmp-blank', true); m = await modal();
-  ok('the typed-blank face is a text box, not four options', m.opts === 0 && m.inputs === 1, m);
+  // ⚠⚠ THE TYPED-BLANK FACE IS OFF, so the preview must not offer it. It used
+  //    to show a one-word MCQ as a text box for a random half of sessions;
+  //    ef5439f made _shouldShowAsBlank return a hard false and left the admin
+  //    checkbox behind. This test was the only thing that noticed, and it
+  //    reported it as "the typed-blank face is a text box, not four options"
+  //    with opts:4, inputs:0 — which reads as a broken renderer rather than as
+  //    a control wired to a feature that no longer exists.
+  // ⚠ Asserted from BLANK_FACE_ENABLED rather than hard-coded, so turning the
+  //   face back on flips this check with it instead of failing.
+  const faceOn = await ev('typeof BLANK_FACE_ENABLED === "undefined" || BLANK_FACE_ENABLED');
+  ok('the typed-blank checkbox is offered only while the app draws that face',
+    m.blankRowShown === faceOn, { blankRowShown: m.blankRowShown, BLANK_FACE_ENABLED: faceOn });
+  if (faceOn) {
+    await tickBox('qmp-blank', true); m = await modal();
+    ok('the typed-blank face is a text box, not four options', m.opts === 0 && m.inputs === 1, m);
+  }
 
   await ev('AdminPanel.qmClosePreview()');
   await openCard(2); await sleep(200); m = await modal();

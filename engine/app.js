@@ -3790,7 +3790,20 @@ function _isSingleWordAnswer(q) {
   return a.length > 0 && a.length <= 20 && !/[\s\d]/.test(a);
 }
 
-function _shouldShowAsBlank(_q) { return false; }
+// ⚠⚠ THE TYPED-BLANK FACE IS OFF. It used to show a one-word MCQ as a text box
+//    for a random half of the sessions (memoised per question id). Turned off
+//    in ef5439f. The flag exists so that OFF is stated once and can be read by
+//    anything that would otherwise offer the face: the admin question preview
+//    kept showing its "typed blank" checkbox for every single-word answer, and
+//    ticking it did nothing at all, because only this function decides.
+//    A control that cannot change what it names is worse than no control.
+const BLANK_FACE_ENABLED = false;
+function _shouldShowAsBlank(q) {
+  if (!BLANK_FACE_ENABLED) return false;
+  if (!_isSingleWordAnswer(q)) return false;
+  if (!_blankQuestions.has(q.id)) _blankQuestions.set(q.id, Math.random() < 0.5);
+  return _blankQuestions.get(q.id);
+}
 
 // ── ANSWER CHECKING ───────────────────────────
 function normalise(v) {

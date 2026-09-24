@@ -5477,7 +5477,13 @@ const AdminPanel = (() => {
       // Half of the pupils meeting a one-word MCQ get a typed box instead of
       // the options. Both faces are real, so both are offered - but only where
       // the question actually has them.
-      const blankable = typeof _isSingleWordAnswer === 'function' && _isSingleWordAnswer(shown);
+      // ⚠ AND ONLY WHILE THE APP STILL DRAWS THAT FACE. _shouldShowAsBlank has
+      //   returned a hard false since ef5439f, so this row was offering a
+      //   checkbox that could not change anything: it appeared for every
+      //   single-word answer, and ticking it left the four options exactly
+      //   where they were. BLANK_FACE_ENABLED is the one place that says off.
+      const blankable = typeof _isSingleWordAnswer === 'function' && _isSingleWordAnswer(shown)
+        && (typeof BLANK_FACE_ENABLED === 'undefined' || BLANK_FACE_ENABLED);
       _el('qmp-blank-row')?.classList.toggle('hidden', !blankable);
       if (typeof _blankQuestions !== 'undefined') {
         _blankQuestions.set(shown.id, blankable && !!_el('qmp-blank')?.checked);
