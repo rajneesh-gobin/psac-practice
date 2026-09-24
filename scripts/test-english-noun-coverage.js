@@ -17,9 +17,17 @@ for(const [grade,prefix,chapter,expected] of cases){
     assert.equal(q.options.filter(o=>o===q.answer).length,1);
     assert.equal(prompts.get(normal(q.question)),1,q.id+' repeats a prompt');
   }
-  for(const [sub,count] of Object.entries(expected)){
-    assert.equal(bank.filter(q=>q.chapterId===chapter&&q.subsection===sub).length,count);
-    console.log(`Grade ${grade} ${sub}: ${count-20} → ${count}`);
+  // ⚠⚠ A FLOOR, NOT A PIN. These count the WHOLE subsection, not the 80-item
+  //    batch this file was written to verify, so every later collective-noun
+  //    question moved them. grade5 collective reached 28 against a hard-coded
+  //    26 and took the suite down with "28 !== 26" -- a bare AssertionError
+  //    with no test name, which reads like a broken bank rather than a bank
+  //    that grew. The batch size above stays EXACT: that one really is a
+  //    fixed set, identified by its id prefix.
+  for(const [sub,floor] of Object.entries(expected)){
+    const n=bank.filter(q=>q.chapterId===chapter&&q.subsection===sub).length;
+    assert(n>=floor,`grade${grade} ${sub}: ${n} questions, expected at least ${floor}`);
+    console.log(`Grade ${grade} ${sub}: ${n} questions (floor ${floor})`);
   }
 }
 console.log('80 new noun questions: valid options, unique IDs/prompts, correct subsection counts and guidance passed.');
