@@ -1,76 +1,76 @@
 {
   "grade4": {
-    "total": 4578,
+    "total": 4998,
     "subjects": {
       "grade4-english": {
-        "count": 873,
-        "hash": "0cab7f6400e46c42b841dd134a8a9cb1977f6a12e37b07626aedba3930b0c60f"
+        "count": 958,
+        "hash": "fd4af38bbfb032247c9226b931844f055eb784fa43d8bc5f1a1a0b4aa480a464"
       },
       "grade4-french": {
-        "count": 2141,
-        "hash": "734f9d38909b665cf94fab0ec1d1a4ed05fa2822c047a6a577e372feeda27f90"
+        "count": 2210,
+        "hash": "5aa1e9acd5ee45a26242f734e861afffff1710f0c86b2ec16b7d6c9fdf4abba8"
       },
       "grade4-history": {
-        "count": 558,
-        "hash": "0a8b5e260d5d6384a08b8c8e31ec2f546e7629b1337c69e17102c972d337bf3a"
+        "count": 648,
+        "hash": "5e608d6f0ad6cec6734a84f7cb348e8bf30a689a580f370ce521d9774ce02518"
       },
       "grade4-maths": {
-        "count": 662,
-        "hash": "a479d597e83e751e699bcf4960193a69d13a39877b411e17daad4f768c67c4c3"
+        "count": 762,
+        "hash": "467da240916e3169c4d30b89e51116a7d7b2b749e246bb0a0ef46f002fb26829"
       },
       "grade4-science": {
-        "count": 344,
-        "hash": "8fce2d59f1ec787077ba4f5224b0763ad911628e883895e246b17090fb84ce09"
+        "count": 420,
+        "hash": "b21a448050169924f12f4df8a26078ec73765144d79a68f0f528f221517d40a6"
       }
     }
   },
   "grade5": {
-    "total": 5430,
+    "total": 6231,
     "subjects": {
       "grade5-english": {
-        "count": 705,
-        "hash": "755f40362d0656ad7d4d5a74c94976f17ebfec34103f806772c61ed7b32905c6"
+        "count": 856,
+        "hash": "6c01f96701fb74228ab8b84a7faf9119e45d0c7f1aa97ae4d435ac6e1e5aa2b6"
       },
       "grade5-french": {
-        "count": 2315,
-        "hash": "dd154e83d337e4e2c6b492c46e856f6c695893202a4eb3fc19573a8b973a4e75"
+        "count": 2453,
+        "hash": "8315517f334f3578d076c78e5605cf670633868963953f90c7729fe47195b4be"
       },
       "grade5-history": {
-        "count": 543,
-        "hash": "eb1605b53dc13f76eceef6e149aef792ba86e7239c04faf64354a31f75da3d62"
+        "count": 893,
+        "hash": "24fcb478a5c302242174ecbf4d33bc10a13735397530f1eed268ea63b60b1704"
       },
       "grade5-maths": {
-        "count": 1431,
-        "hash": "a3e4aa25123b046a2e26aad14b3d490f3a8fdf93ebfa72d150baf78a759dfa6b"
+        "count": 1479,
+        "hash": "6394bc09801e8c5717880c725b81e3725c7ac03065b9904dc69f635f08c38155"
       },
       "grade5-science": {
-        "count": 436,
-        "hash": "1194de4e7d61cdb2f1215758048b6b620a9c4843b8beb6975407873005c1c48f"
+        "count": 550,
+        "hash": "5ed997cce829cf51c3421ea0e557693114d4859665ff9c458930d2835a5c4a69"
       }
     }
   },
   "grade6": {
-    "total": 4784,
+    "total": 5579,
     "subjects": {
       "grade6-english": {
-        "count": 890,
-        "hash": "36058cbc18a1121ff7ca3717ccc0f8936302499d9dcf93ea3ae1ab9837871b93"
+        "count": 1050,
+        "hash": "eb3173ae30b5578f6b1066d4ac801acb28618b87c3164c4fb1182dab14d801b2"
       },
       "grade6-french": {
-        "count": 2254,
-        "hash": "a1ff4f0083b360c918657829ac21e17332e030e42950d949b468c6d2588a0246"
+        "count": 2373,
+        "hash": "0d210e534c3c0a3e16021e1f678887a3074d734cfdefb9e1118d74dfc89de3d9"
       },
       "grade6-history": {
-        "count": 460,
-        "hash": "d195e37fba39a816ee3d3abd8015942ef803c5a69d2003a4d66a5990b3d2ffb1"
+        "count": 715,
+        "hash": "c60008caa5f941c15bc084a5144396a23d8e03749d8c9eab86e24db66c3b629c"
       },
       "grade6-maths": {
-        "count": 717,
-        "hash": "cb370c1f3ebfd4073a74d781f6ca82987aa28dd2eb6cd314043f5cb225bc6d5c"
+        "count": 815,
+        "hash": "6ae06c73741415b774a802d9932a344b3215d27d404d16f67a8bf9a4d1e0763b"
       },
       "grade6-science": {
-        "count": 463,
-        "hash": "30b5d2e39ae59898a4e6d511385dc1db2e64694a5198fa9b341252fb0937bd43"
+        "count": 626,
+        "hash": "41a61cd7e6bb2d6fe30c22d35c5943710fb65405ee98f4d290058712d69c9360"
       }
     }
   }
