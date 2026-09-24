@@ -81,9 +81,24 @@ for (const pack of PACKS) {
   // alongside them are typed `text` items with no `options` at all — every
   // per-question assertion below would throw on one.
   // scripts/test-french-correction.js covers those.
-  const bank = loadSubject(pack.id)
+  // ⚠⚠ THE FORMATION BANK IS THE PREFIXED ONE, never "every MCQ in the
+  //    chapter". The chapter is « Mots & Corrections » and deliberately covers
+  //    BOTH halves of PSAC Q7 - 7B (écris le mot à la forme correcte) and 7A
+  //    (corrige l'erreur soulignée) - so it also holds 7A practice MCQs and
+  //    syllabus-gap top-ups written in other files, under their own id
+  //    prefixes.
+  // ⚠ Judging those by 7B's rules is what failed this suite: 10 grade-4
+  //   g4fr-hd-* and 4 grade-5 g5fr-syl-* items were reported as missing a
+  //   « base → forme » arrow and a ___ blank, neither of which a correction
+  //   item has any reason to carry. Measured 2026-09-24: 100 form-prefixed
+  //   MCQs in all three packs - exactly the number this file asserts.
+  const chapterMcq = loadSubject(pack.id)
     .filter(q => q.chapterId === pack.chapter && q.type === 'mcq');
+  const bank = chapterMcq.filter(q => String(q.id).startsWith(pack.prefix));
   check(bank.length === 100, `${pack.id}: ${pack.chapter} holds 100 questions`, `${bank.length}`);
+  const sharing = chapterMcq.length - bank.length;
+  if (sharing) console.log(`  note  ${pack.id}: ${sharing} further MCQ(s) share this chapter as 7A practice` +
+    ' - they are the correction half, checked by test-french-correction.js');
 
   const declaredIds = declared.map(s => s.id).sort();
   // ⚠ Over the WHOLE chapter, not just the MCQs: a declared id with no
