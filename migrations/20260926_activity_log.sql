@@ -134,10 +134,15 @@ REVOKE ALL ON FUNCTION public.activity_events_stamp() FROM PUBLIC, anon, authent
 --   therefore PER ACTOR (each child, each parent keeps their own last N), with
 --   a hard age limit on top so a dormant account does not keep rows for ever.
 --
+-- ⚠ 500 PER ACTOR, raised from 200 on request 2026-09-26: at 30-60 rows an
+--   evening, 200 only reached back a few days for a heavy user, so "last 30
+--   days" in the admin panel was bounded by the CAP rather than by the age
+--   limit it advertises. 500 rows is ~75 KB per person.
+--
 -- ⚠ There is no pg_cron on this database (measured: pg_stat_statements,
 --   pgcrypto, plpgsql, supabase_vault, uuid-ossp). This is called by the
 --   Worker's 03:00 cron - see workers/api/activity-prune.js.
-CREATE OR REPLACE FUNCTION public.prune_activity_events(p_keep int DEFAULT 200, p_days int DEFAULT 30)
+CREATE OR REPLACE FUNCTION public.prune_activity_events(p_keep int DEFAULT 500, p_days int DEFAULT 30)
  RETURNS jsonb
  LANGUAGE plpgsql
  SECURITY DEFINER
@@ -149,7 +154,7 @@ BEGIN
   IF auth.uid() IS NOT NULL AND NOT public.is_admin() THEN
     RETURN jsonb_build_object('ok', false, 'error', 'not_authorised');
   END IF;
-  v_keep := greatest(coalesce(p_keep, 200), 10);
+  v_keep := greatest(coalesce(p_keep, 500), 10);
   v_days := greatest(coalesce(p_days, 30), 1);
 
   DELETE FROM public.activity_events WHERE created_at < now() - make_interval(days => v_days);

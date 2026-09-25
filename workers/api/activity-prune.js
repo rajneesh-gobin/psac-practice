@@ -11,7 +11,7 @@
 // ⚠ THIS EXISTS BECAUSE THERE IS NO pg_cron ON THIS DATABASE. Measured, not
 //   assumed: the installed extensions are pg_stat_statements, pgcrypto,
 //   plpgsql, supabase_vault and uuid-ossp. Without this handler the retention
-//   the admin panel PROMISES ("kept 30 days · last 200 per person") would never
+//   the admin panel PROMISES ("kept 30 days · last 500 per person") would never
 //   run, and the table would grow without limit.
 //
 // ⚠ The deleting is done by prune_activity_events() inside the database, not by
@@ -19,7 +19,7 @@
 //   window function, and a Worker cannot express it without pulling the whole
 //   table across the wire.
 
-const KEEP = 200;
+const KEEP = 500;
 const DAYS = 30;
 
 export default async function handler(request, env) {

@@ -79,6 +79,13 @@ const Activity = (() => {
     if (!_on || !kind) return;
     const who = _actor();
     if (!who) return;
+    // ⚠ EVERY ROW CARRIES EVERY KEY, null included. PostgREST rejects a batch
+    //   whose objects do not all have the SAME keys - "All object keys must
+    //   match", PGRST102, 400, the WHOLE batch - and measured against
+    //   production that is exactly what happens when one row omits `meta` and
+    //   the next one has it. Nothing here would have shown it: the error is
+    //   swallowed on purpose (instrumentation must not cost the child
+    //   anything), so the trail would simply have gone quiet.
     _buf.push({
       actor_kind: who.actor_kind,
       actor_id:   who.actor_id,

@@ -6275,6 +6275,54 @@ const AdminPanel = (() => {
     want.forEach(id => { if (!_actNames[id]) _actNames[id] = String(id).slice(0, 8) + '…'; });
   }
 
+  // ⚠ A TRAIL OF INTERNAL IDS IS NOT A LOG A PERSON CAN READ. "screen
+  //   practice-hub" and "chapter_open g5m-fractions" are the names the code
+  //   uses; an admin reading them has to know the codebase to know whether a
+  //   child was working or wandering. Everything on screen is translated, and
+  //   an id with no translation still renders as itself rather than blank.
+  const _ACT_SCREEN = {
+    landing: 'the home page', auth: 'sign in', 'student-select': 'choose a child',
+    'student-home': 'kid home', 'practice-hub': 'Start Practicing (pick a subject)',
+    'subject-hub': 'a subject page', 'chapter-select': 'the chapter list',
+    practice: 'practice questions', 'exam-config': 'set up a test', exam: 'a test',
+    results: 'test results', dashboard: 'their progress', analytics: 'progress reports',
+    parent: 'the parent dashboard', 'parent-messages': 'parent messages', inbox: 'the inbox',
+    calendar: 'the calendar', schedule: 'the timetable', shop: 'the shop',
+    certificates: 'certificates', leaderboard: 'the leaderboard', minigames: 'the Game Zone',
+    labs: 'Science Labs', library: 'the library', 'past-papers': 'past papers',
+    search: 'search', forum: 'the forum', classroom: 'a classroom', teacher: 'teacher mode',
+    admin: 'the admin panel', profile: 'their profile', 'grade-select': 'choose a grade',
+    'subject-select': 'choose a subject', 'add-student': 'add a child',
+    'family-setup': 'family setup', contact: 'the contact form', info: 'the info page',
+    syllabus: 'the syllabus', 'cloze-list': 'Textes à trous', 'cloze-play': 'a Texte à trous',
+    'hunt-list': 'Chasse aux erreurs', 'hunt-play': 'a Chasse aux erreurs',
+    'interactive-map': 'the map', assignment: 'homework', 'biometric-lock': 'the lock screen',
+  };
+
+  // Built once from the loaded pack index, not per row.
+  let _actChapterNames = null;
+  function _actChapterName(id) {
+    if (!_actChapterNames) {
+      _actChapterNames = {};
+      try { _allChapters().forEach(c => { _actChapterNames[c.id] = `${c.name} (${c.subject})`; }); }
+      catch (_) { _actChapterNames = {}; }
+    }
+    return _actChapterNames[id] || id;
+  }
+
+  function _actRefLabel(r) {
+    const ref = r.ref || '';
+    if (!ref) return '';
+    if (r.kind === 'chapter_open') return _actChapterName(ref);
+    if (r.kind === 'subject_open') {
+      const p = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(x => x.id === ref);
+      return p ? `${p.subject || p.name} · Grade ${p.grade}` : ref;
+    }
+    // A sign-in or a kid-mode switch carries a STUDENT ID, not a screen.
+    if (r.kind === 'signin_student' || r.kind === 'switch_to_kid') return _actNames[ref] || '';
+    return _ACT_SCREEN[ref] || ref;
+  }
+
   const _ACT_LABEL = {
     signin_student: '🔑 signed in',
     switch_to_kid:  '👪 switched to kid mode',
@@ -6335,7 +6383,7 @@ const AdminPanel = (() => {
         <div class="text-xs font-bold text-gray-600 dark:text-gray-300 mb-2">Where the time goes</div>
         ${top.map(([name, e]) => `<div class="mb-1.5">
           <div class="flex justify-between text-[11px] text-gray-600 dark:text-gray-300">
-            <span class="font-semibold truncate">${_esc(name)}</span>
+            <span class="font-semibold truncate">${_esc(_ACT_SCREEN[name] || name)}</span>
             <span class="text-gray-400 whitespace-nowrap ml-2">${_actDur(e.ms)} · ${e.visits}×${e.answers ? ` · ${e.answers} ans` : ''}</span>
           </div>
           <div class="h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
@@ -6367,7 +6415,7 @@ const AdminPanel = (() => {
         <span class="text-gray-400 font-mono">${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
         <span class="font-semibold ${r.actor_kind === 'parent' ? 'text-purple-600 dark:text-purple-300' : 'text-gray-700 dark:text-gray-200'} truncate max-w-[9rem]">${_esc(who)}</span>${as}
         <span class="text-gray-600 dark:text-gray-300">${_ACT_LABEL[r.kind] || _esc(r.kind)}</span>
-        <span class="text-gray-500 truncate">${_esc(r.ref || '')}</span>
+        <span class="text-gray-500 truncate">${_esc(_actRefLabel(r))}</span>
         <span class="text-gray-400">${ms}${ans}${zero}</span>
         ${dead.has(r.id) ? '<span class="text-amber-600 font-semibold whitespace-nowrap">✗ closed here</span>' : ''}
       </div>`);
@@ -6386,6 +6434,62 @@ const AdminPanel = (() => {
       .join('');
   }
 
+  // ── Finding one person ─────────────────────
+  // ⚠ THE PERSON LIST CANNOT BE BUILT FROM THE EVENTS ON SCREEN. That was the
+  //   first cut, and it can only offer people who happen to appear in the last
+  //   200 rows - so the one search an admin actually runs ("what has THIS child
+  //   been doing?") fails for exactly the quiet children worth asking about.
+  //   Names are searched against the students and profiles tables instead.
+  async function searchActivityPeople() {
+    const term = (document.getElementById('admin-act-search')?.value || '').trim();
+    const sel  = document.getElementById('admin-act-who');
+    if (!sel || !_sb) return;
+    if (term.length < 2) { sel.innerHTML = '<option value="">Everyone</option>'; await loadActivity(); return; }
+    const like = `%${term.replace(/[%,()]/g, '')}%`;
+    const [kids, adults] = await Promise.all([
+      _sb.from('students').select('id, display_name, grade').ilike('display_name', like).limit(25),
+      _sb.from('profiles').select('id, full_name').ilike('full_name', like).limit(25),
+    ]);
+    const opts = [];
+    (kids.data || []).forEach(s => {
+      _actNames[s.id] = `${s.display_name || 'child'} (G${s.grade || '?'})`;
+      opts.push(`<option value="${_esc(s.id)}">🧒 ${_esc(_actNames[s.id])}</option>`);
+    });
+    (adults.data || []).forEach(p => {
+      _actNames[p.id] = p.full_name || 'parent';
+      opts.push(`<option value="${_esc(p.id)}">👪 ${_esc(_actNames[p.id])}</option>`);
+    });
+    sel.innerHTML = '<option value="">Everyone</option>' + opts.join('');
+    // One match is the answer, not a menu to then pick from.
+    if (opts.length === 1) sel.selectedIndex = 1;
+    await loadActivity();
+  }
+
+  // One person's own line at the top of their trail: is this a child who opens
+  // the app and leaves, or one who works?
+  function _renderActivityPerson(box, rows, who) {
+    if (!box || !who) return false;
+    let ms = 0, answers = 0, visits = 0;
+    rows.forEach(r => {
+      if (r.kind !== 'screen_end') return;
+      ms += Number(r.meta?.ms) || 0;
+      answers += Number(r.meta?.answers) || 0;
+    });
+    rows.forEach(r => { if (r.kind === 'signin_student' || r.kind === 'switch_to_kid') visits++; });
+    const last = rows[0] ? new Date(rows[0].created_at) : null;
+    const dead = _actDeadEnds(rows).size;
+    box.insertAdjacentHTML('afterbegin', `
+      <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-3 mb-3">
+        <div class="text-sm font-bold text-indigo-700 dark:text-indigo-300">${_esc(_actNames[who] || who)}</div>
+        <div class="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5">
+          ${_actDur(ms)} on screen · ${answers} answered · ${visits} sign-in${visits === 1 ? '' : 's'}
+          · ${dead} closed-on screen${dead === 1 ? '' : 's'}
+          ${last ? `· last seen ${_esc(last.toLocaleString())}` : ''}
+        </div>
+      </div>`);
+    return true;
+  }
+
   async function loadActivity() {
     const box = document.getElementById('admin-act-list');
     const sum = document.getElementById('admin-act-summary');
@@ -6393,11 +6497,22 @@ const AdminPanel = (() => {
     box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">Loading…</p>';
     const who   = document.getElementById('admin-act-who')?.value || '';
     const limit = parseInt(document.getElementById('admin-act-limit')?.value, 10) || 200;
+    // ⚠ HOURS, NOT DAYS. This was a whole-number DAYS control, so "the last
+    //   hour" - the window an admin actually uses when someone has just
+    //   reported something - could not be expressed at all: parseInt truncated
+    //   any fraction to 0, which silently means ALL TIME, the opposite of a
+    //   narrower filter.
+    const hours = parseInt(document.getElementById('admin-act-since')?.value, 10) || 0;
     let q = _sb.from('activity_events')
       .select('id, actor_kind, actor_id, as_student, kind, ref, meta, created_at')
       .order('created_at', { ascending: false })
       .limit(limit);
-    if (who) q = q.eq('actor_id', who);
+    // ⚠ actor_id OR as_student, NEVER actor_id alone. Everything a parent does
+    //   in kid mode is filed under the PARENT, so filtering a child by actor_id
+    //   hides the half of their trail an adult drove - which is the half this
+    //   whole feature was asked for.
+    if (who)  q = q.or(`actor_id.eq.${who},as_student.eq.${who}`);
+    if (hours) q = q.gte('created_at', new Date(Date.now() - hours * 3600000).toISOString());
     const { data, error } = await q;
     if (error) {
       // 42P01 / PGRST205 both mean the table is not there yet - a different
@@ -6409,14 +6524,20 @@ const AdminPanel = (() => {
       return;
     }
     if (!data || !data.length) {
-      box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">Nothing recorded yet.</p>';
+      // ⚠ Three different silences, and one sentence for all three would send
+      //   an admin looking for a bug that is not there.
+      box.innerHTML = `<p class="text-xs text-gray-400 py-3 text-center">${
+        who  ? 'Nothing from this person in the chosen period.'
+        : hours ? 'Nothing in the chosen period.'
+        : 'Nothing recorded yet.'}</p>`;
       if (sum) sum.innerHTML = '';
       return;
     }
     await _actResolveNames(data);
     _renderActivitySummary(sum, data);
     _renderActivityList(box, data);
-    _fillActivityWho(data);
+    _renderActivityPerson(box, data, who);
+    if (!who) _fillActivityWho(data);
   }
 
   // Hand-adjust one account's balance: support, a refund, or clawing back a
@@ -6772,7 +6893,7 @@ const AdminPanel = (() => {
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
-    publishCatalog, loadSecurityEvents, loadActivity, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
+    publishCatalog, loadSecurityEvents, loadActivity, searchActivityPeople, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
     loadTeacherQueue, setTeacherStatus, teachersPage, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, toggleLeaderboard, loadStats, loadReports, reportsPage, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleQmReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, rolesPage, setRole, filterRoles, loadPlans, togglePlan, loadJuice, saveJuiceSettings, confirmJuice, rejectJuice, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier, sortTeachers, refreshTeacherActivity,
