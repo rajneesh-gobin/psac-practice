@@ -66,7 +66,29 @@ database is a **decision**, not a pending run.
 
 </details>
 
-1. ⚠⚠ **THE WHOLE `netlify/` DIRECTORY IS PUBLICLY SERVED UNTIL THE NEXT DEPLOY.**
+1. ✅ **CLOSED 2026-09-25 — measured anonymous against production, not inferred.**
+   The deploy this item was waiting on has happened, and production is
+   **nouklass.com on Cloudflare**, not Netlify — so the `netlify.toml` redirect
+   was never what fixed it. Every path named below now answers **404**:
+   `/netlify/question-bundles/grade5-maths.json`, `/netlify/functions/questions.js`,
+   `/netlify/lib/student-auth.js`, `/netlify/import-questions.js`,
+   `/docs/content-coverage-plan.md`, `/dbg18.js`, `/test.py`, `/migrations/`,
+   and `/.env`. Both halves of the two-sided probe this item demanded pass:
+   the bundle path is **404** *and* `/.netlify/functions/questions` is still
+   **401**, as is `/api/questions` — the question service is up and still
+   refusing anonymous callers, so no rule caught the leading-dot path.
+   ⚠ Also checked, because a 404 on the bundles proves nothing on its own:
+   `/subjects/grade5-maths/questions/core.js` → **404**, so the raw question
+   files are not reachable either. `/subjects/grade5-maths/_manifest.js` → 200,
+   which is correct and required — `PackLoader.ensure()` fetches it, it carries
+   chapters and generators rather than the bank, and the entitlement decision
+   was never in that file.
+   ⚠ **Re-probe rather than trusting this paragraph.** It records one morning's
+   measurement of a hosting setup that has already moved once.
+
+<details><summary>The original report, kept for context</summary>
+
+   ⚠⚠ **THE WHOLE `netlify/` DIRECTORY IS PUBLICLY SERVED UNTIL THE NEXT DEPLOY.**
    Measured anonymous against production 2026-09-08:
    `/netlify/question-bundles/grade5-maths.json` → **200, 651 KB of real questions
    with their answers** (58 bundle files), `/netlify/functions/questions.js` →
@@ -88,6 +110,8 @@ database is a **decision**, not a pending run.
    not. `scripts/test-netlify-redirects.js` now fails on anything neither
    allowlisted nor blocked. ⚠ `.netlify/` cannot be blocked by a path rule (same
    prefix as the functions); it is asserted gitignored instead.
+
+</details>
 
 2. ⚠ **`netlify/functions/parent-pin-signin.js` IS NOT DEPLOYED YET** (the table
    `parent_pin_attempts` is applied and recorded in the schema; the function and

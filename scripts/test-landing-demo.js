@@ -220,6 +220,103 @@ function getJson(url) {
   ok('the preview offers a free account', promise.unlock);
   ok('the preview says an account tracks progress', promise.progress);
 
+  // ── "this is not a screenshot" ────────────────────────────────────────────
+  // ⚠⚠ RUN THIS BEFORE ANYTHING CLICKS A BUTTON IN THE TRACK. The poke stops
+  //   for good at the first press inside a panel, so every check below is dead
+  //   the moment the "answering" block runs. Nothing above here clicks: the
+  //   chapter check calls Demo.setChapter() directly, which fires no event.
+  console.log('\n══ the poke ══');
+  const poke0 = await js(`(() => {
+    const panes = [...document.getElementById('demo-track').children];
+    const on = panes.filter((p) => p.classList.contains('demo-poke'));
+    const open = panes.findIndex((p) => !p.inert);
+    const target = on[0] && [...on[0].querySelectorAll('*')]
+      .find((el) => getComputedStyle(el).animationName === 'demoPoke');
+    return { count: on.length, openIsPoked: !!on[0] && panes.indexOf(on[0]) === open,
+             target: target ? target.className.toString().slice(0, 40) : null,
+             moves: target ? getComputedStyle(target).animationName : 'none' };
+  })()`);
+  ok('the open slide is poked on arrival, and only that one',
+    poke0.count === 1 && poke0.openIsPoked, JSON.stringify(poke0));
+  // ⚠ Asserts the RULE MATCHES SOMETHING. The class goes on the pane and the
+  //   per-slide target lives in style.css, so renaming a control there breaks
+  //   the hint silently — the pane still carries .demo-poke and nothing moves.
+  ok('something inside the poked slide actually animates', !!poke0.target,
+    JSON.stringify(poke0));
+
+  // ⚠⚠ translate, NEVER transform. .demo-btn:active is transform: scale(.97),
+  //   and an animation beats a plain declaration — animating transform here
+  //   would silently cancel the press feedback on the two slides whose target
+  //   IS a .demo-btn. Read from the stylesheet, because a keyframe that never
+  //   fires in this run would still be wrong.
+  const kf = await js(`(() => {
+    for (const sheet of document.styleSheets) {
+      let rules; try { rules = sheet.cssRules; } catch (_) { continue; }
+      for (const r of rules || []) {
+        if (r.type !== CSSRule.KEYFRAMES_RULE || r.name !== 'demoPoke') continue;
+        const txt = [...r.cssRules].map((k) => k.style.cssText).join(' ');
+        return { found: true, translate: /translate/.test(txt), transform: /transform/.test(txt) };
+      }
+    }
+    return { found: false };
+  })()`);
+  ok('the poke moves with translate, not transform',
+    kf.found && kf.translate && !kf.transform, JSON.stringify(kf));
+
+  // ⚠⚠ EVERY SLIDE, not just the one that happens to be open. The targets are
+  //   seven separate selectors in style.css and each names a class some slide's
+  //   renderer writes; rename one and that slide alone stops hinting, silently,
+  //   with the pane still carrying .demo-poke. Checking the first slide would
+  //   have proved nothing about the other six.
+  // ⚠ 'parent' is expected to have NOTHING. It is a sample report with nothing
+  //   to press, and poking it would promise an interaction that does not exist.
+  const NO_POKE = ['parent'];
+  const sweep = [];
+  for (const sid of await js(`[...document.querySelectorAll('.demo-slide')].map(s => s.id.replace('demo-slide-',''))`)) {
+    await js(`(() => { Demo.show(${JSON.stringify(sid)}); return true; })()`);
+    await sleep(600);
+    sweep.push(await js(`(() => {
+      const p = document.getElementById('demo-slide-' + ${JSON.stringify(sid)});
+      const hit = [...p.querySelectorAll('*')]
+        .filter((el) => getComputedStyle(el).animationName === 'demoPoke');
+      return { id: ${JSON.stringify(sid)}, poked: p.classList.contains('demo-poke'),
+               moving: hit.length, what: hit[0] ? hit[0].className.toString().slice(0, 30) : null };
+    })()`));
+  }
+  ok('every slide is marked when it opens',
+    sweep.every((s) => s.poked), JSON.stringify(sweep.filter((s) => !s.poked)));
+  ok('every slide that should hint has exactly one control doing it',
+    sweep.filter((s) => NO_POKE.indexOf(s.id) < 0).every((s) => s.moving === 1),
+    JSON.stringify(sweep.map((s) => s.id + ':' + s.moving + ':' + s.what)));
+  ok('the sample-report slide has nothing to poke, deliberately',
+    sweep.filter((s) => NO_POKE.indexOf(s.id) >= 0).every((s) => s.moving === 0),
+    JSON.stringify(sweep.filter((s) => NO_POKE.indexOf(s.id) >= 0)));
+
+  // ⚠ A press inside a panel ends it for every slide, permanently — someone who
+  //   has answered a question does not need to be told the card is live.
+  const pokeAfter = await js(`(() => {
+    Demo.show('practise');
+    return true;
+  })()`);
+  await sleep(800);
+  const stopped = await js(`(() => {
+    const pane = document.getElementById('demo-slide-practise');
+    const btn = pane.querySelector('.demo-ch, button');
+    if (!btn) return { clicked: false };
+    btn.click();
+    const panes = [...document.getElementById('demo-track').children];
+    const after = panes.filter((p) => p.classList.contains('demo-poke')).length;
+    Demo.show('lab');
+    const back = [...document.getElementById('demo-track').children]
+      .filter((p) => p.classList.contains('demo-poke')).length;
+    return { clicked: true, after, back };
+  })()`);
+  await sleep(700);
+  ok('one press inside a panel stops the poke everywhere, for good',
+    stopped.clicked && stopped.after === 0 && stopped.back === 0, JSON.stringify(stopped));
+  await js(`(() => { Demo.show('practise'); return true; })()`);
+  await sleep(800);
+
   // ── answering ─────────────────────────────────────────────────────────────
   console.log('\n══ answering ══');
   // ⚠ The one invariant that matters: a stranger tapping a sales demo must
@@ -817,6 +914,95 @@ function getJson(url) {
 
   const errs = await js('(window.__pageErrors||[]).length');
   ok('no page errors surfaced during the run', !errs);
+
+  // ── the arrows, at the widths that HAVE arrows ─────────────────────────────
+  // ⚠⚠ THIS IS WHY .demo-deck-prev/next CARRY align-self:start. The track's
+  //   height is the OPEN slide's height, so while the arrows were centred in
+  //   that grid row they moved by half of every height change — reported as
+  //   "the button jumps to adjust when I click next". Measured before the fix:
+  //   195px of travel at 820px wide (practise 1278px against the past-paper
+  //   shelf 889px), 72px at 1440, 47px at 1024. A control that moves out from
+  //   under the pointer that just clicked it is a broken control.
+  // ⚠ The slides are NOT expected to be the same height and must not be made
+  //   so — sizing to the open pane is what keeps half a phone screen of empty
+  //   board from sitting under the short slides (see _fit() in engine/demo.js).
+  //   The claim asserted here is that the ARROW does not care.
+  // ⚠ 820px is in the band where .demo-shell has not yet gone two-column
+  //   (min-width: 900px), which is where the practise slide is tallest and the
+  //   spread is worst. Testing only at 1440 measured a 72px jump and would have
+  //   been called near enough.
+  for (const w of [1440, 1024, 820]) {
+    await S('Emulation.setDeviceMetricsOverride', { width: w, height: 900, deviceScaleFactor: 1, mobile: false });
+    await sleep(500);
+    const ids = await js(`[...document.querySelectorAll('.demo-slide')].map(s => s.id.replace('demo-slide-',''))`);
+    const seen = [];
+    for (const id of ids) {
+      await js(`(() => { Demo.show(${JSON.stringify(id)}); return true; })()`);
+      await sleep(650);
+      seen.push(await js(`(() => {
+        const prev = document.querySelector('.demo-deck-prev');
+        const next = document.querySelector('.demo-deck-next');
+        const track = document.getElementById('demo-track');
+        const pane = [...track.children].find((p) => !p.inert) || track.children[0];
+        const panel = pane.firstElementChild || pane;
+        const r = prev.getBoundingClientRect(), rn = next.getBoundingClientRect();
+        const pr = panel.getBoundingClientRect();
+        return { id: ${JSON.stringify(id)},
+          shown: getComputedStyle(prev).display !== 'none',
+          top: Math.round(r.top + window.scrollY),
+          nextTop: Math.round(rn.top + window.scrollY),
+          clearsPanel: r.right <= pr.left + 1 && rn.left >= pr.right - 1,
+          insidePanel: r.top >= pr.top - 1 && r.bottom <= pr.bottom + 1 };
+      })()`));
+    }
+    const tops = seen.map((s) => s.top);
+    const spread = Math.max.apply(null, tops) - Math.min.apply(null, tops);
+    ok(w + 'px: the arrows are on screen at this width', seen.every((s) => s.shown));
+    ok(w + 'px: the arrows do not move when the slide changes', spread === 0,
+      'travel ' + spread + 'px · ' + JSON.stringify(seen.map((s) => s.id + ':' + s.top)));
+    ok(w + 'px: prev and next stay level with each other',
+      seen.every((s) => s.top === s.nextTop));
+    // ⚠ Anchoring to the track's top is only safe while every panel is taller
+    //   than the offset. A shorter slide would leave the arrow hanging past the
+    //   panel's bottom edge, and the grid row — not the layout — is what grows
+    //   to absorb it, so nothing else would report it.
+    ok(w + 'px: the arrows sit beside the panel, never over it and never past it',
+      seen.every((s) => s.clearsPanel && s.insidePanel),
+      JSON.stringify(seen.filter((s) => !(s.clearsPanel && s.insidePanel))));
+
+    // ⚠⚠ THE PAPER SLIDE'S SUBJECT ROW SPANS BOTH COLUMNS above 900px, and it
+    //   is a HEIGHT fix. Stacked in the 17.5rem form column those five buttons
+    //   were a 2-col grid three rows deep, which made the form 675px — and the
+    //   form is what sets this slide's height, because the sheet beside it
+    //   stretches to match and turned the same three rows into a 492px blank
+    //   void on the paper. Measured at 1440: the slide was 905px, the TALLEST
+    //   of the eight against a 765px median. Full width it is one row, the
+    //   slide is 805px and the void is 313px.
+    // ⚠ Asserted as a WIDTH, not as a height. A height threshold flaps every
+    //   time a subject is added to a grade or the copy is re-wrapped; the claim
+    //   that actually holds is that the picker is not confined to the form
+    //   column.
+    if (w >= 900) {
+      const mk = await js(`(() => {
+        Demo.show('paper');
+        const pick = document.querySelector('#demo-make .demo-mk-pick');
+        const form = document.querySelector('#demo-make .demo-mk-form');
+        const grid = document.querySelector('#demo-make .demo-mk-grid');
+        if (!pick || !form || !grid) return { missing: true };
+        const p = pick.getBoundingClientRect(), f = form.getBoundingClientRect(),
+              g = grid.getBoundingClientRect();
+        const rows = new Set([...pick.querySelectorAll('.demo-mk-subj')]
+          .map((b) => Math.round(b.getBoundingClientRect().top)));
+        return { spans: p.width > f.width + 40 && p.width >= g.width - 2,
+                 rows: rows.size, pickW: Math.round(p.width), formW: Math.round(f.width) };
+      })()`);
+      await sleep(400);
+      ok(w + 'px: the paper slide picks its subject across the full width',
+        !mk.missing && mk.spans, JSON.stringify(mk));
+      ok(w + 'px: the subject buttons are one row, not a stacked block',
+        !mk.missing && mk.rows === 1, JSON.stringify(mk));
+    }
+  }
 
   // ── file:// — HOW_TO_RUN_LOCALLY.md option 1 ──────────────────────────────
   // ⚠⚠ THIS SECTION EXISTS BECAUSE EVERYTHING ABOVE PASSED WHILE THE DEMO WAS

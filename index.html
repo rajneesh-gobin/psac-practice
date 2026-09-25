@@ -5598,8 +5598,24 @@
       </div>
 
       <h3 id="pd-children-heading" class="font-bold text-lg text-gray-800 dark:text-white mb-3">Your children · today at a glance</h3>
-      <div id="pd-children-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
-      <details id="pd-weekly-details" class="pd-weekly-details mb-6"><summary>Family weekly report - trends and activity</summary><div id="pd-family-overview" class="hidden mt-4"></div></details>
+      <!-- ⚠⚠ THE GLANCE COMES BEFORE THE DETAIL. This block sat BELOW the cards
+           and below the footnote, collapsed, labelled "Family weekly report" —
+           so the one view in the app that reads every child at once, sorted by
+           who needs looking at and carrying the "X has not practised in N days"
+           alerts, was the last thing on a screen headed "today at a glance",
+           behind three twelve-line cards. A parent scanning the top of this
+           section met the cards; the glance was the part they had to go
+           looking for. _renderFamilyOverview() opens it when a child has gone
+           quiet, and writes the count into the summary so it says something
+           even while shut. -->
+      <details id="pd-weekly-details" class="pd-weekly-details mb-5"><summary id="pd-weekly-summary">Family weekly report - trends and activity</summary><div id="pd-family-overview" class="hidden mt-4"></div></details>
+      <div id="pd-children-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2"></div>
+      <!-- ⚠ ONE FOOTNOTE FOR THE WHOLE GRID, not one per child. It was written
+           into every card, so a parent with three children read "Repeats count
+           as attempts, not completed work" three times on one screen — a
+           caveat that applies to the column, printed once per row. It is the
+           same sentence for every child, so it belongs to the grid. -->
+      <p id="pd-children-note" class="hidden text-xs text-gray-500 dark:text-gray-400 mb-6">Repeats count as attempts, not completed work.</p>
 
       <!-- ── Child detail panel (hidden until a card is tapped) ── -->
       <div id="pd-detail-panel" class="hidden">

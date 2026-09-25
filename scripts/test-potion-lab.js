@@ -179,7 +179,16 @@ check(html.includes('engine/minigame_lab.js'), 'the data file is a script tag in
 // ⚠ cache.addAll() is ALL-OR-NOTHING: a data file missing from SHELL_FILES
 //   takes the whole offline shell down, not just this game.
 check(sw.includes("'/engine/minigame_lab.js'"), 'the data file is pre-cached in sw.js');
-check(html.indexOf('engine/minigame_lab.js') < html.indexOf('engine/minigame.js'),
+// ⚠⚠ THE SCRIPT TAG, NOT THE STRING. index.html names engine/minigame.js in a
+//   PROSE COMMENT about 6,400 lines above the script tags — the landing deck
+//   explains there that its game slide borrows the real .bq-* classes this file
+//   paints with. A bare indexOf therefore finds the comment, every data file
+//   sorts AFTER it, and this check could not pass however the tags were
+//   ordered. It was red in four suites at once, which means the load order it
+//   exists to protect had been unverified in all four. test-french-ninja.js and
+//   test-minigame-arcade.js already anchor on the quote; these did not.
+const _tagAt = (src) => html.indexOf('<script src="' + src + '"');
+check(_tagAt('engine/minigame_lab.js') > -1 && _tagAt('engine/minigame_lab.js') < _tagAt('engine/minigame.js'),
   'the data file loads BEFORE minigame.js');
 check(/mg-card-live mg-card-lb/.test(mg), 'the hub card is live, not a teaser');
 // ⚠ Assert on the CARD MARKUP, not on the words — see the note in

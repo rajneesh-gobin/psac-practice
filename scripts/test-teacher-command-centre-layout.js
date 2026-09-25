@@ -11,7 +11,8 @@
 //     stopped at <body> because body { overflow-x: clip } hides everything),
 //   • visible text meets 4.5:1 against its composited background,
 //   • primary actions are at least 44px tall,
-//   • the main navigation has exactly four tabs and More holds five tools,
+//   • every teacher tool has a visible way in — on the nav row, or as a button
+//     beside it — and none is hidden behind a '⋯ More' menu,
 //   • the classroom nav has exactly four primary sections, Materials among them.
 //
 // Run:  node scripts/test-teacher-command-centre-layout.js [--shots DIR]
@@ -23,6 +24,29 @@ const root = path.resolve(__dirname, '..');
 const shotsDir = (() => { const i = process.argv.indexOf('--shots'); return i > 0 ? process.argv[i + 1] : ''; })();
 if (shotsDir) fs.mkdirSync(shotsDir, { recursive: true });
 const PORT = 8797, DBG = 9343;
+
+// ⚠⚠ 'materials' STOPPED BEING A TAB and became the Library's file shelf, but
+//   the NAME has to keep working: switchTab() rejects anything not in ALL_TABS
+//   and falls back to Home, and a teacher's saved location (psac_teacher_loc_v1)
+//   can still hold 'materials' from before the change. Delete the redirect and
+//   a returning teacher lands somewhere they did not choose with nothing
+//   explaining why — a silent failure no layout assertion below would see,
+//   because the screen it lands on is perfectly well formed.
+{
+  const teacher = fs.readFileSync(path.join(root, 'engine/teacher.js'), 'utf8');
+  assert.match(teacher, /if \(tab === 'materials'\) \{\s*switchTab\('library'/,
+    "switchTab('materials') must still redirect to the Library's file shelf");
+  assert.match(teacher, /const TOOL_TABS = \[[^\]]*'materials'/,
+    "'materials' must stay in TOOL_TABS, or switchTab() rejects it before the redirect runs");
+
+  // ⚠ Same trap one level down: 'calendar' stopped being a classroom section
+  //   when Activities and Calendar merged into the Work timeline, and the name
+  //   is still held by TeacherMode.rememberClassroom. Drop the alias and a
+  //   returning teacher opens the overview instead of the screen they left.
+  const detail = fs.readFileSync(path.join(root, 'engine/teacher_classroom_detail.js'), 'utf8');
+  assert.match(detail, /if \(sec === 'calendar'\) sec = 'work';/,
+    "showSection('calendar') must still map to the Work timeline");
+}
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.mjs': 'text/javascript' };
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html';
@@ -107,7 +131,25 @@ const MOCK = `
 const PROBE = `
 (() => {
   const W = innerWidth;
-  const KNOWN = [['.ta-tab-content', ['#243f26', '#101010']], ['.tc-cd-overlay', ['#23422a', '#0f0f0f']], ['.tc-setup-guide', ['#123922', '#123922']], ['.tc-cd-header', ['#1c3c2b', '#1c3c2b']], ['.tc-share-inner', ['#254528', '#254528']], ['.ncf-panel', ['#254528', '#254528']], ['#ta-build-btn', ['#22402a', '#22402a']], ['.ta-btn-pencil', ['#d7ae2d', '#d7ae2d']], ['.tc-cd-action-btn', ['#e8c245', '#e8c245']], ['.teacher-navigation', ['#23422a', '#23422a']], ['.ta-tab', ['#2b4a2c', '#1b1b1b']], ['.tc-cd-nav-active', ['#f4ce52', '#f4ce52']], ['.tc-share-wa-btn', ['#25d366', '#25d366']], ['.tc-share-copy-btn', ['#e8c245', '#e8c245']], ['.ta-btn-eraser', ['#dcb5aa', '#dcb5aa']], ['.tp-flag', ['#1b2f20', '#1b2f20']], ['.tc-cd-student-pin-badge', ['#1b2f20', '#1b2f20']]];
+  // ⚠⚠ KNOWN MAPS A GRADIENT TO THE SOLID COLOUR THE CONTRAST MATHS NEEDS,
+  //   and an entry naming a class that no longer exists is worse than no entry:
+  //   the walk in bgOf() sails past that surface and composites the text
+  //   against whatever solid ground it finds next. This said .tc-cd-overlay.
+  //   That class was renamed when the classroom stopped being a fixed
+  //   full-viewport dialog and became an ordinary screen — the chalkboard
+  //   ground moved to .tc-cd-page — and nothing here followed. Since then every
+  //   text element on the classroom board has been measured against the LIGHT
+  //   page behind it, so cream on dark green was read as cream on near-white:
+  //   "Your classes" at 1.01:1, the class names at 1.01:1, the nav labels at
+  //   2.03:1. Twelve screens failed for it, in the light theme only.
+  // ⚠ THE COLOURS WERE NEVER WRONG. Acting on those numbers would have
+  //   repainted a board that reads perfectly well, and the dark theme — where
+  //   the page behind happens to be dark too — would have gone on passing
+  //   either way, which is what made the split look like a real light-theme bug.
+  // ⚠ A renamed surface is invisible to this list by construction. If a board
+  //   ever starts measuring absurdly low, check these selectors against the CSS
+  //   before touching a single colour.
+  const KNOWN = [['.ta-tab-content', ['#243f26', '#101010']], ['.tc-cd-page', ['#23422a', '#0f0f0f']], ['.tc-setup-guide', ['#123922', '#123922']], ['.tc-cd-header', ['#1c3c2b', '#1c3c2b']], ['.tc-share-inner', ['#254528', '#254528']], ['.ncf-panel', ['#254528', '#254528']], ['#ta-build-btn', ['#22402a', '#22402a']], ['.ta-btn-pencil', ['#d7ae2d', '#d7ae2d']], ['.tc-cd-action-btn', ['#e8c245', '#e8c245']], ['.teacher-navigation', ['#23422a', '#23422a']], ['.ta-tab', ['#2b4a2c', '#1b1b1b']], ['.tc-cd-nav-active', ['#f4ce52', '#f4ce52']], ['.tc-share-wa-btn', ['#25d366', '#25d366']], ['.tc-share-copy-btn', ['#e8c245', '#e8c245']], ['.ta-btn-eraser', ['#dcb5aa', '#dcb5aa']], ['.tp-flag', ['#1b2f20', '#1b2f20']], ['.tc-cd-student-pin-badge', ['#1b2f20', '#1b2f20']]];
   const dark = document.documentElement.classList.contains('dark');
   const parse = s => { const m = (s || '').match(/[\\d.]+/g); if (!m) return null; const v = m.map(Number); return { r: v[0], g: v[1], b: v[2], a: v.length > 3 ? v[3] : 1 }; };
   const hex = h => ({ r: parseInt(h.slice(1,3),16), g: parseInt(h.slice(3,5),16), b: parseInt(h.slice(5,7),16), a: 1 });
@@ -226,7 +268,43 @@ let chrome, ws; const pageErrorsRef = [];
     //   two years of drift out of date - papers and preview had been added to the
     //   menu and nobody updated it. Naming the tabs in order is the point: a tool
     //   that quietly leaves the row is a tool a teacher can no longer reach.
-    assert.deepEqual(nav.tabs, ['home', 'gradebook', 'materials', 'assignments', 'papers', 'preview', 'messages', 'settings'], 'one destination and seven tools, on the row');
+    // ⚠⚠ REACHABILITY, NOT ROW MEMBERSHIP — and the difference is the whole
+    //   lesson here. This named eight tabs in order and went red when five
+    //   tools deliberately left the strip: MEASURED at 1280px, those eight
+    //   needed 1176px in a 1100px strip, so the last was cut off and the strip
+    //   scrolled sideways, which is a poor shape for a menu. Messages, Chapter
+    //   preview and Settings became buttons above it (a tool you open, look at
+    //   and leave); Marks book and Past work moved into "Across all your
+    //   classes" on Home, where that question is actually asked; and materials
+    //   is now the Library's second shelf. Every one of those is an
+    //   improvement, and pinning the row made the suite fail for all five at
+    //   once — which is exactly how a check stops being read.
+    // ⚠ The claim this file was written to defend is one sentence in its own
+    //   comment: "a tool that quietly leaves the row is a tool a teacher can no
+    //   longer reach." That is about REACHING it. So: every tool must have a
+    //   visible control on this screen, whatever chrome it lives in, and none
+    //   may hide behind a '⋯ More' menu. Whether it is a tab or a button is a
+    //   layout decision, and this suite already measures overflow separately.
+    const reach = await evaluate(`(() => {
+      const vis = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+      const seen = {};
+      for (const b of document.querySelectorAll('#screen-teacher .ta-tab')) {
+        if (vis(b) && b.dataset.tab) seen[b.dataset.tab] = 'row';
+      }
+      for (const b of document.querySelectorAll('#screen-teacher [onclick]')) {
+        const m = /switchTab\\('([a-z]+)'/.exec(b.getAttribute('onclick') || '');
+        if (m && vis(b)) seen[m[1]] = seen[m[1]] || 'button';
+      }
+      return seen;
+    })()`);
+    // ⚠ 'materials' is NOT in this list on purpose: it is no longer a
+    //   destination of its own, it is the Library's file shelf. The redirect
+    //   that keeps the old NAME working is asserted from source below, because
+    //   a teacher's saved location can still hold it.
+    for (const tool of ['messages', 'gradebook', 'assignments', 'papers', 'preview', 'library', 'settings']) {
+      assert(reach[tool], tool + ' has no visible way in at ' + tag + ': ' + JSON.stringify(reach));
+    }
+    assert.equal(nav.tabs[0], 'home', 'Home is the first destination on the row');
     assert.equal(nav.menus, 0, 'and nothing is hidden behind a More menu');
     assert(nav.home, 'Home is the landing tab');
     const home = await evaluate(`({ greeting: document.querySelector('.th-hero h3')?.textContent, todos: [...document.querySelectorAll('.th-todo')].map(r => r.textContent.replace(/\\s+/g, ' ').trim()), oldCards: document.querySelectorAll('.th-card, .th-action').length, boards: document.querySelectorAll('#tc-list .tc-board-hanger').length, classesHead: !!document.querySelector('.th-classes-head') })`);
@@ -339,7 +417,15 @@ let chrome, ws; const pageErrorsRef = [];
     await evaluate("TeacherGuestClasses.openById('c1'); true"); await sleep(1200);
     const ov = await evaluate(`({ open: !document.getElementById('tc-classroom-detail').classList.contains('hidden'), nav: [...document.querySelectorAll('.tc-cd-nav > .tc-cd-nav-btn')].map(b => b.dataset.sec), more: [...document.querySelectorAll('#tc-cd-more-menu [data-sec]')].map(b => b.dataset.sec), stats: [...document.querySelectorAll('.tc-today-stats')].length, headStrip: [...document.querySelectorAll('.tc-cd-stat strong')].map(e => e.textContent), todos: [...document.querySelectorAll('.tc-todo')].map(r => r.textContent.replace(/\\s+/g, ' ').trim()), foot: document.querySelectorAll('.tc-today-footnote').length, strip: document.querySelectorAll('button.tc-cd-stat').length })`);
     assert(ov.open, 'classroom overlay opens from Home data');
-    assert.deepEqual(ov.nav, ['overview', 'work', 'pupils', 'materials', 'calendar'], 'five primary classroom sections');
+    // ⚠⚠ FOUR, AND THIS FILE'S OWN HEADER HAS SAID FOUR ALL ALONG — "the
+    //   classroom nav has exactly four primary sections, Materials among them".
+    //   The assertion said five. 'calendar' stopped being a section of its own
+    //   when Activities and Calendar merged into one Work timeline, because the
+    //   two were overlapping subsets of the same list; the name survives as an
+    //   alias so a remembered location still lands on the right screen. When a
+    //   suite's prose and its assertion disagree, one of them is already wrong.
+    assert.deepEqual(ov.nav, ['overview', 'work', 'pupils', 'materials'],
+      'four primary classroom sections, Materials among them');
     assert.deepEqual(ov.more, ['settings'], 'Results are opened from the relevant activity, not a second navigation destination');
     // ⚠ There used to be TWO stat rows on this one screen, disagreeing:
     // "5 submitted" in the header strip beside "2 Submissions" below it,

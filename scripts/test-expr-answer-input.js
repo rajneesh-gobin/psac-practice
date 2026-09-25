@@ -64,11 +64,22 @@ const section = t => console.log('\n── ' + t + ' ──');
 section('every helper class carries a colour of its own');
 {
   const css = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8');
+  // ⚠⚠ A SELECTOR IN A LIST, NOT A LITERAL STRING FOLLOWED BY "{". This
+  //   demanded `#screen-practice .expr-hint {`, so the day the board override
+  //   was widened to cover the admin question-manager preview too —
+  //   `#screen-practice .expr-hint, #qm-preview-board .expr-hint { … }` — all
+  //   four of these went red for an improvement. Nothing was wrong with the
+  //   colours: the browser half of this very suite measured the board at
+  //   9.69:1, 10.32:1, 13.94:1 and 11.26:1 against a 4.5 floor while the source
+  //   half called them missing. A grouped selector is the normal way to add a
+  //   second surface, so the check has to read a rule rather than a substring.
+  const setsColour = (sel) => new RegExp(
+    '(?:^|[,{}])\\s*' + sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
+    '\\s*(?:,[^{}]*)?\\{[^}]*\\bcolor\\s*:', 'm').test(css);
   for (const cls of ['expr-hint', 'slot-label', 'slot-score', 'answer-unsupported']) {
-    const base = (css.match(new RegExp('\\n\\.' + cls + ' \\{[^}]*\\}')) || [''])[0];
-    ck('.' + cls + ' sets a colour on the sheet', /color:/.test(base), base.trim().slice(0, 90));
+    ck('.' + cls + ' sets a colour on the sheet', setsColour('.' + cls));
     ck('#screen-practice .' + cls + ' overrides it for the board',
-      new RegExp('#screen-practice \\.' + cls + ' \\{[^}]*color:').test(css));
+      setsColour('#screen-practice .' + cls));
   }
   ck('.expr-hint no longer dims itself with opacity as well as a colour',
     !/\n\.expr-hint \{[^}]*opacity:/.test(css));

@@ -31,9 +31,18 @@ process.on('SIGINT', () => quit(130));
 const plain = s => String(s || '').replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{2190}-\u{21FF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
 
 (async () => {
-  if (!process.env.CHROME_PATH) { console.log('Set CHROME_PATH to Chrome for Testing (never the installed Chrome).'); process.exit(1); }
+// ⚠⚠ THE FALLBACK IS THE INSTALLED CHROME, and it has to be something that
+//   exists on a machine that is not the one this file was written on. This
+//   defaulted to a Chrome for Testing binary under a SESSION-SCOPED scratch
+//   directory — a path containing a UUID that changes every session, and in
+//   one case a different Windows user entirely — so the suite could not run
+//   for anybody, including the author on their next run. Nine suites were
+//   dark for this reason alone. The instruction it carried ("never the
+//   installed Chrome") is obsolete: re-measured, the installed Chrome drives
+//   these through CDP fine, which is how the other thirty-odd browser suites
+//   here have always run. CHROME_PATH still overrides for a pinned build.
   profile = fs.mkdtempSync(path.join(process.env.LAB_TMP || os.tmpdir(), 'psac-labs-exp-'));
-  chrome = spawn(process.env.CHROME_PATH, ['--headless=new', '--remote-debugging-port=' + DBG, '--user-data-dir=' + profile,
+  chrome = spawn(process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe', ['--headless=new', '--remote-debugging-port=' + DBG, '--user-data-dir=' + profile,
     '--allow-file-access-from-files', '--no-first-run', '--hide-scrollbars', 'about:blank'], { stdio: 'ignore' });
   let version; for (let i = 0; i < 40 && !version; i++) { try { version = await get('http://127.0.0.1:' + DBG + '/json/version'); } catch (_) { await sleep(250); } }
   if (!version) throw new Error('Chrome did not start');
