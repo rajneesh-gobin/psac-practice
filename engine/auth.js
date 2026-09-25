@@ -1612,6 +1612,18 @@ const Auth = (() => {
     _activeAccount    = { id: studentRow.id, name: studentRow.display_name, avatar: studentRow.avatar, grade: studentRow.grade };
     ACTIVE_STUDENT_ID = studentRow.id;
 
+    // ⚠ AFTER ACTIVE_STUDENT_ID, and after the token is installed above:
+    //   Activity resolves who the actor is by reading both, so logging any
+    //   earlier files the row against the PREVIOUS child - or against nobody.
+    // ⚠ The token is also what separates the two things that arrive here. A
+    //   child signing in with their PIN has one; a parent opening a child from
+    //   the dashboard deliberately has none (see the block above), and that is
+    //   exactly the "switched to kid mode, from which account" event.
+    if (typeof Activity !== 'undefined') {
+      Activity.log(token ? 'signin_student' : 'switch_to_kid', studentRow.id,
+        { grade: studentRow.grade || null });
+    }
+
     // AFTER ACTIVE_STUDENT_ID, never before. _applyKidPrefs re-reads
     // _soundEnabled through _prefKey(), which scopes the key by the CURRENT
     // student id - so running it first resolved to the previous child, or to
@@ -2889,6 +2901,11 @@ const Auth = (() => {
   // ── Logout ─────────────────────────────────────
   async function logout() {
     const signedInStudentId = Store.getStudentSession()?.id || null;
+    // ⚠ BEFORE the credentials are torn down. Every buffered row is inserted
+    //   AS the actor who made it - once the token and the JWT are gone, RLS
+    //   refuses the lot and the last screen of the session is lost, which is
+    //   the one that says where they stopped.
+    if (typeof Activity !== 'undefined') { try { await Activity.signOut('signout'); } catch (_) {} }
     _stopSessionGuard();
     // Drop the server-side session before clearing the local token, otherwise
     // the RPC has no x-student-token to identify which sessions to delete.
@@ -4629,6 +4646,10 @@ const Auth = (() => {
     // view is still a moderator, and is_admin() in the database agrees.
     isAdmin: () => _isAdminUser,
     isSuperAdmin: () => _isSuperAdmin,
+    // The signed-in adult's auth.users id. Activity files a parent's rows
+    // under it, and a parent in kid mode is the only way to tell WHICH account
+    // opened a child's screens. Read-only, and null when no adult is signed in.
+    getParentUserId: () => (_parentUser && _parentUser.id) || null,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
     toggleGradeAccess, toggleHintsDisabled,

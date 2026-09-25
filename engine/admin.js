@@ -160,7 +160,7 @@ const AdminPanel = (() => {
   //   the same screen tomorrow, which sessionStorage would not give them.
   const ADMIN_TAB_KEY = 'psac_admin_tab_v1';
   const ADMIN_TABS = ['members', 'teachers', 'reports', 'questions', 'syllabus',
-                      'maps', 'content', 'stats', 'roles', 'plans', 'create'];
+                      'maps', 'content', 'stats', 'activity', 'roles', 'plans', 'create'];
   // ⚠ Super-admin only. A remembered tab an ordinary admin can no longer open
   //   must not be restored — they would land on a panel whose button is hidden,
   //   with no way back to it and no explanation.
@@ -205,6 +205,9 @@ const AdminPanel = (() => {
     // The security log is on the Content tab and is a per-visit read: an admin
     // opening it wants what has happened since, not what was cached at render.
     if (name === 'content')   loadSecurityEvents();
+    // Same rule as the security log: a per-visit read. An admin opening this
+    // wants what has happened since, not what was cached when the panel rendered.
+    if (name === 'activity')  loadActivity();
     // ⚠ Rendered on every visit, not once at init: the seed box and the
     //   generated-paper panel are module state, and per this project's rule
     //   module state resets in the RENDER. Otherwise the tab reopens showing
@@ -6232,6 +6235,190 @@ const AdminPanel = (() => {
     }).join('');
   }
 
+  // ── Activity trail ─────────────────────────
+  // Written by engine/activity.js; admin-only at the database (activity_events
+  // has exactly one SELECT policy, is_admin()).
+  //
+  // ⚠ TIME IS RECONSTRUCTED HERE, NOT STORED. Each screen writes an arrival
+  //   ('screen') and a departure ('screen_end', carrying { ms, answers }), and
+  //   an arrival with NO departure is the interesting one: the app was closed
+  //   on that screen. That is the "clicked chapter practice and then did
+  //   nothing" case, so it is marked rather than quietly dropped.
+  let _actNames = {};
+
+  function _actDur(ms) {
+    const s = Math.round((Number(ms) || 0) / 1000);
+    if (s < 60) return s + 's';
+    const m = Math.floor(s / 60);
+    return m < 60 ? `${m}m ${s % 60}s` : `${Math.floor(m / 60)}h ${m % 60}m`;
+  }
+
+  // One query per kind of actor, and only for the ids actually on screen.
+  async function _actResolveNames(rows) {
+    const kids = new Set(), adults = new Set();
+    rows.forEach(r => {
+      if (r.actor_kind === 'student') kids.add(r.actor_id); else adults.add(r.actor_id);
+      if (r.as_student) kids.add(r.as_student);
+    });
+    const want = [...kids, ...adults].filter(id => id && !_actNames[id]);
+    if (!want.length) return;
+    const kidIds   = [...kids].filter(id => want.includes(id));
+    const adultIds = [...adults].filter(id => want.includes(id));
+    const jobs = [];
+    if (kidIds.length) jobs.push(_sb.from('students').select('id, display_name, grade').in('id', kidIds)
+      .then(({ data }) => (data || []).forEach(s => { _actNames[s.id] = `${s.display_name || 'child'} (G${s.grade || '?'})`; })));
+    if (adultIds.length) jobs.push(_sb.from('profiles').select('id, full_name').in('id', adultIds)
+      .then(({ data }) => (data || []).forEach(p => { _actNames[p.id] = p.full_name || 'parent'; })));
+    // A name that cannot be read (a deleted account) must still render as
+    // something stable, never as "undefined".
+    try { await Promise.all(jobs); } catch (_) {}
+    want.forEach(id => { if (!_actNames[id]) _actNames[id] = String(id).slice(0, 8) + '…'; });
+  }
+
+  const _ACT_LABEL = {
+    signin_student: '🔑 signed in',
+    switch_to_kid:  '👪 switched to kid mode',
+    signout:        '🚪 signed out',
+    page_hide:      '📵 left the app',
+    subject_open:   '📚 opened subject',
+    chapter_open:   '📘 started chapter',
+    screen:         '➡️ opened',
+    screen_end:     '⏱ left',
+  };
+
+  // Walks the trail OLDEST first, per actor, and marks every 'screen' that
+  // never got its 'screen_end'. Returns a Set of row ids.
+  function _actDeadEnds(rows) {
+    const open = {}, dead = new Set();
+    [...rows].reverse().forEach(r => {
+      if (r.kind === 'screen') {
+        if (open[r.actor_id]) dead.add(open[r.actor_id]);
+        open[r.actor_id] = r.id;
+      } else if (r.kind === 'screen_end' || r.kind === 'signout') {
+        delete open[r.actor_id];
+      }
+    });
+    // Whatever is still open at the end of the window is only "dead" if the
+    // row is not the newest one for that actor - otherwise they may simply
+    // still be on that screen right now.
+    const newest = {};
+    rows.forEach(r => { if (!newest[r.actor_id]) newest[r.actor_id] = r.id; });
+    Object.entries(open).forEach(([actor, id]) => { if (newest[actor] !== id) dead.add(id); });
+    return dead;
+  }
+
+  function _renderActivitySummary(box, rows) {
+    if (!box) return;
+    const byScreen = {};
+    let answers = 0, totalMs = 0;
+    rows.forEach(r => {
+      if (r.kind !== 'screen_end') return;
+      const ms = Number(r.meta?.ms) || 0;
+      const a  = Number(r.meta?.answers) || 0;
+      const k  = r.ref || '(unknown)';
+      const e  = byScreen[k] || (byScreen[k] = { ms: 0, visits: 0, answers: 0 });
+      e.ms += ms; e.visits++; e.answers += a;
+      answers += a; totalMs += ms;
+    });
+    const top = Object.entries(byScreen).sort((a, b) => b[1].ms - a[1].ms).slice(0, 8);
+    const actors = new Set(rows.map(r => r.actor_id)).size;
+    const dead   = _actDeadEnds(rows).size;
+    const max    = top.length ? top[0][1].ms : 0;
+    box.innerHTML = `
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        ${[['People', actors], ['Time', _actDur(totalMs)], ['Answers', answers], ['Dead ends', dead]]
+          .map(([l, v]) => `<div class="bg-white dark:bg-gray-800 rounded-xl p-2 text-center shadow-sm">
+            <div class="text-lg font-black text-indigo-600 dark:text-indigo-400">${_esc(String(v))}</div>
+            <div class="text-[10px] text-gray-500 dark:text-gray-400">${l}</div></div>`).join('')}
+      </div>
+      ${top.length ? `<div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm">
+        <div class="text-xs font-bold text-gray-600 dark:text-gray-300 mb-2">Where the time goes</div>
+        ${top.map(([name, e]) => `<div class="mb-1.5">
+          <div class="flex justify-between text-[11px] text-gray-600 dark:text-gray-300">
+            <span class="font-semibold truncate">${_esc(name)}</span>
+            <span class="text-gray-400 whitespace-nowrap ml-2">${_actDur(e.ms)} · ${e.visits}×${e.answers ? ` · ${e.answers} ans` : ''}</span>
+          </div>
+          <div class="h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
+            <div class="h-full bg-indigo-400" style="width:${max ? Math.round(e.ms / max * 100) : 0}%"></div>
+          </div></div>`).join('')}
+      </div>` : ''}`;
+  }
+
+  function _renderActivityList(box, rows) {
+    const dead = _actDeadEnds(rows);
+    let day = '';
+    const out = [];
+    rows.forEach(r => {
+      const d = new Date(r.created_at);
+      const dk = d.toLocaleDateString();
+      if (dk !== day) {
+        day = dk;
+        out.push(`<div class="text-[10px] font-bold text-gray-400 pt-2 pb-1">${_esc(dk)}</div>`);
+      }
+      const who = _actNames[r.actor_id] || '-';
+      const as  = (r.actor_kind === 'parent' && r.as_student)
+        ? ` <span class="text-purple-500">→ ${_esc(_actNames[r.as_student] || '-')}</span>` : '';
+      const ms  = r.kind === 'screen_end' ? ` · ${_actDur(r.meta?.ms)}` : '';
+      const ans = (r.kind === 'screen_end' && r.meta?.answers)
+        ? ` · <span class="text-green-600 dark:text-green-400">${Number(r.meta.answers)} answered</span>` : '';
+      const zero = (r.kind === 'screen_end' && !r.meta?.answers && /practice|chapter|exam/.test(r.ref || ''))
+        ? ' · <span class="text-amber-600">nothing answered</span>' : '';
+      out.push(`<div class="flex items-baseline gap-2 text-[11px] py-0.5 ${dead.has(r.id) ? 'bg-amber-50 dark:bg-amber-900/10 rounded' : ''}">
+        <span class="text-gray-400 font-mono">${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        <span class="font-semibold ${r.actor_kind === 'parent' ? 'text-purple-600 dark:text-purple-300' : 'text-gray-700 dark:text-gray-200'} truncate max-w-[9rem]">${_esc(who)}</span>${as}
+        <span class="text-gray-600 dark:text-gray-300">${_ACT_LABEL[r.kind] || _esc(r.kind)}</span>
+        <span class="text-gray-500 truncate">${_esc(r.ref || '')}</span>
+        <span class="text-gray-400">${ms}${ans}${zero}</span>
+        ${dead.has(r.id) ? '<span class="text-amber-600 font-semibold whitespace-nowrap">✗ closed here</span>' : ''}
+      </div>`);
+    });
+    box.innerHTML = out.join('');
+  }
+
+  function _fillActivityWho(rows) {
+    const sel = document.getElementById('admin-act-who');
+    if (!sel) return;
+    const cur = sel.value;
+    const seen = [];
+    rows.forEach(r => { if (!seen.some(x => x.id === r.actor_id)) seen.push({ id: r.actor_id, kind: r.actor_kind }); });
+    sel.innerHTML = '<option value="">Everyone</option>' + seen
+      .map(a => `<option value="${_esc(a.id)}"${a.id === cur ? ' selected' : ''}>${a.kind === 'parent' ? '👪 ' : '🧒 '}${_esc(_actNames[a.id] || a.id)}</option>`)
+      .join('');
+  }
+
+  async function loadActivity() {
+    const box = document.getElementById('admin-act-list');
+    const sum = document.getElementById('admin-act-summary');
+    if (!box || !_sb) return;
+    box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">Loading…</p>';
+    const who   = document.getElementById('admin-act-who')?.value || '';
+    const limit = parseInt(document.getElementById('admin-act-limit')?.value, 10) || 200;
+    let q = _sb.from('activity_events')
+      .select('id, actor_kind, actor_id, as_student, kind, ref, meta, created_at')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (who) q = q.eq('actor_id', who);
+    const { data, error } = await q;
+    if (error) {
+      // 42P01 / PGRST205 both mean the table is not there yet - a different
+      // answer from "nothing has happened", and the admin can act on it.
+      const missing = error.code === '42P01' || error.code === 'PGRST205';
+      box.innerHTML = `<p class="text-xs text-gray-400 py-3 text-center">${missing
+        ? 'Run migrations/20260926_activity_log.sql to switch this on.' : 'Could not load.'}</p>`;
+      if (sum) sum.innerHTML = '';
+      return;
+    }
+    if (!data || !data.length) {
+      box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">Nothing recorded yet.</p>';
+      if (sum) sum.innerHTML = '';
+      return;
+    }
+    await _actResolveNames(data);
+    _renderActivitySummary(sum, data);
+    _renderActivityList(box, data);
+    _fillActivityWho(data);
+  }
+
   // Hand-adjust one account's balance: support, a refund, or clawing back a
   // farmed balance. Goes through admin_adjust_credits(), which writes the
   // ledger, so a manual change is as auditable as an earned one - there is
@@ -6585,7 +6772,7 @@ const AdminPanel = (() => {
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
-    publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
+    publishCatalog, loadSecurityEvents, loadActivity, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
     loadTeacherQueue, setTeacherStatus, teachersPage, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, toggleLeaderboard, loadStats, loadReports, reportsPage, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleQmReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, rolesPage, setRole, filterRoles, loadPlans, togglePlan, loadJuice, saveJuiceSettings, confirmJuice, rejectJuice, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier, sortTeachers, refreshTeacherActivity,

@@ -405,6 +405,9 @@ function activateSubjectPack(packId, { allowComingSoon = false } = {}) {
 
   ACTIVE_PACK    = pack;
   SELECTED_GRADE = pack.grade;
+  // Which subject was opened, and in which grade - the one thing a screen id
+  // cannot carry, because every subject shares #screen-subject-hub.
+  if (typeof Activity !== 'undefined') Activity.log('subject_open', pack.id, { grade: pack.grade || null });
   // Subject selection should survive a normal refresh. Scope it to the child
   // rather than the device, because families can switch between siblings here.
   try {
@@ -3059,6 +3062,11 @@ function showScreen(id) {
     if (isForward)      sc.classList.add('screen-enter-right');
     else if (isBack)    sc.classList.add('screen-enter-left');
     S.currentScreen = id;
+    // ⚠ HERE, not at the top of showScreen(): every guard above this line can
+    //   turn the call around (a kid-only screen for a parent, an adult-only one
+    //   for a child, a plan gate, a parent-dashboard inline tab). Logging the
+    //   id that was ASKED FOR would record screens nobody was ever shown.
+    if (typeof Activity !== 'undefined') Activity.screen(id);
     // Authentication re-hydrates asynchronously after a full refresh. Keep the
     // user's last real workspace so that flow can return them there afterwards.
     // Entry/lock screens are deliberately excluded: restoring one of those can
@@ -9447,6 +9455,17 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
       .then(() => { _practiceMode = mode; _practiceResume = resume; startChapterDirect(chapterId, forceDiff, 1); })
       .catch(() => toast('Could not load questions. Please try again.', 3000));
     return;
+  }
+
+  // ⚠ HERE, after every gate and after the one-shot reload above. Logged at the
+  //   top it would record chapters the child was refused (locked, plan-gated,
+  //   no questions) as chapters they practised, and the reload path re-enters
+  //   this function, so it would count the same open twice.
+  if (typeof Activity !== 'undefined') {
+    Activity.log('chapter_open', chapterId, {
+      pack: (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) ? ACTIVE_PACK.id : null,
+      diff: forceDiff || null,
+    });
   }
 
   // null diff = mixed mode (random across all levels up to parent cap)

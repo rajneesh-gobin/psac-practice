@@ -4073,6 +4073,8 @@
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📖 Syllabus</button>
         <button onclick="AdminPanel.showTab('stats')" data-tab="stats"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📊 Stats</button>
+        <button onclick="AdminPanel.showTab('activity')" data-tab="activity"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">👣 Activity</button>
         <button onclick="AdminPanel.showTab('reports')" data-tab="reports"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🚩 Reports<span id="admin-reports-badge" class="hidden ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold align-middle">0 open</span></button>
         <button onclick="AdminPanel.showTab('library')" data-tab="library"
@@ -4472,6 +4474,34 @@
           </div>
         </div>
         <button onclick="AdminPanel.loadStats()" class="w-full py-2 bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold rounded-xl transition-colors">↻ Refresh Stats</button>
+      </div>
+
+      <!-- ── Activity tab ──
+           Who did what, in order, and how long each screen held them.
+           ⚠ Admin-only at the DATABASE, not merely here: activity_events has
+             one SELECT policy and it is is_admin(). The panel cannot be the
+             gate - a hidden tab is a hidden door, not a locked one.
+           ⚠ A row highlighted "✗ closed here" is a screen that was opened and
+             never left: the child shut the app on it. That is the drop-off
+             this tab exists to make visible, not a missing row. -->
+      <div id="admin-tab-activity" class="admin-tab-panel hidden">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <select id="admin-act-who" onchange="AdminPanel.loadActivity()"
+            class="text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-800 dark:text-gray-200">
+            <option value="">Everyone</option>
+          </select>
+          <select id="admin-act-limit" onchange="AdminPanel.loadActivity()"
+            class="text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-800 dark:text-gray-200">
+            <option value="200">Last 200</option>
+            <option value="500">Last 500</option>
+            <option value="100">Last 100</option>
+          </select>
+          <button onclick="AdminPanel.loadActivity()"
+            class="text-xs font-bold px-3 py-1.5 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg transition-colors">↻ Refresh</button>
+          <span class="text-[10px] text-gray-400">kept 30 days · last 200 per person</span>
+        </div>
+        <div id="admin-act-summary" class="mb-3"></div>
+        <div id="admin-act-list" class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm overflow-x-auto"></div>
       </div>
 
       <!-- ── Reports tab ── -->
@@ -7207,6 +7237,10 @@
        auth.js and app.js (both reference Shop). -->
   <script src="engine/shop.js"></script>
   <script src="engine/profile_install.js"></script>
+  <!-- Activity trail (Admin › Activity). After events.js and supabase.js, which
+       it reads; before app.js and auth.js, which call it. It resolves who the
+       actor is at CALL time, so loading ahead of them is safe. -->
+  <script src="engine/activity.js"></script>
   <!-- Subject packs -->
   <!-- ⚠ HAND-MAINTAINED, and load-bearing: every manifest MUST load before
        app.js (CHAPTERS is declared in grade5-maths/_manifest.js and app.js

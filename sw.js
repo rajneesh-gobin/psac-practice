@@ -68,6 +68,7 @@ const SHELL_FILES = [
   '/engine/store.js',
   '/engine/shop.js',
   '/engine/profile_install.js',
+  '/engine/activity.js',
   '/engine/supabase.js',
   '/engine/question_loader.js',
   '/engine/interactive_map.js',
