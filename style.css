@@ -3314,6 +3314,15 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
   border: 1px solid rgba(255,255,255,.12);
 }
 
+/* Shown only when subjects/_index.js did not load - the hub has no books to
+   paint and the child needs a way back, not a dead sentence. */
+.ph-retry-btn {
+  font-size: .8rem; padding: .4rem 1.1rem; border-radius: 999px;
+  background: rgba(0,0,0,.3); color: #f0ece8;
+  border: 1px solid rgba(255,255,255,.22); cursor: pointer;
+}
+.ph-retry-btn:disabled { opacity: .6; cursor: default; }
+
 /* ── Subject Hub ──────────────────────────────────────────────── */
 /* ⚠ Paper, for the same reason as #screen-practice-hub above: the chapter
    list already sits on a framed blackboard (.ta-tab-content, 8px #5c3810),

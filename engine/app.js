@@ -11762,7 +11762,31 @@ const PracticeHub = (() => {
       .filter(p => Number(p.grade) === g && !p.comingSoon)
       .sort((a, b) => (a.subject || a.name || '').localeCompare(b.subject || b.name || ''));
     if (!packs.length) {
-      grid.innerHTML = `<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">No subjects available for Grade ${g} yet.</p>`;
+      // ⚠ TWO DIFFERENT FAILURES, and they were reported with one sentence.
+      //   An empty SUBJECT_PACKS means subjects/_index.js never loaded - a
+      //   network failure - and saying "no subjects for Grade 5" sends a parent
+      //   looking for content that is there, on a grade the child may not be
+      //   in: the picker beside it falls back to 5 from the same empty array.
+      const loaded = Object.values(SUBJECT_PACKS || {}).length > 0;
+      if (loaded) {
+        grid.innerHTML = `<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">No subjects available for Grade ${g} yet.</p>`;
+        return;
+      }
+      grid.innerHTML = `<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">
+        The subject list did not load - check your connection.<br>
+        <button id="prac-books-retry" class="ph-retry-btn" style="margin-top:.75rem">Try again</button></p>`;
+      const retry = document.getElementById('prac-books-retry');
+      if (retry) retry.addEventListener('click', () => {
+        retry.disabled = true;
+        retry.textContent = 'Loading…';
+        const done = (typeof PackLoader !== 'undefined')
+          ? PackLoader.ensureIndex() : Promise.resolve(false);
+        done.then(ok => {
+          if (ok) { repaint(); return; }
+          retry.disabled = false;
+          retry.textContent = 'Try again';
+        });
+      });
       return;
     }
     grid.innerHTML = packs.map(pack => {

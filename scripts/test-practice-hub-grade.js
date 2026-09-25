@@ -55,6 +55,9 @@ function boot({ own = 5, allowed = [5], selected = null, packs } = {}) {
   const dom = {
     'prac-grade-sel': el(), 'prac-locked-note': el(),
     'prac-books-grid': el(), 'prac-hub-sub': el(),
+    // Only rendered when the pack list is empty; the handler is captured so a
+    // test can press it.
+    'prac-books-retry': el({ addEventListener(_t, fn) { this._click = fn; } }),
   };
   const shown = [];
   const out = {};
@@ -72,6 +75,7 @@ function boot({ own = 5, allowed = [5], selected = null, packs } = {}) {
     },
     _attr: s => String(s == null ? '' : s),
     SubjectHub: { open() {} },
+    PackLoader: { ensureIndex() { out.retried = (out.retried || 0) + 1; return Promise.resolve(false); } },
     Auth: { getActiveAccount: () => ({ grade: own }) },
     GradeAccess: {
       allowed(g) { allowedCalls.push(Number(g)); return allowed.slice(); },
@@ -216,6 +220,27 @@ const selectedOption = dom => {
   t.PH.repaint();
   ok('repaint() draws the hub without navigating',
     selectedOption(t.dom) === 5 && t.shown.length === 0, t.shown);
+}
+
+// 12 · ⚠ AN EMPTY SUBJECT_PACKS IS A NETWORK FAILURE, NOT AN EMPTY GRADE, and
+//      the hub reported both with the same sentence. Reported 2026-09-26: the
+//      same account showed every subject on one machine and "No subjects
+//      available for Grade 5 yet" on a new laptop, where subjects/_index.js had
+//      not loaded. ⚠ The grade in that sentence is the FALLBACK 5 - liveGrades()
+//      derives from the same empty array - so it names a grade the child may not
+//      even be in, which is exactly how a parent concludes the content is gone.
+{
+  const t = boot({ own: 5, allowed: [5], packs: [] });
+  t.PH.open();
+  const html = t.dom['prac-books-grid'].innerHTML;
+  ok('an empty pack list is reported as a failed load, not as an empty grade',
+    /did not load/.test(html) && !/No subjects available/.test(html), html);
+  ok('and it offers a way to try again',
+    /id="prac-books-retry"/.test(html), html);
+
+  t.dom['prac-books-retry']._click();
+  ok('pressing it asks for the subject index again',
+    t.ctx.__out.retried === 1, t.ctx.__out.retried);
 }
 
 console.log('\nPractice hub grade: ' + checks + ' checks passed.');

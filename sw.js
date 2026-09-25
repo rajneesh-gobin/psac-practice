@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v405';
+const SHELL_VERSION = 'shell-v406';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -319,7 +319,18 @@ async function cacheFirstWithNetwork(request, cacheName) {
 
 async function staleWhileRevalidate(request, cacheName) {
   const cache  = await caches.open(cacheName);
-  const cached = await cache.match(request);
+  // ⚠ FALLS BACK TO EVERY CACHE, not just this one. `install` precaches
+  //   /subjects/_index.js into SHELL_CACHE, while the /subjects/ branch reads
+  //   DATA_CACHE - so on a device that had never completed one successful
+  //   fetch of that file, the precached copy was never once consulted and the
+  //   request went to the network on every load. One failure there (a new
+  //   laptop on a flaky first load, a captive portal, a proxy) leaves
+  //   SUBJECT_PACKS EMPTY and the practice hub says "No subjects available for
+  //   Grade 5 yet" - a content message for a network failure, on the fallback
+  //   grade rather than the child's own. Reproduced in headless Chrome against
+  //   production by blocking that one URL: the whole app still boots, with
+  //   every subject gone and no error anywhere.
+  const cached = (await cache.match(request)) || (await caches.match(request));
   const fetchPromise = fetch(request).then(response => {
     if (response.ok) safePut(cache, request, response.clone());
     return response;
