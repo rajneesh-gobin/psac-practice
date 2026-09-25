@@ -30,7 +30,7 @@ Tailwind CDN.
 | SQL, RLS, a policy, a grant, `supabase-schema.sql` | [`database.md`](docs/claude/database.md) |
 | `style.css`, `index.html`, any screen, modal, layout or the map | [`ui-css.md`](docs/claude/ui-css.md) |
 | `sw.js`, `netlify.toml`, a deploy, or a headless-Chrome harness | [`deploy-and-verification.md`](docs/claude/deploy-and-verification.md) |
-| minigames, teacher mode, the landing page, timetable, materials, contact form, sharing, **subject certificates** | [`features.md`](docs/claude/features.md) |
+| minigames, teacher mode, the landing page, timetable, materials, contact form, sharing, **subject certificates**, **the activity trail** (`engine/activity.js`, Admin › Activity) | [`features.md`](docs/claude/features.md) |
 | what to do next, or anything reported as outstanding | [`pending.md`](docs/claude/pending.md) |
 | **building the Android app** — keystore, Bubblewrap, assetlinks | [`docs/android-build.md`](docs/android-build.md) |
 | **the Android app / Google Play** — what must change in the web app first | [`docs/android-readiness.md`](docs/android-readiness.md) |
@@ -150,11 +150,28 @@ One certificate per **subject**, nine levels, overwritten in place.
 ---
 
 ## Pending / not yet done → [`pending.md`](docs/claude/pending.md)
-16 numbered items. **There are no outstanding SQL migrations.**
-- **1. ⚠⚠ The whole `netlify/` directory is publicly served until the next deploy.**
-  `/netlify/question-bundles/*.json` answered 200 with real questions bypassing entitlements.
-  The `netlify.toml` 404 is written but **unverified**; after deploying, probe that path **and**
-  `/.netlify/functions/questions` (which must still answer 401).
+20 numbered items, 0 and 1 closed. **There are no outstanding SQL migrations.**
+- ⚠ **Item 1 (the public `netlify/` directory) is CLOSED** — re-probed anonymous
+  2026-09-26: every leaked path 404s, `/api/questions` and
+  `/.netlify/functions/questions` both 401.
+- ⚠ **Item 19: CI runs on `[main, dev]` only, and the work happens on `cloudflare`.**
+  No suite in `ci.yml` has ever run on a commit on this branch.
+
+## ⚠⚠ A SERVICE-WORKER CACHE CAN OUTLIVE EVERY DEPLOY
+A `.js` request answered with the HTML shell is a **200**, so it is cached and
+then served ahead of the network — `Unexpected token '<'` at line 1 on every
+load, forever. `DATA_CACHE` and `psac-static-assets` **survive a
+`SHELL_VERSION` bump by design**, so no deploy can clear them; only a
+`DATA_VERSION` bump can, and nothing clears the unversioned asset cache.
+- ⚠ **A hard reload does not touch Cache Storage.** Ctrl+Shift+R bypasses the
+  HTTP cache only. This is why the symptom survived three correct deploys.
+- ⚠ **It is not a boot failure, so the recovery panel never fires** — the app
+  starts fine, `appStarted()` is true, and the child is told “No subjects
+  available for Grade 5 yet”, a content message for a corrupted cache.
+- ✅ Now guarded twice: `typeOk()` in `sw.js` refuses to serve *or store* a
+  wrong-typed response in **both** cache strategies, and `selfHealOnce()` in
+  `engine/protect.js` clears every cache and reloads **once per session**
+  (`scripts/test-self-heal.js`, 16 checks).
 
 ---
 

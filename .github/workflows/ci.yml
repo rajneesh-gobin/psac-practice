@@ -46,6 +46,12 @@ jobs:
       # break in a way nothing else would notice.
       - name: Error-boundary behaviour
         run: node scripts/test-error-boundary.js
+      # The recovery path for a CORRUPTED CACHED SCRIPT, which is NOT a boot
+      # failure and so is invisible to the panel above. Cases B and F are the
+      # safety argument: this clears caches and reloads, so it must happen at
+      # most once per session and never without a loop guard.
+      - name: Corrupted-cache self-heal
+        run: node scripts/test-self-heal.js
       # Renders the co-parent settings card against stubbed responses. The
       # case that matters is F: a failed request must not render as "just you".
       - name: Co-parent settings UI

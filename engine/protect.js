@@ -82,6 +82,59 @@
     } catch (_) {}
   }
 
+  // Clears the service worker registration and the SW caches ONLY.
+  // localStorage is deliberately untouched: it holds the student session
+  // token and the progress blob that has not been flushed to Supabase yet,
+  // and wiping it would turn a display bug into lost work plus a forced
+  // re-login.
+  // ⚠ Called by the recovery button AND by selfHealOnce() below. One copy.
+  function hardReset() {
+    var done = function () { location.replace(location.pathname + '?_r=' + Date.now()); };
+    var jobs = [];
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+        jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
+          return Promise.all(rs.map(function (r) { return r.unregister(); }));
+        }));
+      }
+      if (window.caches && caches.keys) {
+        jobs.push(caches.keys().then(function (ks) {
+          return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+        }));
+      }
+    } catch (_) {}
+    Promise.all(jobs).catch(function () {}).then(done);
+    setTimeout(done, 3000); // never leave it dead if a promise hangs
+  }
+
+  // ⚠⚠ A POISONED CACHE IS NOT A BOOT FAILURE, so showPanel() never fires for
+  //   it and the recovery button above is unreachable. A cached .js answered
+  //   with the HTML shell throws "Unexpected token '<'" at line 1, and the app
+  //   then boots perfectly well without it: Auth.init() finishes, sets opacity
+  //   1, appStarted() is true, and the panel is correctly suppressed.
+  //   Measured 2026-09-26 - a laptop signed in, logged "0 static questions
+  //   across 0 chapters" and told the child "No subjects available for Grade 5
+  //   yet", a content message for a corrupted cache. The only way out was a
+  //   console script, and a console script cannot be handed to every family.
+  // ⚠ ONCE PER SESSION, guarded by sessionStorage, and only for a same-origin
+  //   script. An error that survives the reset must not reload forever - and if
+  //   sessionStorage is unavailable we cannot prove it won't, so we do nothing.
+  function selfHealOnce(message, source) {
+    if (!/unexpected token|invalid or unexpected/i.test(String(message || ''))) return false;
+    if (!source || !/\.m?js(\?|$)/.test(String(source))) return false;
+    try { if (new URL(source, location.href).origin !== location.origin) return false; }
+    catch (_) { return false; }
+    try {
+      if (sessionStorage.getItem('psac-healed')) return false;
+      sessionStorage.setItem('psac-healed', '1');
+    } catch (_) { return false; }
+    if (window.console && console.warn) {
+      console.warn('[psac] cached script is not JavaScript, clearing caches once:', source);
+    }
+    hardReset();
+    return true;
+  }
+
   function esc(v) {
     return String(v == null ? '' : v).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
@@ -141,29 +194,7 @@
       location.reload();
     };
 
-    // Clears the service worker registration and the SW caches ONLY.
-    // localStorage is deliberately untouched: it holds the student session
-    // token and the progress blob that has not been flushed to Supabase yet,
-    // and wiping it would turn a display bug into lost work plus a forced
-    // re-login.
-    document.getElementById('psac-fatal-reset').onclick = function () {
-      var done = function () { location.replace(location.pathname + '?_r=' + Date.now()); };
-      var jobs = [];
-      try {
-        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
-          jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
-            return Promise.all(rs.map(function (r) { return r.unregister(); }));
-          }));
-        }
-        if (window.caches && caches.keys) {
-          jobs.push(caches.keys().then(function (ks) {
-            return Promise.all(ks.map(function (k) { return caches.delete(k); }));
-          }));
-        }
-      } catch (_) {}
-      Promise.all(jobs).catch(function () {}).then(done);
-      setTimeout(done, 3000); // never leave the button dead if a promise hangs
-    };
+    document.getElementById('psac-fatal-reset').onclick = function () { hardReset(); };
   }
 
   function armPanel() {
@@ -189,7 +220,9 @@
       record('script', 'failed to load ' + (ev.target.src || '(inline)'), ev.target.src, 0);
       return;
     }
-    record('error', (ev && ev.message) || 'uncaught error', ev && ev.filename, ev && ev.lineno);
+    var msg = (ev && ev.message) || 'uncaught error';
+    if (selfHealOnce(msg, ev && ev.filename)) return;
+    record('error', msg, ev && ev.filename, ev && ev.lineno);
   }, true);
 
   window.addEventListener('unhandledrejection', function (ev) {

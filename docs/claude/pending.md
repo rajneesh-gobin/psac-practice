@@ -85,6 +85,16 @@ database is a **decision**, not a pending run.
    was never in that file.
    ⚠ **Re-probe rather than trusting this paragraph.** It records one morning's
    measurement of a hosting setup that has already moved once.
+   ✅ **Re-probed 2026-09-26**, anonymous, after three more Cloudflare deploys
+   (`shell-v406` → `v408`). All **404, 0 bytes**:
+   `/netlify/question-bundles/grade5-maths.json`, `/.env`,
+   `/subjects/grade6-english/questions/ch03_clauses.js`,
+   `/assets/questions/PROVENANCE-TODO.md`, `/.library/catalogue.json`,
+   `/wrangler.toml`. Both halves of the two-sided probe still pass:
+   `/api/questions` **401** and `/.netlify/functions/questions` **401**. CSP,
+   HSTS and `X-Frame-Options` all still present on `/style.css`, which is the
+   only evidence that `_headers` is shipping — the Worker never runs for a
+   static asset.
 
 <details><summary>The original report, kept for context</summary>
 
@@ -330,3 +340,15 @@ database is a **decision**, not a pending run.
     Order when it is picked up: Bubblewrap build → upload to internal testing →
     read the fingerprint → paste it here → deploy the site → THEN install and
     check there is no address bar.
+
+19. ⚠ **CI does not run on the `cloudflare` branch, which is the branch the work
+    happens on.** `.github/workflows/ci.yml` triggers on `[main, dev]` only, so
+    every suite it lists — the JS syntax sweep, `check.js`, the error-boundary and
+    self-heal suites, the committed-credential scan — has run on **no commit on
+    this branch**. Measured 2026-09-26: `git rev-parse --abbrev-ref HEAD` is
+    `cloudflare` and the branch has no upstream configured either, so nothing is
+    pushed for GitHub to check even if the trigger matched.
+    ⚠ This is why a shipped-and-live regression can pass every local check and
+      still never be seen by CI. Adding `cloudflare` to both trigger lists is one
+      line; the reason it is a decision rather than a fix is that the branch has
+      never been pushed, and pushing it is the owner's call.
