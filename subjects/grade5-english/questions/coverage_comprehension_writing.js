@@ -1,6 +1,6 @@
 'use strict';
 (function(){
-const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`}));
+const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`,learnMore:G5E_LEARN[id]||''}));
 const rows=(p,c,s,d,o,h)=>d.forEach(([q,a,ro],i)=>add(`g5e-cov-${p}-${i}`,c,s,q,ro||o,a,h));
 // Real explanations, keyed by id. Added because every question in this file
 // used to say only "<b>X</b> is correct.", which teaches nothing.
@@ -19,6 +19,17 @@ const G5E_EXPL = {
   'g5e-cov-figurative-0': "Personification gives a <b>human</b> quality or action to something that is not human. The wind cannot really feel impatient — <b>impatient</b> is a human emotion given to the wind, which is personification.",
   'g5e-cov-figurative-1': "A metaphor says one thing <i>is</i> another — no 'like' or 'as'. <b>The classroom was a buzzing beehive</b> does not compare — it <i>calls</i> the classroom a beehive. The option with 'like' is a simile, not a metaphor.",
   'g5e-cov-figurative-2': "<b>Alliteration</b> is when several words close together begin with the same sound. In <b>Silver snakes slithered silently</b>, every word starts with the letter 's' — four in a row — which makes it alliteration.",
+};
+
+// Learn More content — text plus optional YouTube URL (youtube-nocookie.com iframe
+// is injected automatically by _learnMoreHTML() when a YouTube URL is detected).
+// Add a YouTube URL by appending: https://www.youtube.com/watch?v=VIDEO_ID
+// To add a YouTube video: append  https://www.youtube.com/watch?v=VIDEO_ID  to
+// any entry below. _learnMoreHTML() detects the URL and embeds a nocookie player.
+const G5E_LEARN = {
+  'g5e-cov-figurative-0': '<b>Personification</b> gives human feelings, actions or qualities to animals, objects or ideas. Writers use it to make descriptions vivid and engaging. Example: "The sun smiled down on us." — the sun cannot really smile, but the image brings it to life.',
+  'g5e-cov-figurative-1': '<b>Metaphors</b> make a direct comparison by saying one thing <i>is</i> another — no "like" or "as". They merge two ideas to create a strong image. Example: "Life is a journey." — life is not literally a journey, but the comparison captures its ups and downs.',
+  'g5e-cov-figurative-2': '<b>Alliteration</b> repeats the same starting consonant sound in words close together. Writers use it to create rhythm and make phrases memorable. Example: "Peter Piper picked a peck of pickled peppers." — every important word begins with the same "p" sound.',
 };
 
 // main idea — broken shared opts replaced with per-question options
