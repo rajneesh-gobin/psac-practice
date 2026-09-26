@@ -13165,7 +13165,7 @@ html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-s
   margin: 1.5rem 0 0.5rem;
 }
 .predicted-papers-header {
-  background: linear-gradient(135deg, #e65100, #bf360c);
+  background: linear-gradient(135deg, #1a3c6e, #0d2548);
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 12px;
@@ -13208,8 +13208,8 @@ html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-s
   gap: 0.75rem;
 }
 .predicted-subject-card {
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
+  background: #eef3fb;
+  border: 1px solid #b8cde8;
   border-radius: 10px;
   padding: 0.75rem;
   display: flex;
@@ -13219,12 +13219,12 @@ html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-s
 .predicted-subject-name {
   font-weight: 600;
   font-size: 0.875rem;
-  color: #92400e;
+  color: #1a3c6e;
   margin-bottom: 0.25rem;
 }
 .predicted-dl-btn {
   display: block;
-  background: #ea580c;
+  background: #1a3c6e;
   color: white;
   text-align: center;
   padding: 6px 8px;
@@ -13235,8 +13235,33 @@ html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-s
   transition: background 0.15s;
 }
 .predicted-dl-btn:hover {
-  background: #c2410c;
+  background: #0d2548;
 }
+.predicted-lib-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  background: linear-gradient(135deg, #1a3c6e, #0d2548);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.15s;
+}
+.predicted-lib-banner:hover { opacity: 0.9; }
+.predicted-lib-banner-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.predicted-lib-banner-text strong { font-size: 0.95rem; }
+.predicted-lib-banner-text span { font-size: 0.78rem; opacity: 0.88; }
 @media (max-width: 480px) {
   .predicted-subject-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));

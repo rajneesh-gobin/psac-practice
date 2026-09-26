@@ -1,5 +1,5 @@
 'use strict';
-(function(){const add=(id,c,s,q,o,a,h)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||`<b>${a}</b> is correct.`}));const rows=(p,c,s,d,o,h)=>d.forEach(([q,a,ro],i)=>add(`g5e-cov-${p}-${i}`,c,s,q,ro||o,a,h));
+(function(){const add=(id,c,s,q,o,a,h)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||`<b>${a}</b> is correct.`,learnMore:G5E_LEARN[id]||''}));const rows=(p,c,s,d,o,h)=>d.forEach(([q,a,ro],i)=>add(`g5e-cov-${p}-${i}`,c,s,q,ro||o,a,h));
 // Real explanations, keyed by id. Added because every question in this file
 // used to say only "<b>X</b> is correct.", which teaches nothing.
 const G5E_EXPL = {
@@ -11,6 +11,17 @@ const G5E_EXPL = {
   'g5e-cov-type-0': "It tells someone to do something, so it is a <b>command</b>. <i>Please</i> makes it polite, but it is still an instruction.",
   'g5e-cov-type-1': "It shows strong feeling and ends with an exclamation mark, so it is an <b>exclamation</b>.",
   'g5e-cov-speech-0': "A comma comes before the speech, the spoken words sit inside the inverted commas, and the full stop goes <i>inside</i> them too.",
+  'g5e-cov-sentence-context-0': "<b>The rain stopped after lunch</b> is a complete sentence: it has a subject (<i>the rain</i>) and a verb (<i>stopped</i>), and it makes sense on its own. The other options either lack a subject or a main verb.",
+  'g5e-cov-sentence-context-1': "<b>Because the bus was late.</b> starts with a conjunction that signals a reason, but it leaves the question unanswered — a reason for <i>what</i>? It depends on a main clause to complete its meaning, so it is a sentence fragment.",
+};
+const G5E_LEARN = {
+  'g5e-cov-order-0': '<b>Adjective order</b> in English follows a fixed pattern: number → opinion → size → age → shape → colour → material. So we say "a small blue bag", never "a blue small bag". Native speakers apply this instinctively — the rule explains the pattern behind their instinct.',
+  'g5e-cov-order-1': '<b>Opinion adjectives</b> (delicious, beautiful) always come before <b>fact adjectives</b> (ripe, tall, square). Within fact adjectives, number comes first, then opinion, then size and other physical details. So: three → delicious (opinion) → ripe (condition).',
+  'g5e-cov-type-0': 'A <b>command (imperative sentence)</b> gives an instruction or order. It begins with a base verb: "Sit down." Adding "please" makes it polite but it is still a command. Commands can end with a full stop or an exclamation mark depending on urgency.',
+  'g5e-cov-type-1': 'An <b>exclamation</b> expresses strong feeling — surprise, excitement, delight. It must start with "What" or "How" and end with an exclamation mark: "What an amazing view!" / "How kind you are!" Any other sentence ending in ! is an emphatic statement, not a true exclamation.',
+  'g5e-cov-speech-0': '<b>Direct speech</b> shows the exact words someone said, placed inside inverted commas (speech marks). The pattern: She said, "Words here." — a comma after the reporting verb, capital letter to open the speech, and the full stop inside the closing speech marks.',
+  'g5e-cov-sentence-context-0': 'A <b>complete sentence</b> needs a <b>subject</b> (who/what it is about) and a <b>main verb</b> (what the subject does or is). "The rain stopped after lunch" has both. Phrases like "Under the tall tree" or "Running quickly" have no subject-verb pair and cannot stand alone.',
+  'g5e-cov-sentence-context-1': 'A <b>sentence fragment</b> is an incomplete sentence. Clauses starting with subordinating conjunctions (because, although, when, if) need a main clause to complete their meaning. "Because the bus was late" — late for what? Without a main clause, the reader is left waiting.',
 };
 rows('order','eng-adjectives','order',[['Which phrase describes a bag using the natural adjective order?','a small blue bag'],['Which phrase describes mangoes with the opinion adjective before the adjective describing ripeness?','three delicious ripe mangoes']],['a small blue bag','a blue small bag','three delicious ripe mangoes','three ripe delicious mangoes'],'Opinion adjectives normally come before physical descriptions; size normally comes before colour.');
 rows('adj-context','eng-adjectives','in_context',[['Which word is the adjective in "The enormous waves crashed on the shore"?','enormous',['enormous','waves','crashed','shore']],['Which word is the adjective in "A cheerful crowd waited outside"?','cheerful',['cheerful','crowd','waited','outside']],['Which word is the adjective in "We crossed a narrow bridge"?','narrow',['narrow','crossed','bridge','We']]],['enormous','cheerful','narrow','crossed'],'An adjective describes a noun.');

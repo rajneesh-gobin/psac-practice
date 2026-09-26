@@ -17,6 +17,7 @@ const G5E_EXPL = {
   'g5e-cov-determiner-1': "<i>Money</i> cannot be counted one by one, and the sentence is negative, so <b>much</b> is the word that fits.",
   'g5e-cov-determiner-2': "<b>Every</b> takes a singular noun and means all of them, one by one — which matches <i>pupil must bring</i>.",
   'g5e-cov-determiner-3': "An offer takes <b>some</b> rather than <i>any</i>: \"Would you like some water?\"",
+  'g5e-cov-voice-0': "In the passive voice the subject <i>receives</i> the action instead of doing it. <b>The trophy was lifted by the captain</b> — the trophy did not lift anything; the captain did, but the trophy is the subject. In the active version it would be: <i>The captain lifted the trophy.</i>",
   'g5e-cov-agreement-0': "The subject is <i>the basket</i>, not <i>mangoes</i>. One basket, so the verb is <b>is</b>.",
   'g5e-cov-agreement-1': "<i>Neither</i> is singular — it means not one and not the other — so the verb is <b>is</b>.",
   'g5e-cov-agreement-2': "<i>My friends</i> is plural, so the verb drops its -s: <b>play</b>.",
@@ -25,16 +26,35 @@ const G5E_EXPL = {
   'g5e-cov-past-0': "<i>Begin</i> is irregular, so it becomes <b>began</b> — never \"beginned\".",
   'g5e-cov-past-1': "<i>Yesterday</i> puts the sentence in the past, and <i>visit</i> is regular, so add -ed: <b>visited</b>.",
   'g5e-cov-future-0': "<i>Next week</i> points to the future, so use <b>will visit</b>.",
+  'g5e-cov-future-1': "<b>They are going to plant a tree tomorrow</b> uses <i>going to</i> + a base verb to talk about a plan for the future. <i>Tomorrow</i> confirms it has not happened yet.",
   'g5e-cov-future-2': "<i>On Friday</i> is still to come, so the future form <b>will perform</b> is needed.",
   'g5e-cov-cont-0': "<i>Listen!</i> tells us it is happening at this moment, which needs the present continuous <b>is crying</b>.",
   'g5e-cov-cont-1': "It names a moment in the past — 6 pm yesterday — when the action was already going on, so use the past continuous <b>were eating</b>.",
+  'g5e-cov-cont-2': "The present continuous needs a form of <i>be</i> + the verb ending in <i>-ing</i>. <b>The children are building a sandcastle</b> has <i>are</i> + <i>building</i> and the action is happening now.",
   'g5e-cov-cont-3': "The waiting was already going on when the rain started, so the longer action takes the past continuous <b>was waiting</b>.",
   'g5e-cov-verb-context-0': "<b>squawked</b> is what the parrot did, so it is the verb. <i>noisy</i> describes it and <i>loudly</i> says how.",
   'g5e-cov-verb-context-1': "All three words work as one: <i>have</i> and <i>been</i> are helping verbs and <i>practising</i> is the main verb, so the verb phrase is <b>have been practising</b>.",
   'g5e-cov-verb-context-2': "<i>will</i> is the helping verb that puts it in the future. The action itself — the main verb — is <b>bake</b>.",
   'g5e-cov-verb-context-3': "<b>seems</b> is the verb even though it is not an action: it links the teacher to the word describing her.",
 };
-  const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`}));
+const G5E_LEARN = {
+  'g5e-cov-article-0': 'Use <b>an</b> before words that begin with a <b>vowel sound</b>, even if they start with a consonant letter. "Hour" starts with h but the h is silent — it sounds like "our", a vowel sound. The rule is about the first SOUND, not the first letter. An honour, an hour, an heir — all start with a silent h.',
+  'g5e-cov-article-1': 'Use <b>an</b> before any word whose first SOUND is a vowel (a, e, i, o, u sounds): an apple, an elephant, an ice cream, an orange, an umbrella. Use <b>a</b> before consonant sounds: a ball, a cat, a uniform (sounds like "you" — a consonant sound!).',
+  'g5e-cov-article-2': 'Use <b>the</b> (definite article) when both speaker and listener know exactly which thing is meant. "Close the door near the window" — a specific door, not just any door. Use <b>a/an</b> (indefinite article) when introducing something for the first time or meaning any one of something.',
+  'g5e-cov-plural-0': 'Many nouns ending in <b>-f</b> or <b>-fe</b> change f to v and add <b>-ves</b>: leaf → leaves, loaf → loaves, half → halves, knife → knives, wolf → wolves, wife → wives. Exceptions that just add -s: roof → roofs, chief → chiefs.',
+  'g5e-cov-plural-1': '<b>Irregular plurals</b> change their form entirely and must be memorised: child → children, tooth → teeth, foot → feet, mouse → mice, goose → geese, person → people, man → men, woman → women, ox → oxen.',
+  'g5e-cov-plural-2': 'Nouns ending in <b>consonant + o</b> usually form plurals with <b>-oes</b>: tomato → tomatoes, potato → potatoes, hero → heroes, echo → echoes. Short and borrowed words often just add -s: photo → photos, piano → pianos, radio → radios.',
+  'g5e-cov-abstract-0': '<b>Concrete nouns</b> are things you can physically sense: bicycle (see), thunder (hear), rose (smell). <b>Abstract nouns</b> name ideas, qualities, feelings or states: courage, freedom, happiness, justice, loyalty. You cannot touch or point to an abstract noun.',
+  'g5e-cov-determiner-0': '<b>A few</b> (small number) and <b>a little</b> (small amount) — use <b>a few</b> with countable nouns (things you can count one by one): a few biscuits, a few days. Use <b>a little</b> with uncountable nouns: a little water, a little time, a little sugar.',
+  'g5e-cov-determiner-1': 'With uncountable nouns in negative sentences, use <b>much</b>: "I don\'t have much money." With countable nouns, use <b>many</b>: "I don\'t have many coins." In positive sentences, both can be replaced by "a lot of": "I have a lot of money / coins."',
+  'g5e-cov-voice-0': '<b>Active voice</b>: the subject does the action — "The captain lifted the trophy." <b>Passive voice</b>: the subject receives the action — "The trophy was lifted by the captain." Passive is formed with <b>be + past participle</b>. Use it when the action matters more than who did it.',
+  'g5e-cov-past-0': '<b>Irregular verbs</b> change their form in the past tense rather than adding -ed. Must-know list: begin → began, go → went, come → came, see → saw, take → took, give → gave, write → wrote, know → knew, grow → grew, throw → threw.',
+  'g5e-cov-future-0': 'Two main future forms: <b>will + base verb</b> for predictions, decisions made at the moment of speaking, and promises ("I will help you"). <b>Going to + base verb</b> for plans already decided and predictions based on evidence ("Look at those clouds — it is going to rain").',
+  'g5e-cov-cont-0': 'The <b>present continuous</b> (am/is/are + -ing) describes an action happening at this exact moment or around this time. "Listen! The baby is crying." Also used for temporary situations ("I am staying with my aunt this week") and future arrangements ("We are leaving tomorrow").',
+  'g5e-cov-cont-1': 'The <b>past continuous</b> (was/were + -ing) describes an action that was already in progress at a specific past moment. "At 6 pm yesterday, we were eating dinner." It also describes a longer action interrupted by a shorter one: "I was walking when it began to rain."',
+  'g5e-cov-aux-0': '<b>Auxiliary (helping) verbs</b> work with a main verb to form tenses, questions and negatives. The main auxiliaries are: be (am/is/are/was/were), have (has/had), do (does/did), and the modals (will, would, can, could, may, might, shall, should, must). In "She has finished", has = auxiliary, finished = main verb.',
+};
+  const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`,learnMore:G5E_LEARN[id]||''}));
   const rows=(p,c,s,data,o,h)=>data.forEach(([q,a,ro],i)=>add(`g5e-cov-${p}-${i}`,c,s,q,ro||o,a,h));
 
   // articles — closed set of 3 valid articles, already correct

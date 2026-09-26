@@ -1,0 +1,627 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouklass.com – Grade 6 English – Specimen Paper 4 – 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.cover-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-logo-box .nk-big{font-size:18pt;line-height:1}
+.nk-logo-box .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.passage-box{background:#f8f9fb;border:1px solid #bbb;padding:14px 18px;margin:14px 0;font-size:11pt;line-height:1.9;border-radius:4px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;margin-top:2px;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;white-space:nowrap;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:120px;width:100%;margin:10px 0;padding:6px}
+.answer-box-xl{border:1px solid #aaa;border-radius:3px;min-height:200px;width:100%;margin:10px 0;padding:6px}
+.writing-lines{margin:10px 0;width:100%}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.cloze-blank{border-bottom:1.5px solid #000;display:inline-block;width:120px;height:20px;vertical-align:bottom;margin:0 4px}
+.word-bank{background:#eef3fb;border:1px solid #b8cde8;padding:10px 14px;margin:10px 0;border-radius:4px;font-size:10.5pt}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt;margin-bottom:18px}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.ans-table tr:nth-child(even){background:#f9fbff}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 20px;margin:7px 0 12px}
+.mcq-option{padding:2px 0;font-size:11pt}
+.tf-table{border-collapse:collapse;width:100%;margin:10px 0 14px}
+.tf-table th,.tf-table td{border:1px solid #888;padding:7px 10px;font-size:10.5pt}
+.tf-table th{background:#eef3fb;color:#1a3c6e;font-weight:bold}
+.tf-check{width:26px;height:26px;border:1.5px solid #555;display:inline-block;vertical-align:middle}
+.comp-row{display:flex;align-items:flex-end;gap:8px;margin:9px 0;font-size:11pt}
+.comp-num{font-weight:bold;min-width:26px;color:#1a3c6e;flex-shrink:0}
+.comp-blank{flex:1;border-bottom:1.5px solid #000;min-height:20px}
+.error-text{font-size:11pt;line-height:2.8;margin:12px 0}
+.underlined{text-decoration:underline}
+.corr-box{display:inline-block;border:1px solid #888;min-width:110px;padding:2px 8px;height:22px;vertical-align:bottom}
+.pic-row{display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start;margin:14px 0}
+.pic-box{border:2px solid #888;min-height:110px;background:#f8f9fb;display:flex;align-items:center;justify-content:center;font-size:8.5pt;color:#888;text-align:center;padding:8px;border-radius:3px}
+.pic-words{font-style:italic;font-size:10pt;color:#1a3c6e;margin-bottom:8px}
+.adj-box{display:flex;flex-wrap:wrap;gap:14px 28px;border:1px solid #b8cde8;padding:12px 16px;background:#f8f9fb;border-radius:4px;margin:10px 0;font-size:11pt}
+.marking-grid{width:100%;border-collapse:collapse;margin-top:16px;font-size:9pt}
+.marking-grid th,.marking-grid td{border:1px solid #aaa;padding:4px 8px;text-align:center}
+.marking-grid th{background:#eef3fb;color:#1a3c6e}
+.match-ans-row{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.match-ans-cell{display:flex;align-items:center;gap:6px;font-size:10.5pt}
+.match-ans-box{border:1px solid #888;width:36px;height:30px;display:inline-block}
+@media print{
+  .nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none}
+  body{padding-top:32px}
+  @page{size:A4 portrait;margin:12mm 14mm}
+}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &nbsp;|&nbsp; Grade 6 English &mdash; Specimen Paper 4 of 4</span>
+  <button class="print-btn" onclick="window.print()">&#128438; Print</button>
+</div>
+
+<div class="cover">
+  <div class="cover-header">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">nouklass.com</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">Specimen Paper 4 of 4 &mdash; 2026 &mdash; Practice Use Only</div>
+      <div class="specimen-label" style="margin-top:3px;">Not an official MES paper &mdash; for exam practice only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">English &mdash; Grade 6</div>
+  <div class="paper-meta">
+    <strong>Specimen Paper 4 of 4</strong><br>
+    Time allowed: <strong>1 hour 45 minutes</strong><br>
+    Total marks: <strong>100</strong>
+  </div>
+
+  <div style="margin:14px 0;font-size:11pt">
+    <div style="margin-bottom:10px">Index Number: &nbsp;<span class="index-line"></span></div>
+    <div style="margin-bottom:10px">Name: &nbsp;<span class="index-line" style="width:300px"></span></div>
+    <div>Class: &nbsp;<span class="index-line" style="width:150px"></span></div>
+  </div>
+
+  <div class="instructions">
+    <strong>INSTRUCTIONS TO CANDIDATES</strong>
+    <ol>
+      <li>This paper contains <strong>9 questions</strong>.</li>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <strong>all</strong> questions.</li>
+      <li>Write your answers clearly in the spaces provided.</li>
+      <li>You may not use red, green or black ink.</li>
+    </ol>
+  </div>
+
+  <table class="marking-grid">
+    <thead>
+      <tr><th>Q1</th><th>Q2</th><th>Q3A</th><th>Q3B</th><th>Q4A</th><th>Q4B</th><th>Q5</th><th>Q6A</th><th>Q6B</th><th>Q7A</th><th>Q7B</th><th>Q8A</th><th>Q8B</th><th>Q9</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/5</td><td>/10</td><td>/5</td><td>/5</td><td>/10</td><td>/15</td><td>/10</td><td>/5</td><td>/5</td><td>/5</td><td>/5</td><td>/6</td><td>/4</td><td>/10</td><td>/100</td></tr>
+      <tr style="height:28px"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- QUESTION 1 -->
+<div class="page page-break">
+  <div class="section-header">Question 1 &mdash; Sentence Matching <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="margin-bottom:12px;font-size:11pt;">Match each sentence on the left with the most suitable sentence on the right. An example is given. There is <strong>one extra sentence</strong> on the right that you will not use.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin:14px 0">
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt"><em>Example:</em> The rubbish bins were overflowing. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(i)&nbsp; A new family moved in next door. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(ii)&nbsp; The school hall was brightly decorated. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iii)&nbsp; All the street lights were off. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iv)&nbsp; The old man sat alone on the bench. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(v)&nbsp; The children ran out of the classroom excitedly. &nbsp;&bull;</p>
+    </div>
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull; &nbsp;The cleaners had not come for many days.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>A.</strong> &nbsp;We brought them some food to welcome them.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>B.</strong> &nbsp;There was a special celebration being held.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>C.</strong> &nbsp;There had been a power failure during the night.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>D.</strong> &nbsp;He was feeling very lonely.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>E.</strong> &nbsp;It was the last day of school.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>F.</strong> &nbsp;The bus was running late.</p>
+    </div>
+  </div>
+
+  <p style="font-size:10.5pt;margin-top:14px;margin-bottom:8px;">Write the correct letter in each box:</p>
+  <div class="match-ans-row">
+    <div class="match-ans-cell">(i) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(ii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iv) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(v) <div class="match-ans-box"></div></div>
+  </div>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="page">
+  <div class="section-header">Question 2 &mdash; Grammar <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Circle the letter which shows the correct answer.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:4px">Example: The volunteers ........................... the park every Saturday.</p>
+  <div class="mcq-grid" style="margin-bottom:12px;font-style:italic;color:#555">
+    <div class="mcq-option"><span style="border:2px solid #000;padding:1px 7px;border-radius:50%;font-weight:bold">A</span> clean</div>
+    <div class="mcq-option">B &nbsp;cleaned</div>
+    <div class="mcq-option">C &nbsp;are cleaning</div>
+    <div class="mcq-option">D &nbsp;will clean</div>
+  </div>
+  <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px">
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">1. &nbsp;&nbsp;Maya sat alone ........................... lunchtime, missing her old school.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;in</div><div class="mcq-option">B &nbsp;on</div><div class="mcq-option">C &nbsp;at</div><div class="mcq-option">D &nbsp;during</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;&nbsp;Sadie gave ........................... new classmate a packet of biscuits.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;her</div><div class="mcq-option">B &nbsp;she</div><div class="mcq-option">C &nbsp;hers</div><div class="mcq-option">D &nbsp;herself</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;&nbsp;There are ........................... children who help at the community garden.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;a little</div><div class="mcq-option">B &nbsp;much</div><div class="mcq-option">C &nbsp;many</div><div class="mcq-option">D &nbsp;little</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;&nbsp;The community garden is ........................... project the village has ever started.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;the good</div><div class="mcq-option">B &nbsp;better</div><div class="mcq-option">C &nbsp;as good as</div><div class="mcq-option">D &nbsp;the best</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;&nbsp;The clean-up event will take place ........................... January every year.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;on</div><div class="mcq-option">B &nbsp;in</div><div class="mcq-option">C &nbsp;at</div><div class="mcq-option">D &nbsp;by</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">6. &nbsp;&nbsp;While Maya ........................... alone, Sadie came and sat beside her.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;sat</div><div class="mcq-option">B &nbsp;sits</div><div class="mcq-option">C &nbsp;was sitting</div><div class="mcq-option">D &nbsp;will sit</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">7. &nbsp;&nbsp;The residents cleaned up the whole village ........................... .</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;itself</div><div class="mcq-option">B &nbsp;yourself</div><div class="mcq-option">C &nbsp;ourselves</div><div class="mcq-option">D &nbsp;themselves</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">8. &nbsp;&nbsp;The volunteers have already ........................... their section of the park.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;plant</div><div class="mcq-option">B &nbsp;planting</div><div class="mcq-option">C &nbsp;planted</div><div class="mcq-option">D &nbsp;plants</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">9. &nbsp;&nbsp;The girl ........................... helped Maya settle in was named Sadie.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;whose</div><div class="mcq-option">B &nbsp;whom</div><div class="mcq-option">C &nbsp;who</div><div class="mcq-option">D &nbsp;which</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">10. &nbsp;Maya felt happier ........................... she made new friends at her new school.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;unless</div><div class="mcq-option">B &nbsp;although</div><div class="mcq-option">C &nbsp;despite</div><div class="mcq-option">D &nbsp;once</div></div></div>
+</div>
+
+<!-- QUESTION 3A -->
+<div class="page">
+  <div class="section-header">Question 3A &mdash; Word Definitions <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Read each description. Find the word it describes. The first letter is given as a clue.</p>
+  <p style="font-size:10.5pt;margin-bottom:6px;font-style:italic">Example: A person who works without being paid, to help others. &nbsp;&nbsp; V <u>o</u> <u>l</u> <u>u</u> <u>n</u> <u>t</u> <u>e</u> <u>e</u> <u>r</u></p>
+
+  <div class="comp-row"><div class="comp-num">(i)</div><div style="flex:1;font-size:11pt">A group of people who live in the same area or share common interests. &nbsp;&nbsp; <strong>C</strong> _ _ _ _ _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(ii)</div><div style="flex:1;font-size:11pt">The duty to look after something or someone. &nbsp;&nbsp; <strong>R</strong> _ _ _ _ _ _ _ _ _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iii)</div><div style="flex:1;font-size:11pt">A piece of ground where vegetables and flowers are grown. &nbsp;&nbsp; <strong>G</strong> _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iv)</div><div style="flex:1;font-size:11pt">A person who has just arrived at a new place and is not yet familiar with it. &nbsp;&nbsp; <strong>S</strong> _ _ _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(v)</div><div style="flex:1;font-size:11pt">To give someone confidence by making them feel welcomed or valued. &nbsp;&nbsp; <strong>E</strong> _ _ _ _ _ _ _ _ _</div></div>
+</div>
+
+<!-- QUESTION 3B -->
+<div class="page">
+  <div class="section-header">Question 3B &mdash; Vocabulary <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Circle the letter which shows the correct word to complete each sentence.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">1. &nbsp;&nbsp;The pupils ........................... the rubbish carefully into separate bags for recycling.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;ignored</div><div class="mcq-option">B &nbsp;sorted</div><div class="mcq-option">C &nbsp;lost</div><div class="mcq-option">D &nbsp;forgot</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;&nbsp;Everyone felt very ........................... when the village park looked clean and beautiful again.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;bored</div><div class="mcq-option">B &nbsp;tired</div><div class="mcq-option">C &nbsp;proud</div><div class="mcq-option">D &nbsp;frightened</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;&nbsp;My neighbours like to ........................... fresh vegetables in their community garden.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;destroy</div><div class="mcq-option">B &nbsp;grow</div><div class="mcq-option">C &nbsp;ignore</div><div class="mcq-option">D &nbsp;buy</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;&nbsp;Sadie spoke ........................... and made Maya feel welcome right away.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;rudely</div><div class="mcq-option">B &nbsp;quietly</div><div class="mcq-option">C &nbsp;angrily</div><div class="mcq-option">D &nbsp;warmly</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;&nbsp;The ........................... at the community centre helped the elderly residents with their shopping.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;mechanic</div><div class="mcq-option">B &nbsp;plumber</div><div class="mcq-option">C &nbsp;volunteers</div><div class="mcq-option">D &nbsp;drivers</div></div></div>
+</div>
+
+<!-- QUESTION 4A -->
+<div class="page page-break">
+  <div class="section-header">Question 4A &mdash; Reading Comprehension: Informational Text <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Read the text below, then complete the sentences that follow.</p>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">The Great Village Clean-Up of Mahébourg</p>
+    <p>The small town of Mahébourg, on the south-east coast of Mauritius, is well known for its community spirit. Every year, residents come together for the Great Village Clean-Up &mdash; a weekend event that has been running for over fifteen years.</p>
+    <p style="margin-top:9px">The clean-up takes place every January, when volunteers of all ages gather early in the morning at the village square. Organisers give out gloves, bags and tools, and the volunteers split into teams to cover different areas. Some teams collect litter from streets and public parks. Others paint old benches, repair paths or plant flowers along the roadsides.</p>
+    <p style="margin-top:9px">Young people play an important role in the event. Secondary school students collect litter from the beach and go door to door collecting newspapers, glass bottles and plastic containers for recycling. The Scouts and Girl Guides set up refreshment stalls and give out water and snacks to the other volunteers.</p>
+    <p style="margin-top:9px">The community garden is another central feature of the project. Volunteers work together to plant vegetables, herbs and fruit trees that any resident of the town can harvest freely. This benefits families who cannot afford to buy fresh produce from the market.</p>
+    <p style="margin-top:9px">By the end of the weekend, the town looks completely transformed. The streets are clean, the parks are tidy and the garden is full of young plants. Residents celebrate with a shared meal prepared by local women&rsquo;s groups. Everyone goes home feeling proud of what they have built together as a community.</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Based on the text, complete the following.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:10px">Example: This text is about: &nbsp;<u>the Great Village Clean-Up of Mahébourg</u></p>
+
+  <div class="comp-row"><div class="comp-num">1.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Where Mahébourg is located:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">2.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">How long the event has been running:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">3.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">When the clean-up takes place:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">4.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Where volunteers gather at the start:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">5.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One job some teams do:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">6.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One item secondary school students collect for recycling:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">7.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What the Scouts and Girl Guides do:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">8.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Who benefits from the community garden:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">9.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">How the weekend ends:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">10.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">How residents feel at the end of the event:</div><div class="comp-blank"></div></div>
+</div>
+
+<!-- QUESTION 4B -->
+<div class="page page-break">
+  <div class="section-header">Question 4B &mdash; Reading Comprehension: Narrative <span style="font-weight:normal;font-size:10pt;">(15 marks)</span></div>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">The New Girl</p>
+    <p>Maya had been at Rivi&egrave;re du Rempart Primary School for three days, but she had not yet spoken to anyone. She sat alone at lunch each day, eating her rice and watching the other children play loudly in the yard. She missed her old school, her old friends and the home she had left behind.</p>
+    <p style="margin-top:9px">On the fourth morning, a cheerful girl named Sadie sat down beside her in class. Without saying a word, Sadie placed a small packet of biscuits on Maya&rsquo;s desk.</p>
+    <p style="margin-top:9px">&ldquo;I made too many,&rdquo; Sadie said simply. &ldquo;You can have some.&rdquo;</p>
+    <p style="margin-top:9px">Maya looked up, surprised. &ldquo;Thank you,&rdquo; she whispered.</p>
+    <p style="margin-top:9px">During lunch, Sadie invited Maya to sit with her group of friends. At first, Maya answered only in short sentences and kept her eyes on her plate. But Sadie&rsquo;s friends were friendly and funny, and before long Maya found herself laughing along with them.</p>
+    <p style="margin-top:9px">That afternoon, the class teacher, Mrs Ghoorah, noticed that Maya&rsquo;s face had changed. She no longer looked pale and worried. She was smiling.</p>
+    <p style="margin-top:9px">&ldquo;How are you settling in?&rdquo; Mrs Ghoorah asked her after school.</p>
+    <p style="margin-top:9px">&ldquo;Better,&rdquo; said Maya. &ldquo;Much better.&rdquo;</p>
+    <p style="margin-top:9px">On her way home, Maya thought about Sadie&rsquo;s small act of kindness &mdash; the biscuits and the invitation to join the group. Such a small thing, yet it had changed everything. She decided that she too would always look out for anyone who seemed lonely or new at school.</p>
+    <p style="margin-top:9px">That evening, she told her mother she liked her new school. And she meant it.</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 8px">1. &nbsp;Indicate whether each statement is True or False. Tick (&radic;) the correct box. <span class="marks">[3]</span></p>
+  <table class="tf-table">
+    <thead><tr><th style="width:66%;text-align:left">Statement</th><th style="width:17%">True</th><th style="width:17%">False</th></tr></thead>
+    <tbody>
+      <tr><td>(i) &nbsp;Maya had been at the new school for a week before she made friends.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(ii) &nbsp;Sadie gave Maya a packet of biscuits.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(iii) &nbsp;Mrs Ghoorah was Maya&rsquo;s science teacher.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 6px">Circle the letter of the correct answer.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;At the beginning, where was Maya during lunch? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;Playing with friends</div><div class="mcq-option">B &nbsp;Sitting alone in the yard</div><div class="mcq-option">C &nbsp;Eating with Sadie</div><div class="mcq-option">D &nbsp;Working in class</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;In paragraph 6, the word &ldquo;pale&rdquo; means Maya looked &hellip; <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;very tired</div><div class="mcq-option">B &nbsp;light-faced, as from worry</div><div class="mcq-option">C &nbsp;colourful</div><div class="mcq-option">D &nbsp;very small</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;What did Maya decide to do after going home? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;Change schools again</div><div class="mcq-option">B &nbsp;Make friends more quickly</div><div class="mcq-option">C &nbsp;Always look out for lonely people at school</div><div class="mcq-option">D &nbsp;Talk to Mrs Ghoorah</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;The best title for this story is &hellip; <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;Lunch at School</div><div class="mcq-option">B &nbsp;The Class Teacher&rsquo;s Lesson</div><div class="mcq-option">C &nbsp;A Small Act of Kindness</div><div class="mcq-option">D &nbsp;Maya&rsquo;s Old School</div></div></div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Answer the following questions based on the text.</p>
+
+  <div class="question"><div class="qnum">6.</div><div class="qbody"><p style="font-size:11pt">Give TWO reasons why Maya was unhappy at the beginning of the story. <span class="marks">[2]</span></p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">7.</div><div class="qbody"><p style="font-size:11pt">How did Sadie show kindness to Maya? Give TWO examples from the text. <span class="marks">[2]</span></p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">8.</div><div class="qbody"><p style="font-size:11pt">How do you know that Maya felt more comfortable at lunch with Sadie&rsquo;s group? <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">9.</div><div class="qbody"><p style="font-size:11pt">Circle <strong>TWO</strong> words from the list below that best describe Sadie. <span class="marks">[2]</span></p>
+    <div class="adj-box"><span>selfish</span><span>kind</span><span>careless</span><span>thoughtful</span><span>lazy</span><span>greedy</span></div>
+  </div></div>
+  <div class="question"><div class="qnum">10.</div><div class="qbody"><p style="font-size:11pt">What lesson did Maya learn from Sadie&rsquo;s act of kindness? <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+</div>
+
+<!-- QUESTION 5 -->
+<div class="page page-break">
+  <div class="section-header">Question 5 &mdash; Sentence Writing <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+
+  <div class="question"><div class="qnum">(i)</div><div class="qbody"><p style="font-size:11pt"><strong>Removing the extra word:</strong> <span class="marks">[1]</span><br>Maya sat alone at by the lunch table all week.</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(ii)</div><div class="qbody"><p style="font-size:11pt"><strong>Adding the required capital letter and full stop:</strong> <span class="marks">[1]</span><br>sadie smiled at maya and offered her some biscuits</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(iii)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the adverb &lsquo;warmly&rsquo; in the right place:</strong> <span class="marks">[1]</span><br>Mrs Ghoorah greeted all the new pupils.</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(iv)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the words in order to make a sentence:</strong> <span class="marks">[1]</span><br><em>she &ndash; joined &ndash; new &ndash; the &ndash; school</em></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(v)</div><div class="qbody"><p style="font-size:11pt"><strong>Transforming into its NEGATIVE form:</strong> <span class="marks">[2]</span><br>The children helped to clean up the village last weekend.</p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">(vi)</div><div class="qbody"><p style="font-size:11pt"><strong>Transforming into its INTERROGATIVE form:</strong> <span class="marks">[2]</span><br>The volunteers planted vegetables in the community garden.</p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">(vii)</div><div class="qbody"><p style="font-size:11pt"><strong>Write ONE sentence using these words:</strong> <span class="marks">[2]</span><br><em>community &ndash; together &ndash; proud</em></p><div class="answer-box"></div></div></div>
+</div>
+
+<!-- QUESTION 6A -->
+<div class="page">
+  <div class="section-header">Question 6A &mdash; Cloze Test: Word Bank <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by choosing the correct word from the word bank. The first one has been done for you. There is <strong>one extra word</strong> you will not use.</p>
+
+  <div class="word-bank"><strong>Word Bank:</strong> &nbsp;&nbsp; planted &nbsp;&bull;&nbsp; together &nbsp;&bull;&nbsp; fresh &nbsp;&bull;&nbsp; everyone &nbsp;&bull;&nbsp; happy &nbsp;&bull;&nbsp; decided &nbsp;&bull;&nbsp; always</div>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    The residents <strong><u>planted</u></strong> seeds in the community garden last spring. They worked <span class="cloze-blank"></span> and helped each other with the digging and watering. By summer, the garden was full of <span class="cloze-blank"></span> vegetables that anyone could pick. <span class="cloze-blank"></span> in the village was <span class="cloze-blank"></span> to see how well the garden had grown. The local council <span class="cloze-blank"></span> to make the garden a permanent feature of the village.
+  </div>
+</div>
+
+<!-- QUESTION 6B -->
+<div class="page">
+  <div class="section-header">Question 6B &mdash; Cloze Test: Your Own Words <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by writing <strong>one suitable word</strong> in each blank space.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    On the day of the clean-up, the volunteers <span class="cloze-blank"></span> at the village square early in the morning. They <span class="cloze-blank"></span> on gloves and picked up their bags. Some people <span class="cloze-blank"></span> litter from the roads while others <span class="cloze-blank"></span> benches in the park. By evening, the village <span class="cloze-blank"></span> completely transformed.
+  </div>
+</div>
+
+<!-- QUESTION 7A -->
+<div class="page">
+  <div class="section-header">Question 7A &mdash; Error Correction <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Correct the <span class="underlined">underlined</span> mistakes. Write the correct word in the bracket. The first one has been done for you.</p>
+
+  <div class="error-text">
+    Last Saturday, our neighbours <span class="underlined">has</span>&nbsp;(&nbsp;<strong>had</strong>&nbsp;) a community clean-up in our street. They <span class="underlined">bringed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) bags and gloves for everyone. My father <span class="underlined">goed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) outside to join them. I <span class="underlined">seed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) them painting the old benches near the park. Everyone <span class="underlined">work</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) together until the evening.
+  </div>
+</div>
+
+<!-- QUESTION 7B -->
+<div class="page">
+  <div class="section-header">Question 7B &mdash; Word Forms <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Fill in each blank using the correct form of the word given in CAPITALS.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    Volunteering makes a real <span class="cloze-blank"></span> (DIFFERENT) in our community. People who give their time freely are very <span class="cloze-blank"></span> (COURAGE). Working together shows great <span class="cloze-blank"></span> (GENEROUS). A clean village makes its residents feel <span class="cloze-blank"></span> (PRIDE). Everyone&rsquo;s <span class="cloze-blank"></span> (CONTRIBUTE) matters.
+  </div>
+</div>
+
+<!-- QUESTION 8A -->
+<div class="page page-break">
+  <div class="section-header">Question 8A &mdash; Picture Story <span style="font-weight:normal;font-size:10pt;">(6 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:4px;">Write <strong>one sentence</strong> for each picture to make a short story. Use the words given.</p>
+
+  <div class="pic-row">
+    <div class="pic-box">[Picture 1: A group of children arrive at a beach with bags and gloves, ready for a clean-up]</div>
+    <div>
+      <div class="pic-words">one Saturday &ndash; beach</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 2: Children carefully collect litter and plastic from the sand and water]</div>
+    <div>
+      <div class="pic-words">carefully &ndash; collected</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 3: The clean beach with no litter; children smile and take a group photo together]</div>
+    <div>
+      <div class="pic-words">at the end &ndash; proud</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION 8B -->
+<div class="page">
+  <div class="section-header">Question 8B &mdash; Sentence Linking <span style="font-weight:normal;font-size:10pt;">(4 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Use the word in brackets to link the two sentences. Make any necessary changes.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:12px">Example: The village is clean. Everyone worked hard. (<strong>because</strong>) &rarr; <u>The village is clean because everyone worked hard.</u></p>
+
+  <div class="question"><div class="qnum">1.</div><div class="qbody"><p style="font-size:11pt">Maya felt lonely at first. She had no friends at her new school. (<strong>because</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">2.</div><div class="qbody"><p style="font-size:11pt">Sadie is the kindest pupil in our class. She always helps others. (<strong>who</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">3.</div><div class="qbody"><p style="font-size:11pt">Maya joined the group. She started to feel much happier. (<strong>when</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">4.</div><div class="qbody"><p style="font-size:11pt">The village was cleaned up. Everyone felt proud of the result. (<strong>so</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+</div>
+
+<!-- QUESTION 9 -->
+<div class="page page-break">
+  <div class="section-header">Question 9 &mdash; Writing Task <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Your school organised a community service event &mdash; a clean-up of your local beach or park.</p>
+  <p style="font-size:11pt;margin-bottom:8px;">Write a story of about <strong>120 words</strong> about this experience.</p>
+  <p style="font-size:11pt;font-weight:bold;margin-bottom:6px">The following may help you:</p>
+  <ul style="margin-left:22px;font-size:11pt;line-height:2.2">
+    <li>Who organised the event and who took part?</li>
+    <li>What did you do to help?</li>
+    <li>How did you feel during and after the event?</li>
+    <li>What did you learn from the experience?</li>
+  </ul>
+  <div class="answer-box-xl" style="margin-top:16px"></div>
+  <div class="writing-lines" style="margin-top:4px">
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div>
+  </div>
+</div>
+
+<!-- MARK SCHEME -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Specimen Paper 4</div>
+  <div class="ms-disc">These suggested answers are a guide only. Accept any reasonable answer showing clear understanding of the text and question. For open writing tasks, apply holistic, professional judgement.</div>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 1 &mdash; Sentence Matching (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>A &mdash; We brought them some food to welcome them.</td></tr>
+      <tr><td>(ii)</td><td>B &mdash; There was a special celebration being held.</td></tr>
+      <tr><td>(iii)</td><td>C &mdash; There had been a power failure during the night.</td></tr>
+      <tr><td>(iv)</td><td>D &mdash; He was feeling very lonely.</td></tr>
+      <tr><td>(v)</td><td>E &mdash; It was the last day of school.</td></tr>
+      <tr><td>Extra</td><td>F &mdash; The bus was running late.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 2 &mdash; Grammar MCQ (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>C &mdash; at</td><td>6</td><td>C &mdash; was sitting</td></tr>
+      <tr><td>2</td><td>A &mdash; her</td><td>7</td><td>D &mdash; themselves</td></tr>
+      <tr><td>3</td><td>C &mdash; many</td><td>8</td><td>C &mdash; planted</td></tr>
+      <tr><td>4</td><td>D &mdash; the best</td><td>9</td><td>C &mdash; who</td></tr>
+      <tr><td>5</td><td>B &mdash; in</td><td>10</td><td>D &mdash; once</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3A &mdash; Word Definitions (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>Community</td></tr>
+      <tr><td>(ii)</td><td>Responsibility</td></tr>
+      <tr><td>(iii)</td><td>Garden</td></tr>
+      <tr><td>(iv)</td><td>Stranger</td></tr>
+      <tr><td>(v)</td><td>Encourage</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3B &mdash; Vocabulary MCQ (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B &mdash; sorted</td></tr>
+      <tr><td>2</td><td>C &mdash; proud</td></tr>
+      <tr><td>3</td><td>B &mdash; grow</td></tr>
+      <tr><td>4</td><td>D &mdash; warmly</td></tr>
+      <tr><td>5</td><td>C &mdash; volunteers</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4A &mdash; Informational Text (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>On the south-east coast of Mauritius</td></tr>
+      <tr><td>2</td><td>Over fifteen years</td></tr>
+      <tr><td>3</td><td>Every January</td></tr>
+      <tr><td>4</td><td>The village square</td></tr>
+      <tr><td>5</td><td>Collect litter from streets and parks / paint benches / repair paths / plant flowers (any one)</td></tr>
+      <tr><td>6</td><td>Newspapers / glass bottles / plastic containers (any one)</td></tr>
+      <tr><td>7</td><td>They set up refreshment stalls and give out water and snacks</td></tr>
+      <tr><td>8</td><td>Families who cannot afford to buy fresh produce</td></tr>
+      <tr><td>9</td><td>With a shared meal prepared by local women&rsquo;s groups</td></tr>
+      <tr><td>10</td><td>Proud of what they have built together</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4B &mdash; Narrative Comprehension (15 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1(i)</td><td>False (she had been there three days, not a week)</td><td>1</td></tr>
+      <tr><td>1(ii)</td><td>True</td><td>1</td></tr>
+      <tr><td>1(iii)</td><td>False (she was the class teacher)</td><td>1</td></tr>
+      <tr><td>2</td><td>B &mdash; Sitting alone in the yard</td><td>1</td></tr>
+      <tr><td>3</td><td>B &mdash; light-faced, as from worry</td><td>1</td></tr>
+      <tr><td>4</td><td>C &mdash; Always look out for lonely people at school</td><td>1</td></tr>
+      <tr><td>5</td><td>C &mdash; A Small Act of Kindness</td><td>1</td></tr>
+      <tr><td>6</td><td>She had no friends / she missed her old school, friends and home (1 mark per reason, up to 2)</td><td>2</td></tr>
+      <tr><td>7</td><td>She gave Maya a packet of biscuits; she invited Maya to sit with her friends at lunch (1 each)</td><td>2</td></tr>
+      <tr><td>8</td><td>She found herself laughing along with Sadie&rsquo;s friends</td><td>1</td></tr>
+      <tr><td>9</td><td>kind, thoughtful (both for full marks; 1 mark for one correct word)</td><td>2</td></tr>
+      <tr><td>10</td><td>She learned that a small act of kindness can change everything for someone who is lonely</td><td>1</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 5 &mdash; Sentence Writing (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Acceptable Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>Maya sat alone at the lunch table all week. (remove &ldquo;by&rdquo;) OR Maya sat alone by the lunch table all week. (remove &ldquo;at&rdquo;)</td><td>1</td></tr>
+      <tr><td>(ii)</td><td>Sadie smiled at Maya and offered her some biscuits.</td><td>1</td></tr>
+      <tr><td>(iii)</td><td>Mrs Ghoorah warmly greeted all the new pupils. / Mrs Ghoorah greeted all the new pupils warmly.</td><td>1</td></tr>
+      <tr><td>(iv)</td><td>She joined the new school.</td><td>1</td></tr>
+      <tr><td>(v)</td><td>The children did not help to clean up the village last weekend.</td><td>2</td></tr>
+      <tr><td>(vi)</td><td>Did the volunteers plant vegetables in the community garden?</td><td>2</td></tr>
+      <tr><td>(vii)</td><td>Any correct sentence using all three words, e.g. &ldquo;Our community worked together and felt proud of the result.&rdquo;</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6A &mdash; Cloze: Word Bank (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1 (done)</td><td>planted</td></tr>
+      <tr><td>2</td><td>together</td></tr>
+      <tr><td>3</td><td>fresh</td></tr>
+      <tr><td>4</td><td>Everyone</td></tr>
+      <tr><td>5</td><td>happy</td></tr>
+      <tr><td>6</td><td>decided</td></tr>
+      <tr><td>Extra (unused)</td><td>always</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6B &mdash; Cloze: Own Words (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Acceptable Answers</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>gathered / met / arrived / assembled</td></tr>
+      <tr><td>2</td><td>put / pulled / wore</td></tr>
+      <tr><td>3</td><td>collected / picked up / gathered</td></tr>
+      <tr><td>4</td><td>painted / repaired / cleaned / fixed</td></tr>
+      <tr><td>5</td><td>looked / was / appeared / seemed</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7A &mdash; Error Correction (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Error</th><th>Correction</th></tr></thead>
+    <tbody>
+      <tr><td>has (done)</td><td>had</td></tr>
+      <tr><td>bringed</td><td>brought</td></tr>
+      <tr><td>goed</td><td>went</td></tr>
+      <tr><td>seed</td><td>saw</td></tr>
+      <tr><td>work</td><td>worked</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7B &mdash; Word Forms (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Root Word</th><th>Correct Form</th></tr></thead>
+    <tbody>
+      <tr><td>DIFFERENT</td><td>difference</td></tr>
+      <tr><td>COURAGE</td><td>courageous</td></tr>
+      <tr><td>GENEROUS</td><td>generosity</td></tr>
+      <tr><td>PRIDE</td><td>proud</td></tr>
+      <tr><td>CONTRIBUTE</td><td>contribution</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8A &mdash; Picture Story (6 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Picture</th><th>Sample Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>One Saturday, our class went to the beach with gloves and bags for a clean-up.</td><td>2</td></tr>
+      <tr><td>2</td><td>We carefully collected all the litter and plastic from the sand.</td><td>2</td></tr>
+      <tr><td>3</td><td>At the end, the beach looked beautiful and we felt very proud of our work.</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8B &mdash; Sentence Linking (4 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Acceptable Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Maya felt lonely at first because she had no friends at her new school.</td></tr>
+      <tr><td>2</td><td>Sadie, who is the kindest pupil in our class, always helps others.</td></tr>
+      <tr><td>3</td><td>When Maya joined the group, she started to feel much happier.</td></tr>
+      <tr><td>4</td><td>The village was cleaned up, so everyone felt proud of the result.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 9 &mdash; Writing Task (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Criterion</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>Content: describes the event clearly, addresses all four bullet points</td><td>up to 4</td></tr>
+      <tr><td>Language: appropriate vocabulary, accurate grammar, correct spelling</td><td>up to 4</td></tr>
+      <tr><td>Organisation: clear structure with logical sequence and paragraphs</td><td>up to 2</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:10pt;color:#555;margin-top:8px"><em>Sample answer: Last month, our school organised a beach clean-up at Blue Bay. Our class teacher, Mrs Sunassee, divided us into groups and gave each team a bag and gloves. My group was responsible for the area near the rocks. We collected plastic bottles, sweet wrappers, old cans and even a broken sandal. It was hard work under the hot sun, but we kept going. When I saw our full bags lined up at the end, I felt incredibly proud. The beach looked spotless and beautiful. I learned that even one person&rsquo;s effort can make a big difference. I also realised how important it is to never throw litter in the first place. I will always carry a bag to the beach from now on.</em></p>
+
+  <div style="margin-top:20px;font-size:9pt;color:#666;text-align:center;border-top:2px solid #1a3c6e;padding-top:10px">
+    Nouklass.com Specimen Paper 4 &mdash; For practice use only. Not an official MES examination paper.<br>
+    Always verify with your teacher or official MES materials. &copy; Nouklass.com 2026
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

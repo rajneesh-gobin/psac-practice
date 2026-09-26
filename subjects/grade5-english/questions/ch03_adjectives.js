@@ -9,14 +9,16 @@ STATIC_QUESTIONS.push(
     options:['ran','fast','small','dog'],
     answer:'small',
     hint:'An adjective describes a noun. Which word tells you more about what the dog is like?',
-    explanation:'"<b>Small</b>" (and "brown") are adjectives - they describe the noun "dog". "Fast" is an adverb in this sentence (it tells us how the dog ran, describing the verb "ran").' }),
+    explanation:'"<b>Small</b>" (and "brown") are adjectives - they describe the noun "dog". "Fast" is an adverb in this sentence (it tells us how the dog ran, describing the verb "ran").',
+    learnMore:'<b>Adjectives</b> tell us about nouns — what kind (small, red), how many (three), or which one (this, that). <b>Adverbs</b> tell us about verbs, adjectives or other adverbs — how (fast), when (now), where (here), or how much (very). Key test: does the word describe a noun (adjective) or a verb/action (adverb)?' }),
 
   makeMCQ({ id:'g5eng-adj-002', chapterId:'eng-adjectives', subsection:'adverbs', difficulty:1,
     question:'Which word is an ADVERB in: "She sang beautifully at the concert."',
     options:['sang','beautifully','concert','She'],
     answer:'beautifully',
     hint:'An adverb describes how, when or where an action happens. Look for the -ly ending.',
-    explanation:'"<b>Beautifully</b>" is an adverb - it tells us HOW she sang (the verb). Most adverbs are formed by adding -ly to an adjective: beautiful → beautifully, quick → quickly, careful → carefully.' }),
+    explanation:'"<b>Beautifully</b>" is an adverb - it tells us HOW she sang (the verb). Most adverbs are formed by adding -ly to an adjective: beautiful → beautifully, quick → quickly, careful → carefully.',
+    learnMore:'Most <b>adverbs of manner</b> are formed by adding <i>-ly</i> to an adjective: slow→slowly, careful→carefully, beautiful→beautifully. Spelling rules: adjective ends in -y → change to -i + ly (happy→happily). Adjective ends in -le → change -le to -ly (gentle→gently). Some adverbs have no -ly: fast, hard, well, late.' }),
 
   makeMCQ({ id:'g5eng-adj-003', chapterId:'eng-adjectives', subsection:'comparatives', difficulty:1,
     question:'What is the COMPARATIVE form of the adjective "tall"?',

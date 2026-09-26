@@ -90,7 +90,8 @@ STATIC_QUESTIONS.push(
     options:['an','a','the','some'],
     answer:'an',
     hint:'Use "an" before words that start with a vowel SOUND.',
-    explanation:'<b>An</b> — "honest" starts with a vowel sound (the "o" sound — the "h" is silent), so we use "an" before it.' }),
+    explanation:'<b>An</b> — "honest" starts with a vowel sound (the "o" sound — the "h" is silent), so we use "an" before it.',
+    learnMore:'Use <b>a</b> before consonant sounds (a dog, a car, a university — "u" sounds like "yoo"). Use <b>an</b> before vowel sounds (an apple, an hour — the "h" is silent). The rule is about the SOUND, not the spelling: an honest person ✓, a horrible day ✓.' }),
 
   makeMCQ({ id:'g3eng-grm-013', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which word is a VERB in: "The birds sing beautifully every morning."?',
@@ -125,7 +126,8 @@ STATIC_QUESTIONS.push(
     options:['Conjunction','Noun','Verb','Adjective'],
     answer:'Conjunction',
     hint:'A conjunction joins words or ideas together.',
-    explanation:'<b>Conjunction</b> — "and" is a co-ordinating conjunction that joins "Meena" and "Ravi" together.' }),
+    explanation:'<b>Conjunction</b> — "and" is a co-ordinating conjunction that joins "Meena" and "Ravi" together.',
+    learnMore:'A <b>conjunction</b> is a joining word. <b>Co-ordinating conjunctions</b> join ideas of equal importance: <i>and</i> (addition), <i>but</i> (contrast), <i>or</i> (choice), <i>so</i> (result). "I was tired <i>but</i> happy." A subordinating conjunction joins a main clause to a subordinate one: <i>because</i>, <i>although</i>, <i>when</i>, <i>if</i>.' }),
 
   makeMCQ({ id:'g3eng-grm-018', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which sentence has a NOUN, a VERB and an ADJECTIVE?',
@@ -139,7 +141,8 @@ STATIC_QUESTIONS.push(
     options:['under','sat','cat','table'],
     answer:'under',
     hint:'A preposition shows the relationship between two nouns — it tells you WHERE.',
-    explanation:'<b>Under</b> is a preposition — it tells us WHERE the cat sat (under the table). Other prepositions: on, in, behind, beside, above.' }),
+    explanation:'<b>Under</b> is a preposition — it tells us WHERE the cat sat (under the table). Other prepositions: on, in, behind, beside, above.',
+    learnMore:'A <b>preposition</b> shows the relationship between a noun/pronoun and something else — showing place (under, on, in, beside, behind, above), time (before, after, during, at) or direction (to, into, through). Prepositions always come before a noun or pronoun: "on the <i>table</i>", "after <i>school</i>", "to <i>her</i>".' }),
 
   makeMCQ({ id:'g3eng-grm-020', chapterId:'g3eng-grammar', difficulty:2, subsection:'parts_of_speech',
     question:'What part of speech is the word "loudly" in: "The thunder crashed loudly"?',
@@ -160,7 +163,8 @@ STATIC_QUESTIONS.push(
     options:['butterflies','butterfly','it','big'],
     answer:'butterflies',
     hint:'Plural means more than one.',
-    explanation:'<b>Butterflies</b> — this is the plural of "butterfly" (the -y changes to -ies). It refers to more than one butterfly.' }),
+    explanation:'<b>Butterflies</b> — this is the plural of "butterfly" (the -y changes to -ies). It refers to more than one butterfly.',
+    learnMore:'When a noun ends in a consonant + <i>y</i>, change the <i>y</i> to <i>i</i> and add <i>-es</i>: butterfly→butterflies, baby→babies, city→cities, family→families. If a <b>vowel</b> comes before the <i>y</i>, just add <i>-s</i>: boy→boys, day→days, key→keys.' }),
 
   makeMCQ({ id:'g3eng-grm-023', chapterId:'g3eng-grammar', difficulty:1, subsection:'parts_of_speech',
     question:'Which word is an ADJECTIVE in: "The hungry kitten drank the milk."?',
@@ -174,7 +178,8 @@ STATIC_QUESTIONS.push(
     options:['teeth','tooths','toothes','teeths'],
     answer:'teeth',
     hint:'This is an irregular plural — the word changes completely.',
-    explanation:'<b>Teeth</b> is the irregular plural of "tooth". Irregular plurals must be memorised: foot→feet, mouse→mice, man→men.' }),
+    explanation:'<b>Teeth</b> is the irregular plural of "tooth". Irregular plurals must be memorised: foot→feet, mouse→mice, man→men.',
+    learnMore:'<b>Irregular plurals</b> do not add -s or -es — the word changes: tooth→teeth, foot→feet, goose→geese, man→men, woman→women, child→children, mouse→mice. Some nouns are the same in singular and plural: sheep→sheep, fish→fish, deer→deer. Learn these by heart!' }),
 
   makeMCQ({ id:'g3eng-grm-025', chapterId:'g3eng-grammar', difficulty:2, subsection:'parts_of_speech',
     question:'Which sentence uses a CONJUNCTION to show CONTRAST?',

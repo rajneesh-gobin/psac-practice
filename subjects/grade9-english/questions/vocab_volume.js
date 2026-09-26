@@ -93,13 +93,15 @@ STATIC_QUESTIONS.push(
     question:'Choose the correct collocation: "to .......... advice"',
     options:['give','make','say','tell'], answer:'give',
     hint:'"Give" pairs with advice, information, and instructions.',
-    explanation:'"<b>Give</b> advice" is the standard phrase. You "say" words, "tell" a person, and "make" a suggestion — but advice is given.' }),
+    explanation:'"<b>Give</b> advice" is the standard phrase. You "say" words, "tell" a person, and "make" a suggestion — but advice is given.',
+    learnMore:'The verb <b>give</b> collocates with: <i>give advice, give information, give a speech, give a talk, give permission, give evidence</i>. Note: you <i>make</i> a suggestion, but you <i>give</i> advice — the distinction is fixed by convention, not logic.' }),
 
   makeMCQ({ id:'g9eng-vocv-016', chapterId:'g9eng-vocabulary', subsection:'collocation', difficulty:3,
     question:'Choose the correct collocation: "to .......... a conclusion"',
     options:['draw','make','take','build'], answer:'draw',
     hint:'The verb used in the phrase "drawing conclusions from the evidence".',
-    explanation:'"<b>Draw</b> a conclusion" is the fixed phrase. You draw meaning from evidence the way you draw a line between two points.' }),
+    explanation:'"<b>Draw</b> a conclusion" is the fixed phrase. You draw meaning from evidence the way you draw a line between two points.',
+    learnMore:'The verb <b>draw</b> collocates with: <i>draw a conclusion, draw attention, draw a comparison, draw a distinction, draw inspiration</i>. None of these can be replaced by "make" or "do" — they are fixed collocations learned as set phrases.' }),
 
   makeMCQ({ id:'g9eng-vocv-017', chapterId:'g9eng-vocabulary', subsection:'collocation', difficulty:2,
     question:'Choose the correct collocation: ".......... weather"',
@@ -111,19 +113,22 @@ STATIC_QUESTIONS.push(
     question:'Which is the correct collocation with <b>deeply</b>?',
     options:['deeply concerned','deeply tall','deeply fast','deeply wide'], answer:'deeply concerned',
     hint:'"Deeply" intensifies feelings and states, not physical measurements.',
-    explanation:'"<b>Deeply</b> concerned" is a natural adverb–adjective pairing. "Deeply" collocates with feelings (worried, moved, troubled), never with size adjectives.' }),
+    explanation:'"<b>Deeply</b> concerned" is a natural adverb–adjective pairing. "Deeply" collocates with feelings (worried, moved, troubled), never with size adjectives.',
+    learnMore:'<b>Deeply</b> intensifies emotional and intellectual states: <i>deeply concerned, deeply moved, deeply troubled, deeply committed, deeply regret</i>. Do NOT use it with physical measurements (never "deeply tall"). Similarly, <b>highly</b> collocates with skills/praise (highly skilled, highly recommended) while <b>strongly</b> collocates with verbs of opinion (strongly believe, strongly oppose).' }),
 
   makeMCQ({ id:'g9eng-vocv-019', chapterId:'g9eng-vocabulary', subsection:'collocation', difficulty:2,
     question:'Choose the correct collocation: "to .......... a risk"',
     options:['take','make','do','have'], answer:'take',
     hint:'"Take" pairs with risks, chances, and opportunities.',
-    explanation:'"<b>Take</b> a risk" is the standard phrase. The same verb collocates with "take a chance" and "take an opportunity".' }),
+    explanation:'"<b>Take</b> a risk" is the standard phrase. The same verb collocates with "take a chance" and "take an opportunity".',
+    learnMore:'The verb <b>take</b> collocates with: <i>take a risk, take a chance, take an opportunity, take an exam, take a decision, take a photograph, take action, take advice</i>. In each case "make" or "do" would be wrong — collocations are memorised, not built from rules.' }),
 
   makeMCQ({ id:'g9eng-vocv-020', chapterId:'g9eng-vocabulary', subsection:'collocation', difficulty:3,
     question:'Which sentence uses the correct collocation with <b>raise</b>?',
     options:['raise awareness','raise a mistake','raise homework','raise a photo'], answer:'raise awareness',
     hint:'"Raise" collocates with things that increase or are elevated.',
-    explanation:'"<b>Raise</b> awareness" means to increase public knowledge of an issue. "Raise" also collocates with money, questions, and children.' }),
+    explanation:'"<b>Raise</b> awareness" means to increase public knowledge of an issue. "Raise" also collocates with money, questions, and children.',
+    learnMore:'The verb <b>raise</b> collocates with: <i>raise awareness, raise money, raise a question, raise a concern, raise an issue, raise children, raise standards</i>. The common thread is "to bring something up or to a higher level". Contrast: you <i>make</i> a point but <i>raise</i> an issue.' }),
 
   // ── Vocabulary & Word Choice · word_choice (021–040) ────────────────────
 

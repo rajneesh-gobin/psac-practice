@@ -176,9 +176,18 @@ const MCQ = [
    'A report formats data - often grouped and totalled - so it can be printed or read as a summary.'],
 ];
 
+const G9DB_LEARN = {
+  'g9ict-db-001': 'A <b>database table</b> is organised into rows and columns. Each <b>row</b> is a <i>record</i> — all the data about one item (one pupil, one book). Each <b>column</b> is a <i>field</i> — one category of data (surname, date of birth) shared across every record.',
+  'g9ict-db-002': 'A <b>field</b> is the smallest unit of data: one category of information, such as Surname or Phone Number, running down the whole column. It has a data type (Text, Number, Date/Time, Yes/No, Currency) which controls what values are allowed.',
+  'g9ict-db-004': 'A <b>primary key</b> uniquely identifies every record — no two records may share its value, and it can never be blank. Good choices: an ID number issued once per entity. Poor choices: surname (not unique), date of birth (not unique), name (can repeat).',
+  'g9ict-db-006': 'Choosing the right <b>data type</b> is essential. <i>Date/Time</i>: calendar dates and clock times — enables correct sorting and age calculation. <i>Text</i>: names, codes, phone numbers. <i>Number</i>: values you will calculate with. <i>Currency</i>: money. <i>Yes/No</i>: exactly two states (paid/unpaid, true/false).',
+  'g9ict-db-007': '<b>Telephone numbers</b> must be stored as <i>Text</i>, not Number. Reason: a number field drops any leading zero (07012 becomes 7012), and you never add two phone numbers together. The same applies to postal codes and National ID numbers. If you do not calculate with it, use Text.',
+  'g9ict-db-019': 'A database has three user-facing objects: <b>table</b> (stores raw data), <b>form</b> (friendly screen for entering/viewing one record at a time), <b>query</b> (filters/searches records), <b>report</b> (formats data for printing or presentation). Forms are INPUT; reports are OUTPUT.',
+};
+
 MCQ.forEach(([id, subsection, difficulty, question, options, answer, hint, explanation]) => {
   STATIC_QUESTIONS.push(makeMCQ({ id, chapterId: CH, subsection, difficulty,
-    question, options, answer, hint, explanation }));
+    question, options, answer, hint, explanation, learnMore: G9DB_LEARN[id] || '' }));
 });
 
 const SHORT = [

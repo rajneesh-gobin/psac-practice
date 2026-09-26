@@ -1,0 +1,955 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grade 5 Mathematics — Predicted Paper 3 | Nouklass.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-big{font-size:18pt;line-height:1} .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:11.5pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.question{margin:14px 0 18px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:110px;width:100%;margin:10px 0;padding:6px}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.work-space{min-height:80px;border:1px dashed #ccc;border-radius:3px;margin:10px 0;padding:4px;background:#fafeff}
+.answer-label{font-weight:bold;margin-top:10px;font-size:10.5pt;color:#1a3c6e}
+.answer-line{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:180px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2;margin:0 4px}
+.frac .num{border-bottom:1px solid #000;padding:0 5px;text-align:center}
+.frac .den{padding:0 5px;text-align:center}
+.col-arith{font-family:monospace;font-size:13pt;border:1px solid #ccc;display:inline-block;padding:10px 24px;margin:10px 0;line-height:2}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.mcq-item{border:1px solid #ccc;padding:10px 8px;border-radius:3px}
+.mcq-q{font-size:10.5pt;margin-bottom:8px}
+.tick-opt{display:flex;align-items:center;gap:8px;margin:6px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0}
+.sub-q{margin:10px 0 5px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:26px;color:#1a3c6e}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+@media print{.nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-btn{display:none}body{padding-top:32px}@page{size:A4 portrait;margin:12mm 14mm}}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>NOUKLASS.COM — PSAC EXAM PRACTICE</span>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:18px">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">NOUKLASS<br>.COM</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">PSAC Exam Practice — Predicted Paper</div>
+    </div>
+  </div>
+  <div class="year">2026</div>
+  <div class="subject">Mathematics</div>
+  <div style="font-size:13pt;color:#444;margin-bottom:6px">Grade 5 &nbsp;|&nbsp; Paper 3 of 4 &nbsp;|&nbsp; Multiplication, Division, Data, Symmetry &amp; Measurement</div>
+  <div class="paper-meta">
+    <strong>Time allowed:</strong> 1 hour 30 minutes &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Total marks:</strong> 100<br>
+    <strong>Candidate Name:</strong> <span class="index-line"></span><br>
+    <strong>Class / Teacher:</strong> <span class="index-line"></span>
+  </div>
+  <div class="instructions">
+    <strong>Instructions to candidates:</strong>
+    <ol>
+      <li>Write your name and class in the spaces provided above.</li>
+      <li>Answer <strong>ALL</strong> questions in all three sections.</li>
+      <li>Write your answers clearly in the spaces provided.</li>
+      <li>Show all working where required — method marks are awarded.</li>
+      <li>The number of marks for each question is shown in a box [ ].</li>
+      <li>You may use a ruler and pencil for diagrams.</li>
+      <li>Calculators are <strong>NOT</strong> permitted.</li>
+    </ol>
+  </div>
+  <div style="margin-top:18px;border:1px solid #1a3c6e;border-radius:4px;padding:10px 14px;background:#eef3fb">
+    <strong style="color:#1a3c6e">For Examiner Use Only</strong>
+    <table style="margin-top:8px;width:100%;border-collapse:collapse;font-size:10pt">
+      <tr>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section A</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section B</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section C</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">TOTAL</th>
+      </tr>
+      <tr>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 20</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 20</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 60</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 100</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION A -->
+<div class="page page-break">
+  <div class="section-header">SECTION A — Short Answer Questions &nbsp;(Questions 1–15) &nbsp;[20 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Answer all questions. Questions 1–10 carry 1 mark each. Questions 11–15 carry 2 marks each.</span>
+  </div>
+
+  <div class="question">
+    <div class="qnum">1.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Calculate: &nbsp; <strong>45 × 8</strong>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Calculate: &nbsp; <strong>756 ÷ 7</strong>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Convert <strong>2 m 35 cm</strong> to centimetres.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Convert <strong>3 kg 750 g</strong> to grams.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Convert <strong>4,500 ml</strong> to litres.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      How many <strong>lines of symmetry</strong> does a square have?
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      How many sides does an <strong>octagon</strong> have?
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Convert <strong>5 km 400 m</strong> to metres.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Calculate: &nbsp; <strong>305 × 9</strong>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      A shape has <strong>3 equal sides</strong> and <strong>3 equal angles</strong>. What is the name of this shape?
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">11.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Calculate <strong>487 × 6</strong>. Show your working clearly.
+      <div class="col-arith">
+        &nbsp;&nbsp;4 8 7<br>
+        ×&nbsp;&nbsp;&nbsp;&nbsp;6<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Calculate <strong>756 ÷ 9</strong>. Show your working clearly.
+      <div class="work-space" style="min-height:60px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      A runner completes laps of a track that is <strong>2 km 500 m</strong> long. She runs <strong>4 laps</strong>. How far does she run altogether? Give your answer in metres.
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Total distance =</strong><div class="answer-line" style="margin-top:4px;width:140px"></div><span style="font-size:10pt">m</span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Draw <strong>all the lines of symmetry</strong> on the equilateral triangle below. How many lines of symmetry does it have?
+      <div style="margin:10px 0;text-align:left">
+        <svg width="130" height="115" viewBox="0 0 130 115" style="display:inline-block">
+          <polygon points="65,5 5,110 125,110" fill="#eef3fb" stroke="#1a3c6e" stroke-width="2"/>
+        </svg>
+      </div>
+      <div style="margin:8px 0"><strong>Number of lines of symmetry:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      A bottle holds <strong>750 ml</strong>. How many <strong>full bottles</strong> can be filled from <strong>6 litres</strong>? Show your working.
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Number of full bottles:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- SECTION B -->
+  <div class="section-header">SECTION B — Multiple Choice Questions &nbsp;(Questions 16–25) &nbsp;[20 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Each question carries 2 marks. Tick ONE box only for each question.</span>
+  </div>
+
+  <div class="mcq-grid">
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>16.</strong> What is 48 × 7?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;326</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;336</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;346</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;316</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>17.</strong> What is 540 ÷ 9?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;50</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;55</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;60</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;65</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>18.</strong> How many centimetres are in 2.75 m?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;250 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;2,750 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;275 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;27.5 cm</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>19.</strong> Which shape has exactly <strong>one</strong> line of symmetry?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;Square</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;Rectangle</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;Equilateral triangle</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;Isosceles triangle</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>20.</strong> How many grams are in 4.25 kg?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;425 g</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;4,250 g</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;42,500 g</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;4,025 g</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>21.</strong> A bar chart shows: Football 25, Cricket 18, Tennis 9. How many <strong>more</strong> children prefer football than tennis?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;14</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;16</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;18</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;12</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>22.</strong> 2.5 litres = ? millilitres</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;25 ml</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;250 ml</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;2,500 ml</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;25,000 ml</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>23.</strong> Which number is <strong>NOT</strong> exactly divisible by 8?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;48</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;56</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;62</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;72</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>24.</strong> A rectangle has how many lines of symmetry?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;4</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;3</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;2</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;1</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>25.</strong> 2 km 750 m = ? m</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;275 m</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;27,500 m</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;2,075 m</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;2,750 m</div>
+    </div>
+
+  </div><!-- end mcq-grid -->
+
+  <!-- SECTION C -->
+  <div class="section-header">SECTION C — Structured Questions &nbsp;(Questions 26–40) &nbsp;[60 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Answer all questions. Show all working clearly. Marks are given for method as well as the answer.</span>
+  </div>
+
+  <!-- Q26 [3 marks] -->
+  <div class="question">
+    <div class="qnum">26.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      Calculate. Show all working.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>324 ÷ 4 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:55px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:8px">
+        <div class="sub-label">(b)</div>
+        <div>539 ÷ 7 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:55px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:8px">
+        <div class="sub-label">(c)</div>
+        <div>856 ÷ 8 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:55px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q27 [3 marks] -->
+  <div class="question">
+    <div class="qnum">27.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      Convert each measurement. Show your working.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><strong>3 km 450 m =</strong><div style="display:flex;gap:6px;align-items:flex-end;margin-top:4px"><div class="answer-line" style="width:80px"></div><span style="font-size:10pt">m</span></div></div><span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="sub-q" style="margin-top:8px">
+        <div class="sub-label">(b)</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><strong>4,200 m =</strong><div style="display:flex;gap:6px;align-items:flex-end;margin-top:4px"><div class="answer-line" style="width:80px"></div><span style="font-size:10pt">km</span><div class="answer-line" style="width:80px;margin-left:6px"></div><span style="font-size:10pt">m</span></div></div><span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="sub-q" style="margin-top:8px">
+        <div class="sub-label">(c)</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><strong>2 kg 850 g =</strong><div style="display:flex;gap:6px;align-items:flex-end;margin-top:4px"><div class="answer-line" style="width:80px"></div><span style="font-size:10pt">g</span></div></div><span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q28 [3 marks] -->
+  <div class="question">
+    <div class="qnum">28.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      <div style="margin-bottom:8px">Draw and label all the lines of symmetry on each shape below. Then write the number of lines of symmetry.</div>
+      <div style="display:flex;gap:30px;align-items:flex-end;margin:10px 0">
+        <div style="text-align:center">
+          <svg width="90" height="90" viewBox="0 0 90 90" style="display:block;margin:0 auto">
+            <rect x="10" y="10" width="70" height="70" fill="#eef3fb" stroke="#1a3c6e" stroke-width="2"/>
+          </svg>
+          <div style="font-size:10pt;margin-top:6px">Square</div>
+          <div style="font-size:10pt;margin-top:4px"><strong>Lines:</strong><div class="answer-line" style="margin-top:2px;width:40px"></div></div>
+          <span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span>
+        </div>
+        <div style="text-align:center">
+          <svg width="120" height="90" viewBox="0 0 120 90" style="display:block;margin:0 auto">
+            <rect x="10" y="20" width="100" height="50" fill="#eef3fb" stroke="#1a3c6e" stroke-width="2"/>
+          </svg>
+          <div style="font-size:10pt;margin-top:6px">Rectangle</div>
+          <div style="font-size:10pt;margin-top:4px"><strong>Lines:</strong><div class="answer-line" style="margin-top:2px;width:40px"></div></div>
+          <span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span>
+        </div>
+        <div style="text-align:center">
+          <svg width="100" height="90" viewBox="0 0 100 90" style="display:block;margin:0 auto">
+            <polygon points="50,5 5,85 95,85" fill="#eef3fb" stroke="#1a3c6e" stroke-width="2"/>
+          </svg>
+          <div style="font-size:10pt;margin-top:6px">Equilateral triangle</div>
+          <div style="font-size:10pt;margin-top:4px"><strong>Lines:</strong><div class="answer-line" style="margin-top:2px;width:40px"></div></div>
+          <span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q29 [3 marks] -->
+  <div class="question">
+    <div class="qnum">29.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      The table shows the number of books read by five children during the holidays.
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr style="background:#eef3fb">
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Child</th>
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Books read</th>
+        </tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Asha</td><td style="border:1px solid #aaa;padding:4px 14px">12</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Ravi</td><td style="border:1px solid #aaa;padding:4px 14px">7</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Mia</td><td style="border:1px solid #aaa;padding:4px 14px">15</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Dev</td><td style="border:1px solid #aaa;padding:4px 14px">9</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Lena</td><td style="border:1px solid #aaa;padding:4px 14px">11</td></tr>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Who read the most books? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>How many books were read altogether by all five children? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:40px"></div>
+      <div style="margin:8px 0"><strong>Total books =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:8px">
+        <div class="sub-label">(c)</div>
+        <div>How many more books did Mia read than Ravi? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q30 [3 marks] -->
+  <div class="question">
+    <div class="qnum">30.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      Calculate using column multiplication. Show all working.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>236 × 7 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;2 3 6<br>
+        ×&nbsp;&nbsp;&nbsp;&nbsp;7<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>4 × 568 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;5 6 8<br>
+        ×&nbsp;&nbsp;&nbsp;&nbsp;4<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>9 × 403 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;4 0 3<br>
+        ×&nbsp;&nbsp;&nbsp;&nbsp;9<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q31 [4 marks] -->
+  <div class="question">
+    <div class="qnum">31.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      A school canteen serves <strong>348 meals</strong> each day from Monday to Friday.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>How many meals are served in <strong>one week</strong> (5 days)? Show working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Meals in one week =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>Meals are served in groups of 6 at each table. How many tables are needed each day? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Number of tables =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q32 [4 marks] - Bar chart -->
+  <div class="question">
+    <div class="qnum">32.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      The bar chart shows the favourite subjects of children in Grade 5.
+      <div style="margin:12px 0">
+        <svg width="380" height="220" viewBox="0 0 380 220" style="display:block">
+          <!-- Axes -->
+          <line x1="50" y1="10" x2="50" y2="170" stroke="#000" stroke-width="1.5"/>
+          <line x1="50" y1="170" x2="360" y2="170" stroke="#000" stroke-width="1.5"/>
+          <!-- Y-axis labels (0-25, scale: 6px per unit) -->
+          <text x="45" y="173" text-anchor="end" font-size="10">0</text>
+          <text x="45" y="143" text-anchor="end" font-size="10">5</text>
+          <text x="45" y="113" text-anchor="end" font-size="10">10</text>
+          <text x="45" y="83" text-anchor="end" font-size="10">15</text>
+          <text x="45" y="53" text-anchor="end" font-size="10">20</text>
+          <text x="45" y="23" text-anchor="end" font-size="10">25</text>
+          <!-- Grid lines -->
+          <line x1="50" y1="140" x2="360" y2="140" stroke="#ddd" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="50" y1="110" x2="360" y2="110" stroke="#ddd" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="50" y1="80" x2="360" y2="80" stroke="#ddd" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="50" y1="50" x2="360" y2="50" stroke="#ddd" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="50" y1="20" x2="360" y2="20" stroke="#ddd" stroke-width="1" stroke-dasharray="3,3"/>
+          <!-- Bars: Maths=18, English=12, Science=20, French=8, History=14 -->
+          <!-- Maths: height 18×6=108 -->
+          <rect x="65" y="62" width="42" height="108" fill="#1a3c6e"/>
+          <text x="86" y="185" text-anchor="middle" font-size="10">Maths</text>
+          <!-- English: 12×6=72 -->
+          <rect x="125" y="98" width="42" height="72" fill="#2d5f9e"/>
+          <text x="146" y="185" text-anchor="middle" font-size="10">English</text>
+          <!-- Science: 20×6=120 -->
+          <rect x="185" y="50" width="42" height="120" fill="#1a3c6e"/>
+          <text x="206" y="185" text-anchor="middle" font-size="10">Science</text>
+          <!-- French: 8×6=48 -->
+          <rect x="245" y="122" width="42" height="48" fill="#2d5f9e"/>
+          <text x="266" y="185" text-anchor="middle" font-size="10">French</text>
+          <!-- History: 14×6=84 -->
+          <rect x="305" y="86" width="42" height="84" fill="#1a3c6e"/>
+          <text x="326" y="185" text-anchor="middle" font-size="10">History</text>
+          <!-- Y axis title -->
+          <text x="12" y="95" font-size="10" fill="#444" transform="rotate(-90,12,95)" text-anchor="middle">Number of children</text>
+        </svg>
+        <div style="font-size:9.5pt;color:#555;margin-top:4px">Bar chart: Favourite subjects of Grade 5 children</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Which subject is the most popular? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>How many more children chose Maths than French? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>How many children were surveyed altogether? Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Total children =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q33 [4 marks] -->
+  <div class="question">
+    <div class="qnum">33.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>A jug holds 1.5 litres of juice. Juice is poured into glasses that each hold 250 ml. How many glasses can be filled? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Number of glasses =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>A bag of potatoes weighs 5 kg. Another bag weighs 3 kg 750 g. What is the total weight of both bags? Give your answer in grams. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Total weight =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div><span style="font-size:10pt">g</span></div>
+    </div>
+  </div>
+
+  <!-- Q34 [4 marks] -->
+  <div class="question">
+    <div class="qnum">34.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Complete the table by writing the number of lines of symmetry for each shape. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt;width:100%">
+        <tr style="background:#eef3fb">
+          <th style="border:1px solid #aaa;padding:5px 12px;color:#1a3c6e">Shape</th>
+          <th style="border:1px solid #aaa;padding:5px 12px;color:#1a3c6e">Sides</th>
+          <th style="border:1px solid #aaa;padding:5px 12px;color:#1a3c6e">Lines of symmetry</th>
+        </tr>
+        <tr><td style="border:1px solid #aaa;padding:6px 12px">Equilateral triangle</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center">3</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center"></td></tr>
+        <tr><td style="border:1px solid #aaa;padding:6px 12px">Square</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center">4</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center"></td></tr>
+        <tr><td style="border:1px solid #aaa;padding:6px 12px">Regular pentagon</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center">5</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center"></td></tr>
+        <tr><td style="border:1px solid #aaa;padding:6px 12px">Regular hexagon</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center">6</td><td style="border:1px solid #aaa;padding:6px 12px;text-align:center"></td></tr>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>What pattern do you notice about the number of sides and the number of lines of symmetry in regular shapes? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Using the pattern, how many lines of symmetry would a regular octagon (8 sides) have? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q35 [4 marks] -->
+  <div class="question">
+    <div class="qnum">35.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Calculate 576 ÷ 8. Is there a remainder? Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="display:flex;gap:30px">
+        <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div></div>
+        <div style="margin:8px 0"><strong>Remainder:</strong><div class="answer-line" style="margin-top:4px;width:60px"></div></div>
+      </div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>A baker makes 375 rolls. She packs them in bags of 8. How many <strong>full bags</strong> does she make? How many rolls are left over? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="display:flex;gap:30px">
+        <div style="margin:8px 0"><strong>Full bags:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div></div>
+        <div style="margin:8px 0"><strong>Left over:</strong><div class="answer-line" style="margin-top:4px;width:60px"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q36 [5 marks] -->
+  <div class="question">
+    <div class="qnum">36.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A factory produces <strong>2,450 biscuits</strong> a day.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>How many biscuits does it produce in <strong>6 days</strong>? Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Biscuits in 6 days =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>Biscuits are packed in <strong>packets of 12</strong>. How many full packets can be made from one day's production? How many biscuits are left over? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="display:flex;gap:30px">
+        <div style="margin:8px 0"><strong>Full packets:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div></div>
+        <div style="margin:8px 0"><strong>Left over:</strong><div class="answer-line" style="margin-top:4px;width:60px"></div><span style="font-size:10pt">biscuits</span></div>
+      </div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>Each full packet sells for <strong>Rs 35</strong>. Find the total <strong>sales value</strong> from one day's full packets. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Total sales = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q37 [5 marks] -->
+  <div class="question">
+    <div class="qnum">37.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A class did a survey on favourite sports. The results are shown in the tally chart.
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr style="background:#eef3fb">
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Sport</th>
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Tally</th>
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Frequency</th>
+        </tr>
+        <tr>
+          <td style="border:1px solid #aaa;padding:4px 14px">Football</td>
+          <td style="border:1px solid #aaa;padding:4px 14px;font-family:monospace;letter-spacing:2px">|||| |||| ||||</td>
+          <td style="border:1px solid #aaa;padding:4px 14px"></td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #aaa;padding:4px 14px">Cricket</td>
+          <td style="border:1px solid #aaa;padding:4px 14px;font-family:monospace;letter-spacing:2px">|||| ||||</td>
+          <td style="border:1px solid #aaa;padding:4px 14px"></td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #aaa;padding:4px 14px">Swimming</td>
+          <td style="border:1px solid #aaa;padding:4px 14px;font-family:monospace;letter-spacing:2px">|||| |||</td>
+          <td style="border:1px solid #aaa;padding:4px 14px"></td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #aaa;padding:4px 14px">Athletics</td>
+          <td style="border:1px solid #aaa;padding:4px 14px;font-family:monospace;letter-spacing:2px">|||| |</td>
+          <td style="border:1px solid #aaa;padding:4px 14px"></td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #aaa;padding:4px 14px">Tennis</td>
+          <td style="border:1px solid #aaa;padding:4px 14px;font-family:monospace;letter-spacing:2px">||||</td>
+          <td style="border:1px solid #aaa;padding:4px 14px"></td>
+        </tr>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Complete the Frequency column in the tally chart above. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="sub-q" style="margin-top:8px">
+        <div class="sub-label">(b)</div>
+        <div>What is the total number of children surveyed? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>What is the difference between the most popular and least popular sport? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div>What fraction of the total children prefer Football? Write in simplest form. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Fraction =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q38 [5 marks] -->
+  <div class="question">
+    <div class="qnum">38.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A hiking trail is <strong>14 km 500 m</strong> long.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write the length of the trail in metres. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>A hiker walks at a steady pace and covers <strong>2,500 m per hour</strong>. How many hours does it take to complete the full trail? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Time =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div><span style="font-size:10pt">hours</span></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>At a rest stop, hikers drink water. Each hiker drinks <strong>400 ml</strong> per hour. How much water does a hiker drink on a <strong>5-hour</strong> hike? Give your answer in litres and millilitres. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Water =</strong><div style="display:flex;gap:20px;margin-top:4px"><div><div class="answer-line" style="width:100px"></div><span style="font-size:10pt">litres</span></div><div><div class="answer-line" style="width:100px"></div><span style="font-size:10pt">ml</span></div></div></div>
+    </div>
+  </div>
+
+  <!-- Q39 [5 marks] -->
+  <div class="question">
+    <div class="qnum">39.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A garden contains six identical flower beds, each shaped like a rectangle <strong>6 m long</strong> and <strong>4 m wide</strong>.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the area of <strong>one</strong> flower bed. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Find the <strong>total area</strong> of all six flower beds. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Total area =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div><span style="font-size:10pt">m²</span></div>
+      <div class="sub-q" style="margin-top:8px">
+        <div class="sub-label">(c)</div>
+        <div>Each flower bed has a path around it (perimeter). Find the perimeter of one flower bed. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div>A gardener plants flowers around the edge of every bed. Each flower needs <strong>50 cm</strong> of space. How many flowers can be planted around <strong>one</strong> flower bed? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Number of flowers =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q40 [5 marks] -->
+  <div class="question">
+    <div class="qnum">40.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      The weights of parcels at a post office one morning are recorded in the table.
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr style="background:#eef3fb">
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Weight (kg)</th>
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Number of parcels</th>
+        </tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">1 kg</td><td style="border:1px solid #aaa;padding:4px 14px">8</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">2 kg</td><td style="border:1px solid #aaa;padding:4px 14px">5</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">5 kg</td><td style="border:1px solid #aaa;padding:4px 14px">4</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">10 kg</td><td style="border:1px solid #aaa;padding:4px 14px">2</td></tr>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>How many parcels are there altogether? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Find the <strong>total weight</strong> of all the parcels. Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Total weight =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div><span style="font-size:10pt">kg</span></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>The post office charges Rs 25 per kg to send each parcel. Find the total charge for <strong>all</strong> the parcels. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Total charge = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+</div><!-- end page -->
+
+<!-- MARK SCHEME -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme — Paper 3</div>
+  <div class="ms-disc">
+    This mark scheme is for teacher and parent use. Accept equivalent correct methods. Award method marks where working is shown. For tally chart: 5-bar tally = four vertical + one diagonal.
+  </div>
+  <table class="ans-table">
+    <tr><th>Q</th><th>Answer / Acceptable Responses</th><th>Marks</th></tr>
+    <tr><td>1</td><td>360</td><td>1</td></tr>
+    <tr><td>2</td><td>108</td><td>1</td></tr>
+    <tr><td>3</td><td>235 cm</td><td>1</td></tr>
+    <tr><td>4</td><td>3,750 g</td><td>1</td></tr>
+    <tr><td>5</td><td>4.5 litres (accept 4½ l)</td><td>1</td></tr>
+    <tr><td>6</td><td>4</td><td>1</td></tr>
+    <tr><td>7</td><td>8</td><td>1</td></tr>
+    <tr><td>8</td><td>5,400 m</td><td>1</td></tr>
+    <tr><td>9</td><td>2,745</td><td>1</td></tr>
+    <tr><td>10</td><td>Equilateral triangle</td><td>1</td></tr>
+    <tr><td>11</td><td>487 × 6 = 2,922 [M1 for method, A1 for 2,922]</td><td>2</td></tr>
+    <tr><td>12</td><td>756 ÷ 9 = 84 [M1+A1]</td><td>2</td></tr>
+    <tr><td>13</td><td>2,500 m × 4 = 10,000 m [M1 for conversion to 2,500 m, A1 for 10,000 m]</td><td>2</td></tr>
+    <tr><td>14</td><td>3 lines of symmetry (vertical through each vertex). Award marks for 3 correctly drawn lines. [M1+A1]</td><td>2</td></tr>
+    <tr><td>15</td><td>6,000 ÷ 750 = 8 bottles [M1 for converting 6l to 6,000ml or method, A1 for 8]</td><td>2</td></tr>
+    <tr><td>16</td><td><strong>B</strong> — 336</td><td>2</td></tr>
+    <tr><td>17</td><td><strong>C</strong> — 60</td><td>2</td></tr>
+    <tr><td>18</td><td><strong>C</strong> — 275 cm</td><td>2</td></tr>
+    <tr><td>19</td><td><strong>D</strong> — Isosceles triangle</td><td>2</td></tr>
+    <tr><td>20</td><td><strong>B</strong> — 4,250 g</td><td>2</td></tr>
+    <tr><td>21</td><td><strong>B</strong> — 16 (25 − 9)</td><td>2</td></tr>
+    <tr><td>22</td><td><strong>C</strong> — 2,500 ml</td><td>2</td></tr>
+    <tr><td>23</td><td><strong>C</strong> — 62 (62 ÷ 8 = 7 r 6)</td><td>2</td></tr>
+    <tr><td>24</td><td><strong>C</strong> — 2</td><td>2</td></tr>
+    <tr><td>25</td><td><strong>D</strong> — 2,750 m</td><td>2</td></tr>
+    <tr><td>26a</td><td>81</td><td>1</td></tr>
+    <tr><td>26b</td><td>77</td><td>1</td></tr>
+    <tr><td>26c</td><td>107</td><td>1</td></tr>
+    <tr><td>27a</td><td>3,450 m</td><td>1</td></tr>
+    <tr><td>27b</td><td>4 km 200 m</td><td>1</td></tr>
+    <tr><td>27c</td><td>2,850 g</td><td>1</td></tr>
+    <tr><td>28</td><td>Square: 4 lines; Rectangle: 2 lines; Equilateral triangle: 3 lines [1 mark each]</td><td>3</td></tr>
+    <tr><td>29a</td><td>Mia (15 books)</td><td>1</td></tr>
+    <tr><td>29b</td><td>12+7+15+9+11 = 54</td><td>1</td></tr>
+    <tr><td>29c</td><td>15 − 7 = 8 books</td><td>1</td></tr>
+    <tr><td>30a</td><td>1,652</td><td>1</td></tr>
+    <tr><td>30b</td><td>2,272</td><td>1</td></tr>
+    <tr><td>30c</td><td>3,627</td><td>1</td></tr>
+    <tr><td>31a</td><td>348 × 5 = 1,740 meals [M1+A1]</td><td>2</td></tr>
+    <tr><td>31b</td><td>348 ÷ 6 = 58 tables [M1+A1]</td><td>2</td></tr>
+    <tr><td>32a</td><td>Science (20 children)</td><td>1</td></tr>
+    <tr><td>32b</td><td>18 − 8 = 10 more children</td><td>1</td></tr>
+    <tr><td>32c</td><td>18+12+20+8+14 = 72 children [M1+A1]</td><td>2</td></tr>
+    <tr><td>33a</td><td>1.5 l = 1,500 ml; 1,500 ÷ 250 = 6 glasses [M1+A1]</td><td>2</td></tr>
+    <tr><td>33b</td><td>5,000 g + 3,750 g = 8,750 g [M1+A1]</td><td>2</td></tr>
+    <tr><td>34a</td><td>Equilateral triangle: 3; Square: 4; Regular pentagon: 5; Regular hexagon: 6 [1 mark for 2 correct, 2 marks for all 4]</td><td>2</td></tr>
+    <tr><td>34b</td><td>A regular shape has the same number of lines of symmetry as it has sides. (Accept equivalent wording)</td><td>1</td></tr>
+    <tr><td>34c</td><td>8</td><td>1</td></tr>
+    <tr><td>35a</td><td>576 ÷ 8 = 72, remainder 0 [M1+A1]</td><td>2</td></tr>
+    <tr><td>35b</td><td>375 ÷ 8 = 46 full bags, 7 left over [M1+A1]</td><td>2</td></tr>
+    <tr><td>36a</td><td>2,450 × 6 = 14,700 [M1+A1]</td><td>2</td></tr>
+    <tr><td>36b</td><td>2,450 ÷ 12 = 204 full packets, 2 biscuits left over [M1+A1]</td><td>2</td></tr>
+    <tr><td>36c</td><td>204 × Rs 35 = Rs 7,140</td><td>1</td></tr>
+    <tr><td>37a</td><td>Football: 15; Cricket: 10 (accept 9 if reading 4+4+1 as 9); Swimming: 8 (accept 4+4=8 or 4+3=7 depending on tally reading — intended: |||| ||| = 8 per stroke tally groups); Athletics: 6; Tennis: 5. Award 2 marks for all 5 correct, 1 mark for 3-4 correct. [Intended tallies: Football 15, Cricket 10, Swimming 8, Athletics 6, Tennis 5]</td><td>2</td></tr>
+    <tr><td>37b</td><td>44 total (15+10+8+6+5)</td><td>1</td></tr>
+    <tr><td>37c</td><td>15 − 5 = 10</td><td>1</td></tr>
+    <tr><td>37d</td><td>15/44 (cannot be simplified further)</td><td>1</td></tr>
+    <tr><td>38a</td><td>14,500 m</td><td>1</td></tr>
+    <tr><td>38b</td><td>14,500 ÷ 2,500 = 5.8 hours [M1 for division, A1 for 5.8 h — accept 5 hours 48 min]</td><td>2</td></tr>
+    <tr><td>38c</td><td>5 × 400 ml = 2,000 ml = 2 litres 0 ml [M1+A1]</td><td>2</td></tr>
+    <tr><td>39a</td><td>6 × 4 = 24 m²</td><td>1</td></tr>
+    <tr><td>39b</td><td>6 × 24 = 144 m²</td><td>1</td></tr>
+    <tr><td>39c</td><td>2×(6+4) = 20 m</td><td>1</td></tr>
+    <tr><td>39d</td><td>20 m = 2,000 cm; 2,000 ÷ 50 = 40 flowers [M1+A1]</td><td>2</td></tr>
+    <tr><td>40a</td><td>8+5+4+2 = 19 parcels</td><td>1</td></tr>
+    <tr><td>40b</td><td>(8×1)+(5×2)+(4×5)+(2×10) = 8+10+20+20 = 58 kg [M1 for correct products, A1 for 58]</td><td>2</td></tr>
+    <tr><td>40c</td><td>58 × Rs 25 = Rs 1,450 [M1+A1]</td><td>2</td></tr>
+  </table>
+  <div style="margin-top:20px;font-size:9.5pt;color:#555;border-top:1px solid #ccc;padding-top:10px">
+    Paper 3 Total: 100 marks &nbsp;|&nbsp; Section A: 20 &nbsp;|&nbsp; Section B: 20 &nbsp;|&nbsp; Section C: 60<br>
+    &copy; Nouklass.com — For personal and classroom practice only. Not for commercial reproduction.
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

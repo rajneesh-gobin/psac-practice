@@ -9,7 +9,8 @@ STATIC_QUESTIONS.push(
     options:['recieve','receive','receve','reseive'],
     answer:'receive',
     hint:'Remember the rule: i before e, EXCEPT after c.',
-    explanation:'"<b>Receive</b>" - the ie/ei rule: "i before e, except after c." After the letter c, write "ei": re<b>cei</b>ve, de<b>cei</b>ve, con<b>cei</b>t. But: bel<b>ie</b>ve, ach<b>ie</b>ve, fr<b>ie</b>nd (no c before it).' }),
+    explanation:'"<b>Receive</b>" - the ie/ei rule: "i before e, except after c." After the letter c, write "ei": re<b>cei</b>ve, de<b>cei</b>ve, con<b>cei</b>t. But: bel<b>ie</b>ve, ach<b>ie</b>ve, fr<b>ie</b>nd (no c before it).',
+    learnMore:'The <b>i before e</b> rule: write <i>ie</i> in most words (believe, achieve, field, piece). Write <i>ei</i> after the letter c (receive, ceiling, deceive). Exceptions to memorise: weird, seize, either, neither, height, weight, protein. Saying "I before E except after C" as a rhyme helps you remember the core rule.' }),
 
   makeMCQ({ id:'g5eng-spell-002', chapterId:'eng-spelling', subsection:'common_errors', difficulty:1,
     question:'Which word is spelled CORRECTLY?',
@@ -30,14 +31,16 @@ STATIC_QUESTIONS.push(
     options:['runing','running','runnning','runeing'],
     answer:'running',
     hint:'For short words ending in a single consonant after a single vowel, double the final consonant before -ing.',
-    explanation:'"<b>Running</b>" - when a short word (1 syllable) ends in consonant-vowel-consonant (CVC), double the final consonant before -ing or -ed: run→running, sit→sitting, swim→swimming, stop→stopped.' }),
+    explanation:'"<b>Running</b>" - when a short word (1 syllable) ends in consonant-vowel-consonant (CVC), double the final consonant before -ing or -ed: run→running, sit→sitting, swim→swimming, stop→stopped.',
+    learnMore:'<b>Doubling rule</b>: when a one-syllable word ends in a single consonant preceded by a single vowel (CVC pattern), double the final consonant before a vowel suffix (-ing, -ed, -er): run→running, hop→hopped, big→bigger. Do NOT double if the word ends in two consonants (jump→jumping) or two vowels + consonant (read→reading).' }),
 
   makeMCQ({ id:'g5eng-spell-005', chapterId:'eng-spelling', subsection:'common_errors', difficulty:1,
     question:'Choose the correct HOMOPHONE: "The dog wagged ___ tail."',
     options:['their','there','they\'re','its'],
     answer:'its',
     hint:'"Its" = belonging to it (no apostrophe). The dog\'s tail = belonging to the dog.',
-    explanation:'"<b>Its</b>" (no apostrophe) shows possession - the tail belongs to the dog. "It\'s" = it is. "Their" = belonging to them. "There" = a place. "They\'re" = they are. Be careful with these homophones!' }),
+    explanation:'"<b>Its</b>" (no apostrophe) shows possession - the tail belongs to the dog. "It\'s" = it is. "Their" = belonging to them. "There" = a place. "They\'re" = they are. Be careful with these homophones!',
+    learnMore:'Common <b>homophones</b> (words that sound the same but have different spellings and meanings): <i>its</i> (belonging to it) / <i>it\'s</i> (it is). <i>their</i> (belonging to them) / <i>there</i> (a place) / <i>they\'re</i> (they are). <i>your</i> (belonging to you) / <i>you\'re</i> (you are). <i>to</i> (direction) / <i>too</i> (also) / <i>two</i> (the number).' }),
 
   makeMCQ({ id:'g5eng-spell-006', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
     question:'Which sentence uses the correct homophone?',

@@ -12,25 +12,29 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-001', chapterId:'g9ict-databases',
   question:'A database is best described as:',
   options:['an organised collection of data','a document containing a table','a spreadsheet with one sheet','a program that draws charts'],
   answer:'an organised collection of data', hint:'Think of a school register: many records, organised.',
-  explanation:'A database stores structured data in a way that makes it easy to search, retrieve and update.' }));
+  explanation:'A database stores structured data in a way that makes it easy to search, retrieve and update.',
+  learnMore:'A <b>database</b> is an organised collection of related data stored so it can be searched, retrieved and updated efficiently. It differs from a plain list because data is structured into <b>tables, fields and records</b>, and relationships between tables prevent unnecessary repetition.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-002', chapterId:'g9ict-databases', subsection:'db_structure', difficulty:2,
   question:'In a database, a field is:',
   options:['one item of data in a record','all the records in a table','all the data on one person','a search of the database'],
   answer:'one item of data in a record', hint:'One column heading = one field.',
-  explanation:'A field is the smallest unit of data — one category of information, like First Name or Phone Number.' }));
+  explanation:'A field is the smallest unit of data — one category of information, like First Name or Phone Number.',
+  learnMore:'A <b>field</b> = one column in a table, holding one category of data (e.g. Surname, Date of Birth). Every record in the table has a value for each field. Each field has a <i>data type</i> (Text, Number, Date/Time, Yes/No, Currency) that controls what can be stored.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-003', chapterId:'g9ict-databases', subsection:'db_structure', difficulty:2,
   question:'In a database, a record is:',
   options:['all the fields for one entity','a list of the field names','the result of one query','a single item of data'],
   answer:'all the fields for one entity', hint:'One row in the table = one record.',
-  explanation:'A record is one complete row in a table, grouping all the fields that describe a single entity.' }));
+  explanation:'A record is one complete row in a table, grouping all the fields that describe a single entity.',
+  learnMore:'A <b>record</b> = one row in a table — all the data about a single entity (one pupil, one book, one product). A table of 500 pupils has 500 records. Each record holds values for the same set of fields: surname, first name, date of birth, etc.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-004', chapterId:'g9ict-databases', subsection:'db_structure', difficulty:2,
   question:'A primary key in a database table is a field that:',
   options:['uniquely identifies each record in the table','stores the most important data in each record','allows duplicate values across records','links two tables together'],
   answer:'uniquely identifies each record in the table', hint:'No two records can share the same primary key value.',
-  explanation:'A primary key is a field (or combination of fields) whose value is unique for every record, ensuring each row can be identified without ambiguity.' }));
+  explanation:'A primary key is a field (or combination of fields) whose value is unique for every record, ensuring each row can be identified without ambiguity.',
+  learnMore:'A <b>primary key</b> must be: (1) <i>unique</i> — no two records share the same value; (2) <i>not blank</i> — every record must have one. Good choices: student ID, admission number, ISBN. Poor choices: surname (can repeat), date of birth (can repeat), class (many share it).' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-005', chapterId:'g9ict-databases', subsection:'db_structure', difficulty:2,
   question:'Which of the following would be a suitable primary key for a student database?',
@@ -42,13 +46,15 @@ STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-006', chapterId:'g9ict-databases',
   question:'A flat-file database stores all data in:',
   options:['one table with no links','a multi-sheet spreadsheet','a set of encrypted files','several linked tables'],
   answer:'one table with no links', hint:'Flat = one level, one table.',
-  explanation:'A flat-file database is a single table; it cannot handle complex relationships and can lead to data redundancy.' }));
+  explanation:'A flat-file database is a single table; it cannot handle complex relationships and can lead to data redundancy.',
+  learnMore:'A <b>flat-file database</b> stores all data in one table. Disadvantage: the same information is repeated in many rows (<i>data redundancy</i>). Example: storing the teacher\'s name and room number in every pupil record. A <b>relational database</b> puts teachers in a separate table and links them by a key — no repetition.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-007', chapterId:'g9ict-databases', subsection:'db_structure', difficulty:2,
   question:'A relational database stores data in:',
   options:['linked tables sharing keys','one single very large table','a form that users fill in','a set of plain text files'],
   answer:'linked tables sharing keys', hint:'Related tables = relational.',
-  explanation:'A relational database organises data into separate tables, each representing one entity type, linked by key fields to avoid duplication.' }));
+  explanation:'A relational database organises data into separate tables, each representing one entity type, linked by key fields to avoid duplication.',
+  learnMore:'A <b>relational database</b> splits data across linked tables. Each table covers one entity (Pupils, Teachers, Subjects). Tables are joined by <i>key fields</i>: a <b>primary key</b> in one table matches a <b>foreign key</b> in another. This eliminates redundancy and keeps data consistent.' }));
 
 STATIC_QUESTIONS.push(makeMCQ({ id:'g9ict-dhv-008', chapterId:'g9ict-databases', subsection:'db_structure', difficulty:2,
   question:'Data redundancy in a flat-file database means:',

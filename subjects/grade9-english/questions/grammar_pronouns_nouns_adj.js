@@ -8,14 +8,16 @@ STATIC_QUESTIONS.push(
     question:'Identify the <b>appositive</b> in the sentence:<br><i>"Gandhi, a great leader, changed history."</i>',
     options:['a great leader','Gandhi','changed history','a great'], answer:'a great leader',
     hint:'An appositive renames the noun that comes just before it.',
-    explanation:'"<b>a great leader</b>" renames Gandhi and sits between commas. Remove it and the sentence still makes sense, which is the test of an appositive.' }),
+    explanation:'"<b>a great leader</b>" renames Gandhi and sits between commas. Remove it and the sentence still makes sense, which is the test of an appositive.',
+    learnMore:'An <b>appositive</b> is a noun or noun phrase placed beside another noun to rename or identify it. It is enclosed in paired commas: "The Eiffel Tower, <i>a famous landmark</i>, was built in 1889." Quick test: remove the phrase between the commas. If the sentence still works, it is an appositive.' }),
 
   makeMCQ({ id:'g9eng-grv-002', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:2,
     question:'Which sentence uses an <b>appositive</b> with correct punctuation?',
     options:['Dr Lam, our headteacher, addressed the hall.','Dr Lam our headteacher, addressed the hall.','Dr Lam, our headteacher addressed the hall.','Dr Lam our headteacher addressed the hall.'],
     answer:'Dr Lam, our headteacher, addressed the hall.',
     hint:'An appositive phrase needs a comma at its beginning and at its end.',
-    explanation:'"our headteacher" renames Dr Lam, so it needs a comma <b>on both sides</b>. Using only one comma leaves the boundary unclear.' }),
+    explanation:'"our headteacher" renames Dr Lam, so it needs a comma <b>on both sides</b>. Using only one comma leaves the boundary unclear.',
+    learnMore:'Appositive phrases need <b>a comma before AND a comma after</b>. One comma alone is an error — the reader cannot find the end of the phrase. Exception: a tight appositive with no extra detail takes NO commas: "my friend <i>Maria</i>" (Maria IS the friend, not additional information). Added detail → commas; defining identity → no commas.' }),
 
   makeMCQ({ id:'g9eng-grv-003', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:2,
     question:'What is the appositive in: <i>"Mauritius, a small island nation, has a rich cultural heritage."</i>?',
@@ -29,14 +31,16 @@ STATIC_QUESTIONS.push(
     options:['A noun phrase that renames another noun beside it','An adjective that describes a verb','A clause that explains why something happened','A pronoun that replaces the subject'],
     answer:'A noun phrase that renames another noun beside it',
     hint:'Think about what "appositive" does to the noun next to it.',
-    explanation:'An appositive is a <b>noun or noun phrase placed beside another noun to rename or identify it</b>. It gives extra information about that noun.' }),
+    explanation:'An appositive is a <b>noun or noun phrase placed beside another noun to rename or identify it</b>. It gives extra information about that noun.',
+    learnMore:'<b>Appositive</b> vs relative clause: both add information about a noun. A relative clause contains a verb: "Gandhi, <i>who was a great leader</i>, changed history." An appositive is just a noun phrase: "Gandhi, <i>a great leader</i>, changed history." The appositive is more concise; the relative clause is more flexible.' }),
 
   makeMCQ({ id:'g9eng-grv-005', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:2,
     question:'Spot the <b>error</b> in: <i>"My sister, a doctor works at the hospital."</i>',
     options:['A closing comma is missing after "doctor"','The opening comma before "a" should be removed','The word "doctor" should be capitalised','There is no error in the sentence'],
     answer:'A closing comma is missing after "doctor"',
     hint:'If you open a pair of commas around an appositive, you must close it too.',
-    explanation:'"a doctor" is an appositive and needs commas on <b>both sides</b>. The sentence opens one comma but never closes it, leaving the boundary of the phrase open.' }),
+    explanation:'"a doctor" is an appositive and needs commas on <b>both sides</b>. The sentence opens one comma but never closes it, leaving the boundary of the phrase open.',
+    learnMore:'Think of appositive commas as <b>brackets in disguise</b> — both are needed or neither. "My sister (a doctor) works here" → "My sister, a doctor, works here." If you open with a comma, you must close with a comma. Read the sentence aloud: the two commas match natural pauses in speech.' }),
 
   makeMCQ({ id:'g9eng-grv-006', chapterId:'g9eng-gr-nouns', subsection:'apposition', difficulty:3,
     question:'Which sentence correctly inserts <i>"the longest river in Africa"</i> as an appositive for <i>the Nile</i>?',
@@ -71,7 +75,8 @@ STATIC_QUESTIONS.push(
     options:["The comma after \"Persand\" should not be there if no comma precedes \"Mr\"","There is no error at all in the way that this sentence is punctuated","The name \"Mr Persand\" needs to be removed from the sentence entirely","The verb should be \"leads\" rather than \"led\" to match the subject"],
     answer:'The comma after "Persand" should not be there if no comma precedes "Mr"',
     hint:'Either both commas are present or neither is — a single comma beside an appositive is wrong.',
-    explanation:'"Mr Persand" is an appositive for "Our coach". It should either have <b>no commas</b> (when tightly identifying the person) or <b>both commas</b> (one before "Mr" and one after "Persand"). One comma alone misplaces the boundary.' }),
+    explanation:'"Mr Persand" is an appositive for "Our coach". It should either have <b>no commas</b> (when tightly identifying the person) or <b>both commas</b> (one before "Mr" and one after "Persand"). One comma alone misplaces the boundary.',
+    learnMore:'An appositive has two options: <b>no commas</b> (restrictive — essential identity: "my friend Maria") or <b>paired commas</b> (non-restrictive — extra information: "Maria, my friend, came over"). One comma alone is always wrong. "Our coach, Mr Persand led…" has an unclosed appositive — the comma after "Persand" is missing.' }),
 
   // ── Pronouns · Reflexive (g9eng-gr-pronouns) · 15 questions ─────────────
 

@@ -9,7 +9,8 @@ STATIC_QUESTIONS.push(
     options:['carefully','carefulness','carefuller','careful'],
     answer:'carefully',
     hint:'Most adverbs of manner are made by adding one ending to the adjective.',
-    explanation:'Adding "-ly" to an adjective makes an adverb of manner: <b>carefully</b>. "Carefulness" is a noun, "carefuller" is not a word at all, and "careful" is still the adjective.' }),
+    explanation:'Adding "-ly" to an adjective makes an adverb of manner: <b>carefully</b>. "Carefulness" is a noun, "carefuller" is not a word at all, and "careful" is still the adjective.',
+    learnMore:'Most <b>adverbs of manner</b> are formed by adding <i>-ly</i> to the adjective: slow→slowly, quick→quickly, careful→carefully. Spelling rules: <i>-y</i> → <i>-ily</i> (happy→happily); <i>-le</i> → <i>-ly</i> (gentle→gently); <i>-ic</i> → <i>-ally</i> (dramatic→dramatically). Some adverbs are the same as the adjective: fast, hard, late.' }),
 
   makeMCQ({ id:'g7eng-gr-adverbs-011', chapterId:'g7eng-gr-adverbs', difficulty:2,
     subsection:'types_adverbs',
@@ -17,7 +18,8 @@ STATIC_QUESTIONS.push(
     options:['well','good','gooder','goodly'],
     answer:'well',
     hint:'"Good" has an irregular adverb form.',
-    explanation:'The adverb of "good" is <b>well</b>, and it describes HOW she plays. "Good" is an adjective and cannot describe a verb, while "gooder" and "goodly" are not used in modern English.' }),
+    explanation:'The adverb of "good" is <b>well</b>, and it describes HOW she plays. "Good" is an adjective and cannot describe a verb, while "gooder" and "goodly" are not used in modern English.',
+    learnMore:'"Good" has the <b>irregular adverb</b> "well" — not "goodly". Similarly: fast→fast, hard→hard, late→late (no -ly added). Watch out: "hardly" = almost not at all (not the adverb of "hard"); "lately" = recently (not the adverb of "late"). These -ly forms have different meanings entirely.' }),
 
   makeMCQ({ id:'g7eng-gr-adverbs-012', chapterId:'g7eng-gr-adverbs', difficulty:2,
     subsection:'types_adverbs',
@@ -25,7 +27,8 @@ STATIC_QUESTIONS.push(
     options:['hard','hardly','harder','hardness'],
     answer:'hard',
     hint:'One of these means "almost not at all" — the opposite of what the sentence needs.',
-    explanation:'"Hard" is both an adjective and an adverb, so "worked <b>hard</b>" is correct. "Hardly" means almost not at all, which would contradict passing the test; "harder" is a comparative and "hardness" is a noun.' }),
+    explanation:'"Hard" is both an adjective and an adverb, so "worked <b>hard</b>" is correct. "Hardly" means almost not at all, which would contradict passing the test; "harder" is a comparative and "hardness" is a noun.',
+    learnMore:'Some words are both adjective AND adverb with no change: <b>fast</b> (a fast car / she ran fast), <b>hard</b> (a hard exam / he worked hard), <b>late</b> (a late bus / she arrived late). The -ly form has a different meaning: <i>hardly</i> = almost not; <i>lately</i> = recently. Do not add -ly to these flat adverbs.' }),
 
   makeMCQ({ id:'g7eng-gr-adverbs-013', chapterId:'g7eng-gr-adverbs', difficulty:3,
     subsection:'types_adverbs',
@@ -33,7 +36,8 @@ STATIC_QUESTIONS.push(
     options:['the adjective "hot"','the noun "soup"','the verb "was"','the whole sentence'],
     answer:'the adjective "hot"',
     hint:'Which word would change in meaning if you removed "extremely"?',
-    explanation:'"Extremely" tells you HOW hot, so it modifies the adjective <b>hot</b> — that is exactly what adverbs of degree do. It does not describe the soup itself (the adjective does that), and it comments on neither the verb nor the sentence as a whole.' }),
+    explanation:'"Extremely" tells you HOW hot, so it modifies the adjective <b>hot</b> — that is exactly what adverbs of degree do. It does not describe the soup itself (the adjective does that), and it comments on neither the verb nor the sentence as a whole.',
+    learnMore:'<b>Adverbs of degree</b> modify adjectives and other adverbs — not verbs: very, extremely, quite, fairly, rather, too, enough, slightly. Examples: <i>extremely</i> hot (→ adjective), <i>very</i> quickly (→ adverb). They answer "how much?" or "to what degree?" about the word they modify.' }),
 
   makeText({ id:'g7eng-gr-adverbs-014', chapterId:'g7eng-gr-adverbs', difficulty:2,
     subsection:'types_adverbs',
@@ -48,7 +52,8 @@ STATIC_QUESTIONS.push(
     options:['She speaks English fluently.','She speaks fluently English.','She speaks English fluent.','She fluent speaks English.'],
     answer:'She speaks English fluently.',
     hint:'An adverb of manner never squeezes in between a verb and its object.',
-    explanation:'The adverb follows the whole verb-plus-object group: "speaks English <b>fluently</b>". Putting "fluently" between "speaks" and "English" splits the verb from its object, and "fluent" is an adjective, which cannot describe a verb.' }),
+    explanation:'The adverb follows the whole verb-plus-object group: "speaks English <b>fluently</b>". Putting "fluently" between "speaks" and "English" splits the verb from its object, and "fluent" is an adjective, which cannot describe a verb.',
+    learnMore:'<b>Adverb of manner position</b>: place it AFTER the verb and its object — never between them. "She sings the song <i>beautifully</i>" ✓. "She sings <i>beautifully</i> the song" ✗ (splits verb from object). With no object, the adverb goes right after the verb: "He runs <i>fast</i>." ✓.' }),
 
   makeMCQ({ id:'g7eng-gr-adverbs-016', chapterId:'g7eng-gr-adverbs', difficulty:3,
     subsection:'adverb_position',
@@ -64,7 +69,8 @@ STATIC_QUESTIONS.push(
     options:['He sang well at the concert yesterday.','He sang yesterday well at the concert.','He sang at the concert yesterday well.','He sang yesterday at the concert well.'],
     answer:'He sang well at the concert yesterday.',
     hint:'The usual English order is manner, then place, then time.',
-    explanation:'English normally orders adverbials manner, place, time: <b>well</b> (how), <b>at the concert</b> (where), <b>yesterday</b> (when). Every other version drags the time or the manner out of that order.' }),
+    explanation:'English normally orders adverbials manner, place, time: <b>well</b> (how), <b>at the concert</b> (where), <b>yesterday</b> (when). Every other version drags the time or the manner out of that order.',
+    learnMore:'When a sentence has multiple adverbials, the usual English order is <b>Manner → Place → Time</b> (How? Where? When?): "She danced <i>gracefully</i> at the hall <i>last night</i>." Time can move to the front for emphasis: "Last night, she danced gracefully at the hall." But manner rarely opens a clause unless it is very short.' }),
 
   makeMCQ({ id:'g7eng-gr-adverbs-018', chapterId:'g7eng-gr-adverbs', difficulty:2,
     subsection:'adverb_position',

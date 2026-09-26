@@ -15,7 +15,8 @@ STATIC_QUESTIONS.push(
     options:['is greater than','is less than','is equal to','is not equal to'],
     answer:'is greater than',
     hint:'The open end of > points to the smaller value.',
-    explanation:'<b>></b> means "is greater than". For example, 7 > 3 reads "7 is greater than 3".' }),
+    explanation:'<b>></b> means "is greater than". For example, 7 > 3 reads "7 is greater than 3".',
+    learnMore:'<b>Inequality symbols</b>: > (greater than), < (less than), ≥ (greater than or equal to), ≤ (less than or equal to). Memory trick: the open end of the symbol always faces the LARGER number: 7 > 3 (open end faces 7). A second trick: the symbol looks like a hungry crocodile — it opens its mouth towards the bigger meal.' }),
 
   makeTF({ id:'g8m-ineq-002', chapterId:'g8m-inequalities', difficulty:1,
     subsection:'inequality_notation',
@@ -28,7 +29,8 @@ STATIC_QUESTIONS.push(
     question:'Which inequality correctly describes "x is less than or equal to 7"?',
     options:['x < 7','x > 7','x ≤ 7','x ≥ 7'], answer:'x ≤ 7',
     hint:'"Less than or equal" uses the ≤ symbol.',
-    explanation:'<b>x ≤ 7</b> means x can be any value less than 7, or exactly 7.' }),
+    explanation:'<b>x ≤ 7</b> means x can be any value less than 7, or exactly 7.',
+    learnMore:'<b>≥</b> and <b>≤</b> include the boundary value (closed); <b>></b> and <b><</b> exclude it (open). On a number line: ≤ or ≥ → filled circle ●; < or > → empty circle ○. So x ≤ 7 uses a filled circle at 7 (7 IS included); x < 7 uses an empty circle at 7 (7 is NOT included).' }),
 
   makeMCQ({ id:'g8m-ineq-004', chapterId:'g8m-inequalities', difficulty:1,
     subsection:'inequality_notation',
@@ -42,7 +44,8 @@ STATIC_QUESTIONS.push(
     question:'Which inequality represents "at least 10"?',
     options:['x > 10','x < 10','x ≥ 10','x ≤ 10'], answer:'x ≥ 10',
     hint:'"At least" means 10 or more.',
-    explanation:'"At least 10" means 10 or more, so the correct inequality is <b>x ≥ 10</b>.' }),
+    explanation:'"At least 10" means 10 or more, so the correct inequality is <b>x ≥ 10</b>.',
+    learnMore:'Translating words to symbols: <b>at least n</b> → ≥ n (n included). <b>more than n</b> → > n (n excluded). <b>at most n</b> → ≤ n (n included). <b>fewer/less than n</b> → < n (n excluded). Key question: "Is the boundary value itself included?" Yes → ≥ or ≤. No → > or <.' }),
 
   makeMCQ({ id:'g8m-ineq-006', chapterId:'g8m-inequalities', difficulty:1,
     subsection:'inequality_notation',
@@ -76,7 +79,8 @@ STATIC_QUESTIONS.push(
     question:'A theatre requires that you be "more than 12 years old" to attend. Which inequality expresses this?',
     options:['a ≥ 12','a > 12','a < 12','a ≤ 12'], answer:'a > 12',
     hint:'"More than" is strictly greater than — 12-year-olds are not allowed.',
-    explanation:'"More than 12" means <b>a > 12</b>. 12 is not included.' }),
+    explanation:'"More than 12" means <b>a > 12</b>. 12 is not included.',
+    learnMore:'"<b>More than</b>" uses strict inequality > (boundary excluded). "<b>At least</b>" / "not less than" uses ≥ (boundary included). A 12-year-old is allowed in the second case but NOT the first. Always ask: "Is the limit value itself allowed?" to decide between > and ≥ (or < and ≤).' }),
 
   makeMCQ({ id:'g8m-ineq-011', chapterId:'g8m-inequalities', difficulty:2,
     subsection:'inequality_notation',
@@ -156,7 +160,8 @@ STATIC_QUESTIONS.push(
     question:'Solve: −2x > 8',
     options:['x > −4','x < −4','x > 4','x < 4'], answer:'x < −4',
     hint:'When you divide by a NEGATIVE number, the inequality sign reverses.',
-    explanation:'−2x > 8 → x < 8 ÷ (−2) → <b>x < −4</b>. Dividing by −2 reverses the inequality.' }),
+    explanation:'−2x > 8 → x < 8 ÷ (−2) → <b>x < −4</b>. Dividing by −2 reverses the inequality.',
+    learnMore:'<b>Reversing rule</b>: when you multiply or divide BOTH sides of an inequality by a negative number, the inequality sign reverses (> becomes <, ≤ becomes ≥). This is the biggest difference from equations. Example: −3x ≤ 12 → x ≥ −4 (dividing by −3 reverses ≤ to ≥). Adding or subtracting does NOT reverse the sign.' }),
 
   makeTF({ id:'g8m-ineq-032', chapterId:'g8m-inequalities', difficulty:2,
     subsection:'solving_inequalities',

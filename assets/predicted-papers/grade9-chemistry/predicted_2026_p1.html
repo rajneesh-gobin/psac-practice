@@ -1,0 +1,611 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCE Chemistry — Predicted Paper 1 · Nouklass.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-big{font-size:18pt;line-height:1}.nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;background:#f8f8f8}.marks::before{content:"["}.marks::after{content:"]"}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:80px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:45px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:130px;width:100%;margin:10px 0;padding:6px}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.tick-opt{display:flex;align-items:center;gap:10px;margin:7px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0}
+.sub-q{margin:12px 0 6px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:28px;color:#1a3c6e}
+.chem-eq{font-family:monospace;font-size:12pt;background:#f8f9fb;border:1px solid #ddd;padding:8px 14px;margin:10px 0;border-radius:3px;display:inline-block}
+.diagram-box{border:1.5px solid #888;min-height:140px;margin:12px 0;background:#fafeff;border-radius:4px;padding:8px;display:flex;align-items:center;justify-content:center}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.data-table{border-collapse:collapse;font-size:10.5pt;margin:10px 0}
+.data-table th,.data-table td{border:1px solid #aaa;padding:5px 10px;text-align:center}
+.data-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+@media print{.nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-btn{display:none}body{padding-top:32px}@page{size:A4 portrait;margin:12mm 14mm}}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &mdash; NCE Grade 9 Chemistry &nbsp;|&nbsp; Predicted Paper 1 &nbsp;&middot;&nbsp; 2026</span>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- ══ COVER PAGE ══ -->
+<div class="cover">
+  <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:24px">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">NOUKLASS</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">NCE Grade 9 &mdash; Predicted Specimen Paper &mdash; For Practice Only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">Chemistry</div>
+  <div style="font-size:13pt;color:#333;margin:6px 0 20px">Paper 1 &mdash; Atomic Structure &nbsp;&middot;&nbsp; Periodic Table &nbsp;&middot;&nbsp; Ionic Bonding</div>
+
+  <div class="paper-meta">
+    <b>Time allowed:</b> 45 minutes<br>
+    <b>Total marks:</b> 50<br>
+    <b>Index Number:</b> &nbsp;<span class="index-line"></span>
+  </div>
+
+  <div class="instructions">
+    <b style="font-size:11pt">Instructions to Candidates</b>
+    <ol>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <b>all</b> questions in <b>all three sections</b>.</li>
+      <li>Section A: Choose <b>one</b> answer for each question. Tick the box next to your chosen answer.</li>
+      <li>Section B &amp; C: Write your answers in the spaces provided.</li>
+      <li>Use a blue or black pen. Diagrams may be drawn in pencil.</li>
+      <li>All working must be shown for calculations.</li>
+      <li>The number of marks is given in brackets <b>[ ]</b> at the end of each question.</li>
+    </ol>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:10.5pt;margin-top:18px">
+    <thead>
+      <tr>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Section</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Available</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Awarded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">A</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">B</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">20</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">C</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">Total</td><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">50</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9pt;color:#555;margin-top:28px;text-align:center">
+    &copy; Nouklass.com 2026 &mdash; This paper is for revision purposes only. It is not an official MES publication.
+  </p>
+</div>
+
+<!-- ══ SECTION A ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION A &mdash; Multiple Choice &nbsp;[15 marks]&nbsp; Answer all 15 questions. Tick ONE box per question.</div>
+
+  <!-- Q1 -->
+  <div class="question">
+    <div class="qnum">1</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      The atomic number of an element is equal to the number of
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; neutrons in the nucleus</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; protons in the nucleus</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; electrons in the outermost shell only</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; protons plus neutrons in the nucleus</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question">
+    <div class="qnum">2</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      An atom of oxygen has 8 protons and a mass number of 16. How many neutrons does it contain?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 6</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 7</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 8</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 16</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question">
+    <div class="qnum">3</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      The electron configuration of sodium (atomic number 11) is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 2, 9</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 2, 8, 1</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 3, 8</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 2, 8, 8, 1</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question">
+    <div class="qnum">4</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      What is the maximum number of electrons that can occupy the second electron shell?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 2</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 8</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 18</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 32</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question">
+    <div class="qnum">5</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Two atoms are isotopes of the same element. They must have the same number of
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; protons</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; neutrons</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; mass numbers</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; nucleons</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question">
+    <div class="qnum">6</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Chlorine has atomic number 17 and electron configuration 2, 8, 7. In which period of the periodic table is chlorine found?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Period 1</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Period 2</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Period 3</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Period 4</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question">
+    <div class="qnum">7</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Elements in Group VII of the periodic table are called
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; alkali metals</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; alkaline earth metals</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; halogens</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; noble gases</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question">
+    <div class="qnum">8</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Moving across Period 3 from sodium to chlorine, the atomic radius
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; increases steadily</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; remains constant throughout</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; decreases steadily</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; first increases then decreases</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question">
+    <div class="qnum">9</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Going down Group I of the periodic table, the reactivity of the elements
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; decreases</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; increases</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; remains the same</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; first increases then decreases</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question">
+    <div class="qnum">10</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Carbon-12 and carbon-14 are isotopes. Compared with carbon-12, carbon-14 has
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 2 fewer protons</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 2 more protons</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 2 more neutrons</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 2 fewer neutrons</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question">
+    <div class="qnum">11</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      In the formation of an ionic bond, electrons are
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; shared equally between the two atoms</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; transferred from one atom to another</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; delocalised throughout the structure</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; gained by both atoms simultaneously</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question">
+    <div class="qnum">12</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      What is the chemical formula of magnesium chloride?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; MgCl</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Mg<sub>2</sub>Cl</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; MgCl<sub>2</sub></div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Mg<sub>2</sub>Cl<sub>3</sub></div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question">
+    <div class="qnum">13</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Calcium has atomic number 20. When a calcium atom loses 2 electrons to form an ion, the correct symbol for this ion is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Ca<sup>&minus;</sup></div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Ca<sup>2&minus;</sup></div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Ca<sup>+</sup></div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Ca<sup>2+</sup></div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question">
+    <div class="qnum">14</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Noble gases are found in which group of the periodic table?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Group I</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Group IV</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Group VII</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Group 0</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="question">
+    <div class="qnum">15</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Which of the following elements has the electron configuration 2, 8, 8, 2?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Magnesium (atomic number 12)</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Sulfur (atomic number 16)</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Calcium (atomic number 20)</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Argon (atomic number 18)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION B ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION B &mdash; Short Structured Questions &nbsp;[20 marks]&nbsp; Answer all questions.</div>
+
+  <!-- B1 -->
+  <div class="question">
+    <div class="qnum">B1</div>
+    <div class="qbody">
+      The table below shows data about three particles, X, Y, and Z.
+      <div style="margin:10px 0">
+        <table class="data-table">
+          <thead><tr><th>Particle</th><th>Protons</th><th>Neutrons</th><th>Electrons</th></tr></thead>
+          <tbody>
+            <tr><td>X</td><td>11</td><td>12</td><td>11</td></tr>
+            <tr><td>Y</td><td>11</td><td>13</td><td>11</td></tr>
+            <tr><td>Z</td><td>17</td><td>18</td><td>17</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State the atomic number of particle X.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Particles X and Y are isotopes of the same element. Explain what this means.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Chlorine exists as two isotopes: <sup>35</sup>Cl (75%) and <sup>37</sup>Cl (25%). Calculate the relative atomic mass of chlorine. Show your working.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2 -->
+  <div class="question">
+    <div class="qnum">B2</div>
+    <div class="qbody">
+      This question is about trends in the periodic table.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State how first ionisation energy changes across Period 3 from left to right.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Explain why atomic radius decreases across Period 3. Use ideas about nuclear charge and electron shells in your answer.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Potassium reacts more vigorously with water than sodium does, even though both are in Group I. Explain why.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B3 -->
+  <div class="question">
+    <div class="qnum">B3</div>
+    <div class="qbody">
+      This question is about ionic bonding between sodium (Na, atomic number 11) and chlorine (Cl, atomic number 17).
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">
+          In the box below, draw a dot-and-cross diagram to show the ionic bond formed between one sodium atom and one chlorine atom. Show <b>outer-shell electrons only</b>. Label the ions formed with their charges.<span class="marks">3</span>
+          <div class="diagram-box" style="min-height:170px">
+            <span style="color:#888;font-size:9.5pt">Draw your diagram here</span>
+          </div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">State <b>two</b> physical properties of sodium chloride that are characteristic of ionic compounds.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B4 -->
+  <div class="question">
+    <div class="qnum">B4</div>
+    <div class="qbody">
+      This question is about ions and ionic formulae.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Write the symbol, including charge, of the ion formed when:
+          <div style="margin:8px 0">
+            (i) &nbsp; oxygen gains 2 electrons <span class="marks">1</span>
+            <div class="answer-box-sm"></div>
+          </div>
+          <div style="margin:8px 0">
+            (ii) &nbsp; aluminium loses 3 electrons <span class="marks">1</span>
+            <div class="answer-box-sm"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Use the ions Ca<sup>2+</sup>, Al<sup>3+</sup>, O<sup>2&minus;</sup>, and Cl<sup>&minus;</sup> to write the formulae of the following compounds.
+          <div style="margin:8px 0">
+            (i) &nbsp; Calcium chloride <span class="marks">1</span>
+            <div class="answer-box-sm"></div>
+          </div>
+          <div style="margin:8px 0">
+            (ii) &nbsp; Aluminium oxide <span class="marks">2</span>
+            <div class="answer-box-sm"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION C ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION C &mdash; Long Structured Questions &nbsp;[15 marks]&nbsp; Answer all questions.</div>
+
+  <!-- C1 -->
+  <div class="question">
+    <div class="qnum">C1</div>
+    <div class="qbody">
+      <b>Atomic Structure and the Periodic Table</b> &nbsp;<span class="marks">8</span>
+      <p style="margin:10px 0">Lithium (Li), sodium (Na) and potassium (K) are all elements in Group I of the periodic table. The diagram below shows the electron configuration of the sodium atom.</p>
+
+      <div style="display:flex;align-items:center;gap:24px;margin:14px 0">
+        <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Electron configuration diagram of sodium: 2 electrons in shell 1, 8 electrons in shell 2, 1 electron in shell 3">
+          <circle cx="110" cy="110" r="26" fill="#1a3c6e"/>
+          <text x="110" y="106" text-anchor="middle" fill="white" font-size="9" font-weight="bold">11p</text>
+          <text x="110" y="119" text-anchor="middle" fill="white" font-size="9" font-weight="bold">12n</text>
+          <circle cx="110" cy="110" r="42" fill="none" stroke="#777" stroke-width="1" stroke-dasharray="3,2"/>
+          <circle cx="110" cy="110" r="70" fill="none" stroke="#777" stroke-width="1" stroke-dasharray="3,2"/>
+          <circle cx="110" cy="110" r="98" fill="none" stroke="#777" stroke-width="1" stroke-dasharray="3,2"/>
+          <!-- Shell 1: 2 electrons -->
+          <circle cx="110" cy="68" r="5" fill="#c0392b"/>
+          <circle cx="110" cy="152" r="5" fill="#c0392b"/>
+          <!-- Shell 2: 8 electrons at r=70 -->
+          <circle cx="180" cy="110" r="5" fill="#2980b9"/>
+          <circle cx="159" cy="159" r="5" fill="#2980b9"/>
+          <circle cx="110" cy="180" r="5" fill="#2980b9"/>
+          <circle cx="61" cy="159" r="5" fill="#2980b9"/>
+          <circle cx="40" cy="110" r="5" fill="#2980b9"/>
+          <circle cx="61" cy="61" r="5" fill="#2980b9"/>
+          <circle cx="110" cy="40" r="5" fill="#2980b9"/>
+          <circle cx="159" cy="61" r="5" fill="#2980b9"/>
+          <!-- Shell 3: 1 electron at r=98 -->
+          <circle cx="208" cy="110" r="5" fill="#27ae60"/>
+          <text x="110" y="215" text-anchor="middle" font-size="9.5" fill="#333" font-style="italic">Fig. 1 — Sodium atom (2, 8, 1)</text>
+        </svg>
+        <div style="font-size:10.5pt">
+          <p><b>Key:</b></p>
+          <p style="margin:4px 0"><span style="display:inline-block;width:12px;height:12px;background:#c0392b;border-radius:50%;vertical-align:middle"></span> &nbsp; Shell 1 electrons</p>
+          <p style="margin:4px 0"><span style="display:inline-block;width:12px;height:12px;background:#2980b9;border-radius:50%;vertical-align:middle"></span> &nbsp; Shell 2 electrons</p>
+          <p style="margin:4px 0"><span style="display:inline-block;width:12px;height:12px;background:#27ae60;border-radius:50%;vertical-align:middle"></span> &nbsp; Shell 3 electron</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State what is meant by the term <i>electron configuration</i>.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">In the box below, draw a similar electron configuration diagram for a lithium atom (atomic number 3). Label the nucleus with the correct number of protons and neutrons (lithium-7).<span class="marks">2</span>
+          <div class="diagram-box" style="min-height:160px"><span style="color:#888;font-size:9.5pt">Draw your diagram here</span></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Explain why Group I elements become more reactive going down the group from lithium to potassium. Your answer should refer to electron shells, nuclear charge, and ease of electron loss.<span class="marks">3</span>
+          <div class="answer-box-lg"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">Write the <b>word equation</b> for the reaction of potassium with water.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(e)</div>
+        <div style="flex:1">State what you would observe if a small piece of potassium is placed into water. Give <b>one</b> observation that is different from the observation when sodium reacts with water.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="question" style="margin-top:24px">
+    <div class="qnum">C2</div>
+    <div class="qbody">
+      <b>Ionic Bonding and Properties of Ionic Compounds</b> &nbsp;<span class="marks">7</span>
+      <p style="margin:10px 0">Magnesium oxide (MgO) is an ionic compound widely used as a refractory lining in furnaces because it withstands very high temperatures.</p>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Magnesium has atomic number 12. Write the electron configuration of a magnesium atom.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">In the box below, draw a dot-and-cross diagram to show the ionic bonding in magnesium oxide. Show <b>outer-shell electrons only</b>. Label the ions with their charges.<span class="marks">3</span>
+          <div class="diagram-box" style="min-height:170px"><span style="color:#888;font-size:9.5pt">Draw your diagram here</span></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Magnesium oxide has a higher melting point than sodium chloride. Explain why, in terms of ionic charges and electrostatic attraction.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">Solid magnesium oxide does not conduct electricity, but molten magnesium oxide does. Explain this difference.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MARK SCHEME ══ -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Paper 1</div>
+  <div class="ms-disc">
+    <b>For teacher/self-assessment use only.</b> Accept any answer that conveys the correct scientific meaning. Credit alternative correct responses. Marks in brackets indicate the allocation per point. Underlined words are essential for credit.
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section A — Multiple Choice</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B</td><td>6</td><td>C</td><td>11</td><td>B</td></tr>
+      <tr><td>2</td><td>C</td><td>7</td><td>C</td><td>12</td><td>C</td></tr>
+      <tr><td>3</td><td>B</td><td>8</td><td>C</td><td>13</td><td>D</td></tr>
+      <tr><td>4</td><td>B</td><td>9</td><td>B</td><td>14</td><td>D</td></tr>
+      <tr><td>5</td><td>A</td><td>10</td><td>C</td><td>15</td><td>C</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section B</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>B1(a)</td><td>11</td><td>1</td></tr>
+      <tr><td>B1(b)</td><td>Same number of <u>protons</u> [1]; different number of <u>neutrons</u> [1]</td><td>2</td></tr>
+      <tr><td>B1(c)</td><td>Working: (35 &times; 75 + 37 &times; 25) &divide; 100 [1]; Answer: <b>35.5</b> [1]</td><td>2</td></tr>
+      <tr><td>B2(a)</td><td>First ionisation energy <u>increases</u> across Period 3 (left to right)</td><td>1</td></tr>
+      <tr><td>B2(b)</td><td>Number of protons (nuclear charge) increases [1]; electrons added to <u>same shell</u>, so increased attraction pulls electrons closer to nucleus [1]</td><td>2</td></tr>
+      <tr><td>B2(c)</td><td>Potassium has one more electron shell than sodium [1]; outer electron is further from the nucleus / greater shielding, so it is lost more easily [1]</td><td>2</td></tr>
+      <tr><td>B3(a)</td><td>Na shown with 1 outer electron [1]; Cl shown with 7 outer electrons [1]; after transfer: Na<sup>+</sup> (empty outer shell) and Cl<sup>&minus;</sup> (8 outer electrons) correctly labelled with charges [1]</td><td>3</td></tr>
+      <tr><td>B3(b)</td><td>Any 2 from: high melting/boiling point; conducts electricity when molten or dissolved in water; brittle; soluble in water</td><td>2</td></tr>
+      <tr><td>B4(a)(i)</td><td>O<sup>2&minus;</sup></td><td>1</td></tr>
+      <tr><td>B4(a)(ii)</td><td>Al<sup>3+</sup></td><td>1</td></tr>
+      <tr><td>B4(b)(i)</td><td>CaCl<sub>2</sub></td><td>1</td></tr>
+      <tr><td>B4(b)(ii)</td><td>Al<sub>2</sub>O<sub>3</sub> [1 for correct elements, 1 for correct subscripts]</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section C</p>
+  <table class="ans-table">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>C1(a)</td><td>The arrangement/distribution of electrons in shells/energy levels around the nucleus</td><td>1</td></tr>
+      <tr><td>C1(b)</td><td>Nucleus labelled 3p, 4n [1]; 2 electrons in shell 1, 1 electron in shell 2 correctly drawn [1]</td><td>2</td></tr>
+      <tr><td>C1(c)</td><td>Going down Group I, each element has one more electron shell [1]; outer electron is further from the nucleus [1]; greater shielding by inner electrons, nuclear attraction on outer electron is weaker [1]; outer electron lost more easily, so reactivity increases [bonus point — award 3rd mark for this link]</td><td>3</td></tr>
+      <tr><td>C1(d)</td><td>Potassium + water &rarr; potassium hydroxide + hydrogen</td><td>1</td></tr>
+      <tr><td>C1(e)</td><td>Potassium floats / moves rapidly on surface / fizzes / melts into a ball; difference: potassium <u>ignites / burns with a lilac/pink flame</u> (sodium does not)</td><td>1</td></tr>
+      <tr><td>C2(a)</td><td>2, 8, 2</td><td>1</td></tr>
+      <tr><td>C2(b)</td><td>Mg shown with 2 outer electrons [1]; O shown with 6 outer electrons [1]; after transfer: Mg<sup>2+</sup> (empty outer shell) and O<sup>2&minus;</sup> (8 outer electrons) with correct charges [1]</td><td>3</td></tr>
+      <tr><td>C2(c)</td><td>Mg<sup>2+</sup> and O<sup>2&minus;</sup> ions carry <u>higher charges (2+/2&minus;)</u> than Na<sup>+</sup>/Cl<sup>&minus;</sup> [1]; stronger electrostatic attraction between ions / more energy needed to break the lattice, so higher melting point [1]</td><td>2</td></tr>
+      <tr><td>C2(d)</td><td>In solid MgO, ions are in fixed positions / cannot move; when molten, ions are free to move and carry charge</td><td>1</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

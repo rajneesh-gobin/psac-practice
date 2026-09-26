@@ -15,7 +15,8 @@ CHALLENGE_QS2.push(
     options:['2:3','3:4','4:6','6:9'],
     answer:'2:3',
     hint:'Divide both by their HCF (12).',
-    explanation:'HCF(24,36)=12. 24÷12=2; 36÷12=3. Ratio = 2:3.' }),
+    explanation:'HCF(24,36)=12. 24÷12=2; 36÷12=3. Ratio = 2:3.',
+    learnMore:'To <b>simplify a ratio</b>, divide both numbers by their Highest Common Factor (HCF). Example: 18:24 → HCF = 6 → 3:4. A ratio is fully simplified when the two numbers share no common factor other than 1. Check: can 2 and 3 be divided further? No → done.' }),
 
   makeNum({ id:'CH_RAT02', chapterId:'ratio', subsection:'dividing', difficulty:3,
     question:'Divide Rs 420 in the ratio 3:4. What is the larger share?',
@@ -54,7 +55,8 @@ CHALLENGE_QS2.push(
     options:['2 km','2.5 km','20 km','200 km'],
     answer:'2 km',
     hint:'Multiply the map distance by the scale factor to get real centimetres, then convert cm → m → km.',
-    explanation:'4 × 50,000 = 200,000 cm = 2 km.' }),
+    explanation:'4 × 50,000 = 200,000 cm = 2 km.',
+    learnMore:'A <b>map scale</b> of 1:50,000 means 1 cm on the map = 50,000 cm in real life. Method: real distance = map distance × scale factor. Then convert: 100 cm = 1 m; 1,000 m = 1 km. Always convert to sensible units at the end — 200,000 cm → 2,000 m → 2 km.' }),
 
   makeNum({ id:'CH_RAT08', chapterId:'ratio', subsection:'writing', difficulty:3,
     question:'The ratio of cats to dogs in a shelter is 5:3. There are 48 animals total. How many cats are there?',

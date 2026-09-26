@@ -1,0 +1,854 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouklass.com — Grade 9 NCE Physics Specimen Paper [N] 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 11pt; color: #000; background: #fff; }
+  .nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+  .print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+  .page { width: 210mm; max-width: 210mm; margin: 0 auto; padding: 20mm 18mm 20mm 25mm; }
+  .cover { text-align: left; padding-top: 30px; }
+  .cover-header { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; }
+  .mes-logo { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #1a3c6e; display: flex; align-items: center; justify-content: center; font-size: 8pt; font-weight: bold; color: #1a3c6e; text-align: center; line-height: 1.4; flex-shrink: 0; }
+  .header-box { flex: 1; height: 60px; background: #37474f; }
+  .index-line { font-size: 11pt; margin: 20px 0 10px 0; }
+  .nce-title { font-size: 22pt; font-weight: bold; margin: 30px 0 5px 0; border-top: 3px solid #1a237e; padding-top: 20px; }
+  .nce-year { font-size: 16pt; margin-bottom: 30px; }
+  .subject-line { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
+  .subject-name { font-size: 20pt; font-weight: bold; }
+  .time-line { font-size: 14pt; font-weight: bold; }
+  .materials { font-size: 10.5pt; margin: 10px 0 20px 0; }
+  .materials p { margin: 3px 0; }
+  .specimen-notice { background: #eef2fc; border: 1px solid #1a3c6e; border-radius: 4px; padding: 10px 14px; margin: 10px 0; font-size: 9.5pt; color: #1a3c6e; }
+  .instructions-box { border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 12px 0; margin: 20px 0; }
+  .instructions-title { font-weight: bold; font-size: 11pt; margin-bottom: 10px; }
+  .instructions-list { list-style: none; padding: 0; }
+  .instructions-list li { margin: 4px 0; padding-left: 25px; font-size: 10.5pt; }
+  .instructions-list li::before { content: attr(data-num) "."; display: inline-block; width: 20px; margin-left: -25px; }
+  .examiner-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 10pt; }
+  .examiner-table th, .examiner-table td { border: 1px solid #000; padding: 6px 8px; text-align: center; }
+  .examiner-table th { background: #e0e0e0; font-weight: bold; }
+  .copyright { text-align: center; font-size: 9pt; margin-top: 20px; }
+  .page-break { page-break-before: always; }
+  .marks-col { float: right; font-size: 10pt; color: #555; }
+  .q-header { font-weight: bold; font-size: 11.5pt; margin: 20px 0 12px 0; }
+  .q-instruction { font-weight: bold; margin-bottom: 10px; font-size: 11pt; }
+  .q-part { margin: 14px 0; }
+  .q-part-label { margin-bottom: 6px; }
+  .mcq-options { margin: 8px 0 8px 30px; }
+  .mcq-option { margin: 5px 0; }
+  .mcq-option .letter { font-weight: bold; display: inline-block; width: 20px; }
+  .answer-line { border-bottom: 1px solid #000; min-height: 36px; margin: 6px 0; }
+  .answer-line-long { border-bottom: 1px solid #000; min-height: 36px; margin: 4px 0; display: block; }
+  span.answer-box { border: 1px solid #000; display: inline-block; width: 14px; height: 14px; margin-right: 8px; vertical-align: middle; }
+  div.answer-box { border: 1px solid #000; min-height: 80px; margin: 8px 0; display: block; width: 100%; }
+  .answer-box-row { margin: 6px 0; }
+  .calc-answer { text-align: right; margin-top: 60px; padding-top: 5px; border-top: 1px solid #aaa; font-size: 10.5pt; }
+  .page-num { text-align: center; font-size: 9pt; margin-top: 15px; }
+  .please-turn { text-align: right; font-size: 9pt; margin-top: 15px; }
+  .marks-bracket { font-size: 10pt; }
+  .col-ab { display: flex; gap: 40px; margin: 10px 0; }
+  .col-a, .col-b { flex: 1; }
+  .match-item { display: flex; align-items: center; margin: 12px 0; }
+  .match-text { flex: 1; font-size: 10.5pt; }
+  .match-dot { width: 8px; height: 8px; background: #000; border-radius: 50%; margin: 0 10px; flex-shrink: 0; }
+  .col-b .match-item { flex-direction: row-reverse; }
+  .col-b .match-text { text-align: right; }
+  .svg-container { text-align: center; margin: 12px 0; }
+  .fig-label { text-align: center; font-size: 10pt; margin-top: 4px; }
+  .fill-blank { border-bottom: 1px solid #000; display: inline-block; min-width: 120px; margin: 0 4px; }
+  .ms-section { background: #eef2fc; border: 2px solid #1a3c6e; border-radius: 4px; padding: 16px; margin-top: 30px; }
+  .ms-title { font-size: 14pt; font-weight: bold; color: #1a3c6e; margin-bottom: 14px; border-bottom: 2px solid #1a3c6e; padding-bottom: 6px; }
+  .ms-q { margin: 14px 0 8px 0; font-weight: bold; color: #1a3c6e; }
+  .ms-row { margin: 3px 0 3px 16px; font-size: 10.5pt; }
+  .ms-note { font-size: 9pt; color: #1a3c6e; font-style: italic; margin-top: 8px; }
+  .formula { font-style: italic; background: #fffde7; padding: 2px 6px; border-radius: 3px; border: 1px solid #f0e68c; }
+  .working-space { min-height: 100px; border: none; margin: 8px 0; }
+  .large-working { min-height: 150px; }
+  .sub-indent { margin-left: 20px; }
+  h3.ms-header { font-size: 12pt; color: #1a3c6e; margin: 16px 0 8px 0; border-bottom: 1px solid #a8c4e0; padding-bottom: 4px; }
+  @media print {
+    body { padding-top: 32px; }
+    .nk-bar { position: fixed; top: 0; left: 0; right: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .print-btn { display: none; }
+    .page { margin: 0; padding: 15mm 15mm 15mm 20mm; padding-top: 25mm; }
+    .page-break { page-break-before: always; }
+    .ms-section { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>&#128196; Nouklass.com &mdash; Grade 9 NCE Physics &mdash; Specimen Paper [N] 2026</span>
+  <button class="print-btn" onclick="window.print()">&#128424; Print / Save PDF</button>
+</div>
+
+<div class="page">
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="mes-logo">NK<br><span style="font-size:7pt;">Nouklass.com</span></div>
+    <div class="header-box"></div>
+  </div>
+
+  <div class="index-line"><strong>Index Number: </strong>.....................................................................</div>
+
+  <div class="nce-title">NATIONAL CERTIFICATE OF EDUCATION</div>
+  <div class="nce-year">2026</div>
+
+  <div class="subject-line">
+    <span class="subject-name">PHYSICS (N530)</span>
+    <span class="time-line">TIME: 45 MINUTES</span>
+  </div>
+
+  <div class="materials">
+    <p>Candidates answer on the Question Paper.</p>
+    <p>Additional Materials: &nbsp;&nbsp;&nbsp;&nbsp; Mathematical set, Calculator</p>
+  </div>
+
+  <div class="specimen-notice">
+    Specimen Paper 2026 &mdash; For examination practice only. Not an official MES paper.
+  </div>
+
+  <div class="instructions-box">
+    <div class="instructions-title">READ THESE INSTRUCTIONS FIRST</div>
+    <ol class="instructions-list">
+      <li data-num="1">Write your index number in the space provided above.</li>
+      <li data-num="2">Write in dark blue or black ink. Do not use correction fluid.</li>
+      <li data-num="3">You may use a soft pencil for any diagram, graph or rough working.</li>
+      <li data-num="4">Diagrams are not drawn to scale unless otherwise specified.</li>
+      <li data-num="5">Any rough working should be done in this booklet.</li>
+      <li data-num="6">Answer <strong>ALL</strong> questions.</li>
+      <li data-num="7">This document consists of <strong>6</strong> questions printed on <strong>12</strong> pages, numbered <strong>2</strong> to <strong>13</strong>.</li>
+      <li data-num="8">The total marks for each question is shown in brackets ( ) at the beginning of each question.</li>
+      <li data-num="9">The number of marks for each part question is shown in brackets [ ].</li>
+      <li data-num="10">The total number of marks for this paper is <strong>50</strong>.</li>
+    </ol>
+  </div>
+
+  <table class="examiner-table">
+    <tr>
+      <th colspan="9">For Examiners' use</th>
+    </tr>
+    <tr>
+      <th>Question No.</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>Total</th><th>Signature</th>
+    </tr>
+    <tr>
+      <td>Examiner</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan="3" style="width:80px;"></td>
+    </tr>
+    <tr>
+      <td>Team Leader</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td>CE/ACE</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+  </table>
+
+  <p class="copyright">&#169; 2026 Nouklass.com &mdash; Specimen Paper for examination practice only</p>
+</div>
+
+<!-- PAGE 2: QUESTION 1 -->
+<div class="page-break"></div>
+
+<div style="float:right;font-size:10pt;">Marks</div>
+<div style="clear:both;"></div>
+
+<div class="q-header">Question 1 &nbsp;(10 marks)</div>
+<div class="q-instruction">Circle the correct answer. Each item carries one mark.</div>
+
+<!-- Q1a -->
+<div class="q-part">
+  <div class="q-part-label">(a) Which instrument is used to measure <strong>time</strong>?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> A ruler</div>
+    <div class="mcq-option"><span class="letter">B</span> An electronic balance</div>
+    <div class="mcq-option"><span class="letter">C</span> A stopwatch</div>
+    <div class="mcq-option"><span class="letter">D</span> A thermometer</div>
+  </div>
+</div>
+
+<!-- Q1b -->
+<div class="q-part">
+  <div class="q-part-label">(b) What is the S.I. unit of <strong>force</strong>?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> kilogram (kg)</div>
+    <div class="mcq-option"><span class="letter">B</span> joule (J)</div>
+    <div class="mcq-option"><span class="letter">C</span> newton (N)</div>
+    <div class="mcq-option"><span class="letter">D</span> watt (W)</div>
+  </div>
+</div>
+
+<!-- Q1c -->
+<div class="q-part">
+  <div class="q-part-label">(c) Fig. 1.1 shows four circuit diagrams. Which one shows a <strong>closed</strong> (complete) electric circuit?</div>
+
+  <div class="svg-container">
+  <svg width="420" height="180" viewBox="0 0 420 180" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial;font-size:10px;">
+    <!-- Circuit A: open switch (open) - incomplete -->
+    <g transform="translate(10,10)">
+      <rect x="0" y="0" width="85" height="60" fill="none" stroke="#000" stroke-width="1.2"/>
+      <!-- battery top left -->
+      <line x1="20" y1="0" x2="30" y2="0" stroke="#000" stroke-width="1.5"/>
+      <line x1="30" y1="-7" x2="30" y2="7" stroke="#000" stroke-width="1.5"/>
+      <line x1="38" y1="-4" x2="38" y2="4" stroke="#000" stroke-width="3"/>
+      <line x1="38" y1="0" x2="48" y2="0" stroke="#000" stroke-width="1.5"/>
+      <!-- open switch top right -->
+      <circle cx="65" cy="0" r="2" fill="#000"/>
+      <line x1="65" y1="0" x2="78" y2="-8" stroke="#000" stroke-width="1.5"/>
+      <!-- no connection = open -->
+      <!-- bulb bottom -->
+      <circle cx="42" cy="60" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
+      <line x1="36" y1="54" x2="48" y2="66" stroke="#000" stroke-width="1.5"/>
+      <line x1="48" y1="54" x2="36" y2="66" stroke="#000" stroke-width="1.5"/>
+      <text x="42" y="80" text-anchor="middle" font-size="11" font-weight="bold">A</text>
+    </g>
+    <!-- Circuit B: closed switch - complete circuit -->
+    <g transform="translate(115,10)">
+      <rect x="0" y="0" width="85" height="60" fill="none" stroke="#000" stroke-width="1.2"/>
+      <!-- battery top left -->
+      <line x1="10" y1="0" x2="22" y2="0" stroke="#000" stroke-width="1.5"/>
+      <line x1="22" y1="-7" x2="22" y2="7" stroke="#000" stroke-width="1.5"/>
+      <line x1="30" y1="-4" x2="30" y2="4" stroke="#000" stroke-width="3"/>
+      <line x1="30" y1="0" x2="40" y2="0" stroke="#000" stroke-width="1.5"/>
+      <!-- closed switch top right: two dots connected by line -->
+      <circle cx="60" cy="0" r="2" fill="#000"/>
+      <line x1="60" y1="0" x2="75" y2="0" stroke="#000" stroke-width="1.5"/>
+      <circle cx="75" cy="0" r="2" fill="#000"/>
+      <!-- bulb bottom -->
+      <circle cx="42" cy="60" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
+      <line x1="36" y1="54" x2="48" y2="66" stroke="#000" stroke-width="1.5"/>
+      <line x1="48" y1="54" x2="36" y2="66" stroke="#000" stroke-width="1.5"/>
+      <text x="42" y="80" text-anchor="middle" font-size="11" font-weight="bold">B</text>
+    </g>
+    <!-- Circuit C: open switch, resistor -->
+    <g transform="translate(220,10)">
+      <rect x="0" y="0" width="85" height="60" fill="none" stroke="#000" stroke-width="1.2"/>
+      <!-- battery -->
+      <line x1="10" y1="0" x2="22" y2="0" stroke="#000" stroke-width="1.5"/>
+      <line x1="22" y1="-7" x2="22" y2="7" stroke="#000" stroke-width="1.5"/>
+      <line x1="30" y1="-4" x2="30" y2="4" stroke="#000" stroke-width="3"/>
+      <line x1="30" y1="0" x2="40" y2="0" stroke="#000" stroke-width="1.5"/>
+      <!-- open switch -->
+      <circle cx="60" cy="0" r="2" fill="#000"/>
+      <line x1="60" y1="0" x2="73" y2="-10" stroke="#000" stroke-width="1.5"/>
+      <!-- resistor bottom -->
+      <rect x="28" y="55" width="28" height="10" fill="none" stroke="#000" stroke-width="1.5"/>
+      <text x="42" y="80" text-anchor="middle" font-size="11" font-weight="bold">C</text>
+    </g>
+    <!-- Circuit D: bulb only, no switch, no battery = incomplete (missing battery) -->
+    <g transform="translate(325,10)">
+      <rect x="0" y="0" width="85" height="60" fill="none" stroke="#000" stroke-width="1.2"/>
+      <!-- battery -->
+      <line x1="10" y1="0" x2="22" y2="0" stroke="#000" stroke-width="1.5"/>
+      <line x1="22" y1="-7" x2="22" y2="7" stroke="#000" stroke-width="1.5"/>
+      <line x1="30" y1="-4" x2="30" y2="4" stroke="#000" stroke-width="3"/>
+      <line x1="30" y1="0" x2="85" y2="0" stroke="#000" stroke-width="1.5"/>
+      <!-- bulb bottom -->
+      <circle cx="42" cy="60" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
+      <line x1="36" y1="54" x2="48" y2="66" stroke="#000" stroke-width="1.5"/>
+      <line x1="48" y1="54" x2="36" y2="66" stroke="#000" stroke-width="1.5"/>
+      <!-- open gap right side -->
+      <line x1="85" y1="0" x2="85" y2="35" stroke="#000" stroke-width="1.5"/>
+      <!-- gap at bottom right - circuit is NOT complete -->
+      <text x="42" y="80" text-anchor="middle" font-size="11" font-weight="bold">D</text>
+    </g>
+  </svg>
+  <div class="fig-label">Fig. 1.1</div>
+  </div>
+</div>
+
+<!-- Q1d -->
+<div class="q-part">
+  <div class="q-part-label">(d) An athlete runs a distance of 150 m in 30 s. What is the average <strong>speed</strong> of the athlete?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> 0.2 m/s</div>
+    <div class="mcq-option"><span class="letter">B</span> 5 m/s</div>
+    <div class="mcq-option"><span class="letter">C</span> 180 m/s</div>
+    <div class="mcq-option"><span class="letter">D</span> 4500 m/s</div>
+  </div>
+</div>
+
+<!-- Q1e -->
+<div class="q-part">
+  <div class="q-part-label">(e) Which of the following is a <strong>vector</strong> quantity?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> Distance</div>
+    <div class="mcq-option"><span class="letter">B</span> Mass</div>
+    <div class="mcq-option"><span class="letter">C</span> Speed</div>
+    <div class="mcq-option"><span class="letter">D</span> Velocity</div>
+  </div>
+</div>
+
+<div class="page-num" style="margin-top:20px;">2</div>
+<div class="please-turn">Please turn over</div>
+
+<!-- PAGE 3: Q1 continued -->
+<div class="page-break"></div>
+<div style="float:right;font-size:10pt;">Marks</div>
+<div style="clear:both;"></div>
+
+<!-- Q1f -->
+<div class="q-part">
+  <div class="q-part-label">(f) A car starts from rest and reaches a speed of 24 m/s in 8 s. What is its <strong>acceleration</strong>?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> 3 m/s&#178;</div>
+    <div class="mcq-option"><span class="letter">B</span> 16 m/s&#178;</div>
+    <div class="mcq-option"><span class="letter">C</span> 32 m/s&#178;</div>
+    <div class="mcq-option"><span class="letter">D</span> 192 m/s&#178;</div>
+  </div>
+</div>
+
+<!-- Q1g -->
+<div class="q-part">
+  <div class="q-part-label">(g) Which of the following is a <strong>renewable</strong> source of energy?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> Coal</div>
+    <div class="mcq-option"><span class="letter">B</span> Oil</div>
+    <div class="mcq-option"><span class="letter">C</span> Wind</div>
+    <div class="mcq-option"><span class="letter">D</span> Natural gas</div>
+  </div>
+</div>
+
+<!-- Q1h -->
+<div class="q-part">
+  <div class="q-part-label">(h) What is the formula used to calculate the <strong>kinetic energy</strong> of a moving object?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> mgh</div>
+    <div class="mcq-option"><span class="letter">B</span> &#189;mv&#178;</div>
+    <div class="mcq-option"><span class="letter">C</span> ma</div>
+    <div class="mcq-option"><span class="letter">D</span> mv</div>
+  </div>
+</div>
+
+<!-- Q1i -->
+<div class="q-part">
+  <div class="q-part-label">(i) What is the <strong>unit of electrical resistance</strong>?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> ampere (A)</div>
+    <div class="mcq-option"><span class="letter">B</span> coulomb (C)</div>
+    <div class="mcq-option"><span class="letter">C</span> ohm (&#937;)</div>
+    <div class="mcq-option"><span class="letter">D</span> volt (V)</div>
+  </div>
+</div>
+
+<!-- Q1j -->
+<div class="q-part">
+  <div class="q-part-label">(j) A current of 2 A flows through a circuit. How much <strong>charge</strong> passes a point in the circuit in 30 s?</div>
+  <div class="mcq-options">
+    <div class="mcq-option"><span class="letter">A</span> 15 C</div>
+    <div class="mcq-option"><span class="letter">B</span> 28 C</div>
+    <div class="mcq-option"><span class="letter">C</span> 32 C</div>
+    <div class="mcq-option"><span class="letter">D</span> 60 C</div>
+  </div>
+  <div style="text-align:right;margin-top:10px;font-size:10pt;">[10]</div>
+</div>
+
+<div class="page-num">3</div>
+<div class="please-turn">Please turn over</div>
+
+<!-- PAGE 4: QUESTION 2 -->
+<div class="page-break"></div>
+<div style="float:right;font-size:10pt;">Marks</div>
+<div style="clear:both;"></div>
+
+<div class="q-header">Question 2 &nbsp;(5 marks)</div>
+
+<p style="margin-bottom:10px;">Fig. 2.1 shows a ray of light striking a plane mirror <strong>MN</strong>. The normal at the point of incidence is shown as a dashed line.</p>
+
+<div class="svg-container">
+<svg width="380" height="260" viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial;font-size:11px;">
+  <!-- Mirror MN: horizontal line at y=185 -->
+  <line x1="40" y1="185" x2="340" y2="185" stroke="#000" stroke-width="2.5"/>
+  <!-- Hatching below mirror -->
+  <line x1="40" y1="185" x2="50" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="60" y1="185" x2="70" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="80" y1="185" x2="90" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="100" y1="185" x2="110" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="120" y1="185" x2="130" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="140" y1="185" x2="150" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="160" y1="185" x2="170" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="180" y1="185" x2="190" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="200" y1="185" x2="210" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="220" y1="185" x2="230" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="240" y1="185" x2="250" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="260" y1="185" x2="270" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="280" y1="185" x2="290" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="300" y1="185" x2="310" y2="200" stroke="#000" stroke-width="1"/>
+  <line x1="320" y1="185" x2="330" y2="200" stroke="#000" stroke-width="1"/>
+  <!-- Mirror labels -->
+  <text x="30" y="188" text-anchor="end" font-size="13" font-weight="bold">M</text>
+  <text x="350" y="188" font-size="13" font-weight="bold">N</text>
+  <!-- Normal: dashed vertical at x=190, from y=185 up to y=50, and labeled P at top, Q at bottom -->
+  <line x1="190" y1="50" x2="190" y2="185" stroke="#000" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="195" y="48" font-size="12" font-weight="bold">P</text>
+  <!-- Normal below mirror for context -->
+  <line x1="190" y1="185" x2="190" y2="220" stroke="#000" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="195" y="235" font-size="12" font-weight="bold">Q</text>
+  <!-- Incident ray from upper-left: A(90,70) to O(190,185), labeled with arrow -->
+  <line x1="90" y1="70" x2="190" y2="185" stroke="#000" stroke-width="1.8"/>
+  <!-- Arrowhead on incident ray (toward O) -->
+  <polygon points="190,185 178,175 184,173" fill="#000"/>
+  <text x="78" y="65" font-size="12" font-weight="bold">A</text>
+  <!-- Reflected ray from O(190,185) to B(290,70) -->
+  <line x1="190" y1="185" x2="290" y2="70" stroke="#000" stroke-width="1.8"/>
+  <!-- Arrowhead on reflected ray (away from O) -->
+  <polygon points="290,70 278,80 282,86" fill="#000"/>
+  <text x="295" y="65" font-size="12" font-weight="bold">B</text>
+  <!-- Angle of incidence arc (between incident ray and normal, left side) labeled 'a' -->
+  <path d="M 180,165 A 18,18 0 0,0 182,152" fill="none" stroke="#000" stroke-width="1.2"/>
+  <text x="158" y="160" font-size="11" font-style="italic">a</text>
+  <!-- Angle of reflection arc (between normal and reflected ray, right side) labeled 'b' -->
+  <path d="M 198,152 A 18,18 0 0,0 200,165" fill="none" stroke="#000" stroke-width="1.2"/>
+  <text x="208" y="160" font-size="11" font-style="italic">b</text>
+  <!-- Point O at mirror surface -->
+  <circle cx="190" cy="185" r="3" fill="#000"/>
+  <text x="195" y="184" font-size="11" font-weight="bold">O</text>
+</svg>
+<div class="fig-label">Fig. 2.1</div>
+</div>
+
+<p style="margin-bottom:14px;">Match each item in <strong>Column A</strong> with its correct label in <strong>Fig. 2.1</strong>.</p>
+
+<table style="width:100%;border-collapse:collapse;font-size:10.5pt;margin:10px 0;">
+  <tr>
+    <th style="text-align:left;padding:6px 10px;width:45%;">Column A</th>
+    <th style="width:10%;"></th>
+    <th style="text-align:right;padding:6px 10px;width:45%;">Column B (from Fig. 2.1)</th>
+  </tr>
+  <tr><td style="padding:8px 10px;">(a) &nbsp; Incident ray</td><td style="text-align:center;">&#9679; &nbsp;&nbsp; &#9679;</td><td style="text-align:right;padding:8px 10px;"><em>a</em></td></tr>
+  <tr><td style="padding:8px 10px;">(b) &nbsp; Angle of incidence</td><td style="text-align:center;">&#9679; &nbsp;&nbsp; &#9679;</td><td style="text-align:right;padding:8px 10px;"><em>b</em></td></tr>
+  <tr><td style="padding:8px 10px;">(c) &nbsp; Reflected ray</td><td style="text-align:center;">&#9679; &nbsp;&nbsp; &#9679;</td><td style="text-align:right;padding:8px 10px;"><strong>AO</strong></td></tr>
+  <tr><td style="padding:8px 10px;">(d) &nbsp; Angle of reflection</td><td style="text-align:center;">&#9679; &nbsp;&nbsp; &#9679;</td><td style="text-align:right;padding:8px 10px;"><strong>OB</strong></td></tr>
+  <tr><td style="padding:8px 10px;">(e) &nbsp; The normal at point O</td><td style="text-align:center;">&#9679; &nbsp;&nbsp; &#9679;</td><td style="text-align:right;padding:8px 10px;"><strong>PQ</strong></td></tr>
+</table>
+<div style="text-align:right;font-size:10pt;">[5]</div>
+
+<div class="page-num">4</div>
+<div class="please-turn">Please turn over</div>
+
+<!-- PAGE 5: QUESTION 3 -->
+<div class="page-break"></div>
+<div style="float:right;font-size:10pt;">Marks</div>
+<div style="clear:both;"></div>
+
+<div class="q-header">Question 3 &nbsp;(7 marks)</div>
+
+<div class="q-part">
+  <div class="q-part-label">(a) Define the <strong>time period</strong> of a simple pendulum.</div>
+  <div class="answer-line-long">&nbsp;</div>
+  <div class="answer-line-long">&nbsp;</div>
+  <div class="answer-line-long">&nbsp;</div>
+  <div style="text-align:right;font-size:10pt;">[1]</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(b) Fig. 3.1 shows a stopwatch.</div>
+
+  <div class="svg-container">
+  <svg width="200" height="230" viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial;font-size:10px;">
+    <!-- Stopwatch body -->
+    <ellipse cx="100" cy="135" rx="80" ry="80" fill="#f5f5f5" stroke="#424242" stroke-width="3"/>
+    <!-- Crown/button -->
+    <rect x="88" y="55" width="24" height="14" rx="4" fill="#757575" stroke="#424242" stroke-width="1.5"/>
+    <rect x="78" y="50" width="44" height="10" rx="5" fill="#9e9e9e" stroke="#424242" stroke-width="1.5"/>
+    <!-- Outer rim -->
+    <ellipse cx="100" cy="135" rx="75" ry="75" fill="none" stroke="#757575" stroke-width="4"/>
+    <!-- Face -->
+    <ellipse cx="100" cy="135" rx="68" ry="68" fill="white" stroke="#bdbdbd" stroke-width="1"/>
+    <!-- Scale ticks and numbers (every 5s) -->
+    <!-- 0/60 at top -->
+    <line x1="100" y1="69" x2="100" y2="78" stroke="#000" stroke-width="2"/>
+    <text x="100" y="66" text-anchor="middle" font-size="9" font-weight="bold">60</text>
+    <!-- 5s -->
+    <line x1="133" y1="76" x2="129" y2="83" stroke="#000" stroke-width="1.5"/>
+    <text x="138" y="80" font-size="9">5</text>
+    <!-- 10s -->
+    <line x1="156" y1="100" x2="150" y2="105" stroke="#000" stroke-width="1.5"/>
+    <text x="160" y="106" font-size="9">10</text>
+    <!-- 15s -->
+    <line x1="168" y1="135" x2="161" y2="135" stroke="#000" stroke-width="2"/>
+    <text x="172" y="139" font-size="9">15</text>
+    <!-- 20s -->
+    <line x1="156" y1="170" x2="150" y2="165" stroke="#000" stroke-width="1.5"/>
+    <text x="158" y="175" font-size="9">20</text>
+    <!-- 25s -->
+    <line x1="133" y1="194" x2="129" y2="187" stroke="#000" stroke-width="1.5"/>
+    <text x="131" y="202" font-size="9">25</text>
+    <!-- 30s -->
+    <line x1="100" y1="202" x2="100" y2="193" stroke="#000" stroke-width="2"/>
+    <text x="100" y="213" text-anchor="middle" font-size="9" font-weight="bold">30</text>
+    <!-- 35s -->
+    <line x1="67" y1="194" x2="71" y2="187" stroke="#000" stroke-width="1.5"/>
+    <text x="52" y="202" font-size="9">35</text>
+    <!-- 40s (hand points here approximately) -->
+    <line x1="44" y1="170" x2="50" y2="165" stroke="#000" stroke-width="1.5"/>
+    <text x="27" y="175" font-size="9">40</text>
+    <!-- 45s -->
+    <line x1="32" y1="135" x2="39" y2="135" stroke="#000" stroke-width="2"/>
+    <text x="14" y="139" font-size="9">45</text>
+    <!-- 50s -->
+    <line x1="44" y1="100" x2="50" y2="105" stroke="#000" stroke-width="1.5"/>
+    <text x="26" y="106" font-size="9">50</text>
+    <!-- 55s -->
+    <line x1="67" y1="76" x2="71" y2="83" stroke="#000" stroke-width="1.5"/>
+    <text x="51" y="80" font-size="9">55</text>
+    <!-- Second hand: 38s -->
+    <line x1="100" y1="135" x2="55" y2="175" stroke="#e53935" stroke-width="2.5"/>
+    <circle cx="100" cy="135" r="4" fill="#e53935"/>
+    <!-- Small inner dial -->
+    <ellipse cx="100" cy="110" rx="15" ry="15" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+    <text x="100" y="107" text-anchor="middle" font-size="7">20</text>
+    <text x="100" y="125" text-anchor="middle" font-size="7">10</text>
+    <text x="115" y="115" text-anchor="middle" font-size="7">30</text>
+    <text x="85" y="115" text-anchor="middle" font-size="7">0</text>
+  </svg>
+  <div class="fig-label">Fig. 3.1</div>
+  </div>
+
+  <div class="q-part">
+    <div class="q-part-label">(i) &nbsp; What is the time shown on the stopwatch, in <strong>seconds</strong>?</div>
+    <div class="working-space"></div>
+    <div class="calc-answer">Time = ……………………….. s &nbsp;&nbsp;&nbsp; [3]</div>
+  </div>
+
+  <div class="q-part">
+    <div class="q-part-label">(ii) &nbsp; The time shown in Fig. 3.1 is the time taken for a simple pendulum to complete <strong>20 swings</strong>.<br>Calculate the <strong>time period</strong> of the pendulum. Show all workings.</div>
+    <div class="working-space large-working"></div>
+    <div class="calc-answer">Time period = ……………………….. s &nbsp;&nbsp;&nbsp; [2]</div>
+  </div>
+
+  <div class="q-part">
+    <div class="q-part-label">(iii) &nbsp; Give <strong>one precaution</strong> that should be taken when using the stopwatch to measure the time period.</div>
+    <div class="answer-line-long">&nbsp;</div>
+    <div class="answer-line-long">&nbsp;</div>
+    <div style="text-align:right;font-size:10pt;">[1]</div>
+  </div>
+</div>
+
+<div class="page-num">5</div>
+<div class="please-turn">Please turn over</div>
+
+<!-- PAGE 6: QUESTION 4 -->
+<div class="page-break"></div>
+<div style="float:right;font-size:10pt;">Marks</div>
+<div style="clear:both;"></div>
+
+<div class="q-header">Question 4 &nbsp;(10 marks)</div>
+
+<div class="q-part">
+  <div class="q-part-label">(a) Complete the following sentences using the correct word from the list below.</div>
+  <div style="display:flex;flex-wrap:wrap;gap:20px;margin:10px 20px;font-weight:bold;font-size:11pt;">
+    <span>kinetic</span><span>chemical</span><span>gravitational potential</span><span>heat</span><span>electrical</span><span>renewable</span>
+  </div>
+  <p style="font-style:italic;font-size:10pt;margin:4px 0 10px 0;">[Note: there is one extra word in the list]</p>
+
+  <div class="q-part sub-indent">
+    <div class="q-part-label">(i) &nbsp; A car moving along a road has <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> energy.</div>
+    <div class="q-part-label">(ii) &nbsp; Food gives us <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> energy.</div>
+    <div class="q-part-label">(iii) &nbsp; A boulder at the top of a hill has <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> energy.</div>
+    <div class="q-part-label">(iv) &nbsp; The sun is a <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> source of energy.</div>
+    <div class="q-part-label">(v) &nbsp; A fan converts <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> energy into <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> energy.</div>
+  </div>
+  <div style="text-align:right;font-size:10pt;">[5]</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(b)(i) &nbsp; Which <strong>two</strong> quantities from the list below are <strong>vector</strong> quantities?<br>Tick (&#10003;) the <strong>two</strong> correct boxes.</div>
+  <div class="sub-indent" style="margin-top:8px;">
+    <div class="answer-box-row"><span class="answer-box"></span> Distance</div>
+    <div class="answer-box-row"><span class="answer-box"></span> Displacement</div>
+    <div class="answer-box-row"><span class="answer-box"></span> Speed</div>
+    <div class="answer-box-row"><span class="answer-box"></span> Velocity</div>
+    <div class="answer-box-row"><span class="answer-box"></span> Mass</div>
+  </div>
+  <div style="text-align:right;font-size:10pt;">[2]</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(b)(ii) &nbsp; A motorcycle accelerates uniformly from 4 m/s to 16 m/s in 6 s.<br>Calculate the <strong>acceleration</strong> of the motorcycle. Show all your workings.</div>
+  <div class="working-space large-working"></div>
+  <div class="calc-answer">Acceleration = ……………………….. m/s&#178; &nbsp;&nbsp;&nbsp; [3]</div>
+</div>
+
+<div class="page-num">6</div>
+<div class="please-turn">Please turn over</div>
+
+<!-- PAGE 7: QUESTION 5 -->
+<div class="page-break"></div>
+<div style="float:right;font-size:10pt;">Marks</div>
+<div style="clear:both;"></div>
+
+<div class="q-header">Question 5 &nbsp;(8 marks)</div>
+
+<p style="margin-bottom:10px;">Fig. 5.1 shows a simple series electric circuit containing a cell of e.m.f. 6 V, a switch <strong>S</strong>, an ammeter <strong>A</strong>, and a resistor <strong>R</strong>. Point <strong>P</strong> is marked on the left wire.</p>
+
+<div class="svg-container">
+<svg width="380" height="270" viewBox="0 0 380 270" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial;font-size:11px;">
+  <!-- Outer rectangle wires -->
+  <!-- Top wire: (50,70) to (330,70) -->
+  <line x1="50" y1="70" x2="80" y2="70" stroke="#000" stroke-width="1.8"/>
+  <!-- Battery at top: centered between x=80 and x=145 -->
+  <line x1="80" y1="70" x2="95" y2="70" stroke="#000" stroke-width="1.8"/>
+  <line x1="95" y1="56" x2="95" y2="84" stroke="#000" stroke-width="1.8"/><!-- positive plate (long) -->
+  <text x="90" y="53" font-size="10">+</text>
+  <line x1="115" y1="62" x2="115" y2="78" stroke="#000" stroke-width="4"/><!-- negative plate (short, thick) -->
+  <line x1="115" y1="70" x2="145" y2="70" stroke="#000" stroke-width="1.8"/>
+  <!-- Label 6V -->
+  <text x="101" y="100" text-anchor="middle" font-size="11" font-weight="bold">6 V</text>
+  <!-- Wire from battery to switch -->
+  <line x1="145" y1="70" x2="220" y2="70" stroke="#000" stroke-width="1.8"/>
+  <!-- Switch S: open switch at top right area (x=220 to x=290) -->
+  <circle cx="220" cy="70" r="3" fill="#000"/>
+  <line x1="220" y1="70" x2="262" y2="50" stroke="#000" stroke-width="1.8"/><!-- open lever -->
+  <circle cx="270" cy="70" r="3" fill="#000"/>
+  <text x="238" y="45" text-anchor="middle" font-size="11" font-weight="bold">S</text>
+  <line x1="270" y1="70" x2="330" y2="70" stroke="#000" stroke-width="1.8"/>
+  <!-- Right wire (330,70) to (330,200) -->
+  <line x1="330" y1="70" x2="330" y2="110" stroke="#000" stroke-width="1.8"/>
+  <!-- Ammeter A on right side at y=150 -->
+  <circle cx="330" cy="150" r="22" fill="white" stroke="#000" stroke-width="1.8"/>
+  <text x="330" y="155" text-anchor="middle" font-size="13" font-weight="bold">A</text>
+  <line x1="330" y1="110" x2="330" y2="128" stroke="#000" stroke-width="1.8"/>
+  <line x1="330" y1="172" x2="330" y2="200" stroke="#000" stroke-width="1.8"/>
+  <!-- Bottom wire (330,200) to (50,200) -->
+  <line x1="330" y1="200" x2="220" y2="200" stroke="#000" stroke-width="1.8"/>
+  <!-- Resistor R on bottom: rectangle from x=140 to x=200 at y=200 -->
+  <line x1="140" y1="200" x2="155" y2="200" stroke="#000" stroke-width="1.8"/>
+  <rect x="155" y="188" width="60" height="24" fill="white" stroke="#000" stroke-width="1.8"/>
+  <text x="185" y="203" text-anchor="middle" font-size="11" font-weight="bold">R</text>
+  <line x1="215" y1="200" x2="220" y2="200" stroke="#000" stroke-width="1.8"/>
+  <line x1="50" y1="200" x2="140" y2="200" stroke="#000" stroke-width="1.8"/>
+  <!-- Left wire (50,200) to (50,70) -->
+  <line x1="50" y1="70" x2="50" y2="135" stroke="#000" stroke-width="1.8"/>
+  <line x1="50" y1="165" x2="50" y2="200" stroke="#000" stroke-width="1.8"/>
+  <!-- Point P on left wire at y=150 -->
+  <circle cx="50" cy="150" r="4" fill="#000"/>
+  <text x="32" y="154" font-size="11" font-weight="bold">P</text>
+</svg>
+<div class="fig-label">Fig. 5.1</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(a) State the <strong>function</strong> of the cell in the circuit.</div>
+  <div class="answer-line-long">&nbsp;</div>
+  <div class="answer-line-long">&nbsp;</div>
+  <div style="text-align:right;font-size:10pt;">[1]</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(b) In Fig. 5.1, draw an arrow on the wire at point <strong>P</strong> to show the direction of <strong>conventional current</strong>. <span style="font-size:10pt;">[1]</span></div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(c) The switch <strong>S</strong> is closed and the ammeter reads <strong>0.5 A</strong>.</div>
+  <div class="q-part sub-indent">
+    <div class="q-part-label">(i) &nbsp; Calculate the <strong>resistance</strong> of R. Show all your workings.</div>
+    <div class="working-space large-working"></div>
+    <div class="calc-answer">Resistance = ……………………….. &#937; &nbsp;&nbsp;&nbsp; [2]</div>
+  </div>
+
+  <div class="q-part sub-indent">
+    <div class="q-part-label">(ii) &nbsp; The switch is closed for <strong>4 minutes</strong>. Calculate the total <strong>charge</strong> that flows through the circuit. Show all workings.</div>
+    <div class="working-space large-working"></div>
+    <div class="calc-answer">Charge = ……………………….. C &nbsp;&nbsp;&nbsp; [2]</div>
+  </div>
+
+  <div class="q-part sub-indent">
+    <div class="q-part-label">(iii) &nbsp; How much <strong>electrical energy</strong> is converted by the resistor R in 4 minutes? Show all workings.</div>
+    <div class="working-space large-working"></div>
+    <div class="calc-answer">Energy = ……………………….. J &nbsp;&nbsp;&nbsp; [2]</div>
+  </div>
+</div>
+
+<div class="page-num">7</div>
+<div class="please-turn">Please turn over</div>
+
+<!-- PAGE 8-9: QUESTION 6 -->
+<div class="page-break"></div>
+<div style="float:right;font-size:10pt;">Marks</div>
+<div style="clear:both;"></div>
+
+<div class="q-header">Question 6 &nbsp;(10 marks)</div>
+
+<p style="margin-bottom:10px;">Fig. 6.1 shows the speed-time graph of a bus during part of its journey.</p>
+
+<div class="svg-container">
+<svg width="400" height="290" viewBox="0 0 400 290" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial;font-size:10.5px;">
+  <!-- Grid lines -->
+  <line x1="118" y1="55" x2="118" y2="250" stroke="#ddd" stroke-width="1"/>
+  <line x1="176" y1="55" x2="176" y2="250" stroke="#ddd" stroke-width="1"/>
+  <line x1="234" y1="55" x2="234" y2="250" stroke="#ddd" stroke-width="1"/>
+  <line x1="292" y1="55" x2="292" y2="250" stroke="#ddd" stroke-width="1"/>
+  <!-- Horizontal grids at speed=4(204),8(158),12(112),16(66) -->
+  <line x1="60" y1="204" x2="350" y2="204" stroke="#ddd" stroke-width="1"/>
+  <line x1="60" y1="158" x2="350" y2="158" stroke="#ddd" stroke-width="1"/>
+  <line x1="60" y1="112" x2="350" y2="112" stroke="#ddd" stroke-width="1"/>
+  <line x1="60" y1="66" x2="350" y2="66" stroke="#ddd" stroke-width="1"/>
+  <!-- Axes -->
+  <line x1="60" y1="250" x2="360" y2="250" stroke="#000" stroke-width="2"/><!-- x-axis -->
+  <line x1="60" y1="250" x2="60" y2="45" stroke="#000" stroke-width="2"/><!-- y-axis -->
+  <!-- Axis arrows -->
+  <polygon points="360,250 350,245 350,255" fill="#000"/>
+  <polygon points="60,45 55,55 65,55" fill="#000"/>
+  <!-- Axis labels -->
+  <text x="370" y="254" font-size="11">Time (s)</text>
+  <text x="10" y="80" font-size="11" transform="rotate(-90,18,150)">Speed (m/s)</text>
+  <!-- x-axis tick labels: t=0,5,10,15,20,25 -->
+  <text x="60" y="265" text-anchor="middle" font-size="10">0</text>
+  <text x="118" y="265" text-anchor="middle" font-size="10">5</text>
+  <text x="176" y="265" text-anchor="middle" font-size="10">10</text>
+  <text x="234" y="265" text-anchor="middle" font-size="10">15</text>
+  <text x="292" y="265" text-anchor="middle" font-size="10">20</text>
+  <text x="350" y="265" text-anchor="middle" font-size="10">25</text>
+  <!-- Tick marks on x-axis -->
+  <line x1="118" y1="250" x2="118" y2="256" stroke="#000" stroke-width="1.5"/>
+  <line x1="176" y1="250" x2="176" y2="256" stroke="#000" stroke-width="1.5"/>
+  <line x1="234" y1="250" x2="234" y2="256" stroke="#000" stroke-width="1.5"/>
+  <line x1="292" y1="250" x2="292" y2="256" stroke="#000" stroke-width="1.5"/>
+  <line x1="350" y1="250" x2="350" y2="256" stroke="#000" stroke-width="1.5"/>
+  <!-- y-axis tick labels -->
+  <text x="52" y="208" text-anchor="end" font-size="10">4</text>
+  <text x="52" y="162" text-anchor="end" font-size="10">8</text>
+  <text x="52" y="116" text-anchor="end" font-size="10">12</text>
+  <text x="52" y="70" text-anchor="end" font-size="10">16</text>
+  <!-- Tick marks on y-axis -->
+  <line x1="54" y1="204" x2="60" y2="204" stroke="#000" stroke-width="1.5"/>
+  <line x1="54" y1="158" x2="60" y2="158" stroke="#000" stroke-width="1.5"/>
+  <line x1="54" y1="112" x2="60" y2="112" stroke="#000" stroke-width="1.5"/>
+  <line x1="54" y1="66" x2="60" y2="66" stroke="#000" stroke-width="1.5"/>
+  <!-- Speed-time graph path -->
+  <polyline points="60,250 153,66 292,66 350,250" fill="none" stroke="#1565c0" stroke-width="2.5"/>
+  <!-- Labels on graph -->
+  <text x="58" y="248" text-anchor="middle" font-size="10" font-weight="bold">A</text>
+  <text x="153" y="60" text-anchor="middle" font-size="10" font-weight="bold">B</text>
+  <text x="292" y="60" text-anchor="middle" font-size="10" font-weight="bold">C</text>
+  <text x="350" y="248" text-anchor="middle" font-size="10" font-weight="bold">D</text>
+</svg>
+<div class="fig-label">Fig. 6.1</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(a)</div>
+  <div class="q-part sub-indent">
+    <div class="q-part-label">(i) &nbsp; For how long does the bus move at <strong>constant speed</strong>?</div>
+    <div class="answer-line" style="min-height:36px;"></div>
+    <div style="text-align:right;font-size:10pt;">Time = ……………………….. s &nbsp;&nbsp;&nbsp; [1]</div>
+
+    <div class="q-part-label" style="margin-top:10px;">(ii) &nbsp; What is the <strong>maximum speed</strong> reached by the bus?</div>
+    <div class="answer-line" style="min-height:36px;"></div>
+    <div style="text-align:right;font-size:10pt;">Maximum speed = ……………………….. m/s &nbsp;&nbsp;&nbsp; [1]</div>
+  </div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(b) Fully describe the motion of the bus between</div>
+  <div class="q-part sub-indent">
+    <div class="q-part-label">(i) &nbsp; A and B.</div>
+    <div class="answer-line-long">&nbsp;</div>
+    <div class="answer-line-long">&nbsp;</div>
+    <div style="text-align:right;font-size:10pt;">[1]</div>
+
+    <div class="q-part-label">(ii) &nbsp; C and D.</div>
+    <div class="answer-line-long">&nbsp;</div>
+    <div class="answer-line-long">&nbsp;</div>
+    <div style="text-align:right;font-size:10pt;">[1]</div>
+  </div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(c) Calculate the <strong>acceleration</strong> of the bus between A and B. Show all your workings.</div>
+  <div class="working-space large-working"></div>
+  <div class="calc-answer">Acceleration = ……………………….. m/s&#178; &nbsp;&nbsp;&nbsp; [2]</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(d) Calculate the <strong>total distance</strong> travelled by the bus during the whole journey shown in Fig. 6.1. Show all your workings.</div>
+  <div class="working-space large-working"></div>
+  <div class="calc-answer">Total distance = ……………………….. m &nbsp;&nbsp;&nbsp; [2]</div>
+</div>
+
+<div class="q-part">
+  <div class="q-part-label">(e) The mass of the bus is <strong>5000 kg</strong>. Calculate the <strong>force</strong> needed to produce the acceleration between A and B. Show all your workings. [Take F = ma]</div>
+  <div class="working-space large-working"></div>
+  <div class="calc-answer">Force = ……………………….. N &nbsp;&nbsp;&nbsp; [2]</div>
+</div>
+
+<div class="page-num">8</div>
+
+<!-- MARK SCHEME -->
+<div class="page-break"></div>
+
+<div class="ms-section">
+  <div class="ms-title">Specimen Mark Scheme — Paper 1 of 2</div>
+
+  <h3 class="ms-header">Question 1 — Multiple Choice (10 marks, 1 each)</h3>
+  <div class="ms-row">(a) C — stopwatch</div>
+  <div class="ms-row">(b) C — newton (N)</div>
+  <div class="ms-row">(c) B — closed circuit with switch closed (all components connected with switch bridging the gap)</div>
+  <div class="ms-row">(d) B — 5 m/s &nbsp; <span class="formula">v = d/t = 150/30 = 5 m/s</span></div>
+  <div class="ms-row">(e) D — Velocity (has both magnitude and direction)</div>
+  <div class="ms-row">(f) A — 3 m/s² &nbsp; <span class="formula">a = (v−u)/t = (24−0)/8 = 3 m/s²</span></div>
+  <div class="ms-row">(g) C — Wind (renewable: replenished naturally)</div>
+  <div class="ms-row">(h) B — ½mv²</div>
+  <div class="ms-row">(i) C — ohm (Ω)</div>
+  <div class="ms-row">(j) D — 60 C &nbsp; <span class="formula">Q = It = 2 × 30 = 60 C</span></div>
+
+  <h3 class="ms-header">Question 2 — Reflection Matching (5 marks)</h3>
+  <div class="ms-row">(a) Incident ray → <strong>AO</strong> [1]</div>
+  <div class="ms-row">(b) Angle of incidence → <em>a</em> [1]</div>
+  <div class="ms-row">(c) Reflected ray → <strong>OB</strong> [1]</div>
+  <div class="ms-row">(d) Angle of reflection → <em>b</em> [1]</div>
+  <div class="ms-row">(e) The normal at point O → <strong>PQ</strong> [1]</div>
+
+  <h3 class="ms-header">Question 3 — Pendulum and Stopwatch (7 marks)</h3>
+  <div class="ms-row">(a) The time period is the time taken for the pendulum to complete <strong>one complete oscillation</strong> (swing to and fro). [1]</div>
+  <div class="ms-row">(b)(i) The stopwatch reads <strong>38 s</strong>. Award [3] marks: [1] for reading to the nearest 5 s (35–40), [1] for reading to the nearest second, [1] for correct value 38 s.</div>
+  <div class="ms-row">(b)(ii) Formula: <span class="formula">T = total time / number of swings = 38 / 20 = <strong>1.9 s</strong></span> [2: formula/substitution [1], answer with unit [1]]</div>
+  <div class="ms-row">(b)(iii) Accept any one of: Start and stop the stopwatch exactly when the pendulum passes through the lowest point / count oscillations carefully / repeat and average / reduce parallax error. [1]</div>
+
+  <h3 class="ms-header">Question 4 — Energy and Motion (10 marks)</h3>
+  <div class="ms-row">(a)(i) kinetic [1]</div>
+  <div class="ms-row">(a)(ii) chemical [1]</div>
+  <div class="ms-row">(a)(iii) gravitational potential [1]</div>
+  <div class="ms-row">(a)(iv) renewable [1]</div>
+  <div class="ms-row">(a)(v) electrical … kinetic [1]</div>
+  <div class="ms-row">(b)(i) Tick: <strong>Displacement</strong> and <strong>Velocity</strong> [2]</div>
+  <div class="ms-row">(b)(ii) <span class="formula">a = (v − u) / t = (16 − 4) / 6 = 12 / 6 = <strong>2 m/s²</strong></span></div>
+  <div class="ms-row" style="margin-left:30px;">Formula stated or implied [1], correct substitution [1], answer = 2 m/s² with unit [1]</div>
+
+  <h3 class="ms-header">Question 5 — Electricity (8 marks)</h3>
+  <div class="ms-row">(a) The cell/battery provides electrical energy / drives current around the circuit. [1]</div>
+  <div class="ms-row">(b) Arrow pointing <strong>downward</strong> on the left wire at P (conventional current flows from + terminal, clockwise in this circuit: down the left side). [1]</div>
+  <div class="ms-row">(c)(i) <span class="formula">V = IR → R = V/I = 6 / 0.5 = <strong>12 Ω</strong></span> [formula [1], answer with unit [1]]</div>
+  <div class="ms-row">(c)(ii) Convert 4 min to seconds: 4 × 60 = 240 s</div>
+  <div class="ms-row" style="margin-left:16px;"><span class="formula">Q = I × t = 0.5 × 240 = <strong>120 C</strong></span> [conversion [1], answer with unit [1]]</div>
+  <div class="ms-row">(c)(iii) <span class="formula">E = VIt = 6 × 0.5 × 240 = <strong>720 J</strong></span> (or E = QV = 120 × 6 = 720 J) [formula/substitution [1], answer with unit [1]]</div>
+
+  <h3 class="ms-header">Question 6 — Speed-Time Graph (10 marks)</h3>
+  <div class="ms-row">(a)(i) Bus at constant speed between B and C: 20 − 8 = <strong>12 s</strong> [1]</div>
+  <div class="ms-row">(a)(ii) Maximum speed = <strong>16 m/s</strong> [1]</div>
+  <div class="ms-row">(b)(i) Between A and B: The bus <strong>accelerates uniformly</strong> from rest (0 m/s) to 16 m/s. [1]</div>
+  <div class="ms-row">(b)(ii) Between C and D: The bus <strong>decelerates uniformly</strong> from 16 m/s to rest. [1]</div>
+  <div class="ms-row">(c) <span class="formula">a = (v − u) / t = (16 − 0) / 8 = <strong>2 m/s²</strong></span> [formula/substitution [1], answer with unit [1]]</div>
+  <div class="ms-row">(d) Total distance = area under graph:</div>
+  <div class="ms-row" style="margin-left:16px;"><span class="formula">= ½ × 8 × 16 + 12 × 16 + ½ × 5 × 16</span></div>
+  <div class="ms-row" style="margin-left:16px;"><span class="formula">= 64 + 192 + 40 = <strong>296 m</strong></span> [correct method [1], answer with unit [1]]</div>
+  <div class="ms-row">(e) <span class="formula">F = ma = 5000 × 2 = <strong>10 000 N</strong></span> [formula/substitution [1], answer with unit [1]]</div>
+
+  <div class="ms-note">* This specimen mark scheme is for practice purposes only. The real NCE 2026 paper and mark scheme are set exclusively by the Mauritius Examinations Syndicate (MES). This paper is produced by Nouklass.com.</div>
+</div>
+
+<div class="page-num" style="margin-top:20px;">End of Paper 1</div>
+
+</div><!-- end .page -->
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

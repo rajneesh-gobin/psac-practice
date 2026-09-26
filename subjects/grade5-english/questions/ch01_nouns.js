@@ -9,14 +9,16 @@ STATIC_QUESTIONS.push(
     options:['city','teacher','Port Louis','river'],
     answer:'Port Louis',
     hint:'A proper noun is the specific name of a person, place or thing - it begins with a capital letter.',
-    explanation:'<b>Port Louis</b> is a proper noun - it is the specific name of the capital city of Mauritius. Common nouns (city, teacher, river) name general things and do not need a capital letter.' }),
+    explanation:'<b>Port Louis</b> is a proper noun - it is the specific name of the capital city of Mauritius. Common nouns (city, teacher, river) name general things and do not need a capital letter.',
+    learnMore:'<b>Proper nouns</b> are the specific names of particular people, places, organisations or events. They always start with a capital letter: <i>Mauritius</i>, <i>Monday</i>, <i>English</i>, <i>Divali</i>. <b>Common nouns</b> name general categories (country, day, language, festival) and only need a capital at the start of a sentence.' }),
 
   makeMCQ({ id:'g5eng-noun-002', chapterId:'eng-nouns', subsection:'articles', difficulty:1,
     question:'Choose the correct article: "She ate ___ apple."',
     options:['a','an','the','no article needed'],
     answer:'an',
     hint:'Use "an" before a word that begins with a vowel sound (a, e, i, o, u).',
-    explanation:'We use <b>an</b> before words starting with a vowel sound. "Apple" starts with the vowel "a", so we write <b>an apple</b>. We use "a" before consonant sounds (a dog, a cat).' }),
+    explanation:'We use <b>an</b> before words starting with a vowel sound. "Apple" starts with the vowel "a", so we write <b>an apple</b>. We use "a" before consonant sounds (a dog, a cat).',
+    learnMore:'<b>Articles</b>: use <i>a</i> or <i>an</i> (indefinite) for non-specific things; use <i>the</i> (definite) for specific ones. The rule for a/an is about the SOUND not the letter: use <i>an</i> before vowel sounds (an hour — the h is silent), use <i>a</i> before consonant sounds (a uniform — sounds like "yoo"). Trick: say the word aloud to hear the first sound.' }),
 
   makeMCQ({ id:'g5eng-noun-003', chapterId:'eng-nouns', subsection:'pronouns', difficulty:1,
     question:'Which word is a PRONOUN in the sentence: "She gave him the book."',
@@ -48,7 +50,8 @@ STATIC_QUESTIONS.push(
     options:['me','I','her','him'],
     answer:'I',
     hint:'When the pronoun is the subject of the sentence (doing the action), use "I" not "me". Remove "my sister and" - would you say "Me went to the market"?',
-    explanation:'Use <b>I</b> when it is the subject (doing the action). Test: remove "my sister and" - "I went to the market" ✓ vs "Me went to the market" ✗. So: "My sister and <b>I</b> went to the market."' }),
+    explanation:'Use <b>I</b> when it is the subject (doing the action). Test: remove "my sister and" - "I went to the market" ✓ vs "Me went to the market" ✗. So: "My sister and <b>I</b> went to the market."',
+    learnMore:'<b>Subject pronouns</b> (I, you, he, she, it, we, they) do the action — they come before the verb. <b>Object pronouns</b> (me, you, him, her, it, us, them) receive the action — they come after the verb or a preposition. Quick test: cover the other person\'s name. "Me went" is wrong; "I went" is right. "She helped I" is wrong; "She helped me" is right.' }),
 
   makeMCQ({ id:'g5eng-noun-007', chapterId:'eng-nouns', subsection:'collective', difficulty:1,
     question:'Which of these is a COLLECTIVE noun?',

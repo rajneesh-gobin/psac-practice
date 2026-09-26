@@ -1,0 +1,634 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouklass.com – Grade 6 English – Specimen Paper 2 – 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.cover-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-logo-box .nk-big{font-size:18pt;line-height:1}
+.nk-logo-box .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.passage-box{background:#f8f9fb;border:1px solid #bbb;padding:14px 18px;margin:14px 0;font-size:11pt;line-height:1.9;border-radius:4px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;margin-top:2px;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;white-space:nowrap;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:120px;width:100%;margin:10px 0;padding:6px}
+.answer-box-xl{border:1px solid #aaa;border-radius:3px;min-height:200px;width:100%;margin:10px 0;padding:6px}
+.writing-lines{margin:10px 0;width:100%}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.cloze-blank{border-bottom:1.5px solid #000;display:inline-block;width:120px;height:20px;vertical-align:bottom;margin:0 4px}
+.sub-q{margin:12px 0 6px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:28px;color:#1a3c6e}
+.word-bank{background:#eef3fb;border:1px solid #b8cde8;padding:10px 14px;margin:10px 0;border-radius:4px;font-size:10.5pt}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt;margin-bottom:18px}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.ans-table tr:nth-child(even){background:#f9fbff}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 20px;margin:7px 0 12px}
+.mcq-option{padding:2px 0;font-size:11pt}
+.tf-table{border-collapse:collapse;width:100%;margin:10px 0 14px}
+.tf-table th,.tf-table td{border:1px solid #888;padding:7px 10px;font-size:10.5pt}
+.tf-table th{background:#eef3fb;color:#1a3c6e;font-weight:bold}
+.tf-check{width:26px;height:26px;border:1.5px solid #555;display:inline-block;vertical-align:middle}
+.comp-row{display:flex;align-items:flex-end;gap:8px;margin:9px 0;font-size:11pt}
+.comp-num{font-weight:bold;min-width:26px;color:#1a3c6e;flex-shrink:0}
+.comp-blank{flex:1;border-bottom:1.5px solid #000;min-height:20px}
+.error-text{font-size:11pt;line-height:2.8;margin:12px 0}
+.underlined{text-decoration:underline}
+.corr-box{display:inline-block;border:1px solid #888;min-width:110px;padding:2px 8px;height:22px;vertical-align:bottom}
+.pic-row{display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start;margin:14px 0}
+.pic-box{border:2px solid #888;min-height:110px;background:#f8f9fb;display:flex;align-items:center;justify-content:center;font-size:8.5pt;color:#888;text-align:center;padding:8px;border-radius:3px}
+.pic-words{font-style:italic;font-size:10pt;color:#1a3c6e;margin-bottom:8px}
+.seq-row{display:flex;align-items:center;gap:12px;margin:9px 0}
+.seq-box{width:36px;height:36px;border:1.5px solid #888;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
+.adj-box{display:flex;flex-wrap:wrap;gap:14px 28px;border:1px solid #b8cde8;padding:12px 16px;background:#f8f9fb;border-radius:4px;margin:10px 0;font-size:11pt}
+.marking-grid{width:100%;border-collapse:collapse;margin-top:16px;font-size:9pt}
+.marking-grid th,.marking-grid td{border:1px solid #aaa;padding:4px 8px;text-align:center}
+.marking-grid th{background:#eef3fb;color:#1a3c6e}
+.match-ans-row{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.match-ans-cell{display:flex;align-items:center;gap:6px;font-size:10.5pt}
+.match-ans-box{border:1px solid #888;width:36px;height:30px;display:inline-block}
+@media print{
+  .nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none}
+  body{padding-top:32px}
+  @page{size:A4 portrait;margin:12mm 14mm}
+}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &nbsp;|&nbsp; Grade 6 English &mdash; Specimen Paper 2 of 4</span>
+  <button class="print-btn" onclick="window.print()">&#128438; Print</button>
+</div>
+
+<div class="cover">
+  <div class="cover-header">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">nouklass.com</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">Specimen Paper 2 of 4 &mdash; 2026 &mdash; Practice Use Only</div>
+      <div class="specimen-label" style="margin-top:3px;">Not an official MES paper &mdash; for exam practice only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">English &mdash; Grade 6</div>
+  <div class="paper-meta">
+    <strong>Specimen Paper 2 of 4</strong><br>
+    Time allowed: <strong>1 hour 45 minutes</strong><br>
+    Total marks: <strong>100</strong>
+  </div>
+
+  <div style="margin:14px 0;font-size:11pt">
+    <div style="margin-bottom:10px">Index Number: &nbsp;<span class="index-line"></span></div>
+    <div style="margin-bottom:10px">Name: &nbsp;<span class="index-line" style="width:300px"></span></div>
+    <div>Class: &nbsp;<span class="index-line" style="width:150px"></span></div>
+  </div>
+
+  <div class="instructions">
+    <strong>INSTRUCTIONS TO CANDIDATES</strong>
+    <ol>
+      <li>This paper contains <strong>9 questions</strong>.</li>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <strong>all</strong> questions.</li>
+      <li>Write your answers clearly in the spaces provided.</li>
+      <li>You may not use red, green or black ink.</li>
+    </ol>
+  </div>
+
+  <table class="marking-grid">
+    <thead>
+      <tr><th>Q1</th><th>Q2</th><th>Q3A</th><th>Q3B</th><th>Q4A</th><th>Q4B</th><th>Q5</th><th>Q6A</th><th>Q6B</th><th>Q7A</th><th>Q7B</th><th>Q8A</th><th>Q8B</th><th>Q9</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/5</td><td>/10</td><td>/5</td><td>/5</td><td>/10</td><td>/15</td><td>/10</td><td>/5</td><td>/5</td><td>/5</td><td>/5</td><td>/6</td><td>/4</td><td>/10</td><td>/100</td></tr>
+      <tr style="height:28px"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- QUESTION 1 -->
+<div class="page page-break">
+  <div class="section-header">Question 1 &mdash; Sentence Matching <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="margin-bottom:12px;font-size:11pt;">Match each sentence on the left with the most suitable sentence on the right. An example is given. There is <strong>one extra sentence</strong> on the right that you will not use.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin:14px 0">
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt"><em>Example:</em> It was a very hot summer day. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(i)&nbsp; The old fort had not been used for many years. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(ii)&nbsp; The museum was very crowded that afternoon. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iii)&nbsp; The children visited a sugar cane factory. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iv)&nbsp; The fishermen set off before sunrise. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(v)&nbsp; The traditional dancers wore bright colourful costumes. &nbsp;&bull;</p>
+    </div>
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull; &nbsp;We all drank lots of cold water.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>A.</strong> &nbsp;Its walls were cracked and covered in vines.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>B.</strong> &nbsp;There was an important exhibition on.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>C.</strong> &nbsp;They learned how sugar is made from cane.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>D.</strong> &nbsp;They wanted to catch fish before the heat came.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>E.</strong> &nbsp;It was a cultural festival in the village.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>F.</strong> &nbsp;The storm at sea was very dangerous.</p>
+    </div>
+  </div>
+
+  <p style="font-size:10.5pt;margin-top:14px;margin-bottom:8px;">Write the correct letter in each box:</p>
+  <div class="match-ans-row">
+    <div class="match-ans-cell">(i) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(ii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iv) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(v) <div class="match-ans-box"></div></div>
+  </div>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="page">
+  <div class="section-header">Question 2 &mdash; Grammar <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Circle the letter which shows the correct answer.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:4px">Example: Yesterday, the class ........................... to the museum.</p>
+  <div class="mcq-grid" style="margin-bottom:12px;font-style:italic;color:#555">
+    <div class="mcq-option">A &nbsp;goes</div>
+    <div class="mcq-option"><span style="border:2px solid #000;padding:1px 7px;border-radius:50%;font-weight:bold">B</span> went</div>
+    <div class="mcq-option">C &nbsp;is going</div>
+    <div class="mcq-option">D &nbsp;will go</div>
+  </div>
+  <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px">
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">1. &nbsp;&nbsp;We like to play football ........................... recess.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;at</div><div class="mcq-option">B &nbsp;during</div><div class="mcq-option">C &nbsp;in</div><div class="mcq-option">D &nbsp;on</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;&nbsp;I saw ........................... uncle standing near the gate.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;me</div><div class="mcq-option">B &nbsp;my</div><div class="mcq-option">C &nbsp;myself</div><div class="mcq-option">D &nbsp;mine</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;&nbsp;The workers carried ........................... bags of sugar cane to the cart.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;a little</div><div class="mcq-option">B &nbsp;many</div><div class="mcq-option">C &nbsp;much</div><div class="mcq-option">D &nbsp;any</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;&nbsp;Today is ........................... day of the year so far.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;hot</div><div class="mcq-option">B &nbsp;hotter</div><div class="mcq-option">C &nbsp;as hot</div><div class="mcq-option">D &nbsp;the hottest</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;&nbsp;Next month, the Grade 6 pupils ........................... their end-of-year trip.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;had</div><div class="mcq-option">B &nbsp;have</div><div class="mcq-option">C &nbsp;were having</div><div class="mcq-option">D &nbsp;will have</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">6. &nbsp;&nbsp;The pupils leaned their bicycles ........................... the wall.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;under</div><div class="mcq-option">B &nbsp;against</div><div class="mcq-option">C &nbsp;between</div><div class="mcq-option">D &nbsp;into</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">7. &nbsp;&nbsp;The girls decorated the hall ........................... .</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;himself</div><div class="mcq-option">B &nbsp;yourselves</div><div class="mcq-option">C &nbsp;ourselves</div><div class="mcq-option">D &nbsp;themselves</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">8. &nbsp;&nbsp;Anita has already ........................... the old chest into the living room.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;bring</div><div class="mcq-option">B &nbsp;bringing</div><div class="mcq-option">C &nbsp;brought</div><div class="mcq-option">D &nbsp;brings</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">9. &nbsp;&nbsp;The boy to ........................... the teacher gave the prize was very proud.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;who</div><div class="mcq-option">B &nbsp;which</div><div class="mcq-option">C &nbsp;whose</div><div class="mcq-option">D &nbsp;whom</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">10. &nbsp;........................... you hurry up, we will miss the bus to the museum.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;But</div><div class="mcq-option">B &nbsp;Although</div><div class="mcq-option">C &nbsp;Unless</div><div class="mcq-option">D &nbsp;Despite</div></div></div>
+</div>
+
+<!-- QUESTION 3A -->
+<div class="page">
+  <div class="section-header">Question 3A &mdash; Word Definitions <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Read each description. Find the word it describes. The first letter is given as a clue.</p>
+  <p style="font-size:10.5pt;margin-bottom:6px;font-style:italic">Example: We use it to sweep the floor. &nbsp;&nbsp; B <u>r</u> <u>o</u> <u>o</u> <u>m</u></p>
+
+  <div class="comp-row"><div class="comp-num">(i)</div><div style="flex:1;font-size:11pt">We put our food on it when we eat our meals. &nbsp;&nbsp; <strong>P</strong> _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(ii)</div><div style="flex:1;font-size:11pt">People go there to keep or withdraw money. &nbsp;&nbsp; <strong>B</strong> _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iii)</div><div style="flex:1;font-size:11pt">We use it to lock and unlock doors. &nbsp;&nbsp; <strong>K</strong> _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iv)</div><div style="flex:1;font-size:11pt">A building where old objects and exhibits from history are kept and displayed. &nbsp;&nbsp; <strong>M</strong> _ _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(v)</div><div style="flex:1;font-size:11pt">People go there to catch a plane. &nbsp;&nbsp; <strong>A</strong> _ _ _ _ _ _</div></div>
+</div>
+
+<!-- QUESTION 3B -->
+<div class="page">
+  <div class="section-header">Question 3B &mdash; Vocabulary <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Circle the letter which shows the correct word to complete each sentence.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">1. &nbsp;&nbsp;The ........................... stitched the torn part of my school bag.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;plumber</div><div class="mcq-option">B &nbsp;baker</div><div class="mcq-option">C &nbsp;tailor</div><div class="mcq-option">D &nbsp;driver</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;&nbsp;The pupils visited the ........................... to see the big ships arriving from the sea.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;stadium</div><div class="mcq-option">B &nbsp;harbour</div><div class="mcq-option">C &nbsp;zoo</div><div class="mcq-option">D &nbsp;museum</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;&nbsp;Our grandparents always ........................... us a bedtime story on Fridays.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;say</div><div class="mcq-option">B &nbsp;speak</div><div class="mcq-option">C &nbsp;talk</div><div class="mcq-option">D &nbsp;tell</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;&nbsp;The chef wore a white ........................... to keep his clothes clean while cooking.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;skirt</div><div class="mcq-option">B &nbsp;raincoat</div><div class="mcq-option">C &nbsp;apron</div><div class="mcq-option">D &nbsp;towel</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;&nbsp;The passengers heard the loud ........................... of the ambulance coming from far away.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;music</div><div class="mcq-option">B &nbsp;siren</div><div class="mcq-option">C &nbsp;trumpet</div><div class="mcq-option">D &nbsp;whistle</div></div></div>
+</div>
+
+<!-- QUESTION 4A -->
+<div class="page page-break">
+  <div class="section-header">Question 4A &mdash; Reading Comprehension: Informational Text <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Read the text below, then complete the sentences that follow.</p>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">The Aapravasi Ghat</p>
+    <p>The Aapravasi Ghat is a small but very significant historical site located on the waterfront of Port Louis, the capital city of Mauritius. It was built by the British government in 1849 to receive workers who came from India. These workers were called &ldquo;indentured labourers&rdquo; &mdash; men and women who had signed contracts to work on the sugar cane plantations of Mauritius in exchange for a small wage and accommodation.</p>
+    <p style="margin-top:9px">Between 1834 and 1924, more than half a million Indian workers arrived through the Aapravasi Ghat. They came from different parts of India, including Bihar, Madras and Bengal. The sea journey to Mauritius was long and difficult, often lasting several weeks. Upon arrival, workers were examined by doctors and registered before being sent to plantations across the island.</p>
+    <p style="margin-top:9px">Life for the indentured labourers was very hard. They worked long hours in the sugar cane fields under the hot sun. They lived in simple barracks near the plantations. Many workers fell ill and missed their families deeply. However, over generations, they and their descendants became an important and valued part of Mauritian society, enriching the culture, food, music and traditions of the island.</p>
+    <p style="margin-top:9px">In 2006, the Aapravasi Ghat was inscribed as a UNESCO World Heritage Site, recognising its importance as a site of human migration and labour history. Today it is open to visitors and serves as a powerful reminder of the courage and sacrifice of the indentured labourers &mdash; a symbol of Mauritius&rsquo;s rich and diverse heritage.</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Based on the text, complete the following.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:10px">Example: This text is about: &nbsp;<u>the Aapravasi Ghat</u></p>
+
+  <div class="comp-row"><div class="comp-num">1.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Where the Aapravasi Ghat is located:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">2.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Year the Aapravasi Ghat was built:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">3.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What indentured labourers received in exchange for their work:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">4.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Period during which workers arrived through the Ghat:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">5.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Total number of workers who came through the Aapravasi Ghat:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">6.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One part of India from where workers came:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">7.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One hardship workers faced on arrival:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">8.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One way the labourers enriched Mauritian life:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">9.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Year the site became a UNESCO World Heritage Site:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">10.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What the Aapravasi Ghat is a symbol of today:</div><div class="comp-blank"></div></div>
+</div>
+
+<!-- QUESTION 4B -->
+<div class="page page-break">
+  <div class="section-header">Question 4B &mdash; Reading Comprehension: Narrative <span style="font-weight:normal;font-size:10pt;">(15 marks)</span></div>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">Anita and the Old Chest</p>
+    <p>Anita had always been a curious girl who loved history. One afternoon, while helping her grandmother clear out the attic, she discovered an old wooden chest hidden behind a dusty wardrobe. It was locked, but Grandmother produced a small brass key from her jewellery box.</p>
+    <p style="margin-top:9px">Inside the chest, they found faded photographs, a bundle of handwritten letters tied with string, and a folded piece of cloth that turned out to be an old Indian saree, intricately embroidered with gold thread.</p>
+    <p style="margin-top:9px">&ldquo;This belonged to your great-great-grandmother,&rdquo; said Grandmother softly, holding up the saree. &ldquo;She brought it from India over a hundred years ago when she came as an indentured labourer.&rdquo;</p>
+    <p style="margin-top:9px">Anita listened in silence as her grandmother told the full story. She learned that their ancestor had left her family behind and sailed across the ocean on a crowded ship, hoping for a better life. She had worked hard on the sugar cane fields for many years before eventually owning a small plot of land.</p>
+    <p style="margin-top:9px">&ldquo;She was a very brave woman,&rdquo; said Anita quietly.</p>
+    <p style="margin-top:9px">&ldquo;Yes,&rdquo; said Grandmother. &ldquo;And everything we have today is because of her courage.&rdquo;</p>
+    <p style="margin-top:9px">Anita carefully folded the saree and placed it back in the chest. She decided she would research her family&rsquo;s history and write it all down in a notebook, so that her own children would one day know where they came from and feel proud of their heritage.</p>
+    <p style="margin-top:9px">That evening, she began writing. The first line was: &ldquo;My great-great-grandmother was a hero.&rdquo;</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 8px">1. &nbsp;Indicate whether each statement is True or False. Tick (&radic;) the correct box. <span class="marks">[3]</span></p>
+  <table class="tf-table">
+    <thead><tr><th style="width:66%;text-align:left">Statement</th><th style="width:17%">True</th><th style="width:17%">False</th></tr></thead>
+    <tbody>
+      <tr><td>(i) &nbsp;Anita found the chest in the garden.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(ii) &nbsp;The chest was locked when they found it.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(iii) &nbsp;The saree had belonged to Anita&rsquo;s grandmother.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 6px">Circle the letter of the correct answer.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;What did Anita find inside the chest? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;Books and coins</div><div class="mcq-option">B &nbsp;Photos, letters and a saree</div><div class="mcq-option">C &nbsp;Toys and old clothes</div><div class="mcq-option">D &nbsp;Money and jewellery</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;The word &ldquo;intricately&rdquo; (paragraph 2) means the embroidery was done &hellip; <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;simply and quickly</div><div class="mcq-option">B &nbsp;cheaply and carelessly</div><div class="mcq-option">C &nbsp;with very fine and detailed work</div><div class="mcq-option">D &nbsp;very roughly</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;What did Anita decide to do at the end of the story? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;Sell the saree</div><div class="mcq-option">B &nbsp;Give the chest to a museum</div><div class="mcq-option">C &nbsp;Write down her family&rsquo;s history</div><div class="mcq-option">D &nbsp;Visit India</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;The best title for this story is &hellip; <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;A Grandmother&rsquo;s Secret</div><div class="mcq-option">B &nbsp;Anita Goes to the Attic</div><div class="mcq-option">C &nbsp;The Chest of Courage</div><div class="mcq-option">D &nbsp;An Ordinary Afternoon</div></div></div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Answer the following questions based on the text.</p>
+
+  <div class="question"><div class="qnum">6.</div><div class="qbody"><p style="font-size:11pt">Name THREE things that were found inside the chest. <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">7.</div><div class="qbody"><p style="font-size:11pt">What did Anita&rsquo;s ancestor do in Mauritius before she eventually owned her own land? <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">8.</div><div class="qbody"><p style="font-size:11pt">How do you know that Grandmother felt emotional while telling the story? Give ONE piece of evidence from the text. <span class="marks">[1]</span></p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">9.</div><div class="qbody"><p style="font-size:11pt">Circle <strong>TWO</strong> words from the list below that best describe Anita. <span class="marks">[2]</span></p>
+    <div class="adj-box"><span>greedy</span><span>lazy</span><span>curious</span><span>selfish</span><span>thoughtful</span><span>careless</span></div>
+  </div></div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 6px">10. &nbsp;Put these events in the correct order. Number them 1&ndash;5. The first one has been done for you. <span class="marks">[3]</span></p>
+  <div class="seq-row"><div class="seq-box">1</div><span style="font-size:11pt">Anita helped her grandmother clear the attic.</span></div>
+  <div class="seq-row"><div class="seq-box"></div><span style="font-size:11pt">Anita wrote the first line in her notebook.</span></div>
+  <div class="seq-row"><div class="seq-box"></div><span style="font-size:11pt">Grandmother unlocked the chest with a brass key.</span></div>
+  <div class="seq-row"><div class="seq-box"></div><span style="font-size:11pt">Grandmother told the story of the indentured labourer.</span></div>
+  <div class="seq-row"><div class="seq-box"></div><span style="font-size:11pt">Anita carefully folded the saree and placed it back.</span></div>
+</div>
+
+<!-- QUESTION 5 -->
+<div class="page page-break">
+  <div class="section-header">Question 5 &mdash; Sentence Writing <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+
+  <div class="question"><div class="qnum">(i)</div><div class="qbody"><p style="font-size:11pt"><strong>Separating the words:</strong> <span class="marks">[1]</span><br>Myfatherdrivesawhitecar.</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(ii)</div><div class="qbody"><p style="font-size:11pt"><strong>Removing the extra word:</strong> <span class="marks">[1]</span><br>My mother has always been a very the kind person.</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(iii)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the words in order:</strong> <span class="marks">[1]</span><br><em>old &ndash; we &ndash; visited &ndash; the &ndash; museum</em></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(iv)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the adverb &lsquo;softly&rsquo; in the right place:</strong> <span class="marks">[1]</span><br>Grandmother told the story of their ancestor.</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(v)</div><div class="qbody"><p style="font-size:11pt"><strong>Adding capital letters and full stops:</strong> <span class="marks">[2]</span><br>anita opened the old chest and found some photographs she was very curious</p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">(vi)</div><div class="qbody"><p style="font-size:11pt"><strong>Transforming into INTERROGATIVE form:</strong> <span class="marks">[2]</span><br>Anita has written about her family history in a notebook.</p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">(vii)</div><div class="qbody"><p style="font-size:11pt"><strong>Write ONE sentence using these words:</strong> <span class="marks">[2]</span><br><em>ancestor &ndash; courage &ndash; inspire</em></p><div class="answer-box"></div></div></div>
+</div>
+
+<!-- QUESTION 6A -->
+<div class="page">
+  <div class="section-header">Question 6A &mdash; Cloze Test: Word Bank <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by choosing the correct word from the word bank. The first one has been done for you. There is <strong>one extra word</strong> you will not use.</p>
+
+  <div class="word-bank"><strong>Word Bank:</strong> &nbsp;&nbsp; during &nbsp;&bull;&nbsp; golden &nbsp;&bull;&nbsp; heavy &nbsp;&bull;&nbsp; quickly &nbsp;&bull;&nbsp; tired &nbsp;&bull;&nbsp; proud &nbsp;&bull;&nbsp; decided</div>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    Each year, <strong><u>during</u></strong> the harvest season, workers cut the <span class="cloze-blank"></span> sugar cane in the fields. The bundles were very <span class="cloze-blank"></span> and hard to carry. The labourers filled their carts as <span class="cloze-blank"></span> as possible. By sunset, they were very <span class="cloze-blank"></span> but <span class="cloze-blank"></span> of their day&rsquo;s work.
+  </div>
+</div>
+
+<!-- QUESTION 6B -->
+<div class="page">
+  <div class="section-header">Question 6B &mdash; Cloze Test: Your Own Words <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by writing <strong>one suitable word</strong> in each blank space.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    In the evenings, the labourers would <span class="cloze-blank"></span> around a fire and share stories from their homeland. Some <span class="cloze-blank"></span> traditional songs to remind themselves of home. Gradually, they <span class="cloze-blank"></span> new customs and made <span class="cloze-blank"></span> with people from different villages. Over the years, they <span class="cloze-blank"></span> a new life for themselves in Mauritius.
+  </div>
+</div>
+
+<!-- QUESTION 7A -->
+<div class="page">
+  <div class="section-header">Question 7A &mdash; Error Correction <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Correct the <span class="underlined">underlined</span> mistakes. Write the correct word in the bracket. The first one has been done for you.</p>
+
+  <div class="error-text">
+    Last month, our class <span class="underlined">haved</span>&nbsp;(&nbsp;<strong>had</strong>&nbsp;) a trip to the Aapravasi Ghat in Port Louis. Our teacher <span class="underlined">teached</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) us about the history of indentured labour. The guide <span class="underlined">bringed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) us inside to see the exhibition. We <span class="underlined">look</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) at old photographs and letters. Before leaving, we <span class="underlined">buyed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) small history booklets from the gift shop.
+  </div>
+</div>
+
+<!-- QUESTION 7B -->
+<div class="page">
+  <div class="section-header">Question 7B &mdash; Word Forms <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Fill in each blank using the correct form of the word given in CAPITALS.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    The indentured labourers were very <span class="cloze-blank"></span> (COURAGE) people who left their homes for a better life. Their journey was a significant <span class="cloze-blank"></span> (MIGRATE) in world history. Life in the fields was <span class="cloze-blank"></span> (EXTREME) hard. Their <span class="cloze-blank"></span> (PERSIST) helped them survive. Today, Mauritians are very <span class="cloze-blank"></span> (PRIDE) of this heritage.
+  </div>
+</div>
+
+<!-- QUESTION 8A -->
+<div class="page page-break">
+  <div class="section-header">Question 8A &mdash; Picture Story <span style="font-weight:normal;font-size:10pt;">(6 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:4px;">Write <strong>one sentence</strong> for each picture to make a short story. Use the words given.</p>
+
+  <div class="pic-row">
+    <div class="pic-box">[Picture 1: Children arrive at a museum entrance; their teacher points to exhibits inside]</div>
+    <div>
+      <div class="pic-words">last year &ndash; museum</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 2: A guide in traditional dress shows the class a large photograph of labourers arriving by ship]</div>
+    <div>
+      <div class="pic-words">then &ndash; explained</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 3: Children each receive a certificate; they smile and look proud]</div>
+    <div>
+      <div class="pic-words">finally &ndash; proud</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION 8B -->
+<div class="page">
+  <div class="section-header">Question 8B &mdash; Sentence Linking <span style="font-weight:normal;font-size:10pt;">(4 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Use the word in brackets to link the two sentences. Make any necessary changes.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:12px">Example: Ray loves history. He reads every week. (<strong>and</strong>) &rarr; <u>Ray loves history and he reads every week.</u></p>
+
+  <div class="question"><div class="qnum">1.</div><div class="qbody"><p style="font-size:11pt">Raja loves history. He reads books about Mauritius every week. (<strong>because</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">2.</div><div class="qbody"><p style="font-size:11pt">Mrs Lam is our history teacher. She makes every lesson interesting. (<strong>who</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">3.</div><div class="qbody"><p style="font-size:11pt">The visitors arrived at the museum. The guide greeted them warmly. (<strong>when</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">4.</div><div class="qbody"><p style="font-size:11pt">The exhibition showed old photographs. We learned many new things about our history. (<strong>and</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+</div>
+
+<!-- QUESTION 9 -->
+<div class="page page-break">
+  <div class="section-header">Question 9 &mdash; Writing Task <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Your school organised a visit to a historical place in Mauritius.</p>
+  <p style="font-size:11pt;margin-bottom:8px;">Write a story of about <strong>120 words</strong> about this visit.</p>
+  <p style="font-size:11pt;font-weight:bold;margin-bottom:6px">The following may help you:</p>
+  <ul style="margin-left:22px;font-size:11pt;line-height:2.2">
+    <li>Where did you go and who was with you?</li>
+    <li>What did you see or learn?</li>
+    <li>How did you feel during the visit?</li>
+    <li>What did you do when you got home?</li>
+  </ul>
+  <div class="answer-box-xl" style="margin-top:16px"></div>
+  <div class="writing-lines" style="margin-top:4px">
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div>
+  </div>
+</div>
+
+<!-- MARK SCHEME -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Specimen Paper 2</div>
+  <div class="ms-disc">These suggested answers are a guide only. Accept any reasonable answer showing clear understanding. Apply professional judgement to open-ended responses.</div>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 1 &mdash; Sentence Matching (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>A &mdash; Its walls were cracked and covered in vines.</td></tr>
+      <tr><td>(ii)</td><td>B &mdash; There was an important exhibition on.</td></tr>
+      <tr><td>(iii)</td><td>C &mdash; They learned how sugar is made from cane.</td></tr>
+      <tr><td>(iv)</td><td>D &mdash; They wanted to catch fish before the heat came.</td></tr>
+      <tr><td>(v)</td><td>E &mdash; It was a cultural festival in the village.</td></tr>
+      <tr><td>Extra</td><td>F &mdash; The storm at sea was very dangerous.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 2 &mdash; Grammar MCQ (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B &mdash; during</td><td>6</td><td>B &mdash; against</td></tr>
+      <tr><td>2</td><td>B &mdash; my</td><td>7</td><td>D &mdash; themselves</td></tr>
+      <tr><td>3</td><td>B &mdash; many</td><td>8</td><td>C &mdash; brought</td></tr>
+      <tr><td>4</td><td>D &mdash; the hottest</td><td>9</td><td>D &mdash; whom</td></tr>
+      <tr><td>5</td><td>D &mdash; will have</td><td>10</td><td>C &mdash; Unless</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3A &mdash; Word Definitions (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>Plate</td></tr>
+      <tr><td>(ii)</td><td>Bank</td></tr>
+      <tr><td>(iii)</td><td>Key</td></tr>
+      <tr><td>(iv)</td><td>Museum</td></tr>
+      <tr><td>(v)</td><td>Airport</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3B &mdash; Vocabulary MCQ (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>C &mdash; tailor</td></tr>
+      <tr><td>2</td><td>B &mdash; harbour</td></tr>
+      <tr><td>3</td><td>D &mdash; tell</td></tr>
+      <tr><td>4</td><td>C &mdash; apron</td></tr>
+      <tr><td>5</td><td>B &mdash; siren</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4A &mdash; Informational Text (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>On the waterfront of Port Louis</td></tr>
+      <tr><td>2</td><td>1849</td></tr>
+      <tr><td>3</td><td>A small wage and accommodation</td></tr>
+      <tr><td>4</td><td>1834 to 1924</td></tr>
+      <tr><td>5</td><td>More than half a million</td></tr>
+      <tr><td>6</td><td>Bihar / Madras / Bengal (any one)</td></tr>
+      <tr><td>7</td><td>Long sea journey / being examined by doctors / working long hours in heat (any one)</td></tr>
+      <tr><td>8</td><td>Culture / food / music / traditions (any one)</td></tr>
+      <tr><td>9</td><td>2006</td></tr>
+      <tr><td>10</td><td>Mauritius&rsquo;s rich and diverse heritage</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4B &mdash; Narrative Comprehension (15 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1(i)</td><td>False (it was in the attic)</td><td>1</td></tr>
+      <tr><td>1(ii)</td><td>True</td><td>1</td></tr>
+      <tr><td>1(iii)</td><td>False (it belonged to her great-great-grandmother)</td><td>1</td></tr>
+      <tr><td>2</td><td>B &mdash; Photos, letters and a saree</td><td>1</td></tr>
+      <tr><td>3</td><td>C &mdash; with very fine and detailed work</td><td>1</td></tr>
+      <tr><td>4</td><td>C &mdash; Write down her family&rsquo;s history</td><td>1</td></tr>
+      <tr><td>5</td><td>C &mdash; The Chest of Courage</td><td>1</td></tr>
+      <tr><td>6</td><td>Faded photographs / handwritten letters / an old Indian saree (all three for 1 mark)</td><td>1</td></tr>
+      <tr><td>7</td><td>She worked hard on the sugar cane fields</td><td>1</td></tr>
+      <tr><td>8</td><td>She spoke &ldquo;softly&rdquo; / she said &ldquo;everything we have is because of her courage&rdquo; (1 evidence + 1 explanation)</td><td>1</td></tr>
+      <tr><td>9</td><td>curious, thoughtful (both for full marks; accept either for 1 mark)</td><td>2</td></tr>
+      <tr><td>10 (sequence)</td><td>1 &ndash; Helped grandmother (done) &rarr; 2 &ndash; Grandmother unlocked chest &rarr; 3 &ndash; Grandmother told the story &rarr; 4 &ndash; Anita folded the saree &rarr; 5 &ndash; Anita wrote first line</td><td>3</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 5 &mdash; Sentence Writing (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Acceptable Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>My father drives a white car.</td><td>1</td></tr>
+      <tr><td>(ii)</td><td>My mother has always been a very kind person. (remove &ldquo;the&rdquo;)</td><td>1</td></tr>
+      <tr><td>(iii)</td><td>We visited the old museum.</td><td>1</td></tr>
+      <tr><td>(iv)</td><td>Grandmother softly told the story of their ancestor.</td><td>1</td></tr>
+      <tr><td>(v)</td><td>Anita opened the old chest and found some photographs. She was very curious.</td><td>2</td></tr>
+      <tr><td>(vi)</td><td>Has Anita written about her family history in a notebook?</td><td>2</td></tr>
+      <tr><td>(vii)</td><td>Any correct sentence using all three words, e.g. &ldquo;Our brave ancestor inspires us with her courage.&rdquo;</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6A &mdash; Cloze: Word Bank (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1 (done)</td><td>during</td></tr>
+      <tr><td>2</td><td>golden</td></tr>
+      <tr><td>3</td><td>heavy</td></tr>
+      <tr><td>4</td><td>quickly</td></tr>
+      <tr><td>5</td><td>tired</td></tr>
+      <tr><td>6</td><td>proud</td></tr>
+      <tr><td>Extra (unused)</td><td>decided</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6B &mdash; Cloze: Own Words (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Acceptable Answers</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>gather / sit / meet</td></tr>
+      <tr><td>2</td><td>sang / played / hummed</td></tr>
+      <tr><td>3</td><td>learned / adopted / discovered</td></tr>
+      <tr><td>4</td><td>friends / connections / bonds</td></tr>
+      <tr><td>5</td><td>built / created / made</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7A &mdash; Error Correction (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Error</th><th>Correction</th></tr></thead>
+    <tbody>
+      <tr><td>haved (done)</td><td>had</td></tr>
+      <tr><td>teached</td><td>taught</td></tr>
+      <tr><td>bringed</td><td>brought</td></tr>
+      <tr><td>look</td><td>looked</td></tr>
+      <tr><td>buyed</td><td>bought</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7B &mdash; Word Forms (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Root Word</th><th>Correct Form</th></tr></thead>
+    <tbody>
+      <tr><td>COURAGE</td><td>courageous</td></tr>
+      <tr><td>MIGRATE</td><td>migration</td></tr>
+      <tr><td>EXTREME</td><td>extremely</td></tr>
+      <tr><td>PERSIST</td><td>persistence</td></tr>
+      <tr><td>PRIDE</td><td>proud</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8A &mdash; Picture Story (6 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Picture</th><th>Sample Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Last year, our class visited the historical museum in Port Louis.</td><td>2</td></tr>
+      <tr><td>2</td><td>Then, a guide in traditional dress explained the history of indentured labourers.</td><td>2</td></tr>
+      <tr><td>3</td><td>Finally, we each received a certificate and felt very proud.</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8B &mdash; Sentence Linking (4 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Acceptable Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Raja reads books about Mauritius every week because he loves history.</td></tr>
+      <tr><td>2</td><td>Mrs Lam, who is our history teacher, makes every lesson interesting.</td></tr>
+      <tr><td>3</td><td>When the visitors arrived at the museum, the guide greeted them warmly.</td></tr>
+      <tr><td>4</td><td>The exhibition showed old photographs and we learned many new things about our history.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 9 &mdash; Writing Task (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Criterion</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>Content: addresses prompt using the bullet points as a guide</td><td>up to 4</td></tr>
+      <tr><td>Language: varied vocabulary, correct grammar, accurate spelling</td><td>up to 4</td></tr>
+      <tr><td>Organisation: logical sequence, clear paragraphs</td><td>up to 2</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:10pt;color:#555;margin-top:8px"><em>Sample answer: Last Friday, our whole class went by bus to visit the Aapravasi Ghat in Port Louis. Our teacher, Mrs Boodhun, told us about the indentured labourers on the way. When we arrived, a kind guide showed us around the old stone building and explained how thousands of workers had passed through those very walls more than a hundred years ago. We saw old photographs and read letters written by real labourers. I felt very moved knowing that my own ancestors might have stood in that same place. When I got home, I told my grandmother everything. She smiled and said our family had indeed come from India long ago. I felt proud of where I come from.</em></p>
+
+  <div style="margin-top:20px;font-size:9pt;color:#666;text-align:center;border-top:2px solid #1a3c6e;padding-top:10px">
+    Nouklass.com Specimen Paper 2 &mdash; For practice use only. Not an official MES examination paper.<br>
+    Always verify with your teacher or official MES materials. &copy; Nouklass.com 2026
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

@@ -1,0 +1,622 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouklass.com – Grade 6 English – Specimen Paper 3 – 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.cover-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-logo-box .nk-big{font-size:18pt;line-height:1}
+.nk-logo-box .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.passage-box{background:#f8f9fb;border:1px solid #bbb;padding:14px 18px;margin:14px 0;font-size:11pt;line-height:1.9;border-radius:4px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;margin-top:2px;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;white-space:nowrap;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:120px;width:100%;margin:10px 0;padding:6px}
+.answer-box-xl{border:1px solid #aaa;border-radius:3px;min-height:200px;width:100%;margin:10px 0;padding:6px}
+.writing-lines{margin:10px 0;width:100%}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.cloze-blank{border-bottom:1.5px solid #000;display:inline-block;width:120px;height:20px;vertical-align:bottom;margin:0 4px}
+.word-bank{background:#eef3fb;border:1px solid #b8cde8;padding:10px 14px;margin:10px 0;border-radius:4px;font-size:10.5pt}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt;margin-bottom:18px}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.ans-table tr:nth-child(even){background:#f9fbff}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 20px;margin:7px 0 12px}
+.mcq-option{padding:2px 0;font-size:11pt}
+.tf-table{border-collapse:collapse;width:100%;margin:10px 0 14px}
+.tf-table th,.tf-table td{border:1px solid #888;padding:7px 10px;font-size:10.5pt}
+.tf-table th{background:#eef3fb;color:#1a3c6e;font-weight:bold}
+.tf-check{width:26px;height:26px;border:1.5px solid #555;display:inline-block;vertical-align:middle}
+.comp-row{display:flex;align-items:flex-end;gap:8px;margin:9px 0;font-size:11pt}
+.comp-num{font-weight:bold;min-width:26px;color:#1a3c6e;flex-shrink:0}
+.comp-blank{flex:1;border-bottom:1.5px solid #000;min-height:20px}
+.error-text{font-size:11pt;line-height:2.8;margin:12px 0}
+.underlined{text-decoration:underline}
+.corr-box{display:inline-block;border:1px solid #888;min-width:110px;padding:2px 8px;height:22px;vertical-align:bottom}
+.pic-row{display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start;margin:14px 0}
+.pic-box{border:2px solid #888;min-height:110px;background:#f8f9fb;display:flex;align-items:center;justify-content:center;font-size:8.5pt;color:#888;text-align:center;padding:8px;border-radius:3px}
+.pic-words{font-style:italic;font-size:10pt;color:#1a3c6e;margin-bottom:8px}
+.adj-box{display:flex;flex-wrap:wrap;gap:14px 28px;border:1px solid #b8cde8;padding:12px 16px;background:#f8f9fb;border-radius:4px;margin:10px 0;font-size:11pt}
+.marking-grid{width:100%;border-collapse:collapse;margin-top:16px;font-size:9pt}
+.marking-grid th,.marking-grid td{border:1px solid #aaa;padding:4px 8px;text-align:center}
+.marking-grid th{background:#eef3fb;color:#1a3c6e}
+.match-ans-row{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.match-ans-cell{display:flex;align-items:center;gap:6px;font-size:10.5pt}
+.match-ans-box{border:1px solid #888;width:36px;height:30px;display:inline-block}
+@media print{
+  .nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none}
+  body{padding-top:32px}
+  @page{size:A4 portrait;margin:12mm 14mm}
+}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &nbsp;|&nbsp; Grade 6 English &mdash; Specimen Paper 3 of 4</span>
+  <button class="print-btn" onclick="window.print()">&#128438; Print</button>
+</div>
+
+<div class="cover">
+  <div class="cover-header">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">nouklass.com</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">Specimen Paper 3 of 4 &mdash; 2026 &mdash; Practice Use Only</div>
+      <div class="specimen-label" style="margin-top:3px;">Not an official MES paper &mdash; for exam practice only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">English &mdash; Grade 6</div>
+  <div class="paper-meta">
+    <strong>Specimen Paper 3 of 4</strong><br>
+    Time allowed: <strong>1 hour 45 minutes</strong><br>
+    Total marks: <strong>100</strong>
+  </div>
+
+  <div style="margin:14px 0;font-size:11pt">
+    <div style="margin-bottom:10px">Index Number: &nbsp;<span class="index-line"></span></div>
+    <div style="margin-bottom:10px">Name: &nbsp;<span class="index-line" style="width:300px"></span></div>
+    <div>Class: &nbsp;<span class="index-line" style="width:150px"></span></div>
+  </div>
+
+  <div class="instructions">
+    <strong>INSTRUCTIONS TO CANDIDATES</strong>
+    <ol>
+      <li>This paper contains <strong>9 questions</strong>.</li>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <strong>all</strong> questions.</li>
+      <li>Write your answers clearly in the spaces provided.</li>
+      <li>You may not use red, green or black ink.</li>
+    </ol>
+  </div>
+
+  <table class="marking-grid">
+    <thead>
+      <tr><th>Q1</th><th>Q2</th><th>Q3A</th><th>Q3B</th><th>Q4A</th><th>Q4B</th><th>Q5</th><th>Q6A</th><th>Q6B</th><th>Q7A</th><th>Q7B</th><th>Q8A</th><th>Q8B</th><th>Q9</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/5</td><td>/10</td><td>/5</td><td>/5</td><td>/10</td><td>/15</td><td>/10</td><td>/5</td><td>/5</td><td>/5</td><td>/5</td><td>/6</td><td>/4</td><td>/10</td><td>/100</td></tr>
+      <tr style="height:28px"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- QUESTION 1 -->
+<div class="page page-break">
+  <div class="section-header">Question 1 &mdash; Sentence Matching <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="margin-bottom:12px;font-size:11pt;">Match each sentence on the left with the most suitable sentence on the right. An example is given. There is <strong>one extra sentence</strong> on the right that you will not use.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin:14px 0">
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt"><em>Example:</em> The battery is fully charged. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(i)&nbsp; The solar panel is facing the sun directly. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(ii)&nbsp; The robot ran out of power. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iii)&nbsp; The scientist wore protective goggles. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iv)&nbsp; The computer screen went blank suddenly. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(v)&nbsp; The pupil forgot to save her document. &nbsp;&bull;</p>
+    </div>
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull; &nbsp;We can use the device for much longer.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>A.</strong> &nbsp;It will produce more electricity.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>B.</strong> &nbsp;It stopped moving suddenly.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>C.</strong> &nbsp;She was doing a dangerous experiment.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>D.</strong> &nbsp;The power had been cut off.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>E.</strong> &nbsp;She lost everything she had typed.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>F.</strong> &nbsp;The phone rang during the lesson.</p>
+    </div>
+  </div>
+
+  <p style="font-size:10.5pt;margin-top:14px;margin-bottom:8px;">Write the correct letter in each box:</p>
+  <div class="match-ans-row">
+    <div class="match-ans-cell">(i) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(ii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iv) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(v) <div class="match-ans-box"></div></div>
+  </div>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="page">
+  <div class="section-header">Question 2 &mdash; Grammar <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Circle the letter which shows the correct answer.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:4px">Example: Priya ........................... her project last night.</p>
+  <div class="mcq-grid" style="margin-bottom:12px;font-style:italic;color:#555">
+    <div class="mcq-option">A &nbsp;finish</div>
+    <div class="mcq-option"><span style="border:2px solid #000;padding:1px 7px;border-radius:50%;font-weight:bold">B</span> finished</div>
+    <div class="mcq-option">C &nbsp;is finishing</div>
+    <div class="mcq-option">D &nbsp;finishes</div>
+  </div>
+  <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px">
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">1. &nbsp;&nbsp;Scientists work ........................... when they carry out experiments.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;careless</div><div class="mcq-option">B &nbsp;carefully</div><div class="mcq-option">C &nbsp;caring</div><div class="mcq-option">D &nbsp;care</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;&nbsp;The solar panel ........................... on the school roof since January.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;was</div><div class="mcq-option">B &nbsp;has been</div><div class="mcq-option">C &nbsp;is being</div><div class="mcq-option">D &nbsp;were</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;&nbsp;There is ........................... electricity left in the battery. We must charge it now.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;many</div><div class="mcq-option">B &nbsp;few</div><div class="mcq-option">C &nbsp;little</div><div class="mcq-option">D &nbsp;several</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;&nbsp;This is ........................... invention Priya has ever built.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;the good</div><div class="mcq-option">B &nbsp;better</div><div class="mcq-option">C &nbsp;the best</div><div class="mcq-option">D &nbsp;as good</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;&nbsp;The science fair will be held ........................... Friday morning.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;in</div><div class="mcq-option">B &nbsp;at</div><div class="mcq-option">C &nbsp;on</div><div class="mcq-option">D &nbsp;during</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">6. &nbsp;&nbsp;While Jai ........................... his sister, she explained how the circuit worked.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;helped</div><div class="mcq-option">B &nbsp;helps</div><div class="mcq-option">C &nbsp;was helping</div><div class="mcq-option">D &nbsp;will help</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">7. &nbsp;&nbsp;The engineers built the new machine ........................... .</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;himself</div><div class="mcq-option">B &nbsp;yourself</div><div class="mcq-option">C &nbsp;themselves</div><div class="mcq-option">D &nbsp;itself</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">8. &nbsp;&nbsp;Priya has already ........................... her solar fan to the judges.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;show</div><div class="mcq-option">B &nbsp;showing</div><div class="mcq-option">C &nbsp;shown</div><div class="mcq-option">D &nbsp;shows</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">9. &nbsp;&nbsp;The pupil ........................... project won first prize was Priya.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;who</div><div class="mcq-option">B &nbsp;whose</div><div class="mcq-option">C &nbsp;which</div><div class="mcq-option">D &nbsp;whom</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">10. &nbsp;Priya&rsquo;s fan worked ........................... she had connected the wires correctly.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;although</div><div class="mcq-option">B &nbsp;unless</div><div class="mcq-option">C &nbsp;because</div><div class="mcq-option">D &nbsp;despite</div></div></div>
+</div>
+
+<!-- QUESTION 3A -->
+<div class="page">
+  <div class="section-header">Question 3A &mdash; Word Definitions <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Read each description. Find the word it describes. The first letter is given as a clue.</p>
+  <p style="font-size:10.5pt;margin-bottom:6px;font-style:italic">Example: A machine that does sums very quickly. &nbsp;&nbsp; C <u>o</u> <u>m</u> <u>p</u> <u>u</u> <u>t</u> <u>e</u> <u>r</u></p>
+
+  <div class="comp-row"><div class="comp-num">(i)</div><div style="flex:1;font-size:11pt">The energy that comes from the sun and can be used to make electricity. &nbsp;&nbsp; <strong>S</strong> _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(ii)</div><div style="flex:1;font-size:11pt">A machine programmed to carry out tasks automatically. &nbsp;&nbsp; <strong>R</strong> _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iii)</div><div style="flex:1;font-size:11pt">A person who studies science and carries out experiments. &nbsp;&nbsp; <strong>S</strong> _ _ _ _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iv)</div><div style="flex:1;font-size:11pt">A device used to store and release electrical energy. &nbsp;&nbsp; <strong>B</strong> _ _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(v)</div><div style="flex:1;font-size:11pt">A new object or idea that someone creates for the first time. &nbsp;&nbsp; <strong>I</strong> _ _ _ _ _ _ _ _</div></div>
+</div>
+
+<!-- QUESTION 3B -->
+<div class="page">
+  <div class="section-header">Question 3B &mdash; Vocabulary <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Circle the letter which shows the correct word to complete each sentence.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">1. &nbsp;&nbsp;The science teacher asked the class to ........................... the results of their experiment.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;ignore</div><div class="mcq-option">B &nbsp;record</div><div class="mcq-option">C &nbsp;forget</div><div class="mcq-option">D &nbsp;lose</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;&nbsp;The engineers were ........................... when the new bridge held up perfectly in the storm.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;bored</div><div class="mcq-option">B &nbsp;frightened</div><div class="mcq-option">C &nbsp;relieved</div><div class="mcq-option">D &nbsp;careless</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;&nbsp;My brother likes to ........................... gadgets and electronic devices at home.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;destroy</div><div class="mcq-option">B &nbsp;ignore</div><div class="mcq-option">C &nbsp;build</div><div class="mcq-option">D &nbsp;forget</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;&nbsp;She spoke very ........................... and clearly so that all the judges could follow her explanation.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;quietly</div><div class="mcq-option">B &nbsp;sadly</div><div class="mcq-option">C &nbsp;angrily</div><div class="mcq-option">D &nbsp;confidently</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;&nbsp;The ........................... at the science centre showed the pupils how a telescope works.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;mechanic</div><div class="mcq-option">B &nbsp;demonstrator</div><div class="mcq-option">C &nbsp;plumber</div><div class="mcq-option">D &nbsp;tailor</div></div></div>
+</div>
+
+<!-- QUESTION 4A -->
+<div class="page page-break">
+  <div class="section-header">Question 4A &mdash; Reading Comprehension: Informational Text <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Read the text below, then complete the sentences that follow.</p>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">Solar Energy in Mauritius</p>
+    <p>Solar energy is energy produced from sunlight. It is one of the cleanest and most plentiful sources of power available on Earth. Solar panels, also known as photovoltaic cells, are flat devices that capture sunlight and convert it into electricity. They are made from a special material called silicon, which absorbs light and releases electrons to create an electric current.</p>
+    <p style="margin-top:9px">In Mauritius, the use of solar energy has grown rapidly in recent years. Many homes, schools and businesses have installed solar panels on their rooftops. The government has set a target to generate thirty-five percent of the country&rsquo;s electricity from renewable sources by 2025. Solar farms &mdash; large areas covered with rows of solar panels &mdash; have also been built in several parts of the island.</p>
+    <p style="margin-top:9px">Solar energy has many advantages. It is free and renewable, meaning it will never run out while the sun shines. It produces no harmful gases, unlike coal or oil. Once panels are installed, running costs are very low. In remote areas of Mauritius, solar panels provide electricity to communities that are not connected to the main power grid.</p>
+    <p style="margin-top:9px">However, there are some challenges. Solar panels can be expensive to buy and install. They only produce electricity during daylight hours, and cloudy weather reduces their efficiency. Scientists are working to develop better battery systems to store solar energy for use at night or during bad weather. Solar energy represents an important part of Mauritius&rsquo;s clean energy future.</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Based on the text, complete the following.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:10px">Example: This text is about: &nbsp;<u>solar energy in Mauritius</u></p>
+
+  <div class="comp-row"><div class="comp-num">1.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Another name for solar panels:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">2.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Material solar panels are made from:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">3.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Government target for renewable energy by 2025:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">4.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What solar farms are:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">5.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One advantage of solar energy (other than being free):</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">6.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">How solar energy helps remote communities:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">7.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One challenge of solar panels:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">8.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">When solar panels do not produce electricity:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">9.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What scientists are developing to store solar energy:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">10.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What solar energy represents for Mauritius&rsquo;s future:</div><div class="comp-blank"></div></div>
+</div>
+
+<!-- QUESTION 4B -->
+<div class="page page-break">
+  <div class="section-header">Question 4B &mdash; Reading Comprehension: Narrative <span style="font-weight:normal;font-size:10pt;">(15 marks)</span></div>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">Priya&rsquo;s Invention</p>
+    <p>Priya was a twelve-year-old girl who had always been fascinated by science. When her teacher announced the annual school science fair, Priya immediately had an idea: she would build a small solar-powered fan.</p>
+    <p style="margin-top:9px">She spent two weeks working on her project. She researched solar panels and bought a small kit from a local shop. Every evening after school, she sat at the kitchen table, carefully connecting wires and testing the circuit. Her younger brother Jai sat beside her, handing her tools and asking endless questions.</p>
+    <p style="margin-top:9px">&ldquo;Why does it need a battery?&rdquo; Jai asked one evening.</p>
+    <p style="margin-top:9px">&ldquo;Because when there is no sun, the battery stores the energy so the fan can still work,&rdquo; Priya explained patiently.</p>
+    <p style="margin-top:9px">On the day of the science fair, Priya set up her model on the table. When the judges approached, she placed the solar panel under the classroom light and switched on the fan. It whirred into life immediately. The judges smiled and made careful notes on their clipboards.</p>
+    <p style="margin-top:9px">&ldquo;Can you explain how it works?&rdquo; asked one judge.</p>
+    <p style="margin-top:9px">Priya spoke clearly and confidently. She explained how light hit the solar panel, created electricity and powered the motor in the fan. The judges were visibly impressed.</p>
+    <p style="margin-top:9px">At the award ceremony that afternoon, Priya was called to the stage to receive the first-prize trophy. The hall erupted in applause. Her parents hugged her tightly. Jai pulled her sleeve and whispered, &ldquo;I knew you would win.&rdquo; Priya laughed and hugged him back. It had been the best day of her life.</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 8px">1. &nbsp;Indicate whether each statement is True or False. Tick (&radic;) the correct box. <span class="marks">[3]</span></p>
+  <table class="tf-table">
+    <thead><tr><th style="width:66%;text-align:left">Statement</th><th style="width:17%">True</th><th style="width:17%">False</th></tr></thead>
+    <tbody>
+      <tr><td>(i) &nbsp;Priya decided to build a solar-powered lamp.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(ii) &nbsp;Jai helped Priya by handing her tools.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(iii) &nbsp;Priya received the second-prize trophy.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 6px">Circle the letter of the correct answer.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;What gave Priya the idea for her project? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;Her parents suggested it</div><div class="mcq-option">B &nbsp;Her teacher announced a science fair</div><div class="mcq-option">C &nbsp;She saw one in a shop</div><div class="mcq-option">D &nbsp;Jai asked about solar panels</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;In paragraph 5, &ldquo;whirred&rdquo; suggests the fan &hellip; <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;stopped working</div><div class="mcq-option">B &nbsp;made a humming sound as it spun</div><div class="mcq-option">C &nbsp;broke down</div><div class="mcq-option">D &nbsp;was too slow</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;Why did Priya include a battery in her solar fan? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;To make it look nicer</div><div class="mcq-option">B &nbsp;To power the light</div><div class="mcq-option">C &nbsp;To store energy for when there is no sun</div><div class="mcq-option">D &nbsp;To save money</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;Which word BEST describes Priya? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;disorganised</div><div class="mcq-option">B &nbsp;careless</div><div class="mcq-option">C &nbsp;determined</div><div class="mcq-option">D &nbsp;impatient</div></div></div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Answer the following questions based on the text.</p>
+
+  <div class="question"><div class="qnum">6.</div><div class="qbody"><p style="font-size:11pt">Why was Priya sitting at the kitchen table every evening after school? <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">7.</div><div class="qbody"><p style="font-size:11pt">How did Priya feel when explaining her project to the judges? Give evidence from the text. <span class="marks">[2]</span></p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">8.</div><div class="qbody"><p style="font-size:11pt">In your own words, explain why Priya put a battery in her solar fan. <span class="marks">[2]</span></p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">9.</div><div class="qbody"><p style="font-size:11pt">How do you know that Jai was proud of his sister? Give evidence from the text. <span class="marks">[2]</span></p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">10.</div><div class="qbody"><p style="font-size:11pt">How did the audience react when Priya received her prize? <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+</div>
+
+<!-- QUESTION 5 -->
+<div class="page page-break">
+  <div class="section-header">Question 5 &mdash; Sentence Writing <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+
+  <div class="question"><div class="qnum">(i)</div><div class="qbody"><p style="font-size:11pt"><strong>Removing the extra word:</strong> <span class="marks">[1]</span><br>The scientist has already made a great a discovery this year.</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(ii)</div><div class="qbody"><p style="font-size:11pt"><strong>Adding the required capital letter and full stop:</strong> <span class="marks">[1]</span><br>priya built a solar-powered fan for the school science fair</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(iii)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the adverb &lsquo;carefully&rsquo; in the right place:</strong> <span class="marks">[1]</span><br>She connected the wires to the battery.</p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(iv)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the words in order to make a sentence:</strong> <span class="marks">[1]</span><br><em>solar &ndash; panel &ndash; the &ndash; collected &ndash; energy &ndash; sun</em></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">(v)</div><div class="qbody"><p style="font-size:11pt"><strong>Transforming into its NEGATIVE form:</strong> <span class="marks">[2]</span><br>The judges were pleased with Priya&rsquo;s project.</p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">(vi)</div><div class="qbody"><p style="font-size:11pt"><strong>Transforming into its INTERROGATIVE form:</strong> <span class="marks">[2]</span><br>Jai helped Priya build the solar fan.</p><div class="answer-box"></div></div></div>
+  <div class="question"><div class="qnum">(vii)</div><div class="qbody"><p style="font-size:11pt"><strong>Write ONE sentence using these words:</strong> <span class="marks">[2]</span><br><em>sunlight &ndash; energy &ndash; produce</em></p><div class="answer-box"></div></div></div>
+</div>
+
+<!-- QUESTION 6A -->
+<div class="page">
+  <div class="section-header">Question 6A &mdash; Cloze Test: Word Bank <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by choosing the correct word from the word bank. The first one has been done for you. There is <strong>one extra word</strong> you will not use.</p>
+
+  <div class="word-bank"><strong>Word Bank:</strong> &nbsp;&nbsp; carefully &nbsp;&bull;&nbsp; amazing &nbsp;&bull;&nbsp; connected &nbsp;&bull;&nbsp; inside &nbsp;&bull;&nbsp; quickly &nbsp;&bull;&nbsp; never &nbsp;&bull;&nbsp; always</div>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    Scientists work <strong><u>carefully</u></strong> when building new machines. A robot is an <span class="cloze-blank"></span> device that can perform tasks on its own. Its different parts are <span class="cloze-blank"></span> by wires and circuits. When given a command, it <span class="cloze-blank"></span> carries it out. The power source is stored <span class="cloze-blank"></span> the robot&rsquo;s body. Engineers <span class="cloze-blank"></span> stop looking for ways to improve their designs.
+  </div>
+</div>
+
+<!-- QUESTION 6B -->
+<div class="page">
+  <div class="section-header">Question 6B &mdash; Cloze Test: Your Own Words <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by writing <strong>one suitable word</strong> in each blank space.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    Priya <span class="cloze-blank"></span> the solar fan on and watched the blades begin to <span class="cloze-blank"></span>. She was very <span class="cloze-blank"></span> that it was working perfectly. Her teacher <span class="cloze-blank"></span> over to look at it. &ldquo;This is wonderful work!&rdquo; she said. Priya <span class="cloze-blank"></span> and thanked her politely.
+  </div>
+</div>
+
+<!-- QUESTION 7A -->
+<div class="page">
+  <div class="section-header">Question 7A &mdash; Error Correction <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Correct the <span class="underlined">underlined</span> mistakes. Write the correct word in the bracket. The first one has been done for you.</p>
+
+  <div class="error-text">
+    Last Tuesday, our class <span class="underlined">maked</span>&nbsp;(&nbsp;<strong>made</strong>&nbsp;) a visit to the science museum in Port Louis. We <span class="underlined">seed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) many interesting machines and inventions. A guide <span class="underlined">telled</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) us about electricity and how it <span class="underlined">is</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) first discovered. Our teacher <span class="underlined">gived</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) us a worksheet to fill in while we explored the museum.
+  </div>
+</div>
+
+<!-- QUESTION 7B -->
+<div class="page">
+  <div class="section-header">Question 7B &mdash; Word Forms <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Fill in each blank using the correct form of the word given in CAPITALS.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    Solar energy is a <span class="cloze-blank"></span> (REMARK) source of clean power. Scientists have been <span class="cloze-blank"></span> (STUDY) it for many years. Their <span class="cloze-blank"></span> (DISCOVER) have helped make solar panels more efficient. Building a solar farm is an <span class="cloze-blank"></span> (EXPENSE) task, but the results are truly <span class="cloze-blank"></span> (WORTH).
+  </div>
+</div>
+
+<!-- QUESTION 8A -->
+<div class="page page-break">
+  <div class="section-header">Question 8A &mdash; Picture Story <span style="font-weight:normal;font-size:10pt;">(6 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:4px;">Write <strong>one sentence</strong> for each picture to make a short story. Use the words given.</p>
+
+  <div class="pic-row">
+    <div class="pic-box">[Picture 1: A child reads a book about robots and inventions at a desk, looking very interested]</div>
+    <div>
+      <div class="pic-words">one evening &ndash; book</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 2: The child sits at a table building a small robot from cardboard, wire and batteries]</div>
+    <div>
+      <div class="pic-words">the next day &ndash; started</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 3: The completed robot moves across the table; the child&rsquo;s parents watch and clap proudly]</div>
+    <div>
+      <div class="pic-words">at last &ndash; worked</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION 8B -->
+<div class="page">
+  <div class="section-header">Question 8B &mdash; Sentence Linking <span style="font-weight:normal;font-size:10pt;">(4 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Use the word in brackets to link the two sentences. Make any necessary changes.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:12px">Example: Zara loves science. She joins the robotics club. (<strong>so</strong>) &rarr; <u>Zara loves science, so she joins the robotics club.</u></p>
+
+  <div class="question"><div class="qnum">1.</div><div class="qbody"><p style="font-size:11pt">Priya won first prize. She worked very hard on her project. (<strong>because</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">2.</div><div class="qbody"><p style="font-size:11pt">Professor Rajan is a famous scientist. He visits our school every year. (<strong>who</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">3.</div><div class="qbody"><p style="font-size:11pt">The judge saw the solar fan working. She was very impressed. (<strong>when</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">4.</div><div class="qbody"><p style="font-size:11pt">Jai gave Priya the tools. He cheered her on the whole time. (<strong>and</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+</div>
+
+<!-- QUESTION 9 -->
+<div class="page page-break">
+  <div class="section-header">Question 9 &mdash; Writing Task <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Imagine you could invent any machine or gadget you wished.</p>
+  <p style="font-size:11pt;margin-bottom:8px;">Write a composition of about <strong>120 words</strong> to describe your invention.</p>
+  <p style="font-size:11pt;font-weight:bold;margin-bottom:6px">The following may help you:</p>
+  <ul style="margin-left:22px;font-size:11pt;line-height:2.2">
+    <li>What is your invention called?</li>
+    <li>What does it do?</li>
+    <li>How does it work?</li>
+    <li>Why would it be useful to people?</li>
+  </ul>
+  <div class="answer-box-xl" style="margin-top:16px"></div>
+  <div class="writing-lines" style="margin-top:4px">
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div>
+  </div>
+</div>
+
+<!-- MARK SCHEME -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Specimen Paper 3</div>
+  <div class="ms-disc">These suggested answers are a guide only. Accept any reasonable answer demonstrating clear understanding. For open writing tasks, apply holistic judgement.</div>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 1 &mdash; Sentence Matching (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>A &mdash; It will produce more electricity.</td></tr>
+      <tr><td>(ii)</td><td>B &mdash; It stopped moving suddenly.</td></tr>
+      <tr><td>(iii)</td><td>C &mdash; She was doing a dangerous experiment.</td></tr>
+      <tr><td>(iv)</td><td>D &mdash; The power had been cut off.</td></tr>
+      <tr><td>(v)</td><td>E &mdash; She lost everything she had typed.</td></tr>
+      <tr><td>Extra</td><td>F &mdash; The phone rang during the lesson.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 2 &mdash; Grammar MCQ (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B &mdash; carefully</td><td>6</td><td>C &mdash; was helping</td></tr>
+      <tr><td>2</td><td>B &mdash; has been</td><td>7</td><td>C &mdash; themselves</td></tr>
+      <tr><td>3</td><td>C &mdash; little</td><td>8</td><td>C &mdash; shown</td></tr>
+      <tr><td>4</td><td>C &mdash; the best</td><td>9</td><td>B &mdash; whose</td></tr>
+      <tr><td>5</td><td>C &mdash; on</td><td>10</td><td>C &mdash; because</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3A &mdash; Word Definitions (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>Solar (energy)</td></tr>
+      <tr><td>(ii)</td><td>Robot</td></tr>
+      <tr><td>(iii)</td><td>Scientist</td></tr>
+      <tr><td>(iv)</td><td>Battery</td></tr>
+      <tr><td>(v)</td><td>Invention</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3B &mdash; Vocabulary MCQ (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B &mdash; record</td></tr>
+      <tr><td>2</td><td>C &mdash; relieved</td></tr>
+      <tr><td>3</td><td>C &mdash; build</td></tr>
+      <tr><td>4</td><td>D &mdash; confidently</td></tr>
+      <tr><td>5</td><td>B &mdash; demonstrator</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4A &mdash; Informational Text (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Photovoltaic cells</td></tr>
+      <tr><td>2</td><td>Silicon</td></tr>
+      <tr><td>3</td><td>Thirty-five percent from renewable sources by 2025</td></tr>
+      <tr><td>4</td><td>Large areas covered with rows of solar panels</td></tr>
+      <tr><td>5</td><td>It produces no harmful gases / running costs are very low (either)</td></tr>
+      <tr><td>6</td><td>They provide electricity to communities not connected to the main grid</td></tr>
+      <tr><td>7</td><td>Expensive to buy and install / reduced efficiency on cloudy days (either)</td></tr>
+      <tr><td>8</td><td>At night / during cloudy weather / outside daylight hours</td></tr>
+      <tr><td>9</td><td>Better battery systems</td></tr>
+      <tr><td>10</td><td>An important part of Mauritius&rsquo;s clean energy future</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4B &mdash; Narrative Comprehension (15 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1(i)</td><td>False (it was a solar-powered fan)</td><td>1</td></tr>
+      <tr><td>1(ii)</td><td>True</td><td>1</td></tr>
+      <tr><td>1(iii)</td><td>False (she received the first-prize trophy)</td><td>1</td></tr>
+      <tr><td>2</td><td>B &mdash; Her teacher announced a science fair</td><td>1</td></tr>
+      <tr><td>3</td><td>B &mdash; made a humming sound as it spun</td><td>1</td></tr>
+      <tr><td>4</td><td>C &mdash; To store energy for when there is no sun</td><td>1</td></tr>
+      <tr><td>5</td><td>C &mdash; determined</td><td>1</td></tr>
+      <tr><td>6</td><td>She was working on her solar-powered fan project / connecting wires and testing the circuit</td><td>1</td></tr>
+      <tr><td>7</td><td>She felt confident &mdash; evidence: &ldquo;spoke clearly and confidently&rdquo; (1 feeling + 1 evidence)</td><td>2</td></tr>
+      <tr><td>8</td><td>The battery stores energy from the sun so the fan can continue working even when there is no sunlight (1 mark each for storing + continued function)</td><td>2</td></tr>
+      <tr><td>9</td><td>He whispered &ldquo;I knew you would win&rdquo; to her at the ceremony (1 mark evidence + 1 mark inference)</td><td>2</td></tr>
+      <tr><td>10</td><td>The hall erupted in applause</td><td>1</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 5 &mdash; Sentence Writing (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Acceptable Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>The scientist has already made a great discovery this year. (remove &ldquo;a&rdquo;)</td><td>1</td></tr>
+      <tr><td>(ii)</td><td>Priya built a solar-powered fan for the school science fair.</td><td>1</td></tr>
+      <tr><td>(iii)</td><td>She carefully connected the wires to the battery.</td><td>1</td></tr>
+      <tr><td>(iv)</td><td>The solar panel collected energy from the sun.</td><td>1</td></tr>
+      <tr><td>(v)</td><td>The judges were not pleased with Priya&rsquo;s project.</td><td>2</td></tr>
+      <tr><td>(vi)</td><td>Did Jai help Priya build the solar fan?</td><td>2</td></tr>
+      <tr><td>(vii)</td><td>Any correct sentence, e.g. &ldquo;Solar panels use sunlight to produce electricity.&rdquo;</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6A &mdash; Cloze: Word Bank (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1 (done)</td><td>carefully</td></tr>
+      <tr><td>2</td><td>amazing</td></tr>
+      <tr><td>3</td><td>connected</td></tr>
+      <tr><td>4</td><td>quickly</td></tr>
+      <tr><td>5</td><td>inside</td></tr>
+      <tr><td>6</td><td>never</td></tr>
+      <tr><td>Extra (unused)</td><td>always</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6B &mdash; Cloze: Own Words (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Acceptable Answers</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>switched / turned / put</td></tr>
+      <tr><td>2</td><td>spin / turn / rotate / move</td></tr>
+      <tr><td>3</td><td>pleased / happy / excited / thrilled</td></tr>
+      <tr><td>4</td><td>came / walked / moved</td></tr>
+      <tr><td>5</td><td>smiled / laughed / bowed / nodded</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7A &mdash; Error Correction (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Error</th><th>Correction</th></tr></thead>
+    <tbody>
+      <tr><td>maked (done)</td><td>made</td></tr>
+      <tr><td>seed</td><td>saw</td></tr>
+      <tr><td>telled</td><td>told</td></tr>
+      <tr><td>is</td><td>was</td></tr>
+      <tr><td>gived</td><td>gave</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7B &mdash; Word Forms (5 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Root Word</th><th>Correct Form</th></tr></thead>
+    <tbody>
+      <tr><td>REMARK</td><td>remarkable</td></tr>
+      <tr><td>STUDY</td><td>studying</td></tr>
+      <tr><td>DISCOVER</td><td>discoveries</td></tr>
+      <tr><td>EXPENSE</td><td>expensive</td></tr>
+      <tr><td>WORTH</td><td>worthwhile</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8A &mdash; Picture Story (6 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Picture</th><th>Sample Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>One evening, I read a fascinating book about robots and inventions.</td><td>2</td></tr>
+      <tr><td>2</td><td>The next day, I started building my own small robot from cardboard and wire.</td><td>2</td></tr>
+      <tr><td>3</td><td>At last, my robot worked and my parents clapped with pride.</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8B &mdash; Sentence Linking (4 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Acceptable Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Priya won first prize because she worked very hard on her project.</td></tr>
+      <tr><td>2</td><td>Professor Rajan, who is a famous scientist, visits our school every year.</td></tr>
+      <tr><td>3</td><td>When the judge saw the solar fan working, she was very impressed.</td></tr>
+      <tr><td>4</td><td>Jai gave Priya the tools and cheered her on the whole time.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 9 &mdash; Writing Task (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Criterion</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>Content: describes the invention clearly using the bullet-point guide</td><td>up to 4</td></tr>
+      <tr><td>Language: clear vocabulary, accurate grammar, correct spelling</td><td>up to 4</td></tr>
+      <tr><td>Organisation: logical sequence, clear structure</td><td>up to 2</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:10pt;color:#555;margin-top:8px"><em>Sample answer: My invention is called the HydroBot. It is a small waterproof robot that can clean the bottoms of rivers and lagoons. It works by swimming along the riverbed with tiny arms that pick up litter, plastic bags and waste. The rubbish is stored in a container inside the robot. When the container is full, the robot rises to the surface and a light flashes to let the operator know. The HydroBot runs on solar energy, so it does not need batteries or petrol. I think it would be extremely useful in Mauritius because our lagoons are so important for tourism and marine life. With this robot, we could keep our waters clean without putting any person in danger.</em></p>
+
+  <div style="margin-top:20px;font-size:9pt;color:#666;text-align:center;border-top:2px solid #1a3c6e;padding-top:10px">
+    Nouklass.com Specimen Paper 3 &mdash; For practice use only. Not an official MES examination paper.<br>
+    Always verify with your teacher or official MES materials. &copy; Nouklass.com 2026
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

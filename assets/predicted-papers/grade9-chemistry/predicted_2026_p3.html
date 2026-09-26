@@ -1,0 +1,648 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCE Chemistry — Predicted Paper 3 · Nouklass.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-big{font-size:18pt;line-height:1}.nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;background:#f8f8f8}.marks::before{content:"["}.marks::after{content:"]"}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:80px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:45px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:130px;width:100%;margin:10px 0;padding:6px}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.tick-opt{display:flex;align-items:center;gap:10px;margin:7px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0}
+.sub-q{margin:12px 0 6px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:28px;color:#1a3c6e}
+.chem-eq{font-family:monospace;font-size:12pt;background:#f8f9fb;border:1px solid #ddd;padding:8px 14px;margin:10px 0;border-radius:3px;display:inline-block}
+.diagram-box{border:1.5px solid #888;min-height:140px;margin:12px 0;background:#fafeff;border-radius:4px;padding:8px;display:flex;align-items:center;justify-content:center}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.data-table{border-collapse:collapse;font-size:10.5pt;margin:10px 0}
+.data-table th,.data-table td{border:1px solid #aaa;padding:5px 10px;text-align:center}
+.data-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+@media print{.nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-btn{display:none}body{padding-top:32px}@page{size:A4 portrait;margin:12mm 14mm}}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &mdash; NCE Grade 9 Chemistry &nbsp;|&nbsp; Predicted Paper 3 &nbsp;&middot;&nbsp; 2026</span>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- ══ COVER PAGE ══ -->
+<div class="cover">
+  <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:24px">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">NOUKLASS</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">NCE Grade 9 &mdash; Predicted Specimen Paper &mdash; For Practice Only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">Chemistry</div>
+  <div style="font-size:13pt;color:#333;margin:6px 0 20px">Paper 3 &mdash; Electrochemistry &nbsp;&middot;&nbsp; Rates of Reaction &nbsp;&middot;&nbsp; Energy Changes</div>
+
+  <div class="paper-meta">
+    <b>Time allowed:</b> 45 minutes<br>
+    <b>Total marks:</b> 50<br>
+    <b>Index Number:</b> &nbsp;<span class="index-line"></span>
+  </div>
+
+  <div class="instructions">
+    <b style="font-size:11pt">Instructions to Candidates</b>
+    <ol>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <b>all</b> questions in <b>all three sections</b>.</li>
+      <li>Section A: Choose <b>one</b> answer for each question. Tick the box next to your chosen answer.</li>
+      <li>Section B &amp; C: Write your answers in the spaces provided.</li>
+      <li>Use a blue or black pen. Diagrams may be drawn in pencil.</li>
+      <li>All working must be shown for calculations.</li>
+      <li>The number of marks is given in brackets <b>[ ]</b> at the end of each question.</li>
+    </ol>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:10.5pt;margin-top:18px">
+    <thead>
+      <tr>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Section</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Available</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Awarded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">A</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">B</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">20</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">C</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">Total</td><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">50</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9pt;color:#555;margin-top:28px;text-align:center">
+    &copy; Nouklass.com 2026 &mdash; This paper is for revision purposes only. It is not an official MES publication.
+  </p>
+</div>
+
+<!-- ══ SECTION A ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION A &mdash; Multiple Choice &nbsp;[15 marks]&nbsp; Answer all 15 questions. Tick ONE box per question.</div>
+
+  <div class="question">
+    <div class="qnum">1</div>
+    <div class="qbody"><span class="marks">1</span>
+      Electrolysis is the decomposition of an ionic compound (in molten or aqueous form) by
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; heat energy</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; electrical energy (passing an electric current)</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; light energy</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; chemical energy from a reaction</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2</div>
+    <div class="qbody"><span class="marks">1</span>
+      During electrolysis, reduction occurs at the
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; anode (positive electrode)</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; cathode (negative electrode)</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; electrolyte solution only</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; both electrodes simultaneously</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3</div>
+    <div class="qbody"><span class="marks">1</span>
+      During the electrolysis of molten lead(II) bromide (PbBr<sub>2</sub>), what is produced at the cathode?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Lead (Pb) metal</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Bromine (Br<sub>2</sub>) gas</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Hydrogen gas</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Oxygen gas</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4</div>
+    <div class="qbody"><span class="marks">1</span>
+      A catalyst increases the rate of a chemical reaction by
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; increasing the temperature of the reaction</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; increasing the concentration of reactants</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; lowering the activation energy of the reaction</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; providing extra energy to the reactant particles</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5</div>
+    <div class="qbody"><span class="marks">1</span>
+      Which of the following factors does <b>NOT</b> affect the rate of a chemical reaction?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Temperature</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Concentration of reactants</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Surface area of a solid reactant</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Colour of the reactants</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6</div>
+    <div class="qbody"><span class="marks">1</span>
+      As the temperature of a reaction mixture increases, the rate of reaction
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; increases because particles have more energy and collide more frequently and with greater energy</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; decreases because particles slow down</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; remains unchanged</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; first increases then decreases</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7</div>
+    <div class="qbody"><span class="marks">1</span>
+      Powdered marble (CaCO<sub>3</sub>) reacts faster with dilute acid than lumps of marble of the same mass because
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; powder has greater mass</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; powder has greater surface area exposed to the acid, so more frequent collisions occur</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; powder contains more calcium carbonate</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; powder has a lower activation energy</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8</div>
+    <div class="qbody"><span class="marks">1</span>
+      An exothermic reaction is one that
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; releases energy (heat) to the surroundings</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; absorbs energy from the surroundings</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; has no overall energy change</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; only occurs at high temperatures</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9</div>
+    <div class="qbody"><span class="marks">1</span>
+      On an energy profile diagram, the activation energy is represented by
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; the energy of the products</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; the difference in energy between the reactants and the peak (transition state)</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; the difference in energy between the reactants and the products</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; the energy released when products form</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10</div>
+    <div class="qbody"><span class="marks">1</span>
+      During the electrolysis of aqueous copper(II) sulfate solution using copper electrodes, which of the following describes what happens at the <b>anode</b>?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Copper is deposited on the anode</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Hydrogen gas is produced at the anode</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Copper from the anode dissolves into the solution</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Oxygen gas is produced at the anode</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">11</div>
+    <div class="qbody"><span class="marks">1</span>
+      Which of the following reactions is endothermic?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Combustion of natural gas</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Thermal decomposition of calcium carbonate</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Neutralisation of an acid with a base</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Rusting of iron</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12</div>
+    <div class="qbody"><span class="marks">1</span>
+      The energy released when one mole of a substance burns completely in oxygen is called the
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; heat of neutralisation</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; heat of formation</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; activation energy</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; heat of combustion</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13</div>
+    <div class="qbody"><span class="marks">1</span>
+      The overall enthalpy change (&Delta;H) for an exothermic reaction is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; positive</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; zero</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; negative</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; equal to the activation energy</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14</div>
+    <div class="qbody"><span class="marks">1</span>
+      Electrolysis is used industrially to purify copper. This is because electrolysis with copper electrodes
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; converts copper into copper oxide at the cathode</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; causes pure copper to be deposited at the cathode while impure copper dissolves at the anode</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; removes impurities by burning them off at high current</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; causes copper to be deposited at the anode</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15</div>
+    <div class="qbody"><span class="marks">1</span>
+      When the concentration of a reactant in solution is increased (at constant temperature), the rate of reaction increases because
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; the activation energy is lowered</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; there are more reactant particles per unit volume, so collisions are more frequent</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; particles move faster</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; a catalyst is produced in the reaction</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION B ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION B &mdash; Short Structured Questions &nbsp;[20 marks]&nbsp; Answer all questions.</div>
+
+  <!-- B1 -->
+  <div class="question">
+    <div class="qnum">B1</div>
+    <div class="qbody">
+      <b>Electrolysis of molten lead(II) bromide</b>
+      <p style="margin:8px 0">The diagram below shows the apparatus used for the electrolysis of molten lead(II) bromide (PbBr<sub>2</sub>).</p>
+
+      <div style="text-align:center;margin:14px 0">
+        <svg width="300" height="230" viewBox="0 0 300 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Electrolysis apparatus with beaker, cathode and anode electrodes, battery, and molten lead bromide electrolyte">
+          <!-- Beaker outline -->
+          <rect x="55" y="70" width="190" height="130" rx="5" fill="#e8f4fd" stroke="#1a3c6e" stroke-width="2"/>
+          <!-- Molten electrolyte fill -->
+          <rect x="57" y="120" width="186" height="78" rx="3" fill="#b8d4f0" opacity="0.6"/>
+          <!-- Cathode rod (left, negative) -->
+          <rect x="90" y="55" width="10" height="145" fill="#444" rx="2"/>
+          <!-- Anode rod (right, positive) -->
+          <rect x="200" y="55" width="10" height="145" fill="#666" rx="2"/>
+          <!-- Lead deposit at cathode (bottom) -->
+          <rect x="86" y="190" width="18" height="8" fill="#888" rx="1"/>
+          <!-- Bromine bubbles at anode -->
+          <circle cx="210" cy="130" r="5" fill="none" stroke="#555" stroke-width="1.2"/>
+          <circle cx="206" cy="115" r="4" fill="none" stroke="#555" stroke-width="1.2"/>
+          <circle cx="213" cy="101" r="3.5" fill="none" stroke="#555" stroke-width="1.2"/>
+          <!-- Connecting wires to battery -->
+          <line x1="95" y1="55" x2="95" y2="22" stroke="#333" stroke-width="2"/>
+          <line x1="205" y1="55" x2="205" y2="22" stroke="#333" stroke-width="2"/>
+          <line x1="95" y1="22" x2="145" y2="22" stroke="#333" stroke-width="2"/>
+          <line x1="205" y1="22" x2="155" y2="22" stroke="#333" stroke-width="2"/>
+          <!-- Battery symbol -->
+          <rect x="143" y="12" width="14" height="20" fill="#fff" stroke="#333" stroke-width="1.5"/>
+          <text x="150" y="26" text-anchor="middle" font-size="9" font-weight="bold" fill="#1a3c6e">DC</text>
+          <!-- Electrode labels -->
+          <text x="95" y="50" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a3c6e">&minus;</text>
+          <text x="205" y="50" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a3c6e">+</text>
+          <text x="80" y="222" text-anchor="middle" font-size="9.5" fill="#1a3c6e" font-weight="bold">Cathode</text>
+          <text x="218" y="222" text-anchor="middle" font-size="9.5" fill="#1a3c6e" font-weight="bold">Anode</text>
+          <!-- Electrolyte label -->
+          <text x="150" y="158" text-anchor="middle" font-size="10" fill="#1a3c6e" font-style="italic">Molten PbBr&#8322;</text>
+          <!-- Heat symbol -->
+          <text x="150" y="215" text-anchor="middle" font-size="11" fill="#555">&#9650; heat</text>
+        </svg>
+        <p style="font-size:9.5pt;font-style:italic;color:#555;margin-top:4px">Fig. 1 — Electrolysis of molten lead(II) bromide</p>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Why must lead(II) bromide be <b>molten</b> (not solid) for electrolysis to work?<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Name the product formed at the cathode and at the anode. State whether each change is oxidation or reduction.<span class="marks">2</span>
+          <div style="margin:6px 0;font-weight:bold">Cathode product:</div><div class="answer-box-sm"></div>
+          <div style="margin:6px 0;font-weight:bold">Anode product:</div><div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Write the ionic half-equation for the reaction at the cathode.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2 -->
+  <div class="question">
+    <div class="qnum">B2</div>
+    <div class="qbody">
+      <b>Rates of Reaction</b>
+      <p style="margin:8px 0">A student investigates the effect of concentration on the rate of reaction between sodium thiosulfate (Na<sub>2</sub>S<sub>2</sub>O<sub>3</sub>) and hydrochloric acid. The mixture goes cloudy as sulfur is produced. She measures the time taken for a cross drawn under the flask to become invisible.</p>
+      <table class="data-table" style="margin-bottom:10px">
+        <thead><tr><th>Experiment</th><th>Conc. of Na<sub>2</sub>S<sub>2</sub>O<sub>3</sub> (mol/dm<sup>3</sup>)</th><th>Time / s</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>0.10</td><td>120</td></tr>
+          <tr><td>2</td><td>0.20</td><td>60</td></tr>
+          <tr><td>3</td><td>0.40</td><td>30</td></tr>
+          <tr><td>4</td><td>0.80</td><td>15</td></tr>
+        </tbody>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Describe the relationship between concentration and rate of reaction shown by this data.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Explain, using collision theory, why increasing concentration increases the rate of reaction.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">State <b>one</b> variable that must be kept constant in this experiment to make it a fair test.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">The word equation for this reaction is:<br>
+          sodium thiosulfate + hydrochloric acid &rarr; sodium chloride + sulfur dioxide + sulfur + water<br>
+          Name the gas produced and state how you could test for it.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B3 -->
+  <div class="question">
+    <div class="qnum">B3</div>
+    <div class="qbody">
+      <b>Energy Changes in Reactions</b>
+      <p style="margin:8px 0">Fig. 2 shows the energy profile diagram for a chemical reaction.</p>
+      <div style="text-align:center;margin:12px 0">
+        <svg width="300" height="190" viewBox="0 0 300 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Energy profile diagram showing reactants at higher energy, peak transition state, products at lower energy for an exothermic reaction, with activation energy and delta H labelled">
+          <!-- Axes -->
+          <line x1="35" y1="10" x2="35" y2="165" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="35" y1="165" x2="290" y2="165" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+          <defs>
+            <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#333"/>
+            </marker>
+          </defs>
+          <!-- Y-axis label -->
+          <text x="12" y="90" text-anchor="middle" font-size="9.5" fill="#333" transform="rotate(-90,12,90)">Energy</text>
+          <!-- X-axis label -->
+          <text x="162" y="182" text-anchor="middle" font-size="9.5" fill="#333">Progress of reaction &#8594;</text>
+          <!-- Reaction curve: reactants (y=115), peak (y=40), products (y=140) -->
+          <path d="M 50 115 C 75 115 90 40 120 40 C 150 40 165 140 210 140 L 270 140" fill="none" stroke="#1a3c6e" stroke-width="2.5"/>
+          <!-- Reactants level dashed line -->
+          <line x1="35" y1="115" x2="55" y2="115" stroke="#1a3c6e" stroke-dasharray="3,2" stroke-width="1"/>
+          <!-- Products level dashed line -->
+          <line x1="205" y1="140" x2="275" y2="140" stroke="#1a3c6e" stroke-dasharray="3,2" stroke-width="1"/>
+          <!-- Activation energy arrow -->
+          <line x1="140" y1="115" x2="140" y2="43" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="145" y="80" font-size="9" fill="#c0392b" font-weight="bold">Ea</text>
+          <!-- Delta H arrow (exothermic: negative, products lower) -->
+          <line x1="235" y1="115" x2="235" y2="140" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="240" y="130" font-size="9" fill="#27ae60" font-weight="bold">&Delta;H</text>
+          <!-- Labels -->
+          <text x="52" y="111" font-size="9" fill="#1a3c6e">Reactants</text>
+          <text x="215" y="157" font-size="9" fill="#1a3c6e">Products</text>
+          <text x="108" y="34" font-size="9" fill="#555" font-style="italic">Transition</text>
+          <text x="108" y="44" font-size="9" fill="#555" font-style="italic">state</text>
+        </svg>
+        <p style="font-size:9.5pt;font-style:italic;color:#555;margin-top:2px">Fig. 2 — Energy profile diagram</p>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State whether the reaction shown in Fig. 2 is exothermic or endothermic. Give a reason using Fig. 2.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">On the diagram above, mark with a letter <b>C</b> where a catalyst would place the peak of the curve. Explain what effect this has on the rate of reaction.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">State whether the value of &Delta;H for an exothermic reaction is positive or negative. Explain why.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B4 -->
+  <div class="question">
+    <div class="qnum">B4</div>
+    <div class="qbody">
+      <b>Electroplating</b>
+      <p style="margin:8px 0">A manufacturer wants to electroplate a steel spoon with silver. The diagram shows the electrolysis cell used.</p>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State what material the cathode should be and what material the anode should be for silver electroplating.<span class="marks">2</span>
+          <div style="margin:6px 0;font-weight:bold">Cathode:</div><div class="answer-box-sm"></div>
+          <div style="margin:6px 0;font-weight:bold">Anode:</div><div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Name a suitable electrolyte for silver electroplating.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Describe what happens at the cathode during electroplating. Write the half-equation for this reaction.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION C ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION C &mdash; Long Structured Questions &nbsp;[15 marks]&nbsp; Answer all questions.</div>
+
+  <!-- C1 -->
+  <div class="question">
+    <div class="qnum">C1</div>
+    <div class="qbody">
+      <b>Electrochemistry — Electrolysis of Aqueous Solutions</b> &nbsp;<span class="marks">8</span>
+      <p style="margin:10px 0">A student electrolyses aqueous copper(II) sulfate (CuSO<sub>4</sub>) solution using (i) inert carbon (graphite) electrodes, then (ii) copper electrodes.</p>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Using <b>inert (carbon/graphite) electrodes</b>:
+          <div style="margin:8px 0">
+            (i) &nbsp; Name the product at the cathode and write the ionic half-equation for its formation.<span class="marks">2</span>
+            <div class="answer-box-sm"></div>
+          </div>
+          <div style="margin:8px 0">
+            (ii) &nbsp; Name the product at the anode and write the ionic half-equation for its formation. (Note: O<sub>2</sub> is produced in dilute solution.)<span class="marks">2</span>
+            <div class="answer-box-sm"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Using <b>copper electrodes</b>:
+          <div style="margin:8px 0">
+            (i) &nbsp; State what is observed at the cathode during this electrolysis.<span class="marks">1</span>
+            <div class="answer-box-sm"></div>
+          </div>
+          <div style="margin:8px 0">
+            (ii) &nbsp; State what happens to the <b>anode</b> during this electrolysis and explain why the concentration of Cu<sup>2+</sup> ions in the solution remains approximately constant.<span class="marks">2</span>
+            <div class="answer-box"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">State <b>one</b> industrial use of the electrolysis of copper(II) sulfate with copper electrodes.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="question" style="margin-top:24px">
+    <div class="qnum">C2</div>
+    <div class="qbody">
+      <b>Rates of Reaction and Energy Changes</b> &nbsp;<span class="marks">7</span>
+      <p style="margin:10px 0">Hydrogen peroxide (H<sub>2</sub>O<sub>2</sub>) decomposes to form water and oxygen. The reaction is slow at room temperature but is speeded up by manganese(IV) oxide (MnO<sub>2</sub>) as a catalyst.</p>
+      <div class="chem-eq">2H<sub>2</sub>O<sub>2</sub>(aq) &rarr; 2H<sub>2</sub>O(l) + O<sub>2</sub>(g) &nbsp;&nbsp; &Delta;H = &minus;196 kJ/mol</div>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State, with a reason, whether the decomposition of hydrogen peroxide is exothermic or endothermic.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Explain how MnO<sub>2</sub> increases the rate of decomposition, using ideas about activation energy.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">After the reaction is complete, the student recovers the same mass of MnO<sub>2</sub> that was added. What does this tell you about MnO<sub>2</sub> in this reaction?<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">A student measures the volume of oxygen produced every 30 seconds. Sketch a graph on the axes below to show how the volume of oxygen changes with time for (i) no catalyst, and (ii) with MnO<sub>2</sub> catalyst. Label each curve.<span class="marks">2</span>
+          <div class="diagram-box" style="min-height:150px;flex-direction:column;align-items:flex-start;padding:14px">
+            <svg width="240" height="130" viewBox="0 0 240 130">
+              <line x1="30" y1="10" x2="30" y2="115" stroke="#333" stroke-width="1.5"/>
+              <line x1="30" y1="115" x2="230" y2="115" stroke="#333" stroke-width="1.5"/>
+              <text x="10" y="65" font-size="8" fill="#555" transform="rotate(-90,10,65)">Vol O&#8322;</text>
+              <text x="130" y="128" font-size="8" fill="#555" text-anchor="middle">Time / s</text>
+            </svg>
+            <span style="color:#888;font-size:9pt;margin-top:4px">Sketch your graph above</span>
+          </div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(e)</div>
+        <div style="flex:1">State <b>one</b> other method (not a catalyst) that could be used to increase the rate of decomposition of hydrogen peroxide. Explain how it works using collision theory.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MARK SCHEME ══ -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Paper 3</div>
+  <div class="ms-disc">
+    <b>For teacher/self-assessment use only.</b> Half-equations: must be balanced for charge and mass. Accept alternative correct half-equations. State symbols required only where asked. Credit correct scientific reasoning even if wording differs.
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section A — Multiple Choice</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B</td><td>6</td><td>A</td><td>11</td><td>B</td></tr>
+      <tr><td>2</td><td>B</td><td>7</td><td>B</td><td>12</td><td>D</td></tr>
+      <tr><td>3</td><td>A</td><td>8</td><td>A</td><td>13</td><td>C</td></tr>
+      <tr><td>4</td><td>C</td><td>9</td><td>B</td><td>14</td><td>B</td></tr>
+      <tr><td>5</td><td>D</td><td>10</td><td>C</td><td>15</td><td>B</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section B</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>B1(a)</td><td>When solid, ions are in fixed positions and cannot move / carry charge; when molten, ions are free to move and carry the current</td><td>1</td></tr>
+      <tr><td>B1(b)</td><td>Cathode: lead (Pb) metal — reduction [1]; Anode: bromine (Br<sub>2</sub>) gas — oxidation [1]</td><td>2</td></tr>
+      <tr><td>B1(c)</td><td>Pb<sup>2+</sup> + 2e<sup>&minus;</sup> &rarr; Pb &nbsp; [1 for correct species, 1 for balancing charge]</td><td>2</td></tr>
+      <tr><td>B2(a)</td><td>As concentration increases, the rate increases / time decreases; doubling concentration halves the time (doubles the rate)</td><td>1</td></tr>
+      <tr><td>B2(b)</td><td>More particles per unit volume [1]; so more frequent collisions between reactant particles; more collisions with energy &ge; activation energy [1]</td><td>2</td></tr>
+      <tr><td>B2(c)</td><td>Any one: temperature; volume of acid; volume of sodium thiosulfate solution; same viewing conditions</td><td>1</td></tr>
+      <tr><td>B2(d)</td><td>Sulfur dioxide (SO<sub>2</sub>); test: hold damp blue litmus paper / damp universal indicator paper at mouth of tube — turns red/acid; OR bubble into acidified potassium permanganate — decolourises</td><td>1</td></tr>
+      <tr><td>B3(a)</td><td>Exothermic [1]; products are at lower energy than reactants (on diagram) / energy is released [1]</td><td>2</td></tr>
+      <tr><td>B3(b)</td><td>C marked below original peak on diagram [1]; lower activation energy means more particles have energy &ge; Ea so more successful collisions per second — rate increases [1]</td><td>2</td></tr>
+      <tr><td>B3(c)</td><td>Negative [1]; energy of products is lower than reactants — energy is released to surroundings so the system loses energy [1] (accept: &Delta;H = H<sub>products</sub> &minus; H<sub>reactants</sub>, which is negative for exothermic)</td><td>1</td></tr>
+      <tr><td>B4(a)</td><td>Cathode: steel spoon (object to be plated) [1]; Anode: silver (pure silver) [1]</td><td>2</td></tr>
+      <tr><td>B4(b)</td><td>Silver nitrate solution (AgNO<sub>3</sub>) or silver cyanide solution</td><td>1</td></tr>
+      <tr><td>B4(c)</td><td>Silver ions (Ag<sup>+</sup>) from the electrolyte gain electrons at the cathode and are deposited as silver metal on the spoon [1]; half-equation: Ag<sup>+</sup>(aq) + e<sup>&minus;</sup> &rarr; Ag(s) [1]</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section C</p>
+  <table class="ans-table">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>C1(a)(i)</td><td>Copper deposited at cathode [1]; Cu<sup>2+</sup>(aq) + 2e<sup>&minus;</sup> &rarr; Cu(s) [1]</td><td>2</td></tr>
+      <tr><td>C1(a)(ii)</td><td>Oxygen gas produced at anode [1]; 2H<sub>2</sub>O(l) &rarr; O<sub>2</sub>(g) + 4H<sup>+</sup>(aq) + 4e<sup>&minus;</sup> [1]</td><td>2</td></tr>
+      <tr><td>C1(b)(i)</td><td>Copper metal is deposited (pink/copper-coloured layer builds up) on the cathode</td><td>1</td></tr>
+      <tr><td>C1(b)(ii)</td><td>Copper anode dissolves / decreases in mass [1]; Cu(s) &rarr; Cu<sup>2+</sup>(aq) + 2e<sup>&minus;</sup> — copper enters solution at same rate as it is deposited at cathode, so [Cu<sup>2+</sup>] stays constant [1]</td><td>2</td></tr>
+      <tr><td>C1(c)</td><td>Purification / refining of copper (pure copper obtained at cathode; impurities fall to bottom as anode sludge)</td><td>1</td></tr>
+      <tr><td>C2(a)</td><td>Exothermic; &Delta;H is negative (&minus;196 kJ/mol) / energy is released</td><td>1</td></tr>
+      <tr><td>C2(b)</td><td>MnO<sub>2</sub> provides an alternative reaction pathway with lower activation energy [1]; more H<sub>2</sub>O<sub>2</sub> molecules have energy &ge; the (lower) Ea at room temperature, so the rate increases [1]</td><td>2</td></tr>
+      <tr><td>C2(c)</td><td>MnO<sub>2</sub> is a catalyst — it is not consumed in the reaction; it is chemically unchanged at the end</td><td>1</td></tr>
+      <tr><td>C2(d)</td><td>Two curves both levelling off at the same final volume (same total O<sub>2</sub>) [1]; catalyst curve rises more steeply and levels off sooner [1]</td><td>2</td></tr>
+      <tr><td>C2(e)</td><td>Increase temperature [1]; higher temperature gives particles more kinetic energy, so more collisions per second and greater proportion exceed the activation energy [1] (accept: increase concentration of H<sub>2</sub>O<sub>2</sub> — more particles per unit volume, more frequent collisions)</td><td>1</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

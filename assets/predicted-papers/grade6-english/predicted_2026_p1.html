@@ -1,0 +1,676 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nouklass.com – Grade 6 English – Specimen Paper 1 – 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.cover-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-logo-box .nk-big{font-size:18pt;line-height:1}
+.nk-logo-box .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.passage-box{background:#f8f9fb;border:1px solid #bbb;padding:14px 18px;margin:14px 0;font-size:11pt;line-height:1.9;border-radius:4px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;margin-top:2px;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;white-space:nowrap;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:120px;width:100%;margin:10px 0;padding:6px}
+.answer-box-xl{border:1px solid #aaa;border-radius:3px;min-height:200px;width:100%;margin:10px 0;padding:6px}
+.writing-lines{margin:10px 0;width:100%}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.cloze-blank{border-bottom:1.5px solid #000;display:inline-block;width:120px;height:20px;vertical-align:bottom;margin:0 4px}
+.sub-q{margin:12px 0 6px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:28px;color:#1a3c6e}
+.word-bank{background:#eef3fb;border:1px solid #b8cde8;padding:10px 14px;margin:10px 0;border-radius:4px;font-size:10.5pt}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt;margin-bottom:18px}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.ans-table tr:nth-child(even){background:#f9fbff}
+/* supplementary */
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 20px;margin:7px 0 12px}
+.mcq-option{padding:2px 0;font-size:11pt}
+.tf-table{border-collapse:collapse;width:100%;margin:10px 0 14px}
+.tf-table th,.tf-table td{border:1px solid #888;padding:7px 10px;font-size:10.5pt}
+.tf-table th{background:#eef3fb;color:#1a3c6e;font-weight:bold}
+.tf-check{width:26px;height:26px;border:1.5px solid #555;display:inline-block;vertical-align:middle}
+.comp-row{display:flex;align-items:flex-end;gap:8px;margin:9px 0;font-size:11pt}
+.comp-num{font-weight:bold;min-width:26px;color:#1a3c6e;flex-shrink:0}
+.comp-blank{flex:1;border-bottom:1.5px solid #000;min-height:20px}
+.error-text{font-size:11pt;line-height:2.8;margin:12px 0}
+.underlined{text-decoration:underline}
+.corr-box{display:inline-block;border:1px solid #888;min-width:110px;padding:2px 8px;height:22px;vertical-align:bottom}
+.pic-row{display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start;margin:14px 0}
+.pic-box{border:2px solid #888;min-height:110px;background:#f8f9fb;display:flex;align-items:center;justify-content:center;font-size:8.5pt;color:#888;text-align:center;padding:8px;border-radius:3px}
+.pic-words{font-style:italic;font-size:10pt;color:#1a3c6e;margin-bottom:8px}
+.seq-row{display:flex;align-items:center;gap:12px;margin:9px 0}
+.seq-box{width:36px;height:36px;border:1.5px solid #888;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
+.adj-box{display:flex;flex-wrap:wrap;gap:14px 28px;border:1px solid #b8cde8;padding:12px 16px;background:#f8f9fb;border-radius:4px;margin:10px 0;font-size:11pt}
+.marking-grid{width:100%;border-collapse:collapse;margin-top:16px;font-size:9pt}
+.marking-grid th,.marking-grid td{border:1px solid #aaa;padding:4px 8px;text-align:center}
+.marking-grid th{background:#eef3fb;color:#1a3c6e}
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin:14px 0}
+.match-item-l{text-align:right;padding:8px 0;border-bottom:1px dotted #ddd;font-size:10.5pt}
+.match-item-r{text-align:left;padding:8px 0;border-bottom:1px dotted #ddd;font-size:10.5pt}
+.match-ans-row{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.match-ans-cell{display:flex;align-items:center;gap:6px;font-size:10.5pt}
+.match-ans-box{border:1px solid #888;width:36px;height:30px;display:inline-block}
+@media print{
+  .nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none}
+  body{padding-top:32px}
+  @page{size:A4 portrait;margin:12mm 14mm}
+}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &nbsp;|&nbsp; Grade 6 English &mdash; Specimen Paper 1 of 4</span>
+  <button class="print-btn" onclick="window.print()">&#128438; Print</button>
+</div>
+
+<div class="cover">
+  <div class="cover-header">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">nouklass.com</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">Specimen Paper 1 of 4 &mdash; 2026 &mdash; Practice Use Only</div>
+      <div class="specimen-label" style="margin-top:3px;">Not an official MES paper &mdash; for exam practice only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">English &mdash; Grade 6</div>
+  <div class="paper-meta">
+    <strong>Specimen Paper 1 of 4</strong><br>
+    Time allowed: <strong>1 hour 45 minutes</strong><br>
+    Total marks: <strong>100</strong>
+  </div>
+
+  <div style="margin:14px 0;font-size:11pt">
+    <div style="margin-bottom:10px">Index Number: &nbsp;<span class="index-line"></span></div>
+    <div style="margin-bottom:10px">Name: &nbsp;<span class="index-line" style="width:300px"></span></div>
+    <div>Class: &nbsp;<span class="index-line" style="width:150px"></span></div>
+  </div>
+
+  <div class="instructions">
+    <strong>INSTRUCTIONS TO CANDIDATES</strong>
+    <ol>
+      <li>This paper contains <strong>9 questions</strong>.</li>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <strong>all</strong> questions.</li>
+      <li>Write your answers clearly in the spaces provided.</li>
+      <li>You may not use red, green or black ink.</li>
+    </ol>
+  </div>
+
+  <table class="marking-grid">
+    <thead>
+      <tr>
+        <th>Q1</th><th>Q2</th><th>Q3A</th><th>Q3B</th><th>Q4A</th><th>Q4B</th><th>Q5</th><th>Q6A</th><th>Q6B</th><th>Q7A</th><th>Q7B</th><th>Q8A</th><th>Q8B</th><th>Q9</th><th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>/5</td><td>/10</td><td>/5</td><td>/5</td><td>/10</td><td>/15</td><td>/10</td><td>/5</td><td>/5</td><td>/5</td><td>/5</td><td>/6</td><td>/4</td><td>/10</td><td>/100</td>
+      </tr>
+      <tr style="height:28px">
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- QUESTION 1 -->
+<div class="page page-break">
+  <div class="section-header">Question 1 &mdash; Sentence Matching &nbsp;<span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="margin-bottom:12px;font-size:11pt;">Match each sentence on the left with the most suitable sentence on the right. An example is given. There is <strong>one extra sentence</strong> on the right that you will not use.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin:14px 0">
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt"><em>Example:</em> There is heavy traffic on the road. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(i)&nbsp; The garden had not been watered for a week. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(ii)&nbsp; We saw a family of monkeys in the trees. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iii)&nbsp; The fish were jumping out of the water. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(iv)&nbsp; There was no litter on the beach. &nbsp;&bull;</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;text-align:right;font-size:10.5pt">(v)&nbsp; The sun was very strong that day. &nbsp;&bull;</p>
+    </div>
+    <div>
+      <p style="font-style:italic;color:#666;padding:8px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull; &nbsp;We were stuck in a long queue.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>A.</strong> &nbsp;The plants were wilting and turning yellow.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>B.</strong> &nbsp;We were deep inside the forest.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>C.</strong> &nbsp;Something had frightened them.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>D.</strong> &nbsp;People had cleaned it up earlier.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>E.</strong> &nbsp;We put on sunscreen and our hats.</p>
+      <p style="padding:9px 0;border-bottom:1px dotted #ddd;font-size:10.5pt">&bull;&nbsp; <strong>F.</strong> &nbsp;The river was overflowing its banks.</p>
+    </div>
+  </div>
+
+  <p style="font-size:10.5pt;margin-top:14px;margin-bottom:8px;">Write the correct letter in each box:</p>
+  <div class="match-ans-row">
+    <div class="match-ans-cell">(i) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(ii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iii) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(iv) <div class="match-ans-box"></div></div>
+    <div class="match-ans-cell">(v) <div class="match-ans-box"></div></div>
+  </div>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="page">
+  <div class="section-header">Question 2 &mdash; Grammar <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">For each item, circle the letter which shows the correct answer.</p>
+  <p style="font-size:10.5pt;margin-bottom:4px;font-style:italic;">Example: Sarah loves painting. She ........................... a picture every day.</p>
+  <div class="mcq-grid" style="margin-bottom:12px;font-style:italic;color:#555">
+    <div class="mcq-option"><span style="border:2px solid #000;padding:1px 7px;border-radius:50%;font-weight:bold">A</span> paints</div>
+    <div class="mcq-option">B &nbsp;painted</div>
+    <div class="mcq-option">C &nbsp;is painting</div>
+    <div class="mcq-option">D &nbsp;will paint</div>
+  </div>
+  <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px">
+
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">1. &nbsp;&nbsp;Amir went to Port Louis. ........................... bought some new books.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;She</div><div class="mcq-option">B &nbsp;He</div><div class="mcq-option">C &nbsp;They</div><div class="mcq-option">D &nbsp;It</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">2. &nbsp;&nbsp;My father ........................... us to the lagoon last Sunday.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;takes</div><div class="mcq-option">B &nbsp;is taking</div><div class="mcq-option">C &nbsp;has taken</div><div class="mcq-option">D &nbsp;took</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">3. &nbsp;&nbsp;There is ........................... water left in the bottle. I need to fill it.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;many</div><div class="mcq-option">B &nbsp;little</div><div class="mcq-option">C &nbsp;a few</div><div class="mcq-option">D &nbsp;several</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">4. &nbsp;&nbsp;The coral reef is the ........................... natural treasure in Mauritius.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;great</div><div class="mcq-option">B &nbsp;greater</div><div class="mcq-option">C &nbsp;greatest</div><div class="mcq-option">D &nbsp;as great</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">5. &nbsp;&nbsp;We went snorkelling ........................... the morning.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;on</div><div class="mcq-option">B &nbsp;at</div><div class="mcq-option">C &nbsp;in</div><div class="mcq-option">D &nbsp;by</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">6. &nbsp;&nbsp;While Meera ........................... the garden, she found a butterfly.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;watered</div><div class="mcq-option">B &nbsp;waters</div><div class="mcq-option">C &nbsp;was watering</div><div class="mcq-option">D &nbsp;will water</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">7. &nbsp;&nbsp;The children cleaned up the beach ........................... .</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;himself</div><div class="mcq-option">B &nbsp;yourself</div><div class="mcq-option">C &nbsp;itself</div><div class="mcq-option">D &nbsp;themselves</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">8. &nbsp;&nbsp;Priya has already ........................... her science project.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;finish</div><div class="mcq-option">B &nbsp;finished</div><div class="mcq-option">C &nbsp;finishing</div><div class="mcq-option">D &nbsp;finishes</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">9. &nbsp;&nbsp;The girl ........................... bag was found is very relieved.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;which</div><div class="mcq-option">B &nbsp;whose</div><div class="mcq-option">C &nbsp;who</div><div class="mcq-option">D &nbsp;whom</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <p style="font-size:11pt">10. &nbsp;Ravi is late ........................... he missed the bus.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;although</div><div class="mcq-option">B &nbsp;because</div><div class="mcq-option">C &nbsp;unless</div><div class="mcq-option">D &nbsp;despite</div></div>
+  </div>
+</div>
+
+<!-- QUESTION 3A -->
+<div class="page">
+  <div class="section-header">Question 3A &mdash; Word Definitions <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Read each description. Find the word it describes. The first letter is given as a clue. An example is given.</p>
+  <p style="font-size:10.5pt;margin-bottom:6px;font-style:italic;">Example: We use it to keep rain off our heads. &nbsp;&nbsp; U <u>m</u> <u>b</u> <u>r</u> <u>e</u> <u>l</u> <u>l</u> <u>a</u></p>
+
+  <div class="comp-row"><div class="comp-num">(i)</div><div style="flex:1;font-size:11pt">A place where ships come to load or unload goods. &nbsp;&nbsp; <strong>H</strong> _ _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(ii)</div><div style="flex:1;font-size:11pt">A person whose job is to fly an aeroplane. &nbsp;&nbsp; <strong>P</strong> _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iii)</div><div style="flex:1;font-size:11pt">The outside layer of a body covering a reptile such as a turtle. &nbsp;&nbsp; <strong>S</strong> _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(iv)</div><div style="flex:1;font-size:11pt">A large area of land covered with trees and plants. &nbsp;&nbsp; <strong>F</strong> _ _ _ _ _</div></div>
+  <div class="comp-row"><div class="comp-num">(v)</div><div style="flex:1;font-size:11pt">The science of studying living creatures and the natural world. &nbsp;&nbsp; <strong>B</strong> _ _ _ _ _ _</div></div>
+</div>
+
+<!-- QUESTION 3B -->
+<div class="page">
+  <div class="section-header">Question 3B &mdash; Vocabulary <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:10px;">Circle the letter which shows the correct word to complete each sentence.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">1. &nbsp;&nbsp;The nurse asked the patient to take his ........................... three times a day.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;food</div><div class="mcq-option">B &nbsp;water</div><div class="mcq-option">C &nbsp;medicine</div><div class="mcq-option">D &nbsp;rest</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;&nbsp;The children were ........................... when they saw the dolphin leap out of the water.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;bored</div><div class="mcq-option">B &nbsp;tired</div><div class="mcq-option">C &nbsp;frightened</div><div class="mcq-option">D &nbsp;amazed</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;&nbsp;My grandmother likes to ........................... herbs and vegetables in her garden.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;eat</div><div class="mcq-option">B &nbsp;grow</div><div class="mcq-option">C &nbsp;buy</div><div class="mcq-option">D &nbsp;cook</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;&nbsp;She spoke very ........................... so that the entire audience could hear her.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;quietly</div><div class="mcq-option">B &nbsp;sadly</div><div class="mcq-option">C &nbsp;slowly</div><div class="mcq-option">D &nbsp;loudly</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;&nbsp;The ........................... at the nature park explained how to protect coral reefs.</p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;mechanic</div><div class="mcq-option">B &nbsp;plumber</div><div class="mcq-option">C &nbsp;guide</div><div class="mcq-option">D &nbsp;driver</div></div></div>
+</div>
+
+<!-- QUESTION 4A -->
+<div class="page page-break">
+  <div class="section-header">Question 4A &mdash; Reading Comprehension: Informational Text <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Read the text below, then complete the sentences that follow.</p>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">The Coral Reefs of Mauritius</p>
+    <p>The coral reefs of Mauritius are among the most remarkable natural treasures of the Indian Ocean. They form a ring of shallow, clear water around much of the island, creating sheltered lagoons that are perfect for swimming and snorkelling. The reefs are built by millions of tiny sea creatures called coral polyps, which build hard limestone structures over hundreds of years.</p>
+    <p style="margin-top:9px">These reefs support an extraordinary variety of marine life. Hundreds of species of colourful fish dart through the coral branches, while sea turtles glide gracefully above the sandy seabed. Starfish, sea urchins, octopuses and moray eels all make their homes in the reef. Scientists have identified over one thousand species of plants and animals living in Mauritius&rsquo;s lagoons.</p>
+    <p style="margin-top:9px">Unfortunately, coral reefs around the world are under serious threat. Rising ocean temperatures caused by climate change lead to a process called bleaching, in which coral turns white and eventually dies. Pollution from boats, fertilisers and untreated waste also damages the reef. Careless tourists who stand on coral or remove pieces as souvenirs cause damage that can take decades to recover.</p>
+    <p style="margin-top:9px">The Mauritian government has established marine parks and strict rules to protect the reefs. Fishing is restricted in certain zones, and boats must anchor away from the coral. Environmental groups run clean-up campaigns and educate the public about reef conservation. Every Mauritian has a role to play in keeping these extraordinary ecosystems safe for future generations.</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Based on the text, complete the following. Write your answers on the lines provided.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:10px">Example: This text is about: &nbsp; <u>the coral reefs of Mauritius</u></p>
+
+  <div class="comp-row"><div class="comp-num">1.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What coral reefs form around Mauritius:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">2.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What coral polyps build:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">3.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Number of species in Mauritius&rsquo;s lagoons:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">4.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What bleaching causes coral to do:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">5.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One cause of bleaching:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">6.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">One way tourists damage the reef:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">7.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What the government has set up to protect reefs:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">8.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Where boats must anchor:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">9.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">What environmental groups do:</div><div class="comp-blank"></div></div>
+  <div class="comp-row"><div class="comp-num">10.</div><div style="font-size:11pt;flex:0 0 auto;margin-right:8px">Who has a role to play in reef conservation:</div><div class="comp-blank"></div></div>
+</div>
+
+<!-- QUESTION 4B -->
+<div class="page page-break">
+  <div class="section-header">Question 4B &mdash; Reading Comprehension: Narrative <span style="font-weight:normal;font-size:10pt;">(15 marks)</span></div>
+
+  <div class="passage-box">
+    <p style="font-weight:bold;margin-bottom:8px;color:#1a3c6e">The Butterfly</p>
+    <p>Meera was a lively ten-year-old girl who loved spending Saturday mornings in her grandmother&rsquo;s garden. She enjoyed watering the plants, chasing butterflies and watching bees collect nectar from the flowers.</p>
+    <p style="margin-top:9px">One bright morning, she spotted something unusual near the rose bushes. A beautiful butterfly with orange and black wings was lying very still on the ground. Meera crouched down carefully and saw that one of its delicate wings had become stuck to a dried leaf. The butterfly was struggling helplessly.</p>
+    <p style="margin-top:9px">&ldquo;Poor little thing,&rdquo; Meera murmured softly.</p>
+    <p style="margin-top:9px">She fetched a thin twig from the garden and, very gently, pried the wing free without touching it. For a long moment, nothing happened. Then, slowly, the butterfly spread its wings. It trembled once, twice &mdash; and in a burst of colour, it rose into the air and circled above Meera&rsquo;s head before settling on a nearby flower.</p>
+    <p style="margin-top:9px">&ldquo;Grandma! Grandma!&rdquo; Meera ran inside, calling excitedly. &ldquo;I saved a butterfly!&rdquo;</p>
+    <p style="margin-top:9px">Her grandmother listened to the story and smiled warmly. &ldquo;You have shown real kindness and patience,&rdquo; she said. &ldquo;Those are the finest qualities a person can have.&rdquo;</p>
+    <p style="margin-top:9px">That night, as she lay in bed, Meera made a decision. She would plant more flowers in the garden so that butterflies would always have a safe place to live. She felt a warm glow of happiness &mdash; she had made a small difference in the world, and that felt wonderful.</p>
+    <p style="margin-top:9px;text-align:right;font-style:italic;color:#555">Original passage</p>
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 8px">1. &nbsp;Indicate whether each statement is True or False. Tick (&radic;) the correct box. <span class="marks">[3]</span></p>
+  <table class="tf-table">
+    <thead><tr><th style="width:66%;text-align:left">Statement</th><th style="width:17%">True</th><th style="width:17%">False</th></tr></thead>
+    <tbody>
+      <tr><td>(i) &nbsp;Meera found the butterfly near the pond.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(ii) &nbsp;The butterfly&rsquo;s wing was stuck to a dried leaf.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+      <tr><td>(iii) &nbsp;Meera&rsquo;s grandmother was angry with her.</td><td style="text-align:center"><div class="tf-check"></div></td><td style="text-align:center"><div class="tf-check"></div></td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;margin:12px 0 6px">Circle the letter of the correct answer.</p>
+
+  <div style="margin-bottom:12px"><p style="font-size:11pt">2. &nbsp;What time of day did Meera usually go to the garden? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;Sunday afternoons</div><div class="mcq-option">B &nbsp;Saturday mornings</div><div class="mcq-option">C &nbsp;Every evening</div><div class="mcq-option">D &nbsp;On school days</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">3. &nbsp;How did Meera free the butterfly&rsquo;s wing? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;She pulled the leaf off</div><div class="mcq-option">B &nbsp;She poured water on it</div><div class="mcq-option">C &nbsp;She used a thin twig gently</div><div class="mcq-option">D &nbsp;She cut the leaf with scissors</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">4. &nbsp;In paragraph 3, &ldquo;murmured&rdquo; means she spoke &hellip; <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;very loudly</div><div class="mcq-option">B &nbsp;very quietly</div><div class="mcq-option">C &nbsp;angrily</div><div class="mcq-option">D &nbsp;quickly</div></div></div>
+  <div style="margin-bottom:12px"><p style="font-size:11pt">5. &nbsp;Which word BEST describes Meera? <span class="marks">[1]</span></p>
+    <div class="mcq-grid"><div class="mcq-option">A &nbsp;selfish</div><div class="mcq-option">B &nbsp;impatient</div><div class="mcq-option">C &nbsp;caring</div><div class="mcq-option">D &nbsp;careless</div></div></div>
+
+  <p style="font-size:11pt;font-weight:bold;margin:14px 0 6px">Answer the following questions based on the text.</p>
+
+  <div class="question">
+    <div class="qnum">6.</div>
+    <div class="qbody"><p style="font-size:11pt">Why was the butterfly lying still on the ground? <span class="marks">[2]</span></p><div class="answer-box-sm"></div></div>
+  </div>
+  <div class="question">
+    <div class="qnum">7.</div>
+    <div class="qbody"><p style="font-size:11pt">How did Meera&rsquo;s grandmother show that she was pleased? Use evidence from the text. <span class="marks">[2]</span></p><div class="answer-box"></div></div>
+  </div>
+  <div class="question">
+    <div class="qnum">8.</div>
+    <div class="qbody"><p style="font-size:11pt">Name TWO things Meera enjoyed doing in her grandmother&rsquo;s garden. <span class="marks">[2]</span></p>
+      <p style="font-size:11pt;margin-top:8px">(i) <span class="cloze-blank" style="width:200px"></span></p>
+      <p style="font-size:11pt;margin-top:8px">(ii) <span class="cloze-blank" style="width:200px"></span></p>
+    </div>
+  </div>
+  <div class="question">
+    <div class="qnum">9.</div>
+    <div class="qbody"><p style="font-size:11pt">What decision did Meera make at the end of the story? Why? <span class="marks">[2]</span></p><div class="answer-box"></div></div>
+  </div>
+</div>
+
+<!-- QUESTION 5 -->
+<div class="page page-break">
+  <div class="section-header">Question 5 &mdash; Sentence Writing <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:14px;">Write sentences by:</p>
+
+  <div class="question"><div class="qnum">(i)</div><div class="qbody"><p style="font-size:11pt"><strong>Removing the extra word:</strong> <span class="marks">[1]</span><br>We went to the beach on at the weekend.</p><div class="answer-box-sm"></div></div></div>
+
+  <div class="question"><div class="qnum">(ii)</div><div class="qbody"><p style="font-size:11pt"><strong>Adding the required capital letter and full stop:</strong> <span class="marks">[1]</span><br>the children saw many colourful fish in the sea</p><div class="answer-box-sm"></div></div></div>
+
+  <div class="question"><div class="qnum">(iii)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the adverb &lsquo;carefully&rsquo; in the right place:</strong> <span class="marks">[1]</span><br>She picked up the injured bird.</p><div class="answer-box-sm"></div></div></div>
+
+  <div class="question"><div class="qnum">(iv)</div><div class="qbody"><p style="font-size:11pt"><strong>Putting the words in order to make a sentence:</strong> <span class="marks">[1]</span><br><em>swam &ndash; slowly &ndash; under &ndash; the &ndash; turtle &ndash; bridge</em></p><div class="answer-box-sm"></div></div></div>
+
+  <div class="question"><div class="qnum">(v)</div><div class="qbody"><p style="font-size:11pt"><strong>Transforming into its NEGATIVE form:</strong> <span class="marks">[2]</span><br>The gardener cuts the grass every morning.</p><div class="answer-box"></div></div></div>
+
+  <div class="question"><div class="qnum">(vi)</div><div class="qbody"><p style="font-size:11pt"><strong>Transforming into its INTERROGATIVE form:</strong> <span class="marks">[2]</span><br>Riya has finished her science project.</p><div class="answer-box"></div></div></div>
+
+  <div class="question"><div class="qnum">(vii)</div><div class="qbody"><p style="font-size:11pt"><strong>Writing ONE sentence using these words:</strong> <span class="marks">[2]</span><br><em>lagoon &ndash; reef &ndash; swim</em></p><div class="answer-box"></div></div></div>
+</div>
+
+<!-- QUESTION 6A -->
+<div class="page">
+  <div class="section-header">Question 6A &mdash; Cloze Test: Word Bank <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by choosing the correct word from the word bank. The first one has been done for you. There is <strong>one extra word</strong> you will not use.</p>
+
+  <div class="word-bank"><strong>Word Bank:</strong> &nbsp;&nbsp; beautiful &nbsp;&bull;&nbsp; carefully &nbsp;&bull;&nbsp; decided &nbsp;&bull;&nbsp; disappeared &nbsp;&bull;&nbsp; quickly &nbsp;&bull;&nbsp; still &nbsp;&bull;&nbsp; never</div>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    One afternoon, Lara found a &nbsp;<strong><u>beautiful</u></strong>&nbsp; turtle on the beach. The turtle was sitting very <span class="cloze-blank"></span> in the sand and could not move. Lara <span class="cloze-blank"></span> she must help it. She <span class="cloze-blank"></span> picked it up and walked <span class="cloze-blank"></span> to the water&rsquo;s edge. The little turtle <span class="cloze-blank"></span> into the waves.
+  </div>
+</div>
+
+<!-- QUESTION 6B -->
+<div class="page">
+  <div class="section-header">Question 6B &mdash; Cloze Test: Your Own Words <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Complete the text by writing <strong>one suitable word</strong> in each blank space.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    Lara watched happily as the turtle <span class="cloze-blank"></span> into the ocean. She felt very <span class="cloze-blank"></span> of herself. Her mother, who had been watching <span class="cloze-blank"></span>, called out to her. &ldquo;Well done!&rdquo; she said, giving Lara a <span class="cloze-blank"></span> hug. That evening, Lara <span class="cloze-blank"></span> about her adventure in her diary.
+  </div>
+</div>
+
+<!-- QUESTION 7A -->
+<div class="page">
+  <div class="section-header">Question 7A &mdash; Error Correction <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Correct the <span class="underlined">underlined</span> mistakes. Write the correct word in the bracket. The first one has been done for you.</p>
+
+  <div class="error-text">
+    Last weekend, my family and I <span class="underlined">goed</span>&nbsp;(&nbsp;<strong>went</strong>&nbsp;) to the nature reserve near our home. The reserve <span class="underlined">was</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) full of beautiful birds and trees. I <span class="underlined">seed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) a large butterfly and ran to take a photograph. My little sister <span class="underlined">falled</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) on the path but was not hurt. We <span class="underlined">buyed</span>&nbsp;(<div class="corr-box" style="display:inline-block"></div>) some fresh fruit from a stall on our way home.
+  </div>
+</div>
+
+<!-- QUESTION 7B -->
+<div class="page">
+  <div class="section-header">Question 7B &mdash; Word Forms <span style="font-weight:normal;font-size:10pt;">(5 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">Fill in each blank using the correct form of the word given in CAPITALS.</p>
+
+  <div style="font-size:11pt;line-height:2.6;margin:14px 0">
+    The coral reef is one of Mauritius&rsquo;s most <span class="cloze-blank"></span> (REMARK) natural formations. A team of <span class="cloze-blank"></span> (SCIENCE) studies the reef each year. Their work is <span class="cloze-blank"></span> (EXTREME) important for the environment. Without <span class="cloze-blank"></span> (CONSERVE), many reef animals could be <span class="cloze-blank"></span> (DANGER).
+  </div>
+</div>
+
+<!-- QUESTION 8A -->
+<div class="page page-break">
+  <div class="section-header">Question 8A &mdash; Picture Story <span style="font-weight:normal;font-size:10pt;">(6 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:4px;">Write <strong>one sentence</strong> for each picture to make a short story. Use the words given.</p>
+
+  <div class="pic-row">
+    <div class="pic-box">[Picture 1: A family walks onto a beach on a sunny day, smiling and excited]</div>
+    <div>
+      <div class="pic-words">last weekend &ndash; beach</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 2: Children spot a small injured seabird lying on the sand and look worried]</div>
+    <div>
+      <div class="pic-words">suddenly &ndash; discovered</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+  <div class="pic-row">
+    <div class="pic-box">[Picture 3: A park ranger arrives and gently takes the bird; the children watch happily]</div>
+    <div>
+      <div class="pic-words">luckily &ndash; rescued</div>
+      <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION 8B -->
+<div class="page">
+  <div class="section-header">Question 8B &mdash; Sentence Linking <span style="font-weight:normal;font-size:10pt;">(4 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:6px;">Use the word in brackets to link the two sentences. Make any necessary changes.</p>
+  <p style="font-size:10.5pt;font-style:italic;margin-bottom:12px">Example: Zara loves nature. She visits the park every week. (<strong>and</strong>) &rarr; <u>Zara loves nature and she visits the park every week.</u></p>
+
+  <div class="question"><div class="qnum">1.</div><div class="qbody"><p style="font-size:11pt">Riya loves nature. She visits the botanical garden every month. (<strong>because</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">2.</div><div class="qbody"><p style="font-size:11pt">Mr Kumar is our science teacher. He knows a lot about coral reefs. (<strong>who</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">3.</div><div class="qbody"><p style="font-size:11pt">The storm began. We were exploring the lagoon. (<strong>while</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+  <div class="question"><div class="qnum">4.</div><div class="qbody"><p style="font-size:11pt">The weather is cold and rainy. The children are staying indoors. (<strong>so</strong>) <span class="marks">[1]</span></p><div class="answer-box-sm"></div></div></div>
+</div>
+
+<!-- QUESTION 9 -->
+<div class="page page-break">
+  <div class="section-header">Question 9 &mdash; Writing Task <span style="font-weight:normal;font-size:10pt;">(10 marks)</span></div>
+  <p style="font-size:11pt;margin-bottom:8px;">You went for a walk in a forest near your home and found an injured animal.</p>
+  <p style="font-size:11pt;margin-bottom:8px;">Write a story of about <strong>120 words</strong> saying what happened that day.</p>
+  <p style="font-size:11pt;font-weight:bold;margin-bottom:6px">The following may help you:</p>
+  <ul style="margin-left:22px;font-size:11pt;line-height:2.2">
+    <li>Where were you going and who was with you?</li>
+    <li>What animal did you find? What was wrong with it?</li>
+    <li>How did you help it?</li>
+    <li>How did you feel at the end?</li>
+  </ul>
+  <div class="answer-box-xl" style="margin-top:16px"></div>
+  <div class="writing-lines" style="margin-top:4px">
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div><div class="writing-line"></div>
+    <div class="writing-line"></div><div class="writing-line"></div>
+  </div>
+</div>
+
+<!-- MARK SCHEME -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Specimen Paper 1</div>
+  <div class="ms-disc">These suggested answers are provided as a guide. Accept any reasonable answer that demonstrates clear understanding of the text. For open-ended writing, apply professional judgement.</div>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 1 &mdash; Sentence Matching (5 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>A &mdash; The plants were wilting and turning yellow.</td></tr>
+      <tr><td>(ii)</td><td>B &mdash; We were deep inside the forest.</td></tr>
+      <tr><td>(iii)</td><td>C &mdash; Something had frightened them.</td></tr>
+      <tr><td>(iv)</td><td>D &mdash; People had cleaned it up earlier.</td></tr>
+      <tr><td>(v)</td><td>E &mdash; We put on sunscreen and our hats.</td></tr>
+      <tr><td>Extra (unused)</td><td>F &mdash; The river was overflowing its banks.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 2 &mdash; Grammar MCQ (10 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B &mdash; He</td><td>6</td><td>C &mdash; was watering</td></tr>
+      <tr><td>2</td><td>D &mdash; took</td><td>7</td><td>D &mdash; themselves</td></tr>
+      <tr><td>3</td><td>B &mdash; little</td><td>8</td><td>B &mdash; finished</td></tr>
+      <tr><td>4</td><td>C &mdash; greatest</td><td>9</td><td>B &mdash; whose</td></tr>
+      <tr><td>5</td><td>C &mdash; in</td><td>10</td><td>B &mdash; because</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3A &mdash; Word Definitions (5 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>Harbour</td></tr>
+      <tr><td>(ii)</td><td>Pilot</td></tr>
+      <tr><td>(iii)</td><td>Shell</td></tr>
+      <tr><td>(iv)</td><td>Forest</td></tr>
+      <tr><td>(v)</td><td>Biology</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 3B &mdash; Vocabulary MCQ (5 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>C &mdash; medicine</td></tr>
+      <tr><td>2</td><td>D &mdash; amazed</td></tr>
+      <tr><td>3</td><td>B &mdash; grow</td></tr>
+      <tr><td>4</td><td>D &mdash; loudly</td></tr>
+      <tr><td>5</td><td>C &mdash; guide</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4A &mdash; Informational Text (10 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Sheltered lagoons / a ring of shallow clear water</td></tr>
+      <tr><td>2</td><td>Hard limestone structures</td></tr>
+      <tr><td>3</td><td>Over one thousand species</td></tr>
+      <tr><td>4</td><td>It turns white and dies / bleaches</td></tr>
+      <tr><td>5</td><td>Rising ocean temperatures caused by climate change</td></tr>
+      <tr><td>6</td><td>They stand on coral / remove pieces as souvenirs (either)</td></tr>
+      <tr><td>7</td><td>Marine parks and strict rules</td></tr>
+      <tr><td>8</td><td>Away from the coral</td></tr>
+      <tr><td>9</td><td>They run clean-up campaigns and educate the public</td></tr>
+      <tr><td>10</td><td>Every Mauritian</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 4B &mdash; Narrative Comprehension (15 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1(i) T/F</td><td>False (it was near the rose bushes)</td><td>1</td></tr>
+      <tr><td>1(ii) T/F</td><td>True</td><td>1</td></tr>
+      <tr><td>1(iii) T/F</td><td>False (she smiled warmly and praised her)</td><td>1</td></tr>
+      <tr><td>2</td><td>B &mdash; Saturday mornings</td><td>1</td></tr>
+      <tr><td>3</td><td>C &mdash; She used a thin twig gently</td><td>1</td></tr>
+      <tr><td>4</td><td>B &mdash; very quietly</td><td>1</td></tr>
+      <tr><td>5</td><td>C &mdash; caring</td><td>1</td></tr>
+      <tr><td>6</td><td>Its wing was stuck to a dried leaf / it could not fly</td><td>2</td></tr>
+      <tr><td>7</td><td>She smiled warmly; she said Meera showed &ldquo;real kindness and patience&rdquo; (1 mark for each piece of evidence, up to 2)</td><td>2</td></tr>
+      <tr><td>8</td><td>Any two: watering the plants / chasing butterflies / watching bees collect nectar (1 each)</td><td>2</td></tr>
+      <tr><td>9</td><td>She decided to plant more flowers so butterflies would have a safe place to live. She wanted to make a difference. (1 mark decision + 1 mark reason)</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 5 &mdash; Sentence Writing (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Item</th><th>Acceptable Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>(i)</td><td>We went to the beach on the weekend. (remove &ldquo;at&rdquo;) OR We went to the beach at the weekend. (remove &ldquo;on&rdquo;)</td><td>1</td></tr>
+      <tr><td>(ii)</td><td>The children saw many colourful fish in the sea.</td><td>1</td></tr>
+      <tr><td>(iii)</td><td>She carefully picked up the injured bird. / She picked up the injured bird carefully.</td><td>1</td></tr>
+      <tr><td>(iv)</td><td>The turtle swam slowly under the bridge.</td><td>1</td></tr>
+      <tr><td>(v)</td><td>The gardener does not cut the grass every morning.</td><td>2</td></tr>
+      <tr><td>(vi)</td><td>Has Riya finished her science project?</td><td>2</td></tr>
+      <tr><td>(vii)</td><td>Any grammatically correct sentence using all three words, e.g. &ldquo;The dolphins swim through the reef in the lagoon.&rdquo;</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6A &mdash; Cloze: Word Bank (5 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1 (example done)</td><td>beautiful</td></tr>
+      <tr><td>2</td><td>still</td></tr>
+      <tr><td>3</td><td>decided</td></tr>
+      <tr><td>4</td><td>carefully</td></tr>
+      <tr><td>5</td><td>quickly</td></tr>
+      <tr><td>6</td><td>disappeared</td></tr>
+      <tr><td>Extra (unused)</td><td>never</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 6B &mdash; Cloze: Own Words (5 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Blank</th><th>Acceptable Answers</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>swam / disappeared / plunged / went</td></tr>
+      <tr><td>2</td><td>proud / happy / pleased / glad</td></tr>
+      <tr><td>3</td><td>nearby / quietly / from a distance / close by</td></tr>
+      <tr><td>4</td><td>big / warm / tight / long</td></tr>
+      <tr><td>5</td><td>wrote / told / read / thought</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7A &mdash; Error Correction (5 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Error</th><th>Correction</th></tr></thead>
+    <tbody>
+      <tr><td>goed (done)</td><td>went</td></tr>
+      <tr><td>was</td><td>were</td></tr>
+      <tr><td>seed</td><td>saw</td></tr>
+      <tr><td>falled</td><td>fell</td></tr>
+      <tr><td>buyed</td><td>bought</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 7B &mdash; Word Forms (5 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Root Word</th><th>Correct Form</th></tr></thead>
+    <tbody>
+      <tr><td>REMARK</td><td>remarkable</td></tr>
+      <tr><td>SCIENCE</td><td>scientists</td></tr>
+      <tr><td>EXTREME</td><td>extremely</td></tr>
+      <tr><td>CONSERVE</td><td>conservation</td></tr>
+      <tr><td>DANGER</td><td>endangered</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8A &mdash; Picture Story (6 marks, 2 marks per sentence)</p>
+  <table class="ans-table">
+    <thead><tr><th>Picture</th><th>Sample Answer</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Last weekend, our family went to the beach for the day.</td><td>2</td></tr>
+      <tr><td>2</td><td>Suddenly, we discovered a small injured seabird lying on the sand.</td><td>2</td></tr>
+      <tr><td>3</td><td>Luckily, a park ranger arrived and rescued the bird safely.</td><td>2</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:9.5pt;color:#555;margin-top:4px">Award 1 mark for using the given words correctly + 1 mark for a grammatically correct and relevant sentence.</p>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 8B &mdash; Sentence Linking (4 marks, 1 mark each)</p>
+  <table class="ans-table">
+    <thead><tr><th>Q</th><th>Acceptable Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Riya visits the botanical garden every month because she loves nature.</td></tr>
+      <tr><td>2</td><td>Mr Kumar, who is our science teacher, knows a lot about coral reefs.</td></tr>
+      <tr><td>3</td><td>While we were exploring the lagoon, the storm began.</td></tr>
+      <tr><td>4</td><td>The weather is cold and rainy, so the children are staying indoors.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-weight:bold;color:#1a3c6e;margin:16px 0 6px;font-size:11pt">Question 9 &mdash; Writing Task (10 marks)</p>
+  <table class="ans-table">
+    <thead><tr><th>Criterion</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>Content: addresses the prompt using the bullet-point guide</td><td>up to 4</td></tr>
+      <tr><td>Language: vocabulary, sentence variety, correct grammar and spelling</td><td>up to 4</td></tr>
+      <tr><td>Organisation: logical sequence, paragraphs, clear beginning, middle and end</td><td>up to 2</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:10pt;color:#555;margin-top:8px"><em>Sample answer: One Saturday morning, my cousin and I were walking through the forest near our village when we heard a strange sound coming from behind a bush. We looked and found a young bird lying on the ground. One of its wings was bent and it could not fly. I felt very sorry for it. We carefully placed it in a box lined with leaves. My aunt called the nature reserve, and a wildlife officer came within an hour. He examined the bird and said it would recover fully. We named it Sunny. As we drove home, I felt proud that we had helped a living creature in need.</em></p>
+
+  <div style="margin-top:20px;font-size:9pt;color:#666;text-align:center;border-top:2px solid #1a3c6e;padding-top:10px">
+    Nouklass.com Specimen Paper 1 &mdash; For practice use only. Not an official MES examination paper.<br>
+    Always verify with your teacher or official MES materials. &copy; Nouklass.com 2026
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

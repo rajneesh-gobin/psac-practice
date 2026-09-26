@@ -9,14 +9,16 @@ STATIC_QUESTIONS.push(
     options:['4','5','20','25'],
     answer:'20',
     hint:'Multiply the number of symbols by the value of each symbol.',
-    explanation:'4 symbols x 5 = <b>20 students</b>. Always check the KEY of a pictogram to find out what each symbol is worth before reading the data.' }),
+    explanation:'4 symbols x 5 = <b>20 students</b>. Always check the KEY of a pictogram to find out what each symbol is worth before reading the data.',
+    learnMore:'In a <b>pictogram</b>, each symbol represents a fixed number of items shown in the KEY. Formula: <i>number of symbols × key value = total</i>. Example: 6 symbols where 1 symbol = 5 gives 6 × 5 = 30. Always read the key first — the value per symbol changes from chart to chart.' }),
 
   makeMCQ({ id:'g4m-data-002', chapterId:'g4-data', subsection:'bar_chart', difficulty:1,
     question:'A BAR CHART is most useful for:',
     options:['Showing changes over time','Comparing different categories','Showing parts of a whole','Tracking temperature'],
     answer:'Comparing different categories',
     hint:'Think about what the bars in a bar chart show side by side.',
-    explanation:'A <b>bar chart</b> is best for comparing quantities in different categories (e.g. favourite colours, number of pets). Line graphs show changes over time; pie charts show parts of a whole.' }),
+    explanation:'A <b>bar chart</b> is best for comparing quantities in different categories (e.g. favourite colours, number of pets). Line graphs show changes over time; pie charts show parts of a whole.',
+    learnMore:'Choose your chart type carefully: <b>bar chart</b> = comparing quantities between categories. <b>Line graph</b> = showing change over time (temperature, growth). <b>Pie chart</b> = showing parts of a whole (how time is divided). <b>Pictogram</b> = comparing using pictures/symbols. The wrong chart type gives misleading information.' }),
 
   makeMCQ({ id:'g4m-data-003', chapterId:'g4-data', subsection:'bar_chart', difficulty:2,
     question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Favourite sport - class survey</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 148H354M58 110H354M58 72H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">10</text><text x="50" y="114">20</text><text x="50" y="76">30</text><text x="50" y="38">40</text></g><rect x="73" y="72" width="42" height="114" rx="3" fill="#3b82f6"/><rect x="145" y="91" width="42" height="95" rx="3" fill="#f59e0b"/><rect x="217" y="110" width="42" height="76" rx="3" fill="#10b981"/><rect x="289" y="129" width="42" height="57" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Football</text><text x="94" y="66">30</text><text x="166" y="203">Cricket</text><text x="166" y="85">25</text><text x="238" y="203">Swimming</text><text x="238" y="104">20</text><text x="310" y="203">Badminton</text><text x="310" y="123">15</text></g></svg>Which sport is <b>LEAST</b> popular?',
@@ -41,7 +43,8 @@ STATIC_QUESTIONS.push(
     question:'A bar chart MUST have a TITLE to be correctly drawn.',
     answer:true,
     hint:'Think of all the things needed to make a chart clear and complete.',
-    explanation:'<b>True.</b> A complete bar chart must have: a title, labels on both axes (x and y), a scale on the y-axis, and bars of equal width with equal spacing. Without a title, the reader does not know what the chart is about.' }),
+    explanation:'<b>True.</b> A complete bar chart must have: a title, labels on both axes (x and y), a scale on the y-axis, and bars of equal width with equal spacing. Without a title, the reader does not know what the chart is about.',
+    learnMore:'A correctly drawn <b>bar chart</b> needs: (1) a <b>title</b>, (2) a label on the x-axis (categories), (3) a label on the y-axis (values), (4) a <b>scale</b> going up in equal steps from 0, and (5) bars of equal width with equal spacing. Missing any of these costs marks in an exam.' }),
 
   makeNum({ id:'g4m-data-007', chapterId:'g4-data', subsection:'bar_chart', difficulty:2,
     question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Favourite sport - class survey</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 148H354M58 110H354M58 72H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">10</text><text x="50" y="114">20</text><text x="50" y="76">30</text><text x="50" y="38">40</text></g><rect x="73" y="72" width="42" height="114" rx="3" fill="#3b82f6"/><rect x="145" y="91" width="42" height="95" rx="3" fill="#f59e0b"/><rect x="217" y="110" width="42" height="76" rx="3" fill="#10b981"/><rect x="289" y="129" width="42" height="57" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Football</text><text x="94" y="66">30</text><text x="166" y="203">Cricket</text><text x="166" y="85">25</text><text x="238" y="203">Swimming</text><text x="238" y="104">20</text><text x="310" y="203">Badminton</text><text x="310" y="123">15</text></g></svg>How many students were surveyed in <b>TOTAL</b>?',
@@ -61,7 +64,8 @@ STATIC_QUESTIONS.push(
     options:['The title of the chart','What each symbol represents','The total number of items','The year the data was collected'],
     answer:'What each symbol represents',
     hint:'The KEY shows the value of one picture/symbol.',
-    explanation:'The <b>KEY</b> in a pictogram tells you the value of each symbol. For example "Each heart symbol = 10 students". Always read the key before interpreting a pictogram.' }),
+    explanation:'The <b>KEY</b> in a pictogram tells you the value of each symbol. For example "Each heart symbol = 10 students". Always read the key before interpreting a pictogram.',
+    learnMore:'The <b>key</b> (legend) in a pictogram is essential — it states how many items one symbol equals. Half a symbol = half that value. If 1 ★ = 4 children, then 3½ stars = 3.5 × 4 = 14 children. Always read the key BEFORE counting symbols, because the value per symbol varies between different pictograms.' }),
 
   makeNum({ id:'g4m-data-010', chapterId:'g4-data', subsection:'tally', difficulty:3,
     question:'A teacher surveys 40 students about their favourite sport: Football=16, Cricket=12, Swimming=8, Badminton=4. How many students chose EITHER Football OR Cricket?',

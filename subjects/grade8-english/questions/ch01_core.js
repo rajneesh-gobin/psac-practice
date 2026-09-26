@@ -78,7 +78,8 @@ STATIC_QUESTIONS.push(
     options:['Complex vocabulary and long sentences','Simple words, short sentences, and friendly examples','Technical safety statistics and formal language','Academic language with references'],
     answer:'Simple words, short sentences, and friendly examples',
     hint:'Adapt your language to your audience\'s age and understanding.',
-    explanation:'Adapting register to the audience means using <b>simple vocabulary, short sentences and relatable examples</b> when speaking to young children. Using complex language confuses and disengages the audience. Register adaptation is a core oral skill.' }),
+    explanation:'Adapting register to the audience means using <b>simple vocabulary, short sentences and relatable examples</b> when speaking to young children. Using complex language confuses and disengages the audience. Register adaptation is a core oral skill.',
+    learnMore:'<b>Register adaptation</b> means matching your language to your audience. For young children: short sentences, everyday vocabulary, friendly examples. For adults in a formal setting: complex sentences, precise vocabulary, formal tone. Ignoring audience register is one of the most common speaking mistakes at NCE level.' }),
 
   makeMCQ({ id:'g8eng-speaking-004', chapterId:'g8eng-speaking', difficulty:3,
     subsection:'register_adaptation',
@@ -120,7 +121,8 @@ STATIC_QUESTIONS.push(
     options:['Informative and neutral','Persuasive and urgent','Humorous and light','Academic and formal'],
     answer:'Persuasive and urgent',
     hint:'Short, imperative sentences create a sense of urgency and try to make you act.',
-    explanation:'The short imperative sentences ("Act now", "Donate today") create an <b>urgent, persuasive</b> tone. Identifying tone (the writer\'s attitude) helps you evaluate how a text is trying to influence the reader.' }),
+    explanation:'The short imperative sentences ("Act now", "Donate today") create an <b>urgent, persuasive</b> tone. Identifying tone (the writer\'s attitude) helps you evaluate how a text is trying to influence the reader.',
+    learnMore:'<b>Tone</b> is the writer\'s attitude expressed through word choice and sentence structure. Short imperative sentences ("Act now") = urgent and persuasive. Long, qualified sentences = academic and cautious. Emotive words ("Save lives") = passionate. Neutral, factual language = informative. Identifying tone is a key NCE reading skill.' }),
 
   makeMCQ({ id:'g8eng-reading-003', chapterId:'g8eng-reading', difficulty:2,
     subsection:'explicit_implicit',
@@ -128,7 +130,8 @@ STATIC_QUESTIONS.push(
     options:['She prepared very carefully for the interview.','She was not well prepared or organised for the interview.','She had decided not to take the job.','She had been in an accident on the way.'],
     answer:'She was not well prepared or organised for the interview.',
     hint:'The details given suggest how she approached the interview — though this is never stated directly.',
-    explanation:'The text does not explicitly say Maya was unprepared, but the details — being <b>late, hair uncombed, shirt untucked</b> — allow us to infer she was not well prepared. Inference means reading between the lines using textual evidence.' }),
+    explanation:'The text does not explicitly say Maya was unprepared, but the details — being <b>late, hair uncombed, shirt untucked</b> — allow us to infer she was not well prepared. Inference means reading between the lines using textual evidence.',
+    learnMore:'<b>Inference</b> = reading between the lines. The text gives clues (details, word choice, imagery); the reader uses logic to draw a conclusion that is not directly stated. At NCE level: always cite the textual evidence that supports your inference, not just your gut feeling.' }),
 
   makeMCQ({ id:'g8eng-reading-004', chapterId:'g8eng-reading', difficulty:3,
     subsection:'explicit_implicit',
@@ -170,7 +173,8 @@ STATIC_QUESTIONS.push(
     options:['The children are playing in the garden.','The team play well together.','Each of the students have a book.','The government has announced new policies.'],
     answer:'Each of the students have a book.',
     hint:'"Each" is always singular, even when followed by a plural noun.',
-    explanation:'"Each of the students <b>has</b> a book" is correct. "Each" is singular — the verb must be singular even though "students" is plural. "Each" always takes a singular verb: "Each student has…" / "Each of them has…"' }),
+    explanation:'"Each of the students <b>has</b> a book" is correct. "Each" is singular — the verb must be singular even though "students" is plural. "Each" always takes a singular verb: "Each student has…" / "Each of them has…"',
+    learnMore:'<b>"Each"</b> is always singular and takes a singular verb, even when followed by "of + plural noun". "Each of the pupils <i>has</i> a book" ✓. Same rule for "everyone, everybody, nobody, someone, anyone" — all take singular verbs. Do not be misled by the plural noun that follows "each of".' }),
 
   makeMCQ({ id:'g8eng-writing-003', chapterId:'g8eng-writing', difficulty:2,
     subsection:'extended_writing',
@@ -178,7 +182,8 @@ STATIC_QUESTIONS.push(
     options:["While homework can reinforce learning, excessive amounts harm students' wellbeing.","Homework is a school thing that teachers give to their students every single day.","I personally think that homework is bad and I do not enjoy doing it in the evening.","This essay will discuss homework and whether students should be given any of it."],
     answer:'While homework can reinforce learning, excessive amounts harm students\' wellbeing.',
     hint:'A thesis states a clear, specific, arguable position — not a vague statement of topic.',
-    explanation:'The best thesis is <b>specific and arguable</b>: it acknowledges a counterpoint ("while it can reinforce learning") and states a clear position ("excessive amounts harm wellbeing"). Vague statements like "Homework is a school thing" give the essay no direction.' }),
+    explanation:'The best thesis is <b>specific and arguable</b>: it acknowledges a counterpoint ("while it can reinforce learning") and states a clear position ("excessive amounts harm wellbeing"). Vague statements like "Homework is a school thing" give the essay no direction.',
+    learnMore:'A <b>thesis statement</b> is one sentence at the end of the introduction that states the writer\'s specific, arguable position. It is NOT a statement of topic ("This essay discusses…") or a vague opinion ("I think homework is bad"). A strong thesis is specific enough that someone could disagree with it.' }),
 
   makeMCQ({ id:'g8eng-writing-004', chapterId:'g8eng-writing', difficulty:3,
     subsection:'editing_accuracy',
@@ -186,7 +191,8 @@ STATIC_QUESTIONS.push(
     options:['She walked into the room and sat down.','He opens the door and entered the kitchen.','They were tired, so they went home.','She studied hard and passed the exam.'],
     answer:'He opens the door and entered the kitchen.',
     hint:'Both actions happened in the past — both verbs should be in the same tense.',
-    explanation:'"He <b>opens</b> the door and <b>entered</b> the kitchen" mixes present ("opens") and past ("entered"). Both actions are in the past, so both verbs should be past: "He <b>opened</b> the door and <b>entered</b> the kitchen." Tense consistency is vital in paragraphs.' }),
+    explanation:'"He <b>opens</b> the door and <b>entered</b> the kitchen" mixes present ("opens") and past ("entered"). Both actions are in the past, so both verbs should be past: "He <b>opened</b> the door and <b>entered</b> the kitchen." Tense consistency is vital in paragraphs.',
+    learnMore:'<b>Tense consistency</b>: all verbs in the same sequence must use the same tense unless there is a logical reason to switch. Mixing "opened … enters" in the same clause is an error. In narratives, once you choose past tense, stay in past tense throughout — switching tense mid-paragraph is one of the most common NCE writing errors.' }),
 
   makeMCQ({ id:'g8eng-writing-005', chapterId:'g8eng-writing', difficulty:3,
     subsection:'extended_writing',

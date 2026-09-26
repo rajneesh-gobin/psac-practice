@@ -171,9 +171,18 @@ const MCQ = [
    'A DVD is read by a laser, so it is optical storage. A hard disk is magnetic, a flash drive uses memory chips, and RAM is not a storage medium at all.'],
 ];
 
+const G9SYS_LEARN = {
+  'g9ict-sys-011': '<b>ROM</b> (Read Only Memory) is <i>non-volatile</i> — its contents survive when the power goes off. It stores the computer\'s start-up (boot) instructions. Contrast: <b>RAM</b> is <i>volatile</i> — it loses everything when power is cut. ROM is permanent; RAM is temporary working space.',
+  'g9ict-sys-012': '<b>RAM</b> (Random Access Memory) is <i>volatile</i> — everything held only in RAM is lost when the power goes off. This is why you must save your work to a storage device (hard disk, USB drive). ROM is the opposite: non-volatile and keeps its contents without power.',
+  'g9ict-sys-013': '<b>RAM</b> is working memory — it holds programs and data that are currently in use. More RAM = more things can run at once without the computer slowing. RAM does not store files permanently (that is the hard disk) and does not affect processor speed.',
+  'g9ict-sys-014': '<b>Data size order</b>: 1 byte = 8 <i>bits</i>. 1 kilobyte (KB) ≈ 1,000 bytes. 1 megabyte (MB) ≈ 1,000 KB. 1 gigabyte (GB) ≈ 1,000 MB. 1 terabyte (TB) ≈ 1,000 GB. A bit is the smallest unit (0 or 1); a byte is the basic unit of storage (one character).',
+  'g9ict-sys-015': '<b>Smallest → largest</b>: bit → byte (8 bits) → kilobyte → megabyte → gigabyte → terabyte. Each step is roughly ×1,000. A short email might be 2–3 KB; a photo 3–5 MB; a film 4–8 GB. Knowing the scale helps you choose the right storage.',
+};
+
 MCQ.forEach(([id, subsection, difficulty, question, options, answer, hint, explanation]) => {
   STATIC_QUESTIONS.push(makeMCQ({
     id, chapterId: CH, subsection, difficulty, question, options, answer, hint, explanation,
+    learnMore: G9SYS_LEARN[id] || '',
   }));
 });
 

@@ -1,0 +1,786 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nouklass.com — Grade 6 PSAC Mathematics Specimen Paper 2 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.cover-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-logo-box .nk-big{font-size:18pt;line-height:1}
+.nk-logo-box .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year-subject{margin-bottom:20px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.subject-code{font-size:11.5pt;color:#555;margin-bottom:18px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.marking-grid{border-collapse:collapse;font-size:9.5pt;margin-top:18px;width:100%}
+.marking-grid th,.marking-grid td{border:1px solid #000;padding:4px 8px;text-align:center}
+.marking-grid th{background:#e8edf5}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:11.5pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.section-sub{font-size:10.5pt;font-weight:normal;color:#333;margin-top:5px}
+.question{margin:14px 0 18px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;margin-top:2px;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;white-space:nowrap;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:110px;width:100%;margin:10px 0;padding:6px}
+.writing-lines{margin:10px 0;width:100%}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.work-space{min-height:80px;border:1px dashed #ccc;border-radius:3px;margin:10px 0;padding:4px;background:#fafeff}
+.work-space-sm{min-height:50px;border:1px dashed #ccc;border-radius:3px;margin:8px 0;padding:4px;background:#fafeff}
+.work-space-lg{min-height:130px;border:1px dashed #ccc;border-radius:3px;margin:12px 0;padding:4px;background:#fafeff}
+.answer-label{font-weight:bold;margin-top:12px;font-size:10.5pt;color:#1a3c6e}
+.answer-line{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:180px}
+.answer-line-sm{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:110px}
+.col-arith{font-family:monospace;font-size:13pt;border:1px solid #ccc;display:inline-block;padding:10px 24px;margin:10px 0;line-height:2}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2;margin:0 4px}
+.frac .num{border-bottom:1px solid #000;padding:0 5px;min-width:14px;text-align:center}
+.frac .den{padding:0 5px;min-width:14px;text-align:center}
+.mcq-box{border:1.5px solid #333;padding:10px;margin:10px 0;border-radius:4px}
+.mcq-label{font-weight:bold;font-size:10.5pt;margin-bottom:10px;color:#1a3c6e}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mcq-item{border:1px solid #ccc;padding:10px 8px;border-radius:3px}
+.mcq-q{font-size:10.5pt;margin-bottom:8px;min-height:36px;line-height:1.5}
+.mcq-opt{margin:5px 0;font-size:10.5pt;display:flex;gap:5px}
+.mcq-letter{font-weight:bold;min-width:22px;color:#1a3c6e}
+.tick-opt{display:flex;align-items:center;gap:10px;margin:7px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0;display:inline-block}
+.tick-label{font-size:10.5pt}
+.boxed{border:1px solid #333;padding:2px 10px;display:inline-block;margin:2px;font-family:monospace;font-size:11.5pt}
+.divider{border-bottom:1px solid #ddd;margin:8px 0}
+.page-break{page-break-before:always}
+.sub-q{margin:10px 0 5px}
+.sub-label{font-weight:bold;display:inline-block;min-width:26px;color:#1a3c6e}
+.mark-scheme{padding:14mm 20mm;background:#fff}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.ans-table tr:nth-child(even){background:#f9fbff}
+@media print{
+  .nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none}
+  body{padding-top:32px}
+  @page{size:A4 portrait;margin:12mm 14mm}
+}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>&#128196; Nouklass.com &mdash; Grade 6 PSAC Mathematics &mdash; Specimen Paper 2 of 4 &mdash; 2026</span>
+  <button class="print-btn" onclick="window.print()">&#128424; Print / Save PDF</button>
+</div>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">Nouklass.com</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">Specimen Paper 2026 &mdash; For examination practice only. Not an official MES paper.</div>
+    </div>
+  </div>
+
+  <div class="year-subject">
+    <div class="year">PSAC 2026</div>
+    <div class="subject">Mathematics</div>
+    <div class="subject-code">Specimen Paper 2 of 4 &nbsp;|&nbsp; Prepared by Nouklass.com &nbsp;|&nbsp; Topics: Decimals &bull; Percentages &bull; Money &bull; Volume &amp; Capacity</div>
+  </div>
+
+  <div class="paper-meta">
+    <div><strong>Time allowed: 1 hour 45 minutes</strong> &nbsp;&nbsp;&nbsp; <strong>Total Marks: 99</strong></div>
+    <div style="margin-top:10px">Centre Number: <span class="index-line"></span></div>
+    <div style="margin-top:8px">Index Number: <span class="index-line"></span></div>
+    <div style="margin-top:8px">Candidate's Name: <span class="index-line" style="width:320px"></span></div>
+  </div>
+
+  <div class="instructions">
+    <strong>INSTRUCTIONS TO CANDIDATES</strong>
+    <ol>
+      <li>This paper contains <strong>45</strong> questions in three sections.</li>
+      <li>Write your Index Number and Name in the spaces provided above.</li>
+      <li>Answer <strong>all</strong> questions.</li>
+      <li>Write your answers in the spaces provided in this booklet.</li>
+      <li>Show <strong>all</strong> working clearly. Marks may be awarded for working even if the final answer is wrong.</li>
+      <li>Do <strong>not</strong> use red, green or black ink.</li>
+      <li>Diagrams are <strong>not</strong> drawn to scale unless stated otherwise.</li>
+      <li>Calculators are <strong>not</strong> allowed.</li>
+    </ol>
+  </div>
+
+  <table class="marking-grid">
+    <tr>
+      <th>Section</th><th>Questions</th><th>Marks Available</th><th>Marks Awarded</th><th>Examiner</th>
+    </tr>
+    <tr><td>A</td><td>1–18</td><td>36</td><td></td><td></td></tr>
+    <tr><td>B</td><td>19–28</td><td>20</td><td></td><td></td></tr>
+    <tr><td>C</td><td>29–45</td><td>43</td><td></td><td></td></tr>
+    <tr><td colspan="2"><strong>Total</strong></td><td><strong>99</strong></td><td></td><td></td></tr>
+  </table>
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 1 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION A -->
+<div class="page">
+  <div class="section-header">
+    SECTION A &mdash; Short Answer Questions
+    <div class="section-sub">Questions 1–18 &nbsp;|&nbsp; 36 marks &nbsp;|&nbsp; Write your answers clearly in the spaces provided.</div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">1.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write the decimal <strong>4.735</strong> in words.
+      <div class="writing-lines">
+        <span class="writing-line"></span>
+        <span class="writing-line"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      What is the value of the digit <strong>6</strong> in the decimal number <strong>23.648</strong>?
+      <div class="answer-label">Answer: <span class="answer-line"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Order these decimals from <strong>largest to smallest</strong>:<br>
+      <div style="margin:10px 0;font-size:13pt;letter-spacing:1px">
+        <span class="boxed">3.07</span>
+        <span class="boxed">3.7</span>
+        <span class="boxed">3.071</span>
+        <span class="boxed">3.17</span>
+      </div>
+      <div class="answer-label">Answer (largest first): <span class="answer-line" style="width:260px"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Round <strong>7.483</strong> to:<br>
+      (a) the nearest whole number: <span class="answer-line-sm"></span><br>
+      (b) 1 decimal place: <span class="answer-line-sm"></span>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Calculate: &nbsp; <strong>12.64 + 8.375</strong>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Calculate: &nbsp; <strong>20.5 &minus; 7.84</strong>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Calculate: &nbsp; <strong>3.6 &times; 4</strong>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write <strong>35%</strong> as:<br>
+      (a) a fraction in simplest form: <span class="answer-line-sm"></span><br>
+      (b) a decimal: <span class="answer-line-sm"></span>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Find <strong>20%</strong> of <strong>Rs 350</strong>.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      What percentage is <strong>18 out of 24</strong>?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> %</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 2 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">11.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A shirt costs <strong>Rs 480</strong>. There is a <strong>15% discount</strong>. What is the sale price?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Asha buys 3 items costing Rs 47.50, Rs 23.75 and Rs 18.25. She pays with a Rs 100 note. How much change does she receive?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Change: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A box has a length of <strong>8 cm</strong>, a width of <strong>5 cm</strong> and a height of <strong>4 cm</strong>. Find its volume.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Volume = <span class="answer-line-sm"></span> cm&sup3;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A cube has a side length of <strong>6 cm</strong>. Find its volume.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Volume = <span class="answer-line-sm"></span> cm&sup3;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Convert <strong>2.4 litres</strong> to <strong>millilitres</strong>. Then convert <strong>850 ml</strong> to litres.
+      <div class="answer-label" style="margin-top:14px">2.4 litres = <span class="answer-line-sm"></span> ml &nbsp;&nbsp;&nbsp; 850 ml = <span class="answer-line-sm"></span> litres</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">16.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Calculate: &nbsp; <strong>0.48 &times; 10</strong> &nbsp; and &nbsp; <strong>36.5 &divide; 100</strong>
+      <div class="answer-label" style="margin-top:14px">0.48 &times; 10 = <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; 36.5 &divide; 100 = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">17.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write these as percentages:<br>
+      (a) <span class="frac"><span class="num">7</span><span class="den">20</span></span> = <span class="answer-line-sm"></span> % &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      (b) 0.64 = <span class="answer-line-sm"></span> %
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">18.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A container holds <strong>5 litres</strong>. It is <strong>3/5 full</strong>. How many millilitres of liquid are in it?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> ml</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 3 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION B -->
+<div class="page">
+  <div class="section-header">
+    SECTION B &mdash; Multiple Choice Questions
+    <div class="section-sub">Questions 19–28 &nbsp;|&nbsp; 20 marks &nbsp;|&nbsp; Tick (&check;) ONE box for each question. Each question is worth 2 marks.</div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 19–20</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>19.</strong> Which of these decimals is the largest?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 0.45</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 0.405</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 0.54</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 0.504</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>20.</strong> What is 40% of 250?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 50</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 80</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 100</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 125</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 21–22</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>21.</strong> The volume of a cuboid with l = 5 cm, w = 4 cm, h = 3 cm is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 47 cm&sup3;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 60 cm&sup3;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 94 cm&sup3;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 120 cm&sup3;</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>22.</strong> Which is equivalent to 0.75?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 7/5</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 3/5</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 3/4</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 7/10</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 23–24</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>23.</strong> Nadia earns Rs 6,000. She saves 25% of it. How much does she save?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; Rs 1,200</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; Rs 1,500</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; Rs 1,800</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; Rs 2,000</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>24.</strong> 6.3 &divide; 0.9 = ?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 0.7</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 7</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 70</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 0.07</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 25–26</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>25.</strong> How many 250 ml glasses can be filled from a 3-litre bottle?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 8</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 10</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 12</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 15</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>26.</strong> A coat costs Rs 1,200. In a sale it is reduced by 30%. What is the new price?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; Rs 840</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; Rs 860</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; Rs 900</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; Rs 360</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 27–28</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>27.</strong> What percentage is 45 out of 180?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 20%</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 25%</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 30%</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 45%</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>28.</strong> The digit in the hundredths place of 17.654 is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 1</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 6</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 5</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 4 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION C -->
+<div class="page">
+  <div class="section-header">
+    SECTION C &mdash; Structured Questions
+    <div class="section-sub">Questions 29–45 &nbsp;|&nbsp; 43 marks &nbsp;|&nbsp; Show ALL working. Marks are awarded for method as well as the answer.</div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">29.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A supermarket sells juice in three sizes:
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:5px 12px;background:#eef3fb">Size</th><th style="border:1px solid #999;padding:5px 12px;background:#eef3fb">Volume</th><th style="border:1px solid #999;padding:5px 12px;background:#eef3fb">Price</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">Small</td><td style="border:1px solid #999;padding:4px 12px">250 ml</td><td style="border:1px solid #999;padding:4px 12px">Rs 12.50</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">Medium</td><td style="border:1px solid #999;padding:4px 12px">500 ml</td><td style="border:1px solid #999;padding:4px 12px">Rs 22.00</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">Large</td><td style="border:1px solid #999;padding:4px 12px">1 litre</td><td style="border:1px solid #999;padding:4px 12px">Rs 38.00</td></tr>
+      </table>
+      <div class="sub-q"><span class="sub-label">(a)</span> Which size gives the best value for money? Show your working.</div>
+      <div class="work-space"></div>
+      <div class="answer-label">Best value: <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> How much would 3 large bottles cost?</div>
+      <div class="answer-label">Answer: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">30.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A school tuck shop records these sales on Monday:
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:5px 10px;background:#eef3fb">Item</th><th style="border:1px solid #999;padding:5px 10px;background:#eef3fb">Qty sold</th><th style="border:1px solid #999;padding:5px 10px;background:#eef3fb">Unit price</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">Samosa</td><td style="border:1px solid #999;padding:4px 10px">24</td><td style="border:1px solid #999;padding:4px 10px">Rs 8.50</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">Juice</td><td style="border:1px solid #999;padding:4px 10px">15</td><td style="border:1px solid #999;padding:4px 10px">Rs 12.00</td></tr>
+      </table>
+      <div class="sub-q"><span class="sub-label">(a)</span> What is the total money collected from samosas?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: Rs <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Find the total amount collected from both items.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 5 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">31.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A fish weighs <strong>1.85 kg</strong>. A second fish weighs <strong>0.97 kg</strong> more. Find the combined weight of both fish.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> kg</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">32.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A rectangular fish tank has the dimensions: length <strong>40 cm</strong>, width <strong>25 cm</strong>, height <strong>30 cm</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> Find the volume of the tank in cm&sup3;.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Volume = <span class="answer-line-sm"></span> cm&sup3;</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Convert this volume to litres. (1 litre = 1000 cm&sup3;)</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Volume = <span class="answer-line-sm"></span> litres</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">33.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Rewrite in ascending order (smallest to largest): &nbsp; <strong>3.08, 3.8, 3.008, 3.80, 3.088</strong>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line" style="width:320px"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">34.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Ravi earns <strong>Rs 15,000</strong> per month. He spends 40% on rent, 25% on food, and saves the rest.
+      <div class="sub-q"><span class="sub-label">(a)</span> How much does he spend on rent?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Rent = Rs <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> How much does he spend on food?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Food = Rs <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> How much does he save?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Savings = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 6 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">35.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write these fractions as decimals and then as percentages:
+      <table style="border-collapse:collapse;margin:12px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:5px 16px;background:#eef3fb">Fraction</th><th style="border:1px solid #999;padding:5px 30px;background:#eef3fb">Decimal</th><th style="border:1px solid #999;padding:5px 30px;background:#eef3fb">Percentage</th></tr>
+        <tr><td style="border:1px solid #999;padding:8px 16px;text-align:center">3/5</td><td style="border:1px solid #999;padding:8px 30px">&nbsp;</td><td style="border:1px solid #999;padding:8px 30px">&nbsp;</td></tr>
+        <tr><td style="border:1px solid #999;padding:8px 16px;text-align:center">9/25</td><td style="border:1px solid #999;padding:8px 30px">&nbsp;</td><td style="border:1px solid #999;padding:8px 30px">&nbsp;</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">36.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A price tag reads Rs <strong>540</strong>. After a <strong>10% increase</strong>, what is the new price? Show your working.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">New price = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">37.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A swimming pool holds <strong>480,000 litres</strong> when full. A pipe fills it at <strong>800 litres per minute</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> How many minutes will it take to fill the pool completely?</div>
+      <div class="work-space"></div>
+      <div class="answer-label">Time = <span class="answer-line-sm"></span> minutes</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Convert this time to hours and minutes.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> hours <span class="answer-line-sm"></span> minutes</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">38.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      In a bag there are <strong>40 marbles</strong>. 35% are blue, 25% are red, and the rest are green.
+      <div class="sub-q"><span class="sub-label">(a)</span> How many blue marbles are there?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Blue = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> How many green marbles are there?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Green = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> What percentage are green?</div>
+      <div class="answer-label">Green % = <span class="answer-line-sm"></span> %</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 7 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">39.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Three friends share a bill of <strong>Rs 630</strong> equally. They each give the waiter Rs 220. How much change should each person get back?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Change each = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">40.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      The volume of water in a tank is <strong>3,600 cm&sup3;</strong>. The base of the tank is <strong>20 cm</strong> by <strong>12 cm</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> What is the height of the water in the tank?</div>
+      <div class="work-space"></div>
+      <div class="answer-label">Height = <span class="answer-line-sm"></span> cm</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> What percentage of 1 litre is 3,600 cm&sup3;? (1 litre = 1,000 cm&sup3;)</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> %</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">41.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A trader buys goods for <strong>Rs 2,400</strong> and sells them for <strong>Rs 3,000</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> Find the profit.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Profit = Rs <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Calculate the percentage profit on cost price.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Percentage profit = <span class="answer-line-sm"></span> %</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> If he gives a 5% discount on selling price, what is the new selling price?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">New price = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 8 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">42.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write the missing decimal in each number sentence:
+      <div style="margin:12px 0;line-height:2.8;font-size:11.5pt">
+        (a) &nbsp; <span class="answer-line-sm"></span> + 2.5 = 6.3<br>
+        (b) &nbsp; 8.7 &minus; <span class="answer-line-sm"></span> = 4.85
+      </div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">43.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A recipe requires <strong>0.75 kg</strong> of flour for one cake. Lena wants to make <strong>6 cakes</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> How many kilograms of flour does she need?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> kg</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Flour costs Rs 55 per kg. How much will it cost?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Cost = Rs <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> Lena uses 10% of the flour for decorating. How many grams is this?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> g</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">44.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Look at the sequence of decimals: &nbsp; <strong>0.4, 0.8, 1.2, 1.6, ___</strong>
+      <div class="sub-q"><span class="sub-label">(a)</span> Write the next two terms.</div>
+      <div class="answer-label">Next terms: <span class="answer-line-sm"></span> and <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> What is the rule for this sequence?</div>
+      <div class="writing-lines"><span class="writing-line"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">45.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A car park charges <strong>Rs 15.50</strong> for the first hour and <strong>Rs 8.75</strong> for each extra hour. How much will it cost to park for <strong>4 hours</strong>?
+      <div class="work-space"></div>
+      <div class="answer-label">Total cost = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 9 of 10</div>
+</div>
+
+<!-- MARK SCHEME -->
+<div class="page-break"></div>
+<div class="mark-scheme">
+  <div class="ms-header">&#128203; Mark Scheme &mdash; Nouklass.com Specimen Paper 2 of 4 &mdash; 2026</div>
+  <div class="ms-disc">This mark scheme is provided for self-checking and teacher reference only. For method marks, show all working. Prepared by Nouklass.com based on MES syllabus and past paper analysis. Not an official MES document.</div>
+
+  <table class="ans-table">
+    <tr><th>Q</th><th>Answer</th><th>Marks</th><th>Notes</th></tr>
+    <tr><td>1</td><td>Four and seven hundred and thirty-five thousandths</td><td>2</td><td>Award 1 for mostly correct</td></tr>
+    <tr><td>2</td><td>6 tenths (0.6)</td><td>2</td><td>The digit 6 is in the tenths column</td></tr>
+    <tr><td>3</td><td>3.7, 3.17, 3.071, 3.07</td><td>2</td><td>Award 1 for 3 correct positions</td></tr>
+    <tr><td>4</td><td>(a) 7 &nbsp; (b) 7.5</td><td>2</td><td>7.483: 4 &lt; 5 so rounds down; .48 rounds to .5</td></tr>
+    <tr><td>5</td><td>21.015</td><td>2</td><td>12.640 + 8.375 = 21.015</td></tr>
+    <tr><td>6</td><td>12.66</td><td>2</td><td>20.50 &minus; 7.84 = 12.66</td></tr>
+    <tr><td>7</td><td>14.4</td><td>2</td><td>3.6 &times; 4 = 14.4</td></tr>
+    <tr><td>8</td><td>(a) 7/20 &nbsp; (b) 0.35</td><td>2</td><td>35/100 = 7/20; 35 &divide; 100 = 0.35</td></tr>
+    <tr><td>9</td><td>Rs 70</td><td>2</td><td>350 &times; 20/100 = 350 &times; 0.2 = 70</td></tr>
+    <tr><td>10</td><td>75%</td><td>2</td><td>18/24 &times; 100 = 75%</td></tr>
+    <tr><td>11</td><td>Rs 408</td><td>2</td><td>15% of 480 = 72; 480&minus;72 = 408</td></tr>
+    <tr><td>12</td><td>Rs 10.50</td><td>2</td><td>47.50+23.75+18.25=89.50; 100&minus;89.50=10.50</td></tr>
+    <tr><td>13</td><td>160 cm&sup3;</td><td>2</td><td>8&times;5&times;4=160</td></tr>
+    <tr><td>14</td><td>216 cm&sup3;</td><td>2</td><td>6&times;6&times;6=216</td></tr>
+    <tr><td>15</td><td>2,400 ml; 0.85 litres</td><td>2</td><td>2.4&times;1000=2400; 850&divide;1000=0.85</td></tr>
+    <tr><td>16</td><td>4.8; 0.365</td><td>2</td><td>Multiply by 10 moves decimal; divide by 100 moves it left 2</td></tr>
+    <tr><td>17</td><td>(a) 35% &nbsp; (b) 64%</td><td>2</td><td>7/20 = 35/100; 0.64 &times; 100 = 64</td></tr>
+    <tr><td>18</td><td>3,000 ml</td><td>2</td><td>5 litres = 5000 ml; 3/5 &times; 5000 = 3000</td></tr>
+    <tr><td>19</td><td>C &mdash; 0.54</td><td>2</td><td>0.54 &gt; 0.504 &gt; 0.45 &gt; 0.405</td></tr>
+    <tr><td>20</td><td>C &mdash; 100</td><td>2</td><td>40% of 250 = 0.4 &times; 250 = 100</td></tr>
+    <tr><td>21</td><td>B &mdash; 60 cm&sup3;</td><td>2</td><td>5&times;4&times;3=60</td></tr>
+    <tr><td>22</td><td>C &mdash; 3/4</td><td>2</td><td>0.75 = 75/100 = 3/4</td></tr>
+    <tr><td>23</td><td>B &mdash; Rs 1,500</td><td>2</td><td>25% of 6000 = 1500</td></tr>
+    <tr><td>24</td><td>B &mdash; 7</td><td>2</td><td>6.3 &divide; 0.9 = 63 &divide; 9 = 7</td></tr>
+    <tr><td>25</td><td>C &mdash; 12</td><td>2</td><td>3000 &divide; 250 = 12</td></tr>
+    <tr><td>26</td><td>A &mdash; Rs 840</td><td>2</td><td>30% of 1200 = 360; 1200&minus;360=840</td></tr>
+    <tr><td>27</td><td>B &mdash; 25%</td><td>2</td><td>45/180 &times; 100 = 25%</td></tr>
+    <tr><td>28</td><td>C &mdash; 5</td><td>2</td><td>17.654: tenths=6, hundredths=5, thousandths=4</td></tr>
+    <tr><td>29</td><td>(a) Small at Rs 0.05/ml vs Medium Rs 0.044/ml vs Large Rs 0.038/ml; Large best value. (b) Rs 114</td><td>3</td><td>Compare cost per ml; 3&times;38=114</td></tr>
+    <tr><td>30</td><td>(a) Rs 204 &nbsp; (b) Rs 384</td><td>3</td><td>24&times;8.5=204; 15&times;12=180; 204+180=384</td></tr>
+    <tr><td>31</td><td>4.67 kg</td><td>2</td><td>1.85+0.97=2.82; 1.85+2.82=4.67 (combined both fish)</td></tr>
+    <tr><td>32</td><td>(a) 30,000 cm&sup3; &nbsp; (b) 30 litres</td><td>3</td><td>40&times;25&times;30=30000; 30000&divide;1000=30</td></tr>
+    <tr><td>33</td><td>3.008, 3.08, 3.088, 3.8, 3.80</td><td>2</td><td>3.8 and 3.80 are equal; both acceptable as last two</td></tr>
+    <tr><td>34</td><td>(a) Rs 6,000 &nbsp; (b) Rs 3,750 &nbsp; (c) Rs 5,250</td><td>3</td><td>40%=6000; 25%=3750; 100%&minus;65%=35%&rarr;5250</td></tr>
+    <tr><td>35</td><td>3/5 = 0.6 = 60%; 9/25 = 0.36 = 36%</td><td>2</td><td>3&divide;5=0.6; 9&divide;25=0.36</td></tr>
+    <tr><td>36</td><td>Rs 594</td><td>2</td><td>10% of 540=54; 540+54=594</td></tr>
+    <tr><td>37</td><td>(a) 600 minutes &nbsp; (b) 10 hours 0 minutes</td><td>3</td><td>480000&divide;800=600 min=10 hours</td></tr>
+    <tr><td>38</td><td>(a) 14 &nbsp; (b) 16 &nbsp; (c) 40%</td><td>3</td><td>35%=14; 100&minus;35&minus;25=40%; 40%of40=16</td></tr>
+    <tr><td>39</td><td>Rs 10</td><td>2</td><td>630&divide;3=210; 220&minus;210=10</td></tr>
+    <tr><td>40</td><td>(a) 15 cm &nbsp; (b) 360%</td><td>3</td><td>3600&divide;(20&times;12)=15; 3600&divide;1000&times;100=360%</td></tr>
+    <tr><td>41</td><td>(a) Rs 600 &nbsp; (b) 25% &nbsp; (c) Rs 2,850</td><td>3</td><td>3000&minus;2400=600; 600/2400&times;100=25; 5%of3000=150; 3000&minus;150=2850</td></tr>
+    <tr><td>42</td><td>(a) 3.8 &nbsp; (b) 3.85</td><td>2</td><td>6.3&minus;2.5=3.8; 8.7&minus;4.85=3.85</td></tr>
+    <tr><td>43</td><td>(a) 4.5 kg &nbsp; (b) Rs 247.50 &nbsp; (c) 450 g</td><td>3</td><td>0.75&times;6=4.5; 4.5&times;55=247.5; 10%of4500g=450g</td></tr>
+    <tr><td>44</td><td>(a) 2.0, 2.4 &nbsp; (b) Add 0.4 each time</td><td>2</td><td>Pattern: +0.4 each term</td></tr>
+    <tr><td>45</td><td>Rs 41.75</td><td>2</td><td>15.50 + (3&times;8.75) = 15.50+26.25 = 41.75</td></tr>
+  </table>
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 10 of 10</div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

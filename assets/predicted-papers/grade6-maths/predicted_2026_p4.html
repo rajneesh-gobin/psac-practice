@@ -1,0 +1,784 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nouklass.com — Grade 6 PSAC Mathematics Specimen Paper 4 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.cover-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-logo-box .nk-big{font-size:18pt;line-height:1}
+.nk-logo-box .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year-subject{margin-bottom:20px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.subject-code{font-size:11.5pt;color:#555;margin-bottom:18px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.marking-grid{border-collapse:collapse;font-size:9.5pt;margin-top:18px;width:100%}
+.marking-grid th,.marking-grid td{border:1px solid #000;padding:4px 8px;text-align:center}
+.marking-grid th{background:#e8edf5}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:11.5pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.section-sub{font-size:10.5pt;font-weight:normal;color:#333;margin-top:5px}
+.question{margin:14px 0 18px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;margin-top:2px;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;white-space:nowrap;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:110px;width:100%;margin:10px 0;padding:6px}
+.writing-lines{margin:10px 0;width:100%}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.work-space{min-height:80px;border:1px dashed #ccc;border-radius:3px;margin:10px 0;padding:4px;background:#fafeff}
+.work-space-sm{min-height:50px;border:1px dashed #ccc;border-radius:3px;margin:8px 0;padding:4px;background:#fafeff}
+.work-space-lg{min-height:130px;border:1px dashed #ccc;border-radius:3px;margin:12px 0;padding:4px;background:#fafeff}
+.answer-label{font-weight:bold;margin-top:12px;font-size:10.5pt;color:#1a3c6e}
+.answer-line{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:180px}
+.answer-line-sm{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:110px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2;margin:0 4px}
+.frac .num{border-bottom:1px solid #000;padding:0 5px;min-width:14px;text-align:center}
+.frac .den{padding:0 5px;min-width:14px;text-align:center}
+.mcq-box{border:1.5px solid #333;padding:10px;margin:10px 0;border-radius:4px}
+.mcq-label{font-weight:bold;font-size:10.5pt;margin-bottom:10px;color:#1a3c6e}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mcq-item{border:1px solid #ccc;padding:10px 8px;border-radius:3px}
+.mcq-q{font-size:10.5pt;margin-bottom:8px;min-height:36px;line-height:1.5}
+.tick-opt{display:flex;align-items:center;gap:10px;margin:7px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0;display:inline-block}
+.tick-label{font-size:10.5pt}
+.boxed{border:1px solid #333;padding:2px 10px;display:inline-block;margin:2px;font-family:monospace;font-size:11.5pt}
+.page-break{page-break-before:always}
+.sub-q{margin:10px 0 5px}
+.sub-label{font-weight:bold;display:inline-block;min-width:26px;color:#1a3c6e}
+.mark-scheme{padding:14mm 20mm;background:#fff}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.ans-table tr:nth-child(even){background:#f9fbff}
+@media print{
+  .nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none}
+  body{padding-top:32px}
+  @page{size:A4 portrait;margin:12mm 14mm}
+}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>&#128196; Nouklass.com &mdash; Grade 6 PSAC Mathematics &mdash; Specimen Paper 4 of 4 &mdash; 2026</span>
+  <button class="print-btn" onclick="window.print()">&#128424; Print / Save PDF</button>
+</div>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">Nouklass.com</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">Specimen Paper 2026 &mdash; For examination practice only. Not an official MES paper.</div>
+    </div>
+  </div>
+
+  <div class="year-subject">
+    <div class="year">PSAC 2026</div>
+    <div class="subject">Mathematics</div>
+    <div class="subject-code">Specimen Paper 4 of 4 &nbsp;|&nbsp; Prepared by Nouklass.com &nbsp;|&nbsp; Topics: Number Patterns &bull; Word Problems &bull; 3D Shapes &bull; Symmetry &amp; Coordinates</div>
+  </div>
+
+  <div class="paper-meta">
+    <div><strong>Time allowed: 1 hour 45 minutes</strong> &nbsp;&nbsp;&nbsp; <strong>Total Marks: 99</strong></div>
+    <div style="margin-top:10px">Centre Number: <span class="index-line"></span></div>
+    <div style="margin-top:8px">Index Number: <span class="index-line"></span></div>
+    <div style="margin-top:8px">Candidate's Name: <span class="index-line" style="width:320px"></span></div>
+  </div>
+
+  <div class="instructions">
+    <strong>INSTRUCTIONS TO CANDIDATES</strong>
+    <ol>
+      <li>This paper contains <strong>45</strong> questions in three sections.</li>
+      <li>Write your Index Number and Name in the spaces provided above.</li>
+      <li>Answer <strong>all</strong> questions.</li>
+      <li>Write your answers in the spaces provided in this booklet.</li>
+      <li>Show <strong>all</strong> working clearly. Marks may be awarded for working even if the final answer is wrong.</li>
+      <li>Do <strong>not</strong> use red, green or black ink.</li>
+      <li>Diagrams are <strong>not</strong> drawn to scale unless stated otherwise.</li>
+      <li>Calculators are <strong>not</strong> allowed.</li>
+    </ol>
+  </div>
+
+  <table class="marking-grid">
+    <tr>
+      <th>Section</th><th>Questions</th><th>Marks Available</th><th>Marks Awarded</th><th>Examiner</th>
+    </tr>
+    <tr><td>A</td><td>1–18</td><td>36</td><td></td><td></td></tr>
+    <tr><td>B</td><td>19–28</td><td>20</td><td></td><td></td></tr>
+    <tr><td>C</td><td>29–45</td><td>43</td><td></td><td></td></tr>
+    <tr><td colspan="2"><strong>Total</strong></td><td><strong>99</strong></td><td></td><td></td></tr>
+  </table>
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 1 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION A -->
+<div class="page">
+  <div class="section-header">
+    SECTION A &mdash; Short Answer Questions
+    <div class="section-sub">Questions 1–18 &nbsp;|&nbsp; 36 marks &nbsp;|&nbsp; Write your answers clearly in the spaces provided.</div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">1.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write the next <strong>two terms</strong> in this sequence: &nbsp; <span class="boxed">3</span> <span class="boxed">7</span> <span class="boxed">11</span> <span class="boxed">15</span> <span class="boxed">&#9651;</span> <span class="boxed">&#9651;</span>
+      <div class="answer-label" style="margin-top:14px">Next two terms: <span class="answer-line-sm"></span> and <span class="answer-line-sm"></span></div>
+      <div style="margin-top:8px">Rule: <span class="answer-line"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write the next <strong>two terms</strong>: &nbsp; <span class="boxed">2</span> <span class="boxed">6</span> <span class="boxed">18</span> <span class="boxed">54</span> <span class="boxed">&#9651;</span> <span class="boxed">&#9651;</span>
+      <div class="answer-label" style="margin-top:14px">Next two terms: <span class="answer-line-sm"></span> and <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      What is the <strong>10th term</strong> of the sequence: &nbsp; 5, 10, 15, 20, 25, &hellip;?<br>
+      What is the <strong>rule</strong> for the <em>n</em>th term?
+      <div class="answer-label" style="margin-top:14px">10th term: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; <em>n</em>th term: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Find the missing numbers in this pattern:
+      <div style="margin:12px 0;font-size:13pt;text-align:center;letter-spacing:2px">
+        <span class="boxed">1</span> <span class="boxed">4</span> <span class="boxed">9</span> <span class="boxed">16</span> <span class="boxed">&#9651;</span> <span class="boxed">36</span> <span class="boxed">&#9651;</span>
+      </div>
+      <div class="answer-label">Missing numbers: <span class="answer-line-sm"></span> and <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Name this 3D shape: it has <strong>6 faces</strong>, all of which are rectangles. How many <strong>edges</strong> and <strong>vertices</strong> does it have?
+      <div class="answer-label" style="margin-top:14px">Shape: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Edges: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Vertices: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      How many faces, edges and vertices does a <strong>triangular prism</strong> have?
+      <div class="answer-label" style="margin-top:14px">Faces: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Edges: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Vertices: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A shape has <strong>rotational symmetry of order 4</strong>. Draw or describe what this means. Give an example of a shape with this property.
+      <div class="writing-lines"><span class="writing-line"></span></div>
+      <div class="answer-label">Example shape: <span class="answer-line"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A point P is at coordinate <strong>(3, 5)</strong>. It is reflected in the <em>y</em>-axis. What are the new coordinates?<br>
+      Then it is reflected in the <em>x</em>-axis. What are those coordinates?
+      <div class="answer-label" style="margin-top:14px">Reflected in y-axis: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Reflected in x-axis: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A box of 48 chocolates is shared equally among 6 children. Each child then gives <strong>3 chocolates</strong> back. How many does each child have now?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> chocolates</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A train travels at <strong>80 km/h</strong>. How far does it travel in <strong>2 hours 30 minutes</strong>?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Distance = <span class="answer-line-sm"></span> km</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 2 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">11.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Find the missing term in this sequence and explain the pattern:
+      <div style="margin:12px 0;font-size:13pt;text-align:center">
+        <span class="boxed">100</span> <span class="boxed">97</span> <span class="boxed">91</span> <span class="boxed">82</span> <span class="boxed">&#9651;</span> <span class="boxed">55</span>
+      </div>
+      <div class="answer-label">Missing term: <span class="answer-line-sm"></span></div>
+      <div class="writing-lines"><span class="writing-line"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      How many <strong>faces</strong> does a <strong>sphere</strong> have? How many <strong>vertices</strong> does a <strong>cone</strong> have?
+      <div class="answer-label" style="margin-top:14px">Sphere faces: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Cone vertices: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Akil buys <strong>4 notebooks</strong> at Rs 35 each and <strong>3 pens</strong> at Rs 12.50 each. He pays with a Rs 200 note. How much change does he receive?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Change = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A shop sells T-shirts in <strong>3 colours</strong> (red, blue, green) and <strong>2 sizes</strong> (S, L). List <strong>all possible combinations</strong> using a systematic list.
+      <div class="answer-box-sm"></div>
+      <div class="answer-label">Total combinations: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write the first <strong>five terms</strong> of a sequence where the first term is <strong>3</strong> and each term is <strong>double the previous term</strong>.
+      <div class="answer-label" style="margin-top:14px">Sequence: <span class="answer-line" style="width:280px"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">16.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A square has <strong>4 lines of symmetry</strong> and rotational symmetry of order <strong>4</strong>. How many lines of symmetry does a regular octagon have? What is its order of rotational symmetry?
+      <div class="answer-label" style="margin-top:14px">Lines of symmetry: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Order of rotation: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">17.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A square pyramid has a square base and <strong>4 triangular faces</strong>. Complete: Faces = <span class="answer-line-sm"></span>, Edges = <span class="answer-line-sm"></span>, Vertices = <span class="answer-line-sm"></span>.
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">18.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A car park has <strong>8 rows</strong> with <strong>15 spaces</strong> per row. After <strong>74 cars</strong> park, how many spaces are left?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Spaces left: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 3 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION B -->
+<div class="page">
+  <div class="section-header">
+    SECTION B &mdash; Multiple Choice Questions
+    <div class="section-sub">Questions 19–28 &nbsp;|&nbsp; 20 marks &nbsp;|&nbsp; Tick (&check;) ONE box for each question. Each question is worth 2 marks.</div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 19–20</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>19.</strong> The 8th term of the sequence 4, 8, 12, 16, &hellip; is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 28</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 32</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 36</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 40</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>20.</strong> A cube has how many edges?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 8</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 10</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 12</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 6</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 21–22</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>21.</strong> An isosceles triangle reflected in its line of symmetry produces:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; A different triangle</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; A rectangle</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; The same triangle</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; A square</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>22.</strong> Pens cost Rs 15 each. How many can be bought for Rs 200?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 12</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 13</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 14</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 23–24</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>23.</strong> Point (4, &minus;3) is reflected in the x-axis. The new point is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; (&minus;4, 3)</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; (4, 3)</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; (&minus;4, &minus;3)</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; (3, &minus;4)</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>24.</strong> The rule for sequence 2, 5, 8, 11, &hellip; is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; Multiply by 2</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; Add 3</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; Add 4</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; Subtract 2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 25–26</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>25.</strong> A cylinder has how many curved faces?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 0</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 1</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 2</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 3</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>26.</strong> Leon earns Rs 18,000 per month. He saves Rs 4,500. What fraction of his earnings does he save?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 1/4</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 1/3</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 1/5</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 2/7</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 27–28</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>27.</strong> A sequence starts at 100 and halves each time. The 4th term is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 25</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 50</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 12.5</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 20</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>28.</strong> What is the total number of faces on two tetrahedra (triangular pyramids, each with 4 faces)?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 6</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 8</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 10</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 12</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 4 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION C -->
+<div class="page">
+  <div class="section-header">
+    SECTION C &mdash; Structured Questions
+    <div class="section-sub">Questions 29–45 &nbsp;|&nbsp; 43 marks &nbsp;|&nbsp; Show ALL working. Marks are awarded for method as well as the answer.</div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">29.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      The table shows the number of visitors to a museum over 5 days.
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Day</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Mon</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Tue</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Wed</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Thu</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Fri</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">Visitors</td><td style="border:1px solid #999;padding:4px 12px">145</td><td style="border:1px solid #999;padding:4px 12px">210</td><td style="border:1px solid #999;padding:4px 12px">178</td><td style="border:1px solid #999;padding:4px 12px">230</td><td style="border:1px solid #999;padding:4px 12px">197</td></tr>
+      </table>
+      <div class="sub-q"><span class="sub-label">(a)</span> What is the total number of visitors for the 5 days?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Total = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Find the mean number of daily visitors.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Mean = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> On which day were there most visitors? How many more than Monday?</div>
+      <div class="answer-label">Day: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; More than Monday: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">30.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Look at this pattern of squares made from tiles:
+      <div style="margin:12px 0;padding:10px;border:1px solid #bbb;border-radius:4px;background:#fafeff;font-size:10.5pt">
+        Pattern 1 uses <strong>1</strong> tile. Pattern 2 uses <strong>4</strong> tiles. Pattern 3 uses <strong>9</strong> tiles.
+      </div>
+      <div class="sub-q"><span class="sub-label">(a)</span> How many tiles does Pattern 5 use?</div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> tiles</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Write a formula for the number of tiles in Pattern <em>n</em>.</div>
+      <div class="writing-lines"><span class="writing-line"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> Which pattern uses <strong>100 tiles</strong>?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Pattern number: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 5 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">31.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A baker makes <strong>12 loaves</strong> every hour. He starts at <strong>05:30</strong> and works for <strong>6 hours</strong>. How many loaves does he make? If he sells them for Rs 45 each, how much does he earn?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Loaves: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Earnings: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">32.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A point is at <strong>(2, 3)</strong> on a coordinate grid.
+      <div class="sub-q"><span class="sub-label">(a)</span> Translate the point 4 units right and 2 units down. Write the new coordinates.</div>
+      <div class="answer-label">New point: <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> The original point (2, 3) is reflected in the line x = 0 (the y-axis). Write the new coordinates.</div>
+      <div class="answer-label">Reflected point: <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> A rectangle has vertices at (1, 1), (5, 1), (5, 4) and (1, 4). Find its area.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Area = <span class="answer-line-sm"></span> square units</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">33.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A family buys <strong>2 adult tickets</strong> at Rs 350 each and <strong>3 child tickets</strong> at Rs 175 each for a theme park. They have a <strong>10% discount voucher</strong>. What do they pay after the discount?
+      <div class="work-space"></div>
+      <div class="answer-label">Total after discount = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">34.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      The <em>n</em>th term of a sequence is given by the formula <strong>3<em>n</em> + 2</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> Find the 1st, 2nd and 5th terms.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">1st = <span class="answer-line-sm"></span> &nbsp; 2nd = <span class="answer-line-sm"></span> &nbsp; 5th = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Which term has the value <strong>47</strong>?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Term number: <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> Is 100 a term in this sequence? Explain how you know.</div>
+      <div class="writing-lines"><span class="writing-line"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 6 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">35.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Priya and Leon together have <strong>Rs 840</strong>. Priya has <strong>Rs 120 more</strong> than Leon. How much does each person have?
+      <div class="work-space"></div>
+      <div class="answer-label">Priya: Rs <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Leon: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">36.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Describe the 3D shape that can be made from this net: a rectangle with two semicircles attached to its longer sides.
+      <div class="writing-lines"><span class="writing-line"></span></div>
+      <div class="answer-label">Shape: <span class="answer-line"></span></div>
+      <div style="margin-top:8px">How many edges does a <strong>triangular pyramid (tetrahedron)</strong> have?</div>
+      <div class="answer-label">Edges: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">37.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Mia saves money every week. In week 1 she saves Rs 10, in week 2 she saves Rs 20, in week 3 she saves Rs 40 (each week she doubles the previous amount).
+      <div class="sub-q"><span class="sub-label">(a)</span> How much does she save in week 5?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Week 5: Rs <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> How much has she saved in total after 5 weeks?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Total: Rs <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> In which week will she first save more than Rs 500?</div>
+      <div class="answer-label">Week: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">38.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A school timetable has <strong>6 lessons</strong> per day, each lasting <strong>45 minutes</strong>. Breaks total <strong>30 minutes</strong> per day. School runs <strong>5 days</strong> per week.
+      <div class="sub-q"><span class="sub-label">(a)</span> How many minutes of lessons per day?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> minutes</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> How many hours of lessons per week?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> hours <span class="answer-line-sm"></span> minutes</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> School starts at 08:00. What time does it end if total school day = lessons + breaks?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">End time: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 7 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">39.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A shape has <strong>rotational symmetry of order 3</strong>. Explain what this means and give an example.
+      <div class="writing-lines">
+        <span class="writing-line"></span>
+        <span class="writing-line"></span>
+      </div>
+      <div class="answer-label">Example: <span class="answer-line"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">40.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A shop is having a sale. All prices are reduced by <strong>25%</strong>. The original prices are:
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Item</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Original Price</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Sale Price</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">Bag</td><td style="border:1px solid #999;padding:4px 12px">Rs 480</td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">Shoes</td><td style="border:1px solid #999;padding:4px 12px">Rs 1,200</td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">Hat</td><td style="border:1px solid #999;padding:4px 12px">Rs 160</td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td></tr>
+      </table>
+      <div class="sub-q"><span class="sub-label">(a)</span> Complete the sale price column.</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> What is the total saving if all three items are bought?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Total saving = Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">41.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Look at this staircase pattern made from cubes:
+      <div style="margin:10px 0;padding:10px;border:1px solid #bbb;border-radius:4px;background:#fafeff;font-size:10.5pt">
+        Step 1: 1 cube &nbsp;&bull;&nbsp; Step 2: 3 cubes &nbsp;&bull;&nbsp; Step 3: 6 cubes &nbsp;&bull;&nbsp; Step 4: 10 cubes
+      </div>
+      <div class="sub-q"><span class="sub-label">(a)</span> How many cubes in Step 5?</div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> What is the rule for finding each term (the differences between consecutive terms)?</div>
+      <div class="writing-lines"><span class="writing-line"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> How many cubes in total for steps 1 to 5?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Total = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 8 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">42.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Three children have a total of <strong>Rs 2,100</strong>. Asha has <strong>twice</strong> as much as Ben. Carmen has <strong>Rs 300</strong>. How much does each of Asha and Ben have?
+      <div class="work-space"></div>
+      <div class="answer-label">Ben: Rs <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Asha: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">43.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A container in the shape of a cuboid has a square base of side <strong>10 cm</strong> and a height of <strong>15 cm</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> Find the volume of the container.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Volume = <span class="answer-line-sm"></span> cm&sup3;</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Water fills the container to a height of <strong>12 cm</strong>. What volume of water is in the container?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Volume of water = <span class="answer-line-sm"></span> cm&sup3;</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> What fraction of the container is empty? Give your answer in simplest form.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Empty fraction = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">44.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Describe fully the symmetry of a regular hexagon (include lines of symmetry and order of rotational symmetry).
+      <div class="writing-lines">
+        <span class="writing-line"></span>
+        <span class="writing-line"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">45.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A market stall sells apples at <strong>Rs 8 each</strong> or <strong>Rs 90 for a bag of 12</strong>. Kiran needs <strong>36 apples</strong>. What is the cheapest way to buy them, and how much does it cost?
+      <div class="work-space"></div>
+      <div class="answer-label">Cheapest method: <span class="answer-line"></span></div>
+      <div class="answer-label">Cost: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 9 of 10</div>
+</div>
+
+<!-- MARK SCHEME -->
+<div class="page-break"></div>
+<div class="mark-scheme">
+  <div class="ms-header">&#128203; Mark Scheme &mdash; Nouklass.com Specimen Paper 4 of 4 &mdash; 2026</div>
+  <div class="ms-disc">This mark scheme is provided for self-checking and teacher reference only. For method marks, show all working. Prepared by Nouklass.com based on MES syllabus and past paper analysis. Not an official MES document.</div>
+
+  <table class="ans-table">
+    <tr><th>Q</th><th>Answer</th><th>Marks</th><th>Notes</th></tr>
+    <tr><td>1</td><td>19, 23; Rule: add 4 each time</td><td>2</td><td>Arithmetic sequence with common difference 4</td></tr>
+    <tr><td>2</td><td>162, 486; Rule: multiply by 3</td><td>2</td><td>Geometric sequence; 54&times;3=162</td></tr>
+    <tr><td>3</td><td>10th term = 50; nth term = 5n</td><td>2</td><td>Multiples of 5; 5&times;10=50</td></tr>
+    <tr><td>4</td><td>25 and 49</td><td>2</td><td>Square numbers: 5&sup2;=25, 7&sup2;=49</td></tr>
+    <tr><td>5</td><td>Cuboid; Edges=12; Vertices=8</td><td>2</td><td>Cuboid: 6 rectangular faces, 12 edges, 8 vertices</td></tr>
+    <tr><td>6</td><td>Faces=5; Edges=9; Vertices=6</td><td>2</td><td>Triangular prism: 2 triangles + 3 rectangles</td></tr>
+    <tr><td>7</td><td>It fits exactly onto itself 4 times in a 360&deg; turn; Example: Square</td><td>2</td><td>Accept: regular 4-sided polygon, square</td></tr>
+    <tr><td>8</td><td>Reflected in y-axis: (&minus;3, 5); Reflected in x-axis: (3, &minus;5)</td><td>2</td><td>y-axis reflection: negate x; x-axis reflection: negate y</td></tr>
+    <tr><td>9</td><td>5 chocolates</td><td>2</td><td>48&divide;6=8; 8&minus;3=5</td></tr>
+    <tr><td>10</td><td>200 km</td><td>2</td><td>2.5 hours &times; 80 = 200 km</td></tr>
+    <tr><td>11</td><td>70; Pattern: subtract 3, then 6, then 9, then 12, then 15 (triangular numbers)</td><td>2</td><td>Differences: &minus;3, &minus;6, &minus;9, &minus;12, &minus;15; 82&minus;12=70</td></tr>
+    <tr><td>12</td><td>Sphere faces=1 (curved); Cone vertices=1</td><td>2</td><td>Sphere has one curved surface; cone has 1 apex vertex</td></tr>
+    <tr><td>13</td><td>Rs 37.50</td><td>2</td><td>4&times;35=140; 3&times;12.5=37.5; 140+37.5=177.5; 200&minus;177.5=22.5... wait: 4&times;35=140+3&times;12.5=37.5=177.50; 200&minus;177.50=22.50</td></tr>
+    <tr><td>14</td><td>Red-S, Red-L, Blue-S, Blue-L, Green-S, Green-L; Total: 6</td><td>2</td><td>3 colours &times; 2 sizes = 6 combinations</td></tr>
+    <tr><td>15</td><td>3, 6, 12, 24, 48</td><td>2</td><td>Each term = previous &times; 2</td></tr>
+    <tr><td>16</td><td>8 lines of symmetry; Order 8</td><td>2</td><td>Regular octagon: as many lines as sides</td></tr>
+    <tr><td>17</td><td>Faces=5; Edges=8; Vertices=5</td><td>2</td><td>Square pyramid: 1 square base + 4 triangles</td></tr>
+    <tr><td>18</td><td>46 spaces left</td><td>2</td><td>8&times;15=120 total; 120&minus;74=46</td></tr>
+    <tr><td>19</td><td>B &mdash; 32</td><td>2</td><td>4&times;8=32</td></tr>
+    <tr><td>20</td><td>C &mdash; 12</td><td>2</td><td>Cube: 12 edges</td></tr>
+    <tr><td>21</td><td>C &mdash; The same triangle</td><td>2</td><td>Reflection in line of symmetry maps shape to itself</td></tr>
+    <tr><td>22</td><td>B &mdash; 13</td><td>2</td><td>200&divide;15=13.33; can buy 13 (with Rs 5 change)</td></tr>
+    <tr><td>23</td><td>B &mdash; (4, 3)</td><td>2</td><td>Reflection in x-axis: y changes sign; (4, &minus;3) &rarr; (4, 3)</td></tr>
+    <tr><td>24</td><td>B &mdash; Add 3</td><td>2</td><td>2, 5, 8, 11: difference is +3 each time</td></tr>
+    <tr><td>25</td><td>B &mdash; 1</td><td>2</td><td>Cylinder has 1 curved face and 2 flat circular faces</td></tr>
+    <tr><td>26</td><td>A &mdash; 1/4</td><td>2</td><td>4500/18000 = 1/4</td></tr>
+    <tr><td>27</td><td>C &mdash; 12.5</td><td>2</td><td>100, 50, 25, 12.5 (halving each time)</td></tr>
+    <tr><td>28</td><td>B &mdash; 8</td><td>2</td><td>2 tetrahedra &times; 4 faces = 8</td></tr>
+    <tr><td>29</td><td>(a) 960 (b) 192 (c) Thursday, 85 more</td><td>3</td><td>145+210+178+230+197=960; 960&divide;5=192; 230&minus;145=85</td></tr>
+    <tr><td>30</td><td>(a) 25 tiles (b) n&sup2; (c) Pattern 10</td><td>3</td><td>5&sup2;=25; n&sup2;=100 &rarr; n=10</td></tr>
+    <tr><td>31</td><td>72 loaves; Rs 3,240</td><td>2</td><td>12&times;6=72; 72&times;45=3240</td></tr>
+    <tr><td>32</td><td>(a) (6, 1) (b) (&minus;2, 3) (c) 12 square units</td><td>3</td><td>(2+4, 3&minus;2)=(6,1); reflect: (&minus;2,3); length=4, width=3, A=12</td></tr>
+    <tr><td>33</td><td>Rs 945</td><td>2</td><td>2&times;350+3&times;175=700+525=1050; 10% off=105; 1050&minus;105=945</td></tr>
+    <tr><td>34</td><td>(a) 5, 8, 17 (b) 15th term (c) No; 3n+2=100 &rarr; n=32.67, not a whole number</td><td>3</td><td>3(1)+2=5; 3(2)+2=8; 3(5)+2=17; 3n+2=47&rarr;3n=45&rarr;n=15</td></tr>
+    <tr><td>35</td><td>Priya Rs 480; Leon Rs 360</td><td>2</td><td>L+(L+120)=840; 2L=720; L=360; P=480</td></tr>
+    <tr><td>36</td><td>Cylinder; 6 edges</td><td>2</td><td>Tetrahedron: 4 faces, 6 edges, 4 vertices</td></tr>
+    <tr><td>37</td><td>(a) Rs 160 (b) Rs 310 (c) Week 6 (Rs 320)</td><td>3</td><td>Wk1=10,2=20,3=40,4=80,5=160,6=320; total 5wks=10+20+40+80+160=310</td></tr>
+    <tr><td>38</td><td>(a) 270 min (b) 22 hours 30 min/week (c) 12:30</td><td>3</td><td>6&times;45=270 min; 270&times;5=1350 min=22h30m; 270+30=300 min per day; 08:00+5h=13:00... 300min=5h; 08:00+5h=13:00. Wait: 08:00+5hours=13:00. But total school day (lessons+breaks)=270+30=300min=5h; end=13:00</td></tr>
+    <tr><td>39</td><td>It maps to itself 3 times in a full rotation; Example: equilateral triangle</td><td>2</td><td>Order 3 means fits on itself at 120&deg;, 240&deg; and 360&deg;</td></tr>
+    <tr><td>40</td><td>(a) Rs 360, Rs 900, Rs 120 (b) Total saving = Rs 460</td><td>3</td><td>25% off: 480&times;0.75=360; 1200&times;0.75=900; 160&times;0.75=120; saving=120+300+40=460</td></tr>
+    <tr><td>41</td><td>(a) 15 (b) Add 2 more each time (differences: +2,+3,+4,+5,+6) (c) 35 total</td><td>3</td><td>Triangular numbers: 1,3,6,10,15; 1+3+6+10+15=35</td></tr>
+    <tr><td>42</td><td>Ben: Rs 600; Asha: Rs 1,200</td><td>2</td><td>Asha+Ben+300=2100; 2B+B=1800; B=600; A=1200</td></tr>
+    <tr><td>43</td><td>(a) 1,500 cm&sup3; (b) 1,200 cm&sup3; (c) 1/5</td><td>3</td><td>10&times;10&times;15=1500; 10&times;10&times;12=1200; empty=300/1500=1/5</td></tr>
+    <tr><td>44</td><td>6 lines of symmetry; rotational symmetry of order 6</td><td>2</td><td>Regular hexagon: n lines and order n for n-sided regular polygon</td></tr>
+    <tr><td>45</td><td>Buy 3 bags of 12 (=36 apples) for Rs 270; cheaper than 36&times;Rs 8=Rs 288</td><td>2</td><td>3&times;90=270; 36&times;8=288; bags are cheaper</td></tr>
+  </table>
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 10 of 10</div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

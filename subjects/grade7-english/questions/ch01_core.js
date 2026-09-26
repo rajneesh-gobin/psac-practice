@@ -220,7 +220,8 @@ STATIC_QUESTIONS.push(
     options:['many information','a few information','much information','several information'],
     answer:'much information',
     hint:'"Information" is uncountable. Use "much" with uncountable nouns.',
-    explanation:'"<b>Much information</b>" is correct because "information" is uncountable. Use <b>much/little</b> with uncountable nouns (much water, little time) and <b>many/few</b> with countable nouns (many books, few chairs).' }),
+    explanation:'"<b>Much information</b>" is correct because "information" is uncountable. Use <b>much/little</b> with uncountable nouns (much water, little time) and <b>many/few</b> with countable nouns (many books, few chairs).',
+    learnMore:'<b>Countable nouns</b> can be counted and made plural (book→books, idea→ideas). Use <i>many/few</i>. <b>Uncountable nouns</b> have no plural form (information, advice, water, furniture, weather). Use <i>much/little/some/a lot of</i>. Never say "an information", "many advices" or "furnitures".' }),
 
   makeMCQ({ id:'g7eng-gr-nouns-003', chapterId:'g7eng-gr-nouns', difficulty:2,
     subsection:'subject_verb_agreement',
@@ -228,7 +229,8 @@ STATIC_QUESTIONS.push(
     options:['are','were','is','have been'],
     answer:'is',
     hint:'"News" looks plural because it ends in -s, but it is an uncountable singular noun.',
-    explanation:'"<b>The news is</b> very surprising" — "news" is treated as singular in English (like "information", "advice", "furniture"). Despite ending in -s, it takes a singular verb. This is a common mistake.' }),
+    explanation:'"<b>The news is</b> very surprising" — "news" is treated as singular in English (like "information", "advice", "furniture"). Despite ending in -s, it takes a singular verb. This is a common mistake.',
+    learnMore:'Some nouns end in <i>-s</i> but are <b>grammatically singular</b> and take a singular verb: <i>news</i> (the news is), <i>mathematics</i> (maths is), <i>physics</i> (physics is). <b>Collective nouns</b> (team, class, family, group) are also singular in British English: the team <i>is</i> playing well. The number of items does not determine singularity — grammar does.' }),
 
   makeMCQ({ id:'g7eng-gr-nouns-004', chapterId:'g7eng-gr-nouns', difficulty:2,
     subsection:'subject_verb_agreement',
@@ -244,7 +246,8 @@ STATIC_QUESTIONS.push(
     options:['She gave me an advice.','She gave me some advice.','She gave me advices.','She gave me few advice.'],
     answer:'She gave me some advice.',
     hint:'"Advice" is uncountable — it cannot have "a/an" or a plural form.',
-    explanation:'"<b>Some advice</b>" is correct. "Advice" is uncountable: we never say "an advice" or "advices". For uncountable nouns, use "some", "a piece of", or "much" instead of "a/an" or plurals.' }),
+    explanation:'"<b>Some advice</b>" is correct. "Advice" is uncountable: we never say "an advice" or "advices". For uncountable nouns, use "some", "a piece of", or "much" instead of "a/an" or plurals.',
+    learnMore:'Common <b>uncountable nouns</b> that students often wrongly use with "a/an" or in the plural: <i>advice</i> (not "an advice"), <i>information</i> (not "an information"), <i>news</i> (not "a news"), <i>furniture</i> (not "a furniture"), <i>luggage</i> (not "a luggage"). Use "a piece of advice", "a piece of information", "an item of furniture" to refer to one instance.' }),
 
   makeMCQ({ id:'g7eng-gr-nouns-006', chapterId:'g7eng-gr-nouns', difficulty:3,
     subsection:'subject_verb_agreement',
@@ -278,7 +281,8 @@ STATIC_QUESTIONS.push(
     options:['which','what','whom','who'],
     answer:'who',
     hint:'Use "who" when the relative pronoun refers to a person and is the subject of the relative clause.',
-    explanation:'"The girl <b>who</b> won the prize" — use <b>who</b> for people (subject). Use <b>which</b> for things. Use <b>whom</b> for people (object, e.g. "the girl whom I met"). Use <b>whose</b> for possession.' }),
+    explanation:'"The girl <b>who</b> won the prize" — use <b>who</b> for people (subject). Use <b>which</b> for things. Use <b>whom</b> for people (object, e.g. "the girl whom I met"). Use <b>whose</b> for possession.',
+    learnMore:'<b>Relative pronouns</b> introduce a relative clause that gives more information about a noun. <i>who</i> = person as subject of the clause (the man <i>who</i> called). <i>whom</i> = person as object (the man <i>whom</i> I called). <i>which</i> = thing or animal (the car <i>which</i> broke down). <i>whose</i> = possession (the girl <i>whose</i> bag was lost). <i>that</i> can replace who/which in defining clauses.' }),
 
   makeMCQ({ id:'g7eng-gr-pronouns-004', chapterId:'g7eng-gr-pronouns', difficulty:2,
     subsection:'relative_pronouns',
@@ -302,7 +306,8 @@ STATIC_QUESTIONS.push(
     options:['who','which','that','whose'],
     answer:'whose',
     hint:'Which relative pronoun shows POSSESSION (the backpack belonged to the student)?',
-    explanation:'"The student <b>whose</b> backpack was stolen" — <b>whose</b> shows possession/belonging. It replaces "the student\'s" in a relative clause. "Whose" can refer to people and things.' }),
+    explanation:'"The student <b>whose</b> backpack was stolen" — <b>whose</b> shows possession/belonging. It replaces "the student\'s" in a relative clause. "Whose" can refer to people and things.',
+    learnMore:'<b>Whose</b> is the possessive relative pronoun — it shows that something belongs to the noun just mentioned: "the student <i>whose</i> bag was stolen" = "the student — her bag was stolen". Do not confuse it with "who\'s" (= who is): "the teacher <i>who\'s</i> on duty" (who is) vs "the teacher <i>whose</i> class won" (belonging to the teacher).' }),
 
   // ── Grammar · Adjectives ─────────────────────────────────────────────────
 

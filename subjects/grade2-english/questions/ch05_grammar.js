@@ -34,7 +34,8 @@ STATIC_QUESTIONS.push(
     options:['Mauritius','island','ocean','country'],
     answer:'Mauritius',
     hint:'Proper nouns are specific names — they always start with a capital letter.',
-    explanation:'"<b>Mauritius</b>" is a proper noun — it is the specific name of our country. It always starts with a capital M. Island, ocean and country are common nouns (general words).' }),
+    explanation:'"<b>Mauritius</b>" is a proper noun — it is the specific name of our country. It always starts with a capital M. Island, ocean and country are common nouns (general words).',
+    learnMore:'<b>Proper nouns</b> are the specific names of particular people, places, days and months — they always begin with a capital letter: <i>Tuesday</i>, <i>January</i>, <i>Mauritius</i>. <b>Common nouns</b> are general names (day, month, country) that start with a capital only at the beginning of a sentence.' }),
 
   makeMCQ({ id:'g2eng-grm-005', chapterId:'g2eng-grammar', difficulty:1, subsection:'nouns_pronouns',
     question:'Which sentence uses "it" correctly as a pronoun?',
@@ -104,7 +105,8 @@ STATIC_QUESTIONS.push(
     options:['children','childs','childrens','child\'s'],
     answer:'children',
     hint:'"Child" has an irregular plural — it does NOT just add "s". You must memorise it.',
-    explanation:'"child" → <b>children</b>. This is an irregular plural. Other irregular plurals: man→men, woman→women, mouse→mice, foot→feet.' }),
+    explanation:'"child" → <b>children</b>. This is an irregular plural. Other irregular plurals: man→men, woman→women, mouse→mice, foot→feet.',
+    learnMore:'<b>Irregular plurals</b> do not follow the usual rule of adding -s or -es. They change the word itself: child→children, man→men, woman→women, tooth→teeth, foot→feet, mouse→mice. These must be memorised — you cannot work them out from a rule. When in doubt, use a dictionary.' }),
 
   makeMCQ({ id:'g2eng-grm-015', chapterId:'g2eng-grammar', difficulty:1, subsection:'nouns_pronouns',
     question:'Which word correctly fills: "___ am going to the market."?',
@@ -118,7 +120,8 @@ STATIC_QUESTIONS.push(
     options:['a flock','a herd','a pack','a school'],
     answer:'a flock',
     hint:'Different animal groups have special collective nouns. Which is used for birds?',
-    explanation:'"<b>A flock</b>" of birds. A herd of cows. A pack of wolves. A school of fish. Collective nouns name groups — each group of animals has its own special name!' }),
+    explanation:'"<b>A flock</b>" of birds. A herd of cows. A pack of wolves. A school of fish. Collective nouns name groups — each group of animals has its own special name!',
+    learnMore:'<b>Collective nouns</b> name a group treated as one unit. Common ones: a <i>flock</i> of birds/sheep, a <i>herd</i> of cows/elephants, a <i>pack</i> of wolves, a <i>swarm</i> of bees, a <i>school</i> of fish, a <i>pride</i> of lions, a <i>class</i> of pupils. Each group of animals has its own special collective noun to memorise.' }),
 
   makeMCQ({ id:'g2eng-grm-017', chapterId:'g2eng-grammar', difficulty:1, subsection:'nouns_pronouns',
     question:'Which word is NOT a noun?',
@@ -160,14 +163,16 @@ STATIC_QUESTIONS.push(
     options:['mice','mouses','mouse\'s','mousees'],
     answer:'mice',
     hint:'"Mouse" has an irregular plural — it does NOT add "s". You must memorise it.',
-    explanation:'"mouse" → <b>mice</b>. This is an irregular plural, just like foot→feet, tooth→teeth, goose→geese. They must be memorised!' }),
+    explanation:'"mouse" → <b>mice</b>. This is an irregular plural, just like foot→feet, tooth→teeth, goose→geese. They must be memorised!',
+    learnMore:'Most <b>plurals</b> are formed by adding <i>-s</i> (cat→cats) or <i>-es</i> (dish→dishes). But <b>irregular plurals</b> change the word entirely: mouse→mice, goose→geese, foot→feet, tooth→teeth. There is no pattern — you must memorise each one. Test yourself by covering the answer and trying to recall the plural.' }),
 
   makeMCQ({ id:'g2eng-grm-023', chapterId:'g2eng-grammar', difficulty:1, subsection:'nouns_pronouns',
     question:'Which word best fills: "My sister and ___ went shopping."',
     options:['I','me','my','mine'],
     answer:'I',
     hint:'"My sister and ___" is the subject of the sentence. Should you use "I" (subject) or "me" (object)?',
-    explanation:'"My sister and <b>I</b> went shopping." — "I" is the subject pronoun (we are doing the action). A helpful trick: remove "my sister and" — "I went shopping" sounds right; "Me went shopping" does not.' }),
+    explanation:'"My sister and <b>I</b> went shopping." — "I" is the subject pronoun (we are doing the action). A helpful trick: remove "my sister and" — "I went shopping" sounds right; "Me went shopping" does not.',
+    learnMore:'<b>Subject pronouns</b> (I, you, he, she, it, we, they) perform the action — they go before the verb. <b>Object pronouns</b> (me, you, him, her, it, us, them) receive the action — they come after the verb or preposition. Quick test: remove the other person\'s name. "I went" ✓; "Me went" ✗.' }),
 
   makeMCQ({ id:'g2eng-grm-024', chapterId:'g2eng-grammar', difficulty:1, subsection:'nouns_pronouns',
     question:'Which sentence uses "us" correctly?',

@@ -14,7 +14,8 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The children laughed loudly.',
     hint:'A complete sentence must have both a SUBJECT (who/what) and a VERB (action/state).',
-    explanation:'"<b>The children laughed loudly</b>" is a complete sentence - it has a subject (The children) and a verb (laughed). The other options are fragments: they are missing either a subject, a verb, or both.' }),
+    explanation:'"<b>The children laughed loudly</b>" is a complete sentence - it has a subject (The children) and a verb (laughed). The other options are fragments: they are missing either a subject, a verb, or both.',
+    learnMore:'A <b>complete sentence</b> must have two things: (1) a <i>subject</i> — the person or thing doing or being something, and (2) a <i>main verb</i> — expressing the action or state. "Running through the park" has no subject. "The big dog" has no verb. "Because it was raining" is a subordinate clause — it needs a main clause to complete its meaning.' }),
 
   makeMCQ({ id:'g5eng-sent-002', chapterId:'eng-sentences', subsection:'punctuation', difficulty:1,
     question:'What punctuation mark ends an EXCLAMATORY sentence?',

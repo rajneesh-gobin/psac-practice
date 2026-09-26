@@ -1,6 +1,6 @@
 'use strict';
 (function(){
-const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`}));
+const add=(id,c,s,q,o,a,h,e)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5E_EXPL[id]||e||`<b>${a}</b> is correct.`,learnMore:G5E_LEARN[id]||''}));
 // Real explanations, keyed by id. Added because every question in this file
 // used to say only "<b>X</b> is correct.", which teaches nothing.
 const G5E_EXPL = {
@@ -31,6 +31,14 @@ const G5E_EXPL = {
   'g5e-cov-spellplural-2': "<b>mice</b> is an irregular plural — the word changes inside instead of adding -s.",
   'g5e-cov-spellplural-3': "<i>City</i> ends in a consonant plus y, so the y becomes ies: <b>cities</b>.",
   'g5e-cov-spellplural-4': "<b>sheep</b> does not change in the plural: one sheep, ten sheep.",
+};
+const G5E_LEARN = {
+  'g5e-cov-syn-0': '<b>Synonyms</b> are words with similar meanings. Using synonyms makes writing more varied and interesting. Courage/brave/courageous all describe the same quality, but they have slightly different strengths. "Courageous" is more formal than "brave".',
+  'g5e-cov-ant-0': '<b>Antonyms</b> are words with opposite meanings. Learning antonyms in pairs helps build vocabulary faster: narrow/wide, hot/cold, ancient/modern, arrive/depart. Writers use antonyms to create contrast and highlight differences.',
+  'g5e-cov-context-0': '<b>Context clues</b> are the words around an unfamiliar word that help you work out its meaning. Look for: definitions ("X means..."), examples ("such as..."), contrast ("but", "however"), and cause/effect. "Slippery after the rain" — rain makes paths slippery.',
+  'g5e-cov-rule-0': 'Key spelling rules: (1) Words ending in consonant + y → change y to i before -ed/-es: carry → carried, family → families. (2) Silent e → drop e before vowel suffixes (-ing, -ed, -er): make → making. (3) Short vowel + consonant → double consonant before vowel suffix: swim → swimming.',
+  'g5e-cov-rule-3': 'The <b>i before e</b> rule: write "ie" in most words (believe, achieve, field), but write "ei" after the letter c (receive, ceiling, deceit). Exceptions that must be memorised: weird, seize, either, neither, height, weight.',
+  'g5e-cov-spellplural-0': 'Plural spelling patterns: (1) -f/-fe → -ves: wolf → wolves, knife → knives. (2) Consonant + o → -oes: tomato → tomatoes. (3) Consonant + y → -ies: city → cities. (4) Irregular: mouse → mice, tooth → teeth. (5) No change: sheep → sheep, deer → deer.',
 };
 
 // synonyms — each gets its own 4 options (correct + 3 wrong adjectives/verbs)

@@ -1,0 +1,636 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCE Chemistry — Predicted Paper 2 · Nouklass.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-big{font-size:18pt;line-height:1}.nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;background:#f8f8f8}.marks::before{content:"["}.marks::after{content:"]"}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:80px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:45px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:130px;width:100%;margin:10px 0;padding:6px}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.tick-opt{display:flex;align-items:center;gap:10px;margin:7px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0}
+.sub-q{margin:12px 0 6px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:28px;color:#1a3c6e}
+.chem-eq{font-family:monospace;font-size:12pt;background:#f8f9fb;border:1px solid #ddd;padding:8px 14px;margin:10px 0;border-radius:3px;display:inline-block}
+.diagram-box{border:1.5px solid #888;min-height:140px;margin:12px 0;background:#fafeff;border-radius:4px;padding:8px;display:flex;align-items:center;justify-content:center}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.data-table{border-collapse:collapse;font-size:10.5pt;margin:10px 0}
+.data-table th,.data-table td{border:1px solid #aaa;padding:5px 10px;text-align:center}
+.data-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+@media print{.nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-btn{display:none}body{padding-top:32px}@page{size:A4 portrait;margin:12mm 14mm}}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &mdash; NCE Grade 9 Chemistry &nbsp;|&nbsp; Predicted Paper 2 &nbsp;&middot;&nbsp; 2026</span>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- ══ COVER PAGE ══ -->
+<div class="cover">
+  <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:24px">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">NOUKLASS</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">NCE Grade 9 &mdash; Predicted Specimen Paper &mdash; For Practice Only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">Chemistry</div>
+  <div style="font-size:13pt;color:#333;margin:6px 0 20px">Paper 2 &mdash; Covalent Bonding &nbsp;&middot;&nbsp; Acids &amp; Bases &nbsp;&middot;&nbsp; Neutralisation</div>
+
+  <div class="paper-meta">
+    <b>Time allowed:</b> 45 minutes<br>
+    <b>Total marks:</b> 50<br>
+    <b>Index Number:</b> &nbsp;<span class="index-line"></span>
+  </div>
+
+  <div class="instructions">
+    <b style="font-size:11pt">Instructions to Candidates</b>
+    <ol>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <b>all</b> questions in <b>all three sections</b>.</li>
+      <li>Section A: Choose <b>one</b> answer for each question. Tick the box next to your chosen answer.</li>
+      <li>Section B &amp; C: Write your answers in the spaces provided.</li>
+      <li>Use a blue or black pen. Diagrams may be drawn in pencil.</li>
+      <li>All working must be shown for calculations.</li>
+      <li>The number of marks is given in brackets <b>[ ]</b> at the end of each question.</li>
+    </ol>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:10.5pt;margin-top:18px">
+    <thead>
+      <tr>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Section</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Available</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Awarded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">A</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">B</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">20</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">C</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">Total</td><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">50</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9pt;color:#555;margin-top:28px;text-align:center">
+    &copy; Nouklass.com 2026 &mdash; This paper is for revision purposes only. It is not an official MES publication.
+  </p>
+</div>
+
+<!-- ══ SECTION A ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION A &mdash; Multiple Choice &nbsp;[15 marks]&nbsp; Answer all 15 questions. Tick ONE box per question.</div>
+
+  <!-- Q1 -->
+  <div class="question">
+    <div class="qnum">1</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      In a covalent bond, the atoms are held together by
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; transfer of electrons from one atom to another</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; sharing of a pair of electrons between the two atoms</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; delocalised electrons moving through a lattice</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; electrostatic attraction between oppositely charged ions</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question">
+    <div class="qnum">2</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Which of the following molecules contains a <b>double</b> covalent bond?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; H<sub>2</sub></div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; HCl</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; O<sub>2</sub></div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; NH<sub>3</sub></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question">
+    <div class="qnum">3</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      How many covalent bonds are present in one molecule of water (H<sub>2</sub>O)?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 1</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 2</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 3</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 4</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question">
+    <div class="qnum">4</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Carbon dioxide (CO<sub>2</sub>) has the shape
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; linear (O=C=O in a straight line)</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; bent / V-shaped</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; trigonal planar</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; tetrahedral</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question">
+    <div class="qnum">5</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      A student adds a few drops of universal indicator to an unknown solution. The indicator turns red. The solution is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; strongly acidic</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; weakly acidic</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; neutral</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; alkaline</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question">
+    <div class="qnum">6</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      The pH of a neutral aqueous solution at room temperature is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 0</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 5</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 7</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 14</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question">
+    <div class="qnum">7</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Which of the following is a <b>strong acid</b>?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Hydrochloric acid (HCl)</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Ethanoic acid (CH<sub>3</sub>COOH)</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Citric acid</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Carbonic acid (H<sub>2</sub>CO<sub>3</sub>)</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question">
+    <div class="qnum">8</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      A base is best defined as a substance that
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; turns litmus red</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; neutralises an acid to form a salt and water only</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; has a pH below 7</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; dissolves in water to produce H<sup>+</sup> ions</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question">
+    <div class="qnum">9</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      When a metal carbonate reacts with dilute hydrochloric acid, the products are
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; salt + water</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; salt + hydrogen</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; salt + water + carbon dioxide</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; oxide + water</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question">
+    <div class="qnum">10</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      The pH of a sodium hydroxide (NaOH) solution is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; exactly 7</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; between 1 and 6</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; between 7 and 14 (above 7)</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; always exactly 14</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question">
+    <div class="qnum">11</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      The neutralisation reaction between HCl and NaOH always produces
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; hydrogen gas and a metal oxide</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; a salt and water</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; a salt and carbon dioxide</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; a salt, water, and hydrogen</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question">
+    <div class="qnum">12</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Methane (CH<sub>4</sub>) has which type of bonding?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Ionic bonding only</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Covalent bonding only</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Metallic bonding</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Both ionic and covalent bonding</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question">
+    <div class="qnum">13</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      Which of these is a <b>weak acid</b>?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; Sulfuric acid (H<sub>2</sub>SO<sub>4</sub>)</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; Nitric acid (HNO<sub>3</sub>)</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; Ethanoic acid (CH<sub>3</sub>COOH)</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Hydrochloric acid (HCl)</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question">
+    <div class="qnum">14</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      What are the products when hydrochloric acid reacts with sodium hydroxide solution?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; NaCl + H<sub>2</sub>O</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; NaCl + H<sub>2</sub></div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; NaOH + HCl</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; Na<sub>2</sub>O + H<sub>2</sub>O</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="question">
+    <div class="qnum">15</div>
+    <div class="qbody">
+      <span class="marks">1</span>
+      How many shared pairs of electrons (bonds) are present in a molecule of nitrogen (N<sub>2</sub>)?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 1 (single bond)</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 2 (double bond)</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 3 (triple bond)</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 4</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION B ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION B &mdash; Short Structured Questions &nbsp;[20 marks]&nbsp; Answer all questions.</div>
+
+  <!-- B1 -->
+  <div class="question">
+    <div class="qnum">B1</div>
+    <div class="qbody">
+      This question is about covalent bonding.
+
+      <div style="margin:12px 0;display:flex;gap:32px;align-items:center">
+        <!-- H2O dot-cross SVG -->
+        <svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dot-and-cross diagram of water molecule showing two O-H covalent bonds">
+          <!-- O atom circle -->
+          <circle cx="100" cy="60" r="36" fill="none" stroke="#1a3c6e" stroke-width="1.5"/>
+          <text x="100" y="64" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3c6e">O</text>
+          <!-- H left -->
+          <circle cx="28" cy="60" r="22" fill="none" stroke="#555" stroke-width="1.5"/>
+          <text x="28" y="64" text-anchor="middle" font-size="11" fill="#555">H</text>
+          <!-- H right -->
+          <circle cx="172" cy="60" r="22" fill="none" stroke="#555" stroke-width="1.5"/>
+          <text x="172" y="64" text-anchor="middle" font-size="11" fill="#555">H</text>
+          <!-- Shared pair left (between O and H-left) -->
+          <circle cx="62" cy="55" r="3.5" fill="#c0392b"/>
+          <circle cx="62" cy="67" r="3.5" fill="#555"/>
+          <!-- Shared pair right -->
+          <circle cx="138" cy="55" r="3.5" fill="#c0392b"/>
+          <circle cx="138" cy="67" r="3.5" fill="#555"/>
+          <!-- Lone pairs on O (top and bottom) -->
+          <circle cx="85" cy="28" r="3" fill="#c0392b"/>
+          <circle cx="98" cy="28" r="3" fill="#c0392b"/>
+          <circle cx="85" cy="92" r="3" fill="#c0392b"/>
+          <circle cx="98" cy="92" r="3" fill="#c0392b"/>
+          <!-- Legend -->
+          <circle cx="15" cy="108" r="4" fill="#c0392b"/>
+          <text x="24" y="112" font-size="8" fill="#333">O electrons</text>
+          <circle cx="80" cy="108" r="4" fill="#555"/>
+          <text x="89" y="112" font-size="8" fill="#333">H electrons</text>
+        </svg>
+        <div style="font-size:10pt;color:#444;flex:1">
+          <i>Fig. 1 — Dot-and-cross diagram of water (H<sub>2</sub>O). Only outer-shell electrons are shown.</i>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Using Fig. 1, state the number of covalent bonds in one molecule of water.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">In the box below, draw a dot-and-cross diagram for a molecule of ammonia (NH<sub>3</sub>). Nitrogen has 5 electrons in its outer shell. Show outer-shell electrons only.<span class="marks">3</span>
+          <div class="diagram-box" style="min-height:160px"><span style="color:#888;font-size:9.5pt">Draw your diagram here</span></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">State one difference between covalent bonding and ionic bonding.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2 -->
+  <div class="question">
+    <div class="qnum">B2</div>
+    <div class="qbody">
+      This question is about acids and bases.
+      <div style="margin:10px 0;display:flex;align-items:center;gap:0">
+        <svg width="320" height="56" viewBox="0 0 320 56" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="pH scale from 0 to 14 showing acidic, neutral, and alkaline regions">
+          <defs>
+            <linearGradient id="phgrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#e53935"/>
+              <stop offset="50%" stop-color="#43a047"/>
+              <stop offset="100%" stop-color="#1a3c6e"/>
+            </linearGradient>
+          </defs>
+          <rect x="10" y="16" width="300" height="20" rx="4" fill="url(#phgrad)"/>
+          <text x="10" y="13" font-size="8" fill="#e53935" font-weight="bold">ACIDIC</text>
+          <text x="140" y="13" font-size="8" fill="#43a047" font-weight="bold">NEUTRAL</text>
+          <text x="240" y="13" font-size="8" fill="#1a3c6e" font-weight="bold">ALKALINE</text>
+          <text x="10" y="50" font-size="8.5" fill="#333">0</text>
+          <text x="155" y="50" font-size="8.5" fill="#333">7</text>
+          <text x="305" y="50" font-size="8.5" fill="#333">14</text>
+          <line x1="160" y1="14" x2="160" y2="38" stroke="#fff" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">A solution has pH 2. State whether this solution is acidic, neutral, or alkaline. Name <b>one</b> laboratory acid that would have a pH of approximately 2.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">A student has solutions of hydrochloric acid (pH 1) and ethanoic acid (pH 3), both at the same concentration. Explain why hydrochloric acid has a lower pH than ethanoic acid.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Name the ion responsible for the acidic properties of aqueous acid solutions.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B3 -->
+  <div class="question">
+    <div class="qnum">B3</div>
+    <div class="qbody">
+      This question is about the preparation of copper sulfate (CuSO<sub>4</sub>) crystals by neutralisation.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Name the acid and the base used to prepare copper sulfate solution by neutralisation.<span class="marks">2</span>
+          <div style="margin:6px 0;font-weight:bold">Acid:</div><div class="answer-box-sm"></div>
+          <div style="margin:6px 0;font-weight:bold">Base:</div><div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Write the balanced chemical equation for the reaction between copper(II) oxide and dilute sulfuric acid. Include state symbols.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Describe how you would obtain dry copper sulfate crystals from the solution produced.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B4 -->
+  <div class="question">
+    <div class="qnum">B4</div>
+    <div class="qbody">
+      This question is about neutralisation reactions.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Write the balanced chemical equation for the reaction between hydrochloric acid (HCl) and sodium hydroxide (NaOH).<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Write the balanced chemical equation for the reaction between calcium carbonate (CaCO<sub>3</sub>) and excess dilute hydrochloric acid (HCl). Include state symbols.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Write the ionic equation for the neutralisation of any strong acid by any strong alkali. Include state symbols.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION C ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION C &mdash; Long Structured Questions &nbsp;[15 marks]&nbsp; Answer all questions.</div>
+
+  <!-- C1 -->
+  <div class="question">
+    <div class="qnum">C1</div>
+    <div class="qbody">
+      <b>Covalent Bonding and Properties of Simple Molecules</b> &nbsp;<span class="marks">8</span>
+      <p style="margin:10px 0">Carbon dioxide (CO<sub>2</sub>) and water (H<sub>2</sub>O) are both covalently bonded molecular compounds. Their properties are compared in the table below.</p>
+
+      <table class="data-table" style="margin-bottom:12px">
+        <thead><tr><th>Property</th><th>CO<sub>2</sub></th><th>H<sub>2</sub>O</th></tr></thead>
+        <tbody>
+          <tr><td>Melting point</td><td>&minus;78 &deg;C (sublimes)</td><td>0 &deg;C</td></tr>
+          <tr><td>Boiling point</td><td>&minus;57 &deg;C</td><td>100 &deg;C</td></tr>
+          <tr><td>Conducts electricity (liquid)</td><td>No</td><td>Very slightly</td></tr>
+          <tr><td>Number of bonds</td><td>2 double bonds</td><td>2 single bonds</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">In the box below, draw a dot-and-cross diagram for CO<sub>2</sub>. Show outer-shell electrons only. (Carbon has 4 outer electrons; oxygen has 6.)<span class="marks">2</span>
+          <div class="diagram-box" style="min-height:150px"><span style="color:#888;font-size:9.5pt">Draw your diagram here</span></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Explain why both CO<sub>2</sub> and H<sub>2</sub>O have low melting and boiling points compared with ionic compounds such as NaCl.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Explain why neither CO<sub>2</sub> nor H<sub>2</sub>O (pure liquid) conducts electricity well.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">Carbon dioxide dissolves in water to form a solution that turns litmus <b>red</b>. Write the word equation for this reaction.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(e)</div>
+        <div style="flex:1">State the approximate pH of the solution formed when carbon dioxide dissolves in water. Give a reason for your answer.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="question" style="margin-top:24px">
+    <div class="qnum">C2</div>
+    <div class="qbody">
+      <b>Acids, Bases, and Preparation of Salts</b> &nbsp;<span class="marks">7</span>
+      <p style="margin:10px 0">A student prepares zinc sulfate (ZnSO<sub>4</sub>) by reacting excess zinc oxide powder with dilute sulfuric acid.</p>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Write the balanced chemical equation for the reaction between zinc oxide and dilute sulfuric acid.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">The student uses <b>excess</b> zinc oxide. Explain the purpose of using excess zinc oxide in this preparation.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Describe how the student would obtain the zinc sulfate solution from the mixture after the reaction is complete.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">Describe how the student would then obtain dry zinc sulfate crystals from the solution. Include the names of the two techniques used.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(e)</div>
+        <div style="flex:1">State whether zinc sulfate solution would be acidic, alkaline, or neutral. Give a reason.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MARK SCHEME ══ -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Paper 2</div>
+  <div class="ms-disc">
+    <b>For teacher/self-assessment use only.</b> Accept any chemically correct equivalent. Balanced equations: all species must be correct; one mark for formula, one for balancing unless stated otherwise. State symbols only required where the question asks for them.
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section A — Multiple Choice</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B</td><td>6</td><td>C</td><td>11</td><td>B</td></tr>
+      <tr><td>2</td><td>C</td><td>7</td><td>A</td><td>12</td><td>B</td></tr>
+      <tr><td>3</td><td>B</td><td>8</td><td>B</td><td>13</td><td>C</td></tr>
+      <tr><td>4</td><td>A</td><td>9</td><td>C</td><td>14</td><td>A</td></tr>
+      <tr><td>5</td><td>A</td><td>10</td><td>C</td><td>15</td><td>C</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section B</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>B1(a)</td><td>2</td><td>1</td></tr>
+      <tr><td>B1(b)</td><td>N at centre with 3 shared pairs (each a dot + cross) connecting 3 H atoms [2]; one lone pair on N [1]</td><td>3</td></tr>
+      <tr><td>B1(c)</td><td>In covalent bonding electrons are <u>shared</u>; in ionic bonding electrons are <u>transferred</u> (accept: ionic compounds are made of ions / covalent are made of molecules)</td><td>1</td></tr>
+      <tr><td>B2(a)</td><td>Acidic [1]; hydrochloric acid / sulfuric acid / nitric acid (any one strong acid) [1]</td><td>2</td></tr>
+      <tr><td>B2(b)</td><td>HCl is a <u>strong</u> acid — fully dissociates into H<sup>+</sup> ions [1]; ethanoic acid is a <u>weak</u> acid — only partially dissociates, so fewer H<sup>+</sup> ions, higher pH [1]</td><td>2</td></tr>
+      <tr><td>B2(c)</td><td>H<sup>+</sup> (hydrogen / oxonium ions; accept H<sub>3</sub>O<sup>+</sup>)</td><td>1</td></tr>
+      <tr><td>B3(a)</td><td>Acid: sulfuric acid (H<sub>2</sub>SO<sub>4</sub>) [1]; Base: copper(II) oxide (CuO) [1]</td><td>2</td></tr>
+      <tr><td>B3(b)</td><td>CuO(s) + H<sub>2</sub>SO<sub>4</sub>(aq) &rarr; CuSO<sub>4</sub>(aq) + H<sub>2</sub>O(l) [1 for correct formulae, 1 for balanced with state symbols]</td><td>2</td></tr>
+      <tr><td>B3(c)</td><td>Evaporate the solution (by heating) to concentrate it / until crystals appear; leave to crystallise; filter/dry the crystals</td><td>1</td></tr>
+      <tr><td>B4(a)</td><td>HCl + NaOH &rarr; NaCl + H<sub>2</sub>O (or HCl(aq) + NaOH(aq) &rarr; NaCl(aq) + H<sub>2</sub>O(l))</td><td>1</td></tr>
+      <tr><td>B4(b)</td><td>CaCO<sub>3</sub>(s) + 2HCl(aq) &rarr; CaCl<sub>2</sub>(aq) + H<sub>2</sub>O(l) + CO<sub>2</sub>(g) [1 for formulae, 1 for balancing + state symbols]</td><td>2</td></tr>
+      <tr><td>B4(c)</td><td>H<sup>+</sup>(aq) + OH<sup>&minus;</sup>(aq) &rarr; H<sub>2</sub>O(l) [1 for correct ions, 1 for state symbols]</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section C</p>
+  <table class="ans-table">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>C1(a)</td><td>C at centre [1]; each O connected to C by 2 shared pairs (double bond) [1]; correct lone pairs on each O [bonus — not required for full marks]</td><td>2</td></tr>
+      <tr><td>C1(b)</td><td>Simple/molecular covalent compounds — only <u>weak intermolecular forces</u> between molecules [1]; little energy needed to overcome these forces, so low melting/boiling points [1] (contrast: ionic compounds have strong electrostatic bonds in giant lattice)</td><td>2</td></tr>
+      <tr><td>C1(c)</td><td>No free ions / no charged particles free to move; covalent molecules are not charged</td><td>1</td></tr>
+      <tr><td>C1(d)</td><td>Carbon dioxide + water &rarr; carbonic acid</td><td>1</td></tr>
+      <tr><td>C1(e)</td><td>pH approximately 5–6 (accept 4–6) [1]; because carbonic acid is a <u>weak acid</u> — partially dissociates, producing H<sup>+</sup> ions [1]</td><td>2</td></tr>
+      <tr><td>C2(a)</td><td>ZnO + H<sub>2</sub>SO<sub>4</sub> &rarr; ZnSO<sub>4</sub> + H<sub>2</sub>O [1 for correct formulae, 1 for balanced]</td><td>2</td></tr>
+      <tr><td>C2(b)</td><td>To ensure all the acid is used up / neutralised; so the product is not contaminated with excess acid</td><td>1</td></tr>
+      <tr><td>C2(c)</td><td>Filter the mixture to remove excess unreacted zinc oxide</td><td>1</td></tr>
+      <tr><td>C2(d)</td><td>Evaporation (heat solution to concentrate/reduce volume) [1]; crystallisation (allow to cool so crystals form, then filter/dry) [1]</td><td>2</td></tr>
+      <tr><td>C2(e)</td><td>Neutral (accept slightly acidic for 1 mark with valid reason) [1]; zinc sulfate is a salt formed from a strong acid and a base — it does not hydrolyse significantly at NCE level [1]</td><td>1</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

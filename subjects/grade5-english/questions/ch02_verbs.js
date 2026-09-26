@@ -28,14 +28,16 @@ STATIC_QUESTIONS.push(
     options:['walks','is walking','was walking','will walk'],
     answer:'was walking',
     hint:'An action that was in progress when another action interrupted it uses the past continuous (was/were + -ing).',
-    explanation:'"<b>Was walking</b>" is correct - past continuous (was/were + verb-ing) describes an action in progress in the past when something else happened. "She was walking... when it started raining." (started = interrupted the walking).' }),
+    explanation:'"<b>Was walking</b>" is correct - past continuous (was/were + verb-ing) describes an action in progress in the past when something else happened. "She was walking... when it started raining." (started = interrupted the walking).',
+    learnMore:'<b>Past continuous</b> (was/were + -ing) describes an action that was already in progress at a past moment. It often appears with "when" or "while": the ongoing action uses past continuous, and the interruption uses past simple. Example: "I <i>was reading</i> (ongoing) when the phone <i>rang</i> (interruption)."' }),
 
   makeMCQ({ id:'g5eng-verb-004', chapterId:'eng-verbs', subsection:'past_tense', difficulty:1,
     question:'What is the PAST TENSE of the irregular verb "go"?',
     options:['goed','goes','gone','went'],
     answer:'went',
     hint:'Irregular verbs do NOT follow the -ed pattern. This one changes completely.',
-    explanation:'"<b>Went</b>" is the past simple tense of "go". It is irregular - you cannot say "goed". Other irregular examples: see→saw, have→had, run→ran, come→came.' }),
+    explanation:'"<b>Went</b>" is the past simple tense of "go". It is irregular - you cannot say "goed". Other irregular examples: see→saw, have→had, run→ran, come→came.',
+    learnMore:'<b>Irregular past tenses</b> do not add -ed. Common groups to memorise: (1) vowel change only: run→ran, sing→sang, drink→drank, swim→swam. (2) Same in all forms: cut→cut, put→put, let→let. (3) Completely different: go→went, be→was/were, have→had, buy→bought, think→thought.' }),
 
   makeTF({ id:'g5eng-verb-005', chapterId:'eng-verbs', subsection:'continuous', difficulty:1,
     question:'The sentence "They are playing football" is in the present continuous tense.',

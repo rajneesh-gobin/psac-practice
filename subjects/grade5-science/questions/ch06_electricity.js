@@ -111,7 +111,8 @@ STATIC_QUESTIONS.push(
     ],
     answer:'A battery, wires, a bulb and a switch',
     hint:'A simple circuit has a source of electricity, a path for current to flow, and something that uses the electricity.',
-    explanation:'A simple electric circuit needs: a <b>battery</b> (energy source), <b>wires</b> (path for electricity), a <b>bulb</b> (load/output) and a <b>switch</b> (to open or close the circuit).' }),
+    explanation:'A simple electric circuit needs: a <b>battery</b> (energy source), <b>wires</b> (path for electricity), a <b>bulb</b> (load/output) and a <b>switch</b> (to open or close the circuit).',
+    learnMore:'A <b>simple circuit</b> has four essential parts: a <b>battery</b> (energy source), <b>wires</b> (conduct the current), a <b>bulb</b> or other component (uses the energy), and a <b>switch</b> (opens or closes the path). The circuit must be a complete unbroken loop — remove any part and the bulb goes out.' }),
 
   makeMCQ({ id:'g5sci-el-002', chapterId:'electricity', subsection:'diagrams', difficulty:1,
     question:`${_EL_CLOSED}Look at the circuit diagram above. Will the bulb light up? Why?`,
@@ -147,7 +148,8 @@ STATIC_QUESTIONS.push(
     ],
     answer:'It opens or closes the circuit',
     hint:'Think about what happens when you flick a light switch on and off.',
-    explanation:'A switch <b>opens</b> (breaks) or <b>closes</b> (completes) a circuit. When closed, electricity flows and the bulb lights. When open, the circuit is broken and the bulb goes off.' }),
+    explanation:'A switch <b>opens</b> (breaks) or <b>closes</b> (completes) a circuit. When closed, electricity flows and the bulb lights. When open, the circuit is broken and the bulb goes off.',
+    learnMore:'A <b>switch</b> controls the flow of electricity by opening or closing the circuit. <b>Closed</b> = circuit complete → current flows → bulb ON. <b>Open</b> = gap in circuit → no current → bulb OFF. This is identical to how a light switch in your home works.' }),
 
   makeMCQ({ id:'g5sci-el-005', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:`${_EL_GAP}Look at the circuit above. The switch is closed but the bulb does not light. What is the most likely reason?`,
@@ -166,7 +168,8 @@ STATIC_QUESTIONS.push(
     options:['Rubber','Plastic','Copper wire','Glass'],
     answer:'Copper wire',
     hint:'Metals are generally good conductors of electricity.',
-    explanation:'<b>Copper</b> is an excellent conductor of electricity - electricity passes through it easily. This is why electrical wires are made of copper. Rubber, plastic and glass are insulators.' }),
+    explanation:'<b>Copper</b> is an excellent conductor of electricity - electricity passes through it easily. This is why electrical wires are made of copper. Rubber, plastic and glass are insulators.',
+    learnMore:'<b>Conductors</b> allow electricity to pass through easily — most metals: copper, iron, aluminium, steel. <b>Insulators</b> resist electricity — rubber, plastic, glass, wood. Electrical wires are copper (conducts) coated in plastic (insulates), so electricity travels safely along the wire without shocking you.' }),
 
   makeMCQ({ id:'g5sci-el-007', chapterId:'electricity', subsection:'conductors', difficulty:2,
     question:'Which of the following materials is a good INSULATOR of electricity?',

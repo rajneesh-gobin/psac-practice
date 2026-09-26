@@ -220,7 +220,8 @@ STATIC_QUESTIONS.push(
     options:['is','was','are','has been'],
     answer:'are',
     hint:'"Police" is always treated as a plural noun in English.',
-    explanation:'"The police <b>are</b>" — "police" is always plural in English (like "people", "cattle"). We never say "a police" or "one police" for individual officers — we say "a police officer". Always use a plural verb with "police".' }),
+    explanation:'"The police <b>are</b>" — "police" is always plural in English (like "people", "cattle"). We never say "a police" or "one police" for individual officers — we say "a police officer". Always use a plural verb with "police".',
+    learnMore:'Some nouns are <b>always plural</b> in English and take a plural verb: <i>police, people, cattle, staff, clergy</i>. Never say "a police" — say "a police officer". Contrast: "the government <i>is</i>" (treated as singular in British English) but "the police <i>are</i>" (always plural). These must be memorised.' }),
 
   makeMCQ({ id:'g7eng-gr-nouns-009', chapterId:'g7eng-gr-nouns', difficulty:2,
     subsection:'countable_uncountable',
@@ -228,7 +229,8 @@ STATIC_QUESTIONS.push(
     options:['I need an equipment for the lab.','I need equipments for the lab.','I need some equipment for the lab.','I need a equipment for the lab.'],
     answer:'I need some equipment for the lab.',
     hint:'"Equipment" is an uncountable noun — use "some" or "a piece of".',
-    explanation:'"<b>Some equipment</b>" is correct. "Equipment" is uncountable — we cannot use "a/an" or make it plural. Correct usage: "some equipment", "a piece of equipment". Other uncountable nouns like this: furniture, information, knowledge, research.' }),
+    explanation:'"<b>Some equipment</b>" is correct. "Equipment" is uncountable — we cannot use "a/an" or make it plural. Correct usage: "some equipment", "a piece of equipment". Other uncountable nouns like this: furniture, information, knowledge, research.',
+    learnMore:'<b>Uncountable nouns</b> have no plural form and cannot take a/an: <i>equipment, furniture, information, advice, knowledge, research, luggage, traffic, progress</i>. To count them, use: "a piece of equipment/advice/furniture". A common error is adding -s or using "an" — both wrong.' }),
 
   makeMCQ({ id:'g7eng-gr-nouns-010', chapterId:'g7eng-gr-nouns', difficulty:3,
     subsection:'subject_verb_agreement',
@@ -236,7 +238,8 @@ STATIC_QUESTIONS.push(
     options:['are','were','is','have been'],
     answer:'is',
     hint:'With "either…or", the verb agrees with the noun CLOSEST to it.',
-    explanation:'"Either the teachers or the principal <b>is</b> going to present" — with <b>either…or</b> / <b>neither…nor</b>, the verb agrees with the <b>nearest subject</b>. "The principal" (singular) is closest, so we use "is". If reversed: "Either the principal or the teachers ARE going to present."' }),
+    explanation:'"Either the teachers or the principal <b>is</b> going to present" — with <b>either…or</b> / <b>neither…nor</b>, the verb agrees with the <b>nearest subject</b>. "The principal" (singular) is closest, so we use "is". If reversed: "Either the principal or the teachers ARE going to present."',
+    learnMore:'<b>Either…or / Neither…nor rule</b>: the verb agrees with the subject <i>closest</i> to it. "Either the teachers or <u>the principal</u> <i>is</i>…" (nearest = singular → is). "Either the principal or <u>the teachers</u> <i>are</i>…" (nearest = plural → are). The same rule applies with neither…nor.' }),
 
   // ── Grammar · Pronouns ───────────────────────────────────────────────────
 
@@ -254,7 +257,8 @@ STATIC_QUESTIONS.push(
     options:['who','which','whose','whom'],
     answer:'whose',
     hint:'The cover BELONGS to the book. Which pronoun shows possession?',
-    explanation:'"The book <b>whose</b> cover was torn" — "whose" shows possession and can refer to things as well as people. "Which" would be used differently: "the book which was torn" (not the cover). "Whose" replaces "the book\'s" in the relative clause.' }),
+    explanation:'"The book <b>whose</b> cover was torn" — "whose" shows possession and can refer to things as well as people. "Which" would be used differently: "the book which was torn" (not the cover). "Whose" replaces "the book\'s" in the relative clause.',
+    learnMore:'<b>Whose</b> = the possessive relative pronoun; it can refer to people OR things. "The girl <i>whose</i> bag was stolen" (person); "the house <i>whose</i> roof collapsed" (thing). Test: replace "whose + noun" with "its/his/her + noun" — if it makes sense, whose is correct. Do not confuse with "who\'s" = who is.' }),
 
   makeMCQ({ id:'g7eng-gr-pronouns-009', chapterId:'g7eng-gr-pronouns', difficulty:3,
     subsection:'personal_possessive',
@@ -304,7 +308,8 @@ STATIC_QUESTIONS.push(
     options:['a charming small French village','a French small charming village','a small charming French village','a village charming small French'],
     answer:'a charming small French village',
     hint:'Opinion comes before size, which comes before origin.',
-    explanation:'"A <b>charming</b> (opinion) <b>small</b> (size) <b>French</b> (origin) village" — opinion adjectives always come first, then size, then origin. "Charming small French" follows the standard sequence.' }),
+    explanation:'"A <b>charming</b> (opinion) <b>small</b> (size) <b>French</b> (origin) village" — opinion adjectives always come first, then size, then origin. "Charming small French" follows the standard sequence.',
+    learnMore:'English adjective order: <b>Opinion → Size → Age → Shape → Colour → Origin → Material → Purpose</b>. Memory trick: <i>OSASCOMP</i>. Most common at NCE: opinion first, then size, then origin — "a lovely small Italian restaurant" ✓, "an Italian small lovely restaurant" ✗. Native speakers know this instinctively; learners must memorise the sequence.' }),
 
   // ── Grammar · Verbs & Tenses ─────────────────────────────────────────────
 
@@ -330,7 +335,8 @@ STATIC_QUESTIONS.push(
     options:['She is eating her lunch.','She ate her lunch.','She has eaten her lunch.','She eats her lunch.'],
     answer:'She has eaten her lunch.',
     hint:'Present perfect = have/has + past participle.',
-    explanation:'"She <b>has eaten</b>" is the present perfect (have/has + past participle). It shows that an action happened at an unspecified time in the past and its result is relevant now (she is no longer hungry). Signal words: just, already, yet, ever, never.' }),
+    explanation:'"She <b>has eaten</b>" is the present perfect (have/has + past participle). It shows that an action happened at an unspecified time in the past and its result is relevant now (she is no longer hungry). Signal words: just, already, yet, ever, never.',
+    learnMore:'<b>Present perfect</b> = <i>have/has + past participle</i>. Use it when: the exact time is unknown or unimportant ("I have visited Paris"); the result is still relevant now ("She has eaten" = she isn\'t hungry). Signal words: <i>just, already, yet, ever, never, recently, so far</i>. Compare: "She ate lunch" (simple past — specific finished time) vs "She has eaten" (result matters now).' }),
 
   makeMCQ({ id:'g7eng-gr-verbs-010', chapterId:'g7eng-gr-verbs', difficulty:3,
     subsection:'verb_formation',

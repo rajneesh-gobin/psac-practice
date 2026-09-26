@@ -1,0 +1,889 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grade 5 Mathematics — Predicted Paper 2 | Nouklass.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-big{font-size:18pt;line-height:1} .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:11.5pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.question{margin:14px 0 18px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:110px;width:100%;margin:10px 0;padding:6px}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.work-space{min-height:80px;border:1px dashed #ccc;border-radius:3px;margin:10px 0;padding:4px;background:#fafeff}
+.answer-label{font-weight:bold;margin-top:10px;font-size:10.5pt;color:#1a3c6e}
+.answer-line{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:180px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2;margin:0 4px}
+.frac .num{border-bottom:1px solid #000;padding:0 5px;text-align:center}
+.frac .den{padding:0 5px;text-align:center}
+.col-arith{font-family:monospace;font-size:13pt;border:1px solid #ccc;display:inline-block;padding:10px 24px;margin:10px 0;line-height:2}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.mcq-item{border:1px solid #ccc;padding:10px 8px;border-radius:3px}
+.mcq-q{font-size:10.5pt;margin-bottom:8px}
+.tick-opt{display:flex;align-items:center;gap:8px;margin:6px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0}
+.sub-q{margin:10px 0 5px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:26px;color:#1a3c6e}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+@media print{.nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-btn{display:none}body{padding-top:32px}@page{size:A4 portrait;margin:12mm 14mm}}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>NOUKLASS.COM — PSAC EXAM PRACTICE</span>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:18px">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">NOUKLASS<br>.COM</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">PSAC Exam Practice — Predicted Paper</div>
+    </div>
+  </div>
+  <div class="year">2026</div>
+  <div class="subject">Mathematics</div>
+  <div style="font-size:13pt;color:#444;margin-bottom:6px">Grade 5 &nbsp;|&nbsp; Paper 2 of 4 &nbsp;|&nbsp; Operations, Decimals, Money &amp; Area</div>
+  <div class="paper-meta">
+    <strong>Time allowed:</strong> 1 hour 30 minutes &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Total marks:</strong> 100<br>
+    <strong>Candidate Name:</strong> <span class="index-line"></span><br>
+    <strong>Class / Teacher:</strong> <span class="index-line"></span>
+  </div>
+  <div class="instructions">
+    <strong>Instructions to candidates:</strong>
+    <ol>
+      <li>Write your name and class in the spaces provided above.</li>
+      <li>Answer <strong>ALL</strong> questions in all three sections.</li>
+      <li>Write your answers clearly in the spaces provided.</li>
+      <li>Show all working where required — method marks are awarded.</li>
+      <li>The number of marks for each question is shown in a box [ ].</li>
+      <li>You may use a ruler and pencil for diagrams.</li>
+      <li>Calculators are <strong>NOT</strong> permitted.</li>
+    </ol>
+  </div>
+  <div style="margin-top:18px;border:1px solid #1a3c6e;border-radius:4px;padding:10px 14px;background:#eef3fb">
+    <strong style="color:#1a3c6e">For Examiner Use Only</strong>
+    <table style="margin-top:8px;width:100%;border-collapse:collapse;font-size:10pt">
+      <tr>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section A</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section B</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section C</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">TOTAL</th>
+      </tr>
+      <tr>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 20</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 20</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 60</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 100</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION A -->
+<div class="page page-break">
+  <div class="section-header">SECTION A — Short Answer Questions &nbsp;(Questions 1–15) &nbsp;[20 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Answer all questions. Questions 1–10 carry 1 mark each. Questions 11–15 carry 2 marks each.</span>
+  </div>
+
+  <div class="question">
+    <div class="qnum">1.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Calculate: &nbsp; <strong>34,567 + 28,914</strong>
+      <div class="work-space" style="min-height:60px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Calculate: &nbsp; <strong>73,241 − 45,873</strong>
+      <div class="work-space" style="min-height:60px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Calculate: &nbsp; <strong>247 × 4</strong>
+      <div class="work-space" style="min-height:55px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Calculate: &nbsp; <strong>945 ÷ 5</strong>
+      <div class="work-space" style="min-height:55px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Write <strong>0.7</strong> as a fraction.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Write &nbsp;<span class="frac"><span class="num">3</span><span class="den">10</span></span>&nbsp; as a decimal.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Which decimal is greater: &nbsp;<strong>0.4</strong> &nbsp;or&nbsp; <strong>0.35</strong>?
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Write the price <strong>Rs 24.75</strong> in words.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Find the area of a <strong>rectangle</strong> with length <strong>8 cm</strong> and width <strong>6 cm</strong>.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      A <strong>square</strong> has side 9 cm. Find its area.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">11.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Calculate <strong>56,842 + 37,459</strong>. Show your working clearly using column addition.
+      <div class="col-arith">
+        &nbsp;&nbsp;5 6 8 4 2<br>
+        + 3 7 4 5 9<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      A shirt costs <strong>Rs 345</strong> and a pair of trousers costs <strong>Rs 589</strong>. What is the total cost? Show your working.
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Total cost = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Calculate <strong>384 × 6</strong>. Show your working clearly.
+      <div class="col-arith">
+        &nbsp;&nbsp;3 8 4<br>
+        ×&nbsp;&nbsp;&nbsp;&nbsp; 6<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      A rectangle has an <strong>area of 56 cm²</strong> and a <strong>width of 7 cm</strong>. Find its length. Show your working.
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Length =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Order these decimals from <strong>smallest to largest</strong>: &nbsp;<strong>0.4 &nbsp; 0.08 &nbsp; 0.55 &nbsp; 0.3 &nbsp; 0.75</strong>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Order:</strong><div class="answer-line" style="margin-top:4px;width:280px"></div></div>
+    </div>
+  </div>
+
+  <!-- SECTION B -->
+  <div class="section-header">SECTION B — Multiple Choice Questions &nbsp;(Questions 16–25) &nbsp;[20 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Each question carries 2 marks. Tick ONE box only for each question.</span>
+  </div>
+
+  <div class="mcq-grid">
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>16.</strong> What is 42,315 + 29,486?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;70,801</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;71,801</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;72,801</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;71,701</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>17.</strong> Which decimal is the greatest?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;0.35</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;0.5</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;0.45</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;0.305</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>18.</strong> Mei has Rs 100. She buys items costing Rs 34.50 and Rs 28.75. How much change does she get?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;Rs 36.75</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;Rs 37.25</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;Rs 36.25</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;Rs 36.50</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>19.</strong> What is the area of a rectangle 13 cm long and 7 cm wide?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;40 cm²</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;91 cm²</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;78 cm²</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;84 cm²</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>20.</strong> What is 6 × 348?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;2,088</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;2,888</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;2,148</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;2,188</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>21.</strong> Write 0.65 as a fraction in simplest form.</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;<span class="frac"><span class="num">65</span><span class="den">100</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;<span class="frac"><span class="num">13</span><span class="den">20</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;<span class="frac"><span class="num">6</span><span class="den">10</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;<span class="frac"><span class="num">7</span><span class="den">10</span></span></div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>22.</strong> What is 756 ÷ 4?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;189</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;198</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;169</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;192</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>23.</strong> Which pair of amounts totals exactly Rs 50.00?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;Rs 27.35 and Rs 22.65</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;Rs 31.40 and Rs 19.70</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;Rs 25.50 and Rs 25.60</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;Rs 18.75 and Rs 31.35</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>24.</strong> A rectangle has area 84 cm² and length 12 cm. Find its width.</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;6 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;7 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;8 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;9 cm</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>25.</strong> Calculate 0.6 + 0.35 + 0.05.</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;0.10</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;1.00</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;0.95</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;0.90</div>
+    </div>
+
+  </div><!-- end mcq-grid -->
+
+  <!-- SECTION C -->
+  <div class="section-header">SECTION C — Structured Questions &nbsp;(Questions 26–40) &nbsp;[60 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Answer all questions. Show all working clearly. Marks are given for method as well as the answer.</span>
+  </div>
+
+  <!-- Q26 [3 marks] -->
+  <div class="question">
+    <div class="qnum">26.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      Calculate using column addition. Show your working clearly.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>45,678 + 27,954 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;4 5 6 7 8<br>
+        + 2 7 9 5 4<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>34,209 + 48,783 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;3 4 2 0 9<br>
+        + 4 8 7 8 3<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>12,345 + 23,456 + 34,567 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:70px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q27 [3 marks] -->
+  <div class="question">
+    <div class="qnum">27.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      Calculate using column subtraction. Show your working.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>82,000 − 34,567 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;8 2 0 0 0<br>
+        − 3 4 5 6 7<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>70,304 − 28,615 = <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;7 0 3 0 4<br>
+        − 2 8 6 1 5<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q28 [3 marks] -->
+  <div class="question">
+    <div class="qnum">28.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write these decimals in order, <strong>smallest first</strong>: &nbsp; 0.4 &nbsp; 0.35 &nbsp; 0.8 &nbsp; 0.07 <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Calculate: &nbsp;<strong>3.45 + 2.78</strong> <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>Calculate: &nbsp;<strong>7.60 − 4.35</strong> <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q29 [3 marks] -->
+  <div class="question">
+    <div class="qnum">29.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Calculate: Rs 45.75 + Rs 28.60 <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Answer: Rs</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>From Rs 100.00, subtract Rs 63.40. How much is left? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Three pencils cost Rs 5.25 each. What is the total cost? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:40px"></div>
+      <div style="margin:8px 0"><strong>Total cost = Rs</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q30 [3 marks] -->
+  <div class="question">
+    <div class="qnum">30.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the area of a rectangle with <strong>length 14 cm</strong> and <strong>width 9 cm</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>A square has an area of 64 cm². Find the length of one side. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>A rectangle has area <strong>90 cm²</strong> and length <strong>15 cm</strong>. Find its width. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:40px"></div>
+      <div style="margin:8px 0"><strong>Width =</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q31 [4 marks] -->
+  <div class="question">
+    <div class="qnum">31.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      A school shop sells the following items:
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr style="background:#eef3fb">
+          <th style="border:1px solid #aaa;padding:5px 12px;color:#1a3c6e">Item</th>
+          <th style="border:1px solid #aaa;padding:5px 12px;color:#1a3c6e">Price</th>
+        </tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 12px">Pencil</td><td style="border:1px solid #aaa;padding:4px 12px">Rs 8.50</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 12px">Ruler</td><td style="border:1px solid #aaa;padding:4px 12px">Rs 12.75</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 12px">Eraser</td><td style="border:1px solid #aaa;padding:4px 12px">Rs 4.25</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 12px">Notebook</td><td style="border:1px solid #aaa;padding:4px 12px">Rs 35.00</td></tr>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the cost of <strong>3 pencils</strong> and <strong>2 erasers</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Cost = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>Arjun pays with Rs 100 for <strong>one notebook and one ruler</strong>. Find his change. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Change = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q32 [4 marks] -->
+  <div class="question">
+    <div class="qnum">32.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      The heights of five children are: &nbsp;<strong>1.35 m &nbsp; 1.42 m &nbsp; 1.28 m &nbsp; 1.50 m &nbsp; 1.37 m</strong>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write the heights in order from <strong>shortest to tallest</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>What is the <strong>difference in height</strong> between the tallest and the shortest child? Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Difference =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>Which height is closest to <strong>1.40 m</strong>? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q33 [4 marks] -->
+  <div class="question">
+    <div class="qnum">33.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      Calculate. Show your working clearly for each part.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>467 × 8 <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="col-arith">
+        &nbsp;&nbsp;4 6 7<br>
+        ×&nbsp;&nbsp;&nbsp;&nbsp;8<br>
+        <div style="border-top:2px solid #000;margin-top:4px;padding-top:4px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>936 ÷ 6 <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q34 [4 marks] -->
+  <div class="question">
+    <div class="qnum">34.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      A school hall is <strong>25 m long</strong> and <strong>18 m wide</strong>.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the <strong>area</strong> of the hall floor. Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Area =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>The floor is tiled with square tiles, each measuring <strong>1 m × 1 m</strong>. How many tiles are needed? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Each tile costs <strong>Rs 85</strong>. Find the <strong>total cost</strong> of tiling the floor. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Total cost = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q35 [4 marks] -->
+  <div class="question">
+    <div class="qnum">35.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      Mrs. Sharma buys groceries:
+      <ul style="margin:8px 0 8px 24px;line-height:2">
+        <li>3 kg of rice at <strong>Rs 45 per kg</strong></li>
+        <li>2 litres of oil at <strong>Rs 78.50 per litre</strong></li>
+        <li>4 packets of biscuits at <strong>Rs 32.75 per packet</strong></li>
+      </ul>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the <strong>total cost</strong> of all the groceries. Show all your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[3]</span></div>
+      </div>
+      <div class="work-space" style="min-height:100px"></div>
+      <div style="margin:8px 0"><strong>Total cost = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>She pays with <strong>Rs 500</strong>. Find her change. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q36 [5 marks] -->
+  <div class="question">
+    <div class="qnum">36.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Calculate: &nbsp;<strong>56,234 + 28,567</strong> <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:60px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>Calculate: &nbsp;<strong>93,046 − 47,382</strong> <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space" style="min-height:70px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>Check your answer to (b) by adding your answer to 47,382. Do you get 93,046? Show working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div>Round your answer to (b) to the nearest thousand. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q37 [5 marks] -->
+  <div class="question">
+    <div class="qnum">37.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write 0.25 as a fraction in its simplest form. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Write &nbsp;<span class="frac"><span class="num">3</span><span class="den">5</span></span>&nbsp; as a decimal. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Put these in order from <strong>smallest to largest</strong>: &nbsp;<span class="frac"><span class="num">1</span><span class="den">2</span></span>&nbsp;&nbsp; 0.3 &nbsp;&nbsp; <span class="frac"><span class="num">3</span><span class="den">4</span></span>&nbsp;&nbsp; 0.65 <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Order:</strong><div class="answer-line" style="margin-top:4px;width:220px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(d)</div>
+        <div>What is &nbsp;<span class="frac"><span class="num">1</span><span class="den">4</span></span>&nbsp; + 0.3? Give your answer as a decimal. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q38 [5 marks] -->
+  <div class="question">
+    <div class="qnum">38.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A family goes on an outing. The costs are:
+      <ul style="margin:8px 0 8px 24px;line-height:2">
+        <li><strong>Train tickets:</strong> 2 adults at Rs 85 each, 3 children at Rs 45 each</li>
+        <li><strong>Lunch:</strong> Rs 340 altogether</li>
+        <li><strong>Museum entry:</strong> 2 adults at Rs 120 each, 3 children at Rs 60 each</li>
+      </ul>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the total cost of <strong>train tickets</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Train tickets = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>Find the total cost of <strong>museum entry</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Museum entry = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>Find the <strong>grand total</strong> for the whole outing. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Grand total = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q39 [5 marks] -->
+  <div class="question">
+    <div class="qnum">39.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A rectangular swimming pool is <strong>50 m long</strong> and <strong>25 m wide</strong>. A path <strong>3 m wide</strong> surrounds the pool on all sides.
+      <div style="margin:10px 0;text-align:center">
+        <svg width="300" height="200" viewBox="0 0 300 200" style="display:inline-block">
+          <!-- Outer rectangle (pool + path): 56m × 31m, scale 4px/m -->
+          <rect x="10" y="10" width="224" height="124" fill="#d0e8f8" stroke="#1a3c6e" stroke-width="2"/>
+          <!-- Inner pool: 50m × 25m -->
+          <rect x="22" y="22" width="200" height="100" fill="#a8d5f0" stroke="#1a3c6e" stroke-width="2"/>
+          <!-- Labels -->
+          <text x="122" y="140" text-anchor="middle" font-size="11" fill="#000">56 m (total width)</text>
+          <text x="240" y="72" font-size="11" fill="#000">31 m</text>
+          <text x="122" y="76" text-anchor="middle" font-size="12" fill="#1a3c6e" font-weight="bold">Pool</text>
+          <text x="122" y="92" text-anchor="middle" font-size="11" fill="#1a3c6e">50 m × 25 m</text>
+          <!-- 3m markers -->
+          <text x="15" y="20" font-size="9" fill="#555">3m</text>
+        </svg>
+        <div style="font-size:9.5pt;color:#555">Not drawn to scale</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the <strong>area of the pool</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Area of pool =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>Find the <strong>total length</strong> and <strong>total width</strong> of the outer rectangle (pool + path). <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div style="display:flex;gap:30px;margin:8px 0">
+        <div><strong>Total length:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div></div>
+        <div><strong>Total width:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div></div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Find the <strong>area of the path only</strong>. Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Area of path =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q40 [5 marks] -->
+  <div class="question">
+    <div class="qnum">40.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A factory produces <strong>348 boxes</strong> per day.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>How many boxes does the factory produce in <strong>7 days</strong>? Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Boxes in 7 days =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>The boxes are packed into crates of <strong>6</strong>. How many full crates are made from one week's production? How many boxes are left over? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="display:flex;gap:30px;margin:8px 0">
+        <div style="margin:8px 0"><strong>Crates =</strong><div class="answer-line" style="margin-top:4px;width:80px"></div></div>
+        <div style="margin:8px 0"><strong>Remainder =</strong><div class="answer-line" style="margin-top:4px;width:80px"></div><span style="font-size:10pt">boxes</span></div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Each crate holds 6 boxes. Each box is priced at <strong>Rs 45</strong>. Find the total value of <strong>one full crate</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Value of one crate = Rs</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+</div><!-- end page -->
+
+<!-- MARK SCHEME -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme — Paper 2</div>
+  <div class="ms-disc">
+    This mark scheme is for teacher and parent use. Accept equivalent correct methods. Award method marks where working is shown even if the final answer contains a minor arithmetic error. For money: accept both Rs X.XX and rupees/cents formats.
+  </div>
+  <table class="ans-table">
+    <tr><th>Q</th><th>Answer / Acceptable Responses</th><th>Marks</th></tr>
+    <tr><td>1</td><td>63,481</td><td>1</td></tr>
+    <tr><td>2</td><td>27,368</td><td>1</td></tr>
+    <tr><td>3</td><td>988</td><td>1</td></tr>
+    <tr><td>4</td><td>189</td><td>1</td></tr>
+    <tr><td>5</td><td>7/10</td><td>1</td></tr>
+    <tr><td>6</td><td>0.3</td><td>1</td></tr>
+    <tr><td>7</td><td>0.4</td><td>1</td></tr>
+    <tr><td>8</td><td>Twenty-four rupees and seventy-five cents</td><td>1</td></tr>
+    <tr><td>9</td><td>48 cm²</td><td>1</td></tr>
+    <tr><td>10</td><td>81 cm²</td><td>1</td></tr>
+    <tr><td>11</td><td>94,301 [M1 for correct column layout, A1 for answer]</td><td>2</td></tr>
+    <tr><td>12</td><td>345 + 589 = Rs 934 [M1+A1]</td><td>2</td></tr>
+    <tr><td>13</td><td>384 × 6 = 2,304 [M1 for method, A1 for 2,304]</td><td>2</td></tr>
+    <tr><td>14</td><td>56 ÷ 7 = 8 cm [M1+A1]</td><td>2</td></tr>
+    <tr><td>15</td><td>0.08, 0.3, 0.4, 0.55, 0.75 [M1 for method e.g. writing as hundredths; A1 for fully correct order]</td><td>2</td></tr>
+    <tr><td>16</td><td><strong>B</strong> — 71,801</td><td>2</td></tr>
+    <tr><td>17</td><td><strong>B</strong> — 0.5</td><td>2</td></tr>
+    <tr><td>18</td><td><strong>A</strong> — Rs 36.75 (34.50 + 28.75 = 63.25; 100 − 63.25 = 36.75)</td><td>2</td></tr>
+    <tr><td>19</td><td><strong>B</strong> — 91 cm² (13 × 7)</td><td>2</td></tr>
+    <tr><td>20</td><td><strong>A</strong> — 2,088 (6 × 348)</td><td>2</td></tr>
+    <tr><td>21</td><td><strong>B</strong> — 13/20</td><td>2</td></tr>
+    <tr><td>22</td><td><strong>A</strong> — 189</td><td>2</td></tr>
+    <tr><td>23</td><td><strong>A</strong> — Rs 27.35 + Rs 22.65 = Rs 50.00</td><td>2</td></tr>
+    <tr><td>24</td><td><strong>B</strong> — 7 cm (84 ÷ 12 = 7)</td><td>2</td></tr>
+    <tr><td>25</td><td><strong>B</strong> — 1.00 (0.60 + 0.35 + 0.05 = 1.00)</td><td>2</td></tr>
+    <tr><td>26a</td><td>73,632</td><td>1</td></tr>
+    <tr><td>26b</td><td>82,992</td><td>1</td></tr>
+    <tr><td>26c</td><td>70,368</td><td>1</td></tr>
+    <tr><td>27a</td><td>47,433 [M1 for correct borrowing method; A1 for 47,433]</td><td>2</td></tr>
+    <tr><td>27b</td><td>41,689</td><td>1</td></tr>
+    <tr><td>28a</td><td>0.07, 0.35, 0.4, 0.8</td><td>1</td></tr>
+    <tr><td>28b</td><td>6.23</td><td>1</td></tr>
+    <tr><td>28c</td><td>3.25</td><td>1</td></tr>
+    <tr><td>29a</td><td>Rs 74.35</td><td>1</td></tr>
+    <tr><td>29b</td><td>Rs 36.60</td><td>1</td></tr>
+    <tr><td>29c</td><td>Rs 15.75 (3 × 5.25)</td><td>1</td></tr>
+    <tr><td>30a</td><td>126 cm²</td><td>1</td></tr>
+    <tr><td>30b</td><td>8 cm (√64 = 8)</td><td>1</td></tr>
+    <tr><td>30c</td><td>6 cm (90 ÷ 15)</td><td>1</td></tr>
+    <tr><td>31a</td><td>3 × Rs 8.50 = Rs 25.50; 2 × Rs 4.25 = Rs 8.50; Total = Rs 34.00 [M1 for either correct mult, A1 for Rs 34.00]</td><td>2</td></tr>
+    <tr><td>31b</td><td>Rs 35.00 + Rs 12.75 = Rs 47.75; Change = Rs 100 − Rs 47.75 = Rs 52.25 [M1+A1]</td><td>2</td></tr>
+    <tr><td>32a</td><td>1.28 m, 1.35 m, 1.37 m, 1.42 m, 1.50 m</td><td>1</td></tr>
+    <tr><td>32b</td><td>1.50 − 1.28 = 0.22 m [M1 for subtraction, A1 for 0.22 m]</td><td>2</td></tr>
+    <tr><td>32c</td><td>1.42 m (difference of 0.02 m, vs 1.37 which is 0.03 away)</td><td>1</td></tr>
+    <tr><td>33a</td><td>467 × 8 = 3,736 [M1 for method, A1 for 3,736]</td><td>2</td></tr>
+    <tr><td>33b</td><td>936 ÷ 6 = 156 [M1 for method, A1 for 156]</td><td>2</td></tr>
+    <tr><td>34a</td><td>25 × 18 = 450 m² [M1+A1]</td><td>2</td></tr>
+    <tr><td>34b</td><td>450 tiles</td><td>1</td></tr>
+    <tr><td>34c</td><td>450 × 85 = Rs 38,250</td><td>1</td></tr>
+    <tr><td>35a</td><td>Rice: 3×45=Rs 135; Oil: 2×78.50=Rs 157; Biscuits: 4×32.75=Rs 131; Total = Rs 423 [M1 for each correct line, A1 for Rs 423 (award 3 marks total)]</td><td>3</td></tr>
+    <tr><td>35b</td><td>Rs 500 − Rs 423 = Rs 77</td><td>1</td></tr>
+    <tr><td>36a</td><td>84,801</td><td>1</td></tr>
+    <tr><td>36b</td><td>45,664 [M1 for method, A1 for 45,664]</td><td>2</td></tr>
+    <tr><td>36c</td><td>45,664 + 47,382 = 93,046 ✓</td><td>1</td></tr>
+    <tr><td>36d</td><td>46,000</td><td>1</td></tr>
+    <tr><td>37a</td><td>1/4</td><td>1</td></tr>
+    <tr><td>37b</td><td>0.6</td><td>1</td></tr>
+    <tr><td>37c</td><td>Convert: 1/2=0.5, 3/4=0.75. Order: 0.3, 1/2, 0.65, 3/4 [M1 for conversion, A1 for fully correct order]</td><td>2</td></tr>
+    <tr><td>37d</td><td>0.25 + 0.30 = 0.55</td><td>1</td></tr>
+    <tr><td>38a</td><td>(2×85) + (3×45) = 170 + 135 = Rs 305 [M1 for each product, A1 for Rs 305]</td><td>2</td></tr>
+    <tr><td>38b</td><td>(2×120) + (3×60) = 240 + 180 = Rs 420 [M1+A1]</td><td>2</td></tr>
+    <tr><td>38c</td><td>305 + 340 + 420 = Rs 1,065</td><td>1</td></tr>
+    <tr><td>39a</td><td>50 × 25 = 1,250 m² [M1+A1]</td><td>2</td></tr>
+    <tr><td>39b</td><td>Total length = 56 m; Total width = 31 m</td><td>1</td></tr>
+    <tr><td>39c</td><td>56 × 31 = 1,736 m²; 1,736 − 1,250 = 486 m² [M1 for outer area, A1 for 486 m²]</td><td>2</td></tr>
+    <tr><td>40a</td><td>348 × 7 = 2,436 boxes [M1+A1]</td><td>2</td></tr>
+    <tr><td>40b</td><td>2,436 ÷ 6 = 406 crates, 0 left over [M1+A1] (2,436 ÷ 6 = 406 exactly)</td><td>2</td></tr>
+    <tr><td>40c</td><td>6 × Rs 45 = Rs 270</td><td>1</td></tr>
+  </table>
+  <div style="margin-top:20px;font-size:9.5pt;color:#555;border-top:1px solid #ccc;padding-top:10px">
+    Paper 2 Total: 100 marks &nbsp;|&nbsp; Section A: 20 &nbsp;|&nbsp; Section B: 20 &nbsp;|&nbsp; Section C: 60<br>
+    &copy; Nouklass.com — For personal and classroom practice only. Not for commercial reproduction.
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

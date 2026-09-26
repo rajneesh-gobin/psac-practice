@@ -1,0 +1,909 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nouklass.com — Grade 6 PSAC Mathematics Specimen Paper 3 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.cover-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-logo-box .nk-big{font-size:18pt;line-height:1}
+.nk-logo-box .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year-subject{margin-bottom:20px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.subject-code{font-size:11.5pt;color:#555;margin-bottom:18px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.marking-grid{border-collapse:collapse;font-size:9.5pt;margin-top:18px;width:100%}
+.marking-grid th,.marking-grid td{border:1px solid #000;padding:4px 8px;text-align:center}
+.marking-grid th{background:#e8edf5}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:11.5pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.section-sub{font-size:10.5pt;font-weight:normal;color:#333;margin-top:5px}
+.question{margin:14px 0 18px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;margin-top:2px;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;white-space:nowrap;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:110px;width:100%;margin:10px 0;padding:6px}
+.writing-lines{margin:10px 0;width:100%}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.work-space{min-height:80px;border:1px dashed #ccc;border-radius:3px;margin:10px 0;padding:4px;background:#fafeff}
+.work-space-sm{min-height:50px;border:1px dashed #ccc;border-radius:3px;margin:8px 0;padding:4px;background:#fafeff}
+.work-space-lg{min-height:130px;border:1px dashed #ccc;border-radius:3px;margin:12px 0;padding:4px;background:#fafeff}
+.answer-label{font-weight:bold;margin-top:12px;font-size:10.5pt;color:#1a3c6e}
+.answer-line{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:180px}
+.answer-line-sm{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:110px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2;margin:0 4px}
+.frac .num{border-bottom:1px solid #000;padding:0 5px;min-width:14px;text-align:center}
+.frac .den{padding:0 5px;min-width:14px;text-align:center}
+.mcq-box{border:1.5px solid #333;padding:10px;margin:10px 0;border-radius:4px}
+.mcq-label{font-weight:bold;font-size:10.5pt;margin-bottom:10px;color:#1a3c6e}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mcq-item{border:1px solid #ccc;padding:10px 8px;border-radius:3px}
+.mcq-q{font-size:10.5pt;margin-bottom:8px;min-height:36px;line-height:1.5}
+.tick-opt{display:flex;align-items:center;gap:10px;margin:7px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0;display:inline-block}
+.tick-label{font-size:10.5pt}
+.boxed{border:1px solid #333;padding:2px 10px;display:inline-block;margin:2px;font-family:monospace;font-size:11.5pt}
+.page-break{page-break-before:always}
+.sub-q{margin:10px 0 5px}
+.sub-label{font-weight:bold;display:inline-block;min-width:26px;color:#1a3c6e}
+.mark-scheme{padding:14mm 20mm;background:#fff}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.ans-table tr:nth-child(even){background:#f9fbff}
+/* Bar chart styles */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:140px;border-left:2px solid #555;border-bottom:2px solid #555;padding:0 8px;margin:14px 0;position:relative}
+.bar{background:#1a3c6e;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;position:relative;min-width:32px}
+.bar-label{font-size:8pt;margin-top:4px;text-align:center}
+.y-axis-label{position:absolute;left:-38px;font-size:8pt;color:#555}
+@media print{
+  .nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none}
+  body{padding-top:32px}
+  @page{size:A4 portrait;margin:12mm 14mm}
+}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>&#128196; Nouklass.com &mdash; Grade 6 PSAC Mathematics &mdash; Specimen Paper 3 of 4 &mdash; 2026</span>
+  <button class="print-btn" onclick="window.print()">&#128424; Print / Save PDF</button>
+</div>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">Nouklass.com</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">Specimen Paper 2026 &mdash; For examination practice only. Not an official MES paper.</div>
+    </div>
+  </div>
+
+  <div class="year-subject">
+    <div class="year">PSAC 2026</div>
+    <div class="subject">Mathematics</div>
+    <div class="subject-code">Specimen Paper 3 of 4 &nbsp;|&nbsp; Prepared by Nouklass.com &nbsp;|&nbsp; Topics: Ratio &bull; Data Handling &bull; Angles &bull; 2D Shapes</div>
+  </div>
+
+  <div class="paper-meta">
+    <div><strong>Time allowed: 1 hour 45 minutes</strong> &nbsp;&nbsp;&nbsp; <strong>Total Marks: 99</strong></div>
+    <div style="margin-top:10px">Centre Number: <span class="index-line"></span></div>
+    <div style="margin-top:8px">Index Number: <span class="index-line"></span></div>
+    <div style="margin-top:8px">Candidate's Name: <span class="index-line" style="width:320px"></span></div>
+  </div>
+
+  <div class="instructions">
+    <strong>INSTRUCTIONS TO CANDIDATES</strong>
+    <ol>
+      <li>This paper contains <strong>45</strong> questions in three sections.</li>
+      <li>Write your Index Number and Name in the spaces provided above.</li>
+      <li>Answer <strong>all</strong> questions.</li>
+      <li>Write your answers in the spaces provided in this booklet.</li>
+      <li>Show <strong>all</strong> working clearly. Marks may be awarded for working even if the final answer is wrong.</li>
+      <li>Do <strong>not</strong> use red, green or black ink.</li>
+      <li>Diagrams are <strong>not</strong> drawn to scale unless stated otherwise.</li>
+      <li>Calculators are <strong>not</strong> allowed.</li>
+    </ol>
+  </div>
+
+  <table class="marking-grid">
+    <tr>
+      <th>Section</th><th>Questions</th><th>Marks Available</th><th>Marks Awarded</th><th>Examiner</th>
+    </tr>
+    <tr><td>A</td><td>1–18</td><td>36</td><td></td><td></td></tr>
+    <tr><td>B</td><td>19–28</td><td>20</td><td></td><td></td></tr>
+    <tr><td>C</td><td>29–45</td><td>43</td><td></td><td></td></tr>
+    <tr><td colspan="2"><strong>Total</strong></td><td><strong>99</strong></td><td></td><td></td></tr>
+  </table>
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 1 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION A -->
+<div class="page">
+  <div class="section-header">
+    SECTION A &mdash; Short Answer Questions
+    <div class="section-sub">Questions 1–18 &nbsp;|&nbsp; 36 marks &nbsp;|&nbsp; Write your answers clearly in the spaces provided.</div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">1.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Write the ratio <strong>24 : 36</strong> in its simplest form.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Share <strong>Rs 560</strong> in the ratio <strong>3 : 5</strong>.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Smaller share: Rs <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Larger share: Rs <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      In a class, the ratio of boys to girls is <strong>3 : 4</strong>. There are <strong>12 boys</strong>. How many girls are there?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> girls</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      What is the name of an angle that is exactly <strong>90&deg;</strong>? What about one that is between 90&deg; and 180&deg;?
+      <div class="answer-label" style="margin-top:14px">90&deg; angle: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; between 90&deg; and 180&deg;: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Find the missing angle. The angles in a triangle are <strong>65&deg;</strong>, <strong>48&deg;</strong> and <em>x</em>&deg;.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">x = <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Angles on a straight line add up to <strong>180&deg;</strong>. Find angle <em>y</em> if the other angle on the line is <strong>123&deg;</strong>.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">y = <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A quadrilateral has angles of <strong>110&deg;</strong>, <strong>85&deg;</strong>, <strong>95&deg;</strong> and <em>z</em>&deg;. Find <em>z</em>.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">z = <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      How many lines of symmetry does a regular hexagon have?
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+      <div style="margin-top:8px">How many lines of symmetry does an equilateral triangle have?</div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Name the 2D shape that has <strong>5 sides</strong> and <strong>5 angles</strong>. What is the sum of its interior angles?
+      <div class="answer-label" style="margin-top:14px">Shape: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Sum of angles: <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Look at this frequency table:
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:4px 14px;background:#eef3fb">Colour</th><th style="border:1px solid #999;padding:4px 14px;background:#eef3fb">Frequency</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 14px">Red</td><td style="border:1px solid #999;padding:4px 14px">8</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 14px">Blue</td><td style="border:1px solid #999;padding:4px 14px">12</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 14px">Green</td><td style="border:1px solid #999;padding:4px 14px">5</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 14px">Yellow</td><td style="border:1px solid #999;padding:4px 14px">9</td></tr>
+      </table>
+      What is the total number of items? What is the most popular colour?
+      <div class="answer-label" style="margin-top:10px">Total: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Most popular: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 2 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">11.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Simplify the ratio <strong>1.2 : 0.8</strong>. Then write it in the form <em>n</em> : 1.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Simplified: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Form n : 1: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A rectangle has all four angles equal to <strong>90&deg;</strong>. What is the special name for a rectangle where all sides are equal?
+      <div class="answer-label" style="margin-top:14px">Answer: <span class="answer-line"></span></div>
+      <div style="margin-top:8px">How many pairs of parallel sides does a trapezium have?</div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      This pictogram shows books read by children in one month. Each &#128212; represents 4 books.<br>
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Child</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Books read</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">Asha</td><td style="border:1px solid #999;padding:4px 10px">&#128212;&#128212;&#128212;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">Ben</td><td style="border:1px solid #999;padding:4px 10px">&#128212;&#128212;&#128212;&#128212;&#128212;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">Celia</td><td style="border:1px solid #999;padding:4px 10px">&#128212;&#128212;</td></tr>
+      </table>
+      How many books did Ben read? What is the total for all three children?
+      <div class="answer-label" style="margin-top:10px">Ben: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Total: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Find the mean (average) of these numbers: &nbsp; <strong>14, 18, 22, 10, 16</strong>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Mean = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A recipe uses flour and sugar in the ratio <strong>5 : 2</strong>. If you use <strong>350 g of flour</strong>, how much sugar do you need?
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Sugar = <span class="answer-line-sm"></span> g</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">16.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      What is the size of each interior angle of a regular polygon with <strong>4 sides</strong> (a square)? What about a regular polygon with <strong>6 sides</strong>?
+      <div class="answer-label" style="margin-top:14px">Square interior angle: <span class="answer-line-sm"></span> &deg; &nbsp;&nbsp;&nbsp; Regular hexagon interior angle: <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">17.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      The range of a data set is <strong>18</strong>. The smallest value is <strong>7</strong>. What is the largest value? Find the median of: <strong>3, 7, 9, 12, 15</strong>.
+      <div class="answer-label" style="margin-top:14px">Largest value: <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; Median: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">18.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      How many <strong>degrees</strong> are in a full turn? How many degrees are in three-quarters of a turn?
+      <div class="answer-label" style="margin-top:14px">Full turn: <span class="answer-line-sm"></span> &deg; &nbsp;&nbsp;&nbsp; Three-quarter turn: <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 3 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION B -->
+<div class="page">
+  <div class="section-header">
+    SECTION B &mdash; Multiple Choice Questions
+    <div class="section-sub">Questions 19–28 &nbsp;|&nbsp; 20 marks &nbsp;|&nbsp; Tick (&check;) ONE box for each question. Each question is worth 2 marks.</div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 19–20</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>19.</strong> Which ratio is equivalent to 3 : 5?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 6 : 15</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 9 : 15</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 12 : 25</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 15 : 20</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>20.</strong> The sum of angles in a triangle is always:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 90&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 270&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 180&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 360&deg;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 21–22</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>21.</strong> The mean of 5, 10, 15, 20 is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 10</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 12.5</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 13</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 15</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>22.</strong> How many lines of symmetry does a rectangle have?</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 1</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 2</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 4</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 23–24</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>23.</strong> Two angles of a triangle are 55&deg; and 75&deg;. The third angle is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 40&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 50&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 60&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 70&deg;</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>24.</strong> Rs 900 is shared in ratio 2 : 7. The smaller share is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; Rs 100</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; Rs 180</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; Rs 200</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; Rs 250</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 25–26</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>25.</strong> A regular pentagon has interior angles each measuring:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 108&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 120&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 90&deg;</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 72&deg;</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>26.</strong> A bar chart shows scores: Mon=20, Tue=35, Wed=25, Thu=40, Fri=30. The modal (most frequent) day score is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; Monday</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; Tuesday</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; Thursday</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; Friday</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mcq-box">
+    <div class="mcq-label">Questions 27–28</div>
+    <div class="mcq-grid">
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>27.</strong> An angle of 210&deg; is called:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; Acute</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; Obtuse</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; Reflex</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; Right</span></div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q"><strong>28.</strong> The median of 3, 6, 9, 12, 15, 18, 21 is:</div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>A</strong> &nbsp; 9</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>B</strong> &nbsp; 12</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>C</strong> &nbsp; 13.5</span></div>
+        <div class="tick-opt"><span class="tick-box"></span><span class="tick-label"><strong>D</strong> &nbsp; 15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 4 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION C -->
+<div class="page">
+  <div class="section-header">
+    SECTION C &mdash; Structured Questions
+    <div class="section-sub">Questions 29–45 &nbsp;|&nbsp; 43 marks &nbsp;|&nbsp; Show ALL working. Marks are awarded for method as well as the answer.</div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">29.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      The bar chart below shows the number of pupils who travel to school by different methods.
+      <div style="margin:14px 0;border:1px solid #bbb;padding:14px;border-radius:4px;background:#fafeff">
+        <div style="font-size:9pt;color:#555;margin-bottom:6px;font-weight:bold">Travel to school (number of pupils)</div>
+        <div style="display:flex;align-items:flex-end;gap:10px;height:130px;border-left:2px solid #555;border-bottom:2px solid #555;padding:0 8px;position:relative">
+          <!-- Scale markers -->
+          <div style="position:absolute;left:-28px;bottom:0;font-size:8pt;color:#555">0</div>
+          <div style="position:absolute;left:-30px;bottom:32px;font-size:8pt;color:#555">8</div>
+          <div style="position:absolute;left:-34px;bottom:64px;font-size:8pt;color:#555">16</div>
+          <div style="position:absolute;left:-34px;bottom:96px;font-size:8pt;color:#555">24</div>
+          <!-- Horizontal guide lines -->
+          <div style="position:absolute;left:0;bottom:32px;right:0;border-top:1px dashed #ddd;"></div>
+          <div style="position:absolute;left:0;bottom:64px;right:0;border-top:1px dashed #ddd;"></div>
+          <div style="position:absolute;left:0;bottom:96px;right:0;border-top:1px dashed #ddd;"></div>
+          <!-- Bars (each unit = 4px, so 20 = 80px, 8 = 32px, 24 = 96px, 12 = 48px) -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="background:#1a3c6e;width:36px;height:80px"></div>
+            <div style="font-size:8pt;margin-top:4px;text-align:center">Walk</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="background:#2a5ca8;width:36px;height:32px"></div>
+            <div style="font-size:8pt;margin-top:4px;text-align:center">Cycle</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="background:#1a3c6e;width:36px;height:96px"></div>
+            <div style="font-size:8pt;margin-top:4px;text-align:center">Bus</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="background:#2a5ca8;width:36px;height:48px"></div>
+            <div style="font-size:8pt;margin-top:4px;text-align:center">Car</div>
+          </div>
+        </div>
+      </div>
+      <div class="sub-q"><span class="sub-label">(a)</span> How many more pupils travel by bus than by cycle?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> more pupils</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> What is the total number of pupils?</div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> pupils</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> What fraction travel by car? Give your answer in simplest form.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Fraction = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 5 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">30.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Orange squash is made by mixing <strong>1 part concentrate</strong> to <strong>4 parts water</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> Write the ratio of concentrate to water in its simplest form.</div>
+      <div class="answer-label">Ratio: <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> How much concentrate is needed to make <strong>750 ml</strong> of squash?</div>
+      <div class="work-space"></div>
+      <div class="answer-label">Concentrate = <span class="answer-line-sm"></span> ml</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> How much water is needed?</div>
+      <div class="answer-label">Water = <span class="answer-line-sm"></span> ml</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">31.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      The scores of 6 students in a test are: <strong>72, 58, 85, 63, 79, 91</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> Find the range.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Range = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Find the mean score.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Mean = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">32.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Look at triangle PQR below. All angles are given in terms of <em>x</em>.
+      <div style="margin:12px 0;border:1px solid #bbb;padding:12px 16px;border-radius:4px;background:#fafeff;font-size:11pt">
+        Angle P = 2<em>x</em> &nbsp;&nbsp;&nbsp; Angle Q = <em>x</em> + 20&deg; &nbsp;&nbsp;&nbsp; Angle R = <em>x</em> &minus; 5&deg;
+      </div>
+      <div class="sub-q"><span class="sub-label">(a)</span> Write an equation using the fact that angles in a triangle sum to 180&deg;.</div>
+      <div class="writing-lines"><span class="writing-line"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Solve to find <em>x</em>.</div>
+      <div class="work-space"></div>
+      <div class="answer-label">x = <span class="answer-line-sm"></span> &deg;</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> Find all three angles.</div>
+      <div class="answer-label">P = <span class="answer-line-sm"></span> &deg; &nbsp; Q = <span class="answer-line-sm"></span> &deg; &nbsp; R = <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 6 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">33.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      A pictogram shows trees planted each year. Each &#127795; represents <strong>6 trees</strong>.<br>
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Year</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Trees planted</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">2022</td><td style="border:1px solid #999;padding:4px 10px">&#127795;&#127795;&#127795;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">2023</td><td style="border:1px solid #999;padding:4px 10px">&#127795;&#127795;&#127795;&#127795;&#127795;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">2024</td><td style="border:1px solid #999;padding:4px 10px">&#127795;&#127795;&#127795;&#127795;</td></tr>
+      </table>
+      (a) How many trees were planted in 2023? &nbsp;&nbsp; (b) How many trees were planted in total?
+      <div class="answer-label" style="margin-top:10px">(a) <span class="answer-line-sm"></span> &nbsp;&nbsp;&nbsp; (b) <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">34.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      The table shows daily rainfall in mm for one week:
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Day</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Mon</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Tue</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Wed</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Thu</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Fri</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Sat</th><th style="border:1px solid #999;padding:4px 10px;background:#eef3fb">Sun</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 10px">Rainfall (mm)</td><td style="border:1px solid #999;padding:4px 10px">4</td><td style="border:1px solid #999;padding:4px 10px">0</td><td style="border:1px solid #999;padding:4px 10px">12</td><td style="border:1px solid #999;padding:4px 10px">8</td><td style="border:1px solid #999;padding:4px 10px">5</td><td style="border:1px solid #999;padding:4px 10px">16</td><td style="border:1px solid #999;padding:4px 10px">7</td></tr>
+      </table>
+      <div class="sub-q"><span class="sub-label">(a)</span> On which day did it rain most?</div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Find the total rainfall for the week.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Total = <span class="answer-line-sm"></span> mm</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> Find the mean daily rainfall.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Mean = <span class="answer-line-sm"></span> mm</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 7 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">35.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Concrete is made by mixing cement, sand and gravel in the ratio <strong>1 : 2 : 4</strong>. If <strong>7 kg of cement</strong> are used:
+      <div class="sub-q"><span class="sub-label">(a)</span> How much sand is needed?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Sand = <span class="answer-line-sm"></span> kg</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> What is the total mass of concrete?</div>
+      <div class="answer-label">Total = <span class="answer-line-sm"></span> kg</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">36.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Draw <strong>all</strong> lines of symmetry on this isosceles triangle (describe them if you cannot draw). How many does it have?
+      <div style="margin:12px 0;width:120px;height:80px;border-left:1px solid #888;border-bottom:1px solid #888;border-right:1px solid #888;clip-path:polygon(50% 0%, 0% 100%, 100% 100%);background:#eef3fb;display:inline-block"></div>
+      <div class="answer-label" style="margin-top:10px">Number of lines of symmetry: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">37.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Here are five numbers: &nbsp; <strong>14, 9, 22, 17, 8, 22, 11</strong>
+      <div class="sub-q"><span class="sub-label">(a)</span> Find the mode.</div>
+      <div class="answer-label">Mode = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Find the median.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Median = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> Find the mean.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Mean = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">38.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      A map is drawn at a scale of <strong>1 : 50,000</strong>. On the map, two towns are <strong>4 cm</strong> apart.
+      <div class="sub-q"><span class="sub-label">(a)</span> What is the real distance in cm?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Real distance = <span class="answer-line-sm"></span> cm</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Convert this to kilometres.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Real distance = <span class="answer-line-sm"></span> km</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> A lake is 3 km long in reality. What length should it be drawn on the map?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Map length = <span class="answer-line-sm"></span> cm</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 8 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">39.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Two angles of a quadrilateral are <strong>100&deg;</strong> and <strong>80&deg;</strong>. The other two angles are equal. Find each of these equal angles.
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Each equal angle = <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">40.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      The ages of pupils in a class are recorded. The frequency table is:
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Age</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Frequency</th><th style="border:1px solid #999;padding:4px 12px;background:#eef3fb">Age &times; Freq.</th></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">10</td><td style="border:1px solid #999;padding:4px 12px">6</td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">11</td><td style="border:1px solid #999;padding:4px 12px">14</td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px">12</td><td style="border:1px solid #999;padding:4px 12px">10</td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td></tr>
+        <tr><td style="border:1px solid #999;padding:4px 12px"><strong>Total</strong></td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td><td style="border:1px solid #999;padding:4px 12px">&nbsp;</td></tr>
+      </table>
+      <div class="sub-q"><span class="sub-label">(a)</span> Complete the table.</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> Find the mean age.</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Mean age = <span class="answer-line-sm"></span></div>
+      <div class="sub-q"><span class="sub-label">(c)</span> What is the modal age?</div>
+      <div class="answer-label">Modal age = <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">41.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      Two boys share sweets in the ratio <strong>5 : 3</strong>. The boy with more gets <strong>35 sweets</strong>.
+      <div class="sub-q"><span class="sub-label">(a)</span> How many sweets does the other boy get?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> sweets</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> How many sweets are there in total?</div>
+      <div class="answer-label">Total = <span class="answer-line-sm"></span> sweets</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> If a third boy joins and the sweets are re-shared in the ratio 5 : 3 : 2, how many does each boy get? (Total = 56 sweets)</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">5 parts: <span class="answer-line-sm"></span> &nbsp; 3 parts: <span class="answer-line-sm"></span> &nbsp; 2 parts: <span class="answer-line-sm"></span></div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 9 of 10</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+  <div class="question">
+    <div class="qnum">42.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Name each type of angle and give its size:
+      <div style="margin:12px 0;line-height:2.8;font-size:11pt">
+        (a) An angle that is less than 90&deg; is called: <span class="answer-line-sm"></span><br>
+        (b) An angle that is exactly 180&deg; is called: <span class="answer-line-sm"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">43.</div>
+    <div class="qbody">
+      <span class="marks">3 marks</span>
+      The line graph shows the temperature (°C) measured every 2 hours on a Thursday:
+      <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:10px auto" aria-label="Line graph showing temperature in degrees Celsius measured every 2 hours on a Thursday">
+        <!-- Y-axis -->
+        <line x1="55" y1="15" x2="55" y2="165" stroke="#1a3c6e" stroke-width="2"/>
+        <!-- X-axis -->
+        <line x1="55" y1="165" x2="462" y2="165" stroke="#1a3c6e" stroke-width="2"/>
+        <!-- Y-axis tick marks and labels (15, 20, 25, 30, 35 °C) -->
+        <line x1="50" y1="165" x2="55" y2="165" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="44" y="169" text-anchor="end" font-size="10" font-family="Arial" fill="#000">15</text>
+        <line x1="50" y1="128" x2="55" y2="128" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="44" y="132" text-anchor="end" font-size="10" font-family="Arial" fill="#000">20</text>
+        <line x1="50" y1="90" x2="55" y2="90" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="44" y="94" text-anchor="end" font-size="10" font-family="Arial" fill="#000">25</text>
+        <line x1="50" y1="53" x2="55" y2="53" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="44" y="57" text-anchor="end" font-size="10" font-family="Arial" fill="#000">30</text>
+        <line x1="50" y1="15" x2="55" y2="15" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="44" y="19" text-anchor="end" font-size="10" font-family="Arial" fill="#000">35</text>
+        <!-- Horizontal grid lines -->
+        <line x1="55" y1="128" x2="462" y2="128" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="55" y1="90" x2="462" y2="90" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="55" y1="53" x2="462" y2="53" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="55" y1="15" x2="462" y2="15" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- X-axis tick marks and time labels -->
+        <!-- 06:00 x=55 -->
+        <line x1="55" y1="165" x2="55" y2="170" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="55" y="182" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">06:00</text>
+        <!-- 08:00 x=136 -->
+        <line x1="136" y1="165" x2="136" y2="170" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="136" y="182" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">08:00</text>
+        <!-- 10:00 x=217 -->
+        <line x1="217" y1="165" x2="217" y2="170" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="217" y="182" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">10:00</text>
+        <!-- 12:00 x=298 -->
+        <line x1="298" y1="165" x2="298" y2="170" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="298" y="182" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">12:00</text>
+        <!-- 14:00 x=379 -->
+        <line x1="379" y1="165" x2="379" y2="170" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="379" y="182" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">14:00</text>
+        <!-- 16:00 x=460 -->
+        <line x1="460" y1="165" x2="460" y2="170" stroke="#1a3c6e" stroke-width="1.5"/>
+        <text x="460" y="182" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">16:00</text>
+        <!-- Axis labels -->
+        <text x="258" y="198" text-anchor="middle" font-size="10" font-family="Arial" fill="#1a3c6e" font-weight="bold">Time</text>
+        <text x="12" y="90" text-anchor="middle" font-size="10" font-family="Arial" fill="#1a3c6e" font-weight="bold" transform="rotate(-90 12 90)">Temp (°C)</text>
+        <!-- Data line connecting all 6 points -->
+        <!-- Points: (55,143) (136,113) (217,75) (298,45) (379,30) (460,60) -->
+        <polyline points="55,143 136,113 217,75 298,45 379,30 460,60" fill="none" stroke="#1a3c6e" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- Data point circles -->
+        <circle cx="55" cy="143" r="4" fill="#1a3c6e" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="136" cy="113" r="4" fill="#1a3c6e" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="217" cy="75" r="4" fill="#1a3c6e" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="298" cy="45" r="4" fill="#1a3c6e" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="379" cy="30" r="4" fill="#1a3c6e" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="460" cy="60" r="4" fill="#1a3c6e" stroke="#fff" stroke-width="1.5"/>
+        <!-- Data value labels -->
+        <text x="55" y="138" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">18°C</text>
+        <text x="136" y="108" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">22°C</text>
+        <text x="217" y="70" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">27°C</text>
+        <text x="298" y="40" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">31°C</text>
+        <text x="379" y="25" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">33°C</text>
+        <text x="460" y="55" text-anchor="middle" font-size="9" font-family="Arial" fill="#000">29°C</text>
+      </svg>
+      <div class="sub-q"><span class="sub-label">(a)</span> What was the temperature at noon?</div>
+      <div class="answer-label">Answer: <span class="answer-line-sm"></span> &deg;C</div>
+      <div class="sub-q"><span class="sub-label">(b)</span> By how many degrees did the temperature rise from 06:00 to 14:00?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Rise = <span class="answer-line-sm"></span> &deg;C</div>
+      <div class="sub-q"><span class="sub-label">(c)</span> What is the mean temperature over the six readings?</div>
+      <div class="work-space-sm"></div>
+      <div class="answer-label">Mean = <span class="answer-line-sm"></span> &deg;C</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">44.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Describe the properties of a parallelogram. Name one special type of parallelogram.
+      <div class="writing-lines">
+        <span class="writing-line"></span>
+        <span class="writing-line"></span>
+      </div>
+      <div class="answer-label">Special type: <span class="answer-line"></span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">45.</div>
+    <div class="qbody">
+      <span class="marks">2 marks</span>
+      Three angles around a point are <strong>2x</strong>, <strong>3x</strong> and <strong>x + 60&deg;</strong>. Find <em>x</em> and all three angles. (Angles at a point = 360&deg;)
+      <div class="work-space"></div>
+      <div class="answer-label">x = <span class="answer-line-sm"></span> &deg; &nbsp;&nbsp; Angles: <span class="answer-line-sm"></span> &deg; &nbsp; <span class="answer-line-sm"></span> &deg; &nbsp; <span class="answer-line-sm"></span> &deg;</div>
+    </div>
+  </div>
+
+  <div style="text-align:right;font-size:9pt;color:#888;margin-top:8px">Page 10 of 10</div>
+</div>
+
+<!-- MARK SCHEME -->
+<div class="page-break"></div>
+<div class="mark-scheme">
+  <div class="ms-header">&#128203; Mark Scheme &mdash; Nouklass.com Specimen Paper 3 of 4 &mdash; 2026</div>
+  <div class="ms-disc">This mark scheme is provided for self-checking and teacher reference only. For method marks, show all working. Prepared by Nouklass.com based on MES syllabus and past paper analysis. Not an official MES document.</div>
+
+  <table class="ans-table">
+    <tr><th>Q</th><th>Answer</th><th>Marks</th><th>Notes</th></tr>
+    <tr><td>1</td><td>2 : 3</td><td>2</td><td>HCF of 24 and 36 = 12; 24/12:36/12 = 2:3</td></tr>
+    <tr><td>2</td><td>Rs 210 : Rs 350</td><td>2</td><td>Total parts=8; unit=70; 3&times;70=210; 5&times;70=350</td></tr>
+    <tr><td>3</td><td>16 girls</td><td>2</td><td>12&divide;3=4 (1 part); 4&times;4=16</td></tr>
+    <tr><td>4</td><td>Right angle; Obtuse angle</td><td>2</td><td>Standard angle names</td></tr>
+    <tr><td>5</td><td>67&deg;</td><td>2</td><td>180&minus;65&minus;48=67</td></tr>
+    <tr><td>6</td><td>57&deg;</td><td>2</td><td>180&minus;123=57</td></tr>
+    <tr><td>7</td><td>70&deg;</td><td>2</td><td>360&minus;110&minus;85&minus;95=70</td></tr>
+    <tr><td>8</td><td>Regular hexagon: 6 lines; Equilateral triangle: 3 lines</td><td>2</td><td>Standard symmetry facts</td></tr>
+    <tr><td>9</td><td>Pentagon; 540&deg;</td><td>2</td><td>Sum = (5&minus;2)&times;180 = 540</td></tr>
+    <tr><td>10</td><td>Total: 34; Most popular: Blue (12)</td><td>2</td><td>8+12+5+9=34</td></tr>
+    <tr><td>11</td><td>3 : 2 (simplest); 1.5 : 1</td><td>2</td><td>1.2:0.8 = 12:8 = 3:2; divide by 2 for n:1</td></tr>
+    <tr><td>12</td><td>Square; 1 pair</td><td>2</td><td>A square is a rectangle with equal sides; trapezium has 1 pair parallel sides</td></tr>
+    <tr><td>13</td><td>Ben: 20 books; Total: 40 books</td><td>2</td><td>5 symbols &times; 4 = 20; (3+5+2)&times;4=40</td></tr>
+    <tr><td>14</td><td>16</td><td>2</td><td>(14+18+22+10+16)&divide;5=80&divide;5=16</td></tr>
+    <tr><td>15</td><td>140 g</td><td>2</td><td>350&divide;5=70 (1 part); 70&times;2=140</td></tr>
+    <tr><td>16</td><td>Square: 90&deg;; Regular hexagon: 120&deg;</td><td>2</td><td>(4&minus;2)&times;180&divide;4=90; (6&minus;2)&times;180&divide;6=120</td></tr>
+    <tr><td>17</td><td>Largest = 25; Median = 9</td><td>2</td><td>7+18=25; middle value of 3,7,9,12,15 is 9</td></tr>
+    <tr><td>18</td><td>360&deg;; 270&deg;</td><td>2</td><td>Full turn=360; 3/4&times;360=270</td></tr>
+    <tr><td>19</td><td>B &mdash; 9 : 15</td><td>2</td><td>9:15 simplifies to 3:5 (divide by 3)</td></tr>
+    <tr><td>20</td><td>C &mdash; 180&deg;</td><td>2</td><td>Angle sum of triangle = 180&deg;</td></tr>
+    <tr><td>21</td><td>B &mdash; 12.5</td><td>2</td><td>(5+10+15+20)&divide;4=50&divide;4=12.5</td></tr>
+    <tr><td>22</td><td>B &mdash; 2</td><td>2</td><td>Rectangle has 2 lines of symmetry (horizontal and vertical)</td></tr>
+    <tr><td>23</td><td>B &mdash; 50&deg;</td><td>2</td><td>180&minus;55&minus;75=50</td></tr>
+    <tr><td>24</td><td>C &mdash; Rs 200</td><td>2</td><td>900&divide;9=100 per part; 2&times;100=200</td></tr>
+    <tr><td>25</td><td>A &mdash; 108&deg;</td><td>2</td><td>(5&minus;2)&times;180&divide;5=540&divide;5=108</td></tr>
+    <tr><td>26</td><td>C &mdash; Thursday (score 40)</td><td>2</td><td>Highest bar = Thursday</td></tr>
+    <tr><td>27</td><td>C &mdash; Reflex</td><td>2</td><td>Reflex: between 180&deg; and 360&deg;</td></tr>
+    <tr><td>28</td><td>B &mdash; 12</td><td>2</td><td>7 values; middle (4th) value = 12</td></tr>
+    <tr><td>29</td><td>(a) 16 more (b) 64 pupils (c) 12/64 = 3/16</td><td>3</td><td>Bus=24, Cycle=8, 24&minus;8=16; Walk=20,Cycle=8,Bus=24,Car=12; 12/64=3/16</td></tr>
+    <tr><td>30</td><td>(a) 1:4 (b) 150 ml (c) 600 ml</td><td>3</td><td>1+4=5 parts; 750&divide;5=150; 150&times;4=600</td></tr>
+    <tr><td>31</td><td>(a) Range=33 &nbsp; (b) Mean=74.67</td><td>2</td><td>91&minus;58=33; (72+58+85+63+79+91)&divide;6=448&divide;6&approx;74.7</td></tr>
+    <tr><td>32</td><td>(a) 2x+x+20+x&minus;5=180 &rarr; 4x+15=180 (b) x=41.25&deg; (c) P=82.5&deg;, Q=61.25&deg;, R=36.25&deg;</td><td>3</td><td>4x=165; x=41.25</td></tr>
+    <tr><td>33</td><td>(a) 30 trees &nbsp; (b) 72 trees</td><td>2</td><td>5&times;6=30; (3+5+4)&times;6=72</td></tr>
+    <tr><td>34</td><td>(a) Saturday &nbsp; (b) 52 mm &nbsp; (c) 52&divide;7&approx;7.4 mm</td><td>3</td><td>4+0+12+8+5+16+7=52</td></tr>
+    <tr><td>35</td><td>(a) 14 kg &nbsp; (b) 49 kg</td><td>2</td><td>1 part=7; sand=2&times;7=14; total=7(1+2+4)=49</td></tr>
+    <tr><td>36</td><td>1 line of symmetry</td><td>2</td><td>Isosceles triangle: 1 line through apex to midpoint of base</td></tr>
+    <tr><td>37</td><td>(a) 22 &nbsp; (b) 14 &nbsp; (c) 14.71 (103&divide;7)</td><td>3</td><td>Ordered: 8,9,11,14,17,22,22; mode=22; median=14; mean=103/7</td></tr>
+    <tr><td>38</td><td>(a) 200,000 cm &nbsp; (b) 2 km &nbsp; (c) 6 cm</td><td>3</td><td>4&times;50000=200000cm=2km; 3km=300000cm; 300000&divide;50000=6</td></tr>
+    <tr><td>39</td><td>90&deg;</td><td>2</td><td>360&minus;100&minus;80=180; 180&divide;2=90</td></tr>
+    <tr><td>40</td><td>(a) 60,154,120; Total=30, total&times;freq=334 &nbsp; (b) Mean=334&divide;30&approx;11.1 &nbsp; (c) Modal age=11</td><td>3</td><td>Highest frequency is 14 (age 11)</td></tr>
+    <tr><td>41</td><td>(a) 21 &nbsp; (b) 56 &nbsp; (c) 28, 16.8, 11.2</td><td>3</td><td>35&divide;5=7; 3&times;7=21; total=56; 56&divide;10=5.6 per part</td></tr>
+    <tr><td>42</td><td>(a) Acute &nbsp; (b) Straight angle</td><td>2</td><td>Standard angle names</td></tr>
+    <tr><td>43</td><td>(a) 31&deg;C &nbsp; (b) 15&deg;C &nbsp; (c) 26.7&deg;C</td><td>3</td><td>33&minus;18=15; (18+22+27+31+33+29)&divide;6=160&divide;6&approx;26.7</td></tr>
+    <tr><td>44</td><td>Opposite sides equal and parallel; angles not necessarily 90&deg;. Special types: rectangle, rhombus, square.</td><td>2</td><td>Accept any one correct special type</td></tr>
+    <tr><td>45</td><td>x=50&deg;; Angles: 100&deg;, 150&deg;, 110&deg;</td><td>2</td><td>2x+3x+x+60=360; 6x=300; x=50</td></tr>
+  </table>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

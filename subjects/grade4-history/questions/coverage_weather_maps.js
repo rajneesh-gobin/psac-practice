@@ -102,7 +102,17 @@ const G4HG_EXPL = {
   'g4hg-cov-usemap-8': "A map is only useful if it can be read, so keeping it neat means <b>people can read it</b>.",
   'g4hg-cov-usemap-9': "A map of a neighbourhood shows <b>where places are</b> and how they sit in relation to each other.",
 };
-  const add = (id, c, s, question, options, answer, hint) => STATIC_QUESTIONS.push(makeMCQ({ id, chapterId:c, subsection:s, difficulty:2, question, options, answer, hint, explanation: G4HG_EXPL[id] || `<b>${answer}</b> is correct.` }));
+const G4HG_LEARN = {
+  'g4hg-cov-instrument-0': 'A <b>thermometer</b> measures temperature — how hot or cold the air is. It contains a liquid (often coloured alcohol) that expands as temperature rises, moving up a marked scale. Temperature is recorded in degrees Celsius (°C). A reading of 30°C is a warm summer day in Mauritius.',
+  'g4hg-cov-instrument-1': 'A <b>rain gauge</b> is a container placed in the open to collect rainfall. After rain, you measure the depth of water that collected inside (in millimetres). It must stand away from trees and walls so that nothing blocks or redirects the rain. Weather stations record daily rainfall with a rain gauge.',
+  'g4hg-cov-instrument-3': 'An <b>anemometer</b> measures wind speed. It has three or four cups attached to arms — the wind catches the cups and spins them round. The faster they spin, the stronger the wind. Wind speed is measured in kilometres per hour (km/h) or knots at sea.',
+  'g4hg-cov-cyclone-0': 'During a cyclone, the most important rule is to <b>follow official advice</b> from the Mauritius Meteorological Services. They track the storm\'s position and strength and issue numbered warning classes (1–4). Class 4 means the most dangerous conditions — stay indoors, away from windows.',
+  'g4hg-cov-direction-0': 'A <b>compass</b> has four main (cardinal) directions: North, South, East, West. North and South are opposite each other, as are East and West. There are also four intermediate (inter-cardinal) directions: North-East, South-East, South-West, North-West. Most maps are drawn with North at the top.',
+  'g4hg-cov-symbol-0': '<b>Map symbols</b> are small pictures or marks that represent features on the ground. Because a real area is far larger than the map, symbols allow many features to be shown in a very small space. A symbol only works if readers can look it up in the key (legend) to find out what it means.',
+  'g4hg-cov-part-0': 'Every map should have four main parts: a <b>title</b> (what the map shows), a <b>key/legend</b> (what the symbols mean), a <b>north arrow</b> (which direction is north), and a <b>scale</b> (how map distance relates to real distance). Without these, a map is difficult or impossible to use correctly.',
+  'g4hg-cov-part-3': 'A <b>map scale</b> links a distance on the map to the real distance on the ground. It is often written as a ratio ("1 cm = 1 km") or shown as a scale bar. To use it: measure a distance on the map with a ruler, then multiply by the scale to get the real distance. For example, 5 cm on a 1:50,000 map = 2.5 km.',
+};
+  const add = (id, c, s, question, options, answer, hint) => STATIC_QUESTIONS.push(makeMCQ({ id, chapterId:c, subsection:s, difficulty:2, question, options, answer, hint, explanation: G4HG_EXPL[id] || `<b>${answer}</b> is correct.`, learnMore: G4HG_LEARN[id] || '' }));
 
   // --- seasons ---
   const H = 'Think about Mauritius\'s two main seasons.';

@@ -206,9 +206,17 @@ const MCQ = [
    'Ctrl + Z undoes the last action, which is often the quickest recovery from a mistake.'],
 ];
 
+const G9TS_LEARN = {
+  'g9ict-ts-001': '<b>Troubleshooting rule 1 — simplest first</b>: always start with the cheapest, easiest check (power, cables, settings) before replacing anything. Most faults have simple causes. Replacing hardware before checking the obvious wastes time and money.',
+  'g9ict-ts-003': '<b>Troubleshooting order</b>: (1) <i>Identify</i> the problem — what exactly fails? (2) <i>Check simple causes</i> — power, connections, settings. (3) <i>Apply one fix</i>. (4) <i>Test</i> that it worked. (5) <i>Record</i> what you did. This order prevents random changes that cannot be evaluated.',
+  'g9ict-ts-004': '<b>One change at a time</b> is the core troubleshooting discipline. If you make two changes and the fault disappears, you cannot know which one fixed it — so next time the fault returns, you still do not know the cause. Change one thing, test, then change the next if needed.',
+  'g9ict-ts-008': 'When a file is <b>deleted</b> in Windows, it is moved to the <b>Recycle Bin</b> rather than erased — it can be restored from there. Only once the Recycle Bin is emptied is the file truly gone from the visible file system (though a backup may still recover it).',
+  'g9ict-ts-015': 'A <b>device driver</b> is software that tells the operating system how to communicate with a specific hardware device. Without the correct driver, the OS cannot use the device, even if it is correctly connected. Printers, graphics cards and scanners all need drivers.',
+};
+
 MCQ.forEach(([id, subsection, difficulty, question, options, answer, hint, explanation]) => {
   STATIC_QUESTIONS.push(makeMCQ({ id, chapterId: CH, subsection, difficulty,
-    question, options, answer, hint, explanation }));
+    question, options, answer, hint, explanation, learnMore: G9TS_LEARN[id] || '' }));
 });
 
 const SHORT = [

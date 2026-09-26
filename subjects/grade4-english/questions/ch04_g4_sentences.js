@@ -9,7 +9,8 @@ STATIC_QUESTIONS.push(
     options:['Statement','Question','Exclamation','Command'],
     answer:'Question',
     hint:'Look at the punctuation mark at the end of the sentence.',
-    explanation:'"<b>Question</b>" - this sentence asks something and ends with a question mark (?). Statement: gives information (ends with .). Question: asks something (?). Exclamation: shows strong feeling (!). Command: gives an order (ends with .).' }),
+    explanation:'"<b>Question</b>" - this sentence asks something and ends with a question mark (?). Statement: gives information (ends with .). Question: asks something (?). Exclamation: shows strong feeling (!). Command: gives an order (ends with .).',
+    learnMore:'English has four main <b>sentence types</b>: (1) <i>Statement</i> — gives information, ends with a full stop. (2) <i>Question</i> — asks for information, ends with a question mark. (3) <i>Command</i> — gives an instruction, starts with a verb (Sit down). (4) <i>Exclamation</i> — expresses strong emotion, starts with What/How and ends with an exclamation mark.' }),
 
   makeMCQ({ id:'g4eng-sent-002', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:1,
     question:'Which punctuation mark should end: "What a beautiful sunset"',
@@ -36,7 +37,8 @@ STATIC_QUESTIONS.push(
     options:['Possession','A missing letter','A new sentence','A list'],
     answer:'A missing letter',
     hint:'Don\'t = do not. Where is the letter missing?',
-    explanation:'"Don\'t" = "do not" - the apostrophe replaces the missing letter <b>o</b> in "not". This is a contraction. Other contractions: can\'t (cannot), I\'m (I am), she\'s (she is), they\'re (they are), won\'t (will not).' }),
+    explanation:'"Don\'t" = "do not" - the apostrophe replaces the missing letter <b>o</b> in "not". This is a contraction. Other contractions: can\'t (cannot), I\'m (I am), she\'s (she is), they\'re (they are), won\'t (will not).',
+    learnMore:'An <b>apostrophe</b> has two uses: (1) <i>Contraction</i> — marks a missing letter when two words are joined (do not→don\'t, I am→I\'m, will not→won\'t). (2) <i>Possession</i> — shows ownership (the cat\'s tail, the children\'s books). Never use an apostrophe just to make a plural (two cats NOT two cat\'s).' }),
 
   makeMCQ({ id:'g4eng-sent-006', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Which sentence uses COMMAS correctly?',
@@ -60,7 +62,8 @@ STATIC_QUESTIONS.push(
     ],
     answer:"The dog\'s bowl is empty.",
     hint:'For a singular noun, add apostrophe + s. A plural already ending in -s takes the apostrophe after the s.',
-    explanation:'For a singular noun, add apostrophe + s to show possession: Tom\'s book, the cat\'s tail, the teacher\'s pen. So <b>the dog\'s bowl</b> is the right one here. "The dogs\' bowl" would mean several dogs sharing it, and "the dogs bowl" has no apostrophe at all.' }),
+    explanation:'For a singular noun, add apostrophe + s to show possession: Tom\'s book, the cat\'s tail, the teacher\'s pen. So <b>the dog\'s bowl</b> is the right one here. "The dogs\' bowl" would mean several dogs sharing it, and "the dogs bowl" has no apostrophe at all.',
+    learnMore:'<b>Possessive apostrophes</b>: singular noun → apostrophe + s (the dog\'s lead, the girl\'s bag). Plural noun already ending in -s → apostrophe after the s (the dogs\' kennel, the teachers\' room). Irregular plural not ending in -s → apostrophe + s (the children\'s classroom, the men\'s team).' }),
 
   makeMCQ({ id:'g4eng-sent-008', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Which sentence uses INVERTED COMMAS (speech marks) correctly?',
@@ -72,7 +75,8 @@ STATIC_QUESTIONS.push(
     ],
     answer:'She said, "Come here!"',
     hint:'Inverted commas go around the exact words spoken. A comma comes before the opening speech mark.',
-    explanation:'"<b>She said, "Come here!"</b>" is correct. Inverted commas go around the actual words spoken. A comma (or colon) comes before the opening inverted comma. The exclamation mark/full stop goes inside the closing inverted comma.' }),
+    explanation:'"<b>She said, "Come here!"</b>" is correct. Inverted commas go around the actual words spoken. A comma (or colon) comes before the opening inverted comma. The exclamation mark/full stop goes inside the closing inverted comma.',
+    learnMore:'<b>Direct speech</b> (inverted commas / speech marks) shows the exact words spoken. Pattern: She said, "Come here!" — (1) reporting verb + comma, (2) capital letter to open the speech, (3) spoken words in inverted commas, (4) punctuation <i>inside</i> the closing marks. New speaker = new line.' }),
 
   makeMCQ({ id:'g4eng-sent-009', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:3,
     question:'Which sentence has NO punctuation errors?',

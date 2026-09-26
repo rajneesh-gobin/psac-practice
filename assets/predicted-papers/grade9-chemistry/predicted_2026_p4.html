@@ -1,0 +1,626 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCE Chemistry — Predicted Paper 4 · Nouklass.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-big{font-size:18pt;line-height:1}.nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:12pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.question{margin:16px 0 20px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;background:#f8f8f8}.marks::before{content:"["}.marks::after{content:"]"}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:80px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:45px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:130px;width:100%;margin:10px 0;padding:6px}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.tick-opt{display:flex;align-items:center;gap:10px;margin:7px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0}
+.sub-q{margin:12px 0 6px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:28px;color:#1a3c6e}
+.chem-eq{font-family:monospace;font-size:12pt;background:#f8f9fb;border:1px solid #ddd;padding:8px 14px;margin:10px 0;border-radius:3px;display:inline-block}
+.diagram-box{border:1.5px solid #888;min-height:140px;margin:12px 0;background:#fafeff;border-radius:4px;padding:8px;display:flex;align-items:center;justify-content:center}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.data-table{border-collapse:collapse;font-size:10.5pt;margin:10px 0}
+.data-table th,.data-table td{border:1px solid #aaa;padding:5px 10px;text-align:center}
+.data-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+.struct{font-family:monospace;font-size:11pt;background:#f8f9fb;border:1px solid #ddd;padding:6px 12px;display:inline-block;border-radius:3px;line-height:1.8}
+@media print{.nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-btn{display:none}body{padding-top:32px}@page{size:A4 portrait;margin:12mm 14mm}}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>Nouklass.com &mdash; NCE Grade 9 Chemistry &nbsp;|&nbsp; Predicted Paper 4 &nbsp;&middot;&nbsp; 2026</span>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- ══ COVER PAGE ══ -->
+<div class="cover">
+  <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:24px">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">NOUKLASS</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">NCE Grade 9 &mdash; Predicted Specimen Paper &mdash; For Practice Only</div>
+    </div>
+  </div>
+
+  <div class="year">2026</div>
+  <div class="subject">Chemistry</div>
+  <div style="font-size:13pt;color:#333;margin:6px 0 20px">Paper 4 &mdash; Organic Chemistry &nbsp;&middot;&nbsp; Types of Reactions &nbsp;&middot;&nbsp; Balancing Equations</div>
+
+  <div class="paper-meta">
+    <b>Time allowed:</b> 45 minutes<br>
+    <b>Total marks:</b> 50<br>
+    <b>Index Number:</b> &nbsp;<span class="index-line"></span>
+  </div>
+
+  <div class="instructions">
+    <b style="font-size:11pt">Instructions to Candidates</b>
+    <ol>
+      <li>Write your Index Number in the space provided above.</li>
+      <li>Answer <b>all</b> questions in <b>all three sections</b>.</li>
+      <li>Section A: Choose <b>one</b> answer for each question. Tick the box next to your chosen answer.</li>
+      <li>Section B &amp; C: Write your answers in the spaces provided.</li>
+      <li>Use a blue or black pen. Diagrams may be drawn in pencil.</li>
+      <li>All working must be shown for calculations.</li>
+      <li>The number of marks is given in brackets <b>[ ]</b> at the end of each question.</li>
+    </ol>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:10.5pt;margin-top:18px">
+    <thead>
+      <tr>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Section</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Available</th>
+        <th style="border:1px solid #000;padding:6px 10px;background:#eef3fb;color:#1a3c6e;text-align:center">Marks Awarded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">A</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">B</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">20</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center">C</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">15</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+      <tr><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">Total</td><td style="border:1px solid #000;padding:6px 10px;text-align:center;font-weight:bold">50</td><td style="border:1px solid #000;padding:6px 10px;text-align:center">&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9pt;color:#555;margin-top:28px;text-align:center">
+    &copy; Nouklass.com 2026 &mdash; This paper is for revision purposes only. It is not an official MES publication.
+  </p>
+</div>
+
+<!-- ══ SECTION A ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION A &mdash; Multiple Choice &nbsp;[15 marks]&nbsp; Answer all 15 questions. Tick ONE box per question.</div>
+
+  <div class="question">
+    <div class="qnum">1</div>
+    <div class="qbody"><span class="marks">1</span>
+      The general formula of the <b>alkane</b> homologous series is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; C<sub>n</sub>H<sub>2n</sub></div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; C<sub>n</sub>H<sub>2n+2</sub></div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; C<sub>n</sub>H<sub>2n&minus;2</sub></div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; C<sub>n</sub>H<sub>n</sub></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2</div>
+    <div class="qbody"><span class="marks">1</span>
+      How many carbon atoms are in one molecule of methane?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; 1</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; 2</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; 3</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 4</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3</div>
+    <div class="qbody"><span class="marks">1</span>
+      Ethene (C<sub>2</sub>H<sub>4</sub>) belongs to the homologous series called
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; alkanes</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; alkenes</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; alcohols</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; carboxylic acids</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4</div>
+    <div class="qbody"><span class="marks">1</span>
+      The functional group present in all alcohols is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; &mdash;COOH</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; &mdash;CHO</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; &mdash;OH</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; &mdash;C=C&mdash;</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5</div>
+    <div class="qbody"><span class="marks">1</span>
+      Alkanes react with chlorine in the presence of ultraviolet light by
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; addition reaction</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; substitution reaction</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; neutralisation</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; polymerisation</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6</div>
+    <div class="qbody"><span class="marks">1</span>
+      Alkenes decolourise bromine water because they undergo
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; substitution reactions</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; combustion reactions</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; addition reactions across the C=C double bond</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; cracking reactions</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7</div>
+    <div class="qbody"><span class="marks">1</span>
+      The complete combustion of a hydrocarbon always produces
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; carbon monoxide and water</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; carbon dioxide and water</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; carbon and steam</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; carbon dioxide and hydrogen</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8</div>
+    <div class="qbody"><span class="marks">1</span>
+      The reaction between an alcohol and a carboxylic acid (in the presence of an acid catalyst) produces
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; a polymer and water</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; an alkene and water</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; an aldehyde and hydrogen</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; an ester and water</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9</div>
+    <div class="qbody"><span class="marks">1</span>
+      Cracking is an industrial process used to
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; break down large, less useful hydrocarbon molecules into smaller, more useful ones</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; combine small hydrocarbon molecules into larger ones</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; remove sulfur impurities from crude oil</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; separate fractions from crude oil by boiling point</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10</div>
+    <div class="qbody"><span class="marks">1</span>
+      The IUPAC name of the alkane with the molecular formula C<sub>3</sub>H<sub>8</sub> is
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; methane</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; propane</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; butane</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; ethane</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">11</div>
+    <div class="qbody"><span class="marks">1</span>
+      The reaction CH<sub>4</sub> + Cl<sub>2</sub> &rarr; CH<sub>3</sub>Cl + HCl is an example of
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; addition</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; substitution</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; combustion</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; polymerisation</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12</div>
+    <div class="qbody"><span class="marks">1</span>
+      Ethanol (C<sub>2</sub>H<sub>5</sub>OH) belongs to which homologous series?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; alkanes</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; alkenes</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; alcohols</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; carboxylic acids</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13</div>
+    <div class="qbody"><span class="marks">1</span>
+      In a correctly balanced chemical equation, which of the following must be equal on both sides?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; The number of atoms of each element (mass must be conserved)</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; The number of molecules</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; The number of moles of gas produced</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; The total number of compounds</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14</div>
+    <div class="qbody"><span class="marks">1</span>
+      The complete combustion of propane (C<sub>3</sub>H<sub>8</sub>) is represented by which balanced equation?
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; C<sub>3</sub>H<sub>8</sub> + O<sub>2</sub> &rarr; CO<sub>2</sub> + H<sub>2</sub>O</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; C<sub>3</sub>H<sub>8</sub> + 5O<sub>2</sub> &rarr; 3CO<sub>2</sub> + 4H<sub>2</sub>O</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; C<sub>3</sub>H<sub>8</sub> + 3O<sub>2</sub> &rarr; 3CO<sub>2</sub> + H<sub>2</sub>O</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; 2C<sub>3</sub>H<sub>8</sub> + 5O<sub>2</sub> &rarr; 6CO + 8H<sub>2</sub>O</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15</div>
+    <div class="qbody"><span class="marks">1</span>
+      Addition polymers are made from
+      <div class="tick-opt"><div class="tick-box"></div> A &nbsp; alkane monomers by substitution</div>
+      <div class="tick-opt"><div class="tick-box"></div> B &nbsp; alkene monomers joining together, with no other product</div>
+      <div class="tick-opt"><div class="tick-box"></div> C &nbsp; alcohol monomers reacting with an acid catalyst</div>
+      <div class="tick-opt"><div class="tick-box"></div> D &nbsp; two different monomers with water as a by-product</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION B ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION B &mdash; Short Structured Questions &nbsp;[20 marks]&nbsp; Answer all questions.</div>
+
+  <!-- B1 -->
+  <div class="question">
+    <div class="qnum">B1</div>
+    <div class="qbody">
+      <b>The Alkane Homologous Series</b>
+      <p style="margin:8px 0">The table below shows some members of the alkane homologous series.</p>
+      <table class="data-table" style="margin-bottom:10px;width:100%">
+        <thead><tr><th>Name</th><th>Molecular formula</th><th>Structural formula (displayed)</th><th>Boiling point / &deg;C</th></tr></thead>
+        <tbody>
+          <tr><td>Methane</td><td>CH<sub>4</sub></td><td>CH<sub>4</sub></td><td>&minus;162</td></tr>
+          <tr><td>Ethane</td><td>C<sub>2</sub>H<sub>6</sub></td><td>CH<sub>3</sub>CH<sub>3</sub></td><td>&minus;89</td></tr>
+          <tr><td>Propane</td><td>C<sub>3</sub>H<sub>8</sub></td><td>CH<sub>3</sub>CH<sub>2</sub>CH<sub>3</sub></td><td>&minus;42</td></tr>
+          <tr><td>Butane</td><td>C<sub>4</sub>H<sub>10</sub></td><td>CH<sub>3</sub>(CH<sub>2</sub>)<sub>2</sub>CH<sub>3</sub></td><td>&minus;1</td></tr>
+          <tr><td>Pentane</td><td>C<sub>5</sub>H<sub>12</sub></td><td>CH<sub>3</sub>(CH<sub>2</sub>)<sub>3</sub>CH<sub>3</sub></td><td>36</td></tr>
+        </tbody>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State the molecular formula of the <b>sixth</b> member of the alkane series (hexane).<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Describe the trend in boiling point as the chain length increases. Suggest a reason for this trend.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">State <b>two</b> features that all members of a homologous series share (apart from general formula).<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2 -->
+  <div class="question">
+    <div class="qnum">B2</div>
+    <div class="qbody">
+      <b>Reactions of Alkenes</b>
+      <p style="margin:8px 0">The structural formula of ethene is shown below.</p>
+      <div style="text-align:center;margin:12px 0">
+        <svg width="200" height="90" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Structural formula of ethene showing C=C double bond and four hydrogen atoms">
+          <!-- Carbon atoms -->
+          <text x="60" y="50" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a3c6e">C</text>
+          <text x="140" y="50" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a3c6e">C</text>
+          <!-- Double bond between carbons -->
+          <line x1="74" y1="44" x2="126" y2="44" stroke="#1a3c6e" stroke-width="2"/>
+          <line x1="74" y1="52" x2="126" y2="52" stroke="#1a3c6e" stroke-width="2"/>
+          <!-- H atoms -->
+          <text x="20" y="25" text-anchor="middle" font-size="13" fill="#555">H</text>
+          <text x="20" y="72" text-anchor="middle" font-size="13" fill="#555">H</text>
+          <text x="180" y="25" text-anchor="middle" font-size="13" fill="#555">H</text>
+          <text x="180" y="72" text-anchor="middle" font-size="13" fill="#555">H</text>
+          <!-- Bonds C–H left -->
+          <line x1="52" y1="44" x2="28" y2="26" stroke="#555" stroke-width="1.5"/>
+          <line x1="52" y1="50" x2="28" y2="66" stroke="#555" stroke-width="1.5"/>
+          <!-- Bonds C–H right -->
+          <line x1="148" y1="44" x2="172" y2="26" stroke="#555" stroke-width="1.5"/>
+          <line x1="148" y1="50" x2="172" y2="66" stroke="#555" stroke-width="1.5"/>
+          <text x="100" y="82" text-anchor="middle" font-size="9.5" fill="#555" font-style="italic">Ethene (C&#8322;H&#8324;)</text>
+        </svg>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Ethene reacts with bromine (Br<sub>2</sub>). Name the type of reaction and write the structural equation for the product formed.<span class="marks">2</span>
+          <div style="margin:6px 0;font-weight:bold">Type of reaction:</div><div class="answer-box-sm"></div>
+          <div style="margin:6px 0;font-weight:bold">Product (name and formula):</div><div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">State the observation when ethene gas is bubbled through bromine water.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Ethene can undergo addition polymerisation to form poly(ethene). Draw a section of the polymer chain showing <b>three</b> repeat units.<span class="marks">2</span>
+          <div class="answer-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B3 -->
+  <div class="question">
+    <div class="qnum">B3</div>
+    <div class="qbody">
+      <b>Balancing Chemical Equations</b>
+      <p style="margin:8px 0">Balance each of the following equations by inserting the correct coefficients. Do not change the formulae of the compounds.</p>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">The combustion of ethane:
+          <div class="chem-eq">__C<sub>2</sub>H<sub>6</sub> + __O<sub>2</sub> &rarr; __CO<sub>2</sub> + __H<sub>2</sub>O</div>
+          <span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">The reaction of magnesium with nitrogen gas:
+          <div class="chem-eq">__Mg + __N<sub>2</sub> &rarr; __Mg<sub>3</sub>N<sub>2</sub></div>
+          <span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">The thermal decomposition of calcium carbonate:
+          <div class="chem-eq">__CaCO<sub>3</sub> &rarr; __CaO + __CO<sub>2</sub></div>
+          <span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">The reaction of iron(III) oxide with carbon monoxide during iron extraction:
+          <div class="chem-eq">__Fe<sub>2</sub>O<sub>3</sub> + __CO &rarr; __Fe + __CO<sub>2</sub></div>
+          <span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B4 -->
+  <div class="question">
+    <div class="qnum">B4</div>
+    <div class="qbody">
+      <b>Combustion Reactions and Types of Reactions</b>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Write the balanced equation for the <b>complete combustion</b> of methane (CH<sub>4</sub>).<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Write the balanced equation for the <b>incomplete combustion</b> of methane, where carbon monoxide (CO) is produced instead of CO<sub>2</sub>.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">Classify each of the following reactions as one of: <b>combustion / substitution / addition / decomposition / neutralisation</b>.
+          <div style="margin:8px 0">(i) &nbsp; CH<sub>2</sub>=CH<sub>2</sub> + HBr &rarr; CH<sub>3</sub>CH<sub>2</sub>Br <span class="marks">1</span></div><div class="answer-box-sm"></div>
+          <div style="margin:8px 0">(ii) &nbsp; C<sub>2</sub>H<sub>5</sub>OH + 3O<sub>2</sub> &rarr; 2CO<sub>2</sub> + 3H<sub>2</sub>O <span class="marks">1</span></div><div class="answer-box-sm"></div>
+          <div style="margin:8px 0">(iii) &nbsp; 2H<sub>2</sub>O<sub>2</sub> &rarr; 2H<sub>2</sub>O + O<sub>2</sub> <span class="marks">1</span></div><div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION C ══ -->
+<div class="page page-break">
+  <div class="section-header">SECTION C &mdash; Long Structured Questions &nbsp;[15 marks]&nbsp; Answer all questions.</div>
+
+  <!-- C1 -->
+  <div class="question">
+    <div class="qnum">C1</div>
+    <div class="qbody">
+      <b>Organic Chemistry — Crude Oil, Cracking, and Functional Groups</b> &nbsp;<span class="marks">8</span>
+      <p style="margin:10px 0">Crude oil is a mixture of hydrocarbons that can be separated by fractional distillation. The heavier fractions contain large hydrocarbon molecules that are less in demand. These undergo <b>cracking</b> to produce smaller, more useful molecules.</p>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">State what is meant by the term <i>hydrocarbon</i>.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Decane (C<sub>10</sub>H<sub>22</sub>) can be cracked to give butane (C<sub>4</sub>H<sub>10</sub>) and a mixture of alkenes. Write a balanced equation for one possible cracking of decane to give butane and two molecules of propene (C<sub>3</sub>H<sub>6</sub>).<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">State the conditions needed for thermal cracking.<span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">The table below shows four organic compounds. Complete the table by filling in the missing entries.
+          <table class="data-table" style="width:100%;margin:10px 0">
+            <thead><tr><th>Name</th><th>Formula</th><th>Homologous series</th><th>Functional group</th></tr></thead>
+            <tbody>
+              <tr><td>Ethanol</td><td>C<sub>2</sub>H<sub>5</sub>OH</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>Ethanoic acid</td><td>CH<sub>3</sub>COOH</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>CH<sub>3</sub>CH<sub>2</sub>CH<sub>3</sub></td><td>Alkane</td><td>&nbsp;</td></tr>
+              <tr><td>Propene</td><td>&nbsp;</td><td>Alkene</td><td>&ndash;C=C&ndash;</td></tr>
+            </tbody>
+          </table>
+          <span class="marks">4</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="question" style="margin-top:24px">
+    <div class="qnum">C2</div>
+    <div class="qbody">
+      <b>Balancing Equations and Types of Reactions</b> &nbsp;<span class="marks">7</span>
+      <p style="margin:10px 0">This question requires you to write and balance equations for various chemical reactions.</p>
+
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div style="flex:1">Write the <b>balanced symbol equation</b>, with state symbols, for the reaction of zinc with dilute sulfuric acid to produce zinc sulfate and hydrogen gas.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div style="flex:1">Write the balanced equation for the complete combustion of ethanol (C<sub>2</sub>H<sub>5</sub>OH). Include state symbols.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div style="flex:1">The following equation shows the addition of bromine to propene. Fill in the missing formula for the organic product.<br>
+          <div class="chem-eq">CH<sub>3</sub>CH=CH<sub>2</sub> + Br<sub>2</sub> &rarr; ___________</div>
+          Name the product and state the type of reaction.<span class="marks">2</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div style="flex:1">The thermal decomposition of copper(II) carbonate is represented by the unbalanced equation below. Balance it and state what type of reaction this is.
+          <div class="chem-eq">CuCO<sub>3</sub> &rarr; CuO + CO<sub>2</sub></div>
+          <span class="marks">1</span>
+          <div class="answer-box-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MARK SCHEME ══ -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme &mdash; Paper 4</div>
+  <div class="ms-disc">
+    <b>For teacher/self-assessment use only.</b> For balanced equations: award 1 mark for correct formulae, 1 mark for correct balancing (unless stated otherwise). State symbols required only where the question asks for them. Structural formulae: accept any correct representation.
+  </div>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section A — Multiple Choice</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th><th>Q</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>B</td><td>6</td><td>C</td><td>11</td><td>B</td></tr>
+      <tr><td>2</td><td>A</td><td>7</td><td>B</td><td>12</td><td>C</td></tr>
+      <tr><td>3</td><td>B</td><td>8</td><td>D</td><td>13</td><td>A</td></tr>
+      <tr><td>4</td><td>C</td><td>9</td><td>A</td><td>14</td><td>B</td></tr>
+      <tr><td>5</td><td>B</td><td>10</td><td>B</td><td>15</td><td>B</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section B</p>
+  <table class="ans-table" style="margin-bottom:24px">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>B1(a)</td><td>C<sub>6</sub>H<sub>14</sub></td><td>1</td></tr>
+      <tr><td>B1(b)</td><td>Boiling point <u>increases</u> with chain length [1]; longer chains have stronger van der Waals (intermolecular) forces between molecules, so more energy is needed to separate them [1]</td><td>2</td></tr>
+      <tr><td>B1(c)</td><td>Any 2: same general formula; differ by CH<sub>2</sub> successive members; similar chemical properties; gradual change in physical properties</td><td>2</td></tr>
+      <tr><td>B2(a)</td><td>Addition [1]; product: 1,2-dibromoethane / CH<sub>2</sub>BrCH<sub>2</sub>Br [1]</td><td>2</td></tr>
+      <tr><td>B2(b)</td><td>Bromine water is decolourised (turns from brown/orange to colourless)</td><td>1</td></tr>
+      <tr><td>B2(c)</td><td>Correct repeat unit &ndash;(CH<sub>2</sub>&ndash;CH<sub>2</sub>)&ndash; [1]; three repeat units shown with brackets and bonds extending to chain [1]; (accept &ndash;CH<sub>2</sub>CH<sub>2</sub>&ndash; notation)</td><td>2</td></tr>
+      <tr><td>B3(a)</td><td>2C<sub>2</sub>H<sub>6</sub> + 7O<sub>2</sub> &rarr; 4CO<sub>2</sub> + 6H<sub>2</sub>O [1 for correct formulae, 1 for 2,7,4,6]</td><td>2</td></tr>
+      <tr><td>B3(b)</td><td>3Mg + N<sub>2</sub> &rarr; Mg<sub>3</sub>N<sub>2</sub> (coefficients 3, 1, 1)</td><td>1</td></tr>
+      <tr><td>B3(c)</td><td>CaCO<sub>3</sub> &rarr; CaO + CO<sub>2</sub> (already balanced — coefficients all 1; accept as-is)</td><td>1</td></tr>
+      <tr><td>B3(d)</td><td>Fe<sub>2</sub>O<sub>3</sub> + 3CO &rarr; 2Fe + 3CO<sub>2</sub> (coefficients 1, 3, 2, 3)</td><td>1</td></tr>
+      <tr><td>B4(a)</td><td>CH<sub>4</sub> + 2O<sub>2</sub> &rarr; CO<sub>2</sub> + 2H<sub>2</sub>O</td><td>1</td></tr>
+      <tr><td>B4(b)</td><td>2CH<sub>4</sub> + 3O<sub>2</sub> &rarr; 2CO + 4H<sub>2</sub>O</td><td>1</td></tr>
+      <tr><td>B4(c)(i)</td><td>Addition</td><td>1</td></tr>
+      <tr><td>B4(c)(ii)</td><td>Combustion</td><td>1</td></tr>
+      <tr><td>B4(c)(iii)</td><td>Decomposition (thermal decomposition)</td><td>1</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Section C</p>
+  <table class="ans-table">
+    <thead><tr><th>Question</th><th>Mark-worthy points</th><th>Marks</th></tr></thead>
+    <tbody>
+      <tr><td>C1(a)</td><td>A compound containing <u>carbon and hydrogen only</u></td><td>1</td></tr>
+      <tr><td>C1(b)</td><td>C<sub>10</sub>H<sub>22</sub> &rarr; C<sub>4</sub>H<sub>10</sub> + 2C<sub>3</sub>H<sub>6</sub> [1 for correct formulae, 1 for balanced: C: 4+6=10 ✓; H: 10+12=22 ✓]</td><td>2</td></tr>
+      <tr><td>C1(c)</td><td>High temperature (400–900 &deg;C) [1]; and either high pressure (thermal cracking) or a catalyst / silica or alumina catalyst (catalytic cracking) [1] — award 1 mark for temperature alone</td><td>1</td></tr>
+      <tr><td>C1(d) — 1 mark each correct row:</td><td>
+        Row 1: Alcohols; &ndash;OH [1]<br>
+        Row 2: Carboxylic acids; &ndash;COOH [1]<br>
+        Row 3: Propane; no functional group / C&ndash;C and C&ndash;H only [1]<br>
+        Row 4: C<sub>3</sub>H<sub>6</sub> [1]
+      </td><td>4</td></tr>
+      <tr><td>C2(a)</td><td>Zn(s) + H<sub>2</sub>SO<sub>4</sub>(aq) &rarr; ZnSO<sub>4</sub>(aq) + H<sub>2</sub>(g) [1 for formulae, 1 for state symbols]</td><td>2</td></tr>
+      <tr><td>C2(b)</td><td>C<sub>2</sub>H<sub>5</sub>OH(l) + 3O<sub>2</sub>(g) &rarr; 2CO<sub>2</sub>(g) + 3H<sub>2</sub>O(l) [1 for balanced equation, 1 for state symbols]</td><td>2</td></tr>
+      <tr><td>C2(c)</td><td>Product: CH<sub>3</sub>CHBrCH<sub>2</sub>Br (1,2-dibromopropane) [1]; Addition reaction [1]</td><td>2</td></tr>
+      <tr><td>C2(d)</td><td>Already balanced (coefficients all 1): CaCO<sub>3</sub> &rarr; CuO + CO<sub>2</sub> — note: this is CuCO<sub>3</sub> &rarr; CuO + CO<sub>2</sub> balanced as-is [1 for confirming balanced]; type: thermal decomposition [award mark even if student states decomposition only]</td><td>1</td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:24px;border-top:2px solid #1a3c6e;padding-top:16px">
+    <p style="font-size:10pt;font-weight:bold;color:#1a3c6e;margin-bottom:8px">Key Balanced Equations — Summary (all four papers)</p>
+    <table class="ans-table">
+      <thead><tr><th>Reaction</th><th>Balanced equation</th></tr></thead>
+      <tbody>
+        <tr><td>HCl + NaOH</td><td>HCl + NaOH &rarr; NaCl + H<sub>2</sub>O</td></tr>
+        <tr><td>CaCO<sub>3</sub> + HCl</td><td>CaCO<sub>3</sub> + 2HCl &rarr; CaCl<sub>2</sub> + H<sub>2</sub>O + CO<sub>2</sub></td></tr>
+        <tr><td>CuO + H<sub>2</sub>SO<sub>4</sub></td><td>CuO + H<sub>2</sub>SO<sub>4</sub> &rarr; CuSO<sub>4</sub> + H<sub>2</sub>O</td></tr>
+        <tr><td>ZnO + H<sub>2</sub>SO<sub>4</sub></td><td>ZnO + H<sub>2</sub>SO<sub>4</sub> &rarr; ZnSO<sub>4</sub> + H<sub>2</sub>O</td></tr>
+        <tr><td>2H<sub>2</sub>O<sub>2</sub> decomposition</td><td>2H<sub>2</sub>O<sub>2</sub> &rarr; 2H<sub>2</sub>O + O<sub>2</sub></td></tr>
+        <tr><td>CH<sub>4</sub> complete combustion</td><td>CH<sub>4</sub> + 2O<sub>2</sub> &rarr; CO<sub>2</sub> + 2H<sub>2</sub>O</td></tr>
+        <tr><td>C<sub>2</sub>H<sub>6</sub> complete combustion</td><td>2C<sub>2</sub>H<sub>6</sub> + 7O<sub>2</sub> &rarr; 4CO<sub>2</sub> + 6H<sub>2</sub>O</td></tr>
+        <tr><td>C<sub>3</sub>H<sub>8</sub> complete combustion</td><td>C<sub>3</sub>H<sub>8</sub> + 5O<sub>2</sub> &rarr; 3CO<sub>2</sub> + 4H<sub>2</sub>O</td></tr>
+        <tr><td>C<sub>2</sub>H<sub>5</sub>OH complete combustion</td><td>C<sub>2</sub>H<sub>5</sub>OH + 3O<sub>2</sub> &rarr; 2CO<sub>2</sub> + 3H<sub>2</sub>O</td></tr>
+        <tr><td>Cracking decane</td><td>C<sub>10</sub>H<sub>22</sub> &rarr; C<sub>4</sub>H<sub>10</sub> + 2C<sub>3</sub>H<sub>6</sub></td></tr>
+        <tr><td>Zn + H<sub>2</sub>SO<sub>4</sub></td><td>Zn + H<sub>2</sub>SO<sub>4</sub> &rarr; ZnSO<sub>4</sub> + H<sub>2</sub></td></tr>
+        <tr><td>Fe<sub>2</sub>O<sub>3</sub> + CO</td><td>Fe<sub>2</sub>O<sub>3</sub> + 3CO &rarr; 2Fe + 3CO<sub>2</sub></td></tr>
+        <tr><td>Cathode (CuSO<sub>4</sub>, inert)</td><td>Cu<sup>2+</sup> + 2e<sup>&minus;</sup> &rarr; Cu</td></tr>
+        <tr><td>Anode (CuSO<sub>4</sub>, inert)</td><td>2H<sub>2</sub>O &rarr; O<sub>2</sub> + 4H<sup>+</sup> + 4e<sup>&minus;</sup></td></tr>
+        <tr><td>Cathode (PbBr<sub>2</sub>)</td><td>Pb<sup>2+</sup> + 2e<sup>&minus;</sup> &rarr; Pb</td></tr>
+        <tr><td>Ionic neutralisation</td><td>H<sup>+</sup>(aq) + OH<sup>&minus;</sup>(aq) &rarr; H<sub>2</sub>O(l)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

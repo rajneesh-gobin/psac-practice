@@ -27,7 +27,17 @@ const G5HG_EXPL = {
   'g5hg-min5-unesco-0': "UNESCO lists a site when it has <b>important cultural or natural value</b> — worth protecting for the whole world, not one country.",
   'g5hg-min5-unesco-1': "<b>Aapravasi Ghat</b> in Port Louis is where indentured labourers first set foot in Mauritius, which is why it is listed.",
 };
-const add=(id,c,s,q,o,a,h)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5HG_EXPL[id]||`<b>${a}</b> is correct.`}));
+const G5HG_LEARN = {
+  'g5hg-min5-coast-0': '<b>Coral reefs</b> are underwater structures built by tiny living animals called coral polyps. They form a natural barrier between the open ocean and the shore, breaking the force of waves and creating the calm, shallow lagoon inside. They also shelter hundreds of species of fish and sea creatures.',
+  'g5hg-min5-rocks-0': '<b>Basalt</b> is a dark, dense volcanic rock formed when lava cools quickly. Mauritius was entirely created by volcanic activity under the sea, so basalt is the rock beneath almost everything on the island. It can be seen in old stone walls and rocky stream beds across the plateau.',
+  'g5hg-min5-rocks-1': '<b>Alluvium</b> is the fertile soil and sand deposited by a river. As a river slows down — usually on flat land near its mouth — it drops the material it has been carrying. Over time, these deposits build up into rich, flat land that is excellent for farming.',
+  'g5hg-min5-conserve-0': '<b>Conservation</b> means protecting natural habitats and resources so they can continue to exist for future generations. Once a species is extinct or a habitat is destroyed, it cannot be brought back. Mauritius has lost many unique animals, such as the Dodo, which is why conservation matters so much here.',
+  'g5hg-min5-scale-0': 'A <b>map scale</b> tells you the relationship between a distance on the map and the real distance on the ground. If the scale is 1 cm = 2 km, then every centimetre you measure on the map equals 2 kilometres in real life. Multiply the map measurement by the scale: 3 cm × 2 = 6 km.',
+  'g5hg-min5-symbols-0': 'A <b>map key</b> (also called a legend) is a small table that explains what every symbol on the map means. Without the key, a symbol such as a blue line or a small aeroplane icon would be impossible to interpret correctly. Always read the key before trying to use a new map.',
+  'g5hg-min5-season-0': 'Mauritius has two main seasons instead of four. <b>Summer</b> lasts roughly from November to April — it is hot, humid and rainy, and this is when cyclones are most likely. <b>Winter</b> lasts from about May to October — it is cooler and drier, with steady south-east trade winds.',
+  'g5hg-min5-unesco-0': 'A <b>UNESCO World Heritage Site</b> is a place recognised by the United Nations as having outstanding importance to humanity — either for its natural features or its cultural and historical value. Listing a site helps ensure that it is protected and preserved for future generations everywhere.',
+};
+const add=(id,c,s,q,o,a,h)=>STATIC_QUESTIONS.push(makeMCQ({id,chapterId:c,subsection:s,difficulty:2,question:q,options:o,answer:a,hint:h,explanation:G5HG_EXPL[id]||`<b>${a}</b> is correct.`,learnMore:G5HG_LEARN[id]||''}));
 const rows=(p,c,s,data,opts,h)=>data.forEach(([q,a],i)=>add(`g5hg-min5-${p}-${i}`,c,s,q,opts,a,h));
 
 // water — broken shared opts replaced with per-question options

@@ -1,0 +1,923 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grade 5 Mathematics — Predicted Paper 1 | Nouklass.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:11.5pt;color:#000;max-width:210mm;margin:0 auto;background:#fff}
+.nk-bar{background:#1a3c6e;color:#fff;padding:7px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;font-size:9pt;font-weight:bold}
+.print-btn{background:#fff;color:#1a3c6e;border:none;padding:4px 14px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:9pt}
+.cover{padding:14mm 20mm 10mm;min-height:270mm}
+.nk-logo-box{width:64px;height:64px;border:2px solid #1a3c6e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;color:#1a3c6e;flex-shrink:0}
+.nk-big{font-size:18pt;line-height:1} .nk-small{font-size:6.5pt;margin-top:2px;text-align:center}
+.org-name{font-size:14pt;color:#1a3c6e;font-weight:bold}
+.specimen-label{font-size:9.5pt;color:#555;margin-top:5px}
+.year{font-size:50pt;color:#1a3c6e;font-weight:bold;line-height:1}
+.subject{font-size:26pt;color:#1a3c6e;margin:8px 0 4px}
+.paper-meta{font-size:12pt;margin:14px 0;line-height:2.2}
+.index-line{border-bottom:1.5px solid #000;display:inline-block;width:240px;height:20px;vertical-align:bottom}
+.instructions{margin:18px 0;font-size:10.5pt;border:1px solid #bbb;padding:14px 16px;border-radius:4px}
+.instructions ol{margin-left:22px;line-height:2.2}
+.page{padding:8mm 20mm 8mm 16mm}
+.section-header{font-weight:bold;font-size:11.5pt;border-top:2.5px solid #1a3c6e;color:#1a3c6e;padding-top:9px;margin:22px 0 14px}
+.question{margin:14px 0 18px;display:flex;gap:10px;align-items:flex-start}
+.qnum{font-weight:bold;min-width:30px;flex-shrink:0;color:#1a3c6e}
+.qbody{flex:1}
+.marks{float:right;border:1px solid #000;padding:2px 8px;font-size:9.5pt;margin-left:10px;background:#f8f8f8}
+.answer-box{border:1px solid #aaa;border-radius:3px;min-height:70px;width:100%;margin:10px 0;padding:6px}
+.answer-box-sm{border:1px solid #aaa;border-radius:3px;min-height:40px;width:100%;margin:8px 0;padding:6px}
+.answer-box-lg{border:1px solid #aaa;border-radius:3px;min-height:110px;width:100%;margin:10px 0;padding:6px}
+.writing-line{border-bottom:1px solid #bbb;height:28px;width:100%;display:block;margin-bottom:2px}
+.work-space{min-height:80px;border:1px dashed #ccc;border-radius:3px;margin:10px 0;padding:4px;background:#fafeff}
+.answer-label{font-weight:bold;margin-top:10px;font-size:10.5pt;color:#1a3c6e}
+.answer-line{border-bottom:1.5px solid #000;display:inline-block;height:20px;margin-left:8px;width:180px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2;margin:0 4px}
+.frac .num{border-bottom:1px solid #000;padding:0 5px;text-align:center}
+.frac .den{padding:0 5px;text-align:center}
+.col-arith{font-family:monospace;font-size:13pt;border:1px solid #ccc;display:inline-block;padding:10px 24px;margin:10px 0;line-height:2}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.mcq-item{border:1px solid #ccc;padding:10px 8px;border-radius:3px}
+.mcq-q{font-size:10.5pt;margin-bottom:8px}
+.tick-opt{display:flex;align-items:center;gap:8px;margin:6px 0}
+.tick-box{width:18px;height:18px;border:1.5px solid #000;flex-shrink:0}
+.sub-q{margin:10px 0 5px;display:flex;gap:8px}
+.sub-label{font-weight:bold;min-width:26px;color:#1a3c6e}
+.page-break{page-break-before:always}
+.mark-scheme{padding:14mm 20mm}
+.ms-header{font-size:18pt;color:#1a3c6e;font-weight:bold;border-bottom:3px solid #1a3c6e;padding-bottom:10px;margin-bottom:12px}
+.ms-disc{background:#eef3fb;border:1px solid #1a3c6e;padding:10px;font-size:9.5pt;margin-bottom:20px;border-radius:4px}
+.ans-table{border-collapse:collapse;width:100%;font-size:10.5pt}
+.ans-table th,.ans-table td{border:1px solid #ccc;padding:6px 12px;vertical-align:top}
+.ans-table th{background:#eef3fb;font-weight:bold;color:#1a3c6e}
+@media print{.nk-bar{position:fixed;top:0;width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-btn{display:none}body{padding-top:32px}@page{size:A4 portrait;margin:12mm 14mm}}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Ctext x='140' y='95' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 140 90)' font-size='18' font-family='Arial' font-weight='bold' fill='%231a3c6e' fill-opacity='0.055'%3Enouklass.com%3C/text%3E%3C/svg%3E");background-size:280px 180px;background-repeat:repeat}@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="nk-bar">
+  <span>NOUKLASS.COM — PSAC EXAM PRACTICE</span>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:18px">
+    <div class="nk-logo-box">
+      <div class="nk-big">NK</div>
+      <div class="nk-small">NOUKLASS<br>.COM</div>
+    </div>
+    <div>
+      <div class="org-name">Nouklass.com</div>
+      <div class="specimen-label">PSAC Exam Practice — Predicted Paper</div>
+    </div>
+  </div>
+  <div class="year">2026</div>
+  <div class="subject">Mathematics</div>
+  <div style="font-size:13pt;color:#444;margin-bottom:6px">Grade 5 &nbsp;|&nbsp; Paper 1 of 4 &nbsp;|&nbsp; Numbers, Fractions, Time &amp; Perimeter</div>
+  <div class="paper-meta">
+    <strong>Time allowed:</strong> 1 hour 30 minutes &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Total marks:</strong> 100<br>
+    <strong>Candidate Name:</strong> <span class="index-line"></span><br>
+    <strong>Class / Teacher:</strong> <span class="index-line"></span>
+  </div>
+  <div class="instructions">
+    <strong>Instructions to candidates:</strong>
+    <ol>
+      <li>Write your name and class in the spaces provided above.</li>
+      <li>Answer <strong>ALL</strong> questions in all three sections.</li>
+      <li>Write your answers clearly in the spaces provided.</li>
+      <li>Show all working where required — method marks are awarded.</li>
+      <li>The number of marks for each question is shown in a box [ ].</li>
+      <li>You may use a ruler and pencil for diagrams.</li>
+      <li>Calculators are <strong>NOT</strong> permitted.</li>
+    </ol>
+  </div>
+  <div style="margin-top:18px;border:1px solid #1a3c6e;border-radius:4px;padding:10px 14px;background:#eef3fb">
+    <strong style="color:#1a3c6e">For Examiner Use Only</strong>
+    <table style="margin-top:8px;width:100%;border-collapse:collapse;font-size:10pt">
+      <tr>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section A</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section B</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">Section C</th>
+        <th style="border:1px solid #aaa;padding:5px 10px;background:#fff;color:#1a3c6e">TOTAL</th>
+      </tr>
+      <tr>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 20</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 20</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 60</td>
+        <td style="border:1px solid #aaa;padding:14px 10px;text-align:center">&nbsp;&nbsp;&nbsp;&nbsp; / 100</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION A -->
+<div class="page page-break">
+  <div class="section-header">SECTION A — Short Answer Questions &nbsp;(Questions 1–15) &nbsp;[20 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Answer all questions. Questions 1–10 carry 1 mark each. Questions 11–15 carry 2 marks each.</span>
+  </div>
+
+  <div class="question">
+    <div class="qnum">1.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Write the number <strong>47,382</strong> in words.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">2.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      What is the value of the digit <strong>8</strong> in the number 58,416?
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">3.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Write in figures: <em>forty-six thousand and fifty-three</em>.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">4.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Round <strong>73,562</strong> to the nearest thousand.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">5.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      What number is <strong>1,000 more</strong> than 35,741?
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">6.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Arrange these numbers in order from <strong>smallest to largest</strong>:<br>
+      <span style="font-size:12pt;letter-spacing:2px">&nbsp;&nbsp;28,413 &nbsp;&nbsp;&nbsp; 28,143 &nbsp;&nbsp;&nbsp; 28,314</span>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">7.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Write the missing numerator: &nbsp;
+      <span class="frac"><span class="num">1</span><span class="den">2</span></span>
+      &nbsp;=&nbsp;
+      <span class="frac"><span class="num">?</span><span class="den">8</span></span>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">8.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      What fraction of an hour is <strong>30 minutes</strong>? Write your answer in its simplest form.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">9.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      What time is <strong>20 minutes after</strong> 11:40 a.m.?
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">10.</div>
+    <div class="qbody">
+      <span class="marks">[1]</span>
+      Find the perimeter of a <strong>square</strong> with side 8 cm.
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">11.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Which fraction is greater: &nbsp;
+      <span class="frac"><span class="num">5</span><span class="den">8</span></span>
+      &nbsp; or &nbsp;
+      <span class="frac"><span class="num">3</span><span class="den">4</span></span>?
+      &nbsp; Show how you decided.
+      <div class="work-space" style="min-height:60px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:120px"></div><span style="font-size:10pt">is greater.</span></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">12.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      A bus departs at <strong>10:15 a.m.</strong> and the journey takes <strong>1 hour 40 minutes</strong>. At what time does the bus arrive? Show your working.
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Arrival time:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">13.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      A rectangle has <strong>length 16 cm</strong> and <strong>width 7 cm</strong>. Find its perimeter. Show your working.
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Perimeter =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">14.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      A rectangle has a <strong>perimeter of 42 cm</strong> and a <strong>width of 9 cm</strong>. Find its length. Show your working.
+      <div class="work-space" style="min-height:60px"></div>
+      <div style="margin:8px 0"><strong>Length =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="qnum">15.</div>
+    <div class="qbody">
+      <span class="marks">[2]</span>
+      Order these fractions from <strong>smallest to largest</strong>. Show your working by writing equivalent fractions with the same denominator.
+      <div style="font-size:13pt;margin:8px 0;display:flex;gap:20px;align-items:center">
+        <span class="frac"><span class="num">1</span><span class="den">4</span></span>
+        <span class="frac"><span class="num">5</span><span class="den">8</span></span>
+        <span class="frac"><span class="num">1</span><span class="den">2</span></span>
+        <span class="frac"><span class="num">7</span><span class="den">8</span></span>
+        <span class="frac"><span class="num">3</span><span class="den">4</span></span>
+      </div>
+      <div class="work-space" style="min-height:60px"></div>
+      <div style="margin:8px 0"><strong>Order:</strong><div class="answer-line" style="margin-top:4px;width:260px"></div></div>
+    </div>
+  </div>
+
+  <!-- SECTION B -->
+  <div class="section-header">SECTION B — Multiple Choice Questions &nbsp;(Questions 16–25) &nbsp;[20 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Each question carries 2 marks. Tick ONE box only for each question.</span>
+  </div>
+
+  <div class="mcq-grid">
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>16.</strong> Which number has a <strong>5</strong> in the ten-thousands place?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;35,241</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;15,820</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;51,420</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;45,012</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>17.</strong> What is &nbsp;<span class="frac"><span class="num">1</span><span class="den">4</span></span>&nbsp; + &nbsp;<span class="frac"><span class="num">3</span><span class="den">8</span></span>&nbsp;?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;<span class="frac"><span class="num">4</span><span class="den">12</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;<span class="frac"><span class="num">5</span><span class="den">8</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;<span class="frac"><span class="num">4</span><span class="den">8</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;<span class="frac"><span class="num">3</span><span class="den">8</span></span></div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>18.</strong> A film starts at 5:20 p.m. and lasts 1 hour 35 minutes. When does it end?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;6:45 p.m.</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;6:55 p.m.</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;7:05 p.m.</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;6:35 p.m.</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>19.</strong> Which fraction is equivalent to &nbsp;<span class="frac"><span class="num">6</span><span class="den">8</span></span>&nbsp;?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;<span class="frac"><span class="num">1</span><span class="den">4</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;<span class="frac"><span class="num">3</span><span class="den">4</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;<span class="frac"><span class="num">1</span><span class="den">2</span></span></div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;<span class="frac"><span class="num">5</span><span class="den">6</span></span></div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>20.</strong> A rectangle has perimeter 36 cm and width 8 cm. What is its length?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;20 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;10 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;28 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;9 cm</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>21.</strong> What is &nbsp;<span class="frac"><span class="num">3</span><span class="den">4</span></span>&nbsp; of 40?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;10</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;20</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;30</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;15</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>22.</strong> Which number, when rounded to the nearest thousand, gives 65,000?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;65,612</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;64,501</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;65,499</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;64,312</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>23.</strong> How many minutes from 7:25 a.m. to 8:10 a.m.?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;40</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;45</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;50</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;55</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>24.</strong> A regular pentagon (5 equal sides) has perimeter 45 cm. What is the length of one side?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;7 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;8 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;9 cm</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;10 cm</div>
+    </div>
+
+    <div class="mcq-item">
+      <div class="mcq-q"><strong>25.</strong> Which is the correct order from smallest to largest?</div>
+      <div class="tick-opt"><div class="tick-box"></div> A) &nbsp;52,314 &nbsp; 52,134 &nbsp; 52,431</div>
+      <div class="tick-opt"><div class="tick-box"></div> B) &nbsp;52,134 &nbsp; 52,314 &nbsp; 52,431</div>
+      <div class="tick-opt"><div class="tick-box"></div> C) &nbsp;52,431 &nbsp; 52,314 &nbsp; 52,134</div>
+      <div class="tick-opt"><div class="tick-box"></div> D) &nbsp;52,134 &nbsp; 52,431 &nbsp; 52,314</div>
+    </div>
+
+  </div><!-- end mcq-grid -->
+
+  <!-- SECTION C -->
+  <div class="section-header">SECTION C — Structured Questions &nbsp;(Questions 26–40) &nbsp;[60 marks]<br>
+    <span style="font-weight:normal;font-size:10pt;color:#444">Answer all questions. Show all working clearly. Marks are given for method as well as the answer.</span>
+  </div>
+
+  <!-- Q26 [3 marks] -->
+  <div class="question">
+    <div class="qnum">26.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      A number is written in expanded form as: &nbsp; <strong>60,000 + 4,000 + 500 + 20 + 7</strong>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write the number in figures. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Write the number in words. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Round the number to the nearest thousand. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q27 [3 marks] -->
+  <div class="question">
+    <div class="qnum">27.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      Here are four fractions: &nbsp;
+      <span class="frac"><span class="num">1</span><span class="den">2</span></span>&nbsp;
+      <span class="frac"><span class="num">3</span><span class="den">4</span></span>&nbsp;
+      <span class="frac"><span class="num">1</span><span class="den">4</span></span>&nbsp;
+      <span class="frac"><span class="num">5</span><span class="den">8</span></span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write the <strong>smallest</strong> fraction. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Write the fractions in order from <strong>smallest to largest</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Calculate &nbsp;<span class="frac"><span class="num">3</span><span class="den">4</span></span>&nbsp; of 32. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:40px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q28 [3 marks] -->
+  <div class="question">
+    <div class="qnum">28.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>How many minutes are in <strong>1 hour and 55 minutes</strong>? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Write the time <strong>45 minutes after</strong> 6:30 p.m. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>A swimming lesson starts at 4:20 p.m. and ends at 5:05 p.m. How long is the lesson? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q29 [3 marks] -->
+  <div class="question">
+    <div class="qnum">29.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the perimeter of a rectangle with <strong>length 13 cm</strong> and <strong>width 4 cm</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>A square has a perimeter of 48 cm. Find the length of <strong>one side</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>A triangle has sides of 9 cm, 14 cm and 11 cm. Find its perimeter. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q30 [3 marks] -->
+  <div class="question">
+    <div class="qnum">30.</div>
+    <div class="qbody">
+      <span class="marks">[3]</span>
+      Use the digits <strong>4, 8, 1, 6, 3</strong> to make 5-digit numbers.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write the <strong>largest</strong> possible 5-digit number using each digit once. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Write the <strong>smallest</strong> possible 5-digit number using each digit once. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>What fraction of a metre is 75 cm? Write your answer in its simplest form. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q31 [4 marks] -->
+  <div class="question">
+    <div class="qnum">31.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      The table shows the population of five towns in Mauritius.
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr style="background:#eef3fb">
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Town</th>
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Population</th>
+        </tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Moka</td><td style="border:1px solid #aaa;padding:4px 14px">23,415</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Vacoas</td><td style="border:1px solid #aaa;padding:4px 14px">47,832</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Beau Bassin</td><td style="border:1px solid #aaa;padding:4px 14px">51,204</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Curepipe</td><td style="border:1px solid #aaa;padding:4px 14px">38,642</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Mahebourg</td><td style="border:1px solid #aaa;padding:4px 14px">29,071</td></tr>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write the towns in order from <strong>smallest to largest</strong> population. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="answer-box"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Which town has a population closest to <strong>40,000</strong>? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Round the population of <strong>Curepipe</strong> to the nearest thousand. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q32 [4 marks] -->
+  <div class="question">
+    <div class="qnum">32.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      Priya has <strong>Rs 80</strong>.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>She spends &nbsp;<span class="frac"><span class="num">1</span><span class="den">4</span></span>&nbsp; of her money on a book. How much does she spend on the book? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:40px"></div>
+      <div style="margin:8px 0"><strong>Amount spent on book: Rs</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>She also spends &nbsp;<span class="frac"><span class="num">3</span><span class="den">8</span></span>&nbsp; of her <strong>original</strong> Rs 80 on lunch. How much does she spend on lunch? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:40px"></div>
+      <div style="margin:8px 0"><strong>Amount spent on lunch: Rs</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>How much money does Priya have left after buying the book and lunch? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div>What fraction of her original money does she have left? Write in its simplest form. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q33 [4 marks] -->
+  <div class="question">
+    <div class="qnum">33.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      Here is part of a school timetable for Tuesday.
+      <table style="border-collapse:collapse;margin:10px 0;font-size:10.5pt">
+        <tr style="background:#eef3fb">
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Activity</th>
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">Start</th>
+          <th style="border:1px solid #aaa;padding:5px 14px;color:#1a3c6e">End</th>
+        </tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Registration</td><td style="border:1px solid #aaa;padding:4px 14px">8:00 a.m.</td><td style="border:1px solid #aaa;padding:4px 14px">8:15 a.m.</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Lesson 1</td><td style="border:1px solid #aaa;padding:4px 14px">8:15 a.m.</td><td style="border:1px solid #aaa;padding:4px 14px">9:00 a.m.</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Lesson 2</td><td style="border:1px solid #aaa;padding:4px 14px">9:00 a.m.</td><td style="border:1px solid #aaa;padding:4px 14px">9:45 a.m.</td></tr>
+        <tr><td style="border:1px solid #aaa;padding:4px 14px">Break</td><td style="border:1px solid #aaa;padding:4px 14px">9:45 a.m.</td><td style="border:1px solid #aaa;padding:4px 14px">10:05 a.m.</td></tr>
+      </table>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>How long is <strong>Lesson 1</strong>? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>How long is <strong>Break</strong>? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>What is the total length of time from the start of Registration to the end of Break? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Total time:</strong><div class="answer-line" style="margin-top:4px;width:160px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q34 [4 marks] -->
+  <div class="question">
+    <div class="qnum">34.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      A football pitch is <strong>100 m long</strong> and <strong>65 m wide</strong>.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the <strong>perimeter</strong> of the football pitch. Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Perimeter =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>A player runs around the entire perimeter <strong>3 times</strong> during training. How far does the player run altogether? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Distance run =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q35 [4 marks] -->
+  <div class="question">
+    <div class="qnum">35.</div>
+    <div class="qbody">
+      <span class="marks">[4]</span>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>What is the <strong>value</strong> of the digit 7 in each of these numbers?</div>
+        <div style="display:flex;gap:30px;margin-top:8px">
+          <div>
+            <div>(i) &nbsp;70,412 &nbsp;&nbsp; <span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+            <div style="margin:4px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:2px;width:120px"></div></div>
+          </div>
+          <div>
+            <div>(ii) &nbsp;37,085 &nbsp;&nbsp; <span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+            <div style="margin:4px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:2px;width:120px"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>Write a 5-digit number where the <strong>units digit is 2</strong> and the <strong>ten-thousands digit is four times the units digit</strong>. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Round your number from (b) to the nearest thousand. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q36 [5 marks] -->
+  <div class="question">
+    <div class="qnum">36.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      Start with the number <strong>56,789</strong>.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Add 1,000 to it. Write the new number. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Subtract 100 from <strong>56,789</strong>. Write the new number. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Write <strong>56,789</strong> in expanded form. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div>Round 56,789 to the nearest: &nbsp; (i) hundred <span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span> &nbsp;&nbsp; (ii) ten-thousand <span style="font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div style="display:flex;gap:30px;margin:8px 0">
+        <div><strong>(i) Nearest hundred:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+        <div><strong>(ii) Nearest ten-thousand:</strong><div class="answer-line" style="margin-top:4px;width:100px"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q37 [5 marks] -->
+  <div class="question">
+    <div class="qnum">37.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A class of <strong>40 children</strong> took part in a fun run.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>&nbsp;<span class="frac"><span class="num">1</span><span class="den">4</span></span>&nbsp; of the children finished in under 20 minutes. How many children is that? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:40px"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div><span style="font-size:10pt">children</span></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>&nbsp;<span class="frac"><span class="num">3</span><span class="den">8</span></span>&nbsp; of the children wore red T-shirts. How many children wore red T-shirts? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:80px"></div><span style="font-size:10pt">children</span></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(c)</div>
+        <div>Of the 40 children, 18 are girls. What <strong>fraction</strong> of the children are girls? Write your answer in its simplest form. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(d)</div>
+        <div>Half of the girls finished in the first half of runners. How many girls is that? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Q38 [5 marks] -->
+  <div class="question">
+    <div class="qnum">38.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      Lena plans a day trip. She leaves home at <strong>9:00 a.m.</strong><br>
+      The drive to the beach takes <strong>1 hour 15 minutes</strong>.<br>
+      She stays at the beach for <strong>3 hours 30 minutes</strong>.<br>
+      The drive back home also takes <strong>1 hour 15 minutes</strong>.
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(a)</div>
+        <div>At what time does Lena <strong>arrive</strong> at the beach? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Arrival time:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(b)</div>
+        <div>At what time does Lena <strong>leave</strong> the beach? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>At what time does Lena arrive back <strong>home</strong>? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Home arrival time:</strong><div class="answer-line" style="margin-top:4px;width:140px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q39 [5 marks] -->
+  <div class="question">
+    <div class="qnum">39.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      The diagram shows an <strong>L-shaped playground</strong>. Some measurements are given. Two sides are missing.
+      <div style="margin:12px 0">
+        <svg width="260" height="200" viewBox="0 0 260 200" style="display:block">
+          <polygon points="10,10 106,10 106,80 250,80 250,178 10,178" fill="#eef3fb" stroke="#1a3c6e" stroke-width="2"/>
+          <!-- Top short side label: ? m -->
+          <text x="58" y="8" text-anchor="middle" font-size="11" fill="#c00" font-weight="bold">? m</text>
+          <!-- Inner vertical: 10 m -->
+          <text x="110" y="48" font-size="11" fill="#000">10 m</text>
+          <!-- Inner horizontal: 18 m -->
+          <text x="178" y="75" text-anchor="middle" font-size="11" fill="#000">18 m</text>
+          <!-- Right outer: ? m -->
+          <text x="253" y="132" font-size="11" fill="#c00" font-weight="bold">? m</text>
+          <!-- Bottom: 30 m -->
+          <text x="130" y="194" text-anchor="middle" font-size="11" fill="#000">30 m</text>
+          <!-- Left side: 24 m -->
+          <text x="3" y="97" text-anchor="start" font-size="11" fill="#000">24 m</text>
+          <!-- Corner marks -->
+          <rect x="10" y="10" width="8" height="8" fill="none" stroke="#888" stroke-width="1"/>
+          <rect x="10" y="170" width="8" height="8" fill="none" stroke="#888" stroke-width="1"/>
+          <rect x="242" y="170" width="8" height="8" fill="none" stroke="#888" stroke-width="1"/>
+          <rect x="98" y="72" width="8" height="8" fill="none" stroke="#888" stroke-width="1"/>
+        </svg>
+        <div style="font-size:9.5pt;color:#555;margin-top:4px">Not drawn to scale. Measurements in metres.</div>
+      </div>
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Find the length of the <strong>missing top side</strong> (shown in red). <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Find the length of the <strong>missing right side</strong> (shown in red). <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>Calculate the <strong>perimeter</strong> of the L-shaped playground. Show all your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Perimeter =</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(d)</div>
+        <div>Fencing for the playground costs <strong>Rs 85 per metre</strong>. Find the total cost to fence the entire playground. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Total cost = Rs</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+  <!-- Q40 [5 marks] -->
+  <div class="question">
+    <div class="qnum">40.</div>
+    <div class="qbody">
+      <span class="marks">[5]</span>
+      A stadium holds <strong>48,600</strong> people.
+      <div class="sub-q">
+        <div class="sub-label">(a)</div>
+        <div>Write this number in words. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(b)</div>
+        <div>Round 48,600 to the nearest ten-thousand. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="answer-box-sm"></div>
+      <div class="sub-q">
+        <div class="sub-label">(c)</div>
+        <div>What must be added to 48,600 to make 50,000? Show your working. <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[2]</span></div>
+      </div>
+      <div class="work-space"></div>
+      <div style="margin:8px 0"><strong>Answer:</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+      <div class="sub-q" style="margin-top:10px">
+        <div class="sub-label">(d)</div>
+        <div>On match day, &nbsp;<span class="frac"><span class="num">3</span><span class="den">4</span></span>&nbsp; of the seats are taken. How many seats are <strong>empty</strong>? <span style="float:right;font-size:9.5pt;border:1px solid #999;padding:1px 7px">[1]</span></div>
+      </div>
+      <div class="work-space" style="min-height:50px"></div>
+      <div style="margin:8px 0"><strong>Empty seats:</strong><div class="answer-line" style="margin-top:4px;width:120px"></div></div>
+    </div>
+  </div>
+
+</div><!-- end page -->
+
+<!-- MARK SCHEME -->
+<div class="mark-scheme page-break">
+  <div class="ms-header">Mark Scheme — Paper 1</div>
+  <div class="ms-disc">
+    This mark scheme is for teacher and parent use. Accept equivalent correct methods. Award method marks where working is shown even if the final answer contains a minor arithmetic error, provided the method is clearly correct.
+  </div>
+  <table class="ans-table">
+    <tr><th>Q</th><th>Answer / Acceptable Responses</th><th>Marks</th></tr>
+    <tr><td>1</td><td>Forty-seven thousand, three hundred and eighty-two</td><td>1</td></tr>
+    <tr><td>2</td><td>8,000</td><td>1</td></tr>
+    <tr><td>3</td><td>46,053</td><td>1</td></tr>
+    <tr><td>4</td><td>74,000</td><td>1</td></tr>
+    <tr><td>5</td><td>36,741</td><td>1</td></tr>
+    <tr><td>6</td><td>28,143 &nbsp; 28,314 &nbsp; 28,413</td><td>1</td></tr>
+    <tr><td>7</td><td>4 &nbsp;(so 4/8)</td><td>1</td></tr>
+    <tr><td>8</td><td>1/2</td><td>1</td></tr>
+    <tr><td>9</td><td>12:00 noon (midday)</td><td>1</td></tr>
+    <tr><td>10</td><td>32 cm</td><td>1</td></tr>
+    <tr><td>11</td><td>3/4 is greater. Evidence: 5/8 = 5/8; 3/4 = 6/8; since 6/8 &gt; 5/8, 3/4 is greater. Award 1M + 1A.</td><td>2</td></tr>
+    <tr><td>12</td><td>10:15 + 1h = 11:15; 11:15 + 40 min = 11:55 a.m. [M1 for correct method, A1 for 11:55 a.m.]</td><td>2</td></tr>
+    <tr><td>13</td><td>P = 2 × (16 + 7) = 2 × 23 = 46 cm [M1 for method, A1 for 46 cm]</td><td>2</td></tr>
+    <tr><td>14</td><td>2(l + 9) = 42 → l + 9 = 21 → l = 12 cm [M1 for method, A1 for 12 cm]</td><td>2</td></tr>
+    <tr><td>15</td><td>Convert all to eighths: 1/4=2/8, 1/2=4/8, 3/4=6/8. Order: 1/4, 1/2, 5/8, 3/4, 7/8 [M1 for conversion method, A1 for fully correct order]</td><td>2</td></tr>
+    <tr><td>16</td><td><strong>C</strong> — 51,420 (5 is in ten-thousands place)</td><td>2</td></tr>
+    <tr><td>17</td><td><strong>B</strong> — 5/8 (1/4 = 2/8; 2/8 + 3/8 = 5/8)</td><td>2</td></tr>
+    <tr><td>18</td><td><strong>B</strong> — 6:55 p.m. (5:20 + 1h = 6:20; 6:20 + 35 min = 6:55)</td><td>2</td></tr>
+    <tr><td>19</td><td><strong>B</strong> — 3/4 (6/8 ÷ 2 = 3/4)</td><td>2</td></tr>
+    <tr><td>20</td><td><strong>B</strong> — 10 cm (36 ÷ 2 = 18; 18 − 8 = 10)</td><td>2</td></tr>
+    <tr><td>21</td><td><strong>C</strong> — 30 (3/4 × 40 = 30)</td><td>2</td></tr>
+    <tr><td>22</td><td><strong>B</strong> — 64,501 (rounds up to 65,000)</td><td>2</td></tr>
+    <tr><td>23</td><td><strong>B</strong> — 45 minutes</td><td>2</td></tr>
+    <tr><td>24</td><td><strong>C</strong> — 9 cm (45 ÷ 5 = 9)</td><td>2</td></tr>
+    <tr><td>25</td><td><strong>B</strong> — 52,134 &nbsp; 52,314 &nbsp; 52,431</td><td>2</td></tr>
+    <tr><td>26a</td><td>64,527</td><td>1</td></tr>
+    <tr><td>26b</td><td>Sixty-four thousand, five hundred and twenty-seven</td><td>1</td></tr>
+    <tr><td>26c</td><td>65,000</td><td>1</td></tr>
+    <tr><td>27a</td><td>1/4</td><td>1</td></tr>
+    <tr><td>27b</td><td>1/4, 1/2, 5/8, 3/4</td><td>1</td></tr>
+    <tr><td>27c</td><td>24 (3/4 × 32 = 24)</td><td>1</td></tr>
+    <tr><td>28a</td><td>115 minutes</td><td>1</td></tr>
+    <tr><td>28b</td><td>7:15 p.m.</td><td>1</td></tr>
+    <tr><td>28c</td><td>45 minutes</td><td>1</td></tr>
+    <tr><td>29a</td><td>34 cm (2 × (13+4) = 34)</td><td>1</td></tr>
+    <tr><td>29b</td><td>12 cm (48 ÷ 4 = 12)</td><td>1</td></tr>
+    <tr><td>29c</td><td>34 cm (9+14+11)</td><td>1</td></tr>
+    <tr><td>30a</td><td>86,431</td><td>1</td></tr>
+    <tr><td>30b</td><td>13,468</td><td>1</td></tr>
+    <tr><td>30c</td><td>3/4</td><td>1</td></tr>
+    <tr><td>31a</td><td>Moka, Mahebourg, Curepipe, Vacoas, Beau Bassin [2 marks; 1 mark if 3–4 in correct relative position]</td><td>2</td></tr>
+    <tr><td>31b</td><td>Curepipe (38,642 is closest to 40,000)</td><td>1</td></tr>
+    <tr><td>31c</td><td>39,000</td><td>1</td></tr>
+    <tr><td>32a</td><td>Rs 20 (1/4 of 80)</td><td>1</td></tr>
+    <tr><td>32b</td><td>Rs 30 (3/8 of 80 = 30)</td><td>1</td></tr>
+    <tr><td>32c</td><td>Rs 30 (80 − 20 − 30)</td><td>1</td></tr>
+    <tr><td>32d</td><td>3/8</td><td>1</td></tr>
+    <tr><td>33a</td><td>45 minutes</td><td>1</td></tr>
+    <tr><td>33b</td><td>20 minutes</td><td>1</td></tr>
+    <tr><td>33c</td><td>2 hours 5 minutes [M1 for method, A1 for correct answer]</td><td>2</td></tr>
+    <tr><td>34a</td><td>P = 2×(100+65) = 2×165 = 330 m [M1+A1]</td><td>2</td></tr>
+    <tr><td>34b</td><td>330 × 3 = 990 m [M1+A1]</td><td>2</td></tr>
+    <tr><td>35a(i)</td><td>70,000</td><td>1</td></tr>
+    <tr><td>35a(ii)</td><td>7,000</td><td>1</td></tr>
+    <tr><td>35b</td><td>Any valid 5-digit number with units=2, ten-thousands=8 (e.g., 80,002 or 82,342)</td><td>1</td></tr>
+    <tr><td>35c</td><td>Nearest thousand for their number in 35b (accept correct rounding of a valid answer)</td><td>1</td></tr>
+    <tr><td>36a</td><td>57,789</td><td>1</td></tr>
+    <tr><td>36b</td><td>56,689</td><td>1</td></tr>
+    <tr><td>36c</td><td>50,000 + 6,000 + 700 + 80 + 9</td><td>1</td></tr>
+    <tr><td>36d(i)</td><td>56,800</td><td>1</td></tr>
+    <tr><td>36d(ii)</td><td>60,000</td><td>1</td></tr>
+    <tr><td>37a</td><td>10 children</td><td>1</td></tr>
+    <tr><td>37b</td><td>3/8 × 40 = 15 children [M1 for 3/8 of 40, A1 for 15]</td><td>2</td></tr>
+    <tr><td>37c</td><td>18/40 = 9/20</td><td>1</td></tr>
+    <tr><td>37d</td><td>9 girls (1/2 of 18)</td><td>1</td></tr>
+    <tr><td>38a</td><td>9:00 + 1h15min = 10:15 a.m. [M1+A1]</td><td>2</td></tr>
+    <tr><td>38b</td><td>10:15 + 3h30min = 1:45 p.m.</td><td>1</td></tr>
+    <tr><td>38c</td><td>1:45 + 1h15min = 3:00 p.m. [M1+A1]</td><td>2</td></tr>
+    <tr><td>39a</td><td>30 − 18 = 12 m</td><td>1</td></tr>
+    <tr><td>39b</td><td>24 − 10 = 14 m</td><td>1</td></tr>
+    <tr><td>39c</td><td>12+10+18+14+30+24 = 108 m [M1 for all 6 sides, A1 for 108]</td><td>2</td></tr>
+    <tr><td>39d</td><td>108 × 85 = Rs 9,180</td><td>1</td></tr>
+    <tr><td>40a</td><td>Forty-eight thousand, six hundred</td><td>1</td></tr>
+    <tr><td>40b</td><td>50,000</td><td>1</td></tr>
+    <tr><td>40c</td><td>50,000 − 48,600 = 1,400 [M1+A1]</td><td>2</td></tr>
+    <tr><td>40d</td><td>Empty seats = 1/4 × 48,600 = 12,150</td><td>1</td></tr>
+  </table>
+  <div style="margin-top:20px;font-size:9.5pt;color:#555;border-top:1px solid #ccc;padding-top:10px">
+    Paper 1 Total: 100 marks &nbsp;|&nbsp; Section A: 20 &nbsp;|&nbsp; Section B: 20 &nbsp;|&nbsp; Section C: 60<br>
+    &copy; Nouklass.com — For personal and classroom practice only. Not for commercial reproduction.
+  </div>
+</div>
+
+<style>/* spacing-patch */.question{margin:22px 0 34px}.sub-q{margin:18px 0 12px}.section-header{margin:32px 0 20px}.answer-box{margin:16px 0}.answer-box-sm{margin:12px 0}.answer-box-lg{margin:18px 0}.answer-box-xl{margin:20px 0}.work-space,.work-space-sm,.work-space-lg{margin:16px 0}.writing-lines{margin:16px 0}.page{padding:10mm 20mm 16mm 16mm}.divider{border-bottom:1px solid #ddd;margin:16px 0}.marks{margin-left:12px}</style>
+<style>/* bigbox-patch */.answer-box{min-height:130px!important}.answer-box-sm{min-height:70px!important}.answer-box-lg{min-height:200px!important}.answer-box-xl{min-height:300px!important}.work-space{min-height:160px!important}.work-space-sm{min-height:100px!important}.work-space-lg{min-height:240px!important}.writing-line{height:38px!important;margin-bottom:4px!important}.answer-line{height:38px!important}.answer-line-long{height:38px!important;width:320px!important}</style>
+<style>/* printbar-fix */@media print{.nk-bar{display:none!important}body{padding-top:0!important}}</style>
+</body>
+</html>

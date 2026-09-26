@@ -99,8 +99,17 @@ const G4HG_EXPL = {
   'g4hg-cov-diversity-11': "A person's culture can include their <b>language, food and celebrations</b>, along with their beliefs and dress.",
   'g4hg-cov-diversity-12': "Listening to what others have lived through is how we <b>learn and show respect</b> at the same time.",
 };
+const G4HG_LEARN = {
+  'g4hg-cov-change-1': '<b>Change</b> in history means something is different now from how it was before — a new road where a footpath used to be, or a modern shop where an old house once stood. Historians compare evidence from the past (old photographs, maps, buildings) with the present to identify what has changed.',
+  'g4hg-cov-change-2': '<b>Continuity</b> means something has stayed the same over time. A temple that has stood in the same place for generations is an example of continuity. Historians look for both change AND continuity when studying how a place has developed.',
+  'g4hg-cov-festivals-0': '<b>Divali</b> (also spelled Diwali) is the Hindu festival of lights, usually celebrated in October or November. Families light oil lamps and candles to symbolise the victory of light over darkness and good over evil. It is one of the most widely celebrated festivals in Mauritius.',
+  'g4hg-cov-festivals-1': '<b>Eid ul-Fitr</b> is celebrated by Muslims at the end of Ramadan, the holy month of fasting. Families attend prayers, share a special meal, give to charity (Zakat al-Fitr), and exchange greetings. In Mauritius, it is a public holiday observed by the whole country.',
+  'g4hg-cov-religions-8': '<b>Religious diversity</b> means that a country or community is home to people of many different faiths. Mauritius is one of the most religiously diverse nations in the world, with significant Hindu, Muslim, Christian and Buddhist communities living side by side, sharing the same public spaces and national celebrations.',
+  'g4hg-cov-diversity-0': '<b>Cultural diversity</b> means a community includes people from different backgrounds who have different customs, languages, religions and traditions. In Mauritius, people of African, Indian, Chinese and European heritage have all contributed to a rich, shared national culture that is unique in the world.',
+  'g4hg-cov-lang-4': 'Being <b>multilingual</b> — able to speak more than one language — is a great advantage. It allows you to communicate with more people, understand different cultures, and access more opportunities in education and work. Many Mauritians speak Creole, French and English, and sometimes a heritage language as well.',
+};
   const add = (id, chapterId, subsection, question, options, answer, hint, explanation) =>
-    STATIC_QUESTIONS.push(makeMCQ({ id, chapterId, subsection, difficulty: 2, question, options, answer, hint, explanation: G4HG_EXPL[id] || explanation }));
+    STATIC_QUESTIONS.push(makeMCQ({ id, chapterId, subsection, difficulty: 2, question, options, answer, hint, explanation: G4HG_EXPL[id] || explanation, learnMore: G4HG_LEARN[id] || '' }));
   const rows = (prefix, chapterId, subsection, data, options, hint, explanation) => data.forEach(([question, answer], i) =>
     add(`g4hg-cov-${prefix}-${i}`, chapterId, subsection, question, options, answer, hint, explanation(answer)));
 

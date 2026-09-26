@@ -6,9 +6,16 @@
 //   the importer keys on them and never deletes, so rows must not be
 //   reordered or removed.
 (function () {
+  const G5SMIN_LEARN = {
+    'g5s-min5-photo-0': '<b>Photosynthesis</b> is the process by which green plants make their own food. Ingredients: sunlight + water + carbon dioxide → food (glucose) + oxygen. It happens mainly in the <b>leaves</b>, which are broad and flat to catch as much sunlight as possible.',
+    'g5s-min5-photo-1': 'During <b>photosynthesis</b> a plant takes in <i>carbon dioxide</i> and releases <i>oxygen</i>. This is the opposite of what animals do when they breathe. Green plants are the source of all the oxygen in the atmosphere that animals depend on.',
+    'g5s-min5-cycle-0': 'The <b>water cycle</b> is driven by the <i>Sun</i>. Heat from the Sun causes <i>evaporation</i> (water turns to vapour). Vapour rises, cools and <i>condenses</i> into clouds. Clouds release water as <i>precipitation</i> (rain, snow). Water returns to the sea and the cycle repeats.',
+    'g5s-min5-diagram-1': '<b>Condensation</b> happens when water vapour cools down and changes back into liquid water droplets. It is the opposite of evaporation. You see condensation every day: the mist on a cold glass, or steam turning to droplets on a window.',
+  };
   const add = (id, c, s, q, o, a, h, e) => STATIC_QUESTIONS.push(makeMCQ({
     id, chapterId: c, subsection: s, difficulty: 2, question: q,
-    options: o, answer: a, hint: h, explanation: e
+    options: o, answer: a, hint: h, explanation: e,
+    learnMore: G5SMIN_LEARN[id] || ''
   }));
   const rows = (p, c, s, d, o, h) => d.forEach(([q, a, e], i) =>
     add(`g5s-min5-${p}-${i}`, c, s, q, o, a, h, e));
