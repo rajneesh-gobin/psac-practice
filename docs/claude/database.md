@@ -293,6 +293,29 @@ deployed yet; until it is, nothing calls these.
 - ⚠ `proacl` was read on production after applying: both functions show
   `authenticated` + `service_role` and **no anon, no `=X`**.
 
+### Activity trail (2026-09-26, APPLIED)
+`migrations/20260926_activity_log.sql` — `public.activity_events` plus
+`activity_events_stamp()` (BEFORE INSERT) and `prune_activity_events(keep, days)` (defaults **500 per actor, 30 days**).
+Feature notes: [`features.md`](features.md#admin--activity--the-trail-2026-09-26).
+- ⚠ **`family_id` and `created_at` are TRIGGER-derived, never client-supplied** —
+  a client that could write either could file its rows under another family or
+  date them past every prune.
+- ⚠ **The default Supabase grants are the trap, not the policies.** Measured
+  immediately after `CREATE TABLE`: `anon` held SELECT, INSERT, UPDATE, DELETE,
+  TRUNCATE, REFERENCES and TRIGGER. RLS made it harmless, but an audit log that
+  its own writers can edit is one widened policy from being worthless — the
+  migration REVOKEs them, leaving `anon` with INSERT alone.
+- ⚠ **Children are `anon` + `x-student-token`**, so the INSERT policy is
+  `TO anon, authenticated`; an `authenticated`-only policy is dead for every child.
+- ⚠ **The client must not `.insert().select()`** — RETURNING is checked against
+  the admin-only SELECT policy (rule 2 above). Verified in production: a forged
+  row answers `42501`, a legitimate child row `201`.
+- ⚠ **No `pg_cron` on this database** (installed: pg_stat_statements, pgcrypto,
+  plpgsql, supabase_vault, uuid-ossp), so retention runs from the Worker's 03:00
+  trigger — `workers/api/activity-prune.js`. Two jobs now share that cron string
+  and are dispatched with `Promise.allSettled`; **adding a fourth cron string
+  rewrites the whole schedules PUT, which is atomic.**
+
 ### Other database facts worth keeping
 - ⚠ **`public.profiles` has NO email column** — the address is in `auth.users`,
   which the browser cannot read and should not, so the admin members list could

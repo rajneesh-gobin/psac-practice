@@ -12,8 +12,17 @@ const ROOT = path.resolve(__dirname, '..');
 
 let SRC = fs.readFileSync(path.join(ROOT, 'engine/auth.js'), 'utf8').replace(/^﻿/, '');
 // Do not start the app; and reach the closure the ladder lives in.
-SRC = SRC.replace(/\r/g, '').replace(/\nAuth\.init\(\);\s*$/, '\n');
-if (/Auth\.init\(\);/.test(SRC)) throw new Error('Auth.init() still runs - the test would boot the app');
+// ⚠⚠ MATCH THE CALL, NOT ITS PUNCTUATION. This stripped the literal
+//   `Auth.init();` and then guarded on the same literal — so when auth.js grew
+//   a handler and became `Auth.init().catch(function () {…})`, the strip found
+//   nothing to remove AND the guard written to catch exactly that waved it
+//   through. Every case below then ran against a fully booted module: init()
+//   calls getSession() itself, which ate the scripted responses, and the ladder
+//   under test was answered with "no scripted response" errors its own
+//   try/catch swallowed. Four assertions failed and the fifth crashed on a null
+//   stash — none of it about the code they were written to check.
+SRC = SRC.replace(/\r/g, '').replace(/\n\s*Auth\.init\(\)[\s\S]*$/, '\n');
+if (/^\s*Auth\.init\(\)/m.test(SRC)) throw new Error('Auth.init() still runs - the test would boot the app');
 const EXPORT_ANCHOR = '  return {\n    init,';
 if (SRC.indexOf(EXPORT_ANCHOR) === -1) throw new Error('export anchor moved');
 SRC = SRC.replace(EXPORT_ANCHOR,
@@ -158,7 +167,19 @@ function check(name, ok, detail) {
     await A.enterParentMode();
     check('saved child opens remembered parent PIN recovery', log.pinOpened === 1);
     check('opening parent PIN does not navigate or clear the child', log.screens.length === 0 && log.clearedStudent === 0);
-    check('remembered parent identity does not restore access before PIN verification', sb.calls.length === 0 && log.fetches.length === 0);
+    // ⚠⚠ A LOCAL getSession() IS ALLOWED HERE, AND IS ITSELF A SECURITY
+    //   MEASURE. This demanded sb.calls.length === 0, which forbade
+    //   _refreshPinSessionUid() — the read that works out WHICH account this
+    //   browser holds before either PIN copy is touched, because both are
+    //   scoped by uid and one account deciding whether ANOTHER has a PIN is
+    //   the cross-account leak that scoping closed. getSession() reads what
+    //   the client already holds; it restores nothing and touches no network.
+    // ⚠ The claim that matters is that nothing is RESTORED before the PIN is
+    //   verified: no refresh, no sign-in call, no session installed. Banning
+    //   the local identity read instead made this fail for a fix.
+    check('remembered parent identity does not restore access before PIN verification',
+      sb.calls.every(c => c === 'getSession') && log.fetches.length === 0,
+      'sb=' + JSON.stringify(sb.calls) + ' fetches=' + log.fetches.length);
   }
   // 1. A live session is answered straight away - no needless network refresh,
   //    and the stash is refreshed on the way past.

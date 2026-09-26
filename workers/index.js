@@ -9,6 +9,7 @@ import assignmentSubmitHandler   from './api/assignment-submit.js';
 import assignmentCleanupHandler  from './api/assignment-cleanup.js';
 import classroomMaterialsHandler from './api/classroom-materials.js';
 import classroomPurgeHandler     from './api/classroom-purge.js';
+import activityPruneHandler      from './api/activity-prune.js';
 import contactMessageHandler     from './api/contact-message.js';
 import createUserHandler         from './api/create-user.js';
 import guestDeviceHandler        from './api/guest-device.js';
@@ -41,6 +42,7 @@ import emailPrefsHandler           from './api/email-prefs.js';
 import { scheduled as cleanupScheduled } from './api/assignment-cleanup.js';
 import { scheduled as purgeScheduled    } from './api/classroom-purge.js';
 import { scheduled as digestScheduled   } from './api/weekly-digest.js';
+import { scheduled as activityScheduled } from './api/activity-prune.js';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin':  '*',
@@ -120,6 +122,7 @@ const ROUTES = makeRoutes({
   '/api/assignment-cleanup':      assignmentCleanupHandler,
   '/api/classroom-materials':     classroomMaterialsHandler,
   '/api/classroom-purge':         classroomPurgeHandler,
+  '/api/activity-prune':          activityPruneHandler,
   '/api/contact-message':         contactMessageHandler,
   '/api/create-user':             createUserHandler,
   '/api/guest-device':            guestDeviceHandler,
@@ -209,7 +212,17 @@ export default {
   async scheduled(event, env, ctx) {
     const cron = event.cron;
     if (cron === '17 2 * * *') await cleanupScheduled(event, env, ctx);
-    else if (cron === '0 3 * * *') await purgeScheduled(event, env, ctx);
+    // ⚠ TWO JOBS ON ONE TRIGGER, and the second must not be lost if the first
+    //   throws - adding a fourth cron string would rewrite the whole schedules
+    //   PUT, which is atomic, and one rejected string leaves the Worker with NO
+    //   triggers at all (see the note in wrangler.toml).
+    else if (cron === '0 3 * * *') {
+      const jobs = await Promise.allSettled([
+        purgeScheduled(event, env, ctx),
+        activityScheduled(event, env, ctx),
+      ]);
+      jobs.forEach((j, i) => { if (j.status === 'rejected') console.error('cron 0 3 job', i, j.reason); });
+    }
     // ⚠ Must match wrangler.toml EXACTLY - dispatch is a string compare, and
     //   Cloudflare will not accept '0 9 * * 0' for Sunday (it wants SUN or 7).
     else if (cron === '0 9 * * SUN') await digestScheduled(event, env, ctx);

@@ -16,10 +16,19 @@ const { pathToFileURL } = require('node:url');
 
 const ROOT = path.resolve(__dirname, '..');
 const DBG = Number(process.env.LAB_DBG_PORT) || 9431;
-const CHROME_PATH = process.env.CHROME_PATH ||
-  'C:/Users/rajneesh.gobin/AppData/Local/Temp/claude/D--git-repo-psac-practice/c232e26e-5526-4712-885f-5707afb8a26d/scratchpad/chrome/win64-153.0.8010.36/chrome-win64/chrome.exe';
+// ⚠⚠ THE FALLBACK IS THE INSTALLED CHROME, and it has to be something that
+//   exists on a machine that is not the one this file was written on. This
+//   defaulted to a Chrome for Testing binary under a SESSION-SCOPED scratch
+//   directory — a path containing a UUID that changes every session, and in
+//   one case a different Windows user entirely — so the suite could not run
+//   for anybody, including the author on their next run. Nine suites were
+//   dark for this reason alone. The instruction it carried ("never the
+//   installed Chrome") is obsolete: re-measured, the installed Chrome drives
+//   these through CDP fine, which is how the other thirty-odd browser suites
+//   here have always run. CHROME_PATH still overrides for a pinned build.
+const CHROME_PATH = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const SCRATCH = path.join(
-  'C:/Users/DEEPMA~1.GOB/AppData/Local/Temp/claude/C--Users-deepmala-gobin-OneDrive---Accenture-Desktop-shanvi/71266d30-7da5-4932-b2a8-580b55215f31/scratchpad',
+  require('os').tmpdir(),
   'energy');
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const sleep = ms => new Promise(r => setTimeout(r, ms));

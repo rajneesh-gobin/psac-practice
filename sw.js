@@ -8,8 +8,8 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v404';
-const DATA_VERSION  = 'data-v13';
+const SHELL_VERSION = 'shell-v408';
+const DATA_VERSION  = 'data-v14';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
 
@@ -68,6 +68,7 @@ const SHELL_FILES = [
   '/engine/store.js',
   '/engine/shop.js',
   '/engine/profile_install.js',
+  '/engine/activity.js',
   '/engine/supabase.js',
   '/engine/question_loader.js',
   '/engine/interactive_map.js',
@@ -302,12 +303,30 @@ async function safePut(cache, request, response) {
   try { await cache.put(request, response); } catch(_) {}
 }
 
+// ⚠⚠ A CACHED COPY IS NOT TRUSTED BY ITS URL ALONE, AND NEITHER IS A FRESH ONE.
+//   A .js request answered with the HTML shell is a 200, so response.ok was
+//   true and safePut stored it. Served back ahead of the network it throws
+//   "Unexpected token '<'" at line 1 on EVERY load, and the app boots anyway
+//   with SUBJECT_PACKS empty, so the hub blames the content: "No subjects
+//   available for Grade 5 yet". Measured on a real laptop 2026-09-26.
+// ⚠ BOTH STRATEGIES NEED IT, which is why it lives here and not in a closure.
+//   staleWhileRevalidate covers /subjects/. cacheFirstWithNetwork covers the
+//   shell AND psac-static-assets - and that cache is UNVERSIONED, so nothing
+//   ever deletes it and a poisoned entry there outlives every deploy. /assets/
+//   really does carry scripts (vendor/qrcode-1.5.3.mjs, demo/shelf.js).
+// ⚠ .mjs TOO. /\.js$/ does not match "qrcode-1.5.3.mjs" - the dot is not there.
+function typeOk(request, response) {
+  if (!response) return null;
+  if (!/\.m?js$/.test(new URL(request.url).pathname)) return response;
+  return /javascript|ecmascript/.test(response.headers.get('content-type') || '') ? response : null;
+}
+
 async function cacheFirstWithNetwork(request, cacheName) {
-  const cached = await caches.match(request);
+  const cached = typeOk(request, await caches.match(request));
   if (cached) return cached;
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (response.ok && typeOk(request, response)) {
       const cache = await caches.open(cacheName);
       await safePut(cache, request, response.clone());
     }
@@ -319,9 +338,34 @@ async function cacheFirstWithNetwork(request, cacheName) {
 
 async function staleWhileRevalidate(request, cacheName) {
   const cache  = await caches.open(cacheName);
-  const cached = await cache.match(request);
+  // ⚠ FALLS BACK TO EVERY CACHE, not just this one. `install` precaches
+  //   /subjects/_index.js into SHELL_CACHE, while the /subjects/ branch reads
+  //   DATA_CACHE - so on a device that had never completed one successful
+  //   fetch of that file, the precached copy was never once consulted and the
+  //   request went to the network on every load. One failure there (a new
+  //   laptop on a flaky first load, a captive portal, a proxy) leaves
+  //   SUBJECT_PACKS EMPTY and the practice hub says "No subjects available for
+  //   Grade 5 yet" - a content message for a network failure, on the fallback
+  //   grade rather than the child's own. Reproduced in headless Chrome against
+  //   production by blocking that one URL: the whole app still boots, with
+  //   every subject gone and no error anywhere.
+  // ⚠⚠ A CACHED COPY IS NOT TRUSTED BY ITS URL ALONE. A .js request answered
+  //   with the HTML shell is a 200, so response.ok was true and safePut stored
+  //   it - and DATA_CACHE survives every SHELL_VERSION bump by design, so the
+  //   poisoned entry is permanent. `cached ||` below returns it before the
+  //   network copy is ever consulted, so the page throws
+  //   "Unexpected token '<'" at line 1 on EVERY load, SUBJECT_PACKS stays
+  //   empty, and the hub blames the content: "No subjects available for
+  //   Grade 5 yet". Measured on a laptop still showing it after shell-v406
+  //   had installed and a hard reload - Ctrl+Shift+R bypasses the HTTP cache,
+  //   not Cache Storage.
+  // ⚠ THE caches.match() FALLBACK ABOVE WIDENED THE BLAST RADIUS: it reads
+  //   every cache, including the unversioned psac-static-assets, which nothing
+  //   ever deletes. Bumping DATA_VERSION alone would not have been enough.
+  const cached = typeOk(request, await cache.match(request)) ||
+                 typeOk(request, await caches.match(request));
   const fetchPromise = fetch(request).then(response => {
-    if (response.ok) safePut(cache, request, response.clone());
+    if (response.ok && typeOk(request, response)) safePut(cache, request, response.clone());
     return response;
   }).catch(() => null);
   return cached || await fetchPromise || new Response('Offline.', { status: 503 });

@@ -43,13 +43,19 @@ const quit = code => {
 process.on('SIGINT', () => quit(130));
 
 (async () => {
-  if (!process.env.CHROME_PATH) {
-    console.log('Set CHROME_PATH to Chrome for Testing (never the installed Chrome).');
-    process.exit(1);
-  }
+// ⚠⚠ THE FALLBACK IS THE INSTALLED CHROME, and it has to be something that
+//   exists on a machine that is not the one this file was written on. This
+//   defaulted to a Chrome for Testing binary under a SESSION-SCOPED scratch
+//   directory — a path containing a UUID that changes every session, and in
+//   one case a different Windows user entirely — so the suite could not run
+//   for anybody, including the author on their next run. Nine suites were
+//   dark for this reason alone. The instruction it carried ("never the
+//   installed Chrome") is obsolete: re-measured, the installed Chrome drives
+//   these through CDP fine, which is how the other thirty-odd browser suites
+//   here have always run. CHROME_PATH still overrides for a pinned build.
   const tmpBase = process.env.LAB_TMP || os.tmpdir();
   profile = fs.mkdtempSync(path.join(tmpBase, 'psac-labs-nutrition-'));
-  chrome = spawn(process.env.CHROME_PATH, [
+  chrome = spawn(process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe', [
     '--headless=new', '--remote-debugging-port=' + DBG,
     '--user-data-dir=' + profile,
     '--allow-file-access-from-files',

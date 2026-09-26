@@ -182,9 +182,45 @@ const PackLoader = (() => {
     );
   }
 
-  return { ensure, ensureGrade, isLoaded };
+  // ⚠ subjects/_index.js is ONE request that EVERY subject depends on, and its
+  //   failure is silent: the <script> tag in index.html has no onerror, so a
+  //   dropped load leaves SUBJECT_PACKS empty and the app boots looking
+  //   perfectly healthy with no content in it. Measured against production in
+  //   headless Chrome - block that single URL and the practice hub reports
+  //   "No subjects available for Grade 5 yet" on a grade the child may not even
+  //   be in, because GradeAccess.liveGrades() derives from the same empty array
+  //   and collapses the grade picker to the fallback 5.
+  let _indexRetry = null;
+  function ensureIndex() {
+    if (SUBJECT_PACKS.length) return Promise.resolve(true);
+    if (_indexRetry) return _indexRetry;
+    _indexRetry = _inject('subjects/_index.js')
+      .then(() => SUBJECT_PACKS.length > 0)
+      .catch(() => false)
+      // Drop the cached promise on failure, exactly as ensure() does, so a
+      // later attempt (the hub's Try again button) is not answered from it.
+      .then(ok => { if (!ok) _indexRetry = null; return ok; });
+    return _indexRetry;
+  }
+
+  return { ensure, ensureGrade, ensureIndex, isLoaded };
 })();
 if (typeof window !== 'undefined') window.PackLoader = PackLoader;
+
+// One automatic retry once the page is up - the <script> tag was the first
+// attempt. Repaints what is on screen if it works, because the grade pickers
+// and the practice hub were both painted from the empty array.
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', () => {
+    if (SUBJECT_PACKS.length) return;
+    PackLoader.ensureIndex().then(ok => {
+      if (!ok) return;
+      if (typeof _populateGradeSelects === 'function') _populateGradeSelects();
+      const hub = document.getElementById('screen-practice-hub');
+      if (typeof PracticeHub !== 'undefined' && hub && !hub.classList.contains('hidden')) PracticeHub.repaint();
+    });
+  });
+}
 
 // ── ROLE MODULES — the admin, teacher and forum code, fetched on demand ──────
 //

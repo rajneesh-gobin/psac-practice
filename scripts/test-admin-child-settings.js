@@ -26,8 +26,18 @@ let checks = 0, failed = 0;
 const ok = (label, cond, detail) => { if (cond) { checks++; console.log('OK   ' + label); } else { failed++; console.log('FAIL ' + label + (detail !== undefined ? ' -- ' + JSON.stringify(detail) : '')); } };
 
 (async () => {
-  if (!process.env.CHROME_PATH) { console.log('Set CHROME_PATH to a Chrome for Testing binary (the installed Chrome cannot be driven headless here).'); process.exit(2); }
-  const chrome = spawn(process.env.CHROME_PATH, [
+// ⚠⚠ THE FALLBACK IS THE INSTALLED CHROME, and it has to be something that
+//   exists on a machine that is not the one this file was written on. This
+//   defaulted to a Chrome for Testing binary under a SESSION-SCOPED scratch
+//   directory — a path containing a UUID that changes every session, and in
+//   one case a different Windows user entirely — so the suite could not run
+//   for anybody, including the author on their next run. Nine suites were
+//   dark for this reason alone. The instruction it carried ("never the
+//   installed Chrome") is obsolete: re-measured, the installed Chrome drives
+//   these through CDP fine, which is how the other thirty-odd browser suites
+//   here have always run. CHROME_PATH still overrides for a pinned build.
+  const CHROME = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+  const chrome = spawn(CHROME, [
     '--headless=new', '--remote-debugging-port=' + DBG,
     '--user-data-dir=' + fs.mkdtempSync(path.join(os.tmpdir(), 'psac-childsettings-')),
     '--allow-file-access-from-files', '--no-first-run', '--hide-scrollbars', 'about:blank',

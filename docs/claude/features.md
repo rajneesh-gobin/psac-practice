@@ -2481,3 +2481,76 @@ assigning never learns that.
   (both applied). Tests: `test-assign-a-paper.js` (Store),
   `test-assign-a-paper-ui.js` (static), `test-assign-a-paper-browser.js` (real
   Chrome, 36 checks).
+
+---
+
+## Admin › Activity — the trail (2026-09-26)
+
+**Asked for from the app**: *"know if parents actually switched to kid mode (from
+which account), kid clicked chapter practice, and from there didn't click
+anything… where the kids and parents spend most time."*
+
+| Piece | File |
+|---|---|
+| The recorder | `engine/activity.js` (`Activity.log/screen/endScreen/flush/signOut`) |
+| The table, RLS and the prune | `migrations/20260926_activity_log.sql` — **APPLIED to production 2026-09-26** |
+| The screen | Admin › 👣 Activity — `#admin-tab-activity`, `AdminPanel.loadActivity()` |
+| Retention | `workers/api/activity-prune.js`, on the existing **03:00** cron — **500 per actor + 30-day TTL** |
+| Tests | `scripts/test-activity-log.js` (18) · `scripts/test-admin-activity.js` (10) |
+
+**Filters on the tab**: a name search against the `students`/`profiles` TABLES
+(not the rows on screen - a list built from those can only offer people who were
+already active), a period picker in **HOURS** (hour / 5 hours / 24 hours / 3 days /
+7 days / 30 days / all), and a row cap.
+- ⚠ **One person means `actor_id` OR `as_student`.** Kid-mode rows are filed under
+  the PARENT, so the obvious `eq(actor_id, child)` hides the half of a child's
+  trail an adult drove - the half this was asked for.
+- ⚠ **The period is HOURS, not days.** It was whole days, and `parseInt` turned any
+  sub-day window into `0` - which does not mean "an hour", it means NO FILTER: the
+  widest possible answer served as the narrowest.
+- ⚠ **Every id is translated for display** (screen ids, chapter ids, pack ids, and
+  the student id a `switch_to_kid` carries); an untranslated id renders as itself,
+  never blank.
+
+**What is recorded** — `signin_student`, `switch_to_kid`, `signout`, `screen`,
+`screen_end`, `subject_open`, `chapter_open`, `page_hide`. Hooked in four places
+only: `showScreen()`, `activateSubjectPack()`, `startChapterDirect()` and
+`_loginStudentRow()`/`logout()` in auth.js. Answers are counted off the existing
+`Events.emit('answer')` bus, so nothing in the question path changed.
+
+- ⚠ **TIME IS A GAP, NOT A COLUMN.** A screen writes an arrival and a departure;
+  `screen_end.meta.ms` is measured with **`performance.now()`, which is
+  monotonic** — a device clock is never trusted (same rule as `_muDayKey`).
+  `created_at` is stamped by a **BEFORE INSERT trigger**, as is `family_id`.
+- ⚠ **AN ARRIVAL WITH NO DEPARTURE IS THE ANSWER** — the app was closed on that
+  screen. The panel marks it *"✗ closed here"*. The **newest** row for an actor is
+  never marked: they may still be on it.
+- ⚠ **WHO AND ON WHOSE BEHALF ARE TWO COLUMNS.** `actor_id` is the person holding
+  the device, `as_student` the child on screen. A parent in kid mode is
+  `actor_kind='parent'` **with** `as_student` — and the only thing separating that
+  from a child's own sign-in is that **auth.js mints no `x-student-token` for a
+  parent preview**.
+- ⚠ **EVERY ROW CARRIES EVERY KEY, `null` included.** Measured against production:
+  PostgREST rejects a batch whose objects have differing keys — **PGRST102, "All
+  object keys must match", 400, the WHOLE batch**. activity.js swallows its errors
+  by design, so the only symptom would be a trail that quietly stopped.
+- ⚠ **The insert must never `.select()`** — RETURNING is checked against the
+  admin-only SELECT policy (`database.md` rule 2).
+- ⚠ **Retention is PER ACTOR (500, raised from 200 on 2026-09-26) plus a 30-day
+  TTL, not a global "last 100".**
+  One child in one evening writes 30-60 rows, so a global cap is spent on whoever
+  used the app last and every other family shows an empty trail. ⚠ **The cap and
+  the TTL are two limits and the SMALLER one wins**: at 30-60 rows an evening,
+  200 only reached back a few days for a heavy user, so the panel's "last 30
+  days" was bounded by the cap rather than by the age limit it advertises. 500
+  rows is ~75 KB per person. There is **no
+  pg_cron on this database** (measured), which is why the Worker runs it.
+- ⚠ **Admin-only at the DATABASE**: one SELECT policy, `is_admin()`. `anon` has
+  INSERT and nothing else — the default Supabase grants handed it SELECT, UPDATE,
+  DELETE and TRUNCATE on creation and the migration revokes them.
+
+**Verified against production 2026-09-26**, not reasoned: a forged row (a child
+claiming another child's id) → `42501`; a child reading the log → refused; a real
+child session inserting its own rows → `201` with `family_id` stamped by the
+trigger; `prune_activity_events()` → `{ok:true}`. Every test row was deleted and
+the temporary session revoked (`select count(*) = 0`).

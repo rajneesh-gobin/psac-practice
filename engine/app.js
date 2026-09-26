@@ -405,6 +405,9 @@ function activateSubjectPack(packId, { allowComingSoon = false } = {}) {
 
   ACTIVE_PACK    = pack;
   SELECTED_GRADE = pack.grade;
+  // Which subject was opened, and in which grade - the one thing a screen id
+  // cannot carry, because every subject shares #screen-subject-hub.
+  if (typeof Activity !== 'undefined') Activity.log('subject_open', pack.id, { grade: pack.grade || null });
   // Subject selection should survive a normal refresh. Scope it to the child
   // rather than the device, because families can switch between siblings here.
   try {
@@ -3059,6 +3062,11 @@ function showScreen(id) {
     if (isForward)      sc.classList.add('screen-enter-right');
     else if (isBack)    sc.classList.add('screen-enter-left');
     S.currentScreen = id;
+    // ⚠ HERE, not at the top of showScreen(): every guard above this line can
+    //   turn the call around (a kid-only screen for a parent, an adult-only one
+    //   for a child, a plan gate, a parent-dashboard inline tab). Logging the
+    //   id that was ASKED FOR would record screens nobody was ever shown.
+    if (typeof Activity !== 'undefined') Activity.screen(id);
     // Authentication re-hydrates asynchronously after a full refresh. Keep the
     // user's last real workspace so that flow can return them there afterwards.
     // Entry/lock screens are deliberately excluded: restoring one of those can
@@ -5463,6 +5471,19 @@ function _renderExpiredBanner(slotId) {
     </div>`;
 }
 
+// ⚠⚠ "NEEDS PRACTICE" HAD NO CEILING, so it was simply the three WEAKEST
+//   chapters the child had touched — whatever their accuracy. A parent whose
+//   child is doing well read, in orange, under a heading that says needs
+//   practice: "Le Passé Composé 93% · Les Verbes - Présent 100%". Being told a
+//   chapter the child has never got wrong needs practice is not a cosmetic
+//   problem: it is the card telling the parent something false, and it makes
+//   every other orange chip on the screen worth less.
+// ⚠ 80 is NOT a new number. It is _repAccColour()'s own green boundary — the
+//   line this app already draws between "fine" and "watch this" everywhere it
+//   colours a percentage. A second, private threshold here would mean a chapter
+//   could print green in the report and orange on the card.
+const _PD_WEAK_BELOW = 80;
+
 async function renderParentDashboard() {
   const _el = id => document.getElementById(id);
   // Reset to the My Children panel on every open.
@@ -5495,6 +5516,7 @@ async function renderParentDashboard() {
   if (_el('pd-load-error-msg')) _el('pd-load-error-msg').textContent = loadError || '';
   if (_el('pd-no-children'))   _el('pd-no-children').classList.toggle('hidden', hasStudents || !!loadError);
   if (_el('pd-children-grid')) _el('pd-children-grid').classList.toggle('hidden', !hasStudents);
+  _el('pd-children-note')?.classList.toggle('hidden', !hasStudents);
   _el('pd-children-heading')?.classList.toggle('hidden', !hasStudents);
   _el('pd-weekly-details')?.classList.toggle('hidden', students.length < 2);
   if (_el('pd-detail-panel'))  _el('pd-detail-panel').classList.add('hidden');
@@ -5579,7 +5601,20 @@ async function renderParentDashboard() {
       const studiedToday = (todayData.a || 0) > 0;
       const lastDate  = st.lastDate ? new Date(st.lastDate) : null;
       const daysSince = lastDate ? Math.floor((Date.now() - lastDate.getTime()) / 86400000) : null;
-      const activityPill = studiedToday
+      // ⚠⚠ NEVER PRACTISED IS NOT THE SAME AS GONE QUIET, and the card used to
+      //   print the second when it meant the first. `lastDate` is written when
+      //   the child is ACTIVE, not when they answer something, so a child who
+      //   signed in once and never answered a question was labelled "⚠️ Last
+      //   active 15d ago" in alarm orange — under which sat 0 attempts today, 0
+      //   this week, 0 all time and five "Not started" subjects. Nine lines, one
+      //   fact, and the fact was mis-stated: nothing has lapsed, nothing has
+      //   started. A parent cannot act on a warning about a thing that never
+      //   began; they need the username and the PIN, which is what the card now
+      //   points at.
+      const neverPractised = !(st.totalAttempted > 0);
+      const activityPill = neverPractised
+        ? '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">🌱 Not started yet</span>'
+        : studiedToday
         ? '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">✅ Studied today</span>'
         : (daysSince !== null && daysSince > 3)
           ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">⚠️ Last active ${daysSince}d ago</span>`
@@ -5596,6 +5631,7 @@ async function renderParentDashboard() {
           .map(([id, c]) => ({ name: chMap[id], att: c.attempted || 0, cor: c.correct || 0 }))
           .filter(c => c.name && c.att >= 10)
           .map(c => ({ ...c, acc: Math.round(c.cor / c.att * 100) }))
+          .filter(c => c.acc < _PD_WEAK_BELOW)
           .sort((a, b) => a.acc - b.acc)
           .slice(0, 3);
       })();
@@ -5605,15 +5641,41 @@ async function renderParentDashboard() {
         dueMistakes ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">🩹 ${dueMistakes} mistake${dueMistakes > 1 ? 's' : ''} to fix</span>` : '',
         labsDone ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">🔬 ${labsDone} experiment${labsDone > 1 ? 's' : ''} done</span>` : '',
       ].filter(Boolean).join('');
-      const weakHtml = weakChapters.length ? `<div class="mt-2 mb-1"><p class="text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1">Needs practice:</p><div class="flex flex-wrap gap-1">${weakChapters.map(c => `<span class="text-xs px-2 py-0.5 rounded-full bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700/40 text-orange-700 dark:text-orange-300">${_profEsc(c.name)} ${c.acc}%</span>`).join('')}</div></div>` : '';
+      // ⚠ The count is in the title, not the chip. "10%" with no denominator is
+      //   unreadable — it is one thing off 20 questions and quite another off
+      //   10 — but four numbers in a chip on a three-column grid wraps to two
+      //   lines each. The ≥10-attempt floor above is what keeps the visible
+      //   figure honest; the title carries the working.
+      const weakHtml = weakChapters.length ? `<div class="pd-weak mt-2 mb-1"><p class="text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1">Needs practice:</p><div class="flex flex-wrap gap-1">${weakChapters.map(c => `<span class="text-xs px-2 py-0.5 rounded-full bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700/40 text-orange-700 dark:text-orange-300 pd-weak-chip" title="${_attr(`${c.cor} right out of ${c.att} answered`)}">${_profEsc(c.name)} ${c.acc}%</span>`).join('')}</div></div>` : '';
+
+      // ⚠⚠ A CHILD WHO HAS NEVER ANSWERED ANYTHING GETS ONE LINE, NOT NINE.
+      //   The card used to spell the same zero out five times over — today,
+      //   this week, all time, then a "Not started" chip per subject — and then
+      //   closed with "Open to choose a short practice task for today", which
+      //   is not the missing step. The missing step is that the child has never
+      //   signed in, so the card hands over the two things that fix that.
+      const startHtml = `
+        <p class="text-sm text-gray-700 dark:text-gray-200 my-3">Hasn't answered a question yet.</p>
+        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">They sign in with <strong>@${_profEsc(s.username || '?')}</strong> and their PIN. Open the card to set or reset it.</p>`;
+
+      // ⚠ NO SEPARATE "Today" BLOCK WHEN THERE IS NO TODAY. The pill above
+      //   already says "No activity yet today" / "Last active 15d ago", and the
+      //   block restated it word for word directly underneath — the two most
+      //   prominent lines on the card carrying one fact between them. It earns
+      //   its place only when there is something to report.
+      const todayHtml = todayData.a
+        ? `<div class="pd-child-today"><strong>Today</strong><p>${todayData.a} answer attempts · ${todayData.c || 0} correct</p></div>`
+        : '';
+
       statsEl.innerHTML = `
         <div class="flex items-center flex-wrap gap-2 mb-2">${activityPill}${extraPills}</div>
-        <div class="pd-child-today"><strong>Today</strong><p>${todayData.a ? `${todayData.a} answer attempts · ${todayData.c || 0} correct` : 'No practice recorded today yet.'}</p></div>
+        ${neverPractised ? startHtml : `
+        ${todayHtml}
         <p class="text-sm text-gray-700 dark:text-gray-200 my-3"><strong>Last 7 days:</strong> ${week.a} answer attempts · ${week.days}/7 days practised${week.a ? ` · ${week.c} correct` : ''}</p>
-        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">All time: ${st.totalAttempted || 0} answer attempts${st.totalAttempted ? ` · ${st.totalCorrect || 0} correct` : ''}. Repeats count as attempts, not completed work.</p>
+        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">All time: ${st.totalAttempted || 0} answer attempts · ${st.totalCorrect || 0} correct</p>
         ${weakHtml}
-        ${chips ? `<div class="pd-child-subjects"><p class="text-xs font-semibold mb-2">Grade ${_profEsc(String(s.grade || '?'))} subjects · all-time attempts</p><div class="flex flex-wrap gap-2">${chips}</div></div>` : ''}
-        <p class="pd-child-next">${studiedToday ? 'See today\'s work and choose what comes next.' : 'Open to choose a short practice task for today.'}</p>
+        ${chips ? `<div class="pd-child-subjects"><p class="text-xs font-semibold mb-2">Grade ${_profEsc(String(s.grade || '?'))} subjects · all-time attempts</p><div class="flex flex-wrap gap-2">${chips}</div></div>` : ''}`}
+        <p class="pd-child-next">${neverPractised ? 'Open to get them started.' : studiedToday ? 'See today\'s work and choose what comes next.' : 'Open to choose a short practice task for today.'}</p>
         <span class="pd-child-open">View progress &amp; manage homework →</span>`;
     })(progressById[s.id]);
   }
@@ -5635,6 +5697,10 @@ const _FAMILY_MIN_CHILDREN = 2;
 // child card's own "⚠️ Last active Nd ago" threshold so the two never disagree
 // on the same screen.
 const _FAMILY_QUIET_DAYS = 3;
+// Set the first time the family report is auto-opened for an alert, and by the
+// parent collapsing it. Either way it means "they have seen it", and it is
+// deliberately not reset per render - see _renderFamilyOverview().
+let _famReportSeen = false;
 
 function _famRow(s, prog) {
   const daily = prog.daily || {};
@@ -5738,6 +5804,42 @@ function _renderFamilyOverview(students, progressById) {
   const alerts = quiet.map(r => r.quietFor === null
     ? `${r.name} has not practised in a while`
     : `${r.name} - nothing for ${r.quietFor} day${r.quietFor > 1 ? 's' : ''}`);
+
+  // ⚠⚠ THE SUMMARY HAS TO SAY SOMETHING WHILE SHUT. A <details> is a promise
+  //   that what is inside can wait, and "Family weekly report - trends and
+  //   activity" makes that promise about a block whose most urgent contents are
+  //   "Child2 - nothing for 10 days". The line a parent sees WITHOUT opening
+  //   anything now carries the count, so the warning does not depend on
+  //   curiosity. Opening it is still how you find out which child.
+  // ⚠⚠ IT COUNTS WHAT THE BODY ACTUALLY SHOWS. `alerts` is computed for every
+  //   family, but the body only renders it on the dated branch — with no
+  //   day-by-day history `quietFor` is null for everyone, and "quiet" then
+  //   means nothing more than "has ever answered something", which flagged a
+  //   child who practised today. Harmless while it was one branch nobody
+  //   reached; a lie the moment the count is hoisted into a line the parent
+  //   reads without opening anything. The summary and the panel say the same
+  //   thing or the summary says nothing.
+  const showAlerts = !noDated && alerts.length > 0;
+  const sumEl = document.getElementById('pd-weekly-summary');
+  if (sumEl) {
+    sumEl.innerHTML = showAlerts
+      ? `<span class="pd-weekly-alert">⚠️ ${alerts.length} child${alerts.length > 1 ? 'ren have' : ' has'} gone quiet</span>
+         <span class="pd-weekly-sub">- open the family report</span>`
+      : 'Family weekly report - trends and activity';
+  }
+  // ⚠ OPENED FOR AN ALERT, ONCE. Forcing it open on every render would reopen
+  //   it every time the parent came back from a child's dashboard, which is
+  //   renderParentDashboard()'s other caller — so collapsing it would never
+  //   stick and the panel would argue with the person reading it. The flag is
+  //   deliberately NOT reset per render (the usual rule for module-level UI
+  //   state): "the parent has already seen this and put it away" is a fact
+  //   about the session, not about this paint.
+  const detEl = document.getElementById('pd-weekly-details');
+  if (detEl && showAlerts && !_famReportSeen) { detEl.open = true; _famReportSeen = true; }
+  if (detEl && !detEl._famWired) {
+    detEl._famWired = true;
+    detEl.addEventListener('toggle', () => { if (!detEl.open) _famReportSeen = true; });
+  }
 
   const table = rows.map(r => {
     const accCol = r.now.acc == null ? '' : `color:${_repAccColour(r.now.acc)}`;
@@ -6738,6 +6840,7 @@ const PD = (() => {
 
     if (_el('pd-children-grid')) _el('pd-children-grid').classList.add('hidden');
     if (_el('pd-no-children'))   _el('pd-no-children').classList.add('hidden');
+    _el('pd-children-note')?.classList.add('hidden');
     const panel = _el('pd-detail-panel');
     if (panel) panel.classList.remove('hidden');
 
@@ -9354,6 +9457,17 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
     return;
   }
 
+  // ⚠ HERE, after every gate and after the one-shot reload above. Logged at the
+  //   top it would record chapters the child was refused (locked, plan-gated,
+  //   no questions) as chapters they practised, and the reload path re-enters
+  //   this function, so it would count the same open twice.
+  if (typeof Activity !== 'undefined') {
+    Activity.log('chapter_open', chapterId, {
+      pack: (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) ? ACTIVE_PACK.id : null,
+      diff: forceDiff || null,
+    });
+  }
+
   // null diff = mixed mode (random across all levels up to parent cap)
   const diff = forceDiff ? Math.min(forceDiff, maxDiff) : null;
 
@@ -11667,7 +11781,31 @@ const PracticeHub = (() => {
       .filter(p => Number(p.grade) === g && !p.comingSoon)
       .sort((a, b) => (a.subject || a.name || '').localeCompare(b.subject || b.name || ''));
     if (!packs.length) {
-      grid.innerHTML = `<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">No subjects available for Grade ${g} yet.</p>`;
+      // ⚠ TWO DIFFERENT FAILURES, and they were reported with one sentence.
+      //   An empty SUBJECT_PACKS means subjects/_index.js never loaded - a
+      //   network failure - and saying "no subjects for Grade 5" sends a parent
+      //   looking for content that is there, on a grade the child may not be
+      //   in: the picker beside it falls back to 5 from the same empty array.
+      const loaded = Object.values(SUBJECT_PACKS || {}).length > 0;
+      if (loaded) {
+        grid.innerHTML = `<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">No subjects available for Grade ${g} yet.</p>`;
+        return;
+      }
+      grid.innerHTML = `<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">
+        The subject list did not load - check your connection.<br>
+        <button id="prac-books-retry" class="ph-retry-btn" style="margin-top:.75rem">Try again</button></p>`;
+      const retry = document.getElementById('prac-books-retry');
+      if (retry) retry.addEventListener('click', () => {
+        retry.disabled = true;
+        retry.textContent = 'Loading…';
+        const done = (typeof PackLoader !== 'undefined')
+          ? PackLoader.ensureIndex() : Promise.resolve(false);
+        done.then(ok => {
+          if (ok) { repaint(); return; }
+          retry.disabled = false;
+          retry.textContent = 'Try again';
+        });
+      });
       return;
     }
     grid.innerHTML = packs.map(pack => {

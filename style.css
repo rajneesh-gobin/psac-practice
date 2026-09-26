@@ -2943,6 +2943,19 @@ body.has-bottom-nav main {
 }
 #screen-parent .pd-weekly-details > summary { color: rgba(240,236,220,.8); }
 
+/* ⚠ THE SUMMARY IS THE WARNING WHEN THE BLOCK IS SHUT. _renderFamilyOverview()
+   rewrites it to "⚠️ 2 children have gone quiet" whenever there is an alert
+   inside, so it has to read as an alert and not as a section label — the
+   colour is the whole point. The trailing "- open the family report" stays
+   quiet, because it is instruction, not news.
+   ⚠ Stated for BOTH grounds. The parent screen paints this block on a dark
+   chalkboard and the base rule above it is a light card; a single colour here
+   is unreadable on one of them. */
+.pd-weekly-details > summary .pd-weekly-alert { color: #b45309; font-weight: 800; }
+.pd-weekly-details > summary .pd-weekly-sub { font-weight: 600; opacity: .7; }
+.dark .pd-weekly-details > summary .pd-weekly-alert,
+#screen-parent .pd-weekly-details > summary .pd-weekly-alert { color: #fbbf24; }
+
 /* ── Child detail panel tabs ── */
 #screen-parent .pd-tabbar {
   background: rgba(240,236,220,.07) !important;
@@ -3318,6 +3331,15 @@ html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
   padding: .14rem .6rem; color: rgba(240,236,220,.8);
   border: 1px solid rgba(255,255,255,.12);
 }
+
+/* Shown only when subjects/_index.js did not load - the hub has no books to
+   paint and the child needs a way back, not a dead sentence. */
+.ph-retry-btn {
+  font-size: .8rem; padding: .4rem 1.1rem; border-radius: 999px;
+  background: rgba(0,0,0,.3); color: #f0ece8;
+  border: 1px solid rgba(255,255,255,.22); cursor: pointer;
+}
+.ph-retry-btn:disabled { opacity: .6; cursor: default; }
 
 /* ── Subject Hub ──────────────────────────────────────────────── */
 /* ⚠ Paper, for the same reason as #screen-practice-hub above: the chapter
@@ -12098,6 +12120,24 @@ html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-s
 .demo-deck-nav  { grid-area: nav }
 .demo-dots      { grid-area: dots }
 
+/* ⚠⚠ THE ARROWS HANG FROM THE TOP OF THE TRACK. THEY ARE NOT CENTRED IN IT.
+   The track's height is the OPEN slide's height (_fit() in engine/demo.js), so
+   `align-items: center` on the deck moved both arrows by half of every height
+   change — the button ran out from under the pointer that had just clicked it.
+   Measured at 820px wide: practise 1278px against the past-paper shelf 889px,
+   so ‹ › jumped 195px between two neighbouring slides; 72px at 1440 and 47px
+   at 1024. The panel's TOP edge is the only one that does not move when the
+   height changes, so the arrows are pinned to it and the jump is 0px at every
+   width.
+   ⚠ 13rem is NOT arbitrary: it puts the arrow's centre at 235px, the middle of
+   the SHORTEST measured pane (480px at 1440). So the arrow is where centring
+   used to put it on the shortest slide, and on every taller one it stays there
+   instead of sliding down. Re-measure it if a shorter slide is ever added —
+   below ~262px of pane the arrow would start to hang past the panel's bottom,
+   and the grid row (not the layout) is what grows to absorb it. */
+.demo-deck-prev,
+.demo-deck-next { align-self: start; margin-top: 13rem }
+
 .demo-track {
   grid-area: track;
   display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden;
@@ -12178,6 +12218,68 @@ html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-s
   84%  { box-shadow: 0 0 0 .6rem rgba(167,139,250,0); background: rgba(255,255,255,.12) }
 }
 @media (prefers-reduced-motion: reduce) { .demo-deck-arrow.is-hint { animation: none } }
+
+/* ══ "THIS IS NOT A SCREENSHOT" ═══════════════════════════════════════════
+   ⚠⚠ THE PANEL LOOKS FINISHED, SO IT READS AS A PICTURE OF THE PRODUCT. A
+   stranger meets a complete question card in a wooden frame and scrolls past
+   the one thing on this page built to be touched. engine/demo.js puts
+   .demo-poke on the OPEN pane and removes it for good at the first button
+   press inside the track; each rule below names that slide's FIRST real
+   control.
+   ⚠ ONE RULE PER SLIDE, and a slide may have none. #demo-slide-parent has no
+   rule on purpose — it is a sample report with nothing to press, and poking
+   something there would promise an interaction that does not exist.
+   ⚠⚠ A GROUP, NEVER ONE OPTION, wherever the control is an answer. Singling
+   out one of four moving choices reads as a tip toward that answer — so the
+   whole .demo-opts / .bq-opts / .qf-opts block moves as one piece and points
+   at nothing.
+   ⚠⚠ IT ANIMATES `translate`, NOT `transform`, and that is not a style
+   preference. .demo-btn:active is `transform: scale(.97)`, and an animation
+   beats a plain declaration — animating transform here would silently cancel
+   the press feedback on the two slides whose target IS a .demo-btn, which is
+   the same trap .demo-deck-arrow's comment already records. `translate` is an
+   independent property that composes with transform instead of replacing it.
+   Where it is unsupported the hint is simply absent; nothing else changes.
+   ⚠ 2.5px, and horizontal. It has to survive "nothing in the demo is cropped
+   at 360px" (4px of tolerance, measured mid-animation), so the movement stays
+   well inside the panel's own padding.
+   ⚠ QUIET FOR 4 OF EVERY 4.6 SECONDS, like the arrow hint: a control that
+   twitches continuously beside a question a child is reading is noise. */
+.demo-poke .demo-opts,
+.demo-poke .bq-opts,
+.demo-poke .qf-opts,
+.demo-poke .demo-cv-picks,
+.demo-poke .demo-lab-card .demo-btn-lab,
+.demo-poke .demo-mk-sheet.is-blank .demo-btn-ink,
+.demo-poke .demo-shelf-book.is-open {
+  animation: demoPoke 4.6s ease-in-out infinite;
+}
+@keyframes demoPoke {
+  0%, 84%, 100% { translate: 0 }
+  86% { translate: -2.5px }
+  89% { translate: 2.5px }
+  92% { translate: -1.5px }
+  95% { translate: 1.5px }
+  98% { translate: 0 }
+}
+/* ⚠ REDUCED MOTION STILL NEEDS THE ANSWER. Dropping to `animation: none` — the
+   arrow hint's approach — leaves exactly the visitors who cannot have movement
+   with no signal at all, on a page whose whole job is to say "press this". A
+   still ring says the same thing and never moves. */
+@media (prefers-reduced-motion: reduce) {
+  .demo-poke .demo-opts,
+  .demo-poke .bq-opts,
+  .demo-poke .qf-opts,
+  .demo-poke .demo-cv-picks,
+  .demo-poke .demo-lab-card .demo-btn-lab,
+  .demo-poke .demo-mk-sheet.is-blank .demo-btn-ink,
+  .demo-poke .demo-shelf-book.is-open {
+    animation: none;
+    outline: 2px dashed rgba(167,139,250,.75);
+    outline-offset: 3px;
+    border-radius: .5rem;
+  }
+}
 
 /* ⚠ Hidden on a phone, where the swipe IS the control and two 44px buttons
    beside a full-width panel would squeeze it to nothing. The dots carry the
@@ -12412,15 +12514,34 @@ html:not(.dark) :is(#screen-practice-hub, #screen-subject-hub, #screen-chapter-s
 }
 @media (max-width: 640px) { .demo-rail-ink .demo-rail-l { line-height: 1.5 } }
 
+/* ⚠ ONE COLUMN under 900px, and the areas below rely on source order there:
+   subject, then paper + chapters, then the sheet. */
 .demo-mk-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .8rem }
-@media (min-width: 900px) { .demo-mk-grid { grid-template-columns: 17.5rem minmax(0, 1fr); gap: 1rem } }
+/* ⚠⚠ THE SUBJECT ROW SPANS BOTH COLUMNS. In the left column it was three rows
+   of buttons (143px) inside a form that is what sets this slide's height —
+   measured at 1440px the slide was 905px, the tallest of the eight against a
+   765px median, and the sheet's stretch turned the same 143px into a 492px
+   blank void on the paper. Full width it is one 44px row. Named areas rather
+   than source order, because `subjects, form, sheet` is also the order the
+   single-column phone layout needs. */
+@media (min-width: 900px) {
+  .demo-mk-grid {
+    grid-template-columns: 17.5rem minmax(0, 1fr);
+    grid-template-areas: "subj subj" "form sheet";
+    gap: .8rem 1rem;
+  }
+  .demo-mk-pick       { grid-area: subj }
+  .demo-mk-form       { grid-area: form }
+  .demo-mk-sheet-wrap { grid-area: sheet }
+}
 
-.demo-mk-form { min-width: 0 }
+.demo-mk-pick, .demo-mk-form { min-width: 0 }
 .demo-mk-h {
   margin: .85rem 0 .4rem; font-size: .68rem; font-weight: 900;
   letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft);
   display: flex; align-items: baseline; gap: .4rem;
 }
+.demo-mk-pick > .demo-mk-h:first-child,
 .demo-mk-form > .demo-mk-h:first-child { margin-top: 0 }
 .demo-mk-count { margin-left: auto; font-size: .66rem; font-weight: 700; letter-spacing: 0; text-transform: none }
 

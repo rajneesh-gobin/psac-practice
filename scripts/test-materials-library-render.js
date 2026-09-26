@@ -202,7 +202,15 @@ const ck = (label, ok, extra) => {
   ck('list view renders a card per material', (list.match(/class="card"/g) || []).length === 5);
   ck('newest first puts today at the top',
     list.indexOf('Fractions worksheet') < list.indexOf('Comprehension passage'));
-  ck('a YouTube link gets the watch label', /Watch ↗/.test(list));
+  // ⚠ THE CLAIM, NOT THE SPELLING. This read /Watch ↗/ and went red when the
+  //   label became "Watch on YouTube ↗" — a deliberate improvement (materials.js
+  //   renders no embed, so the link is the only way out and it should say where
+  //   it goes). Pinning the literal made the suite fail for the copy getting
+  //   better, which is how a check stops being read. What must hold is that a
+  //   video is offered as something to WATCH and names where, while an ordinary
+  //   link is not dressed up as one.
+  ck('a YouTube link gets the watch label', /Watch[^<]{0,24}↗/.test(list));
+  ck('the watch label says where it goes', /Watch on YouTube/.test(list));
   // ⚠ The two things that would be a real defect.
   ck('a script tag in a title is escaped',
     /&lt;script&gt;/.test(list) && !/<script>alert/.test(list));

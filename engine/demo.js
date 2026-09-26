@@ -823,12 +823,24 @@ const Demo = (() => {
         </button>`;
       }).join('');
 
+      // ⚠ THE SUBJECT PICKER SPANS BOTH COLUMNS, and that is a height fix, not
+      //   a styling one. Stacked inside the 17.5rem form column it was five
+      //   buttons in a 2-col grid — three rows, 143px — which made the form
+      //   675px and the form is what sets this slide's height. The sheet beside
+      //   it stretches to match, so those three rows also bought a 492px blank
+      //   void on the paper. Measured at 1440px: the slide was 905px, the
+      //   TALLEST of the eight against a 765px median, and it was reported as
+      //   "way too high". Full width the same five buttons are one 44px row.
+      // ⚠ It costs nothing under 900px, where the grid is one column and the
+      //   rail was already full width — so the phone layout is unchanged.
       host.innerHTML = `
         <div class="demo-mk-grid">
-          <div class="demo-mk-form">
+          <div class="demo-mk-pick">
             <p class="demo-mk-h">Subject</p>
             <div class="demo-mk-subjs">${subjects}</div>
+          </div>
 
+          <div class="demo-mk-form">
             <p class="demo-mk-h">Paper</p>
             <div class="demo-mk-types">${types}</div>
 
@@ -1790,6 +1802,31 @@ const Demo = (() => {
       const t = SLIDES[i];
       if (t) p.setAttribute('aria-labelledby', 'demo-tab-' + t.id);
     });
+    _poke();
+  }
+
+  // ⚠⚠ THE PANEL DOES NOT LOOK CLICKABLE, AND THAT IS THE WHOLE PROBLEM. A
+  //   stranger meets a finished-looking question card inside a wooden frame and
+  //   reads it as a SCREENSHOT of the product rather than the product — so they
+  //   scroll past the one thing on the page that was built to be touched.
+  //   `.demo-poke` marks the open pane and style.css nudges that slide's first
+  //   real control, once every 4.6s, quiet in between.
+  // ⚠⚠ THE CLASS GOES ON THE PANE, NEVER ON THE CONTROL. Every slide rewrites
+  //   its own innerHTML — on a grade change, on an answer, on a rebuilt paper —
+  //   so a class set on the button itself is thrown away by the next render and
+  //   the hint dies at a moment nobody can predict. The pane is the one node in
+  //   here that is never replaced. It also keeps the per-slide TARGET in CSS,
+  //   beside the rest of the deck's styling, and a slide with no rule simply
+  //   never pokes: #demo-slide-parent has no rule because it is genuinely a
+  //   static sample report, and pretending otherwise would be a lie.
+  // ⚠ IT STOPS AT THE FIRST BUTTON PRESS INSIDE THE TRACK, for good — the same
+  //   rule the arrow hint follows. Someone who has already answered a question
+  //   does not need to be told the card is live, and a thing that keeps moving
+  //   after you have used it is nagging, not helping.
+  let _touched = false;
+  function _poke() {
+    const panes = _panes();
+    panes.forEach((p, i) => p.classList.toggle('demo-poke', !_touched && i === _slide));
   }
 
   function _ensureMounted(i) {
@@ -1833,6 +1870,18 @@ const Demo = (() => {
   function _initDeck() {
     const t = _track();
     if (!t) return;
+    // ⚠ CLICK, NOT pointerdown. A swipe starts with a pointerdown inside a pane
+    //   and would kill the hint on every slide the visitor swipes past without
+    //   touching anything — and a swipe says they moved the DECK, not that they
+    //   found the buttons. A swipe produces no click.
+    // ⚠ Capture phase and closest('button'), so a handler that stops
+    //   propagation still counts and a stray click on the board's background
+    //   does not.
+    t.addEventListener('click', (e) => {
+      if (_touched || !e.target || !e.target.closest || !e.target.closest('button')) return;
+      _touched = true;
+      _poke();
+    }, true);
     let raf = 0, settle = 0;
     t.addEventListener('scroll', () => {
       _fit(true);

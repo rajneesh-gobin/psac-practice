@@ -24,6 +24,23 @@
   process problem: v232 → v249 in one working session, each bump re-downloading
   the whole shell for every returning user. **Batch deploys.**
 
+### ⚠ Precached into one cache, served from another = never used
+`install` precaches into `SHELL_CACHE`; each fetch branch reads the cache **it**
+names. `/subjects/_index.js` was precached and then served by the `/subjects/`
+branch out of `DATA_CACHE`, so the precached copy was **never once consulted** —
+and a new device writes nothing to `DATA_CACHE` on its first (uncontrolled) load.
+One failed request for that 54 KB file then empties `SUBJECT_PACKS`, the app boots
+looking healthy with **no content in it**, and the practice hub says *"No subjects
+available for Grade 5 yet"* — a content sentence for a network failure, on the
+**fallback** grade, because `GradeAccess.liveGrades()` reads the same empty array
+and collapses the picker to 5. Reported from a real account 2026-09-26: every
+subject on the old PC, none on a new laptop.
+- `staleWhileRevalidate()` now falls back to `caches.match(request)` (every cache).
+- `PackLoader.ensureIndex()` retries the index once on `load`, and the hub's empty
+  state says *the list did not load* with a **Try again** button.
+- ⚠ Pinned by `scripts/test-sw-subject-index.js` (fails against the old worker) and
+  checks 12-14 of `scripts/test-practice-hub-grade.js`.
+
 ### What is and is not precached
 The shell was **56 files / 2.87 MB** over the wire; it is now **37 files / 632 KB**.
 Three rules, not a one-off tidy-up:
