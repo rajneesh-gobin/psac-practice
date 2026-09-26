@@ -1,0 +1,487 @@
+'use strict';
+// NCE 2025 Grade 9 ICT — past-paper questions adapted to MCQ/T-F format.
+
+STATIC_QUESTIONS.push(
+
+  /* ── Q1 MCQs ── */
+  makeMCQ({ id:'g9ict-pp25-001', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:1,
+    question:'Which of the following is an <b>input device</b>?',
+    options:['Monitor','Speaker','Mouse','Printer'],
+    answer:'Mouse',
+    hint:'It sends data into the computer.',
+    explanation:'A mouse is an input device that moves a pointer on screen and sends click signals to the computer. A monitor, speaker, and printer are all output devices. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-002', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:1,
+    question:'In a comic strip, which type of speech balloon uses a <b>jagged or spiky outline</b> to show shouting or expressing strong emotion?',
+    options:['Thought balloon','Whisper balloon','General speech balloon','Expression balloon'],
+    answer:'Expression balloon',
+    hint:'Its pointed edges convey excitement, anger, or surprise.',
+    explanation:'An expression (or exclamation) balloon has a jagged or spiky border to indicate strong emotion such as shouting, surprise, or anger, unlike smooth-bordered speech balloons. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-003', chapterId:'g9ict-internet', subsection:'browsers_search', difficulty:1,
+    question:'Which of the following is a <b>web browser</b> used to access the internet?',
+    options:['Microsoft Excel','Google Chrome','WhatsApp','Photoshop'],
+    answer:'Google Chrome',
+    hint:'You type a URL into it to visit websites.',
+    explanation:'Google Chrome is a web browser — software used to access and navigate web pages on the internet. Microsoft Excel is a spreadsheet application; WhatsApp and Photoshop are not browsers. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-004', chapterId:'g9ict-computer-systems', subsection:'data_units', difficulty:1,
+    question:'How many <b>bits</b> make up one byte?',
+    options:['2','4','8','16'],
+    answer:'8',
+    hint:'Think of one byte as a group of eight switches (on/off).',
+    explanation:'One byte consists of exactly 8 bits. A nibble is 4 bits, not a byte. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-005', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:1,
+    question:'Which key, when pressed in a word processor, <b>starts a new paragraph</b> (moves to a new line and begins a fresh paragraph)?',
+    options:['Backspace','Delete','Tab','Enter'],
+    answer:'Enter',
+    hint:'Also called the Return key.',
+    explanation:'Pressing the Enter (Return) key in a word processor ends the current paragraph and starts a new one on the next line. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-006', chapterId:'g9ict-networks', subsection:'topologies', difficulty:1,
+    needsArtwork:true,
+    question:'In a <b>bus topology</b>, all computers are connected to a single central cable. Which diagram correctly represents this topology?',
+    options:['Diagram A — computers connected along a single horizontal line','Diagram B — computers connected in a ring','Diagram C — computers connected in a star to a central hub','Diagram D — computers arranged in a hierarchy'],
+    answer:'Diagram A — computers connected along a single horizontal line',
+    hint:'In a bus, all nodes share one backbone cable.',
+    explanation:'A bus topology connects all computers to a single shared backbone cable (a "bus"). All data travels along this cable, and each computer receives it but only processes packets addressed to itself. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-007', chapterId:'g9ict-spreadsheets', subsection:'functions', difficulty:1,
+    question:'Which spreadsheet function returns the <b>lowest</b> (minimum) value in a range?',
+    options:['MAX','AVERAGE','SUM','MIN'],
+    answer:'MIN',
+    hint:'Think of "minimum".',
+    explanation:'The MIN function returns the smallest value in a specified cell range. MAX returns the largest; SUM adds all values; AVERAGE finds the mean. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-008', chapterId:'g9ict-spreadsheets', subsection:'formulas', difficulty:1,
+    question:'Which symbol must appear at the <b>beginning</b> of a formula in a spreadsheet?',
+    options:['+','-','#','='],
+    answer:'=',
+    hint:'Without it, the cell shows text rather than a calculated result.',
+    explanation:'All spreadsheet formulas must begin with the equals sign (=) to tell the application that the cell contains a formula to be calculated, not plain text. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-009', chapterId:'g9ict-spreadsheets', subsection:'cells_ranges', difficulty:1,
+    question:'Which spreadsheet feature, shown as a small square at the bottom-right of a selected cell, is used to <b>copy a formula or value</b> to adjacent cells?',
+    options:['AutoSum handle','Merge handle','Fill handle','Format handle'],
+    answer:'Fill handle',
+    hint:'You drag it downward or across to fill cells.',
+    explanation:'The Fill handle is the small black square at the bottom-right corner of a selected cell or range. Dragging it copies the cell\'s content (or continues a sequence) into adjacent cells. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-010', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:1,
+    question:'A student wants to change the text alignment in a paragraph. Which Home tab group contains the alignment buttons?',
+    options:['Font','Clipboard','Styles','Paragraph'],
+    answer:'Paragraph',
+    hint:'Left, Centre, Right, and Justify are paragraph-level options.',
+    explanation:'The Paragraph group in the Home tab of Microsoft Word contains the text alignment buttons: Align Left, Centre, Align Right, and Justify. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-011', chapterId:'g9ict-presentation', subsection:'storyboarding', difficulty:1,
+    question:'A <b>storyboard</b> is best described as…',
+    options:['A type of database report','A sequence of sketches used to plan the scenes of a presentation or video','A network topology diagram','A flowchart for programming logic'],
+    answer:'A sequence of sketches used to plan the scenes of a presentation or video',
+    hint:'Film makers use it to plan every shot before filming.',
+    explanation:'A storyboard is a series of drawn or written panels showing planned scenes in sequence — used in film production, animation, and presentation design to organise content before creation. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-012', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:1,
+    question:'<b>Computer ethics</b> refers to…',
+    options:['The physical design of computer hardware','A set of moral principles that govern the use of computers','Software used to protect computers from viruses','The speed at which a computer processes data'],
+    answer:'A set of moral principles that govern the use of computers',
+    hint:'It includes rules about privacy, copyright, and responsible use.',
+    explanation:'Computer ethics is a branch of ethics that addresses moral issues arising from computer use, including privacy, intellectual property, digital access, and responsible behaviour online. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-013', chapterId:'g9ict-databases', subsection:'db_structure', difficulty:1,
+    question:'In a database, a <b>table</b> is best described as…',
+    options:['A chart used to display data visually','A group of related records organised in rows and columns','A query that retrieves specific data','A form used to enter data into the database'],
+    answer:'A group of related records organised in rows and columns',
+    hint:'Each row is a record; each column is a field.',
+    explanation:'A database table is a structured collection of related data organised in rows (records) and columns (fields). 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-014', chapterId:'g9ict-internet', subsection:'browsers_search', difficulty:1,
+    question:'Which of the following is a <b>search engine</b>?',
+    options:['Microsoft Word','Google','WhatsApp','Android'],
+    answer:'Google',
+    hint:'You use it to find information on the internet by entering keywords.',
+    explanation:'Google is a search engine that indexes web pages and returns relevant results based on search terms. Microsoft Word, WhatsApp, and Android are not search engines. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-015', chapterId:'g9ict-internet', subsection:'email', difficulty:1,
+    question:'An <b>email attachment</b> is best described as…',
+    options:['The subject line of an email','A file (such as a document or image) sent along with an email message','A link added to the signature','The email address of the recipient'],
+    answer:'A file (such as a document or image) sent along with an email message',
+    hint:'You "clip" it to the email before sending.',
+    explanation:'An email attachment is a file (document, image, spreadsheet, etc.) that is sent together with an email message. The recipient can download and open the file separately. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q2(a) Components fill-blank → MCQ ── */
+  makeMCQ({ id:'g9ict-pp25-016', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
+    question:'The __________ is known as the "brain" of the computer because it carries out all processing.',
+    options:['RAM','GPU','CPU','Hard drive'],
+    answer:'CPU',
+    hint:'It stands for Central Processing Unit.',
+    explanation:'The CPU (Central Processing Unit) is called the "brain" of the computer because it executes instructions and carries out all arithmetic and logical processing. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-017', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:1,
+    question:'The __________ processes audio signals and allows microphones and headphones to work with the computer.',
+    options:['Graphics card','Motherboard','Sound card','Network interface card'],
+    answer:'Sound card',
+    hint:'It handles all audio input and output.',
+    explanation:'A sound card (audio card) processes audio signals, enabling microphones (input) and speakers/headphones (output) to work with the computer. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-018', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
+    question:'The __________ inside the computer casing circulates air to prevent overheating.',
+    options:['CPU','Fan','RAM','Power supply'],
+    answer:'Fan',
+    hint:'It spins to move air over hot components.',
+    explanation:'A cooling fan circulates air inside the computer case, preventing components such as the CPU from overheating during operation. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-019', chapterId:'g9ict-computer-systems', subsection:'output_devices', difficulty:1,
+    question:'The __________ processes video signals from the CPU and sends them to the monitor for display.',
+    options:['Sound card','Network card','Graphics card','Motherboard'],
+    answer:'Graphics card',
+    hint:'Also called a video card or GPU card.',
+    explanation:'A graphics card (GPU) processes visual data and renders images, sending the output to the monitor for display. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-020', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
+    question:'The __________ is the main circuit board of a computer that connects and allows communication between all other components.',
+    options:['Hard drive','RAM','Graphics card','Motherboard'],
+    answer:'Motherboard',
+    hint:'Everything else plugs into it.',
+    explanation:'The motherboard is the main printed circuit board of a computer. It physically connects and enables communication between the CPU, RAM, storage devices, and expansion cards. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q2(b) Keyboard shortcuts → MCQ ── */
+  makeMCQ({ id:'g9ict-pp25-021', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:1,
+    question:'On a standard keyboard, pressing <b>Shift + 7</b> produces which character?',
+    options:['7','#','&','*'],
+    answer:'&',
+    hint:'Look at what is printed on the 7 key above the digit.',
+    explanation:'The shift symbol on the 7 key is the ampersand (&). Pressing Shift + 7 types & instead of 7. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q2(c) Icon matching → MCQ ── */
+  makeMCQ({ id:'g9ict-pp25-022', chapterId:'g9ict-word-processing', subsection:'word_icons', difficulty:1,
+    question:'In Microsoft Word, the icon showing a <b>floppy disk</b> represents which function?',
+    options:['Open','Save','Print','Copy'],
+    answer:'Save',
+    hint:'The floppy disk is the universal save symbol.',
+    explanation:'The floppy disk icon in Microsoft Word represents the Save command (Ctrl + S), which saves the current document. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-023', chapterId:'g9ict-software-os', subsection:'os_functions', difficulty:1,
+    question:'In a GUI window, the button showing an <b>X</b> in the top-right corner performs which action?',
+    options:['Minimise the window','Maximise the window','Close the window','Restore the window'],
+    answer:'Close the window',
+    hint:'It terminates the window entirely.',
+    explanation:'The X (Close) button dismisses the window or application from the screen, removing it from the taskbar as well. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-024', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:1,
+    question:'On a keyboard, the arrow key pointing to the <b>right (→)</b> moves the text cursor in which direction?',
+    options:['Left','Up','Down','Right'],
+    answer:'Right',
+    hint:'The arrow points in the direction of movement.',
+    explanation:'The right-arrow key moves the cursor one position to the right within the text. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q3 True/False ── */
+  makeTF({ id:'g9ict-pp25-025', chapterId:'g9ict-presentation', subsection:'animations', difficulty:1,
+    question:'Adding a text overlay to a video is the same as adding an audio track.',
+    answer:false,
+    hint:'Text appears on screen; audio is heard.',
+    explanation:'False. A text overlay is a visual element placed on top of video footage; an audio track adds sound. They are different types of media elements. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-026', chapterId:'g9ict-ethics-security', subsection:'computer_ethics', difficulty:1,
+    question:'Hacking into someone else\'s computer without permission is considered unauthorised access.',
+    answer:true,
+    hint:'Access without consent is by definition unauthorised.',
+    explanation:'True. Accessing a computer system without the owner\'s permission is called unauthorised access and is both unethical and illegal in most countries. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-027', chapterId:'g9ict-internet', subsection:'browsers_search', difficulty:2,
+    question:'A meta-search engine has its own database of indexed web pages.',
+    answer:false,
+    hint:'It relies on other search engines\' results.',
+    explanation:'False. A meta-search engine does not maintain its own index of the web; instead, it sends queries to multiple other search engines and aggregates their results. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-028', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:1,
+    question:'A joystick is mainly used to play computer games.',
+    answer:true,
+    hint:'It gives directional control in games.',
+    explanation:'True. A joystick is primarily used as an input device for playing computer games, providing directional control of on-screen characters or aircraft. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-029', chapterId:'g9ict-computer-systems', subsection:'data_units', difficulty:1,
+    question:'One megabyte (MB) is smaller than one gigabyte (GB).',
+    answer:true,
+    hint:'1 GB = 1 024 MB.',
+    explanation:'True. One gigabyte is 1 024 megabytes, so MB is a smaller unit than GB. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-030', chapterId:'g9ict-presentation', subsection:'video_enhancement', difficulty:1,
+    question:'A caption on a video provides additional information about what is being shown.',
+    answer:true,
+    hint:'Captions can describe the scene, identify a person, or add context.',
+    explanation:'True. Captions are text labels displayed on or below a video image to provide extra information, such as a description of the scene, a speaker\'s name, or a translation. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-031', chapterId:'g9ict-presentation', subsection:'notes_handouts', difficulty:1,
+    question:'Speaker notes in a presentation are visible to the audience during the show.',
+    answer:false,
+    hint:'They are for the presenter\'s reference only.',
+    explanation:'False. Speaker notes are visible only to the presenter (in presenter view) — the audience sees only the slides, not the notes. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-032', chapterId:'g9ict-spreadsheets', subsection:'charts_from_data', difficulty:1,
+    question:'A spreadsheet application can be used to create a pie chart.',
+    answer:true,
+    hint:'Spreadsheets have a built-in chart tool that includes pie charts.',
+    explanation:'True. Spreadsheet programs like Microsoft Excel include chart tools that can generate pie charts, bar charts, line graphs, and other visual representations of data. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-033', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:1,
+    question:'A header appears at the top of every page in a document.',
+    answer:true,
+    hint:'It is placed in the top margin area.',
+    explanation:'True. A header is text that appears in the top margin of every page (or selected pages) of a document. Its counterpart, the footer, appears at the bottom. 📄 NCE 2025 ICT exam.' }),
+
+  makeTF({ id:'g9ict-pp25-034', chapterId:'g9ict-word-processing', subsection:'toc_lists', difficulty:1,
+    question:'Bullets and numbering are used in a word processor to format lists of items.',
+    answer:true,
+    hint:'They are the two main list styles in word processing.',
+    explanation:'True. Bullets create unordered lists with symbols, and numbering creates ordered lists with sequential numbers or letters. Both organise list items visually. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q4(a) Memory/device matching → MCQ ── */
+  makeMCQ({ id:'g9ict-pp25-035', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:2,
+    question:'<b>Cache memory</b> is best described as…',
+    options:['Volatile memory used for program execution','High-speed memory built close to the CPU to store frequently used data','Secondary storage that holds data permanently','Memory that requires power to retain data'],
+    answer:'High-speed memory built close to the CPU to store frequently used data',
+    hint:'It is faster than RAM but has smaller capacity.',
+    explanation:'Cache memory is small, very fast primary storage located close to the CPU that stores frequently accessed instructions and data, reducing the time the CPU waits for information. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-036', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
+    question:'<b>RAM (Random Access Memory)</b> is described as "volatile" because…',
+    options:['It stores data permanently','It is very slow compared to hard disks','Its contents are lost when the computer is switched off','It can only be read, not written to'],
+    answer:'Its contents are lost when the computer is switched off',
+    hint:'Power off = data gone.',
+    explanation:'RAM is volatile memory: it requires a continuous power supply to retain its contents. When the computer is switched off, all data in RAM is lost. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-037', chapterId:'g9ict-computer-systems', subsection:'data_units', difficulty:1,
+    question:'A <b>nibble</b> is equal to…',
+    options:['1 bit','2 bits','4 bits','8 bits'],
+    answer:'4 bits',
+    hint:'It is half a byte.',
+    explanation:'A nibble consists of 4 bits, which is half of one byte (8 bits). 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-038', chapterId:'g9ict-computer-systems', subsection:'data_units', difficulty:1,
+    question:'A single binary digit (either 0 or 1) is called a…',
+    options:['Byte','Nibble','Bit','Character'],
+    answer:'Bit',
+    hint:'It is the smallest unit of data.',
+    explanation:'A bit (binary digit) is the smallest unit of data in computing. It can hold only one of two values: 0 (off) or 1 (on). 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-039', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:1,
+    question:'A <b>sensor</b> is classified as which type of hardware device?',
+    options:['Output device','Storage device','Network device','Input device'],
+    answer:'Input device',
+    hint:'It measures the environment and feeds data into the system.',
+    explanation:'A sensor is an input device that detects physical quantities (temperature, light, motion, etc.) and converts them into data for the computer. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-040', chapterId:'g9ict-computer-systems', subsection:'output_devices', difficulty:1,
+    question:'A <b>plotter</b> is classified as which type of hardware device?',
+    options:['Input device','Storage device','Network device','Output device'],
+    answer:'Output device',
+    hint:'It draws precise technical diagrams on paper.',
+    explanation:'A plotter is an output device that produces large, precise drawings — used mainly in engineering, architecture, and graphic design. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-041', chapterId:'g9ict-computer-systems', subsection:'output_devices', difficulty:1,
+    question:'The term "<b>hard copy</b>" refers to…',
+    options:['An encrypted digital file','A copy stored on a hard disk drive','A printed output on paper','A backup copy on a server'],
+    answer:'A printed output on paper',
+    hint:'You can touch it and hold it.',
+    explanation:'A hard copy is a physical, printed version of a document produced on paper (as opposed to a soft copy, which is stored digitally). 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q4(b) Scratch / software labelling → MCQ ── */
+  makeMCQ({ id:'g9ict-pp25-042', chapterId:'g9ict-algorithms', subsection:'python_basics', difficulty:1,
+    question:'In the Scratch programming environment, the cat character that appears on the stage is called a…',
+    options:['Actor','Sprite','Character','Object'],
+    answer:'Sprite',
+    hint:'All characters and objects you animate in Scratch are called this.',
+    explanation:'In Scratch, each animated character or object is called a Sprite. The default Sprite is the Scratch cat. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-043', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:1,
+    question:'Software that detects and removes viruses and other malicious programs is called…',
+    options:['Firewall','Operating system','Antivirus software','Spreadsheet application'],
+    answer:'Antivirus software',
+    hint:'Examples include AVG, Avast, and Norton.',
+    explanation:'Antivirus software (e.g., AVG, Avast) scans for, detects, and removes viruses and other malware from a computer. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q5 Safety matching → MCQ ── */
+  makeMCQ({ id:'g9ict-pp25-044', chapterId:'g9ict-health-safety', subsection:'safety_precautions', difficulty:1,
+    question:'Which lab safety rule does a picture of a person sitting correctly at a computer desk represent?',
+    options:['No food in the lab','Proper posture when using the computer','Proper steps for switching the computer on and off','No running in the lab'],
+    answer:'Proper posture when using the computer',
+    hint:'The image shows someone with correct back and arm position.',
+    explanation:'A picture of a person seated correctly at a computer desk illustrates the rule about maintaining proper posture — back straight, feet flat, screen at eye level — to avoid RSI and back pain. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-045', chapterId:'g9ict-health-safety', subsection:'lab_guidelines', difficulty:1,
+    question:'Which lab safety rule is indicated by a picture of food with a cross through it?',
+    options:['Proper posture','No running in the lab','No food or drinks allowed in the lab','Switch off equipment after use'],
+    answer:'No food or drinks allowed in the lab',
+    hint:'The crossed-out food symbol means that item is forbidden.',
+    explanation:'A crossed-out food image indicates the lab rule: no food or drinks are permitted in the computer room, to prevent spills that could damage equipment. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q6 AMD computer specifications ── */
+  makeMCQ({ id:'g9ict-pp25-046', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
+    question:'A computer\'s About screen shows "Processor: AMD, Speed: 3.49 GHz". What is the processor brand?',
+    options:['Intel','NVIDIA','AMD','Qualcomm'],
+    answer:'AMD',
+    hint:'Read the Processor field.',
+    explanation:'The processor brand is AMD (Advanced Micro Devices), as stated in the About screen. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-047', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
+    question:'A computer\'s About screen shows "Installed Memory (RAM): 16.0 GB". How much RAM does this computer have?',
+    options:['4 GB','8 GB','12 GB','16 GB'],
+    answer:'16 GB',
+    hint:'Read the Installed Memory field directly.',
+    explanation:'The About screen states 16.0 GB of installed RAM. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-048', chapterId:'g9ict-software-os', subsection:'os_types', difficulty:1,
+    question:'A computer\'s About screen shows "OS: Windows 11 Pro". Which operating system is installed?',
+    options:['Windows 7','Windows 10','Windows 11 Pro','macOS'],
+    answer:'Windows 11 Pro',
+    hint:'Read the OS field in the system information.',
+    explanation:'The About screen clearly states Windows 11 Pro as the installed operating system. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q7 Word — 2016 Summer Olympics document ── */
+  makeMCQ({ id:'g9ict-pp25-049', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:1,
+    question:'A document heading uses the font "Times New Roman" in size 18. What is the font used?',
+    options:['Arial','Calibri','Times New Roman','Comic Sans'],
+    answer:'Times New Roman',
+    hint:'It is a serif font traditionally used for formal documents.',
+    explanation:'The heading font is Times New Roman, a classic serif typeface. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-050', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:1,
+    question:'In a document about the 2016 Summer Olympics, the second paragraph is aligned so that text lines up with <b>both</b> the left and right margins. Which alignment is applied?',
+    options:['Left','Right','Centre','Justify'],
+    answer:'Justify',
+    hint:'Both edges are straight.',
+    explanation:'Justified alignment stretches each line of text to align with both the left and right margins, creating straight edges on both sides. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-051', chapterId:'g9ict-word-processing', subsection:'text_formatting', difficulty:1,
+    question:'In the document, the country name "Kosovo" is formatted in <b>italics</b>. How would "Kosovo" appear?',
+    options:['<b>Kosovo</b>','<u>Kosovo</u>','<i>Kosovo</i>','KOSOVO'],
+    answer:'<i>Kosovo</i>',
+    hint:'Italic text leans to the right.',
+    explanation:'Italic formatting causes text to slant slightly to the right, so "Kosovo" would appear as <i>Kosovo</i>. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-052', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:1,
+    question:'To print pages 4 to 10 of a document, which option should be chosen in the Print dialogue?',
+    options:['All pages','Current page','Custom range: 4-10','Even pages only'],
+    answer:'Custom range: 4-10',
+    hint:'You type the start and end page numbers separated by a dash.',
+    explanation:'Selecting a custom page range and typing "4-10" in the print dialogue will print only pages 4 through 10 of the document. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q8 PC Hardware spreadsheet ── */
+  makeMCQ({ id:'g9ict-pp25-053', chapterId:'g9ict-spreadsheets', subsection:'cells_ranges', difficulty:2,
+    question:'A spreadsheet lists computer peripherals in column A (rows 4–7): Pendrive, Mouse, Webcam, Headset. Which cell contains the label "Headset"?',
+    options:['A4','A5','A6','A7'],
+    answer:'A7',
+    hint:'Pendrive=A4, Mouse=A5, Webcam=A6, Headset=A7.',
+    explanation:'The items are in order: Pendrive(A4), Mouse(A5), Webcam(A6), Headset(A7). So "Headset" is in cell A7. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-054', chapterId:'g9ict-spreadsheets', subsection:'cells_ranges', difficulty:2,
+    question:'A spreadsheet compares prices across three shops: Shop A (column B), Shop B (column C), Shop C (column D). Items start at row 4. Mouse is in row 5. Which cell contains the <b>Shop B price of Mouse</b>?',
+    options:['B5','C4','C5','D5'],
+    answer:'C5',
+    hint:'Shop B is column C; Mouse is row 5.',
+    explanation:'Shop B prices are in column C, and Mouse is in row 5, so C5 contains the Shop B price of Mouse. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-055', chapterId:'g9ict-spreadsheets', subsection:'functions', difficulty:2,
+    question:'To calculate the <b>total price excluding VAT</b> (items in B4:B7) in cell B8, which formula should be used?',
+    options:['=AVERAGE(B4:B7)','=COUNT(B4:B7)','=SUM(B4:B7)','=MAX(B4:B7)'],
+    answer:'=SUM(B4:B7)',
+    hint:'Total means add all the values together.',
+    explanation:'The SUM function adds all values in the range B4:B7, giving the total price excluding VAT in cell B8. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-056', chapterId:'g9ict-spreadsheets', subsection:'formulas', difficulty:2,
+    question:'VAT is 18% of the total excluding VAT in cell B8. Which formula in B9 correctly calculates the VAT amount?',
+    options:['=B8/0.18','=B8+18','=B8-18','=B8*0.18'],
+    answer:'=B8*0.18',
+    hint:'18% means multiply by 0.18.',
+    explanation:'To find 18% of B8, multiply B8 by 0.18. The formula =B8*0.18 correctly calculates the VAT amount. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-057', chapterId:'g9ict-spreadsheets', subsection:'functions', difficulty:2,
+    question:'Pendrive prices across Shop A (B4), Shop B (C4), and Shop C (D4) are Rs 85, Rs 90, and Rs 78. Which formula in E4 gives the <b>average pendrive price</b>?',
+    options:['=SUM(B4:D4)','=AVERAGE(B4:D4)','=MIN(B4:D4)','=COUNT(B4:D4)'],
+    answer:'=AVERAGE(B4:D4)',
+    hint:'Average means sum divided by count.',
+    explanation:'=AVERAGE(B4:D4) calculates the arithmetic mean of B4, C4, and D4 — the average pendrive price across the three shops. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-058', chapterId:'g9ict-spreadsheets', subsection:'advanced_formatting', difficulty:2,
+    question:'Conditional formatting is applied to C4:D7 to highlight prices <b>greater than 80</b>. Prices are: C4=90, C5=75, C6=65, C7=85, D4=78, D5=60, D6=55, D7=96. Which cells are highlighted?',
+    options:['C4 and D7','C4, C7 and D7','C7 and D4','C4, C5 and D7'],
+    answer:'C4, C7 and D7',
+    hint:'Which values are greater than 80?',
+    explanation:'C4=90, C7=85, and D7=96 are all greater than 80 and are highlighted. C5=75, C6=65, D4=78, D5=60, D6=55 are 80 or below. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q10 APPOINTMENT database ── */
+  makeMCQ({ id:'g9ict-pp25-059', chapterId:'g9ict-databases', subsection:'queries', difficulty:2,
+    question:'The APPOINTMENT table has an Activity column. A query sorts Activity in <b>descending</b> order. Given activities: Tennis, Badminton, Swimming, Aerobics, Yoga. Which activity appears <b>first</b> in the result?',
+    options:['Aerobics','Badminton','Yoga','Tennis'],
+    answer:'Yoga',
+    hint:'Descending alphabetical order means Z before A.',
+    explanation:'In descending alphabetical order: Yoga → Tennis → Swimming → Badminton → Aerobics. Yoga (Y) comes first. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-060', chapterId:'g9ict-databases', subsection:'queries', difficulty:2,
+    question:'In the APPOINTMENT database, a query selects all appointments where Style = "Colour". Client IDs JP13, AD14, and AD17 have Style = "Colour". Which records does the query return?',
+    options:['JP13 only','AD14 and AD17 only','JP13, AD14 and AD17','All records regardless of style'],
+    answer:'JP13, AD14 and AD17',
+    hint:'The criteria filters to "Colour" only.',
+    explanation:'The query criterion Style = "Colour" returns the three records whose Style field contains "Colour": JP13, AD14, and AD17. 📄 NCE 2025 ICT exam.' }),
+
+  /* ── Q11 Flowchart symbols ── */
+  makeMCQ({ id:'g9ict-pp25-061', chapterId:'g9ict-algorithms', subsection:'flowchart_symbols', difficulty:1,
+    question:'In a flowchart, a <b>parallelogram</b> symbol represents…',
+    options:['A process or calculation','A decision (yes/no)','Input or output','Start or end'],
+    answer:'Input or output',
+    hint:'Slanted sides hint at data flowing in or out.',
+    explanation:'A parallelogram is used in flowcharts to represent input or output operations — for example, "Enter a number" or "Display result". 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-062', chapterId:'g9ict-algorithms', subsection:'flowchart_symbols', difficulty:1,
+    question:'In a flowchart, a <b>rectangle</b> (with no special shape) represents…',
+    options:['A decision','Input or output','Start or end','A process or calculation'],
+    answer:'A process or calculation',
+    hint:'Simple tasks (add, assign, compute) go in this shape.',
+    explanation:'A rectangle in a flowchart represents a process or calculation step — any action that transforms data (e.g., total = price × quantity). 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-063', chapterId:'g9ict-algorithms', subsection:'flowchart_symbols', difficulty:1,
+    question:'In a flowchart, a <b>diamond</b> shape represents…',
+    options:['A process or calculation','Input or output','Start or end','A decision (yes/no condition)'],
+    answer:'A decision (yes/no condition)',
+    hint:'Two arrows leave it — one for Yes, one for No.',
+    explanation:'A diamond is the decision symbol in a flowchart. It contains a yes/no question; two branches emerge from it representing the two possible outcomes. 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-064', chapterId:'g9ict-algorithms', subsection:'flowchart_reading', difficulty:2,
+    question:'A flowchart inputs a mark for an ICT test. The decision is "Is mark ≥ 35?". If Yes → output "Pass"; if No → output "Fail". If mark = 40, what is the output?',
+    options:['"Fail"','"Pass"','"40"','No output'],
+    answer:'"Pass"',
+    hint:'Is 40 ≥ 35?',
+    explanation:'40 ≥ 35 is True (Yes), so the flowchart outputs "Pass". 📄 NCE 2025 ICT exam.' }),
+
+  makeMCQ({ id:'g9ict-pp25-065', chapterId:'g9ict-algorithms', subsection:'flowchart_reading', difficulty:2,
+    question:'Using the same ICT test flowchart (decision: mark ≥ 35?), if mark = 28, what is the output?',
+    options:['"Pass"','"28"','"Fail"','No output'],
+    answer:'"Fail"',
+    hint:'Is 28 ≥ 35?',
+    explanation:'28 ≥ 35 is False (No), so the flowchart outputs "Fail". 📄 NCE 2025 ICT exam.' })
+
+);
+
+/* ── Section B written questions (PDF only) ── */
+window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
+window.PSAC_PDF_QUESTIONS.push(
+
+  { id:'g9ict-pp25-pdf-001', chapterId:'g9ict-databases', subsection:'queries', difficulty:3,
+    question:'APPOINTMENT database (CLIENT_ID, CLIENT_NAME, ACTIVITY, STYLE, DATE_APPOINTMENT — 7 records). (a)(i) How many records? (a)(ii) How many fields? (b) Sort Activity in descending order — which activity is first? (c)(i) Design a query to display CLIENT_ID and CLIENT_NAME for all appointments where Style = "Colour". (c)(ii) Design a query to display CLIENT_NAME and DATE_APPOINTMENT for clients with a 2/2/2026 appointment.',
+    markScheme:'(a)(i) 7 records [1]. (a)(ii) 5 fields [1]. (b) Yoga [1] (descending alphabetical: Y before T). (c)(i) Show CLIENT_ID and CLIENT_NAME; Criteria on STYLE = "Colour"; expected output JP13, AD14, AD17 [3]. (c)(ii) Show CLIENT_NAME and DATE_APPOINTMENT; Criteria on DATE_APPOINTMENT = 2/2/2026 [2]. NCE 2025 ICT exam.' },
+
+  { id:'g9ict-pp25-pdf-002', chapterId:'g9ict-spreadsheets', subsection:'formulas', difficulty:3,
+    question:'PC Hardware spreadsheet (A4:D7 — four items, three shops). A7=Headset; C5 = mouse price at Shop B. (a) Which cell contains "Headset"? (b) Which cell has the Shop B price of Mouse? (c) Formula for total excluding VAT in B8. (d) Formula for VAT (18%) in B9. (e) Formula for average pendrive price in E4. (f) Conditional formatting applied to C4:D7 highlighting values >80 — name the highlighted cells.',
+    markScheme:'(a) A7 [1]. (b) C5 [1]. (c) =SUM(B4:B7) [1]. (d) =B8*0.18 [1]. (e) =AVERAGE(B4:D4) [1]. (f) C4 (90) and C7 (85) and D7 (96) [2]. NCE 2025 ICT exam.' },
+
+  { id:'g9ict-pp25-pdf-003', chapterId:'g9ict-internet', subsection:'e_services', difficulty:2,
+    question:'(a) What is video conferencing? Give two advantages of video conferencing. (b) Give two examples of video conferencing software. (c) State two disadvantages of video conferencing.',
+    markScheme:'(a) Video conferencing is a live, real-time visual and audio communication between two or more people in different locations using the internet [1]. Advantages: saves travel time and cost [1]; enables communication with people worldwide from the same location [1]. (b) Any two of: Zoom, Microsoft Teams, Google Meet, Skype, Cisco Webex [1 each]. (c) Any two of: requires stable internet connection; technical faults may disrupt meeting; security/privacy concerns; less personal than face-to-face [1 each]. NCE 2025 ICT exam.' },
+
+  { id:'g9ict-pp25-pdf-004', chapterId:'g9ict-algorithms', subsection:'drawing_flowcharts', difficulty:3,
+    question:'Draw a flowchart for the following problem: A user inputs a mark for an ICT test. If the mark is 35 or more, display "Pass"; otherwise display "Fail". Use correct flowchart symbols and label all paths.',
+    markScheme:'Start oval [1] → Parallelogram: Input mark [1] → Diamond: Is mark >= 35? [1] → Yes branch: Parallelogram Output "Pass" [1]; No branch: Parallelogram Output "Fail" [1] → End oval [1]. All shapes correctly used and labelled. NCE 2025 ICT exam.' }
+
+);

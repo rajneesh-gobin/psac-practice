@@ -36,7 +36,7 @@ STATIC_QUESTIONS.push(
     question:'Which piece of apparatus is used to measure <b>temperature</b>?',
     options:['Thermometer','Test tube','Filter funnel','Measuring cylinder'], answer:'Thermometer',
     hint:'Which one has a scale marked in degrees?',
-    explanation:'A <b>thermometer</b> measures temperature. A measuring cylinder measures volume, a filter funnel separates a solid from a liquid and a test tube simply holds a small sample.' })
+    explanation:'A <b>thermometer</b> measures temperature. A measuring cylinder measures volume, a filter funnel separates a solid from a liquid and a test tube simply holds a small sample. 📄 NCE 2024 exam.' })
 );
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];

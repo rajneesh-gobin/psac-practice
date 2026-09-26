@@ -19,61 +19,61 @@ STATIC_QUESTIONS.push(
     question:'Maman ouvre la porte ……………… jardin.',
     options:['de','des','du','de la'], answer:'du',
     hint:'Cherche le genre de « jardin » : est-il masculin ou féminin ?',
-    explanation:'« Le jardin » est masculin singulier. De + le = du. Maman ouvre la porte <em>du</em> jardin.' }),
+    explanation:'« Le jardin » est masculin singulier. De + le = du. Maman ouvre la porte <em>du</em> jardin. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-002', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'Ne prends pas ……………… serviette. Elle est sale.',
     options:['ces','ce','cet','cette'], answer:'cette',
     hint:'Détermine le genre et le nombre du nom « serviette » pour choisir le bon adjectif démonstratif.',
-    explanation:'L\'adjectif démonstratif devant un nom féminin singulier est <em>cette</em>.' }),
+    explanation:'L\'adjectif démonstratif devant un nom féminin singulier est <em>cette</em>. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-003', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'Ne marche pas dans l\'eau avec tes chaussures neuves. ……………… vont s\'abîmer.',
     options:['Elle','Elles','Il','Ils'], answer:'Elles',
     hint:'Cherche quel nom le pronom sujet doit remplacer, puis détermine son genre et son nombre.',
-    explanation:'« Les chaussures » est féminin pluriel → pronom sujet <em>Elles</em>.' }),
+    explanation:'« Les chaussures » est féminin pluriel → pronom sujet <em>Elles</em>. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-004', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'Pour les fêtes de fin d\'année, ……………… les garçons auront un cadeau.',
     options:['tout','toute','tous','toutes'], answer:'tous',
     hint:'L\'adjectif indéfini doit s\'accorder avec le nom qui suit - cherche son genre et son nombre.',
-    explanation:'Devant un nom masculin pluriel on utilise <em>tous</em>. Toutes les filles / tous les garçons.' }),
+    explanation:'Devant un nom masculin pluriel on utilise <em>tous</em>. Toutes les filles / tous les garçons. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-005', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'L\'oiseau est entré dans la maison ……………… la fenêtre.',
     options:['par','en','sur','à'], answer:'par',
     hint:'Quelle préposition indique le passage à travers une ouverture ?',
-    explanation:'La préposition <em>par</em> indique le passage : entrer par la fenêtre.' }),
+    explanation:'La préposition <em>par</em> indique le passage : entrer par la fenêtre. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-006', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'……………… -vous ! On est en retard pour l\'ouverture de l\'exposition.',
     options:['Dépêche','Dépêchons','Dépêchez','Dépêches'], answer:'Dépêchez',
     hint:'Identifie la personne à qui on s\'adresse et cherche la forme de l\'impératif correspondante.',
-    explanation:'Impératif présent de <em>se dépêcher</em> à la 2e personne du pluriel : <em>Dépêchez</em>-vous !' }),
+    explanation:'Impératif présent de <em>se dépêcher</em> à la 2e personne du pluriel : <em>Dépêchez</em>-vous ! 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-007', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'Ce livre d\'histoire contient une ……………… image du port.',
     options:['belle','belles','beau','beaux'], answer:'belle',
     hint:'L\'adjectif doit s\'accorder avec le nom qu\'il qualifie - cherche le genre et le nombre de « image ».',
-    explanation:'<em>Belle</em> s\'accorde avec le nom féminin singulier <em>image</em>. (Beau/bel → masculin.)' }),
+    explanation:'<em>Belle</em> s\'accorde avec le nom féminin singulier <em>image</em>. (Beau/bel → masculin.) 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-008', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'Mon père m\'aide à ……………… les tables de multiplication.',
     options:['apprend','apprendre','appris','apprends'], answer:'apprendre',
     hint:'Quelle forme verbale suit toujours la préposition « à » ?',
-    explanation:'La préposition <em>à</em> est suivie de l\'infinitif : aider à <em>apprendre</em>.' }),
+    explanation:'La préposition <em>à</em> est suivie de l\'infinitif : aider à <em>apprendre</em>. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-009', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'Mon frère et moi ……………… au cinéma hier.',
     options:['sont partis','êtes partis','sommes partis','est parti'], answer:'sommes partis',
     hint:'Identifie à quelle personne correspond « mon frère et moi » et quel auxiliaire prend « partir ».',
-    explanation:'<em>Mon frère et moi</em> équivaut à <em>nous</em>. Partir → nous <em>sommes partis</em> (auxiliaire être).' }),
+    explanation:'<em>Mon frère et moi</em> équivaut à <em>nous</em>. Partir → nous <em>sommes partis</em> (auxiliaire être). 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-010', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'Reza aura besoin de ses cahiers demain. Il ……………… met dans son cartable.',
     options:['leur','le','lui','les'], answer:'les',
     hint:'Identifie le complément remplacé par le pronom : est-il singulier ou pluriel ?',
-    explanation:'<em>Ses cahiers</em> est pluriel → pronom COD <em>les</em>. Il <em>les</em> met dans son cartable.' }),
+    explanation:'<em>Ses cahiers</em> est pluriel → pronom COD <em>les</em>. Il <em>les</em> met dans son cartable. 📄 PSAC 2024 exam.' }),
 
   // ── Q3B : Vocabulaire MCQ (5 marks) ──────────────────────────────────────
 
@@ -81,31 +81,31 @@ STATIC_QUESTIONS.push(
     question:'Cherche dans ……………… quel jour sera le premier décembre.',
     options:['le dictionnaire','l\'album','la calculatrice','le calendrier'], answer:'le calendrier',
     hint:'On cherche une date dans un outil qui montre les jours et les mois.',
-    explanation:'Un <em>calendrier</em> donne les jours du mois. Le dictionnaire explique les mots.' }),
+    explanation:'Un <em>calendrier</em> donne les jours du mois. Le dictionnaire explique les mots. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-012', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'Toutes sortes de plantes poussent ici. La terre est très ……………….',
     options:['fertile','rocheuse','sèche','aride'], answer:'fertile',
     hint:'Si beaucoup de plantes poussent, la terre est ……… (productrice).',
-    explanation:'Une terre <em>fertile</em> est riche et produit bien. Sèche/aride → peu de plantes.' }),
+    explanation:'Une terre <em>fertile</em> est riche et produit bien. Sèche/aride → peu de plantes. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-013', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'Certains oiseaux sont en danger de disparition. Il faut les ……………….',
     options:['chasser','protéger','tuer','effrayer'], answer:'protéger',
     hint:'Pour éviter la disparition d\'une espèce, on doit la ………….',
-    explanation:'On <em>protège</em> les espèces menacées pour qu\'elles ne disparaissent pas.' }),
+    explanation:'On <em>protège</em> les espèces menacées pour qu\'elles ne disparaissent pas. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-014', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'Il y a une fuite d\'eau à la maison. Il faut trouver un ……………… pour la réparation.',
     options:['boutiquier','plombier','pharmacien','dentiste'], answer:'plombier',
     hint:'Quel professionnel répare les tuyaux et les conduites d\'eau ?',
-    explanation:'Un <em>plombier</em> répare les fuites d\'eau et les canalisations.' }),
+    explanation:'Un <em>plombier</em> répare les fuites d\'eau et les canalisations. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-015', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'On ……………… un vieux bâtiment pour construire un autre de vingt étages.',
     options:['a repeint','a restauré','a démoli','a nettoyé'], answer:'a démoli',
     hint:'Pour construire un nouveau bâtiment à cet endroit, l\'ancien doit ………….',
-    explanation:'<em>Démolir</em> = détruire un bâtiment. Restaurer = rénover sans détruire.' }),
+    explanation:'<em>Démolir</em> = détruire un bâtiment. Restaurer = rénover sans détruire. 📄 PSAC 2024 exam.' }),
 
   // ── Q4B : Compréhension MCQ - «&nbsp;Le moulin magique&nbsp;» (contes chinois) ──
 
@@ -113,31 +113,31 @@ STATIC_QUESTIONS.push(
     question:'<em>Il y a fort longtemps deux frères vivaient en Chine : Wang, le grand frère, s\'empara de tout l\'héritage, et Chong, le petit frère, devint pauvre.</em><br><br>Wang et Chong sont ……………….',
     options:['amis','frères','père et fils','mari et femme'], answer:'frères',
     hint:'Relisez la première ligne du texte.',
-    explanation:'Wang est le <em>grand frère</em> et Chong est le <em>petit frère</em> : ils sont frères.' }),
+    explanation:'Wang est le <em>grand frère</em> et Chong est le <em>petit frère</em> : ils sont frères. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-017', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>À la mort de leur père, Wang s\'empara de tout l\'héritage : la belle maison, le buffle et les plantations.</em><br><br>Quand le père meurt, Chong ……………….',
     options:['ne reçoit rien en héritage','reçoit tout l\'héritage','a eu le buffle et les plantations','a eu la belle maison'], answer:'ne reçoit rien en héritage',
     hint:'Wang s\'est emparé de TOUT l\'héritage.',
-    explanation:'Wang prend tout → Chong <em>ne reçoit rien</em>. Il n\'a ni maison, ni buffle, ni plantation.' }),
+    explanation:'Wang prend tout → Chong <em>ne reçoit rien</em>. Il n\'a ni maison, ni buffle, ni plantation. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-018', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Wang était très égoïste et refusa d\'aider Chong qui n\'avait rien à manger.</em><br><br>D\'après l\'histoire, Wang est ……………….',
     options:['naïf','honnête','généreux','égoïste'], answer:'égoïste',
     hint:'Le texte le dit directement.',
-    explanation:'Le texte précise que Wang <em>était très égoïste</em> et refusait d\'aider son frère.' }),
+    explanation:'Le texte précise que Wang <em>était très égoïste</em> et refusait d\'aider son frère. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-019', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Chong posa le petit moulin par terre ; en colère, il lui donna un coup de pied. Le moulin se mit à produire du sel en grande quantité. C\'était un moulin magique.</em><br><br>Chong obtient ce qu\'il veut grâce ……………….',
     options:['au travail','à sa femme','au moulin','à son frère'], answer:'au moulin',
     hint:'Qu\'est-ce qui produit le sel que Chong échange contre tout ce qu\'il veut ?',
-    explanation:'C\'est <em>le moulin magique</em> qui produit le sel, permettant à Chong d\'avoir tout ce qu\'il désire.' }),
+    explanation:'C\'est <em>le moulin magique</em> qui produit le sel, permettant à Chong d\'avoir tout ce qu\'il désire. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6fr-pp24-020', chapterId:'g6fr-textes', subsection:'legende', difficulty:2,
     question:'<em>Wang jeta le moulin à la mer. Le moulin disparut dans l\'océan mais continuait à produire du sel. Et c\'est pour cette raison que l\'eau de la mer est salée.</em><br><br>Cette histoire raconte comment ……………….',
     options:['l\'eau de mer est devenue salée','Chong et Wang vécurent heureux','les graines sont écrasées dans le moulin','on fabrique des moulins'], answer:'l\'eau de mer est devenue salée',
     hint:'Lisez la dernière phrase du texte.',
-    explanation:'La dernière phrase explique : « Et c\'est pour cette raison que <em>l\'eau de la mer est salée</em>. »' })
+    explanation:'La dernière phrase explique : « Et c\'est pour cette raison que <em>l\'eau de la mer est salée</em>. » 📄 PSAC 2024 exam.' })
 
 );
 

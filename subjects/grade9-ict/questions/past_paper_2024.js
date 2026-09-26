@@ -44,32 +44,32 @@ STATIC_QUESTIONS.push(
     question:'Which one of the following is an <b>output</b> device?',
     options:['Plotter','Touchpad','Microphone','Joystick'], answer:'Plotter',
     hint:'An output device sends information OUT of the computer to the user.',
-    explanation:'A <b>plotter</b> draws the computer’s output onto paper, so it is an output device. A touchpad, microphone and joystick all send data <i>into</i> the computer.' }),
+    explanation:'A <b>plotter</b> draws the computer’s output onto paper, so it is an output device. A touchpad, microphone and joystick all send data <i>into</i> the computer. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-002', chapterId:'g9ict-computer-systems', subsection:'data_units', difficulty:1,
     question:'How many <b>bits</b> make up a <b>byte</b>?',
     options:['8 bits','4 bits','12 bits','16 bits'], answer:'8 bits',
     hint:'It is the number of bits needed to store one character.',
-    explanation:'One byte is <b>8 bits</b>. That is enough to hold a single character of text, which is why file sizes are measured in bytes.' }),
+    explanation:'One byte is <b>8 bits</b>. That is enough to hold a single character of text, which is why file sizes are measured in bytes. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-003', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
     question:'Which component prevents the <b>CPU from overheating</b>?',
     options:['Fan','Sound card','Graphics card','Motherboard'], answer:'Fan',
     hint:'Which part moves air across the processor?',
-    explanation:'A <b>fan</b> (with a heat sink) blows air across the CPU to carry heat away. Without it the processor would overheat and shut down.' }),
+    explanation:'A <b>fan</b> (with a heat sink) blows air across the CPU to carry heat away. Without it the processor would overheat and shut down. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-004', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:1,
     question:'Which one of the following stores data <b>temporarily</b>?',
     options:['RAM','ROM','Hard Disk','CD ROM'], answer:'RAM',
     hint:'Which memory loses its contents when the power goes off?',
-    explanation:'<b>RAM</b> is volatile: it holds the programs and data in use right now and is emptied when the computer is switched off. ROM, a hard disk and a CD keep their contents.' }),
+    explanation:'<b>RAM</b> is volatile: it holds the programs and data in use right now and is emptied when the computer is switched off. ROM, a hard disk and a CD keep their contents. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-005', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:2,
     question:'Which <b>device</b> is shown in the picture below?' +
       _g9ict24('d1-device', 'A photograph of a hand-held device being passed over a printed stripe pattern'),
     options:['Barcode reader','Digital camera','Headphone','Printer'], answer:'Barcode reader',
     hint:'Look at what the device is being held over - those stripes are read at a supermarket till.',
-    explanation:'The stripes are a barcode, and the hand-held unit reading them is a <b>barcode reader</b> - an input device that turns the pattern of bars into a product number.' }),
+    explanation:'The stripes are a barcode, and the hand-held unit reading them is a <b>barcode reader</b> - an input device that turns the pattern of bars into a product number. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-006', chapterId:'g9ict-spreadsheets', subsection:'cells_ranges', difficulty:2,
     question:'The spreadsheet below shows the marks obtained by Ravi in a test.' +
@@ -77,57 +77,57 @@ STATIC_QUESTIONS.push(
       'In which <b>cell</b> do the marks for <b>French</b> appear?',
     options:['B3','A3','B2','A2'], answer:'B3',
     hint:'A cell address is its COLUMN letter followed by its ROW number.',
-    explanation:'French is on row 3, and the marks are in column B, so the cell address is <b>B3</b>. A3 holds the word “French” itself, not the mark.' }),
+    explanation:'French is on row 3, and the marks are in column B, so the cell address is <b>B3</b>. A3 holds the word “French” itself, not the mark. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-007', chapterId:'g9ict-presentation', subsection:'comic_strips', difficulty:2,
     question:'Which <b>speech balloon</b> is used when you want your character to <b>tell a secret</b>?',
     options:['Whisper Balloon','Sound Balloon','Thought Balloon','General Speech Balloon'], answer:'Whisper Balloon',
     hint:'A secret is spoken quietly, not thought and not shouted.',
-    explanation:'A <b>whisper balloon</b> (usually drawn with a dashed outline) shows words spoken quietly so other characters cannot hear. A thought balloon shows what a character thinks but does not say.' }),
+    explanation:'A <b>whisper balloon</b> (usually drawn with a dashed outline) shows words spoken quietly so other characters cannot hear. A thought balloon shows what a character thinks but does not say. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-008', chapterId:'g9ict-networks', subsection:'network_components', difficulty:2,
     question:'Which <b>component</b> is used to connect <b>two LANs</b>?',
     options:['Router','Switch','Server','Cable'], answer:'Router',
     hint:'Which device passes traffic between two separate networks rather than within one?',
-    explanation:'A <b>router</b> joins two networks together and decides which way to send traffic between them. A switch connects devices <i>inside</i> one LAN.' }),
+    explanation:'A <b>router</b> joins two networks together and decides which way to send traffic between them. A switch connects devices <i>inside</i> one LAN. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-009', chapterId:'g9ict-networks', subsection:'network_components', difficulty:2,
     question:'Which <b>hardware component</b> is shown below?' +
       _g9ict24('d3-hardware', 'A photograph of a circuit board with a metal bracket and a square socket on the bracket'),
     options:['Network Interface Card','Internal Memory','Hard-disk','Wireless Fidelity Card'], answer:'Network Interface Card',
     hint:'Look at the socket on the metal bracket - what kind of cable plugs into that?',
-    explanation:'The square RJ45 socket on the bracket takes a network cable, so this is a <b>Network Interface Card</b>. A wireless card would have an aerial rather than a cable socket.' }),
+    explanation:'The square RJ45 socket on the bracket takes a network cable, so this is a <b>Network Interface Card</b>. A wireless card would have an aerial rather than a cable socket. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-010', chapterId:'g9ict-health-safety', subsection:'health_hazards', difficulty:2,
     question:'Which <b>health problem</b> may be caused when a <b>mouse</b> is used for a long time?',
     options:['Repetitive strain injury','Headache','Eye strain','Back pain'], answer:'Repetitive strain injury',
     hint:'Think about the same small hand movement being made over and over.',
-    explanation:'Gripping and clicking a mouse repeats the same small movement for hours, which damages tendons and nerves in the hand and wrist - <b>repetitive strain injury</b>. Eye strain comes from the screen, not the mouse.' }),
+    explanation:'Gripping and clicking a mouse repeats the same small movement for hours, which damages tendons and nerves in the hand and wrist - <b>repetitive strain injury</b>. Eye strain comes from the screen, not the mouse. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-011', chapterId:'g9ict-internet', subsection:'web_tools', difficulty:1,
     question:'Which of the following is a popular <b>videoconferencing</b> software?',
     options:['Skype','Twitter','Wiki','Facebook'], answer:'Skype',
     hint:'Which one is built for live audio and video calls?',
-    explanation:'<b>Skype</b> is designed for live video and voice calls. The others are for posting or editing text and pictures, not for holding a meeting.' }),
+    explanation:'<b>Skype</b> is designed for live video and voice calls. The others are for posting or editing text and pictures, not for holding a meeting. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-012', chapterId:'g9ict-internet', subsection:'e_services', difficulty:1,
     question:'Which one of the following is <b>required for e-learning</b>?',
     options:['Laptop','Book','Calculator','Whiteboard'], answer:'Laptop',
     hint:'E-learning means learning delivered electronically, over a network.',
-    explanation:'E-learning needs a computing device that can connect to the internet, so a <b>laptop</b> is required. A book, calculator or ordinary whiteboard cannot deliver an online lesson.' }),
+    explanation:'E-learning needs a computing device that can connect to the internet, so a <b>laptop</b> is required. A book, calculator or ordinary whiteboard cannot deliver an online lesson. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-013', chapterId:'g9ict-algorithms', subsection:'flowchart_symbols', difficulty:2,
     question:'Which <b>shape</b> is used for a <b>“Decision Box”</b> in a flowchart?',
     options:['A diamond','A rectangle','A parallelogram','An oval'], answer:'A diamond',
     hint:'A decision has more than one way out, so the shape has corners for the branches.',
-    explanation:'A decision box is a <b>diamond</b>, with a Yes branch and a No branch leaving it. A rectangle is a process, a parallelogram is input/output and an oval is start or stop.' }),
+    explanation:'A decision box is a <b>diamond</b>, with a Yes branch and a No branch leaving it. A rectangle is a process, a parallelogram is input/output and an oval is start or stop. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-014', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:2,
     question:'Which feature in MS Word allows the word <b>“DRAFT”</b> to be placed behind the text of a document, as shown below?' +
       _g9ict24('d5-watermark', 'A page of text with a large faint word printed diagonally behind it'),
     options:['Watermark','Page Borders','Ruler','Page Color'], answer:'Watermark',
     hint:'The word sits faintly BEHIND the text, across the whole page.',
-    explanation:'A <b>watermark</b> is faint text or an image placed behind the document text, used to mark a page as DRAFT or CONFIDENTIAL. Page Color would fill the whole background with one colour.' }),
+    explanation:'A <b>watermark</b> is faint text or an image placed behind the document text, used to mark a page as DRAFT or CONFIDENTIAL. Page Color would fill the whole background with one colour. 📄 NCE 2024 exam.' }),
 
   // ── Question 2(b): fill in the blanks ───────────────────────────────────
 
@@ -135,83 +135,83 @@ STATIC_QUESTIONS.push(
     question:'In a .......... topology every node is connected to a <b>single cable</b>.',
     options:['bus','mesh','star','ring'], answer:'bus',
     hint:'Picture one long backbone cable with every machine tapping into it.',
-    explanation:'A <b>bus</b> topology runs one backbone cable and every node connects to it. If that single cable breaks, the whole network goes down - which is the weakness of the design.' }),
+    explanation:'A <b>bus</b> topology runs one backbone cable and every node connects to it. If that single cable breaks, the whole network goes down - which is the weakness of the design. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-016', chapterId:'g9ict-software-os', subsection:'os_types', difficulty:1,
     question:'An example of a <b>free operating system</b> is ...........',
     options:['Linux','Windows','macOS','Wifi'], answer:'Linux',
     hint:'Which one can be downloaded and used without paying a licence fee?',
-    explanation:'<b>Linux</b> is free and open source - anyone may download, use and modify it. Windows and macOS are commercial products.' }),
+    explanation:'<b>Linux</b> is free and open source - anyone may download, use and modify it. Windows and macOS are commercial products. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-017', chapterId:'g9ict-networks', subsection:'wired_wireless', difficulty:1,
     question:'Mobile phones can be connected to the internet using ...........',
     options:['Wifi','a bus','Linux','a backup'], answer:'Wifi',
     hint:'Which of these is a way of connecting without a cable?',
-    explanation:'<b>Wifi</b> connects a phone to a network over radio waves, with no cable. The others are a network layout, an operating system and a way of protecting data.' }),
+    explanation:'<b>Wifi</b> connects a phone to a network over radio waves, with no cable. The others are a network layout, an operating system and a way of protecting data. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-018', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:1,
     question:'A .......... is a software that can <b>slow down</b> a computer.',
     options:['virus','backup','browser','firewall'], answer:'virus',
     hint:'Which one is malicious software that a computer catches?',
-    explanation:'A <b>virus</b> is malicious software that copies itself and consumes memory and processor time, which is why an infected machine runs slowly.' }),
+    explanation:'A <b>virus</b> is malicious software that copies itself and consumes memory and processor time, which is why an infected machine runs slowly. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-019', chapterId:'g9ict-ethics-security', subsection:'data_backups', difficulty:2,
     question:'The purpose of a .......... is to <b>keep data secure</b> in case the original is lost.',
     options:['backup','virus','browser','topology'], answer:'backup',
     hint:'What do you make so that losing the original does not lose the data?',
-    explanation:'A <b>backup</b> is a second copy of the data kept somewhere else, so the information survives a deletion, a hardware failure, a fire or a flood.' }),
+    explanation:'A <b>backup</b> is a second copy of the data kept somewhere else, so the information survives a deletion, a hardware failure, a fire or a flood. 📄 NCE 2024 exam.' }),
 
   // ── Question 3: true or false ───────────────────────────────────────────
 
   makeTF({ id:'g9ict-pp24-020', chapterId:'g9ict-computer-systems', subsection:'output_devices', difficulty:2,
     question:'A <b>laser printer is slower</b> than an inkjet printer.', answer:false,
     hint:'Which type is used in busy offices for long print runs?',
-    explanation:'False. A <b>laser printer is faster</b> - it forms a whole page at a time, which is why offices use them for large jobs. An inkjet builds the page line by line.' }),
+    explanation:'False. A <b>laser printer is faster</b> - it forms a whole page at a time, which is why offices use them for large jobs. An inkjet builds the page line by line. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-021', chapterId:'g9ict-word-processing', subsection:'page_layout', difficulty:1,
     question:'A <b>page break</b> helps to separate content between pages.', answer:true,
     hint:'What does inserting one do to the text after it?',
-    explanation:'True. A <b>page break</b> forces everything after it onto a new page, which keeps sections apart no matter how the text above is edited.' }),
+    explanation:'True. A <b>page break</b> forces everything after it onto a new page, which keeps sections apart no matter how the text above is edited. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-022', chapterId:'g9ict-spreadsheets', subsection:'advanced_formatting', difficulty:2,
     question:'A <b>conditional formatting</b> rule cannot be removed in Excel.', answer:false,
     hint:'Is formatting ever permanent in a spreadsheet?',
-    explanation:'False. Conditional formatting rules can be edited or deleted at any time through <b>Manage Rules</b>. Nothing about a spreadsheet’s formatting is permanent.' }),
+    explanation:'False. Conditional formatting rules can be edited or deleted at any time through <b>Manage Rules</b>. Nothing about a spreadsheet’s formatting is permanent. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-023', chapterId:'g9ict-presentation', subsection:'slide_masters', difficulty:3,
     question:'In a PowerPoint presentation, you <b>cannot use more than one slide master</b>.', answer:false,
     hint:'Could one presentation need two different section designs?',
-    explanation:'False. A presentation may contain <b>several slide masters</b>, so different sections can carry different designs while each section stays internally consistent.' }),
+    explanation:'False. A presentation may contain <b>several slide masters</b>, so different sections can carry different designs while each section stays internally consistent. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-024', chapterId:'g9ict-networks', subsection:'topologies', difficulty:2,
     question:'In a <b>star topology</b>, nodes are connected to a central computer.', answer:true,
     hint:'Picture the shape the cables make.',
-    explanation:'True. Every node has its own cable to a central device, forming a star. One node’s cable failing therefore affects only that node - unlike a bus.' }),
+    explanation:'True. Every node has its own cable to a central device, forming a star. One node’s cable failing therefore affects only that node - unlike a bus. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-025', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
     question:'A <b>firewall</b> can be a hardware or a software.', answer:true,
     hint:'Does it have to be a physical box?',
-    explanation:'True. A firewall may be a dedicated hardware device on the edge of a network, or a program running on the computer itself. Both filter traffic against a set of rules.' }),
+    explanation:'True. A firewall may be a dedicated hardware device on the edge of a network, or a program running on the computer itself. Both filter traffic against a set of rules. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-026', chapterId:'g9ict-ethics-security', subsection:'information_privacy', difficulty:1,
     question:'<b>Personal information</b> should be shared with everybody.', answer:false,
     hint:'Think about who could use your address or ID number, and how.',
-    explanation:'False. Personal information should be shared only with people who need it and can be trusted. Sharing it openly invites identity theft, fraud and unwanted contact.' }),
+    explanation:'False. Personal information should be shared only with people who need it and can be trusted. Sharing it openly invites identity theft, fraud and unwanted contact. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-027', chapterId:'g9ict-algorithms', subsection:'flowchart_symbols', difficulty:2,
     question:'In a flowchart, <b>flowlines</b> indicate the movement of data.', answer:true,
     hint:'What do the arrows between the boxes tell you?',
-    explanation:'True. Flowlines are the arrows joining the symbols; they show the order the steps run in and how data moves from one step to the next.' }),
+    explanation:'True. Flowlines are the arrows joining the symbols; they show the order the steps run in and how data moves from one step to the next. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-028', chapterId:'g9ict-databases', subsection:'forms_reports', difficulty:3,
     question:'The <b>Report Wizard</b> is located in the <b>Home Tab</b> in MS Access.', answer:false,
     hint:'Which tab do you use to make a new object in Access?',
-    explanation:'False. The Report Wizard is on the <b>Create</b> tab, along with the other tools that make new tables, queries, forms and reports. The Home tab holds views, clipboard and formatting.' }),
+    explanation:'False. The Report Wizard is on the <b>Create</b> tab, along with the other tools that make new tables, queries, forms and reports. The Home tab holds views, clipboard and formatting. 📄 NCE 2024 exam.' }),
 
   makeTF({ id:'g9ict-pp24-029', chapterId:'g9ict-algorithms', subsection:'python_basics', difficulty:2,
     question:'<b>Python</b> is an example of a database software.', answer:false,
     hint:'Is Python something you store data in, or something you write instructions in?',
-    explanation:'False. Python is a <b>programming language</b>. Database software - MS Access, MySQL - stores and queries data; a Python program may talk to a database but is not one.' }),
+    explanation:'False. Python is a <b>programming language</b>. Database software - MS Access, MySQL - stores and queries data; a Python program may talk to a database but is not one. 📄 NCE 2024 exam.' }),
 
   // ── Question 4: hardware for a task, and term matching ──────────────────
 
@@ -219,62 +219,62 @@ STATIC_QUESTIONS.push(
     question:'Which hardware device <b>stores pictures in digital cameras</b>?',
     options:['Memory Card','Projector','Touchscreen','3D Printer'], answer:'Memory Card',
     hint:'It is small, removable, and slots into the camera.',
-    explanation:'A <b>memory card</b> is removable flash storage small enough for a camera, and it can be taken out and read on a computer.' }),
+    explanation:'A <b>memory card</b> is removable flash storage small enough for a camera, and it can be taken out and read on a computer. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-031', chapterId:'g9ict-computer-systems', subsection:'output_devices', difficulty:2,
     question:'Which hardware device <b>creates real world objects</b> from a computer design?',
     options:['3D Printer','Projector','Memory Card','Keyboard'], answer:'3D Printer',
     hint:'Which one builds something you can hold?',
-    explanation:'A <b>3D printer</b> builds a solid object layer by layer from a digital model, so the output is a physical thing rather than an image or a page.' }),
+    explanation:'A <b>3D printer</b> builds a solid object layer by layer from a digital model, so the output is a physical thing rather than an image or a page. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-032', chapterId:'g9ict-computer-systems', subsection:'output_devices', difficulty:2,
     question:'Which hardware device <b>magnifies images generated by a computer</b>?',
     options:['Projector','3D Printer','Solid State Drive','Touchscreen'], answer:'Projector',
     hint:'Which one throws the screen onto a wall so a whole class can see?',
-    explanation:'A <b>projector</b> enlarges the computer’s display onto a screen or wall, so a large audience can see it at once.' }),
+    explanation:'A <b>projector</b> enlarges the computer’s display onto a screen or wall, so a large audience can see it at once. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-033', chapterId:'g9ict-word-processing', subsection:'mail_merge', difficulty:2,
     question:'Which term is <b>used to perform mail merge</b> in a word document?',
     options:['Mailing list','Memory Management','Blog','Chat'], answer:'Mailing list',
     hint:'Mail merge needs a document AND a source of names and addresses.',
-    explanation:'A <b>mailing list</b> supplies the names, addresses and other fields that mail merge drops into each copy of the letter.' }),
+    explanation:'A <b>mailing list</b> supplies the names, addresses and other fields that mail merge drops into each copy of the letter. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-034', chapterId:'g9ict-software-os', subsection:'os_functions', difficulty:3,
     question:'Which term <b>deals with the loading and running of application software</b>?',
     options:['Memory Management','Mailing list','Hacking','Blog'], answer:'Memory Management',
     hint:'Which one is a job the operating system does?',
-    explanation:'<b>Memory management</b> is the operating system function that allocates memory to each program, loads it and reclaims the space when it closes.' }),
+    explanation:'<b>Memory management</b> is the operating system function that allocates memory to each program, loads it and reclaims the space when it closes. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-035', chapterId:'g9ict-ethics-security', subsection:'internet_dangers', difficulty:2,
     question:'Which term refers to <b>gaining unauthorised access</b> to a computer system?',
     options:['Hacking','Scanning','Blogging','Chatting'], answer:'Hacking',
     hint:'Access that was never permitted in the first place.',
-    explanation:'<b>Hacking</b> is gaining access to a system without permission. It is a criminal offence whether or not any data is changed.' }),
+    explanation:'<b>Hacking</b> is gaining access to a system without permission. It is a criminal offence whether or not any data is changed. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-036', chapterId:'g9ict-computer-systems', subsection:'input_devices', difficulty:2,
     question:'Which device <b>produces digital images of hardcopy documents</b>?',
     options:['Scanner','Blog','Router','Plotter'], answer:'Scanner',
     hint:'It turns something printed on paper into a file.',
-    explanation:'A <b>scanner</b> reads a printed page and produces a digital image of it - the reverse of what a printer does.' }),
+    explanation:'A <b>scanner</b> reads a printed page and produces a digital image of it - the reverse of what a printer does. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-037', chapterId:'g9ict-internet', subsection:'web_tools', difficulty:2,
     question:'Which term describes an <b>online journal that displays the latest posts first</b>?',
     options:['Blog','Chat','Mailing list','Search engine'], answer:'Blog',
     hint:'A personal site of dated entries, newest at the top.',
-    explanation:'A <b>blog</b> is an online journal whose entries are shown newest first, so a returning reader sees what has changed since their last visit.' }),
+    explanation:'A <b>blog</b> is an online journal whose entries are shown newest first, so a returning reader sees what has changed since their last visit. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-038', chapterId:'g9ict-internet', subsection:'browsers_search', difficulty:1,
     question:'Google is an example of a ...........',
     options:['search engine','online forum','operating system','spreadsheet'], answer:'search engine',
     hint:'What do you use it to do?',
-    explanation:'Google is a <b>search engine</b>: it indexes web pages and returns the ones matching the words you type.' }),
+    explanation:'Google is a <b>search engine</b>: it indexes web pages and returns the ones matching the words you type. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-039', chapterId:'g9ict-ethics-security', subsection:'data_security', difficulty:2,
     question:'Which of these is a <b>threat to data security</b>?',
     options:['Accidental loss of data by deletion','Using strong passwords','Using an updated anti-virus','Making regular backups'],
     answer:'Accidental loss of data by deletion',
     hint:'Three of these protect data. One destroys it.',
-    explanation:'<b>Accidental deletion</b> loses the data, so it is a threat. Strong passwords, updated anti-virus software and regular backups are all protections against threats.' }),
+    explanation:'<b>Accidental deletion</b> loses the data, so it is a threat. Strong passwords, updated anti-virus software and regular backups are all protections against threats. 📄 NCE 2024 exam.' }),
 
   // ── Question 6: reading a System information window ─────────────────────
 
@@ -284,7 +284,7 @@ STATIC_QUESTIONS.push(
       'What is the <b>installed memory (RAM)</b> of this computer?',
     options:['8 GB','16 GB','32 GB','64 GB'], answer:'8 GB',
     hint:'Find the line labelled “Installed memory (RAM)”.',
-    explanation:'The window reports <b>8.00 GB</b> of installed memory (7.87 GB usable - some is reserved by the hardware). “64-bit” on the line below is the system type, not the memory size.' }),
+    explanation:'The window reports <b>8.00 GB</b> of installed memory (7.87 GB usable - some is reserved by the hardware). “64-bit” on the line below is the system type, not the memory size. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-041', chapterId:'g9ict-software-os', subsection:'os_types', difficulty:2,
     question:'Using the system information window below, give the <b>operating system</b> installed on the computer.' +
@@ -292,14 +292,14 @@ STATIC_QUESTIONS.push(
     options:['Windows 10 Home Single Language','Windows 10 Pro Single Language','Windows 8 Home Premium Edition','Windows 7 Home Basic Language'],
     answer:'Windows 10 Home Single Language',
     hint:'Look under the heading “Windows edition”.',
-    explanation:'The <b>Windows edition</b> line at the top of the window reads <b>Windows 10 Home Single Language</b>. Every option here is a real Windows edition, so the version number and the edition name both have to be read off the screen.' }),
+    explanation:'The <b>Windows edition</b> line at the top of the window reads <b>Windows 10 Home Single Language</b>. Every option here is a real Windows edition, so the version number and the edition name both have to be read off the screen. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-042', chapterId:'g9ict-computer-systems', subsection:'cpu_memory', difficulty:2,
     question:'Using the system information window below, give the <b>speed of the processor</b>.' +
       _g9ict24('d7-specs', 'A screenshot of a system information window listing edition, processor, memory and computer name'),
     options:['2.50 GHz','7200 GHz','8.00 GHz','64 GHz'], answer:'2.50 GHz',
     hint:'The speed is the figure after the @ sign on the Processor line.',
-    explanation:'The processor line ends “@ <b>2.50GHz</b>”, which is the clock speed. i5-7200U is the model number, not a speed.' }),
+    explanation:'The processor line ends “@ <b>2.50GHz</b>”, which is the clock speed. i5-7200U is the model number, not a speed. 📄 NCE 2024 exam.' }),
 
   // ── Question 8: reading and writing spreadsheet formulae ────────────────
 
@@ -309,42 +309,42 @@ STATIC_QUESTIONS.push(
       'Which <b>cell</b> contains the sales of <b>Chanel</b> perfume bottles in <b>January</b>?',
     options:['B4','B3','C4','A4'], answer:'B4',
     hint:'Find the Chanel row, then the January column.',
-    explanation:'Chanel is on row 4 and January is column B, so the cell is <b>B4</b>. B3 is Dior’s January sales and A4 holds the word “Chanel”.' }),
+    explanation:'Chanel is on row 4 and January is column B, so the cell is <b>B4</b>. B3 is Dior’s January sales and A4 holds the word “Chanel”. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-044', chapterId:'g9ict-spreadsheets', subsection:'cells_ranges', difficulty:2,
     question:'In the spreadsheet below, which <b>cell</b> contains the <b>Average Sales</b> of <b>Gucci</b> perfume bottles?' +
       _g9ict24('d8-spreadsheet', 'A screenshot of a spreadsheet with lettered columns and numbered rows of brands and monthly sales'),
     options:['E6','E5','D6','F6'], answer:'E6',
     hint:'Average Sales is a column heading; Gucci is a row.',
-    explanation:'Average Sales is column E and Gucci is row 6, so the cell is <b>E6</b>. F6 holds the Below/Above label, not the average.' }),
+    explanation:'Average Sales is column E and Gucci is row 6, so the cell is <b>E6</b>. F6 holds the Below/Above label, not the average. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-045', chapterId:'g9ict-spreadsheets', subsection:'formulas', difficulty:3,
     question:'In the spreadsheet below, which formula was used in cell <b>C8</b> to calculate the <b>Total Sales</b> for February?' +
       _g9ict24('d8-spreadsheet', 'A screenshot of a spreadsheet with lettered columns and numbered rows of brands and monthly sales'),
     options:['= SUM(C3:C7)','= C3 * C7','= C3 &minus; B7','= AVERAGE(C3:C7)'], answer:'= SUM(C3:C7)',
     hint:'A total adds every brand’s February figure, from row 3 to row 7.',
-    explanation:'<b>= SUM(C3:C7)</b> adds the five February values in column C. Multiplying or subtracting two of them would not give a total, and AVERAGE would give the mean.' }),
+    explanation:'<b>= SUM(C3:C7)</b> adds the five February values in column C. Multiplying or subtracting two of them would not give a total, and AVERAGE would give the mean. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-046', chapterId:'g9ict-spreadsheets', subsection:'functions', difficulty:3,
     question:'In the spreadsheet below, which formula in cell <b>E3</b> finds the <b>Average Sales</b> of Dior perfume bottles across the three months?' +
       _g9ict24('d8-spreadsheet', 'A screenshot of a spreadsheet with lettered columns and numbered rows of brands and monthly sales'),
     options:['= AVERAGE(B3:D3)','= AVERAGE(B3:B7)','= SUM(B3:D3)','= AVERAGE(B3:D8)'], answer:'= AVERAGE(B3:D3)',
     hint:'Dior’s three monthly figures run ACROSS row 3, from column B to column D.',
-    explanation:'Dior’s January, February and March sales are B3, C3 and D3, so the mean is <b>= AVERAGE(B3:D3)</b>. B3:B7 would average one month down the column instead.' }),
+    explanation:'Dior’s January, February and March sales are B3, C3 and D3, so the mean is <b>= AVERAGE(B3:D3)</b>. B3:B7 would average one month down the column instead. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-047', chapterId:'g9ict-spreadsheets', subsection:'advanced_formatting', difficulty:4,
     question:'The Shop Average Sales is $2500. In cell <b>F3</b>, “Below” must appear when the Average Sales is <b>less than</b> $2500, and “Above” otherwise. Which formula does this?',
     options:['= IF(E3 &lt; 2500, "Below", "Above")','= IF(E3 &gt; 2500, "Below", "Above")','= IF(E3 &lt; 2500, "Above", "Below")','= IF(E3 = 2500, "Below", "Above")'],
     answer:'= IF(E3 &lt; 2500, "Below", "Above")',
     hint:'IF(test, value when true, value when false) - so the FIRST result is the one for a true test.',
-    explanation:'The test is “less than 2500”, and when that is true the answer is “Below”, so it goes in the true slot: <b>= IF(E3 &lt; 2500, "Below", "Above")</b>. Swapping the two results reverses every label.' }),
+    explanation:'The test is “less than 2500”, and when that is true the answer is “Below”, so it goes in the true slot: <b>= IF(E3 &lt; 2500, "Below", "Above")</b>. Swapping the two results reverses every label. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-048', chapterId:'g9ict-spreadsheets', subsection:'functions', difficulty:4,
     question:'In the spreadsheet below, the formula <b>= COUNTIF(F3:F7, "Above")</b> is used in cell F8. What is the output?' +
       _g9ict24('d8-spreadsheet', 'A screenshot of a spreadsheet with lettered columns and numbered rows of brands and monthly sales'),
     options:['2','3','5','2500'], answer:'2',
     hint:'Count how many rows in the last column say Above - do not add anything up.',
-    explanation:'COUNTIF counts the cells in F3:F7 whose contents are “Above”. Dior and Yves Saint Laurent are Above; Chanel, Gucci and Dolce are Below - so the answer is <b>2</b>.' }),
+    explanation:'COUNTIF counts the cells in F3:F7 whose contents are “Above”. Dior and Yves Saint Laurent are Above; Chanel, Gucci and Dolce are Below - so the answer is <b>2</b>. 📄 NCE 2024 exam.' }),
 
   // ── Question 9: databases ───────────────────────────────────────────────
 
@@ -352,13 +352,13 @@ STATIC_QUESTIONS.push(
     question:'In a database table of games, the field <b>RATING</b> holds values such as 5, 4 and 3. Which <b>data type</b> is used for this field?',
     options:['Number','Text','Date/Time','Yes/No'], answer:'Number',
     hint:'Could you sort these values, or work out an average of them?',
-    explanation:'The ratings are whole numbers that can be compared, sorted and averaged, so the field is a <b>Number</b>. Storing them as Text would sort 10 before 2.' }),
+    explanation:'The ratings are whole numbers that can be compared, sorted and averaged, so the field is a <b>Number</b>. Storing them as Text would sort 10 before 2. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-050', chapterId:'g9ict-databases', subsection:'forms_reports', difficulty:2,
     question:'In a database, which object is <b>used to organise and display data</b> for printing?',
     options:['Report','Data type','Query','Field'], answer:'Report',
     hint:'Which one is designed to be read on paper?',
-    explanation:'A <b>report</b> arranges selected data into a formatted, printable layout with headings, grouping and totals.' }),
+    explanation:'A <b>report</b> arranges selected data into a formatted, printable layout with headings, grouping and totals. 📄 NCE 2024 exam.' }),
 
   // ── Question 11: flowcharts and Python ──────────────────────────────────
 
@@ -366,19 +366,19 @@ STATIC_QUESTIONS.push(
     question:'A .......... is a diagram that shows the <b>steps to solve a problem</b>.',
     options:['flowchart','flowline','sequence','loop'], answer:'flowchart',
     hint:'It is the whole diagram, not one part of it.',
-    explanation:'A <b>flowchart</b> is the complete diagram of an algorithm. A flowline is one arrow inside it, and a sequence is one way of ordering its steps.' }),
+    explanation:'A <b>flowchart</b> is the complete diagram of an algorithm. A flowline is one arrow inside it, and a sequence is one way of ordering its steps. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-052', chapterId:'g9ict-algorithms', subsection:'flowchart_symbols', difficulty:2,
     question:'A .......... <b>connects one symbol to another</b> in a flowchart.',
     options:['flowline','flowchart','sequence','loop'], answer:'flowline',
     hint:'It is the arrow between two boxes.',
-    explanation:'A <b>flowline</b> is the arrow joining two symbols; it shows which step follows which.' }),
+    explanation:'A <b>flowline</b> is the arrow joining two symbols; it shows which step follows which. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-053', chapterId:'g9ict-algorithms', subsection:'control_structures', difficulty:2,
     question:'Steps in a .......... are executed <b>one after the other</b>, from first to last.',
     options:['sequence','loop','flowline','decision'], answer:'sequence',
     hint:'No repeating and no branching - just straight through.',
-    explanation:'In a <b>sequence</b> each step runs once, in order. A loop repeats steps and a decision chooses between them.' }),
+    explanation:'In a <b>sequence</b> each step runs once, in order. A loop repeats steps and a decision chooses between them. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-054', chapterId:'g9ict-algorithms', subsection:'python_basics', difficulty:4,
     question:'This Python program must display a sentence <b>seven</b> times.<br>' +
@@ -387,13 +387,13 @@ STATIC_QUESTIONS.push(
       'Which number completes the <b>while</b> line?',
     options:['7','6','8','1'], answer:'7',
     hint:'count starts at 0 and goes up by 1. List the values for which the test is still true.',
-    explanation:'With <code>count</code> starting at 0 and rising by 1, the test <code>count &lt; 7</code> is true for 0, 1, 2, 3, 4, 5 and 6 - <b>seven</b> passes. Using 6 would print six times.' }),
+    explanation:'With <code>count</code> starting at 0 and rising by 1, the test <code>count &lt; 7</code> is true for 0, 1, 2, 3, 4, 5 and 6 - <b>seven</b> passes. Using 6 would print six times. 📄 NCE 2024 exam.' }),
 
   makeMCQ({ id:'g9ict-pp24-055', chapterId:'g9ict-algorithms', subsection:'python_basics', difficulty:3,
     question:'In a Python <b>while</b> loop that must run a fixed number of times, what happens if the line <code>count = count + 1</code> is left out?',
     options:['The loop never ends','The loop runs once','The program will not start','The loop runs seven times'], answer:'The loop never ends',
     hint:'The condition is tested against count. What changes count?',
-    explanation:'Without that line <code>count</code> stays at 0, so the condition is true forever and the loop <b>never ends</b> - an infinite loop. Changing the counter is what eventually makes the test false.' })
+    explanation:'Without that line <code>count</code> stays at 0, so the condition is true forever and the loop <b>never ends</b> - an infinite loop. Changing the counter is what eventually makes the test false. 📄 NCE 2024 exam.' })
 );
 
 // ── The written questions, as printed, for the read-only past-papers screen ──

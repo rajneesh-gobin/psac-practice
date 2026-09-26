@@ -5,73 +5,73 @@ STATIC_QUESTIONS.push(
     question:'Which animal lives in a <strong>web</strong>?',
     options:['Bee','Butterfly','Fly','Spider'], answer:'Spider',
     hint:'This eight-legged creature spins silk to build its home and catch food.',
-    explanation:'Spiders spin silk webs that they use both as their home and as a trap to catch insects for food. Bees, butterflies, and flies do not build webs.' }),
+    explanation:'Spiders spin silk webs that they use both as their home and as a trap to catch insects for food. Bees, butterflies, and flies do not build webs. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-002', chapterId:'plants', subsection:'parts', difficulty:1,
     question:'Which of the following vegetables is a <strong>root</strong> vegetable?',
     options:['Beans','Broccoli','Carrot','Celery'], answer:'Carrot',
     hint:'This orange vegetable grows underground.',
-    explanation:'A carrot is a root - it grows underground and stores nutrients for the plant. Beans and broccoli are other plant parts; celery is a stem.' }),
+    explanation:'A carrot is a root - it grows underground and stores nutrients for the plant. Beans and broccoli are other plant parts; celery is a stem. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-003', chapterId:'energy', subsection:'forms', difficulty:1,
     question:'A fish swimming in a river has which <strong>form of energy</strong>?',
     options:['Heat energy','Light energy','Movement energy','Sound energy'], answer:'Movement energy',
     hint:'Any object that is moving possesses this form of energy.',
-    explanation:'A swimming fish possesses movement (kinetic) energy. This energy came from the chemical energy stored in its food.' }),
+    explanation:'A swimming fish possesses movement (kinetic) energy. This energy came from the chemical energy stored in its food. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-004', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'What is the <strong>function of a switch</strong> in an electric circuit?',
     options:['It protects against electric shocks.','It opens and closes the circuit.','It conducts electricity in the circuit.','It transforms electrical energy into light energy.'], answer:'It opens and closes the circuit.',
     hint:'When you flick it one way, the light comes on; the other way, it goes off.',
-    explanation:'A switch opens and closes the circuit. When closed, the circuit is complete and current flows. When open, the circuit is broken and no current flows.' }),
+    explanation:'A switch opens and closes the circuit. When closed, the circuit is complete and current flows. When open, the circuit is broken and no current flows. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-005', chapterId:'plants', subsection:'parts', difficulty:2,
     question:'Tina put a plant cutting in water. After a few days, she saw water absorbed through the roots. What can she <strong>conclude</strong> about the function of roots?',
     options:['The root holds the plant in soil.','The root stores food.','The root absorbs water.','The root absorbs oil.'], answer:'The root absorbs water.',
     hint:'The experiment shows roots directly taking in water from the surrounding liquid.',
-    explanation:'Tina\'s experiment shows that roots absorb water. Roots also anchor the plant and sometimes store food, but this experiment specifically demonstrates water absorption.' }),
+    explanation:'Tina\'s experiment shows that roots absorb water. Roots also anchor the plant and sometimes store food, but this experiment specifically demonstrates water absorption. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-006', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'Which component of an electric circuit is also called a <strong>dry cell</strong> and provides energy to the circuit?',
     options:['Bulb','Battery (cell)','Switch','Wire'], answer:'Battery (cell)',
     hint:'This component is the power source of the circuit.',
-    explanation:'A battery (or dry cell) provides the electrical energy that drives the current around the circuit. Without it, the circuit has no power source.' }),
+    explanation:'A battery (or dry cell) provides the electrical energy that drives the current around the circuit. Without it, the circuit has no power source. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-007', chapterId:'plants', subsection:'parts', difficulty:1,
     question:'Which part of a jackfruit tree <strong>manufactures food</strong> for the plant?',
     options:['Flower','Fruit','Leaf','Root'], answer:'Leaf',
     hint:'This green, flat part of the plant uses sunlight to make food through photosynthesis.',
-    explanation:'The leaf manufactures food for the plant through photosynthesis. It uses sunlight, carbon dioxide, and water to produce glucose (sugar).' }),
+    explanation:'The leaf manufactures food for the plant through photosynthesis. It uses sunlight, carbon dioxide, and water to produce glucose (sugar). 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-008', chapterId:'plants', subsection:'growth', difficulty:2,
     question:'What is <strong>soil erosion</strong>?',
     options:['The addition of minerals to soil','The growth of new plants in the soil','The carrying away of soil by wind or water','The mixing of different types of soil'], answer:'The carrying away of soil by wind or water',
     hint:'Erosion means wearing away - think of rain washing soil downhill.',
-    explanation:'Soil erosion is the removal and carrying away of topsoil by agents such as wind and water. It is made worse by cutting down trees and overgrazing.' }),
+    explanation:'Soil erosion is the removal and carrying away of topsoil by agents such as wind and water. It is made worse by cutting down trees and overgrazing. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-009', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'During the process of <strong>freezing</strong>, water changes from _____ to _____.',
     options:['Gas to liquid','Liquid to solid','Solid to gas','Solid to liquid'], answer:'Liquid to solid',
     hint:'Freezing happens when you put water in the freezer.',
-    explanation:'During freezing, liquid water loses heat energy and changes into solid ice. This happens at 0°C (the freezing point of water).' }),
+    explanation:'During freezing, liquid water loses heat energy and changes into solid ice. This happens at 0°C (the freezing point of water). 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-010', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'During <strong>condensation</strong>, water changes from _____ to _____.',
     options:['Gas to liquid','Liquid to gas','Solid to liquid','Liquid to solid'], answer:'Gas to liquid',
     hint:'This is what makes water droplets form on the outside of a cold glass.',
-    explanation:'Condensation occurs when water vapour (gas) cools down and changes back into liquid water. In the water cycle, this forms clouds.' }),
+    explanation:'Condensation occurs when water vapour (gas) cools down and changes back into liquid water. In the water cycle, this forms clouds. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-011', chapterId:'animals', subsection:'endangered', difficulty:2,
     question:'What type of bird is the Mauritius Kestrel?',
     options:['Extinct','Exotic','Endemic','Endangered'], answer:'Endemic',
     hint:'This word describes a species found naturally in one specific place and nowhere else.',
-    explanation:'The Mauritius Kestrel (Falco punctatus) is endemic to Mauritius - it is found in the wild only on the island of Mauritius. It was saved from extinction through conservation.' }),
+    explanation:'The Mauritius Kestrel (Falco punctatus) is endemic to Mauritius - it is found in the wild only on the island of Mauritius. It was saved from extinction through conservation. 📄 PSAC 2021 exam.' }),
 
   makeMCQ({ id:'g5sc-pp21-012', chapterId:'animals', subsection:'habitats', difficulty:3,
     question:'Which feature of the <strong>chameleon</strong> helps it grip onto tree branches?',
     options:['Its long curly tail','Its feet with fused toes','Its long sticky tongue','Its two rotating eyes'], answer:'Its feet with fused toes',
     hint:'Think about what is different and useful about a chameleon\'s feet compared to other lizards.',
-    explanation:'A chameleon\'s feet have toes that are fused into two opposing groups (like tongs), allowing them to grip branches firmly. Their prehensile tail also helps for balance.' })
+    explanation:'A chameleon\'s feet have toes that are fused into two opposing groups (like tongs), allowing them to grip branches firmly. Their prehensile tail also helps for balance. 📄 PSAC 2021 exam.' })
 );
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];

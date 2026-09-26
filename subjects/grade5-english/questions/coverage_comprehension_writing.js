@@ -16,6 +16,9 @@ const G5E_EXPL = {
   'g5e-cov-informal-0': "A close friend takes an informal greeting with their name: <b>Hi Aisha,</b>.",
   'g5e-cov-informal-1': "A postcard to a cousin is informal, so a warm everyday ending like <b>See you soon,</b> fits.",
   'g5e-cov-description-2': "<i>Aroma</i> is something you breathe in, so the sense being used is <b>smell</b>.",
+  'g5e-cov-figurative-0': "Personification gives a <b>human</b> quality or action to something that is not human. The wind cannot really feel impatient — <b>impatient</b> is a human emotion given to the wind, which is personification.",
+  'g5e-cov-figurative-1': "A metaphor says one thing <i>is</i> another — no 'like' or 'as'. <b>The classroom was a buzzing beehive</b> does not compare — it <i>calls</i> the classroom a beehive. The option with 'like' is a simile, not a metaphor.",
+  'g5e-cov-figurative-2': "<b>Alliteration</b> is when several words close together begin with the same sound. In <b>Silver snakes slithered silently</b>, every word starts with the letter 's' — four in a row — which makes it alliteration.",
 };
 
 // main idea — broken shared opts replaced with per-question options
@@ -97,13 +100,13 @@ rows('description','eng-writing','descriptive',[
 add('g5e-cov-figurative-0','eng-writing','figurative',
   'Which sentence contains personification?',
   ['The impatient wind rattled the windows.','The wind blew very hard.','The windows were old and broken.','The storm was the worst in years.'],
-  'The impatient wind rattled the windows.','Look for human actions, direct comparisons, or repeated starting sounds.');
+  'The impatient wind rattled the windows.','Personification gives a human feeling or action to something that is not human. Which option describes a non-living thing doing something only a person could do?');
 add('g5e-cov-figurative-1','eng-writing','figurative',
   'Which sentence contains a metaphor?',
   ['The classroom was a buzzing beehive.','The classroom was like a buzzing beehive.','The pupils were busy in the classroom.','The bees buzzed loudly outside the window.'],
-  'The classroom was a buzzing beehive.','Look for human actions, direct comparisons, or repeated starting sounds.');
+  'The classroom was a buzzing beehive.','A metaphor says something IS something else — no "like" or "as". Ignore the option that uses "like" — that is a simile.');
 add('g5e-cov-figurative-2','eng-writing','figurative',
   'Which sentence contains alliteration?',
   ['Silver snakes slithered silently.','The snake moved quietly across the rocks.','Darkness fell over the lonely valley.','Heavy rain fell on the old town.'],
-  'Silver snakes slithered silently.','Look for human actions, direct comparisons, or repeated starting sounds.');
+  'Silver snakes slithered silently.','Alliteration is when several words in a row start with the same sound. Look at the first letter of each word in every option — which one has a matching letter repeated?');
 })();

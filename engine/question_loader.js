@@ -340,7 +340,11 @@ const QuestionLoader = (() => {
                      'subjects/grade9-ict/questions/l4_applied_algorithms.js',
                      'subjects/grade9-ict/questions/l4_applied_networks.js',
                      'subjects/grade9-ict/questions/l4_applied_office.js',
-                     'subjects/grade9-ict/questions/l4_applied_systems.js'],
+                     'subjects/grade9-ict/questions/l4_applied_systems.js',
+                     'subjects/grade9-ict/questions/past_paper_2021.js',
+                     'subjects/grade9-ict/questions/past_paper_2022.js',
+                     'subjects/grade9-ict/questions/past_paper_2023.js',
+                     'subjects/grade9-ict/questions/past_paper_2025.js'],
   'grade9-maths': ['subjects/grade9-maths/questions/ch01_indices.js',
                      'subjects/grade9-maths/questions/ch02_coordinates.js',
                      'subjects/grade9-maths/questions/ch03_number_revision.js',
@@ -368,7 +372,11 @@ const QuestionLoader = (() => {
                      'subjects/grade9-maths/questions/visual_bank_2.js',
                      'subjects/grade9-maths/questions/balance_bank.js',
                      'subjects/grade9-maths/questions/depth_bank.js',
+                     'subjects/grade9-maths/questions/past_paper_2021.js',
+                     'subjects/grade9-maths/questions/past_paper_2022.js',
+                     'subjects/grade9-maths/questions/past_paper_2023.js',
                      'subjects/grade9-maths/questions/past_paper_2024.js',
+                     'subjects/grade9-maths/questions/past_paper_2025.js',
                      'subjects/grade9-maths/questions/maths_multi_year.js'],
     'grade9-english': ['subjects/grade9-english/questions/starter_bank.js',
                        'subjects/grade9-english/questions/grammar_pronouns_nouns_adj.js',
@@ -388,7 +396,12 @@ const QuestionLoader = (() => {
                        'subjects/grade9-english/questions/depth_e4_vocab_words.js',
                        'subjects/grade9-english/questions/depth_e5_verbs_pronouns.js',
                        'subjects/grade9-english/questions/depth_e6_adverbs_sentence.js',
-                       'subjects/grade9-english/questions/depth_e7_punctuation.js'],
+                       'subjects/grade9-english/questions/depth_e7_punctuation.js',
+                       'subjects/grade9-english/questions/past_paper_2021.js',
+                       'subjects/grade9-english/questions/past_paper_2022.js',
+                       'subjects/grade9-english/questions/past_paper_2023.js',
+                       'subjects/grade9-english/questions/past_paper_2024.js',
+                       'subjects/grade9-english/questions/past_paper_2025.js'],
     'grade9-french': ['subjects/grade9-french/questions/starter_bank.js',
                       'subjects/grade9-french/questions/transformation_volume.js',
                       'subjects/grade9-french/questions/grammaire_volume.js',
@@ -405,13 +418,22 @@ const QuestionLoader = (() => {
                       'subjects/grade9-french/questions/approf_1_grammaire.js',
                       'subjects/grade9-french/questions/approf_2_usage.js',
                       'subjects/grade9-french/questions/approf_3_texte.js',
-                      'subjects/grade9-french/questions/approf_4_oeuvres.js'],
+                      'subjects/grade9-french/questions/approf_4_oeuvres.js',
+                      'subjects/grade9-french/questions/past_paper_2021.js',
+                      'subjects/grade9-french/questions/past_paper_2022.js',
+                      'subjects/grade9-french/questions/past_paper_2023.js',
+                      'subjects/grade9-french/questions/past_paper_2024.js',
+                      'subjects/grade9-french/questions/past_paper_2025.js'],
     'grade9-biology': ['subjects/grade9-biology/questions/b1_circulatory.js',
                        'subjects/grade9-biology/questions/b2_reproductive.js',
                        'subjects/grade9-biology/questions/b3_biodiversity.js',
                        'subjects/grade9-biology/questions/b4_plant_nutrition.js',
                        'subjects/grade9-biology/questions/inquiry.js',
+                       'subjects/grade9-biology/questions/past_paper_2021.js',
+                       'subjects/grade9-biology/questions/past_paper_2022.js',
+                       'subjects/grade9-biology/questions/past_paper_2023.js',
                        'subjects/grade9-biology/questions/past_paper_2024.js',
+                       'subjects/grade9-biology/questions/past_paper_2025.js',
                        'subjects/grade9-biology/questions/sts.js',
                        'subjects/grade9-biology/questions/inquiry_depth.js',
                        'subjects/grade9-biology/questions/sts_depth.js',
@@ -435,7 +457,12 @@ const QuestionLoader = (() => {
                          'subjects/grade9-chemistry/questions/c4_metals.js',
                          'subjects/grade9-chemistry/questions/c5_salts.js',
                          'subjects/grade9-chemistry/questions/inquiry.js',
+                         'subjects/grade9-chemistry/questions/past_paper_2021.js',
+                         'subjects/grade9-chemistry/questions/past_paper_2022.js',
+                         'subjects/grade9-chemistry/questions/past_paper_2023.js',
                          'subjects/grade9-chemistry/questions/past_paper_2024.js',
+                         'subjects/grade9-chemistry/questions/past_paper_2025.js',
+                         'subjects/grade9-chemistry/questions/past_paper_practice.js',
                          'subjects/grade9-chemistry/questions/sts.js',
                          'subjects/grade9-chemistry/questions/inquiry_depth.js',
                          'subjects/grade9-chemistry/questions/sts_depth.js',
@@ -457,7 +484,11 @@ const QuestionLoader = (() => {
                        'subjects/grade9-physics/questions/p3_energy.js',
                        'subjects/grade9-physics/questions/p4_motion.js',
                        'subjects/grade9-physics/questions/p5_electricity.js',
+                       'subjects/grade9-physics/questions/past_paper_2021.js',
+                       'subjects/grade9-physics/questions/past_paper_2022.js',
+                       'subjects/grade9-physics/questions/past_paper_2023.js',
                        'subjects/grade9-physics/questions/past_paper_2024.js',
+                       'subjects/grade9-physics/questions/past_paper_2025.js',
                        'subjects/grade9-physics/questions/sts.js',
                        'subjects/grade9-physics/questions/inquiry_depth.js',
                        'subjects/grade9-physics/questions/sts_depth.js',
@@ -493,7 +524,12 @@ const QuestionLoader = (() => {
                                      'subjects/grade9-social-modern-studies/questions/depth_d_people_places.js',
                                      'subjects/grade9-social-modern-studies/questions/depth_e_government_media.js',
                                      'subjects/grade9-social-modern-studies/questions/depth_f_society.js',
-                                     'subjects/grade9-social-modern-studies/questions/depth_g_links_economy.js'],
+                                     'subjects/grade9-social-modern-studies/questions/depth_g_links_economy.js',
+                                     'subjects/grade9-social-modern-studies/questions/past_paper_2021.js',
+                                     'subjects/grade9-social-modern-studies/questions/past_paper_2022.js',
+                                     'subjects/grade9-social-modern-studies/questions/past_paper_2023.js',
+                                     'subjects/grade9-social-modern-studies/questions/past_paper_2024.js',
+                                     'subjects/grade9-social-modern-studies/questions/past_paper_2025.js'],
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
       'subjects/grade5-maths/questions/syllabus_gaps_g5mth.js',
@@ -511,6 +547,10 @@ const QuestionLoader = (() => {
       'subjects/grade5-maths/questions/reasoning_word_problems.js',
       'subjects/grade5-maths/questions/extended_reasoning_bank.js',
       'subjects/grade5-maths/questions/symmetry_line_drawing.js',
+      // past papers
+      'subjects/grade5-maths/questions/past_paper_2023.js',
+      'subjects/grade5-maths/questions/past_paper_2024.js',
+      'subjects/grade5-maths/questions/past_paper_2025.js',
     ],
     'grade5-french': [
       'subjects/grade5-french/questions/ch14b_textes_trous.js',
@@ -537,7 +577,11 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/extended_practice_bank.js',
       'subjects/grade5-french/questions/enrichment_relier_phrases.js',
       'subjects/grade5-french/questions/coverage_g5_balance.js',
-      'subjects/grade5-french/questions/rcp_textes.js'],
+      'subjects/grade5-french/questions/rcp_textes.js',
+      // past papers
+      'subjects/grade5-french/questions/past_paper_2023.js',
+      'subjects/grade5-french/questions/past_paper_2024.js',
+      'subjects/grade5-french/questions/past_paper_2025.js'],
     'grade5-english': [
       'subjects/grade5-english/questions/ch11_cloze.js',
       'subjects/grade5-english/questions/depth_hard.js',
@@ -568,7 +612,11 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/coverage_comprehension_writing.js',
       'subjects/grade5-english/questions/coverage_vocabulary_spelling.js',
       'subjects/grade5-english/questions/enrichment_joining_sentences.js',
-      'subjects/grade5-english/questions/rcp_passages.js'],
+      'subjects/grade5-english/questions/rcp_passages.js',
+      // past papers
+      'subjects/grade5-english/questions/past_paper_2023.js',
+      'subjects/grade5-english/questions/past_paper_2024.js',
+      'subjects/grade5-english/questions/past_paper_2025.js'],
     'grade5-science': [
       'subjects/grade5-science/questions/depth_hard.js',
       'subjects/grade5-science/questions/diagrams_exam_style.js',
@@ -654,6 +702,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-science/questions/enrichment_g6sci_ecosystems.js',
       'subjects/grade6-science/questions/enrichment_g6sci_solar.js',
       // past papers
+      'subjects/grade6-science/questions/past_paper_2025.js',
       'subjects/grade6-science/questions/past_paper_2024.js',
       'subjects/grade6-science/questions/past_paper_2023.js',
       'subjects/grade6-science/questions/past_paper_2022.js',
@@ -682,6 +731,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-history/questions/enrichment_g6_symbols.js',
       'subjects/grade6-history/questions/enrichment_g6_world.js',
       // past papers
+      'subjects/grade6-history/questions/past_paper_2025.js',
       'subjects/grade6-history/questions/past_paper_2024.js',
       'subjects/grade6-history/questions/past_paper_2023.js',
       'subjects/grade6-history/questions/past_paper_2022.js',
@@ -711,6 +761,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/ch11_g6_graphs.js',
       'subjects/grade6-maths/questions/syllabus_gaps_g6mth.js',
       // past papers
+      'subjects/grade6-maths/questions/past_paper_2025.js',
       'subjects/grade6-maths/questions/past_paper_2024.js',
       'subjects/grade6-maths/questions/past_paper_2023.js',
       'subjects/grade6-maths/questions/past_paper_2022.js',
@@ -755,6 +806,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-english/questions/syllabus_gaps_g6eng.js',
       'subjects/grade6-english/questions/ch07_g6_passages.js',
       // past papers
+      'subjects/grade6-english/questions/past_paper_2025.js',
       'subjects/grade6-english/questions/past_paper_2024.js',
       'subjects/grade6-english/questions/past_paper_2023.js',
       'subjects/grade6-english/questions/past_paper_2022.js',
@@ -787,6 +839,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/ch13_g6_chasse_erreurs.js',
       'subjects/grade6-french/questions/extended_practice_bank.js',
       // past papers
+      'subjects/grade6-french/questions/past_paper_2025.js',
       'subjects/grade6-french/questions/past_paper_2024.js',
       'subjects/grade6-french/questions/past_paper_2023.js',
       'subjects/grade6-french/questions/past_paper_2022.js',
@@ -810,6 +863,10 @@ const QuestionLoader = (() => {
       'subjects/grade4-maths/questions/coverage_measures.js',
       'subjects/grade4-maths/questions/coverage_data_reasoning.js',
       'subjects/grade4-maths/questions/extended_reasoning_bank.js',
+      // past papers
+      'subjects/grade4-maths/questions/past_paper_2025.js',
+      'subjects/grade4-maths/questions/past_paper_2024.js',
+      'subjects/grade4-maths/questions/past_paper_2023.js',
     ],
     'grade4-english': [
       'subjects/grade4-english/questions/ch09_cloze.js',
@@ -831,6 +888,10 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/coverage_vocabulary.js',
       'subjects/grade4-english/questions/coverage_passages.js',
       'subjects/grade4-english/questions/enrichment_joining_sentences.js',
+      // past papers
+      'subjects/grade4-english/questions/past_paper_2025.js',
+      'subjects/grade4-english/questions/past_paper_2024.js',
+      'subjects/grade4-english/questions/past_paper_2023.js',
     ],
     'grade4-science': [
       'subjects/grade4-science/questions/depth_hard.js',
@@ -848,6 +909,10 @@ const QuestionLoader = (() => {
       'subjects/grade4-science/questions/enrichment_g4sci_equipment.js',
       // top-up
       'subjects/grade4-science/questions/topup_g4_science.js',
+      // past papers
+      'subjects/grade4-science/questions/past_paper_2025.js',
+      'subjects/grade4-science/questions/past_paper_2024.js',
+      'subjects/grade4-science/questions/past_paper_2023.js',
     ],
     'grade4-french': [
       'subjects/grade4-french/questions/ch12b_textes_trous.js',
@@ -878,6 +943,10 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/coverage_phrase_passe.js',
       'subjects/grade4-french/questions/coverage_imparfait_lecture.js',
       'subjects/grade4-french/questions/enrichment_relier_phrases.js',
+      // past papers
+      'subjects/grade4-french/questions/past_paper_2025.js',
+      'subjects/grade4-french/questions/past_paper_2024.js',
+      'subjects/grade4-french/questions/past_paper_2023.js',
     ],
     'grade4-history': [
       'subjects/grade4-history/questions/depth_hard.js',
@@ -896,6 +965,10 @@ const QuestionLoader = (() => {
       'subjects/grade4-history/questions/coverage_locality_community.js',
       'subjects/grade4-history/questions/coverage_voyages_environment.js',
       'subjects/grade4-history/questions/coverage_weather_maps.js',
+      // past papers
+      'subjects/grade4-history/questions/past_paper_2025.js',
+      'subjects/grade4-history/questions/past_paper_2024.js',
+      'subjects/grade4-history/questions/past_paper_2023.js',
     ],
   };
 
@@ -975,7 +1048,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 163;
+  const _CACHE_VERSION = 171;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

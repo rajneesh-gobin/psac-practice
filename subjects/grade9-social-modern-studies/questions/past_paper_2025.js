@@ -1,0 +1,72 @@
+'use strict';
+STATIC_QUESTIONS.push(
+  makeMCQ({ id: 'g9sms-pp25-001', chapterId: 'g9sms-government-welfare', difficulty: 2,
+    subsection: 'head_of_state_voting',
+    question: 'Who is the head of state of the Republic of Mauritius?',
+    options: ['The President', 'The Prime Minister', 'The Governor General', 'The Speaker'], answer: 'The President',
+    explanation: 'The President is the head of state of the Republic of Mauritius. The President is a largely ceremonial role, while executive power is held by the Prime Minister. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-002', chapterId: 'g9sms-hazards-environment', difficulty: 2,
+    subsection: 'cyclones',
+    question: 'Which cyclone hit Mauritius in 1975?',
+    options: ['Gervaise', 'Alix', 'Carol', 'Dina'], answer: 'Gervaise',
+    explanation: 'Cyclone Gervaise struck Mauritius in 1975, causing widespread damage. It led to significant improvements in cyclone preparedness and warning systems in Mauritius. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-003', chapterId: 'g9sms-living-conditions', difficulty: 2,
+    subsection: 'health_and_disease',
+    question: 'Which disease affected many Mauritians in the 1940s?',
+    options: ['Malaria', 'Diabetes', 'Chikungunya', 'Covid-19'], answer: 'Malaria',
+    explanation: 'Malaria was the major disease affecting Mauritians in the 1940s. A successful eradication campaign using DDT in the late 1940s virtually eliminated the disease, dramatically reducing the death rate. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-004', chapterId: 'g9sms-population', difficulty: 2,
+    subsection: 'density_distribution',
+    question: 'Demography is the study of the ……………….',
+    options: ['population', 'economy', 'environment', 'constitution'], answer: 'population',
+    explanation: 'Demography is the scientific study of the population, including its size, structure, distribution and how it changes over time through births, deaths and migration. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-005', chapterId: 'g9sms-social-change', difficulty: 2,
+    subsection: 'deviance_and_norms',
+    question: 'Which one is an example of deviance?',
+    options: ['Disturbing the class', 'Smoking in hospitals', 'Committing theft', 'Exceeding speed limit'], answer: 'Disturbing the class',
+    explanation: 'Deviance refers to breaking social norms (unwritten rules of behaviour), not necessarily laws. Disturbing the class breaks classroom social norms. Committing theft and exceeding the speed limit are crimes (breaking laws), which is a different concept from deviance. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-006', chapterId: 'g9sms-government-welfare', difficulty: 2,
+    subsection: 'taxes_and_mra',
+    question: 'Which organisation collects taxes in the Republic of Mauritius?',
+    options: ['Mauritius Revenue Authority', 'Central Electricity Board', 'Central Housing Authority', 'Mauritius Housing Corporation'], answer: 'Mauritius Revenue Authority',
+    explanation: 'The Mauritius Revenue Authority (MRA) is the government body responsible for collecting taxes and customs duties in Mauritius. It was established in 2004. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-007', chapterId: 'g9sms-chagos-tromelin', difficulty: 2,
+    subsection: 'diego_garcia',
+    question: 'On which island of the Republic of Mauritius is there a military base?',
+    options: ['Diego Garcia', 'Rodrigues', 'St Brandon', 'Tromelin'], answer: 'Diego Garcia',
+    explanation: 'Diego Garcia, the largest island of the Chagos Archipelago, hosts a major United States military base. Mauritius claims sovereignty over the Chagos Archipelago, including Diego Garcia. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-008', chapterId: 'g9sms-government-welfare', difficulty: 2,
+    subsection: 'taxes_and_mra',
+    question: 'Which of the following is a source of income for the Mauritian government?',
+    options: ['Taxes', 'Pensions', 'Loans', 'Salaries'], answer: 'Taxes',
+    explanation: 'Taxes are the main source of revenue for the Mauritian government. They include income tax, VAT and customs duties, and are collected by the Mauritius Revenue Authority (MRA). 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-009', chapterId: 'g9sms-family', difficulty: 2,
+    subsection: 'family_types',
+    question: 'What type of family consists of a mother, father and their dependent children living under the same roof?',
+    options: ['Nuclear family', 'Extended family', 'Single-parent family', 'Reconstituted family'], answer: 'Nuclear family',
+    explanation: 'A nuclear family consists of a mother, father and their dependent children living together under the same roof. It is the most common family type in modern Mauritius. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' }),
+
+  makeMCQ({ id: 'g9sms-pp25-010', chapterId: 'g9sms-economy-1960s', difficulty: 2,
+    subsection: 'obstacles',
+    question: 'The economic problem faced by Mauritius in the 1960s was ……………….',
+    options: ['high unemployment', 'traffic jams', 'health epidemics', 'low death rate'], answer: 'high unemployment',
+    explanation: 'High unemployment was a major economic problem facing Mauritius in the 1960s at independence. The economy was heavily dependent on sugar, which could not absorb the growing workforce. This was one of the main reasons the government pursued industrialisation. 📄 NCE 2025 Social & Modern Studies exam.',
+    learnMore: '📄 NCE 2025 Social & Modern Studies exam.' })
+);

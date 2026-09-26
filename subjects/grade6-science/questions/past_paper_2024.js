@@ -32,13 +32,13 @@ STATIC_QUESTIONS.push(
       'Which material is <b>most appropriate</b> to make part <b>X</b> of the umbrella?',
     options:['Glass','Plastic','Silk','Wool'], answer:'Plastic',
     hint:'The canopy must be waterproof and flexible.',
-    explanation:'Plastic (synthetic fabric like nylon) is waterproof and light - ideal for an umbrella canopy. Glass breaks; wool and silk absorb water.' }),
+    explanation:'Plastic (synthetic fabric like nylon) is waterproof and light - ideal for an umbrella canopy. Glass breaks; wool and silk absorb water. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-003', chapterId:'g6-energy', subsection:'forms', difficulty:1,
     question:'What is the form of energy <b>at the output</b> when a television set is switched on?',
     options:['Chemical','Electrical','Light','Movement'], answer:'Light',
     hint:'What can you see and hear from a television?',
-    explanation:'A television converts electrical energy into light energy (and sound). Light is the visible output.' }),
+    explanation:'A television converts electrical energy into light energy (and sound). Light is the visible output. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-004', chapterId:'g6-air', subsection:'breathing', difficulty:1,
     question:'Which one of the following gases is necessary for <b>burning</b> to take place?',
@@ -53,7 +53,7 @@ STATIC_QUESTIONS.push(
       'Which of the following food items should be added to the meal to make it a <b>balanced</b> meal?',
     options:['Apple','Bread','Lentils','Cheese'], answer:'Lentils',
     hint:'Cereals provide carbohydrates. Milk provides dairy/fats. What food group is still missing?',
-    explanation:'Lentils provide protein, which is the missing food group. Apple and bread add more carbohydrates; cheese adds more fat/dairy.' }),
+    explanation:'Lentils provide protein, which is the missing food group. Apple and bread add more carbohydrates; cheese adds more fat/dairy. 📄 PSAC 2024 exam.' }),
 
   // ── Q2: Air composition - MCQ-convertible sub-questions ─────────────────
 
@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
       'What is the percentage of <b>carbon dioxide</b> found in dry air?',
     options:['0.03%','0.87%','21.0%','78.1%'], answer:'0.03%',
     hint:'Carbon dioxide is a trace gas - very small amount.',
-    explanation:'Carbon dioxide makes up only 0.03% of dry air.' }),
+    explanation:'Carbon dioxide makes up only 0.03% of dry air. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-007', chapterId:'g6-air', subsection:'properties', difficulty:2,
     question:'<b>Diagram 3</b> shows the percentage composition of gases in dry air.' +
@@ -71,13 +71,13 @@ STATIC_QUESTIONS.push(
       'Name the gas labelled <b>P</b>.',
     options:['Argon','Carbon dioxide','Nitrogen','Oxygen'], answer:'Oxygen',
     hint:'The second most common gas in air, needed for breathing and combustion.',
-    explanation:'Oxygen makes up 21% of dry air. Nitrogen is ~78%, argon ~0.87%, CO₂ ~0.03%.' }),
+    explanation:'Oxygen makes up 21% of dry air. Nitrogen is ~78%, argon ~0.87%, CO₂ ~0.03%. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-008', chapterId:'g6-air', subsection:'properties', difficulty:1,
     question:'Which gas is <b>absent</b> in dry air?',
     options:['Argon','Carbon dioxide','Nitrogen','Water vapour'], answer:'Water vapour',
     hint:'"Dry air" means the water has been removed.',
-    explanation:'Dry air by definition contains no water vapour. All the others (nitrogen, oxygen, argon, CO₂) are present in dry air.' }),
+    explanation:'Dry air by definition contains no water vapour. All the others (nitrogen, oxygen, argon, CO₂) are present in dry air. 📄 PSAC 2024 exam.' }),
 
   // ── Q3: Animals ─────────────────────────────────────────────────────────
 
@@ -94,13 +94,13 @@ STATIC_QUESTIONS.push(
     question:'To which group of animals does the <b>bee</b> belong?',
     options:['Birds','Insects','Mammals','Reptiles'], answer:'Insects',
     hint:'The bee has 6 legs and 3 body parts.',
-    explanation:'Bees are insects: they have 6 legs, 3 body parts (head, thorax, abdomen), and an exoskeleton.' }),
+    explanation:'Bees are insects: they have 6 legs, 3 body parts (head, thorax, abdomen), and an exoskeleton. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-011', chapterId:'g6-animals', subsection:'classification', difficulty:2,
     question:'How do <b>birds and reptiles</b> reproduce?',
     options:['By giving birth to live young','By budding','By laying eggs','By spores'], answer:'By laying eggs',
     hint:'Think about what comes out of a hen or a lizard.',
-    explanation:'Both birds and reptiles are oviparous - they reproduce by laying eggs.' }),
+    explanation:'Both birds and reptiles are oviparous - they reproduce by laying eggs. 📄 PSAC 2024 exam.' }),
 
   // ── Q4: Materials ────────────────────────────────────────────────────────
 
@@ -108,7 +108,7 @@ STATIC_QUESTIONS.push(
     question:'Which of the following materials is <b>man-made</b> (not natural)?',
     options:['Glass','Leather','Cotton','Steel'], answer:'Steel',
     hint:'Think about which material is processed from iron ore in a factory.',
-    explanation:'Steel is man-made (an alloy of iron and carbon). Glass can also be man-made but is derived from natural sand; steel is entirely manufactured.' }),
+    explanation:'Steel is man-made (an alloy of iron and carbon). Glass can also be man-made but is derived from natural sand; steel is entirely manufactured. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-013', chapterId:'g6-materials', subsection:'rusting', difficulty:2,
     question:'An experiment is set up as shown in <b>Diagram 6</b>. All the pins are made of the same material.' +
@@ -125,7 +125,7 @@ STATIC_QUESTIONS.push(
       'Which of the following best explains why?',
     options:['The oil stops air reaching the iron', 'There is far too much water present', 'Iron does not rust when it is cold', 'Oil is a conductor of electricity'], answer:'The oil stops air reaching the iron',
     hint:'Rusting needs both air and water. Pin A still has water around it - so what must be missing?',
-    explanation:'The oil layer sits on top of the water and acts as a barrier, preventing oxygen from reaching the iron - so rusting cannot occur.' }),
+    explanation:'The oil layer sits on top of the water and acts as a barrier, preventing oxygen from reaching the iron - so rusting cannot occur. 📄 PSAC 2024 exam.' }),
 
   // ── Q5: Energy ───────────────────────────────────────────────────────────
 
@@ -142,13 +142,13 @@ STATIC_QUESTIONS.push(
     question:'In a thermal power station using heavy oil, the energy transformation is: <b>___ energy → movement energy → ___ energy</b>. Which pair of words correctly fills the blanks?',
     options:['Solar → electrical','Chemical → electrical','Nuclear → light','Electrical → chemical'], answer:'Chemical → electrical',
     hint:'Burning oil releases stored energy. The final product of a power station is electricity.',
-    explanation:'Heavy oil (fossil fuel) contains chemical energy. Burning it → heat → steam → movement (kinetic) → electrical energy.' }),
+    explanation:'Heavy oil (fossil fuel) contains chemical energy. Burning it → heat → steam → movement (kinetic) → electrical energy. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-017', chapterId:'g6-energy', subsection:'sources', difficulty:2,
     question:'Give one <b>disadvantage</b> of a thermal power station that burns heavy oil.',
     options:['It pollutes the air with waste gases', 'It produces completely clean energy', 'It uses a renewable energy source', 'It is very cheap to build and run'], answer:'It pollutes the air with waste gases',
     hint:'Think about what burning oil releases into the atmosphere.',
-    explanation:'Burning fossil fuels releases CO₂ and other pollutants - contributing to air pollution and climate change. Oil is also non-renewable.' }),
+    explanation:'Burning fossil fuels releases CO₂ and other pollutants - contributing to air pollution and climate change. Oil is also non-renewable. 📄 PSAC 2024 exam.' }),
 
   // ── Q2(c), Q5(b) and Q6(a): paper items that had no entry at all until the
   //    diagrams existed. Each of these is unanswerable without its picture,
@@ -160,7 +160,7 @@ STATIC_QUESTIONS.push(
       'What <b>type of pollution</b> is shown in Diagram 4?',
     options:['Air pollution','Water pollution','Noise pollution','Soil pollution'], answer:'Air pollution',
     hint:'Look at what is coming out of the chimneys and the vehicles.',
-    explanation:'The smoke from the factory chimneys and the exhaust fumes from the bus and cars release gases and soot into the air, so this is <b>air pollution</b>.' }),
+    explanation:'The smoke from the factory chimneys and the exhaust fumes from the bus and cars release gases and soot into the air, so this is <b>air pollution</b>. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-019', chapterId:'g6-air', subsection:'pollution', difficulty:2,
     question:'<b>Diagram 4</b> shows a polluted area.' +
@@ -169,7 +169,7 @@ STATIC_QUESTIONS.push(
     options:['Exhaust fumes from vehicles','Rubbish dumped in a river','Loudspeakers in the street','Fertiliser washed off a field'],
     answer:'Exhaust fumes from vehicles',
     hint:'A source is the thing the pollution comes OUT of. Name one you can see in the picture.',
-    explanation:'The bus and cars give off <b>exhaust fumes</b>, and the factory chimneys give off smoke. Both put gases and soot into the air. The other options are real kinds of pollution, but none of them is shown here.' }),
+    explanation:'The bus and cars give off <b>exhaust fumes</b>, and the factory chimneys give off smoke. Both put gases and soot into the air. The other options are real kinds of pollution, but none of them is shown here. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-020', chapterId:'g6-energy', subsection:'sources', difficulty:1,
     question:'<b>Diagram 8</b> shows solar panels on a roof.' +
@@ -178,7 +178,7 @@ STATIC_QUESTIONS.push(
     options:['Light energy','Heat energy from the ground','Movement energy from the wind','Chemical energy from fuel'],
     answer:'Light energy',
     hint:'What do the panels need to be pointed at to work?',
-    explanation:'Solar panels convert <b>light energy</b> from the Sun into electrical energy. They stop producing electricity at night, which is their main limitation.' }),
+    explanation:'Solar panels convert <b>light energy</b> from the Sun into electrical energy. They stop producing electricity at night, which is their main limitation. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-021', chapterId:'g6-ecosystems', subsection:'food_webs', difficulty:2,
     question:'<b>Diagram 9</b> shows an ecosystem.' +
@@ -187,7 +187,7 @@ STATIC_QUESTIONS.push(
     options:['Algae, then big fish','Big fish, then algae','Tree, then bird','Water, then sun'],
     answer:'Algae, then big fish',
     hint:'Work out what the small fish eats, and what eats the small fish.',
-    explanation:'The small fish feed on the <b>algae</b> (the producer), and the <b>big fish</b> feed on the small fish. Energy flows in the direction of the arrows, from producer to consumer.' }),
+    explanation:'The small fish feed on the <b>algae</b> (the producer), and the <b>big fish</b> feed on the small fish. Energy flows in the direction of the arrows, from producer to consumer. 📄 PSAC 2024 exam.' }),
 
   makeMCQ({ id:'g6sc-pp24-022', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:2,
     question:'<b>Diagram 9</b> shows an ecosystem.' +
@@ -196,7 +196,7 @@ STATIC_QUESTIONS.push(
     options:['Water','Small fish','Algae','The tree'],
     answer:'Water',
     hint:'A non-living thing was never alive. Three of these four are living things.',
-    explanation:'<b>Water</b> is the non-living thing the bird depends on - it drinks it and hunts in it. The small fish, the algae and the tree are all living things. The Sun is the other non-living thing shown.' })
+    explanation:'<b>Water</b> is the non-living thing the bird depends on - it drinks it and hunts in it. The small fish, the algae and the tree are all living things. The Sun is the other non-living thing shown. 📄 PSAC 2024 exam.' })
 
 );
 

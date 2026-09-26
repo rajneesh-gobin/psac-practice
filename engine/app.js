@@ -12131,6 +12131,36 @@ function renderResults(correct, total, pct, timeTaken, chapterStats) {
   // filtered to mistakes from the moment they appear.
   _examReviewWrongOnly = false;
   _renderExamReview();
+
+  // Load written questions for Section B (fire-and-forget)
+  (async () => {
+    const sec = document.getElementById('results-written-section');
+    const writtenEl = document.getElementById('results-written-list');
+    if (!sec || !writtenEl || typeof QuestionLoader === 'undefined') return;
+    const grade = ACTIVE_PACK && ACTIVE_PACK.grade;
+    const subjectName = ACTIVE_PACK && ACTIVE_PACK.name;
+    const papers = await QuestionLoader.loadPastPapers(grade);
+    const relevant = papers.filter(q => q.subject && subjectName &&
+      q.subject.toLowerCase().includes(subjectName.toLowerCase().split(' ')[0]));
+    if (!relevant.length) return;
+    sec.classList.remove('hidden');
+    writtenEl.innerHTML = relevant.slice(0, 10).map(q => `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-4">
+        <div class="flex items-start gap-3">
+          <span class="text-xs font-bold text-indigo-400 shrink-0 mt-0.5">Q.</span>
+          <div class="flex-1">
+            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${q.question}</p>
+            ${q.image ? `<img src="${q.image}" alt="${q.imageAlt || 'Exam diagram'}" loading="lazy" style="display:block;margin:8px auto;max-width:min(100%,420px);height:auto;border-radius:6px">` : ''}
+            <div class="flex items-center gap-2 flex-wrap mt-2">
+              ${q.marks ? `<span class="text-[11px] font-bold text-gray-500 dark:text-gray-400">[${q.marks} mark${q.marks !== 1 ? 's' : ''}]</span>` : ''}
+              ${q.year ? `<span class="text-[11px] text-gray-400 dark:text-gray-500">${q.year}</span>` : ''}
+              ${q.markScheme ? `<button onclick="var ms=this.nextElementSibling;ms.classList.toggle('hidden');this.textContent=ms.classList.contains('hidden')?'Show mark scheme':'Hide mark scheme'" class="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Show mark scheme</button><div class="hidden mt-2 text-xs text-gray-600 dark:text-gray-300 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-xl px-3 py-2 leading-relaxed">${q.markScheme}</div>` : ''}
+            </div>
+          </div>
+        </div>
+      </div>`).join('');
+    _makeImgsZoomable(writtenEl);
+  })();
 }
 
 // ── EXAM ANSWER REVIEW ─────────────────────────
@@ -12866,20 +12896,58 @@ function _logPracticeAnswer(q, userAnswer, correct, skipped) {
   }
 }
 
+function _ytVideoId(text) {
+  // Extracts a YouTube video ID from a watch URL or short URL embedded anywhere
+  // in the learnMore string. Returns null if none found.
+  // Patterns: youtube.com/watch?v=ID  |  youtu.be/ID  |  youtube.com/embed/ID
+  const m = String(text).match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  );
+  return m ? m[1] : null;
+}
+function _learnMoreText(text) {
+  // Strip the YouTube URL from the visible text so it does not show as a raw link.
+  return String(text)
+    .replace(/https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?[^\s]*|embed\/[^\s]*)|youtu\.be\/[^\s]*)/g, '')
+    .trim();
+}
 function _learnMoreHTML(q) {
   if (!q || !q.learnMore) return '';
+  const vid   = _ytVideoId(q.learnMore);
+  const prose = _learnMoreText(q.learnMore);
+  // The iframe src is set on open, not at render time, so no video loads until
+  // the child actually taps "Learn More". data-vid holds the ID until then.
+  const videoHTML = vid
+    ? `<div class="lm-video-wrap" data-vid="${_attr(vid)}">
+        <iframe class="lm-video-frame" src="" title="Video explainer"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer"></iframe>
+       </div>`
+    : '';
   return `<div class="mt-3 pt-3 border-t border-white/10">
     <button class="flex items-center gap-1.5 text-xs text-indigo-300/70 hover:text-indigo-100 transition-colors" onclick="toggleLearnMore(this)">
       <span>📚</span><span class="underline underline-offset-2">Learn More</span><span class="learn-more-arrow text-[10px]">▼</span>
     </button>
-    <div class="learn-more-panel hidden mt-2 text-xs text-indigo-100/80 leading-relaxed space-y-1.5">${q.learnMore}</div>
+    <div class="learn-more-panel hidden mt-2 text-xs text-indigo-100/80 leading-relaxed space-y-2">
+      ${prose ? `<p>${prose}</p>` : ''}${videoHTML}
+    </div>
   </div>`;
 }
 function toggleLearnMore(btn) {
   const panel = btn.nextElementSibling;
   const arrow = btn.querySelector('.learn-more-arrow');
-  const open = panel.classList.toggle('hidden') === false;
+  const open  = panel.classList.toggle('hidden') === false;
   if (arrow) arrow.textContent = open ? '▲' : '▼';
+  // Lazy-load the YouTube iframe the first time the panel opens.
+  if (open) {
+    const wrap = panel.querySelector('.lm-video-wrap');
+    if (wrap && !wrap.dataset.loaded) {
+      wrap.dataset.loaded = '1';
+      const iframe = wrap.querySelector('.lm-video-frame');
+      // youtube-nocookie.com: same player, no tracking cookie until play is pressed.
+      iframe.src = `https://www.youtube-nocookie.com/embed/${wrap.dataset.vid}?rel=0&modestbranding=1`;
+    }
+  }
 }
 
 function _showRoundComplete() {
